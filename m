@@ -2,314 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAB950F310
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50ED250F313
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbiDZHyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        id S1344364AbiDZH4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242699AbiDZHyr (ORCPT
+        with ESMTP id S1344498AbiDZHzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:54:47 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC0A1AC;
-        Tue, 26 Apr 2022 00:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650959500; x=1682495500;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AF4hNHwrM38viZOG6GKR5ftamlJBG8twUEdWLdAN5HQ=;
-  b=FaiI3cR+eDnrL67PAVSBE7wjzTKxb0FQgwOqhvDId8WmFXXifMTxOBuG
-   dSDYLK/Dre8yeLeQ/xUBL3WQN3vYZqNkCH5VIpZI0+/4fmm62W4p+Y4QI
-   uTXkiry+mkhnZstGrkMATOmh6FDhqQyTs4UYOPGqJEBctrWDnqQ3JQRTa
-   WFHnmGtblJmeH9B3mwIW5WPUIPNMwi1rQfSD+3vD0fZEJb73trk7qqas8
-   IOB2GWBvGtuU60ctlWs1VP92kre1jmRYPL5ZKXqjicF7fCniL3P78cY/0
-   YmRGUpYt+/yDUPyqK3QQ8s94PEcoRtnapGu0h+7/k7SzYQwZaHF32cRFS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="325977114"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="325977114"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:51:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="558170957"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.98])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:51:35 -0700
-Message-ID: <d643e80e-a7a7-818f-5d75-09d198e1a5b3@intel.com>
-Date:   Tue, 26 Apr 2022 10:51:31 +0300
+        Tue, 26 Apr 2022 03:55:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2327B1EB
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650959557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CsyLdgIfz/J4d2JXrqNRHu2e24b1rKeyXKBpw9KICek=;
+        b=KRYsShB3yUfqwC9dhnvRZg1lArrp6/YaPcYVtwcN28Rc0Hl79UIGIGEN1Xd3BsG3J7fIj5
+        axzxKJK6JHfzTBEiRX67OlkEo/CRgTmzRegarb2VVKeHuNQR8dFEgxtVuEINvQdyqoDv1w
+        WcxeDwB5dtqS/p6gvCvK6Tis8MTSpUM=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-GoCJMlykMgWvoKfGRO2kMQ-1; Tue, 26 Apr 2022 03:52:34 -0400
+X-MC-Unique: GoCJMlykMgWvoKfGRO2kMQ-1
+Received: by mail-pf1-f198.google.com with SMTP id d6-20020aa78e46000000b0050cfcce2fefso6262359pfr.18
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:52:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CsyLdgIfz/J4d2JXrqNRHu2e24b1rKeyXKBpw9KICek=;
+        b=ywgC398z+jUabm668f52IRSBCtMu1tONVhAp5Nl/bAMB7TRm7u9l5AAbkS8QhvKrfN
+         g7yVc6o+kEfo8zrQjSurbSPPCFK3Mj3YFoCCjgBM2JZabBN4I5/PfiEeezQWDcOHOWZE
+         eogkL9wRskiaijwRxdEm/gZ+HBL0ZN0dqOG0fNKYMzqv3lPi6ha7/dDlqiZqT6d28H3T
+         brGW/ppLjsxNV3dpCZBWkGa2zOYD1cCkP87OvYOegpwIpfbjlKz5n3xsREY/nAVTpWJd
+         LcVxFyruVDs1IT6hFvgvMJt1vNRFCyix/1/QaOFfMVN/4GK2DmYQN4qVnTO19ZYjlkfT
+         Z31Q==
+X-Gm-Message-State: AOAM530OtR5THHcrAhFlKUtX95HUeWZwIH8dB9RwWYjwIVsUwEihbIk9
+        dZ7BGy0P+Ix38iDTQfJ3gcGwqG8TUNuC0TTQ4FLRnKbFyNLodjRF4jyRT5ve2Ctvbu6OQYWUmqQ
+        IZaO1DvljqynCsR3bnIER/trJgXMEZTxY7aLVWoO5
+X-Received: by 2002:a63:5606:0:b0:3ab:84d3:cfbe with SMTP id k6-20020a635606000000b003ab84d3cfbemr2870544pgb.191.1650959553260;
+        Tue, 26 Apr 2022 00:52:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyrJqOAdclf97Ql1V/uWaKgsj2lBg1ANvXOzN4QoIaBsxQuxtoa4/Mg1H2hEbADxlqqfMdefO+faiELkv9d+X0=
+X-Received: by 2002:a63:5606:0:b0:3ab:84d3:cfbe with SMTP id
+ k6-20020a635606000000b003ab84d3cfbemr2870516pgb.191.1650959552946; Tue, 26
+ Apr 2022 00:52:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH V5 2/5] mmc: sdhci: Capture eMMC and SD card errors
-Content-Language: en-US
-To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        ulf.hansson@linaro.org, wsa+renesas@sang-engineering.com,
-        yoshihiro.shimoda.uh@renesas.com, linus.walleij@linaro.org,
-        digetx@gmail.com, briannorris@chromium.org,
-        quic_riteshh@quicinc.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-References: <1650902443-26357-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1650902443-26357-3-git-send-email-quic_c_sbhanu@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <1650902443-26357-3-git-send-email-quic_c_sbhanu@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220421140740.459558-1-benjamin.tissoires@redhat.com>
+ <20220421140740.459558-4-benjamin.tissoires@redhat.com> <20220426041147.gwnxhcjftl2kaz6g@MBP-98dd607d3435.dhcp.thefacebook.com>
+In-Reply-To: <20220426041147.gwnxhcjftl2kaz6g@MBP-98dd607d3435.dhcp.thefacebook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 26 Apr 2022 09:52:21 +0200
+Message-ID: <CAO-hwJLWxtZcs-ynzAaF4hGf6zPF5wAni3Etzb1_XrvQpx2Jxw@mail.gmail.com>
+Subject: Re: [RFC bpf-next v4 3/7] error-inject: add new type that carries if
+ the function is non sleepable
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/22 19:00, Shaik Sajida Bhanu wrote:
-> Add changes to capture eMMC and SD card errors.
-> This is useful for debug and testing.
-> 
-> Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
-> Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
-> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+On Tue, Apr 26, 2022 at 6:11 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Apr 21, 2022 at 04:07:36PM +0200, Benjamin Tissoires wrote:
+> > When using error-injection function through bpf to change the return
+> > code, we need to know if the function is sleepable or not.
+> >
+> > Currently the code assumes that all error-inject functions are sleepable,
+> > except for a few selected of them, hardcoded in kernel/bpf/verifier.c
+> >
+> > Add a new flag to error-inject so we can code that information where the
+> > function is declared.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
+> > ---
+> >
+> > new in v4:
+> > - another approach would be to define a new kfunc_set, and register
+> >   it with btf. But in that case, what program type would we use?
+> >   BPF_PROG_TYPE_UNSPEC?
+> > - also note that maybe we should consider all of the functions
+> >   non-sleepable and only mark some as sleepable. IMO it makes more
+> >   sense to be more restrictive by default.
+>
+> I think the approach in this patch is fine.
+> We didn't have issues with check_non_sleepable_error_inject() so far,
+> so I wouldn't start refactoring it.
 
-Looks good.  A couple of minor comments.
+OK... though I can't help but thinking that adding a new
+error-inject.h enum value is going to be bad, because it's an API
+change, and users might not expect NS_ERRNO.
 
-> ---
->  drivers/mmc/host/sdhci.c | 54 ++++++++++++++++++++++++++++++++++++------------
->  drivers/mmc/host/sdhci.h |  3 +++
->  include/linux/mmc/mmc.h  |  6 ++++++
->  3 files changed, 50 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 2215202..1cda28ba 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -224,6 +224,7 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
->  		if (timedout) {
->  			pr_err("%s: Reset 0x%x never completed.\n",
->  				mmc_hostname(host->mmc), (int)mask);
-> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->  			sdhci_dumpregs(host);
->  			return;
->  		}
-> @@ -1716,6 +1717,7 @@ static bool sdhci_send_command_retry(struct sdhci_host *host,
->  		if (!timeout--) {
->  			pr_err("%s: Controller never released inhibit bit(s).\n",
->  			       mmc_hostname(host->mmc));
-> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->  			sdhci_dumpregs(host);
->  			cmd->error = -EIO;
->  			return false;
-> @@ -1965,6 +1967,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
->  		if (timedout) {
->  			pr_err("%s: Internal clock never stabilised.\n",
->  			       mmc_hostname(host->mmc));
-> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->  			sdhci_dumpregs(host);
->  			return;
->  		}
-> @@ -1987,6 +1990,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
->  			if (timedout) {
->  				pr_err("%s: PLL clock never stabilised.\n",
->  				       mmc_hostname(host->mmc));
-> +				sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->  				sdhci_dumpregs(host);
->  				return;
->  			}
-> @@ -3161,6 +3165,7 @@ static void sdhci_timeout_timer(struct timer_list *t)
->  	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
->  		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
->  		       mmc_hostname(host->mmc));
-> +		sdhci_err_stats_inc(host, REQ_TIMEOUT);
->  		sdhci_dumpregs(host);
->  
->  		host->cmd->error = -ETIMEDOUT;
-> @@ -3183,6 +3188,7 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
->  	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
->  		pr_err("%s: Timeout waiting for hardware interrupt.\n",
->  		       mmc_hostname(host->mmc));
-> +		sdhci_err_stats_inc(host, REQ_TIMEOUT);
->  		sdhci_dumpregs(host);
->  
->  		if (host->data) {
-> @@ -3234,17 +3240,21 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->  			return;
->  		pr_err("%s: Got command interrupt 0x%08x even though no command operation was in progress.\n",
->  		       mmc_hostname(host->mmc), (unsigned)intmask);
-> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->  		sdhci_dumpregs(host);
->  		return;
->  	}
->  
->  	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
->  		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
-> -		if (intmask & SDHCI_INT_TIMEOUT)
-> +		if (intmask & SDHCI_INT_TIMEOUT) {
->  			host->cmd->error = -ETIMEDOUT;
-> -		else
-> +			sdhci_err_stats_inc(host, CMD_TIMEOUT);
-> +		} else {
->  			host->cmd->error = -EILSEQ;
-> -
-> +			if (!mmc_op_tuning(host->cmd->opcode))
-> +				sdhci_err_stats_inc(host, CMD_CRC);
-> +		}
->  		/* Treat data command CRC error the same as data CRC error */
->  		if (host->cmd->data &&
->  		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
-> @@ -3266,6 +3276,8 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->  			  -ETIMEDOUT :
->  			  -EILSEQ;
->  
-> +		sdhci_err_stats_inc(host, AUTO_CMD);
-> +
->  		if (sdhci_auto_cmd23(host, mrq)) {
->  			mrq->sbc->error = err;
->  			__sdhci_finish_mrq(host, mrq);
-> @@ -3342,6 +3354,7 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->  			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  				host->data_cmd = NULL;
->  				data_cmd->error = -ETIMEDOUT;
-> +				sdhci_err_stats_inc(host, CMD_TIMEOUT);
->  				__sdhci_finish_mrq(host, data_cmd->mrq);
->  				return;
->  			}
-> @@ -3370,23 +3383,29 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->  
->  		pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
->  		       mmc_hostname(host->mmc), (unsigned)intmask);
-> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->  		sdhci_dumpregs(host);
->  
->  		return;
->  	}
->  
-> -	if (intmask & SDHCI_INT_DATA_TIMEOUT)
-> +	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		host->data->error = -ETIMEDOUT;
-> -	else if (intmask & SDHCI_INT_DATA_END_BIT)
-> +		sdhci_err_stats_inc(host, DAT_TIMEOUT);
-> +	} else if (intmask & SDHCI_INT_DATA_END_BIT)
->  		host->data->error = -EILSEQ;
+OTOH, if we had a new kfunc_set, we keep the existing error-inject API
+in place with all the variants and we just teach the verifier that the
+function is non sleepable.
 
-Seems to be missing here:
+>
+> > ---
+> >  include/asm-generic/error-injection.h |  1 +
+> >  kernel/bpf/verifier.c                 | 10 ++++++++--
+> >  lib/error-inject.c                    |  2 ++
+> >  3 files changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
+> > index fbca56bd9cbc..5974942353a6 100644
+> > --- a/include/asm-generic/error-injection.h
+> > +++ b/include/asm-generic/error-injection.h
+> > @@ -9,6 +9,7 @@ enum {
+> >       EI_ETYPE_ERRNO,         /* Return -ERRNO if failure */
+> >       EI_ETYPE_ERRNO_NULL,    /* Return -ERRNO or NULL if failure */
+> >       EI_ETYPE_TRUE,          /* Return true if failure */
+> > +     EI_ETYPE_NS_ERRNO,      /* Return -ERRNO if failure and tag the function as non-sleepable */
+>
+> >  };
+> >
+> >  struct error_injection_entry {
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 0f339f9058f3..45c8feea6478 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -14085,6 +14085,11 @@ static int check_non_sleepable_error_inject(u32 btf_id)
+> >       return btf_id_set_contains(&btf_non_sleepable_error_inject, btf_id);
+> >  }
+> >
+> > +static int is_non_sleepable_error_inject(unsigned long addr)
+> > +{
+> > +     return get_injectable_error_type(addr) == EI_ETYPE_NS_ERRNO;
+>
+> It's a linear search. Probably ok. But would be good to double check
+> that we're not calling it a lot.
 
-		sdhci_err_stats_inc(host, DAT_CRC);
+IIUC, the kfunc_set approach would solve that, no?
 
-Also it would be nice to have braces {} on all arms of if-else-if
-Can use checkpatch.pl --strict to see where
+Cheers,
+Benjamin
 
->  	else if ((intmask & SDHCI_INT_DATA_CRC) &&
->  		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
-> -			!= MMC_BUS_TEST_R)
-> +			!= MMC_BUS_TEST_R) {
->  		host->data->error = -EILSEQ;
-> +		if (!mmc_op_tuning(host->cmd->opcode))
-> +			sdhci_err_stats_inc(host, DAT_CRC);
-> +	}
->  	else if (intmask & SDHCI_INT_ADMA_ERROR) {
->  		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
->  		       intmask);
->  		sdhci_adma_show_error(host);
-> +		sdhci_err_stats_inc(host, ADMA);
->  		host->data->error = -EIO;
->  		if (host->ops->adma_workaround)
->  			host->ops->adma_workaround(host, intmask);
-> @@ -3584,6 +3603,7 @@ static irqreturn_t sdhci_irq(int irq, void *dev_id)
->  	if (unexpected) {
->  		pr_err("%s: Unexpected interrupt 0x%08x.\n",
->  			   mmc_hostname(host->mmc), unexpected);
-> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->  		sdhci_dumpregs(host);
->  	}
->  
-> @@ -3905,20 +3925,27 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  	if (!host->cqe_on)
->  		return false;
->  
-> -	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
-> +	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
->  		*cmd_error = -EILSEQ;
-> -	else if (intmask & SDHCI_INT_TIMEOUT)
-> +		if (!mmc_op_tuning(host->cmd->opcode))
-> +			sdhci_err_stats_inc(host, CMD_CRC);
-> +	} else if (intmask & SDHCI_INT_TIMEOUT) {
->  		*cmd_error = -ETIMEDOUT;
-> -	else
-> +		sdhci_err_stats_inc(host, CMD_TIMEOUT);
-> +	} else
->  		*cmd_error = 0;
->  
-> -	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
-> +	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
->  		*data_error = -EILSEQ;
-> -	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
-> +		if (!mmc_op_tuning(host->cmd->opcode))
-> +			sdhci_err_stats_inc(host, DAT_CRC);
-> +	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->  		*data_error = -ETIMEDOUT;
-> -	else if (intmask & SDHCI_INT_ADMA_ERROR)
-> +		sdhci_err_stats_inc(host, DAT_TIMEOUT);
-> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
->  		*data_error = -EIO;
-> -	else
-> +		sdhci_err_stats_inc(host, ADMA);
-> +	} else
->  		*data_error = 0;
->  
->  	/* Clear selected interrupts. */
-> @@ -3934,6 +3961,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->  		sdhci_writel(host, intmask, SDHCI_INT_STATUS);
->  		pr_err("%s: CQE: Unexpected interrupt 0x%08x.\n",
->  		       mmc_hostname(host->mmc), intmask);
-> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->  		sdhci_dumpregs(host);
->  	}
->  
-> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index d7929d7..95a08f0 100644
-> --- a/drivers/mmc/host/sdhci.h
-> +++ b/drivers/mmc/host/sdhci.h
-> @@ -356,6 +356,9 @@ struct sdhci_adma2_64_desc {
->   */
->  #define MMC_CMD_TRANSFER_TIME	(10 * NSEC_PER_MSEC) /* max 10 ms */
->  
-> +#define sdhci_err_stats_inc(host, err_name) \
-> +	mmc_debugfs_err_stats_inc((host)->mmc, MMC_ERR_##err_name)
-> +
->  enum sdhci_cookie {
->  	COOKIE_UNMAPPED,
->  	COOKIE_PRE_MAPPED,	/* mapped by sdhci_pre_req() */
-> diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h
-> index d9a65c6..9c50bc4 100644
-> --- a/include/linux/mmc/mmc.h
-> +++ b/include/linux/mmc/mmc.h
-> @@ -99,6 +99,12 @@ static inline bool mmc_op_multi(u32 opcode)
->  	       opcode == MMC_READ_MULTIPLE_BLOCK;
->  }
->  
-> +static inline bool mmc_op_tuning(u32 opcode)
-> +{
-> +	return opcode == MMC_SEND_TUNING_BLOCK ||
-> +			opcode == MMC_SEND_TUNING_BLOCK_HS200;
-> +}
-> +
->  /*
->   * MMC_SWITCH argument format:
->   *
+>
+> > +}
+> > +
+> >  int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >                           const struct bpf_prog *prog,
+> >                           const struct bpf_prog *tgt_prog,
+> > @@ -14281,8 +14286,9 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >                               /* fentry/fexit/fmod_ret progs can be sleepable only if they are
+> >                                * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+> >                                */
+> > -                             if (!check_non_sleepable_error_inject(btf_id) &&
+> > -                                 within_error_injection_list(addr))
+> > +                             if (within_error_injection_list(addr) &&
+> > +                                 !check_non_sleepable_error_inject(btf_id) &&
+> > +                                 !is_non_sleepable_error_inject(addr))
+> >                                       ret = 0;
+> >                               break;
+> >                       case BPF_PROG_TYPE_LSM:
+> > diff --git a/lib/error-inject.c b/lib/error-inject.c
+> > index 2ff5ef689d72..560c3b18f439 100644
+> > --- a/lib/error-inject.c
+> > +++ b/lib/error-inject.c
+> > @@ -183,6 +183,8 @@ static const char *error_type_string(int etype)
+> >               return "ERRNO_NULL";
+> >       case EI_ETYPE_TRUE:
+> >               return "TRUE";
+> > +     case EI_ETYPE_NS_ERRNO:
+> > +             return "NS_ERRNO";
+> >       default:
+> >               return "(unknown)";
+> >       }
+> > --
+> > 2.35.1
+> >
+>
 
-There does not seem to be any:
-
-	sdhci_err_stats_inc(host, TUNING);
-
-MMC_ERR_TUNING does not seem to get used.

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC9050F88A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AFF50F8AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244836AbiDZJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S238645AbiDZJSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347217AbiDZIvO (ORCPT
+        with ESMTP id S1345948AbiDZIo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B99158F49;
-        Tue, 26 Apr 2022 01:39:48 -0700 (PDT)
+        Tue, 26 Apr 2022 04:44:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F275315E853;
+        Tue, 26 Apr 2022 01:33:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C1760C4A;
-        Tue, 26 Apr 2022 08:39:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E06BC385A0;
-        Tue, 26 Apr 2022 08:39:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55D6261899;
+        Tue, 26 Apr 2022 08:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66B0BC385A4;
+        Tue, 26 Apr 2022 08:33:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962387;
+        s=korg; t=1650962035;
         bh=/BAm5NTJdX2tMlaApiM7QAkYP88sHZe13rGjL+RUOcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kdy3rqM1aiICZ5CqrE4flk7BTsjD9Ff9g1K2xpnt5AzVo1vNSUP4XMIzvgAL4qQO0
-         /ihmDbFHCusFBk1bUl14FEoR9APuNcnJVyBcFtvN7KCoE98+9MuS/7wnD2GpocfA87
-         mO00UFUgZhCH9FZU0gAwRyF0AkUegRzwc8u8mLt4=
+        b=Fj4oEAhOqMMwbIAlu+X/km143JPzW3XK0nSWeWVwwCKh1njxheUYtMo4hghXDyvNT
+         B3SZbfQcnYRhqUpQApHLbaYcNIK3pArmgTHGmizdYMFMGDaT2ZEL3u4k2Ui7loFboU
+         1aeXJhJuElTpzN2V011EttXYLp0ysX4j/657K0g0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
         Borislav Petkov <bp@suse.de>,
         Michal Simek <michal.simek@xilinx.com>
-Subject: [PATCH 5.15 077/124] EDAC/synopsys: Read the error count from the correct register
-Date:   Tue, 26 Apr 2022 10:21:18 +0200
-Message-Id: <20220426081749.489594896@linuxfoundation.org>
+Subject: [PATCH 5.10 51/86] EDAC/synopsys: Read the error count from the correct register
+Date:   Tue, 26 Apr 2022 10:21:19 +0200
+Message-Id: <20220426081742.675332755@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

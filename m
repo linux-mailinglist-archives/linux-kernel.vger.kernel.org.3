@@ -2,194 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F1A50FEBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8F150FEBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350852AbiDZNXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S1349969AbiDZNXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350857AbiDZNXW (ORCPT
+        with ESMTP id S1350842AbiDZNXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:23:22 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793C2193E2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:20:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650979210; x=1682515210;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1V0/3lCFUFvYH380s9fH3oZRP3EJgrr3lCquxLUB5Gk=;
-  b=aAjyljVbxdJRx/r+2usIbuyabAKxVzo8CLHU4ZfwXPzRLLezb2foEfXX
-   d7z9ftySVzcNoRWC/5kBQgovtRp23n1iTPpyxIxIgHjAobpsboYnreu8E
-   zxYqdGWm9T1XfsdFwxyi1OXRsWW5zzQOeZJDPv6mkyyCHw4FshzcQ6WTs
-   lxaNULxR+3iomtg+WJQz8fc3noexDbw/ZpCG4Zi9MJb9ViJbLcVPvdLKr
-   mWfVA5Qz7v3Q5WElNIixxNqOCHzwYdpVvlUJUlKWV7qVbbUHsTJWZCrsC
-   Pp7VMtzajg0BR31eZKw9onyIUEIIpAxwHmbULNHH2mUxzjC8o6POuH66B
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264419775"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="264419775"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:19:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="558306664"
-Received: from liuyujie-mobl.ccr.corp.intel.com ([10.249.168.137])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:19:53 -0700
-From:   Yujie Liu <yujie.liu@intel.com>
-To:     Philip Li <philip.li@intel.com>
-Cc:     lkp-devops@eclists.intel.com, Yujie Liu <yujie.liu@intel.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH lkp-cloud] spec/kbuild_bisect_queue: update kismet error id format and reproduce command
-Date:   Tue, 26 Apr 2022 21:19:51 +0800
-Message-Id: <20220426131951.2636-1-yujie.liu@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Apr 2022 09:23:11 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73D9DF92
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:20:00 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y38so2206999pfa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HLmgdCeRQnlZPI0jqFO8y9T2xXc5m6qGLiOpaSM2FSM=;
+        b=jPCQfFTpQpV7n7pB7rQDJt9sEnkgB4WREXGbL8Dv7b1F2XbxwlGG9CjunEgd52tZNh
+         f7b7jRWcHwxnBXWkjhTIo5RsaLGht6e7tCbque3ut0TGd+K/JWFdBL3RoZ66gTg6AWOr
+         tt/4wyon5tX9Fj2AvW12rYJSMG5VjtoOlW++QPT8nwJk7gFXCOX3SrHat2epwpEjI8ww
+         AFCQ8Rn77o0zNND5MQZv31aCz2DUeV3FK9hPagKRgqmRKXpwU/XnLSgFUbHZhkfSHEkJ
+         o1Ok5lmOEVM5/v+cSqBQdoCuC+HiqBJ64GblVLjeciEYYmiEZfTWUZcMQfwIiTVE6i/p
+         J72w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HLmgdCeRQnlZPI0jqFO8y9T2xXc5m6qGLiOpaSM2FSM=;
+        b=vN8ISC++1nm95IB5OYjcGnry9O/j9oKYt1+yHqbTtROE+4I45EEuXs1247kgmIMhjg
+         pBGvS2UhLzCd85FJ27YFxfYrvoaS/F0NYvy+7Sp5+YDDOSaDY9jmwusEA9HXfVQEEgpO
+         kC0SN0wh5iXZbdYrzGdH2q+mojzA+RCaLWucTzxmO9fqXaY5oIpM5zOCf9gHh0hrr+CD
+         DhVBLETdUPkiqdIA5TjFf3z0FmaEuiYZv5UN1lyQxSXn1URXIGfU70JNA8mzSrNbTW8S
+         s8bVQ9pXMn9Sf+zwL+jK5Wpm0Lav3M60KTOMuu10S6PFLF1Gs6Mp/HF/u3rOULIf790o
+         cDPQ==
+X-Gm-Message-State: AOAM5317UyRRXOEVPT0C9hGhMvywhpnEFKjeh3RMvVY+WNli3qF3JIs+
+        PmuL0A0ANjPdfrVrZEhSHnIFVw==
+X-Google-Smtp-Source: ABdhPJywU6zSNw8eC6iZB0lW4cMNYVRUgoT39LY8hW7zbfiZnYq6dVsSlFGb05d66NZD5nCNmqfhWQ==
+X-Received: by 2002:a63:86c8:0:b0:3aa:fa50:b002 with SMTP id x191-20020a6386c8000000b003aafa50b002mr13427236pgd.570.1650979199932;
+        Tue, 26 Apr 2022 06:19:59 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (216.24.179.102.16clouds.com. [216.24.179.102])
+        by smtp.gmail.com with ESMTPSA id x22-20020a17090aa39600b001d95c09f877sm3120923pjp.35.2022.04.26.06.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 06:19:59 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 21:19:52 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Timothy Hayes <timothy.hayes@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH 2/3] perf: arm-spe: Fix SPE events with phys addresses
+Message-ID: <20220426131952.GA1923836@leoy-ThinkPad-X240s>
+References: <20220421165205.117662-1-timothy.hayes@arm.com>
+ <20220421165205.117662-3-timothy.hayes@arm.com>
+ <20220424125951.GD978927@leoy-ThinkPad-X240s>
+ <322009d2-330c-22d4-4075-eca2042f64e1@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <322009d2-330c-22d4-4075-eca2042f64e1@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-$ rake spec-slow spec=3Dkbuild_bisect_kismet debug=3D1 code=3D1 C_ROOT=3D/h=
-ome/jenkins/rake-spec-test/kernel-tests
-start spec
+On Mon, Apr 25, 2022 at 10:12:36AM +0100, James Clark wrote:
 
-/usr/bin/ruby2.5 -I/var/lib/gems/2.5.0/gems/rspec-support-3.11.0/lib:/var/l=
-ib/gems/2.5.0/gems/rspec-core-3.11.0/lib /var/lib/gems/2.5.0/gems/rspec-cor=
-e-3.11.0/exe/rspec --pattern spec/\*\*\{,/\*/\*\*\}/kbuild_bisect_kismet_sp=
-ec.rb --tag speed:slow
-Run options: include {:speed=3D>"slow"}
-/tmp/qa-20220426-21054-w5d450
-latest: Pulling from kbuild
-Digest: sha256:c1bc7056e6b210b81791496bf7987b64edfd12b4d300252edda8f54446c5=
-7334
-Status: Image is up to date for lkp-server:5000/kbuild:latest
-lkp-server:5000/kbuild:latest
-.
+[...]
 
-Finished in 57 minutes 34 seconds (files took 1.12 seconds to load)
-1 example, 0 failures
+> >> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+> >> index 151cc38a171c..1a80151baed9 100644
+> >> --- a/tools/perf/util/arm-spe.c
+> >> +++ b/tools/perf/util/arm-spe.c
+> >> @@ -1033,7 +1033,8 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+> >>  	memset(&attr, 0, sizeof(struct perf_event_attr));
+> >>  	attr.size = sizeof(struct perf_event_attr);
+> >>  	attr.type = PERF_TYPE_HARDWARE;
+> >> -	attr.sample_type = evsel->core.attr.sample_type & PERF_SAMPLE_MASK;
+> >> +	attr.sample_type = evsel->core.attr.sample_type &
+> >> +				(PERF_SAMPLE_MASK | PERF_SAMPLE_PHYS_ADDR);
+> > 
+> > I verified this patch and I can confirm the physical address can be
+> > dumped successfully.
+> > 
+> > I have a more general question, seems to me, we need to change the
+> > macro PERF_SAMPLE_MASK in the file util/event.h as below, so
+> > here doesn't need to 'or' the flag PERF_SAMPLE_PHYS_ADDR anymore.
+> > 
+> > @Arnaldo, @Jiri, could you confirm if this is the right way to move
+> > forward?  I am not sure why PERF_SAMPLE_MASK doesn't contain the bit
+> > PERF_SAMPLE_PHYS_ADDR in current code.
+> 
+> I think there is a reason that PERF_SAMPLE_MASK is a subset of all the
+> bits. This comment below suggests it. Is it so the mask only includes fields
+> that are 64bits? That makes the __evsel__sample_size() function a simple
+> multiplication of a count of all the fields that are 64bits.
 
-the final content of report mail is:
+After reading code, seems the conclusion "a count of all the fields
+that are 64bits" is not valid.  PERF_SAMPLE_MASK contains bits
+PERF_SAMPLE_IP and PERF_SAMPLE_TID, the corresponding fields 'pid'
+and 'tid' in the structure perf_sample are u32 type.
 
-CC: kbuild-all@lists.01.org
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Artur Rojek <contact@artur-rojek.eu>
-CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>   static int
+>   perf_event__check_size(union perf_event *event, unsigned int sample_size)
+>   {
+> 	/*
+> 	 * The evsel's sample_size is based on PERF_SAMPLE_MASK which includes
+> 	 * up to PERF_SAMPLE_PERIOD.  After that overflow() must be used to
+> 	 * check the format does not go past the end of the event.
+> 	 */
+> 	if (sample_size + sizeof(event->header) > event->header.size)
+> 		return -EFAULT;
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
-master
-head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
-commit: 2c2b364fddd551f0da98953618e264c098dfa140 Input: joystick - add ADC =
-attached joystick driver.
-date:   1 year, 7 months ago
-:::::: branch date: 18 hours ago
-:::::: commit date: 1 year, 7 months ago
-reproduce:
-  download attached .config.gz and extract .config to linux source tree
-  run "make ARCH=3Dx86_64 olddefconfig"
+Okay, thanks for sharing the info, it does show that it's deliberately to
+not contain all fields in PERF_SAMPLE_MASK.  If so, this patch is fine
+for me:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-kismet warnings: (new ones prefixed by >>)
->> WARNING: unmet direct dependencies detected, selectee: CONFIG_IIO_BUFFER=
-_CB, selector: CONFIG_JOYSTICK_ADC
 
-   WARNING: unmet direct dependencies detected for IIO_BUFFER_CB
-     Depends on [n]: IIO [=3Dy] && IIO_BUFFER [=3Dn]
-     Selected by [y]:
-     - JOYSTICK_ADC [=3Dy] && !UML && INPUT [=3Dy] && INPUT_JOYSTICK [=3Dy]=
- && IIO [=3Dy]
-
---
-0-DAY CI Kernel Test Service
-https://01.org/lkp
-
---RWj8+mpoThLpL0oB
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=3D".config.gz"
-Content-Transfer-Encoding: base64
-...
-
-Link: https://jira.devtools.intel.com/browse/ZDAYCI-15410
-Signed-off-by: Yujie Liu <yujie.liu@intel.com>
----
- ...d-selectee:CONFIG_IIO_BUFFER_CB-selector:CONFIG_JOYSTICK_ADC | 1 +
- ...-udd-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config | 1 -
- spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb           | 2 +-
- 3 files changed, 2 insertions(+), 2 deletions(-)
- create mode 100644 spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fdd=
-d551f0da98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WAR=
-NING:unmet-direct-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-selec=
-tor:CONFIG_JOYSTICK_ADC
- delete mode 100644 spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fdd=
-d551f0da98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/x86=
-_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-UNMET_ALARM-True-kismet-test-c=
-ases-udd-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config
-
-diff --git a/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0d=
-a98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WARNING:un=
-met-direct-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-selector:CON=
-FIG_JOYSTICK_ADC b/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd=
-551f0da98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WARN=
-ING:unmet-direct-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-select=
-or:CONFIG_JOYSTICK_ADC
-new file mode 100644
-index 0000000..64e3ea7
---- /dev/null
-+++ b/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0da989536=
-18e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/WARNING:unmet-dir=
-ect-dependencies-detected-selectee:CONFIG_IIO_BUFFER_CB-selector:CONFIG_JOY=
-STICK_ADC
-@@ -0,0 +1 @@
-+WARNING: unmet direct dependencies detected, selectee: CONFIG_IIO_BUFFER_C=
-B, selector: CONFIG_JOYSTICK_ADC
-diff --git a/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0d=
-a98953618e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/x86_64-CON=
-FIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-UNMET_ALARM-True-kismet-test-cases-ud=
-d-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config b/spec/kbuild_bis=
-ect_queue/kbuild/bisect-queue/2c2b364fddd551f0da98953618e264c098dfa140:gcc-=
-11:x86_64-allnoconfig/.reduce_errors/x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOY=
-STICK_ADC-UNMET_ALARM-True-kismet-test-cases-udd-x86_64-CONFIG_IIO_BUFFER_C=
-B-CONFIG_JOYSTICK_ADC-.config
-deleted file mode 100644
-index ec7df3e..0000000
---- a/spec/kbuild_bisect_queue/kbuild/bisect-queue/2c2b364fddd551f0da989536=
-18e264c098dfa140:gcc-11:x86_64-allnoconfig/.reduce_errors/x86_64-CONFIG_IIO=
-_BUFFER_CB-CONFIG_JOYSTICK_ADC-UNMET_ALARM-True-kismet-test-cases-udd-x86_6=
-4-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-.config
-+++ /dev/null
-@@ -1 +0,0 @@
--x86_64,CONFIG_IIO_BUFFER_CB,CONFIG_JOYSTICK_ADC,0,0,UNMET_ALARM,True,kisme=
-t-test-cases/udd-x86_64-CONFIG_IIO_BUFFER_CB-CONFIG_JOYSTICK_ADC-0-0.config=
-=0D
-diff --git a/spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb b/spec/k=
-build_bisect_queue/kbuild_bisect_kismet_spec.rb
-index 000233b..736bfc6 100644
---- a/spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb
-+++ b/spec/kbuild_bisect_queue/kbuild_bisect_kismet_spec.rb
-@@ -7,7 +7,7 @@ describe 'kbuild_worker', speed: 'slow' do
-                     commit: '2c2b364fddd551f0da98953618e264c098dfa140',
-                     first_bad_branch: 'linus/master',
-                     first_bad_commit: '2c2b364fddd551f0da98953618e264c098d=
-fa140',
--                    reproduce_command: 'kismet --linux-ksrc=3Dlinux -a=3Dx=
-86_64' }]
-+                    reproduce_command: 'make ARCH=3Dx86_64 olddefconfig' }]
-=20
-   define_kbuild_bisect_queue_spec('bisect_kismet', 'kbuild_bisect_queue', =
-test_options)
- end
---=20
-2.25.1
-
+> 	return 0;
+>   }
+> 
+> Having said that, the mask was updated once to add PERF_SAMPLE_IDENTIFIER to
+> it, so that comment is slightly out of date now.
+> 
+> 
+> > 
+> > diff --git a/tools/perf/util/event.h b/tools/perf/util/event.h
+> > index cdd72e05fd28..c905ac32ebad 100644
+> > --- a/tools/perf/util/event.h
+> > +++ b/tools/perf/util/event.h
+> > @@ -39,7 +39,7 @@ struct perf_event_attr;
+> >          PERF_SAMPLE_TIME | PERF_SAMPLE_ADDR |          \
+> >         PERF_SAMPLE_ID | PERF_SAMPLE_STREAM_ID |        \
+> >          PERF_SAMPLE_CPU | PERF_SAMPLE_PERIOD |         \
+> > -        PERF_SAMPLE_IDENTIFIER)
+> > +        PERF_SAMPLE_IDENTIFIER | PERF_SAMPLE_PHYS_ADDR)
+> > 
+> > Thanks,
+> > Leo
+> > 
+> >>  	attr.sample_type |= PERF_SAMPLE_IP | PERF_SAMPLE_TID |
+> >>  			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC |
+> >>  			    PERF_SAMPLE_WEIGHT | PERF_SAMPLE_ADDR;
+> >> -- 
+> >> 2.25.1
+> >>

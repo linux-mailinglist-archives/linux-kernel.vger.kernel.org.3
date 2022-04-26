@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CED751009C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52545100A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244649AbiDZOlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S1351680AbiDZOn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiDZOlb (ORCPT
+        with ESMTP id S230070AbiDZOnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:41:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5063017E237;
-        Tue, 26 Apr 2022 07:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650983903; x=1682519903;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=14yHVXqcqrje3rs1NKf1Yn65ycn1yHcDDp+EJGlJkqg=;
-  b=FHwQhPqPjXRaY2iceKWQjx/G4e+E+3OVKrF3/j8s/j5S9UEATZUCj5iS
-   4QvtcwS0klqH1NDZNM9BEAoceRFrX0WZjH+dQWqRht2TnR3Jzpo77E9uA
-   vN10wE0OrSKGQ6xUspnHxxOHy5SADD0aEuQRhEYSJMmxfX/CsOhOYC/ji
-   bUq+jjLTZQYCCWXoQN4fOQhfuzmun8b0zx8LMI6YnmS14s37PHPiF8yXA
-   0yTVdJidKAVavPSVY1tUDW2vFFEEzI+dQiMxuSMs36VBILwxDHLI3PiEH
-   giXZGYTC6Eszbr5dZq17xqMS8rBOaxAh7/5J20cuHKr9I6V0G7+knF/Fz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265761009"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="265761009"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 07:38:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="538816565"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2022 07:38:22 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 26 Apr 2022 07:38:22 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 26 Apr 2022 07:38:22 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 26 Apr 2022 07:38:21 -0700
+        Tue, 26 Apr 2022 10:43:50 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFB613F14
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:40:42 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QDSx06011324;
+        Tue, 26 Apr 2022 14:40:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=aAjJ4EikgLoj4q5smAEEYHZhbl3ku6BMyewNDtjsp+M=;
+ b=h58zTeBOzM+SKbaMc/rUt24yz9gW+I/HNsjF1smJjr4fzkHM2qYnAvF/elqSqb7k2Mjq
+ qWn6uJsPCoeNKTIFI8gbK/GZK7284DJ8c2WAbgohIeCZOdSUodg1R2ZAUuKCe/YxJ7GX
+ Bms7nAQSpBIjT08CJteXDHn+cn1x45qm3V70IcHsJ1fSTz4hgr5rHEuQ87fFL75SpaKs
+ BhdvpR0wIM5f6vZmXodnjVxX4lC/tnb0ksTIuLOU8HLYImKu2TPkpP6nzZOfbqwUIion
+ orzz43zbnSC+1zDITjSk2QwJKTf8elCRgGy1h/sndJdsk2OFueBIV8bjimWvEUzHz9DS Mw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fmaw4ec75-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 14:40:04 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23QEah6I017455;
+        Tue, 26 Apr 2022 14:40:03 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2043.outbound.protection.outlook.com [104.47.73.43])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fp5yjk1n2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 14:40:03 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T3C/mxvIxhi71hNhV6qjmQGPxHahmRWPBnWQjVJPSldXTq5I2QGjhZkG9DcDKH6lfKmacxL5aRjy4AS2lDa37y9OiWtsR6589P3sJe+Pg7rTiEDE14qchzOdYs+fFHpk7vL/M4v8it54zM1CpidFJjFj40+Ri0XzIQ7h/3QDZIAwHDOXGZODwpJhv5+dtBBLyjl5Nj7m/VAFvtaGxyvBJks9kjZ3dbtYujAkXmJJpw4ioSVXTBh9KggmC5HYNwPc2wnP9oU/3TBd3FkoYSc1JvZA0o2Q7Tk8yI8AEXH3FeQHEatzXcZuTzc8Gt3Sx/orxkJa067VB6tHQJpg10A2lw==
+ b=LfWeWohE/eFDhDskJ6NRlWjpet6MrRJfzo8keKm556khde4mLMB7NWZpxd5MT0PtAjkg4yloEaKtfyPIU6soDK4BisbO46tiXSCtZv1gW5ypZxmShYvqHv+ZZNbxuuhnlDo7tpgjbq5QBBIWh1zC/iHEXumQV8tOWCMqsg2W1Th4uwZvL4tKZ1yJJisn+eztS8r7Z8dQHIaPbn8lYp+BVlkGP6FW6F3FWbBTGZScwAF1WF8rr7uNr5cU5kWwLQLQyAfLyhrv66Yi9mPhCOaxclOHSGpz0ih6nWWn7sNCOJYWriJh29Dnc4bKBZXlDIrdxdIJ7vYzx2EgQG2R9cdD8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nMMAuXKKwh3GfPItmC9vQvEMkFbSHKyjORzdKPh5FnM=;
- b=iGZMnkLgtTi+vMgWXQyH20kXB+JaXvag/Q4OL4zfJqEvKLSZhiELjE1EQzCYOcb7/mlD/mjV64RGhWgjOXjo9HsHciE3WL3FFJflQ9uXS7BgFiLyurTodOanPWPh6dcYDr2RuOuyXKRkg9qSKPCf5F5yXVsjo6i92VRlmxMZHa8xSxvMShpj5cCUn6m+a/RVr3M48412fOceLyXt3NyrKrQC6zEg6cpUkpnKLGa3iWXNwLDuio3GS/kG3QhWOcKSJB5tAkVFmC9wOOpsDy6fdcIF6OT/6Tcz1VwqF+g83LEWq/f1Z3h4BKA1jV9Oh27REs0rBIEBjKrTFvBKh4T0vA==
+ bh=aAjJ4EikgLoj4q5smAEEYHZhbl3ku6BMyewNDtjsp+M=;
+ b=illl3Tso4zN+sOJgjtSzaSBpNH8LSlLgdAkI/NSFTmOPc4FE4fCjr6q+53Mp0LqribfCkyXYN3H19uj7p2m6hddtZDkXmCavrwq19IcJRiBxlT3L80sQvqglZYU7ecwVACFFsymGCroOOd7AdyxWioiHvqLKwwcpVPKkBXB2i8TB3amXKuAI1+WBVz02ZOnif3hd7fbcjV5m0rj0AaYOTZqR0RNLTQGcg3nhex3pM2bruWAv1+ar0cNKhYVh+dAPWiycstOmyX4mI8K7sRzwoUtB1WVl/fv4FPqbD0YR/j+SX0E07DkJShVE027GRgapclDcD/vElQf6vqTqlKCtjQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by BL1PR11MB5253.namprd11.prod.outlook.com (2603:10b6:208:310::20) with
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aAjJ4EikgLoj4q5smAEEYHZhbl3ku6BMyewNDtjsp+M=;
+ b=d9BdG0PxEqM9MC2aFPG2gOqBm7MR7HJDDWZXq71cfwke7oLpiYWEVgVgiGof6ddt6GubPEcu6Q2sppc0dB78mAjQS5M+ATM507cXbdPIS9bz4GUe93DcpeOrLtpvUO7ZxmbNZ7ewfRTOfNcsiaNfTh+0HRiI2qdVt434kJsEFe8=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by DS7PR10MB5069.namprd10.prod.outlook.com (2603:10b6:5:3a8::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Tue, 26 Apr
- 2022 14:38:20 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::c579:f1c1:28b3:610f]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::c579:f1c1:28b3:610f%8]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 14:38:20 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] rcu: Dump all rcuc kthreads status for CPUs that not
- report quiescent state
-Thread-Topic: [PATCH v4] rcu: Dump all rcuc kthreads status for CPUs that not
- report quiescent state
-Thread-Index: AQHYWEB6oQO0A/rD6EKnXzafiZz6Ja0Axn6AgAD56rCAAHfHAIAADPZQ
-Date:   Tue, 26 Apr 2022 14:38:20 +0000
-Message-ID: <PH0PR11MB588050E2A88BE7CEE6F8634DDAFB9@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <20220425010404.3249118-1-qiang1.zhang@intel.com>
- <20220425154533.GT4285@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB5880A72D33DCB9CDC22DED19DAFB9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20220426134844.GC4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220426134844.GC4285@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
+ 2022 14:40:01 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::c11a:5b2b:9659:7c42]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::c11a:5b2b:9659:7c42%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 14:40:01 +0000
+Message-ID: <300a485c-4bc5-c58a-d34a-bacdb1fa4510@oracle.com>
+Date:   Tue, 26 Apr 2022 09:39:55 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v7 2/8] x86/crash: Introduce new options to support cpu
+ and memory hotplug
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3b7ba01b-9c97-440d-9967-08da279268c1
-x-ms-traffictypediagnostic: BL1PR11MB5253:EE_
-x-microsoft-antispam-prvs: <BL1PR11MB5253455987AF5AD240CEBE2FDAFB9@BL1PR11MB5253.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: M2AdSoj0DWJkd+FRxS69GkU3c6+pfhm74vKZnq6fEntZ4zwBIo6jWcL3U02IWarVk6Xg+frMxgly+jWvfJm9ZifPiDSWZvzk2m5KbhtBCZ6tz+lk8YcxAvGV2lrmHkZep2kLSLZ+5ke39eoBZB3QXRfieYpIkrdKZs5oJFSHMXb40jppRh4BBKeOuB08veWloQ4YvGO8jZwi254nl6lVFikSajhx5l9CHt7r6KpLEAbNykGlO7y3YVxFloAjhju4NVh2mKoyzT8VPuxDvEtyVWpnnDGImxqzZnk5q3VHv+jLudPw2xPgIQuWr8lAbYFiSCUg6EvMKSFXWVLxue3bKr5bt1eS6h4HgE4lPi55zSaEUhsmEfhsCR1jrofyo4xmlkw3teWh41Tqm8UD830VOAhn0tjPjq3IEQyRADVsG7AxAEGCDCv2Ttlmo3fZpTcnejcpGRX6N+tEzW2t/OKrQXNCO2W8t2RWyAPgFNrjp+LLFvIl+ydnzY3cmsKSBY+KvVMGeoPaKkLv8z63Pvd75srKMb8nWyUTymDIbiTce1OX3cwB3H8+5mImj4l6awNsWRsUUSfU0yG9hNrSdATjnW9jGSIekn2r0jihVjGytmZQg2dsh27BBpByNh6mrC2OhxbHrZ3s3ZGUZKfqJ/0bKimm8ac9kuydGs0Oo1D68RuIuiWh7eCQBes6fbTrj7MeV70eIr+nFxJv2xwtqN+StbfaeipYg1jr3TcT0Y4UlE87j3dNCw7KAp9V2ZilVa78G+bZO0tBaHkqoc30ONAO0IvvL9RV2ZKQxMCJ8CeFMRA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(186003)(71200400001)(66574015)(76116006)(55016003)(5660300002)(66556008)(66446008)(64756008)(66476007)(33656002)(6506007)(9686003)(7696005)(26005)(83380400001)(6916009)(316002)(66946007)(8676002)(52536014)(4326008)(8936002)(508600001)(122000001)(2906002)(38070700005)(38100700002)(86362001)(966005)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WagwixSJxpHtRaGtFf24ZuQWqABN24VUWsVQVVKolACLMhK4Ki6ShfgGhyDv?=
- =?us-ascii?Q?TZma18apG2PukBZPgSP8TAHjOHEM4fdGG8o+GCblK4x8CMkf4bOaklZayi1H?=
- =?us-ascii?Q?GFewZTMzTM2F9sAg3r9jEwJaJhrcjpIwnqDw5Z3d5rjBCGjibQ1RihkTzhGj?=
- =?us-ascii?Q?QIep8k/eSi7zzETkHVjJUu+3vtMTEb4LQXqpalc+VYOpw43uvG5Hgr/vw8Uw?=
- =?us-ascii?Q?3+e4WEkmLzG4pem/isKOf504rn3PHv83g3L6WCmAANvYQwpGjxeSixU/z+U7?=
- =?us-ascii?Q?gIngn4KxHi1gcvAa9TzLfnFo75uEKF/gyG4Lr074IkCom8hkOPwcUagDq0DS?=
- =?us-ascii?Q?4hpQpwT/mToGDiBWSnkHgq65F/9cXWi4vj9OYEQpe27RgBovenZibNKQLPVS?=
- =?us-ascii?Q?y8ktVFRVKcvKCHamEpiNYokJ0BaefCrE7OLKm7SOfLF9fIQsdiu2H7INPHab?=
- =?us-ascii?Q?bbhDEgTO3YZDlbelzUvEAGnoupv5i7yGBghNlu8eK6sK+voPDEMQ32wHPTTx?=
- =?us-ascii?Q?j0gRUS7881rTJd7kKn2mI7Zn/Bkl60/lfxnL/12beFHw2xzWBcPjtqTNzlxK?=
- =?us-ascii?Q?bCuz4LhKLWFCMLdIzqMV9MdPCpVQWaYoDMSUn0kf2DmrNSnYGC5VXJ8MwsmU?=
- =?us-ascii?Q?GjeH4lJFYwMce48B4gY87K+p/kh+Yqdeli+RLMdYaKXUygC34ynINSpPbVNa?=
- =?us-ascii?Q?R7NLY5b4+mdonLzjjhvKbuiZ0nzY3E9SBTjFpsqI2nU5oK71JUu3uyOsrSkT?=
- =?us-ascii?Q?GxD0eU/76Lrx2XoT9IN4aOtrY/yzkHZD2nMt92IwSpXOY3fjQXPfNn0iOMt6?=
- =?us-ascii?Q?L/JDO2Et/xhWytjRkf/Ivi01HJQgn+lvs+RYNqP08C92LFKdArUTpY/AJiyL?=
- =?us-ascii?Q?SgEBZZSp43dElmB0Lm0FsFxPpVSPEmY3UORCHURN9+vIAdwESHCWNvW+C/Ap?=
- =?us-ascii?Q?Z/95u1EBXMpKmvtTWrxOJeRQ+10htYCKBy4theYupaCY9y0LEnWy62QONBTH?=
- =?us-ascii?Q?XrUmeLoH7dkVIHcAHi60425RQuff8DtHNTqOLV8YRMirdIaqkvMYrY0hZqFS?=
- =?us-ascii?Q?TSVPE3krcjLMdQFDZPjEoCA95GsgU8hKHte0tSGZSyJUMm2j1eAIM62NUPA7?=
- =?us-ascii?Q?CbskPT3SFh153U3SWknc+8coxsUKRwttFSTar9gqS+Cyp1VTulE0FUdkOrls?=
- =?us-ascii?Q?780+APnWksXlszNHqHWO7L9TI+QDfPMWA3eDT4bZQTJQyU4aIFnRnQ0vYfby?=
- =?us-ascii?Q?Z8hIWlf+52Z5syaqGK0Z5PAJrMH664nYmloEJQH0pfqcKhM4DxAeqkqRf1hn?=
- =?us-ascii?Q?OxZP05rQad9o5Vjb/ZsDQht2gBxo/j4SIk3LqIsmQyDih4TK1XlDwC4Dzkct?=
- =?us-ascii?Q?rDIlqDA+/01HrdDwJIPSg++4Oq/9lSaT5unakLYqi7UsonG7sWDyhq2gTxWz?=
- =?us-ascii?Q?e6+0SRHmVUT1HeYEM+0ojPb6oesJN8C5PpW6Ndpk+MxuHQ28VZ1zdVwG9YHF?=
- =?us-ascii?Q?flvnEh39oAnzFqSJWR8czOkWprFypzAhYMfCHhijC0BJV3fJ2TnmODxBf7kc?=
- =?us-ascii?Q?QCflrOJyoMv/YTJAv8lTVsjEOmZB3y+BrJ7g/9tFfeNy11BNpc04fY/K98dM?=
- =?us-ascii?Q?/8W9ROxiPiCS5mVTpyKOxKI0qiMXgLm+j1+qUyEV1yFE6Om/PA5NzbQiwia5?=
- =?us-ascii?Q?s3BHM4rKoRle0Nc0gikwBzebllLMiYs7YlBZFhqdFyqFU3Y9X+GGBiu/aX34?=
- =?us-ascii?Q?+nc8UuVjAA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Sourabh Jain <sourabhjain@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220413164237.20845-1-eric.devolder@oracle.com>
+ <20220413164237.20845-3-eric.devolder@oracle.com>
+ <d90f4299-e821-f5d5-957a-1e84f16816e0@linux.ibm.com>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <d90f4299-e821-f5d5-957a-1e84f16816e0@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN7PR04CA0183.namprd04.prod.outlook.com
+ (2603:10b6:806:126::8) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ee4621c-8be4-4288-09ea-08da2792a4de
+X-MS-TrafficTypeDiagnostic: DS7PR10MB5069:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR10MB5069D144D5D46BF35B12E78897FB9@DS7PR10MB5069.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Nok1/DPkxBxspreqdRngnDYlPgbT1p+P3vRYxRyAd6tK7Ugo8QGlLa/H42raDWghoQiKwVssAuWI5moX272IiZNOOW/CSjXtiiSsYXkHWrzZE9/nm+CjXcd34JDfhjQ7FogPRFE9klnk3nHBCFuKaBzMOU0lmsVWOdDFGORK2Zm1a3Y1Or7gXqEpzmxPlzz3mpWyLA2EuV8BIgT9VXJKaPYbtnkrO+/r1RAswFRcALmZ32fqk1j02WQ67r3JgogyPPMam+bz5epQJSSJ8zCdvRFM4OhA1Y0v1V3h6IGaQ6OVLmtAGrfOVijNNqGNwELZt9LXCfU6Y4VrgYh/1znSML5eFDeG3gwFmTz8JivtsNiu9BSjXCdxzYVpW1B+d8d193Shv2bbUu5piuyNlJGKpZ0NaTqWXhf7j+3y1NJL+cgckJyh8UUEmYqKaYn2cKMkUlf/rjBvOwH1ZfsSJSz8c1RQfNf55RZB/6JEf1arGtLIRDWGrUcjvp5jpnqkciNNc/Udv+IoyASw7bCP4FK6QENj6y97QjmdrZgjL3h/dX61rWyH/JLBDnNKU6hBJYMvzdTvPLU9PtFq84USVt64zt6jBGNt0WbsMRwJYAcc3UU8L9KGkwV0PbmhC8/GGzOhAcWu/wWbRfCZDPwlZSfIJwBkqaEeBY5kEBzpaW+OzfvBpgVLl9+3HDYbdLu5pxOAWhFQDyYNEp/PbYw4lsvhOJ7WkRu2tvU9KM3Zy6JYy/rzQuWScaw2uMg4NOUrRs+x
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(4326008)(2616005)(66556008)(66476007)(86362001)(7416002)(6506007)(316002)(6512007)(6666004)(53546011)(2906002)(6486002)(83380400001)(66946007)(5660300002)(8936002)(8676002)(508600001)(31696002)(31686004)(186003)(36756003)(107886003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUllUXZKcVZJcmVJRnZxU09GN2MxSFRkTUlCWGt4NmZtY2dacTVjdWdDUzU1?=
+ =?utf-8?B?Yk5VRytnYXhDTDVRYmNxWlkwK0wvcXQraWJ0Yy9jVmtReE9hS1FuZU0wMnp4?=
+ =?utf-8?B?bzFyOThBS3loSVJ5cDFacm5sREhqQnpKMFFOVFUyb2RhUjVCWTRzVlFzS0h3?=
+ =?utf-8?B?RnV3dFkzMnFaMDUwNHQrMVZwQlhqY0s2WkJQYXZ1SE90b1Q4OXU1YkJtSEQw?=
+ =?utf-8?B?VFRIL1NxeVRmaXdKYStMNDdFMGsySDNvQmh6MDd4azhZem1DUUdUSFZNOSt0?=
+ =?utf-8?B?ZkNLSVViUUxIWngyMFpmVUx4NHhobVhMRlRtY0JkTVVSdE1Edy9jS3dQT3ht?=
+ =?utf-8?B?UkJ1dXNHS0c2N2xFd0VaUkxaNFEzM04yQS9oQW5SMUFMOUFFK0t6b0V4Z2ZK?=
+ =?utf-8?B?amtzVVNFYUlYSWxGM3g4VlExMW9odWZsdk1lcWNkOUExTU11SGpsMzQ2RG1V?=
+ =?utf-8?B?S1RWWHppL3czVkU2aEVjeTM0R0xka2pPb3NsTCswekd1a1R2WEdvZmYzLzNW?=
+ =?utf-8?B?UjZwdmN4TzBJTzcxdGRXbHR4K1NNaFRzTzhBWkJIdXA4YmMwZ2FoZk1MN0lT?=
+ =?utf-8?B?aExFcVRnY3VNWFBVRmQ3anNUemFjRGFjVzVtUGttRGhab2VxMnF2aDBkbGk2?=
+ =?utf-8?B?elRpY1c3MFpuUTN6ZXR3d0JVaVZxQkdVNC9vK0ZzMmJyRDdsTW01RUdGS2hi?=
+ =?utf-8?B?MlRNaWt2U3dJTldvSk5jN01XaDVuclFMQm5relR5dXJaY1U2TmVtZTd0bEIw?=
+ =?utf-8?B?ZldEOVp5N1lEc0N3ekVHWTlSQTJ3ZzA2QTRxRk9IemVYMEg2TjJ0U0IxMWtQ?=
+ =?utf-8?B?N2hyOWdCSGQ5T1g2aThSWnVhUEJuQzlheWRrelJJQzU1Q0dlYk10dFJ3dUJO?=
+ =?utf-8?B?R0VxWHJIcG8wT0lON3VLWnZsZ3FYZC9zbmhDS3dOSXQwUytvV08wL3kwV3ow?=
+ =?utf-8?B?dmgzQTNkOEdSVDNlaDNiQmJoTEgxN3lhOGJlYUF2MEEzSlViMU5ydUxaNFk2?=
+ =?utf-8?B?dThpMEFabGhTOXRwQWZUR1JSU2hzT05JeUdVaHFPazRNdHdncDIvUnpvTlpo?=
+ =?utf-8?B?V2E3bTFxTEwzcmNoQXJYUW1PRzk4Mk40TWloREQwdTVwU2lpT1VqMzhncGpl?=
+ =?utf-8?B?cjB4Y0JnZjRtNzBTMTBTcnN2b1pUTmxSWkFmcEpRTUVxU08rRWNBS1JnSkZH?=
+ =?utf-8?B?elByUkdRL1I4MitmVkF3cnlGbzJaWmwyOXVSOE14NVUxQ2dwZ0ZweU1WUmdC?=
+ =?utf-8?B?L3IweVArNWN4K3E3ZVkrWmFpb2FvSkU1SndMR3h5aEhEbTVIdXR0UGN6b3lQ?=
+ =?utf-8?B?T2dueUhiNGc0ZjNVcnRlK0JWTVFvRHFOeG1MZXpoTFBqaVBQbWlzTGE2bDJv?=
+ =?utf-8?B?Sms0bTZnMFZxZEtsN21Bbll0Mm5DSGtRZHJyN3JaOHNDRDZ0eWRDRzE1UmJ5?=
+ =?utf-8?B?RVk4SEVjczlsM1ZEWVg4Wm1VZmNLRHJwNEcrVXRlYXF6R2VjU2FueTRDT3U4?=
+ =?utf-8?B?R0N5QlhwR0hwNTNpRFo5WTFWSHV6N1VETFBBMDNmcTIrdjdBVWszK09BeUxi?=
+ =?utf-8?B?T25mNWE3RytCMnN2Y0hzcW5Cb3hRTE9DaXhZTE1lWUdUb0FHcGxZMmxYVWUz?=
+ =?utf-8?B?NHJUb2hKRmRUNFp4c25hVTVIWG5QOStITzVMSWhRL0RtRU03OUdpQ09HRURU?=
+ =?utf-8?B?OXI1Znl3YWluUG5qN2Z0UnlTejcycC9McHI3WXZmTit4REs3d202aXBxaHND?=
+ =?utf-8?B?OUllanRWWFdEcmpNdjI5L2tGMEIwRUtUNzQ5SjNTTWdlQkd3UTY1UGJkSUhT?=
+ =?utf-8?B?dnRjVHFWMnEvZy9oNTZZeEJVWXFxdW1JZ0FVMElNNHMxNGJwZDIydEJ1QUNL?=
+ =?utf-8?B?L0J6d2RXell6bG9IWFBoV2pnODVXb3ZlM0pteWRMbHBqU2dZTE1oMmhNeFNj?=
+ =?utf-8?B?aWhXSmo4L0NwK2xxZDNhQjh4ZlNPU0xKbkIyd0Y3RytuVFFZWDlySjhscjd5?=
+ =?utf-8?B?YlY3TWEzQmxyRUU4S0c2bGtTbEFQN01VN1RQbGFscDI4SUpJc0VNQXpmRTRO?=
+ =?utf-8?B?OWExU0xNTlhwT1U4eVkwcDhNVjViWVVaTWlMOVc5TWpyOTR4YVFIbXJnRHdz?=
+ =?utf-8?B?ZDVWQWxRdk40WG1hbW4xa3VSTGZvSjN4dDdSYzdsS2UxcWFIY2loWHcxQ1d3?=
+ =?utf-8?B?R2VMTW8yZ2JiVjFLMXh6L2lWQisvQ1dWckdVeTA0RTBRRmY0NmxUWDRJcGdD?=
+ =?utf-8?B?YkU5N1VQcjc0dzVOS1Y5UGZLbm5XUXlMMTk2Y2RwdFVVamo2MVM4RHZwUEFl?=
+ =?utf-8?B?WUVrN1BJdG45MEJESVpsY09YbTRFV2FpQzV4RVAyMTM2eE81dVRpL01yODBw?=
+ =?utf-8?Q?076fRCxaNdifdv9gX9DPrln00/AsBkBCsNipsKNsqhLzd?=
+X-MS-Exchange-AntiSpam-MessageData-1: z0Hxwg7aRW2eIw==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ee4621c-8be4-4288-09ea-08da2792a4de
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b7ba01b-9c97-440d-9967-08da279268c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 14:38:20.2104
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 14:40:01.3725
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sNl2NY+0ADWc5eofJdAQMSFd0iXsqybrSDfl115w6FHDdcS30oQN1sSGRF1qclRiGEBPpGFzde8jfyTa8wU7zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5253
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mvSTcAYCXsFPt8AZxzRiN3MAfkMkc1sY/i4JM4w+KtWOrDcoYRiAEgAcu+XS5tQbdxg3Ul73BBZyUFvCGAE/M+qTYN/AfwOZIFj9ednuH6M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5069
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-26_04:2022-04-26,2022-04-26 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204260092
+X-Proofpoint-GUID: Foy2yvD9KbZDlBtdknZGmUhFPnVkyhb2
+X-Proofpoint-ORIG-GUID: Foy2yvD9KbZDlBtdknZGmUhFPnVkyhb2
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,226 +169,85 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, Apr 26, 2022 at 06:44:46AM +0000, Zhang, Qiang1 wrote:
->=20
-> On Mon, Apr 25, 2022 at 09:04:04AM +0800, Zqiang wrote:
-> > If the rcutree.use_softirq is configured, when RCU Stall event=20
-> > happened, dump status of all rcuc kthreads who due to starvation=20
-> > prevented grace period ends on CPUs that not report quiescent state.
-> >=20
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> >  v1->v2:
-> >  rework rcuc_kthread_dump function
-> >  v2->v3:
-> >  merge this rcuc-stalled information into print_cpu_stall_info()
-> >  v3->v4:
-> >  print rcuc info only when rcuc kthread is starved
-> >=20
-> >  kernel/rcu/tree_stall.h | 49
-> > ++++++++++++++++++-----------------------
-> >  1 file changed, 21 insertions(+), 28 deletions(-)
->=20
-> >I have queued this for testing and further review, thank you!
-> >
-> >I did the usual wordsmithing, plus I got rid of a couple of space charac=
-ters that are extraneous in the common case (one of yours and one pre-exist=
-ing instance).
-> >
-> >Could you please generate an actual stall of this type?  You might need =
-to add a delay to the rcuc code, but other than that, please see the rcutor=
-ture blog series [1] and in particular the post on forcing stall warnings [=
-2].
-> >
-> >							Thanx, Paul
-> >
-> >[1] https://paulmck.livejournal.com/61432.html
-> >[2] https://paulmck.livejournal.com/58077.html
->=20
-> I followed the instructions, add " rcutorture.stall_cpu=3D22=20
-> rcutorture.fwd_progress=3D0"  and " rcutree.use_softirq=3D0"to bootargs, =
-can trigger  RCU CPU stall warning:
->=20
-> root@qemux86-64:/# dmesg
-> [   37.556435] rcu: INFO: rcu_preempt self-detected stall on CPU
-> [   37.556437] rcu:     3-....: (1 GPs behind) idle=3D269/1/0x40000000000=
-00000 softirq=3D0/0 fqs=3D5631 rcuc=3D26004 jiffies(starved)
-> [   37.556440]  (t=3D26000 jiffies g=3D3589 q=3D35403)
-> [   37.556441] NMI backtrace for cpu 3
-> [   37.556442] CPU: 3 PID: 117 Comm: rcu_torture_sta Tainted: G          =
-   L    5.17.0-yoctodev-standard #16 7fe7533e7466875b0801ac148f921afcf57d38=
-bc
-> [   37.556443] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS r=
-el-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-> [   37.556444] Call Trace:
-> [   37.556445]  <IRQ>
-> [   37.556446]  dump_stack_lvl+0x5b/0x82
-> [   37.556449]  dump_stack+0x10/0x12
-> [   37.556451]  nmi_cpu_backtrace.cold+0x32/0x8a
-> [   37.556452]  ? lapic_can_unplug_cpu+0x80/0x80
-> [   37.556454]  nmi_trigger_cpumask_backtrace+0xce/0xe0
-> [   37.556456]  arch_trigger_cpumask_backtrace+0x19/0x20
-> [   37.556458]  rcu_dump_cpu_stacks+0xcd/0x140
-> [   37.556460]  rcu_sched_clock_irq.cold+0x7a/0x3ba
-> [   37.556463]  ? debug_smp_processor_id+0x17/0x20
-> [   37.556466]  update_process_times+0x9b/0xd0
-> [   37.556467]  tick_sched_handle.isra.0+0x25/0x50
-> [   37.556469]  tick_sched_timer+0x79/0x90
-> [   37.556470]  ? tick_sched_do_timer+0x60/0x60
-> [   37.556471]  __hrtimer_run_queues+0x1d1/0x4c0
-> [   37.556473]  hrtimer_interrupt+0x114/0x230
-> [   37.556475]  ? rcu_read_lock_held_common+0x12/0x50
-> [   37.556489]  __sysvec_apic_timer_interrupt+0xa4/0x280
-> [   37.556491]  sysvec_apic_timer_interrupt+0x95/0xc0
-> [   37.556492]  </IRQ>
 
->Excellent, thank you!!!
->
->Now could you please do the same thing for a use_softirq kernel to verify =
-that it prints correctly when that message is not supposed to be shown?
+On 4/25/22 23:21, Sourabh Jain wrote:
+> 
+> On 13/04/22 22:12, Eric DeVolder wrote:
+>> CRASH_HOTPLUG is to enable cpu and memory hotplug support of crash.
+>>
+>> CRASH_HOTPLUG_ELFCOREHDR_SZ is used to specify the maximum size of
+>> the elfcorehdr buffer/segment.
+>>
+>> This is a preparation for later usage.
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> Acked-by: Baoquan He <bhe@redhat.com>
+>> ---
+>>   arch/x86/Kconfig | 26 ++++++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index b0142e01002e..f7b92ee1bcc7 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -2072,6 +2072,32 @@ config CRASH_DUMP
+>>         (CONFIG_RELOCATABLE=y).
+>>         For more details see Documentation/admin-guide/kdump/kdump.rst
+>> +config CRASH_HOTPLUG
+>> +    bool "kernel updates of crash elfcorehdr"
+>> +    depends on CRASH_DUMP && (HOTPLUG_CPU || MEMORY_HOTPLUG) && KEXEC_FILE
+>> +    help
+>> +      Enable the kernel to update the crash elfcorehdr (which contains
+>> +      the list of CPUs and memory regions) directly when hot plug/unplug
+>> +      of CPUs or memory. Otherwise userspace must monitor these hot
+>> +      plug/unplug change notifications via udev in order to
+>> +      unload-then-reload the crash kernel so that the list of CPUs and
+>> +      memory regions is kept up-to-date. Note that the udev CPU and
+>> +      memory change notifications still occur (however, userspace is not
+>> +      required to monitor for crash dump purposes).
+>> +
+>> +config CRASH_HOTPLUG_ELFCOREHDR_SZ
+>> +    depends on CRASH_HOTPLUG
+>> +    int
+>> +    default 131072
+>> +    help
+>> +      Specify the maximum size of the elfcorehdr buffer/segment.
+>> +      The 128KiB default is sized so that it can accommodate 2048
+>> +      Elf64_Phdr, where each Phdr represents either a CPU or a
+>> +      region of memory.
+>> +      For example, this size can accommodate a machine with up to 1024
+>> +      CPUs and up to 1024 memory regions, eg. as represented by the
+>> +      'System RAM' entries in /proc/iomem.
+> 
+> Is it possible to get rid of CRASH_HOTPLUG_ELFCOREHDR_SZ?
+At the moment, I do not think so. The idea behind this value is to represent the largest number of 
+CPUs and memory regions possible in the system. Today there is NR_CPUS which could be used for CPUs, 
+but there isn't a similar value for memory. I also am not aware of a kernel variable that could be 
+utilized to represent the maximum number of memory regions. If there is, please let me know!
+> 
+> How about finding the additional buffer space needed for future CPU and memory
+> add during the kdump load? Not sure about the feasibility of doing this in
+> kexec tool (userspace).
 
-The use_softirq is not set zero, log follow:
+I may not understand what you are asking, but the x86 code, for kexec_file_load, does in fact 
+allocate all the space needed (currently via CRASH_HOTPLUG_ELFCOREHDR_SZ) upon kdump load.
 
-rcu: INFO: rcu_preempt self-detected stall on CPU=09
-[   32.388910] rcu:     3-....: (20847 ticks this GP) idle=3D733/1/0x400000=
-0000000000 softirq=3D4565/4565 fqs=3D4655
-[   32.388913]  (t=3D21000 jiffies g=3D8113 q=3D12547)
-[   32.388914] NMI backtrace for cpu 3
-[   32.388914] CPU: 3 PID: 73 Comm: rcu_torture_sta Tainted: G             =
-L    5.17.0-yoctodev-standard #2 05f26dfea00beb93d9714ba8d61bb77646676403
-[   32.388915] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel=
--1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-[   32.388916] Call Trace:
-[   32.388916]  <IRQ>
-[   32.388917]  dump_stack_lvl+0x5b/0x82
+For kexec_load, I've had no problem asking the kexec tool to allocate a larger piece of memory for 
+the elfcorehdr. But it is the same problem as CRASH_HOTPLUG_ELFCOREHDR_SZ; how big? In my workspace 
+I tell kexec tool how big. If there are sysfs visible values for NR_CPU and memory, then we could 
+have kexec pull those and compute.
 
-Thanks
-Zqiang
+I do think the important thing is that this allocation needs to happen once (for either kexec_load 
+or kexec_file_load), so that the buffer is always in the same spot and thus the pointer to that 
+buffer does not change; else boot_params cmdline would need to change. I once had this coded this 
+way, but Baoquan pointed out this simpler way.
 
->
->							Thanx, Paul
+Regards,
+eric
 
-> Thanks
-> Zqiang
->=20
-> >
-> ----------------------------------------------------------------------
-> --
->=20
-> commit 66226e2acda8b31b60137b1ae71244df68541a01
-> Author: Zqiang <qiang1.zhang@intel.com>
-> Date:   Mon Apr 25 09:04:04 2022 +0800
->=20
->     rcu: Dump all rcuc kthreads status for CPUs that not report=20
-> quiescent state
->    =20
->     If the rcutree.use_softirq kernel boot parameter is disabled, then it=
- is
->     possible that a RCU CPU stall is due to the rcuc kthreads being starv=
-ed of
->     CPU time.  There is currently no easy way to infer this from the RCU =
-CPU
->     stall warning output.  This commit therefore adds a string of the for=
-m "
->     rcuc=3D%ld jiffies(starved)" to a given CPU's output if the correspon=
-ding
->     rcuc kthread has been starved for more than two seconds.
->    =20
->     [ paulmck: Eliminate extraneous space characters. ]
->    =20
->     Signed-off-by: Zqiang <qiang1.zhang@intel.com>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->=20
-> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h index=20
-> d7956c03edbd4..0a25a4ea6eef8 100644
-> --- a/kernel/rcu/tree_stall.h
-> +++ b/kernel/rcu/tree_stall.h
-> @@ -407,7 +407,19 @@ static bool rcu_is_gp_kthread_starving(unsigned=20
-> long *jp)
-> =20
->  static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned =
-long *jp)  {
-> -	unsigned long j =3D jiffies - READ_ONCE(rdp->rcuc_activity);
-> +	int cpu;
-> +	struct task_struct *rcuc;
-> +	unsigned long j;
-> +
-> +	rcuc =3D rdp->rcu_cpu_kthread_task;
-> +	if (!rcuc)
-> +		return false;
-> +
-> +	cpu =3D task_cpu(rcuc);
-> +	if (cpu_is_offline(cpu) || idle_cpu(cpu))
-> +		return false;
-> +
-> +	j =3D jiffies - READ_ONCE(rdp->rcuc_activity);
-> =20
->  	if (jp)
->  		*jp =3D j;
-> @@ -432,6 +444,9 @@ static void print_cpu_stall_info(int cpu)
->  	struct rcu_data *rdp =3D per_cpu_ptr(&rcu_data, cpu);
->  	char *ticks_title;
->  	unsigned long ticks_value;
-> +	bool rcuc_starved;
-> +	unsigned long j;
-> +	char buf[32];
-> =20
->  	/*
->  	 * We could be printing a lot while holding a spinlock.  Avoid @@ -449,=
-7 +464,10 @@ static void print_cpu_stall_info(int cpu)
->  	delta =3D rcu_seq_ctr(rdp->mynode->gp_seq - rdp->rcu_iw_gp_seq);
->  	falsepositive =3D rcu_is_gp_kthread_starving(NULL) &&
->  			rcu_dynticks_in_eqs(rcu_dynticks_snap(rdp));
-> -	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=3D%03x/%ld/%#lx softirq=3D%u/%u fq=
-s=3D%ld %s\n",
-> +	rcuc_starved =3D rcu_is_rcuc_kthread_starving(rdp, &j);
-> +	if (rcuc_starved)
-> +		sprintf(buf, " rcuc=3D%ld jiffies(starved)", j);
-> +	pr_err("\t%d-%c%c%c%c: (%lu %s) idle=3D%03x/%ld/%#lx softirq=3D%u/%u=20
-> +fqs=3D%ld%s%s\n",
->  	       cpu,
->  	       "O."[!!cpu_online(cpu)],
->  	       "o."[!!(rdp->grpmask & rdp->mynode->qsmaskinit)], @@ -462,32 +48=
-0,10 @@ static void print_cpu_stall_info(int cpu)
->  	       rdp->dynticks_nesting, rdp->dynticks_nmi_nesting,
->  	       rdp->softirq_snap, kstat_softirqs_cpu(RCU_SOFTIRQ, cpu),
->  	       data_race(rcu_state.n_force_qs) -=20
-> rcu_state.n_force_qs_gpstart,
-> +	       rcuc_starved ? buf : "",
->  	       falsepositive ? " (false positive?)" : "");  }
-> =20
-> -static void rcuc_kthread_dump(struct rcu_data *rdp) -{
-> -	int cpu;
-> -	unsigned long j;
-> -	struct task_struct *rcuc;
-> -
-> -	rcuc =3D rdp->rcu_cpu_kthread_task;
-> -	if (!rcuc)
-> -		return;
-> -
-> -	cpu =3D task_cpu(rcuc);
-> -	if (cpu_is_offline(cpu) || idle_cpu(cpu))
-> -		return;
-> -
-> -	if (!rcu_is_rcuc_kthread_starving(rdp, &j))
-> -		return;
-> -
-> -	pr_err("%s kthread starved for %ld jiffies\n", rcuc->comm, j);
-> -	sched_show_task(rcuc);
-> -	if (!trigger_single_cpu_backtrace(cpu))
-> -		dump_cpu_task(cpu);
-> -}
-> -
->  /* Complain about starvation of grace-period kthread.  */  static=20
-> void rcu_check_gp_kthread_starvation(void)
->  {
-> @@ -659,9 +655,6 @@ static void print_cpu_stall(unsigned long gps)
->  	rcu_check_gp_kthread_expired_fqs_timer();
->  	rcu_check_gp_kthread_starvation();
-> =20
-> -	if (!use_softirq)
-> -		rcuc_kthread_dump(rdp);
-> -
->  	rcu_dump_cpu_stacks();
-> =20
->  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> 
+> Thanks,
+> Sourabh Jain
+> 
+> 
+> 

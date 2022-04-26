@@ -2,139 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2B650EF2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949F550EF30
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243001AbiDZD0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 23:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S243019AbiDZDal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 23:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235959AbiDZD0r (ORCPT
+        with ESMTP id S232958AbiDZDaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 23:26:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE59AC6152;
-        Mon, 25 Apr 2022 20:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650943421; x=1682479421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MIZ9NnOqirQrvhaRVQ8rsuasqFgvVqtc65THhom/L0w=;
-  b=Ca+uNgPHuQDkjgv7MSPDTywLgxBzC/iyQTU2CnojwnDVXz59+n8WeXQD
-   acpcL9Hq0q+tUxYYnlu2X5sBcIOT3lt92a2Xs56Mf0i6IvwIRD3A2euUW
-   ipk0ZJu2KQI0qtHn2qH/5XYI3e7lbCYwvseqcMm3TPdbl0J40Nham8MQ0
-   k1jQF0gUxzUCXfU284nYDMDOFcLiQdT59xRUoMtcQEC+h2o2z9auIVE9w
-   +qaotL8F7U8cqeMMeh3UtPKO5/mRdJcsxKjXkoTm+R00DElB2gCyoeXEH
-   Jl+vrFUm0Aes9t0Uiz+36vI5k30MMU9Tc5OPFXj2XQd7UQDkr9Mn2HrwX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351878222"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="351878222"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 20:23:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579644855"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2022 20:23:37 -0700
-Date:   Tue, 26 Apr 2022 11:23:37 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>, ying.huang@intel.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] cgroup/cpuset: Remove cpus_allowed/mems_allowed setup
- in cpuset_init_smp()
-Message-ID: <20220426032337.GA84190@shbuild999.sh.intel.com>
-References: <20220425155505.1292896-1-longman@redhat.com>
+        Mon, 25 Apr 2022 23:30:35 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9522182D;
+        Mon, 25 Apr 2022 20:27:28 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id jt15so7273135qvb.13;
+        Mon, 25 Apr 2022 20:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oxvTmypBBV1dcA5LKBfYnuJggK+6LDF/F/EDctPMfhg=;
+        b=lpvJnznv8Wt7AE6DkzPZ8wyC84hrbIv3ngWbpuZypeTEcnGM+CTX0J9XT9A+tanY06
+         TNLpZPKUYECXDFT5YQa6TE9ixMK72mxm8OCG+yEJB9giQt63+yV1qjRh/rFiKC6yMTHT
+         U7K+teoWg0vlcH9D8ozYmHuBKLnr6o4vlucPw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oxvTmypBBV1dcA5LKBfYnuJggK+6LDF/F/EDctPMfhg=;
+        b=CuT0jbticD2N97Rvk3Nr7XwWjPNgx5GWFsqsYmZpIsFYJ0OVYvbHhNAog4GTE3zNtQ
+         xe8h+Jsdx2ZSnLJqjfyZNQUlBZWCxQKQXrXeDJXJjqycpwyTNNQd7kQ3D8HgiC58Gmwd
+         aTFNv31zJ5xc8RZ0s6laOx4qijzUSV48ZRCZealhUtT6KXA9+sBPpQRGwS4ipjpbW1Be
+         pTSYycg9oorg/daULEgX0HeYdW+uw7vLXamvFUgYBJbEIlgb6C5JVWuohqtgAq+cbAka
+         BtSjUWTWKqhqLVgqqMBV57aTSTJ/WHEgiCJ6wkFP8zezPGwsaJ3RgSMDFH7TIW9iS1/G
+         XMZQ==
+X-Gm-Message-State: AOAM532tN22ECFt+hicsX6p94AA78SGWU2I9PZEK60dat2Tj4VX6wv4P
+        CIh61vREB/eQlRyhVdBlp6tR+rGXkKXrI8NzU1Y=
+X-Google-Smtp-Source: ABdhPJxBFhrNYmM1RYhKhzeRze/BwTn7OXbQYrKNsL7mqiE5bOcX72wExIw7Ok4LXU8qVZD+F4qIg3T2gUTomr3axnA=
+X-Received: by 2002:ad4:5dea:0:b0:452:6009:844b with SMTP id
+ jn10-20020ad45dea000000b004526009844bmr13646167qvb.121.1650943647552; Mon, 25
+ Apr 2022 20:27:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425155505.1292896-1-longman@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220304063137.12970-1-tommy_huang@aspeedtech.com> <20220304063137.12970-3-tommy_huang@aspeedtech.com>
+In-Reply-To: <20220304063137.12970-3-tommy_huang@aspeedtech.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 26 Apr 2022 03:27:15 +0000
+Message-ID: <CACPK8Xc92tStUOAgU9_XPGK7bQwJ_hutV16U+otUZkswrOumeA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] drm/aspeed: Add 1024x768 mode for AST2600
+To:     Tommy Haung <tommy_huang@aspeedtech.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Waiman,
-
-On Mon, Apr 25, 2022 at 11:55:05AM -0400, Waiman Long wrote:
-> There are 3 places where the cpu and node masks of the top cpuset can
-> be initialized in the order they are executed:
->  1) start_kernel -> cpuset_init()
->  2) start_kernel -> cgroup_init() -> cpuset_bind()
->  3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
-> 
-> The first cpuset_init() function just sets all the bits in the masks.
-> The last one executed is cpuset_init_smp() which sets up cpu and node
-> masks suitable for v1, but not v2.  cpuset_bind() does the right setup
-> for both v1 and v2.
-> 
-> For systems with cgroup v2 setup, cpuset_bind() is called once. For
-> systems with cgroup v1 setup, cpuset_bind() is called twice. It is
-> first called before cpuset_init_smp() in cgroup v2 mode.  Then it is
-> called again when cgroup v1 filesystem is mounted in v1 mode after
-> cpuset_init_smp().
-> 
->   [    2.609781] cpuset_bind() called - v2 = 1
->   [    3.079473] cpuset_init_smp() called
->   [    7.103710] cpuset_bind() called - v2 = 0
-
-I run some test, on a server with centOS, this did happen that
-cpuset_bind() is called twice, first as v2 during kernel boot,
-and then as v1 post-boot. 
-
-However on a QEMU running with a basic debian rootfs image,
-the second  call of cpuset_bind() didn't happen. 
-
-> As a result, cpu and memory node hot add may fail to update the cpu and
-> node masks of the top cpuset to include the newly added cpu or node in
-> a cgroup v2 environment.
-> 
-> smp_init() is called after the first two init functions.  So we don't
-> have a complete list of active cpus and memory nodes until later in
-> cpuset_init_smp() which is the right time to set up effective_cpus
-> and effective_mems.
-> 
-> To fix this problem, the potentially incorrect cpus_allowed &
-> mems_allowed setup in cpuset_init_smp() are removed.  For cgroup v2
-> systems, the initial cpuset_bind() call will set them up correctly.
-> For cgroup v1 systems, the second call to cpuset_bind() will do the
-> right setup.
-> 
-> cc: stable@vger.kernel.org
-> Signed-off-by: Waiman Long <longman@redhat.com>
+On Fri, 4 Mar 2022 at 06:32, Tommy Haung <tommy_huang@aspeedtech.com> wrote:
+>
+> Update the aspeed_gfx_set_clk with display width.
+> At AST2600, the display clock could be coming from
+> HPLL clock / 16 = 75MHz. It would fit 1024x768@70Hz.
+> Another chip will still keep 800x600.
+>
+> Signed-off-by: Tommy Haung <tommy_huang@aspeedtech.com>
 > ---
->  kernel/cgroup/cpuset.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 9390bfd9f1cd..6bd8f5ef40fe 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -3390,8 +3390,9 @@ static struct notifier_block cpuset_track_online_nodes_nb = {
->   */
->  void __init cpuset_init_smp(void)
+>  drivers/gpu/drm/aspeed/aspeed_gfx.h      | 12 ++++++----
+>  drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c | 29 ++++++++++++++++++++----
+>  drivers/gpu/drm/aspeed/aspeed_gfx_drv.c  | 16 +++++++++++--
+>  drivers/gpu/drm/aspeed/aspeed_gfx_out.c  | 14 +++++++++++-
+>  4 files changed, 60 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx.h b/drivers/gpu/drm/aspeed/aspeed_gfx.h
+> index eb4c267cde5e..c7aefee0657a 100644
+> --- a/drivers/gpu/drm/aspeed/aspeed_gfx.h
+> +++ b/drivers/gpu/drm/aspeed/aspeed_gfx.h
+> @@ -109,11 +109,15 @@ int aspeed_gfx_create_output(struct drm_device *drm);
+>  #define CRT_THROD_HIGH(x)              ((x) << 8)
+>
+>  /* SCU control */
+> -#define SCU_G6_CLK_COURCE              0x300
+> +#define G6_CLK_SOURCE                  0x300
+> +#define G6_CLK_SOURCE_MASK             (BIT(8) | BIT(9) | BIT(10))
+> +#define G6_CLK_SOURCE_HPLL             (BIT(8) | BIT(9) | BIT(10))
+> +#define G6_CLK_SOURCE_USB              BIT(9)
+> +#define G6_CLK_SEL3                    0x308
+> +#define G6_CLK_DIV_MASK                        0x3F000
+> +#define G6_CLK_DIV_16                  (BIT(16)|BIT(15)|BIT(13)|BIT(12))
+> +#define G6_USB_40_CLK                  BIT(9)
+>
+>  /* GFX FLAGS */
+>  #define CLK_MASK                       BIT(0)
+>  #define CLK_G6                         BIT(0)
+> -
+> -#define G6_CLK_MASK                    (BIT(8) | BIT(9) | BIT(10))
+> -#define G6_USB_40_CLK                  BIT(9)
+> diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c b/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c
+> index a24fab22eac4..5829be9c7c67 100644
+> --- a/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c
+> +++ b/drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c
+> @@ -23,6 +23,28 @@ drm_pipe_to_aspeed_gfx(struct drm_simple_display_pipe *pipe)
+>         return container_of(pipe, struct aspeed_gfx, pipe);
+>  }
+>
+> +static void aspeed_gfx_set_clock_source(struct aspeed_gfx *priv, int mode_width)
+> +{
+> +       regmap_update_bits(priv->scu, G6_CLK_SOURCE, G6_CLK_SOURCE_MASK, 0x0);
+> +       regmap_update_bits(priv->scu, G6_CLK_SEL3, G6_CLK_DIV_MASK, 0x0);
+> +
+> +       switch (mode_width) {
+> +       case 1024:
+> +               /* hpll div 16 = 75Mhz */
+> +               regmap_update_bits(priv->scu, G6_CLK_SOURCE,
+> +               G6_CLK_SOURCE_MASK, G6_CLK_SOURCE_HPLL);
+> +               regmap_update_bits(priv->scu, G6_CLK_SEL3,
+> +               G6_CLK_DIV_MASK, G6_CLK_DIV_16);
+> +               break;
+> +       case 800:
+> +       default:
+> +               /* usb 40Mhz */
+> +               regmap_update_bits(priv->scu, G6_CLK_SOURCE,
+> +               G6_CLK_SOURCE_MASK, G6_CLK_SOURCE_USB);
+> +               break;
+> +       }
+
+I'm not familiar with this area, but I think this belongs in the clock driver.
+
+We want to be able to call clk_set_rate() from the drm driver and have
+the clock driver update the correct bits in the SCU.
+
+Instead of specialising the 2600 vs others, could clk_set_rate() fail
+on the others, and cause the driver to stay at 800x600. If the set
+succeeds it can then run at the higher resolution. If this is not how
+the APIs work, we could instead have a clock_rate in struct aspeed_gfx
+and each platform can define its expected clock rate. It would then
+need a corresponding resolution.
+
+Please take a look at other drivers and see what they do.
+
+
+
+> +}
+> +
+>  static int aspeed_gfx_set_pixel_fmt(struct aspeed_gfx *priv, u32 *bpp)
 >  {
-> -	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
-> -	top_cpuset.mems_allowed = node_states[N_MEMORY];
-
-So can we keep line
-  cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
-
-and only remove line 
-       top_cpuset.mems_allowed = node_states[N_MEMORY];
-?
-
-Thanks,
-Feng
+>         struct drm_crtc *crtc = &priv->pipe.crtc;
+> @@ -77,12 +99,11 @@ static void aspeed_gfx_disable_controller(struct aspeed_gfx *priv)
+>         regmap_update_bits(priv->scu, priv->dac_reg, BIT(16), 0);
+>  }
+>
+> -static void aspeed_gfx_set_clk(struct aspeed_gfx *priv)
+> +static void aspeed_gfx_set_clk(struct aspeed_gfx *priv, int mode_width)
+>  {
+>         switch (priv->flags & CLK_MASK) {
+>         case CLK_G6:
+> -               regmap_update_bits(priv->scu, SCU_G6_CLK_COURCE, G6_CLK_MASK, 0x0);
+> -               regmap_update_bits(priv->scu, SCU_G6_CLK_COURCE, G6_CLK_MASK, G6_USB_40_CLK);
+> +               aspeed_gfx_set_clock_source(priv, mode_width);
+>                 break;
+>         default:
+>                 break;
+> @@ -99,7 +120,7 @@ static void aspeed_gfx_crtc_mode_set_nofb(struct aspeed_gfx *priv)
+>         if (err)
+>                 return;
+>
+> -       aspeed_gfx_set_clk(priv);
+> +       aspeed_gfx_set_clk(priv, m->hdisplay);
+>
+>  #if 0
+>         /* TODO: we have only been able to test with the 40MHz USB clock. The
+> diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+> index af56ffdccc65..e1a814aebc2d 100644
+> --- a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+> +++ b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+> @@ -110,6 +110,7 @@ static const struct drm_mode_config_funcs aspeed_gfx_mode_config_funcs = {
+>
+>  static int aspeed_gfx_setup_mode_config(struct drm_device *drm)
+>  {
+> +       struct aspeed_gfx *priv = to_aspeed_gfx(drm);
+>         int ret;
+>
+>         ret = drmm_mode_config_init(drm);
+> @@ -118,8 +119,18 @@ static int aspeed_gfx_setup_mode_config(struct drm_device *drm)
+>
+>         drm->mode_config.min_width = 0;
+>         drm->mode_config.min_height = 0;
+> -       drm->mode_config.max_width = 800;
+> -       drm->mode_config.max_height = 600;
+> +
+> +       switch (priv->flags & CLK_MASK) {
+> +       case CLK_G6:
+> +               drm->mode_config.max_width = 1024;
+> +               drm->mode_config.max_height = 768;
+> +               break;
+> +       default:
+> +               drm->mode_config.max_width = 800;
+> +               drm->mode_config.max_height = 600;
+> +               break;
+> +       }
+> +
+>         drm->mode_config.funcs = &aspeed_gfx_mode_config_funcs;
+>
+>         return ret;
+> @@ -167,6 +178,7 @@ static int aspeed_gfx_load(struct drm_device *drm)
+>         priv->vga_scratch_reg = config->vga_scratch_reg;
+>         priv->throd_val = config->throd_val;
+>         priv->scan_line_max = config->scan_line_max;
+> +       priv->flags = config->gfx_flags;
+>
+>         priv->scu = syscon_regmap_lookup_by_phandle(np, "syscon");
+>         if (IS_ERR(priv->scu)) {
+> diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_out.c b/drivers/gpu/drm/aspeed/aspeed_gfx_out.c
+> index 6759cb88415a..5d5e04f15c59 100644
+> --- a/drivers/gpu/drm/aspeed/aspeed_gfx_out.c
+> +++ b/drivers/gpu/drm/aspeed/aspeed_gfx_out.c
+> @@ -10,7 +10,19 @@
+>
+>  static int aspeed_gfx_get_modes(struct drm_connector *connector)
+>  {
+> -       return drm_add_modes_noedid(connector, 800, 600);
+> +       struct aspeed_gfx *priv = container_of(connector, struct aspeed_gfx, connector);
+> +       int mode_count = 0;
+> +
+> +       switch (priv->flags & CLK_MASK) {
+> +       case CLK_G6:
+> +               mode_count = drm_add_modes_noedid(connector, 1024, 768);
+> +               break;
+> +       default:
+> +               mode_count = drm_add_modes_noedid(connector, 800, 600);
+> +               break;
+> +       }
+> +
+> +       return mode_count;
+>  }
+>
+>  static const struct
+> --
+> 2.17.1
+>

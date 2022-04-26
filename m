@@ -2,156 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6306A510577
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C6451057B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347916AbiDZRg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S1348896AbiDZRg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236851AbiDZRgZ (ORCPT
+        with ESMTP id S236851AbiDZRg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:36:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D921457A5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:33:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FD0D6168F
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A73C385A4;
-        Tue, 26 Apr 2022 17:33:15 +0000 (UTC)
-Date:   Tue, 26 Apr 2022 13:33:14 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     syzbot <syzbot+7cc6f78de62bf22bda9c@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in ring_buffer_lock_reserve
-Message-ID: <20220426133314.09661e25@gandalf.local.home>
-In-Reply-To: <000000000000469c2805dd9181e9@google.com>
-References: <000000000000469c2805dd9181e9@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 13:36:57 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B11471A0C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:33:49 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id v17-20020a056902029100b006484d85132eso6546233ybh.14
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=UL+SlRLbaVahbVnEErphEvk34WlHfGNPNxSO/gRB8PU=;
+        b=WVZjjQ54CzpaSP6EB8cxzwA22v2BaFabmk72IIN5b8LZpcSwnNi7bthLXjUlG7D4vy
+         jWiiNwegWTh9CyHzDXVg08bbBzZa9qdwGhPjOBLbH9xgM84Zqh5Xx3mfN98pF+JrennA
+         4efC6M+p9kkkg0cubAT10Z8C2d2VpJZwyut6bvFJW7N3hIV+BzRGQlzOS9ppJE8d8omF
+         FIi4LF08nNajEe4f04f3WwtIM8Pqb7x8g6+hdRLmuMlUKogcwg93tc1SahaEv5ZT2HBZ
+         NAObPIYgXfofprWi2vJy8m58WG9jHtbxbhmcZBNtr63EvZ69HBiYiHetZq3m6IgWfTSP
+         3O6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=UL+SlRLbaVahbVnEErphEvk34WlHfGNPNxSO/gRB8PU=;
+        b=ruB+ezcWpk9iT0Ob8KHi+Bi7FgfQ1uhr7EuSdwo03NwskOS0daPtVjqsmhuqk3uVib
+         t33a61i8EjGeLsODB4zMM2CdH/4ujPd1laFdBU0gzdrU4bwQz2ckRb48coBhr77JeeZn
+         zJpSAav8GpaQJ0u5es8GxCC0SFm13If8pCwJCrMp1sNMjz/xorVFvqJw25xF513w8Uu2
+         dQd/I9N3wFLmnAH4MEoX7q/hm2dQZPf7/StXF8i5elLBkUuNFpP1/vhuIyYHDptR+YuY
+         0PD9FoWqlEy2f5J08F/hsVnDFIoMCrClvEvlLhCcXYwkixqsZzkL5GAWzC7W8DBaT8Sd
+         pIKA==
+X-Gm-Message-State: AOAM533FvykxeEJSSiMTZtZ4ZEdc5jfmQflTOOPeqMmgTPZ0NfoSCmId
+        NR7Kozz4B1/3KRY8Ubjl8C7eizaGzMfiPA==
+X-Google-Smtp-Source: ABdhPJyAA6ghAnIrcliz2lxZQyhdyS/0JQY3ML8KWVPV0QCWm7Bo0lXAgd81iHTfdQAlYt6Luco5KLHASCaP6Q==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:b03d:8d64:4a06:2c5f])
+ (user=dlatypov job=sendgmr) by 2002:a5b:8cb:0:b0:645:d65f:dcdd with SMTP id
+ w11-20020a5b08cb000000b00645d65fdcddmr18303389ybq.233.1650994428754; Tue, 26
+ Apr 2022 10:33:48 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 10:33:32 -0700
+Message-Id: <20220426173334.3871399-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH 1/3] kunit: tool: remove dead parse_crash_in_log() logic
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 09:51:32 -0700
-syzbot <syzbot+7cc6f78de62bf22bda9c@syzkaller.appspotmail.com> wrote:
+This logic depends on the kernel logging a message containing
+'kunit test case crashed', but there is no corresponding logic to do so.
 
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    c00c5e1d157b Merge tag 'ext4_for_linus_stable' of git://gi..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16c71798f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d1843173f299d1e8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7cc6f78de62bf22bda9c
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+7cc6f78de62bf22bda9c@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> Delta way too big! 8384096949562536641 ts=8384098609305280746 before=1659742744105 after=1659742744105 write stamp=8384098609305280746
+This is likely a relic of the revision process KUnit initially went
+through when being upstreamed.
 
-Looks like something in the test messed with the timestamp. As it went
-from 1659742744105 to 8384096949562536641, even for nanoseconds, that is a
-delta of 265 years!
+Delete it given
+1) it's been missing for years and likely won't get implemented
+2) the parser has been moving to be a more general KTAP parser,
+   kunit-only magic like this isn't how we'd want to implement it.
 
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_parser.py           | 21 ------
+ tools/testing/kunit/kunit_tool_test.py        | 17 ++---
+ .../test_data/test_is_test_passed-crash.log   | 70 -------------------
+ 3 files changed, 4 insertions(+), 104 deletions(-)
+ delete mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
 
-And looking at the console output, it looks like something happened because
-even that shows:
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 807ed2bd6832..7a0faf527a98 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -475,26 +475,6 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+ 		log.append(lines.pop())
+ 	return log
+ 
+-DIAGNOSTIC_CRASH_MESSAGE = re.compile(r'^# .*?: kunit test case crashed!$')
+-
+-def parse_crash_in_log(test: Test) -> bool:
+-	"""
+-	Iterate through the lines of the log to parse for crash message.
+-	If crash message found, set status to crashed and return True.
+-	Otherwise return False.
+-
+-	Parameters:
+-	test - Test object for current test being parsed
+-
+-	Return:
+-	True if crash message found in log
+-	"""
+-	for line in test.log:
+-		if DIAGNOSTIC_CRASH_MESSAGE.match(line):
+-			test.status = TestStatus.TEST_CRASHED
+-			return True
+-	return False
+-
+ 
+ # Printing helper methods:
+ 
+@@ -682,7 +662,6 @@ def bubble_up_test_results(test: Test) -> None:
+ 	Parameters:
+ 	test - Test object for current test being parsed
+ 	"""
+-	parse_crash_in_log(test)
+ 	subtests = test.subtests
+ 	counts = test.counts
+ 	status = test.status
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 210df0f443e6..1200e451c418 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -230,15 +230,6 @@ class KUnitParserTest(unittest.TestCase):
+ 		print_mock.stop()
+ 		self.assertEqual(0, len(result.subtests))
+ 
+-	def test_crashed_test(self):
+-		crashed_log = test_data_path('test_is_test_passed-crash.log')
+-		with open(crashed_log) as file:
+-			result = kunit_parser.parse_run_tests(
+-				file.readlines())
+-		self.assertEqual(
+-			kunit_parser.TestStatus.TEST_CRASHED,
+-			result.status)
+-
+ 	def test_skipped_test(self):
+ 		skipped_log = test_data_path('test_skip_tests.log')
+ 		with open(skipped_log) as file:
+@@ -478,10 +469,10 @@ class KUnitJsonTest(unittest.TestCase):
+ 			result["sub_groups"][1]["test_cases"][0])
+ 
+ 	def test_crashed_test_json(self):
+-		result = self._json_for('test_is_test_passed-crash.log')
++		result = self._json_for('test_kernel_panic_interrupt.log')
+ 		self.assertEqual(
+-			{'name': 'example_simple_test', 'status': 'ERROR'},
+-			result["sub_groups"][1]["test_cases"][0])
++			{'name': '', 'status': 'ERROR'},
++			result["sub_groups"][2]["test_cases"][1])
+ 
+ 	def test_skipped_test_json(self):
+ 		result = self._json_for('test_skip_tests.log')
+@@ -562,7 +553,7 @@ class KUnitMainTest(unittest.TestCase):
+ 	def test_exec_no_tests(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+ 		with self.assertRaises(SystemExit) as e:
+-                  kunit.main(['run'], self.linux_source_mock)
++		  kunit.main(['run'], self.linux_source_mock)
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=None, build_dir='.kunit', filter_glob='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains(' 0 tests run!'))
+diff --git a/tools/testing/kunit/test_data/test_is_test_passed-crash.log b/tools/testing/kunit/test_data/test_is_test_passed-crash.log
+deleted file mode 100644
+index 4d97f6708c4a..000000000000
+--- a/tools/testing/kunit/test_data/test_is_test_passed-crash.log
++++ /dev/null
+@@ -1,70 +0,0 @@
+-printk: console [tty0] enabled
+-printk: console [mc-1] enabled
+-TAP version 14
+-1..2
+-	# Subtest: sysctl_test
+-	1..8
+-	# sysctl_test_dointvec_null_tbl_data: sysctl_test_dointvec_null_tbl_data passed
+-	ok 1 - sysctl_test_dointvec_null_tbl_data
+-	# sysctl_test_dointvec_table_maxlen_unset: sysctl_test_dointvec_table_maxlen_unset passed
+-	ok 2 - sysctl_test_dointvec_table_maxlen_unset
+-	# sysctl_test_dointvec_table_len_is_zero: sysctl_test_dointvec_table_len_is_zero passed
+-	ok 3 - sysctl_test_dointvec_table_len_is_zero
+-	# sysctl_test_dointvec_table_read_but_position_set: sysctl_test_dointvec_table_read_but_position_set passed
+-	ok 4 - sysctl_test_dointvec_table_read_but_position_set
+-	# sysctl_test_dointvec_happy_single_positive: sysctl_test_dointvec_happy_single_positive passed
+-	ok 5 - sysctl_test_dointvec_happy_single_positive
+-	# sysctl_test_dointvec_happy_single_negative: sysctl_test_dointvec_happy_single_negative passed
+-	ok 6 - sysctl_test_dointvec_happy_single_negative
+-	# sysctl_test_dointvec_single_less_int_min: sysctl_test_dointvec_single_less_int_min passed
+-	ok 7 - sysctl_test_dointvec_single_less_int_min
+-	# sysctl_test_dointvec_single_greater_int_max: sysctl_test_dointvec_single_greater_int_max passed
+-	ok 8 - sysctl_test_dointvec_single_greater_int_max
+-kunit sysctl_test: all tests passed
+-ok 1 - sysctl_test
+-	# Subtest: example
+-	1..2
+-init_suite
+-	# example_simple_test: initializing
+-Stack:
+- 6016f7db 6f81bd30 6f81bdd0 60021450
+- 6024b0e8 60021440 60018bbe 16f81bdc0
+- 00000001 6f81bd30 6f81bd20 6f81bdd0
+-Call Trace:
+- [<6016f7db>] ? kunit_try_run_case+0xab/0xf0
+- [<60021450>] ? set_signals+0x0/0x60
+- [<60021440>] ? get_signals+0x0/0x10
+- [<60018bbe>] ? kunit_um_run_try_catch+0x5e/0xc0
+- [<60021450>] ? set_signals+0x0/0x60
+- [<60021440>] ? get_signals+0x0/0x10
+- [<60018bb3>] ? kunit_um_run_try_catch+0x53/0xc0
+- [<6016f321>] ? kunit_run_case_catch_errors+0x121/0x1a0
+- [<60018b60>] ? kunit_um_run_try_catch+0x0/0xc0
+- [<600189e0>] ? kunit_um_throw+0x0/0x180
+- [<6016f730>] ? kunit_try_run_case+0x0/0xf0
+- [<6016f600>] ? kunit_catch_run_case+0x0/0x130
+- [<6016edd0>] ? kunit_vprintk+0x0/0x30
+- [<6016ece0>] ? kunit_fail+0x0/0x40
+- [<6016eca0>] ? kunit_abort+0x0/0x40
+- [<6016ed20>] ? kunit_printk_emit+0x0/0xb0
+- [<6016f200>] ? kunit_run_case_catch_errors+0x0/0x1a0
+- [<6016f46e>] ? kunit_run_tests+0xce/0x260
+- [<6005b390>] ? unregister_console+0x0/0x190
+- [<60175b70>] ? suite_kunit_initexample_test_suite+0x0/0x20
+- [<60001cbb>] ? do_one_initcall+0x0/0x197
+- [<60001d47>] ? do_one_initcall+0x8c/0x197
+- [<6005cd20>] ? irq_to_desc+0x0/0x30
+- [<60002005>] ? kernel_init_freeable+0x1b3/0x272
+- [<6005c5ec>] ? printk+0x0/0x9b
+- [<601c0086>] ? kernel_init+0x26/0x160
+- [<60014442>] ? new_thread_handler+0x82/0xc0
+-
+-	# example_simple_test: kunit test case crashed!
+-	# example_simple_test: example_simple_test failed
+-	not ok 1 - example_simple_test
+-	# example_mock_test: initializing
+-	# example_mock_test: example_mock_test passed
+-	ok 2 - example_mock_test
+-kunit example: one or more tests failed
+-not ok 2 - example
+-List of all partitions:
 
-[ 3577.088716][T18453] GRED: Unable to relocate VQ 0x0 after dequeue, screwing up backlog
-[ 3577.088716][T18453] GRED: Unable to relocate VQ 0x0 after dequeue, screwing up backlog
-[ 3577.088716][T17423] GRED: Unable to relocate VQ 0x0 after dequeue, screwing up backlog
-
-[..]
-
-[8384098609.310217][T18453] GRED: Unable to relocate VQ 0x0 after dequeue, screwing up backlog
-[8384098609.310217][T19083] overlayfs: conflicting lowerdir path
-[8384098609.310217][T18453] GRED: Unable to relocate VQ 0x0 after dequeue, screwing up backlog
-[8384098609.310217][T18453] GRED: Unable to relocate VQ 0x0 after dequeue, screwing up backlog
-
-And yes, if you change the time stamp between two events that use deltas
-between them, it will cause this warning. That's a feature not a bug.
-
--- Steve
-
-
-
-> WARNING: CPU: 0 PID: 19417 at kernel/trace/ring_buffer.c:2744 rb_check_timestamp+0x129/0x130 kernel/trace/ring_buffer.c:2734
-> Modules linked in:
-> CPU: 0 PID: 19417 Comm: syz-executor.2 Tainted: G S                5.18.0-rc3-syzkaller-00190-gc00c5e1d157b #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:rb_check_timestamp+0x129/0x130 kernel/trace/ring_buffer.c:2734
-> Code: e8 91 8a 48 0f 44 e8 48 c7 c7 e0 ea 91 8a 48 8b 34 24 4c 89 fa 4c 89 e9 4d 89 f0 49 89 d9 31 c0 55 e8 5b 17 c6 ff 48 83 c4 08 <0f> 0b e9 f4 fe ff ff 55 41 57 41 56 41 55 41 54 53 48 83 ec 58 49
-> RSP: 0018:ffffc90002bef798 EFLAGS: 00010082
-> RAX: 45645b4ce4a40800 RBX: 745a4d43a97ce0ea RCX: 0000000000040000
-> RDX: ffffc9000bb08000 RSI: 000000000000adf6 RDI: 000000000000adf7
-> RBP: ffffffff8a91e8e0 R08: ffffffff816ac162 R09: ffffed1017344f24
-> R10: ffffed1017344f24 R11: 1ffff11017344f23 R12: ffff888011468930
-> R13: 0000018270606e29 R14: 0000018270606e29 R15: 745a4d43a97ce0ea
-> FS:  00007ff57856c700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ff57759d090 CR3: 0000000073001000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  rb_add_timestamp+0x324/0x520 kernel/trace/ring_buffer.c:2772
->  rb_update_event kernel/trace/ring_buffer.c:2809 [inline]
->  __rb_reserve_next kernel/trace/ring_buffer.c:3565 [inline]
->  rb_reserve_next_event kernel/trace/ring_buffer.c:3635 [inline]
->  ring_buffer_lock_reserve+0x10df/0x22a0 kernel/trace/ring_buffer.c:3694
->  __trace_buffer_lock_reserve kernel/trace/trace.c:949 [inline]
->  trace_event_buffer_lock_reserve+0xd8/0x6a0 kernel/trace/trace.c:2821
->  trace_event_buffer_reserve+0x2ae/0x3d0 kernel/trace/trace_events.c:496
->  trace_event_raw_event_bpf_trace_printk+0xfd/0x210 kernel/trace/./bpf_trace.h:11
->  trace_bpf_trace_printk+0x1c8/0x210 kernel/trace/./bpf_trace.h:11
->  ____bpf_trace_printk kernel/trace/bpf_trace.c:388 [inline]
->  bpf_trace_printk+0x194/0x200 kernel/trace/bpf_trace.c:371
->  bpf_prog_0605f9f479290f07+0x2f/0x33
->  bpf_dispatcher_nop_func include/linux/bpf.h:804 [inline]
->  __bpf_prog_run include/linux/filter.h:628 [inline]
->  bpf_prog_run include/linux/filter.h:635 [inline]
->  __bpf_trace_run kernel/trace/bpf_trace.c:2022 [inline]
->  bpf_trace_run2+0x18a/0x320 kernel/trace/bpf_trace.c:2059
->  __bpf_trace_sys_exit+0x60/0x70 include/trace/events/syscalls.h:44
->  trace_sys_exit+0xb2/0xd0 include/trace/events/syscalls.h:44
->  syscall_exit_work+0x4a/0xe0 kernel/entry/common.c:245
->  syscall_exit_to_user_mode_prepare+0x62/0x80 kernel/entry/common.c:276
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
->  syscall_exit_to_user_mode+0xa/0x70 kernel/entry/common.c:294
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7ff5774890e9
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ff57856c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: 0000000000000004 RBX: 00007ff57759bf60 RCX: 00007ff5774890e9
-> RDX: 0000000000000010 RSI: 0000000020000180 RDI: 0000000000000011
-> RBP: 00007ff5774e308d R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffe5033831f R14: 00007ff57856c300 R15: 0000000000022000
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+base-commit: 59729170afcd4900e08997a482467ffda8d88c7f
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
 

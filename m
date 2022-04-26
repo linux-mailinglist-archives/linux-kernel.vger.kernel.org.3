@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FF450F81E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC6250F53E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343916AbiDZJGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S230221AbiDZIqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346535AbiDZIpH (ORCPT
+        with ESMTP id S1345786AbiDZIjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0BB16B196;
-        Tue, 26 Apr 2022 01:34:56 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3124F9C6;
+        Tue, 26 Apr 2022 01:31:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C5196185D;
-        Tue, 26 Apr 2022 08:34:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C510C385A4;
-        Tue, 26 Apr 2022 08:34:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83724B81A2F;
+        Tue, 26 Apr 2022 08:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3EAC385AC;
+        Tue, 26 Apr 2022 08:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962095;
-        bh=WEBbgczWrpbCXYwFl07E9jqszZ2qufQtN0yZY/YVjpg=;
+        s=korg; t=1650961864;
+        bh=EipAMTZF5YuchwXSMNVNeqbz16e87WfypAJBaEy8V9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mhEO8JDD2TW3OHeN1DIDnu0dNZPwbUjiVFG/h+bsafaZDoCbsDDBhTbKvASt2QNQ8
-         CrxNWPj652F/O2Zt+VK4Z1oYGzv27EO4kaetuFfAxdo03KQmQbaoZ2WxCDvcR1hOV5
-         EMU01ZYcxCwoqx965Qdn+HLi20mGhDH07dmoPlDs=
+        b=T7r/quVIQRGUGAC+Qq7U6cWvhc8/X9B0LKoTwAXJsGaA6tNWzzroBfifb7o5fDYL7
+         c0tid83QTjRzndNyQrGFpgH6AZOeNBbPQHtth02VZ5vjRxvWuFnbK/h/wrnydtJXjZ
+         mDDNtazYbgskRCqkBeaK4+I9IBy93Io4LgjOUOzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 69/86] drm/panel/raspberrypi-touchscreen: Initialise the bridge in prepare
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 5.4 57/62] ext4: force overhead calculation if the s_overhead_cluster makes no sense
 Date:   Tue, 26 Apr 2022 10:21:37 +0200
-Message-Id: <20220426081743.198823808@linuxfoundation.org>
+Message-Id: <20220426081738.856257915@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit 5f18c0782b99e26121efa93d20b76c19e17aa1dd ]
+commit 85d825dbf4899a69407338bae462a59aa9a37326 upstream.
 
-The panel has a prepare call which is before video starts, and an
-enable call which is after.
-The Toshiba bridge should be configured before video, so move
-the relevant power and initialisation calls to prepare.
+If the file system does not use bigalloc, calculating the overhead is
+cheap, so force the recalculation of the overhead so we don't have to
+trust the precalculated overhead in the superblock.
 
-Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-3-stefan.wahren@i2se.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ fs/ext4/super.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index 90487df62480..4b92c6341490 100644
---- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-+++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -265,7 +265,7 @@ static int rpi_touchscreen_noop(struct drm_panel *panel)
- 	return 0;
- }
- 
--static int rpi_touchscreen_enable(struct drm_panel *panel)
-+static int rpi_touchscreen_prepare(struct drm_panel *panel)
- {
- 	struct rpi_touchscreen *ts = panel_to_ts(panel);
- 	int i;
-@@ -295,6 +295,13 @@ static int rpi_touchscreen_enable(struct drm_panel *panel)
- 	rpi_touchscreen_write(ts, DSI_STARTDSI, 0x01);
- 	msleep(100);
- 
-+	return 0;
-+}
-+
-+static int rpi_touchscreen_enable(struct drm_panel *panel)
-+{
-+	struct rpi_touchscreen *ts = panel_to_ts(panel);
-+
- 	/* Turn on the backlight. */
- 	rpi_touchscreen_i2c_write(ts, REG_PWM, 255);
- 
-@@ -349,7 +356,7 @@ static int rpi_touchscreen_get_modes(struct drm_panel *panel,
- static const struct drm_panel_funcs rpi_touchscreen_funcs = {
- 	.disable = rpi_touchscreen_disable,
- 	.unprepare = rpi_touchscreen_noop,
--	.prepare = rpi_touchscreen_noop,
-+	.prepare = rpi_touchscreen_prepare,
- 	.enable = rpi_touchscreen_enable,
- 	.get_modes = rpi_touchscreen_get_modes,
- };
--- 
-2.35.1
-
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -4514,9 +4514,18 @@ no_journal:
+ 	 * Get the # of file system overhead blocks from the
+ 	 * superblock if present.
+ 	 */
+-	if (es->s_overhead_clusters)
+-		sbi->s_overhead = le32_to_cpu(es->s_overhead_clusters);
+-	else {
++	sbi->s_overhead = le32_to_cpu(es->s_overhead_clusters);
++	/* ignore the precalculated value if it is ridiculous */
++	if (sbi->s_overhead > ext4_blocks_count(es))
++		sbi->s_overhead = 0;
++	/*
++	 * If the bigalloc feature is not enabled recalculating the
++	 * overhead doesn't take long, so we might as well just redo
++	 * it to make sure we are using the correct value.
++	 */
++	if (!ext4_has_feature_bigalloc(sb))
++		sbi->s_overhead = 0;
++	if (sbi->s_overhead == 0) {
+ 		err = ext4_calculate_overhead(sb);
+ 		if (err)
+ 			goto failed_mount_wq;
 
 

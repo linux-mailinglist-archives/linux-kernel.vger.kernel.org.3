@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EC750F56E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B834C50F5A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346303AbiDZIyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S1345911AbiDZIoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345409AbiDZIky (ORCPT
+        with ESMTP id S1345222AbiDZIh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:40:54 -0400
+        Tue, 26 Apr 2022 04:37:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84579156E19;
-        Tue, 26 Apr 2022 01:32:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1981890A7;
+        Tue, 26 Apr 2022 01:29:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36017B81CF9;
-        Tue, 26 Apr 2022 08:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F59BC385A4;
-        Tue, 26 Apr 2022 08:32:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D2FCB81CED;
+        Tue, 26 Apr 2022 08:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC16CC385A4;
+        Tue, 26 Apr 2022 08:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961971;
-        bh=FNUxyha6533HUnq5rVuZcQa26iropGAM7TaqeG2OOHw=;
+        s=korg; t=1650961747;
+        bh=w5zQ/smunMnh0oP0dXDgpqizKSPgIVojJ/G14JGHKOY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lr4CSqfKlOabWHoGcyZCQjHTGPscPT1MbZ9ody/vn8QJUzF9Z2lqZ/iwdTt1ToGbe
-         13zzgLhZMiwEET6nbBmrf2UtNfyu+UvY2O1JIzw/UcW67YQVBGAiOgAnb2TQ+SLVIQ
-         fIaAIMZ6UG3CjuxkJHZs5PVVikuJ0fAAu5rGd1XY=
+        b=houV1AQrHoFVBOCgwB1cIkl5IMJMrChoDWE2ifNnViYK3oQyPY0Ufy3JP9KUiHOos
+         QrZez1phyjmgJCzF20oXA2W6PJNT6m/YJQuNlaY8+A78pXBWycT/n8FJM5b3kK8bVR
+         kzekDvBsnc2VuFMl4WjmFdEVGwMoqK4P5HA37Hsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bernice Zhang <bernice.zhang@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 29/86] dmaengine: idxd: add RO check for wq max_batch_size write
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
+Subject: [PATCH 5.4 17/62] net/smc: Fix sock leak when release after smc_shutdown()
 Date:   Tue, 26 Apr 2022 10:20:57 +0200
-Message-Id: <20220426081742.049499318@linuxfoundation.org>
+Message-Id: <20220426081737.721078009@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+From: Tony Lu <tonylu@linux.alibaba.com>
 
-[ Upstream commit 66903461ffed0b66fc3e0200082d4e09365aacdc ]
+[ Upstream commit 1a74e99323746353bba11562a2f2d0aa8102f402 ]
 
-Block wq_max_batch_size_store() when the device is configured as read-only
-and not configurable.
+Since commit e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown
+and fallback"), for a fallback connection, __smc_release() does not call
+sock_put() if its state is already SMC_CLOSED.
 
-Fixes: e7184b159dd3 ("dmaengine: idxd: add support for configurable max wq batch size")
-Reported-by: Bernice Zhang <bernice.zhang@intel.com>
-Tested-by: Bernice Zhang <bernice.zhang@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Link: https://lore.kernel.org/r/164971493551.2201159.1942042593642155209.stgit@djiang5-desk3.ch.intel.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+When calling smc_shutdown() after falling back, its state is set to
+SMC_CLOSED but does not call sock_put(), so this patch calls it.
+
+Reported-and-tested-by: syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
+Fixes: e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown and fallback")
+Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/idxd/sysfs.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/smc/af_smc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-index 7b41cdff1a2c..5bf4b4be64e4 100644
---- a/drivers/dma/idxd/sysfs.c
-+++ b/drivers/dma/idxd/sysfs.c
-@@ -1132,6 +1132,9 @@ static ssize_t wq_max_batch_size_store(struct device *dev, struct device_attribu
- 	u64 batch_size;
- 	int rc;
- 
-+	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
-+		return -EPERM;
-+
- 	if (wq->state != IDXD_WQ_DISABLED)
- 		return -EPERM;
- 
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 06684ac346ab..5221092cc66d 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -1698,8 +1698,10 @@ static int smc_shutdown(struct socket *sock, int how)
+ 	if (smc->use_fallback) {
+ 		rc = kernel_sock_shutdown(smc->clcsock, how);
+ 		sk->sk_shutdown = smc->clcsock->sk->sk_shutdown;
+-		if (sk->sk_shutdown == SHUTDOWN_MASK)
++		if (sk->sk_shutdown == SHUTDOWN_MASK) {
+ 			sk->sk_state = SMC_CLOSED;
++			sock_put(sk);
++		}
+ 		goto out;
+ 	}
+ 	switch (how) {
 -- 
 2.35.1
 

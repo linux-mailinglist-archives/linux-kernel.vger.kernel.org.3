@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A150F720
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E6850F789
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237064AbiDZJHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
+        id S1346241AbiDZJH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346402AbiDZIpA (ORCPT
+        with ESMTP id S1346414AbiDZIpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5008789329;
-        Tue, 26 Apr 2022 01:34:43 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A13A16941E;
+        Tue, 26 Apr 2022 01:34:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E1D21CE1BC3;
-        Tue, 26 Apr 2022 08:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CA1C385A0;
-        Tue, 26 Apr 2022 08:34:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7265B81CF2;
+        Tue, 26 Apr 2022 08:34:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10BCC385BC;
+        Tue, 26 Apr 2022 08:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962080;
-        bh=cO5fCD0ZzNkZaR/zh4/84j4XIbL0lFAwsD0hABYmrS8=;
+        s=korg; t=1650962086;
+        bh=KdS1QDOj+LvTKxofeljDe/A2cZ6/6XqlWp6vxJFqwFo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZPDlixFUwmRQiXC0c/CBzObZEcVbCpMcaR/8xhRm46vk2Sv32xEI1PWFS1l/xFUyS
-         in1F0+HHe1QpPFDVkkv6Ezzo3Nm7fw3yEyr3V72Q+ksRQMQXtqStxi2MceDCQwACQG
-         DNq4XuJ4Mgv2IOo8EdMr+e8+T6lnIctm0E0A36P4=
+        b=wC5+FtI3AZAvTTihh41v4FM3ewCs02zqNRAcZdFR5+1N8XpwccQDlYHa/gQuPabSW
+         aOHsXqMi2MtNpoZYBCYrSeRzyWsAPBBuZQnfvkzMWM189FrKLOJL+dRp3F6puNe3Eu
+         oNaNemLab7YtQjt7nCSeD9JfOsAu14S1EuVEofAA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Grant <al.grant@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.10 65/86] arm_pmu: Validate single/group leader events
-Date:   Tue, 26 Apr 2022 10:21:33 +0200
-Message-Id: <20220426081743.084793776@linuxfoundation.org>
+        stable@vger.kernel.org, kuyo chang <kuyo.chang@mediatek.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 66/86] sched/pelt: Fix attach_entity_load_avg() corner case
+Date:   Tue, 26 Apr 2022 10:21:34 +0200
+Message-Id: <20220426081743.113797427@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
 References: <20220426081741.202366502@linuxfoundation.org>
@@ -55,54 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Herring <robh@kernel.org>
+From: kuyo chang <kuyo.chang@mediatek.com>
 
-commit e5c23779f93d45e39a52758ca593bd7e62e9b4be upstream.
+[ Upstream commit 40f5aa4c5eaebfeaca4566217cb9c468e28ed682 ]
 
-In the case where there is only a cycle counter available (i.e.
-PMCR_EL0.N is 0) and an event other than CPU cycles is opened, the open
-should fail as the event can never possibly be scheduled. However, the
-event validation when an event is opened is skipped when the group
-leader is opened. Fix this by always validating the group leader events.
+The warning in cfs_rq_is_decayed() triggered:
 
-Reported-by: Al Grant <al.grant@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/r/20220408203330.4014015-1-robh@kernel.org
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+		  cfs_rq->avg.util_avg ||
+		  cfs_rq->avg.runnable_avg)
+
+There exists a corner case in attach_entity_load_avg() which will
+cause load_sum to be zero while load_avg will not be.
+
+Consider se_weight is 88761 as per the sched_prio_to_weight[] table.
+Further assume the get_pelt_divider() is 47742, this gives:
+se->avg.load_avg is 1.
+
+However, calculating load_sum:
+
+  se->avg.load_sum = div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
+  se->avg.load_sum = 1*47742/88761 = 0.
+
+Then enqueue_load_avg() adds this to the cfs_rq totals:
+
+  cfs_rq->avg.load_avg += se->avg.load_avg;
+  cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+
+Resulting in load_avg being 1 with load_sum is 0, which will trigger
+the WARN.
+
+Fixes: f207934fb79d ("sched/fair: Align PELT windows between cfs_rq and its se")
+Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+[peterz: massage changelog]
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lkml.kernel.org/r/20220414090229.342-1-kuyo.chang@mediatek.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/perf/arm_pmu.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ kernel/sched/fair.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -398,6 +398,9 @@ validate_group(struct perf_event *event)
- 	if (!validate_event(event->pmu, &fake_pmu, leader))
- 		return -EINVAL;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index acd9833b8ec2..1a306ef51bbe 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3748,11 +3748,11 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
  
-+	if (event == leader)
-+		return 0;
-+
- 	for_each_sibling_event(sibling, leader) {
- 		if (!validate_event(event->pmu, &fake_pmu, sibling))
- 			return -EINVAL;
-@@ -487,12 +490,7 @@ __hw_perf_event_init(struct perf_event *
- 		local64_set(&hwc->period_left, hwc->sample_period);
- 	}
+ 	se->avg.runnable_sum = se->avg.runnable_avg * divider;
  
--	if (event->group_leader != event) {
--		if (validate_group(event) != 0)
--			return -EINVAL;
+-	se->avg.load_sum = divider;
+-	if (se_weight(se)) {
+-		se->avg.load_sum =
+-			div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
 -	}
--
--	return 0;
-+	return validate_group(event);
- }
++	se->avg.load_sum = se->avg.load_avg * divider;
++	if (se_weight(se) < se->avg.load_sum)
++		se->avg.load_sum = div_u64(se->avg.load_sum, se_weight(se));
++	else
++		se->avg.load_sum = 1;
  
- static int armpmu_event_init(struct perf_event *event)
+ 	enqueue_load_avg(cfs_rq, se);
+ 	cfs_rq->avg.util_avg += se->avg.util_avg;
+-- 
+2.35.1
+
 
 

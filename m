@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4120350FF2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E0F50FF36
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiDZNjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S233677AbiDZNk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351043AbiDZNig (ORCPT
+        with ESMTP id S243111AbiDZNkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:38:36 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F86380;
-        Tue, 26 Apr 2022 06:35:27 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id a10so20648591oif.9;
-        Tue, 26 Apr 2022 06:35:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OygyeH4rfmUuZsXmWAEGnr/ZlA2kUw1LkTJEURaNg9M=;
-        b=ak6JwVWG8OHulFUMcWJkL3kMLQ2pwk5zPc4oM587uF1nXrI2rEUTerGW0IrnabexEs
-         /LPqEm4MnEv8diLzX+xI9ID7W5nCNlLdWaG3CRgasG6wpRFqYAkr6ctYkxt5vy5CN1Vs
-         RTVv/2pqx5R81kj65Yt/zSNKaXJObsEFtIG7ZFWMlT8ME8WS36+85ho5rr06+9CF1lxt
-         5u7JQXi1Ba28DPoa3Sv3FHq+y96+KhcRaQl+qaJyasDyi42uE8hmt0g0Z/XobJoVao8y
-         nYm73WaSdpyH/oOVBP00xkt/254qJTEOYBQj/wN3ZIW13Mb76F83nGTHeDld57HkTZ+U
-         XMKg==
-X-Gm-Message-State: AOAM533ZCVTn8kee9cq5evQNG1Xo3KZICjEdQ4cwrfIlmnYKVUE6di7h
-        Cug+sWyGM9pOKJ+v5opurg==
-X-Google-Smtp-Source: ABdhPJxh7Jprs4lrGBymoDiRReBL7R7uytG+LGnCHdclTxGBoQgU9QJ18XdD5KDldb2alZ+K9kVR2w==
-X-Received: by 2002:a05:6808:124a:b0:2da:3588:6d35 with SMTP id o10-20020a056808124a00b002da35886d35mr10804716oiv.269.1650980126381;
-        Tue, 26 Apr 2022 06:35:26 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id 65-20020aca0544000000b002f980b50140sm4891611oif.18.2022.04.26.06.35.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:35:25 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Gene Chen <gene_chen@richtek.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: leds-mt6360: Drop redundant 'unevaluateProperties'
-Date:   Tue, 26 Apr 2022 08:35:08 -0500
-Message-Id: <20220426133508.1849580-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 26 Apr 2022 09:40:24 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C194198F;
+        Tue, 26 Apr 2022 06:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=l4h0Ov9OzmifR5jldxkma+y1tJv7QCkgxeL1WbcVp2I=; b=vGRJbhRGckl9QnEYvsb4P+RCnc
+        cua3k6wPbIPbIu3JCsJ8VLa6meBL5p23ZHiDphp+sDc/ZuaEcKn9wMqiYtOVxS5NS5MbNnQfTC4iH
+        iEsWZAc5fY0ReNehxoSgLoHaBmifIfYByjwW15JkwHWmfYrAB+6ETgQYXrk0C1/3grjk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1njLN9-00HYfD-GM; Tue, 26 Apr 2022 15:36:55 +0200
+Date:   Tue, 26 Apr 2022 15:36:55 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "joabreu@synopsys.com" <joabreu@synopsys.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "festevam@gmail.com" <festevam@gmail.com>
+Subject: Re: net: stmmac: dwmac-imx: half duplex crash
+Message-ID: <Ymf1dwrwHe0PS1Cq@lunn.ch>
+References: <36ba455aad3e57c0c1f75cce4ee0f3da69e139a1.camel@toradex.com>
+ <YmXIo6q8vVkL6zLp@lunn.ch>
+ <5e51e11bbbf6ecd0ee23b4fd2edec98e6e7fbaa8.camel@toradex.com>
+ <YmbFblFCrGFND+h/@lunn.ch>
+ <8f8cdcf584c13faf8bcdc2abfdb62b09950ea652.camel@toradex.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f8cdcf584c13faf8bcdc2abfdb62b09950ea652.camel@toradex.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The binding has both 'unevaluateProperties: false' and
-'additionalProperties: false' which is redundant. 'additionalProperties'
-is the stricter of the two, so drop 'unevaluateProperties'.
+> > Anyway, this is roughly there the check should go.
+> 
+> You mean it would need an additional check against advertising nothing?
 
-Fixes: e05cab34e417 ("dt-bindings: leds: Add bindings for MT6360 LED")
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/leds/leds-mt6360.yaml | 2 --
- 1 file changed, 2 deletions(-)
+I would check for a mode being requested which is not
+supported. phydev->supported tells you what the MAC/PHY can actually
+do. If there is a bit set which is not a member of that, return
+EINVAL. I don't think the plumbing is there, but netlink ethtool
+allows you to also return a text message via extack, so you could give
+the user a bit more information, the link mode which is invalid.
 
-diff --git a/Documentation/devicetree/bindings/leds/leds-mt6360.yaml b/Documentation/devicetree/bindings/leds/leds-mt6360.yaml
-index b2fe6eb89389..10f95bf1d666 100644
---- a/Documentation/devicetree/bindings/leds/leds-mt6360.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-mt6360.yaml
-@@ -43,8 +43,6 @@ patternProperties:
-           - 4 # LED output FLASH1
-           - 5 # LED output FLASH2
- 
--unevaluatedProperties: false
--
- required:
-   - compatible
-   - "#address-cells"
--- 
-2.34.1
+> Well, we are gearing up on our automated testing infrastructure and asking my humble opinion on what exactly to
+> test concerning the Ethernet subsystem I gave the brilliant suggestion to try each and every supported link
+> mode (;-p). Which actually works just fine on every other hardware of ours just not the i.MX 8M Plus with the
+> DWMAC IP (remember, even FEC MAC works). So for now this is not something a customer of ours has real trouble
+> with but it raised some questions concerning whether or not and what exactly we do support...
 
+So in practice, this should not happen. You don't advertise the half
+modes, so you should never end up in a half mode. So it is not a
+problem :-)
+
+	Andrew

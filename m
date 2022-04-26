@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE38550F56F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DF450F40A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346655AbiDZIuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S1344470AbiDZIcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345874AbiDZIjk (ORCPT
+        with ESMTP id S1344870AbiDZI3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9450793A9;
-        Tue, 26 Apr 2022 01:32:13 -0700 (PDT)
+        Tue, 26 Apr 2022 04:29:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328D26D3B3;
+        Tue, 26 Apr 2022 01:24:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6356186E;
-        Tue, 26 Apr 2022 08:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A881C385A0;
-        Tue, 26 Apr 2022 08:32:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0709361778;
+        Tue, 26 Apr 2022 08:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A076C385AE;
+        Tue, 26 Apr 2022 08:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961932;
-        bh=avBp042OE31BMRDyzTLJ+AKx4VLhedoWFD+owDAlhws=;
+        s=korg; t=1650961486;
+        bh=KhnqbTI40bcgc+gv8MN7+miV4cr/0b8bQdQ739nQbUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UG0C0NrntO5mQyEsIh7nUGPs7OaqZ336c4Jr3sJiOWQVbE3n8OrizUxFkQZIwCoFn
-         I54mR/yXaruuK6DjtutzWmS5Zq1PLxWGqQyds7PSnTW7JrlKTP7pvLXH8PPTNG9l1g
-         ie6usWZPTXYcKEjRMJWsMsdIYiSyUmwNA0J0eJrQ=
+        b=Y3QKlu19lenvs9DjfBcCCNB9UKXNvCT/+bpiaJUEHtiwQ/KitZeeib8DR5yNzLSHr
+         eqchgDvHIzsngaAO5hh0kBAmQk2twhwHa7jKTI6KTB60VAbexrV9ysUMkHZtZFtyIk
+         sHgdJYTSYGxRrcbA6qAJ6bSCIeeXJbbB5XMKilTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dima Ruinskiy <dima.ruinskiy@intel.com>,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Naama Meir <naamax.meir@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 17/86] igc: Fix infinite loop in release_swfw_sync
+        stable@vger.kernel.org,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.14 03/43] tracing: Have traceon and traceoff trigger honor the instance
 Date:   Tue, 26 Apr 2022 10:20:45 +0200
-Message-Id: <20220426081741.703088248@linuxfoundation.org>
+Message-Id: <20220426081734.615461663@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Neftin <sasha.neftin@intel.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit 907862e9aef75bf89e2b265efcc58870be06081e ]
+commit 302e9edd54985f584cfc180098f3554774126969 upstream.
 
-An infinite loop may occur if we fail to acquire the HW semaphore,
-which is needed for resource release.
-This will typically happen if the hardware is surprise-removed.
-At this stage there is nothing to do, except log an error and quit.
+If a trigger is set on an event to disable or enable tracing within an
+instance, then tracing should be disabled or enabled in the instance and
+not at the top level, which is confusing to users.
 
-Fixes: c0071c7aa5fe ("igc: Add HW initialization code")
-Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
-Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220223223837.14f94ec3@rorschach.local.home
+
+Cc: stable@vger.kernel.org
+Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
+Tested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/igc/igc_i225.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ kernel/trace/trace_events_trigger.c |   52 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 46 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_i225.c b/drivers/net/ethernet/intel/igc/igc_i225.c
-index 553d6bc78e6b..624236a4202e 100644
---- a/drivers/net/ethernet/intel/igc/igc_i225.c
-+++ b/drivers/net/ethernet/intel/igc/igc_i225.c
-@@ -156,8 +156,15 @@ void igc_release_swfw_sync_i225(struct igc_hw *hw, u16 mask)
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -932,6 +932,16 @@ void set_named_trigger_data(struct event
+ static void
+ traceon_trigger(struct event_trigger_data *data, void *rec)
  {
- 	u32 swfw_sync;
- 
--	while (igc_get_hw_semaphore_i225(hw))
--		; /* Empty */
-+	/* Releasing the resource requires first getting the HW semaphore.
-+	 * If we fail to get the semaphore, there is nothing we can do,
-+	 * except log an error and quit. We are not allowed to hang here
-+	 * indefinitely, as it may cause denial of service or system crash.
-+	 */
-+	if (igc_get_hw_semaphore_i225(hw)) {
-+		hw_dbg("Failed to release SW_FW_SYNC.\n");
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (tracer_tracing_is_on(file->tr))
++			return;
++
++		tracer_tracing_on(file->tr);
 +		return;
 +	}
++
+ 	if (tracing_is_on())
+ 		return;
  
- 	swfw_sync = rd32(IGC_SW_FW_SYNC);
- 	swfw_sync &= ~mask;
--- 
-2.35.1
-
+@@ -941,8 +951,15 @@ traceon_trigger(struct event_trigger_dat
+ static void
+ traceon_count_trigger(struct event_trigger_data *data, void *rec)
+ {
+-	if (tracing_is_on())
+-		return;
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (tracer_tracing_is_on(file->tr))
++			return;
++	} else {
++		if (tracing_is_on())
++			return;
++	}
+ 
+ 	if (!data->count)
+ 		return;
+@@ -950,12 +967,25 @@ traceon_count_trigger(struct event_trigg
+ 	if (data->count != -1)
+ 		(data->count)--;
+ 
+-	tracing_on();
++	if (file)
++		tracer_tracing_on(file->tr);
++	else
++		tracing_on();
+ }
+ 
+ static void
+ traceoff_trigger(struct event_trigger_data *data, void *rec)
+ {
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (!tracer_tracing_is_on(file->tr))
++			return;
++
++		tracer_tracing_off(file->tr);
++		return;
++	}
++
+ 	if (!tracing_is_on())
+ 		return;
+ 
+@@ -965,8 +995,15 @@ traceoff_trigger(struct event_trigger_da
+ static void
+ traceoff_count_trigger(struct event_trigger_data *data, void *rec)
+ {
+-	if (!tracing_is_on())
+-		return;
++	struct trace_event_file *file = data->private_data;
++
++	if (file) {
++		if (!tracer_tracing_is_on(file->tr))
++			return;
++	} else {
++		if (!tracing_is_on())
++			return;
++	}
+ 
+ 	if (!data->count)
+ 		return;
+@@ -974,7 +1011,10 @@ traceoff_count_trigger(struct event_trig
+ 	if (data->count != -1)
+ 		(data->count)--;
+ 
+-	tracing_off();
++	if (file)
++		tracer_tracing_off(file->tr);
++	else
++		tracing_off();
+ }
+ 
+ static int
 
 

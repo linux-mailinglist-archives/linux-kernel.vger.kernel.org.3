@@ -2,203 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FEE510508
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6DC510526
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiDZRRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S231831AbiDZRWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiDZRRC (ORCPT
+        with ESMTP id S229839AbiDZRWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:17:02 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980571275D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:13:54 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id h1so18525147pfv.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=COISYBtLemURzEtVRJTSOaoU1kvxhQruqFG2UXo9XUw=;
-        b=ICQKMM5VJ8dZCmZ5IDftKBD0tk2p/btzOGUR1kYXd/zFRS/EkvTLCpPCF1BWQ1lKzH
-         Bqh4vxvd9/HnKEhvMjZIYnNj2yFTyCqWnJW+u9sWIKXgfunEJOyiAGcoiGom0Fjw4+ka
-         PLtm7GIGMzzUN3ttrb56TQfPJKwV2PasGCyTFseghYcMYWl+0iS+YumxymWwxECcFY1g
-         JRdSZQT+i9TCp8T5DDInsYfDjIyKVFo702VauqiPnw8KYNWqo4U3LUZim+g67CUif1E7
-         I2M4VxY3Hs8iCvYzmtDEU4yfuI4Q/MIIivgirMZZUMt0ThznOwHSbGUBfWZwJDUpmo8/
-         B/oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=COISYBtLemURzEtVRJTSOaoU1kvxhQruqFG2UXo9XUw=;
-        b=0sZYFerkSrdTUBMV/wea4vT1xUkPmXkmshNC6zkT2E0EZzYh0ypFdsXicM9kCWgrTt
-         WtGr9hN4Sa0j/18wWtj7BmjmltLFrkXr4TS4suytxzkx0no9NyxF/kWs27yK/Xe7gtCo
-         p3M/28qj8nd7yMvMafSk0q5AtHlbYwBa/1usxpBxchtcuNQB7YCE3kvKeFcn4ifjzGPK
-         8xyynEzNav27NnJnwGVFSHyEkPJUr1Y5uW5ZuMxlGC8FYCs4NUXezul8BUC8H04kxMJI
-         0VW0Hylay1l+s4MPtYl9gyUx2gQGGLIEgd750i+dg2BLPmjVIYXCR0Y1a3vwN039xFwl
-         Wrtw==
-X-Gm-Message-State: AOAM5315iEUjgG1/O6QF1x1WS4eSck7s3WeI6zjX5fOfS7KTg885ESh1
-        TwRo7hsAETa64a6t8T1a/ISRG/z0PYyTP+exX1N+5g==
-X-Google-Smtp-Source: ABdhPJw0Ra1dMBKYFZkjWanWW4cefxv2B97eXQvw3FrcmpDznbuhiQB1ig3w2zhaYU9CkF8BOrp7P30WHnRXgF9Udfk=
-X-Received: by 2002:a62:fb0e:0:b0:505:fd9e:9218 with SMTP id
- x14-20020a62fb0e000000b00505fd9e9218mr26023121pfm.78.1650993233860; Tue, 26
- Apr 2022 10:13:53 -0700 (PDT)
+        Tue, 26 Apr 2022 13:22:18 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4F224595;
+        Tue, 26 Apr 2022 10:19:09 -0700 (PDT)
+Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1My6xz-1o5LQB2b5b-00zTZO; Tue, 26 Apr 2022 19:14:04 +0200
+Received: by mail-yb1-f180.google.com with SMTP id w187so24764165ybe.2;
+        Tue, 26 Apr 2022 10:14:04 -0700 (PDT)
+X-Gm-Message-State: AOAM532TsqAt7Q/IPazDwjCS6R/JEhIcoPDVTsdC9pmcMcvx7ZCU6ZpG
+        htWPz1fVoKBklr2XU7h8bs7g1Vq+5LHFp+nNr+A=
+X-Google-Smtp-Source: ABdhPJy4qrzId24VdonwrFL8xdmT+OefZW9RIA7s/JBFmqDtK6o+FbcHdop/B8RF2jVsl9Z7YvDRgbjOS6bpOD7eSC0=
+X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
+ e185-20020a25d3c2000000b0064574dff43dmr21550935ybf.394.1650993243035; Tue, 26
+ Apr 2022 10:14:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426000640.3581446-1-rajatja@google.com> <030f48f4-44d7-c04c-a194-5f4999873ebe@arm.com>
-In-Reply-To: <030f48f4-44d7-c04c-a194-5f4999873ebe@arm.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Tue, 26 Apr 2022 10:13:17 -0700
-Message-ID: <CACK8Z6GEPTaQKbxeBqQuKbNmVkL1DoHDrKwDeosCeRXfHbD_=w@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] PCI/ACPI: Support Microsoft's "DmaProperty"
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        iommu@lists.linux-foundation.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-3-axelrasmussen@google.com> <20220425203249.GA5814@altlinux.org>
+ <CAJHvVchLSpbKXn6u451pjaRpW=SwbOFSdpQpaC47WBFa0660xw@mail.gmail.com>
+In-Reply-To: <CAJHvVchLSpbKXn6u451pjaRpW=SwbOFSdpQpaC47WBFa0660xw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 26 Apr 2022 19:13:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0th99KbPO_Mt17uztHay6vBMngT-ii2dFW4++BaAQNpw@mail.gmail.com>
+Message-ID: <CAK8P3a0th99KbPO_Mt17uztHay6vBMngT-ii2dFW4++BaAQNpw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     "Dmitry V. Levin" <ldv@altlinux.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:+s8HFHdANqZQ0PHV/EC05dFnp+y9+zq7ZoknP0XSfx+gbj1UKdy
+ qpd/5nWyjvrS+vcbvdCPyfrueeReCzfxkFwdSw8JbIqIinpDALZigP9yF6FY8L0US6P4aG6
+ JncGfCJpshBqIUY+6ShHNRwX1J1a4eECU2ibabTL/29b2T58eMWnbdprNr/ARASn82mFmEZ
+ NpD5ZuwRg6RsaYYS4ofTA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0naR4d11Hho=:T/uCdg0IR3rEfMqak9PYUn
+ zOE2qQ6wxT3yC1Vzz/WV6+QpsRIL4kY2AjBUzlYySiZYfc7/3EzGuhXLItGo2Kb3+ZY0PQJ42
+ VZzF4UW2lGC6kFYmJQ+WMTF92+ENA7/y164+o+meFagCa9Fn+3NfQaRk56Ff8s/aU5GO/pUUY
+ XUhCq+yZ6NRbJOECBFonYVkG4as7im20bcmzTs2BKsr4kAEpJliKOi9epmsYRokD6L2CjiE8d
+ yS61e1Vk1sCee5j4oT/u8ALpEKUs2RP3gZBTnmv5tCTMLSTBkMu9pBuVuGY0y6MHycjgWc/PN
+ uHi1N3tMZf7YOfPMn2JYI1VXxco6XyNWdV9ib5innyN67evnHCI/O89YecEzqrxGzB9DaMIia
+ XVTrqoYIEbaOhFIHql7O9b1mZfjF1lk3uG+dhZ5P1tWdJiUB5FxIs0VNKuV1ZSo398jMz3LXK
+ 6Z0wb45FHbYHdMQdgedxRQHVH3meS08WJuTRh83gRWWN9dZufJBRln0JUglmMzousuSUWtyxp
+ qWZD5lZ5YOR5LaahRVE8zvePLQ0H04a+NH5iJwuZfpXy5JC5bShdZDiusWs8SMv3vCMw3UbaQ
+ UTZ65k1AyB7TOB1ZRre0Yf6y/7Lkqv1SHVZGbmDB8jXf01s2X/M/IhNxSjwMxHD7yKK8WFRlE
+ OcYJk/vBipN4vr6bpdOkQaU1Qw5AuZsQjPzmRREMuC2INh75h6OZXoHKQqHZuG2mcab7bZYcg
+ J55deikpHYsUgLz3xZl/sInGUID9zNUwLB/JyATNj4wE7JFKIKZXMaGK9tDEfponNtBCNdNZz
+ axy2FU0aEnACFatxVhJPEuowBbHpsX3FBDxdbvVefIH0W64R4s=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 4:15 AM Robin Murphy <robin.murphy@arm.com> wrote:
+On Tue, Apr 26, 2022 at 6:00 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
 >
-> On 2022-04-26 01:06, Rajat Jain via iommu wrote:
-> > The "DmaProperty" is supported and currently documented and used by
-> > Microsoft [link 1 below], to flag internal PCIe root ports that need
-> > DMA protection [link 2 below]. We have discussed with them and reached
-> > a common understanding that they shall change their MSDN documentation
-> > to say that the same property can be used to protect any PCI device,
-> > and not just internal PCIe root ports (since there is no point
-> > introducing yet another property for arbitrary PCI devices). This helps
-> > with security from internal devices that offer an attack surface for
-> > DMA attacks (e.g. internal network devices).
-> >
-> > Support DmaProperty to mark DMA from a PCI device as untrusted.
-> >
-> > Link: [1] https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
-> > Link: [2] https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> > v6: * Take care of Bjorn's comments:
-> >         - Update the commit log
-> >         - Rename to pci_dev_has_dma_property()
-> >         - Use acpi_dev_get_property()
-> > v5: * Reorder the patches in the series
-> > v4: * Add the GUID.
-> >      * Update the comment and commitlog.
-> > v3: * Use Microsoft's documented property "DmaProperty"
-> >      * Resctrict to ACPI only
-> >
-> >   drivers/acpi/property.c |  3 +++
-> >   drivers/pci/pci-acpi.c  | 21 +++++++++++++++++++++
-> >   2 files changed, 24 insertions(+)
-> >
-> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> > index 12bbfe833609..bafe35c301ac 100644
-> > --- a/drivers/acpi/property.c
-> > +++ b/drivers/acpi/property.c
-> > @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
-> >       /* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
-> >       GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
-> >                 0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
-> > +     /* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
-> > +     GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
-> > +               0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
-> >   };
-> >
-> >   /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
-> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > index 3ae435beaf0a..d7c6ba48486f 100644
-> > --- a/drivers/pci/pci-acpi.c
-> > +++ b/drivers/pci/pci-acpi.c
-> > @@ -1369,12 +1369,33 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
-> >               dev->external_facing = 1;
-> >   }
-> >
-> > +static int pci_dev_has_dma_property(struct pci_dev *dev)
-> > +{
-> > +     struct acpi_device *adev;
-> > +     const union acpi_object *obj;
-> > +
-> > +     adev = ACPI_COMPANION(&dev->dev);
-> > +     if (!adev)
-> > +             return 0;
-> > +
-> > +     /*
-> > +      * Property also used by Microsoft Windows for same purpose,
-> > +      * (to implement DMA protection from a device, using the IOMMU).
->
-> Nit: there is no context for "same purpose" here, so this comment is
-> more confusing than helpful. Might I suggest a rewording like:
->
->         /*
->          * Property used by Microsoft Windows to enforce IOMMU DMA
->          * protection for any device that the system might not fully
->          * trust; we'll honour it the same way.
->          */
->
-> ?
+> You're right, [1] says _IO is appropriate for ioctls which only take
+> an integer argument. I'll send a v3 with this fix, although I might
+> wait a bit for any other review comments before doing so. Thanks for
+> taking a look!
 
-Sure, will do.
+If there are no other command codes, you could also set .compat_ioctl
+to the same function pointer as .unlocked_ioctl, the compat_ptr_ioctl
+conversion is only needed when there are commands that take a pointer.
 
->
-> Personally I think it would have been more logical to handle this in
-> pci_set_dma_untrusted(), but I see some of those implementation aspects
-> have already been discussed, and Bjorn's preference definitely wins over
-> mine here :)
-
-Yes, this was discussed. The primary reason is that ACPI properties
-for PCI devices are not available at the time pci_set_untrusted_dma()
-is called.
-
-Thanks & Best Regards,
-
-Rajat
-
->
-> Thanks,
-> Robin.
->
-> > +      */
-> > +     if (!acpi_dev_get_property(adev, "DmaProperty", ACPI_TYPE_INTEGER,
-> > +                                &obj) && obj->integer.value == 1)
-> > +             return 1;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >   void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
-> >   {
-> >       struct pci_dev *pci_dev = to_pci_dev(dev);
-> >
-> >       pci_acpi_optimize_delay(pci_dev, adev->handle);
-> >       pci_acpi_set_external_facing(pci_dev);
-> > +     pci_dev->untrusted |= pci_dev_has_dma_property(pci_dev); >      pci_acpi_add_edr_notifier(pci_dev);
-> >
-> >       pci_acpi_add_pm_notifier(adev, pci_dev);
+        Armd

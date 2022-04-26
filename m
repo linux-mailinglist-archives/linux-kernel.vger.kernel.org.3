@@ -2,131 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8F650F744
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6C250F69C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346558AbiDZJSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S1345358AbiDZIzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345867AbiDZIoP (ORCPT
+        with ESMTP id S1345563AbiDZInD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D5515CED7;
-        Tue, 26 Apr 2022 01:33:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DBE8B81A2F;
-        Tue, 26 Apr 2022 08:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27968C385AF;
-        Tue, 26 Apr 2022 08:33:44 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SQ4KGuFb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650962021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x0ZaEAIZRfY3TXnaiCeg2Im/5REFBepeu9hIAwpHFEg=;
-        b=SQ4KGuFbwAXPLahgY7AhuqoWeqFloOr+hAIIPGiVl/7Ha8CRUcIy9PK+LUlx1JkJKU5Scg
-        yNlAZSNm+bmpas2sdxXJdZOvHJ2Q4LFMy+jAoS/PGdURyR0DHb5rONd6poB8+S0rnUuLwE
-        /i2Y2OWkI9Jy/YZc/LejjzK5jCMUIy8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e397a466 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 26 Apr 2022 08:33:41 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org
-Subject: [PATCH v7 13/17] x86/asm: use fallback for random_get_entropy() instead of zero
-Date:   Tue, 26 Apr 2022 10:33:01 +0200
-Message-Id: <20220426083301.816458-1-Jason@zx2c4.com>
-In-Reply-To: <YmbZZwXxaC+S863+@zx2c4.com>
-References: <YmbZZwXxaC+S863+@zx2c4.com>
+        Tue, 26 Apr 2022 04:43:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2898815A431
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:33:19 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1njGdD-0005tm-O2; Tue, 26 Apr 2022 10:33:11 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1njGd7-0008VO-GE; Tue, 26 Apr 2022 10:33:05 +0200
+Date:   Tue, 26 Apr 2022 10:33:05 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/4] dt-bindings: net: silabs, wfx: add prt,
+ prtt1c-wfm200 antenna variant
+Message-ID: <20220426083305.GA17577@pengutronix.de>
+References: <20220425132844.866743-1-o.rempel@pengutronix.de>
+ <14881918.tv2OnDr8pf@pc-42>
+ <20220426072113.GC3419@pengutronix.de>
+ <4686508.cEBGB3zze1@pc-42>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4686508.cEBGB3zze1@pc-42>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:28:02 up 26 days, 20:57, 80 users,  load average: 0.09, 0.18,
+ 0.31
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the event that random_get_entropy() can't access a cycle counter or
-similar, falling back to returning 0 is suboptimal. Instead, fallback
-to calling random_get_entropy_fallback(), which isn't extremely high
-precision or guaranteed to be entropic, but is certainly better than
-returning zero all the time.
+On Tue, Apr 26, 2022 at 10:19:29AM +0200, Jérôme Pouiller wrote:
+> On Tuesday 26 April 2022 09:21:13 CEST Oleksij Rempel wrote:
+> > On Mon, Apr 25, 2022 at 05:38:20PM +0200, Jérôme Pouiller wrote:
+> > > On Monday 25 April 2022 15:28:42 CEST Oleksij Rempel wrote:
+> > > > Add compatible for wfm200 antenna configuration variant for Protonic PRTT1C
+> > > > board.
+> > > >
+> > > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > > > ---
+> > > >  .../devicetree/bindings/staging/net/wireless/silabs,wfx.yaml     | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/staging/net/wireless/silabs,wfx.yaml b/Documentation/devicetree/bindings/staging/net/wireless/silabs,wfx.yaml
+> > > > index 105725a127ab..ce107fe45d7c 100644
+> > > > --- a/Documentation/devicetree/bindings/staging/net/wireless/silabs,wfx.yaml
+> > > > +++ b/Documentation/devicetree/bindings/staging/net/wireless/silabs,wfx.yaml
+> > > > @@ -39,6 +39,7 @@ properties:
+> > > >    compatible:
+> > > >      items:
+> > > >        - enum:
+> > > > +          - prt,prtt1c-wfm200 # Protonic PRTT1C Board
+> > > >            - silabs,brd4001a # WGM160P Evaluation Board
+> > > >            - silabs,brd8022a # WF200 Evaluation Board
+> > > >            - silabs,brd8023a # WFM200 Evaluation Board
+> > >
+> > > I think you also have to declare this new entry in wfx_sdio_of_match,
+> > > and/or wfx_spi_of_match and wfx_spi_id.
+> > >
+> > > On the WFM200 variant, the antenna is built in the chip. So I think you
+> > > can point on the same configuration than the brd8023a.
+> > 
+> > I assume driver update can be made in a separate patch. As soon as we
+> > reserved compatible for this boards there should be no conflicts. This patches
+> > series is targeting only devicetree and needed DT schema changes.
+> 
+> hmmm... I am not DT specialist, but it seems a bit weird to have a new
+> entry in the dt schema, but no new code in any of_match table. 
 
-If CONFIG_X86_TSC=n, then it's possible for the kernel to run on systems
-without RDTSC, such as 486 and certain 586, so the fallback code is only
-required for that case.
+Here is one example:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/spi/fsl-imx-cspi.yaml?h=v5.18-rc4#n28
+properties:
+  compatible:
+    oneOf:
+      - const: fsl,imx1-cspi
+      - const: fsl,imx21-cspi
+      - const: fsl,imx27-cspi
+      - const: fsl,imx31-cspi
+      - const: fsl,imx35-cspi
+      - const: fsl,imx51-ecspi
+      - const: fsl,imx53-ecspi
+      - items:
+          - enum:
+              - fsl,imx50-ecspi
+              - fsl,imx6q-ecspi
+              - fsl,imx6sx-ecspi
+              - fsl,imx6sl-ecspi
+              - fsl,imx6sll-ecspi
+              - fsl,imx6ul-ecspi
+              - fsl,imx7d-ecspi
+              - fsl,imx8mq-ecspi
+              - fsl,imx8mm-ecspi
+              - fsl,imx8mn-ecspi
+              - fsl,imx8mp-ecspi
+          - const: fsl,imx51-ecspi
 
-As well, fix up both the new function and the get_cycles() function from
-which it was derived to use cpu_feature_enabled() rather than
-boot_cpu_has(), and use !IS_ENABLED() instead of #ifndef.
+httpt://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/spi/spi-imx.c?h=v5.18-rc4#n1063
+static const struct of_device_id spi_imx_dt_ids[] = {
+	{ .compatible = "fsl,imx1-cspi", .data = &imx1_cspi_devtype_data, },
+	{ .compatible = "fsl,imx21-cspi", .data = &imx21_cspi_devtype_data, },
+	{ .compatible = "fsl,imx27-cspi", .data = &imx27_cspi_devtype_data, },
+	{ .compatible = "fsl,imx31-cspi", .data = &imx31_cspi_devtype_data, },
+	{ .compatible = "fsl,imx35-cspi", .data = &imx35_cspi_devtype_data, },
+	{ .compatible = "fsl,imx51-ecspi", .data = &imx51_ecspi_devtype_data, },
+	{ .compatible = "fsl,imx53-ecspi", .data = &imx53_ecspi_devtype_data, },
+	{ .compatible = "fsl,imx6ul-ecspi", .data = &imx6ul_ecspi_devtype_data, },
+	{ /* sentinel */ }
+};
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v6->v7:
-- Adjust commit subject and body to match tip commit style.
-- Use !IS_ENABLED() instead of #ifndef.
-
- arch/x86/include/asm/timex.h | 9 +++++++++
- arch/x86/include/asm/tsc.h   | 7 +++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/include/asm/timex.h b/arch/x86/include/asm/timex.h
-index a4a8b1b16c0c..956e4145311b 100644
---- a/arch/x86/include/asm/timex.h
-+++ b/arch/x86/include/asm/timex.h
-@@ -5,6 +5,15 @@
- #include <asm/processor.h>
- #include <asm/tsc.h>
- 
-+static inline unsigned long random_get_entropy(void)
-+{
-+	if (!IS_ENABLED(CONFIG_X86_TSC) &&
-+	    !cpu_feature_enabled(X86_FEATURE_TSC))
-+		return random_get_entropy_fallback();
-+	return rdtsc();
-+}
-+#define random_get_entropy random_get_entropy
-+
- /* Assume we use the PIT time source for the clock tick */
- #define CLOCK_TICK_RATE		PIT_TICK_RATE
- 
-diff --git a/arch/x86/include/asm/tsc.h b/arch/x86/include/asm/tsc.h
-index 01a300a9700b..fbdc3d951494 100644
---- a/arch/x86/include/asm/tsc.h
-+++ b/arch/x86/include/asm/tsc.h
-@@ -20,13 +20,12 @@ extern void disable_TSC(void);
- 
- static inline cycles_t get_cycles(void)
- {
--#ifndef CONFIG_X86_TSC
--	if (!boot_cpu_has(X86_FEATURE_TSC))
-+	if (!IS_ENABLED(CONFIG_X86_TSC) &&
-+	    !cpu_feature_enabled(X86_FEATURE_TSC))
- 		return 0;
--#endif
--
- 	return rdtsc();
- }
-+#define get_cycles get_cycles
- 
- extern struct system_counterval_t convert_art_to_tsc(u64 art);
- extern struct system_counterval_t convert_art_ns_to_tsc(u64 art_ns);
+Regards,
+Oleksij
 -- 
-2.35.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

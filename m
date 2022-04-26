@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7B150F48E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13AF50F860
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345339AbiDZIir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S1347745AbiDZJeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345550AbiDZIen (ORCPT
+        with ESMTP id S1347868AbiDZJGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:43 -0400
+        Tue, 26 Apr 2022 05:06:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FE778FF9;
-        Tue, 26 Apr 2022 01:27:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889B2169413;
+        Tue, 26 Apr 2022 01:46:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3550B81CF2;
-        Tue, 26 Apr 2022 08:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACD4C385A0;
-        Tue, 26 Apr 2022 08:27:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2057AB81CB3;
+        Tue, 26 Apr 2022 08:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8950EC385A0;
+        Tue, 26 Apr 2022 08:46:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961660;
-        bh=hwfjXND5lWJxfc1ZH9AR78hx36ahGd29wxnqRyHV4U0=;
+        s=korg; t=1650962786;
+        bh=rq5FHE9UfEIhmfpoeDO2X6VA78krI4zQucUGitHhanY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wqceYgVQnkgZEoLBUtERubo5cIy73xQqR4dDmDTfxvGjtu+jTM5nh3McqN0xPRJNA
-         ve97CoiBB8eebUEW4xkwIVV/AH6wlcHJ863Uz9YIzLPcqZrXu96BITL67TJPuVcl9V
-         3w21ATowG2JXF9/38uAFSbxfoMuo2eGY9coNUU/A=
+        b=PpS5chCj2hzqkDCGtJFe+7wimUE4h3m0xjucToK8NUW3Tr+KIriCtJU1L1X11QFfa
+         IobXDFnq+6dVXeBtHVwK+KqPdfortIB7SpcA5fiObFVScE8A1+KRHsR0113Efdoh5b
+         1JBVIXsrbWexYltkBRGV+QhUCxVEmqS8plwm2uz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.19 42/53] ext4: force overhead calculation if the s_overhead_cluster makes no sense
-Date:   Tue, 26 Apr 2022 10:21:22 +0200
-Message-Id: <20220426081736.880345111@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: [PATCH 5.17 088/146] EDAC/synopsys: Read the error count from the correct register
+Date:   Tue, 26 Apr 2022 10:21:23 +0200
+Message-Id: <20220426081752.532823717@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
-commit 85d825dbf4899a69407338bae462a59aa9a37326 upstream.
+commit e2932d1f6f055b2af2114c7e64a26dc1b5593d0c upstream.
 
-If the file system does not use bigalloc, calculating the overhead is
-cheap, so force the recalculation of the overhead so we don't have to
-trust the precalculated overhead in the superblock.
+Currently, the error count is read wrongly from the status register. Read
+the count from the proper error count register (ERRCNT).
 
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+  [ bp: Massage. ]
+
+Fixes: b500b4a029d5 ("EDAC, synopsys: Add ECC support for ZynqMP DDR controller")
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220414102813.4468-1-shubhrajyoti.datta@xilinx.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/edac/synopsys_edac.c |   16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -4423,9 +4423,18 @@ no_journal:
- 	 * Get the # of file system overhead blocks from the
- 	 * superblock if present.
- 	 */
--	if (es->s_overhead_clusters)
--		sbi->s_overhead = le32_to_cpu(es->s_overhead_clusters);
--	else {
-+	sbi->s_overhead = le32_to_cpu(es->s_overhead_clusters);
-+	/* ignore the precalculated value if it is ridiculous */
-+	if (sbi->s_overhead > ext4_blocks_count(es))
-+		sbi->s_overhead = 0;
-+	/*
-+	 * If the bigalloc feature is not enabled recalculating the
-+	 * overhead doesn't take long, so we might as well just redo
-+	 * it to make sure we are using the correct value.
-+	 */
-+	if (!ext4_has_feature_bigalloc(sb))
-+		sbi->s_overhead = 0;
-+	if (sbi->s_overhead == 0) {
- 		err = ext4_calculate_overhead(sb);
- 		if (err)
- 			goto failed_mount_wq;
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -164,6 +164,11 @@
+ #define ECC_STAT_CECNT_SHIFT		8
+ #define ECC_STAT_BITNUM_MASK		0x7F
+ 
++/* ECC error count register definitions */
++#define ECC_ERRCNT_UECNT_MASK		0xFFFF0000
++#define ECC_ERRCNT_UECNT_SHIFT		16
++#define ECC_ERRCNT_CECNT_MASK		0xFFFF
++
+ /* DDR QOS Interrupt register definitions */
+ #define DDR_QOS_IRQ_STAT_OFST		0x20200
+ #define DDR_QOSUE_MASK			0x4
+@@ -423,15 +428,16 @@ static int zynqmp_get_error_info(struct
+ 	base = priv->baseaddr;
+ 	p = &priv->stat;
+ 
++	regval = readl(base + ECC_ERRCNT_OFST);
++	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
++	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
++	if (!p->ce_cnt)
++		goto ue_err;
++
+ 	regval = readl(base + ECC_STAT_OFST);
+ 	if (!regval)
+ 		return 1;
+ 
+-	p->ce_cnt = (regval & ECC_STAT_CECNT_MASK) >> ECC_STAT_CECNT_SHIFT;
+-	p->ue_cnt = (regval & ECC_STAT_UECNT_MASK) >> ECC_STAT_UECNT_SHIFT;
+-	if (!p->ce_cnt)
+-		goto ue_err;
+-
+ 	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
+ 
+ 	regval = readl(base + ECC_CEADDR0_OFST);
 
 

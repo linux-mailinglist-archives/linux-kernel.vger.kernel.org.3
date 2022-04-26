@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D6A50F8AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B662E50F6A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347386AbiDZJOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
+        id S244499AbiDZI6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347475AbiDZIvi (ORCPT
+        with ESMTP id S1346325AbiDZIou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224DDCD675;
-        Tue, 26 Apr 2022 01:40:19 -0700 (PDT)
+        Tue, 26 Apr 2022 04:44:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3138567C;
+        Tue, 26 Apr 2022 01:34:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C95E3B81D0B;
-        Tue, 26 Apr 2022 08:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D75C385A0;
-        Tue, 26 Apr 2022 08:40:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE4E4B81D13;
+        Tue, 26 Apr 2022 08:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0894AC385A4;
+        Tue, 26 Apr 2022 08:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962416;
-        bh=ANemBF0bfxRf6RmGxUxmDlZxuSUU9ownLlWMAlAyxEM=;
+        s=korg; t=1650962074;
+        bh=aZKggbzIzkrZzKiqHXtizI9wcyrF2NWorw67sBKovp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yjN08sDuwdOeq9SMr42V4tEMiHXL5LPTltMUlubaj+Gf8/ahPzFwlPZEpCuG6cpRT
-         KIzmLZfDBgDpYAhnUEs8ckgnSvVWz3nnaKEf7zUuL/zMVkugwQ4x208GEEaRYREcFJ
-         sVyD4vO5Z1rJvMFOAmsYR4IvNYPYCE9HclLjOVUg=
+        b=PCKXnaE5bRcqbwhDJMLcxtQgeBnskjUQwLOvcf+RJsTN05oCRsT3s9QOzrjtfm3BE
+         4jWM1Zxyei7PuW1q5ar/Dohuro2ae5bJQE6jI9uyAmkgEDtMpajl47+TZIUjT1KMFC
+         IJeUEvk0E2scvluL3Eq3hQ5iMMrAkEFopFhBmg+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhipeng Xie <xiezhipeng1@huawei.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 090/124] perf/core: Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
+        stable@vger.kernel.org,
+        James Hutchinson <jahutchinson99@googlemail.com>,
+        Dima Ruinskiy <dima.ruinskiy@intel.com>,
+        Sasha Neftin <sasha.neftin@intel.com>,
+        Naama Meir <naamax.meir@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 63/86] e1000e: Fix possible overflow in LTR decoding
 Date:   Tue, 26 Apr 2022 10:21:31 +0200
-Message-Id: <20220426081749.857987874@linuxfoundation.org>
+Message-Id: <20220426081743.025793485@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,89 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhipeng Xie <xiezhipeng1@huawei.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-[ Upstream commit 60490e7966659b26d74bf1fa4aa8693d9a94ca88 ]
+commit 04ebaa1cfddae5f240cc7404f009133bb0389a47 upstream.
 
-This problem can be reproduced with CONFIG_PERF_USE_VMALLOC enabled on
-both x86_64 and aarch64 arch when using sysdig -B(using ebpf)[1].
-sysdig -B works fine after rebuilding the kernel with
-CONFIG_PERF_USE_VMALLOC disabled.
+When we decode the latency and the max_latency, u16 value may not fit
+the required size and could lead to the wrong LTR representation.
 
-I tracked it down to the if condition event->rb->nr_pages != nr_pages
-in perf_mmap is true when CONFIG_PERF_USE_VMALLOC is enabled where
-event->rb->nr_pages = 1 and nr_pages = 2048 resulting perf_mmap to
-return -EINVAL. This is because when CONFIG_PERF_USE_VMALLOC is
-enabled, rb->nr_pages is always equal to 1.
+Scaling is represented as:
+scale 0 - 1         (2^(5*0)) = 2^0
+scale 1 - 32        (2^(5 *1))= 2^5
+scale 2 - 1024      (2^(5 *2)) =2^10
+scale 3 - 32768     (2^(5 *3)) =2^15
+scale 4 - 1048576   (2^(5 *4)) = 2^20
+scale 5 - 33554432  (2^(5 *4)) = 2^25
+scale 4 and scale 5 required 20 and 25 bits respectively.
+scale 6 reserved.
 
-Arch with CONFIG_PERF_USE_VMALLOC enabled by default:
-	arc/arm/csky/mips/sh/sparc/xtensa
+Replace the u16 type with the u32 type and allow corrected LTR
+representation.
 
-Arch with CONFIG_PERF_USE_VMALLOC disabled by default:
-	x86_64/aarch64/...
-
-Fix this problem by using data_page_nr()
-
-[1] https://github.com/draios/sysdig
-
-Fixes: 906010b2134e ("perf_event: Provide vmalloc() based mmap() backing")
-Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220209145417.6495-1-xiezhipeng1@huawei.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 44a13a5d99c7 ("e1000e: Fix the max snoop/no-snoop latency for 10M")
+Reported-by: James Hutchinson <jahutchinson99@googlemail.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215689
+Suggested-by: Dima Ruinskiy <dima.ruinskiy@intel.com>
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+Tested-by: James Hutchinson <jahutchinson99@googlemail.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/events/core.c        | 2 +-
- kernel/events/internal.h    | 5 +++++
- kernel/events/ring_buffer.c | 5 -----
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/intel/e1000e/ich8lan.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 699446d60b6b..7c891a8eb323 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6348,7 +6348,7 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
- again:
- 	mutex_lock(&event->mmap_mutex);
- 	if (event->rb) {
--		if (event->rb->nr_pages != nr_pages) {
-+		if (data_page_nr(event->rb) != nr_pages) {
- 			ret = -EINVAL;
- 			goto unlock;
- 		}
-diff --git a/kernel/events/internal.h b/kernel/events/internal.h
-index 228801e20788..aa23ffdaf819 100644
---- a/kernel/events/internal.h
-+++ b/kernel/events/internal.h
-@@ -116,6 +116,11 @@ static inline int page_order(struct perf_buffer *rb)
- }
- #endif
- 
-+static inline int data_page_nr(struct perf_buffer *rb)
-+{
-+	return rb->nr_pages << page_order(rb);
-+}
-+
- static inline unsigned long perf_data_size(struct perf_buffer *rb)
+--- a/drivers/net/ethernet/intel/e1000e/ich8lan.c
++++ b/drivers/net/ethernet/intel/e1000e/ich8lan.c
+@@ -1006,8 +1006,8 @@ static s32 e1000_platform_pm_pch_lpt(str
  {
- 	return rb->nr_pages << (PAGE_SHIFT + page_order(rb));
-diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-index 52868716ec35..fb35b926024c 100644
---- a/kernel/events/ring_buffer.c
-+++ b/kernel/events/ring_buffer.c
-@@ -859,11 +859,6 @@ void rb_free(struct perf_buffer *rb)
- }
+ 	u32 reg = link << (E1000_LTRV_REQ_SHIFT + E1000_LTRV_NOSNOOP_SHIFT) |
+ 	    link << E1000_LTRV_REQ_SHIFT | E1000_LTRV_SEND;
+-	u16 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
+-	u16 lat_enc_d = 0;	/* latency decoded */
++	u32 max_ltr_enc_d = 0;	/* maximum LTR decoded by platform */
++	u32 lat_enc_d = 0;	/* latency decoded */
+ 	u16 lat_enc = 0;	/* latency encoded */
  
- #else
--static int data_page_nr(struct perf_buffer *rb)
--{
--	return rb->nr_pages << page_order(rb);
--}
--
- static struct page *
- __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)
- {
--- 
-2.35.1
-
+ 	if (link) {
 
 

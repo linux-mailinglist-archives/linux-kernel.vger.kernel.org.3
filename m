@@ -2,85 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2614450FD45
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3EF50FD4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350086AbiDZMoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S1350123AbiDZMon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 08:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350088AbiDZMny (ORCPT
+        with ESMTP id S1345870AbiDZMol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:43:54 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E85915F5AA;
-        Tue, 26 Apr 2022 05:40:47 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id z16so17850524pfh.3;
-        Tue, 26 Apr 2022 05:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yD7e9mPWeNwo1vgL89bG3pSg2Dekc+TvmVsazxgc/xQ=;
-        b=GnbxG5lHExJVNlDP+xzzDlUmG5m8kM2lnHSyteFhSHuHmpvLor+hykPvI88Ozca2bT
-         VJsDsUomaDNoDRz/VtOzCjG/S91wN/bnLQU8ay8+PyylBsG0a0DoyukUNb3/ScorOh8E
-         lvNdkOuaBkw48w94VH3S61M1BI0ruUpScv4/3bK0+55k1HhwfZC1sdGqEznzkYYu2e5y
-         0TjpNn2RhmZKHJlDu4Qlc8ZprjifkOaqcCdteN9ZnRdKvkFtklPpU3i8p1syKgIU1bjB
-         eVEDh8n9T3T8Fp8LX2Z/1S6VkrdAC9QTatPw6NZ/lXf2YVRUOwBrNp2flzFbpWTkFwgZ
-         s7zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yD7e9mPWeNwo1vgL89bG3pSg2Dekc+TvmVsazxgc/xQ=;
-        b=dHq9xKz02sU+ib7v4vjZaW6lKxQdPUByZI+EuJmsc9tKd25L7fWUwXkZS4HzmpDXWr
-         ZWK1nSszTch9F3xSQ5/3O6v7RvibD0BqZwzlIBfA1OOtjY/IvgFoQil1/Pdg5MlqP+LP
-         V/CJjV4dtwQFSz0P2om4KwU21QGecnxxC5cVpHlZgcVcDsW42wmLxWG/ZwXZmn8o4ty0
-         cDPe3HrjrPZkwde49WiFRs6auUjf/4yKjHtNnH5QL1/gGV4y/mfU9Kc6uN6J4S/cCSZ9
-         5U1q7WME7I6RgmWvyeqILaqI2hcQFE/KoqvA+AlJFJRbPip8b+MlXvzje3hM5pVv2AUt
-         SIFg==
-X-Gm-Message-State: AOAM532emsBtvim/pJOsAqUpdUANRWUNd2bpjyEsnquCiktzdJArPel1
-        ABH680ogLR123EGO54GeQEqBSOGH7t67AA==
-X-Google-Smtp-Source: ABdhPJxQpQBnfySbDernbtM/2zvLb6OSYK+avT5/SNEuSrqQE/7Jv9ZFk6Gy3eDnWfCPcZ391s1lEg==
-X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr24461635pfm.41.1650976846536;
-        Tue, 26 Apr 2022 05:40:46 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-1.three.co.id. [180.214.232.1])
-        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b0050d4246fbedsm6798183pfd.187.2022.04.26.05.40.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 05:40:45 -0700 (PDT)
-Message-ID: <9b428d55-322b-5685-b336-4bd71b52a73f@gmail.com>
-Date:   Tue, 26 Apr 2022 19:40:38 +0700
+        Tue, 26 Apr 2022 08:44:41 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C907FBB08E;
+        Tue, 26 Apr 2022 05:41:31 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 492345C0074;
+        Tue, 26 Apr 2022 08:41:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 26 Apr 2022 08:41:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1650976889; x=
+        1651063289; bh=AC3fXGBXmPXraihRLIM77w9frliDq7HqkQUBjuY+6ZM=; b=g
+        YFCyGxOW2D6uHceOc3OwhFvYxkQUfmrhYbBZViG9qtOP9Fci3L9JahnM0bShrlGj
+        ik0Unwn6qEPc+AwHVaf4kneMox0e4MiN4r7ixdDIu7mSle6bLznBHyp14ROdKNHP
+        0bfrLhe3cK85z/hyTaThkGf6xgDjgI/XCwbCPKr0S1Ve8/n4D7/Td642e1vK/c/H
+        YmlXmMFXR8YorvL34Kn2gwRVe0zDYG1yRhFRs/uA6G7dvRyV973BRESAPZRhAOOi
+        IjZyyo+Yk2xrRLGrlahUiKZxI3GErmbkjDeyBb9bl+14BWPinjpL7bndA8sFRWsN
+        5B6EZ1unPU4Z59BF+h4gw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650976889; x=1651063289; bh=AC3fXGBXmPXra
+        ihRLIM77w9frliDq7HqkQUBjuY+6ZM=; b=EaDO1lKq2CqgxpawH9zKOm5CgVnbK
+        mDDQrCsfkOgz1ebrEJSeg6urqSwJsCUjAUU+mhFNJqjSui/aq0MrxW+0R2Q2rAXR
+        3P2FWg9VahGaSJI07boDtQ46OyUe+jA3gTIPsPsOzHjtJW3ScoLESjEbXJZwFxEh
+        ynfP32MIBckcr591xNs5Z1yxE+4sRhudFMkoCCUyFQVfOXorSt6IOCz/Wf2XCNGt
+        tC1zt6zGqtA9khdv6tl/Zxy4HL+zCI7b8idYGuopg3AYCtwx+wJZiYugWGO3IzHc
+        WdvV2P5m7sJAB48JisKDl3M+8gPUnUwhG5baHjzMjq6YcaHAYn6qe+NsQ==
+X-ME-Sender: <xms:eOhnYjvMYorkKsA77MWQO4fxGMke0WWzDVjMGT59CVYtBL7hlUBMYA>
+    <xme:eOhnYkcT6GeskyBpjsL-2Kw79X_sHO_gGf8hqnjAEtcC2VeBd2t41Bq70VY382xtb
+    AC7IOUOefFNnWI6hMI>
+X-ME-Received: <xmr:eOhnYmxX9g37oMqHCmZDkX-5BB__hycdC1UaNbGefIHn8DuzT0CYJsbnT-Hm5_WCZlvT6oyJbYy2lUKeOY5g1zb3IDP8IgwjifcpPcE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdehvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuieeggffhffffieefheduieeuvdetgeeufeffvefgtedvffehheekffev
+    udefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:eOhnYiOt4cgKwKfL-lFolxFwcboWqnuu9bRHsSbSl1ff-0GHDi9t1w>
+    <xmx:eOhnYj_uK3zthnQf0Cb90wGDUVzfzrgbY-Bk8xuTf3PZHWsdmuWX3g>
+    <xmx:eOhnYiWnuxuZfgD__pZjVlSzaLbyvLM_m9P7aazza1Wt2H2_BcUqSA>
+    <xmx:eehnYmUaVr1UECo73YZzJQ2xbMjsoj8kQNADB7Nfs6kKjE5LsFQn6Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Apr 2022 08:41:27 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, David Airlie <airlied@linux.ie>,
+        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: (subset) [PATCH v3 03/14] drm/sun4i: Remove obsolete references to PHYS_OFFSET
+Date:   Tue, 26 Apr 2022 14:41:24 +0200
+Message-Id: <165097687063.513954.2708926846046765429.b4-ty@cerno.tech>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220424162633.12369-4-samuel@sholland.org>
+References: <20220424162633.12369-1-samuel@sholland.org> <20220424162633.12369-4-samuel@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] KVM: powerpc: remove extraneous asterisk from
- rm_host_ipi_action comment
-Content-Language: en-US
-To:     linux-doc@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Suresh Warrier <warrier@linux.vnet.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220426074750.71251-1-bagasdotme@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220426074750.71251-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,29 +92,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 14:47, Bagas Sanjaya wrote:
-> Link: https://lore.kernel.org/linux-doc/202204252334.Cd2IsiII-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Suresh Warrier <warrier@linux.vnet.ibm.com>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Anders Roxell <anders.roxell@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Segher Boessenkool <segher@kernel.crashing.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Fabiano Rosas <farosas@linux.ibm.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: kvm@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On Sun, 24 Apr 2022 11:26:21 -0500, Samuel Holland wrote:
+> commit b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a
+> central place") added a platform device notifier that sets the DMA
+> offset for all of the display engine frontend and backend devices.
+> 
+> The code applying the offset to DMA buffer physical addresses was then
+> removed from the backend driver in commit 756668ba682e ("drm/sun4i:
+> backend: Remove the MBUS quirks"), but the code subtracting PHYS_OFFSET
+> was left in the frontend driver.
+> 
+> [...]
 
-Oops, I forgot Fixes: 0c2a66062470cd ("KVM: PPC: Book3S HV: Host side kick VCPU when poked by real-mode KVM")
-tag.
+Applied to drm/drm-misc (drm-misc-fixes).
 
--- 
-An old man doll... just what I always wanted! - Clara
+Thanks!
+Maxime

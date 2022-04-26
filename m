@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1991E50F4B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1963C50F80F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345374AbiDZIiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S1345546AbiDZJUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345555AbiDZIen (ORCPT
+        with ESMTP id S233983AbiDZI5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:43 -0400
+        Tue, 26 Apr 2022 04:57:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63A79390;
-        Tue, 26 Apr 2022 01:27:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4291684EC0;
+        Tue, 26 Apr 2022 01:41:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0763D617AE;
-        Tue, 26 Apr 2022 08:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12013C385A0;
-        Tue, 26 Apr 2022 08:27:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0F7D604F5;
+        Tue, 26 Apr 2022 08:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C30C385A0;
+        Tue, 26 Apr 2022 08:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961663;
-        bh=2ky58ZqsPOERE4WIyFZo9GgN20b/64m7+5qjVQ2WsHs=;
+        s=korg; t=1650962518;
+        bh=H2GVOsN4Wlnmq7iS7cjQO3AXAVt7hMVJpGRKNMcx78Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hFuHk6swhMcmsM5scU5/UAXRTMAqU8R2z8U/Mfgk/L2Ek7b4sTayS/pWcWhzGYGFn
-         mXdFFAWp3ZhFXM0Ygy4a2W4M7fBJl9UO1vn+wBeK20y4izmzd3/asy8TwC4DPddsAH
-         1Kx+3gyb1x1vJ+YVhzlWjDZlX8u+8AvYQy0pLu0k=
+        b=Efk5+koe4LapixIGMtkz9ZNP4472FGtfJKdviBhib8Pz/PDRxV1YJ0DmEdSeLO6YI
+         wsyLliVxlhATZq4oMoyfX4lKNd6WcSrhmGVDE6juH7j9tMqxPcHbgj25IsfiJLSzCw
+         uZNbvIoisXCrjoHyH47UEm9ccqJn86mrWiIfkZNs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, lee.jones@linaro.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "stable@vger.kernel.org, Dan Carpenter" <dan.carpenter@oracle.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 4.19 43/53] staging: ion: Prevent incorrect reference counting behavour
-Date:   Tue, 26 Apr 2022 10:21:23 +0200
-Message-Id: <20220426081736.910195602@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.15 083/124] ata: pata_marvell: Check the bmdma_addr beforing reading
+Date:   Tue, 26 Apr 2022 10:21:24 +0200
+Message-Id: <20220426081749.661460232@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,28 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-Supply additional check in order to prevent unexpected results.
+commit aafa9f958342db36c17ac2a7f1b841032c96feb4 upstream.
 
-Fixes: b892bf75b2034 ("ion: Switch ion to use dma-buf")
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Before detecting the cable type on the dma bar, the driver should check
+whether the 'bmdma_addr' is zero, which means the adapter does not
+support DMA, otherwise we will get the following error:
+
+[    5.146634] Bad IO access at port 0x1 (return inb(port))
+[    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
+[    5.150856] RIP: 0010:ioread8+0x4a/0x60
+[    5.160238] Call Trace:
+[    5.160470]  <TASK>
+[    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
+[    5.161728]  ata_eh_recover+0x3520/0x6cc0
+[    5.168075]  ata_do_eh+0x49/0x3c0
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/android/ion/ion.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/ata/pata_marvell.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/staging/android/ion/ion.c
-+++ b/drivers/staging/android/ion/ion.c
-@@ -140,6 +140,9 @@ static void *ion_buffer_kmap_get(struct
- 	void *vaddr;
- 
- 	if (buffer->kmap_cnt) {
-+		if (buffer->kmap_cnt == INT_MAX)
-+			return ERR_PTR(-EOVERFLOW);
-+
- 		buffer->kmap_cnt++;
- 		return buffer->vaddr;
- 	}
+--- a/drivers/ata/pata_marvell.c
++++ b/drivers/ata/pata_marvell.c
+@@ -83,6 +83,8 @@ static int marvell_cable_detect(struct a
+ 	switch(ap->port_no)
+ 	{
+ 	case 0:
++		if (!ap->ioaddr.bmdma_addr)
++			return ATA_CBL_PATA_UNK;
+ 		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
+ 			return ATA_CBL_PATA40;
+ 		return ATA_CBL_PATA80;
 
 

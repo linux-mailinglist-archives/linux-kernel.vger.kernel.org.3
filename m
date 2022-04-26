@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83E050F880
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EC650F8CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239666AbiDZJMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S1348366AbiDZJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347526AbiDZIvm (ORCPT
+        with ESMTP id S1346950AbiDZJJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC23CE646;
-        Tue, 26 Apr 2022 01:40:25 -0700 (PDT)
+        Tue, 26 Apr 2022 05:09:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22417B9B5;
+        Tue, 26 Apr 2022 01:49:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3F04B81D0A;
-        Tue, 26 Apr 2022 08:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FAC7C385A0;
-        Tue, 26 Apr 2022 08:40:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E25460C42;
+        Tue, 26 Apr 2022 08:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D69C385A4;
+        Tue, 26 Apr 2022 08:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962422;
-        bh=sr+Nk5FxcDLzx6uPd1VgAtnE1P3v/6qsQnnjLwf2oUA=;
+        s=korg; t=1650962967;
+        bh=bZ0Xe/AYFJWiHqb195AYspAhCa1rCBvLLVFu9aa1DhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X2fqpmhtld7mBvArSWCvBjiuajzNxqmrHY6gojhQHnfBrgH+XeWG5fXAXWzHDEmPN
-         dLtQs20fqzYL1jjqcemHhpJouSp+cbUVBtVqXin4qMvadpYCPKqn4OeyPYeB6qqgnf
-         Y7mnaGdeb33cqnGG5mnLjYDQjwYWawbjMrDPh7+Y=
+        b=DeebPXnqML4U6FwiK3QYj6Ct4O6G1Gb1+qwSxb02/7+Wi0diExv8gwK9+HQZlDMP4
+         8N+9c7XIjQK6AlNZaYc5jiJMBNzH34AWpUIVoIDDO/m75+fn5LDVD0IQgIMpjG+F9a
+         WxZmp+lHsO44+q4UF/w7ROfKoxXY+oEMA4JV1ZKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/124] drm/panel/raspberrypi-touchscreen: Initialise the bridge in prepare
+Subject: [PATCH 5.17 098/146] drm/radeon: fix logic inversion in radeon_sync_resv
 Date:   Tue, 26 Apr 2022 10:21:33 +0200
-Message-Id: <20220426081749.914852716@linuxfoundation.org>
+Message-Id: <20220426081752.811178065@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Christian König <christian.koenig@amd.com>
 
-[ Upstream commit 5f18c0782b99e26121efa93d20b76c19e17aa1dd ]
+[ Upstream commit 022074918042465668db9b0f768e2260b1e39c59 ]
 
-The panel has a prepare call which is before video starts, and an
-enable call which is after.
-The Toshiba bridge should be configured before video, so move
-the relevant power and initialisation calls to prepare.
+Shared is the opposite of write/exclusive.
 
-Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-3-stefan.wahren@i2se.com
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Fixes: 0597ca7b43e4 ("drm/radeon: use new iterator in radeon_sync_resv")
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1970
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220412093626.608767-1-christian.koenig@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/radeon/radeon_sync.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index 1f805eb8fdb5..145047e19394 100644
---- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-+++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -265,7 +265,7 @@ static int rpi_touchscreen_noop(struct drm_panel *panel)
- 	return 0;
- }
+diff --git a/drivers/gpu/drm/radeon/radeon_sync.c b/drivers/gpu/drm/radeon/radeon_sync.c
+index b991ba1bcd51..f63efd8d5e52 100644
+--- a/drivers/gpu/drm/radeon/radeon_sync.c
++++ b/drivers/gpu/drm/radeon/radeon_sync.c
+@@ -96,7 +96,7 @@ int radeon_sync_resv(struct radeon_device *rdev,
+ 	struct dma_fence *f;
+ 	int r = 0;
  
--static int rpi_touchscreen_enable(struct drm_panel *panel)
-+static int rpi_touchscreen_prepare(struct drm_panel *panel)
- {
- 	struct rpi_touchscreen *ts = panel_to_ts(panel);
- 	int i;
-@@ -295,6 +295,13 @@ static int rpi_touchscreen_enable(struct drm_panel *panel)
- 	rpi_touchscreen_write(ts, DSI_STARTDSI, 0x01);
- 	msleep(100);
- 
-+	return 0;
-+}
-+
-+static int rpi_touchscreen_enable(struct drm_panel *panel)
-+{
-+	struct rpi_touchscreen *ts = panel_to_ts(panel);
-+
- 	/* Turn on the backlight. */
- 	rpi_touchscreen_i2c_write(ts, REG_PWM, 255);
- 
-@@ -349,7 +356,7 @@ static int rpi_touchscreen_get_modes(struct drm_panel *panel,
- static const struct drm_panel_funcs rpi_touchscreen_funcs = {
- 	.disable = rpi_touchscreen_disable,
- 	.unprepare = rpi_touchscreen_noop,
--	.prepare = rpi_touchscreen_noop,
-+	.prepare = rpi_touchscreen_prepare,
- 	.enable = rpi_touchscreen_enable,
- 	.get_modes = rpi_touchscreen_get_modes,
- };
+-	dma_resv_for_each_fence(&cursor, resv, shared, f) {
++	dma_resv_for_each_fence(&cursor, resv, !shared, f) {
+ 		fence = to_radeon_fence(f);
+ 		if (fence && fence->rdev == rdev)
+ 			radeon_sync_fence(sync, fence);
 -- 
 2.35.1
 

@@ -2,228 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB71510A77
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D146510A7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354953AbiDZUdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S1354958AbiDZUeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349201AbiDZUdm (ORCPT
+        with ESMTP id S1349201AbiDZUeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:33:42 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCE31DA40;
-        Tue, 26 Apr 2022 13:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651005033; x=1682541033;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=7sf8/bBYPUuXzj5inLy3hD7sG9+MKo+kiFa3U/y6TDU=;
-  b=g/MQ2jXFuXpSM/g7zjJCsCz/Yzrt65QG7OAchOL5r30km8Uuo3C0at4n
-   CE7+urrzAqWfd1pN0d4su72qYt/cIFm743zxLZU/miRWnpeumxaivPegy
-   2n90i+EnZi+7+Yt/XIN24xl6qYAx6ullPU4IMrHSbbMddSM88roRrG1lT
-   Q=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 13:30:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:30:32 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 13:30:32 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 13:30:31 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5] drm/msm/dp: remove fail safe mode related code
-Date:   Tue, 26 Apr 2022 13:30:21 -0700
-Message-ID: <1651005021-3069-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 26 Apr 2022 16:34:15 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115DA2CE01;
+        Tue, 26 Apr 2022 13:31:07 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id t6-20020a056830224600b00605491a5cd7so13831238otd.13;
+        Tue, 26 Apr 2022 13:31:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wXjPKtNZTtKNBuOy/a9KKwId4T2O7MJMpPr2sIf2PbY=;
+        b=U12n1SP9zIMrH0YG+APnlncHzWREQSEJH2W4zoFKtreAW5wpxisVc21qQTBX/cMS06
+         iT4MXRr/Rw14oZ7dJnqdWvh64mqVnmhWcmeMgz3Z/LpKz1kKuUZ1Sd1tkiugBndoeCDL
+         lg7XoHeZPigLciWAvpPL6uuRNIODb04/9ExnHVnVhnaRA4MoeVWYD0GIdLfqzTdYuma7
+         HuaqHcUb7AihjH1TSy7d45cQzmZGIpL/5/EOW16v9wxtfadnrVvgqtvXn0JLMX+FCVXo
+         TDwFP/dSRxOtSttxjGLw9oovnvEe44E9Z2NdZrHMHXXw781RtXV0MefDtPN5tACVa7NN
+         6S7w==
+X-Gm-Message-State: AOAM530E6VKI/xBcma7dcJhD4zGe9bpv3sOCFz3PVBIJ4XtLmzej+7Ie
+        OkpEutzxaw6yfkz3a+bfXA==
+X-Google-Smtp-Source: ABdhPJwYoKqpVwgCbbe2QW9WNBJvChNr9GEFiXHGCjmCGqjpyaWklBOqdUhhYuhF5A2I8esCGPeyHQ==
+X-Received: by 2002:a05:6830:8d:b0:605:4b4f:cdf7 with SMTP id a13-20020a056830008d00b006054b4fcdf7mr9324809oto.45.1651005066307;
+        Tue, 26 Apr 2022 13:31:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x21-20020a4a6215000000b0033993dc1d65sm6006125ooc.8.2022.04.26.13.31.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:31:05 -0700 (PDT)
+Received: (nullmailer pid 2484879 invoked by uid 1000);
+        Tue, 26 Apr 2022 20:31:05 -0000
+Date:   Tue, 26 Apr 2022 15:31:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>
+Cc:     "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/3] dt-bindings: iio: accel: add dt-binding schema
+ for msa311 accel driver
+Message-ID: <YmhWic3rG8ERtCYY@robh.at.kernel.org>
+References: <20220419154555.24191-1-ddrokosov@sberdevices.ru>
+ <20220419154555.24191-4-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419154555.24191-4-ddrokosov@sberdevices.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current DP driver implementation has adding safe mode done at
-dp_hpd_plug_handle() which is expected to be executed under event
-thread context.
+On Tue, Apr 19, 2022 at 03:45:58PM +0000, Rokosov Dmitry Dmitrievich wrote:
+> Introduce devicetree binding json-schema for MSA311 tri-axial,
+> low-g accelerometer driver.
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  .../bindings/iio/accel/memsensing,msa311.yaml      | 64 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+> new file mode 100644
+> index 00000000..3e4660f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: MEMSensing digital 3-Axis accelerometer
+> +
+> +maintainers:
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +description: |
+> +  MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
+> +  sensitivity consumer applications. It has dynamical user selectable full
+> +  scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurements
+> +  with output data rates from 1Hz to 1000Hz.
+> +  Datasheet can be found at following URL
+> +  https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: memsensing,msa311
+> +
 
-However there is possible circular locking happen (see blow stack trace)
-after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
-is executed under drm_thread context.
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
 
-After review all possibilities methods and as discussed on
-https://patchwork.freedesktop.org/patch/483155/, supporting EDID
-compliance tests in the driver is quite hacky. As seen with other
-vendor drivers, supporting these will be much easier with IGT. Hence
-removing all the related fail safe code for it so that no possibility
-of circular lock will happen.
+These apply to 'reg' in a child node, but you don't have child nodes so 
+drop them.
 
-======================================================
- WARNING: possible circular locking dependency detected
- 5.15.35-lockdep #6 Tainted: G        W
- ------------------------------------------------------
- frecon/429 is trying to acquire lock:
- ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
-dp_panel_add_fail_safe_mode+0x4c/0xa0
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: I2C registers address
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: optional I2C int pin can be freely mapped to specific func
+> +
+> +  interrupt-names:
+> +    const: irq
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c0 {
 
- but task is already holding lock:
- ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
+i2c {
 
- which lock already depends on the new lock.
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        msa311: msa311@62 {
 
- the existing dependency chain (in reverse order) is:
+accelerometer@62 {
 
- -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        lock_crtcs+0xb4/0x124
-        msm_atomic_commit_tail+0x330/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        ww_mutex_lock+0xb8/0x278
-        modeset_lock+0x304/0x4ac
-        drm_modeset_lock+0x4c/0x7c
-        drmm_mode_config_init+0x4a8/0xc50
-        msm_drm_init+0x274/0xac0
-        msm_drm_bind+0x20/0x2c
-        try_to_bring_up_master+0x3dc/0x470
-        __component_add+0x18c/0x3c0
-        component_add+0x1c/0x28
-        dp_display_probe+0x954/0xa98
-        platform_probe+0x124/0x15c
-        really_probe+0x1b0/0x5f8
-        __driver_probe_device+0x174/0x20c
-        driver_probe_device+0x70/0x134
-        __device_attach_driver+0x130/0x1d0
-        bus_for_each_drv+0xfc/0x14c
-        __device_attach+0x1bc/0x2bc
-        device_initial_probe+0x1c/0x28
-        bus_probe_device+0x94/0x178
-        deferred_probe_work_func+0x1a4/0x1f0
-        process_one_work+0x5d4/0x9dc
-        worker_thread+0x898/0xccc
-        kthread+0x2d4/0x3d4
-        ret_from_fork+0x10/0x20
-
- -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
-        ww_acquire_init+0x1c4/0x2c8
-        drm_modeset_acquire_init+0x44/0xc8
-        drm_helper_probe_single_connector_modes+0xb0/0x12dc
-        drm_mode_getconnector+0x5dc/0xfe8
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
-        __lock_acquire+0x2650/0x672c
-        lock_acquire+0x1b4/0x4ac
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        dp_panel_add_fail_safe_mode+0x4c/0xa0
-        dp_hpd_plug_handle+0x1f0/0x280
-        dp_bridge_enable+0x94/0x2b8
-        drm_atomic_bridge_chain_enable+0x11c/0x168
-        drm_atomic_helper_commit_modeset_enables+0x500/0x740
-        msm_atomic_commit_tail+0x3e4/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
-Changes in v2:
--- re text commit title
--- remove all fail safe mode
-
-Changes in v3:
--- remove dp_panel_add_fail_safe_mode() from dp_panel.h
--- add Fixes
-
-Changes in v4:
---  to=dianders@chromium.org
-
-Fixes: 8b2c181 ("drm/msm/dp: add fail safe mode outside of event_mutex context")
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_panel.c | 11 -----------
- 1 file changed, 11 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index f141872..26f4b695 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -206,17 +206,6 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 			rc = -ETIMEDOUT;
- 			goto end;
- 		}
--
--		/* fail safe edid */
--		mutex_lock(&connector->dev->mode_config.mutex);
--		if (drm_add_modes_noedid(connector, 640, 480))
--			drm_set_preferred_mode(connector, 640, 480);
--		mutex_unlock(&connector->dev->mode_config.mutex);
--	} else {
--		/* always add fail-safe mode as backup mode */
--		mutex_lock(&connector->dev->mode_config.mutex);
--		drm_add_modes_noedid(connector, 640, 480);
--		mutex_unlock(&connector->dev->mode_config.mutex);
- 	}
- 
- 	if (panel->aux_cfg_update_done) {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+> +            compatible = "memsensing,msa311";
+> +            reg = <0x62>;
+> +            interrupt-parent = <&gpio_intc>;
+> +            interrupts = <29 IRQ_TYPE_LEVEL_HIGH>;
+> +            interrupt-names = "irq";
+> +            status = "okay";
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c75be17..4227914 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12482,6 +12482,7 @@ MEMSENSING MICROSYSTEMS MSA311 ACCELEROMETER DRIVER
+>  M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>  L:	linux-iio@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
+>  F:	drivers/iio/accel/msa311.c
+>  
+>  MEN A21 WATCHDOG DRIVER
+> -- 
+> 2.9.5
+> 

@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EAC50FFC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7562550FFC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351304AbiDZN6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S1351311AbiDZN7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351297AbiDZN6s (ORCPT
+        with ESMTP id S1351300AbiDZN6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:58:48 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9A815F393
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:55:41 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ebf4b91212so183071037b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:55:41 -0700 (PDT)
+        Tue, 26 Apr 2022 09:58:53 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D8F15F58A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:55:45 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id s30so5107334ybi.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:55:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/vnAxl9/6m01Rp7k898UysKn+D7uwIp07j9FOdL8K08=;
-        b=tKoudsGaU3jACLFNweKVC1FxDvCj1EKUnpHd1WVFMlq2ZJqDHrIccJNy2IpQmvfGNE
-         nWzuTY2RIX7HeRb6Ew9wEQ3jVbRHnFiYIBeE+IUdpoRtPK3UR+OP4SfcKMr56nugmsDA
-         T5FmzucJMSZpZhSG118zaEhcrFdeyLQJSBz0yZkif12Hzc17tf+utn7rJtjJm3rU8am9
-         qqfzL3ARG+RI4RPjuIfjMn5PzGBZQ1u3c8wIzZQcQJwVhuvgDi6nWOWRkOOCgWGr2atp
-         aNUm3TVZs2iTHbzxFAiDIyenddPgISE3lMOORLLtWlLJyp7hW4isLItOD/G96HFMu5lg
-         /zVQ==
+        bh=uBWTMy19BCU8GJLOpBmlkiJHgnhETyOqG4xsK78wLxQ=;
+        b=y0qlk5Wop1rWL3gXkgBl5O9PjeYqAiQ1ig5/DeQlJRMziLwwYQx+LkfhDm+OGi+g9j
+         7oliRUhScsahDl34Eu1Fa2j59Y8ajc/Vhlir2Y7/aPAFoB67qyf+oqHDK1XZ2UVaQNlw
+         sr0RkEERg55+T9vK0IZlgRpc6eSXLnVnM291eRkpVjMG3Z0VLQR9eTKNxCaKdALs5NFO
+         hBhWH+3ZRcXKKK1sultcqu8lbZ7aCzaRdi1IzAjb3TqCebP5VSiWhG6+vmvI6J4przib
+         ASXHvVFfO5rMIdh1GlBR0Q1uYleb+NKjAVVfkERYhkI039Egka5l45WNe6gJpXbgkXQt
+         rCuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/vnAxl9/6m01Rp7k898UysKn+D7uwIp07j9FOdL8K08=;
-        b=hdMypS0V0aslY0YyJRgvxcNEiq2ijQk4jQ7EF3IqY8pdBbJ7Ve/asirCUofoBxu8UG
-         zxraO4IXxR/KTo19ObdYvhgl/Vvxqg72Gg/vPAnOFVd01KfczOSEdQFWgWhiSnn9RXqx
-         kX6VD2Fv2QcI/3i+d1h3fVjpfeucp72YUngE3LFaPwhbZY08hb2hYqVRKYQMg9JBu0Mx
-         oKCmfrnWPtALTVIU+QTc2fI6QrpuIRenBUnewmfcqfRCjlfKTQ5zNbazbLyeAOZNg4yo
-         X0k2jhyygLkWIFQT1ys5U04Np53kTc6x9lj8rj5dmwLvq3IWuUypgkgcfad2SNgGdXXg
-         ztrg==
-X-Gm-Message-State: AOAM530sffeVIvM7kaFDx2TCMoqHu4Zfdw9edXClQLwN0hdBz9dGoD5b
-        iJbVsa9ZfBZE+MfeyBFFcIqxMO68ssp88Yy9yjJu2Q1z9TE=
-X-Google-Smtp-Source: ABdhPJwXP4TdwcxWnUNBNkwDbTV3dLBtvpt2L3DjaLE74Wt1O6h1Rzd9M2lvWXt7y67o8B8B3IM+kwYDJXvx3UbsQoM=
-X-Received: by 2002:a81:998e:0:b0:2f4:e2a0:f30f with SMTP id
- q136-20020a81998e000000b002f4e2a0f30fmr21422325ywg.376.1650981340479; Tue, 26
- Apr 2022 06:55:40 -0700 (PDT)
+        bh=uBWTMy19BCU8GJLOpBmlkiJHgnhETyOqG4xsK78wLxQ=;
+        b=RDwP91Bv35oE4sSAdj/6Qojt+3sgtp4qlNkRuZsOhTHWi9cPIpSTJiK8j2epJJOA/p
+         JsQoa/s3Ze4XA0QdRC8yyQg0W439h31lIW7tsnrAbRZv5jwkMvxosfnfcDI4+9RG+XuC
+         naKFtFeP9kSw9PsBBnHEGDh74VO32G9YGiBCJqBvNaHCuthfwVUsy5VcQZlHAHdyivkY
+         EheeC1CWT+ziZdaFqPwgkWDnJuFWM6IKbztD8TeCNXHFv4Bpkt+lh9TrlFZ/b85YVJZm
+         59r8JpRke15zW6+p04fguYWVP5LzNiG9fFpG2LgVpmKyV2b526H53I7UOSCk8JnJuZEw
+         OSBA==
+X-Gm-Message-State: AOAM531p0PtKW2htQ/cwTELOaqWImX6IOhoy13AwF7iGBZROa02ZxQXv
+        2q6SlclpBCKKu6O9ZvHjFeeLkN5VOJAcbcrsF9HxNg==
+X-Google-Smtp-Source: ABdhPJw92iLZ8A8h//KsmSd7zk7HfXV1sN9OJS8uxSz8+RRspq25GOq/lPymHBG1FtpLpzP8LuhhvxTuI+IgUuTf+0M=
+X-Received: by 2002:a05:6902:8c:b0:631:ef56:6694 with SMTP id
+ h12-20020a056902008c00b00631ef566694mr20679552ybs.194.1650981344539; Tue, 26
+ Apr 2022 06:55:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220423221623.1074556-1-huobean@gmail.com> <20220423221623.1074556-2-huobean@gmail.com>
-In-Reply-To: <20220423221623.1074556-2-huobean@gmail.com>
+References: <20220423221623.1074556-1-huobean@gmail.com> <20220423221623.1074556-3-huobean@gmail.com>
+In-Reply-To: <20220423221623.1074556-3-huobean@gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 26 Apr 2022 15:55:03 +0200
-Message-ID: <CAPDyKFqHVxqz8ZSJYeZkjyLxEiCk-xpPuqOj69AkeJ=ZUYgvow@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] mmc: sdhci-omap: Use of_device_get_match_data() helper
-To:     Bean Huo <huobean@gmail.com>
-Cc:     adrian.hunter@intel.com, linus.walleij@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beanhuo@micron.com
+Date:   Tue, 26 Apr 2022 15:55:08 +0200
+Message-ID: <CAPDyKFrksB_kgrnmcay+ub0nDfmPVZfw-zJihop5N8_6qUqrug@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] mmc: core: Allows to override the timeout value
+ for ioctl() path
+To:     Bean Huo <huobean@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, beanhuo@micron.com,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,44 +73,48 @@ On Sun, 24 Apr 2022 at 00:16, Bean Huo <huobean@gmail.com> wrote:
 >
 > From: Bean Huo <beanhuo@micron.com>
 >
-> Only the device data is needed, not the entire struct of_device_id.
-> Use of_device_get_match_data() instead of open coding of_match_device().
+> Occasionally, user-land applications initiate longer timeout values for certain commands
+> through ioctl() system call. But so far we are still using a fixed timeout of 10 seconds
+> in mmc_poll_for_busy() on the ioctl() path, even if a custom timeout is specified in the
+> userspace application. This patch allows custom timeout values to override this default
+> timeout values on the ioctl path.
 >
+> Cc: stable <stable@vger.kernel.org>
 > Signed-off-by: Bean Huo <beanhuo@micron.com>
 
 Applied for next, thanks!
+
+Linus, I interpreted your earlier reply as a reviewed-by tag, so I
+have added that. Please tell me, if you want me to drop it.
 
 Kind regards
 Uffe
 
 
 > ---
->  drivers/mmc/host/sdhci-omap.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
+>  drivers/mmc/core/block.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/mmc/host/sdhci-omap.c b/drivers/mmc/host/sdhci-omap.c
-> index 64e27c2821f9..86e867ffbb10 100644
-> --- a/drivers/mmc/host/sdhci-omap.c
-> +++ b/drivers/mmc/host/sdhci-omap.c
-> @@ -1219,16 +1219,11 @@ static int sdhci_omap_probe(struct platform_device *pdev)
->         struct sdhci_pltfm_host *pltfm_host;
->         struct sdhci_omap_host *omap_host;
->         struct mmc_host *mmc;
-> -       const struct of_device_id *match;
-> -       struct sdhci_omap_data *data;
-> +       const struct sdhci_omap_data *data;
->         const struct soc_device_attribute *soc;
->         struct resource *regs;
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index b35e7a95798b..6cb701aa1abc 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -609,11 +609,11 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
 >
-> -       match = of_match_device(omap_sdhci_match, dev);
-> -       if (!match)
-> -               return -EINVAL;
-> -
-> -       data = (struct sdhci_omap_data *)match->data;
-> +       data = of_device_get_match_data(&pdev->dev);
->         if (!data) {
->                 dev_err(dev, "no sdhci omap data\n");
->                 return -EINVAL;
+>         if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
+>                 /*
+> -                * Ensure RPMB/R1B command has completed by polling CMD13
+> -                * "Send Status".
+> +                * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
+> +                * allow to override the default timeout value if a custom timeout is specified.
+>                  */
+> -               err = mmc_poll_for_busy(card, MMC_BLK_TIMEOUT_MS, false,
+> -                                       MMC_BUSY_IO);
+> +               err = mmc_poll_for_busy(card, idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS,
+> +                                       false, MMC_BUSY_IO);
+>         }
+>
+>         return err;
 > --
 > 2.34.1
 >

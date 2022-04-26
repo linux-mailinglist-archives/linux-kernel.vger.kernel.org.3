@@ -2,45 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5955D510023
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1E7510027
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351513AbiDZOQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S1351483AbiDZORQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351489AbiDZOQj (ORCPT
+        with ESMTP id S1347711AbiDZORO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:16:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F4A192AE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:13:31 -0700 (PDT)
+        Tue, 26 Apr 2022 10:17:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E945218E3B;
+        Tue, 26 Apr 2022 07:14:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3DB3617A5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242E2C385A0;
-        Tue, 26 Apr 2022 14:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650982410;
-        bh=RofGvcu1ei9rfLGRCQtdIc30Yw2jgOKd/JjFNzj/g5A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=si6Q5SneJV2OTU1qUBiJBtEGh9AEYsGEUdKrHTjYJfTVdiMXA1Cqf6HzXEcz3PKEF
-         9V7nc4Nxgd1oFEQZNE2Upg8/8hv8j3FpWHkcSglM6GKAkNy3LsP00cWVHBRXwdCb7M
-         F4fBJ0LgoYnZ7F495KngqaWBEcIpV4YEKSeO6jtY=
-Date:   Tue, 26 Apr 2022 16:13:26 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, sboyd@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, keescook@chromium.org
-Subject: Re: [PATCH v3] devcoredump : Serialize devcd_del work
-Message-ID: <Ymf+Brpl77kvN1I4@kroah.com>
-References: <1650981343-11739-1-git-send-email-quic_mojha@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 828E2617A1;
+        Tue, 26 Apr 2022 14:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3670C385AA;
+        Tue, 26 Apr 2022 14:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650982445;
+        bh=vIR/I/WOOXwUWDTjzFU2wGyQYvRoYeEp7ly2vdSZ6O4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sx18sAHN6xtgoLtYNmnTs1Rj6iwG7aHsyGqrxqCC8/AL+ICJeYvXbJxSP7wc194FU
+         rjh5rVpDJ2wl+mqqCoTNsVP6vEubQelHsJA3uNEm711NWLCjUYXJ4oIJJK1iH80Ddx
+         ZxeyANsNGnIOtnu12u+kdjdS7KZuIQflZhUNt5L2H5PJD2OYgQO5P9At0vJSnrMBCS
+         GOvFuUXoHl+NxXKs6g/jlTeeHbZ9zoxIUFdjMRFlJUYZN+fAfB8n5kWrcfv5jXfZ3o
+         7gAmRnr/8bKFANdFtm3TQoKc+3rZjQ52ESo9kECxpAZ73nT3yet5U6draFHvyNGQWp
+         k7/OqCpxHc4IA==
+Date:   Tue, 26 Apr 2022 09:14:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, kbuild-all@lists.01.org,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] vfio/pci: Invalidate mmaps and block the access
+ in D3hot power state
+Message-ID: <20220426141403.GA1723756@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1650981343-11739-1-git-send-email-quic_mojha@quicinc.com>
+In-Reply-To: <202204260928.TsUAxMD3-lkp@intel.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,13 +62,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:25:43PM +0530, Mukesh Ojha wrote:
-> +	bool flg;
+On Tue, Apr 26, 2022 at 09:42:45AM +0800, kernel test robot wrote:
+> ...
 
-This is not the 1980's where we had a limited size for variable names
-due to memory and compiler restrictions.
+> sparse warnings: (new ones prefixed by >>)
+> >> drivers/vfio/pci/vfio_pci_config.c:703:13: sparse: sparse: restricted pci_power_t degrades to integer
+>    drivers/vfio/pci/vfio_pci_config.c:703:22: sparse: sparse: restricted pci_power_t degrades to integer
 
-Please use vowels and descriptive names that identify what the variable
-is for instantly.  "flg" is unknown.
+I dunno what Alex thinks, but we have several of these warnings in
+drivers/pci/.  I'd like to get rid of them, but we haven't figured out
+a good way yet.  So this might be something we just live with for now.
 
-greg k-h
+> vim +703 drivers/vfio/pci/vfio_pci_config.c
+> 
+>    694	
+>    695	/*
+>    696	 * It takes all the required locks to protect the access of power related
+>    697	 * variables and then invokes vfio_pci_set_power_state().
+>    698	 */
+>    699	static void
+>    700	vfio_lock_and_set_power_state(struct vfio_pci_core_device *vdev,
+>    701				      pci_power_t state)
+>    702	{
+>  > 703		if (state >= PCI_D3hot)
+>    704			vfio_pci_zap_and_down_write_memory_lock(vdev);
+>    705		else
+>    706			down_write(&vdev->memory_lock);
+>    707	
+>    708		vfio_pci_set_power_state(vdev, state);
+>    709		up_write(&vdev->memory_lock);
+>    710	}
+>    711	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

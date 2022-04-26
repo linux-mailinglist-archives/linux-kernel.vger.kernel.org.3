@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB873510643
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3535D510649
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353661AbiDZSGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S1350025AbiDZSHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349900AbiDZSGt (ORCPT
+        with ESMTP id S1353679AbiDZSHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:06:49 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B9127CEC;
-        Tue, 26 Apr 2022 11:03:39 -0700 (PDT)
+        Tue, 26 Apr 2022 14:07:45 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED365BD3C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:04:34 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id q185so13834128ljb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650996220; x=1682532220;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aPIKkpibUxQQR3KJl7UUM0dwN+Ho/AxYVCKHrcAsEQc=;
-  b=eOlUngWArIEVIlR2G1wQ1QJi1kUIiHLBmS7lI9KmRRoscjfA6FMj5Sp1
-   xAq/0GkajEjO6iH5dUZOhuiTAe77H7jUBix8O8YmMT6enZls4mpGyHqYS
-   ZbfnVEIwTLRLEgYjvR1PjegP4jY2+x6w/N/4Sehm+FnaEb+loyktewZQR
-   4=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 26 Apr 2022 11:03:39 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 11:03:38 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 11:03:37 -0700
-Received: from [10.111.160.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
- 2022 11:03:34 -0700
-Message-ID: <9425d65b-85b1-6695-2a0b-95a1a46fb752@quicinc.com>
-Date:   Tue, 26 Apr 2022 11:03:32 -0700
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tufCt4byBk3LeEDKkh/mC8U5Nhou08h/BKoICMK0GmI=;
+        b=crVYUnuh24mOkyUpx+qDImncBz6JWXkQ3hqw20FmjmtUUK9peW+IgUTJmIkj1My6KE
+         xYZsNWQOlPqTrNPin/oqF52o10VfAD2KThjCsoaeJj2r0VWkI6H4p63p26qdZElVH6zh
+         jc05H+QVNrFGia260RsvfnkGQukqL7AAjiUYBdHQ/mVDz5Baq9DvMCEFDyGfuHkJ6n2R
+         ROtdWNksOVMKQ4Xin0hCp5XfHbMYiYH5Cu4+DFuYLLcvHM+yzMqMG7dc4uHOIDVd5Nyt
+         fm0kixb1YeR96Yv8wCyaiZijW0dWrm9C4ZTxsYMpliTCesEsANRv+cbX3HXJoQTbx6hz
+         FXoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tufCt4byBk3LeEDKkh/mC8U5Nhou08h/BKoICMK0GmI=;
+        b=pmoNQmqfyTexOCiFdk7ftlDuUk88rfR1f7ftuzuDwmpUnEOXxn7Ivsg0pX3gBJtDrr
+         twj/afHwPfXrtkB0kCTkJw4dVhzj9aP/WGy6akmJ1mJpQyWDtOMe/QzEZwia2a4lQZil
+         9Sg5pZbVdP9nDvWuzZfIJtNn18Cf1D8y1j87h1tJziKpaN7R9qNKw79CzCKXiopekB9J
+         G5921J0zF30y3b96Oy/G/OaR2FXUW43oCFE1fFfBv4yeFyeJS0VEW4q08fBUQJPiYVQH
+         RHhRXz47rJ2S8DvGp1BGwvnkRWQlmpQSmCHMN4MGOjzPjDGxi+CqMwQtoBAIy5o/YUbo
+         bQpA==
+X-Gm-Message-State: AOAM531s8cF+PemOssh5AGBUls4wLKZqmyPCzs5imlrGJVdyk2rN9h1H
+        SVcAJV9oOEGWCYD2clMujPRf8g==
+X-Google-Smtp-Source: ABdhPJw5RAklH7SXLgSYk+EhZIYU91zA9CkrW8NLL2lhc3YisU6DNjKb3w+8zwUEltnqjz9MSuwsuA==
+X-Received: by 2002:a2e:7f13:0:b0:247:ef72:9e8b with SMTP id a19-20020a2e7f13000000b00247ef729e8bmr15410498ljd.205.1650996272660;
+        Tue, 26 Apr 2022 11:04:32 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id bi10-20020a05651c230a00b0024f13295d98sm593105ljb.63.2022.04.26.11.04.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 11:04:32 -0700 (PDT)
+Message-ID: <a67dbe24-f15f-cc52-d2d8-22dca554caae@linaro.org>
+Date:   Tue, 26 Apr 2022 21:04:31 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
 Subject: Re: [Freedreno] [PATCH] drm/msm/dp: move add fail safe mode to
  dp_connector_get_mode()
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Sean Paul <sean@poorly.run>,
+Content-Language: en-GB
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
         Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
         David Airlie <airlied@linux.ie>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
         Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>
+        Stephen Boyd <swboyd@chromium.org>, Sean Paul <sean@poorly.run>
 References: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
  <3b9588d2-d9f6-c96f-b316-953b56b59bfe@linaro.org>
  <73e2a37e-23db-d614-5f5c-8120f1869158@quicinc.com>
@@ -75,13 +85,10 @@ References: <1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com>
  <CAD=FV=XNWCLxEcGdDOarsY5j7wQDcPP__VsMhpe_G4N1kL-gHg@mail.gmail.com>
  <fa751163-78e8-18ee-4441-c50e016ee8bf@linaro.org>
  <CAD=FV=W7FyKeJ4h6uAjQFWg=-Cn9r1+js+RUm_niGexJmcDu6A@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 In-Reply-To: <CAD=FV=W7FyKeJ4h6uAjQFWg=-Cn9r1+js+RUm_niGexJmcDu6A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -91,9 +98,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/26/2022 10:56 AM, Doug Anderson wrote:
+On 26/04/2022 20:56, Doug Anderson wrote:
 > Hi,
 > 
 > On Tue, Apr 26, 2022 at 10:44 AM Dmitry Baryshkov
@@ -360,15 +365,9 @@ On 4/26/2022 10:56 AM, Doug Anderson wrote:
 > specific knowledge about what the display said it could handle and we
 > can't support any of them. The DP spec _only_ lists 640x480 as a
 > required mode so that's the only one we should add.
-> 
-> -Doug
 
-So one thing to note Doug, in case you have not already made note of it.
-I believe you are referring to drm_add_modes_noedid() and NOT 
-drm_add_override_edid_modes()? Because the latter needs an override firware
+Then this should be a DP-specific override happening after all the pruning.
 
-If so, just wanted to mention that drm_add_modes_noedid() operates on 
-the probed_modes() list but after validation and pruning, probed_modes 
-list does not exits. It gets copied over to connector->modes list.
-
-So we cannot directly call that.
+-- 
+With best wishes
+Dmitry

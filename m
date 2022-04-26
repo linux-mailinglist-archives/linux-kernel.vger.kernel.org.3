@@ -2,148 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C5950F48A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDC050F47D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345109AbiDZIgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S235541AbiDZIho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345139AbiDZIeH (ORCPT
+        with ESMTP id S1345279AbiDZIe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:07 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D844B6E550
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:26:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bcFJhbzWsoI6F+6NYxYYNJv0+/w6Hdms+3mppbUVdJFLp/uTUjEh8AdQBx1LYX5JbX3151MhATMX0lhT1byVtb824Zvb0Lgb770xs7CrvQBWIb9KmD48S1TE1iO+deK3uViJrIItvTLGFrekO13I1BJVrXyLT8FFd37gVVH7daVFC0Llpq+uLbwQpWoxUKNzVeDeZ73nq74fE9FWkXLRfN3+i/QQRm0nLUZ6MKmrnTV3zgUTTvMNupYT2LrubiVbiaca371wRZC2m3xUv1VRWq+bxkwBVxBa1qtYgDbiOvUUFTB4pgs5QP5OPFP5tnTyZ3ZjRedNMfAo7kP1eKB9jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lFqXuY219pQYqdcnExefYu3BoAMa/pMzNdZVT5eZxrU=;
- b=ms3U5QcZXLpPYFYJqdqknkeqBqvOx96fiDNcbbKMCNCvQeDsNpc6ZPcfULyNxJxCK3bD+cOtKiOtlQjmo9hzK1hyajNGhJTZCU/dl+yjLPYv9+G2xMgPXLHG8p3qXAgD1LBxxSGtFLBnVgCifEJFnIhkSvm3vIjWV/8DGi5CKTgx53hYjrDJJALkLk8RddV6BCpRfkHR3LB8xOPc4myweqSZfaRnGEHzyFB500TU2/AS6PUA5eCXxyg0b8bZcUtsk5TDiGDYQncEwF1udKIxThKoNe61e7+UiXtWebvh7lcyd7PBln8JNHwt0/oWrvqkhIdv0vtgM5IA5Hx9B3gHcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lFqXuY219pQYqdcnExefYu3BoAMa/pMzNdZVT5eZxrU=;
- b=dW5Ot29LSIcdKdhAXEcdH+fFPs1yPCloAQNiE4H/62cfhKq4bNB62Gj5l0WOBhZXUO/8CYde4xC2/WC/g/eokSGzFLJ3p/d4ClRZ/cWCehzA8Cki52nfjsSys1CRJ+AblWR8wbuWMfBCi4VgJWEMfORYsv2CxWWTdUygJ3nbZDk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- TYZPR06MB3952.apcprd06.prod.outlook.com (2603:1096:400:6::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.14; Tue, 26 Apr 2022 08:26:10 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 08:26:09 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] mm/filemap: Fix NULL pointer dereference in pagecache_get_page
-Date:   Tue, 26 Apr 2022 16:25:48 +0800
-Message-Id: <20220426082549.590899-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR01CA0069.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::33) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cdec9c02-e6d4-4b3a-8996-08da275e6a72
-X-MS-TrafficTypeDiagnostic: TYZPR06MB3952:EE_
-X-Microsoft-Antispam-PRVS: <TYZPR06MB3952AD1C799A2DB1E7DE27EBABFB9@TYZPR06MB3952.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lmTCgQR1BPJktKI97vqL1Hx0FTWJT+5zsCWd7Yi+7g6nloknufiy0nSPUYiK2/5fM+l3EMDjG0HmpbojTj04f4X0PxP13laXvWOkRsmKXKQzuHQREiCNWbIkBwVGJ5ZZbnMHI6XgNy+Yaj1pCu4imOJd85Cn79SL26GIrnANPitjHY9EmHSleoterG18RI4WHZzh6LDOsuWYJ/sM09c0uQV/uPthD87iFzSGXnujOBqAdTpMj4g3m+ugNIWbRtnJQfD80MplMQ728cq1pmEVkF9k8pYtad7POfBkyde6ltEKfgw41Hq89GrEQ52hW7x02YkXNt5W5ovs9jTxavBjS7wofsm8s/uDYIET05D0HaVDBOZm3QbUCv7H5PtEkF2QKWk9VUuIjDadPV5bA/KrCU+fqoacQp+1eDI93YN20d4YE6YXP9vS4EBJD9n7WLNy/zy28pgXlN9TPtof3xZEJ9qYxJYDvv+9PtbfRTbdWvfEYs+r2kFssYJHwc4fhROxiLLD7j/e2uaclXrYkEc/oPujjEdt12P6M53jkY8Tb/Bu85ccNH9UDqW6JvlLcXjPxWJpPL2OMAcNkCmFRmGYsA187Gzrn4DOnXx2zSjuYdYPdymLXq5NggQlZO4hS4+uCQOkAPSyKIGtxSnq+TpHnZP2RjXhnDLbPfYi5fRRXiNHq1O9suDN9Wk9wCfZBo9GXycBeOFiA1zFcIgdPa5EBQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(6666004)(66476007)(66556008)(66946007)(4326008)(8676002)(4744005)(38350700002)(38100700002)(8936002)(6486002)(6512007)(6506007)(508600001)(86362001)(186003)(26005)(83380400001)(36756003)(5660300002)(2906002)(107886003)(316002)(110136005)(2616005)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fk73PeyQcVh5/TrjXIOCRrIa7x0uSShtF4cxddDyzc9aKxtWVP2z6nH1UxgD?=
- =?us-ascii?Q?WWwKr74f2W2ne3D8qb0iWhwD1njIqo+tVNgPlnv9QMaTRMguZAHeoAlhXMvT?=
- =?us-ascii?Q?/JC7ah3iGtezsdE5KbDVi+JsJkcbv56Ear/y8ezkYrSe7oIwzrX3amnMoCOi?=
- =?us-ascii?Q?8Spww3oiCc9kCVU0AHwq3No0opeqC7uVMV+6HBoXap5ZJK6GBCQ0DInoKmb+?=
- =?us-ascii?Q?27gplmriAgVlSmC/WwASh9TvzqTe13u8onDoSnt9F/ZyxNWGehPryfKCa94R?=
- =?us-ascii?Q?QxmNrHHetljcwaI16eMHRp6RGnciNBK6Yjef7cDlKDa+E2i/MrVDBcfo4ogg?=
- =?us-ascii?Q?VK8KcBBM6vpYFVJ/Al6PhPgaSSRvdq+pW1xJrKRaZ9nU7CEjWZF9JD4SURDE?=
- =?us-ascii?Q?8ybQBHyAANZGHlfX7It70ndlWZz8qmy7nuQso4JoB+g09J/5KxGFu5Dt5axh?=
- =?us-ascii?Q?j4mN3lltyANDRZ5GfR/UCGR+0tWs3oEtZfmjlRGfwHSG0q9d00wJaKP1QpO4?=
- =?us-ascii?Q?vcl7eQ7kfLl72YQO1wKeYD4NCHzxmVjXW+Qf71nE99yNtgJqef26qt48/G60?=
- =?us-ascii?Q?BMWC+e6PWjHnKqaI9z07STjsMDxeb/wt2E+TsLXv3PR9ABPY7+Ber3D2l4Bm?=
- =?us-ascii?Q?sgwfGYsFOP88gITsTakA8URWlsGKUa9mbWDvBVgmi2FGPnEG7F9gEmdP0BAk?=
- =?us-ascii?Q?Mp8ojSAuO9i2/qXH0RN2jIWvl2x1p5ArzaHhWUtMpwOX7DdfsTOTmVc9ZDBV?=
- =?us-ascii?Q?caOabmW3MiTLj23ml0sYfw70+hSyT0V8p4ObfAK2tkN8dhM7DKRiSHR8OnjW?=
- =?us-ascii?Q?8PQVJ3C1fjUnOXVKaWrHB5refTFUMT57H8VS+jS00g/+CBnuuSn+bIyYz7Dl?=
- =?us-ascii?Q?iqnPx/8/o/+0WBnSnonRhZbaqIbqtb53m4TUgAB+NYfaJvKtFrN40LV7zpod?=
- =?us-ascii?Q?+75+tRnh5elGIIvl6hzHZxUgr7ojDgrEJf/MmuBuHGQ9qYDMwbdBkDt5+gxX?=
- =?us-ascii?Q?BfT9wzvTiRz9QZFugpAZMLXYk1G+v1HmGgVOqtktNA9o3eg4syURDn5mT/tk?=
- =?us-ascii?Q?1D9mJWwVZ/CTASUyUb4X1VTAE7frAqBH2g16w815iBsTeTECasdXm0O5YR6X?=
- =?us-ascii?Q?NxSdD4KWLMQo9M/JOSobIBWdZIy6kEeSBTjrpA+gwis+M6uJBt+btpByV4fT?=
- =?us-ascii?Q?FFmem12OCaTGeT5NulvBh5eLk+WDxFz7tM+raHp2iur687dEX3Djxxive2RY?=
- =?us-ascii?Q?BfeF8GVKbNBDouv4wZK0LWLJlGLYmfyOyQMzanzU0Ga3NB5UnbreevlWS/pl?=
- =?us-ascii?Q?EJNTyyLPDPtx0YSE4tFzMRXkRm/oqvNhbd/FuG37X1ScDp1k+8i+BSB/SExu?=
- =?us-ascii?Q?qUX/8NXtzWSX/YLTtFHkrzZ3jPhgs8zYT75ielE48Lt/eeqxxt5ycahpSsS6?=
- =?us-ascii?Q?FrLIa3iixc3QQFuRaL5l0xSr1UGjjv5fLWR3AhFlpTxlG9GUhoZglIOtCRr7?=
- =?us-ascii?Q?W4EwC9CNAWe9b0CM6vgbVgIb8DiN0Z5ZiT96IRowXl1kNzDMntYqmn/xFnSz?=
- =?us-ascii?Q?MRKb4X9Pf/sx3DG1XdQOmrZgGZWbkfA7b5vBZLDGq/u+IJgBt2SBAFc2a5uB?=
- =?us-ascii?Q?g+MZ39yuN3gB8L+lYC9LJwh1AmdWCVeilhnVMTpXG7a+2pvWZV8nw/dxIQmy?=
- =?us-ascii?Q?fprL3PziTwL4W45SKnHylu/Yd3V37z6FL+P1O6U2jZ1VW8SafsJqhZhRDgVy?=
- =?us-ascii?Q?xkQZE6Lpjg=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cdec9c02-e6d4-4b3a-8996-08da275e6a72
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 08:26:09.5615
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /25ix0cXy5j2yhGsjdwyfW0ECH/BVw8g9IrdXtlmvm4sFy2N81B5jNnNvU8lG1fW8dtPl5PGsVwxN13ee3YNLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB3952
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 04:34:28 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48FB73065;
+        Tue, 26 Apr 2022 01:26:57 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id i24so17305091pfa.7;
+        Tue, 26 Apr 2022 01:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=yhLyL+XNsxkwpVleNlagUYPk4ikrWSVwJ5iKvEtm9r4=;
+        b=QhrHokc1cqTSaM8Bm+BwVpjH81YmWkQrBRqiM+8OSkSDQlbidv8n9aGyRD16LTp05s
+         3WChyLlV3VO9IPi13CJKMhT05wEYckITk4L7Xghehtq7K/BS+BiP09vHFsi82wxpXF51
+         cnYzW9J7jWDyDd4NNG9GV4d4G16Er+IhZM+saPSpFcNO3B2T1kKbarnCdmpSiTl75D3w
+         uCu43xKe8ggtAvbg/t0TF+w4PEchRrPd4iiXPJefmSup2qnzNkxiXwWYD27F8miIR70s
+         dTrXz2rFYhLpRm73qjMHmgmOKI5Py9I+fjIY7ZDTvt7sj7Ob7807i7XbyOvTg1YhTVg5
+         cZ4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yhLyL+XNsxkwpVleNlagUYPk4ikrWSVwJ5iKvEtm9r4=;
+        b=G/koMKj7p+r1r5mBySzqVe96txAtguoz15oNbt35xn9jrA3UG9kCDtqLMnIMsSyc3K
+         BVDAITq9JskNgYahWTrxeSgEjps3nLU3Aa7DGDQ9eg0IxDArT0rTg7a/eER3aUMNvEny
+         a18q5juj49WTtJSA5E8aSxxLPtQT8CE6JsPmwaRnfyrgjnL+aWe4olATxOFc6Ogwr2D4
+         +1yLDGE5U1esNSEplRbI8H+0qy390WJnAT1d9Iw/YtHO3K6ISuNft8usBZE3EZyrdacT
+         ZAwVcUqG1VCzRR/qerFFFgFHQ8QUsaefHSeSavMgSWZuzzExXs8ZvIyl1Y1hLxiPeqj5
+         roDA==
+X-Gm-Message-State: AOAM533NNn7n+oKdCI2xz9ZkeMKdAkwgYexUXFCej1HVk4SuzfhDjwif
+        MLZC1juYxMbCDGNyUth0xi9zNVnltr8=
+X-Google-Smtp-Source: ABdhPJz+74lK30qT8FEbdkFdhMy6GpRLV2X22ikbl7jvT9J2uD4jEhIbrQcWPhnJvO2yG0B2407JDw==
+X-Received: by 2002:a05:6a00:894:b0:4fe:25d7:f59e with SMTP id q20-20020a056a00089400b004fe25d7f59emr23477482pfj.58.1650961617115;
+        Tue, 26 Apr 2022 01:26:57 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.119])
+        by smtp.googlemail.com with ESMTPSA id k15-20020a63ab4f000000b00381eef69bfbsm12024832pgp.3.2022.04.26.01.26.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Apr 2022 01:26:56 -0700 (PDT)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] KVM: LAPIC: Fix advance timer expiration delta trace
+Date:   Tue, 26 Apr 2022 01:25:51 -0700
+Message-Id: <1650961551-38390-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck error:
-mm/folio-compat.c:128:17-21: ERROR: folio is NULL but dereferenced.
+From: Wanpeng Li <wanpengli@tencent.com>
 
-'folio' would be NULL when getting a reference to a folio failed.
-Add a NULL check before dereferring 'folio'.
+The advance timer expiration delta trace is moved after guest_exit_irqoff()
+since it can avoid to violate RCU extended quiescent state when moving 
+wait_lapic_expire() just before vmentry. Now kvm can enter a guest multiple 
+times since IPI/Timer fastpath, snapshot the delta multiple times before 
+vmentry and trace it one time after vmexit is not accurately this time. 
+Commit 87fa7f3e98a1 (x86/kvm: Move context tracking where it belongs) moves 
+rcu state updates more closer around vmentry/vmexit, we will not violate RCU 
+any more. Let's fix it by keeping the advance timer expiration delta trace 
+in __kvm_wait_lapic_epire() and dropping advance_expire_delta.
 
-Fixes: 3f0c6a07fee6 ("mm/filemap: Add filemap_get_folio")
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
 ---
- mm/folio-compat.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kvm/lapic.c | 4 ++--
+ arch/x86/kvm/lapic.h | 1 -
+ arch/x86/kvm/x86.c   | 8 --------
+ 3 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/mm/folio-compat.c b/mm/folio-compat.c
-index 46fa179e32fb..54b17c1246c4 100644
---- a/mm/folio-compat.c
-+++ b/mm/folio-compat.c
-@@ -124,7 +124,9 @@ struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
- 	struct folio *folio;
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 66b0eb0bda94..a4e9eb329e42 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1648,10 +1648,10 @@ static void __kvm_wait_lapic_expire(struct kvm_vcpu *vcpu)
+ 	tsc_deadline = apic->lapic_timer.expired_tscdeadline;
+ 	apic->lapic_timer.expired_tscdeadline = 0;
+ 	guest_tsc = kvm_read_l1_tsc(vcpu, rdtsc());
+-	apic->lapic_timer.advance_expire_delta = guest_tsc - tsc_deadline;
++	trace_kvm_wait_lapic_expire(vcpu->vcpu_id, guest_tsc - tsc_deadline);
  
- 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
--	if ((fgp_flags & FGP_HEAD) || !folio || xa_is_value(folio))
-+	if (!folio)
-+		return NULL;
-+	if ((fgp_flags & FGP_HEAD) || xa_is_value(folio))
- 		return &folio->page;
- 	return folio_file_page(folio, index);
- }
+ 	if (lapic_timer_advance_dynamic) {
+-		adjust_lapic_timer_advance(vcpu, apic->lapic_timer.advance_expire_delta);
++		adjust_lapic_timer_advance(vcpu, guest_tsc - tsc_deadline);
+ 		/*
+ 		 * If the timer fired early, reread the TSC to account for the
+ 		 * overhead of the above adjustment to avoid waiting longer
+diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+index 4e4f8a22754f..65bb2a8cf145 100644
+--- a/arch/x86/kvm/lapic.h
++++ b/arch/x86/kvm/lapic.h
+@@ -38,7 +38,6 @@ struct kvm_timer {
+ 	u64 tscdeadline;
+ 	u64 expired_tscdeadline;
+ 	u32 timer_advance_ns;
+-	s64 advance_expire_delta;
+ 	atomic_t pending;			/* accumulated triggered timers */
+ 	bool hv_timer_in_use;
+ };
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index a6ab19afc638..5fa465b268d2 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10248,14 +10248,6 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 	 */
+ 	guest_timing_exit_irqoff();
+ 
+-	if (lapic_in_kernel(vcpu)) {
+-		s64 delta = vcpu->arch.apic->lapic_timer.advance_expire_delta;
+-		if (delta != S64_MIN) {
+-			trace_kvm_wait_lapic_expire(vcpu->vcpu_id, delta);
+-			vcpu->arch.apic->lapic_timer.advance_expire_delta = S64_MIN;
+-		}
+-	}
+-
+ 	local_irq_enable();
+ 	preempt_enable();
+ 
 -- 
-2.35.3
+2.25.1
 

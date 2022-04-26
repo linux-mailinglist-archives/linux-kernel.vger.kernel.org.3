@@ -2,191 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE0150F187
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6D250F18E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243332AbiDZG4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
+        id S1343537AbiDZHAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241673AbiDZG41 (ORCPT
+        with ESMTP id S239877AbiDZHAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:56:27 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3161D42A0B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:53:21 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id dk23so10736637ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Q40uyIs3xy8w9+WmqoeowW/ecHV3cseBYLZ+cOlF5Ew=;
-        b=x2RzL+HtmzrhBc8qv/r2cwqJLfFCCozO2PVNKmUiM7Dv92qDUCcmgDQAz97JnmG/Lu
-         6Ev868iq3M7ypokHiRCcWOBClvbPXuXb0JPdpZTxQXeEGtPyBCzuiJAqUCDIkFA6a/ni
-         IPtn98jd5aa1LnUC3F4YtJ8vpJInb4lcYvN7J2RUio5OYvv6YrgG3FKm1kfgtBhLUbP/
-         KHQkXJxG+PZEGe+vtmvpGxuwbFEPMtsTa73MaSrzT7Exk2vQcNnh7TFDT5EJ4pDxflGG
-         CeVS2H3yVoZMIijX5/Ud72YLP/xnXc2BIttio0A5QGWniUmgAeGRqOGuzg55OL2qXUb5
-         2lHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Q40uyIs3xy8w9+WmqoeowW/ecHV3cseBYLZ+cOlF5Ew=;
-        b=nLK0wUp05ISVpBpFJx/l6z/iA5PkD6sZKsa6gwA/9xPhMMXwbo+BEZp5tGKOpJoBOl
-         7Wd090WMRLOjCRkzB8pUl9gHU8KsslZHir3vTA+G90a0nErMQ7iy9yuLQNlXUS09fEq9
-         c62SrGqLmEu6vH3gGrs2kBT3Zb+/d2Pgw4iMC7/EDWrlX1QgZi2RFW+ut9Ipm5H7pioU
-         pxs/8rMAh2jFNRUuP8B9CVJ+kQL95bYS4I4XpUJGYpNB5JdU15srB5eIbgwMFEOsPC/P
-         YMwtQrLr1zvaCilF9s+6hmhItces/ngNbb9OCRIzHpMRzwLxtNG+VcTJ3H2vs35vo5Nw
-         ArqQ==
-X-Gm-Message-State: AOAM532QjWyhBAaDQUEjwjuLUwhWcpGKtR6xTfGBbl4A5m+f7qKqW+pH
-        LvOdlbVaK9kNxFmlAt1CkEiG0g==
-X-Google-Smtp-Source: ABdhPJx+1t6SUKBo8VMaI71GznlhDLDPRtmEPfD+f3z/pZNKjISvnVzcMhRQ3d2QoeqqC8yUOa3plg==
-X-Received: by 2002:a17:907:d26:b0:6f0:2a0:d3d5 with SMTP id gn38-20020a1709070d2600b006f002a0d3d5mr18853912ejc.608.1650955999804;
-        Mon, 25 Apr 2022 23:53:19 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709060cc200b006d3d91e88c7sm4371417ejh.214.2022.04.25.23.53.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 23:53:19 -0700 (PDT)
-Message-ID: <c324eec7-79b1-33da-c38e-4a480fe23126@linaro.org>
-Date:   Tue, 26 Apr 2022 08:53:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: fsl,ls-extirq:
- convert to YAML
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Tue, 26 Apr 2022 03:00:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB40B4DF7A;
+        Mon, 25 Apr 2022 23:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650956233; x=1682492233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jKxbJleSnjKHArCrWhKDUX9hPVC8Trh5097+ZmEWrzI=;
+  b=aNhJMxNyL4j1YLm2K+tA1xzWGdv9Am3xsy6eiY9y5Mrc62YDQT35mSvO
+   9AB7n/TD+UkO3e7gfYD5qXMVTLL9yFtj7wsfHa9dC+uv67FzuC+o+GyGR
+   aDeiWfiAzW7HoHySutaAKYvpabrj5CKUlefHEkUZnYN9h54+m8bXfbwbK
+   xmfMMlwXsSeAUlcZrjIgNako/lAFrjYuyitTBnsFppfaocyMx0GHBiWVL
+   UEIjENLvJp9F1PKNebLjoNPrsDwWojeaqpVJRswxy/jKN0o48dDz1qAno
+   hxxnjfM4aww5xGKSvvI/JafbVAPYYmoa7POFs6lKck9E8xqzqs/vcQ21L
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264998480"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="264998480"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:57:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="704917710"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 25 Apr 2022 23:57:08 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 26 Apr 2022 09:57:07 +0300
+Date:   Tue, 26 Apr 2022 09:57:07 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Aswath Govindraju <a-govindraju@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Martin Kepplinger <martink@posteo.de>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220425140214.32448-1-michael@walle.cc>
- <658851ed-33fd-8e2b-7db7-ef1ca9e31c33@linaro.org>
- <83b596d0570c779c61c3c37c6f512679@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <83b596d0570c779c61c3c37c6f512679@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
+ property optional
+Message-ID: <YmeXw8nerjpuKPC9@kuha.fi.intel.com>
+References: <20220414083120.22535-1-a-govindraju@ti.com>
+ <20220414083120.22535-2-a-govindraju@ti.com>
+ <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
+ <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
+ <ae54dbb1-2b02-cba2-5de2-cf3d9a4e35f5@kernel.org>
+ <c1de4293-a058-5e25-9be2-b61ac39f43a3@ti.com>
+ <89f7d69a-4fc8-33cc-d9ca-5c50dc5381ab@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <89f7d69a-4fc8-33cc-d9ca-5c50dc5381ab@kernel.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 23:58, Michael Walle wrote:
->>> +  reg:
->>> +    maxItems: 1
->>> +    description:
->>> +      Specifies the Interrupt Polarity Control Register (INTPCR) in 
->>> the
->>> +      SCFG or the External Interrupt Control Register (IRQCR) in the 
->>> ISC.
->>> +
->>> +  interrupt-map:
+On Tue, Apr 26, 2022 at 09:42:31AM +0300, Roger Quadros wrote:
+> Hi,
 > 
-> btw.
+> On 22/04/2022 08:07, Aswath Govindraju wrote:
+> > Hi Roger,
+> > 
+> > On 21/04/22 00:46, Roger Quadros wrote:
+> >> Hi,
+> >>
+> >> On 18/04/2022 08:19, Aswath Govindraju wrote:
+> >>> Hi Roger,
+> >>>
+> >>> On 14/04/22 23:40, Roger Quadros wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On 14/04/2022 11:31, Aswath Govindraju wrote:
+> >>>>> Support for polling has been added in the driver, which will be used by
+> >>>>> default if interrupts property is not populated. Therefore, remove
+> >>>>> interrupts and interrupt-names from the required properties and add a note
+> >>>>> under interrupts property describing the above support in driver.
+> >>>>>
+> >>>>> Suggested-by: Roger Quadros <rogerq@kernel.org>
+> >>>>
+> >>>> I did not suggest to make interrupts optional by default.
+> >>>>
+> >>>> What I suggested was that if a DT property exists to explicitly
+> >>>> indicate polling mode then interrupts are not required.
+> >>>>
+> >>>
+> >>> ohh okay, got it. However, may I know if adding a dt property to
+> >>> indicate polling for aiding the driver, is the correct approach to model it?
+> >>>
+> >>> In terms of modelling hardware, as interrupts are not connected we are
+> >>> not populating the interrupts property. Shouldn't that be all. If we are
+> >>> adding a property explicitly to indicate polling that can be used by
+> >>> driver, wouldn't that be a software aid being added in the device tree?
+> >>
+> >> The hardware (tps6598x chip) has an interrupt pin and is expected to be used
+> >> in normal case.
+> >>
+> >> Some buggy boards might have forgot to connect it. We are adding polling mode only for these buggy boards. ;)
+> >> So polling mode is an exception.
+> >>
+> > 
+> > Yes as you mentioned the interrupt line is expected to connected but
+> > there could be cases where there are not enough pins on the SoC and
+> > polling is used intentionally. In these cases this would be a feature
+> > rather than a bug.
 > 
-> minItems: 12
-> maxItems: 12
+> I do not agree that this is a feature but a board defect. You can always use
+> a GPIO expander to add more GPIOs than the SoC can provide.
 > 
-> Isn't working here, is that expected? The validator seem to get the 
-> count
-> of the elements of one tuple wrong.
+> Type-C events are asynchronous and polling is a waste of CPU time.
+> What will you do if system suspends and you need to wake up on Type-C
+> status change?
+> So polling mode is just an exception for the defective boards or could
+> be used for debugging.
 > 
-> I.e.
-> arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dtb: 
-> interrupt-controller@14: interrupt-map: [[0, 0, 1, 0, 0, 4, 1, 0], [1, 
-> 0, 1, 4, 2, 0, 1, 0], [2, 4, 3, 0, 1, 0, 3, 4], [4, 0, 1, 0, 4, 4, 5, 
-> 0], [1, 0, 5, 4, 6, 0, 1, 0], [6, 4, 7, 0, 1, 0, 7, 4], [8, 0, 1, 0, 8, 
-> 4, 9, 0], [1, 0, 9, 4, 10, 0, 1, 0], [10, 4, 11, 0, 1, 0, 11, 4]] is too 
-> short
+> > 
+> > Also, I feel like not adding interrupts property in the dt nodes will
+> > indicate polling. My question is why are we adding an extra property
+> > (which is being used only as an aid in the driver) when this feature can
+> > be modeled by making interrupts property optional.
+> 
+> Because interrupt property was not originally optional for this driver.
+> 
+> I would like to hear what Heikki has to say about this.
+> 
+> Any thoughts Heikki?
+
+I think the question is generic. How should DT describe the
+connection/lack of connection? Rob should comment on this.
+
+thanks,
 
 
-Works for me (in different schema)... maybe update your dtschema?
-
+> cheers,
+> -roger
 > 
->>> +    description: Specifies the mapping from external interrupts to 
->>> GIC interrupts.
->>> +
->>> +  interrupt-map-mask:
->>> +    items:
->>> +      - const: 0xffffffff
->>
->> This looks highly permissive mask and should be instead defined per
->> variant, for example (quickly looking at DTS):
->> 0x7 for ls1021
->> 0xf for ls1043a and ls1088a
-> 
-> Just that I understand it correctly, the result of the AND with that
-> mask is then looked up in the interrupt-map (the first entry there)?
+> > 
+> > Thanks,
+> > Aswath
+> > 
+> >> cheers,
+> >> -roger
+> >>
+> >>>
+> >>> Thanks,
+> >>> Aswath
+> >>>
+> >>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
+> >>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> >>>>> index a4c53b1f1af3..1c4b8c6233e5 100644
+> >>>>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> >>>>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> >>>>> @@ -25,6 +25,8 @@ properties:
+> >>>>>  
+> >>>>>    interrupts:
+> >>>>>      maxItems: 1
+> >>>>> +    description:
+> >>>>> +      If interrupts are not populated then by default polling will be used.
+> >>>>>  
+> >>>>>    interrupt-names:
+> >>>>>      items:
+> >>>>> @@ -33,8 +35,6 @@ properties:
+> >>>>>  required:
+> >>>>>    - compatible
+> >>>>>    - reg
+> >>>>> -  - interrupts
+> >>>>> -  - interrupt-names
+> >>>>>  
+> >>>>>  additionalProperties: true
+> >>>>>  
+> >>>>
+> >>>> cheers,
+> >>>> -roger
+> > 
+> > 
 
-Yes, the child (first) interrupt specifier. Since address-cells are 0,
-this will be bit-AND with [0-5].
-
->> You might need to correct the DTS. Some confirmation from someone with
->> datasheet would be good.
-> 
-> According to their datasheets they have the following number of external
-> IRQs:
-> - ls1021a has 6,
-> - ls1043a has 12,
-> - ls1046a has 12,
-> - ls1088a has 12,
-> - ls2080a has 12,
-> - lx2160a has 12.
-> 
-> That is what I need to confirm, right?
-
-Yes.
-
-> 
-> Is there a better way than the following snippet:
-> 
-> properties:
->    interrupt-map-mask: true
-> 
-> allOf:
->    - if:
->        properties:
->          compatible:
->            contains:
->              enum:
->                - fsl,ls1021a-extirq
->      then:
->        properties:
->          interrupt-map-mask:
->            items:
->              - const: 0x7
->              - const: 0
->    - if:
->        properties:
->          compatible:
->            contains:
->              enum:
->                - fsl,ls1043a-extirq
->                - fsl,ls1046a-extirq
->                - fsl,ls1088a-extirq
->                - fsl,ls2080a-extirq
->                - fsl,lx2160a-extirq
->      then:
->        properties:
->          interrupt-map-mask:
->            items:
->              - const: 0xf
->              - const: 0
-> 
-
-
-Exactly like this, looks good. Thank you.
-
-
-Best regards,
-Krzysztof
+-- 
+heikki

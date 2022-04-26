@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F38950F19E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A2450F1A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343590AbiDZHDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
+        id S1343592AbiDZHEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343583AbiDZHD1 (ORCPT
+        with ESMTP id S236689AbiDZHEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:03:27 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DD165A7;
-        Tue, 26 Apr 2022 00:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650956420; x=1682492420;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9I1hHVxk/98J86IJBuypvXdSk+3wv9Y4DMZ0GVE3jy4=;
-  b=Xhby8Fq1Btgib//VT9f/q1O7Wkbe44DJ5IBOg/3+Uk6EK2Jin1s4f2i7
-   Mlfu0Cw6KGhbKogU3ktsB+FYH/Y+OVbGco9Xzq0nQWfIzzXQQ0ByYAtf0
-   3F9RbpliBooGUSix9Ss16vjZ9D8RvwlzVSMoG2/6K7Lt4wIdnZqPL5qtP
-   +fZr/1XK+YecncZDmB/UBA+asJGPf+1nZmwYQfzTF6Nlh8DM+zUdF6pxD
-   SGKcSQTqKwgzTUpTl7mQAd5i3ZnH2B4NcPpt60pye/fWcVWpY79OYXL+t
-   I5Aes4rkifmynhSETxD5e+YZdphrpG/mvyXngBLT2SbnQHgAXUq+DRQd4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264999090"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="264999090"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:00:18 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579722327"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:00:16 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] rcu: Add nocb_cb_kthread check to rcu_is_callbacks_kthread()
-Date:   Tue, 26 Apr 2022 15:00:31 +0800
-Message-Id: <20220426070031.3759998-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Apr 2022 03:04:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888D365D37;
+        Tue, 26 Apr 2022 00:01:36 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 09:01:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650956493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VTCRMU626wUXdIQdsZJqxEPJIS21IoevEG8EtyqRngs=;
+        b=G1YYFC7b9CA25F5dqZ9G3lB1okaKxhr7ktdUOimKsz4r416XIpu7aqXalKH35lsqmIgocG
+        XtnjaBEKDpwPiIwmZ3fqNBM4Isdnl7FJnPAOj5hbHYVoY9ZT7UGNNBtszOi7+U1+bD3qY2
+        JbPL0FSSpvsfAFkiTeZjCs8vf/Y4gHkdfqNe0H4fGOaJeICEWrx8K9Lm1YR4qwsugidY17
+        8nOAUb5Ztub8G9FAhMj0cG0HjotfyV1EenDdoeb/yfGrwwjV7Ibg1v9PtHo4Er8/V5TBJS
+        uwvSZ3E4pof+F3558WLSX6kvhxZl1Eq6LoisSWDhKx1G8QlD2Gi9TZ344r1a6Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650956493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VTCRMU626wUXdIQdsZJqxEPJIS21IoevEG8EtyqRngs=;
+        b=lYRgzZbkyghTMsuisYtZfHyNE6sUa/c2MsYt3zCtiyMmsqyoJQbiuBx91lqudW4h3ffaQ1
+        9nxLtOnBF63hLXDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        "Acked-by : Mike Rapoport" <rppt@linux.ibm.com>
+Subject: Re: [PATCH v2 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
+Message-ID: <YmeYzKT8Ikq5SfdE@linutronix.de>
+References: <20220425162400.11334-1-fmdefrancesco@gmail.com>
+ <20220425162400.11334-2-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220425162400.11334-2-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At present, there are two situations which the rcu callback function
-be exectued in the kthreads, one is if the use_softirq is set to zero,
-the RCU_SOFTIRQ processing is carried out by the per-CPU rcuc kthreads,
-for non-offload rdp, the rdp's rcu callback function be exectued in rcuc
-kthreads. another one is if the rdp is set to offloaded, the rdp's rcu
-callback function be exectued in the rcuop kthreads.
+On 2022-04-25 18:23:57 [+0200], Fabio M. De Francesco wrote:
+> index a77be5630209..aa22daeed617 100644
+> --- a/include/linux/highmem-internal.h
+> +++ b/include/linux/highmem-internal.h
+> @@ -236,9 +236,17 @@ static inline unsigned long totalhigh_pages(void) { return 0UL; }
+>  
+>  #endif /* CONFIG_HIGHMEM */
+>  
+> -/*
+> - * Prevent people trying to call kunmap_atomic() as if it were kunmap()
+> - * kunmap_atomic() should get the return value of kmap_atomic, not the page.
+> +/**
+> + * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
+> + * @__addr:       Virtual address to be unmapped
+> + *
+> + * Unmaps an address previously mapped by kmap_atomic() and re-enables
+> + * pagefaults and preemption. Mappings should be unmapped in the reverse
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- v1->v2:
- fix compilation error when CONFIG_RCU_NOCB_CPU is no define
+You mind adding "Deprecated!" like kmap_atomic() has? The part about
+disabling/ enabling preemption is true for !PREEMPT_RT. The part that
+worries me is that people use it and rely on disabled preemption like
+some did in the past. 
+I've been told this API is about to be removed (or so I have been told)
+so I hope that it will be gone soon ;)
 
- kernel/rcu/tree.c        |  4 ++--
- kernel/rcu/tree.h        |  2 +-
- kernel/rcu/tree_plugin.h | 12 +++++++++---
- 3 files changed, 12 insertions(+), 6 deletions(-)
+> + * order that they were mapped. See kmap_local_page() for details.
+> + * @__addr can be any address within the mapped page, so there is no need
+> + * to subtract any offset that has been added. In contrast to kunmap(),
+> + * this function takes the address returned from kmap_atomic(), not the
+> + * page passed to it. The compiler will warn you if you pass the page.
+>   */
+>  #define kunmap_atomic(__addr)					\
+>  do {								\
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 5c587e00811c..9dc4c4e82db6 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2610,7 +2610,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 		trace_rcu_batch_end(rcu_state.name, 0,
- 				    !rcu_segcblist_empty(&rdp->cblist),
- 				    need_resched(), is_idle_task(current),
--				    rcu_is_callbacks_kthread());
-+				    rcu_is_callbacks_kthread(rdp));
- 		return;
- 	}
- 
-@@ -2688,7 +2688,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 	rcu_nocb_lock_irqsave(rdp, flags);
- 	rdp->n_cbs_invoked += count;
- 	trace_rcu_batch_end(rcu_state.name, count, !!rcl.head, need_resched(),
--			    is_idle_task(current), rcu_is_callbacks_kthread());
-+			    is_idle_task(current), rcu_is_callbacks_kthread(rdp));
- 
- 	/* Update counts and requeue any remaining callbacks. */
- 	rcu_segcblist_insert_done_cbs(&rdp->cblist, &rcl);
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 996387962de3..3cdc18997a38 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -433,7 +433,7 @@ static void rcu_flavor_sched_clock_irq(int user);
- static void dump_blkd_tasks(struct rcu_node *rnp, int ncheck);
- static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags);
- static void rcu_preempt_boost_start_gp(struct rcu_node *rnp);
--static bool rcu_is_callbacks_kthread(void);
-+static bool rcu_is_callbacks_kthread(struct rcu_data *rdp);
- static void rcu_cpu_kthread_setup(unsigned int cpu);
- static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp);
- static bool rcu_preempt_has_tasks(struct rcu_node *rnp);
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 971bb6a00ede..120bade40e02 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -1155,9 +1155,15 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
-  * Is the current CPU running the RCU-callbacks kthread?
-  * Caller must have preemption disabled.
-  */
--static bool rcu_is_callbacks_kthread(void)
-+static bool rcu_is_callbacks_kthread(struct rcu_data *rdp)
- {
--	return __this_cpu_read(rcu_data.rcu_cpu_kthread_task) == current;
-+	bool ret;
-+#ifdef CONFIG_RCU_NOCB_CPU
-+	ret = rdp->rcu_cpu_kthread_task == current || rdp->nocb_cb_kthread == current;
-+#else
-+	ret = rdp->rcu_cpu_kthread_task == current;
-+#endif
-+	return ret;
- }
- 
- #define RCU_BOOST_DELAY_JIFFIES DIV_ROUND_UP(CONFIG_RCU_BOOST_DELAY * HZ, 1000)
-@@ -1242,7 +1248,7 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- }
- 
--static bool rcu_is_callbacks_kthread(void)
-+static bool rcu_is_callbacks_kthread(struct rcu_data *rdp)
- {
- 	return false;
- }
--- 
-2.25.1
-
+Sebastian

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAAE50F8D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C56050F50D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343709AbiDZJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S238757AbiDZIlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347216AbiDZIvO (ORCPT
+        with ESMTP id S1345090AbiDZIeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8FD158F55;
-        Tue, 26 Apr 2022 01:39:46 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3C56A02B;
+        Tue, 26 Apr 2022 01:25:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D63160EC4;
-        Tue, 26 Apr 2022 08:39:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E647C385A0;
-        Tue, 26 Apr 2022 08:39:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D2D7B81CF5;
+        Tue, 26 Apr 2022 08:25:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CCEC385AC;
+        Tue, 26 Apr 2022 08:25:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962384;
-        bh=ji0RFgXR37v47Ioji/Ek0sxM2Xxd8cjtq5D9oiSiFpU=;
+        s=korg; t=1650961556;
+        bh=hQQJexZ4MpOJ5d+Pv/RnkJ5TuHvqDFbTbbPUzM6su/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YyIVK1J5vWBELa9ZkHXci6w1RASG9omwaG461doW9C3gHgtaTdhk28RvWb5zWsaiO
-         nhysQRnKTWrFXFoV9YBHlnb9Q3Zo0eL5RYTO1RtScXmjHpGuc4E+cLvk3ArgUuPPU0
-         TfS1hSpfzRSI/Q3NU42kNU8m/GZ6gw9ezs2J+Djs=
+        b=N6Hlj63Kb19kWYO86cjgJx3Nass0YQBn9gQbF/UODNKnHd9VW7qIcsROKAZkZlkKC
+         8E5DIVUEIiYw8F2u3RQeseTXvv1arrUm2yTZ/XqJfzvrV6uZaeeR4+ebTVqGgGn3u6
+         e8/lVR0nsRM2w8ZWMbR6YeSaELkLhwF1P+jKavAc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 076/124] nvme-pci: disable namespace identifiers for Qemu controllers
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 35/43] ax25: add refcount in ax25_dev to avoid UAF bugs
 Date:   Tue, 26 Apr 2022 10:21:17 +0200
-Message-Id: <20220426081749.461615444@linuxfoundation.org>
+Message-Id: <20220426081735.550901087@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +54,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 66dd346b84d79fde20832ed691a54f4881eac20d ]
+commit d01ffb9eee4af165d83b08dd73ebdf9fe94a519b upstream.
 
-Qemu unconditionally reports a UUID, which depending on the qemu version
-is either all-null (which is incorrect but harmless) or contains a single
-bit set for all controllers.  In addition it can also optionally report
-a eui64 which needs to be manually set.  Disable namespace identifiers
-for Qemu controlles entirely even if in some cases they could be set
-correctly through manual intervention.
+If we dereference ax25_dev after we call kfree(ax25_dev) in
+ax25_dev_device_down(), it will lead to concurrency UAF bugs.
+There are eight syscall functions suffer from UAF bugs, include
+ax25_bind(), ax25_release(), ax25_connect(), ax25_ioctl(),
+ax25_getname(), ax25_sendmsg(), ax25_getsockopt() and
+ax25_info_show().
 
-Reported-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Keith Busch <kbusch@kernel.org>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+One of the concurrency UAF can be shown as below:
+
+  (USE)                       |    (FREE)
+                              |  ax25_device_event
+                              |    ax25_dev_device_down
+ax25_bind                     |    ...
+  ...                         |      kfree(ax25_dev)
+  ax25_fillin_cb()            |    ...
+    ax25_fillin_cb_from_dev() |
+  ...                         |
+
+The root cause of UAF bugs is that kfree(ax25_dev) in
+ax25_dev_device_down() is not protected by any locks.
+When ax25_dev, which there are still pointers point to,
+is released, the concurrency UAF bug will happen.
+
+This patch introduces refcount into ax25_dev in order to
+guarantee that there are no pointers point to it when ax25_dev
+is released.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 4.14: adjusted context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/pci.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/net/ax25.h    |   10 ++++++++++
+ net/ax25/af_ax25.c    |    2 ++
+ net/ax25/ax25_dev.c   |   12 ++++++++++--
+ net/ax25/ax25_route.c |    3 +++
+ 4 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 61f01f5afdc1..d7695bdbde8d 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3314,7 +3314,10 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_VDEVICE(INTEL, 0x5845),	/* Qemu emulated controller */
- 		.driver_data = NVME_QUIRK_IDENTIFY_CNS |
--				NVME_QUIRK_DISABLE_WRITE_ZEROES, },
-+				NVME_QUIRK_DISABLE_WRITE_ZEROES |
-+				NVME_QUIRK_BOGUS_NID, },
-+	{ PCI_VDEVICE(REDHAT, 0x0010),	/* Qemu emulated controller */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x126f, 0x2263),	/* Silicon Motion unidentified */
- 		.driver_data = NVME_QUIRK_NO_NS_DESC_LIST, },
- 	{ PCI_DEVICE(0x1bb1, 0x0100),   /* Seagate Nytro Flash Storage */
--- 
-2.35.1
-
+--- a/include/net/ax25.h
++++ b/include/net/ax25.h
+@@ -235,6 +235,7 @@ typedef struct ax25_dev {
+ #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
+ 	ax25_dama_info		dama;
+ #endif
++	refcount_t		refcount;
+ } ax25_dev;
+ 
+ typedef struct ax25_cb {
+@@ -289,6 +290,15 @@ static __inline__ void ax25_cb_put(ax25_
+ 	}
+ }
+ 
++#define ax25_dev_hold(__ax25_dev) \
++	refcount_inc(&((__ax25_dev)->refcount))
++
++static __inline__ void ax25_dev_put(ax25_dev *ax25_dev)
++{
++	if (refcount_dec_and_test(&ax25_dev->refcount)) {
++		kfree(ax25_dev);
++	}
++}
+ static inline __be16 ax25_type_trans(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	skb->dev      = dev;
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -101,6 +101,7 @@ again:
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
+ 			s->ax25_dev = NULL;
++			ax25_dev_put(ax25_dev);
+ 			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+@@ -450,6 +451,7 @@ static int ax25_ctl_ioctl(const unsigned
+ 	  }
+ 
+ out_put:
++	ax25_dev_put(ax25_dev);
+ 	ax25_cb_put(ax25);
+ 	return ret;
+ 
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -40,6 +40,7 @@ ax25_dev *ax25_addr_ax25dev(ax25_address
+ 	for (ax25_dev = ax25_dev_list; ax25_dev != NULL; ax25_dev = ax25_dev->next)
+ 		if (ax25cmp(addr, (ax25_address *)ax25_dev->dev->dev_addr) == 0) {
+ 			res = ax25_dev;
++			ax25_dev_hold(ax25_dev);
+ 		}
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 
+@@ -59,6 +60,7 @@ void ax25_dev_device_up(struct net_devic
+ 		return;
+ 	}
+ 
++	refcount_set(&ax25_dev->refcount, 1);
+ 	dev->ax25_ptr     = ax25_dev;
+ 	ax25_dev->dev     = dev;
+ 	dev_hold(dev);
+@@ -86,6 +88,7 @@ void ax25_dev_device_up(struct net_devic
+ 	spin_lock_bh(&ax25_dev_lock);
+ 	ax25_dev->next = ax25_dev_list;
+ 	ax25_dev_list  = ax25_dev;
++	ax25_dev_hold(ax25_dev);
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 
+ 	ax25_register_dev_sysctl(ax25_dev);
+@@ -115,20 +118,22 @@ void ax25_dev_device_down(struct net_dev
+ 
+ 	if ((s = ax25_dev_list) == ax25_dev) {
+ 		ax25_dev_list = s->next;
++		ax25_dev_put(ax25_dev);
+ 		spin_unlock_bh(&ax25_dev_lock);
+ 		dev->ax25_ptr = NULL;
+ 		dev_put(dev);
+-		kfree(ax25_dev);
++		ax25_dev_put(ax25_dev);
+ 		return;
+ 	}
+ 
+ 	while (s != NULL && s->next != NULL) {
+ 		if (s->next == ax25_dev) {
+ 			s->next = ax25_dev->next;
++			ax25_dev_put(ax25_dev);
+ 			spin_unlock_bh(&ax25_dev_lock);
+ 			dev->ax25_ptr = NULL;
+ 			dev_put(dev);
+-			kfree(ax25_dev);
++			ax25_dev_put(ax25_dev);
+ 			return;
+ 		}
+ 
+@@ -136,6 +141,7 @@ void ax25_dev_device_down(struct net_dev
+ 	}
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 	dev->ax25_ptr = NULL;
++	ax25_dev_put(ax25_dev);
+ }
+ 
+ int ax25_fwd_ioctl(unsigned int cmd, struct ax25_fwd_struct *fwd)
+@@ -152,6 +158,7 @@ int ax25_fwd_ioctl(unsigned int cmd, str
+ 		if (ax25_dev->forward != NULL)
+ 			return -EINVAL;
+ 		ax25_dev->forward = fwd_dev->dev;
++		ax25_dev_put(fwd_dev);
+ 		break;
+ 
+ 	case SIOCAX25DELFWD:
+@@ -164,6 +171,7 @@ int ax25_fwd_ioctl(unsigned int cmd, str
+ 		return -EINVAL;
+ 	}
+ 
++	ax25_dev_put(ax25_dev);
+ 	return 0;
+ }
+ 
+--- a/net/ax25/ax25_route.c
++++ b/net/ax25/ax25_route.c
+@@ -119,6 +119,7 @@ static int __must_check ax25_rt_add(stru
+ 	ax25_rt->dev          = ax25_dev->dev;
+ 	ax25_rt->digipeat     = NULL;
+ 	ax25_rt->ip_mode      = ' ';
++	ax25_dev_put(ax25_dev);
+ 	if (route->digi_count != 0) {
+ 		if ((ax25_rt->digipeat = kmalloc(sizeof(ax25_digi), GFP_ATOMIC)) == NULL) {
+ 			write_unlock_bh(&ax25_route_lock);
+@@ -175,6 +176,7 @@ static int ax25_rt_del(struct ax25_route
+ 			}
+ 		}
+ 	}
++	ax25_dev_put(ax25_dev);
+ 	write_unlock_bh(&ax25_route_lock);
+ 
+ 	return 0;
+@@ -217,6 +219,7 @@ static int ax25_rt_opt(struct ax25_route
+ 	}
+ 
+ out:
++	ax25_dev_put(ax25_dev);
+ 	write_unlock_bh(&ax25_route_lock);
+ 	return err;
+ }
 
 

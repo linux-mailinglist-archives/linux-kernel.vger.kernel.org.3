@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F114650F594
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7A850F7C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346195AbiDZIyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
+        id S1345642AbiDZJIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345816AbiDZIje (ORCPT
+        with ESMTP id S1346335AbiDZIov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC99E78FF7;
-        Tue, 26 Apr 2022 01:31:45 -0700 (PDT)
+        Tue, 26 Apr 2022 04:44:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B752887B0;
+        Tue, 26 Apr 2022 01:34:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4E58B81CF3;
-        Tue, 26 Apr 2022 08:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE36C385A0;
-        Tue, 26 Apr 2022 08:31:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06190617E7;
+        Tue, 26 Apr 2022 08:34:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127A6C385A0;
+        Tue, 26 Apr 2022 08:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961903;
-        bh=+7W/z/NXq+al8Bfg6I1o93fhJ8rD0L8br9mElJvBpog=;
+        s=korg; t=1650962077;
+        bh=PIbE8wYRzCn0BTyvB9PVYzMMEEQC1HTzIblaKs78ulA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xo+38FwCX+Jz9v8TL8/R/qMLZqBVkyAFhrklOMx1hnRpYS2N5d0zmoo7KksnEs8Qk
-         ayzFeO1hPLrS48da+UFP9kLVSO/ItpYE82EKQqQQGSoN6VMr9ZrTpX63wFXA+vu7wc
-         h3cvUkQ+48NXwDL8x1QEwo6Lv3Dcrf16vfW3Ku3k=
+        b=u+5d0n16mUhznDxUx0Tvq0ySfm8iTGsyQv3Y+RLM0sBWyTDj3l2h7fOWTJSw4FJbQ
+         cW0VWQuK6D1WAYBC1Q8oaI0dzYYzCMmckOG23PqEzkjp3lH3mtujoci5FfYj+Wg3v2
+         O8dgl2YX4GSSmm0r4Um8/qHsp3qcPCNLYCgo3kWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ye Bin <yebin10@huawei.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 52/62] ext4: fix symlink file size not match to file content
+        stable@vger.kernel.org,
+        Sergey Matyukevich <sergey.matyukevich@synopsys.com>,
+        Vineet Gupta <vgupta@kernel.org>
+Subject: [PATCH 5.10 64/86] ARC: entry: fix syscall_trace_exit argument
 Date:   Tue, 26 Apr 2022 10:21:32 +0200
-Message-Id: <20220426081738.713722480@linuxfoundation.org>
+Message-Id: <20220426081743.054171142@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
 
-commit a2b0b205d125f27cddfb4f7280e39affdaf46686 upstream.
+commit b1c6ecfdd06907554518ec384ce8e99889d15193 upstream.
 
-We got issue as follows:
-[home]# fsck.ext4  -fn  ram0yb
-e2fsck 1.45.6 (20-Mar-2020)
-Pass 1: Checking inodes, blocks, and sizes
-Pass 2: Checking directory structure
-Symlink /p3/d14/d1a/l3d (inode #3494) is invalid.
-Clear? no
-Entry 'l3d' in /p3/d14/d1a (3383) has an incorrect filetype (was 7, should be 0).
-Fix? no
+Function syscall_trace_exit expects pointer to pt_regs. However
+r0 is also used to keep syscall return value. Restore pointer
+to pt_regs before calling syscall_trace_exit.
 
-As the symlink file size does not match the file content. If the writeback
-of the symlink data block failed, ext4_finish_bio() handles the end of IO.
-However this function fails to mark the buffer with BH_write_io_error and
-so when unmount does journal checkpoint it cannot detect the writeback
-error and will cleanup the journal. Thus we've lost the correct data in the
-journal area. To solve this issue, mark the buffer as BH_write_io_error in
-ext4_finish_bio().
-
-Cc: stable@kernel.org
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220321144438.201685-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
+Signed-off-by: Vineet Gupta <vgupta@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/page-io.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arc/kernel/entry.S |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/ext4/page-io.c
-+++ b/fs/ext4/page-io.c
-@@ -100,8 +100,10 @@ static void ext4_finish_bio(struct bio *
- 				continue;
- 			}
- 			clear_buffer_async_write(bh);
--			if (bio->bi_status)
-+			if (bio->bi_status) {
-+				set_buffer_write_io_error(bh);
- 				buffer_io_error(bh);
-+			}
- 		} while ((bh = bh->b_this_page) != head);
- 		bit_spin_unlock(BH_Uptodate_Lock, &head->b_state);
- 		local_irq_restore(flags);
+--- a/arch/arc/kernel/entry.S
++++ b/arch/arc/kernel/entry.S
+@@ -199,6 +199,7 @@ tracesys_exit:
+ 	st  r0, [sp, PT_r0]     ; sys call return value in pt_regs
+ 
+ 	;POST Sys Call Ptrace Hook
++	mov r0, sp		; pt_regs needed
+ 	bl  @syscall_trace_exit
+ 	b   ret_from_exception ; NOT ret_from_system_call at is saves r0 which
+ 	; we'd done before calling post hook above
 
 

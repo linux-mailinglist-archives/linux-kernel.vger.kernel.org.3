@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF270510986
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137BF51098B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354439AbiDZUKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S1354455AbiDZULB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240601AbiDZUKH (ORCPT
+        with ESMTP id S242266AbiDZULA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:10:07 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FCA1594BF
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:06:57 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so3129207pju.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:06:57 -0700 (PDT)
+        Tue, 26 Apr 2022 16:11:00 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8AA1594BF
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:07:51 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d15so31218640pll.10
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:07:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XYZny63Olqdg6ug0jPC0IStZPSKLknIicaEuGEKKAA8=;
-        b=veF8bU8ZuY4+7L01tnkAqnvnIS105JuIyOIc9jEjB2riL9bUNDkywylOlBB9cZ7alg
-         aYHfxFvJn/kPoxsuT4AF/LLIK37UKhDWs5cY8ow5krN42QIvpj+xt9duHH8PwI2F6gMU
-         WQNP0iIq3XlbYhsY04ueU6IU+1pHigr2y5mgo0RAt/awM0logn4wMW/2p7/HXGVAfc0h
-         apCilHYRzF4k/lZh700CN/IGer3dnVLBvkSecCKJLRMjHJHpnseTtm+Fpe4DQkDeHo5X
-         FO7ctl/cV8eo6zuLvl5g6miMsFcEhLNamYo7SY42XDD/fA73pG7gaRa1v1HURA99tO4c
-         rc9Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SW1r9xunGXg3yysfsoaj8Bnq3ZsDVEmEB9V/7mp80tU=;
+        b=7foukoKrNys4GHY3j9yVIeTLC11mNsmvO+E3VubNfVzYpMrBO9+k1a/ihtJxR3yqUq
+         1cj12lZdpqoUHhANmWi9mQ284vUoriuKdbMei9dT8Jr1nyi3aS7Ardpp2ac8V4U41dOK
+         LzMHk23dHQhAJ0CLjQgmi5anszhTn/rmr321XgE772L2JLQ/jAZ7bYFeJhIz7UonBQa0
+         GZ133toLbgaGfFrvviTMRTHM6lyleti47cuBlY2Hfl8y57DgVbrScBIBghlHdFiQToxM
+         HXOeqZrxihZ4RWmgKR+yBWkrET4T+wT+xEtikLo2yeLRpr4g1khZz8hsQLBdwkADw1TI
+         nOFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XYZny63Olqdg6ug0jPC0IStZPSKLknIicaEuGEKKAA8=;
-        b=IH1/guTD7x6H8ZUHNXYE+NHn7upJVINMKOAXuZaBnc9RmRERcGIByIh9CDOUc+QlfE
-         mJWUZafDLjLYnvisW6gJ3+nf2/533RdBcoEub1iLxUFAKgQRLTqKNFqKKo1YgBUeM9Ah
-         a/jMVbRfZ2L8T+se2job5pgpAwBi+9Fo5GKDjVL+ywCX9bvH5yNz8ieCsOeX2gcR3ONa
-         FANw/zMgMYVQpY2GotmEh9kXBLKOs27AyiqB4ubiG3l/O4IGaq36AZo1K7kQQ2S968l8
-         zA0NmeiKpQ0utWFkXFQUUrCA0nbzDyjf9SkgqsYDc9hGxydGguyswmg7hyiVH0OsGxni
-         LeWw==
-X-Gm-Message-State: AOAM5334sen22qJSonLWxe4bp1oGep7Z5uVqcibKi91YCGsP3ZcBxZJX
-        TyoNZR7OlrPFRxytpPy8jzvQFazbQGq0ig==
-X-Google-Smtp-Source: ABdhPJwGioRwBB+ZEDr03SJUKywxCI2kMXKUwm+5HMD5y9n1SXucNrhUMQ5dzztjaBew2CyWlubH0A==
-X-Received: by 2002:a17:902:b941:b0:14d:af72:3f23 with SMTP id h1-20020a170902b94100b0014daf723f23mr25933783pls.6.1651003617294;
-        Tue, 26 Apr 2022 13:06:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SW1r9xunGXg3yysfsoaj8Bnq3ZsDVEmEB9V/7mp80tU=;
+        b=TUU5PCmhqlgh/FHppJa6A19CnoY7Ajbe1TZTF3NQir5hQawL64uQQs5rhM9Wjyu3tc
+         CHvx5TybMgaY47nJPnmHMohEpfPpBfhsR0Ab1A0HNHipCzpZ6HgNPTpPWM6PcCN08IB5
+         YJg1yCjbUi7JkifZptbiwED9nutmvZrWjbx3rHkTbuN1HKIWKtX3TWjRqxM+Qa5LxpR1
+         FCVEoShhHuKUQPUHGC3IuiN1oHtYadxGCsme6UuUCRxbotXxgCPtKsa/x6oJwBSUhk1o
+         U7NDS+UBdPX4Yn8U/nbY5qKyjLrOl6gnpzAfS4n9j/UlXYde9I1SborawJ3rx3LqVE13
+         9a/w==
+X-Gm-Message-State: AOAM531j8kupkDVnmwvFwZish86IEEsIMfnZnz64t62cvIS1k6WVjm09
+        psUi3USEat3VLdTxsH6WWmDnoA==
+X-Google-Smtp-Source: ABdhPJzr32AprvOhjotUxBt1JDzT7nBTFeQBBS3sRqmMoxfYRupnoD0lnK7Y5rRAjQ3m31/sT/HE7g==
+X-Received: by 2002:a17:902:e542:b0:15d:1ba:78d9 with SMTP id n2-20020a170902e54200b0015d01ba78d9mr14341049plf.107.1651003671259;
+        Tue, 26 Apr 2022 13:07:51 -0700 (PDT)
 Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:9bcd:e060:b370:70d8])
-        by smtp.gmail.com with ESMTPSA id o5-20020a62f905000000b0050b5b5efa47sm16203839pfh.191.2022.04.26.13.06.56
+        by smtp.gmail.com with ESMTPSA id o5-20020a62f905000000b0050b5b5efa47sm16203839pfh.191.2022.04.26.13.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:06:56 -0700 (PDT)
+        Tue, 26 Apr 2022 13:07:50 -0700 (PDT)
 From:   Drew Fustini <dfustini@baylibre.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -56,11 +56,14 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Dave Gerlach <d-gerlach@ti.com>,
         Tony Lindgren <tony@atomide.com>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>
-Subject: [PATCH v3 0/2]  soc: ti: wkup_m3_ipc: support i2c voltage scaling
-Date:   Tue, 26 Apr 2022 13:07:40 -0700
-Message-Id: <20220426200741.712842-1-dfustini@baylibre.com>
+        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>,
+        Keerthy <j-keerthy@ti.com>
+Subject: [PATCH v3 1/2] dt-bindings: wkup-m3-ipc: Add firmware-name property
+Date:   Tue, 26 Apr 2022 13:07:42 -0700
+Message-Id: <20220426200741.712842-2-dfustini@baylibre.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220426200741.712842-1-dfustini@baylibre.com>
+References: <20220426200741.712842-1-dfustini@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,33 +75,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow loading of a binary file containing i2c scaling sequences to be
-provided to the Cortex-M3 firmware in order to properly scale voltage
-rails on the PMIC during low power modes like DeepSleep0.
+From: Dave Gerlach <d-gerlach@ti.com>
 
-The 'firmware-name' property which contains the name of a binary file.
-    
-A prerequisite for this series is:
-[PATCH v3 0/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
-https://lore.kernel.org/linux-devicetree/20220414192722.2978837-1-dfustini@baylibre.com/
+Document that the firmware-name property can be used to indicate a file
+contains I2C sequences for PMIC voltage scaling during deep sleep.
 
+Based on previous work by Russ Dill.
+
+Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+Signed-off-by: Keerthy <j-keerthy@ti.com>
+[dfustini: split from driver patch and convert to json-schema]
+Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+---
 Changes from v2:
-- correct the name of the property in the commit message of the bindings
-  patch to firmware-name instead of the old ti,scale-data-fw property
+- fix the property name in this commit message
 
 Changes from v1:
 - change 'ti,scale-data-fw' to 'firmware-name'
 - add 'firmware-name' property to the examples
 
-Dave Gerlach (2):
-  dt-bindings: wkup-m3-ipc: Add firmware-name property
-  soc: ti: wkup_m3_ipc: Add support for i2c voltage scaling
+ .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml      | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
- .../bindings/soc/ti/wkup-m3-ipc.yaml          | 12 +++
- drivers/soc/ti/wkup_m3_ipc.c                  | 93 ++++++++++++++++++-
- include/linux/wkup_m3_ipc.h                   |  9 ++
- 3 files changed, 113 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+index 88d690de050c..0df41c4f60c1 100644
+--- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
++++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+@@ -40,6 +40,12 @@ description: |+
+   override the pin's existing bias (pull-up/pull-down) and value (high/low) when
+   IO isolation is active.
+ 
++  Support for I2C PMIC Voltage Scaling
++  ====================================
++  It is possible to pass the name of a binary file to load into the CM3 memory.
++  The binary data is the I2C sequences for the CM3 to send out to the PMIC
++  during low power mode entry.
++
+ properties:
+   compatible:
+     enum:
+@@ -67,6 +73,10 @@ properties:
+       mbox_wkupm3 child node.
+     maxItems: 1
+ 
++  firmware-name:
++    description:
++      Name of binary file with I2C sequences for PMIC voltage scaling
++
+   ti,vtt-gpio-pin:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: GPIO pin connected to enable pin on VTT regulator
+@@ -117,6 +127,7 @@ examples:
+            ti,rproc = <&wkup_m3>;
+            mboxes = <&am335x_mailbox &mbox_wkupm3>;
+            ti,vtt-gpio-pin = <7>;
++           firmware-name = "am335x-evm-scale-data.bin";
+         };
+     };
+ 
+@@ -157,6 +168,7 @@ examples:
+            ti,rproc = <&wkup_m3>;
+            mboxes = <&am437x_mailbox &mbox_wkupm3>;
+            ti,set-io-isolation;
++           firmware-name = "am43x-evm-scale-data.bin";
+         };
+     };
+ 
 -- 
 2.32.0
 

@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8274150F8DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA3750F463
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242094AbiDZJcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S245217AbiDZIf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347754AbiDZJGI (ORCPT
+        with ESMTP id S1345094AbiDZIeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468B411C1A;
-        Tue, 26 Apr 2022 01:45:37 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557286D4E0;
+        Tue, 26 Apr 2022 01:26:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8D6261344;
-        Tue, 26 Apr 2022 08:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31B2C385B3;
-        Tue, 26 Apr 2022 08:45:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E599B81CF5;
+        Tue, 26 Apr 2022 08:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E1DC385A4;
+        Tue, 26 Apr 2022 08:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962736;
-        bh=0up0+3ng2gkf9fVKVYD32dBPHhE8G+CBylS47GayzIM=;
+        s=korg; t=1650961559;
+        bh=OZh4LPinysjplNiwT4eLfT6wOyCunHQ9OYvn5K7otxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iDBGmsQ5Ts4FyZoFrD8HxijxMedlJ3ZbTAAM3TQ7PZ/c/DIG8ez7V5Xg0l78Rl0jV
-         mny/HUG1op2DQ8ubO+cc0hXwGv//10hPuYnGwBnDdmqLnlZa/NORBHM8vVr+JWKIxU
-         rrYlbY+4jKut+WS3HJGes4i/Mz92mr48ho5Fbn3w=
+        b=FWTt+8fiJe7yNaIvAzBpg5q87Hg4LwrxKRT9UrsXV+7ZjSuxRKwfKD/3nOBMFfRuO
+         U0IH2RoXQUOQg7qvSN4tYS0kzSzQ6a2Tg4b8i8usy5hSUuGL69ep9ucyyTUJVVZlns
+         w/yqQhS7jxV0EwGRcl0x90dx8eZiqZimLeF5tHtM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        brcm80211-dev-list.pdl@broadcom.com, netdev@vger.kernel.org,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 073/146] brcmfmac: sdio: Fix undefined behavior due to shift overflowing the constant
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.14 26/43] ASoC: soc-dapm: fix two incorrect uses of list iterator
 Date:   Tue, 26 Apr 2022 10:21:08 +0200
-Message-Id: <20220426081752.114020307@linuxfoundation.org>
+Message-Id: <20220426081735.290430235@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,55 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 6fb3a5868b2117611f41e421e10e6a8c2a13039a ]
+commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
 
-Fix:
+These two bug are here:
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
 
-  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c: In function ‘brcmf_sdio_drivestrengthinit’:
-  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:3798:2: error: case label does not reduce to an integer constant
-    case SDIOD_DRVSTR_KEY(BRCM_CC_43143_CHIP_ID, 17):
-    ^~~~
-  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:3809:2: error: case label does not reduce to an integer constant
-    case SDIOD_DRVSTR_KEY(BRCM_CC_43362_CHIP_ID, 13):
-    ^~~~
+After the list_for_each_entry_safe_continue() exits, the list iterator
+will always be a bogus pointer which point to an invalid struct objdect
+containing HEAD member. The funciton poniter 'w->event' will be a
+invalid value which can lead to a control-flow hijack if the 'w' can be
+controlled.
 
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
+The original intention was to continue the outer list_for_each_entry_safe()
+loop with the same entry if w->event is NULL, but misunderstanding the
+meaning of list_for_each_entry_safe_continue().
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Arend van Spriel <aspriel@gmail.com>
-Cc: Franky Lin <franky.lin@broadcom.com>
-Cc: Hante Meuleman <hante.meuleman@broadcom.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: brcm80211-dev-list.pdl@broadcom.com
-Cc: netdev@vger.kernel.org
-Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/Ykx0iRlvtBnKqtbG@zn.tnic
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So just add a 'continue;' to fix the bug.
+
+Cc: stable@vger.kernel.org
+Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/soc-dapm.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-index 5d156e591b35..f7961b22e051 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-@@ -557,7 +557,7 @@ enum brcmf_sdio_frmtype {
- 	BRCMF_SDIO_FT_SUB,
- };
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -1617,8 +1617,7 @@ static void dapm_seq_run(struct snd_soc_
+ 		switch (w->id) {
+ 		case snd_soc_dapm_pre:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
  
--#define SDIOD_DRVSTR_KEY(chip, pmu)     (((chip) << 16) | (pmu))
-+#define SDIOD_DRVSTR_KEY(chip, pmu)     (((unsigned int)(chip) << 16) | (pmu))
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
+@@ -1630,8 +1629,7 @@ static void dapm_seq_run(struct snd_soc_
  
- /* SDIO Pad drive strength to select value mappings */
- struct sdiod_drive_str {
--- 
-2.35.1
-
+ 		case snd_soc_dapm_post:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
+ 
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
 
 

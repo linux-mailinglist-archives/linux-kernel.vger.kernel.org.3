@@ -2,146 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACB350FEC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BE350FEEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350834AbiDZNZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S1350865AbiDZNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiDZNZC (ORCPT
+        with ESMTP id S1350844AbiDZNZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:25:02 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2131.outbound.protection.outlook.com [40.107.215.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3954227FF8;
-        Tue, 26 Apr 2022 06:21:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TJDSe0sgfr8I/HCZMsJLRcLtanhrldp4FOYrh7+iofdMZfYZW2JFlRfX+XAIxRI726bYmI5x4ZaPR5owKENYH+K+iJNzsPxqJOwXGszYuj/ylg7NqoNRU4cRnmrQz7kwKOwiqVCdUEVq+bLBW2rUAYzqQIOUosf1b4qQ1gY274BfiFkt8o8mbcG4oHcWFWTyRtjGo+QPWdpA4AsW6jkPq1lKNr613xLW0BPXjFcnqWC9IRmxurIwE1mUjl2y2bR7qsYxycXZFhS+W7p+mKxROUbbKTudtuwjlkBdGBu8CDdEd+xTTKR51+4Iqb8DStTq4xxxAxstD3D2YGK+EvJwMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MbH/hT7j4xY6emUZBWeVi5ms9E26ZhDvilsL1BNUG/w=;
- b=crIOQxU7AeSLD/eTONUKaGbwqbeCfL68+0M6oveuCoqx6ZYGOjBgShoaOzDx60WtnNwQdKYMqWYr72vVsRAA5aaH376kXf7QXsw5AB1WXGlJx8VuiY4VqmXrV6VaaPAcA2WHN5GqYTzkpK9FOftA9SVdEJPG0w3fe6zpGp+JMxO6JjznKjB3qV1FnCHUHlJPhc5Sdx5ubSP9MdaNDnSgYKZux4KBsrnx+y5qPwNUfkfS60IZEzMjONsg5ZB9NFTkyix6Tt5oVUNsUv5QCSQPlB/cgBd6Zhh+wxuDhlqTYAGq92Uci0m+W/fYW26LMZVHnH6dyRSm+CNvgZtsZjtUuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MbH/hT7j4xY6emUZBWeVi5ms9E26ZhDvilsL1BNUG/w=;
- b=hIKZvJNLk+VizGupm3U+8f8r+axoORGvhxdvCT/VHSh2sgg6uIMbTl4egi0bjEW+J1ixoLnoD/OawDI2jnK2dQBJZICUroVv544OFLGPzt51hhhNg1XwUBc+K1nOruF+wkonTMJJrsibDr6J5wLq4jeCe1HZYdtKZZ9xJsle6JE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- KL1PR0601MB4939.apcprd06.prod.outlook.com (2603:1096:820:96::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
- 2022 13:21:46 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 13:21:46 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] drm/msm: Use div64_ul instead of do_div
-Date:   Tue, 26 Apr 2022 21:21:26 +0800
-Message-Id: <20220426132126.686447-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0127.apcprd02.prod.outlook.com
- (2603:1096:202:16::11) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Tue, 26 Apr 2022 09:25:05 -0400
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB0F15737;
+        Tue, 26 Apr 2022 06:21:57 -0700 (PDT)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+        by mxout2.routing.net (Postfix) with ESMTP id EFACD5FBBE;
+        Tue, 26 Apr 2022 13:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1650979315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3MPG+xGmR4VMjoWP9SmdGX2PEI83rfYf+MZ3I3FUJrI=;
+        b=gDHOiM3w+YaLFxLLc1F70fyqbPq93DIDUQzzsn/TEwBbqKfZc2s1wlBSzwaR28BRe1qmSb
+        hUBPgzGEpH+idDN1yKP5VTHdpm1l5ck2rlPlaldXQ/DtKoExmkubxJQ5WK4rBCog0ewUO0
+        6iRf3wiGhn+7BCRnZAASp/VZNDIJYQQ=
+Received: from localhost.localdomain (fttx-pool-80.245.77.37.bambit.de [80.245.77.37])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id B7B49401C9;
+        Tue, 26 Apr 2022 13:21:53 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: [RFC/RFT v2 00/11] RK3568 PCIe V3 support
+Date:   Tue, 26 Apr 2022 15:21:28 +0200
+Message-Id: <20220426132139.26761-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d9901219-c31c-48c8-a267-08da2787b644
-X-MS-TrafficTypeDiagnostic: KL1PR0601MB4939:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR0601MB4939232C8944BBFE8884EB45ABFB9@KL1PR0601MB4939.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: B61C6wkGkFp5xHgCf1jV1FJIJ5v+1ViMwkzdI6YKVsedAoDlzr8fY4mgrF2Z+vawS1fWAsj4huMOmbX96NWHdtkmiCCmaI2M2HHZkq2iC2pA4IVkse8prYRtV1ktCxWAFACio9Cz2EG7gDHjp1PiNqDfLtoaf0Q9SWt+3fZxyEwl6iRJkkK05UyXZJVFiScliJRICb4qwVnsk5OGFt3lxRE0rTAayW1wsaihrDQwTpcxU9EivdIF6to+4fTbGkxQo6ZT1fgG1etmGaR4wSwSS9svWP99GYfHEyt3HeGJUWKRrVlOMgNPgOaov2ZMolo9DaB1jZYbderYnnTwgnMtLDP1b2LO0fNkd6xPWtDl/h0IJT/5PApPbekBVjCY6JfxTTXav2dXZfiTbFEUpxAZGJxy6F+Mue05oQ2EobyRGsU0jBfw5M9vM2MHJRH8HPRNLQNE0nUwJx/kfar3sMXrcZlfoQZWhqWlHmhvNIRJ1fHKozxvp+x/fcZKvLX42g5/zCipFIW9Y+2dW9ybpB8fhQZaCs5JjEibHYytonIWEVP8A6S6V2+6jxCmjK305ny/vkjhwXRPmERvbsc0Rpo2U8jtk62sWjhQEBZXFZ2Zv8f94/fqWVAyAXAp/1F3JUBu1DfI+9PjUucosotx/BjCzahe5hyjactHsQJ468SlIoARifSDpCEBYDoixwxxgr+JGY4WEVbXQWk/06+1Qb3lng==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(2906002)(52116002)(6506007)(6512007)(8936002)(2616005)(186003)(107886003)(1076003)(36756003)(4744005)(26005)(83380400001)(6666004)(4326008)(110136005)(508600001)(316002)(6486002)(66946007)(38100700002)(38350700002)(8676002)(66556008)(66476007)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hf9BkgBRXsC0qRahiJ2F8AldYikTI6ADL5M13tfwfkv1OBFPj8UeKoRqCB6i?=
- =?us-ascii?Q?SZZE36j82j1eyLT8rQAokBvWugqStSwWGYkFoYWOlwYycmlQmehMhWkjPgG7?=
- =?us-ascii?Q?sR9SWKXbGb0cmYzU+LW4w/O7gk2YqGjdNauQYW48nATFyQFgkD/CxMhZWoyI?=
- =?us-ascii?Q?W9IMCwNcUEfbyrLsaEKsPJqO43bDxT3N5O2TuEJLByRaM5QT6tIpg8XmQTmW?=
- =?us-ascii?Q?29NLGZYtky6vA+MLPZ6WeXQPmgYtiVcGmlIzg0Vaxg69jUQswyTr2CZSj9EQ?=
- =?us-ascii?Q?GY3xxBj0m3LK8P8og0W6GdJyo9YyWnEaAXnsU18BQCsPJIv0LBYdEC4L+Lzx?=
- =?us-ascii?Q?MiEcIDHDkD2/rQZvmoQ0wMuAnj9sLHapX+/8zeBkRbcs8kJ+WXpMMKO+a95S?=
- =?us-ascii?Q?X6HdahQBCc3kejsldYCh9NRzp0JDlCtlbWjGq35nIfxNnL6xG5XV/65j1TyX?=
- =?us-ascii?Q?fWL1i2MuGMPn0+vi92x7RuAsp9T2/J80VmlJVL54v9oTUPLhlcv3NQtExorJ?=
- =?us-ascii?Q?lcVEQ92lZJTPcPX5QKysmbheeIcSLSjccvQUbCk3K9rCPJpv4uaZR2Z/ghJ4?=
- =?us-ascii?Q?dC4RebP/6FDezGVgBRip+iQApT31jMMokU0hRsDpUBL87uGtWfuM5Yx5GM6N?=
- =?us-ascii?Q?qg3hNcymjK/iLmTeVw8+CHoShQy4jjPoxz1Q/vQHAz/vldJsjiPts5CqYzrK?=
- =?us-ascii?Q?dSdtyt79clQojSt2owWCZnectfwzfoQcB2AmbJ7ruceMEvxatMWRkPTHVFk2?=
- =?us-ascii?Q?2CrbZ+gfJ7+isF25k0hT3ZZhnh4DVFiOmpMYYhapXGHt67TtFwfzM1smzesd?=
- =?us-ascii?Q?gL3GgzuGQAdOXSM86BRVnRxdBqKeSojawPsl7zk1YHxz/hiLXoHk0ZaPT1jb?=
- =?us-ascii?Q?XGHXQEMM5QtnsIEztJ3NTM9zORmLjpw7cgC+wdLxJ89yOd+crjYBiiCNJUBd?=
- =?us-ascii?Q?PHt8iLuVNfV5FI+LSg56PQiJE0P+sBC4OCKRZHv9LZ1Etn4vhdtYAECo6Tlo?=
- =?us-ascii?Q?8H5ejDWG27tbHoLjD9rsFt/ALtaapSVk9pWv4GV7oWZtIgVBoFmyfSqY5OfN?=
- =?us-ascii?Q?POSGoYy/dUXukf8ETi4XPs8dYkVMJZiziwtGZZlgkgDpnB6V7do+/+Ektltu?=
- =?us-ascii?Q?qOmLHWe5T9W29HrE8m0vVFWzcJsDRd0GtTRpll9v1Y51DQEvii0fZWU+Y4bY?=
- =?us-ascii?Q?4ES++j0+etmCQqPXR4pdbxHVtGffFsaYZPDuXBbgBfNNu43lehmGMH9gsoFM?=
- =?us-ascii?Q?14OZpuib/+wbZR/V84uyYN0PSYXjXQMbRK/JvEGEzilpGJqqnA5OCj5dEZLc?=
- =?us-ascii?Q?b5t4lrgs4HTsyGqo8PlFq+yhPevFcfENTB4E9sHkcxMYynHca9KdzLHkO3m/?=
- =?us-ascii?Q?/LAPwCXoYFJcKD/cJCMgqgnE6yYq+ZJ3GdoUuEpNegbhM4ToC3ai5Oom67Mq?=
- =?us-ascii?Q?keDgCoh/UQoanr0rUHGUJaxS5tur9s+LoaoE9evWrZ9hxejXlz3U0uk42xyd?=
- =?us-ascii?Q?daobb7qAM3/RyxX0GgC1z2arSdyNWrevVwpkDfaO1TPAHy/OxfmjrrdMaA8c?=
- =?us-ascii?Q?qACFfjO7fouZzgkRkd0cp+cx2Ii8ZjCP9XN1QD+6SjORSSW2/qywe1g/cZSg?=
- =?us-ascii?Q?7BM1vLveYdqPWIaU4RC6/0Dm80U8ry229PEwnGnRTaqW8R5X4EvU4R6+LHIT?=
- =?us-ascii?Q?ruQe8oXUVn14n/L2RR7iqJlxhADrpBGl86dTeY9+BXhSUox3iIXUdkusuXCT?=
- =?us-ascii?Q?KZyqN+zuoQ=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9901219-c31c-48c8-a267-08da2787b644
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 13:21:46.1022
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kUArpZIYlIiStGHEeVO7m9Xop8ZqgrzhvFdMNwFQd4wMlnM8GWV5tlBkDDSyyImdHAEQwVsWS2Xu6SIDvZKfMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4939
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 6ee0f1ac-3381-46d2-9e26-38a02835f5ee
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck warning:
-drivers/gpu/drm/msm/msm_gpu_devfreq.c:72:1-7: WARNING: do_div() does a 64-by-32 division, please consider using div64_ul instead.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Use div64_ul instead of do_div to avoid a possible truncation.
+This series adds Rockchip PCIe V3 support found on rk3568 SOC.
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/gpu/drm/msm/msm_gpu_devfreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It is based on "Enable rk356x PCIe controller" series of Peter Geis
+v8: https://patchwork.kernel.org/project/linux-rockchip/list/?series=634925
 
-diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-index d2539ca78c29..c2ea978c8921 100644
---- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-+++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-@@ -69,7 +69,7 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
- 	df->time = time;
- 
- 	busy_time *= USEC_PER_SEC;
--	do_div(busy_time, sample_rate);
-+	busy_time = div64_ul(busy_time, sample_rate);
- 	if (WARN_ON(busy_time > ~0LU))
- 		busy_time = ~0LU;
- 
+Compared to PCIeV2 which uses the Naneng combphy, pciev3
+uses a dedicated pci-phy.
+
+This Version is still an RFC/RFT because i cannot only test PCIe-slot on R2Pro
+as the other is a M.2 Key-E where i don't have any Hardware.
+
+last 3 Patches show a replacement for bifurcation setting to make it more
+useful for vendor-indepent lane-mapping.
+
+Frank Wunderlich (11):
+  dt-bindings: phy: rockchip: add PCIe v3 phy
+  dt-bindings: soc: grf: add pcie30-{phy,pipe}-grf
+  dt-bindings: phy: rockchip: add PCIe v3 constants
+  phy: rockchip: Support PCIe v3
+  dt-bindings: pci: add bifurcation option to Rockchip DesignWare
+    binding
+  PCI: rockchip-dwc: add PCIe bifurcation
+  arm64: dts: rockchip: rk3568: Add PCIe v3 nodes
+  arm64: dts: rockchip: Add PCIe v3 nodes to BPI-R2-Pro
+  dt-bindings: pci: add lane-map to rockchip PCIe binding
+  PCI: rockchip: add a lane-map to rockchip pcie driver
+  arm64: dts: rockchip: add basic lane-map and drop bifurcation from
+    r2pro
+
+ .../bindings/pci/rockchip-dw-pcie.yaml        |   3 +
+ .../bindings/phy/rockchip,pcie3-phy.yaml      |  84 ++++++
+ .../devicetree/bindings/soc/rockchip/grf.yaml |   3 +
+ .../boot/dts/rockchip/rk3568-bpi-r2-pro.dts   |  79 +++++
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      | 122 ++++++++
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c |  22 ++
+ drivers/phy/rockchip/Kconfig                  |   9 +
+ drivers/phy/rockchip/Makefile                 |   1 +
+ .../phy/rockchip/phy-rockchip-snps-pcie3.c    | 278 ++++++++++++++++++
+ include/dt-bindings/phy/phy-rockchip-pcie3.h  |  21 ++
+ include/linux/phy/pcie.h                      |  12 +
+ 11 files changed, 634 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+ create mode 100644 drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
+ create mode 100644 include/dt-bindings/phy/phy-rockchip-pcie3.h
+ create mode 100644 include/linux/phy/pcie.h
+
 -- 
-2.35.3
+2.25.1
 

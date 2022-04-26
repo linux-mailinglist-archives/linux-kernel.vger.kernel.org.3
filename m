@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E4950F8D8
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAAE50F8D7
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241167AbiDZJSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S1343709AbiDZJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345905AbiDZIoR (ORCPT
+        with ESMTP id S1347216AbiDZIvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:17 -0400
+        Tue, 26 Apr 2022 04:51:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357815CF5E;
-        Tue, 26 Apr 2022 01:33:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8FD158F55;
+        Tue, 26 Apr 2022 01:39:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28A5161899;
-        Tue, 26 Apr 2022 08:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3726AC385AC;
-        Tue, 26 Apr 2022 08:33:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D63160EC4;
+        Tue, 26 Apr 2022 08:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E647C385A0;
+        Tue, 26 Apr 2022 08:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962029;
-        bh=BKmbcASJHd6f1rIBhJ/lD0NYZIRNWXppaDUSuvpXYF0=;
+        s=korg; t=1650962384;
+        bh=ji0RFgXR37v47Ioji/Ek0sxM2Xxd8cjtq5D9oiSiFpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eMfAGrIZpK7Rk2iQ4UENUWj92y3FKV3jt/59bYJgZt2enLv1cSSoljPeedD44Uhry
-         ztie5ppoKz5P23YdX21lETapOB497qiR51oKt1DKLbdfkAh58x+o8A0+pHJq2PbhMP
-         gDpjwgxRpdtMM2GOmmxNjq+TSahzBke4fxeE1zbQ=
+        b=YyIVK1J5vWBELa9ZkHXci6w1RASG9omwaG461doW9C3gHgtaTdhk28RvWb5zWsaiO
+         nhysQRnKTWrFXFoV9YBHlnb9Q3Zo0eL5RYTO1RtScXmjHpGuc4E+cLvk3ArgUuPPU0
+         TfS1hSpfzRSI/Q3NU42kNU8m/GZ6gw9ezs2J+Djs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
         Keith Busch <kbusch@kernel.org>,
         Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 49/86] nvme: add a quirk to disable namespace identifiers
+Subject: [PATCH 5.15 076/124] nvme-pci: disable namespace identifiers for Qemu controllers
 Date:   Tue, 26 Apr 2022 10:21:17 +0200
-Message-Id: <20220426081742.619192756@linuxfoundation.org>
+Message-Id: <20220426081749.461615444@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,99 +58,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 00ff400e6deee00f7b15e200205b2708b63b8cf6 ]
+[ Upstream commit 66dd346b84d79fde20832ed691a54f4881eac20d ]
 
-Add a quirk to disable using and exporting namespace identifiers for
-controllers where they are broken beyond repair.
+Qemu unconditionally reports a UUID, which depending on the qemu version
+is either all-null (which is incorrect but harmless) or contains a single
+bit set for all controllers.  In addition it can also optionally report
+a eui64 which needs to be manually set.  Disable namespace identifiers
+for Qemu controlles entirely even if in some cases they could be set
+correctly through manual intervention.
 
-The most directly visible problem with non-unique namespace identifiers
-is that they break the /dev/disk/by-id/ links, with the link for a
-supposedly unique identifier now pointing to one of multiple possible
-namespaces that share the same ID, and a somewhat random selection of
-which one actually shows up.
-
+Reported-by: Luis Chamberlain <mcgrof@kernel.org>
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Keith Busch <kbusch@kernel.org>
 Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c | 24 ++++++++++++++++++------
- drivers/nvme/host/nvme.h |  5 +++++
- 2 files changed, 23 insertions(+), 6 deletions(-)
+ drivers/nvme/host/pci.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 853b9a24f744..ad4f1cfbad2e 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -1270,6 +1270,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
- 				 warn_str, cur->nidl);
- 			return -1;
- 		}
-+		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
-+			return NVME_NIDT_EUI64_LEN;
- 		memcpy(ids->eui64, data + sizeof(*cur), NVME_NIDT_EUI64_LEN);
- 		return NVME_NIDT_EUI64_LEN;
- 	case NVME_NIDT_NGUID:
-@@ -1278,6 +1280,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
- 				 warn_str, cur->nidl);
- 			return -1;
- 		}
-+		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
-+			return NVME_NIDT_NGUID_LEN;
- 		memcpy(ids->nguid, data + sizeof(*cur), NVME_NIDT_NGUID_LEN);
- 		return NVME_NIDT_NGUID_LEN;
- 	case NVME_NIDT_UUID:
-@@ -1286,6 +1290,8 @@ static int nvme_process_ns_desc(struct nvme_ctrl *ctrl, struct nvme_ns_ids *ids,
- 				 warn_str, cur->nidl);
- 			return -1;
- 		}
-+		if (ctrl->quirks & NVME_QUIRK_BOGUS_NID)
-+			return NVME_NIDT_UUID_LEN;
- 		uuid_copy(&ids->uuid, data + sizeof(*cur));
- 		return NVME_NIDT_UUID_LEN;
- 	case NVME_NIDT_CSI:
-@@ -1381,12 +1387,18 @@ static int nvme_identify_ns(struct nvme_ctrl *ctrl, unsigned nsid,
- 	if ((*id)->ncap == 0) /* namespace not allocated or attached */
- 		goto out_free_id;
- 
--	if (ctrl->vs >= NVME_VS(1, 1, 0) &&
--	    !memchr_inv(ids->eui64, 0, sizeof(ids->eui64)))
--		memcpy(ids->eui64, (*id)->eui64, sizeof(ids->eui64));
--	if (ctrl->vs >= NVME_VS(1, 2, 0) &&
--	    !memchr_inv(ids->nguid, 0, sizeof(ids->nguid)))
--		memcpy(ids->nguid, (*id)->nguid, sizeof(ids->nguid));
-+
-+	if (ctrl->quirks & NVME_QUIRK_BOGUS_NID) {
-+		dev_info(ctrl->device,
-+			 "Ignoring bogus Namespace Identifiers\n");
-+	} else {
-+		if (ctrl->vs >= NVME_VS(1, 1, 0) &&
-+		    !memchr_inv(ids->eui64, 0, sizeof(ids->eui64)))
-+			memcpy(ids->eui64, (*id)->eui64, sizeof(ids->eui64));
-+		if (ctrl->vs >= NVME_VS(1, 2, 0) &&
-+		    !memchr_inv(ids->nguid, 0, sizeof(ids->nguid)))
-+			memcpy(ids->nguid, (*id)->nguid, sizeof(ids->nguid));
-+	}
- 
- 	return 0;
- 
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 5dd1dd8021ba..10e5ae3a8c0d 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -150,6 +150,11 @@ enum nvme_quirks {
- 	 * encoding the generation sequence number.
- 	 */
- 	NVME_QUIRK_SKIP_CID_GEN			= (1 << 17),
-+
-+	/*
-+	 * Reports garbage in the namespace identifiers (eui64, nguid, uuid).
-+	 */
-+	NVME_QUIRK_BOGUS_NID			= (1 << 18),
- };
- 
- /*
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 61f01f5afdc1..d7695bdbde8d 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3314,7 +3314,10 @@ static const struct pci_device_id nvme_id_table[] = {
+ 		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN, },
+ 	{ PCI_VDEVICE(INTEL, 0x5845),	/* Qemu emulated controller */
+ 		.driver_data = NVME_QUIRK_IDENTIFY_CNS |
+-				NVME_QUIRK_DISABLE_WRITE_ZEROES, },
++				NVME_QUIRK_DISABLE_WRITE_ZEROES |
++				NVME_QUIRK_BOGUS_NID, },
++	{ PCI_VDEVICE(REDHAT, 0x0010),	/* Qemu emulated controller */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(0x126f, 0x2263),	/* Silicon Motion unidentified */
+ 		.driver_data = NVME_QUIRK_NO_NS_DESC_LIST, },
+ 	{ PCI_DEVICE(0x1bb1, 0x0100),   /* Seagate Nytro Flash Storage */
 -- 
 2.35.1
 

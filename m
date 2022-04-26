@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B03B50F796
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB7550F759
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347446AbiDZJUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        id S1347297AbiDZJTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345546AbiDZI4h (ORCPT
+        with ESMTP id S1345869AbiDZI4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:56:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A933DC5BE;
-        Tue, 26 Apr 2022 01:41:19 -0700 (PDT)
+        Tue, 26 Apr 2022 04:56:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5747814A5;
+        Tue, 26 Apr 2022 01:41:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 233D6604F5;
-        Tue, 26 Apr 2022 08:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342F3C385A4;
-        Tue, 26 Apr 2022 08:41:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67650B81D0A;
+        Tue, 26 Apr 2022 08:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95E3C385A0;
+        Tue, 26 Apr 2022 08:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962478;
-        bh=YqHERyHUxwYJs79q5FsoWblJusq3+OePBnS0nEGGnn8=;
+        s=korg; t=1650962481;
+        bh=BwezHAYAX5zda3TQxBa8HvpHICs3ULxiWMTyV4MwdJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuLWnI/5V1u7RqUfKysiocBEn6GP4rTbcyyEtOqJeogjupl9bezgPMkUWbC3zR9n1
-         omxhhONQftOi4osRhXb2ZGW4egplsPCYdiYTHttP4qfsk0jzhQCj4Hdi3L1uPtwuBA
-         Oi6gJMcwM4veg5UFjQ4Hcrrt5n+UGjkOLbc9rmC8=
+        b=DS2V2cQPQRjzcXQ8T+lcTchFgBAW/GIQkerAkyGSpixud2SwzKBMu1FX5mek3d94w
+         FRcNBIR5a/yOodOFt6bPWlOZ9KYSJyiw4AvI1fiupYamKP6Hd1qoEaQmkpLLm+TrEp
+         Ii8CcPixL0N1o5aoYvJuL+Jnq+/3SYr4iaYw4Rt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, stable@vger.kerel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 109/124] KVM: nVMX: Defer APICv updates while L2 is active until L1 is active
-Date:   Tue, 26 Apr 2022 10:21:50 +0200
-Message-Id: <20220426081750.393843374@linuxfoundation.org>
+Subject: [PATCH 5.15 110/124] KVM: SVM: Flush when freeing encrypted pages even on SME_COHERENT CPUs
+Date:   Tue, 26 Apr 2022 10:21:51 +0200
+Message-Id: <20220426081750.421291090@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
 References: <20220426081747.286685339@linuxfoundation.org>
@@ -53,93 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Mingwei Zhang <mizhang@google.com>
 
-commit 7c69661e225cc484fbf44a0b99b56714a5241ae3 upstream.
+commit d45829b351ee6ec5f54dd55e6aca1f44fe239fe6 upstream.
 
-Defer APICv updates that occur while L2 is active until nested VM-Exit,
-i.e. until L1 regains control.  vmx_refresh_apicv_exec_ctrl() assumes L1
-is active and (a) stomps all over vmcs02 and (b) neglects to ever updated
-vmcs01.  E.g. if vmcs12 doesn't enable the TPR shadow for L2 (and thus no
-APICv controls), L1 performs nested VM-Enter APICv inhibited, and APICv
-becomes unhibited while L2 is active, KVM will set various APICv controls
-in vmcs02 and trigger a failed VM-Entry.  The kicker is that, unless
-running with nested_early_check=1, KVM blames L1 and chaos ensues.
+Use clflush_cache_range() to flush the confidential memory when
+SME_COHERENT is supported in AMD CPU. Cache flush is still needed since
+SME_COHERENT only support cache invalidation at CPU side. All confidential
+cache lines are still incoherent with DMA devices.
 
-In all cases, ignoring vmcs02 and always deferring the inhibition change
-to vmcs01 is correct (or at least acceptable).  The ABSENT and DISABLE
-inhibitions cannot truly change while L2 is active (see below).
+Cc: stable@vger.kerel.org
 
-IRQ_BLOCKING can change, but it is firmly a best effort debug feature.
-Furthermore, only L2's APIC is accelerated/virtualized to the full extent
-possible, e.g. even if L1 passes through its APIC to L2, normal MMIO/MSR
-interception will apply to the virtual APIC managed by KVM.
-The exception is the SELF_IPI register when x2APIC is enabled, but that's
-an acceptable hole.
-
-Lastly, Hyper-V's Auto EOI can technically be toggled if L1 exposes the
-MSRs to L2, but for that to work in any sane capacity, L1 would need to
-pass through IRQs to L2 as well, and IRQs must be intercepted to enable
-virtual interrupt delivery.  I.e. exposing Auto EOI to L2 and enabling
-VID for L2 are, for all intents and purposes, mutually exclusive.
-
-Lack of dynamic toggling is also why this scenario is all but impossible
-to encounter in KVM's current form.  But a future patch will pend an
-APICv update request _during_ vCPU creation to plug a race where a vCPU
-that's being created doesn't get included in the "all vCPUs request"
-because it's not yet visible to other vCPUs.  If userspaces restores L2
-after VM creation (hello, KVM selftests), the first KVM_RUN will occur
-while L2 is active and thus service the APICv update request made during
-VM creation.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220420013732.3308816-3-seanjc@google.com>
+Fixes: add5e2f04541 ("KVM: SVM: Add support for the SEV-ES VMSA")
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+Message-Id: <20220421031407.2516575-3-mizhang@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/nested.c |    5 +++++
- arch/x86/kvm/vmx/vmx.c    |    5 +++++
- arch/x86/kvm/vmx/vmx.h    |    1 +
- 3 files changed, 11 insertions(+)
+ arch/x86/kvm/svm/sev.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4601,6 +4601,11 @@ void nested_vmx_vmexit(struct kvm_vcpu *
- 		kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
- 	}
- 
-+	if (vmx->nested.update_vmcs01_apicv_status) {
-+		vmx->nested.update_vmcs01_apicv_status = false;
-+		kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-+	}
-+
- 	if ((vm_exit_reason != -1) &&
- 	    (enable_shadow_vmcs || evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)))
- 		vmx->nested.need_vmcs12_to_shadow_sync = true;
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4098,6 +4098,11 @@ static void vmx_refresh_apicv_exec_ctrl(
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1990,11 +1990,14 @@ static void sev_flush_guest_memory(struc
+ 				   unsigned long len)
  {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 
-+	if (is_guest_mode(vcpu)) {
-+		vmx->nested.update_vmcs01_apicv_status = true;
-+		return;
+ 	/*
+-	 * If hardware enforced cache coherency for encrypted mappings of the
+-	 * same physical page is supported, nothing to do.
++	 * If CPU enforced cache coherency for encrypted mappings of the
++	 * same physical page is supported, use CLFLUSHOPT instead. NOTE: cache
++	 * flush is still needed in order to work properly with DMA devices.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_SME_COHERENT))
++	if (boot_cpu_has(X86_FEATURE_SME_COHERENT)) {
++		clflush_cache_range(va, PAGE_SIZE);
+ 		return;
 +	}
-+
- 	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
- 	if (cpu_has_secondary_exec_ctrls()) {
- 		if (kvm_vcpu_apicv_active(vcpu))
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -164,6 +164,7 @@ struct nested_vmx {
- 	bool change_vmcs01_virtual_apic_mode;
- 	bool reload_vmcs01_apic_access_page;
- 	bool update_vmcs01_cpu_dirty_logging;
-+	bool update_vmcs01_apicv_status;
  
  	/*
- 	 * Enlightened VMCS has been enabled. It does not mean that L1 has to
+ 	 * If the VM Page Flush MSR is supported, use it to flush the page
 
 

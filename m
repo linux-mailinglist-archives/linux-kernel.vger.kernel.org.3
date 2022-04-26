@@ -2,159 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196C5510286
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036D251028A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345201AbiDZQHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S1352805AbiDZQJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352798AbiDZQHU (ORCPT
+        with ESMTP id S236812AbiDZQJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:07:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD5243EC1;
-        Tue, 26 Apr 2022 09:04:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 436D061A59;
-        Tue, 26 Apr 2022 16:04:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7CCC385AA;
-        Tue, 26 Apr 2022 16:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650989051;
-        bh=DF6HiaHX+dY5oLx+lPOr2QI/LdmMgjcLKt3ZE8J8gK8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=fUz4dsSHHsZ0RthaQqqNVleFK3yj7u6ZWZ3AqxjSzYd816B8v5+wSSrUlbJhbQPxI
-         2EEb+sLh/UV0OfQxxkG/by3e08H39Z/H0OtgKBsYiEz6tkjRb2PAFpSYbUpWSRe7KA
-         JufQJb17P6X/yy0AyPKoNLs+yGdUns/bEH9USJGBTMejgYFh/jRoEaRiI8+AQMoT2Q
-         VYQaIYj+rIqNuf2JVNoZvg/wKfz8LJ0yIr9q3R6MfilJysBWIHdYYBGuk8JaZfTQg/
-         gY9v9s6a0774Gr953EHhaOe6amXWYY43lNAm1Kg8Aq3PDuVB5b/n9+mJjCrBoJiwdH
-         j1/oGcEXQmUhA==
-Date:   Tue, 26 Apr 2022 11:04:09 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
+        Tue, 26 Apr 2022 12:09:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2784579A;
+        Tue, 26 Apr 2022 09:06:16 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 5E74D1F42C72
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650989172;
+        bh=1wvRqjVZjbReycK48tbxPvly7/Q6yNLcAhf9ITv2WX4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YJ+JNryBr+ROkJYtXFkF2H7ftrQmFIYl0D5Zd8CaOOtgTlc4zdhdCLz4PcLX35eWL
+         8LlIMGeCuzRmK5RG257HlotWDGpbNlMgzHXqy4Gw7oR2KBXSx4FjL0HZ3YIys1ZWgK
+         Q+dTEiHDJOhNl85mAePKB3wKTVETMQyV6AfLu9ho/YtTWReGmumRRSbAEB3mvyqvpo
+         uCoHd0koRXgJUNYWwi/WnkHuMMdL0T10+aMc+rxmrEKSI7Yv5UWDJKJ/q/hbVWWu8+
+         6JQq3FJ5jH3QJcgXGiuXkD3MPc1j6lLrdttCq3OL4Tm4RiAX7gUdH+N0e6RPnJfe34
+         BeSwA7WpwmCpg==
+Message-ID: <bad44be8-abc7-169f-bc7a-cef3692c9a71@collabora.com>
+Date:   Tue, 26 Apr 2022 18:06:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 2/2] phy: mediatek: Add PCIe PHY driver
+Content-Language: en-US
+To:     Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [RFC/RFT v2 09/11] dt-bindings: pci: add lane-map to rockchip
- PCIe binding
-Message-ID: <20220426160409.GA1731042@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426132139.26761-10-linux@fw-web.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Wei-Shun Chang <weishunc@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+References: <20220422142331.17173-1-jianjun.wang@mediatek.com>
+ <20220422142331.17173-3-jianjun.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220422142331.17173-3-jianjun.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:21:37PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+Il 22/04/22 16:23, Jianjun Wang ha scritto:
+> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
 > 
-> Create new property for (rockchip) PCIe controller binding to
-> define lane mapping.
-> 
-> Rockchip driver uses this for bifurcation (true/false) based
-> on lanes should be splitted across controllers or not.
-> 
-> On rk3568 there are 2 PCIe Controllers which share 2 PCIe lanes.
-> 
-> pcie3x1: pcie@fe270000 //lane1 when using 1+1
-> pcie3x2: pcie@fe280000 //lane0 when using 1+1
-> 
-> This ends up in one Controller (pcie3x1) uses lane-map = <0 1>; and
-> the other lane-map = <1 0>; (pcie3x2)
-> 
-> This means there are 2 lanes (count of numbers), one (by position)
-> is mapped to the first controller, the other one is used on the other
-> controller.
-> 
-> In rockchip PCIe driver the lane-map is simply converted to the
-> bifurcation bool instead of direct mapping a specific lane to a
-> controller.
-> 
-> There is not yet any slot mapping below one controller.
-> But for binding this may be possible like:
-> 
-> lane-map = <1 2 3 3 4 4 4 4>;
->             | | | ...
->         lane0 | |
->           lane1 |
->             lane2
-> 
-> on a 8-lane phy.
-> 
-> This can map lane0 to port1 (number used at this position),
-> lane1 to port2, lanes 2+3 to port 3 and lanes 4,5,6,7 to port 4.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+
+Hello Jianjun,
+there's only one last bit to fix, check below:
+
 > ---
-> v2:
-> - new patch
-> ---
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>   drivers/phy/mediatek/Kconfig        |  11 ++
+>   drivers/phy/mediatek/Makefile       |   1 +
+>   drivers/phy/mediatek/phy-mtk-pcie.c | 267 ++++++++++++++++++++++++++++
+>   3 files changed, 279 insertions(+)
+>   create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> index a992970e8b85..998b20b3a9dc 100644
-> --- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> @@ -52,6 +52,8 @@ properties:
->        - const: pclk
->        - const: aux
->  
-> +  lane-map: true
+
+..snip..
+
+> +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
+> +{
+> +	struct device *dev = pcie_phy->dev;
+> +	bool nvmem_enabled;
+> +	int ret, i;
 > +
->    msi-map: true
->  
->    num-lanes: true
-> @@ -74,8 +76,6 @@ properties:
->    reset-names:
->      const: pipe
->  
-> -  bifurcation: true
-> -
+> +	/* nvmem data is optional */
+> +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
 
-Why are you adding "bifurcation" earlier in the series, then
-immediately removing it?  Why not just add "lane-map" directly and
-never mention "bifurcation" in the DT at all?
+device_property_read_bool() returns device_property_present().
 
->    vpcie3v3-supply: true
->  
->  required:
-> @@ -115,6 +115,7 @@ examples:
->                            "aclk_dbi", "pclk",
->                            "aux";
->              device_type = "pci";
-> +            lane-map = <0 1>;
->              linux,pci-domain = <2>;
->              max-link-speed = <2>;
->              msi-map = <0x2000 &its 0x2000 0x1000>;
-> -- 
-> 2.25.1
-> 
-> 
-> -- 
-> linux-phy mailing list
-> linux-phy@lists.infradead.org
-> https://lists.infradead.org/mailman/listinfo/linux-phy
+I would prefer that, instead, you call the latter:
+
+	nvmem_enabled = device_property_present(dev, "nvmem-cells");
+
+It's the same, yes, but this will increase human readability, as the function
+name clearly states the intention here.
+
+Thanks,
+Angelo
+

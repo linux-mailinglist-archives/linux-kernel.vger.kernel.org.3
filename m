@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C2250F570
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B784E50F787
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243563AbiDZIsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S1348286AbiDZJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345440AbiDZIjH (ORCPT
+        with ESMTP id S1346986AbiDZIu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:07 -0400
+        Tue, 26 Apr 2022 04:50:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4242B1387F4;
-        Tue, 26 Apr 2022 01:29:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C164171C39;
+        Tue, 26 Apr 2022 01:39:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C43276185A;
-        Tue, 26 Apr 2022 08:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21EECC385A4;
-        Tue, 26 Apr 2022 08:29:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A42706090C;
+        Tue, 26 Apr 2022 08:39:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAD9C385A4;
+        Tue, 26 Apr 2022 08:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961786;
-        bh=MD2a3mTLCRYlsfqyW71MashvvoF42g9X7TNWmf2UenA=;
+        s=korg; t=1650962359;
+        bh=+KolcSOmUT8nfhzFWRnBxV23DouA6VHrhRtYpSvkK5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KZl4qppQo68r3wXX0caOgVJ7J5vWgA4Sjqm0MdXtK8n4yHsp+rlbA4H9R/cNWhsN0
-         DFE/zOWReaIhV8ck5czauTNk3NuMw99Sq1d0GHjHMCzYznLe9jaFZztDfR9kon/giN
-         UVegGSwooTtbDMnj8NvuCen1SVOXNFcrlzaNg0Gk=
+        b=YJnuXweChqjj6rmIlpE1/Vfiuiwzj3rIfNAuCnItBNWPLMpRlSLr27iOmY2CBKFUn
+         0Dy5/Qib3fQzxr6aeY4GkQwxoShpXADqBjJvR6otJ/KDv0LzwN5YK+D3UcqNKqHMNo
+         u4hOcnElOhKFpNhdcivTVjsnnSvPpse0LhjoxQT8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Wu Bo <wubo40@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 29/62] mt76: Fix undefined behavior due to shift overflowing the constant
+Subject: [PATCH 5.15 068/124] scsi: iscsi: Release endpoint ID when its freed
 Date:   Tue, 26 Apr 2022 10:21:09 +0200
-Message-Id: <20220426081738.061478684@linuxfoundation.org>
+Message-Id: <20220426081749.234869034@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,51 +57,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit dbc2b1764734857d68425468ffa8486e97ab89df ]
+[ Upstream commit 3c6ae371b8a1ffba1fc415989fd581ebf841ed0a ]
 
-Fix:
+We can't release the endpoint ID until all references to the endpoint have
+been dropped or it could be allocated while in use. This has us use an idr
+instead of looping over all conns to find a free ID and then free the ID
+when all references have been dropped instead of when the device is only
+deleted.
 
-  drivers/net/wireless/mediatek/mt76/mt76x2/pci.c: In function ‘mt76x2e_probe’:
-  ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_946’ \
-	declared with attribute error: FIELD_PREP: mask is not constant
-    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Felix Fietkau <nbd@nbd.name>
-Cc: Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>
-Cc: Ryder Lee <ryder.lee@mediatek.com>
-Cc: Shayne Chen <shayne.chen@mediatek.com>
-Cc: Sean Wang <sean.wang@mediatek.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220405151517.29753-9-bp@alien8.de
+Link: https://lore.kernel.org/r/20220408001314.5014-4-michael.christie@oracle.com
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Reviewed-by: Wu Bo <wubo40@huawei.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt76x2/pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/scsi_transport_iscsi.c | 71 ++++++++++++++---------------
+ include/scsi/scsi_transport_iscsi.h |  2 +-
+ 2 files changed, 36 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76x2/pci.c b/drivers/net/wireless/mediatek/mt76/mt76x2/pci.c
-index cf611d1b817c..e6d7646a0d9c 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76x2/pci.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76x2/pci.c
-@@ -76,7 +76,7 @@ mt76pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	mt76_rmw_field(dev, 0x15a10, 0x1f << 16, 0x9);
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index c7b1b2e8bb02..bcdfcb25349a 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -86,6 +86,9 @@ struct iscsi_internal {
+ 	struct transport_container session_cont;
+ };
  
- 	/* RG_SSUSB_G1_CDR_BIC_LTR = 0xf */
--	mt76_rmw_field(dev, 0x15a0c, 0xf << 28, 0xf);
-+	mt76_rmw_field(dev, 0x15a0c, 0xfU << 28, 0xf);
++static DEFINE_IDR(iscsi_ep_idr);
++static DEFINE_MUTEX(iscsi_ep_idr_mutex);
++
+ static atomic_t iscsi_session_nr; /* sysfs session id for next new session */
+ static struct workqueue_struct *iscsi_eh_timer_workq;
  
- 	/* RG_SSUSB_CDR_BR_PE1D = 0x3 */
- 	mt76_rmw_field(dev, 0x15c58, 0x3 << 6, 0x3);
+@@ -169,6 +172,11 @@ struct device_attribute dev_attr_##_prefix##_##_name =	\
+ static void iscsi_endpoint_release(struct device *dev)
+ {
+ 	struct iscsi_endpoint *ep = iscsi_dev_to_endpoint(dev);
++
++	mutex_lock(&iscsi_ep_idr_mutex);
++	idr_remove(&iscsi_ep_idr, ep->id);
++	mutex_unlock(&iscsi_ep_idr_mutex);
++
+ 	kfree(ep);
+ }
+ 
+@@ -181,7 +189,7 @@ static ssize_t
+ show_ep_handle(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct iscsi_endpoint *ep = iscsi_dev_to_endpoint(dev);
+-	return sysfs_emit(buf, "%llu\n", (unsigned long long) ep->id);
++	return sysfs_emit(buf, "%d\n", ep->id);
+ }
+ static ISCSI_ATTR(ep, handle, S_IRUGO, show_ep_handle, NULL);
+ 
+@@ -194,48 +202,32 @@ static struct attribute_group iscsi_endpoint_group = {
+ 	.attrs = iscsi_endpoint_attrs,
+ };
+ 
+-#define ISCSI_MAX_EPID -1
+-
+-static int iscsi_match_epid(struct device *dev, const void *data)
+-{
+-	struct iscsi_endpoint *ep = iscsi_dev_to_endpoint(dev);
+-	const uint64_t *epid = data;
+-
+-	return *epid == ep->id;
+-}
+-
+ struct iscsi_endpoint *
+ iscsi_create_endpoint(int dd_size)
+ {
+-	struct device *dev;
+ 	struct iscsi_endpoint *ep;
+-	uint64_t id;
+-	int err;
+-
+-	for (id = 1; id < ISCSI_MAX_EPID; id++) {
+-		dev = class_find_device(&iscsi_endpoint_class, NULL, &id,
+-					iscsi_match_epid);
+-		if (!dev)
+-			break;
+-		else
+-			put_device(dev);
+-	}
+-	if (id == ISCSI_MAX_EPID) {
+-		printk(KERN_ERR "Too many connections. Max supported %u\n",
+-		       ISCSI_MAX_EPID - 1);
+-		return NULL;
+-	}
++	int err, id;
+ 
+ 	ep = kzalloc(sizeof(*ep) + dd_size, GFP_KERNEL);
+ 	if (!ep)
+ 		return NULL;
+ 
++	mutex_lock(&iscsi_ep_idr_mutex);
++	id = idr_alloc(&iscsi_ep_idr, ep, 0, -1, GFP_NOIO);
++	if (id < 0) {
++		mutex_unlock(&iscsi_ep_idr_mutex);
++		printk(KERN_ERR "Could not allocate endpoint ID. Error %d.\n",
++		       id);
++		goto free_ep;
++	}
++	mutex_unlock(&iscsi_ep_idr_mutex);
++
+ 	ep->id = id;
+ 	ep->dev.class = &iscsi_endpoint_class;
+-	dev_set_name(&ep->dev, "ep-%llu", (unsigned long long) id);
++	dev_set_name(&ep->dev, "ep-%d", id);
+ 	err = device_register(&ep->dev);
+         if (err)
+-                goto free_ep;
++		goto free_id;
+ 
+ 	err = sysfs_create_group(&ep->dev.kobj, &iscsi_endpoint_group);
+ 	if (err)
+@@ -249,6 +241,10 @@ iscsi_create_endpoint(int dd_size)
+ 	device_unregister(&ep->dev);
+ 	return NULL;
+ 
++free_id:
++	mutex_lock(&iscsi_ep_idr_mutex);
++	idr_remove(&iscsi_ep_idr, id);
++	mutex_unlock(&iscsi_ep_idr_mutex);
+ free_ep:
+ 	kfree(ep);
+ 	return NULL;
+@@ -276,14 +272,17 @@ EXPORT_SYMBOL_GPL(iscsi_put_endpoint);
+  */
+ struct iscsi_endpoint *iscsi_lookup_endpoint(u64 handle)
+ {
+-	struct device *dev;
++	struct iscsi_endpoint *ep;
+ 
+-	dev = class_find_device(&iscsi_endpoint_class, NULL, &handle,
+-				iscsi_match_epid);
+-	if (!dev)
+-		return NULL;
++	mutex_lock(&iscsi_ep_idr_mutex);
++	ep = idr_find(&iscsi_ep_idr, handle);
++	if (!ep)
++		goto unlock;
+ 
+-	return iscsi_dev_to_endpoint(dev);
++	get_device(&ep->dev);
++unlock:
++	mutex_unlock(&iscsi_ep_idr_mutex);
++	return ep;
+ }
+ EXPORT_SYMBOL_GPL(iscsi_lookup_endpoint);
+ 
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index 037c77fb5dc5..3ecf9702287b 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -296,7 +296,7 @@ extern void iscsi_host_for_each_session(struct Scsi_Host *shost,
+ struct iscsi_endpoint {
+ 	void *dd_data;			/* LLD private data */
+ 	struct device dev;
+-	uint64_t id;
++	int id;
+ 	struct iscsi_cls_conn *conn;
+ };
+ 
 -- 
 2.35.1
 

@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CB250F407
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7D550F7AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344934AbiDZIbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S1347379AbiDZJKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344969AbiDZI3H (ORCPT
+        with ESMTP id S1346830AbiDZIuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:29:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCDF3A5C6;
-        Tue, 26 Apr 2022 01:24:40 -0700 (PDT)
+        Tue, 26 Apr 2022 04:50:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9358F17036C;
+        Tue, 26 Apr 2022 01:39:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C574DB81CF6;
-        Tue, 26 Apr 2022 08:24:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3062FC385A4;
-        Tue, 26 Apr 2022 08:24:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F38DA60EC4;
+        Tue, 26 Apr 2022 08:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDE4C385A0;
+        Tue, 26 Apr 2022 08:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961477;
-        bh=GYRN8gEHNluHJetTN7qwHBSbp5xnHOcjNQsr6hRA2LE=;
+        s=korg; t=1650962343;
+        bh=0up0+3ng2gkf9fVKVYD32dBPHhE8G+CBylS47GayzIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=juG99kQaKkVvECZjiFvDTqyxooE8tbLnzIu853S1TRlsDzXtaKEpQJSN3Q6+cH6xm
-         P6XA2AXuBc343QVVFu5mJttjIBFIiG+dTVP27NHSh+caksRxQoXVOjDHy8F4A7FGwI
-         sYDMDYtmyg42aBTDjx50qbC1RaMP7t2ZWQxRyAPg=
+        b=IWI0JbGVGsEv4oPzWvXV906D9sanRp/IGzO2cnUhssFQpGWpPkxORT/Kk6az57i/K
+         /4LC2iS/uLw9cDQs7rdtDZji9xaIhuOxMG0/3mfsXmQ2bLtiyBvofE0iUnM1kTjmyq
+         uuu6JRrj7ammpi4K0VJLg17XuZ6YvMIZr6oSNDVc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4.14 23/43] dma: at_xdmac: fix a missing check on list iterator
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        brcm80211-dev-list.pdl@broadcom.com, netdev@vger.kernel.org,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 064/124] brcmfmac: sdio: Fix undefined behavior due to shift overflowing the constant
 Date:   Tue, 26 Apr 2022 10:21:05 +0200
-Message-Id: <20220426081735.203132279@linuxfoundation.org>
+Message-Id: <20220426081749.121241727@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,57 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Borislav Petkov <bp@alien8.de>
 
-commit 206680c4e46b62fd8909385e0874a36952595b85 upstream.
+[ Upstream commit 6fb3a5868b2117611f41e421e10e6a8c2a13039a ]
 
-The bug is here:
-	__func__, desc, &desc->tx_dma_desc.phys, ret, cookie, residue);
+Fix:
 
-The list iterator 'desc' will point to a bogus position containing
-HEAD if the list is empty or no element is found. To avoid dev_dbg()
-prints a invalid address, use a new variable 'iter' as the list
-iterator, while use the origin variable 'desc' as a dedicated
-pointer to point to the found element.
+  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c: In function ‘brcmf_sdio_drivestrengthinit’:
+  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:3798:2: error: case label does not reduce to an integer constant
+    case SDIOD_DRVSTR_KEY(BRCM_CC_43143_CHIP_ID, 17):
+    ^~~~
+  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:3809:2: error: case label does not reduce to an integer constant
+    case SDIOD_DRVSTR_KEY(BRCM_CC_43362_CHIP_ID, 13):
+    ^~~~
 
-Cc: stable@vger.kernel.org
-Fixes: 82e2424635f4c ("dmaengine: xdmac: fix print warning on dma_addr_t variable")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220327061154.4867-1-xiam0nd.tong@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+details as to why it triggers with older gccs only.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Arend van Spriel <aspriel@gmail.com>
+Cc: Franky Lin <franky.lin@broadcom.com>
+Cc: Hante Meuleman <hante.meuleman@broadcom.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: brcm80211-dev-list.pdl@broadcom.com
+Cc: netdev@vger.kernel.org
+Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/Ykx0iRlvtBnKqtbG@zn.tnic
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/at_xdmac.c |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1390,7 +1390,7 @@ at_xdmac_tx_status(struct dma_chan *chan
- {
- 	struct at_xdmac_chan	*atchan = to_at_xdmac_chan(chan);
- 	struct at_xdmac		*atxdmac = to_at_xdmac(atchan->chan.device);
--	struct at_xdmac_desc	*desc, *_desc;
-+	struct at_xdmac_desc	*desc, *_desc, *iter;
- 	struct list_head	*descs_list;
- 	enum dma_status		ret;
- 	int			residue, retry;
-@@ -1505,11 +1505,13 @@ at_xdmac_tx_status(struct dma_chan *chan
- 	 * microblock.
- 	 */
- 	descs_list = &desc->descs_list;
--	list_for_each_entry_safe(desc, _desc, descs_list, desc_node) {
--		dwidth = at_xdmac_get_dwidth(desc->lld.mbr_cfg);
--		residue -= (desc->lld.mbr_ubc & 0xffffff) << dwidth;
--		if ((desc->lld.mbr_nda & 0xfffffffc) == cur_nda)
-+	list_for_each_entry_safe(iter, _desc, descs_list, desc_node) {
-+		dwidth = at_xdmac_get_dwidth(iter->lld.mbr_cfg);
-+		residue -= (iter->lld.mbr_ubc & 0xffffff) << dwidth;
-+		if ((iter->lld.mbr_nda & 0xfffffffc) == cur_nda) {
-+			desc = iter;
- 			break;
-+		}
- 	}
- 	residue += cur_ubc << dwidth;
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+index 5d156e591b35..f7961b22e051 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+@@ -557,7 +557,7 @@ enum brcmf_sdio_frmtype {
+ 	BRCMF_SDIO_FT_SUB,
+ };
  
+-#define SDIOD_DRVSTR_KEY(chip, pmu)     (((chip) << 16) | (pmu))
++#define SDIOD_DRVSTR_KEY(chip, pmu)     (((unsigned int)(chip) << 16) | (pmu))
+ 
+ /* SDIO Pad drive strength to select value mappings */
+ struct sdiod_drive_str {
+-- 
+2.35.1
+
 
 

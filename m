@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6556B50F643
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED3550F7EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiDZImF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S235133AbiDZJ2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbiDZIea (ORCPT
+        with ESMTP id S1347352AbiDZJFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAF774877;
-        Tue, 26 Apr 2022 01:27:04 -0700 (PDT)
+        Tue, 26 Apr 2022 05:05:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9EC111CA6;
+        Tue, 26 Apr 2022 01:44:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5048B81CED;
-        Tue, 26 Apr 2022 08:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E345C385A0;
-        Tue, 26 Apr 2022 08:27:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E0F26133B;
+        Tue, 26 Apr 2022 08:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A2DDC385A4;
+        Tue, 26 Apr 2022 08:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961621;
-        bh=MSOqXNS4Azyxzhiu/r4xu6CEimlb/9BkCfsl0L7K9oc=;
+        s=korg; t=1650962668;
+        bh=boMH+JABDXmSGHJzf6Di9Kg3rMGRkIRz2H3gt25TXfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VAfyPzJqCNb7FkT2N8Jj9NwE2C3F4neXJUhpxNPhp07t4EtKcNOKuuSNcpKU6PN1B
-         GvYBLOsiPIxtokqh4T5Ow3CpRRAGn6dSp/Xq+eyH92rF6D6jfoLDT1uj4dX4VQ2gow
-         dU/Unl/+wt/+mP9ddSrwq1goXlDXbWDNI8Hm+1dc=
+        b=tbio1GR3nXc464jxJx0wzUzDeYP/te2h8yADQ4Y8RK3I+gdX2SxIBueLxRd/A6+KX
+         GXc85alZ3AN5n3bfb/yDnmLh8gR47lrqFFBIkbUphwHKYguT7ylzpFlG5RmlGULyVb
+         N9WS107cI7s5V1lb/vnQFIw9deovm0G0fP3RneD8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Zanussi <zanussi@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.19 03/53] tracing: Dump stacktrace trigger to the corresponding instance
+        stable@vger.kernel.org,
+        Thiago Macieira <thiago.macieira@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 048/146] dmaengine: idxd: match type for retries var in idxd_enqcmds()
 Date:   Tue, 26 Apr 2022 10:20:43 +0200
-Message-Id: <20220426081735.755621847@linuxfoundation.org>
+Message-Id: <20220426081751.422610194@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+From: Dave Jiang <dave.jiang@intel.com>
 
-commit ce33c845b030c9cf768370c951bc699470b09fa7 upstream.
+[ Upstream commit 5d9d16e5aa0cf023e600bf716239fd9caa2d4148 ]
 
-The stacktrace event trigger is not dumping the stacktrace to the instance
-where it was enabled, but to the global "instance."
+wq->enqcmds_retries is defined as unsigned int. However, retries on the
+stack is defined as int. Change retries to unsigned int to compare the same
+type.
 
-Use the private_data, pointing to the trigger file, to figure out the
-corresponding trace instance, and use it in the trigger action, like
-snapshot_trigger does.
-
-Link: https://lkml.kernel.org/r/afbb0b4f18ba92c276865bc97204d438473f4ebc.1645396236.git.bristot@kernel.org
-
-Cc: stable@vger.kernel.org
-Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Tested-by: Tom Zanussi <zanussi@kernel.org>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7930d8553575 ("dmaengine: idxd: add knob for enqcmds retries")
+Suggested-by: Thiago Macieira <thiago.macieira@intel.com>
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/165031747059.3658198.6035308204505664375.stgit@djiang5-desk3.ch.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_events_trigger.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/dma/idxd/submit.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/kernel/trace/trace_events_trigger.c
-+++ b/kernel/trace/trace_events_trigger.c
-@@ -1212,7 +1212,14 @@ static void
- stacktrace_trigger(struct event_trigger_data *data, void *rec,
- 		   struct ring_buffer_event *event)
+diff --git a/drivers/dma/idxd/submit.c b/drivers/dma/idxd/submit.c
+index e289fd48711a..554b0602d2e9 100644
+--- a/drivers/dma/idxd/submit.c
++++ b/drivers/dma/idxd/submit.c
+@@ -150,7 +150,8 @@ static void llist_abort_desc(struct idxd_wq *wq, struct idxd_irq_entry *ie,
+  */
+ int idxd_enqcmds(struct idxd_wq *wq, void __iomem *portal, const void *desc)
  {
--	trace_dump_stack(STACK_SKIP);
-+	struct trace_event_file *file = data->private_data;
-+	unsigned long flags;
-+
-+	if (file) {
-+		local_save_flags(flags);
-+		__trace_stack(file->tr, flags, STACK_SKIP, preempt_count());
-+	} else
-+		trace_dump_stack(STACK_SKIP);
- }
+-	int rc, retries = 0;
++	unsigned int retries = 0;
++	int rc;
  
- static void
+ 	do {
+ 		rc = enqcmds(portal, desc);
+-- 
+2.35.1
+
 
 

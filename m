@@ -2,120 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5264510B6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BEA510B71
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355520AbiDZVhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S1355443AbiDZVlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346480AbiDZVhN (ORCPT
+        with ESMTP id S1346480AbiDZVlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:37:13 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7811B1A5DD1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:34:04 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id h8so203285iov.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zJHneikLXEGfJde4krQasd9PQhsFRpApoS4ZRag7+RU=;
-        b=EdwxR0V/0R58E5VQDj0HrytGDcfRa0ZaI7Me6rDBjirAgNHRbWWWvGaw7HmQEIGzu+
-         8UTTpBJpVmtohKiGL5cVYIq8PicWJvFUQVly2vSP4TS+56W86k/aX6l5WCrdoFzyILM+
-         1Yehf40AqvUszrZodWCBswvT50v8vrsYb0CT9VT0ik1assb3s50rjI/Ghc6ERMC0+hQS
-         kngQQpUrenrx0Z/CG7kuYI7vOHHB9pxCvklytawOfmTdu9cTLRddizluzNirEjBtvgHq
-         /7wjZvrPSoiAuTCiyBqcBwBGz7SjzYicglmkQ0p2ZcHJZmj17y1/IkCZAoejAg68UMHJ
-         xOsA==
+        Tue, 26 Apr 2022 17:41:49 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A260A63BC4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:38:40 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-e2fa360f6dso51758fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:38:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zJHneikLXEGfJde4krQasd9PQhsFRpApoS4ZRag7+RU=;
-        b=Q5QFQj4dxDIG6cf96TDDZ5+F2QYB1kxwsrhABAnl0j1PVcdrhp8RSezTmQEkDs6b5D
-         yEke2c737a9BkozNhGWq+um6og4bOAlQdP9dAfia9VB2A6Xgj6f/jd7EM0eygzR/D2md
-         dmHFX2k7Mj/2xf9qQfvHs53/qpFOLb1/zKyxEV+kq7T5hAH7hASOkHgBGIFtYCJcnbxs
-         CJ0CKybUj+ppjrX8aNuLW7Z7KlGLkT9zJkT2oi2tmElGbQ0a3HqQdf06suQkVyzNmVx2
-         x9ud7z2Kk848BNm2ET6b624Ay6frvhjYuN08NNoqC5Q4oFpodFcCEyD26vN/5E/JsGFJ
-         LawQ==
-X-Gm-Message-State: AOAM531gOpLvITMdDCchWPYUA7O/1r3dtUl3aV53D0Qs7iULnOPD24+S
-        3utShs+/n2mVRSbrhBQhBipE6ek7KgmkS177xokT/EPE7DA=
-X-Google-Smtp-Source: ABdhPJyGNR5sOXzGqUeKg6keEazd9H9Z8L/jAzBgMCoHI+lyyK7gNjS+2erCu0X4dzgJTpnr7YSLg3mNpJ5fsfcJHI0=
-X-Received: by 2002:a5d:9448:0:b0:657:24e0:c0b2 with SMTP id
- x8-20020a5d9448000000b0065724e0c0b2mr10388348ior.167.1651008843696; Tue, 26
- Apr 2022 14:34:03 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zhyNtTRWKpgiVoHNVp/CiGMxHi3Y9XR1OWQf9/EqURQ=;
+        b=hK1b9xtu92GWprnrtxyib1Rj14X4Y59I6aKnKTTaw1Sq9N3sys0bT3Pctry/qEIbmb
+         dfo+8m7rbu4TEHEcQRecbjbCZjDcQiF56VRG4EADieoRuzdZq3ZluxK3c0eQLhwE9OeO
+         J8NE3yalyEbNJoB2xU6wBpMajKZOkYr/h8oZD7xg5oNYo6rcALxkB7qNhgrEqmfJpLJU
+         Lp/0rfUd24OkpW9FaB734o33seTihve4ULWzB6FbIakplDpPdmP92wnEbLjHx5Igu6W7
+         DyeFjnMO4F4LHgI/bv7Nb+61WbAKeK8Jch3uL0AhYNy8xOrGenvc6UoJTrbPbMlvPUDL
+         jyeQ==
+X-Gm-Message-State: AOAM531yTTuagzZVsFpLtOkXCtFaa6KGDggWDoWSrjbmfSe1UZKqv6BC
+        owjZe+rllOPZ7y6joPXz1w==
+X-Google-Smtp-Source: ABdhPJydqYRqWI0cp4kXY25TEM4qbC2jQJOu+ISl9HwJMZmr7tsR1Tjj0vCRAPwtiK15Bcd2ft593Q==
+X-Received: by 2002:a05:6870:d210:b0:e2:c10b:a7b with SMTP id g16-20020a056870d21000b000e2c10b0a7bmr10187521oac.181.1651009119901;
+        Tue, 26 Apr 2022 14:38:39 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y22-20020a056870389600b000e93d386d97sm1252404oan.31.2022.04.26.14.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 14:38:39 -0700 (PDT)
+Received: (nullmailer pid 2577401 invoked by uid 1000);
+        Tue, 26 Apr 2022 21:38:38 -0000
+Date:   Tue, 26 Apr 2022 16:38:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Joel Stanley <joel@jms.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 04/11] clocksource/drivers: Add HPE GXP timer
+Message-ID: <YmhmXl5IWHmKzAyG@robh.at.kernel.org>
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+ <20220421192132.109954-5-nick.hawkins@hpe.com>
+ <CAK8P3a0nQ1BrtfBJ7sUSaLkA=pbVwx83bEUpZczvLOSOHDR=dw@mail.gmail.com>
+ <CACRpkdbJ1N7VOgoBzGS+cOaErFcYiOVDeWRmhPyHA7=9W0CGhA@mail.gmail.com>
+ <CAK8P3a2ie8kFYstCYr6FO6+yFw7VxyJjWYyy9b+rUHu_u0YXPg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-3-axelrasmussen@google.com> <YmhW+mOuQUWsByj4@xz-m1.local>
-In-Reply-To: <YmhW+mOuQUWsByj4@xz-m1.local>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 26 Apr 2022 14:33:27 -0700
-Message-ID: <CAJHvVch=8znnY-u1PbPb1qUeczn+9AR_eZOP5z9kD6PgtPQjrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2ie8kFYstCYr6FO6+yFw7VxyJjWYyy9b+rUHu_u0YXPg@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 1:33 PM Peter Xu <peterx@redhat.com> wrote:
->
-> Axel,
->
-> On Fri, Apr 22, 2022 at 02:29:41PM -0700, Axel Rasmussen wrote:
-> > @@ -65,6 +66,8 @@ struct userfaultfd_ctx {
-> >       unsigned int flags;
-> >       /* features requested from the userspace */
-> >       unsigned int features;
-> > +     /* whether or not to handle kernel faults */
-> > +     bool handle_kernel_faults;
->
-> Could you help explain why we need this bool?  I failed to figure out
-> myself on the difference against "!(ctx->flags & UFFD_USER_MODE_ONLY)".
+On Tue, Apr 26, 2022 at 08:00:20AM +0200, Arnd Bergmann wrote:
+> On Mon, Apr 25, 2022 at 10:38 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Fri, Apr 22, 2022 at 3:16 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Thu, Apr 21, 2022 at 9:21 PM <nick.hawkins@hpe.com> wrote:
+> > >
+> > > > +
+> > > > +static struct platform_device gxp_watchdog_device = {
+> > > > +       .name = "gxp-wdt",
+> > > > +       .id = -1,
+> > > > +};
+> > > > +/*
+> > > > + * This probe gets called after the timer is already up and running. This will create
+> > > > + * the watchdog device as a child since the registers are shared.
+> > > > + */
+> > > > +
+> > > > +static int gxp_timer_probe(struct platform_device *pdev)
+> > > > +{
+> > > > +       struct device *dev = &pdev->dev;
+> > > > +
+> > > > +       /* Pass the base address (counter) as platform data and nothing else */
+> > > > +       gxp_watchdog_device.dev.platform_data = local_gxp_timer->counter;
+> > > > +       gxp_watchdog_device.dev.parent = dev;
+> > > > +       return platform_device_register(&gxp_watchdog_device);
+> > > > +}
+> > >
+> > > I don't understand what this is about: the device should be created from
+> > > DT, not defined statically in the code. There are multiple ways of creating
+> > > a platform_device from a DT node, or you can allocate one here, but static
+> > > definitions are generally a mistake.
+> > >
+> > > I see that you copied this from the ixp4xx driver, so I think we should fix this
+> > > there as well.
+> >
+> > The ixp4xx driver looks like that because the register range used for
+> > the timer and the watchdog is combined, i.e. it is a single IP block:
+> >
+> >                 timer@c8005000 {
+> >                         compatible = "intel,ixp4xx-timer";
+> >                         reg = <0xc8005000 0x100>;
+> >                         interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+> >                 };
+> >
+> > Device tree probing does not allow two devices to probe from the same
+> > DT node, so this was solved by letting the (less important) watchdog
+> > be spawn as a platform device from the timer.
+> >
+> > I don't know if double-probing for the same register range can be fixed,
+> > but I was assuming that the one-compatible-to-one-driver assumption
+> > was pretty hard-coded into the abstractions. Maybe it isn't?
+> 
+> Having a child device is fine, my objection was about the way
+> the device is created from a 'static platform_device ...' definition
+> rather than having the device structure allocated at probe time.
+> 
+> > Another way is of course to introduce an MFD. That becomes
+> > problematic in another way: MFD abstractions are supposed to
+> > be inbetween the resource and the devices it spawns, and with
+> > timers/clocksources this creates a horrible special-casing since the
+> > MFD bus (the parent may be providing e.g. an MMIO regmap)
+> > then need to be early-populated and searched by the timer core
+> > from TIMER_OF_DECLARE() early in boot.
+> >
+> > So this solution was the lesser evil that I could think about.
+> 
+> There are multiple ways of doing this that we already discussed
+> in the thread. The easiest is probably to have a child node without
+> custom registers in the DT and then use the DT helpers to
+> populate the linux devices with the correct data.
 
-Ah, yeah you're right, we can get rid of it and just rely on
-UFFD_USER_MODE_ONLY.
+I think that's what the wdt binding is doing, but I don't like that. 
+Maybe it's not a child node, I can't tell.
 
-Just to add context, in a previous version I never sent out, I had:
+Bindings should not be decided on the *current* driver split on one 
+particular OS. This looks like 1 block, so 1 node. If that doesn't work 
+well or easy for Linux, then we should fix Linux.
 
-ctx->handle_kernel_faults = userfaultfd_allowed(...);
-
-That's wrong for other reasons, but if we were going to do that we'd
-have to store the result, since it's a function not just of the flags,
-but also of the method used to create the userfaultfd. I changed this
-without also dropping the boolean, which can now be cleaned up. I'll
-include this change in a v3.
-
->
-> Thanks,
->
-> --
-> Peter Xu
->
+Rob

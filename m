@@ -2,192 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B949850F1FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F92C50F205
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343775AbiDZHTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S239610AbiDZHUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343778AbiDZHS6 (ORCPT
+        with ESMTP id S234310AbiDZHUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:18:58 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F35762A1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:15:51 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ebf4b91212so172575687b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:15:51 -0700 (PDT)
+        Tue, 26 Apr 2022 03:20:15 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABC989CF0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:17:08 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b24so21140887edu.10
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:17:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W48mPmCEODAeKCo4cYR/TrFD4JfPLTSWRwhqTfeCiJA=;
-        b=gb90e2Jc05v2CZzab1gHuWlQZ7mOLM72uzZFGtD2dQ9ITduk47VqRyMZSqLQBpMOdA
-         nFLeuRNpSqERdwglV+kmc4yo4Q1h4a/lvVcQQQimgkzRm1zMQHkM/eHTlmBATFoWbcYf
-         yi57ZBCATFUH0Z7H/An1LTnNVoGM6AkOemwmY=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=shX4IM4IxXnZAwFkwJE2OgpC7RVVTATTpnGlocR5V84=;
+        b=nkwegCQ8EKFVIPs5hZHXdpuhv8bMa7YtQcYyd/qrqIn4Hq2RKrB8ZQdqteOE7+cVh6
+         FGpvuTrZzgWr3rd1cUdkI1eWBB+lYlJPS7gZdWeDO9i/PEtl1ea17FvJqh8UpU41Wubj
+         fnyRVEUvKUiob7yUIL9tXqvAATdXlSSFwQkuxJ/BCX3d3H2WAx0RWWM1GejeF3A0bn+F
+         dnSy9lA82Juycz5a59AOaj0pbHf2AHfBLos0JCLkT9AuB4ONriuURNuZBctckj5pn0Io
+         c2f0Q16rnyOjSZCcfAVSIZNzfnwcV1KGB4kuC9xq6oItQ5gZnbbzT+r6zL2Cn0EuST1P
+         8dpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W48mPmCEODAeKCo4cYR/TrFD4JfPLTSWRwhqTfeCiJA=;
-        b=X4PbrSyQ8TOCidh9+yENmIHT2rWXDuV1q5hbz9Cl8CBhrry1LpKgHA7nWaKtNnl+eh
-         lvmuhjaahA8oOd3ygJz59rI4ae2DnRZpH9/NTqc2X1KOhgLh56vTbczE1c3zyLrihChd
-         NDlIpypVGVA6Ax9xmI3z2HgE96XnWitjjENEhMOz/ajo+87jKtnMJa6Suhd1E5RZ9/hB
-         NMzJQFzkJJEdzJ76PLwRelkSws8fjOxVUIxirQLOagGyItRozdQ+qOJOzIiqHXF5jPPF
-         0NakKc3EG+52fMwZSxWlTKWhOIVjIfXi3luXl8n2jxFQmIwohfpx7wMugBQRnFPB0PFr
-         70zQ==
-X-Gm-Message-State: AOAM531QpgY0x4GwzwCiVYh7z7SNuVmFvysNMwfh+uwDwq6cdScUY/wL
-        rCO578zDv/QAe8OXlGF560c//kVk87uCv8TcJwMNBg==
-X-Google-Smtp-Source: ABdhPJz7mWph1YxLYcWICwibet7gNS3uzR3x+TVoftrHCaq7u1jn0mZA1c/96IclyLrgvQXvXMO9rZu6QlzK9rbUOSE=
-X-Received: by 2002:a81:ad1f:0:b0:2f4:da5b:5133 with SMTP id
- l31-20020a81ad1f000000b002f4da5b5133mr20961896ywh.105.1650957350928; Tue, 26
- Apr 2022 00:15:50 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=shX4IM4IxXnZAwFkwJE2OgpC7RVVTATTpnGlocR5V84=;
+        b=UoOL/HUnlQnu/OmTGYxjPQyt0ODUI+mwil053q85x2/FWfI/Tt49tnnIwpHZl3EaGv
+         E+EwFG+FUKxkBc+I21rLpxoEM3r3G02okWYTUten4VBnyLLDJ2hpvydatRaiemPdie2i
+         wfg3jhDWy7vHAlzrjpc2EDhPvJkk1apFmXZ/Z5PUqKrCVhd9ltkS9GJ7CqNyUbEacEQ3
+         SUOK9jhE8sDZv90YC6J5s8vkbJcgjVkJtXUaz/9YhF+SSnYwZtKomOmwhjRzlTncsRBk
+         mfXTXiIWivwrtriEYzsuJAhVIWRIkxON1Osls+rD+Qp2NWtqGVxrioap8IssXdefiFIU
+         gYwA==
+X-Gm-Message-State: AOAM532qmE3BNzIZTk78tSNxjO4cBc49yWe6WpsTylF2WiN3YDyCsAz4
+        r56QDsTFWrznLpX+FLv8WfJG5w==
+X-Google-Smtp-Source: ABdhPJzsDgilI6y9JHqYWD8OWuHEuuSPGf6T7DrE8s9gbzU5nzA3PXCrFJQcPnXqIIM0+lzgdBiksQ==
+X-Received: by 2002:a05:6402:84a:b0:423:fe99:8c53 with SMTP id b10-20020a056402084a00b00423fe998c53mr22805247edz.195.1650957427148;
+        Tue, 26 Apr 2022 00:17:07 -0700 (PDT)
+Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c3-20020a17090654c300b006e4e1a3e9d5sm4507003ejp.144.2022.04.26.00.17.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 00:17:06 -0700 (PDT)
+Message-ID: <262fa922-0564-7dec-9558-b680480d0e67@linaro.org>
+Date:   Tue, 26 Apr 2022 09:17:05 +0200
 MIME-Version: 1.0
-References: <20220420102044.10832-1-roger.lu@mediatek.com> <7hczhbe3wn.fsf@baylibre.com>
- <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
- <7hsfq6ql4v.fsf@baylibre.com> <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
- <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
-In-Reply-To: <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 26 Apr 2022 15:15:39 +0800
-Message-ID: <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
-Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-Cc:     Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 25/33] dt-bindings: crypto: rockchip: convert to new
+ driver bindings
+Content-Language: en-US
+To:     Corentin Labbe <clabbe@baylibre.com>, heiko@sntech.de,
+        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org
+Cc:     linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+References: <20220425202119.3566743-1-clabbe@baylibre.com>
+ <20220425202119.3566743-26-clabbe@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220425202119.3566743-26-clabbe@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:38 PM Matthias Brugger
-<matthias.bgg@gmail.com> wrote:
->
->
->
-> On 22/04/2022 04:24, Roger Lu wrote:
-> > Hi Kevin,
-> >
-> > On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
-> >> Hi Roger,
-> >>
-> >> Roger Lu <roger.lu@mediatek.com> writes:
-> >>
-> >>> On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
-> >>
-> >> [...]
-> >>
-> >>>> That being said, it would be really nice to see an integration tree
-> >>>> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
-> >>>>
-> >>>> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
-> >>>> board, it fails to probe[1] because there is no CCI node in the upstream
-> >>>> mt8183.dtsi.
-> >>>>
-> >>>> I'm assuming this series is also not very useful without the CPUfreq
-> >>>> series from Rex, so being able to test this, CCI and CPUfreq together on
-> >>>> MT8183 on a mainline kernel would be very helpful.
-> >>>>
-> >>>> Kevin
-> >>>>
-> >>>> [1]
-> >>>> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
-> >>>> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
-> >>>> fail
-> >>>
-> >>> Just share. I've tested this series on below two platforms and it works as
-> >>> expected.
-> >>> - mt8183-Krane (kernel-v5.10)
-> >>> - mt8192-Hayato (kernel-v5.4)
-> >>
-> >> Unfortunately testing on v5.4 and v5.10 with lots of other additional
-> >> out-of-tree patches does not give much confidence that this series works
-> >> with upstream, especially when I've given a few reasons why it will not
-> >> work uptream.
-> >>
-> >> The examples I gave above for CCI and CPUs/cluster disable are good
-> >> examples, but another one I forgot to mention is the dependency on Mali.
-> >> The SVS driver will never probe because it also depens on a "mali" node,
-> >> which doesn't exist upstream either (but panfrost does, and acutually
-> >> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
-> >> upstream panfrost.
-> >>
-> >> IMO, in order for this to be merged upstream, it should at least have
-> >> some basic validation with upstream, and so far I have not even been
-> >> able to make it successfuly probe.  To do that, you will need to either
-> >> provide a list of the dependencies for testing this with mainline
-> >> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
-> >> integration tree based on recent mainline (e.g. v5.17 stable, or
-> >> v5.18-rc) which shows all the patches (in addition to this series) used
-> >> to validate this on mainline.
-> >
-> > No problem. We'll find a machine that can be run correctly with recent mainline
-> > (e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
-> > any DT changes) to test this SVS series. Thanks very much.
-> >
->
-> Thanks Roger. I'll wait until this got tested with upstream Linux, before I will
-> apply all the patches.
+On 25/04/2022 22:21, Corentin Labbe wrote:
+> The latest addition to the rockchip crypto driver need to update the
+> driver bindings.
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>  .../crypto/rockchip,rk3288-crypto.yaml        | 85 +++++++++++++++++--
+>  1 file changed, 77 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml b/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+> index 8a219d439d02..ad604d7e4bc0 100644
+> --- a/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+> @@ -13,6 +13,8 @@ properties:
+>    compatible:
+>      enum:
+>        - rockchip,rk3288-crypto
+> +      - rockchip,rk3328-crypto
+> +      - rockchip,rk3399-crypto
+>  
+>    reg:
+>      maxItems: 1
+> @@ -21,21 +23,88 @@ properties:
+>      maxItems: 1
+>  
+>    clocks:
+> +    minItems: 3
+>      maxItems: 4
+>  
+>    clock-names:
+> -    items:
+> -      - const: aclk
+> -      - const: hclk
+> -      - const: sclk
+> -      - const: apb_pclk
+> +    minItems: 3
+> +    maxItems: 4
+>  
+>    resets:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 3
+>  
+>    reset-names:
+> -    items:
+> -      - const: crypto-rst
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,rk3288-crypto
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +        clock-names:
+> +          items:
+> +            - const: "aclk"
 
-Hi everyone,
+No quotes (here and other places).
 
-I've put together an integration test branch:
+Rest looks good.
 
-https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
-
-This branch is based on next-20220422 and includes the following series:
-
-- ANX7625 DPI support v2
-  https://lore.kernel.org/all/20220422084720.959271-1-xji@analogixsemi.com/
-- MTK SVS v24
-  https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
-- MTK cpufreq v4
-  https://lore.kernel.org/all/20220422075239.16437-1-rex-bc.chen@mediatek.com/
-- PM / devfreq core patches from
-  http://git.kernel.org/chanwoo/h/devfreq-testing
-  PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
-  PM / devfreq: Add cpu based scaling support to passive governor
-  PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
-  PM / devfreq: passive: Update frequency when start governor
-- CCI devfreq v2
-  https://lore.kernel.org/all/20220408052150.22536-1-johnson.wang@mediatek.com/
-
-And some patches of my own to fix some errors. See the last handful of
-patches including and after the fixup! one.
-
-This was tested on Juniper (Acer Chromebook Spin 311) that has MT8183.
-Looking at the mcu_*_sel clocks from /sys/kernel/debug/clk/clk_summary ,
-it does seem like things are happening, though I'm not sure how to
-thoroughly test this, especially SVS.
-
-Hope this unblocks things for everyone involved.
-
-
-Regards
-ChenYu
+Best regards,
+Krzysztof

@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B1E50EF37
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781C950EF47
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 05:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241591AbiDZDdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 23:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S243306AbiDZDjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 23:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbiDZDda (ORCPT
+        with ESMTP id S243219AbiDZDir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 23:33:30 -0400
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF231172;
-        Mon, 25 Apr 2022 20:30:16 -0700 (PDT)
-Received: from [172.16.69.231] (unknown [49.255.141.98])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 1EF8420162;
-        Tue, 26 Apr 2022 11:30:08 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codeconstruct.com.au; s=2022a; t=1650943811;
-        bh=f1PVLbmLqz5IPQlx+FIi6pDmg09DbyV9nrjE0q+JCFM=;
-        h=Subject:From:To:Date:In-Reply-To:References;
-        b=VmMAdQx3aKyfOY+rj6g1bhRIBzKmKepQiEuQbMLFkWU8kPP/MfSTmHXV6GkUl7c3u
-         +kS8whk3b0qv3pNUO/ZfmjXPLOdK5VtZ5LjOOLFQEwrnKJ/4U5kMU0yWdiYIuU0zU1
-         o6h3rxrsWpoxixiiYA7IR9vbW4ts6e+IfXCaqYCnFVuq1IrpHlFQnFrIdnYotW4amP
-         tctJUUiSf8GnoN2fWLmDX1cEu4BFZa1g9fk3Zj++EsTrJAFt+5aEMpn9eTy02rpQW4
-         d+nxECahVHgOyrydzdGuJx/y8m/jXnlpP6vmUY8i9dV7RtjIfnHtZrMvtK3c3GfATl
-         e/2etEQTQntiQ==
-Message-ID: <ddea6b99f6976174f352bbbad4a6c7aa6ac6b91b.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v0] mctp: defer the kfree of object mdev->addrs
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     Lin Ma <linma@zju.edu.cn>, matt@codeconstruct.com.au,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 26 Apr 2022 11:30:08 +0800
-In-Reply-To: <20220422114340.32346-1-linma@zju.edu.cn>
-References: <20220422114340.32346-1-linma@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Apr 2022 23:38:47 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3D6A39829;
+        Mon, 25 Apr 2022 20:35:41 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.188:49938.983364622
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.39 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id 9226E2800CD;
+        Tue, 26 Apr 2022 11:35:36 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.188])
+        by app0023 with ESMTP id 5a46b418558e44358452701610bdefdb for wim@linux-watchdog.org;
+        Tue, 26 Apr 2022 11:35:40 CST
+X-Transaction-ID: 5a46b418558e44358452701610bdefdb
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.188
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH v3 0/4] Some Impovements about watchdog
+Date:   Tue, 26 Apr 2022 11:35:16 +0800
+Message-Id: <1650944120-30954-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lin,
+Changelog:
+v1->v2 Update the commit messages
+v2->v3 - Add the context about why using watchdog_timeout_invalid.
+       - Using SET_NOIRQ_SYSTEM_SLEEP_PM_OPS reduces redundant code for
+       iTCO watchdog.
 
-> The function mctp_unregister() reclaims the device's relevant resource
-> when a netcard detaches. However, a running routine may be unaware of
-> this and cause the use-after-free of the mdev->addrs object.
+Liu Xinpeng (4):
+  watchdog: wdat_wdg: Using the existed function to check parameter
+    timeout
+  watchdog: wdat_wdg: Stop watchdog when rebooting the system
+  watchdog: wdat_wdg: Stop watchdog when uninstalling module
+  watchdog: iTCO_wdg: Make code more clearly with macro definition
 
-[...]
+ drivers/watchdog/iTCO_wdt.c | 12 +++---------
+ drivers/watchdog/wdat_wdt.c |  7 +++++--
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-> To this end, just like the commit e04480920d1e ("Bluetooth: defer
-> cleanup of resources in hci_unregister_dev()")=C2=A0 this patch defers th=
-e
-> destructive kfree(mdev->addrs) in mctp_unregister to the mctp_dev_put,
-> where the refcount of mdev is zero and the entire device is reclaimed.
-> This prevents the use-after-free because the sendmsg thread holds the
-> reference of mdev in the mctp_route object.
+-- 
+2.23.0
 
-Looks good to me, thanks for checking this out.
-
-We could also check out the semantics of ->addrs over a release (perhaps
-we should clear addresses immediately with the write lock held?), but
-that would be best done as a separate change.
-
-So:
-
-Acked-by: Jeremy Kerr <jk@codeconstruct.com.au>
-
-Cheers,
-
-
-Jeremy

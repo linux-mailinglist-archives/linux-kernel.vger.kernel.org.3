@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3883E50FFC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4506550FFCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351249AbiDZN7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S1351312AbiDZOAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348362AbiDZN7s (ORCPT
+        with ESMTP id S237966AbiDZOAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:59:48 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FD415F593
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650981397; x=1682517397;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=BbPKb4s/XxVsrqGGMXkZS1CO1iYYct6t+mfIlDCl4u8=;
-  b=dXk0mh2wBC54bLwOWCqUYoCEZ2HBQzS4Cqlfzuo+3rpuVpRNW8uNvNKf
-   k4rLausyrhLUUJor6BcVhq9l2sJ4m/nmIhJMO3wh1Ch0PGD/1WrC+v4eV
-   Xzztj/WNtFNP8O2Peb3jB1jW5J1S8GuFAQzOCTNWydVg0lBCLdcc+m1zT
-   E=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 06:56:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:56:31 -0700
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 06:56:28 -0700
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <tglx@linutronix.de>, <sboyd@kernel.org>, <rafael@kernel.org>,
-        <johannes@sipsolutions.net>, <gregkh@linuxfoundation.org>,
-        <keescook@chromium.org>, Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v3] devcoredump : Serialize devcd_del work
-Date:   Tue, 26 Apr 2022 19:25:43 +0530
-Message-ID: <1650981343-11739-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 26 Apr 2022 10:00:47 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB2E161E91;
+        Tue, 26 Apr 2022 06:57:38 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6E9B7C0009;
+        Tue, 26 Apr 2022 13:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650981457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QXillSlDec+QdBFHMoazEsDlgZIJ8YMeOCBMwuPfphY=;
+        b=brrKEe1cOheWxjqRfbu7MAq3yJXJavO8aHcrCe5VVAzM2yOYy/K/h+eccWo7D1Gl1mQh1g
+        34f6LXnicgZ6ZvQDxNlx+g81sODKX/Yj3vVznMa6DFjBbdvehpqOTjz82hhWV1z4LTRV52
+        g4bJUjcMPWLwrXoqSf7n1YlEgxAq7bQGgUwJhOYQgY+trLFNE09E0WnT47jnCcOqlhUjAC
+        i2tnWLqwySW0S2F0GXg3Ob/uLVKU/Y6EVWYjG0FJoQC6zRRgUQt742stDIEqL7mHQIZmUe
+        f4FziQHt4KpucEWziEjzQ3lW4+XeVtAG953iVobc/dUtKqa93uh/O9D3k3gKgA==
+Date:   Tue, 26 Apr 2022 15:57:32 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next 2/5] net: dsa: add out-of-band tagging protocol
+Message-ID: <20220426155732.223e0446@pc-19.home>
+In-Reply-To: <68c4710d-013e-85e0-154d-413f4e13b27e@gmail.com>
+References: <20220422180305.301882-1-maxime.chevallier@bootlin.com>
+ <20220422180305.301882-3-maxime.chevallier@bootlin.com>
+ <68c4710d-013e-85e0-154d-413f4e13b27e@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,213 +63,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In following scenario(diagram), when one thread X running dev_coredumpm()
-adds devcd device to the framework which sends uevent notification to
-userspace and another thread Y reads this uevent and call to
-devcd_data_write() which eventually try to delete the queued timer that
-is not initialized/queued yet.
+Hello Florian,
 
-So, debug object reports some warning and in the meantime, timer is
-initialized and queued from X path. and from Y path, it gets reinitialized
-again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
+On Fri, 22 Apr 2022 11:28:30 -0700
+Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-To fix this, introduce mutex and a boolean flag to serialize the behaviour.
+Thanks for the review :)
 
- 	cpu0(X)			                cpu1(Y)
+> On 4/22/22 11:03, Maxime Chevallier wrote:
+> > This tagging protocol is designed for the situation where the link
+> > between the MAC and the Switch is designed such that the Destination
+> > Port, which is usually embedded in some part of the Ethernet
+> > Header, is sent out-of-band, and isn't present at all in the
+> > Ethernet frame.
+> > 
+> > This can happen when the MAC and Switch are tightly integrated on an
+> > SoC, as is the case with the Qualcomm IPQ4019 for example, where
+> > the DSA tag is inserted directly into the DMA descriptors. In that
+> > case, the MAC driver is responsible for sending the tag to the
+> > switch using the out-of-band medium. To do so, the MAC driver needs
+> > to have the information of the destination port for that skb.
+> > 
+> > This tagging protocol relies on a new set of fields in skb->shinfo
+> > to transmit the dsa tagging information to and from the MAC driver.
+> > 
+> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>  
+> 
+> First off, I am not a big fan of expanding skb::shared_info because
+> it is sensitive to cache line sizes and is critical for performance
+> at much higher speeds, I would expect Eric and Jakub to not be
+> terribly happy about it.
 
-    dev_coredump() uevent sent to user space
-    device_add()  ======================> user space process Y reads the
-                                          uevents writes to devcd fd
-                                          which results into writes to
+No problem, I'm testing with the skb->cb approach as you suggested and
+see how it goes.
 
-                                         devcd_data_write()
-                                           mod_delayed_work()
-                                             try_to_grab_pending()
-                                               del_timer()
-                                                 debug_assert_init()
-   INIT_DELAYED_WORK()
-   schedule_delayed_work()
-                                                   debug_object_fixup()
-                                                     timer_fixup_assert_init()
-                                                       timer_setup()
-                                                         do_init_timer()
-                                                       /*
-                                                        Above call reinitializes
-                                                        the timer to
-                                                        timer->entry.pprev=NULL
-                                                        and this will be checked
-                                                        later in timer_pending() call.
-                                                       */
-                                                 timer_pending()
-                                                  !hlist_unhashed_lockless(&timer->entry)
-                                                    !h->pprev
-                                                /*
-                                                  del_timer() checks h->pprev and finds
-                                                  it to be NULL due to which
-                                                  try_to_grab_pending() stucks.
-                                                */
+> The Broadcom systemport (bcmsysport.c) has a mode where it can
+> extract the Broadcom tag and put it in front of the actual packet
+> contents which appears to be very similar here. From there on, you
+> can have two strategies:
+> 
+> - have the Ethernet controller mangle the packet contents such that
+> the QCA tag is located in front of the actual Ethernet frame and
+> create a new tagging protocol variant for QCA, similar to the
+> TAG_BRCM versus TAG_BRCM_PREPEND
+> 
+> - provide the necessary information for the tagger to work using an
+> out of band mechanism, which is what you have done, in which case,
+> maybe you can use skb->cb[] instead of using skb::shared_info?
 
-Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-v2->v3:
- Addressed comments from gregkh
- - Wrapped the commit text and corrected the alignment.
- - Described the reason to introduce new variables.
- - Restored the blank line.
- - rename the del_wk_queued to flg.
- Addressed comments from tglx
- - Added a comment which explains the race which looks obvious however
-   would not occur between disabled_store and devcd_del work.
+One of the reason why I chose the second is to support possible future
+cases where another controller would face a similar situation, and also
+make use of the out-of-band tagger.
 
+I understand that it's not very elegant in the sense that this breaks
+the nice tagging model we have, but adding/removing data before the
+payload also seems convoluted to achieve the same thing :) It seems
+that this approach comes with a bit of an overhead since it implies
+mangling the skb a bit, but I've yet to test this myself.
 
-v1->v2:
- - Added del_wk_queued flag to serialize the race between devcd_data_write()
-   and disabled_store() => devcd_free().
+That's actually what I wanted your opinion on, it also seems like
+Andrew likes the idea of putting the tag ahead of the frame to stick
+with the actual model.
 
- drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 81 insertions(+), 2 deletions(-)
+I don't have strong feelings myself on the way of doing this, I'm
+looking for an approach that is efficient but yet easily maintainable.
 
-diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
-index f4d794d..199b265 100644
---- a/drivers/base/devcoredump.c
-+++ b/drivers/base/devcoredump.c
-@@ -25,6 +25,47 @@ struct devcd_entry {
- 	struct device devcd_dev;
- 	void *data;
- 	size_t datalen;
-+	/*
-+	 * Here, mutex is required to serialize the calls to del_wk work between
-+	 * user/kernel space which happens when devcd is added with device_add()
-+	 * and that sends uevent to user space. User space reads the uevents
-+	 * and calls to devcd_data_write() which try to modify the work which is
-+	 *  not even initialized/queued from devcoredump.
-+	 *
-+	 *
-+	 *
-+	 *        cpu0(X)                                 cpu1(Y)
-+	 *
-+	 *        dev_coredump() uevent sent to user space
-+	 *        device_add()  ======================> user space process Y reads the
-+	 *                                              uevents writes to devcd fd
-+	 *                                              which results into writes to
-+	 *
-+	 *                                             devcd_data_write()
-+	 *                                               mod_delayed_work()
-+	 *                                                 try_to_grab_pending()
-+	 *                                                   del_timer()
-+	 *                                                     debug_assert_init()
-+	 *       INIT_DELAYED_WORK()
-+	 *       schedule_delayed_work()
-+	 *
-+	 *
-+	 * Also, mutex alone would not be enough to avoid scheduling of
-+	 * del_wk work after it get flush from a call to devcd_free()
-+	 * mentioned as below.
-+	 *
-+	 *	disabled_store()
-+	 *        devcd_free()
-+	 *          mutex_lock()             devcd_data_write()
-+	 *          flush_delayed_work()
-+	 *          mutex_unlock()
-+	 *                                   mutex_lock()
-+	 *                                   mod_delayed_work()
-+	 *                                   mutex_unlock()
-+	 * So, a flag is required.
-+	 */
-+	struct mutex mutex;
-+	bool flg;
- 	struct module *owner;
- 	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
- 			void *data, size_t datalen);
-@@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct devcd_entry *devcd = dev_to_devcd(dev);
- 
--	mod_delayed_work(system_wq, &devcd->del_wk, 0);
-+	mutex_lock(&devcd->mutex);
-+	if (!devcd->flg) {
-+		devcd->flg = true;
-+		mod_delayed_work(system_wq, &devcd->del_wk, 0);
-+	}
-+	mutex_unlock(&devcd->mutex);
- 
- 	return count;
- }
-@@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
- {
- 	struct devcd_entry *devcd = dev_to_devcd(dev);
- 
-+	mutex_lock(&devcd->mutex);
-+	if (!devcd->flg)
-+		devcd->flg = true;
-+
- 	flush_delayed_work(&devcd->del_wk);
-+	mutex_unlock(&devcd->mutex);
- 	return 0;
- }
- 
-@@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
- 	return sysfs_emit(buf, "%d\n", devcd_disabled);
- }
- 
-+/*
-+ *
-+ *	disabled_store()                                	worker()
-+ *	 class_for_each_device(&devcd_class,
-+ *		NULL, NULL, devcd_free)
-+ *         ...
-+ *         ...
-+ *	   while ((dev = class_dev_iter_next(&iter))
-+ *                                                             devcd_del()
-+ *                                                               device_del()
-+ *                                                                 put_device() <- last reference
-+ *             error = fn(dev, data)                           devcd_dev_release()
-+ *             devcd_free(dev, data)                           kfree(devcd)
-+ *             mutex_lock(&devcd->mutex);
-+ *
-+ *
-+ * In the above diagram, It looks like disabled_store() would be racing with parallely
-+ * running devcd_del() and result in memory abort while acquiring devcd->mutex which
-+ * is called after kfree of devcd memory  after dropping its last reference with
-+ * put_device(). However, this will not happens as fn(dev, data) runs
-+ * with its own reference to device via klist_node so it is not its last reference.
-+ * so, above situation would not occur.
-+ */
-+
- static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
- 			      const char *buf, size_t count)
- {
-@@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
- 	devcd->read = read;
- 	devcd->free = free;
- 	devcd->failing_dev = get_device(dev);
-+	devcd->flg = false;
- 
-+	mutex_init(&devcd->mutex);
- 	device_initialize(&devcd->devcd_dev);
- 
- 	dev_set_name(&devcd->devcd_dev, "devcd%d",
- 		     atomic_inc_return(&devcd_count));
- 	devcd->devcd_dev.class = &devcd_class;
- 
-+	mutex_lock(&devcd->mutex);
- 	if (device_add(&devcd->devcd_dev))
- 		goto put_device;
- 
-@@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
- 
- 	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
- 	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
--
-+	mutex_unlock(&devcd->mutex);
- 	return;
-  put_device:
- 	put_device(&devcd->devcd_dev);
-+	mutex_unlock(&devcd->mutex);
-  put_module:
- 	module_put(owner);
-  free:
--- 
-2.7.4
+Thanks,
 
+Maxime

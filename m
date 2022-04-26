@@ -2,269 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644C5510B0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D3D510B0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355288AbiDZVPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S1355300AbiDZVPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiDZVPc (ORCPT
+        with ESMTP id S233055AbiDZVPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:15:32 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C33D75E5D;
-        Tue, 26 Apr 2022 14:12:24 -0700 (PDT)
+        Tue, 26 Apr 2022 17:15:35 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC6A75E5D;
+        Tue, 26 Apr 2022 14:12:27 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id z16so19077311pfh.3;
+        Tue, 26 Apr 2022 14:12:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651007544; x=1682543544;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=xvUlKqORpU29A5yaTyazJYFWcLuLF39ndK57GwYP+L4=;
-  b=PeVH9OgnfUeeOI0fvwzXdSnaO8Ae+ibLtMdAv5bH3iW4Zs3F12nHdcUV
-   h9qggvB+Uv+PjEuupsxSFjurx2FU7B+/9eM0kzkyjc09vqe5k3wg3u/XS
-   yo8q4dTriaYkAmv6YVrjG+DYbFmX81741YeWZ+t4AwJWZzBRDBQJOwxX8
-   o=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Apr 2022 14:12:23 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 14:12:23 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 14:12:23 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 14:12:22 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6] drm/msm/dp: remove fail safe mode related code
-Date:   Tue, 26 Apr 2022 14:12:14 -0700
-Message-ID: <1651007534-31842-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dTNHzgfUOL4osO2j/zaJgcQDZH2hhUWA+/riZkN8hcc=;
+        b=qrMvkpn1dhwLTmWBJPXzi8j82SmulVrBUqm+++Hg5yAlQt7JM9rqoaaQVhTL6+Qirj
+         VkJnyWNCuwEF77pl3w3Yn7v1OKFwbznYzvA+WvXSzFqL9xqGq8WxuyLRTsOS/scvDpnx
+         JS0tSuTVCGy0Oy+cOvHHdP9pgB1SHu2Y11M/T/aTLxvVm4AofVOpoX59bRz1GJkHajRb
+         dyX/f65P2Ygha/5H8VxyqInUOsDxU1zXBQDDWwJB7lp6H0O0C7SW1rnjmXMZC/ChgwI+
+         4xGvewgx/OvuNHOJ6X1uXSTWSZJ+eyaDI70Y0KmaG/FzPcX97+XoNr6Bn6LsM1gjSbJJ
+         zxTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dTNHzgfUOL4osO2j/zaJgcQDZH2hhUWA+/riZkN8hcc=;
+        b=uwhsM5AKpA+4XB36HZDaNrLtvon15V/k7GmTKXmbQAucaTVGXpqiXFCqhnkL6R8Tqk
+         kTvLF4b9hBLOe26Oz1dEeh+9Ky17tMNzos9m45wZx7QA7T3tMpMNjXWE92JqDmtYesBg
+         sS7GHGXlh+wuFqddnP4N0wV6I7XqloTgV9Xm2xedzeC8zcCcfyTPQZUb3FbkZcG576rc
+         mIhl/XpfEGysztkdHGrwCRK09bz0e+VwVuBRcUVD/V6YsUyg47ZwR4f2r78xWQaYNLxY
+         E71Am5wWTfAvrbCPMJ0qiGMGx20y0Y3+CvYlHHWj/P7uw5+AsK7lBmXxhuIbttWQO6PT
+         fxhw==
+X-Gm-Message-State: AOAM533939sTNKIEeiUQGpKFYTISK8t8QtOqksC/nR7l7V0cNgPdZy7d
+        C/CmvOMaKHLommDcgn125J8=
+X-Google-Smtp-Source: ABdhPJyOnqoegYBSF3apdSPf31rkfnNuc96uFOcVS4nbde0MYTQIrogR4qYfOw1CqlklwjUpY7Oqag==
+X-Received: by 2002:a63:2b8a:0:b0:3aa:f59e:a4a7 with SMTP id r132-20020a632b8a000000b003aaf59ea4a7mr15560768pgr.91.1651007546318;
+        Tue, 26 Apr 2022 14:12:26 -0700 (PDT)
+Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
+        by smtp.gmail.com with ESMTPSA id f14-20020a63380e000000b0038253c4d5casm13765851pga.36.2022.04.26.14.12.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 14:12:25 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 14:12:23 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     Kai Huang <kai.huang@intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 048/104] KVM: x86/tdp_mmu: Support TDX private
+ mapping for TDP MMU
+Message-ID: <20220426211223.GA1719560@private.email.ne.jp>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <7a5246c54427952728bd702bd7f2c6963eefa712.1646422845.git.isaku.yamahata@intel.com>
+ <fb83aaeed48c7da071f0e9f3e4b36e9145ad5c63.camel@intel.com>
+ <CAAhR5DHFi14LzAt+3t-1tSFMLZYmtx-TxXSovh8m4=R=5NsdXA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhR5DHFi14LzAt+3t-1tSFMLZYmtx-TxXSovh8m4=R=5NsdXA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current DP driver implementation has adding safe mode done at
-dp_hpd_plug_handle() which is expected to be executed under event
-thread context.
+On Mon, Apr 25, 2022 at 12:10:22PM -0700,
+Sagi Shahar <sagis@google.com> wrote:
 
-However there is possible circular locking happen (see blow stack trace)
-after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
-is executed under drm_thread context.
+> On Wed, Apr 6, 2022 at 5:50 PM Kai Huang <kai.huang@intel.com> wrote:
+> >
+> > On Fri, 2022-03-04 at 11:49 -0800, isaku.yamahata@intel.com wrote:
+> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+...
+> > > @@ -914,14 +1014,23 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
+> > >       u64 new_spte;
+> > >       int ret = RET_PF_FIXED;
+> > >       bool wrprot = false;
+> > > +     unsigned long pte_access = ACC_ALL;
+> > >
+> > >       WARN_ON(sp->role.level != fault->goal_level);
+> > > +
+> > > +     /* TDX shared GPAs are no executable, enforce this for the SDV. */
+> > > +     if (!kvm_is_private_gfn(vcpu->kvm, iter->gfn))
+> 
+> This should be:
+> if (kvm_gfn_stolen_mask(vcpu->kvm) && !kvm_is_private_gfn(vcpu->kvm, iter->gfn))
+> 
+> Otherwise, when TDX is disabled, all EPTs are going to be considered
+> as shared non-executable EPTs.
 
-After review all possibilities methods and as discussed on
-https://patchwork.freedesktop.org/patch/483155/, supporting EDID
-compliance tests in the driver is quite hacky. As seen with other
-vendor drivers, supporting these will be much easier with IGT. Hence
-removing all the related fail safe code for it so that no possibility
-of circular lock will happen.
+Oops, will fix it. Thank you for pointing it out.
 
-======================================================
- WARNING: possible circular locking dependency detected
- 5.15.35-lockdep #6 Tainted: G        W
- ------------------------------------------------------
- frecon/429 is trying to acquire lock:
- ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
-dp_panel_add_fail_safe_mode+0x4c/0xa0
-
- but task is already holding lock:
- ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
-
- which lock already depends on the new lock.
-
- the existing dependency chain (in reverse order) is:
-
- -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        lock_crtcs+0xb4/0x124
-        msm_atomic_commit_tail+0x330/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        ww_mutex_lock+0xb8/0x278
-        modeset_lock+0x304/0x4ac
-        drm_modeset_lock+0x4c/0x7c
-        drmm_mode_config_init+0x4a8/0xc50
-        msm_drm_init+0x274/0xac0
-        msm_drm_bind+0x20/0x2c
-        try_to_bring_up_master+0x3dc/0x470
-        __component_add+0x18c/0x3c0
-        component_add+0x1c/0x28
-        dp_display_probe+0x954/0xa98
-        platform_probe+0x124/0x15c
-        really_probe+0x1b0/0x5f8
-        __driver_probe_device+0x174/0x20c
-        driver_probe_device+0x70/0x134
-        __device_attach_driver+0x130/0x1d0
-        bus_for_each_drv+0xfc/0x14c
-        __device_attach+0x1bc/0x2bc
-        device_initial_probe+0x1c/0x28
-        bus_probe_device+0x94/0x178
-        deferred_probe_work_func+0x1a4/0x1f0
-        process_one_work+0x5d4/0x9dc
-        worker_thread+0x898/0xccc
-        kthread+0x2d4/0x3d4
-        ret_from_fork+0x10/0x20
-
- -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
-        ww_acquire_init+0x1c4/0x2c8
-        drm_modeset_acquire_init+0x44/0xc8
-        drm_helper_probe_single_connector_modes+0xb0/0x12dc
-        drm_mode_getconnector+0x5dc/0xfe8
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
-        __lock_acquire+0x2650/0x672c
-        lock_acquire+0x1b4/0x4ac
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        dp_panel_add_fail_safe_mode+0x4c/0xa0
-        dp_hpd_plug_handle+0x1f0/0x280
-        dp_bridge_enable+0x94/0x2b8
-        drm_atomic_bridge_chain_enable+0x11c/0x168
-        drm_atomic_helper_commit_modeset_enables+0x500/0x740
-        msm_atomic_commit_tail+0x3e4/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
-Changes in v2:
--- re text commit title
--- remove all fail safe mode
-
-Changes in v3:
--- remove dp_panel_add_fail_safe_mode() from dp_panel.h
--- add Fixes
-
-Changes in v5:
---  to=dianders@chromium.org
-
-Changes in v6:
---  fix Fixes commit ID
-
-Fixes: 8b2c181e3dcf ("drm/msm/dp: add fail safe mode outside of event_mutex context")
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c |  6 ------
- drivers/gpu/drm/msm/dp/dp_panel.c   | 11 -----------
- drivers/gpu/drm/msm/dp/dp_panel.h   |  1 -
- 3 files changed, 18 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 92cd50f..01453db 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -555,12 +555,6 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
- 
- 	mutex_unlock(&dp->event_mutex);
- 
--	/*
--	 * add fail safe mode outside event_mutex scope
--	 * to avoid potiential circular lock with drm thread
--	 */
--	dp_panel_add_fail_safe_mode(dp->dp_display.connector);
--
- 	/* uevent will complete connection part */
- 	return 0;
- };
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 1aa9aa8c..8ff174a 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -151,15 +151,6 @@ static int dp_panel_update_modes(struct drm_connector *connector,
- 	return rc;
- }
- 
--void dp_panel_add_fail_safe_mode(struct drm_connector *connector)
--{
--	/* fail safe edid */
--	mutex_lock(&connector->dev->mode_config.mutex);
--	if (drm_add_modes_noedid(connector, 640, 480))
--		drm_set_preferred_mode(connector, 640, 480);
--	mutex_unlock(&connector->dev->mode_config.mutex);
--}
--
- int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 	struct drm_connector *connector)
- {
-@@ -215,8 +206,6 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 			rc = -ETIMEDOUT;
- 			goto end;
- 		}
--
--		dp_panel_add_fail_safe_mode(connector);
- 	}
- 
- 	if (panel->aux_cfg_update_done) {
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
-index 99739ea..9023e5b 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.h
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.h
-@@ -59,7 +59,6 @@ int dp_panel_init_panel_info(struct dp_panel *dp_panel);
- int dp_panel_deinit(struct dp_panel *dp_panel);
- int dp_panel_timing_cfg(struct dp_panel *dp_panel);
- void dp_panel_dump_regs(struct dp_panel *dp_panel);
--void dp_panel_add_fail_safe_mode(struct drm_connector *connector);
- int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 		struct drm_connector *connector);
- u32 dp_panel_get_mode_bpp(struct dp_panel *dp_panel, u32 mode_max_bpp,
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

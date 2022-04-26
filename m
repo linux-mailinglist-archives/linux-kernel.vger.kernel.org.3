@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC5F50F413
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D07350F831
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344952AbiDZIdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S1347797AbiDZJ3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344880AbiDZIbo (ORCPT
+        with ESMTP id S1347537AbiDZJFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:31:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F777E597;
-        Tue, 26 Apr 2022 01:24:59 -0700 (PDT)
+        Tue, 26 Apr 2022 05:05:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F144F12FECE;
+        Tue, 26 Apr 2022 01:44:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04EBB617A4;
-        Tue, 26 Apr 2022 08:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1203FC385A4;
-        Tue, 26 Apr 2022 08:24:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1E36B81CFE;
+        Tue, 26 Apr 2022 08:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4494C385A0;
+        Tue, 26 Apr 2022 08:44:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961498;
-        bh=rv/GX7icARfrLpZuyE33Cr4F/qHjUe73i7Nfj25q3AY=;
+        s=korg; t=1650962692;
+        bh=5xTDvNXwoCQJk1iKzJHupHTTjUGUOgb2bv+ABVlDzXk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ysa7Bi14jK+nAmCl9VKwTbvVA26yL7K5vABilwb7lXmZqlgUbrhGHBtBHcyKLwKEe
-         G18AXilCvIgAIepGZHbeYUiAn/Z8LeV4IVEVGIkQkgxkjV39sPvE7xYZF6Rwppm/ib
-         I6N7Q2s/WLyZDa/f1+0Ro+Rs3l9U/7oXfKuQA4Qw=
+        b=H4klwte6T2nI2vC5kuR+mRGDbi/Mgc1MoinXI8qmLCc/QCu8iJPtvrUUqvrURBBIa
+         h66/442zMLJhlG+4BvST9K1zx69T9ROsZtpkohZ12SSujha7357hqE7ERJVYYFS2S6
+         ADXTCOILiJ0feq//QeRDDp3bNG3rdHRlzAna5f64=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 07/43] ALSA: usb-audio: Clear MIDI port active flag after draining
-Date:   Tue, 26 Apr 2022 10:20:49 +0200
-Message-Id: <20220426081734.732504490@linuxfoundation.org>
+        stable@vger.kernel.org, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 055/146] userfaultfd: mark uffd_wp regardless of VM_WRITE flag
+Date:   Tue, 26 Apr 2022 10:20:50 +0200
+Message-Id: <20220426081751.615934458@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Nadav Amit <namit@vmware.com>
 
-commit 0665886ad1392e6b5bae85d7a6ccbed48dca1522 upstream.
+[ Upstream commit 0e88904cb700a9654c9f0d9ca4967e761e7c9ee8 ]
 
-When a rawmidi output stream is closed, it calls the drain at first,
-then does trigger-off only when the drain returns -ERESTARTSYS as a
-fallback.  It implies that each driver should turn off the stream
-properly after the drain.  Meanwhile, USB-audio MIDI interface didn't
-change the port->active flag after the drain.  This may leave the
-output work picking up the port that is closed right now, which
-eventually leads to a use-after-free for the already released rawmidi
-object.
+When a PTE is set by UFFD operations such as UFFDIO_COPY, the PTE is
+currently only marked as write-protected if the VMA has VM_WRITE flag
+set.  This seems incorrect or at least would be unexpected by the users.
 
-This patch fixes the bug by properly clearing the port->active flag
-after the output drain.
+Consider the following sequence of operations that are being performed
+on a certain page:
 
-Reported-by: syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/00000000000011555605dceaff03@google.com
-Link: https://lore.kernel.org/r/20220420130247.22062-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	mprotect(PROT_READ)
+	UFFDIO_COPY(UFFDIO_COPY_MODE_WP)
+	mprotect(PROT_READ|PROT_WRITE)
+
+At this point the user would expect to still get UFFD notification when
+the page is accessed for write, but the user would not get one, since
+the PTE was not marked as UFFD_WP during UFFDIO_COPY.
+
+Fix it by always marking PTEs as UFFD_WP regardless on the
+write-permission in the VMA flags.
+
+Link: https://lkml.kernel.org/r/20220217211602.2769-1-namit@vmware.com
+Fixes: 292924b26024 ("userfaultfd: wp: apply _PAGE_UFFD_WP bit")
+Signed-off-by: Nadav Amit <namit@vmware.com>
+Acked-by: Peter Xu <peterx@redhat.com>
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/midi.c |    1 +
- 1 file changed, 1 insertion(+)
+ mm/userfaultfd.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
---- a/sound/usb/midi.c
-+++ b/sound/usb/midi.c
-@@ -1210,6 +1210,7 @@ static void snd_usbmidi_output_drain(str
- 		} while (drain_urbs && timeout);
- 		finish_wait(&ep->drain_wait, &wait);
- 	}
-+	port->active = 0;
- 	spin_unlock_irq(&ep->buffer_lock);
- }
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 0780c2a57ff1..885e5adb0168 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -72,12 +72,15 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 	_dst_pte = pte_mkdirty(_dst_pte);
+ 	if (page_in_cache && !vm_shared)
+ 		writable = false;
+-	if (writable) {
+-		if (wp_copy)
+-			_dst_pte = pte_mkuffd_wp(_dst_pte);
+-		else
+-			_dst_pte = pte_mkwrite(_dst_pte);
+-	}
++
++	/*
++	 * Always mark a PTE as write-protected when needed, regardless of
++	 * VM_WRITE, which the user might change.
++	 */
++	if (wp_copy)
++		_dst_pte = pte_mkuffd_wp(_dst_pte);
++	else if (writable)
++		_dst_pte = pte_mkwrite(_dst_pte);
  
+ 	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+ 
+-- 
+2.35.1
+
 
 

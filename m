@@ -2,304 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49277510A44
+	by mail.lfdr.de (Postfix) with ESMTP id D8E6D510A46
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354923AbiDZUWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S1354929AbiDZUW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354920AbiDZUWL (ORCPT
+        with ESMTP id S1354926AbiDZUWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:22:11 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D02E1A73DD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651004340; x=1682540340;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9eVKmLkjcPLHT1pKfInMUHcB/TClxCN7Mx5KT9zdIvI=;
-  b=P8lCQtP2rEeNIDisHTRc3WvaBO65QMcg7FnPiVAPtsOsn1p/qwqLZ0Ja
-   Vh9M6nskS+U+YkQa5FY9l8TwCmQkOMFF4oOUEXZ+vBsmOmj1ZXwJRCud5
-   wFhWF4kblsZNBFrKYWpip8oFkkHZwt2JmCGmLnYlh8e0E9FXDyJ1MjzxV
-   4=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 13:19:00 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:18:59 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 13:18:59 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
- 2022 13:18:57 -0700
-Date:   Tue, 26 Apr 2022 16:18:55 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Zi Yan <ziy@nvidia.com>
-CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
- alloc_contig_range alignment.
-Message-ID: <20220426201855.GA1014@qian>
-References: <20220425143118.2850746-1-zi.yan@sent.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220425143118.2850746-1-zi.yan@sent.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 16:22:24 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7BF1A73FF;
+        Tue, 26 Apr 2022 13:19:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1651004345;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:To:Cc:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=T+gA++UZtTjFuYAmY/nN3XzDzCsaiQIP4G9Onhil2co=;
+    b=O6x3WMrOhbY4ilIYUoaC2TGZ4w0iLn9K9BKNK/QD6YwOhLyfL+SdX+PC4BlFI+QWdb
+    WF2D7eJnDcZ6fk26KluuRXCGLrBw9D4chQXmMtng2OJJrLrrn/+EfKyrQVd0/TYPj+qW
+    EU0cFvu3s1rwb4EjENk0jDGH+Edyqn05pbwCG4QiSxxTnYPA0NCuofeAK0ait1L1w2/N
+    UtULAifGC6ycoGBhhxvZZx4lK8j/wCIkGuSS8d5IrBBERXVbo05Hz1+tLEQ/Qdr9pfJj
+    9GO8u0SRbtMQpG/YZg/755/Vq1D0MAdDPPx6O7+zHfN/KLZR3KQzJjQVvkBUXkwaLUuk
+    MgTA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4vkcA=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy3QKJ4zum
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 26 Apr 2022 22:19:04 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Date:   Tue, 26 Apr 2022 22:19:04 +0200
+Subject: kernel panic with v5.18-rc1 on OpenPandora (only)
+Cc:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>
+To:     Tony Lindgren <tony@atomide.com>
+Message-Id: <FA654A0D-29B7-4B6B-B613-73598A92ADA8@goldelico.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 10:31:12AM -0400, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Hi David,
-> 
-> This patchset tries to remove the MAX_ORDER-1 alignment requirement for CMA
-> and alloc_contig_range(). It prepares for my upcoming changes to make
-> MAX_ORDER adjustable at boot time[1]. It is on top of mmotm-2022-04-20-17-12.
-> 
-> Changelog
-> ===
-> V11
-> ---
-> 1. Moved start_isolate_page_range()/undo_isolate_page_range() alignment
->    change to a separate patch after the unmovable page check change and
->    alloc_contig_range() change to avoid some unwanted memory
->    hotplug/hotremove failures.
-> 2. Cleaned up has_unmovable_pages() in Patch 2.
-> 
-> V10
-> ---
-> 1. Reverted back to the original outer_start, outer_end range for
->    test_pages_isolated() and isolate_freepages_range() in Patch 3,
->    otherwise isolation will fail if start in alloc_contig_range() is in
->    the middle of a free page.
-> 
-> V9
-> ---
-> 1. Limited has_unmovable_pages() check within a pageblock.
-> 2. Added a check to ensure page isolation is done within a single zone
->    in isolate_single_pageblock().
-> 3. Fixed an off-by-one bug in isolate_single_pageblock().
-> 4. Fixed a NULL-deferencing bug when the pages before to-be-isolated pageblock
->    is not online in isolate_single_pageblock().
-> 
-> V8
-> ---
-> 1. Cleaned up has_unmovable_pages() to remove page argument.
-> 
-> V7
-> ---
-> 1. Added page validity check in isolate_single_pageblock() to avoid out
->    of zone pages.
-> 2. Fixed a bug in split_free_page() to split and free pages in correct
->    page order.
-> 
-> V6
-> ---
-> 1. Resolved compilation error/warning reported by kernel test robot.
-> 2. Tried to solve the coding concerns from Christophe Leroy.
-> 3. Shortened lengthy lines (pointed out by Christoph Hellwig).
-> 
-> V5
-> ---
-> 1. Moved isolation address alignment handling in start_isolate_page_range().
-> 2. Rewrote and simplified how alloc_contig_range() works at pageblock
->    granularity (Patch 3). Only two pageblock migratetypes need to be saved and
->    restored. start_isolate_page_range() might need to migrate pages in this
->    version, but it prevents the caller from worrying about
->    max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) alignment after the page range
->    is isolated.
-> 
-> V4
-> ---
-> 1. Dropped two irrelevant patches on non-lru compound page handling, as
->    it is not supported upstream.
-> 2. Renamed migratetype_has_fallback() to migratetype_is_mergeable().
-> 3. Always check whether two pageblocks can be merged in
->    __free_one_page() when order is >= pageblock_order, as the case (not
->    mergeable pageblocks are isolated, CMA, and HIGHATOMIC) becomes more common.
-> 3. Moving has_unmovable_pages() is now a separate patch.
-> 4. Removed MAX_ORDER-1 alignment requirement in the comment in virtio_mem code.
-> 
-> Description
-> ===
-> 
-> The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
-> isolates pageblocks to remove free memory from buddy allocator but isolating
-> only a subset of pageblocks within a page spanning across multiple pageblocks
-> causes free page accounting issues. Isolated page might not be put into the
-> right free list, since the code assumes the migratetype of the first pageblock
-> as the whole free page migratetype. This is based on the discussion at [2].
-> 
-> To remove the requirement, this patchset:
-> 1. isolates pages at pageblock granularity instead of
->    max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages);
-> 2. splits free pages across the specified range or migrates in-use pages
->    across the specified range then splits the freed page to avoid free page
->    accounting issues (it happens when multiple pageblocks within a single page
->    have different migratetypes);
-> 3. only checks unmovable pages within the range instead of MAX_ORDER - 1 aligned
->    range during isolation to avoid alloc_contig_range() failure when pageblocks
->    within a MAX_ORDER - 1 aligned range are allocated separately.
-> 4. returns pages not in the range as it did before.
-> 
-> One optimization might come later:
-> 1. make MIGRATE_ISOLATE a separate bit to be able to restore the original
->    migratetypes when isolation fails in the middle of the range.
-> 
-> Feel free to give comments and suggestions. Thanks.
-> 
-> [1] https://lore.kernel.org/linux-mm/20210805190253.2795604-1-zi.yan@sent.com/
-> [2] https://lore.kernel.org/linux-mm/d19fb078-cb9b-f60f-e310-fdeea1b947d2@redhat.com/
-> 
-> Zi Yan (6):
->   mm: page_isolation: move has_unmovable_pages() to mm/page_isolation.c
->   mm: page_isolation: check specified range for unmovable pages
->   mm: make alloc_contig_range work at pageblock granularity
->   mm: page_isolation: enable arbitrary range page isolation.
->   mm: cma: use pageblock_order as the single alignment
->   drivers: virtio_mem: use pageblock size as the minimum virtio_mem
->     size.
-> 
->  drivers/virtio/virtio_mem.c    |   6 +-
->  include/linux/cma.h            |   4 +-
->  include/linux/mmzone.h         |   5 +-
->  include/linux/page-isolation.h |   6 +-
->  mm/internal.h                  |   6 +
->  mm/memory_hotplug.c            |   3 +-
->  mm/page_alloc.c                | 191 +++++-------------
->  mm/page_isolation.c            | 345 +++++++++++++++++++++++++++++++--
->  8 files changed, 392 insertions(+), 174 deletions(-)
+Hi Tony,
+I ran across a new issue on the OpenPandora (omap3530) first appearing =
+with v5.18-rc1.
+It seems as if there is something happening within the omap3 L3 irq =
+handler which
+is used (only?) for the wl1251. And this triggers the timeout BUG_ON() =
+in
+omap3_l3_app_irq().
 
-Reverting this series fixed a deadlock during memory offline/online
-tests and then a crash.
+I have not seen this issue on the GTA04.
 
- INFO: task kmemleak:1027 blocked for more than 120 seconds.
-       Not tainted 5.18.0-rc4-next-20220426-dirty #27
- "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
- task:kmemleak        state:D stack:27744 pid: 1027 ppid:     2 flags:0x00000008
- Call trace:
-  __switch_to
-  __schedule
-  schedule
-  percpu_rwsem_wait
-  __percpu_down_read
-  percpu_down_read.constprop.0
-  get_online_mems
-  kmemleak_scan
-  kmemleak_scan_thread
-  kthread
-  ret_from_fork
+It goes away if I remove the wlan interrupt from =
+omap3-pandora-common.dtsi.
+Interestingly, removing the wl1251.ko does NOT stop it. So it is not the =
+driver.
 
- Showing all locks held in the system:
- 1 lock held by rcu_tasks_kthre/11:
-  #0: ffffc1e2cefc17f0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp
- 1 lock held by rcu_tasks_rude_/12:
-  #0: ffffc1e2cefc1a90 (rcu_tasks_rude.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp
- 1 lock held by rcu_tasks_trace/13:
-  #0: ffffc1e2cefc1db0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp
- 1 lock held by khungtaskd/824:
-  #0: ffffc1e2cefc2820 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks
- 2 locks held by kmemleak/1027:
-  #0: ffffc1e2cf1aa628 (scan_mutex){+.+.}-{3:3}, at: kmemleak_scan_thread
-  #1: ffffc1e2cf14e690 (mem_hotplug_lock){++++}-{0:0}, at: get_online_mems
- 2 locks held by cppc_fie/1805:
- 1 lock held by in:imklog/2822:
- 8 locks held by tee/3334:
-  #0: ffff0816d65c9438 (sb_writers#6){.+.+}-{0:0}, at: vfs_write
-  #1: ffff40025438be88 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter
-  #2: ffff4000c8261eb0 (kn->active#298){.+.+}-{0:0}, at: kernfs_fop_write_iter
-  #3: ffffc1e2d0013f68 (device_hotplug_lock){+.+.}-{3:3}, at: online_store
-  #4: ffff0800cd8bb998 (&dev->mutex){....}-{3:3}, at: device_offline
-  #5: ffffc1e2ceed3750 (cpu_hotplug_lock){++++}-{0:0}, at: cpus_read_lock
-  #6: ffffc1e2cf14e690 (mem_hotplug_lock){++++}-{0:0}, at: offline_pages
-  #7: ffffc1e2cf13bf68 (pcp_batch_high_lock){+.+.}-{3:3}, at: zone_pcp_disable
- __zone_set_pageset_high_and_batch at mm/page_alloc.c:7005
- (inlined by) zone_pcp_disable at mm/page_alloc.c:9286
+git bisect reported:
 
-Later, running some kernel compilation workloads could trigger a crash.
+a1c510d0adc604bb143c86052bc5be48cbcfa17c is the first bad commit
+commit a1c510d0adc604bb143c86052bc5be48cbcfa17c
+Author: Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu Sep 23 09:15:53 2021 +0200
 
- Unable to handle kernel paging request at virtual address fffffbfffe000030
- KASAN: maybe wild-memory-access in range [0x0003dffff0000180-0x0003dffff0000187]
- Mem abort info:
-   ESR = 0x96000006
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
-   FSC = 0x06: level 2 translation fault
- Data abort info:
-   ISV = 0, ISS = 0x00000006
-   CM = 0, WnR = 0
- swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000817545fd000
- [fffffbfffe000030] pgd=00000817581e9003, p4d=00000817581e9003, pud=00000817581ea003, pmd=0000000000000000
- Internal error: Oops: 96000006 [#1] PREEMPT SMP
- Modules linked in: bridge stp llc cdc_ether usbnet ipmi_devintf ipmi_msghandler cppc_cpufreq fuse ip_tables x_tables ipv6 btrfs blake2b_generic libcrc32c xor xor_neon raid6_pq zstd_compress dm_mod nouveau drm_ttm_helper ttm crct10dif_ce mlx5_core drm_display_helper drm_kms_helper nvme mpt3sas xhci_pci nvme_core drm raid_class xhci_pci_renesas
- CPU: 147 PID: 3334 Comm: tee Not tainted 5.18.0-rc4-next-20220426-dirty #27
- pstate: 10400009 (nzcV daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : isolate_single_pageblock
- lr : isolate_single_pageblock
- sp : ffff80003e767500
- x29: ffff80003e767500 x28: 0000000000000000 x27: ffff783c59963b1f
- x26: dfff800000000000 x25: ffffc1e2ccb1d000 x24: ffffc1e2ccb1d8f8
- x23: 00000000803bfe00 x22: ffffc1e2cee39098 x21: 0000000000000020
- x20: 00000000803c0000 x19: fffffbfffe000000 x18: ffffc1e2cee37d1c
- x17: 0000000000000000 x16: 1fffe8004a86f14c x15: 1fffe806c89e154a
- x14: 1fffe8004a86f11c x13: 0000000000000004 x12: ffff783c5c455e6d
- x11: 1ffff83c5c455e6c x10: ffff783c5c455e6c x9 : dfff800000000000
- x8 : ffffc1e2e22af363 x7 : 0000000000000001 x6 : 0000000000000003
- x5 : ffffc1e2e22af360 x4 : ffff783c5c455e6c x3 : ffff700007cece90
- x2 : 0000000000000003 x1 : 0000000000000000 x0 : fffffbfffe000030
- Call trace:
- Call trace:
-  isolate_single_pageblock
-  PageBuddy at ./include/linux/page-flags.h:969 (discriminator 3)
-  (inlined by) isolate_single_pageblock at mm/page_isolation.c:414 (discriminator 3)
-  start_isolate_page_range
-  offline_pages
-  memory_subsys_offline
-  device_offline
-  online_store
-  dev_attr_store
-  sysfs_kf_write
-  kernfs_fop_write_iter
-  new_sync_write
-  vfs_write
-  ksys_write
-  __arm64_sys_write
-  invoke_syscall
-  el0_svc_common.constprop.0
-  do_el0_svc
-  el0_svc
-  el0t_64_sync_handler
-  el0t_64_sync
- Code: 38fa6821 7100003f 7a411041 54000dca (b9403260)
- ---[ end trace 0000000000000000 ]---
- Kernel panic - not syncing: Oops: Fatal exception
- SMP: stopping secondary CPUs
- Kernel Offset: 0x41e2c0720000 from 0xffff800008000000
- PHYS_OFFSET: 0x80000000
- CPU features: 0x000,0021700d,19801c82
- Memory Limit: none
+    ARM: implement support for vmap'ed stacks
+   =20
+Any ideas?
+
+BR and thanks,
+Nikolaus
+
+...
+[   27.357666] omap_hsmmc 480ad000.mmc: found wl1251
+[   27.465332] OF: graph: no port node found in =
+/ocp@68000000/isp@480bc000/ports
+[   27.535552] wl1251: using dedicated interrupt line
+[   27.597839] usb0: HOST MAC 32:70:05:18:ff:78
+[   27.751281] ------------[ cut here ]------------
+[   27.756164] kernel BUG at drivers/bus/omap_l3_smx.c:177!
+[   27.761749] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+[   27.767913] Modules linked in: omap3_isp(+) v4l2_fwnode v4l2_async =
+wl1251_sdio(+) videobuf2_dma_contig videobuf2_memops wl1251 usb_f_ecm =
+videobuf2_v4l2 videobuf2_common bq27xxx_battery_hdq omap_sham videodev =
+mac80211 mc omap_aes_driver libarc4 crypto_engine omap_crypto g_ether =
+usb_f_rndis u_ether omap_hdq libcomposite configfs panel_tpo_td043mtea1 =
+omap2430(+) phy_twl4030_usb musb_hdrc twl4030_pwrbutton twl4030_charger =
+twl4030_madc snd_soc_twl4030 industrialio twl4030_keypad ehci_omap =
+bq27xxx_battery_i2c bq27xxx_battery pandora_nub omapdrm cfg80211 =
+drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops drm =
+drm_panel_orientation_quirks cec ip_tables x_tables ipv6 autofs4
+[   27.831207] CPU: 0 PID: 1812 Comm: systemd-udevd Not tainted =
+5.16.0-rc1-letux+ #9435
+[   27.839355] Hardware name: Generic OMAP3 (Flattened Device Tree)
+[   27.845672] PC is at omap3_l3_app_irq+0x3c/0x120
+[   27.850555] LR is at __handle_irq_event_percpu+0xb0/0x1f8
+[   27.856262] pc : [<c053f5a4>]    lr : [<c017d36c>]    psr: 20070193
+[   27.862854] sp : e0001eb0  ip : 0dcf2f92  fp : c0d04014
+[   27.868377] r10: e0001f00  r9 : c1032200  r8 : 00000000
+[   27.873870] r7 : e0001f84  r6 : 0000001a  r5 : 00000000  r4 : =
+f8000000
+[   27.880767] r3 : 00000000  r2 : 00080000  r1 : 00080000  r0 : =
+00080000
+[   27.887634] Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  =
+Segment none
+[   27.895263] Control: 10c5387d  Table: 829a8019  DAC: 00000051
+[   27.901306] Register r0 information: non-paged memory
+[   27.906646] Register r1 information: non-paged memory
+[   27.911987] Register r2 information: non-paged memory
+[   27.917297] Register r3 information: NULL pointer
+[   27.922271] Register r4 information: 0-page vmalloc region starting =
+at 0xf8000000 allocated at iotable_init+0x0/0xf4
+[   27.933380] Register r5 information: NULL pointer
+[   27.938354] Register r6 information: non-paged memory
+[   27.943695] Register r7 information: 2-page vmalloc region starting =
+at 0xe0000000 allocated at start_kernel+0x5c0/0x918
+[   27.955047] Register r8 information: NULL pointer
+[   27.959991] Register r9 information: slab kmalloc-256 start c1032200 =
+pointer offset 0 size 256
+[   27.969085] Register r10 information: 2-page vmalloc region starting =
+at 0xe0000000 allocated at start_kernel+0x5c0/0x918
+[   27.980529] Register r11 information: non-slab/vmalloc memory
+[   27.986572] Register r12 information: non-paged memory
+[   27.991973] Process systemd-udevd (pid: 1812, stack limit =3D =
+0x9cb9744d)
+[   27.998931] Stack: (0xe0001eb0 to 0xe0002000)
+[   28.003509] 1ea0:                                     0000001a =
+c111a880 00000000 c111a800
+[   28.012115] 1ec0: c1032200 0000001a e0001f84 c017d36c c1032200 =
+e0001f00 00000000 c0d03fc8
+[   28.020721] 1ee0: c1032200 c1032218 e0001f84 c0c79374 c29a15c0 =
+c0deb720 e0001f50 c017d4d8
+[   28.029296] 1f00: 00000000 ea298583 c1032200 c103226c c1032218 =
+c017d55c c1032200 c103226c
+[   28.037902] 1f20: c1032218 c0181c64 c0c7f684 e0001f50 00000000 =
+c017ccbc c0c7f684 c0901018
+[   28.046508] 1f40: c0101314 60070113 ffffffff c0100b60 c29a15c0 =
+c0c805c0 00000000 1ed14000
+[   28.055114] 1f60: c0c805c0 c0c805c0 00000040 c0d02d00 c0c79374 =
+c29a15c0 c0deb720 c0d02080
+[   28.063690] 1f80: 0dcf2f92 e0001fa0 c01012e0 c0101314 60070113 =
+ffffffff 00000051 c01012e0
+[   28.072265] 1fa0: c29a15c0 e01ddb8c e01dda50 00400140 0000000a =
+ffff95a7 c1005c50 c0c805c0
+[   28.080871] 1fc0: c0d02d00 c0c805c0 c29a15c0 c29a15c0 60070013 =
+ffffffff e01dda84 e01ddab0
+[   28.089447] 1fe0: c29a15c0 e01ddb8c e01dda50 c0136f10 c0905de0 =
+c0137008 c0905de0 c0100b60
+[   28.098052] [<c053f5a4>] (omap3_l3_app_irq) from [<c017d36c>] =
+(__handle_irq_event_percpu+0xb0/0x1f8)
+[   28.107666] [<c017d36c>] (__handle_irq_event_percpu) from =
+[<c017d4d8>] (handle_irq_event_percpu+0x24/0x70)
+[   28.117797] [<c017d4d8>] (handle_irq_event_percpu) from [<c017d55c>] =
+(handle_irq_event+0x38/0x5c)
+[   28.127136] [<c017d55c>] (handle_irq_event) from [<c0181c64>] =
+(handle_level_irq+0x7c/0xb4)
+[   28.135864] [<c0181c64>] (handle_level_irq) from [<c017ccbc>] =
+(handle_irq_desc+0x1c/0x2c)
+[   28.144470] [<c017ccbc>] (handle_irq_desc) from [<c0901018>] =
+(generic_handle_arch_irq+0x2c/0x44)
+[   28.153717] [<c0901018>] (generic_handle_arch_irq) from [<c0100b60>] =
+(__irq_svc+0x80/0xb8)
+[   28.162414] Exception stack(0xe0001fa0 to 0xe0001fe8)
+[   28.167755] 1fa0: c29a15c0 e01ddb8c e01dda50 00400140 0000000a =
+ffff95a7 c1005c50 c0c805c0
+[   28.176330] 1fc0: c0d02d00 c0c805c0 c29a15c0 c29a15c0 60070013 =
+ffffffff e01dda84 e01ddab0
+[   28.184906] 1fe0: c29a15c0 e01ddb8c
+[   28.188598] [<c0100b60>] (__irq_svc) from [<c0101314>] =
+(__do_softirq+0x84/0x304)
+[   28.196380] [<c0101314>] (__do_softirq) from [<c0136f10>] =
+(__irq_exit_rcu+0x8c/0xd4)
+[   28.204528] [<c0136f10>] (__irq_exit_rcu) from [<c0137008>] =
+(irq_exit+0x8/0x10)
+[   28.212219] [<c0137008>] (irq_exit) from [<c0100b60>] =
+(__irq_svc+0x80/0xb8)
+[   28.219543] Exception stack(0xe01ddaa0 to 0xe01ddae8)
+[   28.224884] daa0: 7fffffff c0902e94 00000004 00000000 c29a15c0 =
+e01ddb90 e01ddb90 ea298583
+[   28.233459] dac0: 00000000 e01ddb8c e01ddb88 7fffffff 00000002 =
+00000010 00000100 c202a000
+[   28.242065] dae0: 97ff8010 c0902f54
+[   28.245727] [<c0100b60>] (__irq_svc) from [<c0905de0>] =
+(_raw_spin_unlock_irq+0x20/0x4c)
+[   28.254150] [<c0905de0>] (_raw_spin_unlock_irq) from [<c0902e94>] =
+(do_wait_for_common+0xa8/0x138)
+[   28.263488] [<c0902e94>] (do_wait_for_common) from [<c0902f54>] =
+(wait_for_common+0x30/0x48)
+[   28.272277] [<c0902f54>] (wait_for_common) from [<c074edf8>] =
+(mmc_wait_for_req_done+0x1c/0x90)
+[   28.281341] [<c074edf8>] (mmc_wait_for_req_done) from [<c075a72c>] =
+(mmc_io_rw_extended+0x1c0/0x2f4)
+[   28.290893] [<c075a72c>] (mmc_io_rw_extended) from [<c075bd00>] =
+(sdio_io_rw_ext_helper+0x118/0x140)
+[   28.300415] [<c075bd00>] (sdio_io_rw_ext_helper) from [<c075bdd0>] =
+(sdio_memcpy_toio+0x18/0x20)
+[   28.309570] [<c075bdd0>] (sdio_memcpy_toio) from [<bf3de1ec>] =
+(wl1251_sdio_write+0x34/0x54 [wl1251_sdio])
+[   28.319702] [<bf3de1ec>] (wl1251_sdio_write [wl1251_sdio]) from =
+[<bf40fc8c>] (wl1251_set_partition+0x90/0x404 [wl1251])
+[   28.331207] [<bf40fc8c>] (wl1251_set_partition [wl1251]) from =
+[<bf4074ec>] (wl1251_init_ieee80211+0x1c0/0x3dc [wl1251])
+[   28.342712] [<bf4074ec>] (wl1251_init_ieee80211 [wl1251]) from =
+[<bf3de474>] (wl1251_sdio_probe+0x1a0/0x250 [wl1251_sdio])
+[   28.354339] [<bf3de474>] (wl1251_sdio_probe [wl1251_sdio]) from =
+[<c075aee8>] (sdio_bus_probe+0x128/0x138)
+[   28.364410] [<c075aee8>] (sdio_bus_probe) from [<c061c7d4>] =
+(really_probe+0x170/0x2fc)
+[   28.372741] [<c061c7d4>] (really_probe) from [<c061ca24>] =
+(__driver_probe_device+0xc4/0xd8)
+[   28.381530] [<c061ca24>] (__driver_probe_device) from [<c061ca68>] =
+(driver_probe_device+0x30/0xac)
+[   28.390960] [<c061ca68>] (driver_probe_device) from [<c061ce98>] =
+(__driver_attach+0xc4/0xd8)
+[   28.399841] [<c061ce98>] (__driver_attach) from [<c061acec>] =
+(bus_for_each_dev+0x64/0xa0)
+[   28.408447] [<c061acec>] (bus_for_each_dev) from [<c061bc2c>] =
+(bus_add_driver+0x148/0x1a4)
+[   28.417144] [<c061bc2c>] (bus_add_driver) from [<c061d700>] =
+(driver_register+0xb4/0xf8)
+[   28.425567] [<c061d700>] (driver_register) from [<bf29d00c>] =
+(wl1251_sdio_init+0xc/0x1000 [wl1251_sdio])
+[   28.435577] [<bf29d00c>] (wl1251_sdio_init [wl1251_sdio]) from =
+[<c0101f94>] (do_one_initcall+0x90/0x1c8)
+[   28.445587] [<c0101f94>] (do_one_initcall) from [<c08f4e00>] =
+(do_init_module+0x4c/0x204)
+[   28.454132] [<c08f4e00>] (do_init_module) from [<c01b5148>] =
+(load_module+0x13f0/0x1928)
+[   28.462524] [<c01b5148>] (load_module) from [<c01b58b8>] =
+(sys_finit_module+0xa0/0xc0)
+[   28.470794] [<c01b58b8>] (sys_finit_module) from [<c0100270>] =
+(__sys_trace_return+0x0/0x10)
+[   28.479583] Code: e0000002 e0011003 e1901001 0a000002 (e7f001f2)=20
+[   28.485992] ---[ end trace 6855b0c4a2214070 ]---
+[   28.490844] Kernel panic - not syncing: Fatal exception in interrupt
+[   28.497528] ---[ end Kernel panic - not syncing: Fatal exception in =
+interrupt ]---
+

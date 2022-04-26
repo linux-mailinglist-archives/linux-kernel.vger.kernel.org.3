@@ -2,191 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B140650F24B
+	by mail.lfdr.de (Postfix) with ESMTP id 485C350F24A
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343724AbiDZH1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S1343851AbiDZH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245251AbiDZH12 (ORCPT
+        with ESMTP id S245251AbiDZH1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:27:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA56AFAC3;
-        Tue, 26 Apr 2022 00:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650957861; x=1682493861;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=hDbmmwZJNMiVp904yfq8CgVyXP9tH3whkIKI1il7Pfo=;
-  b=z6541CMjgbHHKwfU9SIyuvgzKN3MpWwP+IZRRjDPeVWnAtg/r7SgXqbA
-   gd/7qBayxA3Zmo2JmL0aCkRHBYHY1tVXXEvvYx5JST0nlvbKskOtQevhc
-   QIHftUF/o7H1HTtjQJPGr9uCEyJP2dBSt/GaGcxc/8/lbM9vDYPb0iZnO
-   nmV110E/adat3fUPySwTFvmiCjSBo/qcG3jTiktvQjGfDmR6EdbfoX51x
-   LPGxtOwapaIacRoeylBWQjT2UHKNeSknz9rSX9wT9mSOwUZd93XomkpxJ
-   rYIvaovT/4dyCokmrTWjQoX5D6F95WSP2bLXg1Q5cqCmUbDjMbETDqgLA
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,290,1643698800"; 
-   d="scan'208";a="93552648"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Apr 2022 00:24:19 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 26 Apr 2022 00:24:17 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Tue, 26 Apr 2022 00:24:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PNVoCSzeVMRqxe3HZmYcDurgoGnTkgfrMWBgwEErquKi+r48FnjshkQ2k4JxbdMLW6vSg3nC7PwbDf8jNi1SshhXDpN3UW1CSDtDL7bBjI7SWscNfXmBk2U7ah5YzlWc1zhWkll4ibrGpNHKDvL9UPF4zfqNHu10SRUZ5tA8ng0YfeZfk9iwsZa9wopYieH211avkj8COX+3xMu/1I7xlaXjCub0EhDiMeXGjqqkkga+MSgOmuu0SuHSeJjuPh5XR8zCJRWxuPCyrkObBAJMtBr7XfASdyeEREtaAc2jLGZW06JouSMfcebnUbjoQPBNkZ/Zd+T5wRrkD5pcmK6dQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hDbmmwZJNMiVp904yfq8CgVyXP9tH3whkIKI1il7Pfo=;
- b=MjBPUPRmgGjGM6Ftv9Cu3xIM8FQdXRunFYr8WwonIk29STNPHGGggkT8cf7D1zvIIvacFMMgTujZ4V2UMZTh4da0pUK+6gghur3IZN6d9UdKk8ve4Z9FuvUjF6SfMmDaBolGWmHBBg0Pq23b739xDTZeM2tUDsPkKp8E9QapryMNZwU13RUu4jD81zLIWnGD3ptih/MkE6LJAPQWHkXWcDDLtV1Ee4Mj41SBd/IbppgUHxJiqlA66XjI/gyksNMwGZBOZVwWfKv8H1goOLCWExODs1Ee0zlFUSba+Bwir9h6koAM8N4xfbtRVCn/p0zT57y0FRyMS2eZjWd5txOAOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hDbmmwZJNMiVp904yfq8CgVyXP9tH3whkIKI1il7Pfo=;
- b=o1WPJ3grP23R1GRY2XaFq+a/EBWKHpi6+hpk0rAb4vc29NMoFwT9GHxSt5K40kUhgc/OhH5mIvXLATTMISN1K9tnBoR8tLvmTzVJlw4H5bul0KyUL0bg696nwuu7ZS8R+2jzjzO6B7tALFuCEqJluBgzOJKjvh4bErwe/OxzsRc=
-Received: from MW4PR11MB5936.namprd11.prod.outlook.com (2603:10b6:303:16b::11)
- by CY4PR11MB1638.namprd11.prod.outlook.com (2603:10b6:910:e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Tue, 26 Apr
- 2022 07:24:15 +0000
-Received: from MW4PR11MB5936.namprd11.prod.outlook.com
- ([fe80::3c24:30c4:ee81:9f1c]) by MW4PR11MB5936.namprd11.prod.outlook.com
- ([fe80::3c24:30c4:ee81:9f1c%2]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 07:24:15 +0000
-From:   <Codrin.Ciubotariu@microchip.com>
-To:     <sboyd@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <mturquette@baylibre.com>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <Claudiu.Beznea@microchip.com>
-Subject: Re: [PATCH] clk: at91: generated: consider range when calculating
- best rate
-Thread-Topic: [PATCH] clk: at91: generated: consider range when calculating
- best rate
-Thread-Index: AQHYTwYLocsblKFTaE2b4sfTx9QXEKz7LfQAgAaxRIA=
-Date:   Tue, 26 Apr 2022 07:24:15 +0000
-Message-ID: <e18eb810-e437-6a19-26ec-1f0daedaaf5f@microchip.com>
-References: <20220413071318.244912-1-codrin.ciubotariu@microchip.com>
- <20220422011216.A4A23C385A5@smtp.kernel.org>
-In-Reply-To: <20220422011216.A4A23C385A5@smtp.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b0f35aa1-27ab-4f57-3895-08da2755c4fa
-x-ms-traffictypediagnostic: CY4PR11MB1638:EE_
-x-microsoft-antispam-prvs: <CY4PR11MB1638510B38DC2FF6DB7E596AE7FB9@CY4PR11MB1638.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0oI4HP+E1jZqvtdJbIv1afhf6gXZSQjgtmKSGShSidiUG2mQ4Acx48cE/eyW9RKZIEz/Q3ghqV1q5RSbmexAeAqRB56lV/yS3FrF92bz+QUK3f+Aj//HFxHhXxI0beBfNtcM7bSFMebKQoRTQehqszG0ZKCoZZes+rFEGmA/6OYNye31B19soOgJkLX8pUF2fZrQ1YHlQgfH6M3XZSVqL+k8T6cPeAveU5h3+o/rPA+C7i0L/v9bJLCvNfp0VMf1zGxj955HjTb08H5iUqxMZuMXW56Vw5VFK7089Txv7JwGdo1eNXQ18APEDawWY73986RFy4alnQ0B28hO7XiQaPozmRYCG07XnYTdT7VG4WW0y9NlAH/5o2R86kamRcFck62Oe8iO2JYwamLPd65H0Tpoc4Ci3fdS+zcuZAkmCdzzJJJVHa8XL3sF5X9tFMN3Ifiz42lGId07cJSKFH7p08E/rWlB8ZndkmETbgf3opzR0v2O1h1Kde1EB25/CN0X91E41GT8Hw4qodNGIcupYrXit8/TmYuOB8Rn6WKgayCGpG8jNfs5DOncr9mu8iBWn79UyV5BHutSVaMqcemNlYC9DRv9GDBt8LnxS5FODvVfqkBaz9c6l13YUsKS+f+uTqgISGKexhAl4DSqn64/g9mlbY4bdlnN88CvDebtN6STfScrQ4mlnze9g9fnmXLwE8Bkd4e2AZM+Rd9+BLUgskSlqtT89hyR1ScOwxognZmMCE90iyTfSczjX+VeZpQjYmdEFMXlvWzNCfkOwLaDww==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5936.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(91956017)(2906002)(110136005)(2616005)(71200400001)(53546011)(6506007)(64756008)(66946007)(76116006)(5660300002)(8676002)(66446008)(4326008)(316002)(8936002)(36756003)(31686004)(66476007)(66556008)(6486002)(107886003)(54906003)(6512007)(38070700005)(38100700002)(122000001)(83380400001)(31696002)(508600001)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OXdnNlgzalpxemJpaXY1ZDdDekFLamxYYzRIdkIrcFE2c0YybmpZaTJheVhp?=
- =?utf-8?B?OGZ6RDE2ODZNUlh4RkQ2SEJUZXJ4V3VBUmo0TlhDN3VLK3QwOTgvblNobDZQ?=
- =?utf-8?B?Vjc0cGFKT1A5MU1INVVrWHFlbWp2RUx3V1VBbDFQLzg5Tno5ZGR5ajVwOUVU?=
- =?utf-8?B?dWlHQXlJelc2NjlqSlc4aUlWY1o0RDV3dnRjaUF4YmVWNEU0S3YrMVRsZDVV?=
- =?utf-8?B?a0p6SjZGK1M0Wk1pajBqSVVJaklPamloNFdwYmhuSkNDOW83dWhRalJ3eVlp?=
- =?utf-8?B?a0NvQ0lxY1c2MDUzVndyMHJTM3Vsb05IcmhiR0hHeC81OHpSU0RqTlRUVUd4?=
- =?utf-8?B?empLWVRmQjhoNFBYRks2YlAra3dNRk9mYUNHYWRzcWk0STdRSVUwY3UraTEv?=
- =?utf-8?B?R3I1V3djL3J3UURpQ1NhTTZFRHJOMGxPQ3BucG5IR2FCMGdIbHBiQ2dMNFdJ?=
- =?utf-8?B?UEwxd0ZocGpPSHdtT25ZUlZyek5WRTVBQmZmSzQydFNjRW5rdTdRVFBnUHQ2?=
- =?utf-8?B?QUhwMlg2bnlPQlZHVmlRTUhRemJyMlNyQkhxWDZ5d21ncS9oL0pqeHJ3aXdl?=
- =?utf-8?B?RUladElQdUVoWjlXMUg4a3pNcUlESis0ejRBT2lEalFuWmQxYjk3NnBDanM4?=
- =?utf-8?B?TG9yUVVZc25zOVJGK3dQcVF4QVlJRzZ0MXYreXplSWJJaVhma0JTclBZYUxG?=
- =?utf-8?B?bGw2T1dQeDlFcDZYS2FXeXRLVnBnZTNQSUxXenMvYjN1SXM0VlZ2ZGRwcFJx?=
- =?utf-8?B?bVA1RTVUbFhGYU5VRENtaEI0SkRUdTlPd2Q3aXZoYThBd2cwVzk4aWwrYWJE?=
- =?utf-8?B?aHFoMWZhRkx0aUkxTVN5Q0J6NHZRanpkdjlGV3c3RUlPc3pqMWU5YTlBQWVI?=
- =?utf-8?B?akRRU1FLbDFaZXNsaVY1cE02eHhSYmpYWFZWSTJiS09PbmViajBJaFdHTU1k?=
- =?utf-8?B?N2FhaHJndnRUc0krTHFBYlNSaEIrMWZBQ3cyWHlxU09NaW53QzN0MFZ4cXRD?=
- =?utf-8?B?bURUWWhxWWNSTmpMRXRNZTAwY0tRMXNmN2tLQzF5SHFBN3R0czFXQmt2Qzh0?=
- =?utf-8?B?LzdDV2Y1ZGRnZWtyODIwT3Z4Z0ViN3pJYjFUdmxURVZpVjJtMzFOV25jZE9V?=
- =?utf-8?B?YXh0a1VsQVJScG1zbFlmd1UvRk5EK2YyU00rVTIzYUlHeVJlRzZTVTBiNTd1?=
- =?utf-8?B?NFI4aTcvMjhGbEhGMHdmamlraVlQQ0xVbHd5endsazQ0Q1QwdW5lZzRIUlNx?=
- =?utf-8?B?ZjExUDlMb0Q1ZSthT0hXQ1BCdkxsb2hHcUpkQjFRV0I4SWlqSjY3N054a01o?=
- =?utf-8?B?Q214UkVtVXJYenF6b0djdlJwN0VLYWJ2V2xjb3RxeEpJRDBRZjZPREtkeTdC?=
- =?utf-8?B?dEt1dXozM3RBQldhWkNacklYaXZCM0FyK0ZleEk2Q1JDSDB5UVg1aHBFZlZR?=
- =?utf-8?B?ZmlTL1MvVTZxUDlKWVVKUExNS2ZhbFVuS3JkZkg0Q2IxWEhTQVZRWVEraFc0?=
- =?utf-8?B?bVIzYWh6YnZjejcwOUtyMENBeVk0QlFUZjlEVXZSQnlKN2hkTjFlalQ1QUo3?=
- =?utf-8?B?Qm9keGRoN2JuNFhaTFl4ZndsTFNqZGRhMmowQm5zS0xWdFAybEo2MUlUdnps?=
- =?utf-8?B?dWVjeEJsL2tZdDlYNEVuYi9iVzRJRmVxTUVFYmMyZkZOcHRYWUdHZy8rNnpO?=
- =?utf-8?B?clByK3pWalQ2czQ1Mm9VRjI1RmVPRmpuSEZzV0h6RnNzNlVhcEYvTzUwRURH?=
- =?utf-8?B?QkoyVWFlM1UvSkNCUW9QdFV0VHNWYmR1dUtiYk1xSVFCblV0aGlRdS9ydDRH?=
- =?utf-8?B?NTJ3clBEMTNCWWlCRVhiSWNwOEI2Y0dHUUlVTVB5VFhEYW1JeWhqa1dET0E2?=
- =?utf-8?B?djFWZWVSVUNRMFE2ajdVU3d4Ykkrc3l0cjJPekJ3WTBEK0RQMm54OGoxb3ph?=
- =?utf-8?B?cTdkWm0zUnRWb0tNTTFieHdhZjJwdXZnM0FBNENaSDVUSEdhUElwazdaM0Rk?=
- =?utf-8?B?UHlYYjZOZWRic1lycVpBTDFTZlV6TXhrUUVQeDB5M1RCZEl2dnBGbnYzc3Bn?=
- =?utf-8?B?dXRINWVHTXdHMVdTRXQrMS9tUjAvRE80YTRBTEZKejFvTmhBTWoyVE13U0xJ?=
- =?utf-8?B?MCtnbHhIajJQa2xGaVMrNG5oNCs3MUphQTlKWnRFc2Fjdmhpem1nUG9SR1Nx?=
- =?utf-8?B?Njg4RDVKYjgzZHgrbjkyNW1OUjFPZHNDaWdsVlNQdVkzdFg0YzA3dHB6dkUv?=
- =?utf-8?B?b0l3WEtaRVY2ckhSbC96bE9CZ05WcDVRVHVEekhEQjBqZldSdm0xakpFNTRU?=
- =?utf-8?B?TTlpUXk2WEgwR2x2aTQxOXY0VUNaRVJRcnRFY2xVeEJxNDltSnZPQkhEV2sx?=
- =?utf-8?Q?Gb8bTFZj299CBcZj2IXj3buyw5hN+mI0RkeP/oqIfSs5P?=
-x-ms-exchange-antispam-messagedata-1: NcC0slxevPi5Sy0oCrjjSC/Ojr0ScTeY7cQ=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <98F889AD7963D7478B7A4C97E1214F87@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 26 Apr 2022 03:27:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E77A1ADD6D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650957878;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wq0cX5f/tSHQNq0CGIDaJqE3zMD36/mEnx1ziP9dP9M=;
+        b=MoFjMM5TNxN2DPSNlbh1q84IaIcn5INctVtvOZKxunG3Jod1V2dFZp22d2xBDMUczIQPPM
+        P9n0mR0xtE/3hFcsETL/D6hqKN1r8JSRMp6Geukd9oOb0ZeKknXUmyIyRrGnCQmBaqU3xB
+        t/fQzMMuVwuaBmEMcH1Oyi/2QUT53Oc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-609-u9WXaItiN1Ctt2Q916m_Gw-1; Tue, 26 Apr 2022 03:24:32 -0400
+X-MC-Unique: u9WXaItiN1Ctt2Q916m_Gw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9A7B811E76;
+        Tue, 26 Apr 2022 07:24:31 +0000 (UTC)
+Received: from [10.72.13.230] (ovpn-13-230.pek2.redhat.com [10.72.13.230])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BDE42145BA44;
+        Tue, 26 Apr 2022 07:24:24 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 7/9] tools: Import ARM SMCCC definitions
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+References: <20220423000328.2103733-1-rananta@google.com>
+ <20220423000328.2103733-8-rananta@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <867b0aeb-97f4-8fc0-b37a-42946a1e65ad@redhat.com>
+Date:   Tue, 26 Apr 2022 15:24:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5936.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0f35aa1-27ab-4f57-3895-08da2755c4fa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 07:24:15.6157
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qqGdJAm3vZGlmMTOzsj8qEcDQOUgKLTtrqbKMNZD9HqTR9SQZ9hZ2IuKXyPZiI6kgsVVl97+6dQuhq+zOnunENHRNKZk5U3r85+VK8XeIL4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1638
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220423000328.2103733-8-rananta@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjIuMDQuMjAyMiAwNDoxMiwgU3RlcGhlbiBCb3lkIHdyb3RlOg0KPiBRdW90aW5nIENvZHJp
-biBDaXVib3Rhcml1ICgyMDIyLTA0LTEzIDAwOjEzOjE4KQ0KPj4gY2xrX2dlbmVyYXRlZF9iZXN0
-X2RpZmYoKSBoZWxwcyBpbiBmaW5kaW5nIHRoZSBwYXJlbnQgYW5kIHRoZSBkaXZpc29yIHRvDQo+
-PiBjb21wdXRlIGEgcmF0ZSBjbG9zZXN0IHRvIHRoZSByZXF1aXJlZCBvbmUuIEhvd2V2ZXIsIGl0
-IGRvZXNuJ3QgdGFrZSBpbnRvDQo+PiBhY2NvdW50IHRoZSByZXF1ZXN0J3MgcmFuZ2UgZm9yIHRo
-ZSBuZXcgcmF0ZS4gTWFrZSBzdXJlIHRoZSBuZXcgcmF0ZQ0KPj4gaXMgd2l0aGluIHRoZSByZXF1
-aXJlZCByYW5nZS4NCj4+DQo+PiBGaXhlczogOGE4ZjRiZjBjNDgwICgiY2xrOiBhdDkxOiBjbGst
-Z2VuZXJhdGVkOiBjcmVhdGUgZnVuY3Rpb24gdG8gZmluZCBiZXN0X2RpZmYiKQ0KPj4gU2lnbmVk
-LW9mZi1ieTogQ29kcmluIENpdWJvdGFyaXUgPGNvZHJpbi5jaXVib3Rhcml1QG1pY3JvY2hpcC5j
-b20+DQo+PiAtLS0NCj4gDQo+IElzIHRoaXMgZml4aW5nIGFueXRoaW5nIHJlYWwgb3IgaXQncyBq
-dXN0IGEgdGhpbmcgdGhhdCB5b3Ugbm90aWNlZCBhbmQNCj4gc2VudCBhIHBhdGNoIHRvIGZpeD8N
-Cg0KSXQgZml4ZXMgdGhlIGNsa19zZXRfbWluL21heF9yYXRlKCkgY2FsbHMgdG8gYSBnZW5lcmF0
-ZWQgY2xvY2suIERvIHlvdSANCndhbnQgbWUgdG8gYWRkIHRoaXMgZmFjdCBpbiB0aGUgY29tbWl0
-IGRlc2NyaXB0aW9uPw0KDQo+IA0KPj4gICBkcml2ZXJzL2Nsay9hdDkxL2Nsay1nZW5lcmF0ZWQu
-YyB8IDQgKysrKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspDQo+Pg0KPj4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL2F0OTEvY2xrLWdlbmVyYXRlZC5jIGIvZHJpdmVycy9j
-bGsvYXQ5MS9jbGstZ2VuZXJhdGVkLmMNCj4+IGluZGV4IDIzY2M4Mjk3ZWM0Yy4uZDQyOWJhNTJh
-NzE5IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9jbGsvYXQ5MS9jbGstZ2VuZXJhdGVkLmMNCj4+
-ICsrKyBiL2RyaXZlcnMvY2xrL2F0OTEvY2xrLWdlbmVyYXRlZC5jDQo+PiBAQCAtMTE3LDYgKzEx
-NywxMCBAQCBzdGF0aWMgdm9pZCBjbGtfZ2VuZXJhdGVkX2Jlc3RfZGlmZihzdHJ1Y3QgY2xrX3Jh
-dGVfcmVxdWVzdCAqcmVxLA0KPj4gICAgICAgICAgICAgICAgICB0bXBfcmF0ZSA9IHBhcmVudF9y
-YXRlOw0KPj4gICAgICAgICAgZWxzZQ0KPj4gICAgICAgICAgICAgICAgICB0bXBfcmF0ZSA9IHBh
-cmVudF9yYXRlIC8gZGl2Ow0KPj4gKw0KPj4gKyAgICAgICBpZiAodG1wX3JhdGUgPCByZXEtPm1p
-bl9yYXRlIHx8IHRtcF9yYXRlID4gcmVxLT5tYXhfcmF0ZSkNCj4+ICsgICAgICAgICAgICAgICBy
-ZXR1cm47DQo+PiArDQo+PiAgICAgICAgICB0bXBfZGlmZiA9IGFicyhyZXEtPnJhdGUgLSB0bXBf
-cmF0ZSk7DQo+Pg0KPj4gICAgICAgICAgaWYgKCpiZXN0X2RpZmYgPCAwIHx8ICpiZXN0X2RpZmYg
-Pj0gdG1wX2RpZmYpIHsNCg0K
+On 4/23/22 8:03 AM, Raghavendra Rao Ananta wrote:
+> Import the standard SMCCC definitions from include/linux/arm-smccc.h.
+> 
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>   tools/include/linux/arm-smccc.h | 193 ++++++++++++++++++++++++++++++++
+>   1 file changed, 193 insertions(+)
+>   create mode 100644 tools/include/linux/arm-smccc.h
+> 
+
+Reviewed-by: Gavin Shan <gshan@redhat.com>
+
+> diff --git a/tools/include/linux/arm-smccc.h b/tools/include/linux/arm-smccc.h
+> new file mode 100644
+> index 000000000000..63ce9bebccd3
+> --- /dev/null
+> +++ b/tools/include/linux/arm-smccc.h
+> @@ -0,0 +1,193 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2015, Linaro Limited
+> + */
+> +#ifndef __LINUX_ARM_SMCCC_H
+> +#define __LINUX_ARM_SMCCC_H
+> +
+> +#include <linux/const.h>
+> +
+> +/*
+> + * This file provides common defines for ARM SMC Calling Convention as
+> + * specified in
+> + * https://developer.arm.com/docs/den0028/latest
+> + *
+> + * This code is up-to-date with version DEN 0028 C
+> + */
+> +
+> +#define ARM_SMCCC_STD_CALL	        _AC(0,U)
+> +#define ARM_SMCCC_FAST_CALL	        _AC(1,U)
+> +#define ARM_SMCCC_TYPE_SHIFT		31
+> +
+> +#define ARM_SMCCC_SMC_32		0
+> +#define ARM_SMCCC_SMC_64		1
+> +#define ARM_SMCCC_CALL_CONV_SHIFT	30
+> +
+> +#define ARM_SMCCC_OWNER_MASK		0x3F
+> +#define ARM_SMCCC_OWNER_SHIFT		24
+> +
+> +#define ARM_SMCCC_FUNC_MASK		0xFFFF
+> +
+> +#define ARM_SMCCC_IS_FAST_CALL(smc_val)	\
+> +	((smc_val) & (ARM_SMCCC_FAST_CALL << ARM_SMCCC_TYPE_SHIFT))
+> +#define ARM_SMCCC_IS_64(smc_val) \
+> +	((smc_val) & (ARM_SMCCC_SMC_64 << ARM_SMCCC_CALL_CONV_SHIFT))
+> +#define ARM_SMCCC_FUNC_NUM(smc_val)	((smc_val) & ARM_SMCCC_FUNC_MASK)
+> +#define ARM_SMCCC_OWNER_NUM(smc_val) \
+> +	(((smc_val) >> ARM_SMCCC_OWNER_SHIFT) & ARM_SMCCC_OWNER_MASK)
+> +
+> +#define ARM_SMCCC_CALL_VAL(type, calling_convention, owner, func_num) \
+> +	(((type) << ARM_SMCCC_TYPE_SHIFT) | \
+> +	((calling_convention) << ARM_SMCCC_CALL_CONV_SHIFT) | \
+> +	(((owner) & ARM_SMCCC_OWNER_MASK) << ARM_SMCCC_OWNER_SHIFT) | \
+> +	((func_num) & ARM_SMCCC_FUNC_MASK))
+> +
+> +#define ARM_SMCCC_OWNER_ARCH		0
+> +#define ARM_SMCCC_OWNER_CPU		1
+> +#define ARM_SMCCC_OWNER_SIP		2
+> +#define ARM_SMCCC_OWNER_OEM		3
+> +#define ARM_SMCCC_OWNER_STANDARD	4
+> +#define ARM_SMCCC_OWNER_STANDARD_HYP	5
+> +#define ARM_SMCCC_OWNER_VENDOR_HYP	6
+> +#define ARM_SMCCC_OWNER_TRUSTED_APP	48
+> +#define ARM_SMCCC_OWNER_TRUSTED_APP_END	49
+> +#define ARM_SMCCC_OWNER_TRUSTED_OS	50
+> +#define ARM_SMCCC_OWNER_TRUSTED_OS_END	63
+> +
+> +#define ARM_SMCCC_FUNC_QUERY_CALL_UID  0xff01
+> +
+> +#define ARM_SMCCC_QUIRK_NONE		0
+> +#define ARM_SMCCC_QUIRK_QCOM_A6		1 /* Save/restore register a6 */
+> +
+> +#define ARM_SMCCC_VERSION_1_0		0x10000
+> +#define ARM_SMCCC_VERSION_1_1		0x10001
+> +#define ARM_SMCCC_VERSION_1_2		0x10002
+> +#define ARM_SMCCC_VERSION_1_3		0x10003
+> +
+> +#define ARM_SMCCC_1_3_SVE_HINT		0x10000
+> +
+> +#define ARM_SMCCC_VERSION_FUNC_ID					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   0, 0)
+> +
+> +#define ARM_SMCCC_ARCH_FEATURES_FUNC_ID					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   0, 1)
+> +
+> +#define ARM_SMCCC_ARCH_SOC_ID						\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   0, 2)
+> +
+> +#define ARM_SMCCC_ARCH_WORKAROUND_1					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   0, 0x8000)
+> +
+> +#define ARM_SMCCC_ARCH_WORKAROUND_2					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   0, 0x7fff)
+> +
+> +#define ARM_SMCCC_ARCH_WORKAROUND_3					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   0, 0x3fff)
+> +
+> +#define ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID				\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   ARM_SMCCC_OWNER_VENDOR_HYP,			\
+> +			   ARM_SMCCC_FUNC_QUERY_CALL_UID)
+> +
+> +/* KVM UID value: 28b46fb6-2ec5-11e9-a9ca-4b564d003a74 */
+> +#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0	0xb66fb428U
+> +#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1	0xe911c52eU
+> +#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2	0x564bcaa9U
+> +#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3	0x743a004dU
+> +
+> +/* KVM "vendor specific" services */
+> +#define ARM_SMCCC_KVM_FUNC_FEATURES		0
+> +#define ARM_SMCCC_KVM_FUNC_PTP			1
+> +#define ARM_SMCCC_KVM_FUNC_FEATURES_2		127
+> +#define ARM_SMCCC_KVM_NUM_FUNCS			128
+> +
+> +#define ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID			\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   ARM_SMCCC_OWNER_VENDOR_HYP,			\
+> +			   ARM_SMCCC_KVM_FUNC_FEATURES)
+> +
+> +#define SMCCC_ARCH_WORKAROUND_RET_UNAFFECTED	1
+> +
+> +/*
+> + * ptp_kvm is a feature used for time sync between vm and host.
+> + * ptp_kvm module in guest kernel will get service from host using
+> + * this hypercall ID.
+> + */
+> +#define ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID				\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,				\
+> +			   ARM_SMCCC_SMC_32,				\
+> +			   ARM_SMCCC_OWNER_VENDOR_HYP,			\
+> +			   ARM_SMCCC_KVM_FUNC_PTP)
+> +
+> +/* ptp_kvm counter type ID */
+> +#define KVM_PTP_VIRT_COUNTER			0
+> +#define KVM_PTP_PHYS_COUNTER			1
+> +
+> +/* Paravirtualised time calls (defined by ARM DEN0057A) */
+> +#define ARM_SMCCC_HV_PV_TIME_FEATURES				\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_64,			\
+> +			   ARM_SMCCC_OWNER_STANDARD_HYP,	\
+> +			   0x20)
+> +
+> +#define ARM_SMCCC_HV_PV_TIME_ST					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_64,			\
+> +			   ARM_SMCCC_OWNER_STANDARD_HYP,	\
+> +			   0x21)
+> +
+> +/* TRNG entropy source calls (defined by ARM DEN0098) */
+> +#define ARM_SMCCC_TRNG_VERSION					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_32,			\
+> +			   ARM_SMCCC_OWNER_STANDARD,		\
+> +			   0x50)
+> +
+> +#define ARM_SMCCC_TRNG_FEATURES					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_32,			\
+> +			   ARM_SMCCC_OWNER_STANDARD,		\
+> +			   0x51)
+> +
+> +#define ARM_SMCCC_TRNG_GET_UUID					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_32,			\
+> +			   ARM_SMCCC_OWNER_STANDARD,		\
+> +			   0x52)
+> +
+> +#define ARM_SMCCC_TRNG_RND32					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_32,			\
+> +			   ARM_SMCCC_OWNER_STANDARD,		\
+> +			   0x53)
+> +
+> +#define ARM_SMCCC_TRNG_RND64					\
+> +	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
+> +			   ARM_SMCCC_SMC_64,			\
+> +			   ARM_SMCCC_OWNER_STANDARD,		\
+> +			   0x53)
+> +
+> +/*
+> + * Return codes defined in ARM DEN 0070A
+> + * ARM DEN 0070A is now merged/consolidated into ARM DEN 0028 C
+> + */
+> +#define SMCCC_RET_SUCCESS			0
+> +#define SMCCC_RET_NOT_SUPPORTED			-1
+> +#define SMCCC_RET_NOT_REQUIRED			-2
+> +#define SMCCC_RET_INVALID_PARAMETER		-3
+> +
+> +#endif /*__LINUX_ARM_SMCCC_H*/
+> 
+

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C4950F5B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F0450F457
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346056AbiDZIts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S242374AbiDZIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345579AbiDZIjO (ORCPT
+        with ESMTP id S1344974AbiDZIct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:14 -0400
+        Tue, 26 Apr 2022 04:32:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6B33EB7;
-        Tue, 26 Apr 2022 01:30:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBCA3BA4F;
+        Tue, 26 Apr 2022 01:25:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AAB961864;
-        Tue, 26 Apr 2022 08:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529D7C385A0;
-        Tue, 26 Apr 2022 08:30:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E2261722;
+        Tue, 26 Apr 2022 08:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6624AC385AE;
+        Tue, 26 Apr 2022 08:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961818;
-        bh=GYRN8gEHNluHJetTN7qwHBSbp5xnHOcjNQsr6hRA2LE=;
+        s=korg; t=1650961519;
+        bh=aBRbv+1Tz+Eu6abnTREsUCxKbGJaAkQqCf3lh/zj5kU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jRizSTf8ZyqAl3lcCeXodLUekO2Lgb4YzZ3IZcYuQDwLM44/hXrDO2EtZrT2SsrNz
-         uQVdUgkGhbCt1t6DOB2YR5JWqU28EWuU/IDcx28B3mWrgV3v8fwuzdmBCof0db4wSV
-         jOtHDDY2zZ7l2kpmZ+Am6i9GaJNQhY6aymmZSAQI=
+        b=i8yz89wK/RoW52MbW+kBt9aDTAWMH3McI8qktFlA78PxClph8YmjlrlfECV1JXpqN
+         D6USsGG5lPJ6qSIIr4oRso9H91ZKIAyNfy9MQ7Hnogyn3efdMXHY9r15LGDvna5le+
+         Wa7p9iIOjXErvXb/bsC00csF3frm5wBx8NPa0iGI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.4 39/62] dma: at_xdmac: fix a missing check on list iterator
-Date:   Tue, 26 Apr 2022 10:21:19 +0200
-Message-Id: <20220426081738.342995248@linuxfoundation.org>
+        Thomas Osterried <thomas@osterried.de>,
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 38/43] ax25: Fix refcount leaks caused by ax25_cb_del()
+Date:   Tue, 26 Apr 2022 10:21:20 +0200
+Message-Id: <20220426081735.640993366@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,57 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 206680c4e46b62fd8909385e0874a36952595b85 upstream.
+commit 9fd75b66b8f68498454d685dc4ba13192ae069b0 upstream.
 
-The bug is here:
-	__func__, desc, &desc->tx_dma_desc.phys, ret, cookie, residue);
+The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev to
+avoid UAF bugs") and commit feef318c855a ("ax25: fix UAF bugs of
+net_device caused by rebinding operation") increase the refcounts of
+ax25_dev and net_device in ax25_bind() and decrease the matching refcounts
+in ax25_kill_by_device() in order to prevent UAF bugs, but there are
+reference count leaks.
 
-The list iterator 'desc' will point to a bogus position containing
-HEAD if the list is empty or no element is found. To avoid dev_dbg()
-prints a invalid address, use a new variable 'iter' as the list
-iterator, while use the origin variable 'desc' as a dedicated
-pointer to point to the found element.
+The root cause of refcount leaks is shown below:
 
-Cc: stable@vger.kernel.org
-Fixes: 82e2424635f4c ("dmaengine: xdmac: fix print warning on dma_addr_t variable")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220327061154.4867-1-xiam0nd.tong@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+     (Thread 1)                      |      (Thread 2)
+ax25_bind()                          |
+ ...                                 |
+ ax25_addr_ax25dev()                 |
+  ax25_dev_hold()   //(1)            |
+  ...                                |
+ dev_hold_track()   //(2)            |
+ ...                                 | ax25_destroy_socket()
+                                     |  ax25_cb_del()
+                                     |   ...
+                                     |   hlist_del_init() //(3)
+                                     |
+                                     |
+     (Thread 3)                      |
+ax25_kill_by_device()                |
+ ...                                 |
+ ax25_for_each(s, &ax25_list) {      |
+  if (s->ax25_dev == ax25_dev) //(4) |
+   ...                               |
+
+Firstly, we use ax25_bind() to increase the refcount of ax25_dev in
+position (1) and increase the refcount of net_device in position (2).
+Then, we use ax25_cb_del() invoked by ax25_destroy_socket() to delete
+ax25_cb in hlist in position (3) before calling ax25_kill_by_device().
+Finally, the decrements of refcounts in ax25_kill_by_device() will not
+be executed, because no s->ax25_dev equals to ax25_dev in position (4).
+
+This patch adds decrements of refcounts in ax25_release() and use
+lock_sock() to do synchronization. If refcounts decrease in ax25_release(),
+the decrements of refcounts in ax25_kill_by_device() will not be
+executed and vice versa.
+
+Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
+Fixes: 87563a043cef ("ax25: fix reference count leaks of ax25_dev")
+Fixes: feef318c855a ("ax25: fix UAF bugs of net_device caused by rebinding operation")
+Reported-by: Thomas Osterried <thomas@osterried.de>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 4.14: adjust dev_put_track()->dev_put()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ net/ax25/af_ax25.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1390,7 +1390,7 @@ at_xdmac_tx_status(struct dma_chan *chan
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -101,8 +101,10 @@ again:
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
+ 			s->ax25_dev = NULL;
+-			dev_put(ax25_dev->dev);
+-			ax25_dev_put(ax25_dev);
++			if (sk->sk_socket) {
++				dev_put(ax25_dev->dev);
++				ax25_dev_put(ax25_dev);
++			}
+ 			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+@@ -982,14 +984,20 @@ static int ax25_release(struct socket *s
  {
- 	struct at_xdmac_chan	*atchan = to_at_xdmac_chan(chan);
- 	struct at_xdmac		*atxdmac = to_at_xdmac(atchan->chan.device);
--	struct at_xdmac_desc	*desc, *_desc;
-+	struct at_xdmac_desc	*desc, *_desc, *iter;
- 	struct list_head	*descs_list;
- 	enum dma_status		ret;
- 	int			residue, retry;
-@@ -1505,11 +1505,13 @@ at_xdmac_tx_status(struct dma_chan *chan
- 	 * microblock.
- 	 */
- 	descs_list = &desc->descs_list;
--	list_for_each_entry_safe(desc, _desc, descs_list, desc_node) {
--		dwidth = at_xdmac_get_dwidth(desc->lld.mbr_cfg);
--		residue -= (desc->lld.mbr_ubc & 0xffffff) << dwidth;
--		if ((desc->lld.mbr_nda & 0xfffffffc) == cur_nda)
-+	list_for_each_entry_safe(iter, _desc, descs_list, desc_node) {
-+		dwidth = at_xdmac_get_dwidth(iter->lld.mbr_cfg);
-+		residue -= (iter->lld.mbr_ubc & 0xffffff) << dwidth;
-+		if ((iter->lld.mbr_nda & 0xfffffffc) == cur_nda) {
-+			desc = iter;
- 			break;
-+		}
- 	}
- 	residue += cur_ubc << dwidth;
+ 	struct sock *sk = sock->sk;
+ 	ax25_cb *ax25;
++	ax25_dev *ax25_dev;
  
+ 	if (sk == NULL)
+ 		return 0;
+ 
+ 	sock_hold(sk);
+-	sock_orphan(sk);
+ 	lock_sock(sk);
++	sock_orphan(sk);
+ 	ax25 = sk_to_ax25(sk);
++	ax25_dev = ax25->ax25_dev;
++	if (ax25_dev) {
++		dev_put(ax25_dev->dev);
++		ax25_dev_put(ax25_dev);
++	}
+ 
+ 	if (sk->sk_type == SOCK_SEQPACKET) {
+ 		switch (ax25->state) {
 
 

@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77BE51060D
+	by mail.lfdr.de (Postfix) with ESMTP id C984851060E
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349464AbiDZR7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
+        id S1349418AbiDZR7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353643AbiDZR7d (ORCPT
+        with ESMTP id S1353649AbiDZR7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 13:59:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D333DDC6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:56:00 -0700 (PDT)
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A6D3DDD3;
+        Tue, 26 Apr 2022 10:56:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1650995760; x=1682531760;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N2x2LXk+r++AMqXB9ywRqVW7milvAS5JXMJ3BbkKtTg=;
-  b=W1/0EVplnP3br3UlyuiuvNNXTekJN3spwY+F59pTUWoaKQ1s0F+BomH/
-   ZckF8FVDT8g7FkXg9twbm/95bZP1SL2mWNMd7pUq2WnMcezL9XWy4YUCx
-   X+91LHeuZYRs/x23Kymi/drDO8OkJEfdc7/HibkMfXB423T+atuvsFnf1
-   NlA5pJ10dJPVqL7Ix7FavFXe6yjlXp0I3ymQpaShldcrBcZtmTPmQtK/X
-   YumbvH2lHLV/nys5P0TPd+so24tYf+W+50iiUvo+eliWXIx4X7nShsbhT
-   4H+K2WPSkY7Nt9C7YMXEDU8YNwg6ffgujM3+de/sALrzRA+V2pbPHbcnG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263266406"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lFNYjYV0TGvX9dxBXO+JQ/DdIQG+A42esjoVfyX+w7g=;
+  b=JmGKDruC911skrHkCTcsPUfbqV3H2ZrFqPLLPRuDSOiP6xI00JCg4qdc
+   tY/01eY8Dsga78l9nxI1DSyNSVxQ4+/1H3n6MYMY1Elw3tM+20YAxvFFc
+   uy7ryM2CH3WDZ0gILislzAFSw9Y6mmZjzGcaNMaToLdBHKRcJZFXlO1OA
+   YqQwYVIFCoS1KgpnEYREnPOolDRyDLxVvZX6GAXktsS2kc+NQLLaD5PiS
+   gXqvSzJM4EMLnLFG1cypjumUz0rmFG8xaLE+5BPrUQFT77zxWyqRdh9ss
+   SSiYKUdnjr2Ru092bYtz5zKKC/79DpIbIA7WhzHuswbWBXACbpHQKXyQW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326163445"
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="263266406"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 10:55:59 -0700
+   d="scan'208";a="326163445"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 10:56:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="617116800"
+   d="scan'208";a="513280755"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2022 10:55:57 -0700
+  by orsmga003.jf.intel.com with ESMTP; 26 Apr 2022 10:55:57 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1njPPo-0003sC-GI;
+        id 1njPPo-0003s8-Dm;
         Tue, 26 Apr 2022 17:55:56 +0000
-Date:   Wed, 27 Apr 2022 01:55:08 +0800
+Date:   Wed, 27 Apr 2022 01:55:10 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: kernel/trace/trace_osnoise.c:101:1: sparse: sparse: symbol
- '__pcpu_scope_per_cpu_osnoise_var' was not declared. Should it be static?
-Message-ID: <202204270146.IRxXM4hU-lkp@intel.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
+Message-ID: <202204270151.wJnsbJBF-lkp@intel.com>
+References: <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,77 +70,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d615b5416f8a1afeb82d13b238f8152c572d59c0
-commit: bce29ac9ce0bb0b0b146b687ab978378c21e9078 trace: Add osnoise tracer
-date:   10 months ago
-config: parisc-randconfig-s031-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270146.IRxXM4hU-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce:
+Hi Daehwan,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on krzk/for-next char-misc/char-misc-testing v5.18-rc4 next-20220426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204270151.wJnsbJBF-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bce29ac9ce0bb0b0b146b687ab978378c21e9078
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout bce29ac9ce0bb0b0b146b687ab978378c21e9078
+        # https://github.com/intel-lab-lkp/linux/commit/6beb993f823c7c9a71f0b539a34d0ef5c64bd73d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
+        git checkout 6beb993f823c7c9a71f0b539a34d0ef5c64bd73d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/host/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/trace/trace_osnoise.c:101:1: sparse: sparse: symbol '__pcpu_scope_per_cpu_osnoise_var' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:160:14: sparse: sparse: symbol 'interface_lock' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:438:6: sparse: sparse: symbol 'osnoise_trace_irq_entry' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:461:6: sparse: sparse: symbol 'osnoise_trace_irq_exit' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:520:5: sparse: sparse: symbol 'hook_irq_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:552:6: sparse: sparse: symbol 'unhook_irq_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:569:6: sparse: sparse: symbol 'trace_softirq_entry_callback' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:592:6: sparse: sparse: symbol 'trace_softirq_exit_callback' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:706:1: sparse: sparse: symbol 'trace_sched_switch_callback' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:724:5: sparse: sparse: symbol 'hook_thread_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:741:6: sparse: sparse: symbol 'unhook_thread_events' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:753:6: sparse: sparse: symbol 'save_osn_sample_stats' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:768:6: sparse: sparse: symbol 'diff_osn_sample_stats' was not declared. Should it be static?
-   kernel/trace/trace_osnoise.c:966:17: sparse: sparse: incompatible types in comparison expression (different signedness):
-   kernel/trace/trace_osnoise.c:966:17: sparse:    signed long long *
-   kernel/trace/trace_osnoise.c:966:17: sparse:    unsigned long long [usertype] *
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_address_device':
+>> drivers/usb/host/xhci-exynos.c:112:26: warning: variable 'xhci' set but not used [-Wunused-but-set-variable]
+     112 |         struct xhci_hcd *xhci;
+         |                          ^~~~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_vendor_init':
+>> drivers/usb/host/xhci-exynos.c:205:34: warning: variable 'pdev' set but not used [-Wunused-but-set-variable]
+     205 |         struct platform_device  *pdev;
+         |                                  ^~~~
+   drivers/usb/host/xhci-exynos.c: In function 'xhci_exynos_parse_endpoint':
+>> drivers/usb/host/xhci-exynos.c:353:29: warning: variable 'ep_ctx' set but not used [-Wunused-but-set-variable]
+     353 |         struct xhci_ep_ctx *ep_ctx;
+         |                             ^~~~~~
+   At top level:
+   drivers/usb/host/xhci-exynos.c:543:12: warning: 'xhci_exynos_resume' defined but not used [-Wunused-function]
+     543 | static int xhci_exynos_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:533:12: warning: 'xhci_exynos_suspend' defined but not used [-Wunused-function]
+     533 | static int xhci_exynos_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-exynos.c:30:12: warning: 'xhci_exynos_register_vendor_ops' defined but not used [-Wunused-function]
+      30 | static int xhci_exynos_register_vendor_ops(struct xhci_vendor_ops *vendor_ops)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-vim +/__pcpu_scope_per_cpu_osnoise_var +101 kernel/trace/trace_osnoise.c
 
-    85	
-    86	/*
-    87	 * osnoise_register_instance - register a new trace instance
-    88	 *
-    89	 * Register a trace_array *tr in the list of instances running
-    90	 * osnoise/timerlat tracers.
-    91	 */
-    92	static int osnoise_register_instance(struct trace_array *tr)
-    93	{
-    94		struct osnoise_instance *inst;
-    95	
-    96		/*
-    97		 * register/unregister serialization is provided by trace's
-    98		 * trace_types_lock.
-    99		 */
-   100		lockdep_assert_held(&trace_types_lock);
- > 101	
-   102		inst = kmalloc(sizeof(*inst), GFP_KERNEL);
-   103		if (!inst)
-   104			return -ENOMEM;
-   105	
-   106		INIT_LIST_HEAD_RCU(&inst->list);
-   107		inst->tr = tr;
-   108		list_add_tail_rcu(&inst->list, &osnoise_instances);
+vim +/xhci +112 drivers/usb/host/xhci-exynos.c
+
    109	
-   110		return 0;
-   111	}
-   112	
+   110	static int xhci_exynos_address_device(struct usb_hcd *hcd, struct usb_device *udev)
+   111	{
+ > 112		struct xhci_hcd *xhci;
+   113		int ret;
+   114	
+   115		ret = xhci_address_device(hcd, udev);
+   116		xhci = hcd_to_xhci(hcd);
+   117	
+   118		/* TODO: store and pass hw info to Co-Processor here*/
+   119	
+   120		return ret;
+   121	}
+   122	
+   123	static int xhci_exynos_wake_lock(struct xhci_hcd_exynos *xhci_exynos,
+   124					   int is_main_hcd, int is_lock)
+   125	{
+   126		struct usb_hcd	*hcd = xhci_exynos->hcd;
+   127		struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+   128		struct wakeup_source *main_wakelock, *shared_wakelock;
+   129	
+   130		main_wakelock = xhci_exynos->main_wakelock;
+   131		shared_wakelock = xhci_exynos->shared_wakelock;
+   132	
+   133		if (xhci->xhc_state & XHCI_STATE_REMOVING)
+   134			return -ESHUTDOWN;
+   135	
+   136		if (is_lock) {
+   137			if (is_main_hcd)
+   138				__pm_stay_awake(main_wakelock);
+   139			else
+   140				__pm_stay_awake(shared_wakelock);
+   141		} else {
+   142			if (is_main_hcd)
+   143				__pm_relax(main_wakelock);
+   144			else
+   145				__pm_relax(shared_wakelock);
+   146		}
+   147	
+   148		return 0;
+   149	}
+   150	
+   151	static int xhci_exynos_bus_suspend(struct usb_hcd *hcd)
+   152	{
+   153		struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
+   154		struct xhci_hcd_exynos *xhci_exynos = priv->vendor_priv;
+   155		struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+   156	
+   157	
+   158		int ret, main_hcd;
+   159	
+   160		if (hcd == xhci->main_hcd)
+   161			main_hcd = 1;
+   162		else
+   163			main_hcd = 0;
+   164	
+   165		ret = xhci_bus_suspend(hcd);
+   166		xhci_exynos_wake_lock(xhci_exynos, main_hcd, 0);
+   167	
+   168		return ret;
+   169	}
+   170	
+   171	static int xhci_exynos_bus_resume(struct usb_hcd *hcd)
+   172	{
+   173		struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
+   174		struct xhci_hcd_exynos *xhci_exynos = priv->vendor_priv;
+   175		struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+   176	
+   177		int ret, main_hcd;
+   178	
+   179		if (hcd == xhci->main_hcd)
+   180			main_hcd = 1;
+   181		else
+   182			main_hcd = 0;
+   183	
+   184		ret = xhci_bus_resume(hcd);
+   185		xhci_exynos_wake_lock(xhci_exynos, main_hcd, 1);
+   186	
+   187		return ret;
+   188	}
+   189	
+   190	const struct xhci_driver_overrides xhci_exynos_overrides = {
+   191		.reset = xhci_exynos_setup,
+   192		.start = xhci_exynos_start,
+   193		.add_endpoint = xhci_exynos_add_endpoint,
+   194		.address_device = xhci_exynos_address_device,
+   195		.bus_suspend = xhci_exynos_bus_suspend,
+   196		.bus_resume = xhci_exynos_bus_resume,
+   197	};
+   198	
+   199	static int xhci_exynos_vendor_init(struct xhci_hcd *xhci, struct device *dev)
+   200	{
+   201		struct usb_hcd		*hcd;
+   202		struct xhci_hcd_exynos	*xhci_exynos;
+   203		struct xhci_plat_priv *priv;
+   204		struct wakeup_source	*main_wakelock, *shared_wakelock;
+ > 205		struct platform_device	*pdev;
+   206	
+   207		pdev = to_platform_device(dev);
+   208	
+   209		xhci_plat_override_driver(&xhci_exynos_overrides);
+   210		dev->driver->pm = &xhci_exynos_pm_ops;
+   211	
+   212		main_wakelock = wakeup_source_register(dev, dev_name(dev));
+   213		__pm_stay_awake(main_wakelock);
+   214	
+   215		/* Initialization shared wakelock for SS HCD */
+   216		shared_wakelock = wakeup_source_register(dev, dev_name(dev));
+   217		__pm_stay_awake(shared_wakelock);
+   218	
+   219		hcd = xhci->main_hcd;
+   220	
+   221		priv = hcd_to_xhci_priv(hcd);
+   222		xhci_exynos = priv->vendor_priv;
+   223		xhci_exynos->dev = dev;
+   224		xhci_exynos->main_wakelock = main_wakelock;
+   225		xhci_exynos->shared_wakelock = shared_wakelock;
+   226	
+   227		return 0;
+   228	}
+   229	
 
 -- 
 0-DAY CI Kernel Test Service

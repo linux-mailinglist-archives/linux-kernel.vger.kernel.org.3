@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FA950F5F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A6450F906
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346994AbiDZIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S238805AbiDZJUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345804AbiDZIjd (ORCPT
+        with ESMTP id S1345602AbiDZI51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AD770911;
-        Tue, 26 Apr 2022 01:31:25 -0700 (PDT)
+        Tue, 26 Apr 2022 04:57:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B84384EC6;
+        Tue, 26 Apr 2022 01:42:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA40DB81CF9;
-        Tue, 26 Apr 2022 08:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342C0C385A0;
-        Tue, 26 Apr 2022 08:31:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBCF660A67;
+        Tue, 26 Apr 2022 08:42:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29CFC385A0;
+        Tue, 26 Apr 2022 08:42:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961882;
-        bh=wa6DKY7ihCAiI4ORJ4Lemo2W/kJEgxqyoapglfQxiiI=;
+        s=korg; t=1650962521;
+        bh=+kalJFicQos3OPzHJvD22NxkzItAti/SDX2f8dJuBmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zTIhCndvvQ9lFjQdYDx/ZcDCTWzJZ93lSng+ASgD7p7SwgN/5Oh6e4Lqjsy+Mkhh9
-         lTHsT/Y5yjfo+mAp8uKljrTzjGiGK9DyYUxFKXc+kKU2FwK9FefzAvx4gjRIodGec6
-         bTogZk3jJD1BRAHOYZgPC8Ny7lld+LbMSauww53o=
+        b=WNzq6ozR+EZtz59Dbtwqf493lVRfwg8lXRA0UWyTcrLeF9fzumMWiKsR6veGz1/R+
+         uXhY+ea1SqHZyaS4jAb6xpW72l4tS5xaVVSUmhDD6edjMerDv3XzzmEXtqXaz5F83t
+         TWVwCODU8K2MdpZF8ZHraM7IUI4u4f29/9tI79m0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 5.4 45/62] xtensa: patch_text: Fixup last cpu should be master
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.15 084/124] dma: at_xdmac: fix a missing check on list iterator
 Date:   Tue, 26 Apr 2022 10:21:25 +0200
-Message-Id: <20220426081738.514474363@linuxfoundation.org>
+Message-Id: <20220426081749.689618472@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit ee69d4be8fd064cd08270b4808d2dfece3614ee0 upstream.
+commit 206680c4e46b62fd8909385e0874a36952595b85 upstream.
 
-These patch_text implementations are using stop_machine_cpuslocked
-infrastructure with atomic cpu_count. The original idea: When the
-master CPU patch_text, the others should wait for it. But current
-implementation is using the first CPU as master, which couldn't
-guarantee the remaining CPUs are waiting. This patch changes the
-last CPU as the master to solve the potential risk.
+The bug is here:
+	__func__, desc, &desc->tx_dma_desc.phys, ret, cookie, residue);
 
-Fixes: 64711f9a47d4 ("xtensa: implement jump_label support")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: <stable@vger.kernel.org>
-Message-Id: <20220407073323.743224-4-guoren@kernel.org>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+The list iterator 'desc' will point to a bogus position containing
+HEAD if the list is empty or no element is found. To avoid dev_dbg()
+prints a invalid address, use a new variable 'iter' as the list
+iterator, while use the origin variable 'desc' as a dedicated
+pointer to point to the found element.
+
+Cc: stable@vger.kernel.org
+Fixes: 82e2424635f4c ("dmaengine: xdmac: fix print warning on dma_addr_t variable")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220327061154.4867-1-xiam0nd.tong@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/xtensa/kernel/jump_label.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/at_xdmac.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/arch/xtensa/kernel/jump_label.c
-+++ b/arch/xtensa/kernel/jump_label.c
-@@ -40,7 +40,7 @@ static int patch_text_stop_machine(void
+--- a/drivers/dma/at_xdmac.c
++++ b/drivers/dma/at_xdmac.c
+@@ -1450,7 +1450,7 @@ at_xdmac_tx_status(struct dma_chan *chan
  {
- 	struct patch *patch = data;
+ 	struct at_xdmac_chan	*atchan = to_at_xdmac_chan(chan);
+ 	struct at_xdmac		*atxdmac = to_at_xdmac(atchan->chan.device);
+-	struct at_xdmac_desc	*desc, *_desc;
++	struct at_xdmac_desc	*desc, *_desc, *iter;
+ 	struct list_head	*descs_list;
+ 	enum dma_status		ret;
+ 	int			residue, retry;
+@@ -1565,11 +1565,13 @@ at_xdmac_tx_status(struct dma_chan *chan
+ 	 * microblock.
+ 	 */
+ 	descs_list = &desc->descs_list;
+-	list_for_each_entry_safe(desc, _desc, descs_list, desc_node) {
+-		dwidth = at_xdmac_get_dwidth(desc->lld.mbr_cfg);
+-		residue -= (desc->lld.mbr_ubc & 0xffffff) << dwidth;
+-		if ((desc->lld.mbr_nda & 0xfffffffc) == cur_nda)
++	list_for_each_entry_safe(iter, _desc, descs_list, desc_node) {
++		dwidth = at_xdmac_get_dwidth(iter->lld.mbr_cfg);
++		residue -= (iter->lld.mbr_ubc & 0xffffff) << dwidth;
++		if ((iter->lld.mbr_nda & 0xfffffffc) == cur_nda) {
++			desc = iter;
+ 			break;
++		}
+ 	}
+ 	residue += cur_ubc << dwidth;
  
--	if (atomic_inc_return(&patch->cpu_count) == 1) {
-+	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
- 		local_patch_text(patch->addr, patch->data, patch->sz);
- 		atomic_inc(&patch->cpu_count);
- 	} else {
 
 

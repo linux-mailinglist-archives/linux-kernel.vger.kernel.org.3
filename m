@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FF450F775
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018C550F74E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347965AbiDZJZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S1348026AbiDZJZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346741AbiDZJBL (ORCPT
+        with ESMTP id S1346788AbiDZJBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:01:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CA1793B2;
-        Tue, 26 Apr 2022 01:43:29 -0700 (PDT)
+        Tue, 26 Apr 2022 05:01:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66AE85945;
+        Tue, 26 Apr 2022 01:43:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A7B9611A3;
-        Tue, 26 Apr 2022 08:43:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80783C385A4;
-        Tue, 26 Apr 2022 08:43:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85F07B81A2F;
+        Tue, 26 Apr 2022 08:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE24C385A4;
+        Tue, 26 Apr 2022 08:43:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962608;
-        bh=1kzBCrS/4dNEaFZo2xGXwRPSegciKCrtTqSWBwzICZM=;
+        s=korg; t=1650962612;
+        bh=nDv3ZUX4ndQ8MpYE3JNAFqkJacWDpguWL47ft7pczH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y+t67OceqFieOhbyOhJqpoUY9KJDOBG1ktfoMk7owRCdC2eU7fJZguMTkPaag+BUn
-         I9nOJkgjub436IwdJwF7GifF6/KyOQRJUKcuK3zz884Pu4/dH+eb7c8OjsDydeb8+M
-         vTuleF2BAV4ocN73GhCRTgLfoQ5Pme4bsFjVndBE=
+        b=K3397YhuYn1N9QlTvC003VPvLdqPO8xSbvNqUFp2BK+ZM9d84grkbSCM4AGhzEflI
+         zWsnxugxHhuWvy9IPaCJ9ynvtBxDAIYuzNSGJRIPVjVyBGadWfV+I5SrfUbN2itZoi
+         iT24F/f34gTJ90a+JXeqkzCXE2G203aoMS5yiDSI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 030/146] ALSA: hda/hdmi: fix warning about PCM count when used with SOF
-Date:   Tue, 26 Apr 2022 10:20:25 +0200
-Message-Id: <20220426081750.914813903@linuxfoundation.org>
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 031/146] rxrpc: Restore removed timer deletion
+Date:   Tue, 26 Apr 2022 10:20:26 +0200
+Message-Id: <20220426081750.942360528@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
 References: <20220426081750.051179617@linuxfoundation.org>
@@ -54,66 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit c74193787b2f683751a67603fb5f15c7584f355f ]
+[ Upstream commit ee3b0826b4764f6c13ad6db67495c5a1c38e9025 ]
 
-With commit 13046370c4d1 ("ALSA: hda/hdmi: let new platforms assign the
-pcm slot dynamically"), old behaviour to consider the HDA pin number,
-when choosing PCM to assign, was dropped.
+A recent patch[1] from Eric Dumazet flipped the order in which the
+keepalive timer and the keepalive worker were cancelled in order to fix a
+syzbot reported issue[2].  Unfortunately, this enables the mirror image bug
+whereby the timer races with rxrpc_exit_net(), restarting the worker after
+it has been cancelled:
 
-Build on this change and limit the number of PCMs created to number of
-converters (= maximum number of concurrent display/receivers) when
-"mst_no_extra_pcms" and "dyn_pcm_no_legacy" quirks are both set.
+	CPU 1		CPU 2
+	===============	=====================
+			if (rxnet->live)
+			<INTERRUPT>
+	rxnet->live = false;
+ 	cancel_work_sync(&rxnet->peer_keepalive_work);
+			rxrpc_queue_work(&rxnet->peer_keepalive_work);
+	del_timer_sync(&rxnet->peer_keepalive_timer);
 
-Fix the check in hdmi_find_pcm_slot() to ensure only spec->pcm_used
-entries are considered in the search. Elsewhere in the driver
-spec->pcm_used is already checked properly.
+Fix this by restoring the removed del_timer_sync() so that we try to remove
+the timer twice.  If the timer runs again, it should see ->live == false
+and not restart the worker.
 
-Doing this avoids following warning at SOF driver probe for multiple
-machine drivers:
-
-[  112.425297] sof_sdw sof_sdw: hda_dsp_hdmi_build_controls: no
-PCM in topology for HDMI converter 4
-[  112.425298] sof_sdw sof_sdw: hda_dsp_hdmi_build_controls: no
-PCM in topology for HDMI converter 5
-[  112.425299] sof_sdw sof_sdw: hda_dsp_hdmi_build_controls: no
-PCM in topology for HDMI converter 6
-
-Fixes: 13046370c4d1 ("ALSA: hda/hdmi: let new platforms assign the pcm slot dynamically")
-BugLink: https://github.com/thesofproject/linux/issues/2573
-Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220414150516.3638283-1-kai.vehmanen@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 1946014ca3b1 ("rxrpc: fix a race in rxrpc_exit_net()")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/20220404183439.3537837-1-eric.dumazet@gmail.com/ [1]
+Link: https://syzkaller.appspot.com/bug?extid=724378c4bb58f703b09a [2]
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_hdmi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ net/rxrpc/net_ns.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index cf4f277dccdd..26637a695979 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -1387,7 +1387,7 @@ static int hdmi_find_pcm_slot(struct hdmi_spec *spec,
+diff --git a/net/rxrpc/net_ns.c b/net/rxrpc/net_ns.c
+index f15d6942da45..cc7e30733feb 100644
+--- a/net/rxrpc/net_ns.c
++++ b/net/rxrpc/net_ns.c
+@@ -113,7 +113,9 @@ static __net_exit void rxrpc_exit_net(struct net *net)
+ 	struct rxrpc_net *rxnet = rxrpc_net(net);
  
-  last_try:
- 	/* the last try; check the empty slots in pins */
--	for (i = 0; i < spec->num_nids; i++) {
-+	for (i = 0; i < spec->pcm_used; i++) {
- 		if (!test_bit(i, &spec->pcm_bitmap))
- 			return i;
- 	}
-@@ -2263,7 +2263,9 @@ static int generic_hdmi_build_pcms(struct hda_codec *codec)
- 	 * dev_num is the device entry number in a pin
- 	 */
- 
--	if (codec->mst_no_extra_pcms)
-+	if (spec->dyn_pcm_no_legacy && codec->mst_no_extra_pcms)
-+		pcm_num = spec->num_cvts;
-+	else if (codec->mst_no_extra_pcms)
- 		pcm_num = spec->num_nids;
- 	else
- 		pcm_num = spec->num_nids + spec->dev_num - 1;
+ 	rxnet->live = false;
++	del_timer_sync(&rxnet->peer_keepalive_timer);
+ 	cancel_work_sync(&rxnet->peer_keepalive_work);
++	/* Remove the timer again as the worker may have restarted it. */
+ 	del_timer_sync(&rxnet->peer_keepalive_timer);
+ 	rxrpc_destroy_all_calls(rxnet);
+ 	rxrpc_destroy_all_connections(rxnet);
 -- 
 2.35.1
 

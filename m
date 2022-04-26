@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70ACA510CED
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EBE510CF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356288AbiD0AAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S1356205AbiD0ABm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356358AbiD0AA3 (ORCPT
+        with ESMTP id S231330AbiD0ABk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:00:29 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA784E3A2;
-        Tue, 26 Apr 2022 16:57:17 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id k23so206393ejd.3;
-        Tue, 26 Apr 2022 16:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=226dFbtrPQIoFHWbTajhuZZyDWbBc2bREA3l7+aGRpU=;
-        b=Jyzw4HuxsKM7Hu+oPvA2i5DvNqRk3iJheUk8PsqA2PIrvnvNCRSR1hzW0XzAc4d3Le
-         r086uigB4IgWOAazr7oCU9tIV0vsFl06lDNlg18LnTCGFDA852D5XoskoSHo8ejGhIWC
-         xi2CzU6rAlrTnAzIs7Zd2LqyjaSpLSL3McpZMconGThl3h091s0deH9lAok66IdeNwmE
-         VbyNguKPd5AiQxpyicpPG5HbyJn2NqXd7lgVhrW/yaDlv4e2kocDGkfPzhMO7McgROyK
-         wyn/6fOfCWxVtCtS/1yoy3m3RTFFc3tFxTZkbbr18tQ4wQCGzNorRBFZQ+qXcWDvgwqr
-         3bgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=226dFbtrPQIoFHWbTajhuZZyDWbBc2bREA3l7+aGRpU=;
-        b=lC+QzYNemueBQZ4g0jPnSDBFX5rUyw3C1NutDt6lKRKGRWnu/5l/EIf6o8a8qKzdR6
-         PiBFyEpLR7p0C/LIDtG83clAEqxA2Dsf3nGpgub9HyzLpeePHua5SyUUz0rAdJFlYrze
-         6eywIgb9D76LkKFII4t02pjkAcjZ8jYq3L6IYLlCK1NJuoaLr9SKdHmTsy/YE16dwKHN
-         4EzNXYO56Bwy+6v8AdezI9sQgOzjLnNICI+gJYLm8/hS5Wn6UsrGefFB2YGbAs5DsSEu
-         4Kp8S/Kn/F0EMbDLsvQpvHrULckn+nHUYHN/39c6uybtyjpMEa9lSSCG605oarBoVW9Y
-         9Cpg==
-X-Gm-Message-State: AOAM533chH8iRpfUZDuAfmED6poevwKujD1yUwItM2AMksaFok6VV+Rv
-        UnD5wCyY+NZ1vPa4koPpmxE=
-X-Google-Smtp-Source: ABdhPJyMFeRbcOlg0p93A4LH81VJTxOaIx6gVJpFUK3HMs+pAGtQLor2HZVvCnGiP8TcxEb+T95y8Q==
-X-Received: by 2002:a17:906:7c96:b0:6f3:b6c4:7b2 with SMTP id w22-20020a1709067c9600b006f3b6c407b2mr4497132ejo.676.1651017436376;
-        Tue, 26 Apr 2022 16:57:16 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id r13-20020a508d8d000000b00425d3555fc6sm5934416edh.30.2022.04.26.16.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 16:57:15 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 02:57:13 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC v1 1/3] net: dsa: mt753x: make reset optional
-Message-ID: <20220426235713.engzue7ujwqjdyjc@skbuf>
-References: <20220426134924.30372-1-linux@fw-web.de>
- <20220426134924.30372-2-linux@fw-web.de>
+        Tue, 26 Apr 2022 20:01:40 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054885DA1C;
+        Tue, 26 Apr 2022 16:58:31 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id C6C17320010B;
+        Tue, 26 Apr 2022 19:58:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 26 Apr 2022 19:58:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1651017507; x=1651103907; bh=BtMmL7n/JRGJ14Fmmq/dwVsCTg2ZxcEpq+r
+        qW3S1p3A=; b=l/pSzQk4/Td483IRhu1k7tJ1TVQ232yVN5Dup90RCvvWdiwl7qS
+        tEV+CYktZmkdtNEgHzPYugpqqNegKQg5iwBqPA9yrqJgpXEbuU+dOOkxFVeZGec+
+        t6AgtgVI0Z7Yj3C5bqVsTiIseTcGa+VHYrLflHO71MP45hqmhbiQMHVzf6K4Ouc2
+        +XqDsFaZCxYJD5N6qIMSDlhDYzaqSeU3FONhon+UcrfH2Gy4bfXuCHRj6aGwDH70
+        uTWOhqN9WVM8XKKPCAvth+KP3Mo8gl5/uXsCvikSF1/yrErqTYstKWjj6O1PL4XT
+        3W5MytOZQQuvTKl6G+7eFPss6D4wq5NwEeg==
+X-ME-Sender: <xms:IodoYuFw54edr7sfwoPBUMp_SSCTkN9LpUN0xKzgmvbahtbrXOxDhg>
+    <xme:IodoYvVRV0IpGIAGX5uoe4gqFoMkglqDzj0sOMl-YUyRVqAHn6BKHdEEtNvaLtFYv
+    xAIzBhprYRcZw>
+X-ME-Received: <xmr:IodoYoJbDK65vnlGW8r5Y0eZsdBYAQF59YkN6jn3pVFmlRf0CdcidZLN4NGndrysQsdv-27d>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeggddvlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepofgrrhgvkhcu
+    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
+    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepkedvjefg
+    hefhteelkeeiveeihfektdegueehhfehvedvffehtedthfdtgfeufeelnecuffhomhgrih
+    hnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghksehinhhvihhsihgslhgvthhhih
+    hnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:IodoYoEuNZIZmlaEHxSQrBCIiBHGsLAU6m6q9usPLfcU-hI4ddR0pg>
+    <xmx:IodoYkV3nAE6sRw6vEV4043rVz_Yye_-9GQlvJRHWdZrvfHvh8-I5w>
+    <xmx:IodoYrNiSY3O0pwr97lRuhLb3H9-urESbKAEQFY8BbtTVr4qUQBxpA>
+    <xmx:I4doYglaXAIgwcBt1yKP2oeeaon2j4egYHnTCG4xeyNwFd_6L2U7gQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Apr 2022 19:58:24 -0400 (EDT)
+From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, stable@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Candice Li <candice.li@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Jingwen Chen <Jingwen.Chen2@amd.com>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Victor Skvortsov <victor.skvortsov@amd.com>,
+        Bokun Zhang <bokun.zhang@amd.com>,
+        Bernard Zhao <bernard@vivo.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS)
+Subject: [PATCH] drm/amdgpu: do not use passthrough mode in Xen dom0
+Date:   Wed, 27 Apr 2022 01:57:15 +0200
+Message-Id: <20220426235718.1634359-1-marmarek@invisiblethingslab.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426134924.30372-2-linux@fw-web.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,70 +89,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:49:22PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Currently a reset line is required, but on BPI-R2-Pro board
-> this reset is shared with the gmac and prevents the switch to
-> be initialized because mdio is not ready fast enough after
-> the reset.
-> 
-> So make the reset optional to allow shared reset lines.
+While technically Xen dom0 is a virtual machine too, it does have
+access to most of the hardware so it doesn't need to be considered a
+"passthrough". Commit b818a5d37454 ("drm/amdgpu/gmc: use PCI BARs for
+APUs in passthrough") changed how FB is accessed based on passthrough
+mode. This breaks amdgpu in Xen dom0 with message like this:
 
-What does it mean "to allow shared reset lines"? Allow as in "allow them
-to sit there, unused"?
+    [drm:dc_dmub_srv_wait_idle [amdgpu]] *ERROR* Error waiting for DMUB idle: status=3
 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
->  drivers/net/dsa/mt7530.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index 19f0035d4410..ccf4cb944167 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2134,7 +2134,7 @@ mt7530_setup(struct dsa_switch *ds)
->  		reset_control_assert(priv->rstc);
->  		usleep_range(1000, 1100);
->  		reset_control_deassert(priv->rstc);
-> -	} else {
-> +	} else if (priv->reset) {
+While the reason for this failure is unclear, the passthrough mode is
+not really necessary in Xen dom0 anyway. So, to unbreak booting affected
+kernels, disable passthrough mode in this case.
 
-I don't really understand this patch. gpiod_set_value_cansleep() can
-tolerate NULL GPIO descriptors.
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1985
+Fixes: b818a5d37454 ("drm/amdgpu/gmc: use PCI BARs for APUs in passthrough")
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->  		gpiod_set_value_cansleep(priv->reset, 0);
->  		usleep_range(1000, 1100);
->  		gpiod_set_value_cansleep(priv->reset, 1);
-> @@ -2276,7 +2276,7 @@ mt7531_setup(struct dsa_switch *ds)
->  		reset_control_assert(priv->rstc);
->  		usleep_range(1000, 1100);
->  		reset_control_deassert(priv->rstc);
-> -	} else {
-> +	} else if (priv->reset) {
->  		gpiod_set_value_cansleep(priv->reset, 0);
->  		usleep_range(1000, 1100);
->  		gpiod_set_value_cansleep(priv->reset, 1);
-> @@ -3272,8 +3272,7 @@ mt7530_probe(struct mdio_device *mdiodev)
->  		priv->reset = devm_gpiod_get_optional(&mdiodev->dev, "reset",
->  						      GPIOD_OUT_LOW);
->  		if (IS_ERR(priv->reset)) {
-> -			dev_err(&mdiodev->dev, "Couldn't get our reset line\n");
-> -			return PTR_ERR(priv->reset);
-> +			dev_warn(&mdiodev->dev, "Couldn't get our reset line\n");
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
+index a025f080aa6a..5e3756643da3 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
+@@ -24,6 +24,7 @@
+ #include <linux/module.h>
+ 
+ #include <drm/drm_drv.h>
++#include <xen/xen.h>
+ 
+ #include "amdgpu.h"
+ #include "amdgpu_ras.h"
+@@ -710,7 +711,8 @@ void amdgpu_detect_virtualization(struct amdgpu_device *adev)
+ 		adev->virt.caps |= AMDGPU_SRIOV_CAPS_ENABLE_IOV;
+ 
+ 	if (!reg) {
+-		if (is_virtual_machine())	/* passthrough mode exclus sriov mod */
++		/* passthrough mode exclus sriov mod */
++		if (is_virtual_machine() && !xen_initial_domain())
+ 			adev->virt.caps |= AMDGPU_PASSTHROUGH_MODE;
+ 	}
+ 
+-- 
+2.35.1
 
-I certainly don't understand why you're suppressing the pointer-encoded
-errors here. The function used is devm_gpiod_get_optional(), which
-returns NULL for a missing reset-gpios, not IS_ERR(something). The
-IS_ERR(something) is actually important to not ignore, maybe it's
-IS_ERR(-EPROBE_DEFER). And this change breaks waiting for the descriptor
-to become available.
-
->  		}
->  	}
->  
-> -- 
-> 2.25.1
-> 
-
-So what doesn't work without this patch, exactly?

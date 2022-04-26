@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3997C50F8D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE2C50F6E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346911AbiDZJ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S1343682AbiDZJBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346714AbiDZJBK (ORCPT
+        with ESMTP id S1346955AbiDZIpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:01:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFABF7DAAF;
-        Tue, 26 Apr 2022 01:43:26 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445BF3DDD8;
+        Tue, 26 Apr 2022 01:36:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D3FC60A56;
-        Tue, 26 Apr 2022 08:43:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7411FC385AC;
-        Tue, 26 Apr 2022 08:43:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21818618E8;
+        Tue, 26 Apr 2022 08:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBBB0C385A4;
+        Tue, 26 Apr 2022 08:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962605;
-        bh=dMzO9NbcYCk4F9iz1CCQtjpG4YJv/4z7OV6cEnqqQAs=;
+        s=korg; t=1650962217;
+        bh=+2Fi1ILVgr/TXV+c7AXwJyqn3eo8rkvAxRa7kZL1PaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZE8chdlzUcDBA5OxvaLbVZNLJ8yaKoXSRF7Vs267gZpFDl+m37RgVvsV5+LHx6kF0
-         nT3MO8L4azSoy5ao0q7CwKP9t1xVRctHMXs1wIa4YY5WPxAwIQZzmwLv440vYnv0XP
-         tdpBlvOHMOeranW3WSZRe9Ymiyu1rIFiqRxmAM7o=
+        b=SGvrIUIgPCHbe/uA5RP1C47y6okoqHtb5PfTNM1dsiYON6KYELtx2o8JhnVIJS/dg
+         5u4DJ2H8vwyH2h+2WFXp3v4xFAYl1NB+wlgEYq1y4Oii8EfPJynxl5rovOQ5gFm2Yv
+         2k6srU7HE5811mWU5o3rTKW7t8OakllT4fd3QXE0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.17 029/146] ice: Fix memory leak in ice_get_orom_civd_data()
-Date:   Tue, 26 Apr 2022 10:20:24 +0200
-Message-Id: <20220426081750.886273697@linuxfoundation.org>
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 024/124] dmaengine: mediatek:Fix PM usage reference leak of mtk_uart_apdma_alloc_chan_resources
+Date:   Tue, 26 Apr 2022 10:20:25 +0200
+Message-Id: <20220426081747.992031554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +53,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: zhangqilong <zhangqilong3@huawei.com>
 
-[ Upstream commit 7c8881b77908a51814a050da408c89f1a25b7fb7 ]
+[ Upstream commit 545b2baac89b859180e51215468c05d85ea8465a ]
 
-A memory chunk was allocated for orom_data in ice_get_orom_civd_data()
-by vzmalloc(). But when ice_read_flash_module() fails, the allocated
-memory is not freed, which will lead to a memory leak.
+pm_runtime_get_sync will increment pm usage counter even it failed.
+Forgetting to putting operation will result in reference leak here.
+We fix it:
+1) Replacing it with pm_runtime_resume_and_get to keep usage counter
+   balanced.
+2) Add putting operation before returning error.
 
-We can fix it by freeing the orom_data when ce_read_flash_module() fails.
-
-Fixes: af18d8866c80 ("ice: reduce time to read Option ROM CIVD data")
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Fixes:9135408c3ace4 ("dmaengine: mediatek: Add MediaTek UART APDMA support")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220319022142.142709-1-zhangqilong3@huawei.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_nvm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/dma/mediatek/mtk-uart-apdma.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_nvm.c b/drivers/net/ethernet/intel/ice/ice_nvm.c
-index 4eb0599714f4..13cdb5ea594d 100644
---- a/drivers/net/ethernet/intel/ice/ice_nvm.c
-+++ b/drivers/net/ethernet/intel/ice/ice_nvm.c
-@@ -641,6 +641,7 @@ ice_get_orom_civd_data(struct ice_hw *hw, enum ice_bank_select bank,
- 	status = ice_read_flash_module(hw, bank, ICE_SR_1ST_OROM_BANK_PTR, 0,
- 				       orom_data, hw->flash.banks.orom_size);
- 	if (status) {
-+		vfree(orom_data);
- 		ice_debug(hw, ICE_DBG_NVM, "Unable to read Option ROM data\n");
- 		return status;
+diff --git a/drivers/dma/mediatek/mtk-uart-apdma.c b/drivers/dma/mediatek/mtk-uart-apdma.c
+index 375e7e647df6..a1517ef1f4a0 100644
+--- a/drivers/dma/mediatek/mtk-uart-apdma.c
++++ b/drivers/dma/mediatek/mtk-uart-apdma.c
+@@ -274,7 +274,7 @@ static int mtk_uart_apdma_alloc_chan_resources(struct dma_chan *chan)
+ 	unsigned int status;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(mtkd->ddev.dev);
++	ret = pm_runtime_resume_and_get(mtkd->ddev.dev);
+ 	if (ret < 0) {
+ 		pm_runtime_put_noidle(chan->device->dev);
+ 		return ret;
+@@ -288,18 +288,21 @@ static int mtk_uart_apdma_alloc_chan_resources(struct dma_chan *chan)
+ 	ret = readx_poll_timeout(readl, c->base + VFF_EN,
+ 			  status, !status, 10, 100);
+ 	if (ret)
+-		return ret;
++		goto err_pm;
+ 
+ 	ret = request_irq(c->irq, mtk_uart_apdma_irq_handler,
+ 			  IRQF_TRIGGER_NONE, KBUILD_MODNAME, chan);
+ 	if (ret < 0) {
+ 		dev_err(chan->device->dev, "Can't request dma IRQ\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_pm;
  	}
+ 
+ 	if (mtkd->support_33bits)
+ 		mtk_uart_apdma_write(c, VFF_4G_SUPPORT, VFF_4G_SUPPORT_CLR_B);
+ 
++err_pm:
++	pm_runtime_put_noidle(mtkd->ddev.dev);
+ 	return ret;
+ }
+ 
 -- 
 2.35.1
 

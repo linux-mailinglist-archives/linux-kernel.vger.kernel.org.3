@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BA350F9DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A8D50F9D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348556AbiDZKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
+        id S1348481AbiDZKND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345152AbiDZKMr (ORCPT
+        with ESMTP id S1348556AbiDZKMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:12:47 -0400
+        Tue, 26 Apr 2022 06:12:43 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1407621E0BC
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:35:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEB7221F8EA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:35:26 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD8A3ED1;
-        Tue, 26 Apr 2022 02:35:23 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF2501424;
+        Tue, 26 Apr 2022 02:35:25 -0700 (PDT)
 Received: from localhost.localdomain (unknown [10.57.41.198])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1BFC83F73B;
-        Tue, 26 Apr 2022 02:35:21 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2A2DE3F73B;
+        Tue, 26 Apr 2022 02:35:24 -0700 (PDT)
 From:   Vincent Donnefort <vincent.donnefort@arm.com>
 To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         morten.rasmussen@arm.com, chris.redpath@arm.com,
         qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v6 1/7] sched/fair: Provide u64 read for 32-bits arch helper
-Date:   Tue, 26 Apr 2022 10:35:00 +0100
-Message-Id: <20220426093506.3415588-2-vincent.donnefort@arm.com>
+Subject: [PATCH v6 2/7] sched/fair: Decay task PELT values during wakeup migration
+Date:   Tue, 26 Apr 2022 10:35:01 +0100
+Message-Id: <20220426093506.3415588-3-vincent.donnefort@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220426093506.3415588-1-vincent.donnefort@arm.com>
 References: <20220426093506.3415588-1-vincent.donnefort@arm.com>
@@ -42,213 +42,280 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introducing macro helpers u64_u32_{store,load}() to factorize lockless
-accesses to u64 variables for 32-bits architectures.
+Before being migrated to a new CPU, a task sees its PELT values
+synchronized with rq last_update_time. Once done, that same task will also
+have its sched_avg last_update_time reset. This means the time between
+the migration and the last clock update (B) will not be accounted for in
+util_avg and a discontinuity will appear. This issue is amplified by the
+PELT clock scaling. If the clock hasn't been updated while the CPU is
+idle, clock_pelt will not be aligned with clock_task and that time (A)
+will be also lost.
 
-Users are for now cfs_rq.min_vruntime and sched_avg.last_update_time. To
-accommodate the later where the copy lies outside of the structure
-(cfs_rq.last_udpate_time_copy instead of sched_avg.last_update_time_copy),
-use the _copy() version of those helpers.
+   ---------|----- A -----|-----------|------- B -----|>
+        clock_pelt   clock_task     clock            now
 
-Those new helpers encapsulate smp_rmb() and smp_wmb() synchronization and
-therefore, have a small penalty in set_task_rq_fair() and init_cfs_rq().
+This is especially problematic for asymmetric CPU capacity systems which
+need stable util_avg signals for task placement and energy estimation.
+
+Ideally, this problem would be solved by updating the runqueue clocks
+before the migration. But that would require taking the runqueue lock
+which is quite expensive [1]. Instead estimate the missing time and update
+the task util_avg with that value:
+
+  A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
+
+sched_clock_cpu() is a costly functinon. Limit the usage to the case where
+the source CPU is idle as we know this is when the clock is having the
+biggest risk of being outdated.
+
+Neither clock_task, clock_pelt nor clock can be accessed without the
+runqueue lock. We then need to store those values in a timestamp variable
+which can be accessed during the migration. rq's enter_idle will give the
+wall-clock time when the rq went idle. We have then:
+
+  B = sched_clock_cpu() - rq->enter_idle.
+
+Then, to catch-up the PELT clock scaling (A), two cases:
+
+  * !CFS_BANDWIDTH: We can simply use clock_task(). This value is stored
+    in rq's clock_pelt_idle, before the rq enters idle. The estimated time
+    is then:
+
+      rq->clock_pelt_idle + sched_clock_cpu() - rq->enter_idle.
+
+  * CFS_BANDWIDTH: We can't catch-up with clock_task because of the
+    throttled_clock_task_time offset. cfs_rq's clock_pelt_idle is then
+    giving the PELT clock when the cfs_rq becomes idle. This gives:
+
+      A = rq->clock_pelt_idle - cfs_rq->clock_pelt_idle
+
+    And gives the following estimated time:
+
+      cfs_rq->last_update_time +
+      rq->clock_pelt_idle - cfs_rq->clock_pelt_idle + (A)
+      sched_clock_cpu() - rq->enter_idle (B)
+
+The (B) part of the missing time is however an estimation that doesn't
+take into account IRQ and Paravirt time.
+
+[1] https://lore.kernel.org/all/20190709115759.10451-1-chris.redpath@arm.com/
 
 Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 4c420124b5d6..abd1feeec0c2 100644
+index abd1feeec0c2..1256e2c0e2e2 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -600,11 +600,8 @@ static void update_min_vruntime(struct cfs_rq *cfs_rq)
- 	}
+@@ -3694,6 +3694,48 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
  
- 	/* ensure we never gain time by being placed backwards. */
--	cfs_rq->min_vruntime = max_vruntime(cfs_rq->min_vruntime, vruntime);
--#ifndef CONFIG_64BIT
--	smp_wmb();
--	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
--#endif
-+	u64_u32_store(cfs_rq->min_vruntime,
-+		      max_vruntime(cfs_rq->min_vruntime, vruntime));
- }
+ #endif /* CONFIG_FAIR_GROUP_SCHED */
  
- static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
-@@ -3301,6 +3298,11 @@ static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
- }
- 
- #ifdef CONFIG_SMP
-+static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
++#ifdef CONFIG_NO_HZ_COMMON
++static inline void migrate_se_pelt_lag(struct sched_entity *se)
 +{
-+	return u64_u32_load_copy(cfs_rq->avg.last_update_time,
-+				 cfs_rq->last_update_time_copy);
++	struct cfs_rq *cfs_rq;
++	struct rq *rq;
++	bool is_idle;
++	u64 now;
++
++	cfs_rq = cfs_rq_of(se);
++	rq = rq_of(cfs_rq);
++
++	rcu_read_lock();
++	is_idle = is_idle_task(rcu_dereference(rq->curr));
++	rcu_read_unlock();
++
++	/*
++	 * The lag estimation comes with a cost we don't want to pay all the
++	 * time. Hence, limiting to the case where the source CPU is idle and
++	 * we know we are at the greatest risk to have an outdated clock.
++	 */
++	if (!is_idle)
++		return;
++
++#ifdef CONFIG_CFS_BANDWIDTH
++	now = u64_u32_load(cfs_rq->clock_pelt_idle);
++	/* The clock has been stopped for throttling */
++	if (now == U64_MAX)
++		return;
++
++	now += cfs_rq_last_update_time(cfs_rq);
++	now -= u64_u32_load(rq->clock_pelt_idle);
++#else
++	now = u64_u32_load(rq->clock_pelt_idle);
++#endif
++	now += sched_clock_cpu(cpu_of(rq)) - u64_u32_load(rq->enter_idle);
++
++	__update_load_avg_blocked_se(now, se);
 +}
- #ifdef CONFIG_FAIR_GROUP_SCHED
- /*
-  * Because list_add_leaf_cfs_rq always places a child cfs_rq on the list
-@@ -3411,27 +3413,9 @@ void set_task_rq_fair(struct sched_entity *se,
- 	if (!(se->avg.last_update_time && prev))
- 		return;
- 
--#ifndef CONFIG_64BIT
--	{
--		u64 p_last_update_time_copy;
--		u64 n_last_update_time_copy;
--
--		do {
--			p_last_update_time_copy = prev->load_last_update_time_copy;
--			n_last_update_time_copy = next->load_last_update_time_copy;
--
--			smp_rmb();
-+	p_last_update_time = cfs_rq_last_update_time(prev);
-+	n_last_update_time = cfs_rq_last_update_time(next);
- 
--			p_last_update_time = prev->avg.last_update_time;
--			n_last_update_time = next->avg.last_update_time;
--
--		} while (p_last_update_time != p_last_update_time_copy ||
--			 n_last_update_time != n_last_update_time_copy);
--	}
--#else
--	p_last_update_time = prev->avg.last_update_time;
--	n_last_update_time = next->avg.last_update_time;
--#endif
- 	__update_load_avg_blocked_se(p_last_update_time, se);
- 	se->avg.last_update_time = n_last_update_time;
- }
-@@ -3786,8 +3770,9 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
- 	decayed |= __update_load_avg_cfs_rq(now, cfs_rq);
- 
- #ifndef CONFIG_64BIT
--	smp_wmb();
--	cfs_rq->load_last_update_time_copy = sa->last_update_time;
-+	u64_u32_store_copy(sa->last_update_time,
-+			   cfs_rq->last_update_time_copy,
-+			   sa->last_update_time);
- #endif
- 
- 	return decayed;
-@@ -3921,27 +3906,6 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 	}
++#else
++static void migrate_se_pelt_lag(struct sched_entity *se) {}
++#endif
++
+ /**
+  * update_cfs_rq_load_avg - update the cfs_rq's load/util averages
+  * @now: current time, as per cfs_rq_clock_pelt()
+@@ -4429,6 +4471,9 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ 	 */
+ 	if ((flags & (DEQUEUE_SAVE | DEQUEUE_MOVE)) != DEQUEUE_SAVE)
+ 		update_min_vruntime(cfs_rq);
++
++	if (cfs_rq->nr_running == 0)
++		update_idle_cfs_rq_clock_pelt(cfs_rq);
  }
  
--#ifndef CONFIG_64BIT
--static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
--{
--	u64 last_update_time_copy;
--	u64 last_update_time;
--
--	do {
--		last_update_time_copy = cfs_rq->load_last_update_time_copy;
--		smp_rmb();
--		last_update_time = cfs_rq->avg.last_update_time;
--	} while (last_update_time != last_update_time_copy);
--
--	return last_update_time;
--}
--#else
--static inline u64 cfs_rq_last_update_time(struct cfs_rq *cfs_rq)
--{
--	return cfs_rq->avg.last_update_time;
--}
--#endif
--
  /*
-  * Synchronize entity load avg of dequeued entity without locking
-  * the previous rq.
-@@ -6991,21 +6955,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	if (READ_ONCE(p->__state) == TASK_WAKING) {
- 		struct sched_entity *se = &p->se;
- 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
--		u64 min_vruntime;
- 
--#ifndef CONFIG_64BIT
--		u64 min_vruntime_copy;
--
--		do {
--			min_vruntime_copy = cfs_rq->min_vruntime_copy;
--			smp_rmb();
--			min_vruntime = cfs_rq->min_vruntime;
--		} while (min_vruntime != min_vruntime_copy);
--#else
--		min_vruntime = cfs_rq->min_vruntime;
--#endif
--
--		se->vruntime -= min_vruntime;
-+		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
- 	}
- 
- 	if (p->on_rq == TASK_ON_RQ_MIGRATING) {
-@@ -11453,10 +11404,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
- void init_cfs_rq(struct cfs_rq *cfs_rq)
+@@ -6946,6 +6991,8 @@ static void detach_entity_cfs_rq(struct sched_entity *se);
+  */
+ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
  {
- 	cfs_rq->tasks_timeline = RB_ROOT_CACHED;
--	cfs_rq->min_vruntime = (u64)(-(1LL << 20));
--#ifndef CONFIG_64BIT
--	cfs_rq->min_vruntime_copy = cfs_rq->min_vruntime;
--#endif
-+	u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
- #ifdef CONFIG_SMP
- 	raw_spin_lock_init(&cfs_rq->removed.lock);
++	struct sched_entity *se = &p->se;
++
+ 	/*
+ 	 * As blocked tasks retain absolute vruntime the migration needs to
+ 	 * deal with this by subtracting the old and adding the new
+@@ -6953,7 +7000,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 	 * the task on the new runqueue.
+ 	 */
+ 	if (READ_ONCE(p->__state) == TASK_WAKING) {
+-		struct sched_entity *se = &p->se;
+ 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+ 
+ 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+@@ -6965,25 +7011,29 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 		 * rq->lock and can modify state directly.
+ 		 */
+ 		lockdep_assert_rq_held(task_rq(p));
+-		detach_entity_cfs_rq(&p->se);
++		detach_entity_cfs_rq(se);
+ 
+ 	} else {
++		remove_entity_load_avg(se);
++
+ 		/*
+-		 * We are supposed to update the task to "current" time, then
+-		 * its up to date and ready to go to new CPU/cfs_rq. But we
+-		 * have difficulty in getting what current time is, so simply
+-		 * throw away the out-of-date time. This will result in the
+-		 * wakee task is less decayed, but giving the wakee more load
+-		 * sounds not bad.
++		 * Here, the task's PELT values have been updated according to
++		 * the current rq's clock. But if that clock hasn't been
++		 * updated in a while, a substantial idle time will be missed,
++		 * leading to an inflation after wake-up on the new rq.
++		 *
++		 * Estimate the missing time from the cfs_rq last_update_time
++		 * and update sched_avg to improve the PELT continuity after
++		 * migration.
+ 		 */
+-		remove_entity_load_avg(&p->se);
++		migrate_se_pelt_lag(se);
+ 	}
+ 
+ 	/* Tell new CPU we are migrated */
+-	p->se.avg.last_update_time = 0;
++	se->avg.last_update_time = 0;
+ 
+ 	/* We have migrated, no longer consider this task hot */
+-	p->se.exec_start = 0;
++	se->exec_start = 0;
+ 
+ 	update_scan_period(p, new_cpu);
+ }
+diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
+index 4ff2ed4f8fa1..0380f750adbe 100644
+--- a/kernel/sched/pelt.h
++++ b/kernel/sched/pelt.h
+@@ -103,6 +103,14 @@ static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
+ 	rq->clock_pelt += delta;
+ }
+ 
++static inline u64 rq_clock_pelt(struct rq *rq)
++{
++	lockdep_assert_rq_held(rq);
++	assert_clock_updated(rq);
++
++	return rq->clock_pelt - rq->lost_idle_time;
++}
++
+ /*
+  * When rq becomes idle, we have to check if it has lost idle time
+  * because it was fully busy. A rq is fully used when the /Sum util_sum
+@@ -130,17 +138,24 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
+ 	 */
+ 	if (util_sum >= divider)
+ 		rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
+-}
+ 
+-static inline u64 rq_clock_pelt(struct rq *rq)
+-{
+-	lockdep_assert_rq_held(rq);
+-	assert_clock_updated(rq);
++	 /* The rq is idle, we can sync with clock_task */
++	rq->clock_pelt = rq_clock_task(rq);
+ 
+-	return rq->clock_pelt - rq->lost_idle_time;
++	u64_u32_store(rq->enter_idle, rq_clock(rq));
++	u64_u32_store(rq->clock_pelt_idle, rq_clock_pelt(rq));
+ }
+ 
+ #ifdef CONFIG_CFS_BANDWIDTH
++static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
++{
++	if (unlikely(cfs_rq->throttle_count))
++		u64_u32_store(cfs_rq->clock_pelt_idle, U64_MAX);
++	else
++		u64_u32_store(cfs_rq->clock_pelt_idle,
++			      rq_clock_pelt(rq_of(cfs_rq)));
++}
++
+ /* rq->task_clock normalized against any time this cfs_rq has spent throttled */
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ {
+@@ -150,6 +165,7 @@ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ 	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
+ }
+ #else
++static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ {
+ 	return rq_clock_pelt(rq_of(cfs_rq));
+@@ -204,6 +220,7 @@ update_rq_clock_pelt(struct rq *rq, s64 delta) { }
+ static inline void
+ update_idle_rq_clock_pelt(struct rq *rq) { }
+ 
++static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
  #endif
+ 
+ 
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 762be73972bd..e2cf6e48b165 100644
+index e2cf6e48b165..07014e8cbae2 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -513,6 +513,45 @@ struct cfs_bandwidth { };
+@@ -641,6 +641,10 @@ struct cfs_rq {
+ 	int			runtime_enabled;
+ 	s64			runtime_remaining;
  
- #endif	/* CONFIG_CGROUP_SCHED */
- 
-+/*
-+ * u64_u32_load/u64_u32_store
-+ *
-+ * Use a copy of a u64 value to protect against data race. This is only
-+ * applicable for 32-bits architectures.
-+ */
-+#ifdef CONFIG_64BIT
-+# define u64_u32_load_copy(var, copy)       var
-+# define u64_u32_store_copy(var, copy, val) (var = val)
-+#else
-+# define u64_u32_load_copy(var, copy)					\
-+({									\
-+	u64 __val, __val_copy;						\
-+	do {								\
-+		__val_copy = copy;					\
-+		/*							\
-+		 * paired with u64_u32_store, ordering access		\
-+		 * to var and copy.					\
-+		 */							\
-+		smp_rmb();						\
-+		__val = var;						\
-+	} while (__val != __val_copy);					\
-+	__val;								\
-+})
-+# define u64_u32_store_copy(var, copy, val)				\
-+do {									\
-+	typeof(val) __val = (val);					\
-+	var = __val;							\
-+	/*								\
-+	 * paired with u64_u32_load, ordering access to var and		\
-+	 * copy.							\
-+	 */								\
-+	smp_wmb();							\
-+	copy = __val;							\
-+} while (0)
++	u64			clock_pelt_idle;
++#ifndef CONFIG_64BIT
++	u64                     clock_pelt_idle_copy;
 +#endif
-+# define u64_u32_load(var)      u64_u32_load_copy(var, var##_copy)
-+# define u64_u32_store(var, val) u64_u32_store_copy(var, var##_copy, val)
-+
- /* CFS-related fields in a runqueue */
- struct cfs_rq {
- 	struct load_weight	load;
-@@ -553,7 +592,7 @@ struct cfs_rq {
- 	 */
- 	struct sched_avg	avg;
- #ifndef CONFIG_64BIT
--	u64			load_last_update_time_copy;
-+	u64			last_update_time_copy;
- #endif
- 	struct {
- 		raw_spinlock_t	lock ____cacheline_aligned;
+ 	u64			throttled_clock;
+ 	u64			throttled_clock_pelt;
+ 	u64			throttled_clock_pelt_time;
+@@ -1013,6 +1017,12 @@ struct rq {
+ 	u64			clock_task ____cacheline_aligned;
+ 	u64			clock_pelt;
+ 	unsigned long		lost_idle_time;
++	u64			clock_pelt_idle;
++	u64			enter_idle;
++#ifndef CONFIG_64BIT
++	u64			clock_pelt_idle_copy;
++	u64			enter_idle_copy;
++#endif
+ 
+ 	atomic_t		nr_iowait;
+ 
 -- 
 2.25.1
 

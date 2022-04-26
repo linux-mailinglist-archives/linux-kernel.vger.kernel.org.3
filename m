@@ -2,229 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B178B50F158
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7489050F14E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245461AbiDZGpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S245641AbiDZGpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343498AbiDZGoR (ORCPT
+        with ESMTP id S245611AbiDZGoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:44:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8696011A07
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650955265;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PaxfFpiwJIOoU//KMEFt34Dr7h93sV4bGjReNBc2liQ=;
-        b=CH3pBbSEoMBH5T0KlhE0Iqt5nzd9J0qF5bmm1dFhUE5Vlczb/H9xib72KH8hglvLLdPwip
-        aS/78KcIBoDBfGZqITCOp4O+Yxa1QuDG5dup8sTFw1T7Sd211kYoqxIzDJgAb86DFucSQC
-        58OmPoXZFAOTtoiLgjCpY69hOEJN+OM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-j3eAS5owPFKpkX7Q1MXcXQ-1; Tue, 26 Apr 2022 02:41:01 -0400
-X-MC-Unique: j3eAS5owPFKpkX7Q1MXcXQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 26 Apr 2022 02:44:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B4CE099;
+        Mon, 25 Apr 2022 23:40:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0D42800882;
-        Tue, 26 Apr 2022 06:41:00 +0000 (UTC)
-Received: from [10.72.13.230] (ovpn-13-230.pek2.redhat.com [10.72.13.230])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 04500463EC1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0287CB81C1E;
         Tue, 26 Apr 2022 06:40:52 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v6 4/9] KVM: arm64: Add vendor hypervisor firmware
- register
-To:     Raghavendra Rao Ananta <rananta@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-References: <20220423000328.2103733-1-rananta@google.com>
- <20220423000328.2103733-5-rananta@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <a5c43c41-8981-07f7-8bc7-6aabbaa05436@redhat.com>
-Date:   Tue, 26 Apr 2022 14:40:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF1AC385AE;
+        Tue, 26 Apr 2022 06:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650955250;
+        bh=6torebe632s6Xh8593qZioLSF0dyeFQL93aZy68b2AU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fKqg1mY+zPEmj0CIcvgxqV4kN9oczi+6n9FcLrbgXCfl5q87ug6obd0BE2YwGn9br
+         TLqNHVJjwZBc6mpkwIhwg+OhDd0BOYJAhU2fIH3ncr9w/GfHLFhdG4OpTr1q1MenZS
+         bI5u0Ya/Ie5vBC6/MSi4RxceFLOFb1/F1gkCWe7c=
+Date:   Tue, 26 Apr 2022 08:40:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     stable@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        davem@davemloft.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: add IPA qcom,qmp property
+Message-ID: <YmeT7yC4896tlwi9@kroah.com>
+References: <20220421220011.1750952-1-elder@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20220423000328.2103733-5-rananta@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421220011.1750952-1-elder@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/23/22 8:03 AM, Raghavendra Rao Ananta wrote:
-> Introduce the firmware register to hold the vendor specific
-> hypervisor service calls (owner value 6) as a bitmap. The
-> bitmap represents the features that'll be enabled for the
-> guest, as configured by the user-space. Currently, this
-> includes support for KVM-vendor features along with
-> reading the UID, represented by bit-0, and Precision Time
-> Protocol (PTP), represented by bit-1.
+On Thu, Apr 21, 2022 at 05:00:11PM -0500, Alex Elder wrote:
+> commit 73419e4d2fd1b838fcb1df6a978d67b3ae1c5c01 upstream.
 > 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> At least three platforms require the "qcom,qmp" property to be
+> specified, so the IPA driver can request register retention across
+> power collapse.  Update DTS files accordingly.
+> 
+> Cc: <stable@vger.kernel.org>    # 5.15.x
+> Fixes: 1aac309d3207 ("net: ipa: use autosuspend")
+> Signed-off-by: Alex Elder <elder@linaro.org>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Link: https://lore.kernel.org/r/20220201140723.467431-1-elder@linaro.org
 > ---
->   arch/arm64/include/asm/kvm_host.h |  2 ++
->   arch/arm64/include/uapi/asm/kvm.h |  4 ++++
->   arch/arm64/kvm/hypercalls.c       | 23 ++++++++++++++++++-----
->   include/kvm/arm_hypercalls.h      |  2 ++
->   4 files changed, 26 insertions(+), 5 deletions(-)
-> 
+> Enable this feature, now that 8ff8bdb8c92d6 ("net: ipa: request IPA
+> register values be retained") has been accepted into linux-5.15.y.
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+Both now queued up, thanks.
 
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 27d4b2a7970e..a025c2ba012a 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -106,10 +106,12 @@ struct kvm_arch_memory_slot {
->    *
->    * @std_bmap: Bitmap of standard secure service calls
->    * @std_hyp_bmap: Bitmap of standard hypervisor service calls
-> + * @vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
->    */
->   struct kvm_smccc_features {
->   	unsigned long std_bmap;
->   	unsigned long std_hyp_bmap;
-> +	unsigned long vendor_hyp_bmap;
->   };
->   
->   struct kvm_arch {
-> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> index 9eecc7ee8c14..e7d5ae222684 100644
-> --- a/arch/arm64/include/uapi/asm/kvm.h
-> +++ b/arch/arm64/include/uapi/asm/kvm.h
-> @@ -344,6 +344,10 @@ struct kvm_arm_copy_mte_tags {
->   #define KVM_REG_ARM_STD_HYP_BMAP		KVM_REG_ARM_FW_FEAT_BMAP_REG(1)
->   #define KVM_REG_ARM_STD_HYP_BIT_PV_TIME		0
->   
-> +#define KVM_REG_ARM_VENDOR_HYP_BMAP		KVM_REG_ARM_FW_FEAT_BMAP_REG(2)
-> +#define KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT	0
-> +#define KVM_REG_ARM_VENDOR_HYP_BIT_PTP		1
-> +
->   /* Device Control API: ARM VGIC */
->   #define KVM_DEV_ARM_VGIC_GRP_ADDR	0
->   #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS	1
-> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> index f097bebdad39..76e626d0e699 100644
-> --- a/arch/arm64/kvm/hypercalls.c
-> +++ b/arch/arm64/kvm/hypercalls.c
-> @@ -72,9 +72,6 @@ static bool kvm_hvc_call_default_allowed(struct kvm_vcpu *vcpu, u32 func_id)
->   	 */
->   	case ARM_SMCCC_VERSION_FUNC_ID:
->   	case ARM_SMCCC_ARCH_FEATURES_FUNC_ID:
-> -	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
-> -	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> -	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
->   		return true;
->   	default:
->   		return kvm_psci_func_id_is_valid(vcpu, func_id);
-> @@ -97,6 +94,13 @@ static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu, u32 func_id)
->   	case ARM_SMCCC_HV_PV_TIME_ST:
->   		return kvm_arm_fw_reg_feat_enabled(&smccc_feat->std_hyp_bmap,
->   					KVM_REG_ARM_STD_HYP_BIT_PV_TIME);
-> +	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> +	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
-> +		return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
-> +					KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT);
-> +	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
-> +		return kvm_arm_fw_reg_feat_enabled(&smccc_feat->vendor_hyp_bmap,
-> +					KVM_REG_ARM_VENDOR_HYP_BIT_PTP);
->   	default:
->   		return kvm_hvc_call_default_allowed(vcpu, func_id);
->   	}
-> @@ -189,8 +193,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
->   		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
->   		break;
->   	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
-> -		val[0] = BIT(ARM_SMCCC_KVM_FUNC_FEATURES);
-> -		val[0] |= BIT(ARM_SMCCC_KVM_FUNC_PTP);
-> +		val[0] = smccc_feat->vendor_hyp_bmap;
->   		break;
->   	case ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID:
->   		kvm_ptp_get_time(vcpu, val);
-> @@ -217,6 +220,7 @@ static const u64 kvm_arm_fw_reg_ids[] = {
->   	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
->   	KVM_REG_ARM_STD_BMAP,
->   	KVM_REG_ARM_STD_HYP_BMAP,
-> +	KVM_REG_ARM_VENDOR_HYP_BMAP,
->   };
->   
->   void kvm_arm_init_hypercalls(struct kvm *kvm)
-> @@ -225,6 +229,7 @@ void kvm_arm_init_hypercalls(struct kvm *kvm)
->   
->   	smccc_feat->std_bmap = KVM_ARM_SMCCC_STD_FEATURES;
->   	smccc_feat->std_hyp_bmap = KVM_ARM_SMCCC_STD_HYP_FEATURES;
-> +	smccc_feat->vendor_hyp_bmap = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
->   }
->   
->   int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
-> @@ -317,6 +322,9 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->   	case KVM_REG_ARM_STD_HYP_BMAP:
->   		val = READ_ONCE(smccc_feat->std_hyp_bmap);
->   		break;
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> +		val = READ_ONCE(smccc_feat->vendor_hyp_bmap);
-> +		break;
->   	default:
->   		return -ENOENT;
->   	}
-> @@ -343,6 +351,10 @@ static int kvm_arm_set_fw_reg_bmap(struct kvm_vcpu *vcpu, u64 reg_id, u64 val)
->   		fw_reg_bmap = &smccc_feat->std_hyp_bmap;
->   		fw_reg_features = KVM_ARM_SMCCC_STD_HYP_FEATURES;
->   		break;
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
-> +		fw_reg_bmap = &smccc_feat->vendor_hyp_bmap;
-> +		fw_reg_features = KVM_ARM_SMCCC_VENDOR_HYP_FEATURES;
-> +		break;
->   	default:
->   		return -ENOENT;
->   	}
-> @@ -445,6 +457,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
->   		return 0;
->   	case KVM_REG_ARM_STD_BMAP:
->   	case KVM_REG_ARM_STD_HYP_BMAP:
-> +	case KVM_REG_ARM_VENDOR_HYP_BMAP:
->   		return kvm_arm_set_fw_reg_bmap(vcpu, reg->id, val);
->   	default:
->   		return -ENOENT;
-> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
-> index aadd6ae3ab72..4ebfdd26e486 100644
-> --- a/include/kvm/arm_hypercalls.h
-> +++ b/include/kvm/arm_hypercalls.h
-> @@ -9,9 +9,11 @@
->   /* Last valid bits of the bitmapped firmware registers */
->   #define KVM_REG_ARM_STD_BMAP_BIT_MAX		0
->   #define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX	0
-> +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX	1
->   
->   #define KVM_ARM_SMCCC_STD_FEATURES		GENMASK(KVM_REG_ARM_STD_BMAP_BIT_MAX, 0)
->   #define KVM_ARM_SMCCC_STD_HYP_FEATURES		GENMASK(KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX, 0)
-> +#define KVM_ARM_SMCCC_VENDOR_HYP_FEATURES	GENMASK(KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX, 0)
->   
->   int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
->   
-> 
-
+greg k-h

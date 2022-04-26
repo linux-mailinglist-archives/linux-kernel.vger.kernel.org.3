@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A76850F885
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB57350F8FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346958AbiDZJMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S1347559AbiDZJOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347329AbiDZIvT (ORCPT
+        with ESMTP id S1347345AbiDZIvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6341CCFE7C;
+        Tue, 26 Apr 2022 04:51:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6402CD0A92;
         Tue, 26 Apr 2022 01:40:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C26896104C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D926460EC7;
         Tue, 26 Apr 2022 08:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 698CDC385A0;
-        Tue, 26 Apr 2022 08:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3D771C385C5;
+        Tue, 26 Apr 2022 08:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650962411;
-        bh=Y7Z7dCVcyqeGFz/D8avQ0iiz2pUwlgEGs0PVOgs5IEA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NANSNwZkt/EfQS56azmPlB8nVmpUB66Z8uLjasEMUUqLLHm4Tw5AN3jT+obncTvyC
-         FetNX0sx8R8KQBnQZKBJUJtwd4lFVIZtDcNmF/RhX2BVqVlxPJHWfk/Pjz3Cl+Q0mR
-         gZ+/f0yicISQ1hHO385w0YYsXFtGA/8hwBe58Hn6rokt4PG0oc3fA4u4ZmOtSnXn2N
-         8HRzpkijUJIeKxs2Msb/HQDZvIlBssN8RZ9t5+B2EwH3Iis9Odh+XQkKBwcYc8S8/k
-         k6st0KAcxKibgib8FayExvP8CzF8BBh0oRGKSbLYW8Y5HYJqUwwGw8DVDtgyrohA5j
-         j/Hy85DxKV2nA==
-Message-ID: <063c09f5-bb70-11cf-0a20-662c1b7f07fb@kernel.org>
-Date:   Tue, 26 Apr 2022 11:40:06 +0300
+        bh=bQ+5P70i0WtQREnFW1rAYAo8fBoIK7QDEbySBRRFQQk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VdFnZ9kn7yj/wrQPr36e6fff/EGK3not/II/W0y+qc1pgc62dRvD0XmQUTPTqcsdT
+         DlV8ER/LA2AibF005ySJ4c9WaEqL1ITkbEvzOgVVPtfLh0qoTiStY96KosKeHB5UgS
+         deT/XYm6DSxPQq5wSaaerT1YeBpGlZzDLm1ahDsXkNmtXcLkB7IYumpcjVUSNYSwvz
+         FY2FPsMyCwJmX6jElV2URbUW0zFt/ec3azfVxOdl358UNxuczj2rZDU0MeX92Jz6iY
+         J/u8HQGdAgeFUXrrDCYNwdXiQS3yvnoIikOV7Xc1olWZzIAtUKCjnXjhKraFH21rM1
+         PqYT/A3mo6yQg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1AAE6E8DD85;
+        Tue, 26 Apr 2022 08:40:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 0/2] memory: omap-gpmc: Allow module build
-Content-Language: en-US
-To:     krzk@kernel.org
-Cc:     miquel.raynal@bootlin.com, tony@atomide.com, vigneshr@ti.com,
-        kishon@ti.com, nm@ti.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220426082611.24427-1-rogerq@kernel.org>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20220426082611.24427-1-rogerq@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [Patch net-next] net: dsa: ksz: added the generic port_stp_state_set
+ function
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165096241109.29558.13120003848434431521.git-patchwork-notify@kernel.org>
+Date:   Tue, 26 Apr 2022 08:40:11 +0000
+References: <20220424112831.11504-1-arun.ramadoss@microchip.com>
+In-Reply-To: <20220424112831.11504-1-arun.ramadoss@microchip.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
+        olteanv@gmail.com, f.fainelli@gmail.com, vivien.didelot@gmail.com,
+        andrew@lunn.ch, UNGLinuxDriver@microchip.com,
+        woojung.huh@microchip.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-I've asked LKP bot to test my tree.
-We should get a report if there are any surprises.
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-cheers,
--roger
+On Sun, 24 Apr 2022 16:58:31 +0530 you wrote:
+> The ksz8795 and ksz9477 uses the same algorithm for the
+> port_stp_state_set function except the register address is different. So
+> moved the algorithm to the ksz_common.c and used the dev_ops for
+> register read and write. This function can also used for the lan937x
+> part. Hence making it generic for all the parts.
+> 
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> 
+> [...]
 
-On 26/04/2022 11:26, Roger Quadros wrote:
-> Hi,
-> 
-> These patches allow OMAP_GPMC config to be visible in menuconfig
-> and buildable as a module.
-> 
-> cheers,
-> -roger
-> 
-> Changelog:
-> v4:
-> - drop COMPILE_TEST as include/linux/irqdomain.h does not have
-> fallbacks if CONFIG_IRQ_DOMAIN is not available. So build will
-> fail with COMPILE_TEST on platforms not having CONFIG_IRQ_DOMAIN.
-> - use GPL instead of GPL v2 for MODULE_LICENSE. Fixes checkpatch
-> warning.
-> 
-> v3:
-> - Remove not required MODULE_ALIAS
-> - Mention in commit message why we need to remove of_match_node() call
-> 
-> v2:
-> - Allow building as a module
-> 
-> Roger Quadros (2):
->   memory: omap-gpmc: Make OMAP_GPMC config visible and selectable
->   memory: omap-gpmc: Allow building as a module
-> 
->  drivers/memory/Kconfig     |  2 +-
->  drivers/memory/omap-gpmc.c | 43 ++++++++++++++++++++------------------
->  2 files changed, 24 insertions(+), 21 deletions(-)
-> 
+Here is the summary with links:
+  - [net-next] net: dsa: ksz: added the generic port_stp_state_set function
+    https://git.kernel.org/netdev/net-next/c/de6dd626d708
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

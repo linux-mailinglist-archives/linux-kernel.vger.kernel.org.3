@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE26E50F2B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2480E50F2B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344144AbiDZHkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S1344110AbiDZHkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344108AbiDZHjt (ORCPT
+        with ESMTP id S1344086AbiDZHkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:39:49 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F2BFD04;
-        Tue, 26 Apr 2022 00:36:37 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KnYZk4Xylz1JBn8;
-        Tue, 26 Apr 2022 15:35:42 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 15:36:35 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 15:36:34 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH] rcu/nocb: Delete local variable 'need_rcu_nocb_mask' in rcu_init_nohz()
-Date:   Tue, 26 Apr 2022 15:36:26 +0800
-Message-ID: <20220426073626.967-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        Tue, 26 Apr 2022 03:40:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C013FD09;
+        Tue, 26 Apr 2022 00:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650958622; x=1682494622;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=S3egy43WTJExLU3u7/k2FT8QCl0oLX3uS9BX5mAWDfo=;
+  b=XcA+cL+wgB+W1k7iSFPniozzMSxbeHS1t4nDiyJKL95vcRv2P8wI5NLP
+   dtXQ051jkZ2p53lMEX5C1MLkBchg2iT4QXjExJ7d1KMP0lDUQH9WmpAkM
+   35ny3nfqEm+AHrr9ZomeaiqC8D4JEunL5ycPOa4gIv1Ktfoley8Am1Iqr
+   3iPIAl7a0VqG7vd6sIDQIyhkR3Vp7znOEteYyF7kw/UKtk91mXu2xCxlr
+   loFB7AYMAK6GzJNk4Hd+DDkfiGWVnPgp2BnU43gmmE1hz8JIe401kExb0
+   fS5SQM0rV+fF30U79+q2XfkgMgzSHh2qww7ZZndcfgEYxuSQNf6SgSDaZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247417826"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="247417826"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:36:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="532528422"
+Received: from vhlushch-mobl.ger.corp.intel.com (HELO localhost) ([10.249.132.136])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:36:52 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Zhi Wang <zhi.a.wang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm-intel tree
+In-Reply-To: <20220426120802.574a9659@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220426120802.574a9659@canb.auug.org.au>
+Date:   Tue, 26 Apr 2022 10:36:50 +0300
+Message-ID: <87a6c8uwh9.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The local variable 'need_rcu_nocb_mask' is true only if CONFIG_NO_HZ_FULL
-is defined. So branch "if (need_rcu_nocb_mask)" can be moved within the
-scope of "#if defined(CONFIG_NO_HZ_FULL)". At this point, using variable
-'need_rcu_nocb_mask' is not necessary, so delete it.
+On Tue, 26 Apr 2022, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Hi all,
+>
+> After merging the drm-intel tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> ERROR: modpost: "intel_runtime_pm_put" [drivers/gpu/drm/i915/kvmgt.ko] undefined!
+>
+> Possibly caused by commit
+>
+>   8b750bf74418 ("drm/i915/gvt: move the gvt code into kvmgt.ko")
+>
+> or one of tehe follow ups.
+>
+> I have used the drm-intel tree from next-20220422 for today.
 
-No functional changes, but the code looks a little more concise.
+Details at [1], fix at [2].
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/rcu/tree_nocb.h | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+BR,
+Jani.
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 636d0546a4e932e..1e334e217f0afb7 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1165,15 +1165,10 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
- void __init rcu_init_nohz(void)
- {
- 	int cpu;
--	bool need_rcu_nocb_mask = false;
- 	struct rcu_data *rdp;
- 
- #if defined(CONFIG_NO_HZ_FULL)
--	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
--		need_rcu_nocb_mask = true;
--#endif /* #if defined(CONFIG_NO_HZ_FULL) */
--
--	if (need_rcu_nocb_mask) {
-+	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
- 		if (!cpumask_available(rcu_nocb_mask)) {
- 			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
- 				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
-@@ -1182,6 +1177,7 @@ void __init rcu_init_nohz(void)
- 		}
- 		rcu_nocb_is_setup = true;
- 	}
-+#endif /* #if defined(CONFIG_NO_HZ_FULL) */
- 
- 	if (!rcu_nocb_is_setup)
- 		return;
+[1] https://lore.kernel.org/r/87ilqxuyu3.fsf@intel.com
+[2] https://lore.kernel.org/r/20220425220331.24865-1-zhi.a.wang@intel.com
+
+
 -- 
-2.26.0.106.g9fadedd
-
+Jani Nikula, Intel Open Source Graphics Center

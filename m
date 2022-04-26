@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCE4510530
+	by mail.lfdr.de (Postfix) with ESMTP id 656C9510531
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiDZRWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S232070AbiDZRXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiDZRWo (ORCPT
+        with ESMTP id S231994AbiDZRXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:22:44 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD7D44753;
-        Tue, 26 Apr 2022 10:19:34 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:49348)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njOqb-00AeV8-5Z; Tue, 26 Apr 2022 11:19:33 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35722 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njOqa-002Nau-7s; Tue, 26 Apr 2022 11:19:32 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org
-In-Reply-To: <20220426055122.GA29684@redhat.com> (Oleg Nesterov's message of
-        "Tue, 26 Apr 2022 07:51:23 +0200")
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <20220425143537.GA12412@redhat.com>
-        <20220425183343.GM2731@worktop.programming.kicks-ass.net>
-        <87pml4llvm.fsf@email.froward.int.ebiederm.org>
-        <20220426055122.GA29684@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Tue, 26 Apr 2022 12:19:20 -0500
-Message-ID: <878rrrkbjb.fsf@email.froward.int.ebiederm.org>
+        Tue, 26 Apr 2022 13:23:09 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBF14B871
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:20:00 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id bo5so18563102pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O4FZja9WudcKens4azldCUmjh2etbVq0EGH84l7RjgU=;
+        b=gcOCeXEtfA5bcZ/0OV4XMefXitjP6xuTILazvyaC+XU0gpaBiM0Dlgq0QSn5nnYeDu
+         hhDibZtZpYTsaYC0GBYi9E4xYXa1QxVYXJPTKhW5jEogY9D7brvG/037iX8URKn16x/Y
+         a45/RuOD/U5pb9Hj6+uANTPMZDlDhiPvLhJUfjpngUdOCiueITld9oB5KmFW6mJiK1+S
+         N76z7OfUxd1I62SO1Fu0ejnC4zUVdviKqwRlQv0tkpyGOXmistKqH7Bnmmdly65qfeU7
+         Gnq6Sbk7uyoGGHhUYla7OHHq8l+ncuWcUxttGrpEjVKb9jBI5znDmgB8HDYwHZMvbBfy
+         +6KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O4FZja9WudcKens4azldCUmjh2etbVq0EGH84l7RjgU=;
+        b=OBmWN09bTuKWnIIRLkKy8iaMWx2vJ6rAD/mJKxNLqfYguwK6CVu46iyUj0hpsWkiWf
+         N9XJteTP09WVd5QRo8meel27PxA/JA4O6w8k2UDINmqmfjLcOxMjT+CfaqWHh5dfxjR+
+         nslY78v3ZVyvxfZrVgeG97EPB60qx2wCZ6dNzyvc9JLJoOQ8njUSOBw8G6+rYw4z2yb+
+         bpufGxHIgZmIv9XAnlG9Dxm1PC10SBawSq256jb8+Yv0AOhjJnH7c0yVxEfmJswRcTwy
+         go/P4++gf2r/iG5XdAGJFXb7x94WLk4TM6D3c2fvM7n4Ql7zv88QKfbGwPcIlK961B5u
+         7Q/g==
+X-Gm-Message-State: AOAM533tiaXvXXpKUgAdJPHIpMkBrEAmngGUO3a7rNsENKrwjfWKXprz
+        18aO9lN1/krTm3aL/b6PVxv7ZnWJSDYBFi7wJkmWsQ==
+X-Google-Smtp-Source: ABdhPJw41MD54CZn3iFTHAqU/4zXInNZxrbaKEbgqHdskaF06GdYcfMFMso5Ak25IGKvB9HSfzmpK89B5hdyIBaBt1M=
+X-Received: by 2002:a63:8ac7:0:b0:3aa:fa62:5a28 with SMTP id
+ y190-20020a638ac7000000b003aafa625a28mr14854945pgd.400.1650993600084; Tue, 26
+ Apr 2022 10:20:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1njOqa-002Nau-7s;;;mid=<878rrrkbjb.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+mtzpiqhlhzhmU0iIbDnQQBdvVxBQ/W88=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220327205803.739336-1-mizhang@google.com> <YkHRYY6x1Ewez/g4@google.com>
+ <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com> <YkH7KZbamhKpCidK@google.com>
+In-Reply-To: <YkH7KZbamhKpCidK@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Tue, 26 Apr 2022 10:19:49 -0700
+Message-ID: <CAL715W+6UwO2zgoSLUeTmBHRo1HMSGshA6YMhvBiqfJrejhwFQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before lookup_address_in_mm()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 301 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (3.7%), b_tie_ro: 10 (3.2%), parse: 1.33
-        (0.4%), extract_message_metadata: 4.0 (1.3%), get_uri_detail_list:
-        1.13 (0.4%), tests_pri_-1000: 5 (1.8%), tests_pri_-950: 1.77 (0.6%),
-        tests_pri_-900: 1.48 (0.5%), tests_pri_-90: 86 (28.7%), check_bayes:
-        84 (28.0%), b_tokenize: 7 (2.4%), b_tok_get_all: 6 (2.0%),
-        b_comp_prob: 2.3 (0.8%), b_tok_touch_all: 65 (21.6%), b_finish: 1.03
-        (0.3%), tests_pri_0: 168 (55.9%), check_dkim_signature: 0.51 (0.2%),
-        check_dkim_adsp: 2.8 (0.9%), poll_dns_idle: 0.96 (0.3%), tests_pri_10:
-        2.1 (0.7%), tests_pri_500: 8 (2.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
-
-> On 04/25, Eric W. Biederman wrote:
->>
->> I don't see JOBCTL_TRACED_QUIESCE being cleared "if (!current->ptrace)".
+On Mon, Mar 28, 2022 at 11:15 AM Sean Christopherson <seanjc@google.com> wrote:
 >
-> As Peter explained, in this case we can rely on __ptrace_unlink() which
-> should clear this flag.
+> On Mon, Mar 28, 2022, Mingwei Zhang wrote:
+> > With that, I start to feel this is a bug. The issue is just so rare
+> > that it has never triggered a problem.
+> >
+> > lookup_address_in_mm() walks the host page table as if it is a
+> > sequence of _static_ memory chunks. This is clearly dangerous.
+>
+> Yeah, it's broken.  The proper fix is do something like what perf uses, or maybe
+> just genericize and reuse the code from commit 8af26be06272
+> ("perf/core: Fix arch_perf_get_page_size()).
 
-I had missed that that signal_wake_up_state was clearing
-JOBCTL_TRACED_QUIESCE.
+hmm, I am thinking about this. We clearly need an adaptor layer if we
+choose to use this function, e.g., size -> layer change; using irq or
+not. Alternatively, I am wondering if we can just modify
+lookup_address_in_mm() to make the code compatible with "lockless"
+walk?
 
-Relying on __ptrace_unlink assumes the __ptrace_unlink happens after
-siglock is taken before calling ptrace_stop.  Especially with the
-ptrace_notify in signal_delivered that does not look guaranteed.
+On top of that, since kvm_mmu_max_mapping_level() is used in two
+places: 1) ept violation and 2) disabling dirty logging. The former
+does not require disable/enable irq since it is safe. So maybe add a
+parameter in this function and plumb through towards
+host_pfn_mapping_level()?
+>
+> > But right now,  kvm_mmu_max_mapping_level() are used in other places
+> > as well: kvm_mmu_zap_collapsible_spte(), which does not satisfy the
+> > strict requirement of walking the host page table.
+>
+> The host pfn size is used only as a hueristic, so false postives/negatives are
+> ok, the only race that needs to be avoided is dereferencing freed page table
+> memory.  lookup_address_in_pgd() is really broken because it doesn't even ensure
+> a given PxE is READ_ONCE().  I suppose one could argue the caller is broken, but
+> I doubt KVM is the only user that doesn't provide the necessary protections.
 
-The __ptrace_unlink could also happen during arch_ptrace_stop.
-
-Relying on siglock is sufficient because __ptrace_unlink holds siglock
-over clearing task->ptrace.  Which means that the simple fix for this is
-to just test task->ptrace before we set JOBCTL_TRACED_QUEIESCE.
-
-Eric
-
+right. since lookup_address_in_pgd() is so broken. I am thinking about
+just fix it in place instead of switching to a different function.

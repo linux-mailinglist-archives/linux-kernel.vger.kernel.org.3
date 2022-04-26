@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE5D50F8A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB6C50F808
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346455AbiDZJ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S242022AbiDZJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345636AbiDZJBz (ORCPT
+        with ESMTP id S1345893AbiDZJCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:01:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEE68C7FE;
-        Tue, 26 Apr 2022 01:43:37 -0700 (PDT)
+        Tue, 26 Apr 2022 05:02:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0DDDE082;
+        Tue, 26 Apr 2022 01:43:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30572B81CFE;
-        Tue, 26 Apr 2022 08:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965B4C385AE;
-        Tue, 26 Apr 2022 08:43:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D929611BB;
+        Tue, 26 Apr 2022 08:43:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD9EC385A4;
+        Tue, 26 Apr 2022 08:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962614;
-        bh=SUAn3YB/j5PTGxSFVHNsRKIXtZlnRLSnEars9wTl8II=;
+        s=korg; t=1650962620;
+        bh=Urtn68nh2cnrStwYQ2ZjZ6cnqWEIAIE1PNUgiWD29HA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TfL42/A6w/Ue/mF5GB7cZp/gZKolDpCK4F4VMovQUcplyoCSga1VQENwxGZE/s7zx
-         Y4mnFf4piLAgfA7fNqPQaK9n9XA/L+wzQdvLN9knP99kklRt2jJIOkkmUzNqPsCNQn
-         vtt+XkH4JAU3bMA352ZDCQlKlStut8cwnM7Zx6XY=
+        b=VVgc9mpBpsriNPJYm8w8Cpker9DNrhBMOwggAPaIF3LvUNxWeBLHJpMdf6AcBtMlE
+         S1sohlR4T5ioJSFx+GXvvbVDEKIgiTscXC73ofgAjNarbK5PDXQGjAYhR6wvr7TYIG
+         7NY8lA0HrifQvelyu/skr21qd3CPZJhcSXGxuaWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
+        stable@vger.kernel.org, Flavio Leitner <fbl@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
-Subject: [PATCH 5.17 032/146] net/smc: Fix sock leak when release after smc_shutdown()
-Date:   Tue, 26 Apr 2022 10:20:27 +0200
-Message-Id: <20220426081750.970138852@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 033/146] net/packet: fix packet_sock xmit return value checking
+Date:   Tue, 26 Apr 2022 10:20:28 +0200
+Message-Id: <20220426081750.998058054@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
 References: <20220426081750.051179617@linuxfoundation.org>
@@ -56,43 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lu <tonylu@linux.alibaba.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit 1a74e99323746353bba11562a2f2d0aa8102f402 ]
+[ Upstream commit 29e8e659f984be00d75ec5fef4e37c88def72712 ]
 
-Since commit e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown
-and fallback"), for a fallback connection, __smc_release() does not call
-sock_put() if its state is already SMC_CLOSED.
+packet_sock xmit could be dev_queue_xmit, which also returns negative
+errors. So only checking positive errors is not enough, or userspace
+sendmsg may return success while packet is not send out.
 
-When calling smc_shutdown() after falling back, its state is set to
-SMC_CLOSED but does not call sock_put(), so this patch calls it.
+Move the net_xmit_errno() assignment in the braces as checkpatch.pl said
+do not use assignment in if condition.
 
-Reported-and-tested-by: syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
-Fixes: e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown and fallback")
-Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Flavio Leitner <fbl@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/af_smc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/packet/af_packet.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 303c5e56e4df..68cd110722a4 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -2538,8 +2538,10 @@ static int smc_shutdown(struct socket *sock, int how)
- 	if (smc->use_fallback) {
- 		rc = kernel_sock_shutdown(smc->clcsock, how);
- 		sk->sk_shutdown = smc->clcsock->sk->sk_shutdown;
--		if (sk->sk_shutdown == SHUTDOWN_MASK)
-+		if (sk->sk_shutdown == SHUTDOWN_MASK) {
- 			sk->sk_state = SMC_CLOSED;
-+			sock_put(sk);
-+		}
- 		goto out;
- 	}
- 	switch (how) {
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index a7273af2d900..e3c60251e708 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2856,8 +2856,9 @@ static int tpacket_snd(struct packet_sock *po, struct msghdr *msg)
+ 
+ 		status = TP_STATUS_SEND_REQUEST;
+ 		err = po->xmit(skb);
+-		if (unlikely(err > 0)) {
+-			err = net_xmit_errno(err);
++		if (unlikely(err != 0)) {
++			if (err > 0)
++				err = net_xmit_errno(err);
+ 			if (err && __packet_get_status(po, ph) ==
+ 				   TP_STATUS_AVAILABLE) {
+ 				/* skb was destructed already */
+@@ -3058,8 +3059,12 @@ static int packet_snd(struct socket *sock, struct msghdr *msg, size_t len)
+ 		skb->no_fcs = 1;
+ 
+ 	err = po->xmit(skb);
+-	if (err > 0 && (err = net_xmit_errno(err)) != 0)
+-		goto out_unlock;
++	if (unlikely(err != 0)) {
++		if (err > 0)
++			err = net_xmit_errno(err);
++		if (err)
++			goto out_unlock;
++	}
+ 
+ 	dev_put(dev);
+ 
 -- 
 2.35.1
 

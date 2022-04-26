@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0ADA510C5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 00:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B864F510C5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355963AbiDZXB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
+        id S1355980AbiDZXDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244571AbiDZXBz (ORCPT
+        with ESMTP id S234676AbiDZXDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:01:55 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFCB67D36
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:58:46 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2f16645872fso649167b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 15:58:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L4eqHWSN42ueWZ89KsFRMnxsq+gg1YBjDPu+hpKQi3A=;
-        b=mvx4yW7S0NUOQCD9L2yGJOy9tKusa3h5GHrRZ0OExjnpg1PH+Wlsh4dxjojG7q43zT
-         EABQ+Av3CJ/9HnJFry9Y3iZl0h7GGIc6GqlELDC3mXdLpEapGlb3RlCsc7zBDBVEAtO7
-         6yFi6IGWA5rzL09NkX+GiT19A2OeHKq4p0TAKcPNd5WxPOA8p9dG2rVUcj9tJrpoNhjr
-         3D9hSXSK2CPFTQWQkvQlgFDQx6bl/GD/YlZXLt4mL5D16cceSy0wYeINzZQrIgfaxWJh
-         GVz/dAjTVacyio2J6cy02tPjnzJFGU2oSoxm5kOA8cLP7Vi8kTa29zd77IyhPiROpFgd
-         yy1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L4eqHWSN42ueWZ89KsFRMnxsq+gg1YBjDPu+hpKQi3A=;
-        b=5CUsHFHnNmSRrAfy7jwaD3A6H8YQMFCec0Wdvrz9NsVYILMbIVR6QgUd0WDzIDhkCy
-         BhyH/F5W3xI9xz+69jZSS7s8V8oXdgjEzTF1up+ohwH3FzJwHVOlzYxjkrQBpAGnyDrV
-         8nHuB4rTlSWPoYdHCx7cHofEI5hejzzNtXbAl3g4+QDbh4HspW1iHKnn1xxfVgJZ0Ilp
-         5XKqI4ZTTHHIDqbzB3YGNuV8qrzJS44tlAvvGvEVUn65k9lLiQNXIUtCeg3EYZKbLAzj
-         yqrNEJetEExTi73fLz7uRCXtY3MSPWcQVaaR9vLaO9Y9Ln9sOFATqiv101qS9rrpC/ds
-         OyGQ==
-X-Gm-Message-State: AOAM5321L6fGGYBgrA15rLJCZYCpHTaMtF9rORdSd/WrKaoQEUf/1k59
-        qDdgb8yqlqIC0dVHDAVClHDyjm7SRz/QoCEGCK+4
-X-Google-Smtp-Source: ABdhPJxcB8JiZrX3abrVoRVZptJtZb+xka4JrPXoQU9HvLnqTul9wm0iSxbDZDgm23+xs5WBvnb7TrWAwgDIYXas1f0=
-X-Received: by 2002:a81:1a4a:0:b0:2f7:da21:ec5c with SMTP id
- a71-20020a811a4a000000b002f7da21ec5cmr13587990ywa.312.1651013925644; Tue, 26
- Apr 2022 15:58:45 -0700 (PDT)
+        Tue, 26 Apr 2022 19:03:41 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D7A1B78D;
+        Tue, 26 Apr 2022 16:00:26 -0700 (PDT)
+X-UUID: b01e251323fe49b191adf977035ec3bd-20220427
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:c798749d-6419-4a65-bd83-1d17f9c77b59,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:54
+X-CID-INFO: VERSION:1.1.4,REQID:c798749d-6419-4a65-bd83-1d17f9c77b59,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_UHam,ACTI
+        ON:release,TS:54
+X-CID-META: VersionHash:faefae9,CLOUDID:c374cb2e-6199-437e-8ab4-9920b4bc5b76,C
+        OID:8746203ebe7a,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: b01e251323fe49b191adf977035ec3bd-20220427
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2046369977; Wed, 27 Apr 2022 07:00:19 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 27 Apr 2022 07:00:18 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 27 Apr
+ 2022 07:00:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Apr 2022 07:00:16 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <allen-kh.cheng@mediatek.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>, <hsinyi@chromium.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <robh+dt@kernel.org>, <ryder.lee@kernel.org>, <wenst@chromium.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: arm: Add compatible for Mediatek MT8186
+Date:   Wed, 27 Apr 2022 07:00:16 +0800
+Message-ID: <20220426230017.20640-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220426125046.17311-2-allen-kh.cheng@mediatek.com>
+References: <20220426125046.17311-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <8E281DF1-248F-4861-A3C0-2573A5EFEE61@fb.com> <20220426065917.3123488-1-bartoschek@google.com>
- <20220426140919.GD4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220426140919.GD4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Christoph Bartoschek <bartoschek@google.com>
-Date:   Wed, 27 Apr 2022 00:58:34 +0200
-Message-ID: <CAAQBG5jnvSxcjwr+L5nuxwh87bv=D=tzU325W2Zp3DVpn-VmcQ@mail.gmail.com>
-Subject: Re: [PATCH RFC fs/namespace] Make kern_unmount() use synchronize_rcu_expedited()
-To:     paulmck@kernel.org
-Cc:     Chris Mason <clm@fb.com>, Giuseppe Scrivano <gscrivan@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        "riel@surriel.com" <riel@surriel.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,17 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 3. https://lore.kernel.org/lkml/20220218183114.2867528-1-riel@surriel.com/
->         Refined queue_rcu_work() approach.
->
-> #1 should work, but the resulting IPIs are not going to make the real-time
-> guys happy.  #2 and #3 have been subject to reasonably heavy testing
-> and did fix a very similar issue to the one that you are reporting,
-> but last I knew there were doubts about the concurrency consequences.
->
-> Could you please give at least #3 a shot and see if it helps you?
->
+Hi Allen,
 
-I have tried #3 and it works well with my testcases as far as I can see it.
+> This commit adds dt-binding documentation for the Mediatek MT8186
 
-Christoph
+s/Mediatek/MediaTek/
+
+
+thanks,
+Miles
+
+> reference board.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> index 4a2bd9759c47..5a29b7b381ef 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+> @@ -131,6 +131,10 @@ properties:
+>            - enum:
+>                - mediatek,mt8183-evb
+>            - const: mediatek,mt8183
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8186-evb
+> +          - const: mediatek,mt8186
+>        - items:
+>            - enum:
+>                - mediatek,mt8192-evb

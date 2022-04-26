@@ -2,144 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C39D50FBCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2387D50FBD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349480AbiDZLTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S1349492AbiDZLUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349499AbiDZLS6 (ORCPT
+        with ESMTP id S1346724AbiDZLUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:18:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83326DF4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:15:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47BF7ED1;
-        Tue, 26 Apr 2022 04:15:49 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.76.208])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBF313F5A1;
-        Tue, 26 Apr 2022 04:15:47 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 12:15:40 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        akpm@linux-foundation.org, alex.popov@linux.com,
-        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH 0/8] stackleak: fixes and rework
-Message-ID: <YmfUXN7ZsFfAeegX@FVFF77S0Q05N>
-References: <20220425115603.781311-1-mark.rutland@arm.com>
- <202204251551.0CFE01DF4@keescook>
- <YmfFLOW5QyF3DKTC@FVFF77S0Q05N>
- <YmfLe+UZ85LhshZx@FVFF77S0Q05N>
+        Tue, 26 Apr 2022 07:20:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA0D3A187
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:17:06 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 333FA1EC0503;
+        Tue, 26 Apr 2022 13:17:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650971821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=0/pzm9e2iDycI7rO928zqJLiV9GuD5I4xPzZfSe633g=;
+        b=QKn7p9c+Xx58HkrgfK0vaZ0Hq8RwnOhXDyfVc1uhejI5I0GIt/UsYcC87wFSHsiwlfBDip
+        KIXZVbnVxB9vh/6WhJoc0woZlZd+mvo/f1R0qgbcG+6qGZNU8S4gmoJ+P8RlLJPQXSVns4
+        hu2B8sKa65pKnilCIQ3ZuI1qd8xMtrw=
+Date:   Tue, 26 Apr 2022 13:16:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Oleksandr <olekstysh@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Julien Grall <julien@xen.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH V1 3/6] xen/virtio: Add option to restrict memory access
+ under Xen
+Message-ID: <YmfUqlKnk0Mbmvpk@zn.tnic>
+References: <YmQsFb36UEH9BUnN@infradead.org>
+ <6c5042fe-dafc-eb4f-c1fa-03b0faf252de@gmail.com>
+ <abc5d23d-3d38-d198-4646-e886df2e83d4@suse.com>
+ <YmZUpua3hkCPdbfx@infradead.org>
+ <147f68f6-7d67-1884-bd14-5040639b3396@suse.com>
+ <67c7460a-3001-35a6-8e5b-f367270b257a@gmail.com>
+ <YmcR5bfaYh1z7VUq@zn.tnic>
+ <7d89848a-3a1c-415d-957a-564ffdd3712d@suse.com>
+ <YmewJaxWS1KGVkTf@zn.tnic>
+ <cbd4cd8a-0271-5a53-4688-59d6cc6ee3db@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YmfLe+UZ85LhshZx@FVFF77S0Q05N>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cbd4cd8a-0271-5a53-4688-59d6cc6ee3db@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:37:47AM +0100, Mark Rutland wrote:
-> On Tue, Apr 26, 2022 at 11:10:52AM +0100, Mark Rutland wrote:
-> > On Mon, Apr 25, 2022 at 03:54:00PM -0700, Kees Cook wrote:
-> > > On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
-> > > > This series reworks the stackleak code. The first patch fixes some
-> > > > latent issues on arm64, and the subsequent patches improve the code to
-> > > > improve clarity and permit better code generation.
-> > > 
-> > > This looks nice; thanks! I'll put this through build testing and get it
-> > > applied shortly...
-> > 
-> > Thanks!
-> > 
-> > Patch 1 is liable to conflict with come other stacktrace bits that may go in
-> > for v5.19, so it'd be good if either that could be queued as a fix for
-> > v5.1-rc4, or we'll have to figure out how to deal with conflicts later.
-> > 
-> > > > While the improvement is small, I think the improvement to clarity and
-> > > > code generation is a win regardless.
-> > > 
-> > > Agreed. I also want to manually inspect the resulting memory just to
-> > > make sure things didn't accidentally regress. There's also an LKDTM test
-> > > for basic functionality.
-> > 
-> > I assume that's the STACKLEAK_ERASING test?
-> > 
-> > I gave that a spin, but on arm64 that test is flaky even on baseline v5.18-rc1.
-> > On x86_64 it seems consistent after 100s of runs. I'll go dig into that now. 
-> 
-> I hacked in some debug, and it looks like the sp used in the test is far above
-> the current lowest_sp. The test is slightly wrong since it grabs the address of
-> a local variable rather than using current_stack_pointer, but the offset I see
-> is much larger:
-> 
-> # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT 
-> [   27.665221] lkdtm: Performing direct entry STACKLEAK_ERASING
-> [   27.665986] lkdtm: FAIL: lowest_stack 0xffff8000083a39e0 is lower than test sp 0xffff8000083a3c80
-> [   27.667530] lkdtm: FAIL: the thread stack is NOT properly erased!
-> 
-> That's off by 0x2a0 (AKA 672) bytes, and it seems to be consistent from run to
-> run.
-> 
-> I note that an interrupt occuring could cause similar (since on arm64 those are
-> taken/triaged on the task stack before moving to the irq stack, and the irq
-> regs alone will take 300+ bytes), but that doesn't seem to be the problem here
-> given this is consistent, and it appears some prior function consumed a lot of
-> stack.
-> 
-> I *think* the same irq problem would apply to x86, but maybe that initial
-> triage happens on a trampoline stack.
-> 
-> I'll dig a bit more into the arm64 side...
+On Tue, Apr 26, 2022 at 11:36:40AM +0200, Juergen Gross wrote:
+> As the suggestion was to add another flag this wouldn't be a problem IMO.
 
-That offset above seems to be due to the earlier logic in direct_entry(), which
-I guess is running out-of-line. With that hacked to:
+We had a problem already with adding one flag would break the same flag
+on the other guest type. That's why we added cc_vendor too. So it can be
+tricky.
 
-----------------
-diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-index e2228b6fc09bb..53f3027e8202d 100644
---- a/drivers/misc/lkdtm/core.c
-+++ b/drivers/misc/lkdtm/core.c
-@@ -378,8 +378,9 @@ static ssize_t direct_entry(struct file *f, const char __user *user_buf,
-                size_t count, loff_t *off)
- {
-        const struct crashtype *crashtype;
--       char *buf;
-+       char *buf = "STACKLEAK_ERASING";
- 
-+#if 0
-        if (count >= PAGE_SIZE)
-                return -EINVAL;
-        if (count < 1)
-@@ -395,13 +396,17 @@ static ssize_t direct_entry(struct file *f, const char __user *user_buf,
-        /* NULL-terminate and remove enter */
-        buf[count] = '\0';
-        strim(buf);
-+#endif
- 
-        crashtype = find_crashtype(buf);
-+
-+#if 0
-        free_page((unsigned long) buf);
-        if (!crashtype)
-                return -EINVAL;
-+#endif
- 
--       pr_info("Performing direct entry %s\n", crashtype->name);
-+       // pr_info("Performing direct entry %s\n", crashtype->name);
-        lkdtm_do_action(crashtype);
-        *off += count;
- 
-----------------
+> platform_has() doesn't seem too bad IMO.
+> 
+> I will write a patch for starting the discussion.
 
-... the SP check doesn't fail, but I still see intermittent bad value failures.
-Those might be due to interrupt frames.
+Yeah, I guess such a proposal would need a wider audience - maybe CC
+linux-arch...
 
-Thanks,
-Mark.
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

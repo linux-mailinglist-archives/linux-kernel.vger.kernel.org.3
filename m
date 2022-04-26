@@ -2,1531 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A62510A2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91A6510A38
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354891AbiDZUUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
+        id S1354837AbiDZUTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354951AbiDZUTO (ORCPT
+        with ESMTP id S1354850AbiDZUSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:19:14 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5410A1FCF3;
-        Tue, 26 Apr 2022 13:16:04 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id B82415C00FF;
-        Tue, 26 Apr 2022 16:16:03 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 26 Apr 2022 16:16:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1651004163; x=
-        1651090563; bh=KxjX5QEvgtyJmV4JIXm5v0M7GNRZFOgLesdsnLjth4w=; b=i
-        04LKPBXswCNKU2ADJgBkH135pgWqYQpg0cNwb6+B4ELvQH830bwNxOKVeuVKLdhq
-        Z5s84afKA+WrcWFO7G+/3ChkS0qGeP6wvnHvanxZvu/w4NldhKXY9Yru0ZOYWA/O
-        cV9wKX3GdCRklp0x82GSAV77kJw5w0fBBUK+Xu2BK5emdgrFKhz5Qm/R6U4KllfT
-        JN7M7z37qxcwnbYwnxIEIJQGy9g+uxrJl6A12ZBlnDVI1YXaoZ5BnGaHGtG5JuhL
-        T1FHQYuHhZ0OLq2npuypoKMdBO7pJkfZHni+VP5pYzMJAwwuk+Lj9G4ElanPvKW1
-        wUI63dc2fcVpNz4W32P7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1651004163; x=1651090563; bh=KxjX5QEvgtyJmV4JIXm5v0M7GNRZFOgLesd
-        snLjth4w=; b=gO4+SC/zlpiADQ1cxxRCs6AQ8bHO+D1LOoTbRn+TaSyKTLrm3rK
-        NoQKrO/II9N4GrDJqNnWasG/x9DLn5AXtPjipaTINg/7UgReqbv6khaYlowoOpLZ
-        I2AcmeucucpNrkC0sjiOX83+GalVCF3WJF5z2FlFSri/gvMgOYYm5JPJNRI/uuOI
-        5RBJC8EXaKvDLLkrz0fsGQM0Fe+O0yMQI0Myw19tDgBF8hGINjB/3vdO0mr4D3V9
-        JbPd+PHczOLdxoolDDqNjNQ+z356RG0HzG04k04TUEqD3hvdyREfdiAY1aIymRDW
-        nqdED2LqX0Nxb+4qCIgxi/UGQmEMiaEXtPA==
-X-ME-Sender: <xms:A1NoYoE7nDphWkS0dZSOvEW7KHBEACQ8pvaBHYn6aG1AIY1r8N2UiQ>
-    <xme:A1NoYhVY3VJ5MGa124GIuiBMOEzxEnDE4IQjDogkt-NhSfrLb524QOp189Sb8__B9
-    o4qOEi_9xhtO-I9UgU>
-X-ME-Received: <xmr:A1NoYiK3HYaD015PMswwDyPbBQDA6sV0BoV-eAxBsSufd26hEwSGuv6K148uUuaKbQbsD6LLCvwA_FZFaepyXcte0aJrskNEVZVe68F6X7oEVUU0lKXApxxo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgddugeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
-    ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
-    gvrhhnpeejieehheekgedvjefhveekjefguddtfefhteehtdeiffelkeeiuedufeelkeej
-    geenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
-    gvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:A1NoYqHxamEQF0LylfiR3_sywsbv7D702AkOaNTtdH3zH3z_X9R_UQ>
-    <xmx:A1NoYuVLTyo6f0CeyLI3ZbrSIJ9hcnI7W3lJFHQwgwiv-zGI46d2lA>
-    <xmx:A1NoYtOq9U-GOiG2Loat7_qBgGNGLZq98E48nGnyw0HeH2i_DVOOUw>
-    <xmx:A1NoYvsIDyZJZ7Sz0eCo22y-ijMweJXoBcCvqxpdXOSh7q4cXuyGhw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Apr 2022 16:16:01 -0400 (EDT)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>, Janne Grunau <j@jannau.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: [PATCH v3 5/6] soc: apple: Add RTKit IPC library
-Date:   Tue, 26 Apr 2022 22:15:38 +0200
-Message-Id: <20220426201539.12829-6-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220426201539.12829-1-sven@svenpeter.dev>
-References: <20220426201539.12829-1-sven@svenpeter.dev>
+        Tue, 26 Apr 2022 16:18:55 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A56EA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:15:42 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id bn33so23437321ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NoH+Q2JRO6SKcFvlMJuCO580Qoh6JOOoycqYQgBg9Ro=;
+        b=cWB0TVSq8VKcPdtkF3M26lXQbeIW1kHtVsp0FDBMnEKF3reK6Q2MuOAyXLaMgZrW7n
+         ijHrNuaCDG/pz5dROHnVVq3xj6N16Rm7onIyGZT6bacYY68GG7+vpd+wHnnabQnAXyB3
+         rWjH3iOHckvnlEFaIw0/go6q29XOrF7nDGopwT98p39Tk88l58PNKSdiAJHdID6G127l
+         FDeGRlU2CeFXqKI8IB48fCse5Jj7jknXvWDO2D++PLSp+Lw1JpILw2JhwMpPB32HV/5V
+         Pp4n5TwBSyrUf3jONeM+VMZxd+H+e5qRkv65DR5S68TotRVguKv3Cq568cYm6GIiDjr9
+         f/eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NoH+Q2JRO6SKcFvlMJuCO580Qoh6JOOoycqYQgBg9Ro=;
+        b=joUlVHgfxGmThFwe1Zv+8gM556iaZC9zvoiRK7+NXu3D/sLCggtKDCTRVK8VSHSU11
+         VYlMAPPbX36uOc54JwlHrDAzLUGooUPxENet9rwfAmnWA3AheRDT08UxgEzFOuX6NeHf
+         bLbqzOiPeoSzD9nYUg4JM2GISdpOiqQDFVt0xzMb3Q3KAG7SGVctnOCqaEeU0eyfL2vJ
+         YHXoh/t1bPm4da9kgYTCw25uPHcyyyZiSuN50jLJA+1/pq4prbFt0Jbod+HZcrnwrKSg
+         SJhXpZQcCcyAbTxsuTGNesG0XCkAjqc+mm4FKUGk6wfGYx6Gzqc7MdpuN92mj9SVlqi2
+         NwfQ==
+X-Gm-Message-State: AOAM533PUNBP34BXVMSO4IOemtL4U/TBo/qk1C5VgjRNKRBdxd4DTdva
+        9I4vMwwBxughUln7ulc0MbkPjQ==
+X-Google-Smtp-Source: ABdhPJz2e3A8i09zQrnVOpL83T9ubklwt+3pWXhS5CcK/Muf+ApEy2u+oQF0FV2zPUXzGlOs+SgVww==
+X-Received: by 2002:a2e:3e15:0:b0:247:d94b:c004 with SMTP id l21-20020a2e3e15000000b00247d94bc004mr15684754lja.428.1651004140400;
+        Tue, 26 Apr 2022 13:15:40 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d29-20020a19385d000000b004720e1cc3fasm606630lfj.70.2022.04.26.13.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 13:15:40 -0700 (PDT)
+Message-ID: <5915a71f-50fa-8783-f186-7bbf9a5409c8@linaro.org>
+Date:   Tue, 26 Apr 2022 23:15:39 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4] drm/msm/dp: remove fail safe mode related code
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1651003453-12282-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1651003453-12282-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apple SoCs such as the M1 come with multiple embedded co-processors
-running proprietary firmware. Communication with those is established
-over a simple mailbox using the RTKit IPC protocol.
+On 26/04/2022 23:04, Kuogee Hsieh wrote:
+> Current DP driver implementation has adding safe mode done at
+> dp_hpd_plug_handle() which is expected to be executed under event
+> thread context.
+> 
+> However there is possible circular locking happen (see blow stack trace)
+> after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
+> is executed under drm_thread context.
+> 
+> After review all possibilities methods and as discussed on
+> https://patchwork.freedesktop.org/patch/483155/, supporting EDID
+> compliance tests in the driver is quite hacky. As seen with other
+> vendor drivers, supporting these will be much easier with IGT. Hence
+> removing all the related fail safe code for it so that no possibility
+> of circular lock will happen.
+> 
+> ======================================================
+>   WARNING: possible circular locking dependency detected
+>   5.15.35-lockdep #6 Tainted: G        W
+>   ------------------------------------------------------
+>   frecon/429 is trying to acquire lock:
+>   ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
+> dp_panel_add_fail_safe_mode+0x4c/0xa0
+> 
+>   but task is already holding lock:
+>   ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
+> 
+>   which lock already depends on the new lock.
+> 
+>   the existing dependency chain (in reverse order) is:
+> 
+>   -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
+>          __mutex_lock_common+0x174/0x1a64
+>          mutex_lock_nested+0x98/0xac
+>          lock_crtcs+0xb4/0x124
+>          msm_atomic_commit_tail+0x330/0x748
+>          commit_tail+0x19c/0x278
+>          drm_atomic_helper_commit+0x1dc/0x1f0
+>          drm_atomic_commit+0xc0/0xd8
+>          drm_atomic_helper_set_config+0xb4/0x134
+>          drm_mode_setcrtc+0x688/0x1248
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
+>          __mutex_lock_common+0x174/0x1a64
+>          ww_mutex_lock+0xb8/0x278
+>          modeset_lock+0x304/0x4ac
+>          drm_modeset_lock+0x4c/0x7c
+>          drmm_mode_config_init+0x4a8/0xc50
+>          msm_drm_init+0x274/0xac0
+>          msm_drm_bind+0x20/0x2c
+>          try_to_bring_up_master+0x3dc/0x470
+>          __component_add+0x18c/0x3c0
+>          component_add+0x1c/0x28
+>          dp_display_probe+0x954/0xa98
+>          platform_probe+0x124/0x15c
+>          really_probe+0x1b0/0x5f8
+>          __driver_probe_device+0x174/0x20c
+>          driver_probe_device+0x70/0x134
+>          __device_attach_driver+0x130/0x1d0
+>          bus_for_each_drv+0xfc/0x14c
+>          __device_attach+0x1bc/0x2bc
+>          device_initial_probe+0x1c/0x28
+>          bus_probe_device+0x94/0x178
+>          deferred_probe_work_func+0x1a4/0x1f0
+>          process_one_work+0x5d4/0x9dc
+>          worker_thread+0x898/0xccc
+>          kthread+0x2d4/0x3d4
+>          ret_from_fork+0x10/0x20
+> 
+>   -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
+>          ww_acquire_init+0x1c4/0x2c8
+>          drm_modeset_acquire_init+0x44/0xc8
+>          drm_helper_probe_single_connector_modes+0xb0/0x12dc
+>          drm_mode_getconnector+0x5dc/0xfe8
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+>   -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
+>          __lock_acquire+0x2650/0x672c
+>          lock_acquire+0x1b4/0x4ac
+>          __mutex_lock_common+0x174/0x1a64
+>          mutex_lock_nested+0x98/0xac
+>          dp_panel_add_fail_safe_mode+0x4c/0xa0
+>          dp_hpd_plug_handle+0x1f0/0x280
+>          dp_bridge_enable+0x94/0x2b8
+>          drm_atomic_bridge_chain_enable+0x11c/0x168
+>          drm_atomic_helper_commit_modeset_enables+0x500/0x740
+>          msm_atomic_commit_tail+0x3e4/0x748
+>          commit_tail+0x19c/0x278
+>          drm_atomic_helper_commit+0x1dc/0x1f0
+>          drm_atomic_commit+0xc0/0xd8
+>          drm_atomic_helper_set_config+0xb4/0x134
+>          drm_mode_setcrtc+0x688/0x1248
+>          drm_ioctl_kernel+0x1e4/0x338
+>          drm_ioctl+0x3a4/0x684
+>          __arm64_sys_ioctl+0x118/0x154
+>          invoke_syscall+0x78/0x224
+>          el0_svc_common+0x178/0x200
+>          do_el0_svc+0x94/0x13c
+>          el0_svc+0x5c/0xec
+>          el0t_64_sync_handler+0x78/0x108
+>          el0t_64_sync+0x1a4/0x1a8
+> 
+> Changes in v2:
+> -- re text commit title
+> -- remove all fail safe mode
+> 
+> Changes in v3:
+> -- remove dp_panel_add_fail_safe_mode() from dp_panel.h
+> -- add Fixes
+> 
+> Changes in v4:
+> --  to=dianders@chromium.org
+> 
+> Fixes: 8b2c181 ("drm/msm/dp: add fail safe mode outside of event_mutex context")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> 
+> Fixes: f1b47e6a8df8 ("drm/msm/dp: remove fail safe mode related code")
+> Reported-by: Douglas Anderson <dianders@chromium.org>
 
-This cannot be implement inside the mailbox subsystem since on top
-of communication over channels we also need support for starting,
-hibernating and resetting these co-processors. We also need to
-handle shared memory allocations differently depending on the
-co-processor and don't want to split that across multiple drivers.
+This does not look correct. Your sign-off should be the latest one. Also 
+please recheck the Fixes tags.
 
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
-v2 -> v3:
-  - Used {GENMASK,BIT}_ULL to allow compile testing on 32bit
-    as well
-v1 -> v2:
-  - Replaced custom kthread with workqueue (Arnd Bergmann)
-  - Fixed indentation issues and un-exported apple_rtkit_init
-    (Arnd Bergmann)
-  - Added explanation why this can't be easily implemented as a mailbox
-    (Krzysztof Kozlowski)
-  - Removed redundant shmem_setup arguments (Arnd Bergmann)
-  - Removed custom rtk_{err,warn,...} macros (Arnd Bergmann)
-  - Disallow using the interface without CONFIG_APPLE_RTKIT and
-    make all consumers hard-depend on that (Arnd Bergmann)
-  - Documented power states (Alyssa Rosenzweig)
-  - Made recv_message optional
-  - Added recv_message_early for clients that must handle messages
-    inside atomic context
-  - Changed send_message to allow calling from atomic context
+> ---
+>   drivers/gpu/drm/msm/dp/dp_panel.c | 11 -----------
+>   1 file changed, 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
+> index f141872..26f4b695 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+> @@ -206,17 +206,6 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
+>   			rc = -ETIMEDOUT;
+>   			goto end;
+>   		}
+> -
+> -		/* fail safe edid */
+> -		mutex_lock(&connector->dev->mode_config.mutex);
+> -		if (drm_add_modes_noedid(connector, 640, 480))
+> -			drm_set_preferred_mode(connector, 640, 480);
+> -		mutex_unlock(&connector->dev->mode_config.mutex);
+> -	} else {
+> -		/* always add fail-safe mode as backup mode */
+> -		mutex_lock(&connector->dev->mode_config.mutex);
+> -		drm_add_modes_noedid(connector, 640, 480);
+> -		mutex_unlock(&connector->dev->mode_config.mutex);
+>   	}
+>   
+>   	if (panel->aux_cfg_update_done) {
 
- drivers/soc/apple/Kconfig          |  13 +
- drivers/soc/apple/Makefile         |   3 +
- drivers/soc/apple/rtkit-crashlog.c | 154 +++++
- drivers/soc/apple/rtkit-internal.h |  62 ++
- drivers/soc/apple/rtkit.c          | 958 +++++++++++++++++++++++++++++
- include/linux/soc/apple/rtkit.h    | 159 +++++
- 6 files changed, 1349 insertions(+)
- create mode 100644 drivers/soc/apple/rtkit-crashlog.c
- create mode 100644 drivers/soc/apple/rtkit-internal.h
- create mode 100644 drivers/soc/apple/rtkit.c
- create mode 100644 include/linux/soc/apple/rtkit.h
 
-diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
-index 8c37ffd53fbd..a1596fefacff 100644
---- a/drivers/soc/apple/Kconfig
-+++ b/drivers/soc/apple/Kconfig
-@@ -17,6 +17,19 @@ config APPLE_PMGR_PWRSTATE
- 	  controls for SoC devices. This driver manages them through the
- 	  generic power domain framework, and also provides reset support.
- 
-+config APPLE_RTKIT
-+	tristate "Apple RTKit co-processor IPC protocol"
-+	depends on MAILBOX
-+	depends on ARCH_APPLE || COMPILE_TEST
-+	default ARCH_APPLE
-+	help
-+	  Apple SoCs such as the M1 come with various co-processors running
-+	  their proprietary RTKit operating system. This option enables support
-+	  for the protocol library used to communicate with those. It is used
-+	  by various client drivers.
-+
-+	  Say 'y' here if you have an Apple SoC.
-+
- config APPLE_SART
- 	tristate "Apple SART DMA address filter"
- 	depends on ARCH_APPLE || COMPILE_TEST
-diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
-index c83c66317098..e293770cf66d 100644
---- a/drivers/soc/apple/Makefile
-+++ b/drivers/soc/apple/Makefile
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_APPLE_PMGR_PWRSTATE)	+= apple-pmgr-pwrstate.o
- 
-+obj-$(CONFIG_APPLE_RTKIT) += apple-rtkit.o
-+apple-rtkit-y = rtkit.o rtkit-crashlog.o
-+
- obj-$(CONFIG_APPLE_SART) += apple-sart.o
- apple-sart-y = sart.o
-diff --git a/drivers/soc/apple/rtkit-crashlog.c b/drivers/soc/apple/rtkit-crashlog.c
-new file mode 100644
-index 000000000000..732deed64660
---- /dev/null
-+++ b/drivers/soc/apple/rtkit-crashlog.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR MIT
-+/*
-+ * Apple RTKit IPC library
-+ * Copyright (C) The Asahi Linux Contributors
-+ */
-+#include "rtkit-internal.h"
-+
-+#define FOURCC(a, b, c, d) \
-+	(((u32)(a) << 24) | ((u32)(b) << 16) | ((u32)(c) << 8) | ((u32)(d)))
-+
-+#define APPLE_RTKIT_CRASHLOG_HEADER FOURCC('C', 'L', 'H', 'E')
-+#define APPLE_RTKIT_CRASHLOG_STR FOURCC('C', 's', 't', 'r')
-+#define APPLE_RTKIT_CRASHLOG_VERSION FOURCC('C', 'v', 'e', 'r')
-+#define APPLE_RTKIT_CRASHLOG_MBOX FOURCC('C', 'm', 'b', 'x')
-+#define APPLE_RTKIT_CRASHLOG_TIME FOURCC('C', 't', 'i', 'm')
-+
-+struct apple_rtkit_crashlog_header {
-+	u32 fourcc;
-+	u32 version;
-+	u32 size;
-+	u32 flags;
-+	u8 _unk[16];
-+};
-+static_assert(sizeof(struct apple_rtkit_crashlog_header) == 0x20);
-+
-+struct apple_rtkit_crashlog_mbox_entry {
-+	u64 msg0;
-+	u64 msg1;
-+	u32 timestamp;
-+	u8 _unk[4];
-+};
-+static_assert(sizeof(struct apple_rtkit_crashlog_mbox_entry) == 0x18);
-+
-+static void apple_rtkit_crashlog_dump_str(struct apple_rtkit *rtk, u8 *bfr,
-+					  size_t size)
-+{
-+	u32 idx;
-+	u8 *ptr, *end;
-+
-+	memcpy(&idx, bfr, 4);
-+
-+	ptr = bfr + 4;
-+	end = bfr + size;
-+	while (ptr < end) {
-+		u8 *newline = memchr(ptr, '\n', end - ptr);
-+
-+		if (newline) {
-+			u8 tmp = *newline;
-+			*newline = '\0';
-+			dev_warn(rtk->dev, "RTKit: Message (id=%x): %s\n", idx,
-+				 ptr);
-+			*newline = tmp;
-+			ptr = newline + 1;
-+		} else {
-+			dev_warn(rtk->dev, "RTKit: Message (id=%x): %s", idx,
-+				 ptr);
-+			break;
-+		}
-+	}
-+}
-+
-+static void apple_rtkit_crashlog_dump_version(struct apple_rtkit *rtk, u8 *bfr,
-+					      size_t size)
-+{
-+	dev_warn(rtk->dev, "RTKit: Version: %s", bfr + 16);
-+}
-+
-+static void apple_rtkit_crashlog_dump_time(struct apple_rtkit *rtk, u8 *bfr,
-+					   size_t size)
-+{
-+	u64 crash_time;
-+
-+	memcpy(&crash_time, bfr, 8);
-+	dev_warn(rtk->dev, "RTKit: Crash time: %lld", crash_time);
-+}
-+
-+static void apple_rtkit_crashlog_dump_mailbox(struct apple_rtkit *rtk, u8 *bfr,
-+					      size_t size)
-+{
-+	u32 type, index, i;
-+	size_t n_messages;
-+	struct apple_rtkit_crashlog_mbox_entry entry;
-+
-+	memcpy(&type, bfr + 16, 4);
-+	memcpy(&index, bfr + 24, 4);
-+	n_messages = (size - 28) / sizeof(entry);
-+
-+	dev_warn(rtk->dev, "RTKit: Mailbox history (type = %d, index = %d)",
-+		 type, index);
-+	for (i = 0; i < n_messages; ++i) {
-+		memcpy(&entry, bfr + 28 + i * sizeof(entry), sizeof(entry));
-+		dev_warn(rtk->dev, "RTKit:  #%03d@%08x: %016llx %016llx", i,
-+			 entry.timestamp, entry.msg0, entry.msg1);
-+	}
-+}
-+
-+void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size)
-+{
-+	size_t offset;
-+	u32 section_fourcc, section_size;
-+	struct apple_rtkit_crashlog_header header;
-+
-+	memcpy(&header, bfr, sizeof(header));
-+	if (header.fourcc != APPLE_RTKIT_CRASHLOG_HEADER) {
-+		dev_warn(rtk->dev, "RTKit: Expected crashlog header but got %x",
-+			 header.fourcc);
-+		return;
-+	}
-+
-+	if (header.size > size) {
-+		dev_warn(rtk->dev, "RTKit: Crashlog size (%x) is too large",
-+			 header.size);
-+		return;
-+	}
-+
-+	size = header.size;
-+	offset = sizeof(header);
-+
-+	while (offset < size) {
-+		memcpy(&section_fourcc, bfr + offset, 4);
-+		memcpy(&section_size, bfr + offset + 12, 4);
-+
-+		switch (section_fourcc) {
-+		case APPLE_RTKIT_CRASHLOG_HEADER:
-+			dev_dbg(rtk->dev, "RTKit: End of crashlog reached");
-+			return;
-+		case APPLE_RTKIT_CRASHLOG_STR:
-+			apple_rtkit_crashlog_dump_str(rtk, bfr + offset + 16,
-+						      section_size);
-+			break;
-+		case APPLE_RTKIT_CRASHLOG_VERSION:
-+			apple_rtkit_crashlog_dump_version(
-+				rtk, bfr + offset + 16, section_size);
-+			break;
-+		case APPLE_RTKIT_CRASHLOG_MBOX:
-+			apple_rtkit_crashlog_dump_mailbox(
-+				rtk, bfr + offset + 16, section_size);
-+			break;
-+		case APPLE_RTKIT_CRASHLOG_TIME:
-+			apple_rtkit_crashlog_dump_time(rtk, bfr + offset + 16,
-+						       section_size);
-+			break;
-+		default:
-+			dev_warn(rtk->dev,
-+				 "RTKit: Unknown crashlog section: %x",
-+				 section_fourcc);
-+		}
-+
-+		offset += section_size;
-+	}
-+
-+	dev_warn(rtk->dev,
-+		 "RTKit: End of crashlog reached but no footer present");
-+}
-diff --git a/drivers/soc/apple/rtkit-internal.h b/drivers/soc/apple/rtkit-internal.h
-new file mode 100644
-index 000000000000..24bd619ec5e4
---- /dev/null
-+++ b/drivers/soc/apple/rtkit-internal.h
-@@ -0,0 +1,62 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
-+/*
-+ * Apple RTKit IPC library
-+ * Copyright (C) The Asahi Linux Contributors
-+ */
-+
-+#ifndef _APPLE_RTKIT_INTERAL_H
-+#define _APPLE_RTKIT_INTERAL_H
-+
-+#include <linux/apple-mailbox.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitmap.h>
-+#include <linux/completion.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/soc/apple/rtkit.h>
-+#include <linux/workqueue.h>
-+
-+#define APPLE_RTKIT_APP_ENDPOINT_START 0x20
-+#define APPLE_RTKIT_MAX_ENDPOINTS 0x100
-+
-+struct apple_rtkit {
-+	void *cookie;
-+	const struct apple_rtkit_ops *ops;
-+	struct device *dev;
-+
-+	const char *mbox_name;
-+	int mbox_idx;
-+	struct mbox_client mbox_cl;
-+	struct mbox_chan *mbox_chan;
-+
-+	struct completion epmap_completion;
-+	struct completion iop_pwr_ack_completion;
-+	struct completion ap_pwr_ack_completion;
-+
-+	int boot_result;
-+	int version;
-+
-+	unsigned int iop_power_state;
-+	unsigned int ap_power_state;
-+	bool crashed;
-+
-+	DECLARE_BITMAP(endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
-+
-+	struct apple_rtkit_shmem ioreport_buffer;
-+	struct apple_rtkit_shmem crashlog_buffer;
-+
-+	struct apple_rtkit_shmem syslog_buffer;
-+	char *syslog_msg_buffer;
-+	size_t syslog_n_entries;
-+	size_t syslog_msg_size;
-+
-+	struct workqueue_struct *wq;
-+};
-+
-+void apple_rtkit_crashlog_dump(struct apple_rtkit *rtk, u8 *bfr, size_t size);
-+
-+#endif
-diff --git a/drivers/soc/apple/rtkit.c b/drivers/soc/apple/rtkit.c
-new file mode 100644
-index 000000000000..cf1129e9f76b
---- /dev/null
-+++ b/drivers/soc/apple/rtkit.c
-@@ -0,0 +1,958 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR MIT
-+/*
-+ * Apple RTKit IPC library
-+ * Copyright (C) The Asahi Linux Contributors
-+ */
-+
-+#include "rtkit-internal.h"
-+
-+enum {
-+	APPLE_RTKIT_PWR_STATE_OFF = 0x00, /* power off, cannot be restarted */
-+	APPLE_RTKIT_PWR_STATE_SLEEP = 0x01, /* sleeping, can be restarted */
-+	APPLE_RTKIT_PWR_STATE_QUIESCED = 0x10, /* running but no communication */
-+	APPLE_RTKIT_PWR_STATE_ON = 0x20, /* normal operating state */
-+};
-+
-+enum {
-+	APPLE_RTKIT_EP_MGMT = 0,
-+	APPLE_RTKIT_EP_CRASHLOG = 1,
-+	APPLE_RTKIT_EP_SYSLOG = 2,
-+	APPLE_RTKIT_EP_DEBUG = 3,
-+	APPLE_RTKIT_EP_IOREPORT = 4,
-+	APPLE_RTKIT_EP_OSLOG = 8,
-+};
-+
-+#define APPLE_RTKIT_MGMT_TYPE GENMASK_ULL(59, 52)
-+
-+enum {
-+	APPLE_RTKIT_MGMT_HELLO = 1,
-+	APPLE_RTKIT_MGMT_HELLO_REPLY = 2,
-+	APPLE_RTKIT_MGMT_STARTEP = 5,
-+	APPLE_RTKIT_MGMT_SET_IOP_PWR_STATE = 6,
-+	APPLE_RTKIT_MGMT_SET_IOP_PWR_STATE_ACK = 7,
-+	APPLE_RTKIT_MGMT_EPMAP = 8,
-+	APPLE_RTKIT_MGMT_EPMAP_REPLY = 8,
-+	APPLE_RTKIT_MGMT_SET_AP_PWR_STATE = 0xb,
-+	APPLE_RTKIT_MGMT_SET_AP_PWR_STATE_ACK = 0xb,
-+};
-+
-+#define APPLE_RTKIT_MGMT_HELLO_MINVER GENMASK_ULL(15, 0)
-+#define APPLE_RTKIT_MGMT_HELLO_MAXVER GENMASK_ULL(31, 16)
-+
-+#define APPLE_RTKIT_MGMT_EPMAP_LAST   BIT_ULL(51)
-+#define APPLE_RTKIT_MGMT_EPMAP_BASE   GENMASK_ULL(34, 32)
-+#define APPLE_RTKIT_MGMT_EPMAP_BITMAP GENMASK_ULL(31, 0)
-+
-+#define APPLE_RTKIT_MGMT_EPMAP_REPLY_MORE BIT_ULL(0)
-+
-+#define APPLE_RTKIT_MGMT_STARTEP_EP   GENMASK_ULL(39, 32)
-+#define APPLE_RTKIT_MGMT_STARTEP_FLAG BIT_ULL(1)
-+
-+#define APPLE_RTKIT_MGMT_PWR_STATE GENMASK_ULL(15, 0)
-+
-+#define APPLE_RTKIT_CRASHLOG_CRASH 1
-+
-+#define APPLE_RTKIT_BUFFER_REQUEST	1
-+#define APPLE_RTKIT_BUFFER_REQUEST_SIZE GENMASK_ULL(51, 44)
-+#define APPLE_RTKIT_BUFFER_REQUEST_IOVA GENMASK_ULL(41, 0)
-+
-+#define APPLE_RTKIT_SYSLOG_TYPE GENMASK_ULL(59, 52)
-+
-+#define APPLE_RTKIT_SYSLOG_LOG 5
-+
-+#define APPLE_RTKIT_SYSLOG_INIT	     8
-+#define APPLE_RTKIT_SYSLOG_N_ENTRIES GENMASK_ULL(7, 0)
-+#define APPLE_RTKIT_SYSLOG_MSG_SIZE  GENMASK_ULL(31, 24)
-+
-+#define APPLE_RTKIT_OSLOG_TYPE GENMASK_ULL(63, 56)
-+#define APPLE_RTKIT_OSLOG_INIT	1
-+#define APPLE_RTKIT_OSLOG_ACK	3
-+
-+#define APPLE_RTKIT_MIN_SUPPORTED_VERSION 11
-+#define APPLE_RTKIT_MAX_SUPPORTED_VERSION 12
-+
-+struct apple_rtkit_msg {
-+	struct completion *completion;
-+	struct apple_mbox_msg mbox_msg;
-+};
-+
-+struct apple_rtkit_rx_work {
-+	struct apple_rtkit *rtk;
-+	u8 ep;
-+	u64 msg;
-+	struct work_struct work;
-+};
-+
-+bool apple_rtkit_is_running(struct apple_rtkit *rtk)
-+{
-+	if (rtk->crashed)
-+		return false;
-+	if ((rtk->iop_power_state & 0xff) != APPLE_RTKIT_PWR_STATE_ON)
-+		return false;
-+	if ((rtk->ap_power_state & 0xff) != APPLE_RTKIT_PWR_STATE_ON)
-+		return false;
-+	return true;
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_is_running);
-+
-+bool apple_rtkit_is_crashed(struct apple_rtkit *rtk)
-+{
-+	return rtk->crashed;
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_is_crashed);
-+
-+static void apple_rtkit_management_send(struct apple_rtkit *rtk, u8 type,
-+					u64 msg)
-+{
-+	msg &= ~APPLE_RTKIT_MGMT_TYPE;
-+	msg |= FIELD_PREP(APPLE_RTKIT_MGMT_TYPE, type);
-+	apple_rtkit_send_message(rtk, APPLE_RTKIT_EP_MGMT, msg, NULL, false);
-+}
-+
-+static void apple_rtkit_management_rx_hello(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u64 reply;
-+
-+	int min_ver = FIELD_GET(APPLE_RTKIT_MGMT_HELLO_MINVER, msg);
-+	int max_ver = FIELD_GET(APPLE_RTKIT_MGMT_HELLO_MAXVER, msg);
-+	int want_ver = min(APPLE_RTKIT_MAX_SUPPORTED_VERSION, max_ver);
-+
-+	dev_dbg(rtk->dev, "RTKit: Min ver %d, max ver %d\n", min_ver, max_ver);
-+
-+	if (min_ver > APPLE_RTKIT_MAX_SUPPORTED_VERSION) {
-+		dev_err(rtk->dev, "RTKit: Firmware min version %d is too new\n",
-+			min_ver);
-+		goto abort_boot;
-+	}
-+
-+	if (max_ver < APPLE_RTKIT_MIN_SUPPORTED_VERSION) {
-+		dev_err(rtk->dev, "RTKit: Firmware max version %d is too old\n",
-+			max_ver);
-+		goto abort_boot;
-+	}
-+
-+	dev_info(rtk->dev, "RTKit: Initializing (protocol version %d)\n",
-+		 want_ver);
-+	rtk->version = want_ver;
-+
-+	reply = FIELD_PREP(APPLE_RTKIT_MGMT_HELLO_MINVER, want_ver);
-+	reply |= FIELD_PREP(APPLE_RTKIT_MGMT_HELLO_MAXVER, want_ver);
-+	apple_rtkit_management_send(rtk, APPLE_RTKIT_MGMT_HELLO_REPLY, reply);
-+
-+	return;
-+
-+abort_boot:
-+	rtk->boot_result = -EINVAL;
-+	complete_all(&rtk->epmap_completion);
-+}
-+
-+static void apple_rtkit_management_rx_epmap(struct apple_rtkit *rtk, u64 msg)
-+{
-+	int i, ep;
-+	u64 reply;
-+	unsigned long bitmap = FIELD_GET(APPLE_RTKIT_MGMT_EPMAP_BITMAP, msg);
-+	u32 base = FIELD_GET(APPLE_RTKIT_MGMT_EPMAP_BASE, msg);
-+
-+	dev_dbg(rtk->dev,
-+		"RTKit: received endpoint bitmap 0x%lx with base 0x%x\n",
-+		bitmap, base);
-+
-+	for_each_set_bit(i, &bitmap, 32) {
-+		ep = 32 * base + i;
-+		dev_dbg(rtk->dev, "RTKit: Discovered endpoint 0x%02x\n", ep);
-+		set_bit(ep, rtk->endpoints);
-+	}
-+
-+	reply = FIELD_PREP(APPLE_RTKIT_MGMT_EPMAP_BASE, base);
-+	if (msg & APPLE_RTKIT_MGMT_EPMAP_LAST)
-+		reply |= APPLE_RTKIT_MGMT_EPMAP_LAST;
-+	else
-+		reply |= APPLE_RTKIT_MGMT_EPMAP_REPLY_MORE;
-+
-+	apple_rtkit_management_send(rtk, APPLE_RTKIT_MGMT_EPMAP_REPLY, reply);
-+
-+	if (!(msg & APPLE_RTKIT_MGMT_EPMAP_LAST))
-+		return;
-+
-+	for_each_set_bit(ep, rtk->endpoints, APPLE_RTKIT_APP_ENDPOINT_START) {
-+		switch (ep) {
-+		/* the management endpoint is started by default */
-+		case APPLE_RTKIT_EP_MGMT:
-+			break;
-+
-+		/* without starting these RTKit refuses to boot */
-+		case APPLE_RTKIT_EP_SYSLOG:
-+		case APPLE_RTKIT_EP_CRASHLOG:
-+		case APPLE_RTKIT_EP_DEBUG:
-+		case APPLE_RTKIT_EP_IOREPORT:
-+		case APPLE_RTKIT_EP_OSLOG:
-+			dev_dbg(rtk->dev,
-+				"RTKit: Starting system endpoint 0x%02x\n", ep);
-+			apple_rtkit_start_ep(rtk, ep);
-+			break;
-+
-+		default:
-+			dev_warn(rtk->dev,
-+				 "RTKit: Unknown system endpoint: 0x%02x\n",
-+				 ep);
-+		}
-+	}
-+
-+	rtk->boot_result = 0;
-+	complete_all(&rtk->epmap_completion);
-+}
-+
-+static void apple_rtkit_management_rx_iop_pwr_ack(struct apple_rtkit *rtk,
-+						  u64 msg)
-+{
-+	unsigned int new_state = FIELD_GET(APPLE_RTKIT_MGMT_PWR_STATE, msg);
-+
-+	dev_dbg(rtk->dev, "RTKit: IOP power state transition: 0x%x -> 0x%x\n",
-+		rtk->iop_power_state, new_state);
-+	rtk->iop_power_state = new_state;
-+
-+	complete_all(&rtk->iop_pwr_ack_completion);
-+}
-+
-+static void apple_rtkit_management_rx_ap_pwr_ack(struct apple_rtkit *rtk,
-+						 u64 msg)
-+{
-+	unsigned int new_state = FIELD_GET(APPLE_RTKIT_MGMT_PWR_STATE, msg);
-+
-+	dev_dbg(rtk->dev, "RTKit: AP power state transition: 0x%x -> 0x%x\n",
-+		rtk->ap_power_state, new_state);
-+	rtk->ap_power_state = new_state;
-+
-+	complete_all(&rtk->ap_pwr_ack_completion);
-+}
-+
-+static void apple_rtkit_management_rx(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u8 type = FIELD_GET(APPLE_RTKIT_MGMT_TYPE, msg);
-+
-+	switch (type) {
-+	case APPLE_RTKIT_MGMT_HELLO:
-+		apple_rtkit_management_rx_hello(rtk, msg);
-+		break;
-+	case APPLE_RTKIT_MGMT_EPMAP:
-+		apple_rtkit_management_rx_epmap(rtk, msg);
-+		break;
-+	case APPLE_RTKIT_MGMT_SET_IOP_PWR_STATE_ACK:
-+		apple_rtkit_management_rx_iop_pwr_ack(rtk, msg);
-+		break;
-+	case APPLE_RTKIT_MGMT_SET_AP_PWR_STATE_ACK:
-+		apple_rtkit_management_rx_ap_pwr_ack(rtk, msg);
-+		break;
-+	default:
-+		dev_warn(
-+			rtk->dev,
-+			"RTKit: unknown management message: 0x%llx (type: 0x%02x)\n",
-+			msg, type);
-+	}
-+}
-+
-+static int apple_rtkit_common_rx_get_buffer(struct apple_rtkit *rtk,
-+					    struct apple_rtkit_shmem *buffer,
-+					    u8 ep, u64 msg)
-+{
-+	size_t n_4kpages = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_SIZE, msg);
-+	u64 reply;
-+	int err;
-+
-+	buffer->buffer = NULL;
-+	buffer->iomem = NULL;
-+	buffer->is_mapped = false;
-+	buffer->iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-+	buffer->size = n_4kpages << 12;
-+
-+	dev_dbg(rtk->dev, "RTKit: buffer request for 0x%zx bytes at %pad\n",
-+		buffer->size, &buffer->iova);
-+
-+	if (buffer->iova &&
-+	    (!rtk->ops->shmem_setup || !rtk->ops->shmem_destroy)) {
-+		err = -EINVAL;
-+		goto error;
-+	}
-+
-+	if (rtk->ops->shmem_setup) {
-+		err = rtk->ops->shmem_setup(rtk->cookie, buffer);
-+		if (err)
-+			goto error;
-+	} else {
-+		buffer->buffer = dma_alloc_coherent(rtk->dev, buffer->size,
-+						    &buffer->iova, GFP_KERNEL);
-+		if (!buffer->buffer) {
-+			err = -ENOMEM;
-+			goto error;
-+		}
-+	}
-+
-+	if (!buffer->is_mapped) {
-+		reply = FIELD_PREP(APPLE_RTKIT_SYSLOG_TYPE,
-+				   APPLE_RTKIT_BUFFER_REQUEST);
-+		reply |= FIELD_PREP(APPLE_RTKIT_BUFFER_REQUEST_SIZE, n_4kpages);
-+		reply |= FIELD_PREP(APPLE_RTKIT_BUFFER_REQUEST_IOVA,
-+				    buffer->iova);
-+		apple_rtkit_send_message(rtk, ep, reply, NULL, false);
-+	}
-+
-+	return 0;
-+
-+error:
-+	buffer->buffer = NULL;
-+	buffer->iomem = NULL;
-+	buffer->iova = 0;
-+	buffer->size = 0;
-+	buffer->is_mapped = false;
-+	return err;
-+}
-+
-+static void apple_rtkit_free_buffer(struct apple_rtkit *rtk,
-+				    struct apple_rtkit_shmem *bfr)
-+{
-+	if (bfr->size == 0)
-+		return;
-+
-+	if (rtk->ops->shmem_destroy)
-+		rtk->ops->shmem_destroy(rtk->cookie, bfr);
-+	else if (bfr->buffer)
-+		dma_free_coherent(rtk->dev, bfr->size, bfr->buffer, bfr->iova);
-+
-+	bfr->buffer = NULL;
-+	bfr->iomem = NULL;
-+	bfr->iova = 0;
-+	bfr->size = 0;
-+	bfr->is_mapped = false;
-+}
-+
-+static void apple_rtkit_memcpy(struct apple_rtkit *rtk, void *dst,
-+			       struct apple_rtkit_shmem *bfr, size_t offset,
-+			       size_t len)
-+{
-+	if (bfr->iomem)
-+		memcpy_fromio(dst, bfr->iomem + offset, len);
-+	else
-+		memcpy(dst, bfr->buffer + offset, len);
-+}
-+
-+static void apple_rtkit_crashlog_rx(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u8 type = FIELD_GET(APPLE_RTKIT_SYSLOG_TYPE, msg);
-+	u8 *bfr;
-+
-+	if (type != APPLE_RTKIT_CRASHLOG_CRASH) {
-+		dev_warn(rtk->dev, "RTKit: Unknown crashlog message: %llx\n",
-+			 msg);
-+		return;
-+	}
-+
-+	if (!rtk->crashlog_buffer.size) {
-+		apple_rtkit_common_rx_get_buffer(rtk, &rtk->crashlog_buffer,
-+						 APPLE_RTKIT_EP_CRASHLOG, msg);
-+		return;
-+	}
-+
-+	dev_err(rtk->dev, "RTKit: co-processor has crashed\n");
-+
-+	/*
-+	 * create a shadow copy here to make sure the co-processor isn't able
-+	 * to change the log while we're dumping it. this also ensures
-+	 * the buffer is in normal memory and not iomem for e.g. the SMC
-+	 */
-+	bfr = kzalloc(rtk->crashlog_buffer.size, GFP_KERNEL);
-+	if (bfr) {
-+		apple_rtkit_memcpy(rtk, bfr, &rtk->crashlog_buffer, 0,
-+				   rtk->crashlog_buffer.size);
-+		apple_rtkit_crashlog_dump(rtk, bfr, rtk->crashlog_buffer.size);
-+		kfree(bfr);
-+	} else {
-+		dev_err(rtk->dev,
-+			"RTKit: Couldn't allocate crashlog shadow buffer\n");
-+	}
-+
-+	rtk->crashed = true;
-+	if (rtk->ops->crashed)
-+		rtk->ops->crashed(rtk->cookie);
-+}
-+
-+static void apple_rtkit_ioreport_rx(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u8 type = FIELD_GET(APPLE_RTKIT_SYSLOG_TYPE, msg);
-+
-+	switch (type) {
-+	case APPLE_RTKIT_BUFFER_REQUEST:
-+		apple_rtkit_common_rx_get_buffer(rtk, &rtk->ioreport_buffer,
-+						 APPLE_RTKIT_EP_IOREPORT, msg);
-+		break;
-+	/* unknown, must be ACKed or the co-processor will hang */
-+	case 0x8:
-+	case 0xc:
-+		apple_rtkit_send_message(rtk, APPLE_RTKIT_EP_IOREPORT, msg,
-+					 NULL, false);
-+		break;
-+	default:
-+		dev_warn(rtk->dev, "RTKit: Unknown ioreport message: %llx\n",
-+			 msg);
-+	}
-+}
-+
-+static void apple_rtkit_syslog_rx_init(struct apple_rtkit *rtk, u64 msg)
-+{
-+	rtk->syslog_n_entries = FIELD_GET(APPLE_RTKIT_SYSLOG_N_ENTRIES, msg);
-+	rtk->syslog_msg_size = FIELD_GET(APPLE_RTKIT_SYSLOG_MSG_SIZE, msg);
-+
-+	rtk->syslog_msg_buffer = kzalloc(rtk->syslog_msg_size, GFP_KERNEL);
-+
-+	dev_dbg(rtk->dev,
-+		"RTKit: syslog initialized: entries: %zd, msg_size: %zd\n",
-+		rtk->syslog_n_entries, rtk->syslog_msg_size);
-+}
-+
-+static void apple_rtkit_syslog_rx_log(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u8 idx = msg & 0xff;
-+	char log_context[24];
-+	size_t entry_size = 0x20 + rtk->syslog_msg_size;
-+
-+	if (!rtk->syslog_msg_buffer) {
-+		dev_warn(
-+			rtk->dev,
-+			"RTKit: received syslog message but no syslog_msg_buffer\n");
-+		goto done;
-+	}
-+	if (!rtk->syslog_buffer.size) {
-+		dev_warn(
-+			rtk->dev,
-+			"RTKit: received syslog message but syslog_buffer.size is zero\n");
-+		goto done;
-+	}
-+	if (!rtk->syslog_buffer.buffer && !rtk->syslog_buffer.iomem) {
-+		dev_warn(
-+			rtk->dev,
-+			"RTKit: received syslog message but no syslog_buffer.buffer or syslog_buffer.iomem\n");
-+		goto done;
-+	}
-+	if (idx > rtk->syslog_n_entries) {
-+		dev_warn(rtk->dev, "RTKit: syslog index %d out of range\n",
-+			 idx);
-+		goto done;
-+	}
-+
-+	apple_rtkit_memcpy(rtk, log_context, &rtk->syslog_buffer,
-+			   idx * entry_size + 8, sizeof(log_context));
-+	apple_rtkit_memcpy(rtk, rtk->syslog_msg_buffer, &rtk->syslog_buffer,
-+			   idx * entry_size + 8 + sizeof(log_context),
-+			   rtk->syslog_msg_size);
-+
-+	log_context[sizeof(log_context) - 1] = 0;
-+	rtk->syslog_msg_buffer[rtk->syslog_msg_size - 1] = 0;
-+	dev_info(rtk->dev, "RTKit: syslog message: %s: %s\n", log_context,
-+		 rtk->syslog_msg_buffer);
-+
-+done:
-+	apple_rtkit_send_message(rtk, APPLE_RTKIT_EP_SYSLOG, msg, NULL, false);
-+}
-+
-+static void apple_rtkit_syslog_rx(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u8 type = FIELD_GET(APPLE_RTKIT_SYSLOG_TYPE, msg);
-+
-+	switch (type) {
-+	case APPLE_RTKIT_BUFFER_REQUEST:
-+		apple_rtkit_common_rx_get_buffer(rtk, &rtk->syslog_buffer,
-+						 APPLE_RTKIT_EP_SYSLOG, msg);
-+		break;
-+	case APPLE_RTKIT_SYSLOG_INIT:
-+		apple_rtkit_syslog_rx_init(rtk, msg);
-+		break;
-+	case APPLE_RTKIT_SYSLOG_LOG:
-+		apple_rtkit_syslog_rx_log(rtk, msg);
-+		break;
-+	default:
-+		dev_warn(rtk->dev, "RTKit: Unknown syslog message: %llx\n",
-+			 msg);
-+	}
-+}
-+
-+static void apple_rtkit_oslog_rx_init(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u64 ack;
-+
-+	dev_dbg(rtk->dev, "RTKit: oslog init: msg: 0x%llx\n", msg);
-+	ack = FIELD_PREP(APPLE_RTKIT_OSLOG_TYPE, APPLE_RTKIT_OSLOG_ACK);
-+	apple_rtkit_send_message(rtk, APPLE_RTKIT_EP_OSLOG, ack, NULL, false);
-+}
-+
-+static void apple_rtkit_oslog_rx(struct apple_rtkit *rtk, u64 msg)
-+{
-+	u8 type = FIELD_GET(APPLE_RTKIT_OSLOG_TYPE, msg);
-+
-+	switch (type) {
-+	case APPLE_RTKIT_OSLOG_INIT:
-+		apple_rtkit_oslog_rx_init(rtk, msg);
-+		break;
-+	default:
-+		dev_warn(rtk->dev, "RTKit: Unknown oslog message: %llx\n", msg);
-+	}
-+}
-+
-+static void apple_rtkit_rx_work(struct work_struct *work)
-+{
-+	struct apple_rtkit_rx_work *rtk_work =
-+		container_of(work, struct apple_rtkit_rx_work, work);
-+	struct apple_rtkit *rtk = rtk_work->rtk;
-+
-+	switch (rtk_work->ep) {
-+	case APPLE_RTKIT_EP_MGMT:
-+		apple_rtkit_management_rx(rtk, rtk_work->msg);
-+		break;
-+	case APPLE_RTKIT_EP_CRASHLOG:
-+		apple_rtkit_crashlog_rx(rtk, rtk_work->msg);
-+		break;
-+	case APPLE_RTKIT_EP_SYSLOG:
-+		apple_rtkit_syslog_rx(rtk, rtk_work->msg);
-+		break;
-+	case APPLE_RTKIT_EP_IOREPORT:
-+		apple_rtkit_ioreport_rx(rtk, rtk_work->msg);
-+		break;
-+	case APPLE_RTKIT_EP_OSLOG:
-+		apple_rtkit_oslog_rx(rtk, rtk_work->msg);
-+		break;
-+	case APPLE_RTKIT_APP_ENDPOINT_START ... 0xff:
-+		if (rtk->ops->recv_message)
-+			rtk->ops->recv_message(rtk->cookie, rtk_work->ep,
-+					       rtk_work->msg);
-+		else
-+			dev_warn(
-+				rtk->dev,
-+				"Received unexpected message to EP%02d: %llx\n",
-+				rtk_work->ep, rtk_work->msg);
-+		break;
-+	default:
-+		dev_warn(rtk->dev,
-+			 "RTKit: message to unknown endpoint %02x: %llx\n",
-+			 rtk_work->ep, rtk_work->msg);
-+	}
-+
-+	kfree(rtk_work);
-+}
-+
-+static void apple_rtkit_rx(struct mbox_client *cl, void *mssg)
-+{
-+	struct apple_rtkit *rtk = container_of(cl, struct apple_rtkit, mbox_cl);
-+	struct apple_mbox_msg *msg = mssg;
-+	struct apple_rtkit_rx_work *work;
-+	u8 ep = msg->msg1;
-+
-+	/*
-+	 * The message was read from a MMIO FIFO and we have to make
-+	 * sure all reads from buffers sent with that message happen
-+	 * afterwards.
-+	 */
-+	dma_rmb();
-+
-+	if (!test_bit(ep, rtk->endpoints))
-+		dev_warn(rtk->dev,
-+			 "RTKit: Message to undiscovered endpoint 0x%02x\n",
-+			 ep);
-+
-+	if (ep >= APPLE_RTKIT_APP_ENDPOINT_START &&
-+	    rtk->ops->recv_message_early &&
-+	    rtk->ops->recv_message_early(rtk->cookie, ep, msg->msg0))
-+		return;
-+
-+	work = kzalloc(sizeof(*work), GFP_ATOMIC);
-+	if (!work)
-+		return;
-+
-+	work->rtk = rtk;
-+	work->ep = ep;
-+	work->msg = msg->msg0;
-+	INIT_WORK(&work->work, apple_rtkit_rx_work);
-+	queue_work(rtk->wq, &work->work);
-+}
-+
-+static void apple_rtkit_tx_done(struct mbox_client *cl, void *mssg, int r)
-+{
-+	struct apple_rtkit_msg *msg =
-+		container_of(mssg, struct apple_rtkit_msg, mbox_msg);
-+
-+	if (r == -ETIME)
-+		return;
-+
-+	if (msg->completion)
-+		complete(msg->completion);
-+	kfree(msg);
-+}
-+
-+int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
-+			     struct completion *completion, bool atomic)
-+{
-+	struct apple_rtkit_msg *msg;
-+	int ret;
-+	gfp_t flags;
-+
-+	if (rtk->crashed)
-+		return -EINVAL;
-+	if (ep >= APPLE_RTKIT_APP_ENDPOINT_START &&
-+	    !apple_rtkit_is_running(rtk))
-+		return -EINVAL;
-+
-+	if (atomic)
-+		flags = GFP_ATOMIC;
-+	else
-+		flags = GFP_KERNEL;
-+
-+	msg = kzalloc(sizeof(*msg), flags);
-+	if (!msg)
-+		return -ENOMEM;
-+
-+	msg->mbox_msg.msg0 = message;
-+	msg->mbox_msg.msg1 = ep;
-+	msg->completion = completion;
-+
-+	/*
-+	 * The message will be sent with a MMIO write. We need the barrier
-+	 * here to ensure any previous writes to buffers are visible to the
-+	 * device before that MMIO write happens.
-+	 */
-+	dma_wmb();
-+
-+	ret = mbox_send_message(rtk->mbox_chan, &msg->mbox_msg);
-+	if (ret < 0) {
-+		kfree(msg);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_send_message);
-+
-+int apple_rtkit_send_message_wait(struct apple_rtkit *rtk, u8 ep, u64 message,
-+				  unsigned long timeout, bool atomic)
-+{
-+	DECLARE_COMPLETION_ONSTACK(completion);
-+	int ret;
-+	long t;
-+
-+	ret = apple_rtkit_send_message(rtk, ep, message, &completion, atomic);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (atomic) {
-+		ret = mbox_flush(rtk->mbox_chan, timeout);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (try_wait_for_completion(&completion))
-+			return 0;
-+
-+		return -ETIME;
-+	} else {
-+		t = wait_for_completion_interruptible_timeout(
-+			&completion, msecs_to_jiffies(timeout));
-+		if (t < 0)
-+			return t;
-+		else if (t == 0)
-+			return -ETIME;
-+		return 0;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_send_message_wait);
-+
-+int apple_rtkit_start_ep(struct apple_rtkit *rtk, u8 endpoint)
-+{
-+	u64 msg;
-+
-+	if (!test_bit(endpoint, rtk->endpoints))
-+		return -EINVAL;
-+	if (endpoint >= APPLE_RTKIT_APP_ENDPOINT_START &&
-+	    !apple_rtkit_is_running(rtk))
-+		return -EINVAL;
-+
-+	msg = FIELD_PREP(APPLE_RTKIT_MGMT_STARTEP_EP, endpoint);
-+	msg |= APPLE_RTKIT_MGMT_STARTEP_FLAG;
-+	apple_rtkit_management_send(rtk, APPLE_RTKIT_MGMT_STARTEP, msg);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_start_ep);
-+
-+static int apple_rtkit_request_mbox_chan(struct apple_rtkit *rtk)
-+{
-+	if (rtk->mbox_name)
-+		rtk->mbox_chan = mbox_request_channel_byname(&rtk->mbox_cl,
-+							     rtk->mbox_name);
-+	else
-+		rtk->mbox_chan =
-+			mbox_request_channel(&rtk->mbox_cl, rtk->mbox_idx);
-+
-+	if (IS_ERR(rtk->mbox_chan))
-+		return PTR_ERR(rtk->mbox_chan);
-+	return 0;
-+}
-+
-+static struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
-+					    const char *mbox_name, int mbox_idx,
-+					    const struct apple_rtkit_ops *ops)
-+{
-+	struct apple_rtkit *rtk;
-+	int ret;
-+
-+	if (!ops)
-+		return ERR_PTR(-EINVAL);
-+
-+	rtk = kzalloc(sizeof(*rtk), GFP_KERNEL);
-+	if (!rtk)
-+		return ERR_PTR(-ENOMEM);
-+
-+	rtk->dev = dev;
-+	rtk->cookie = cookie;
-+	rtk->ops = ops;
-+
-+	init_completion(&rtk->epmap_completion);
-+	init_completion(&rtk->iop_pwr_ack_completion);
-+	init_completion(&rtk->ap_pwr_ack_completion);
-+
-+	bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
-+	set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
-+
-+	rtk->mbox_name = mbox_name;
-+	rtk->mbox_idx = mbox_idx;
-+	rtk->mbox_cl.dev = dev;
-+	rtk->mbox_cl.tx_block = false;
-+	rtk->mbox_cl.knows_txdone = false;
-+	rtk->mbox_cl.rx_callback = &apple_rtkit_rx;
-+	rtk->mbox_cl.tx_done = &apple_rtkit_tx_done;
-+
-+	rtk->wq = alloc_ordered_workqueue("rtkit-%s", WQ_MEM_RECLAIM,
-+					  dev_name(rtk->dev));
-+	if (!rtk->wq) {
-+		ret = -ENOMEM;
-+		goto free_rtk;
-+	}
-+
-+	ret = apple_rtkit_request_mbox_chan(rtk);
-+	if (ret)
-+		goto destroy_wq;
-+
-+	return rtk;
-+
-+destroy_wq:
-+	destroy_workqueue(rtk->wq);
-+free_rtk:
-+	kfree(rtk);
-+	return ERR_PTR(ret);
-+}
-+
-+static int apple_rtkit_wait_for_completion(struct completion *c)
-+{
-+	long t;
-+
-+	t = wait_for_completion_interruptible_timeout(c,
-+						      msecs_to_jiffies(1000));
-+	if (t < 0)
-+		return t;
-+	else if (t == 0)
-+		return -ETIME;
-+	else
-+		return 0;
-+}
-+
-+int apple_rtkit_reinit(struct apple_rtkit *rtk)
-+{
-+	/* make sure we don't handle any messages while reinitializing */
-+	mbox_free_channel(rtk->mbox_chan);
-+	flush_workqueue(rtk->wq);
-+
-+	apple_rtkit_free_buffer(rtk, &rtk->ioreport_buffer);
-+	apple_rtkit_free_buffer(rtk, &rtk->crashlog_buffer);
-+	apple_rtkit_free_buffer(rtk, &rtk->syslog_buffer);
-+
-+	kfree(rtk->syslog_msg_buffer);
-+
-+	rtk->syslog_msg_buffer = NULL;
-+	rtk->syslog_n_entries = 0;
-+	rtk->syslog_msg_size = 0;
-+
-+	bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
-+	set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
-+
-+	reinit_completion(&rtk->epmap_completion);
-+	reinit_completion(&rtk->iop_pwr_ack_completion);
-+	reinit_completion(&rtk->ap_pwr_ack_completion);
-+
-+	rtk->crashed = false;
-+	rtk->iop_power_state = APPLE_RTKIT_PWR_STATE_OFF;
-+	rtk->ap_power_state = APPLE_RTKIT_PWR_STATE_OFF;
-+
-+	return apple_rtkit_request_mbox_chan(rtk);
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_reinit);
-+
-+static int apple_rtkit_set_ap_power_state(struct apple_rtkit *rtk,
-+					  unsigned int state)
-+{
-+	u64 msg;
-+	int ret;
-+
-+	reinit_completion(&rtk->ap_pwr_ack_completion);
-+
-+	msg = FIELD_PREP(APPLE_RTKIT_MGMT_PWR_STATE, state);
-+	apple_rtkit_management_send(rtk, APPLE_RTKIT_MGMT_SET_AP_PWR_STATE,
-+				    msg);
-+
-+	ret = apple_rtkit_wait_for_completion(&rtk->ap_pwr_ack_completion);
-+	if (ret)
-+		return ret;
-+
-+	if (rtk->ap_power_state != state)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+static int apple_rtkit_set_iop_power_state(struct apple_rtkit *rtk,
-+					   unsigned int state)
-+{
-+	u64 msg;
-+	int ret;
-+
-+	reinit_completion(&rtk->iop_pwr_ack_completion);
-+
-+	msg = FIELD_PREP(APPLE_RTKIT_MGMT_PWR_STATE, state);
-+	apple_rtkit_management_send(rtk, APPLE_RTKIT_MGMT_SET_IOP_PWR_STATE,
-+				    msg);
-+
-+	ret = apple_rtkit_wait_for_completion(&rtk->iop_pwr_ack_completion);
-+	if (ret)
-+		return ret;
-+
-+	if (rtk->iop_power_state != state)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+int apple_rtkit_boot(struct apple_rtkit *rtk)
-+{
-+	int ret;
-+
-+	if (apple_rtkit_is_running(rtk))
-+		return 0;
-+	if (rtk->crashed)
-+		return -EINVAL;
-+
-+	dev_dbg(rtk->dev, "RTKit: waiting for boot to finish\n");
-+	ret = apple_rtkit_wait_for_completion(&rtk->epmap_completion);
-+	if (ret)
-+		return ret;
-+	if (rtk->boot_result)
-+		return rtk->boot_result;
-+
-+	dev_dbg(rtk->dev, "RTKit: waiting for IOP power state ACK\n");
-+	ret = apple_rtkit_wait_for_completion(&rtk->iop_pwr_ack_completion);
-+	if (ret)
-+		return ret;
-+
-+	return apple_rtkit_set_ap_power_state(rtk, APPLE_RTKIT_PWR_STATE_ON);
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_boot);
-+
-+int apple_rtkit_shutdown(struct apple_rtkit *rtk)
-+{
-+	int ret;
-+
-+	/* if OFF is used here the co-processor will not wake up again */
-+	ret = apple_rtkit_set_ap_power_state(rtk,
-+					     APPLE_RTKIT_PWR_STATE_QUIESCED);
-+	if (ret)
-+		return ret;
-+
-+	ret = apple_rtkit_set_iop_power_state(rtk, APPLE_RTKIT_PWR_STATE_SLEEP);
-+	if (ret)
-+		return ret;
-+
-+	return apple_rtkit_reinit(rtk);
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_shutdown);
-+
-+int apple_rtkit_quiesce(struct apple_rtkit *rtk)
-+{
-+	int ret;
-+
-+	ret = apple_rtkit_set_ap_power_state(rtk,
-+					     APPLE_RTKIT_PWR_STATE_QUIESCED);
-+	if (ret)
-+		return ret;
-+
-+	ret = apple_rtkit_set_iop_power_state(rtk,
-+					      APPLE_RTKIT_PWR_STATE_QUIESCED);
-+	if (ret)
-+		return ret;
-+
-+	ret = apple_rtkit_reinit(rtk);
-+	if (ret)
-+		return ret;
-+
-+	rtk->iop_power_state = APPLE_RTKIT_PWR_STATE_QUIESCED;
-+	rtk->ap_power_state = APPLE_RTKIT_PWR_STATE_QUIESCED;
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_quiesce);
-+
-+int apple_rtkit_wake(struct apple_rtkit *rtk)
-+{
-+	u64 msg;
-+
-+	if (apple_rtkit_is_running(rtk))
-+		return -EINVAL;
-+
-+	reinit_completion(&rtk->iop_pwr_ack_completion);
-+
-+	/*
-+	 * Use open-coded apple_rtkit_set_iop_power_state since apple_rtkit_boot
-+	 * will wait for the completion anyway.
-+	 */
-+	msg = FIELD_PREP(APPLE_RTKIT_MGMT_PWR_STATE, APPLE_RTKIT_PWR_STATE_ON);
-+	apple_rtkit_management_send(rtk, APPLE_RTKIT_MGMT_SET_IOP_PWR_STATE,
-+				    msg);
-+
-+	return apple_rtkit_boot(rtk);
-+}
-+EXPORT_SYMBOL_GPL(apple_rtkit_wake);
-+
-+static void apple_rtkit_free(struct apple_rtkit *rtk)
-+{
-+	mbox_free_channel(rtk->mbox_chan);
-+	destroy_workqueue(rtk->wq);
-+
-+	apple_rtkit_free_buffer(rtk, &rtk->ioreport_buffer);
-+	apple_rtkit_free_buffer(rtk, &rtk->crashlog_buffer);
-+	apple_rtkit_free_buffer(rtk, &rtk->syslog_buffer);
-+
-+	kfree(rtk->syslog_msg_buffer);
-+	kfree(rtk);
-+}
-+
-+struct apple_rtkit *devm_apple_rtkit_init(struct device *dev, void *cookie,
-+					  const char *mbox_name, int mbox_idx,
-+					  const struct apple_rtkit_ops *ops)
-+{
-+	struct apple_rtkit *rtk;
-+	int ret;
-+
-+	rtk = apple_rtkit_init(dev, cookie, mbox_name, mbox_idx, ops);
-+	if (IS_ERR(rtk))
-+		return rtk;
-+
-+	ret = devm_add_action_or_reset(dev, (void (*)(void *))apple_rtkit_free,
-+				       rtk);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return rtk;
-+}
-+EXPORT_SYMBOL_GPL(devm_apple_rtkit_init);
-+
-+MODULE_LICENSE("Dual MIT/GPL");
-+MODULE_AUTHOR("Sven Peter <sven@svenpeter.dev>");
-+MODULE_DESCRIPTION("Apple RTKit driver");
-diff --git a/include/linux/soc/apple/rtkit.h b/include/linux/soc/apple/rtkit.h
-new file mode 100644
-index 000000000000..17e8c4813f42
---- /dev/null
-+++ b/include/linux/soc/apple/rtkit.h
-@@ -0,0 +1,159 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
-+/*
-+ * Apple RTKit IPC Library
-+ * Copyright (C) The Asahi Linux Contributors
-+ *
-+ * Apple's SoCs come with various co-processors running their RTKit operating
-+ * system. This protocol library is used by client drivers to use the
-+ * features provided by them.
-+ */
-+#ifndef _LINUX_APPLE_RTKIT_H_
-+#define _LINUX_APPLE_RTKIT_H_
-+
-+#include <linux/device.h>
-+#include <linux/types.h>
-+#include <linux/mailbox_client.h>
-+
-+#if IS_ENABLED(CONFIG_APPLE_RTKIT)
-+
-+/*
-+ * Struct to represent implementation-specific RTKit operations.
-+ *
-+ * @buffer:    Shared memory buffer allocated inside normal RAM.
-+ * @iomem:     Shared memory buffer controlled by the co-processors.
-+ * @size:      Size of the shared memory buffer.
-+ * @iova:      Device VA of shared memory buffer.
-+ * @is_mapped: Shared memory buffer is managed by the co-processor.
-+ */
-+
-+struct apple_rtkit_shmem {
-+	void *buffer;
-+	void __iomem *iomem;
-+	size_t size;
-+	dma_addr_t iova;
-+	bool is_mapped;
-+};
-+
-+/*
-+ * Struct to represent implementation-specific RTKit operations.
-+ *
-+ * @crashed:       Called when the co-processor has crashed. Runs in process
-+ *                 context.
-+ * @recv_message:  Function called when a message from RTKit is received
-+ *                 on a non-system endpoint. Called from a worker thread.
-+ * @recv_message_early:
-+ *                 Like recv_message, but called from atomic context. It
-+ *                 should return true if it handled the message. If it
-+ *                 returns false, the message will be passed on to the
-+ *                 worker thread.
-+ * @shmem_setup:   Setup shared memory buffer. If bfr.is_iomem is true the
-+ *                 buffer is managed by the co-processor and needs to be mapped.
-+ *                 Otherwise the buffer is managed by Linux and needs to be
-+ *                 allocated. If not specified dma_alloc_coherent is used.
-+ *                 Called in process context.
-+ * @shmem_destroy: Undo the shared memory buffer setup in shmem_setup. If not
-+ *                 specified dma_free_coherent is used. Called in process
-+ *                 context.
-+ */
-+struct apple_rtkit_ops {
-+	void (*crashed)(void *cookie);
-+	void (*recv_message)(void *cookie, u8 endpoint, u64 message);
-+	bool (*recv_message_early)(void *cookie, u8 endpoint, u64 message);
-+	int (*shmem_setup)(void *cookie, struct apple_rtkit_shmem *bfr);
-+	void (*shmem_destroy)(void *cookie, struct apple_rtkit_shmem *bfr);
-+};
-+
-+struct apple_rtkit;
-+
-+/*
-+ * Initializes the internal state required to handle RTKit. This
-+ * should usually be called within _probe.
-+ *
-+ * @dev:         Pointer to the device node this coprocessor is assocated with
-+ * @cookie:      opaque cookie passed to all functions defined in rtkit_ops
-+ * @mbox_name:   mailbox name used to communicate with the co-processor
-+ * @mbox_idx:    mailbox index to be used if mbox_name is NULL
-+ * @ops:         pointer to rtkit_ops to be used for this co-processor
-+ */
-+struct apple_rtkit *devm_apple_rtkit_init(struct device *dev, void *cookie,
-+					  const char *mbox_name, int mbox_idx,
-+					  const struct apple_rtkit_ops *ops);
-+
-+/*
-+ * Reinitialize internal structures. Must only be called with the co-processor
-+ * is held in reset.
-+ */
-+int apple_rtkit_reinit(struct apple_rtkit *rtk);
-+
-+/*
-+ * Handle RTKit's boot process. Should be called after the CPU of the
-+ * co-processor has been started.
-+ */
-+int apple_rtkit_boot(struct apple_rtkit *rtk);
-+
-+/*
-+ * Quiesce the co-processor.
-+ */
-+int apple_rtkit_quiesce(struct apple_rtkit *rtk);
-+
-+/*
-+ * Wake the co-processor up from hibernation mode.
-+ */
-+int apple_rtkit_wake(struct apple_rtkit *rtk);
-+
-+/*
-+ * Shutdown the co-processor
-+ */
-+int apple_rtkit_shutdown(struct apple_rtkit *rtk);
-+
-+/*
-+ * Checks if RTKit is running and ready to handle messages.
-+ */
-+bool apple_rtkit_is_running(struct apple_rtkit *rtk);
-+
-+/*
-+ * Checks if RTKit has crashed.
-+ */
-+bool apple_rtkit_is_crashed(struct apple_rtkit *rtk);
-+
-+/*
-+ * Starts an endpoint. Must be called after boot but before any messages can be
-+ * sent or received from that endpoint.
-+ */
-+int apple_rtkit_start_ep(struct apple_rtkit *rtk, u8 endpoint);
-+
-+/*
-+ * Send a message to the given endpoint.
-+ *
-+ * @rtk:            RTKit reference
-+ * @ep:             target endpoint
-+ * @message:        message to be sent
-+ * @completeion:    will be completed once the message has been submitted
-+ *                  to the hardware FIFO. Can be NULL.
-+ * @atomic:         if set to true this function can be called from atomic
-+ *                  context.
-+ */
-+int apple_rtkit_send_message(struct apple_rtkit *rtk, u8 ep, u64 message,
-+			     struct completion *completion, bool atomic);
-+
-+/*
-+ * Send a message to the given endpoint and wait until it has been submitted
-+ * to the hardware FIFO.
-+ * Will return zero on success and a negative error code on failure
-+ * (e.g. -ETIME when the message couldn't be written within the given
-+ * timeout)
-+ *
-+ * @rtk:            RTKit reference
-+ * @ep:             target endpoint
-+ * @message:        message to be sent
-+ * @timeout:        timeout in milliseconds to allow the message transmission
-+ *                  to be completed
-+ * @atomic:         if set to true this function can be called from atomic
-+ *                  context.
-+ */
-+int apple_rtkit_send_message_wait(struct apple_rtkit *rtk, u8 ep, u64 message,
-+				  unsigned long timeout, bool atomic);
-+
-+#endif /* IS_ENABLED(CONFIG_APPLE_RTKIT) */
-+
-+#endif /* _LINUX_APPLE_RTKIT_H_ */
 -- 
-2.25.1
-
+With best wishes
+Dmitry

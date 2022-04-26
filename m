@@ -2,139 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8B2510957
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0366D51095E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354307AbiDZT5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S1354325AbiDZUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiDZT5b (ORCPT
+        with ESMTP id S1354318AbiDZUB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:57:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC5A7486A;
-        Tue, 26 Apr 2022 12:54:22 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QJIDm8013637;
-        Tue, 26 Apr 2022 19:53:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=uIQwJX508dFGTPPox0kxzyjch6Vz1M0Kw+Ufz6SrqTo=;
- b=WmjPjE02A2glZ3GEypJCv1I3nyS5NenxU1DsecPWagOiGlHB+isLhG4iS8LhRXe60h7m
- GzwiRmclQrYSianmOrGwTGfTBvAyUcSoidmYvJjBnb2DpNhuqfc4bww0fGS3lNngH1by
- 0mj+od80f4KkyqFHO/V3P+6w2853Vo75Kw2AGBVcwNSP6+RrLMKtGteOEADl6c8SIk4n
- SZBx14UACa/I4KqhWtDzcPenr7u3OGrPWtQ7DKcGQm/s5oGgajGW1Hn76K/G8Xhht8LM
- o8Ktx1MudAQoNOSnLUKK36qhB7uARe/zj5WQDZyJJ4Id0bGud307+MvAy1YCklZsMwxF OQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpj07ydjm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 19:53:51 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QJGflV028203;
-        Tue, 26 Apr 2022 19:53:50 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpj07ydhw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 19:53:50 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QJqlWI008177;
-        Tue, 26 Apr 2022 19:53:48 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938vvfk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 19:53:47 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QJrivJ31195588
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 19:53:44 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A23E54C04A;
-        Tue, 26 Apr 2022 19:53:44 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB5DD4C040;
-        Tue, 26 Apr 2022 19:53:43 +0000 (GMT)
-Received: from osiris (unknown [9.145.34.143])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 26 Apr 2022 19:53:43 +0000 (GMT)
-Date:   Tue, 26 Apr 2022 21:53:42 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-Subject: Re: [PATCH 1/2] kernel: add platform_has() infrastructure
-Message-ID: <YmhNxnHMe/of4rDD@osiris>
-References: <20220426134021.11210-1-jgross@suse.com>
- <20220426134021.11210-2-jgross@suse.com>
- <YmgsYvWQchxub8cW@zn.tnic>
+        Tue, 26 Apr 2022 16:01:27 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9566970938;
+        Tue, 26 Apr 2022 12:58:18 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id D5BC61C0B8D; Tue, 26 Apr 2022 21:58:15 +0200 (CEST)
+Date:   Tue, 26 Apr 2022 21:58:15 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/86] 5.10.113-rc1 review
+Message-ID: <20220426195815.GA9427@duo.ucw.cz>
+References: <20220426081741.202366502@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
 Content-Disposition: inline
-In-Reply-To: <YmgsYvWQchxub8cW@zn.tnic>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: e5Ttc1-K1zi3D9kbUbAUZB-rSO9nhubA
-X-Proofpoint-ORIG-GUID: 22ZVrN89OB26N_EjwFeeJmS59Kwfcbpc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_05,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- phishscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204260123
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:31:14PM +0200, Borislav Petkov wrote:
-> On Tue, Apr 26, 2022 at 03:40:20PM +0200, Juergen Gross wrote:
-> > diff --git a/kernel/platform-feature.c b/kernel/platform-feature.c
-> > new file mode 100644
-> > index 000000000000..2d52f8442cd5
-> > --- /dev/null
-> > +++ b/kernel/platform-feature.c
-> > @@ -0,0 +1,7 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <linux/cache.h>
-> > +#include <linux/platform-feature.h>
-> > +
-> > +unsigned long __read_mostly platform_features[PLATFORM_FEAT_ARRAY_SZ];
-> 
-> Probably __ro_after_init.
-> 
-> > +EXPORT_SYMBOL_GPL(platform_features);
-> 
-> You probably should make that thing static and use only accessors to
-> modify it in case you wanna change the underlying data structure in the
-> future.
 
-That would add another indirection, which at least I think is not
-necessary, and would make it less likely that this infrastructure is
-used.
+--6c2NcOVqGQ03X4Wi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> This is the start of the stable review cycle for the 5.10.113 release.
+> There are 86 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--6c2NcOVqGQ03X4Wi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYmhO1wAKCRAw5/Bqldv6
+8uETAJ9idyIC7Rkp5QPZpimeP6UNOt0pWQCgxMdloT49XnkE14Dy8ThbEX+Dx9w=
+=XjWJ
+-----END PGP SIGNATURE-----
+
+--6c2NcOVqGQ03X4Wi--

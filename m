@@ -2,167 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890B350FBCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C39D50FBCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349463AbiDZLTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S1349480AbiDZLTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349490AbiDZLSz (ORCPT
+        with ESMTP id S1349499AbiDZLS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:18:55 -0400
+        Tue, 26 Apr 2022 07:18:58 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13A6D38BE7;
-        Tue, 26 Apr 2022 04:15:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83326DF4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:15:49 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB8B023A;
-        Tue, 26 Apr 2022 04:15:46 -0700 (PDT)
-Received: from [10.57.80.98] (unknown [10.57.80.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99EA53F5A1;
-        Tue, 26 Apr 2022 04:15:43 -0700 (PDT)
-Message-ID: <030f48f4-44d7-c04c-a194-5f4999873ebe@arm.com>
-Date:   Tue, 26 Apr 2022 12:15:37 +0100
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47BF7ED1;
+        Tue, 26 Apr 2022 04:15:49 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.76.208])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBF313F5A1;
+        Tue, 26 Apr 2022 04:15:47 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 12:15:40 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        akpm@linux-foundation.org, alex.popov@linux.com,
+        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
+Subject: Re: [PATCH 0/8] stackleak: fixes and rework
+Message-ID: <YmfUXN7ZsFfAeegX@FVFF77S0Q05N>
+References: <20220425115603.781311-1-mark.rutland@arm.com>
+ <202204251551.0CFE01DF4@keescook>
+ <YmfFLOW5QyF3DKTC@FVFF77S0Q05N>
+ <YmfLe+UZ85LhshZx@FVFF77S0Q05N>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 1/2] PCI/ACPI: Support Microsoft's "DmaProperty"
-Content-Language: en-GB
-To:     Rajat Jain <rajatja@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        iommu@lists.linux-foundation.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-References: <20220426000640.3581446-1-rajatja@google.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220426000640.3581446-1-rajatja@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmfLe+UZ85LhshZx@FVFF77S0Q05N>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-26 01:06, Rajat Jain via iommu wrote:
-> The "DmaProperty" is supported and currently documented and used by
-> Microsoft [link 1 below], to flag internal PCIe root ports that need
-> DMA protection [link 2 below]. We have discussed with them and reached
-> a common understanding that they shall change their MSDN documentation
-> to say that the same property can be used to protect any PCI device,
-> and not just internal PCIe root ports (since there is no point
-> introducing yet another property for arbitrary PCI devices). This helps
-> with security from internal devices that offer an attack surface for
-> DMA attacks (e.g. internal network devices).
+On Tue, Apr 26, 2022 at 11:37:47AM +0100, Mark Rutland wrote:
+> On Tue, Apr 26, 2022 at 11:10:52AM +0100, Mark Rutland wrote:
+> > On Mon, Apr 25, 2022 at 03:54:00PM -0700, Kees Cook wrote:
+> > > On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
+> > > > This series reworks the stackleak code. The first patch fixes some
+> > > > latent issues on arm64, and the subsequent patches improve the code to
+> > > > improve clarity and permit better code generation.
+> > > 
+> > > This looks nice; thanks! I'll put this through build testing and get it
+> > > applied shortly...
+> > 
+> > Thanks!
+> > 
+> > Patch 1 is liable to conflict with come other stacktrace bits that may go in
+> > for v5.19, so it'd be good if either that could be queued as a fix for
+> > v5.1-rc4, or we'll have to figure out how to deal with conflicts later.
+> > 
+> > > > While the improvement is small, I think the improvement to clarity and
+> > > > code generation is a win regardless.
+> > > 
+> > > Agreed. I also want to manually inspect the resulting memory just to
+> > > make sure things didn't accidentally regress. There's also an LKDTM test
+> > > for basic functionality.
+> > 
+> > I assume that's the STACKLEAK_ERASING test?
+> > 
+> > I gave that a spin, but on arm64 that test is flaky even on baseline v5.18-rc1.
+> > On x86_64 it seems consistent after 100s of runs. I'll go dig into that now. 
 > 
-> Support DmaProperty to mark DMA from a PCI device as untrusted.
+> I hacked in some debug, and it looks like the sp used in the test is far above
+> the current lowest_sp. The test is slightly wrong since it grabs the address of
+> a local variable rather than using current_stack_pointer, but the offset I see
+> is much larger:
 > 
-> Link: [1] https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
-> Link: [2] https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> v6: * Take care of Bjorn's comments:
->         - Update the commit log
->         - Rename to pci_dev_has_dma_property()
->         - Use acpi_dev_get_property()
-> v5: * Reorder the patches in the series
-> v4: * Add the GUID.
->      * Update the comment and commitlog.
-> v3: * Use Microsoft's documented property "DmaProperty"
->      * Resctrict to ACPI only
+> # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT 
+> [   27.665221] lkdtm: Performing direct entry STACKLEAK_ERASING
+> [   27.665986] lkdtm: FAIL: lowest_stack 0xffff8000083a39e0 is lower than test sp 0xffff8000083a3c80
+> [   27.667530] lkdtm: FAIL: the thread stack is NOT properly erased!
 > 
->   drivers/acpi/property.c |  3 +++
->   drivers/pci/pci-acpi.c  | 21 +++++++++++++++++++++
->   2 files changed, 24 insertions(+)
+> That's off by 0x2a0 (AKA 672) bytes, and it seems to be consistent from run to
+> run.
 > 
-> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> index 12bbfe833609..bafe35c301ac 100644
-> --- a/drivers/acpi/property.c
-> +++ b/drivers/acpi/property.c
-> @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
->   	/* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
->   	GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
->   		  0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
-> +	/* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
-> +	GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
-> +		  0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
->   };
->   
->   /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
-> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> index 3ae435beaf0a..d7c6ba48486f 100644
-> --- a/drivers/pci/pci-acpi.c
-> +++ b/drivers/pci/pci-acpi.c
-> @@ -1369,12 +1369,33 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
->   		dev->external_facing = 1;
->   }
->   
-> +static int pci_dev_has_dma_property(struct pci_dev *dev)
-> +{
-> +	struct acpi_device *adev;
-> +	const union acpi_object *obj;
-> +
-> +	adev = ACPI_COMPANION(&dev->dev);
-> +	if (!adev)
-> +		return 0;
-> +
-> +	/*
-> +	 * Property also used by Microsoft Windows for same purpose,
-> +	 * (to implement DMA protection from a device, using the IOMMU).
+> I note that an interrupt occuring could cause similar (since on arm64 those are
+> taken/triaged on the task stack before moving to the irq stack, and the irq
+> regs alone will take 300+ bytes), but that doesn't seem to be the problem here
+> given this is consistent, and it appears some prior function consumed a lot of
+> stack.
+> 
+> I *think* the same irq problem would apply to x86, but maybe that initial
+> triage happens on a trampoline stack.
+> 
+> I'll dig a bit more into the arm64 side...
 
-Nit: there is no context for "same purpose" here, so this comment is 
-more confusing than helpful. Might I suggest a rewording like:
+That offset above seems to be due to the earlier logic in direct_entry(), which
+I guess is running out-of-line. With that hacked to:
 
-	/*
-	 * Property used by Microsoft Windows to enforce IOMMU DMA
-	 * protection for any device that the system might not fully
-	 * trust; we'll honour it the same way.
-	 */
+----------------
+diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+index e2228b6fc09bb..53f3027e8202d 100644
+--- a/drivers/misc/lkdtm/core.c
++++ b/drivers/misc/lkdtm/core.c
+@@ -378,8 +378,9 @@ static ssize_t direct_entry(struct file *f, const char __user *user_buf,
+                size_t count, loff_t *off)
+ {
+        const struct crashtype *crashtype;
+-       char *buf;
++       char *buf = "STACKLEAK_ERASING";
+ 
++#if 0
+        if (count >= PAGE_SIZE)
+                return -EINVAL;
+        if (count < 1)
+@@ -395,13 +396,17 @@ static ssize_t direct_entry(struct file *f, const char __user *user_buf,
+        /* NULL-terminate and remove enter */
+        buf[count] = '\0';
+        strim(buf);
++#endif
+ 
+        crashtype = find_crashtype(buf);
++
++#if 0
+        free_page((unsigned long) buf);
+        if (!crashtype)
+                return -EINVAL;
++#endif
+ 
+-       pr_info("Performing direct entry %s\n", crashtype->name);
++       // pr_info("Performing direct entry %s\n", crashtype->name);
+        lkdtm_do_action(crashtype);
+        *off += count;
+ 
+----------------
 
-?
-
-Personally I think it would have been more logical to handle this in 
-pci_set_dma_untrusted(), but I see some of those implementation aspects 
-have already been discussed, and Bjorn's preference definitely wins over 
-mine here :)
+... the SP check doesn't fail, but I still see intermittent bad value failures.
+Those might be due to interrupt frames.
 
 Thanks,
-Robin.
-
-> +	 */
-> +	if (!acpi_dev_get_property(adev, "DmaProperty", ACPI_TYPE_INTEGER,
-> +				   &obj) && obj->integer.value == 1)
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
->   void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
->   {
->   	struct pci_dev *pci_dev = to_pci_dev(dev);
->   
->   	pci_acpi_optimize_delay(pci_dev, adev->handle);
->   	pci_acpi_set_external_facing(pci_dev);
-> +	pci_dev->untrusted |= pci_dev_has_dma_property(pci_dev); >   	pci_acpi_add_edr_notifier(pci_dev);
->   
->   	pci_acpi_add_pm_notifier(adev, pci_dev);
+Mark.

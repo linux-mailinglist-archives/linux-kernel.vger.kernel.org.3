@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5096750F5CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E2750F852
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346427AbiDZIpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S1348083AbiDZJPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345483AbiDZIjK (ORCPT
+        with ESMTP id S1347049AbiDZIvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A5813FB57;
-        Tue, 26 Apr 2022 01:29:57 -0700 (PDT)
+        Tue, 26 Apr 2022 04:51:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F021C1738CA;
+        Tue, 26 Apr 2022 01:39:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4E77B81A2F;
-        Tue, 26 Apr 2022 08:29:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 417D3C385A0;
-        Tue, 26 Apr 2022 08:29:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 504116090C;
+        Tue, 26 Apr 2022 08:39:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FCFEC385A0;
+        Tue, 26 Apr 2022 08:39:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961794;
-        bh=M1sk34xlYCQpQot+7xmeV9IzI73vVdZ8Sw1Ikj2J5Cc=;
+        s=korg; t=1650962364;
+        bh=JQxcb8I4zW0fNZWM3VRNh61ptw73ZrM7m53hpGMdlrA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P0xgsIIsElaDQyOUb+LE+dTO+wxIWIOrsliyWiPK+cpysMs2VGK/5UERF7gTgTkE7
-         ql1cHTDE0WlBWKtZEcXQB+pjlFdWcnaHlXbW5QHe7RTdsi4jti96DQs+1Ftf34ppdz
-         F2fNtbnMDF3SMPE/iBFq/nAG2kTJ2fyPe+jSaUR8=
+        b=fCeSLxDsmVgAcUWtvYwEPQ9V/SF/d4E/6Xk+1gA1rdW0sBgJbGeAy1X/iVHa8fqur
+         gpEiIFcJ3Qa/dElOCUVlsPdt9nIkScya+pStNwSuwfVgZLKLWZZVG4O5ATbW3Huj51
+         rxLvtyKxR9iRl0hfsw+Wm18aWp5uYhPqd8NSjb+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 31/62] dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
+Subject: [PATCH 5.15 070/124] scsi: iscsi: Fix NOP handling during conn recovery
 Date:   Tue, 26 Apr 2022 10:21:11 +0200
-Message-Id: <20220426081738.118345525@linuxfoundation.org>
+Message-Id: <20220426081749.291563079@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit 1a7eb80d170c28be2928433702256fe2a0bd1e0f ]
+[ Upstream commit 44ac97109e42f87b1a34954704b81b6c8eca80c4 ]
 
-Both of of_get_parent() and of_parse_phandle() return node pointer with
-refcount incremented, use of_node_put() on it to decrease refcount
-when done.
+If a offload driver doesn't use the xmit workqueue, then when we are doing
+ep_disconnect libiscsi can still inject PDUs to the driver. This adds a
+check for if the connection is bound before trying to inject PDUs.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/r/20220408001314.5014-9-michael.christie@oracle.com
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/libiscsi.c | 7 ++++++-
+ include/scsi/libiscsi.h | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
-index 7ce2e99b594d..0a186d16e73f 100644
---- a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
-+++ b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
-@@ -506,11 +506,15 @@ static int dpaa_get_ts_info(struct net_device *net_dev,
- 	info->phc_index = -1;
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index a4f26431b033..0f2c7098f9d6 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -678,7 +678,8 @@ __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
+ 	struct iscsi_task *task;
+ 	itt_t itt;
  
- 	fman_node = of_get_parent(mac_node);
--	if (fman_node)
-+	if (fman_node) {
- 		ptp_node = of_parse_phandle(fman_node, "ptimer-handle", 0);
-+		of_node_put(fman_node);
-+	}
+-	if (session->state == ISCSI_STATE_TERMINATE)
++	if (session->state == ISCSI_STATE_TERMINATE ||
++	    !test_bit(ISCSI_CONN_FLAG_BOUND, &conn->flags))
+ 		return NULL;
  
--	if (ptp_node)
-+	if (ptp_node) {
- 		ptp_dev = of_find_device_by_node(ptp_node);
-+		of_node_put(ptp_node);
-+	}
+ 	if (opcode == ISCSI_OP_LOGIN || opcode == ISCSI_OP_TEXT) {
+@@ -2214,6 +2215,8 @@ void iscsi_conn_unbind(struct iscsi_cls_conn *cls_conn, bool is_active)
+ 	iscsi_suspend_tx(conn);
  
- 	if (ptp_dev)
- 		ptp = platform_get_drvdata(ptp_dev);
+ 	spin_lock_bh(&session->frwd_lock);
++	clear_bit(ISCSI_CONN_FLAG_BOUND, &conn->flags);
++
+ 	if (!is_active) {
+ 		/*
+ 		 * if logout timed out before userspace could even send a PDU
+@@ -3312,6 +3315,8 @@ int iscsi_conn_bind(struct iscsi_cls_session *cls_session,
+ 	spin_lock_bh(&session->frwd_lock);
+ 	if (is_leading)
+ 		session->leadconn = conn;
++
++	set_bit(ISCSI_CONN_FLAG_BOUND, &conn->flags);
+ 	spin_unlock_bh(&session->frwd_lock);
+ 
+ 	/*
+diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
+index bdb0ae11682d..d1e282f0d6f1 100644
+--- a/include/scsi/libiscsi.h
++++ b/include/scsi/libiscsi.h
+@@ -55,7 +55,7 @@ enum {
+ /* Connection flags */
+ #define ISCSI_CONN_FLAG_SUSPEND_TX	BIT(0)
+ #define ISCSI_CONN_FLAG_SUSPEND_RX	BIT(1)
+-
++#define ISCSI_CONN_FLAG_BOUND		BIT(2)
+ 
+ #define ISCSI_ITT_MASK			0x1fff
+ #define ISCSI_TOTAL_CMDS_MAX		4096
 -- 
 2.35.1
 

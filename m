@@ -2,299 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF24850F029
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFB550F02D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244527AbiDZFYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 01:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
+        id S244354AbiDZFZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 01:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244349AbiDZFYE (ORCPT
+        with ESMTP id S233119AbiDZFZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 01:24:04 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2105.outbound.protection.outlook.com [40.107.215.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61C915FF0;
-        Mon, 25 Apr 2022 22:20:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kCnAWiExwVpdMjsyq7lWeQhrq1FEGesBUpxqQcrqnKKxtTCoVAj4XnsjGnKz50RicfffpsRIh4RgenDk7YAo5BWBVv7LrFAtf8dLSnPZGlrFTo6pC+0wm8em6Fc4T9pIW7cPanejuO4GOALNpNozUlSpTMXb0HLsUooIhCJrVYR87gQAUdgsu4Pal5J2WOZpIVlrDlMiNb4H1X29c4mw+PihgJOrb9psbBR4HXAx6tWmyMbIlDH05Jc2XyEHwd+dL9GO6vPrM2SMm/9vfPv7f7PsMZ4hvmYvp1M/7X8ldE/p9UtXX6JYcLoibGtEGdHoeqqu6hMEVMTaALfNv0PP4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rpqUOj5/AYskNGus184C0fYMvhSFrzVjm8ZIcgQMlj8=;
- b=bAb+YA+gbZdy/+7zUZw0ZxJherbUglSoBptVHuzLZnjnZKCEwaL16UeX7LitcwvBozacNdG/7/U2XR9sHDzVAXFgzzfqi1vtiyvTsZaf5OiCHd5H3Irql7rPfbl8phdhET8HfffP6MvxRrPp2DQf86w1mfg6qWu7SJOnF8RFX4rxzpiIL2k7y3hTzewYaXuA4UN1h3EEqY/3QQq6sTRdVKIAbQznT2DDSp3JA0frN6PnSw5wsebM7/kef9TwMQ6DmqWayTclQapSBiasf9SOsnzJVcgjz/1dxfs66Gp8AzhBEDRxC4yGvidZ0wmPo9xeFrKUKlvesIa8on6lnn2FHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rpqUOj5/AYskNGus184C0fYMvhSFrzVjm8ZIcgQMlj8=;
- b=XawyGORXuR9KTIZLvBGAPd6+f2GggvdYwBA+FQD5my++18hf7bNJuyM+yU115k4wLq90aEvQ02/anOW+CmeqEY6W1j8hg7WXOsxblR3v194DH8nXFglUTK9unIlL0RW8tXI4+BV7wp9Z+HM3F7jslGN+3pGzQAJf+Nzg1TP+eSEN4BTFgbD6ElLfUPIluK+3DwWmz7DdlFAGLlOkv1VHI3gTXQ3Z/S61MI8yXqxTEOKym459qFE79K1bQ4rSaRWeXans6TwzVkdq+2AS84/NVCwX1nsb1tuwuW78OTmZXdg6/Lvz0FtlV03PTRYH8i7fEYXZFHY51T0cr2sVP7CmDQ==
-Received: from SG2PR06MB4818.apcprd06.prod.outlook.com (2603:1096:4:172::13)
- by KL1PR0601MB4210.apcprd06.prod.outlook.com (2603:1096:820:2c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Tue, 26 Apr
- 2022 05:20:50 +0000
-Received: from SG2PR06MB4818.apcprd06.prod.outlook.com
- ([fe80::61ad:8a4f:fd13:b261]) by SG2PR06MB4818.apcprd06.prod.outlook.com
- ([fe80::61ad:8a4f:fd13:b261%9]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 05:20:50 +0000
-From:   Tommy Huang <tommy_huang@aspeedtech.com>
-To:     Joel Stanley <joel@jms.id.au>
-CC:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v1 2/2] drm/aspeed: Add 1024x768 mode for AST2600
-Thread-Topic: [PATCH v1 2/2] drm/aspeed: Add 1024x768 mode for AST2600
-Thread-Index: AQHYL5GJYwRSY7QFIkesAL2saXmbV60B2+mAgAAbIlA=
-Date:   Tue, 26 Apr 2022 05:20:50 +0000
-Message-ID: <SG2PR06MB4818330BF3AB12D398BE73F6E1FB9@SG2PR06MB4818.apcprd06.prod.outlook.com>
-References: <20220304063137.12970-1-tommy_huang@aspeedtech.com>
- <20220304063137.12970-3-tommy_huang@aspeedtech.com>
- <CACPK8Xc92tStUOAgU9_XPGK7bQwJ_hutV16U+otUZkswrOumeA@mail.gmail.com>
-In-Reply-To: <CACPK8Xc92tStUOAgU9_XPGK7bQwJ_hutV16U+otUZkswrOumeA@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ff3c970a-ffda-4d47-ebfb-08da27448727
-x-ms-traffictypediagnostic: KL1PR0601MB4210:EE_
-x-microsoft-antispam-prvs: <KL1PR0601MB4210CC1E867F48869A155EABE1FB9@KL1PR0601MB4210.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gbnDEl5SVChwrWeD93VjLEHtpDgdauXBCssQQm4K3MLungsbkWvHz8d+6LtpodEHnNVL8nbPN6+impeHpfXHwLR7vTuqchavdCjbK8wmP7EYqCuGFHuXSODYmw0sqr/Qa/yS18NlRqusSHzXnDMZcv7mZmfcQGkhRnnR0Xfj6Pw+DxjzKFvwT1LO2tBJlkAXph1mljbZu346keVd9vgDf1b/rzYfWl5bBJq0iLwKt0oExl8Ty7FGQi+TSodDh1oVRj9qGGYpE3c0gSKP6N4obQKYs1PKE+DSgvrdGGYAejq68RP2ERlMvlxbqyO75fuotmHvEmIBOXfJL2W6hqLG+M8DXLKHn/Oza1jp0HpvhfZKa1x/zViElL4KENyl72qNXJBXw6pVYWWWfHZFbJkeVJjoS7XC5mEIl967vo+3hd8Kgvy6hGih6viqokq4FEinrbGZGI1F0iQBpbAQD2m1IMcOCCX5jQ8DLrB/zOpZipDGfmA0HEwUh1qQCZKQVy9RpVBn2N/qt99fJUScAvjG/+dwT3IBhYcrsIy7u/DFm1gRKfCC+iuZkfMhlX7Xtzo3rs+yv1YhCRiWcJDVN8FrxGCeadHA17lYZfilV8VdxxXwy+KqMl8C4AVJmo0qZGefO1pq287tn+TB11UsWWqMf3TOYzw0KsjxrpssStq86KF/vcvUElhr+fMhC8RXr2XUoQNMOBCXl3KZxCvlkSOS2w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB4818.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(396003)(346002)(376002)(366004)(39850400004)(136003)(8676002)(66446008)(4326008)(66476007)(186003)(316002)(86362001)(66946007)(66556008)(64756008)(55016003)(8936002)(5660300002)(7416002)(9686003)(26005)(52536014)(76116006)(6916009)(33656002)(83380400001)(54906003)(6506007)(53546011)(508600001)(71200400001)(7696005)(38070700005)(107886003)(38100700002)(2906002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L0s4b3F2THUwSTVlcThCOURRQmxSbDJsRm1ZNEFnbExDU2VnZW4yR05SOE1O?=
- =?utf-8?B?aUtyS292dmx1UklybER3SkFQS0F2MXMvQnZEaHlScHdSRCtzSEZCK1BLRmI3?=
- =?utf-8?B?b0RLdGJNU2N1dFpveGY3THZHemx5dHlTVzRoNGVyNnRwRGljV09nQzVPdnRF?=
- =?utf-8?B?c3p5R01sRDdOZDBhbTJyYXkvdFhVZGIzV053MVgvaTFOeDF4ZUhxMjFSUG8z?=
- =?utf-8?B?eFBIVmViMjVLNEFvU0pnem5SWEovVjR6Kzk4MG1mSU4vZ1dHbG5HWjJxUzdk?=
- =?utf-8?B?U016OHFxNklzdkdrQTl4cGRCTFQ0N29BalhvUnl3UGVsOE00KzNzcS91M3ZN?=
- =?utf-8?B?c1g3UXBzQy9FRDEreFdzRUhQMk9CaWRLYmJXNE1iaTRsUlNKb3Z4RzlBU29o?=
- =?utf-8?B?cGtDYUd6VzlybmUzTk9JaERCdW9HdHB4dklaSy9YZ1g3N2ZpQXZRVjF5dkVz?=
- =?utf-8?B?RzJraGRIYTA2c0g4cFdHdmxMbU9WUUVBVWk1SlRmT0hHSDMva21nWHZBTzdY?=
- =?utf-8?B?L1MrYVVPZklqRmIrWjh6TUE1cEhTRlZkT25PVUMwTXh0MDFUOTBnTE85U3Vh?=
- =?utf-8?B?QUxZRWlCSjZRYlFQb3BETldPZm9XSVg5Zi8yTTRWWElNK3A0NExGMlRJaHNn?=
- =?utf-8?B?TTdXWWJXRzFUMEdKaUh6WVVpQ3M5TEZFcm5HVFFnbkxiV0p5UTdWOGZiMGls?=
- =?utf-8?B?dDJGWUszLzhHL1BuUHppMjMvVXcycVRWMU5FLzh6R0tWTnJMdmZ1b0hKOUhK?=
- =?utf-8?B?OW5kNkU2QTdvRC82UmdtaDNCZUFRWUs1R3labHJzOVd1SUVpTXc3LzFnSFRR?=
- =?utf-8?B?MktzTFNmV3FMaVpuN2Z3ZkxyK1UrOFlGZmhPNlZ0cU8xdmUxb3FEaEI5K0ZL?=
- =?utf-8?B?UmdpaVh5L0tSMllnQ0dnZFRKSWpnNUZqZThwL3JBVUxiY2kyVDNDQ3VWNmdD?=
- =?utf-8?B?bWxRVmMvRFJoSTF0NHZFMWViVlBwYkFCSlZBVllPdVRoMlFGNTVSZHcwQUVy?=
- =?utf-8?B?ZWluYU9yMTBTVXQzU3lZS1YxdFZEUU5WYmxOOGlYR2NjeDIrVDJpV1FwNUpa?=
- =?utf-8?B?ZlVtQi93bzhjNm9NYWU0VnpHTGVtdmZhNGxlQ2h0MGN5OHB6dlNNWURHd0NQ?=
- =?utf-8?B?bWhxUkY4SE12cFlEOVhsQm53TC9RUU1ZcEhLVGpaQnBPYXJVTDBFRFZVdHlt?=
- =?utf-8?B?TUxMc1kycEVieHUwcmg0NURyeUVPdEE3N3VvdVVVN1FubUlEeE5ESndpdjQv?=
- =?utf-8?B?cGE4eHYrZkVvbUhXSXVtZHNaRjllb2ZDcC9GNUIwQjZXbjlBSldlUk9iWTJp?=
- =?utf-8?B?V053Y2wwQ0hRSlpwV1YxeTRsQ1RWYTdWSTlVQ0w5TjFYQllLeGJIZFIveDR2?=
- =?utf-8?B?TXhGQ3ZmNzhuc0k2dkhDckJ2TnJnaUdPMkkvcStEYnhhbVJlS2hFemRMRjNn?=
- =?utf-8?B?YnU4bVFWRDQ2WVNOMEVOSHZ5V0JCWHN0S3c1V2hzaThPMlJ1SU5sS3lONmlp?=
- =?utf-8?B?by9EZ3J4UEhyZ2lMSWU0RVhNUm90Q2FWdlFiZjlwRVR1K0s2NWtLNlFRd3hI?=
- =?utf-8?B?dmZyM0hOSlMzTnFpOUNDVVdZMi8wWGRiZ2F1Z01qeWp6THg1akF0c1c3V0oy?=
- =?utf-8?B?OXhuK0NCUmQvWWVPSnBBT1F6S1N3ZDdwN0crQ1d2dXRTSjZJeDdoTUIyR2Qw?=
- =?utf-8?B?ZFp6K3orR2R5cCtQQlZRUzhOUE1QemQwSzBnMmVqMUtHMENVSFJEcjFWQkhG?=
- =?utf-8?B?RlRjRk9pakZTclJZamVqUzJXMmJjUTgydHZGSGlXQm1wMEtpa3V6Q09MVWky?=
- =?utf-8?B?c0c2b24xS1VWYUtKeWMza0VqQ0J4b1l6YTRqSHBLbkM4WTlUVWZ1S1ArQmNu?=
- =?utf-8?B?c1hBQzZDNG1QSWRKWHhnTHJzaE5jSEV0N0xkUXp1MzFaZnhXR2tzVHBWdjZs?=
- =?utf-8?B?cXFER0dRSHZKMEpBTFBXcWR3K2E2R0lBcDJ4OUMxVVBEZ3NoekxPejQwYnBY?=
- =?utf-8?B?MW5RT1ZpdFJuaW5lSktscHBsSkpLYzdPRGNZZnZ6clUzTkR6T3FqYXIvNTI3?=
- =?utf-8?B?SjhLaEh4OXZCNkxSTnBNZFJwOTNWcEIzbW1pYm5ORlB2bnQySGdVT2h5d1k0?=
- =?utf-8?B?dExMazJxOHFiWDFBUzBoK3hNRStEQXZYdHN4UW5oSWp1RFdIKzlObHhHUnVS?=
- =?utf-8?B?TjZQaE13eGh5OHlQRTgvZmtPc2ZLblpLS2l0RzVIY1FBQmV4VXNSOG0yRUVu?=
- =?utf-8?B?dTlYMmNkZ01ReHE4VG5ObTEvQjF2TFIzaHZic0VQamlLWGNuTUlrcjBDdUkz?=
- =?utf-8?B?RlBmekxpTUFBLzA4dVgyOVpNUll0WDVRcW5wYlRJUkhDcVRsTXpZMGxSeEov?=
- =?utf-8?Q?8bhe7/LC/8+UrNU4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 26 Apr 2022 01:25:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AC4715FF1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:22:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650950558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Oi1OQ4ZktnWK4rvX8OP/yxG1sG9N5ACoFGRSW4tvxHo=;
+        b=JnSxHXQdzRvXniBapEvk2t8pE94gfm6JPffuXSnBS20iQ1fF0VZca0SL1eRi4jEwdjBYnL
+        oLie4/MHbYYnwzWCkp3m7XWR+CC2JExdi8TZO9AuSRiTyLArBH+O1ZWLpsTwEOViXksoDV
+        r0tubX2+T9B5najmAzICRVT/a9QBWl4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-3Gzn4f5HPlmslYTJhwMrmg-1; Tue, 26 Apr 2022 01:22:35 -0400
+X-MC-Unique: 3Gzn4f5HPlmslYTJhwMrmg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BEA551014A60;
+        Tue, 26 Apr 2022 05:22:34 +0000 (UTC)
+Received: from localhost (ovpn-12-33.pek2.redhat.com [10.72.12.33])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EE20F403373;
+        Tue, 26 Apr 2022 05:22:30 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 13:22:22 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Sourabh Jain <sourabhjain@linux.ibm.com>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v7 4/8] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <YmeBjrChOHsIYG3e@MiWiFi-R3L-srv>
+References: <20220413164237.20845-1-eric.devolder@oracle.com>
+ <20220413164237.20845-5-eric.devolder@oracle.com>
+ <YleK3J/4HNuFioIh@MiWiFi-R3L-srv>
+ <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
+ <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB4818.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff3c970a-ffda-4d47-ebfb-08da27448727
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 05:20:50.4822
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: naMqlynUmK7hOVBUMLYIdw9Arx9JYooRymk7EFXIMQzTibpdXpWKrySrW4f0nO+q5fqN4Q9jzL/rFo9wvuDKwb20IrFJfIHue3XZ818gXag=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4210
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSm9lbCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKb2VsIFN0
-YW5sZXkgPGpvZWxAam1zLmlkLmF1Pg0KPiBTZW50OiBUdWVzZGF5LCBBcHJpbCAyNiwgMjAyMiAx
-MToyNyBBTQ0KPiBUbzogVG9tbXkgSHVhbmcgPHRvbW15X2h1YW5nQGFzcGVlZHRlY2guY29tPg0K
-PiBDYzogRGF2aWQgQWlybGllIDxhaXJsaWVkQGxpbnV4LmllPjsgRGFuaWVsIFZldHRlciA8ZGFu
-aWVsQGZmd2xsLmNoPjsgUm9iDQo+IEhlcnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IEFuZHJl
-dyBKZWZmZXJ5IDxhbmRyZXdAYWouaWQuYXU+Ow0KPiBsaW51eC1hc3BlZWQgPGxpbnV4LWFzcGVl
-ZEBsaXN0cy5vemxhYnMub3JnPjsgb3BlbiBsaXN0OkRSTSBEUklWRVJTDQo+IDxkcmktZGV2ZWxA
-bGlzdHMuZnJlZWRlc2t0b3Aub3JnPjsgZGV2aWNldHJlZSA8ZGV2aWNldHJlZUB2Z2VyLmtlcm5l
-bC5vcmc+Ow0KPiBMaW51eCBBUk0gPGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9y
-Zz47IExpbnV4IEtlcm5lbCBNYWlsaW5nIExpc3QNCj4gPGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
-bC5vcmc+OyBCTUMtU1cgPEJNQy1TV0Bhc3BlZWR0ZWNoLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2MSAyLzJdIGRybS9hc3BlZWQ6IEFkZCAxMDI0eDc2OCBtb2RlIGZvciBBU1QyNjAwDQo+
-IA0KPiBPbiBGcmksIDQgTWFyIDIwMjIgYXQgMDY6MzIsIFRvbW15IEhhdW5nIDx0b21teV9odWFu
-Z0Bhc3BlZWR0ZWNoLmNvbT4NCj4gd3JvdGU6DQo+ID4NCj4gPiBVcGRhdGUgdGhlIGFzcGVlZF9n
-Znhfc2V0X2NsayB3aXRoIGRpc3BsYXkgd2lkdGguDQo+ID4gQXQgQVNUMjYwMCwgdGhlIGRpc3Bs
-YXkgY2xvY2sgY291bGQgYmUgY29taW5nIGZyb20gSFBMTCBjbG9jayAvIDE2ID0NCj4gPiA3NU1I
-ei4gSXQgd291bGQgZml0IDEwMjR4NzY4QDcwSHouDQo+ID4gQW5vdGhlciBjaGlwIHdpbGwgc3Rp
-bGwga2VlcCA4MDB4NjAwLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogVG9tbXkgSGF1bmcgPHRv
-bW15X2h1YW5nQGFzcGVlZHRlY2guY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2dwdS9kcm0v
-YXNwZWVkL2FzcGVlZF9nZnguaCAgICAgIHwgMTIgKysrKysrLS0tLQ0KPiA+ICBkcml2ZXJzL2dw
-dS9kcm0vYXNwZWVkL2FzcGVlZF9nZnhfY3J0Yy5jIHwgMjkNCj4gPiArKysrKysrKysrKysrKysr
-KysrKy0tLS0gIGRyaXZlcnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9kcnYuYyAgfA0KPiA+
-IDE2ICsrKysrKysrKysrLS0gIGRyaXZlcnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9vdXQu
-YyAgfCAxNA0KPiA+ICsrKysrKysrKysrLQ0KPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDYwIGluc2Vy
-dGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-Z3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeC5oDQo+ID4gYi9kcml2ZXJzL2dwdS9kcm0vYXNwZWVk
-L2FzcGVlZF9nZnguaA0KPiA+IGluZGV4IGViNGMyNjdjZGU1ZS4uYzdhZWZlZTA2NTdhIDEwMDY0
-NA0KPiA+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeC5oDQo+ID4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4LmgNCj4gPiBAQCAtMTA5LDExICsx
-MDksMTUgQEAgaW50IGFzcGVlZF9nZnhfY3JlYXRlX291dHB1dChzdHJ1Y3QgZHJtX2RldmljZQ0K
-PiAqZHJtKTsNCj4gPiAgI2RlZmluZSBDUlRfVEhST0RfSElHSCh4KSAgICAgICAgICAgICAgKCh4
-KSA8PCA4KQ0KPiA+DQo+ID4gIC8qIFNDVSBjb250cm9sICovDQo+ID4gLSNkZWZpbmUgU0NVX0c2
-X0NMS19DT1VSQ0UgICAgICAgICAgICAgIDB4MzAwDQo+ID4gKyNkZWZpbmUgRzZfQ0xLX1NPVVJD
-RSAgICAgICAgICAgICAgICAgIDB4MzAwDQo+ID4gKyNkZWZpbmUgRzZfQ0xLX1NPVVJDRV9NQVNL
-ICAgICAgICAgICAgIChCSVQoOCkgfCBCSVQoOSkgfCBCSVQoMTApKQ0KPiA+ICsjZGVmaW5lIEc2
-X0NMS19TT1VSQ0VfSFBMTCAgICAgICAgICAgICAoQklUKDgpIHwgQklUKDkpIHwgQklUKDEwKSkN
-Cj4gPiArI2RlZmluZSBHNl9DTEtfU09VUkNFX1VTQiAgICAgICAgICAgICAgQklUKDkpDQo+ID4g
-KyNkZWZpbmUgRzZfQ0xLX1NFTDMgICAgICAgICAgICAgICAgICAgIDB4MzA4DQo+ID4gKyNkZWZp
-bmUgRzZfQ0xLX0RJVl9NQVNLICAgICAgICAgICAgICAgICAgICAgICAgMHgzRjAwMA0KPiA+ICsj
-ZGVmaW5lIEc2X0NMS19ESVZfMTYNCj4gKEJJVCgxNil8QklUKDE1KXxCSVQoMTMpfEJJVCgxMikp
-DQo+ID4gKyNkZWZpbmUgRzZfVVNCXzQwX0NMSyAgICAgICAgICAgICAgICAgIEJJVCg5KQ0KPiA+
-DQo+ID4gIC8qIEdGWCBGTEFHUyAqLw0KPiA+ICAjZGVmaW5lIENMS19NQVNLICAgICAgICAgICAg
-ICAgICAgICAgICBCSVQoMCkNCj4gPiAgI2RlZmluZSBDTEtfRzYgICAgICAgICAgICAgICAgICAg
-ICAgICAgQklUKDApDQo+ID4gLQ0KPiA+IC0jZGVmaW5lIEc2X0NMS19NQVNLICAgICAgICAgICAg
-ICAgICAgICAoQklUKDgpIHwgQklUKDkpIHwgQklUKDEwKSkNCj4gPiAtI2RlZmluZSBHNl9VU0Jf
-NDBfQ0xLICAgICAgICAgICAgICAgICAgQklUKDkpDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-Z3B1L2RybS9hc3BlZWQvYXNwZWVkX2dmeF9jcnRjLmMNCj4gPiBiL2RyaXZlcnMvZ3B1L2RybS9h
-c3BlZWQvYXNwZWVkX2dmeF9jcnRjLmMNCj4gPiBpbmRleCBhMjRmYWIyMmVhYzQuLjU4MjliZTlj
-N2M2NyAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXNwZWVkL2FzcGVlZF9nZnhf
-Y3J0Yy5jDQo+ID4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X2NydGMu
-Yw0KPiA+IEBAIC0yMyw2ICsyMywyOCBAQCBkcm1fcGlwZV90b19hc3BlZWRfZ2Z4KHN0cnVjdA0K
-PiBkcm1fc2ltcGxlX2Rpc3BsYXlfcGlwZSAqcGlwZSkNCj4gPiAgICAgICAgIHJldHVybiBjb250
-YWluZXJfb2YocGlwZSwgc3RydWN0IGFzcGVlZF9nZngsIHBpcGUpOyAgfQ0KPiA+DQo+ID4gK3N0
-YXRpYyB2b2lkIGFzcGVlZF9nZnhfc2V0X2Nsb2NrX3NvdXJjZShzdHJ1Y3QgYXNwZWVkX2dmeCAq
-cHJpdiwgaW50DQo+ID4gK21vZGVfd2lkdGgpIHsNCj4gPiArICAgICAgIHJlZ21hcF91cGRhdGVf
-Yml0cyhwcml2LT5zY3UsIEc2X0NMS19TT1VSQ0UsDQo+IEc2X0NMS19TT1VSQ0VfTUFTSywgMHgw
-KTsNCj4gPiArICAgICAgIHJlZ21hcF91cGRhdGVfYml0cyhwcml2LT5zY3UsIEc2X0NMS19TRUwz
-LCBHNl9DTEtfRElWX01BU0ssDQo+ID4gKzB4MCk7DQo+ID4gKw0KPiA+ICsgICAgICAgc3dpdGNo
-IChtb2RlX3dpZHRoKSB7DQo+ID4gKyAgICAgICBjYXNlIDEwMjQ6DQo+ID4gKyAgICAgICAgICAg
-ICAgIC8qIGhwbGwgZGl2IDE2ID0gNzVNaHogKi8NCj4gPiArICAgICAgICAgICAgICAgcmVnbWFw
-X3VwZGF0ZV9iaXRzKHByaXYtPnNjdSwgRzZfQ0xLX1NPVVJDRSwNCj4gPiArICAgICAgICAgICAg
-ICAgRzZfQ0xLX1NPVVJDRV9NQVNLLCBHNl9DTEtfU09VUkNFX0hQTEwpOw0KPiA+ICsgICAgICAg
-ICAgICAgICByZWdtYXBfdXBkYXRlX2JpdHMocHJpdi0+c2N1LCBHNl9DTEtfU0VMMywNCj4gPiAr
-ICAgICAgICAgICAgICAgRzZfQ0xLX0RJVl9NQVNLLCBHNl9DTEtfRElWXzE2KTsNCj4gPiArICAg
-ICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgICBjYXNlIDgwMDoNCj4gPiArICAgICAgIGRl
-ZmF1bHQ6DQo+ID4gKyAgICAgICAgICAgICAgIC8qIHVzYiA0ME1oeiAqLw0KPiA+ICsgICAgICAg
-ICAgICAgICByZWdtYXBfdXBkYXRlX2JpdHMocHJpdi0+c2N1LCBHNl9DTEtfU09VUkNFLA0KPiA+
-ICsgICAgICAgICAgICAgICBHNl9DTEtfU09VUkNFX01BU0ssIEc2X0NMS19TT1VSQ0VfVVNCKTsN
-Cj4gPiArICAgICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgICB9DQo+IA0KPiBJJ20gbm90
-IGZhbWlsaWFyIHdpdGggdGhpcyBhcmVhLCBidXQgSSB0aGluayB0aGlzIGJlbG9uZ3MgaW4gdGhl
-IGNsb2NrIGRyaXZlci4NCj4gDQo+IFdlIHdhbnQgdG8gYmUgYWJsZSB0byBjYWxsIGNsa19zZXRf
-cmF0ZSgpIGZyb20gdGhlIGRybSBkcml2ZXIgYW5kIGhhdmUgdGhlDQo+IGNsb2NrIGRyaXZlciB1
-cGRhdGUgdGhlIGNvcnJlY3QgYml0cyBpbiB0aGUgU0NVLg0KPiANCj4gSW5zdGVhZCBvZiBzcGVj
-aWFsaXNpbmcgdGhlIDI2MDAgdnMgb3RoZXJzLCBjb3VsZCBjbGtfc2V0X3JhdGUoKSBmYWlsIG9u
-IHRoZQ0KPiBvdGhlcnMsIGFuZCBjYXVzZSB0aGUgZHJpdmVyIHRvIHN0YXkgYXQgODAweDYwMC4g
-SWYgdGhlIHNldCBzdWNjZWVkcyBpdCBjYW4gdGhlbg0KPiBydW4gYXQgdGhlIGhpZ2hlciByZXNv
-bHV0aW9uLiBJZiB0aGlzIGlzIG5vdCBob3cgdGhlIEFQSXMgd29yaywgd2UgY291bGQgaW5zdGVh
-ZA0KPiBoYXZlIGEgY2xvY2tfcmF0ZSBpbiBzdHJ1Y3QgYXNwZWVkX2dmeCBhbmQgZWFjaCBwbGF0
-Zm9ybSBjYW4gZGVmaW5lIGl0cw0KPiBleHBlY3RlZCBjbG9jayByYXRlLiBJdCB3b3VsZCB0aGVu
-IG5lZWQgYSBjb3JyZXNwb25kaW5nIHJlc29sdXRpb24uDQo+IA0KPiBQbGVhc2UgdGFrZSBhIGxv
-b2sgYXQgb3RoZXIgZHJpdmVycyBhbmQgc2VlIHdoYXQgdGhleSBkby4NCg0KVGhhbmtzIGZvciB5
-b3VyIGNvbW1vbi4gVGhlIHBpeGVsIGNsb2NrIHNlbGVjdGlvbiBpcyB2ZXJ5IGxpbWl0IG9uIHNv
-YyBkaXNwbGF5Lg0KVW50aWwgbm93LCB0aGVyZSBhcmUganVzdCB0d28gcmVzb2x1dGlvbnMgKDgw
-MHg2MDBANjAgYW5kIDEwMjR4NzY4QDcwKWNvdWxkIGJlIHNlbGVjdGVkIGF0IGFzdDI2MDAuDQpB
-bmQgdGhlcmUgaXMganVzdCA4MDB4NjAwQDYwIGNvdWxkIGJlIHNlbGVjdGVkIGF0IGFzdDI1MDAg
-YW5kIGFzdDI0MDAuDQpBbHRob3VnaCBJIGFsc28gd2FudCB0byBoYXZlIGNsa19zZXRfcmF0ZSgp
-IGZ1bmN0aW9uIHRvIHNlbGVjdCBmbGV4aWJsZSBwaXhlbCBjbG9jayB3aXRoIGEgcHJvZ3JhbWFi
-bGUgcGxsLg0KV2UgbWlnaHQgZGVmaW5lIHN1cHBvcnQgY2xvY2sgcmF0ZSBpbiBldmVyeSBkZXZp
-Y2Ugc3RydWN0dXJlIGZvciB0aGlzIHNpdHVhdGlvbi4NCj4gDQo+IA0KPiANCj4gPiArfQ0KPiA+
-ICsNCj4gPiAgc3RhdGljIGludCBhc3BlZWRfZ2Z4X3NldF9waXhlbF9mbXQoc3RydWN0IGFzcGVl
-ZF9nZnggKnByaXYsIHUzMg0KPiA+ICpicHApICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgZHJtX2Ny
-dGMgKmNydGMgPSAmcHJpdi0+cGlwZS5jcnRjOyBAQCAtNzcsMTIgKzk5LDExIEBADQo+ID4gc3Rh
-dGljIHZvaWQgYXNwZWVkX2dmeF9kaXNhYmxlX2NvbnRyb2xsZXIoc3RydWN0IGFzcGVlZF9nZngg
-KnByaXYpDQo+ID4gICAgICAgICByZWdtYXBfdXBkYXRlX2JpdHMocHJpdi0+c2N1LCBwcml2LT5k
-YWNfcmVnLCBCSVQoMTYpLCAwKTsgIH0NCj4gPg0KPiA+IC1zdGF0aWMgdm9pZCBhc3BlZWRfZ2Z4
-X3NldF9jbGsoc3RydWN0IGFzcGVlZF9nZnggKnByaXYpDQo+ID4gK3N0YXRpYyB2b2lkIGFzcGVl
-ZF9nZnhfc2V0X2NsayhzdHJ1Y3QgYXNwZWVkX2dmeCAqcHJpdiwgaW50DQo+ID4gK21vZGVfd2lk
-dGgpDQo+ID4gIHsNCj4gPiAgICAgICAgIHN3aXRjaCAocHJpdi0+ZmxhZ3MgJiBDTEtfTUFTSykg
-ew0KPiA+ICAgICAgICAgY2FzZSBDTEtfRzY6DQo+ID4gLSAgICAgICAgICAgICAgIHJlZ21hcF91
-cGRhdGVfYml0cyhwcml2LT5zY3UsIFNDVV9HNl9DTEtfQ09VUkNFLA0KPiBHNl9DTEtfTUFTSywg
-MHgwKTsNCj4gPiAtICAgICAgICAgICAgICAgcmVnbWFwX3VwZGF0ZV9iaXRzKHByaXYtPnNjdSwg
-U0NVX0c2X0NMS19DT1VSQ0UsDQo+IEc2X0NMS19NQVNLLCBHNl9VU0JfNDBfQ0xLKTsNCj4gPiAr
-ICAgICAgICAgICAgICAgYXNwZWVkX2dmeF9zZXRfY2xvY2tfc291cmNlKHByaXYsIG1vZGVfd2lk
-dGgpOw0KPiA+ICAgICAgICAgICAgICAgICBicmVhazsNCj4gPiAgICAgICAgIGRlZmF1bHQ6DQo+
-ID4gICAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+IEBAIC05OSw3ICsxMjAsNyBAQCBzdGF0aWMg
-dm9pZCBhc3BlZWRfZ2Z4X2NydGNfbW9kZV9zZXRfbm9mYihzdHJ1Y3QNCj4gYXNwZWVkX2dmeCAq
-cHJpdikNCj4gPiAgICAgICAgIGlmIChlcnIpDQo+ID4gICAgICAgICAgICAgICAgIHJldHVybjsN
-Cj4gPg0KPiA+IC0gICAgICAgYXNwZWVkX2dmeF9zZXRfY2xrKHByaXYpOw0KPiA+ICsgICAgICAg
-YXNwZWVkX2dmeF9zZXRfY2xrKHByaXYsIG0tPmhkaXNwbGF5KTsNCj4gPg0KPiA+ICAjaWYgMA0K
-PiA+ICAgICAgICAgLyogVE9ETzogd2UgaGF2ZSBvbmx5IGJlZW4gYWJsZSB0byB0ZXN0IHdpdGgg
-dGhlIDQwTUh6IFVTQg0KPiA+IGNsb2NrLiBUaGUgZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
-bS9hc3BlZWQvYXNwZWVkX2dmeF9kcnYuYw0KPiA+IGIvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9h
-c3BlZWRfZ2Z4X2Rydi5jDQo+ID4gaW5kZXggYWY1NmZmZGNjYzY1Li5lMWE4MTRhZWJjMmQgMTAw
-NjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X2Rydi5jDQo+
-ID4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X2Rydi5jDQo+ID4gQEAg
-LTExMCw2ICsxMTAsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9tb2RlX2NvbmZpZ19mdW5j
-cw0KPiA+IGFzcGVlZF9nZnhfbW9kZV9jb25maWdfZnVuY3MgPSB7DQo+ID4NCj4gPiAgc3RhdGlj
-IGludCBhc3BlZWRfZ2Z4X3NldHVwX21vZGVfY29uZmlnKHN0cnVjdCBkcm1fZGV2aWNlICpkcm0p
-ICB7DQo+ID4gKyAgICAgICBzdHJ1Y3QgYXNwZWVkX2dmeCAqcHJpdiA9IHRvX2FzcGVlZF9nZngo
-ZHJtKTsNCj4gPiAgICAgICAgIGludCByZXQ7DQo+ID4NCj4gPiAgICAgICAgIHJldCA9IGRybW1f
-bW9kZV9jb25maWdfaW5pdChkcm0pOyBAQCAtMTE4LDggKzExOSwxOCBAQA0KPiBzdGF0aWMNCj4g
-PiBpbnQgYXNwZWVkX2dmeF9zZXR1cF9tb2RlX2NvbmZpZyhzdHJ1Y3QgZHJtX2RldmljZSAqZHJt
-KQ0KPiA+DQo+ID4gICAgICAgICBkcm0tPm1vZGVfY29uZmlnLm1pbl93aWR0aCA9IDA7DQo+ID4g
-ICAgICAgICBkcm0tPm1vZGVfY29uZmlnLm1pbl9oZWlnaHQgPSAwOw0KPiA+IC0gICAgICAgZHJt
-LT5tb2RlX2NvbmZpZy5tYXhfd2lkdGggPSA4MDA7DQo+ID4gLSAgICAgICBkcm0tPm1vZGVfY29u
-ZmlnLm1heF9oZWlnaHQgPSA2MDA7DQo+ID4gKw0KPiA+ICsgICAgICAgc3dpdGNoIChwcml2LT5m
-bGFncyAmIENMS19NQVNLKSB7DQo+ID4gKyAgICAgICBjYXNlIENMS19HNjoNCj4gPiArICAgICAg
-ICAgICAgICAgZHJtLT5tb2RlX2NvbmZpZy5tYXhfd2lkdGggPSAxMDI0Ow0KPiA+ICsgICAgICAg
-ICAgICAgICBkcm0tPm1vZGVfY29uZmlnLm1heF9oZWlnaHQgPSA3Njg7DQo+ID4gKyAgICAgICAg
-ICAgICAgIGJyZWFrOw0KPiA+ICsgICAgICAgZGVmYXVsdDoNCj4gPiArICAgICAgICAgICAgICAg
-ZHJtLT5tb2RlX2NvbmZpZy5tYXhfd2lkdGggPSA4MDA7DQo+ID4gKyAgICAgICAgICAgICAgIGRy
-bS0+bW9kZV9jb25maWcubWF4X2hlaWdodCA9IDYwMDsNCj4gPiArICAgICAgICAgICAgICAgYnJl
-YWs7DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+ICAgICAgICAgZHJtLT5tb2RlX2NvbmZpZy5m
-dW5jcyA9ICZhc3BlZWRfZ2Z4X21vZGVfY29uZmlnX2Z1bmNzOw0KPiA+DQo+ID4gICAgICAgICBy
-ZXR1cm4gcmV0Ow0KPiA+IEBAIC0xNjcsNiArMTc4LDcgQEAgc3RhdGljIGludCBhc3BlZWRfZ2Z4
-X2xvYWQoc3RydWN0IGRybV9kZXZpY2UgKmRybSkNCj4gPiAgICAgICAgIHByaXYtPnZnYV9zY3Jh
-dGNoX3JlZyA9IGNvbmZpZy0+dmdhX3NjcmF0Y2hfcmVnOw0KPiA+ICAgICAgICAgcHJpdi0+dGhy
-b2RfdmFsID0gY29uZmlnLT50aHJvZF92YWw7DQo+ID4gICAgICAgICBwcml2LT5zY2FuX2xpbmVf
-bWF4ID0gY29uZmlnLT5zY2FuX2xpbmVfbWF4Ow0KPiA+ICsgICAgICAgcHJpdi0+ZmxhZ3MgPSBj
-b25maWctPmdmeF9mbGFnczsNCj4gPg0KPiA+ICAgICAgICAgcHJpdi0+c2N1ID0gc3lzY29uX3Jl
-Z21hcF9sb29rdXBfYnlfcGhhbmRsZShucCwgInN5c2NvbiIpOw0KPiA+ICAgICAgICAgaWYgKElT
-X0VSUihwcml2LT5zY3UpKSB7DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hc3Bl
-ZWQvYXNwZWVkX2dmeF9vdXQuYw0KPiA+IGIvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRf
-Z2Z4X291dC5jDQo+ID4gaW5kZXggNjc1OWNiODg0MTVhLi41ZDVlMDRmMTVjNTkgMTAwNjQ0DQo+
-ID4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X291dC5jDQo+ID4gKysr
-IGIvZHJpdmVycy9ncHUvZHJtL2FzcGVlZC9hc3BlZWRfZ2Z4X291dC5jDQo+ID4gQEAgLTEwLDcg
-KzEwLDE5IEBADQo+ID4NCj4gPiAgc3RhdGljIGludCBhc3BlZWRfZ2Z4X2dldF9tb2RlcyhzdHJ1
-Y3QgZHJtX2Nvbm5lY3RvciAqY29ubmVjdG9yKSAgew0KPiA+IC0gICAgICAgcmV0dXJuIGRybV9h
-ZGRfbW9kZXNfbm9lZGlkKGNvbm5lY3RvciwgODAwLCA2MDApOw0KPiA+ICsgICAgICAgc3RydWN0
-IGFzcGVlZF9nZnggKnByaXYgPSBjb250YWluZXJfb2YoY29ubmVjdG9yLCBzdHJ1Y3QNCj4gYXNw
-ZWVkX2dmeCwgY29ubmVjdG9yKTsNCj4gPiArICAgICAgIGludCBtb2RlX2NvdW50ID0gMDsNCj4g
-PiArDQo+ID4gKyAgICAgICBzd2l0Y2ggKHByaXYtPmZsYWdzICYgQ0xLX01BU0spIHsNCj4gPiAr
-ICAgICAgIGNhc2UgQ0xLX0c2Og0KPiA+ICsgICAgICAgICAgICAgICBtb2RlX2NvdW50ID0gZHJt
-X2FkZF9tb2Rlc19ub2VkaWQoY29ubmVjdG9yLCAxMDI0LA0KPiA3NjgpOw0KPiA+ICsgICAgICAg
-ICAgICAgICBicmVhazsNCj4gPiArICAgICAgIGRlZmF1bHQ6DQo+ID4gKyAgICAgICAgICAgICAg
-IG1vZGVfY291bnQgPSBkcm1fYWRkX21vZGVzX25vZWRpZChjb25uZWN0b3IsIDgwMCwNCj4gNjAw
-KTsNCj4gPiArICAgICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+
-ICsgICAgICAgcmV0dXJuIG1vZGVfY291bnQ7DQo+ID4gIH0NCj4gPg0KPiA+ICBzdGF0aWMgY29u
-c3Qgc3RydWN0DQo+ID4gLS0NCj4gPiAyLjE3LjENCj4gPg0K
+On 04/26/22 at 09:36am, Sourabh Jain wrote:
+> 
+> On 15/04/22 03:59, Eric DeVolder wrote:
+> > Hi Baoquan,
+> > Inline comments below.
+> > Thanks!
+> > eric
+> > 
+> > On 4/13/22 21:45, Baoquan He wrote:
+> > > On 04/13/22 at 12:42pm, Eric DeVolder wrote:
+> > > > Upon CPU and memory changes, a generic crash_hotplug_handler()
+> > > > dispatches the hot plug/unplug event to the architecture specific
+> > > > arch_crash_hotplug_handler(). During the process, the kexec_mutex
+> > > > is held.
+> > > > 
+> > > > To support cpu hotplug, a callback is registered to capture the
+> > > > CPUHP_AP_ONLINE_DYN online and ofline events via
+> > > > cpuhp_setup_state_nocalls().
+> > > > 
+> > > > To support memory hotplug, a notifier is registered to capture the
+> > > > MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
+> > > > 
+> > > > The cpu callback and memory notifier then call crash_hotplug_handler()
+> > > > to handle the hot plug/unplug event.
+> > > > 
+> > > > Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> > > > ---
+> > > >   include/linux/kexec.h |  16 +++++++
+> > > >   kernel/crash_core.c   | 101
+> > > > ++++++++++++++++++++++++++++++++++++++++++
+> > > >   2 files changed, 117 insertions(+)
+> > > > 
+> > > > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> > > > index f93f2591fc1e..02daff1f47dd 100644
+> > > > --- a/include/linux/kexec.h
+> > > > +++ b/include/linux/kexec.h
+> > > > @@ -306,6 +306,13 @@ struct kimage {
+> > > >         /* Information for loading purgatory */
+> > > >       struct purgatory_info purgatory_info;
+> > > > +
+> > > > +#ifdef CONFIG_CRASH_HOTPLUG
+> > > > +    bool hotplug_event;
+> > > > +    unsigned int offlinecpu;
+> > > > +    bool elfcorehdr_index_valid;
+> > > > +    int elfcorehdr_index;
+> > > > +#endif
+> > > >   #endif
+> > > >     #ifdef CONFIG_IMA_KEXEC
+> > > > @@ -322,6 +329,15 @@ struct kimage {
+> > > >       unsigned long elf_load_addr;
+> > > >   };
+> > > >   +#ifdef CONFIG_CRASH_HOTPLUG
+> > > > +void arch_crash_hotplug_handler(struct kimage *image,
+> > > > +    unsigned int hp_action, unsigned int cpu);
+> > > > +#define KEXEC_CRASH_HP_REMOVE_CPU   0
+> > > > +#define KEXEC_CRASH_HP_ADD_CPU      1
+> > > > +#define KEXEC_CRASH_HP_REMOVE_MEMORY 2
+> > > > +#define KEXEC_CRASH_HP_ADD_MEMORY   3
+> > > > +#endif /* CONFIG_CRASH_HOTPLUG */
+> > > > +
+> > > >   /* kexec interface functions */
+> > > >   extern void machine_kexec(struct kimage *image);
+> > > >   extern int machine_kexec_prepare(struct kimage *image);
+> > > > diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> > > > index 256cf6db573c..ecf746243ab2 100644
+> > > > --- a/kernel/crash_core.c
+> > > > +++ b/kernel/crash_core.c
+> > > > @@ -9,12 +9,17 @@
+> > > >   #include <linux/init.h>
+> > > >   #include <linux/utsname.h>
+> > > >   #include <linux/vmalloc.h>
+> > > > +#include <linux/highmem.h>
+> > > > +#include <linux/memory.h>
+> > > > +#include <linux/cpuhotplug.h>
+> > > >     #include <asm/page.h>
+> > > >   #include <asm/sections.h>
+> > > >     #include <crypto/sha1.h>
+> > > >   +#include "kexec_internal.h"
+> > > > +
+> > > >   /* vmcoreinfo stuff */
+> > > >   unsigned char *vmcoreinfo_data;
+> > > >   size_t vmcoreinfo_size;
+> > > > @@ -491,3 +496,99 @@ static int __init crash_save_vmcoreinfo_init(void)
+> > > >   }
+> > > >     subsys_initcall(crash_save_vmcoreinfo_init);
+> > > > +
+> > > > +#ifdef CONFIG_CRASH_HOTPLUG
+> > > > +void __weak arch_crash_hotplug_handler(struct kimage *image,
+> > > > +    unsigned int hp_action, unsigned int cpu)
+> > > > +{
+> > > > +    pr_warn("crash hp: %s not implemented", __func__);
+> > > > +}
+> > > > +
+> > > > +static void crash_hotplug_handler(unsigned int hp_action,
+> > > > +    unsigned int cpu)
+> > > > +{
+> > > > +    /* Obtain lock while changing crash information */
+> > > > +    if (!mutex_trylock(&kexec_mutex))
+> > > > +        return;
+> > > > +
+> > > > +    /* Check kdump is loaded */
+> > > > +    if (kexec_crash_image) {
+> > > > +        pr_debug("crash hp: hp_action %u, cpu %u", hp_action, cpu);
+> > > > +
+> > > > +        /* Needed in order for the segments to be updated */
+> > > > +        arch_kexec_unprotect_crashkres();
+> > > > +
+> > > > +        /* Flag to differentiate between normal load and hotplug */
+> > > > +        kexec_crash_image->hotplug_event = true;
+> > > > +
+> > > > +        /* Now invoke arch-specific update handler */
+> > > > +        arch_crash_hotplug_handler(kexec_crash_image, hp_action, cpu);
+> > > > +
+> > > > +        /* No longer handling a hotplug event */
+> > > > +        kexec_crash_image->hotplug_event = false;
+> > > > +
+> > > > +        /* Change back to read-only */
+> > > > +        arch_kexec_protect_crashkres();
+> > > > +    }
+> > > > +
+> > > > +    /* Release lock now that update complete */
+> > > > +    mutex_unlock(&kexec_mutex);
+> > > > +}
+> > > > +
+> > > > +#if defined(CONFIG_MEMORY_HOTPLUG)
+> > > > +static int crash_memhp_notifier(struct notifier_block *nb,
+> > > > +    unsigned long val, void *v)
+> > > > +{
+> > > > +    struct memory_notify *mhp = v;
+> > > > +
+> > > > +    switch (val) {
+> > > > +    case MEM_ONLINE:
+> > > > +        crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY, -1U);
+> > > We don't differentiate the memory add/remove, cpu add, except of cpu
+> > > remove. Means the hp_action only differentiate cpu remove from the other
+> > > action. Maybe only making two types?
+> > > 
+> > > #define KEXEC_CRASH_HP_REMOVE_CPU   0
+> > > #define KEXEC_CRASH_HP_UPDATE_OTHER      1
+> > > 
+> > Sourabh Jain's work with PPC uses REMOVE_CPU, REMOVE_MEMORY, and
+> > ADD_MEMORY.
+> > Do you still want to consolidate these?
+> 
+> On PowerPC different actions are needed for CPU add and memory add/remove.
+> For CPU add case only FDT is updated whereas for the memory hotplug we will
+> be
+> updating FDT and elfcorehdr.
+
+I don't understand. For elfcorehdr updating, we only need regenerate it.
+Do you update them different for memory add/remove?
+
+What I saw is the added action for memory hotplug is only for message
+printing. Is this really needed? And memory hotplug is even not
+supported. Please correct me if I missed anything.
+
++       /* crash update on memory hotplug is not support yet */
++       if (hp_action == KEXEC_CRASH_HP_REMOVE_MEMORY || hp_action == KEXEC_CRASH_HP_ADD_MEMORY) {
++               pr_info_once("crash hp: crash update is not supported with memory hotplug\n");
++               return;
++       }
+
+
+> 
+> Ideally, I would prefer the crash hotplug handler to report all four actions
+> separately.
+> 
+> Thanks,
+> Sourabh Jain
+> 
+

@@ -2,152 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AE850FBD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C6550FBD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349510AbiDZLUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S1349498AbiDZLUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349500AbiDZLUn (ORCPT
+        with ESMTP id S245427AbiDZLUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:20:43 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2112.outbound.protection.outlook.com [40.107.255.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DB863BDA;
-        Tue, 26 Apr 2022 04:17:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k8M+DXsAN54Iv9aoXlDWtrML59boJVyn+oI+jJK6a4SnRYJWRSWeX1Xw6h+iavXw4h2YMZzgzIE3yGO1gCaUKsZ1HgFWmLZ8RrDLsz48UpMiMA7KWP7R6dUMlkTvBrIAkmURiiHsEc10nzM9khqDMA8PgJFeQex/iLoD13z9by4svrTAjjcP9PV08JNVaD6a58jqL2zRvTiqn5j88/CTWvpcXozm+fh4ytl86K5GCtmmDw3MmuVcAuzXfhUahjC8yQDI37aHGNJe8SmP6QjSvt8dkoFNSLSE6quiYNy768So1oQqjmmtQexY+vCVzvA2ymWYoqSmfdU/pAoxA8oenw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nH8lfn/GEabTIC1vo7b0dFnlSGaji5zPki37qA5r6yE=;
- b=AzDDWycExg2Y5Ea/Le35kHnwwINHliiWtnx3iKFKXWV325PJB2rFHfMI4N8G1jMhuZ8mkyX7QMM2BD85+wUdmMegmXDv9YbtakHxVVA+uzINmrYzXdvUuaeyyOv8SaYP1NbEJy5avyjJYBSk8t8fsOc7cXLQ5zBElE9hcb+IOYjsX8i+dRND9mGsnlSq1ozDiTqeHxYQ6MpRTQAIFahn35rXcMRhtk8OU6DzwNp5U3uuyDVANpkjWYIMjlcz9bWegl+YQxoSFa7iW98wfVFK6S71UC5W43EyFv5bEgV7zw/LDdAFKd49aVGMWFkKyTIXR2FwNLG/MxRuqGmEgIwn9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nH8lfn/GEabTIC1vo7b0dFnlSGaji5zPki37qA5r6yE=;
- b=GzLkrOYOAGSWWKESR7w4LAGhNrXfo8vsA3hKqSt7a/e5um1lDKe/RWZlMjGZHQE2ebCsMmsOCgRwSeTHVb+YS5a5IObDzhUkHXUv2m/TLmRMHJt7VHLO83RxNxAKycFHKKA//lKmBvsEQNAufVYRnT1z9qB3KnaUMGaJt3IYOTY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- PS1PR0601MB3660.apcprd06.prod.outlook.com (2603:1096:300:86::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.16; Tue, 26 Apr
- 2022 11:17:33 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 11:17:32 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] cpufreq: mediatek: Fix NULL pointer dereference in mediatek-cpufreq
-Date:   Tue, 26 Apr 2022 19:17:14 +0800
-Message-Id: <20220426111715.627609-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK0PR03CA0120.apcprd03.prod.outlook.com
- (2603:1096:203:b0::36) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Tue, 26 Apr 2022 07:20:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D92E3A189
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650971845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=04oBpXRz9dQvTo95R2G0BWiNbQsIPh3agUFG6K2tgYI=;
+        b=Wuw6fMd+ajnW8gK3q3V3jwlwZ+omDQEMkSqtIyfTOdAC57ku8I1ft4CmLC8yHCaMp9x1uU
+        dBldBXt6y5eDfcKZLeIP+2GkMaQxzSKkxOy8BBvuZrPV6xjYIDJ8renoQWR7yNUDPk2wdA
+        DcPc8NBZXY1MmJ7kced4jCj3NHUZXFs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-568-lL3G3PC_PtubcUETPxNIMg-1; Tue, 26 Apr 2022 07:17:24 -0400
+X-MC-Unique: lL3G3PC_PtubcUETPxNIMg-1
+Received: by mail-wm1-f71.google.com with SMTP id p31-20020a05600c1d9f00b0038ed0964a90so707493wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:17:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=04oBpXRz9dQvTo95R2G0BWiNbQsIPh3agUFG6K2tgYI=;
+        b=NBgDDcKDkwSPRKFGmTcUp9EaxhXGVIqv7RaEjDRisswTEjcYu5mWFW2GKvLS/y+4EU
+         icL3lQoa86HftUgdca+u49hPZJFV+0vacf+IZwlSVAlXg4x7CL51Drfl/VCCqBJJSy9N
+         Zk+QQyqHGGRaXDPtNhRWh/GEVVlilZ6X1rN+rXVqiXF0RukbuzCrbslMsRUzd4eLY1nB
+         qBUnhTL2tITckhDsy/KooeJlwXhRh0wHD3N6EsLIEOeNoAnPPdHqILxSdb4CU6wXPPaR
+         vNcp/02VudkosZpxFPEU+i/53W6PvGV0vjCrDmnFUDjFcXpyeDY2Vg0AL5HUkIJNojnZ
+         VZVA==
+X-Gm-Message-State: AOAM532O5Y07KEFm4EE2N4ZYDNQJM1sYBqJkUwmKxv2QNiLNkpGebjgB
+        I9aGAHfElQNyI+EnC5ul4nN17CvEZ7vD+KT/To3jL8Iv/KI6dpsrfoyYZtDaruzBlAw+k+upWB2
+        w7/85eiY3X1bJaS04FKOPqtob
+X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr17958609wrj.713.1650971842743;
+        Tue, 26 Apr 2022 04:17:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwStMLfSxqQ+OCcxnqnNJykkkim5r8J/AH+nTUbkq+OS93lq+pltJzm0pB+gFuBW0G98x8GLw==
+X-Received: by 2002:adf:e2cc:0:b0:203:e8ba:c709 with SMTP id d12-20020adfe2cc000000b00203e8bac709mr17958586wrj.713.1650971842460;
+        Tue, 26 Apr 2022 04:17:22 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-117-160.dyn.eolo.it. [146.241.117.160])
+        by smtp.gmail.com with ESMTPSA id h10-20020a05600c414a00b0038ebb6884d8sm12422473wmm.0.2022.04.26.04.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 04:17:22 -0700 (PDT)
+Message-ID: <57eae113432e286b7e279102220c21fcf0bd1306.camel@redhat.com>
+Subject: Re: [PATCH net V2] nfc: nfcmrvl: main: reorder destructive
+ operations in nfcmrvl_nci_unregister_dev to avoid bugs
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Duoming Zhou <duoming@zju.edu.cn>, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        akpm@linux-foundation.org, netdev@vger.kernel.org, linma@zju.edu.cn
+Date:   Tue, 26 Apr 2022 13:17:21 +0200
+In-Reply-To: <20220425095838.100882-1-duoming@zju.edu.cn>
+References: <20220425095838.100882-1-duoming@zju.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 54084a91-fa42-4b39-7881-08da27765b6d
-X-MS-TrafficTypeDiagnostic: PS1PR0601MB3660:EE_
-X-Microsoft-Antispam-PRVS: <PS1PR0601MB3660C7CDB35C18D0CFF04BBAABFB9@PS1PR0601MB3660.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z1Qz3Bl5bBippvFGQ/xWelpw95NaI7hCeQExmFvyj+/rnbgmUypXq44p1Njn95WKrP1FMqOsSR6NJC9CN/wccyzViV7N1+MT6FowPwULyASxvJVZhM7xrdDR8kyEg5HNA1qdYY0pd7upvk5f6f5WurLHih36zonmQ58yB46kHHjM5XWghTAzOnphk19ENn0EJ43U6ZSLO2E1GPXQS9upMLG7pVO8mJzCyCNiTAkmknXv9ql7n4oyEVRTy3ZiqBHUcY2hmna83ca/bMWMgvnRdtrEZSSXjX5H4pGJ5cX+ffB1ik8uv4ku5TZuBb60JbVs0aaM7Q7vyzFcZceJEQegkgHftvFftc6Nj0ikcAsDUdfLFyQhX655lII0fpmTIQ/T/+2jzYxKeymI+RvCigRb5z1n/t7G+7T1rfj93nzFxPcYGmGA80ccsFXHaqGMb2irlz/QQBz0n7S16HR+eJj/M5jRKnT1JoSxIM37kUewSeZ/s9Nx65qAAEnRfLWZ2iaIXY7L1LLW7Hl5D1O9KyO040twIoOQGyHAO/aF/XMnsOD1Fww+COboWScsFNqil78z65+EzdBAJ/HT66hZigDihpr+qeb4dp+I2HYEIZw351UmCemi8RKEYgK5D/NaMfllgYQmaNsOI0Tj5tBV3qVvjEg4g5mD+a2a3JNw/19RNTAcol6yV7OvKsM3oF1Cl+gYqX0aaw5b+u+5EUptPmhdHA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(110136005)(86362001)(186003)(508600001)(8676002)(36756003)(66556008)(4326008)(107886003)(38100700002)(66946007)(66476007)(2906002)(8936002)(4744005)(1076003)(2616005)(26005)(38350700002)(5660300002)(83380400001)(6666004)(6512007)(52116002)(316002)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yySuQ8qPKnCAAfU0N/7CQuDf35gpro0z1UiVuTN3DLKAhJsjuozEo29JW+Hx?=
- =?us-ascii?Q?xk5s6hZb92XYtgK2b2vaAl84MH1oZJPWBXDLSl2p889yKj3DJUpPm8cNUQOs?=
- =?us-ascii?Q?p9n9XNPh0gYPhKDdlf8KD9mfrHmhLDb88L5xY0MJ/a7l9SmpMELvekWLvhOl?=
- =?us-ascii?Q?6RV3GfTWf95dcSADAB7kcF+HrrVHSlJu14ewWfc2f9Qe/GamCF3zvvsbXUvp?=
- =?us-ascii?Q?D4AaVhUCPvJusXsOpV38+KDNHqMpvzTPWzhkElhCH+omwy3KqYHrIyOvzOTx?=
- =?us-ascii?Q?PatKIwxGyzX9su8Os5CI6tFFgdyqI/mDdVdrL9n8AyJbvAZUfQyhwFQ6yvYW?=
- =?us-ascii?Q?YfzKp80ZPtLMvQQws+uc0V1h7QKBe2uiT743fbfmgkbOEkSzSK7LIbW37gEP?=
- =?us-ascii?Q?BxQSxJLRXVL5a2NP1IKOWsSbrjIFOqHAxf1oLQHltqH2NQkV4eCWU3XtEzeB?=
- =?us-ascii?Q?NEDIwTalDS6LKKtR50VOWjiStbO5NCdDxoPQSuR5ZquQXGA6sEt9I/2iHz1V?=
- =?us-ascii?Q?/kh00s3wciqp2v+dlZISrrunnN9SuCNTixSEGpQbAgA6e4chbSZOp9LQxvRt?=
- =?us-ascii?Q?weWR8lmn85xcWHhgH50A4EYLfwJiPrb/nlHVWduixBTOyBLtRnTQ34Uiq1SD?=
- =?us-ascii?Q?vHenxzrhiE9bbjknv0kgevM5Mz8ZMEkXSGwltfy8cfVWJzZH5jGf8jWGX83y?=
- =?us-ascii?Q?E9JGzYw8C28WJOGa9YBE39b8cKh/Ze/TgtoCnqLuwKcsDEVYgrTdHiBpUJiy?=
- =?us-ascii?Q?60CaYoX424GE6medlNnnqOztdlkJa0zOXB8+fY4QhX/Qe6ZsEsZf8M0wgnIo?=
- =?us-ascii?Q?JcobWKZOBworxXV5v7+UyVOfPcwLozINZVRaNy4K3y+o4YGCmUv87F+EaorX?=
- =?us-ascii?Q?T7jgwlqRpPId9OA2IEOVziUEqxjYKmyFBZqQ0EBIMh+/G1N10I055w8jlV1O?=
- =?us-ascii?Q?ZbjI2xdWWVdqPPIjrk1VtkemnA337VTLIHKze0CKy790aLxxEs/n+zPbVOiD?=
- =?us-ascii?Q?Ys50sSR34nvBjaesIln28eUGsQ2FTtkBvn6deWTr2pCJpIa7b6PKOXpnRmGK?=
- =?us-ascii?Q?wSZz4H8F8UHx2VX/uXsCq1evJ+f76RWUH6t17Mpm9xQJe2wKJMcSAthwGDqq?=
- =?us-ascii?Q?yh9NcWe8QP35gwWv4WUEoWlTjLLGoLPcpuMB/Z8sGS/odyG+Ka5kNVv2Ttl0?=
- =?us-ascii?Q?I1FYj19PKtwcIrxjbxOC5+92dWo4Sdw049l1zSxRR8zONJC9GSDHkmHz8sZ+?=
- =?us-ascii?Q?aiDh/MUzpo+s3pHj2I0tx3prD2N0ecpKZnBzDqxkvmg08CsFNJ4DVs1SBnZ2?=
- =?us-ascii?Q?dClzPqteqc53RpTW7FGCfjWOOeUj2jV0gipgPDam5XOmlUdh50tOyBduYpLN?=
- =?us-ascii?Q?b1zg92idleBYg1PqnQ7CpjMF1dn/kyYSBjSepAx7IAMGtv+UXJpX3f8qqAX2?=
- =?us-ascii?Q?qDd+tFkCu4WTAMmMv9GohBPBNpeQsDm4kM6oveNZPBh+m0G1XRVJqbQ/vXc5?=
- =?us-ascii?Q?DOh6ZmTIvp6S9ZRMgeNAs5qZuCuIvxEQ86eYIi4CV57D2VB006u6SFj2QqWd?=
- =?us-ascii?Q?+n3n2NdCSwY6OBE/L4Q0ve2yAcVezK2rArhoUw+nnZCzW5D9o5nIYZHMcKss?=
- =?us-ascii?Q?3PwRe0nYREhIVzxjTEN/yNn/vqJzkaUaJb33BcFGZ92abdH/ZoonHWvdJAlB?=
- =?us-ascii?Q?+SkWwxqPt0TUbE1LcxxddYJpSFDan8OtoQ+kahJYAbD4s9+SoxfLO6aEjyS3?=
- =?us-ascii?Q?tll5nsdHbw=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54084a91-fa42-4b39-7881-08da27765b6d
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 11:17:32.2683
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: er/8oIDGQyIvabZJmtQXScLfqdlZP/glH6GGpjNIbKweIljrsWWuFUNMNxbZonZ82bOew2olFKTqhckltWPx+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS1PR0601MB3660
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck error:
-drivers/cpufreq/mediatek-cpufreq.c:464:16-23: ERROR: info is NULL but dereferenced.
+On Mon, 2022-04-25 at 17:58 +0800, Duoming Zhou wrote:
+> There are destructive operations such as nfcmrvl_fw_dnld_abort and
+> gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
+> gpio and so on could be destructed while the upper layer functions such as
+> nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
+> to double-free, use-after-free and null-ptr-deref bugs.
+> 
+> There are three situations that could lead to double-free bugs.
+> 
+> The first situation is shown below:
+> 
+>    (Thread 1)                 |      (Thread 2)
+> nfcmrvl_fw_dnld_start         |
+>  ...                          |  nfcmrvl_nci_unregister_dev
+>  release_firmware()           |   nfcmrvl_fw_dnld_abort
+>   kfree(fw) //(1)             |    fw_dnld_over
+>                               |     release_firmware
+>   ...                         |      kfree(fw) //(2)
+>                               |     ...
+> 
+> The second situation is shown below:
+> 
+>    (Thread 1)                 |      (Thread 2)
+> nfcmrvl_fw_dnld_start         |
+>  ...                          |
+>  mod_timer                    |
+>  (wait a time)                |
+>  fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
+>    fw_dnld_over               |   nfcmrvl_fw_dnld_abort
+>     release_firmware          |    fw_dnld_over
+>      kfree(fw) //(1)          |     release_firmware
+>      ...                      |      kfree(fw) //(2)
+> 
+> The third situation is shown below:
+> 
+>        (Thread 1)               |       (Thread 2)
+> nfcmrvl_nci_recv_frame          |
+>  if(..->fw_download_in_progress)|
+>   nfcmrvl_fw_dnld_recv_frame    |
+>    queue_work                   |
+>                                 |
+> fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
+>  fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
+>   release_firmware              |   fw_dnld_over
+>    kfree(fw) //(1)              |    release_firmware
+>                                 |     kfree(fw) //(2)
+> 
+> The firmware struct is deallocated in position (1) and deallocated
+> in position (2) again.
+> 
+> The crash trace triggered by POC is like below:
+> 
+> [  122.640457] BUG: KASAN: double-free or invalid-free in fw_dnld_over+0x28/0xf0
+> [  122.640457] Call Trace:
+> [  122.640457]  <TASK>
+> [  122.640457]  kfree+0xb0/0x330
+> [  122.640457]  fw_dnld_over+0x28/0xf0
+> [  122.640457]  nfcmrvl_nci_unregister_dev+0x61/0x70
+> [  122.640457]  nci_uart_tty_close+0x87/0xd0
+> [  122.640457]  tty_ldisc_kill+0x3e/0x80
+> [  122.640457]  tty_ldisc_hangup+0x1b2/0x2c0
+> [  122.640457]  __tty_hangup.part.0+0x316/0x520
+> [  122.640457]  tty_release+0x200/0x670
+> [  122.640457]  __fput+0x110/0x410
+> [  122.640457]  task_work_run+0x86/0xd0
+> [  122.640457]  exit_to_user_mode_prepare+0x1aa/0x1b0
+> [  122.640457]  syscall_exit_to_user_mode+0x19/0x50
+> [  122.640457]  do_syscall_64+0x48/0x90
+> [  122.640457]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  122.640457] RIP: 0033:0x7f68433f6beb
+> 
+> What's more, there are also use-after-free and null-ptr-deref bugs
+> in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
+> set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
+> then, we dereference firmware, gpio or the members of priv->fw_dnld in
+> nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
+> 
+> This patch reorders destructive operations after nci_unregister_device
+> to avoid the double-free, UAF and NPD bugs, as nci_unregister_device
+> is well synchronized and won't return if there is a running routine.
+> This was mentioned in commit 3e3b5dfcd16a ("NFC: reorder the logic in
+> nfc_{un,}register_device").
 
-Use pr_err instead of dev_err to avoid dereferring a NULL pointer.
+It looks like the above is not enough to close all the possible races,
+specifically it looks like fw_dnld_timeout() and fw_dnld_rx_work() may
+still race one vs another. 
 
-Fixes: f52b16ba9fe4 ("cpufreq: mediatek: Use device print to show logs")
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/cpufreq/mediatek-cpufreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I *think* that the approach you already suggested here:
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index bcabb3726a5b..901042e9a240 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -461,8 +461,8 @@ static int mtk_cpufreq_init(struct cpufreq_policy *policy)
- 
- 	info = mtk_cpu_dvfs_info_lookup(policy->cpu);
- 	if (!info) {
--		dev_err(info->cpu_dev,
--			"dvfs info for cpu%d is not initialized.\n", policy->cpu);
-+		pr_err("dvfs info for cpu%d is not initialized.\n",
-+			policy->cpu);
- 		return -EINVAL;
- 	}
- 
--- 
-2.35.3
+https://lore.kernel.org/netdev/1d34425a0ea8a553a66dcf4f22ca55cc920dbb42.1649913521.git.duoming@zju.edu.cn/
+
+should be safer - but you have to protect with the same spinlock even
+every fw_dnld->fw modification.
+
+@Lin Ma: I see you don't like the spinlock solution, but this other
+option looks racing. Do you have other suggestions? (and/or would you
+reconsider the spinlock?)
+
+Thanks!
+
+Paolo
 

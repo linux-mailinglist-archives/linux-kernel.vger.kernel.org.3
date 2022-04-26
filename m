@@ -2,202 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DEB510B73
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FCE510B75
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355509AbiDZVm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S1355530AbiDZVnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346480AbiDZVmX (ORCPT
+        with ESMTP id S1346480AbiDZVnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:42:23 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2089.outbound.protection.outlook.com [40.107.223.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8118363BC5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:39:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l7AvbkHWiBvuk8eZ9hN1kVBSSe4Fk4VAR36P9TCfk+PCuDWBxF3E8gqwiHHgSqSXw++1bwLgjDflgSY9AiFRxEh+iyA1J4HFjNMsnHCiaPnrlMbeuDf2oWsra455lYsuLb7VZAeEfNdenLYQTVn4wIbYBc+Phb5fgB//oUivgHk7mDEWt358ahpi0Cv1U3payKM9wOasYe31lF37dsbVRN2f9EHLYBUlBaZLDagmXrc4siRF0Z04lLzQzKuxDy/OwOlUyO0MTEX0VlDm6Qa54HFSpWb5YGrWW5AwVFpdcwUN/c4ZVP6faDlujcMe3qXe6hNCMhymYHqMJkBldzdpwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6acqcZjqSy7ovd9KlhHiW1EO4qZHLu5nv51jRo2TJaA=;
- b=RSuWnGyPOQmfkL8hGjvFmC5bCFtpeOzo5y8C/rXMkEudlrRVkCCpbgJ142KxcZyGnf4+58p3A5myRhvgM14lELE1ci+rI/bIv5Sgr6dr7DwwsFgt+WpgCfFNAZqGVdNVMgqhXpIeSK1NeZZvxoH0iaoS03SVyryG0SciWpy8EnPDfnH0F3ybmPK6VvT+M+1qGKeEBxboNVTDMVpSuGQl+52szIhc1weXHHG2gR7A+RA3ElOE3GFkLBR5q7kh8Dtn9LgozmEgMv7wRS1Wdf84Mw7eNh56dyCbV+RcZiyAGiAYwtKCuaJnVboONsrCbAaRWGJY+B41jZJ1Jw3lp7CyUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6acqcZjqSy7ovd9KlhHiW1EO4qZHLu5nv51jRo2TJaA=;
- b=gYcZkM+WJ9mUyJoYm+N821s7k9yLwyPqiatA8pcKv/NFoL9muKWjJ4LJ679ICZAjS2X4oTkA0k+ggOI3z95SNXZztFGDtiuNznBtdNJrF47sFTAyccyXEjhyfq0LpWJcBJjedAYFGCG805cpt9uI3E/nToLaHwxlsgOXJpzGaqe/KHhNC62AmdrbJmhYhC7QBmuWp6QOONxsHuo+2tGsHjgjZ39DOQf4GsBlt8ergpgo43DbZ7rP4nTsuW+lYpnYRQl8Wrn4NmsaXaYlrVUszqbV/fWsCTFfVp7DUAMkvduzm6h5HKn+lUVKXGJnwuQg6Gl1es/3JHZ5NzPbzjeoAw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by BL0PR12MB2498.namprd12.prod.outlook.com (2603:10b6:207:40::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Tue, 26 Apr
- 2022 21:39:13 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::920:970d:6f94:1f10]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::920:970d:6f94:1f10%4]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 21:39:12 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and alloc_contig_range alignment.
-Date:   Tue, 26 Apr 2022 17:38:58 -0400
-X-Mailer: MailMate (1.14r5870)
-Message-ID: <2B9844C8-6D35-41E2-ACB2-9854E7A9C29F@nvidia.com>
-In-Reply-To: <20220426210801.GA1038@qian>
-References: <20220425143118.2850746-1-zi.yan@sent.com>
- <20220426201855.GA1014@qian>
- <B621B4DD-5D11-4F0E-AFF5-F8684AE37E57@nvidia.com>
- <20220426210801.GA1038@qian>
-Content-Type: multipart/signed;
- boundary="=_MailMate_12640CD4-4573-49EE-93F5-01EF8643F3E2_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0209.namprd13.prod.outlook.com
- (2603:10b6:208:2be::34) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+        Tue, 26 Apr 2022 17:43:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F1E2193
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651009202; x=1682545202;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8PJocHdQIU0L3qCnGMuHYqmEYMHIJBX1KbzqKywx+2E=;
+  b=Y1Jk8HUjRqfFvLIzOxMom/WPA+rwrhQ6Po9fxSaJL8p3qllSnjSet4oQ
+   aLuxIH6vz9H/9D4ZabArXY7EVJdgyEQziZx9BwaTO8HXZ0EX8kGZlAMKM
+   takdJew1vTt9HuDRR4suoiNG68CROeTKmWe30wDqZR7ikyN8mX+VrSW4O
+   TXyLEEBsSUgCsHt02D13hufwe8MJBaF30+1E6tyNYyvHPDms9VayfAkon
+   8KDmUeCz4vNg24G42NByCJqr4nfZvV0+Cof0kBZvfvuJYVfXltaJwRULS
+   /+hHiNV6qLnLb5WBwjzj2oqr6YcLGMiWkOWKJVMcG1ZYghYNGbIgbbCYW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263321056"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="263321056"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 14:40:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="705242830"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Apr 2022 14:40:01 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njSue-00041z-FO;
+        Tue, 26 Apr 2022 21:40:00 +0000
+Date:   Wed, 27 Apr 2022 05:39:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [axboe-block:io_uring-flags2 48/74] fs/io_uring.c:7388:28: warning:
+ unused function 'io_file_from_index'
+Message-ID: <202204270552.OzdnvA4W-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fb9a0d9b-5d8a-43f7-f3db-08da27cd345c
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2498:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB2498193886FFD92CE8D80BCEC2FB9@BL0PR12MB2498.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /bXm8voi5Pk6UY3WJUcpYGfQff91RLy8vtoC9JqmjMCnP4UX2dECUKe0IYRAgpsLd6t7/vdxmSrWSTA8dGrqkYrdbDgyb2mjEiCQy847qXGantWjLiN8lfJ3pzbZGl66NMndGVVKUq3wXNfCH9g/UrQO4C0lLiKV7e0bZRYQ4HEse2/bT2xxKtZKbtnasEBahiPW+pXv1LWumdhhN7oH6XE+oL9VIAfyoaZ34k6Kh6UW81CijxE6ff5aaLFfQtj6YVfptpB2sAtw9JUFhqQl7R3s7emP9fnW5YFsS+ntKvP+6QCAUvhuMwgEd20drHs+JPcP8vkIGaI6yBlBVhQ/IpR8nrHyq1XSyK5wFsFsduRt9TcRqHNERF3iJUbsUme2hmiIluBLnLx21yIQbEXmP0Oc3TJYWEWBkqtB4/gmmmpBWEhoH+UuV1NmlWXM55qEK6Y+ubGFghBQ2kURfpKAO5FZmLo3uw8+75tmBeLERy9fDCOOG2IwR9ynqNODQZHQW9YibpxxEXaRzA2SSiRl8tRnpgQKWtHVLqOiRx1RkXJ/TyYLvxP9JNhsBZhFeuJcgJMSkf79tJj7oN83Bhbo1a3eGQoUOMFWiz3TDKZrAaZhy3NDJ83XEJWjHF24WkPtucSOaO3xtM8YgdWtzAVuHA/mmuvfWMfpyJcBDzU45BNuMGJStuAAa+Nau+EhO77xW6Um+yFF64pQx+3tKJt4rglxyvDhABRD3UCHRjtL2Mo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(6666004)(4326008)(26005)(33656002)(5660300002)(53546011)(38100700002)(21480400003)(2906002)(6512007)(6486002)(6506007)(508600001)(316002)(66556008)(83380400001)(54906003)(86362001)(36756003)(235185007)(8936002)(66476007)(2616005)(186003)(8676002)(66946007)(7416002)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MGjrmNIwIMCLWiebGoAH67wgyONjopXNaoOvMb5z1c8t05WPeLRzNWWf9wIF?=
- =?us-ascii?Q?oZ1cLz/4rb1mQbx0jS6GZHL2Q4uxtQgTmUhoz6yavn3Wcc+ep843K2zWB/BV?=
- =?us-ascii?Q?GNxlhps2VgZpD9oc89p5ksZrXKU+m3HUgXWhHW2dAhZjFFn1tf3QXJrcb4Jn?=
- =?us-ascii?Q?8sZWSCD++DTxN+T7zzU0Ad1rVperHTUt0iV0g6GRAUicN7wVQ+dgiAgjbZzs?=
- =?us-ascii?Q?hrS/MAxQEv73b9rvTmz9zN3rhImwHRWGeyxXm39/wtLYmKntQjASdZXrHUB/?=
- =?us-ascii?Q?dmEr6AuBpPp2zsudJVCamugLKZtorrtODVivu/n88d2+W268McF+hxVZzJ5C?=
- =?us-ascii?Q?0ATUG4pot3wp7clh/Wc/ttkv7SEeLiCPY1NWGpg7+DThImQeLxYVbjOQV26C?=
- =?us-ascii?Q?KE0ZOSSjnaMWgh0nsW5HldfPC7tYWULENDI+b4LOVoR41Iskd42/k2RcnBMk?=
- =?us-ascii?Q?w+yJtfks5V+/Xe3gKAp/GSu6RylcsTQqSGLnvD1LtqAcIMiUf66vnPV/Lq4d?=
- =?us-ascii?Q?syn4SWWaAYw8kl/SCBcfLVJ1DueIEyd69ugIdbkO0ujE0zhcdicZgzb5V/A7?=
- =?us-ascii?Q?zyFIhsL9Cq2ZecPiol5MewgIChOn1w6jGacFbF96kxs0viU+wP2Lj5Ue5QZB?=
- =?us-ascii?Q?OAeCom3wuQ1Wo2zpoVIrl1vh/JiBBzn+V6HkszfKaFcalWiO4KvTPTloL/ml?=
- =?us-ascii?Q?OMgeURWReVqTMY3vXHCQ/NiI6EOYNfjqxHczVM+1xoDvjUmKRHRZowFJk9Dc?=
- =?us-ascii?Q?NC1duLo6Yqj84G6yCAP1Pe1YlXtZcLG46/I2QI1r/ZnKfyirEBPRJmYIukrb?=
- =?us-ascii?Q?SkblEgje3p3tztt0gk2VAJPI6Pbid5yY19P14ZwDIc6n5CoMZS5gYeMD8doT?=
- =?us-ascii?Q?0bcRbKlbU1LLDcpTIDO+BND9A9yuxkijYyACNkOps/DtJzoFEBOBJZ7aO+Qm?=
- =?us-ascii?Q?y7Vs56Syiz8nKI24b7kSz+wOH1QvYiYWGNTKmKTcdgCQ+RfEuJETBwN/0lUA?=
- =?us-ascii?Q?ZXjI80IyQ7wPdIgLElihf2JOZgjkCo2r7qECXydAR3APas4iMbQcDpI5jR8e?=
- =?us-ascii?Q?r6w+Y8KpnWcK3LdCMTgDz8yJovsvnVAGLKLoC+K6TtBlyJ506h+Y/xPYDoA5?=
- =?us-ascii?Q?bPTBMqShM5MXggQFxnF9qJWTQ4D/cWhpy4ag9p8kuVnyNx5oSoKQ3ICjSZ9L?=
- =?us-ascii?Q?g5Zw8a99Y0AqhyLfv1kpFpjdwU3rOhpmT8nZaB91FMWwaT5KvYJhf8pWrM2l?=
- =?us-ascii?Q?E/fJoXqZ7k5U+5wjFqVMoXUPSFBalHD2Sre9jljPb3LATOyaEYXel1ZX+kiX?=
- =?us-ascii?Q?eVMSGyCX+Z8ATJhvFamphn2FCcIo+gDacfkQoZUy+KsRJ4SCtLXZHzKi44qk?=
- =?us-ascii?Q?zqbzLONJvVw8wDor4s6IirCA2PT60vz21sFLZ8o3h7ShbRsAtygwEIOmfdp0?=
- =?us-ascii?Q?NxKoRjAdeN6mX6OjjtRxXG7NkwyaEgTkH+O1yFPNWtdVskoTDFDxK1CdXuOr?=
- =?us-ascii?Q?CqH80mbq2H2mBIOBDHaOqojz41umGRg35py0WWc/8QoqfNm/3gIOF4yjZqAp?=
- =?us-ascii?Q?c52B69k1lI7OBu1ROyNAxl9P6WpJr6Bu6S9NrI0Nwn6ZipmaiDZwf/oQyFs6?=
- =?us-ascii?Q?bEmj5aXRNadRlp+JA9ovGFNkI0DtFimQKeSAqZdQH4HlLLkj3x9KZcSKR1Nh?=
- =?us-ascii?Q?aWvAZ45VSxKPVheChHSAC9j7Nq7/Qf6jTdNZsT7RpaNaHnkqzXEK7iDDysMp?=
- =?us-ascii?Q?e7a5d5iBIw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb9a0d9b-5d8a-43f7-f3db-08da27cd345c
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 21:39:12.8351
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gixsm3C+RNHW6VXtwecqPEAQr2teR3WhPZNbEt8vpnGgpLmY/SNNyphfVqw/kpIZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2498
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_12640CD4-4573-49EE-93F5-01EF8643F3E2_=
-Content-Type: text/plain
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.g=
+it io_uring-flags2
+head:   bfbad055dcd5655d2258b97e8db1653e5109739f
+commit: 5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4 [48/74] io_uring: store SC=
+M state in io_fixed_file->file_ptr
+config: mips-randconfig-r003-20220426 (https://download.01.org/0day-ci/arch=
+ive/20220427/202204270552.OzdnvA4W-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcf=
+dc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=3D1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
+make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block=
+=2Egit/commit/?id=3D5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4
+        git remote add axboe-block https://git.kernel.org/pub/scm/linux/ker=
+nel/git/axboe/linux-block.git
+        git fetch --no-tags axboe-block io_uring-flags2
+        git checkout 5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
+1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash
 
-On 26 Apr 2022, at 17:08, Qian Cai wrote:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> On Tue, Apr 26, 2022 at 04:26:08PM -0400, Zi Yan wrote:
->> Thanks for reporting the issue. Do you have a reproducer I can use to debug the code?
->
-> Nothing fancy. It just try to remove and add back each memory section.
->
-> #!/usr/bin/env python3
-> # SPDX-License-Identifier: GPL-2.0
->
-> import os
-> import re
-> import subprocess
->
->
-> def mem_iter():
->     base_dir = '/sys/devices/system/memory/'
->     for curr_dir in os.listdir(base_dir):
->         if re.match(r'memory\d+', curr_dir):
->             yield base_dir + curr_dir
->
->
-> if __name__ == '__main__':
->     print('- Try to remove each memory section and then add it back.')
->     for mem_dir in mem_iter():
->         status = f'{mem_dir}/online'
->         if open(status).read().rstrip() == '1':
->             # This could expectedly fail due to many reasons.
->             section = os.path.basename(mem_dir)
->             print(f'- Try to remove {section}.')
->             proc = subprocess.run([f'echo 0 | sudo tee {status}'], shell=True)
->             if proc.returncode == 0:
->                 print(f'- Try to add {section}.')
->                 subprocess.check_call([f'echo 1 | sudo tee {status}'], shell=True)
+All warnings (new ones prefixed by >>):
 
-Thanks. Do you mind attaching your config file? I cannot reproduce
-the deadlock locally using my own config. I also see kmemleak_scan
-in the dumped stack, so it must be something else in addition to
-memory online/offline causing the issue.
+   fs/io_uring.c:8498:6: warning: unused variable 'i'
+   int i;
+   ^
+>> fs/io_uring.c:7388:28: warning: unused function 'io_file_from_index'
+   static inline struct file io_ring_ctx
+   ^
+   fatal error: error in backend: Nested variants found in inline asm strin=
+g: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
+h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
+branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
+de/asm/atomic.h", .line =3D 155, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
+et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1 # atomic_add
+   addu $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
+s/ and include the crash backtrace, preprocessed source, and associated run=
+ script.
+   Stack dump:
+   0. Program arguments: clang -Wp,-MMD,fs/.io_uring.o.d -nostdinc -Iarch/m=
+ips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/mi=
+ps/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./inc=
+lude/generated/uapi -include include/linux/compiler-version.h -include incl=
+ude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ -D=
+VMLINUX_LOAD_ADDRESS=3D0xffffffff80060000 -DLINKER_LOAD_ADDRESS=3D0x8006000=
+0 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_EXT=
+RA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-stri=
+ct-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-function-=
+declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-securi=
+ty -std=3Dgnu11 --target=3Dmips-linux -fintegrated-as -Werror=3Dunknown-war=
+ning-option -Werror=3Dignored-optimization-argument -mno-check-zero-divisio=
+n -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_SET_H=
+ARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-stack-check -march=3Dmips=
+32r2 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-ath7=
+9 -Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tables -fno=
+-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-membe=
+r -O2 -Wframe-larger-than=3D1024 -fstack-protector -Wimplicit-fallthrough -=
+Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-stack-=
+clash-protection -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign =
+-Wcast-function-type -fno-strict-overflow -fno-stack-check -Werror=3Ddate-t=
+ime -Werror=3Dincompatible-pointer-types -Wextra -Wunused -Wno-unused-param=
+eter -Wmissing-declarations -Wmissing-format-attribute -Wmissing-prototypes=
+ -Wold-style-definition -Wmissing-include-dirs -Wunused-but-set-variable -W=
+unused-const-variable -Wno-missing-field-initializers -Wno-sign-compare -Wn=
+o-type-limits -Wno-shift-negative-value -I fs -I ./fs -DKBUILD_MODFILE=3D"f=
+s/io_uring" -DKBUILD_BASENAME=3D"io_uring" -DKBUILD_MODNAME=3D"io_uring" -D=
+__KBUILD_MODNAME=3Dkmod_io_uring -c -o fs/io_uring.o fs/io_uring.c
+   1. <eof> parser at end of file
+   2. Code generation
+   3. Running pass 'Function Pass Manager' on module 'fs/io_uring.c'.
+   4. Running pass 'Mips Assembly Printer' on function '@io_uring_cancel_ge=
+neric'
+   #0 0x000055798c800a2f Signals.cpp:0:0
+   #1 0x000055798c7fe854 llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
+oss/clang-1cddcfdc3c/bin/clang-15+0x34bf854)
+   #2 0x000055798c73dcf7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
+cross/clang-1cddcfdc3c/bin/clang-15+0x33fecf7)
+   #3 0x000055798c7f6e8e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
+ang-1cddcfdc3c/bin/clang-15+0x34b7e8e)
+   #4 0x000055798a4005db (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x10c15d=
+b)
+   #5 0x000055798c74481c llvm::report_fatal_error(llvm::Twine const&, bool)=
+ (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x340581c)
+   #6 0x000055798d47aa30 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
+ const (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x413ba30)
+   #7 0x000055798d476932 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
+lang-1cddcfdc3c/bin/clang-15+0x4137932)
+   #8 0x000055798ae8ef77 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
+achineFunction&) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x1b4ff77)
+   #9 0x000055798bb70f8d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
+ction&) (.part.53) MachineFunctionPass.cpp:0:0
+   #10 0x000055798bfb7597 llvm::FPPassManager::runOnFunction(llvm::Function=
+&) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x2c78597)
+   #11 0x000055798bfb7711 llvm::FPPassManager::runOnModule(llvm::Module&) (=
+/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x2c78711)
+   #12 0x000055798bfb828f llvm::legacy::PassManagerImpl::run(llvm::Module&)=
+ (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x2c7928f)
+   #13 0x000055798cb2b34f clang::EmitBackendOutput(clang::DiagnosticsEngine=
+&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
+TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
+ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
+lvm::raw_pwrite_stream> >) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x37ec=
+34f)
+   #14 0x000055798d79fe11 clang::BackendConsumer::HandleTranslationUnit(cla=
+ng::ASTContext&) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x4460e11)
+   #15 0x000055798e30e6b1 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
+ross/clang-1cddcfdc3c/bin/clang-15+0x4fcf6b1)
+   #16 0x000055798d79f4d5 clang::CodeGenAction::ExecuteAction() (/opt/cross=
+/clang-1cddcfdc3c/bin/clang-15+0x44604d5)
+   #17 0x000055798d18ebe1 clang::FrontendAction::Execute() (/opt/cross/clan=
+g-1cddcfdc3c/bin/clang-15+0x3e4fbe1)
+   #18 0x000055798d1235aa clang::CompilerInstance::ExecuteAction(clang::Fro=
+ntendAction&) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x3de45aa)
+   #19 0x000055798d2562db (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x3f172=
+db)
+   #20 0x000055798a401b8c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
+ng-1cddcfdc3c/bin/clang-15+0x10c2b8c)
+   #21 0x000055798a3fe85b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
+cpp:0:0
+   #22 0x000055798cfb45e5 void llvm::function_ref<void ()>::callback_fn<cla=
+ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
+ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
+tor<char> const::'lambda'()>(long) Job.cpp:0:0
+   #23 0x000055798c73dbb3 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
+ion_ref<void ()>) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x33febb3)
+   #24 0x000055798cfb4ede clang::driver::CC1Command::Execute(llvm::ArrayRef=
+<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
+har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
+   #25 0x000055798cf88757 clang::driver::Compilation::ExecuteCommand(clang:=
+:driver::Command const&, clang::driver::Command const (/opt/cross/clang-1cd=
+dcfdc3c/bin/clang-15+0x3c49757)
+   #26 0x000055798cf89137 clang::driver::Compilation::ExecuteJobs(clang::dr=
+iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) const (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x3c4a137)
+   #27 0x000055798cf92c59 clang::driver::Driver::ExecuteCompilation(clang::=
+driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x3c53c59)
+   #28 0x000055798a34aa0f main (/opt/cross/clang-1cddcfdc3c/bin/clang-15+0x=
+100ba0f)
+   #29 0x00007f87e39be7fd __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
+6+0x237fd)
+   #30 0x000055798a3fe37a _start (/opt/cross/clang-1cddcfdc3c/bin/clang-15+=
+0x10bf37a)
+   clang-15: error: clang frontend command failed with exit code 70 (use -v=
+ to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 1cddcfdc3c683b393df1a=
+5c9063252eb60e52818)
+   Target: mips-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-1cddcfdc3c/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch certs crypto drivers fs include init ipc kernel lib mm nr_=
+bisected scripts security sound source usr virt
 
---
-Best Regards,
-Yan, Zi
 
---=_MailMate_12640CD4-4573-49EE-93F5-01EF8643F3E2_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/io_file_from_index +7388 fs/io_uring.c
 
------BEGIN PGP SIGNATURE-----
+dafecf19e25f9b Pavel Begunkov 2021-02-28  7387 =20
+65e19f54d29cd8 Jens Axboe     2019-10-26 @7388  static inline struct file *=
+io_file_from_index(struct io_ring_ctx *ctx,
+65e19f54d29cd8 Jens Axboe     2019-10-26  7389  					      int index)
+09bb839434bd84 Jens Axboe     2019-03-13  7390  {
+aeca241b0bdd83 Pavel Begunkov 2021-04-11  7391  	struct io_fixed_file *slot=
+ =3D io_fixed_file_slot(&ctx->file_table, index);
+7b29f92da377c3 Jens Axboe     2021-03-12  7392 =20
+a04b0ac0cb64fc Pavel Begunkov 2021-04-01  7393  	return (struct file *) (sl=
+ot->file_ptr & FFS_MASK);
+65e19f54d29cd8 Jens Axboe     2019-10-26  7394  }
+65e19f54d29cd8 Jens Axboe     2019-10-26  7395 =20
 
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmJoZnIPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU7tgQAI0fSeALKcvSURGezqi1l7GhPCgqZ1q5k2gx
-Muzde2v1Z4JB2IlWFLyqTI0N7I7+m7Yy9ppgWNBdtDR1+erfHXoAMYOw97CgQrRx
-Xir1oqoBQGMk1szbC+FJ41I5JiHfqty1oMy3+Ea9BTGerOMW8zOMBpf+O7Iz9/8z
-DgujDv0ppkFqcjSXoN1HTt1LP+cc+kaIrhRBiYO4nIXMmej7zts2tuPT/AW60UVa
-oV8YEOUV9nyCnnazrJ3oiSkcKKK7ZyV++vjNvtay24cURBdgwj2g1xdQPW0U+T+Y
-XEbDr2Mu4XYrGbZNhHaN87L+w0pvYmcPDAm+cPb5P264ih2/CTeemeCSujwWEGnx
-JRU0SYw3kjwHRZsY7ZTXvQ5r+IcOzw7yq2VvdbkbEl0SuBWPdZ7Ui5LXEF8g+BCL
-yFSwScZAh+g4VFOQTyu5FGZXHDbvYUDKWquGmyHEFumLb45WWMzBWl2InQW+R9ox
-B2fDJQvalytBRN6X5gaH2cGYv/M2ArFt//J3uTw23iUIrX10pW5h1bfWQLIgHozV
-f24x3IuoNWjBWu63BNnTquCC+lDZiY5/kcbGSgTL+ppZdC3i5Kk2XAFPU7rOiGVQ
-g/I3pdvEICDewsq7BF6YH8GMyaAh4izHvkwGYAz0Ol4OUvrWEeT4rVYjdY5vNtFU
-fvKI92Rb
-=iXsA
------END PGP SIGNATURE-----
+:::::: The code at line 7388 was first introduced by commit
+:::::: 65e19f54d29cd8559ce60cfd0d751bef7afbdc5c io_uring: support for large=
+r fixed file sets
 
---=_MailMate_12640CD4-4573-49EE-93F5-01EF8643F3E2_=--
+:::::: TO: Jens Axboe <axboe@kernel.dk>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+--=20
+0-DAY CI Kernel Test Service
+https://01.org/lkp

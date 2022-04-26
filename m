@@ -2,99 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AEC5104F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C7B5104FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353903AbiDZRMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S231144AbiDZRMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353911AbiDZRLj (ORCPT
+        with ESMTP id S1354037AbiDZRMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:11:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C688D340E4;
-        Tue, 26 Apr 2022 10:08:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3869F615C4;
-        Tue, 26 Apr 2022 17:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 864EAC385A4;
-        Tue, 26 Apr 2022 17:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650992881;
-        bh=t+NgkpJB3vxQf6yAgzdBpY45jLxBhqyRF9ybIDrNW+U=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dprNeE3Gcz7UyJ56wAKgas6P4y19joJeUg1d4xyaKsYa4+7R4Cm6bsqgiITv+X8fK
-         WYpgoGnQkJlMTCYuGURqgUtcZ1LVypg8UmBkfyHoKvuAvuA7b6V7VEhvChuD6QadKb
-         aIukV+kkagv+uwXN7yJdF7DTErhc38CIGndmrWvPeDSYiCFzGdK18PsQ9bMHKXhrpr
-         WCabTaXTdSCQin1TNYWqb2xN2LMrY5+OdQYLX1qNSqEknibbBKYPtR4hjYBsTdUkGI
-         4XM6CABR1M0vW6SWHPR5tEZVeaveZ6Y9XcdO5MclzLEcmvB+4x5U/lIIsvi/GH5G8/
-         Ujt94HRPiAlaQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     stephan@gerhold.net, devicetree@vger.kernel.org, perex@perex.cz,
-        tiwai@suse.com, lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        lukas.bulwahn@gmail.com, pbrobinson@gmail.com, krzk+dt@kernel.org,
-        cy_huang@richtek.com, ryan.lee.analog@gmail.com,
-        pierre-louis.bossart@linux.intel.com,
-        srinivas.kandagatla@linaro.org, hdegoede@redhat.com,
-        drhodes@opensource.cirrus.com, tanureal@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, ryans.lee@analog.com,
-        Arnd Bergmann <arnd@arndb.de>, robh+dt@kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     lkp@intel.com
-In-Reply-To: <20220423021558.1773598-1-ryan.lee.analog@gmail.com>
-References: <20220423021558.1773598-1-ryan.lee.analog@gmail.com>
-Subject: Re: [PATCH V3 2/2] ASoC: max98396: add amplifier driver
-Message-Id: <165099287726.2323572.10174502705514813349.b4-ty@kernel.org>
-Date:   Tue, 26 Apr 2022 18:07:57 +0100
+        Tue, 26 Apr 2022 13:12:03 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1096338BF
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:08:39 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id w1so33061355lfa.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mj5YNIpqKili4njrI75f0/IFkDmlnuz7/vAcRFXF5qo=;
+        b=io1nLFMc9+ErVeKm4EDDchVdVYXWmUQ8SmiWSUDjaMpSsm6oWXpCfZj4wr5zNa+Qqv
+         OMlIIEMk6xiz9WnGxyRzQRmb0+VqnuRlAVBJnP+j1MDdagAmzm6iDrPvMufpbyIFcoxk
+         v7x09EqIb7DCKz+eQmrKau4OihA3TSQGvVoZM794wf+uvE75uZVZQ9S9+h5Ax3gsvDqp
+         TfR+sM4zKjIsIQazg+gsigCLkHC8E9Y3PG54FqBIFQBfEXzNkwtLYlGIkUEIRPOKz30e
+         6IfpDWoXlE1BAgwdlCLu1nA1P/tJh27jDlXuB04EGVzlsNYIIaQBZ3HVG6+j+XeKXIj0
+         qnTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mj5YNIpqKili4njrI75f0/IFkDmlnuz7/vAcRFXF5qo=;
+        b=mV684w1K3X5perfx2K08c7rfmqRF4g4hHxI7yUidDXz9rsrtO8tCR1JudWbzVlDeaa
+         BCdsBCsO7NIykMDZYE9WEOWJasJOnByngyheKWJiWy5CTc/cm5z0Pb5Ww/UfhmIiU6E9
+         adcofoqeBxOswK3sGiTFeLEAgkVOMYfp0EAuqdGezMVdGxmbSSdnUgWcCJgfdy6NqZ4V
+         ZJ0t5LiFN31IHP6Fh5yy1NdJrHphPe4INsYP9Qe26BOsDGuSffEole72qCRwZWq10tpE
+         Eqc27rTyfoGg3e0vct0K5PBaqrRe1lyITv5QTFoYcrBPJtGzvWpEQLEhM854PtpQApjn
+         ICLw==
+X-Gm-Message-State: AOAM5332r8JoR0BUnj6rdN1/QyQAbMsNO+vRXd1lqjwP2iX3V3cOgVWb
+        EsorpE95kZUIu5AVAiAG7Ko1VTtDeL8ib0fXME77o6MHjIE=
+X-Google-Smtp-Source: ABdhPJya8Phm79PF7Y31/YZmxkplUDt9LDWp86dvQxAFGd8ZFGIj4Jv0kqJTc68ZS1a4NQqtlQM/NuM719rjq4AgJVo=
+X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
+ f17-20020a05651201d100b00471f63ab182mr13215378lfp.392.1650992917897; Tue, 26
+ Apr 2022 10:08:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-11-masahiroy@kernel.org>
+In-Reply-To: <20220424190811.1678416-11-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 26 Apr 2022 10:08:25 -0700
+Message-ID: <CAKwvOdnysRX_qp1KYSd331G7K863iH-Xiw3UOwKRSQm65u9i-Q@mail.gmail.com>
+Subject: Re: [PATCH 10/27] modpost: traverse unresolved symbols in order
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 19:15:58 -0700, Ryan Lee wrote:
-> This series of patches adds support for Analog Devices MAX98396
-> mono amplifier with IV sense. The device provides a PCM interface
-> for audio data and a standard I2C interface for control data
-> communication. This driver also supports MAX98397 which is
-> a variant of MAX98396 with wide input supply range.
-> 
-> 
-> [...]
+On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Currently, modpost manages unresolved in a singly liked list; it adds
 
-Applied to
+s/liked/linked/
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> a new node to the head, and traverses the list from new to old.
+>
+> Use a doubly linked list to keep the order in the symbol table in the
+> ELF file.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 20 ++++++++++++++------
+>  scripts/mod/modpost.h |  2 +-
+>  2 files changed, 15 insertions(+), 7 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 1c7d2831e89d..e1eb188d6282 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -185,6 +185,8 @@ static struct module *new_module(const char *modname)
+>         mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
+>         memset(mod, 0, sizeof(*mod));
+>
+> +       INIT_LIST_HEAD(&mod->unresolved_symbols);
+> +
+>         strcpy(mod->name, modname);
+>         mod->is_vmlinux = (strcmp(modname, "vmlinux") == 0);
+>         mod->gpl_compatible = true;
+> @@ -201,6 +203,7 @@ static struct module *new_module(const char *modname)
+>
+>  struct symbol {
+>         struct symbol *next;
+> +       struct list_head list;
 
-Thanks!
+Isn't `list` meant to replace `next`?
 
-[2/2] ASoC: max98396: add amplifier driver
-      commit: b58581136770569d2ee4300b10c7c0d76bb86250
+>         struct module *module;
+>         unsigned int crc;
+>         bool crc_valid;
+> @@ -255,8 +258,12 @@ static struct symbol *new_symbol(const char *name, struct module *module,
+>
+>  static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
+>  {
+> -       mod->unres = alloc_symbol(name, mod->unres);
+> -       mod->unres->weak = weak;
+> +       struct symbol *sym;
+> +
+> +       sym = alloc_symbol(name, NULL);
+> +       sym->weak = weak;
+> +
+> +       list_add_tail(&sym->list, &mod->unresolved_symbols);
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Because I was curious here why NULL was passed, rather than remove the
+assignment to struct symbol's next member in alloc_symbol.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+I get why you replace the `unres` member of struct module. I guess I'm
+curious then why yet another list is added to struct symbol, rather
+than replace the next member.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Also, does adding a struct list_head member really not specify the
+_type_ of the next element?  I guess when I look at the definition of
+struct module, at the member unresolved symbols, I don't know whether
+it's a list of struct module* or a list of struct symbol*.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+<snip>
 
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index c3b5d2f0e2bb..6a90bfc08458 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -117,7 +117,7 @@ struct namespace_list {
+>  struct module {
+>         struct list_head list;
+>         int gpl_compatible;
+> -       struct symbol *unres;
+> +       struct list_head unresolved_symbols;
+>         bool from_dump;         /* true if module was loaded from *.symvers */
+>         bool is_vmlinux;
+>         bool seen;
+> --
+> 2.32.0
+>
+
+
+-- 
 Thanks,
-Mark
+~Nick Desaulniers

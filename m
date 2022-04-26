@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6421150F791
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2E650F4A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348379AbiDZJfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S242972AbiDZIgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347897AbiDZJGV (ORCPT
+        with ESMTP id S1345171AbiDZIeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:21 -0400
+        Tue, 26 Apr 2022 04:34:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F38EAC073;
-        Tue, 26 Apr 2022 01:46:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FD66EB22;
+        Tue, 26 Apr 2022 01:26:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC42604F5;
-        Tue, 26 Apr 2022 08:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04C2C385A4;
-        Tue, 26 Apr 2022 08:46:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47DC66179E;
+        Tue, 26 Apr 2022 08:26:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4757FC385A0;
+        Tue, 26 Apr 2022 08:26:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962812;
-        bh=y4FzcMqIYjP6yJMMswEni40ksnSonHHl5KEbQHYCCgw=;
+        s=korg; t=1650961580;
+        bh=1p1Yb7l2k7G9BT7/XN3WtepUiU/Z/dfOrJ4l6vuEh9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e1osvW2DjRtrupRpOuzwDpRUIqLs7RGXzp3zpV5WE4ERzgMycDPjw3oqY4ce8T0zK
-         UPHA5XDPSY0pLZ54H1lwAJ5FDa0Zylfw5LwvYorRG+axwim90l7AC/k8OYCYOLz+3q
-         N1ZoT6wFx843zWV8CxiX06XK+kGAe7hh7NMPycI0=
+        b=aerxXl9qnbZXmuFa1mh9mOc9bPOEZOZiht+nxKvVU7umdpDwOrSFPAJ9a+gzSLbS3
+         DYLF9BL+zXwQBcx5rVg8oxDePDKaoyv1nq3SOg7AezGRW2Q+E4Y319wosGFsDLcH6X
+         MdPmQhy7B59xpb9MK+JYyX9tgO3U+MPeY6PW+FHE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 060/146] ARM: vexpress/spc: Avoid negative array index when !SMP
+Subject: [PATCH 4.19 15/53] net/sched: cls_u32: fix possible leak in u32_init_knode()
 Date:   Tue, 26 Apr 2022 10:20:55 +0200
-Message-Id: <20220426081751.754307470@linuxfoundation.org>
+Message-Id: <20220426081736.100870781@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit b3f1dd52c991d79118f35e6d1bf4d7cb09882e38 ]
+[ Upstream commit ec5b0f605b105457f257f2870acad4a5d463984b ]
 
-When building multi_v7_defconfig+CONFIG_SMP=n, -Warray-bounds exposes
-a couple negative array index accesses:
+While investigating a related syzbot report,
+I found that whenever call to tcf_exts_init()
+from u32_init_knode() is failing, we end up
+with an elevated refcount on ht->refcnt
 
-arch/arm/mach-vexpress/spc.c: In function 've_spc_clk_init':
-arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
-  583 |   if (init_opp_table[cluster])
-      |       ~~~~~~~~~~~~~~^~~~~~~~~
-arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
-  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
-      |       ^~~~~~~~~~~~~~
-arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
-  592 |    init_opp_table[cluster] = true;
-      |    ~~~~~~~~~~~~~~^~~~~~~~~
-arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
-  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
-      |       ^~~~~~~~~~~~~~
+To avoid that, only increase the refcount after
+all possible errors have been evaluated.
 
-Skip this logic when built !SMP.
-
-Link: https://lore.kernel.org/r/20220331190443.851661-1-keescook@chromium.org
-Cc: Liviu Dudau <liviu.dudau@arm.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: linux-arm-kernel@lists.infradead.org
-Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Fixes: b9a24bb76bf6 ("net_sched: properly handle failure case of tcf_exts_init()")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-vexpress/spc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/sched/cls_u32.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
-index 1da11bdb1dfb..1c6500c4e6a1 100644
---- a/arch/arm/mach-vexpress/spc.c
-+++ b/arch/arm/mach-vexpress/spc.c
-@@ -580,7 +580,7 @@ static int __init ve_spc_clk_init(void)
- 		}
+diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+index fe246e03fcd9..5eee26cf9011 100644
+--- a/net/sched/cls_u32.c
++++ b/net/sched/cls_u32.c
+@@ -873,10 +873,6 @@ static struct tc_u_knode *u32_init_knode(struct tcf_proto *tp,
+ 	new->flags = n->flags;
+ 	RCU_INIT_POINTER(new->ht_down, ht);
  
- 		cluster = topology_physical_package_id(cpu_dev->id);
--		if (init_opp_table[cluster])
-+		if (cluster < 0 || init_opp_table[cluster])
- 			continue;
+-	/* bump reference count as long as we hold pointer to structure */
+-	if (ht)
+-		ht->refcnt++;
+-
+ #ifdef CONFIG_CLS_U32_PERF
+ 	/* Statistics may be incremented by readers during update
+ 	 * so we must keep them in tact. When the node is later destroyed
+@@ -899,6 +895,10 @@ static struct tc_u_knode *u32_init_knode(struct tcf_proto *tp,
+ 		return NULL;
+ 	}
  
- 		if (ve_init_opp_table(cpu_dev))
++	/* bump reference count as long as we hold pointer to structure */
++	if (ht)
++		ht->refcnt++;
++
+ 	return new;
+ }
+ 
 -- 
 2.35.1
 

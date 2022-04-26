@@ -2,137 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C6C50F928
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018FD50F953
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348163AbiDZJ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S1347743AbiDZJ6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346695AbiDZJ5n (ORCPT
+        with ESMTP id S1347967AbiDZJ5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:57:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D927387BE;
-        Tue, 26 Apr 2022 02:15:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 854F823A;
-        Tue, 26 Apr 2022 02:15:48 -0700 (PDT)
-Received: from monolith.localdoman (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D32D23F73B;
-        Tue, 26 Apr 2022 02:15:46 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 10:15:43 +0100
-From:   Alexandru Elisei <alexandru.elisei@arm.com>
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com,
-        reijiw@google.com, ricarkol@google.com
-Subject: Re: [PATCH v3 0/5] KVM: arm64: Limit feature register reads from
- AArch32
-Message-ID: <Yme4P2cVoxjOXqz9@monolith.localdoman>
-References: <20220425235342.3210912-1-oupton@google.com>
+        Tue, 26 Apr 2022 05:57:45 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71479393CE;
+        Tue, 26 Apr 2022 02:15:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1EF70210E8;
+        Tue, 26 Apr 2022 09:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650964557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T8e0nIRkLCUyTnDBEHyJjEuTQzh/rCLSIPDQ6DhDV/I=;
+        b=OJEny+G7A/0mav8h7TlmjPDrOBDbC3J4v9FpmTC72MjePncEZbbVp8YDoMHbenWXSS7Zly
+        C9G3UYvWaVHv/nIyI0eHSSuKZVQrR0rSAEoF+ko8GuGtyIpGkDsrubdnH0WJdhcnOVZOsQ
+        CgaVfnB9GJINqrHJ9zb/EhGAZAngMc4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650964557;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T8e0nIRkLCUyTnDBEHyJjEuTQzh/rCLSIPDQ6DhDV/I=;
+        b=lDNbxr3k7daPhK6uuh1ABrJ/qq1OS0B8U0PHOeskdGH1pwQvUlqvtBq54RObLPIqknewzg
+        A1WsU//Zxs+omkCQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0A9BC2C141;
+        Tue, 26 Apr 2022 09:15:56 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7D036A0620; Tue, 26 Apr 2022 11:15:56 +0200 (CEST)
+Date:   Tue, 26 Apr 2022 11:15:56 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2 2/5] block, bfq: add fake weight_counter for
+ weight-raised queue
+Message-ID: <20220426091556.qzryd552gzo6dikf@quack3.lan>
+References: <20220416093753.3054696-1-yukuai3@huawei.com>
+ <20220416093753.3054696-3-yukuai3@huawei.com>
+ <20220425094856.qgkhba2klguduxot@quack3.lan>
+ <a27b8c79-867f-9253-84db-1d39c964b3ed@huawei.com>
+ <20220425161650.xzyijgkb5yzviea3@quack3.lan>
+ <4591d02d-1f14-c928-1c50-6e434dfbb7b2@huawei.com>
+ <20220426074023.5y4gwvjsjzem3vgp@quack3.lan>
+ <77b4c06c-f813-bcac-ea26-107e52f46d0a@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220425235342.3210912-1-oupton@google.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <77b4c06c-f813-bcac-ea26-107e52f46d0a@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue 26-04-22 16:27:46, yukuai (C) wrote:
+> 在 2022/04/26 15:40, Jan Kara 写道:
+> > On Tue 26-04-22 09:49:04, yukuai (C) wrote:
+> > > 在 2022/04/26 0:16, Jan Kara 写道:
+> > > > Hello!
+> > > > 
+> > > > On Mon 25-04-22 21:34:16, yukuai (C) wrote:
+> > > > > 在 2022/04/25 17:48, Jan Kara 写道:
+> > > > > > On Sat 16-04-22 17:37:50, Yu Kuai wrote:
+> > > > > > > Weight-raised queue is not inserted to weights_tree, which makes it
+> > > > > > > impossible to track how many queues have pending requests through
+> > > > > > > weights_tree insertion and removel. This patch add fake weight_counter
+> > > > > > > for weight-raised queue to do that.
+> > > > > > > 
+> > > > > > > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> > > > > > 
+> > > > > > This is a bit hacky. I was looking into a better place where to hook to
+> > > > > > count entities in a bfq_group with requests and I think bfq_add_bfqq_busy()
+> > > > > > and bfq_del_bfqq_busy() are ideal for this. It also makes better sense
+> > > > > > conceptually than hooking into weights tree handling.
+> > > > > 
+> > > > > bfq_del_bfqq_busy() will be called when all the reqs in the bfqq are
+> > > > > dispatched, however there might still some reqs are't completed yet.
+> > > > > 
+> > > > > Here what we want to track is how many bfqqs have pending reqs,
+> > > > > specifically if the bfqq have reqs are't complted.
+> > > > > 
+> > > > > Thus I think bfq_del_bfqq_busy() is not the right place to do that.
+> > > > 
+> > > > Yes, I'm aware there will be a difference. But note that bfqq can stay busy
+> > > > with only dispatched requests because the logic in __bfq_bfqq_expire() will
+> > > > not call bfq_del_bfqq_busy() if idling is needed for service guarantees. So
+> > > > I think using bfq_add/del_bfqq_busy() would work OK.
+> > > Hi,
+> > > 
+> > > I didn't think of that before. If bfqq stay busy after dispathing all
+> > > the requests, there are two other places that bfqq can clear busy:
+> > > 
+> > > 1) bfq_remove_request(), bfqq has to insert a new req while it's not in
+> > > service.
+> > 
+> > Yes and the request then would have to be dispatched or merged. Which
+> > generally means another bfqq from the same bfqg is currently active and
+> > thus this should have no impact on service guarantees we are interested in.
+> > 
+> > > 2) bfq_release_process_ref(), user thread is gone / moved, or old bfqq
+> > > is gone due to merge / ioprio change.
+> > 
+> > Yes, here there's no new IO for the bfqq so no point in maintaining any
+> > service guarantees to it.
+> > 
+> > > I wonder, will bfq_del_bfqq_busy() be called immediately when requests
+> > > are completed? (It seems not to me...). For example, a user thread
+> > > issue a sync io just once, and it keep running without issuing new io,
+> > > then when does the bfqq clears the busy state?
+> > 
+> > No, when bfqq is kept busy, it will get scheduled as in-service queue in
+> > the future. Then what happens depends on whether it will get more requests
+> > or not. But generally its busy state will get cleared once it is expired
+> > for other reason than preemption.
+> 
+> Thanks for your explanation.
+> 
+> I think in normal case using bfq_add/del_bfqq_busy() if fine.
+> 
+> There is one last situation that I'm worried: If some disk are very
+> slow that the dispatched reqs are not completed when the bfqq is
+> rescheduled as in-service queue, and thus busy state can be cleared
+> while reqs are not completed.
+> 
+> Using bfq_del_bfqq_busy() will change behaviour in this specail case,
+> do you think service guarantees will be broken?
 
-On Mon, Apr 25, 2022 at 11:53:37PM +0000, Oliver Upton wrote:
-> KVM/arm64 does not restrict the guest's view of the AArch32 feature
-> registers when read from AArch32. HCR_EL2.TID3 is cleared for AArch32
-> guests, meaning that register reads come straight from hardware. This is
-> problematic as KVM relies on read_sanitised_ftr_reg() to expose a set of
-> features consistent for a particular system.
-> 
-> Appropriate handlers must first be put in place for CP10 and CP15 ID
-> register accesses before setting TID3. Rather than exhaustively
-> enumerating each of the encodings for CP10 and CP15 registers, take the
-> lazy route and aim the register accesses at the AArch64 system register
-> table.
-> 
-> Patches 1-2 are small cleanups to how we handle register emulation
-> failure. No functional change for current KVM, but required to do
-> register emulation correctly in this series.
-> 
-> Patch 3 reroutes the CP15 registers into the AArch64 table, taking care
-> to immediately RAZ undefined ranges of registers. This is done to avoid
-> possibly conflicting with encodings for future AArch64 registers.
-> 
-> Patch 4 installs an exit handler for the CP10 ID registers and also
-> relies on the general AArch64 register handler to implement reads.
-> 
-> Finally, patch 5 actually sets TID3 for AArch32 guests, providing
-> known-safe values for feature register accesses.
-> 
-> There is an argument that the series is in fact a bug fix for running
-> AArch32 VMs on heterogeneous systems. To that end, it could be
-> blamed/backported to when we first knew better:
-> 
->   93390c0a1b20 ("arm64: KVM: Hide unsupported AArch64 CPU features from guests")
-> 
-> But I left that tag off as in the aforementioned change skipping
-> AArch32 was intentional. Up to you, Marc, if you want to call it a
-> bugfix ;-)
-> 
-> Applies cleanly to 5.18-rc4.
-> 
-> Tested with AArch32 kvm-unit-tests and booting an AArch32 debian guest
-> on a Raspberry Pi 4. Additionally, I tested AArch32 kvm-unit-tests w/
-> pmu={on,off} and saw no splat, as Alex had discovered [1]. The test
-> correctly skips with the PMU feature bit disabled now.
+Well, I don't think so. Because slow disks don't tend to do a lot of
+internal scheduling (or have deep IO queues for that matter). Also note
+that generally bfq_select_queue() will not even expire a queue (despite it
+not having any requests to dispatch) when we should not dispatch other
+requests to maintain service guarantees. So I think service guarantees will
+be generally preserved. Obviously I could be wrong, we we will not know
+until we try it :).
 
-But a guest who ignores the fact that the ID register doesn't advertise a PMU
-and tries to access the PMU registers regardless would still trigger the splat,
-right? I don't think the series changes the AArch32 PMU registers visibility to
-REG_HIDDEN when the VCPU feature is not set.
+								Honza
 
-Thanks,
-Alex
-
-> 
-> [1]: https://lore.kernel.org/r/20220425145530.723858-1-alexandru.elisei@arm.com
-> 
-> v1: https://lore.kernel.org/kvmarm/20220329011301.1166265-1-oupton@google.com/
-> v2: https://lore.kernel.org/r/20220401010832.3425787-1-oupton@google.com
-> 
-> v2 -> v3:
->  - Collect R-b from Reiji (thanks!)
->  - Adopt Marc's suggestion for CP15 register handling
->  - Avoid writing to Rt when emulation fails (Marc)
->  - Print some debug info on an unexpected CP10 register access (Reiji)
-> 
-> v1 -> v2:
->  - Actually set TID3! Oops.
->  - Refactor kvm_emulate_cp15_id_reg() to check preconditions before
->    proceeding to emulation (Reiji)
->  - Tighten up comment on kvm_is_cp15_id_reg() to indicate that the only
->    other trapped ID register (CTR) is already handled in the cp15
-> 
-> Oliver Upton (5):
->   KVM: arm64: Return a bool from emulate_cp()
->   KVM: arm64: Don't write to Rt unless sys_reg emulation succeeds
->   KVM: arm64: Wire up CP15 feature registers to their AArch64
->     equivalents
->   KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg handler
->   KVM: arm64: Start trapping ID registers for 32 bit guests
-> 
->  arch/arm64/include/asm/kvm_arm.h     |   3 +-
->  arch/arm64/include/asm/kvm_emulate.h |   7 -
->  arch/arm64/include/asm/kvm_host.h    |   1 +
->  arch/arm64/kvm/handle_exit.c         |   1 +
->  arch/arm64/kvm/sys_regs.c            | 197 +++++++++++++++++++++++----
->  arch/arm64/kvm/sys_regs.h            |   7 +
->  6 files changed, 178 insertions(+), 38 deletions(-)
-> 
-> -- 
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
-> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

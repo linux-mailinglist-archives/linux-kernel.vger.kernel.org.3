@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AC551073E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D63510741
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242069AbiDZSlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S1351875AbiDZSl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343969AbiDZSlB (ORCPT
+        with ESMTP id S241045AbiDZSlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:41:01 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4677F6A001
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:37:52 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id kd11so5017560qvb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vCAdqtcSv+Uuvkd1gfYn6mJK/62p5uI0bhh5S33HH+o=;
-        b=hKQNNTwMC0Pg+p4P7tiCPZm0cj9miN42hel47mSzB3H5BqCOYQKy7Zgic6zuztiAgp
-         vHNLCSMVT1/3s+QBInq9vSSbcKTFlfOHgP508j701VpKAAWJgcj10GaL/8p4VPFl4tDm
-         QwLt+xl51ubmMorzTvwDBSmQvMDAgJfDSrfg1XHY34ECBP4qmpYBZPKRrN8q4na8RHt1
-         UyScxb9ei5p4apSOlkbOpxhfSiehS+0Ke9bl9BrT6yKoml5Nl0Oj70D/X/ay8in9Wv/z
-         mBdvrmnuSPeFggrdGJ5yQTR269+20YgTk/0BqFZfoLCwJTnSsHlEyTXjCRNOBzjBGkF4
-         kPCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vCAdqtcSv+Uuvkd1gfYn6mJK/62p5uI0bhh5S33HH+o=;
-        b=tTbWvVzTUfz2q3i++F1dYrhnmu6O4HvhaaQXOLspn8kxFBXTG8rFdLQFUiVHAqeT1J
-         0T6yvnplSbozigefUgZ7l0CL7UNT249/T7N/1OXrAHpHHzlttihRszhKCDnpYeWMUc1S
-         pZxizZOUBWMEHSAPVG6UYGegSK8EX4TcDWemIPGqBecl/CCOnhIkTj2uC/T4DDJ2cljY
-         5SY3sWwBngh/mAZkRRHrcYVKXOa0+gayUFEgy2XtYe9zxWePJqfuVzHoxw2vUWRMHGS6
-         +pApV1WY+g/Nx1aHTk4oBPFcuVxJsZvCxBaLccU+GBvEHkGmvigfWzcwiLKNRgE7/qgP
-         qcLQ==
-X-Gm-Message-State: AOAM530oj21i3gd/5lDOOnTkguKOIt7wK1cpNjb581ihrAxwxF+UdnkU
-        KW0huShtn2iFjyWvzvpk9Q==
-X-Google-Smtp-Source: ABdhPJyiC6wP3gKNyX3AB8SQeHDh5fHSv3C77/OXChNe05LMyjEqMoULU+d8RGd7Dppfigq92I0ycw==
-X-Received: by 2002:ad4:576f:0:b0:451:b403:2c3e with SMTP id r15-20020ad4576f000000b00451b4032c3emr16176767qvx.83.1650998272081;
-        Tue, 26 Apr 2022 11:37:52 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id x2-20020a379502000000b0069d14dabad6sm6851134qkd.79.2022.04.26.11.37.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 11:37:51 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 14:37:49 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Dave Chinner <dchinner@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH v2 0/7] mm: introduce shrinker debugfs interface
-Message-ID: <20220426183749.iumpdardzltpf23y@moria.home.lan>
-References: <20220422202644.799732-1-roman.gushchin@linux.dev>
- <YmeK6/eZYaMo2Ltm@rh>
- <Ymggvr4Boc5JIf9j@carbon>
+        Tue, 26 Apr 2022 14:41:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7DB6A006;
+        Tue, 26 Apr 2022 11:38:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95CF9B81DE7;
+        Tue, 26 Apr 2022 18:38:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1324C385A0;
+        Tue, 26 Apr 2022 18:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650998324;
+        bh=Ybj8IchajmkzAQ5r0wEtBIPCgRxzxJki5uddLEvY3aY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iyLOsNSK6YJyUtSna1fyEzFOYk6Y7UP+F9+dhQOji8sEBX7rnC50SwvfR9hGGGUdX
+         FBqn+ZmpzWJdI+e4vVj7ZFEbulOo7eIj5EZLwRBH7YliURljEovkvrO8BW5rNKveFx
+         qkyG43CylYmlYxDHpCOaKDftmptA6lyTYshKXpGI=
+Date:   Tue, 26 Apr 2022 20:38:41 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     John Donnelly <John.p.donnelly@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH 5.15 000/124] 5.15.36-rc1 review
+Message-ID: <Ymg8MSKq93nSS1rq@kroah.com>
+References: <20220426081747.286685339@linuxfoundation.org>
+ <09eb98b8-6200-20c2-faa2-ced7f0e4fc95@oracle.com>
+ <Ymgxd6WGhUBuntkS@kroah.com>
+ <e1eb47ea-7327-7565-3a8f-3d9cf4ee904c@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ymggvr4Boc5JIf9j@carbon>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e1eb47ea-7327-7565-3a8f-3d9cf4ee904c@oracle.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 09:41:34AM -0700, Roman Gushchin wrote:
-> My plan is to work on convert shrinkers API to bytes and experiment
-> with different LRU implementations. I find an ability to easily export
-> statistics and other data (which doesn't exist now) via debugfs useful
-> (and way more convenient than changing existing tracepoints), as well as
-> an ability to trigger scanning of individual shrinkers. If nobody else
-> seeing any value here, I'm fine to keep these patches private, no reason
-> to argue about the output format then.
+On Tue, Apr 26, 2022 at 12:24:24PM -0500, John Donnelly wrote:
+> On 4/26/22 12:52 PM, Greg Kroah-Hartman wrote:
+> > On Tue, Apr 26, 2022 at 12:37:21PM -0500, john.p.donnelly@oracle.com wrote:
+> > > 76723ed1fb89 2021-12-01 | locking/rwsem: Make handoff bit handling more
+> > > consistent
+> > > 
+> > > In Linux 5.15.y.
+> > 
+> > That commit is in 5.15.6, released December 1, 2021.  And this just now
+> > shows up?  How is this related to 5.15.36-rc1?
+> 
+> Hi,
+> 
+> This  was briefly discussed in :
+> 
+> Re: [PATCH v5] locking/rwsem: Make handoff bit handling more consistent
 
-I don't think converting the shrinker API to bytes instead of object counts is
-such a great idea - that's going to introducing new rounding errors and new
-corner cases when we can't free the exact # of bytes requested.
+Have a lore.kernel.org link?  Why not continue it there?
 
-I was thinking along the lines of adding reporting for memory usage in bytes as
-either an additional thing the .count_objects reports, or a new callback.
+> Additional testing shows the rwsem hang still exists.  It takes a 24hr fio
+> soak test to show up.
+> 
+> It likely still exists in Linux 5.18.y too. We will be testing that in the
+> future as time permits.
+
+Can you test 5.17.y also as there is no 5.18.y yet :)
+
+thanks,
+
+greg k-h

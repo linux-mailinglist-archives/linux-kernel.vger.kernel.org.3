@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABBC50EFED
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EA050EFF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243923AbiDZE2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 00:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S244106AbiDZEcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 00:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiDZE2T (ORCPT
+        with ESMTP id S243726AbiDZEcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 00:28:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6241C10D7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ql6OU1exhFym7974YqTBfW/6EKRkqJeNSaKNccjHSB4=; b=tXszhFOo6SlOaPho5BX9WVsQvZ
-        mff2L6ZCQdShtYYmxjNYuRImFCNJ+R5Do6qEj7Q7Xysbuw3dkq7K1wrkgNMRNWvxyOvFvoIWqewtT
-        MEF2l8HmxjRC9dDdwaF7xCL/mqrzH5JKSNXpZTgwC8AjRS5YVc58HIS8pfpnK8HE8YArUq3fOAEug
-        BfvLPn065znVlzS8Cmc7K3JC49ZfW0QI0ILRWz9AXsugmSKZ9xDWvNVPpHP/4c1bvtaR8YBA+8hC1
-        HtsljFwhZTRGEA+RGbghmVAU0bi/PecWak2/7BJLJlryDQXkETX7UJBidt8xsm/Z1Uk+vFKIswhKb
-        Clk7nkuA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1njCky-00CPdx-Cq; Tue, 26 Apr 2022 04:24:56 +0000
-Date:   Mon, 25 Apr 2022 21:24:56 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, mst@redhat.com,
-        jasowang@redhat.com, xieyongji@bytedance.com,
-        dan.carpenter@oracle.com, elic@nvidia.com, parav@nvidia.com,
-        guanjun@linux.alibaba.com
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Julius Hemanth Pitti <jpitti@cisco.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>, Ingo Molnar <mingo@elte.hu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, Eli Cohen <elic@nvidia.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [proc/sysctl]  1dd38979b2:
- BUG:kernel_NULL_pointer_dereference,address
-Message-ID: <Ymd0GIf3Ieh3DRcg@bombadil.infradead.org>
-References: <20220425083302.GD21864@xsang-OptiPlex-9020>
- <YmbvxQVNFESRwxxU@bombadil.infradead.org>
- <20220425144607.2c2588e6b1f00ab8a6f3f6ea@linux-foundation.org>
- <YmcqCVLv3HQ+Kxeq@bombadil.infradead.org>
- <20220425163434.5f8f47e8c301ea30c2f94a5a@linux-foundation.org>
- <Ymc1Zn8BbQMbjb58@bombadil.infradead.org>
+        Tue, 26 Apr 2022 00:32:20 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EC360D9A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650947354; x=1682483354;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AKckjXYaxQGxTNPTsQ7PBu5TUGPg1ZpPQG3uCju+UvI=;
+  b=M4jaAzTuNPt2FAOR4DfxzND0+08TqtBNGXriGhHwYT59K5S2ai8LwPvW
+   +rSWnxYGlJJmC56l8uPZGlsgw0Byl6RLHKjaSa4p//es02ccfBJoPhlML
+   Hhal7iNOYT70N6PP7hcPRZa9Ck4KofZzrnr3u1zUCCcmVg9HZFCd2EDxd
+   qyI4OXmF9KxLl+ZRkwaPB8mIaHszoDByCP9jIuAWxhAxm00tVYc6I/skb
+   WfCDy4Zes/ivci00eOqAHGm8kXHKiW/6wLTckrvbWlRAYEspWIxOP0ouu
+   dffa9fDjshLKqM9ySxGvxWKWWJF6+s+oUeW8JDacUWUQ1geKTCiBEaa3S
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351891210"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="351891210"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 21:28:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="512955263"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Apr 2022 21:28:23 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njCoJ-0003DC-0L;
+        Tue, 26 Apr 2022 04:28:23 +0000
+Date:   Tue, 26 Apr 2022 12:27:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:ras/core] BUILD SUCCESS
+ fa619f5156cf1ee3773edc6d756be262c9ef35de
+Message-ID: <626774bd.EvNTJxOMGUjgEeXy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ymc1Zn8BbQMbjb58@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,49 +63,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 04:57:26PM -0700, Luis Chamberlain wrote:
-> On Mon, Apr 25, 2022 at 04:34:34PM -0700, Andrew Morton wrote:
-> > On Mon, 25 Apr 2022 16:08:57 -0700 Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > 
-> > > On Mon, Apr 25, 2022 at 02:46:07PM -0700, Andrew Morton wrote:
-> > > > On Mon, 25 Apr 2022 12:00:21 -0700 Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > 
-> > > > > Andrew, can we drop this patch for now?
-> > > > 
-> > > > I've been sitting on (ie, forgotten about) this patch
-> > > > (https://lore.kernel.org/all/20200709235115.56954-1-jpitti@cisco.com/T/#u)
-> > > 
-> > > Jesh, yeah I see.
-> > > 
-> > > > for two years.  Evidently waiting for you/Kees/Ingo to provide
-> > > > guidance.  So sure, the need seems very unurgent so I can drop it.
-> > > 
-> > > Well Keew as OK with it, but I yeah I can't decipher the issue at this
-> > > point in time.
-> > > 
-> > > > However I fail to see how that patch could have caused this crash.  I'm
-> > > > suspecting a bisection error?
-> > > > 
-> > > > Maybe something is unwell in drivers/vdpa/vdpa_user/vduse_dev.c.
-> > > 
-> > > At a quick glance, yes it could very well by vduse_init() is messy and
-> > > races somehow with init, but if a race does lurk here my instincts tell
-> > > me this can't be the only place.
-> > > 
-> > > Not sure if leaving a patch in place more time to see how else things
-> > > can explode is worth it.
-> > 
-> > Confused.  Are you thinking that the above-linked patch was somehow
-> > involved in this crash?  If so, but how?  All it does it to permit
-> > unprivileged reads to four ints via proc_dointvec_minmax()?
-> 
-> If the priv allows for it access to dereferencing a pointer is allowed.
-> How that race happens though, indeed is beyond the patch's fault.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
+branch HEAD: fa619f5156cf1ee3773edc6d756be262c9ef35de  x86/mce: Add messages for panic errors in AMD's MCE grading
 
-Even so, I am 99.99% sure this is a driver bug then. And so if enabling
-this patch just enables more driver bugs so be it.
+elapsed time: 740m
 
-So driver maintainers: please take a look, I tried to check but
-the driver bug is not obvious to me yet.
+configs tested: 110
+configs skipped: 87
 
-  Luis
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+mips                 randconfig-c004-20220425
+i386                 randconfig-c001-20220425
+powerpc                       ppc64_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                    sam440ep_defconfig
+sh                           se7619_defconfig
+powerpc                      pasemi_defconfig
+sh                        sh7785lcr_defconfig
+powerpc                    amigaone_defconfig
+um                               alldefconfig
+sh                              ul2_defconfig
+sh                          sdk7786_defconfig
+arm                           viper_defconfig
+mips                      loongson3_defconfig
+parisc64                            defconfig
+sparc                               defconfig
+arm                         lubbock_defconfig
+h8300                       h8s-sim_defconfig
+arc                     haps_hs_smp_defconfig
+arm                           h3600_defconfig
+xtensa                  nommu_kc705_defconfig
+x86_64               randconfig-c001-20220425
+arm                  randconfig-c002-20220425
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20220425
+x86_64               randconfig-a014-20220425
+x86_64               randconfig-a011-20220425
+x86_64               randconfig-a013-20220425
+x86_64               randconfig-a012-20220425
+x86_64               randconfig-a016-20220425
+i386                 randconfig-a011-20220425
+i386                 randconfig-a014-20220425
+i386                 randconfig-a015-20220425
+i386                 randconfig-a012-20220425
+i386                 randconfig-a013-20220425
+i386                 randconfig-a016-20220425
+arc                  randconfig-r043-20220425
+s390                 randconfig-r044-20220425
+riscv                randconfig-r042-20220425
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+riscv                randconfig-c006-20220425
+mips                 randconfig-c004-20220425
+x86_64               randconfig-c007-20220425
+arm                  randconfig-c002-20220425
+i386                 randconfig-c001-20220425
+powerpc              randconfig-c003-20220425
+arm                        magician_defconfig
+powerpc                       ebony_defconfig
+arm                     davinci_all_defconfig
+mips                        workpad_defconfig
+mips                           ip27_defconfig
+x86_64               randconfig-a002-20220425
+x86_64               randconfig-a004-20220425
+x86_64               randconfig-a003-20220425
+x86_64               randconfig-a001-20220425
+x86_64               randconfig-a005-20220425
+x86_64               randconfig-a006-20220425
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a003-20220425
+i386                 randconfig-a002-20220425
+i386                 randconfig-a001-20220425
+i386                 randconfig-a005-20220425
+i386                 randconfig-a004-20220425
+i386                 randconfig-a006-20220425
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

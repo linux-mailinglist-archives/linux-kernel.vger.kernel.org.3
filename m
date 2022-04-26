@@ -2,153 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3AC50FAA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F2D50FA8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349040AbiDZKdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S1349104AbiDZKe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349080AbiDZKbu (ORCPT
+        with ESMTP id S1349143AbiDZKdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:31:50 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CA3114F82;
-        Tue, 26 Apr 2022 03:10:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DqYib8/g7KbuUHzPvhUWe1fwqc3Iok6LLiIDTTQtjB6wlpD6Ql/2yYbWblCWKXTCP5/zVvTC2rskSxohdc66rdhrzI4jIxV3qRd7ehiOIfIYoMSisjRzbYoKHATNOWJ1AxXqUjtSjNKRAidSsuVf3Od9X5H2hqvwtOUhiP2/Smg/akZWJ3YZ312qaYybVYTspyWT+Ve7V5zed+Rae81ZuQ/9PSEp6bk7zZXfOqkg7O3utisR88AZhCbYNw5DoiAdBwxfCukyB1MBtGPoHj8+mbZsrFs60UM2a7Sl4mzbnribAEekdz7UaXkFe5ALEd6raz9IoQF1TS1rHdVS3Orp3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vAgj1g5Plfq+RXhzrxFlwpB9TVwD+WVrjXlS/8D/6CM=;
- b=XVHCsaEUBw0hKahB/99Qn+klHfXxsAiE/Aj3+q/cqWm8NSBU8u6eBiz1YlI3Jgr1dinbOg1wIRuDFrgZyqvvVa5WADj3gzKKsPm8AayoheQxOQOacetDsKJWTQeCpvodKKIm87UFLusMS6aP40yr3JUB+ylv7yyiu9smy1jmn/VuaT5NqUpHtqqDakq/N/WsKJ/ZeoPmgYrq4kxL4NBcy7lYLhzjPgMOQnq2TDQmZU1hdn1r/NroPNUnyxBDbvx6u3Om3XeRiqaPhF5fV+SvnqBNFwIcbPLKxvREYZX5UROv/6+Kt+vxVOMHhwIkItPTHm+c79kN9bJ5MQv20bPMkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vAgj1g5Plfq+RXhzrxFlwpB9TVwD+WVrjXlS/8D/6CM=;
- b=LK/fD1HsjLe1DJao8SSF7CgEmzOLEX584Tcs9WzN7B3Hzpjgr92YWVK8zvwFe47PKWpcxhXwpTUk5KecvjPUoW8bHZTQNmm7sx4yO3FI/dAJs/5stbAMNUfckQFyArk03VUoZmk8fLpw0CvLU6hE+hMhy2zzEoOOUnvTOg0HVSE=
-Received: from MW4P222CA0030.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::35)
- by DM5PR1201MB0201.namprd12.prod.outlook.com (2603:10b6:4:5b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
- 2022 10:10:06 +0000
-Received: from CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::b) by MW4P222CA0030.outlook.office365.com
- (2603:10b6:303:114::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15 via Frontend
- Transport; Tue, 26 Apr 2022 10:10:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT053.mail.protection.outlook.com (10.13.175.63) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5186.14 via Frontend Transport; Tue, 26 Apr 2022 10:10:05 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
- 2022 05:09:49 -0500
-Date:   Tue, 26 Apr 2022 12:09:47 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-CC:     <peterz@infradead.org>, <acme@kernel.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <tglx@linutronix.de>, <bp@alien8.de>, <irogers@google.com>,
-        <yao.jin@linux.intel.com>, <james.clark@arm.com>,
-        <leo.yan@linaro.org>, <kan.liang@linux.intel.com>,
-        <ak@linux.intel.com>, <eranian@google.com>,
-        <like.xu.linux@gmail.com>, <x86@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
-        <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: Re: [PATCH 3/6] perf/tool/amd/ibs: Warn about sampling period skew
-Message-ID: <YmfE6wIA1Dbet1nX@rric.localdomain>
-References: <20220425044323.2830-1-ravi.bangoria@amd.com>
- <20220425044323.2830-4-ravi.bangoria@amd.com>
+        Tue, 26 Apr 2022 06:33:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 538FD101D6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:11:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83EFD23A;
+        Tue, 26 Apr 2022 03:11:00 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.76.208])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3300C3F5A1;
+        Tue, 26 Apr 2022 03:10:59 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 11:10:52 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        akpm@linux-foundation.org, alex.popov@linux.com,
+        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
+Subject: Re: [PATCH 0/8] stackleak: fixes and rework
+Message-ID: <YmfFLOW5QyF3DKTC@FVFF77S0Q05N>
+References: <20220425115603.781311-1-mark.rutland@arm.com>
+ <202204251551.0CFE01DF4@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220425044323.2830-4-ravi.bangoria@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6dd07ea0-5cb5-4a7d-a2f3-08da276cef62
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB0201:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB0201BB90E39931743B2679C99CFB9@DM5PR1201MB0201.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zhk+q4fD6Bj5ClEA6X85jC0/pr0II1lzEJE3s9OX4byD6Z6rkV1hvTjkWkucTw4zgH5ujY+pjzma8Va255AnkQ6Bzy+aOJF48Ob8JxeCMi6lN1BBoY1rBSKSekNbodiTXtx/9cALTTBVYGvGRZFIRHaeUFewLxzEcJcQkhmxKQNhezybHloHlPAJRXnwRrkf+qbn6Pn8WEVA0U7ypeIoE4p1wccGTGACA34mIs5FGYcNTFV7AdAzKabuGlX+O21UmvjrKo606hT95pxj4HOOBamze0i5jX8o+dX62rGkGTn8NdronnmL4+fDzbiDWPzdgKOVtcjZiJKOCWtUwaWnNQm5nyerpO6gdRLq7SYtCdC1EP/kihdmLLrPUcngC8mrIApwDgR1X2kJ6lpVPyyCAHK1GtE4o/om4XM7gf6MfEkrfs4+O8nSZG0h+RkixmgwqeezJ2GTPDc5HtsPiUQEMakD3tigqNO1qoDksLD596Iq+yZqcfFHSmyQqA8aezVzscTIE2j9vJsZgcJShuD+lGjGUWinxCz7Mc2Iwk1XP+nc+jquMQ4iYnVu9gj/6Tt0+cVGj7GO6Ae6u33PTBfdrv5+9xQNHpus2v+zskIKyZ1+c8OLkqxc9upEHAOlwp/CvqDnW8mYibifBYlE2F999ypEu0jYkIkPOadsYXCQp7dDrms2vIXGq4khlR4fmuJfgFeqeiJ9Dqwk1BRg/Vbrwg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(508600001)(55016003)(316002)(82310400005)(7416002)(8936002)(36860700001)(8676002)(6862004)(81166007)(40460700003)(6636002)(336012)(426003)(70586007)(53546011)(47076005)(54906003)(70206006)(186003)(16526019)(5660300002)(9686003)(4326008)(2906002)(83380400001)(356005)(7696005)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 10:10:05.0797
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6dd07ea0-5cb5-4a7d-a2f3-08da276cef62
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0201
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202204251551.0CFE01DF4@keescook>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.22 10:13:20, Ravi Bangoria wrote:
+On Mon, Apr 25, 2022 at 03:54:00PM -0700, Kees Cook wrote:
+> On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
+> > This series reworks the stackleak code. The first patch fixes some
+> > latent issues on arm64, and the subsequent patches improve the code to
+> > improve clarity and permit better code generation.
+> 
+> This looks nice; thanks! I'll put this through build testing and get it
+> applied shortly...
 
-> @@ -29,3 +31,32 @@ void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr)
->  
->  	free(env.cpuid);
->  }
-> +
-> +void arch_evsel__warn_ambiguity(struct evsel *evsel, struct perf_event_attr *attr)
+Thanks!
 
-Have an 'ibs_' string in the name?
+Patch 1 is liable to conflict with come other stacktrace bits that may go in
+for v5.19, so it'd be good if either that could be queued as a fix for
+v5.1-rc4, or we'll have to figure out how to deal with conflicts later.
 
-> +{
-> +	struct perf_env *env = evsel__env(evsel);
-> +	struct perf_pmu *evsel_pmu = evsel__find_pmu(evsel);
-> +	struct perf_pmu *ibs_fetch_pmu = perf_pmu__find("ibs_fetch");
-> +	struct perf_pmu *ibs_op_pmu = perf_pmu__find("ibs_op");
-> +	static int warned_once;
-> +
-> +	if (warned_once || !perf_env__cpuid(env) || !env->cpuid ||
-> +	    !strstarts(env->cpuid, "AuthenticAMD") || !evsel_pmu)
-> +		return;
-> +
-> +	if (ibs_fetch_pmu && ibs_fetch_pmu->type == evsel_pmu->type) {
-> +		if (attr->config & (1ULL << 59)) {
-> +			pr_warning(
-> +"WARNING: Hw internally resets sampling period when L3 Miss Filtering is enabled\n"
-> +"and tagged operation does not cause L3 Miss. This causes sampling period skew.\n");
-> +			warned_once = 1;
-> +		}
-> +	} else if (ibs_op_pmu && ibs_op_pmu->type == evsel_pmu->type) {
-> +		if (attr->config & (1ULL << 16)) {
-> +			pr_warning(
-> +"WARNING: Hw internally resets sampling period when L3 Miss Filtering is enabled\n"
-> +"and tagged operation does not cause L3 Miss. This causes sampling period skew.\n");
+> > While the improvement is small, I think the improvement to clarity and
+> > code generation is a win regardless.
+> 
+> Agreed. I also want to manually inspect the resulting memory just to
+> make sure things didn't accidentally regress. There's also an LKDTM test
+> for basic functionality.
 
-Avoid duplicate code. You could move it to the end of the function and
-early return if the config bit is not set.
+I assume that's the STACKLEAK_ERASING test?
 
-> +			warned_once = 1;
-> +		}
-> +	}
-> +}
+I gave that a spin, but on arm64 that test is flaky even on baseline v5.18-rc1.
+On x86_64 it seems consistent after 100s of runs. I'll go dig into that now. 
 
--Robert
+FWIW, I'm testing with defconfig + STACKLEAK + STACKLEAK_RUNTIME_DISABLE +
+LKDTM, using GCC 11.1.0 from the kernel.org crosstool pages. When running the
+test it passes a few times, then fails dramatically:
+
+| # uname -a
+| Linux buildroot 5.18.0-rc1 #1 SMP PREEMPT Tue Apr 26 10:38:12 BST 2022 aarch64 GNU/Linux
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   21.899596] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   21.900102] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   21.900752] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   21.901318] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   22.551022] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   22.551625] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   22.552314] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   22.552915] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   23.137457] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   23.138521] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   23.139173] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   23.139787] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   23.601729] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   23.603159] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   23.603982] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   23.604565] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   24.046171] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   24.046525] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   24.046965] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   24.047562] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   24.481889] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   24.482682] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   24.483361] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   24.483994] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   24.930625] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   24.931168] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   24.931914] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   24.932404] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   25.351606] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   25.352181] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   25.352827] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   25.353496] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   25.762500] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   25.762970] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   25.763396] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   25.763789] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   26.157349] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   26.157880] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   26.158381] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   26.158859] lkdtm: OK: the rest of the thread stack is properly erased
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| [   26.527798] lkdtm: Performing direct entry STACKLEAK_ERASING
+| [   26.528621] lkdtm: checking unused part of the thread stack (15480 bytes)...
+| [   26.529451] lkdtm: the erased part begins after 1440 not poisoned bytes
+| [   26.530654] lkdtm: FAIL: bad value number 197 in the erased part: 0xffff8000083d3670
+| [   26.531246] lkdtm: FAIL: bad value number 198 in the erased part: 0xaea4d638c4322298
+| [   26.531760] lkdtm: FAIL: bad value number 199 in the erased part: 0xffff8000083d3670
+| [   26.532219] lkdtm: FAIL: bad value number 200 in the erased part: 0xdead000000000122
+| [   26.532640] lkdtm: FAIL: bad value number 201 in the erased part: 0x0
+| [   26.532991] lkdtm: FAIL: bad value number 202 in the erased part: 0xdead000000000122
+| [   26.533412] lkdtm: FAIL: bad value number 203 in the erased part: 0x101
+| [   26.533773] lkdtm: FAIL: bad value number 204 in the erased part: 0xffff2f22033d0000
+| [   26.535385] lkdtm: FAIL: bad value number 205 in the erased part: 0xffff8000083d3650
+| [   26.536150] lkdtm: FAIL: bad value number 206 in the erased part: 0x2fc3d638c4321e2c
+| [   26.536798] lkdtm: FAIL: bad value number 207 in the erased part: 0xffffd638c61c3880
+| [   26.537487] lkdtm: FAIL: bad value number 208 in the erased part: 0xffff2f227fbd4878
+| [   26.538444] lkdtm: FAIL: bad value number 209 in the erased part: 0xffff8000083d3600
+| [   26.539094] lkdtm: FAIL: bad value number 210 in the erased part: 0xfd5d638c4311244
+| [   26.539736] lkdtm: FAIL: bad value number 211 in the erased part: 0xffffd638c6139a38
+| [   26.540383] lkdtm: FAIL: bad value number 212 in the erased part: 0x0
+| [   26.540919] lkdtm: FAIL: bad value number 213 in the erased part: 0x0
+| [   26.541458] lkdtm: FAIL: bad value number 214 in the erased part: 0x3eb4d638c43111dc
+| [   26.542399] lkdtm: FAIL: bad value number 215 in the erased part: 0xfffffcbc880fa8c0
+| [   26.543051] lkdtm: FAIL: bad value number 216 in the erased part: 0xffff2f2203ea3100
+| [   26.543698] lkdtm: FAIL: bad value number 217 in the erased part: 0xffff2f2202817500
+| [   26.544353] lkdtm: FAIL: bad value number 218 in the erased part: 0xe184d638c447df3c
+| [   26.545004] lkdtm: FAIL: bad value number 219 in the erased part: 0xffff8000083d3600
+| [   26.545652] lkdtm: FAIL: bad value number 220 in the erased part: 0xffff2f22033d0000
+| [   26.546571] lkdtm: FAIL: bad value number 221 in the erased part: 0xffff2f227fbd3b80
+| [   26.547110] lkdtm: FAIL: bad value number 222 in the erased part: 0xc5d1d638c42cb164
+| [   26.547643] lkdtm: FAIL: bad value number 223 in the erased part: 0xffff8000083d35a0
+| [   26.548180] lkdtm: FAIL: bad value number 224 in the erased part: 0x2f94d638c42cb150
+| [   26.548716] lkdtm: FAIL: bad value number 225 in the erased part: 0xffff8000083d35a0
+| [   26.549263] lkdtm: FAIL: bad value number 226 in the erased part: 0xffff2f22033d0000
+| [   26.549798] lkdtm: FAIL: bad value number 227 in the erased part: 0xffffd638c61c3880
+| [   26.550684] lkdtm: FAIL: bad value number 228 in the erased part: 0x96ccd638c4477ac8
+| [   26.551216] lkdtm: FAIL: bad value number 229 in the erased part: 0xffff8000083d35a0
+| [   26.551754] lkdtm: FAIL: bad value number 230 in the erased part: 0x99abd638c4499888
+| [   26.552289] lkdtm: FAIL: bad value number 231 in the erased part: 0xffff8000083d3580
+| [   26.552821] lkdtm: FAIL: bad value number 232 in the erased part: 0x6ccd638c447e0e0
+| [   26.553348] lkdtm: FAIL: bad value number 233 in the erased part: 0xffff8000083d3600
+| [   26.554135] lkdtm: FAIL: bad value number 234 in the erased part: 0xffff2f227fbd3b00
+| [   26.554674] lkdtm: FAIL: bad value number 235 in the erased part: 0xffff2f220288ba00
+| [   26.555210] lkdtm: FAIL: bad value number 236 in the erased part: 0x3da6d638c42c1e34
+| [   26.555739] lkdtm: FAIL: bad value number 237 in the erased part: 0xffff8000083d3540
+| [   26.556271] lkdtm: FAIL: bad value number 238 in the erased part: 0xc0
+| [   26.556723] lkdtm: FAIL: bad value number 239 in the erased part: 0x0
+| [   26.557182] lkdtm: FAIL: bad value number 240 in the erased part: 0xffff2f220288ba00
+| [   26.557719] lkdtm: FAIL: bad value number 241 in the erased part: 0xffff2f227fbd3b00
+| [   26.558478] lkdtm: FAIL: bad value number 242 in the erased part: 0xf882d638c447a134
+| [   26.558944] lkdtm: FAIL: bad value number 243 in the erased part: 0xffff8000083d3530
+| [   26.559407] lkdtm: FAIL: bad value number 244 in the erased part: 0x14bcd638c4494bf4
+| [   26.559862] lkdtm: FAIL: bad value number 245 in the erased part: 0xffff8000083d3510
+| [   26.560320] lkdtm: FAIL: bad value number 246 in the erased part: 0x33a7d638c44939c4
+| [   26.560774] lkdtm: FAIL: bad value number 247 in the erased part: 0xffff8000083d34e0
+| [   26.561227] lkdtm: FAIL: bad value number 248 in the erased part: 0x1
+| [   26.561606] lkdtm: FAIL: bad value number 249 in the erased part: 0xffff2f22028701b0
+| [   26.562293] lkdtm: FAIL: bad value number 250 in the erased part: 0xfff3d638c448fb6c
+| [   26.562753] lkdtm: FAIL: bad value number 251 in the erased part: 0xffff8000083d34c0
+| [   26.563206] lkdtm: FAIL: bad value number 252 in the erased part: 0x1
+| [   26.563596] lkdtm: FAIL: bad value number 253 in the erased part: 0xffff2f22028701b0
+| [   26.564055] lkdtm: FAIL: bad value number 254 in the erased part: 0xc3b1d638c448f978
+| [   26.564509] lkdtm: FAIL: bad value number 255 in the erased part: 0xffff8000083d34a0
+| [   26.564963] lkdtm: FAIL: bad value number 256 in the erased part: 0x4399d638c42c1cec
+| [   26.565420] lkdtm: FAIL: bad value number 257 in the erased part: 0xffff8000083d34b0
+| [   26.566045] lkdtm: FAIL: bad value number 258 in the erased part: 0xffff2f227fbd3b80
+| [   26.566507] lkdtm: FAIL: bad value number 259 in the erased part: 0xffff2f220288ba80
+| [   26.566965] lkdtm: FAIL: bad value number 260 in the erased part: 0xe9e9d638c42cca74
+| [   26.567421] lkdtm: FAIL: bad value number 261 in the erased part: 0xffff8000083d34b0
+| [   26.567821] lkdtm: FAIL: bad value number 262 in the erased part: 0xffff2f220288ba80
+| [   26.568221] lkdtm: FAIL: bad value number 263 in the erased part: 0xffff2f227fbd3b80
+| [   26.568620] lkdtm: FAIL: bad value number 264 in the erased part: 0xf697d638c42cb164
+| [   26.569015] lkdtm: FAIL: bad value number 265 in the erased part: 0xffff8000083d3450
+| [   26.569410] lkdtm: FAIL: bad value number 266 in the erased part: 0x47e5d638c42cb150
+| [   26.569947] lkdtm: FAIL: bad value number 267 in the erased part: 0xffff8000083d3450
+| [   26.570391] lkdtm: FAIL: bad value number 268 in the erased part: 0xf0b1d638c447ad28
+| [   26.570788] lkdtm: FAIL: bad value number 269 in the erased part: 0xffff8000083d3430
+| [   26.571189] lkdtm: FAIL: the thread stack is NOT properly erased!
+
+Thanks,
+Mark.

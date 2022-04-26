@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BFA510996
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C785109C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354504AbiDZUMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S1354666AbiDZUNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354464AbiDZUMK (ORCPT
+        with ESMTP id S1354619AbiDZUNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:12:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C09C162F14
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:09:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 26 Apr 2022 16:13:02 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9CF17B9B7;
+        Tue, 26 Apr 2022 13:09:46 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05CB5B822AA
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:09:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8337EC385A0;
-        Tue, 26 Apr 2022 20:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651003738;
-        bh=Qwed+C79D8lks+RIeSv7PbPzhqtu6lXzek9ZYCiYAOo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OWv71skeoIO7MVnnXssCP5G13aIy2I8gnnD1pTuXHmbcv8ipu+W4CFXRpvdQVWq9t
-         k2tcyPH+6m3rO5qgKJxJWF545u7QGbaoYn+YIJH4c1j3hhoNlkQMOx06oGL2BNP71f
-         8PCYmhNJxea2CoN+w31AuXab3ecSjhpArLUWw4AM=
-Date:   Tue, 26 Apr 2022 13:08:57 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v8 00/70] Introducing the Maple Tree
-Message-Id: <20220426130857.09f40743b42b5f0bf4f19a59@linux-foundation.org>
-In-Reply-To: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
-References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79D091EC013E;
+        Tue, 26 Apr 2022 22:09:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651003781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=g+qc3MZ0SQsvosVVg7h3CKtzDX+zr1LTTY7ud+C7p94=;
+        b=GUxKH9o77tdVt0rqwRSeU3fUYAlvlTkvhwr15Rs40kD2dZ5yKdFvRJGFXCxpUNV0SFsxwP
+        qnW2VQIe8J1Jp1dpOAts0sf+yiOAUT8Ifyc51B8XqFD9D6wCAYxIZvFYhvIJ/MM2DIKunD
+        VXk4NdNk5fEXgr1gM1va5FIoRXXStNc=
+Date:   Tue, 26 Apr 2022 22:09:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: Re: [PATCH 1/2] kernel: add platform_has() infrastructure
+Message-ID: <YmhRgn896loDHofa@zn.tnic>
+References: <20220426134021.11210-1-jgross@suse.com>
+ <20220426134021.11210-2-jgross@suse.com>
+ <YmgsYvWQchxub8cW@zn.tnic>
+ <YmhNxnHMe/of4rDD@osiris>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YmhNxnHMe/of4rDD@osiris>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 15:06:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+On Tue, Apr 26, 2022 at 09:53:42PM +0200, Heiko Carstens wrote:
+> > You probably should make that thing static and use only accessors to
+> > modify it in case you wanna change the underlying data structure in the
+> > future.
+>
+> That would add another indirection, which at least I think is not
+> necessary and would make it less likely that this infrastructure is
+> used.
 
-> The maple tree is an RCU-safe range based B-tree designed to use modern
-> processor cache efficiently.  There are a number of places in the kernel
+So if you want to have a single variable which contains platform feature
+bits, you don't need any platform_<bla> accessors but use this variable
+directly.
 
-I think it would be helpful to expand on "a number of places". 
-Specifically which places?
+I'd prefer the accessors any day of the week, though.
 
-> that a non-overlapping range-based tree would be beneficial, especially
-> one with a simple interface.  The first user that is covered in this
-> patch set is the vm_area_struct, where three data structures are
-> replaced by the maple tree: the augmented rbtree, the vma cache, and the
-> linked list of VMAs in the mm_struct.  The long term goal is to reduce
-> or remove the mmap_sem contention.
+-- 
+Regards/Gruss,
+    Boris.
 
-"mmap_lock" ;)
-
-> 
-> The tree has a branching factor of 10 for non-leaf nodes and 16 for leaf
-> nodes.  With the increased branching factor, it is significantly shorter than
-> the rbtree so it has fewer cache misses.  The removal of the linked list
-> between subsequent entries also reduces the cache misses and the need to pull
-> in the previous and next VMA during many tree alterations.
-
-Do we have any quantitative testing results?
-
-What's the plan on utilizing this to further reduce mmap_lock contention?
+https://people.kernel.org/tglx/notes-about-netiquette

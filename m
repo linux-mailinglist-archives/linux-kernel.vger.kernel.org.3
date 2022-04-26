@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838F150EE39
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B454950EE3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 03:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241397AbiDZBtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 21:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S237211AbiDZBvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 21:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241338AbiDZBtK (ORCPT
+        with ESMTP id S230262AbiDZBvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 21:49:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269BC33367;
-        Mon, 25 Apr 2022 18:46:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 25 Apr 2022 21:51:38 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686A554BED;
+        Mon, 25 Apr 2022 18:48:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B603861736;
-        Tue, 26 Apr 2022 01:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7E0C385A4;
-        Tue, 26 Apr 2022 01:46:01 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 21:45:59 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        John Kacur <jkacur@redhat.com>, Daniel Wagner <dwagner@suse.de>
-Subject: Re: [PATCH 1/2] rtla: Remove procps-ng dependency
-Message-ID: <20220425214559.55988956@gandalf.local.home>
-In-Reply-To: <52161d343abeda6d039d2f0734904a1383a4c62e.1650617571.git.bristot@kernel.org>
-References: <52161d343abeda6d039d2f0734904a1383a4c62e.1650617571.git.bristot@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnPt22mnPz4xLb;
+        Tue, 26 Apr 2022 11:48:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650937707;
+        bh=9kBhR8QSUgvJZYnXsARchbPfp7Jz9CUax/1FT05p1lA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Nh89AaDkqmpMgnPTvTYxJZIaoHWXHQrt09qUESfqG1L33T7CadwFMY6nDTSOylOO/
+         +Mgo1zvutf1AatIgIKLXZvGbYAtGaWuFBspjffWb3KXC1ThItQnxqtd6c0AA9Rdbg0
+         mN7lDCIv7mlavS91/Avbr6PPwaIg41Vx5JgZo/ERW6ko6oY77L3FnbnGkpDO8WoRoC
+         9bzpDVF3gkET4JZNgHQz5aZu1c1tE02r4IJfV7akO/cx5XWN4DLD8xSCX6S3U6xcIn
+         Nu4nVcePRXJvg+kYkXcrcW9bC9PdNO9XzLZ6DzugmMzyeAVjY4YmZqQBIrqtv491PE
+         AB8dLgTmDbPfQ==
+Date:   Tue, 26 Apr 2022 11:48:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm-misc tree with the
+ drm-misc-fixes tree
+Message-ID: <20220426114825.7a07c67c@canb.auug.org.au>
+In-Reply-To: <20220414094715.4c2e0127@canb.auug.org.au>
+References: <20220414094715.4c2e0127@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YL0fxYxeUKXBwDs+mgbDYqx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 12:01:31 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+--Sig_/YL0fxYxeUKXBwDs+mgbDYqx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-> +
-> +/*
-> + * procfs_is_workload_pid - check if a procfs entry contains a workload_prefix* comm
-> + *
-> + * Check if the procfs entry is a directory of a process, and then check if the
-> + * process has a comm with the prefix set in char *workload_prefix. As the
-> + * current users of this function only check for kernel threads, there is no
-> + * need to check for the threads for the process.
-> + *
-> + * Return: True if the proc_entry contains a comm file with workload_prefix*.
-> + * Otherwise returns false.
-> + */
-> +static int procfs_is_workload_pid(const char *workload_prefix, struct dirent *proc_entry)
-> +{
-> +	char comm_path[MAX_PATH], comm[MAX_PATH];
+On Thu, 14 Apr 2022 09:47:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the drm-misc tree got a conflict in:
+>=20
+>   drivers/gpu/drm/radeon/radeon_sync.c
+>=20
+> between commit:
+>=20
+>   022074918042 ("drm/radeon: fix logic inversion in radeon_sync_resv")
+>=20
+> from the drm-misc-fixes tree and commit:
+>=20
+>   7bc80a5462c3 ("dma-buf: add enum dma_resv_usage v4")
+>=20
+> from the drm-misc tree.
+>=20
+> I fixed it up (I just used the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-This is probably fine (but there is one issue), but I would have done this
-a little different.
+This is now a conflict between the drm tree and Linus' tree.
 
-	int len = strlen(workload_prefix);
-	char comm[len + 1];
+--=20
+Cheers,
+Stephen Rothwell
 
-> +	int comm_fd, retval;
-> +	char *t_name;
-> +
-> +	if (proc_entry->d_type != DT_DIR)
-> +		return 0;
-> +
-> +	if (*proc_entry->d_name == '.')
-> +		return 0;
-> +
-> +	/* check if the string is a pid */
-> +	for (t_name = proc_entry->d_name; t_name; t_name++) {
-> +		if (!isdigit(*t_name))
-> +			break;
-> +	}
-> +
-> +	if (*t_name != '\0')
-> +		return 0;
-> +
-> +	snprintf(comm_path, MAX_PATH, "/proc/%s/comm", proc_entry->d_name);
-> +	comm_fd = open(comm_path, O_RDONLY);
-> +	if (comm_fd < 0)
-> +		return 0;
-> +
-> +	memset(comm, 0, MAX_PATH);
+--Sig_/YL0fxYxeUKXBwDs+mgbDYqx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-No need for the memset.
+-----BEGIN PGP SIGNATURE-----
 
-> +	retval = read(comm_fd, comm, MAX_PATH);
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJnT2kACgkQAVBC80lX
+0GwXPQf7BQigK2+/T5d8A50Z/8M751oZO4FLYt30HQT8qgT98F/AjQcYo6eTKEQx
+iqvQfCBGkHv2tjMT1BDykx0VyWFAEZ60BG26odiFZ7Qoelx7/MYdbYe5MPurGEr1
+r/xaWxAgmJDg6JzNYbyDLEFAb3Q1Ofa8TyggINUuPitYHR+m821DRSgLwa2ZaAVA
++tGhybE04y85sV1Sme2LhbF6lvrhG4lYe6QoPWk2/MRrmaQgsgvOVagMjsFo6YJ9
+Eg1HTePL5GopCLA1dyHaA5wWtQvMNj+Vy5d2LKRyQZZrdpbk8Y41MkhAdkN+McCK
+YweRcvJgHysqZ7WQt5nt5czwLp8XbA==
+=McuI
+-----END PGP SIGNATURE-----
 
-	retval = read(comm_fd, comm, len + 1);
-
-> +
-> +	close(comm_fd);
-> +
-> +	if (retval <= 0)
-> +		return 0;
-
-	if (comm[len] != '\n')
-		return 0;
-
-> +
-> +	retval = !strncmp(workload_prefix, comm, strlen(workload_prefix));
-
-What happens if strlen(workload_prefix) is greater than MAX_PATH? ;-)
-
-	retval = !strncmp(workload_prefix, comm, len);
-
-But that's me. If you want to keep this as is, let me know.
-
--- Steve
-
-
-
-> +	if (!retval)
-> +		return 0;
-> +
-> +	/* comm already have \n */
-> +	debug_msg("Found workload pid:%s comm:%s", proc_entry->d_name, comm);
-> +
-> +	return 1;
-> +}
-> +
+--Sig_/YL0fxYxeUKXBwDs+mgbDYqx--

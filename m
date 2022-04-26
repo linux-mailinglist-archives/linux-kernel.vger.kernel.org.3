@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99B150FBAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB69A50FBB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 13:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345232AbiDZLJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 07:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S1349390AbiDZLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 07:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiDZLJZ (ORCPT
+        with ESMTP id S1345570AbiDZLLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 07:09:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6A4D29806
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650971176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DHfnXNbbraU+74d3T1xSt5cZBiLAUCkRDpQuxcIh3qo=;
-        b=OtZQ5ozPgzFjZ586LYoKznp5B4cTc7ysE0wtVOIqzo0hg25xq6tcRWMzUeT0hCAnuybaTs
-        KiJP9RtQJmTUv+MxNuJAbOXv8ezvAglZ+LAd4Xj3yrRtmrWmhJm3niS0jttZiG968tK7dV
-        4DOhPR+0dg34uooBEBfBOTBLjS/CBx0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-183-jdBrqvlCPQW13Q3iKCq0BA-1; Tue, 26 Apr 2022 07:06:15 -0400
-X-MC-Unique: jdBrqvlCPQW13Q3iKCq0BA-1
-Received: by mail-wm1-f72.google.com with SMTP id d13-20020a05600c3acd00b0038ff865c043so1067475wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:06:15 -0700 (PDT)
+        Tue, 26 Apr 2022 07:11:10 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461D2AC60
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:08:02 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id dk23so11991927ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 04:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ned8K4/DJ2jNNS3XJQ8BysZeLMLkezd228hF2G2kCNA=;
+        b=bTzMeiMzvnJ3igj9/EPAnoT0quEcrRMVvqCDZt7cjChZ8FiuQ/qBSYrjp5PYDLkLWo
+         2SJmgwBnp3mw5dAZs3zQSAePI4r7nI080cK0vfhJ3h28Zfn+UsLBULlJWOrEuVhD26ci
+         49c9pisJKDnip5uKtRqycy+80CjOB5TToP62ADTblfIuz9SA/WTd8MxWS3Z34gmYNVAe
+         iRiC4jlHpBdMH+/xinuSSb9HR7euPV9h50b9bRRjIsYEsg22s4dS0MyLr5CfNNV20zln
+         UngdE00lUseRPe1/B7XlCPMjANoQWsZaxUo9eLKc4jjKssCl6xY5k6OQDaJgxbjZxsU3
+         jseQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=DHfnXNbbraU+74d3T1xSt5cZBiLAUCkRDpQuxcIh3qo=;
-        b=yXvecu4O84xBvsQNj57gO5i9aZmibrE/MmwGyOrRjnD9q8WjFrF//RtO7MSQwTpXCn
-         lLxHpKn2k60DxP1o4LaUSHs+ylKRQUEmbhGBPSdkhScqZLPibGzKJi4iFDyJWWWoqEAO
-         2jNaRCrjfJupKC+uhKz/vGPAeI9vK4cXv5b/qRCwNYPKTLjS23MElqg6OwIJE6drKuCr
-         5Vv/KKeR42VVvSCWum9MVFH6XoaV2idixFJn3NGVnSFKLkXfKvzj/hryZqE3DOFnxG4f
-         QMjLeg/Xu1M8O3fLTFy4TuhvfuQ5Zd/K+ZIciuANfSl1nSh7/wGFeAA41oeJlaeKPkeg
-         YV9A==
-X-Gm-Message-State: AOAM531unesxQ+VjkT7/T+/fvxD8voQkTkOPcHPx1Fo4gIGNtHI46+3q
-        rjA/FHwUeyVFVm8KoKaQ5w4phyp0mVRw2Vvw1T68hr3VRIDV0aXRzAWJjOhwyIb5Byz92Y/1lfj
-        AWA32dz2ryB4hGSFuk2s071bp
-X-Received: by 2002:a05:6000:223:b0:20a:db3a:e761 with SMTP id l3-20020a056000022300b0020adb3ae761mr7883472wrz.43.1650971174193;
-        Tue, 26 Apr 2022 04:06:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy+Ob9PQFNXcWbkfeMMvapipW9rElBZyeHIS9L5GSq7xdZt6/Me6QPwGd36G3ygXGirhLZhSw==
-X-Received: by 2002:a05:6000:223:b0:20a:db3a:e761 with SMTP id l3-20020a056000022300b0020adb3ae761mr7883418wrz.43.1650971173519;
-        Tue, 26 Apr 2022 04:06:13 -0700 (PDT)
-Received: from ?IPv6:2a0c:5a80:1306:2f00:cfcf:62cf:6f38:dd92? ([2a0c:5a80:1306:2f00:cfcf:62cf:6f38:dd92])
-        by smtp.gmail.com with ESMTPSA id r17-20020a0560001b9100b00207afaa8987sm12848160wru.27.2022.04.26.04.06.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ned8K4/DJ2jNNS3XJQ8BysZeLMLkezd228hF2G2kCNA=;
+        b=dAXYcE9KOfuLzSi+P+gJ/XCFJ6JALYkkMvWD2cNs47rqdqsgL7+evFv1CU7EFDWELy
+         etZY+qMbaBkjHOyVpYTDsiUnJSiVLk+PceCBtnF+DzE0s5yETCth9SFDeFCuMwMmFc9S
+         okvQf3Ahqe0DZZNQX7IpTDW46CQ4GbodfTBau/R9b2zaiT2s5EO7JkyImFb3akDQ3IvN
+         dV7u7B0FTAnOR/bscipRtgzyHlMqSlTFHAg1uAEG/xFue044cr6xO9kMiqoKXTwcQ33q
+         cAEgaE9pdc86nVn7UZi3V/2ERUIFJ4vzWy0kPn16XGWFmzxCOFcXPj8/48SypX0MDBlC
+         anfg==
+X-Gm-Message-State: AOAM531Bu0b5t1WwL9txhPC8XPxkxVyqTT5tzUlNd8okeJ69gGB0PJVd
+        nOHZmdqJWKNcz6o9yqQZDV1i9w==
+X-Google-Smtp-Source: ABdhPJza9w19lgcQbzmc9lPFuOGcElTa3Uz0iMCiD7XPluXEE1inm+3i4eVNdXCAWTodwZoCvhYasQ==
+X-Received: by 2002:a17:907:c07:b0:6f3:a3b2:9582 with SMTP id ga7-20020a1709070c0700b006f3a3b29582mr6148248ejc.91.1650971281249;
+        Tue, 26 Apr 2022 04:08:01 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05640204d000b0042062f9f0e1sm5926033edw.15.2022.04.26.04.07.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 04:06:13 -0700 (PDT)
-Message-ID: <cf861ff3bf106b71994886cad7c4570b6ce9af0d.camel@redhat.com>
-Subject: Re: [RFC PATCH 0/6] Drain remote per-cpu directly
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Minchan Kim <minchan@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Date:   Tue, 26 Apr 2022 13:06:12 +0200
-In-Reply-To: <YmcnmZBtZEgJrrUv@google.com>
-References: <20220420095906.27349-1-mgorman@techsingularity.net>
-         <YmcnmZBtZEgJrrUv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 26 Apr 2022 04:08:00 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH] dt-bindings: soc: qcom,rpmh-rsc: simplify qcom,tcs-config
+Date:   Tue, 26 Apr 2022 13:07:57 +0200
+Message-Id: <20220426110757.80603-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 15:58 -0700, Minchan Kim wrote:
-> On Wed, Apr 20, 2022 at 10:59:00AM +0100, Mel Gorman wrote:
-> > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-> > per-cpu lists drain support" -- avoid interference of a high priority
-> > task due to a workqueue item draining per-cpu page lists. While many
-> > workloads can tolerate a brief interruption, it may be cause a real-time
-> > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-> > the draining in non-deterministic.
-> 
-> Yeah, the non-deterministic is a problem. I saw the kworker-based draining
-> takes 100+ms(up to 300ms observed) sometimes in alloc_contig_range if CPUs
-> are heavily loaded.
-> 
-> I am not sure Nicolas already observed. it's not only problem of
-> per_cpu_pages but it is also lru_pvecs (pagevec) draining.
-> Do we need to introduce similar(allow remote drainning with spin_lock)
-> solution for pagevec?
+The schema for "qcom,tcs-config" property can be a little bit simpler,
+without the need of defining each item.  Also move the description of
+each part of "qcom,tcs-config" tupple to the tupple items description.
 
-Yes, I'm aware of the lru problem. I'll start working on it too once we're done
-with the page allocator (and if no-one beats me to it). That said, I don't know
-if we can apply the exact same approach, the devil is in the details. :)
+Suggested-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/soc/qcom/qcom,rpmh-rsc.yaml      | 33 +++++++------------
+ 1 file changed, 11 insertions(+), 22 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+index f5ecf4a8c377..4a50f1d27724 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+@@ -65,33 +65,22 @@ properties:
+ 
+   qcom,tcs-config:
+     $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    minItems: 4
++    maxItems: 4
+     items:
+-      - items:
+-          - description: TCS type
+-            enum: [ 0, 1, 2, 3 ]
+-          - description: Number of TCS
+-      - items:
+-          - description: TCS type
+-            enum: [ 0, 1, 2, 3 ]
+-          - description: Number of TCS
+-      - items:
+-          - description: TCS type
+-            enum: [ 0, 1, 2, 3]
+-          - description: Numbe r of TCS
+-      - items:
+-          - description: TCS type
+-            enum: [ 0, 1, 2, 3 ]
+-          - description: Number of TCS
++      items:
++        - description: |
++            TCS type::
++             - ACTIVE_TCS
++             - SLEEP_TCS
++             - WAKE_TCS
++             - CONTROL_TCS
++          enum: [ 0, 1, 2, 3 ]
++        - description: Number of TCS
+     description: |
+       The tuple defining the configuration of TCS. Must have two cells which
+       describe each TCS type.  The order of the TCS must match the hardware
+       configuration.
+-      Cell 1 (TCS Type):: TCS types to be specified::
+-       - ACTIVE_TCS
+-       - SLEEP_TCS
+-       - WAKE_TCS
+-       - CONTROL_TCS
+-      Cell 2 (Number of TCS):: <u32>
+ 
+   qcom,tcs-offset:
+     $ref: /schemas/types.yaml#/definitions/uint32
 -- 
-Nicolás Sáenz
+2.32.0
 

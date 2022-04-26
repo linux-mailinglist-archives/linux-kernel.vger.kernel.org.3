@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A564D510B86
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FD8510B89
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355561AbiDZVx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S1355565AbiDZVyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355565AbiDZVxx (ORCPT
+        with ESMTP id S237427AbiDZVyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:53:53 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530253B556
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:50:44 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id q129so108255oif.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:50:44 -0700 (PDT)
+        Tue, 26 Apr 2022 17:54:08 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4F86B090;
+        Tue, 26 Apr 2022 14:50:59 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id n134so322237iod.5;
+        Tue, 26 Apr 2022 14:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=pjo5mXaYQ8tuJfJZuu4TdSNcsnRgj5B9DLZVepdghWQ=;
-        b=CQiwaHLvsuJ+ikXqofBkW8jrqC5ybJyYGda2ADk6TuRwRak/ZZrAWQr+Oc3GoIyUxL
-         jAiQC84FRkg0/xIgPZYwLmYHAR/MiaTGiJk7wDC3ByWcpz0mVRL0o5yr3i5GeTh9YxTq
-         TczVSgufsKZt2Yp2vNv7WM6j9VMoK+ZRTN5VI=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fFhxvEKDcp+p+Jf+hKy1k48Hi9OxmwmKYCtCg5xjO34=;
+        b=gydrhvbAvrmqKWEOGZZ8swyxUk51TMy97z+ch9gcoqXwDrzYplo4Epen7SIvfGzz59
+         nDHV5uh8XlqtG+R8ZtPYwJy4GUovL3xazdKha7BX37OyJLvpZRBcaPWWarlNpZEfbiAP
+         OzxIRxf8drhYUHAdTDzWmpGLUYrUeNAgjF50CDCj2+v9midPumJaqO3SqVAVj21b4tUp
+         WDWZfhp2jhAdSftAxleMYBI/CEnBqHs0piSQqtpnZlrExVD74nYRzFDlFmF0C3GshutT
+         DFF6UtxN44M86ztGCclbnNR0uGY6G2Vixz/pTRonGE8f1maV+XTsQxA1O/L3RiUfZ98I
+         9tTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=pjo5mXaYQ8tuJfJZuu4TdSNcsnRgj5B9DLZVepdghWQ=;
-        b=f4Fps14LujqkKzJ14CB95PmF8ZKamAHoF72CNy6ZXtEvJZ+lPMMpiCv18a8th2V8On
-         6Niunc7015T0kc2JcguKiliT0VWWE+knUtEhBo7eHrgJ1Me+PYY+EN5zZCkNRkhNPHiB
-         HHf3HIaP+NOXPwH1T6q6ibCgwq5pA8OCviILGiHXfsuZ+JW6JSAnBcTgd6afXUhnwElV
-         /STFNooxuBDKKp5WNQ4UrNgTKeZLozPNLR/R4PVSmmXqTWrS/CutJ8ri+i0o9yWxJCyW
-         isP/tJd1rBA0irojYK1p3aUPyrCALq+diT2+NRqoLtlZThBhe3GQyNGiSyPTxQ9A4tio
-         QVZA==
-X-Gm-Message-State: AOAM5302VsNuLtUovWtmAvQSywzIY64PrjZ1wnvcW3DHTzEEexEVkDs+
-        x1X/SZSSNBM/mempCbDxAYqA2qv7QNg9gfkv7BHPqQ==
-X-Google-Smtp-Source: ABdhPJwyMTUw/mtFu6agjAsPIJW+iWTJHYIxIVvFs4+GRM3nbBnWOJM3vPKxiLw52uQ1xwjfjvHgiiuMneQ854bVIsM=
-X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
- n62-20020acabd41000000b002ecff42814fmr11888453oif.63.1651009843704; Tue, 26
- Apr 2022 14:50:43 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 26 Apr 2022 14:50:43 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fFhxvEKDcp+p+Jf+hKy1k48Hi9OxmwmKYCtCg5xjO34=;
+        b=SC+BmXZ16blBsrUxJDIvIYqHwmovCjKKSZ6lLYL+jtwzPxlst39+3CeygfNmQBlYLE
+         Y0EBUBM/mbmTsuGbBRiCkUSPkW+iMc99YGONb2MQRz/40+tZvyeC95WRd9ZfLrDwJk2l
+         YzVUphxtqxGXRHnGbQPo74ok0KG7xzsNwgywr6EfuN/QuyI8qA6F0DJSl+fXADtULpAm
+         K4ylB5oBpYl5/PpIpMnG28EmhfUiBx2C1X+e5OWq6356j+z6AJ3LPPQKAOuOLNXNRMKn
+         TXii2f73sb5EP0QdjVTJDZgitLSTWiWMIxqCQGiDR1DIh+gSBNoru0e6wb7Mzk0JdvMn
+         Fo6w==
+X-Gm-Message-State: AOAM5336Fixc6T1a/E5KLsAUrLb3mbCg2Bt23hFOyAMcAA4AywG+wR//
+        HDFJwp6XLJDxaYMJ6ro4zVCg8I5w4/8H4pNFGpc=
+X-Google-Smtp-Source: ABdhPJyXTZIbcS6XsIYv3OXNhY52CgrTfa8TJPzROLHZ8RTWQROxLwBpdNsY0++kqjAOKD7RQlqZLNduWZXtwuILONY=
+X-Received: by 2002:a05:6e02:1888:b0:2c8:713f:dcff with SMTP id
+ o8-20020a056e02188800b002c8713fdcffmr8897423ilu.289.1651009858991; Tue, 26
+ Apr 2022 14:50:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1650952931-31988-1-git-send-email-quic_vpolimer@quicinc.com>
-References: <1650952931-31988-1-git-send-email-quic_vpolimer@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 26 Apr 2022 14:50:43 -0700
-Message-ID: <CAE-0n52cSR_xCxF+_UeK8CaHqsu=4HOtfWQ3BMmx2Tx3kmk-ZA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/disp/dpu1: avoid clearing hw interrupts if
- hw_intr is null during drm uninit
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dmitry.baryshkov@linaro.org, dianders@chromium.org,
-        quic_kalyant@quicinc.com
+References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
+ <20220426092340.495704-4-eugene.shalygin@gmail.com> <20220426152418.GA3344789@roeck-us.net>
+In-Reply-To: <20220426152418.GA3344789@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Tue, 26 Apr 2022 23:50:47 +0200
+Message-ID: <CAB95QARiSNaMU=Z3ZpvgRYfr+XyYiFtfXXV-e4aZU60FUfDcEg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] hwmon: (asus-ec-sensors) add support for board families
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Vinod Polimera (2022-04-25 23:02:11)
-> Avoid clearing irqs and derefernce hw_intr when hw_intr is null.
+> > +enum board_family {
+> > +     family_amd_500_series,
+>
+> The default enum value is 0. This means that specifying nothing
+> for .family matches in the structure below always matches the first
+> enum, which doesn't make much sense and might cause trouble in the
+> future. I would suggest to explicitly select a value != 0 as first
+> entry, such as
+>
+> enum board_family {
+>         family_amd_500_series = 1,
+>         ...
+> };
+>
+> to avoid that problem.
 
-Presumably this is only the case when the display driver doesn't fully
-probe and something probe defers? Can you clarify how this situation
-happens?
+Thank you, added family_unknown member ( = 0) instead, to simplify
+adding new members (I want this enum to be alphabetically sorted).
 
->
-> BUG: Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
->
-> Call trace:
->  dpu_core_irq_uninstall+0x50/0xb0
->  dpu_irq_uninstall+0x18/0x24
->  msm_drm_uninit+0xd8/0x16c
->  msm_drm_bind+0x580/0x5fc
->  try_to_bring_up_master+0x168/0x1c0
->  __component_add+0xb4/0x178
->  component_add+0x1c/0x28
->  dp_display_probe+0x38c/0x400
->  platform_probe+0xb0/0xd0
->  really_probe+0xcc/0x2c8
->  __driver_probe_device+0xbc/0xe8
->  driver_probe_device+0x48/0xf0
->  __device_attach_driver+0xa0/0xc8
->  bus_for_each_drv+0x8c/0xd8
->  __device_attach+0xc4/0x150
->  device_initial_probe+0x1c/0x28
->
-> Fixes: a73033619ea ("drm/msm/dpu: squash dpu_core_irq into dpu_hw_interrupts")
-
-The fixes tag looks odd. In dpu_core_irq_uninstall() at that commit it
-is dealing with 'irq_obj' which isn't a pointer. After commit
-f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct
-dpu_hw_intr") dpu_core_irq_uninstall() starts using 'hw_intr' which is
-allocated on the heap. If we backported this patch to a place that had
-a73033619ea without f25f656608e3 it wouldn't make any sense.
-
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> index c515b7c..ab28577 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> @@ -599,6 +599,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
->  {
->         int i;
->
-> +       if (!dpu_kms->hw_intr)
-> +               return;
-> +
->         pm_runtime_get_sync(&dpu_kms->pdev->dev);
->         for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
+Eugene

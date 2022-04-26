@@ -2,223 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA83510239
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E11451023B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352631AbiDZPyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S1352637AbiDZPz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242400AbiDZPyu (ORCPT
+        with ESMTP id S1352633AbiDZPzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:54:50 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921E74507C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:51:42 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id g21so20469592iom.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:51:42 -0700 (PDT)
+        Tue, 26 Apr 2022 11:55:55 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B68474DED;
+        Tue, 26 Apr 2022 08:52:47 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id b12so15844769plg.4;
+        Tue, 26 Apr 2022 08:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5zrRO/+5huIYXdKY8I32fCReo43SRfTwaBNjdukwSuw=;
-        b=Y6RJXvVvJydXkqSgHCZ3Zjpjlqm/Kn1jAZ5113K1yRh6032AtTpHWl7/Jkv75lMy88
-         lG6PMX8bINYKvZQ3ny101eC6kdk+3e9pDo3jh+uQMeZX/1418M8W1e5BYixPYDNwIg8d
-         ycxuuYYVzV3Y6ETsH6xMnPRJESrsnsKbjJlfjbvKlznfwAx/QkqDlkJFTAicGfcsWaBA
-         zDNRWUtxyYEfWgT9QSAN8k+PkbE2eNDZcKlozxakByHNmFE/c1T1yYVHF4uct+D9LZF+
-         u5/5bujurA4wKgSrrLrPhpfZZig7d4dI5VxWbcqIBRvFDjk2swWOwzCwnSIHnSOi6GsD
-         rlwg==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GC7DL53ai6k3NGlh2GS+CUKAHaq0iiM5lF16d5uI1v8=;
+        b=HjsRLxrVtAKkoXCItST1hFzeyRKLJdMwwGTDD1KhKkHSp9U9y5kpKCLSfd7wMxX0Wy
+         gPeOc0mTaTm5Wgz786M7UZjpZTkjdVxM+UA2cC/eAoZLDIAABa3MJVe1rm/kpv85TtgD
+         3oZfZ331K0YC8NS26H6THAeZKI/bq0FmOIuMAWtQOQs1ZTUm2a2PqBsD/TDYLB0Sxvoa
+         tLH13vv7DUIUcg5Tg+EPNKgtfxR4bIu28DcVgPUi7BuNd0vwHa57NFwbeOZNUtMjCDEN
+         AssUR8EWhtheGo9umFo7IiAMRrQztNiXtorp/cTgg6QiCcak3zOC5t8e7yz6FLJTkUrp
+         t6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5zrRO/+5huIYXdKY8I32fCReo43SRfTwaBNjdukwSuw=;
-        b=vD+3HH2GrMpNcowKyDYVLuw/Q6ZO82S78ypjV3aZm/R2khL1ynInQ7Ua+JmpgSS5C4
-         rG0By3idYlKndw2/CMWT2DiTX/CNyTFHgEolcNPDDx0NNib32/n4RxmwfysHuDQk4u/R
-         ll6fBcntntgloecgTLOt6AoPY6pOOa2DDh/o5h3dLnLDyWI4p4V+gqkklHsnAKBHDKm9
-         vN0GngAqIM0MEC9OEU+34O0oNOrfyNtccJgpshC08jNf4hQBeBLmcmAMDaYd//MZ6DUD
-         kKl/d5El1ux77DGYy/V4EYqbk9Lg+DA4kXc7QajtgZ3Vs1ZeCE2xza+RL3yNUl4c/aoP
-         rF8Q==
-X-Gm-Message-State: AOAM532myn1P4b+e8mH6isfK1Us2++DkQrMuxZvcGNfwo8aMeKJOo/3w
-        EJf/14gtUH7Kt94H6nIzuxn790xLbPAdiBMu2CM=
-X-Google-Smtp-Source: ABdhPJyoKenckq1VNEN3Swh8n2axLkgVEGYHKXI8T6DU2QkxmoUwq9DbCbdSRRSL9thezW6MGI7x9XLIVg6BmhwUl0s=
-X-Received: by 2002:a05:6e02:1b89:b0:2cd:942d:86e3 with SMTP id
- h9-20020a056e021b8900b002cd942d86e3mr4628848ili.71.1650988301825; Tue, 26 Apr
- 2022 08:51:41 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=GC7DL53ai6k3NGlh2GS+CUKAHaq0iiM5lF16d5uI1v8=;
+        b=z32zwswefSS/qE2NAqIcbqnaVzNH2Jzdi6YMEk+g/VzarrfLhcEWd4WjrB3s8cbBwN
+         WKenbNXgULY+zevf3doA0c/dxY4r9+kh+bIGt2AemaBm2auGZlSPGBTJP2ANIV/BvOIq
+         fnFfroLO8aKsgt8dbIn58IIDtV2myYuVF92UiVqKc3UynPGNrw4CFGIu5IGbHEgDpg6I
+         KKd/NobAzo0aNIUBV/Ra+ywORBo5MF01CM4p3FCrp5XRNeVvCKPUWD+patlo69nmhpPq
+         DdJdqH/nVVmD5YHunDsdt17uBhdl2zHooiRzOw/65Ku6ZcIxw1eoPiMvBBduMOGWcC4i
+         P0fg==
+X-Gm-Message-State: AOAM532ILt+iazsKAq6fqMBKK8TucdMybPWbY8Gk7cs9rpEeFdFk1exj
+        lgoD8LREgIOq3qiJ44+1PxI=
+X-Google-Smtp-Source: ABdhPJx1srVR9TBBVXc+NkJTALo2Bg9NrDLgeyjKGSuPMtZpd7O2FF5aF1WXzRnW91TsfavQDbZ3uw==
+X-Received: by 2002:a17:903:1248:b0:151:9708:d586 with SMTP id u8-20020a170903124800b001519708d586mr24057168plh.15.1650988366668;
+        Tue, 26 Apr 2022 08:52:46 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id g10-20020a17090ace8a00b001cd4989ff64sm3515376pju.43.2022.04.26.08.52.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 08:52:45 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [RFC PATCH] kbuild: call checksyscalls.sh and check-atomics.sh only if prerequisites change
+Date:   Wed, 27 Apr 2022 00:52:29 +0900
+Message-Id: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220120162520.570782-1-valentin.schneider@arm.com>
- <93a20759600c05b6d9e4359a1517c88e06b44834.camel@fb.com> <20220422110903.GW2731@worktop.programming.kicks-ass.net>
- <056e9bb0d0e3fc20572d42db7386face1d0665d6.camel@fb.com> <CAADnVQKsah4aka-LJ+X+5XHHESKbbw36D8fXTLqcYp2io3PN_w@mail.gmail.com>
- <YmflVPQlwpiBuxRc@hirez.programming.kicks-ass.net>
-In-Reply-To: <YmflVPQlwpiBuxRc@hirez.programming.kicks-ass.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 26 Apr 2022 08:51:30 -0700
-Message-ID: <CAEf4BzbJ2N9sOyKuM4iNPX2kqkKJ3zxWrT6eSt74S+McP2U8yA@mail.gmail.com>
-Subject: Re: [PATCH] sched/tracing: append prev_state to tp args instead
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "legion@kernel.org" <legion@kernel.org>,
-        "adharmap@quicinc.com" <adharmap@quicinc.com>,
-        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
-        "ed.tsai@mediatek.com" <ed.tsai@mediatek.com>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 5:28 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Apr 22, 2022 at 11:30:12AM -0700, Alexei Starovoitov wrote:
-> > On Fri, Apr 22, 2022 at 10:22 AM Delyan Kratunov <delyank@fb.com> wrote:
-> > >
-> > > On Fri, 2022-04-22 at 13:09 +0200, Peter Zijlstra wrote:
-> > > > And on the other hand; those users need to be fixed anyway, right?
-> > > > Accessing prev->__state is equally broken.
-> > >
-> > > The users that access prev->__state would most likely have to be fixed, for sure.
-> > >
-> > > However, not all users access prev->__state. `offcputime` for example just takes a
-> > > stack trace and associates it with the switched out task. This kind of user
-> > > would continue working with the proposed patch.
-> > >
-> > > > If bpf wants to ride on them, it needs to suffer the pain of doing so.
-> > >
-> > > Sure, I'm just advocating for a fairly trivial patch to avoid some of the suffering,
-> > > hopefully without being a burden to development. If that's not the case, then it's a
-> > > clear no-go.
-> >
-> >
-> > Namhyung just sent this patch set:
-> > https://patchwork.kernel.org/project/netdevbpf/patch/20220422053401.208207-3-namhyung@kernel.org/
->
-> That has:
->
-> + * recently task_struct->state renamed to __state so it made an incompatible
-> + * change.
->
-> git tells me:
->
->   2f064a59a11f ("sched: Change task_struct::state")
->
-> is almost a year old by now. That don't qualify as recently in my book.
-> That says that 'old kernels used to call this...'.
->
-> > to add off-cpu profiling to perf.
-> > It also hooks into sched_switch tracepoint.
-> > Notice it deals with state->__state rename just fine.
->
-> So I don't speak BPF much; it always takes me more time to make bpf work
-> than to just hack up the kernel, which makes it hard to get motivated.
->
-> However, it was not just a rename, state changed type too, which is why I
-> did the rename, to make sure all users would get a compile fail and
-> could adjust.
->
-> If you're silently making it work by frobbing the name, you loose that.
+Currently, checksyscalls.sh and check-atomics.sh are executed
+unconditionally. Most developers will not modify the files being
+checked by those scripts and thus do not need to execute these again
+for each iterative make. Change Kbuild target so that those two
+scripts get executed only if the prerequisite are modified.
 
-In general, libbpf is trying to accommodate it as best as it can. It
-will adjust load size automatically based on BTF information for
-direct memory reads. For cases when users have to use
-bpf_probe_read_kernel(), it's impossible to do this automatically, but
-libbpf and BPF CO-RE provide primitives to accommodate changes to
-field types. We have bpf_core_field_size() and
-BPF_CORE_READ_BITFIELD()/BPF_CORE_READ_BITFIELD_PROBED() macros that
-can read any bitfield or integer type properly and store them into
-u64.
+In order to implement this we:
 
-So yes, user will still have to test and validate their BPF programs
-for new kernels, but they do have instruments to handle this in a
-contained way in BPF code without awkward extra user-space side
-feature detection.
+  1. use the if_change macro instead of cmd. c.f. [1]
 
-With __state rename, it's been done, it's easy to accommodate. That
-easiness of being able to deal with this change is one of the reasons
-we never asked to do anything about that. It was rather mild
-inconveniences for a bunch of tools and applications.
+  2. create two dot files: scripts/.checksyscalls and
+  scripts/atomic/.check-atomics to keep track of whether the script
+  were already executed or not. Otherwise, the prerequisite would
+  always be considered as newer than the target (c.f. output "due to
+  target missing" of make V=2).
 
-This argument reordering, as I mentioned before, is a much bigger deal
-and much harder to deal with easily. As Alexei mentioned, we are
-discussing extending BPF CO-RE to be able to accommodate even such
-changes in pure BPF-side code, but we don't have that mechanism yet,
-so if it's not too hard, we still kindly ask to consider appending a
-new argument at the end.
+  3. modify the CLEAN_FILES target of the root Makefile to removed the
+  two temporary dot files created in 2.
 
+We also added an additional dependency to include/linux/atomic/* for
+check-atomics.sh to make sure that the script gets executed again if
+the header are modified. check-atomics.sh already has a dependency
+toward include/generated/asm-offsets.h and so no additional
+dependencies were added.
 
->
-> Specifically, task_struct::state used to be 'volatile long', while
-> task_struct::__state is 'unsigned int'. As such, any user must now be
-> very careful to use READ_ONCE(). I don't see that happening with just
-> frobbing the name.
->
-> Additinoally, by shrinking the field, I suppose BE systems get to keep
-> the pieces?
->
-> > But it will have a hard time without this patch
-> > until we add all the extra CO-RE features to detect
-> > and automatically adjust bpf progs when tracepoint
-> > arguments order changed.
->
-> Could be me, but silently making it work sounds like fail :/ There's a
-> reason code changes, users need to adapt, not silently pretend stuff is
-> as before.
->
-> How will you know you need to fix your tool?
+[1] https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#command-change-detection
 
-There is no denying that tracing BPF code successfully compiling
-doesn't mean it's going to work correctly (like with any other code,
-really). So testing is still mandatory. This is more about being able
-to deal with such changes without having to maintain two separately
-compiled BPF programs or doing extensive and expensive feature
-detection in user-space code.
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+Sending this as RFC because I am not an expert of Kbuild. The use of
+the dot files was my best shot at tackling this issue. Maybe there is
+a smarter way which I just missed?
 
->
-> > We will do it eventually, of course.
-> > There will be additional work in llvm, libbpf, kernel, etc.
-> > But for now I think it would be good to land Delyan's patch
-> > to avoid unnecessary pain to all the users.
-> >
-> > Peter, do you mind?
->
-> I suppose I can help out this time, but I really don't want to set a
-> precedent for these things. Broken is broken.
+If I receive no comments for the next two weeks, I will resend this
+patch without the RFC tag.
+---
+ Kbuild   | 14 ++++++++------
+ Makefile |  3 ++-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-We'd really appreciate it if you do help out this time. The intent is
-not to set any kind of precedent. This ask is due to
-sched_switch is a very popular target *and* this change can't be
-easily detected (once detected it can be easily accommodated, but
-detection is painful), so overall impact is disproportionate.
+diff --git a/Kbuild b/Kbuild
+index fa441b98c9f6..d579f4971aa3 100644
+--- a/Kbuild
++++ b/Kbuild
+@@ -39,21 +39,23 @@ $(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.s FORCE
+ #####
+ # Check for missing system calls
+ 
+-always-y += missing-syscalls
++always-y += scripts/.missing-syscalls
+ 
+ quiet_cmd_syscalls = CALL    $<
+       cmd_syscalls = $(CONFIG_SHELL) $< $(CC) $(c_flags) $(missing_syscalls_flags)
+ 
+-missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
+-	$(call cmd,syscalls)
++scripts/.missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
++	$(call if_changed,syscalls)
++	@touch $@
+ 
+ #####
+ # Check atomic headers are up-to-date
+ 
+-always-y += old-atomics
++always-y += scripts/atomic/.old-atomics
+ 
+ quiet_cmd_atomics = CALL    $<
+       cmd_atomics = $(CONFIG_SHELL) $<
+ 
+-old-atomics: scripts/atomic/check-atomics.sh FORCE
+-	$(call cmd,atomics)
++scripts/atomic/.old-atomics: scripts/atomic/check-atomics.sh $(wildcard include/linux/atomic/*) FORCE
++	$(call if_changed,atomics)
++	@touch $@
+diff --git a/Makefile b/Makefile
+index fa5112a0ec1b..b18af9d4248a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1483,7 +1483,8 @@ endif # CONFIG_MODULES
+ # Directories & files removed with 'make clean'
+ CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
+ 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+-	       compile_commands.json .thinlto-cache
++	       compile_commands.json .thinlto-cache \
++	       scripts/.missing-syscalls scripts/atomic/.old-atomics
+ 
+ # Directories & files removed with 'make mrproper'
+ MRPROPER_FILES += include/config include/generated          \
+-- 
+2.35.1
 
->
-> The down-side for me is that the argument order no longer makes any
-> sense.
-
-The order changes only for tracing-related macros/functions, so
-hopefully that doesn't make the rest of scheduler code illogical or
-inconvenient.

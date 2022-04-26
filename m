@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE5050F5AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA3650F458
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345594AbiDZImf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S1344854AbiDZIdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345539AbiDZIen (ORCPT
+        with ESMTP id S1344978AbiDZIct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC3D78FE9;
-        Tue, 26 Apr 2022 01:27:38 -0700 (PDT)
+        Tue, 26 Apr 2022 04:32:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C9D3BBD3;
+        Tue, 26 Apr 2022 01:25:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 167CC617AE;
-        Tue, 26 Apr 2022 08:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA9AC385A4;
-        Tue, 26 Apr 2022 08:27:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DC90617B8;
+        Tue, 26 Apr 2022 08:25:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366D3C385A0;
+        Tue, 26 Apr 2022 08:25:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961657;
-        bh=rXwXAidvJq3nMv+8q5ENQBIe/PH5KIoFhtL2h7Zp24k=;
+        s=korg; t=1650961522;
+        bh=oHQYOgs2GyOCvQK9Lf6/4Vr+3Cg3dtCT/F6PsZasEwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nrS9RghNiCzeqdSiD3mZOwVeJgb+kSRzSoFYLUdqOrEzJm8YS3u1mNl1uhqBC/qEs
-         Pfe2tdLfRsN12sSTrPhFifbfqbgLk1thM9GIut+sDgVjy6QdQoIXEK9O3NWt3FLi2Y
-         ROfBeoB5O8X5272acS3i9SEtuAUfxnD3s9PJZWgY=
+        b=OcM9f1o0KW5+GQmQCElLRAkHbg4kB4LSqBQjy0MYDFOPWlsHWzxa2A3hB3w6CEMY4
+         VeKsxpVJaS2lgaet7g5/NyzWjPNRfV6NEkSyUr+Gj7GHZzWV31TUFBmAiulkUA21Z8
+         MnrajFvTVd315y2o9cMUu5QzhjgmvHWFuAERXTKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 4.19 41/53] ext4: fix overhead calculation to account for the reserved gdt blocks
+        Duoming Zhou <duoming@zju.edu.cn>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 39/43] ax25: fix UAF bug in ax25_send_control()
 Date:   Tue, 26 Apr 2022 10:21:21 +0200
-Message-Id: <20220426081736.852399741@linuxfoundation.org>
+Message-Id: <20220426081735.671532259@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,35 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 10b01ee92df52c8d7200afead4d5e5f55a5c58b1 upstream.
+commit 5352a761308397a0e6250fdc629bb3f615b94747 upstream.
 
-The kernel calculation was underestimating the overhead by not taking
-into account the reserved gdt blocks.  With this change, the overhead
-calculated by the kernel matches the overhead calculation in mke2fs.
+There are UAF bugs in ax25_send_control(), when we call ax25_release()
+to deallocate ax25_dev. The possible race condition is shown below:
 
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+      (Thread 1)              |     (Thread 2)
+ax25_dev_device_up() //(1)    |
+                              | ax25_kill_by_device()
+ax25_bind()          //(2)    |
+ax25_connect()                | ...
+ ax25->state = AX25_STATE_1   |
+ ...                          | ax25_dev_device_down() //(3)
+
+      (Thread 3)
+ax25_release()                |
+ ax25_dev_put()  //(4) FREE   |
+ case AX25_STATE_1:           |
+  ax25_send_control()         |
+   alloc_skb()       //USE    |
+
+The refcount of ax25_dev increases in position (1) and (2), and
+decreases in position (3) and (4). The ax25_dev will be freed
+before dereference sites in ax25_send_control().
+
+The following is part of the report:
+
+[  102.297448] BUG: KASAN: use-after-free in ax25_send_control+0x33/0x210
+[  102.297448] Read of size 8 at addr ffff888009e6e408 by task ax25_close/602
+[  102.297448] Call Trace:
+[  102.303751]  ax25_send_control+0x33/0x210
+[  102.303751]  ax25_release+0x356/0x450
+[  102.305431]  __sock_release+0x6d/0x120
+[  102.305431]  sock_close+0xf/0x20
+[  102.305431]  __fput+0x11f/0x420
+[  102.305431]  task_work_run+0x86/0xd0
+[  102.307130]  get_signal+0x1075/0x1220
+[  102.308253]  arch_do_signal_or_restart+0x1df/0xc00
+[  102.308253]  exit_to_user_mode_prepare+0x150/0x1e0
+[  102.308253]  syscall_exit_to_user_mode+0x19/0x50
+[  102.308253]  do_syscall_64+0x48/0x90
+[  102.308253]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  102.308253] RIP: 0033:0x405ae7
+
+This patch defers the free operation of ax25_dev and net_device after
+all corresponding dereference sites in ax25_release() to avoid UAF.
+
+Fixes: 9fd75b66b8f6 ("ax25: Fix refcount leaks caused by ax25_cb_del()")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+[OP: backport to 4.14: adjust dev_put_track()->dev_put()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/ax25/af_ax25.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3440,9 +3440,11 @@ static int count_overhead(struct super_b
- 	ext4_fsblk_t		first_block, last_block, b;
- 	ext4_group_t		i, ngroups = ext4_get_groups_count(sb);
- 	int			s, j, count = 0;
-+	int			has_super = ext4_bg_has_super(sb, grp);
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -994,10 +994,6 @@ static int ax25_release(struct socket *s
+ 	sock_orphan(sk);
+ 	ax25 = sk_to_ax25(sk);
+ 	ax25_dev = ax25->ax25_dev;
+-	if (ax25_dev) {
+-		dev_put(ax25_dev->dev);
+-		ax25_dev_put(ax25_dev);
+-	}
  
- 	if (!ext4_has_feature_bigalloc(sb))
--		return (ext4_bg_has_super(sb, grp) + ext4_bg_num_gdb(sb, grp) +
-+		return (has_super + ext4_bg_num_gdb(sb, grp) +
-+			(has_super ? le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks) : 0) +
- 			sbi->s_itb_per_group + 2);
+ 	if (sk->sk_type == SOCK_SEQPACKET) {
+ 		switch (ax25->state) {
+@@ -1059,6 +1055,10 @@ static int ax25_release(struct socket *s
+ 		sk->sk_state_change(sk);
+ 		ax25_destroy_socket(ax25);
+ 	}
++	if (ax25_dev) {
++		dev_put(ax25_dev->dev);
++		ax25_dev_put(ax25_dev);
++	}
  
- 	first_block = le32_to_cpu(sbi->s_es->s_first_data_block) +
+ 	sock->sk   = NULL;
+ 	release_sock(sk);
 
 

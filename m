@@ -2,213 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD6750EEEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C70B50EEE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242685AbiDZCyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 22:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S242661AbiDZCyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 22:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242678AbiDZCyQ (ORCPT
+        with ESMTP id S230491AbiDZCyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 22:54:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1596710FD6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 19:51:08 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PMf9fn002943;
-        Tue, 26 Apr 2022 02:51:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=0HFp/dtYsRDF0xV3AMzOvMfLQW7g/p1IqBhfJ8n6Mt4=;
- b=KrXPuOFxMb/MWPAUkUSgFdtuiFp1yY8Vwxb6fJPkeT7GBzNmtgzrV01DoJxTGvvC+3TK
- yF0bcC3IbyrSDuDks5E/UWBAIO1k+03Na9gkZdA/8DjMiADCR60r9U+ONL+PDlFYnhwV
- jO22p2MnyGPBCCDdvMVPWf7hDMZYfOV75dT4vBbwbOZNGe2KZPmFZEf96m3twbeivtNh
- hQCWOpQReNs5ObaUdcGIKDgAZsxoXFqCtd1FZiPNjb4/naNUayPbF/orA1U5EjurdYRw
- 35LuHO52/Vi5RWul/arLxIC89MXytc8WDgp4/xC346SX1z060fb7I+dbRVBgn61p4kmn Vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fp15807m6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 02:51:00 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23Q2oxYT000336;
-        Tue, 26 Apr 2022 02:51:00 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fp15807kj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 02:50:59 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23Q2ncRM002627;
-        Tue, 26 Apr 2022 02:50:55 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3fm938tm5b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 02:50:55 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23Q2or9c49414654
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 02:50:53 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D8C3A404D;
-        Tue, 26 Apr 2022 02:50:53 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 73FDCA4040;
-        Tue, 26 Apr 2022 02:50:52 +0000 (GMT)
-Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.52.32])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue, 26 Apr 2022 02:50:52 +0000 (GMT)
-Date:   Tue, 26 Apr 2022 04:50:50 +0200
-From:   Halil Pasic <pasic@linux.ibm.com>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, sgarzare@redhat.com,
-        eperezma@redhat.com, lulu@redhat.com, tglx@linutronix.de,
-        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org,
-        Halil Pasic <pasic@linux.ibm.com>
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-Message-ID: <20220426045050.4697c833.pasic@linux.ibm.com>
-In-Reply-To: <87a6c98rwf.fsf@redhat.com>
-References: <20220425024418.8415-1-jasowang@redhat.com>
-        <20220425024418.8415-7-jasowang@redhat.com>
-        <20220425040512-mutt-send-email-mst@kernel.org>
-        <87a6c98rwf.fsf@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Mon, 25 Apr 2022 22:54:04 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356A910FD6;
+        Mon, 25 Apr 2022 19:50:58 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 19:50:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1650941456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GXBsNESQZfIaAKadUYOa+SDoc+85t8RLisih8+qEL90=;
+        b=BZEJVGSQbQna5YPVt/zgZb1xcavzGypztWiz7oSNbvFlNBt5UIGE3dm8UcDmm+ONRC98Zj
+        tHzuasQXAuszKFYJ/KRekAxhj5LA/p6kbS+3o1nWoqjCepWBpyZavGJuUW3nqOhABMOI7v
+        Dq9s7knx7Mfj6cTS9Z3wqQuxF5PHLDA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH memcg v3] net: set proper memcg for net_init hooks
+ allocations
+Message-ID: <YmdeCqi6wmgiSiWh@carbon>
+References: <20220424144627.GB13403@xsang-OptiPlex-9020>
+ <c2f0139a-62e2-5985-34e9-d42faac81960@openvz.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cd7m943RPs77y-Ogdgm4XIbN1hGBzUCL
-X-Proofpoint-ORIG-GUID: PPYjYjkc_YhP6CDObAT2cw3Fa3ebaMDl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_10,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204260014
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2f0139a-62e2-5985-34e9-d42faac81960@openvz.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 10:54:24 +0200
-Cornelia Huck <cohuck@redhat.com> wrote:
+On Mon, Apr 25, 2022 at 01:56:02PM +0300, Vasily Averin wrote:
 
-> On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+Hello, Vasily!
+
+> __register_pernet_operations() executes init hook of registered
+> pernet_operation structure in all existing net namespaces.
 > 
-> > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:  
-> >> This patch tries to implement the synchronize_cbs() for ccw. For the
-> >> vring_interrupt() that is called via virtio_airq_handler(), the
-> >> synchronization is simply done via the airq_info's lock. For the
-> >> vring_interrupt() that is called via virtio_ccw_int_handler(), a per
-> >> device spinlock for irq is introduced ans used in the synchronization
-> >> method.
-> >> 
-> >> Cc: Thomas Gleixner <tglx@linutronix.de>
-> >> Cc: Peter Zijlstra <peterz@infradead.org>
-> >> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> >> Cc: Marc Zyngier <maz@kernel.org>
-> >> Cc: Halil Pasic <pasic@linux.ibm.com>
-> >> Cc: Cornelia Huck <cohuck@redhat.com>
-> >> Signed-off-by: Jason Wang <jasowang@redhat.com>  
-> >
-> >
-> > This is the only one that is giving me pause. Halil, Cornelia,
-> > should we be concerned about the performance impact here?
-> > Any chance it can be tested?  
-> 
-> We can have a bunch of devices using the same airq structure, and the
-> sync cb creates a choke point, same as registering/unregistering. If
-> invoking the sync cb is a rare operation (same as (un)registering), it
-> should not affect interrupt processing for other devices too much, but
-> it really should be rare.
+> Typically, these hooks are called by a process associated with
+> the specified net namespace, and all __GFP_ACCOUNTING marked
+> allocation are accounted for corresponding container/memcg.
 
-With the notable difference that the critical section in sync_cb is
-basically empty, so it should be less intrusive that register/unregister.
-
-I would also argue, that since after the reset we (re-)discover our
-virtqueues and (re-)register adapter interrupts, and thus before or as a
-part of the reset we probably do an unregister to clean up the adapter
-interrupts and de-allocate the bits in the info, this should not incur
-any mayor overhead for the airq case, which is the preferred one.
-
-Or am I missing something?
+__GFP_ACCOUNT
 
 > 
-> For testing, you would probably want to use a setup with many devices
-> that share the same airq area (you can fit a lot of devices if they have
-> few queues), generate traffic on the queues, and then do something that
-> triggers the callback (adding/removing a new device in a loop?)
+> However __register_pernet_operations() calls the hooks in the same
+> context, and as a result all marked allocations are accounted
+> to one memcg for all processed net namespaces.
 > 
-> I currently don't have such a setup handy; Halil, would you be able to
-> test that?
-
-Neither do I. I would also have to start from scratch. I guess it would
-be also sufficient to do a setup with two devices: a nic with many busy
-queues, and another device that is responsible for generating the resets.
-
-Regards,
-Halil
+> This patch adjusts active memcg for each net namespace and helps
+> to account memory allocated inside ops_init() into the proper memcg.
 > 
-> >  
-> >> ---
-> >>  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
-> >>  1 file changed, 27 insertions(+)
-> >> 
-> >> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> >> index d35e7a3f7067..c19f07a82d62 100644
-> >> --- a/drivers/s390/virtio/virtio_ccw.c
-> >> +++ b/drivers/s390/virtio/virtio_ccw.c
-> >> @@ -62,6 +62,7 @@ struct virtio_ccw_device {
-> >>  	unsigned int revision; /* Transport revision */
-> >>  	wait_queue_head_t wait_q;
-> >>  	spinlock_t lock;
-> >> +	spinlock_t irq_lock;
-> >>  	struct mutex io_lock; /* Serializes I/O requests */
-> >>  	struct list_head virtqueues;
-> >>  	bool is_thinint;
-> >> @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
-> >>  	return dev_name(&vcdev->cdev->dev);
-> >>  }
-> >>  
-> >> +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
-> >> +{
-> >> +	struct virtio_ccw_device *vcdev = to_vc_device(vdev);
-> >> +	struct airq_info *info = vcdev->airq_info;
-> >> +
-> >> +	/*
-> >> +	 * Synchronize with the vring_interrupt() called by
-> >> +	 * virtio_ccw_int_handler().
-> >> +	 */
-> >> +	spin_lock(&vcdev->irq_lock);
-> >> +	spin_unlock(&vcdev->irq_lock);
-> >> +
-> >> +	if (info) {
-> >> +		/*
-> >> +		 * Synchronize with the vring_interrupt() with airq indicator
-> >> +		 */
-> >> +		write_lock(&info->lock);
-> >> +		write_unlock(&info->lock);
-> >> +	}  
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
+> v3: put_net_memcg() replaced by an alreay existing mem_cgroup_put()
+>     It checks memcg before accessing it, this is required for
+>     __register_pernet_operations() called before memcg initialization.
+>     Additionally fixed leading whitespaces in non-memcg_kmem version
+>     of mem_cgroup_from_obj().
 > 
-> I think we can make this an either/or operation (devices will either use
-> classic interrupts or adapter interrupts)?
-
-Right, for virtqueue notifications. I second Connie's motion!
-
+> v2: introduced get/put_net_memcg(),
+>     new functions are moved under CONFIG_MEMCG_KMEM
+>     to fix compilation issues reported by Intel's kernel test robot
 > 
-> >> +}
-> >> +
-> >>  static const struct virtio_config_ops virtio_ccw_config_ops = {
-> >>  	.get_features = virtio_ccw_get_features,
-> >>  	.finalize_features = virtio_ccw_finalize_features,  
+> v1: introduced get_mem_cgroup_from_kmem(), which takes the refcount
+>     for the found memcg, suggested by Shakeel
+> ---
+>  include/linux/memcontrol.h | 29 ++++++++++++++++++++++++++++-
+>  net/core/net_namespace.c   |  7 +++++++
+>  2 files changed, 35 insertions(+), 1 deletion(-)
 > 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 0abbd685703b..cfb68a3f7015 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1714,6 +1714,29 @@ static inline int memcg_cache_id(struct mem_cgroup *memcg)
+>  
+>  struct mem_cgroup *mem_cgroup_from_obj(void *p);
+>  
+> +static inline struct mem_cgroup *get_mem_cgroup_from_kmem(void *p)
+> +{
+> +	struct mem_cgroup *memcg;
+> +
+> +	rcu_read_lock();
+> +	do {
+> +		memcg = mem_cgroup_from_obj(p);
+> +	} while (memcg && !css_tryget(&memcg->css));
+> +	rcu_read_unlock();
+> +	return memcg;
+> +}
 
+Please, rename it to get_mem_cgroup_from_obj() for consistency.
+
+> +
+> +static inline struct mem_cgroup *get_net_memcg(void *p)
+> +{
+> +	struct mem_cgroup *memcg;
+> +
+> +	memcg = get_mem_cgroup_from_kmem(p);
+> +
+> +	if (!memcg)
+> +		memcg = root_mem_cgroup;
+> +
+> +	return memcg;
+> +}
+
+I'm not a fan of this helper: it has nothing to do with the networking,
+actually it's a wrapper of get_mem_cgroup_from_kmem() replacing NULL
+with root_mem_cgroup.
+
+Overall the handling of root_mem_cgroup is very messy, I don't blame
+this patch. But I wonder if it's better to simple move this code
+to the call site without introducing a new function?
+
+Alternatively, you can introduce something like:
+struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
+{
+	return memcg ? memcg : root_mem_cgroup;
+}
+
+>  #else
+>  static inline bool mem_cgroup_kmem_disabled(void)
+>  {
+> @@ -1763,9 +1786,13 @@ static inline void memcg_put_cache_ids(void)
+>  
+>  static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
+>  {
+> -       return NULL;
+> +	return NULL;
+>  }
+>  
+> +static inline struct mem_cgroup *get_net_memcg(void *p)
+> +{
+> +	return NULL;
+> +}
+>  #endif /* CONFIG_MEMCG_KMEM */
+>  
+>  #endif /* _LINUX_MEMCONTROL_H */
+> diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+> index a5b5bb99c644..3093b4d5b2b9 100644
+> --- a/net/core/net_namespace.c
+> +++ b/net/core/net_namespace.c
+> @@ -26,6 +26,7 @@
+>  #include <net/net_namespace.h>
+>  #include <net/netns/generic.h>
+>  
+> +#include <linux/sched/mm.h>
+>  /*
+>   *	Our network namespace constructor/destructor lists
+>   */
+> @@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
+>  		 * setup_net() and cleanup_net() are not possible.
+>  		 */
+>  		for_each_net(net) {
+> +			struct mem_cgroup *old, *memcg;
+> +
+> +			memcg = get_net_memcg(net);
+> +			old = set_active_memcg(memcg);
+>  			error = ops_init(ops, net);
+> +			set_active_memcg(old);
+> +			mem_cgroup_put(memcg);
+>  			if (error)
+>  				goto out_undo;
+>  			list_add_tail(&net->exit_list, &net_exit_list);
+> -- 
+> 2.31.1
+> 

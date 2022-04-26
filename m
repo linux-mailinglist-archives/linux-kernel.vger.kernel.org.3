@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABE450EF7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E70F50EF7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243811AbiDZEEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 00:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S243800AbiDZEFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 00:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243798AbiDZEEP (ORCPT
+        with ESMTP id S238826AbiDZEFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 00:04:15 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5B617051;
-        Mon, 25 Apr 2022 21:01:06 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PL8t2i022267;
-        Tue, 26 Apr 2022 04:00:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=VfaAkAPyUePRFxMzN4vqCs4A6PVXSAifuZPdHgE9/bI=;
- b=g30R3MYw16RtEFJoD/k/wG7apkc24EzrkocSqiTxKqOanPgiMm8TrNvPwmGPiSH2OPGn
- DtMVSx9bNUJNvK8eYhTyyPW2osoW4uN5Zyf6KNcL1upxZZCt0hwdTKC53CfyRpBp3wA5
- 3fDnWX+G7TXLBoJAC7QiaX8XJwt8/A6JEvwYZs6W9OC4h0xqMnTu9B4Tot5rGAqlK11f
- 4J8Yylg5ttBqSb+Ht7SwTsZds63CKPsNjZCZBCQ2ks/u67LsronCEAfYjqoeBYXjBdJO
- VNsnzqek+waFTQnrZIupbsCwpQNsJmb7Ey13B2X/9n2eGAXf1ibMM/2u1KbKdg7bRMnO PA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fmaw4d0bt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 04:00:49 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23Q40QVv029494;
-        Tue, 26 Apr 2022 04:00:48 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fp5yj3v2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 04:00:48 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 23Q40juV030030;
-        Tue, 26 Apr 2022 04:00:47 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fp5yj3v10-4;
-        Tue, 26 Apr 2022 04:00:47 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Po-Wen Kao <powen.kao@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        chun-hung.wu@mediatek.com, chaotian.jing@mediatek.com,
-        linux-scsi@vger.kernel.org, stanley.chu@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, cc.chou@mediatek.com,
-        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        alice.chao@mediatek.com, yohan.joung@sk.com,
-        jiajie.hao@mediatek.com, linux-mediatek@lists.infradead.org,
-        huobean@gmail.com, jason.li@sk.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] scsi: ufs: remove redundant HPB unmap
-Date:   Tue, 26 Apr 2022 00:00:43 -0400
-Message-Id: <165094528686.21993.15243100183282892659.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220412073131.10644-1-powen.kao@mediatek.com>
-References: <20220412073131.10644-1-powen.kao@mediatek.com>
+        Tue, 26 Apr 2022 00:05:02 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C9912A8B;
+        Mon, 25 Apr 2022 21:01:54 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KnSn01gVSzGpJf;
+        Tue, 26 Apr 2022 11:59:16 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 12:01:50 +0800
+Message-ID: <b8c5ba79-c6e5-10bd-1963-5a0a94b9fbbc@huawei.com>
+Date:   Tue, 26 Apr 2022 12:01:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 5ZG8fnjdj6FEVSC0UJ8zd_-U7Y1gxeCo
-X-Proofpoint-ORIG-GUID: 5ZG8fnjdj6FEVSC0UJ8zd_-U7Y1gxeCo
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v2 4/6] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Content-Language: en-US
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>, <kernel-team@cloudflare.com>
+References: <20220414162220.1985095-1-xukuohai@huawei.com>
+ <20220414162220.1985095-5-xukuohai@huawei.com>
+ <87levxfj32.fsf@cloudflare.com>
+ <13cd161b-43a2-ce66-6a27-6662fc36e063@huawei.com>
+ <87pml56xsr.fsf@cloudflare.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <87pml56xsr.fsf@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 15:31:28 +0800, Po-Wen Kao wrote:
-
-> Since the HPB mapping is already reset in ufshpb_init by setting
-> flag QUERY_FLAG_IDN_HPB_RESET, there is no need doing so again in
-> ufshpb_hpb_lu_prepared.
+On 4/25/2022 10:26 PM, Jakub Sitnicki wrote:
+> On Sun, Apr 24, 2022 at 01:05 PM +08, Xu Kuohai wrote:
+>> Thanks for your testing and suggestion! I added bpf2bpf poking to this
+>> series and rebased it to [2] a few days ago, so there are some conflicts
+>> with the bpf-next branch. I'll rebase it to bpf-next and send v3.
+>>
+>> [2] https://lore.kernel.org/bpf/20220416042940.656344-1-kuifeng@fb.com/
 > 
-> This would also resolve the issue where HPB WRTIE BUFFER is issued
-> before UAC being cleared.
+> Looking forward to it.
 > 
-> [...]
+> I think it would be okay to post v3 saying that it depends on the
+> "Attach a cookie to a tracing program" series and won't apply cleanly to
+> bpf-next with out.
+> 
+> It would give us more time to review.
+> .
 
-Applied to 5.19/scsi-queue, thanks!
-
-[1/1] scsi: ufs: remove redundant HPB unmap
-      https://git.kernel.org/mkp/scsi/c/25a0bf213b8a
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Ah, already sent v3 based on bpf-next :(, will send an update after [2]
+is merged.

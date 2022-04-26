@@ -2,159 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4D050F32A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CAE50F32F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbiDZH5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S1343996AbiDZH64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiDZH5r (ORCPT
+        with ESMTP id S241468AbiDZH6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:57:47 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB1011C35
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:54:40 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CD370C0011;
-        Tue, 26 Apr 2022 07:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650959679;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wbjUJF85j7VcoyUcJNo/0uHXS5A5nvA+sLUFvu2hF2Q=;
-        b=kwo7M+YBinQdDLV406ejHk8p5PtP/AaEbfWC0rZwFh9ifHPfdKBpQftZlhZOllVQ8EvvU8
-        76P4vb1Qx5UdbqctG5x7B/r6RQKLl3iYDCFFeT2ro1FTl9j0O7D1+4ne4HqKcTpWm+XACZ
-        FQxEl/1PBrXOyJ6PZPuyn74xsQyh2pgCN9HiFAJJRLDEWZuiOz5XSrghdZslVT+w0ruNxI
-        CGVED/ZVhoQ3RUVl++aAv9nIr7KTEbEmyVLXTN4P0InG1K0bnoTCx1yCPtG83Xam+kAvLe
-        PvWbb3wnE+33gJcZjywQMiZ5I768A2ho/UnYgEmIud6ZYexVb2gy9vvBtNTYcQ==
-Date:   Tue, 26 Apr 2022 09:54:36 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jagan Teki <jagan@amarulasolutions.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
- bridge"
-Message-ID: <YmelPCcWCCjALtRU@aptenodytes>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org>
- <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat>
- <YmEdAVwZuA7Wo1Ch@aptenodytes>
+        Tue, 26 Apr 2022 03:58:45 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D5E15A03
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:55:38 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l18so7723731ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=U1WIMsibwKAIR96y0nfN1dWqQ9y7DvH5uIdNqetGlS8=;
+        b=FyZ/TA1R0QE9jseCnsTKYHivHbJbdV3nJ2NWiZVIhMzQOaldbwN8vuAtrdZD/wP6hA
+         89cSdgErVumgQOt1bPWr1jgCFjfDYqE1mbAiDg6qb/D8DdimLrdY3TAGjiK+sqdO39Dx
+         P1ZSzHXILr9emGF2u8Y2vYQPe2rCIgTHDlhzXsl1p4ZquHvKW9KTCFHeH1cZOqYkJhNQ
+         TnfENNrCmpZu10KT0YcRGPaPzHg76g5U5T7tx7iYUfEnrgCBquNxNS+pahzCw9Jg2lgM
+         ULXAjZ79f8mRQMFXU1DDuCcqcugSK+6CTQCEm+9BEMLHOCiJQQ/XzvbZH3eYZX3dsudZ
+         M87g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=U1WIMsibwKAIR96y0nfN1dWqQ9y7DvH5uIdNqetGlS8=;
+        b=QlHS8ZIycaDWxhGTRMHc0d87KQv11KpTAeUph13skJIJC6lrPhwk/vUUoI6/ExBhG5
+         BR7+fYosde286v3dbRuNAhJdVM9cvY2/YI9hTA4lKxzsVI49HhF7PDbFRCHUUNAI5uox
+         J37bJLW33bctYiQfdRHZ4xtxmBcYAStiTkvdN81MIzjK6tEaQvBckFWGtPCOb1fLMD8Y
+         qXbE8q0Sz2Y0gnZ/qODu/i5EQL7jh1u/cb/+gM2MJawlA8Sudo32bFVNn8HqIUTcHQlp
+         Y1sa+WqrlDZ1UR3QmJRp6FOWd9wEnzEFzw901/U5EvJqmKWy4hmyrgTqSgLKl1ouH21e
+         x1iw==
+X-Gm-Message-State: AOAM531jAKeaHAdp8AElXbc/3NWYkFUG0FdzHnJhaMuiktKVScJmxpal
+        pTx4xL5BfwfBn2HnXwwX2hVcSw==
+X-Google-Smtp-Source: ABdhPJyl6PyJGE7Jjc6hic8TZ5AB9cjeYf4nSNHBpwP4vGGeYWVVrFn2tuH6oToWF4vr+xPevOz/qQ==
+X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id l8-20020a170906794800b006da64ed178emr20831011ejo.523.1650959737278;
+        Tue, 26 Apr 2022 00:55:37 -0700 (PDT)
+Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o18-20020a1709064f9200b006e7f229b332sm4428329eju.36.2022.04.26.00.55.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 00:55:36 -0700 (PDT)
+Message-ID: <2ac59e59-2516-2bca-9db6-e2cfec671cef@linaro.org>
+Date:   Tue, 26 Apr 2022 09:55:35 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Si6USORBDKWOev5w"
-Content-Disposition: inline
-In-Reply-To: <YmEdAVwZuA7Wo1Ch@aptenodytes>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] riscv: dts: fu540-c000: fix duplicated dma compatible
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Bin Meng <bmeng.cn@gmail.com>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220421065401.9303-1-krzysztof.kozlowski@linaro.org>
+ <f822fc7a-7c47-d8f9-8ef9-fda2c7832926@linaro.org>
+In-Reply-To: <f822fc7a-7c47-d8f9-8ef9-fda2c7832926@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/04/2022 09:53, Krzysztof Kozlowski wrote:
+> On 21/04/2022 08:54, Krzysztof Kozlowski wrote:
+>> Remove duplicated compatible to fix error:
+>>
+>>   u540-c000.dtsi:171.4-42: ERROR (duplicate_property_names): /soc/dma@3000000:compatible: Duplicate property name
+>>
+>> Fixes: 7eba954a8de8 ("riscv: dts: Add dma-channels property and modify compatible")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Hi everyone,
+> 
+> This is an error which causes compilation to fail. Such patches should
+> be picked up faster than later, because it breaks various builds.
+> 
+> I'll take it via my tree.
 
---Si6USORBDKWOev5w
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, it seems Palmer rebased his tree after it got accepted to next, so
+patch can be dropped.
 
-Hi,
 
-On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
-> Hi Maxime,
->=20
-> On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
-> > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > + Linus
-> > > + Marek
-> > > + Laurent
-> > > + Robert
-> > >=20
-> > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
-> > > <bjorn.andersson@linaro.org> wrote:
-> > > >
-> > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > > bridge")' attempted to simplify the case of expressing a simple pan=
-el
-> > > > under a DSI controller, by assuming that the first non-graph child =
-node
-> > > > was a panel or bridge.
-> > > >
-> > > > Unfortunately for non-trivial cases the first child node might not =
-be a
-> > > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > > DisplayPort, or an opp-table represented before the panel node.
-> > > >
-> > > > In these cases the reverted commit prevents the caller from ever fi=
-nding
-> > > > a reference to the panel.
-> > > >
-> > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node h=
-as
-> > > > panel or bridge")', in favor of using an explicit graph reference t=
-o the
-> > > > panel in the trivial case as well.
-> > >=20
-> > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > switched drivers.  Do you have any suggestions on how to proceed to
-> > > succeed in those use cases as well?
-> >=20
-> > I guess we could create a new helper for those, like
-> > devm_drm_of_get_bridge_with_panel, or something.
->=20
-> Oh wow I feel stupid for not thinking about that.
->=20
-> Yeah I agree that it seems like the best option.
-
-Should I prepare a patch with such a new helper?
-
-The idea would be to keep drm_of_find_panel_or_bridge only for the of graph
-case and add one for the child node case, maybe:
-drm_of_find_child_panel_or_bridge.
-
-I really don't have a clear idea of which driver would need to be switched
-over though. Could someone (Jagan?) let me know where it would be needed?
-
-Are there cases where we could both expect of graph and child node?
-(i.e. does the new helper also need to try via of graph?)
-
-Thanks,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---Si6USORBDKWOev5w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJnpTwACgkQ3cLmz3+f
-v9FpNQf+PmdFzmDCc2lB70OeH1fQOTNlthZRA/ZDA9XQizGkSF7BFS5dJkp9FfWr
-6fEanp5K7wl+z9FUcx+G+A36n7y82sWeZVk2HwNQuBei8DH/ZQrBAWZa8kpZ1RQO
-5bec85tS8OimvJ/dNMUCXypf6p39mSiMLPj2y65p6KVn2fFE5XMllQqBifaQfbJX
-yt+HjpH58GJz5GPSgeb4c2W2Lz43TxjfGzhMd+lKwWgnBkeQQ/2G8y3R+G0VNkTu
-wuDWOl3BUGc2dtXkj8dHzzSqZJrQYdFU5ctJdhbibfAv0oNYdzM/RBQA9WYndO8Y
-9eRdxvuj0o96p8BjFqxBZ33LUyhQIg==
-=Bckb
------END PGP SIGNATURE-----
-
---Si6USORBDKWOev5w--
+Best regards,
+Krzysztof

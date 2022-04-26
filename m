@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E96C50F141
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4952550F146
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243434AbiDZGos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S245759AbiDZGoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245725AbiDZGoL (ORCPT
+        with ESMTP id S245641AbiDZGoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:44:11 -0400
-Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B96FD36
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:41:02 -0700 (PDT)
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id C09AD25504;
-        Tue, 26 Apr 2022 06:41:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id 6032820028;
-        Tue, 26 Apr 2022 06:40:54 +0000 (UTC)
-Message-ID: <2e34830b5339697020ea6b2f511bdb4a8f95c6ea.camel@perches.com>
-Subject: Re: [PATCH][next] checkpatch: add new alloc functions to alloc with
- multiplies check
-From:   Joe Perches <joe@perches.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Mon, 25 Apr 2022 23:40:53 -0700
-In-Reply-To: <20220426062043.GA19970@embeddedor>
-References: <20220426062043.GA19970@embeddedor>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Tue, 26 Apr 2022 02:44:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 097701B784
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:40:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C686623A;
+        Mon, 25 Apr 2022 23:40:58 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CC343F5A1;
+        Mon, 25 Apr 2022 23:40:57 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 07:40:53 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     =?utf-8?B?546L5pOO?= <wangqing@vivo.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH V2] arm64: add SCHED_CLUSTER's dependency on ACPI
+Message-ID: <20220426064053.h4rwvcdvmwxj2hmt@bogus>
+References: <1650855303-91388-1-git-send-email-wangqing@vivo.com>
+ <20220425100635.ig4dxvlflglfagpx@bogus>
+ <SL2PR06MB308217E24459AB685FBF6FD2BDF89@SL2PR06MB3082.apcprd06.prod.outlook.com>
+ <20220425165946.qb6xilgmjahdh4pa@bogus>
+ <SL2PR06MB3082544EFB9C6F518A2EBF04BDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 6032820028
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: kfr6w59f8t7cy7oj6o6jfjeazbyqrsqh
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+aTwzhO9CWER5MnzGmDaMttym0w1A7h08=
-X-HE-Tag: 1650955254-7895
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SL2PR06MB3082544EFB9C6F518A2EBF04BDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 01:20 -0500, Gustavo A. R. Silva wrote:
-> kvmalloc() and kvzalloc() functions have now 2-factor multiplication
-> argument forms kvmalloc_array() and kvcalloc(), correspondingly.
-
-OK, thanks
-
+On Tue, Apr 26, 2022 at 02:23:25AM +0000, 王擎 wrote:
 > 
-> Add alloc-with-multiplies checks for these new functions.
-> 
-> Link: https://github.com/KSPP/linux/issues/187
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  scripts/checkpatch.pl | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 577e02998701..503e8abbb2c1 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -7033,14 +7033,16 @@ sub process {
->  			    "Prefer $3(sizeof(*$1)...) over $3($4...)\n" . $herecurr);
->  		}
->  
-> -# check for k[mz]alloc with multiplies that could be kmalloc_array/kcalloc
-> +# check for (kv|k)[mz]alloc with multiplies that could be kmalloc_array/kvmalloc_array/kvcalloc/kcalloc
->  		if ($perl_version_ok &&
->  		    defined $stat &&
-> -		    $stat =~ /^\+\s*($Lval)\s*\=\s*(?:$balanced_parens)?\s*(k[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)\s*,/) {
-> +		    $stat =~ /^\+\s*($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)\s*,/) {
->  			my $oldfunc = $3;
->  			my $a1 = $4;
->  			my $a2 = $10;
->  			my $newfunc = "kmalloc_array";
-> +			$newfunc = "kvmalloc_array" if ($oldfunc eq "kvmalloc");
-> +			$newfunc = "kvcalloc" if ($oldfunc eq "kvzalloc");
->  			$newfunc = "kcalloc" if ($oldfunc eq "kzalloc");
->  			my $r1 = $a1;
->  			my $r2 = $a2;
-> @@ -7057,7 +7059,7 @@ sub process {
->  					 "Prefer $newfunc over $oldfunc with multiply\n" . $herectx) &&
->  				    $cnt == 1 &&
->  				    $fix) {
-> -					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*(k[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' = ' . "$newfunc(" . trim($r1) . ', ' . trim($r2)/e;
-> +					$fixed[$fixlinenr] =~ s/\b($Lval)\s*\=\s*(?:$balanced_parens)?\s*((?:kv|k)[mz]alloc)\s*\(\s*($FuncArg)\s*\*\s*($FuncArg)/$1 . ' = ' . "$newfunc(" . trim($r1) . ', ' . trim($r2)/e;
->  				}
->  			}
->  		}
+> >> 
+> >> >> From: Wang Qing <wangqing@vivo.com>
+> >> >> 
+> >> >> cluster sched_domain configured by cpu_topology[].cluster_sibling, 
+> >> >> which is set by cluster_id, cluster_id can only get from ACPI.
+> >> >> 
+> >> >> If the system does not enable ACPI, cluster_id is always -1, even enable
+> >> >> SCHED_CLUSTER is invalid, this is misleading. 
+> >> >> 
+> >> >> So we add SCHED_CLUSTER's dependency on ACPI here.
+> >> >>
+> >> >
+> >> >Any reason why this can't be extended to support DT based systems via
+> >> >cpu-map in the device tree. IMO we almost have everything w.r.t topology
+> >> >in DT and no reason to deviate this feature between ACPI and DT.
+> >> >
+> >> That's the problem, we parse out "cluster" info according to the
+> >> description in cpu-map, but do assign it to package_id, which used to
+> >> configure the MC sched domain, not cluster sched domain.
+> >>
+> >
+> >Right, we haven't updated the code after updating the bindings to match
+> >ACPI sockets which are the physical package boundaries. Clusters are not
+> >the physical boundaries and the current topology code is not 100% aligned
+> >with the bindings after Commit 849b384f92bc ("Documentation: DT: arm: add
+> >support for sockets defining package boundaries")
+>
+> I see, but this commit is a long time ago, why hasn't it been used widely.
+> Maybe I can help about it if you need.
+>
 
+I assume no one cared or had a requirement for the same.
 
+--
+Regards,
+Sudeep

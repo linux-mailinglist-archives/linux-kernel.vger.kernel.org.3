@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E1B50F0DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B4A50F0DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbiDZGXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S240387AbiDZGXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236710AbiDZGXK (ORCPT
+        with ESMTP id S245061AbiDZGXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:23:10 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37F055BF;
-        Mon, 25 Apr 2022 23:20:03 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q5HWFs029832;
-        Tue, 26 Apr 2022 06:20:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=UqRGLC6DMwrnIxvnxBlIJqoItPrKRPj+Q1itnANNIzw=;
- b=nr8was6CRZvFAPtJ/GetW3yIy3MkOnPtVYYlkxUa79w9yCnUmjI76aNW1I696CS5ov4n
- vKMjVfloL94CMptfTPsk0gTl1OzQwEMZ9JHZjTEpCOFaHk0UhGImRprXg0ATZ0DeTa6W
- CXKuR3TpNYGTe8g9ufkigMV4moBm34h+diwOIYzH9uG6UL2qyysCdk/FE7ytGsrfACp0
- NE+vr98K3SccUjD0SjzsfV4O4vp+n3FfVzEnQZ2UD+89y8kGNyG/W5cawjs3vBzk7kou
- zYJdo+OLeoBzJDMyqTPoBdlWDeqKd7rsIz0Zuv+sEw5mDNM3l3jUydveVYHp/rRjRFQl VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fp6k9cpka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 06:20:00 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23Q6JxWi009914;
-        Tue, 26 Apr 2022 06:19:59 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fp6k9cpjr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 06:19:59 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23Q6COhU029626;
-        Tue, 26 Apr 2022 06:19:58 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938unk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 06:19:57 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23Q6JssG58524144
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 06:19:54 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B9D694C046;
-        Tue, 26 Apr 2022 06:19:54 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1AC404C040;
-        Tue, 26 Apr 2022 06:19:54 +0000 (GMT)
-Received: from [9.171.16.5] (unknown [9.171.16.5])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 06:19:54 +0000 (GMT)
-Message-ID: <1ccb1333-2233-8832-4102-a6c082b29108@linux.ibm.com>
-Date:   Tue, 26 Apr 2022 08:19:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/2] Dirtying, failing memop: don't indicate
- suppression
+        Tue, 26 Apr 2022 02:23:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926E1FA432;
+        Mon, 25 Apr 2022 23:20:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V27yDkLUD/0qiqufsgYswpOwBb42bCEFcJlgPd3Sl2Xy3QpEU9WFD9wj6XKez+dMjHl+8yVQArZFkfjsQ/TLvoNCXY3UDOmJQ5O0fP6v/DLPX3dRmRBG6e68xA/KrmMM7vowoy0dGlCu3cPhqB64PzBRC/zoOWdSlwvVcJKPW0ppMz10lT9vL8lqOS361q4qS/t+3d9zUCuCC7nsHJjXZ+hInOhCDBgR+b5Kcdf1quby61l5bok23bMi3hBbPPIcsUNbYcB+M7g7Whbf/inic6yQHhJskORTErpX1Ysaq5b/JFBX2zpJyiXYerIZIJXQLGTze0cA623h4+3wWiQ+tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C6GvL43A/cMO4/OqFEJ/GXhg01b37CuZIDgh3vbCZKQ=;
+ b=YqR1Yw4FRDUYixiBPzXFKfCghVMZMyEVDiuNYhkKM9NhhWSGQEOqmp9l3/rxqV9ji4inSZWnH0YjrTtISC4lOMcEbwpfCjpXe972w54JjZH8qtKhhsIu3GW8TGzB5giaUs3n69ySInjifswfUfFkt1rt2LjtU59PZqySwBncdso2DwCCazdQ6876e8VCQ9ssTXFflgXhsWX+rjGjyFtMHFO+s7xy0t2fznQbh54Dgaa4Kggpc44/TFABlKjIWuq4HKxNBG5ePRLSZCVHLXW7OgecPkPe6hzFdffGmoAal5v1GY+em1/OOx0wxFtao3KD8Er54ajUhJPvUCJStCFJpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C6GvL43A/cMO4/OqFEJ/GXhg01b37CuZIDgh3vbCZKQ=;
+ b=qoRAMUypfSbo7MPBDGFmBc+515I9gtAwmto3n9pTNT8xOHUAIJY6GSPwu+S7MsjUcFxYSqvW7sXMP4zNioG4mTM1MKp0xWMxayAyfvY9BWg2AvccbXTdNnSG4OLcL7ZN5MQ6inVwai9RXrPMKAoJs4gSNrFEEDeppBuxGouj3etuo136zJzSf/FnyPl48rh7ea71l3OaNxhyzPE1FEXOMg6uYxNoj44wQG0C+Ljcn/JdzJegLlqJeKl31BevbfsrM14YfbM73V6kvnQmQZoSDfzWdfVpFnf0JPyTEix4DJ9w49lqQb+Wf5x0yb4YmkH8G7UIhxI6+9wlVYUxYTSkVw==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by BY5PR12MB3668.namprd12.prod.outlook.com (2603:10b6:a03:194::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Tue, 26 Apr
+ 2022 06:20:19 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::a90b:9df2:370c:e76b]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::a90b:9df2:370c:e76b%3]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 06:20:19 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "shinichiro.kawasaki@wdc.com" <shinichiro.kawasaki@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "chaitanya.kulkarni@wdc.com" <chaitanya.kulkarni@wdc.com>
+Subject: Re: [PATCH] null-blk: save memory footprint for struct nullb_cmd
+Thread-Topic: [PATCH] null-blk: save memory footprint for struct nullb_cmd
+Thread-Index: AQHYWRJfc6q9UMjEXESR9nddsnwuda0BuUKA
+Date:   Tue, 26 Apr 2022 06:20:19 +0000
+Message-ID: <3662c725-a919-443a-9ab8-dc536cb5c03b@nvidia.com>
+References: <20220426022133.3999006-1-yukuai3@huawei.com>
+In-Reply-To: <20220426022133.3999006-1-yukuai3@huawei.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20220425100147.1755340-1-scgl@linux.ibm.com>
- <8095d0de-dd99-0388-b1d4-e59b01dc4be0@linux.ibm.com>
- <13d0d706-abc4-3e4d-88c3-6447636fd1fd@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <13d0d706-abc4-3e4d-88c3-6447636fd1fd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZvCISHOvZJpvSVKFUxy2vXGmM8YgKKS6
-X-Proofpoint-ORIG-GUID: tpFYGwXvD6iQMF3LChEb-_hroWSPeo4t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_02,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=724 suspectscore=0 spamscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204260040
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d31eb8cd-af42-4417-033f-08da274cd69c
+x-ms-traffictypediagnostic: BY5PR12MB3668:EE_
+x-microsoft-antispam-prvs: <BY5PR12MB36686390C781FBCDBBCC67CBA3FB9@BY5PR12MB3668.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: O9nR23tPeNHsHxdlNFImiMXzCcou5w51sdOUxB+TLXh3mPuhetShgpRqM/hRP2wOhDUVOEBkpKc5gfjy9vrR6+sXw0AdRSPk1NsW0Oi4k0ADk57jfJAz4t+IY31uH5K+sxVAaRX1o3yXRa29uaEL+760QVfUeYzACpalHlZ+sgeZI7OPgiH2oJvwVl4GK8S8Dhsvliw7lEmgSU7vcNiMc4buZ75fk6TzFxEdW2raS5ofgOAGUKi3LOkvkkA/pBdpQTdGfg1CWvFogjDGQkyq5zYr2taZEx0fmYBLX+pR1sTW6QExbktj67mOohKdtbC/9EXwkULd8NrdVFP9GeTMjNhCNfQGfvEu8ETb9a9pbIvDYXmF0tg8RzF+HzSLtNE4lJ7tKrVPEG6uDtA1czajYjIWCrt8IK3Tu/lFAgZBygS8FyCf6oBcJnZAIiNJbyd5JoJhEPXWUQsT2USCDuUawzsTUB/eoyS7ot/sMou9e4GZQjq9Ech6tELOl1oNzpglbfB3RMrgsHq5V7Qp5sU12tAtZQ08pUHFoJeOHbHebII/CbCMqoOTeRg6qI0gKqU3mChvtiUWUkzC9JqNieYmo31kIhfnCEA54NeOF7ooX6hrNTDqJ0uRTsO18Y/fY/oj6hfZ0QGckXD0BxKp7EK4/4YVmeL2jTy5IDl+OKBJvSSGpzwB2DRgT8XxLrTc5sKZsGl7qfXVGevEbv2SwWymkvCLU7ebLZ5prjVNavVKW+pRSacOJVyD5KlE0aMRLxHttUQkp4Rd4nljPy84wW5Epg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(5660300002)(122000001)(36756003)(38070700005)(66446008)(2906002)(316002)(2616005)(4744005)(38100700002)(6916009)(31686004)(4326008)(8676002)(66946007)(91956017)(66476007)(76116006)(66556008)(186003)(64756008)(86362001)(53546011)(31696002)(6512007)(71200400001)(8936002)(6486002)(508600001)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c3l2V2J0czBOeWNpZ1k3YUFvV1I1dHNST0I5NklLS3lSSi9Kb09CNUh4aDFj?=
+ =?utf-8?B?elBmQzVHMlJKeGczUkJ3d1ZWVk9MYW9COUxlQmE2NHJpL052WWhYNkdiNkx4?=
+ =?utf-8?B?OWtqcGFBU245ZS8wWWVSSEFuZld4WmVzR1NpZk5ndE11Mmx5ck1OYjl0bmVs?=
+ =?utf-8?B?dkJFM2d0Q2dRc2lSdTlGY0FBMlZBdHdzRHFoVnhxV2RaZm1KM1dVbzIrQWc4?=
+ =?utf-8?B?RkxGVVNpQUxyL2R4REoxZVlEQmpzK2VLOE1tVVZPZSs4Vmdvb1liM1FxNXFy?=
+ =?utf-8?B?UCtjMURCQlVVSkFqNnVCYWx1Ry9VVXFTUWtSSnRpTXY3NDlLdVJkTjEyT091?=
+ =?utf-8?B?TTlrZDZQbWI1WGx6MmptRXJ1S1dsa0E0S1kxMG0vSDFSNlNkV2lnQXlKWUhC?=
+ =?utf-8?B?RnJMTmhoVUw4ck53UmZ6dVZRRC9EREhCbEFXQzhzOUhJbUZrYWFQLzNMNHV1?=
+ =?utf-8?B?dlh6OHFHTi9wTUQvL1NwZ2l6NWZmT1BaRUZXdk93RXhGM2FKNlF6OXpTeXJx?=
+ =?utf-8?B?ZTlkanIyOUNiUVFJcjNUOFlEWjMrRmxSdFhqN0lEd0NUVy9vazdnY0pHUGNs?=
+ =?utf-8?B?eThwUGVuQURaLzJsMzJNbVorLzFJMXZ0UEh3b3M1RDkrRG1XV3hIL1FUQnRJ?=
+ =?utf-8?B?aS9QdFM3OUVTWUd0SjR4L0gxaEdxZ1Z5cXRNaEhwMEUxWFEyNDd4aW56U0lo?=
+ =?utf-8?B?RDBmblI2d2htZ1BzdHg2b24wZDc0M1Y3dFdTcjhsTWRHdEZsRnZkRFRaWVlC?=
+ =?utf-8?B?dEFTL08ybG9DbUhmU3RkTUZFNXlaSVVrNG9QY08vOUE0S2dHZjBlN3k1b2hL?=
+ =?utf-8?B?ZjVxUGlsOWZheUQwQzdSZkwvamp2bjlXQTQzWE9EVnRPdHlxc2EramY0cno2?=
+ =?utf-8?B?M1A4Vy9QQlROOHFMMUtsNnYzQnFjdzZ6NTZRR2Qxa0RjcGVtcWgyYVNNUkQz?=
+ =?utf-8?B?MjZJdUJLb2IvYmtqQXlPSkRjUnZLajlJYjdEZ21ISnRNam40QVZZS1k0RWQ4?=
+ =?utf-8?B?M25ISEp3dzM4Vi95WnA3YXc2M2dlOUE5c0dma250WUtCeCtWeVN1cjAyN1ow?=
+ =?utf-8?B?ZVIrZVJrUFBSb1hJMDRacU0wYnRNbmxEMTBwS0NPclFza2FPNTdkUGpCUnA5?=
+ =?utf-8?B?RkkxRjZXWDAxdkJpNkQ5SG0rUVYraVljUFlRU0JUMmpteGQrS2FUNEJ5ZjRI?=
+ =?utf-8?B?ZHk1ZDVoKzRFT0gxRTUrRHZ2ZmdpOEs4bXAwM0ZmNmtPNVhiTG8xOGIzcUFs?=
+ =?utf-8?B?b0RCUkFPZXRXNzJ1U0RMYjFvZDFPenZ0U1BhQzFJdkJueUpuMy8wSXJjUVh6?=
+ =?utf-8?B?K0pZMHpXMU53b0lQbTRYMjBOVlVjSjRKdW1Ya0RSN1lkTER0RlVqNFJ4c05k?=
+ =?utf-8?B?ZkMzVkd6UVJVRnNNdjYxRFhHZlZaaWJrcWpLR0FNZGJDVzVtdmRxUFBsRzhy?=
+ =?utf-8?B?T2o3UVVsUmh6WGl2Z0VhMWNyS2Z0bHZDb0dPQjBOQ1NOditCVnlZRy9Ra2lU?=
+ =?utf-8?B?OGtLdDdGbzV1VjZ5OUFETG4rYjBGbk1pNGxwMExtYlVJWTFZbUUwQUNrRlcy?=
+ =?utf-8?B?a2pFM2taYUkzcjFiTStINTJHeTBveDB0bUlMczRYV2docy85VXJaUXlLTlpK?=
+ =?utf-8?B?N0srRkpRUGNzWUZTOUpJcytISGNINzhheUJLRkRmRkNJQkVtVXdrRElEKzUz?=
+ =?utf-8?B?eEVSL3lPN1ZMZ0NsVzFMTkJQOUFSeEI0ekRJblB4akxDTXhMeityTU9wV0xw?=
+ =?utf-8?B?UjBraktUbWxwVFV0bk9aQmhIdnZEWHFLNUVJckgrS1ZOS0lKVU11NGdpUnhx?=
+ =?utf-8?B?T2haMTFBdnFqdE5XYVhHbXlDTFFXb1FEMXZ0c2xQcGtVblNTTUQwbjhpck0z?=
+ =?utf-8?B?bzZHMFJrdHllWFAvVU1RY21GTnd5YW5mN05MMExjYjBJL3ZDODI0NFNaMDlL?=
+ =?utf-8?B?R0VoK3dsQjFtRDM5aFYzeGVESGxVRXBrN2ZEV0pHeXRDVXJjNmNrZUhDaDdK?=
+ =?utf-8?B?U2N2NkVyMEZTRXdieVlkRG1Ea3VQRjhIWXQ5OGZCdFpxVTlFcmVVWDJaemo0?=
+ =?utf-8?B?c1Fyc1dJTk1ta2VZUVBNQmhkUktsVmUvbE9VbnRwY3crb0FZeVNCKzI0Zkw2?=
+ =?utf-8?B?Mm40eUc0dFh0cXZLMHZORjJQeUx6eVN1UjFlVG9SWEZRRFhtVEVvdlNDdFlD?=
+ =?utf-8?B?K3JLRTdvQW90QmpIUzh3Zk1SNDdaT05MYnRqS2JYNHljVFNMVnVYSFUzaXd4?=
+ =?utf-8?B?UmU3WlBpdXkwanJZREtOWkgvL212N0krRjgxbm9zenI4dlNLQWtodmlsc0xh?=
+ =?utf-8?B?ZVdvRS9pdGs5WWFRTUQxaHVoM0dtejMvQVhVbUJlRmtOc0JuU0hJOEJheWlm?=
+ =?utf-8?Q?3EcnGL7DKaV9UvfvSQ3MHeRwDsVxu/QIej40qfjtXBqFG?=
+x-ms-exchange-antispam-messagedata-1: MFpWTHkfKQujpQ==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <07D3DCD14D575343AA02B3D670EBF5D0@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d31eb8cd-af42-4417-033f-08da274cd69c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 06:20:19.7267
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kkxXsmrBBBFft2KgkKhJbjcmJlGGwrIBz4HrFuQgv9iOmy6NlYqGnwmTUCdISpYi2Oo8oxwknVVNDtIrAqcFVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3668
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 25.04.22 um 19:29 schrieb Janis Schoetterl-Glausch:
-> On 4/25/22 18:30, Christian Borntraeger wrote:
->> Am 25.04.22 um 12:01 schrieb Janis Schoetterl-Glausch:
->>> If a memop fails due to key checked protection, after already having
->>> written to the guest, don't indicate suppression to the guest, as that
->>> would imply that memory wasn't modified.
->>>
->>> This could be considered a fix to the code introducing storage key
->>> support, however this is a bug in KVM only if we emulate an
->>> instructions writing to an operand spanning multiple pages, which I
->>> don't believe we do.
->>>
->>
->> Thanks applied. I think it makes sense for 5.18 nevertheless.
-> 
-> Janosch had some concerns because the protection code being 000 implies
-> that the effective address in the TEID is unpredictable.
-> Let's see if he chimes in.
-
-z/VM does exactly the same on key protection crossing a page boundary. The
-architecture was written in a way to allow all zeros exactly for this case.
-(hypervisor emulation of key protection crossing pages).
-This is even true for ESOP-2. See Figure 3-5 or figure 3-8 (the first line)
-which allows to NOT have a valid address in the TEID for key controlled
-protection.
-
-The only question is, do we need to change the suppression parameter in
-access_guest_with_key
-
-  (mode != GACC_STORE) || (idx == 0)
-
-to also check for prot != PROT_TYPE_KEYC
-? I think we do not need this as we have checked other reasons before.
+T24gNC8yNS8yMiAxOToyMSwgWXUgS3VhaSB3cm90ZToNCj4gVG90YWwgMTYgYnl0ZXMgY2FuIGJl
+IHNhdmVkIGluIHR3byB3YXlzOg0KPiANCj4gMSkgVGhlIGZpZWxkICdiaW8nIHdpbGwgb25seSBi
+ZSB1c2VkIGluIGJpbyBiYXNlZCBtb2RlLCBhbmQgdGhlIGZpZWxkDQo+ICAgICAncnEnIHdpbGwg
+b25seSBiZSB1c2VkIGluIG1xIG1vZGUuIFNpbmNlIHRoZXkgd29uJ3QgYmUgdXNlZCBpbiB0aGUN
+Cj4gICAgIHNhbWUgdGltZSwgZGVjbGFyZSBhIHVuaW9uIGZvciB0aGVtLg0KPiAyKSBUaGUgZmll
+bGQgJ2Jvb2wgZmFrZV90aW1lb3V0JyBjYW4gYmUgcGxhY2VkIGluIHRoZSBob2xlIGFmdGVyIHRo
+ZQ0KPiAgICAgZmllbGQgJ2Vycm9yJy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFl1IEt1YWkgPHl1
+a3VhaTNAaHVhd2VpLmNvbT4NCj4gLS0tDQoNCg0KTG9va3MgZ29vZC4NCg0KUmV2aWV3ZWQtYnk6
+IENoYWl0YW55YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQoNCi1jaw0KDQoNCg==

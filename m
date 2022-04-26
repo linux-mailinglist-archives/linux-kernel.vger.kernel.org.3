@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70969510A37
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C08510A41
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354899AbiDZUUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S1354725AbiDZUVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355032AbiDZUTd (ORCPT
+        with ESMTP id S1354904AbiDZUVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:19:33 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0527F29826
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:16:25 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y38so3223182pfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uvJxHyXfgLj1ZgKVawFWQdRMgkOnfWjoHaxt/IGWjk8=;
-        b=UTbLbXRNJ0dAd026mrJNwVSpoYi1Cdsph/ZnyFL5LkZ6PaGTmkK5tePkW5vAI4PhHe
-         xG8C70wpuoZYzxz6L5wCi4vClB3C+gNK5yvCACYd9V6sv6ibU04j1wSWE65e5TXg4OX1
-         pTfT82P1KQnVnZDuF63yABZM4xbXevoLv87bORkeAm4kS4BLvGBi+1X0wscUSmMvG3O7
-         J1N4/j4i6oiVVEGJEtyguAs0v54ZVTsV82qCezDOCxvA83erRrqIpdXuSuBsdwk92/Jr
-         w1JPY0PCiU/syvAq8zKD/wHO8vpO4ZA93we8likeyc4jZgwQr/giwqg6ZzOKd8RVOb8O
-         0CzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=uvJxHyXfgLj1ZgKVawFWQdRMgkOnfWjoHaxt/IGWjk8=;
-        b=ureO9wnLRgs4iRqN2myxd+gZXT6tNIGNcBtWVxk15Cvn9b+TBmrF3gwm9bI9wQW+E0
-         Nsma4XjXi9XkAnDjLWst4AY4jZdtAatUMPS04HZqpJOENnLvC3tGExbxWMQTYyw3lf66
-         Q6Wgf67ekM+hA8XZoVsiO4KCpfq6Nu2fNLR78XvUQE8ZfYX2iFh2EEwU9HQNBqqqFmKO
-         ZC02bJetAavIWiGqRUmR2U/tDzgla31/Lwui1jnxkd14lB3t8J25nVbGYjln8I4fNfYn
-         3WtKUG4sMItsiJoEC8oBYFVtlEuxzbuHob27h7nbwcTN5yR+K90KLRTrqYUEvaGT9y6Y
-         96qw==
-X-Gm-Message-State: AOAM532J6HXvJPAIPvEYa5vNC+lOBN0Xgnn4t5/kqWGIPPhbBFujImQZ
-        8yW5P9o5dYD/dBkfBLuJpwk=
-X-Google-Smtp-Source: ABdhPJzHkxcGsfj1J9sFWJfFLme527CXJJ0r0HD/JQCnI0bQ1SneyVCF4mOhjCSyoyVXOXSZLZCqSA==
-X-Received: by 2002:aa7:9852:0:b0:50d:6d10:2094 with SMTP id n18-20020aa79852000000b0050d6d102094mr1721384pfq.4.1651004184324;
-        Tue, 26 Apr 2022 13:16:24 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7a3e])
-        by smtp.gmail.com with ESMTPSA id co21-20020a17090afe9500b001cd4989fedcsm3713684pjb.40.2022.04.26.13.16.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:16:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 26 Apr 2022 10:16:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 01/10] kernfs: Remove reference counting for
- kernfs_open_node.
-Message-ID: <YmhTFZ5zCGhWJOry@slm.duckdns.org>
-References: <20220410023719.1752460-1-imran.f.khan@oracle.com>
- <20220410023719.1752460-2-imran.f.khan@oracle.com>
- <YmLRxWUnF/zflEO2@slm.duckdns.org>
- <e30f95c3-ab55-bb1b-75c1-8bd2f91787b5@oracle.com>
- <Ymg6AazfnwdZXkXx@slm.duckdns.org>
- <YmhSYkXp0KBXOyFc@zeniv-ca.linux.org.uk>
+        Tue, 26 Apr 2022 16:21:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF9F40909
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651004310; x=1682540310;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lP3baKG5jw9ATZeLqsBWuVAZhUls7h1IdUOOl3BREwA=;
+  b=Grme+QLUa3qvLL5YqLPEorTCedWRIANpYU2+E5DSpuBJ4YhR34/YcAIk
+   UshsOodOqN4AwFN0dzuNdFvKFJb3Rw8TFeMV5mO3Clz9UWYxuajdmQKCz
+   AUn5bz8msiEdtHZQSLe516gaxYBcpNNSTWgy/QyKThpwvvNcnwQPgEXMN
+   wjZOXRaQifLWWxiYxng+j3MKSJykq0rooAtqjhGQp1Dl1kN0xpjq7gVOy
+   lTdLMuROrN9eDszE5/sFq3Xap3+KDsWju51mGA85g0XFHduRxr6EnWGtj
+   FCmjk6hookQIXkqqTJsDsiMB1zQJnD94FKpV2kytUhENUA2jiTGdouHHO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326199820"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="326199820"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:18:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="595939325"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 13:18:27 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njRdj-0003wQ-8B;
+        Tue, 26 Apr 2022 20:18:27 +0000
+Date:   Wed, 27 Apr 2022 04:17:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     kbuild-all@lists.01.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [driver-core:driver-core-testing 30/34] fs/kernfs/file.c:160:46:
+ sparse: sparse: incorrect type in argument 1 (different address spaces)
+Message-ID: <202204270438.Uex7Kt3b-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmhSYkXp0KBXOyFc@zeniv-ca.linux.org.uk>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 08:13:22PM +0000, Al Viro wrote:
-> On Tue, Apr 26, 2022 at 08:29:21AM -1000, Tejun Heo wrote:
-> 
-> > The code is just wrong. You can end up:
-> > 
-> >         on = kn->attr.open;
-> >         if (!on)
-> >                 return;
-> > 
-> >         // we get preempted here and someone else puts @on and then
-> >         // recreates it
-> 
-> Can't happen - the caller has guaranteed that no new openers will be
-> coming.  Look at the call chain of kernfs_drain_open_files()...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-testing
+head:   26360a8c9732cff2ee5bc2f180e9716b63e9f650
+commit: 07b42a72474e4ab59d6acb451f7816664095d7c0 [30/34] kernfs: make ->attr.open RCU protected.
+config: alpha-randconfig-s032-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270438.Uex7Kt3b-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=07b42a72474e4ab59d6acb451f7816664095d7c0
+        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+        git fetch --no-tags driver-core driver-core-testing
+        git checkout 07b42a72474e4ab59d6acb451f7816664095d7c0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash fs/kernfs/
 
-Ah, okay. It can only transition to NULL from there. It's still a weird way
-to go about it tho.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks.
+
+sparse warnings: (new ones prefixed by >>)
+>> fs/kernfs/file.c:160:46: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t const [usertype] *v @@     got struct atomic_t [noderef] __rcu * @@
+   fs/kernfs/file.c:160:46: sparse:     expected struct atomic_t const [usertype] *v
+   fs/kernfs/file.c:160:46: sparse:     got struct atomic_t [noderef] __rcu *
+   fs/kernfs/file.c:204:46: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t const [usertype] *v @@     got struct atomic_t [noderef] __rcu * @@
+   fs/kernfs/file.c:204:46: sparse:     expected struct atomic_t const [usertype] *v
+   fs/kernfs/file.c:204:46: sparse:     got struct atomic_t [noderef] __rcu *
+
+vim +160 fs/kernfs/file.c
+
+414985ae23c031e Tejun Heo 2013-11-28  155  
+414985ae23c031e Tejun Heo 2013-11-28  156  static int kernfs_seq_show(struct seq_file *sf, void *v)
+414985ae23c031e Tejun Heo 2013-11-28  157  {
+c525aaddc366df2 Tejun Heo 2013-12-11  158  	struct kernfs_open_file *of = sf->private;
+414985ae23c031e Tejun Heo 2013-11-28  159  
+adc5e8b58f4886d Tejun Heo 2013-12-11 @160  	of->event = atomic_read(&of->kn->attr.open->event);
+414985ae23c031e Tejun Heo 2013-11-28  161  
+adc5e8b58f4886d Tejun Heo 2013-12-11  162  	return of->kn->attr.ops->seq_show(sf, v);
+414985ae23c031e Tejun Heo 2013-11-28  163  }
+414985ae23c031e Tejun Heo 2013-11-28  164  
+
+:::::: The code at line 160 was first introduced by commit
+:::::: adc5e8b58f4886d45f79f4ff41a09001a76a6b12 kernfs: drop s_ prefix from kernfs_node members
+
+:::::: TO: Tejun Heo <tj@kernel.org>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp

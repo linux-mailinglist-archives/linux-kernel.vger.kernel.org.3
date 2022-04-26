@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5470B50F806
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C0950F8B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237082AbiDZJ1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S1344694AbiDZJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346732AbiDZJBL (ORCPT
+        with ESMTP id S1347777AbiDZJGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:01:11 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C6C78FE6;
-        Tue, 26 Apr 2022 01:43:29 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:58142.1056067529
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.39 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id AF1122800B7;
-        Tue, 26 Apr 2022 16:43:24 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 3abfba636edf49a1a199d8e1085c7956 for wim@linux-watchdog.org;
-        Tue, 26 Apr 2022 16:43:27 CST
-X-Transaction-ID: 3abfba636edf49a1a199d8e1085c7956
-X-Real-From: liuxp11@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: liuxp11@chinatelecom.cn
-From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, tzungbi@kernel.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: [PATCH v5] watchdog: wdat_wdg: Using the existed function to check parameter timeout
-Date:   Tue, 26 Apr 2022 16:43:09 +0800
-Message-Id: <1650962589-1992-1-git-send-email-liuxp11@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 05:06:10 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E93718B2E;
+        Tue, 26 Apr 2022 01:45:44 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id q13so4669870qvk.3;
+        Tue, 26 Apr 2022 01:45:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s8JC263FgFy3jyxA285+ySjFZq/wFTiKMNVDc/5kVhk=;
+        b=nt1HXhudCOieSH/ymuSaNTnhqUd/Yn/oVUEEYb3qthVUMbdwFvIw1v0rc1C1Tp+WPw
+         UJWxenWHUbFlqtiaar8qbKkHXa6imluukeApPMlTrfLlhVpvNewvoHvuIml4/HByW/yT
+         SbUZp/GU+AxFM2GbY9mOu3wrneuQnRKWo1rNg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s8JC263FgFy3jyxA285+ySjFZq/wFTiKMNVDc/5kVhk=;
+        b=A7006gB/6uliZT16r9BmaNo704b/t6cFMbHSqFSeZSY2xZ67WboSGS6bTNtSV2NsT6
+         /zMFp+spygDQ9c1VnvRwbXDI4Lja8Og4y7OKuRKs126Lp+RB48VcZvgdu3bi4j5L1dka
+         S+A84qGNhmCAamq+UDihY8q7W/picAo2v4vABIr/HW4g1dBpoBt3FWMcHcupp88gNVvR
+         gpgwuJ1XZzKnZYnlrH5LKmNabsURZJPu+iWfXAWqtzfb1LG0Ty4b3QYdjazKrTVRFzDE
+         y07kqCfWI1SSTR0UKoIBibEq1l5gU0va4F18nkqKV4VgbsUN89YRUeFtDiM75EsI7bZy
+         iUDQ==
+X-Gm-Message-State: AOAM532JRvuIN5iKnS5id8qLkOKdWsZ9awQAkf+hUIcD9o3WUG32A8EQ
+        vHfatmv0uzzoo1U1sQcNhKvBzg8lNewzXOhzTAk=
+X-Google-Smtp-Source: ABdhPJy/a7R5QcfkDGNvXevfex9gGYiGDw8Vgm3NWqkPXA+VHo8PUgOW+SRHNkzWV1ncHmUfOz8hiw4ynmpzy6AWqSo=
+X-Received: by 2002:ad4:53c5:0:b0:42d:7bb4:a8e8 with SMTP id
+ k5-20020ad453c5000000b0042d7bb4a8e8mr15201215qvv.8.1650962743952; Tue, 26 Apr
+ 2022 01:45:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220426071848.11619-1-zev@bewilderbeest.net> <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
+In-Reply-To: <YmetYjSKFs+WWwYz@hatter.bewilderbeest.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 26 Apr 2022 08:45:32 +0000
+Message-ID: <CACPK8Xf2a2tC-u_9CjLVoh9iJmUdOKveLfjy1UNKQbqYPr0Zhw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] hwmon: (nct6775) Convert to regmap, add i2c support
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>, webmaster@kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Rob Herring <robh+dt@kernel.org>,
+        Renze Nicolai <renze@rnplus.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Context: If max_hw_heartbeat_ms is provided, the configured maximum timeout
-is not limited by it. The limit check in this driver therefore doesn't make
-much sense. Similar, the watchdog core ensures that minimum timeout limits
-are met if min_hw_heartbeat_ms is set. Using watchdog_timeout_invalid()
-makes more sense because it takes this into account.
+On Tue, 26 Apr 2022 at 08:29, Zev Weiss <zev@bewilderbeest.net> wrote:
+>
+> [Adding korg webmaster re: list infrastructure]
+>
+> On Tue, Apr 26, 2022 at 12:18:42AM PDT, Zev Weiss wrote:
+> >Hello,
+> >
+> >This is v3 of my effort to add i2c support to the nct6775 hwmon
+> >driver.
+> >
+> >Changes since v2 [0]:
+> > ...
+> > - Renamed drivers and Kconfig symbols to keep existing platform
+> >   driver as "nct6775" (SENSORS_NCT6775) and the core module as
+> >   "nct6775-core" (SENSORS_NCT6775_CORE) [Guenter]
+>
+> Unfortunately while this was a simple enough change to make (a few 'git
+> mv' commands and a handful of actual text changes), it ballooned the
+> size of the diff for patch 5 to the point that vger bounced it for
+> exceeding the 100K message-size limit.  As far as I can tell it looks
+> like it went through elsewhere, but does leave a bit of a gap in the
+> public list archives -- please let me know if there's anything I should
+> try in terms of re-sending it.  (The only combination of 'git
+> format-patch' flags I've been able to find that gets it back down to
+> approximately its previous size is '-B -D', which isn't so useful for
+> actually applying.)
 
-Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
----
- drivers/watchdog/wdat_wdt.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+FWIW, I moderated it through to the openbmc list, which is on lore:
 
-diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-index 195c8c004b69..9db01d165310 100644
---- a/drivers/watchdog/wdat_wdt.c
-+++ b/drivers/watchdog/wdat_wdt.c
-@@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
- 		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
- 
- #define WDAT_DEFAULT_TIMEOUT	30
-+#define WDAT_MIN_TIMEOUT     1
- 
- static int timeout = WDAT_DEFAULT_TIMEOUT;
- module_param(timeout, int, 0);
-@@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 	wdat->period = tbl->timer_period;
- 	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
- 	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-+	wdat->wdd.min_timeout = WDAT_MIN_TIMEOUT;
- 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
- 	wdat->wdd.info = &wdat_wdt_info;
- 	wdat->wdd.ops = &wdat_wdt_ops;
-@@ -450,8 +452,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
- 	 * watchdog properly after it has opened the device. In some cases
- 	 * the BIOS default is too short and causes immediate reboot.
- 	 */
--	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
--	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
-+	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
- 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
- 			 timeout, WDAT_DEFAULT_TIMEOUT);
- 		timeout = WDAT_DEFAULT_TIMEOUT;
--- 
-2.23.0
+ https://lore.kernel.org/openbmc/YmetYjSKFs+WWwYz@hatter.bewilderbeest.net/
 
+So the series can be fetched with eg. b4.
+
+Aside from the mega-diff in patch 5 the changes look good to me (If
+you can think of a way that makes patch 5 easier to review then let me
+know).
+
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+
+>
+> I'm not sure how critical a limit that 100K is, or if it's something we
+> might consider raising a bit?
+>
+>
+> Thanks,
+> Zev
+>

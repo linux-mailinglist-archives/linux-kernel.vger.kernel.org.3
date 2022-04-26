@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C08510A41
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE00E510A32
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354725AbiDZUVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S1354896AbiDZUVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354904AbiDZUVm (ORCPT
+        with ESMTP id S242807AbiDZUVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:21:42 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF9F40909
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651004310; x=1682540310;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lP3baKG5jw9ATZeLqsBWuVAZhUls7h1IdUOOl3BREwA=;
-  b=Grme+QLUa3qvLL5YqLPEorTCedWRIANpYU2+E5DSpuBJ4YhR34/YcAIk
-   UshsOodOqN4AwFN0dzuNdFvKFJb3Rw8TFeMV5mO3Clz9UWYxuajdmQKCz
-   AUn5bz8msiEdtHZQSLe516gaxYBcpNNSTWgy/QyKThpwvvNcnwQPgEXMN
-   wjZOXRaQifLWWxiYxng+j3MKSJykq0rooAtqjhGQp1Dl1kN0xpjq7gVOy
-   lTdLMuROrN9eDszE5/sFq3Xap3+KDsWju51mGA85g0XFHduRxr6EnWGtj
-   FCmjk6hookQIXkqqTJsDsiMB1zQJnD94FKpV2kytUhENUA2jiTGdouHHO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326199820"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="326199820"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:18:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="595939325"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 13:18:27 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njRdj-0003wQ-8B;
-        Tue, 26 Apr 2022 20:18:27 +0000
-Date:   Wed, 27 Apr 2022 04:17:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     kbuild-all@lists.01.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [driver-core:driver-core-testing 30/34] fs/kernfs/file.c:160:46:
- sparse: sparse: incorrect type in argument 1 (different address spaces)
-Message-ID: <202204270438.Uex7Kt3b-lkp@intel.com>
+        Tue, 26 Apr 2022 16:21:06 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810F7366A7;
+        Tue, 26 Apr 2022 13:17:58 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id v65so17247170oig.10;
+        Tue, 26 Apr 2022 13:17:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5CTXaz+V6AADkCyMRViJwbGXG2CrQ/Q0Z8NFjTN9J94=;
+        b=WqjlarLpd346YItChEmX1w1yTnpCSQvtL62OnCdSsFFteTGymSg1O5fZ3b/6Gy9E/d
+         /EUOL1uRAjD+zJ/b3Ekm79vyfpl9c0JmDYRPS9hpUF5OXa6FNcQ8uRfp0GVbYWqNDDFD
+         lg6JGxxkzaCPbGrriu4hqDk7oZBA31wW7B9jfjaQHQJ7rWENHTK3CqbcDSANrBlBcXGr
+         3EXpAf10Cecy3nzRH39rnFeD+jDzG06J2+LiDox7Ts/7XA2ZE7bZ7q27K+g4XdPcJMnu
+         ByfgYqbh7VMCKwDtYqLheWh9KciQAHaod4LQLrOz9y0UfvgNtVd8bzmQ6qDJEzuff/4e
+         Ggag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=5CTXaz+V6AADkCyMRViJwbGXG2CrQ/Q0Z8NFjTN9J94=;
+        b=mKvSQRPN12+30ZCORhmZepdtqeH4z7Yb1pLHeiwyJe9ly0/vrNgZhSWfolrOWwIOeM
+         2po+BeZpxMZQ/NNS4KB/Rv6aS9XfDqhCQlR9vDBdnBN3BJp+DI9mhmJyrHpYRMOTafUZ
+         xecVBZ075A/DJnIks2M91Zt4t2f2HbfKXhuvdZcQSf7EFDzvlN/b/bhJh+prV0PEQuYL
+         /kh+uiWr8qd3D8LMeOUCzB+yIstMkr13xL931G+O7hxScJL8WipmB/gm8qEH5yId3HsJ
+         9vjaPPj66XAFIJ+XeDkbgjQYJvFJHrjJPpm33166zQjWG7GKuo/OUjcOzpPMjobsqRNu
+         9IuQ==
+X-Gm-Message-State: AOAM5305hEXBS2FQFz7rLqYB9SWx3f27xuCNzB7CTfEHiVqB+jNhRgB9
+        uIinizTLHA81CMycrpSijgc=
+X-Google-Smtp-Source: ABdhPJxlVQ24ZRLfHmX0K72G/7Bd7V0I9z01BMMNhFrpjI25E6aMB2ih6RvjvUQw1Qf992I1nEvEXw==
+X-Received: by 2002:a05:6808:1202:b0:2f9:c7b4:fd56 with SMTP id a2-20020a056808120200b002f9c7b4fd56mr11287188oil.55.1651004277905;
+        Tue, 26 Apr 2022 13:17:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k124-20020aca3d82000000b002ef4c5bb9dbsm5171253oia.0.2022.04.26.13.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:17:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Apr 2022 13:17:55 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] hwmon: (dell-smm) Warn if SMM call took a very long
+ time to execute
+Message-ID: <20220426201755.GN4093517@roeck-us.net>
+References: <20220426200320.399435-1-W_Armin@gmx.de>
+ <20220426200320.399435-4-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426200320.399435-4-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-testing
-head:   26360a8c9732cff2ee5bc2f180e9716b63e9f650
-commit: 07b42a72474e4ab59d6acb451f7816664095d7c0 [30/34] kernfs: make ->attr.open RCU protected.
-config: alpha-randconfig-s032-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270438.Uex7Kt3b-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=07b42a72474e4ab59d6acb451f7816664095d7c0
-        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-        git fetch --no-tags driver-core driver-core-testing
-        git checkout 07b42a72474e4ab59d6acb451f7816664095d7c0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash fs/kernfs/
+On Tue, Apr 26, 2022 at 10:03:20PM +0200, Armin Wolf wrote:
+> If a particular SMM call takes a very long time to execute,
+> the user might experience audio problems. Print a warning
+> if a particular SMM call took over 0.250 seconds to execute,
+> so the user can check whether or not possible audio problems
+> are caused by this driver.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index f13902414615..b960330eaded 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -49,6 +49,9 @@
+>  #define I8K_SMM_GET_DELL_SIG1	0xfea3
+>  #define I8K_SMM_GET_DELL_SIG2	0xffa3
+> 
+> +/* in usecs */
+> +#define DELL_SMM_MAX_DURATION  250000
+> +
+>  #define I8K_FAN_MULT		30
+>  #define I8K_FAN_RPM_THRESHOLD	1000
+>  #define I8K_MAX_TEMP		127
+> @@ -239,6 +242,9 @@ static int i8k_smm_func(void *par)
+>  	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
+>  		 (rc ? 0xffff : regs->eax & 0xffff), duration);
+> 
+> +	if (duration > DELL_SMM_MAX_DURATION)
+> +		pr_warn("SMM call took %lld usecs!\n", duration);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+pr_warn_once, maybe ? If this happens, it will happen a lot, and it doesn't
+add much if any value to keep reporting the problem.
 
-
-sparse warnings: (new ones prefixed by >>)
->> fs/kernfs/file.c:160:46: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t const [usertype] *v @@     got struct atomic_t [noderef] __rcu * @@
-   fs/kernfs/file.c:160:46: sparse:     expected struct atomic_t const [usertype] *v
-   fs/kernfs/file.c:160:46: sparse:     got struct atomic_t [noderef] __rcu *
-   fs/kernfs/file.c:204:46: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t const [usertype] *v @@     got struct atomic_t [noderef] __rcu * @@
-   fs/kernfs/file.c:204:46: sparse:     expected struct atomic_t const [usertype] *v
-   fs/kernfs/file.c:204:46: sparse:     got struct atomic_t [noderef] __rcu *
-
-vim +160 fs/kernfs/file.c
-
-414985ae23c031e Tejun Heo 2013-11-28  155  
-414985ae23c031e Tejun Heo 2013-11-28  156  static int kernfs_seq_show(struct seq_file *sf, void *v)
-414985ae23c031e Tejun Heo 2013-11-28  157  {
-c525aaddc366df2 Tejun Heo 2013-12-11  158  	struct kernfs_open_file *of = sf->private;
-414985ae23c031e Tejun Heo 2013-11-28  159  
-adc5e8b58f4886d Tejun Heo 2013-12-11 @160  	of->event = atomic_read(&of->kn->attr.open->event);
-414985ae23c031e Tejun Heo 2013-11-28  161  
-adc5e8b58f4886d Tejun Heo 2013-12-11  162  	return of->kn->attr.ops->seq_show(sf, v);
-414985ae23c031e Tejun Heo 2013-11-28  163  }
-414985ae23c031e Tejun Heo 2013-11-28  164  
-
-:::::: The code at line 160 was first introduced by commit
-:::::: adc5e8b58f4886d45f79f4ff41a09001a76a6b12 kernfs: drop s_ prefix from kernfs_node members
-
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter

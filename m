@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B7E5103B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3ED5103BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353062AbiDZQnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S1353069AbiDZQoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345421AbiDZQnP (ORCPT
+        with ESMTP id S1345421AbiDZQoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:43:15 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903D6DFF7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:40:07 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 16so7597969lju.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:40:07 -0700 (PDT)
+        Tue, 26 Apr 2022 12:44:03 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B56BB7CE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:40:55 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id p10so32940831lfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cB5NjQgyHxPYEpDTZ0PSuz+LJmELdLbWCQhQbA445xM=;
-        b=jIea80rv6317KJHDIdWEbWLBH461Z6ATA9dHEddVM6shF40hnoZ/lnlgYWIl1caWXG
-         Yb/G0dSCt5pOJZdvCTEDTQrIg045MQkLNpLdop5n97g8AavwMV2wfDM3puA15FUjILKx
-         8MBe4JSCXWmgocvd1aXyzegdZiEZFRlgw2J7xvdT1yj4JaKHfkKZeFo/awKotDRDuPJn
-         +RzFukr2Ks+iaDANd0a83Usr7Xto7N6PiN1/9da4lpYRdntlJem0jBBIdrO959nSeSf+
-         Dkj+H1b+xJNcmsONZxRDhqxHl8H0EnAGmUQSo4ts0TxJnlECnnqc/QWm9y4clr6yXM9c
-         OGNg==
+        bh=fqueYHGBpkvl2UC9CcSLlzu06+co5a0HYwKYVQXXlxQ=;
+        b=Wu/cE5RmdzCdeA3QYzRxKb85+k8dUOSdgrDnfs1bHmFy29o1q3eL+ejynv2C1zYwj2
+         /e08ICmkzYVL+XbYklwlwgU+etvnKR3e4QCiVdPxsiwaoGAnLSy2mvz+jni2+aIsx+sL
+         IcIs8tWyE4STzyWj4xnt8DbhqTS2/1B2s+RkYy8wTaAjIbkeFIr1e04UmERJW8J54lqR
+         SaIhle7LscGB8w08xoMghGyDKQFp+wqgQPkGuCDPw0LjmgBVSxiDh4eCEyLk5CaVgcFk
+         XEmEx8mfjWHk/81HoPiudE3USckaPUksJgHBhBUEORvZBXRcNbalsZvZILODS92lA/mg
+         mAww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cB5NjQgyHxPYEpDTZ0PSuz+LJmELdLbWCQhQbA445xM=;
-        b=uwpOr0W64cuW2dUBxB5EWVui6Eashm1GAgZ2YpjQWrB2nPO2B8hvraUS0xBAFX+wu4
-         GbmuKWIewbsQT3oMzboExomPHpNe2hwUNnnFPi68SKMAV+KoZJEzKAdhi+1mupnA1VQS
-         /XWThbR8+imC1Qj6zxpqXbfxYJ4CggZpiL3iANMr9IacePdTZw1Y7nzbeTqtfu/yNlBW
-         4F/FWD7MzZgoL1/L4SW8K3L+yZMVRxBwjE9TJOJY76DWWN8iar913n92+agUGPLCYSLN
-         vLYQz3RJyih8pZ7oQgQ/2o/iLEd0PawR1UFMRNlyN1OBolBikoRg3CGTbtULnazyX2ye
-         ERXw==
-X-Gm-Message-State: AOAM530cxCcdwkH3JWYlHXpGQUf/elEbIxElaGT76DdIFDYaQADLNzQc
-        E2odTvbf5O63/XJ9iKW8hP9oYUScttmA+mq6/JaaAHP2iZE=
-X-Google-Smtp-Source: ABdhPJzCHG1DW6WwNCEQQr1E6ENnVyF3MYLe1M7kwazJPqDOFzVfHEITcsPFkNsdFROU9SnNXltpQ8u9ocAyT++DhiQ=
-X-Received: by 2002:a2e:a7d4:0:b0:24d:b0c3:9683 with SMTP id
- x20-20020a2ea7d4000000b0024db0c39683mr14669411ljp.472.1650991205358; Tue, 26
- Apr 2022 09:40:05 -0700 (PDT)
+        bh=fqueYHGBpkvl2UC9CcSLlzu06+co5a0HYwKYVQXXlxQ=;
+        b=VS+m4+QbrIdfEYxDhsuDWXHqVxrJ3l5N6hnPzrjt2c0WOVAHmT8SbR1ZLz//pBzwTu
+         6T5JabmaQ7TNqlSHtabSPpywzwIUh2n/lz55mGFH6xgpXS9CAKz8qgT5AOk0oHu3vbPa
+         8LHkI3BcZAEjjOGShWc6DSR/NcbnCsvm6dM8MNKcL7zYdvQaDIEQWI9yY5yDQ7HfX7HQ
+         4q29pQ8Y1e66qWaJMs2RHkCVC/RANUPhl+s1NcoKDNOEt6rnLVSHkZEWnVgU7dTGRFVM
+         jrPrsqX9KDJA87sFD18vNFxF6HOr8s5R+iVBtPx2TnPaxwhfvL/2cey/PqFp82CNJYul
+         DSeg==
+X-Gm-Message-State: AOAM533Q4IZ42RMQhLIgqFhoT70vM6tUZOEOSKX/i/P2VVFm8uwxFJb3
+        lZ0++++b/Z/4kianF6+grLfRL3Ro2isw5lDTQd9oQQ==
+X-Google-Smtp-Source: ABdhPJyJzubFSWnwzD9vAlMyHZanErLBPeKAQeH2atwZT+VQLnRDa34pRUDJO2+m/FtJUXlMpFMMmPypgOQHd/Y9wDc=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr17294136lfl.87.1650991253103; Tue, 26
+ Apr 2022 09:40:53 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-17-masahiroy@kernel.org> <CAKwvOdk1nt4b9am=_BP=U3igkSRBN14nx+5oS8iaaw9zhbH5JA@mail.gmail.com>
- <CAK7LNAR-u=EVzPL+iJHoBW62AK2ViD3nVnL79EdxNS03UxmkBA@mail.gmail.com>
-In-Reply-To: <CAK7LNAR-u=EVzPL+iJHoBW62AK2ViD3nVnL79EdxNS03UxmkBA@mail.gmail.com>
+ <20220424190811.1678416-10-masahiroy@kernel.org> <CAKwvOdkac4Bk+u=v2dwSD=X0kZo2y4UxRUNHJdYiTLTPSp7=kQ@mail.gmail.com>
+ <CAK7LNAR4N_OAUJJnCoZWA3OKWPFJHgOTLmsgY+DHaXRJFwGsGQ@mail.gmail.com>
+In-Reply-To: <CAK7LNAR4N_OAUJJnCoZWA3OKWPFJHgOTLmsgY+DHaXRJFwGsGQ@mail.gmail.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 26 Apr 2022 09:39:54 -0700
-Message-ID: <CAKwvOd=9ffHMynzCPXPAAdz90BcW0JhihjqnRNneFqMq3u+59Q@mail.gmail.com>
-Subject: Re: [PATCH 16/27] modpost: make multiple export error
+Date:   Tue, 26 Apr 2022 09:40:41 -0700
+Message-ID: <CAKwvOd=W3sgPFie_WzOGqfkhht-_cfyOnWqaiCuDpFid=uibFA@mail.gmail.com>
+Subject: Re: [PATCH 09/27] modpost: add sym_add_unresolved() helper
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -70,31 +70,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 9:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Mon, Apr 25, 2022 at 9:00 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Tue, Apr 26, 2022 at 3:48 AM Nick Desaulniers
+> On Tue, Apr 26, 2022 at 3:41 AM Nick Desaulniers
 > <ndesaulniers@google.com> wrote:
 > >
 > > On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 > > >
-> > > This is currently a warning, but I think modpost should stop building
-> > > in this case.
+> > > Add a small helper, sym_add_unresolved() to ease the further
+> > > refactoring.
 > > >
-> > > If the same symbol is exported multiple times and we let it keep going,
-> > > the sanity check becomes difficult.
-> > >
-> > > Only the legitimate case is that an external module overrides the
-> > > corresponding in-tree module to provide a different implementation
-> > > with the same interface.
+> > > Remove the 'weak' argument from alloc_symbol() because it is sensible
+> > > only for unresolved symbols.
 > >
-> > Could the same module export a weak version of a symbol, and a strong one?
+> > I did not yet read the rest of the series to see how else your newly
+> > added helper `sym_add_unresolved` is used.
+> > Perhaps the callers of `alloc_symbol` should just set the symbol's
+> > weak member to true if needed, and alloc_symbol can default to setting
+> > it false (as the memset currently does)?
+> >
+> > Then, you don't need the helper, and just `handle_symbol` needs the
+> > assignment when `ELF_ST_BIND(sym->st_info) == STB_WEAK`?
 >
-> No.  There is no concept like   EXPORT_SYMBOL_WEAK.
 >
-> I am talking about kmod things.
-> You can modprobe an external module instead of the in-kernel one.
+> I will change this in the later commit:
+> https://patchwork.kernel.org/project/linux-kbuild/patch/20220424190811.1678416-11-masahiroy@kernel.org/
+>
+> I think this is a good case for a new helper.
+>
+> If you look at the entire series,
+> "allocate a new symbol and connect it to the proper linked list or hash_table"
+> is consistently done in a helper function.
+>
+>
+> Also, I chose the function name as they look symmetrical.
+>
+>  sym_add_unresolved()
+>  sym_add_exported()
+>  sym_add_crc()
 
-Ok, this patch seems fine to me.
+Ok.
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 -- 
 Thanks,

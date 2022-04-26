@@ -2,83 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F023F50F9F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608B350FA07
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348439AbiDZKSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
+        id S1348772AbiDZKSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348659AbiDZKRV (ORCPT
+        with ESMTP id S1348461AbiDZKSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:17:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206AE6D86B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:40:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C04B1CE1BF7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B48FC385AE;
-        Tue, 26 Apr 2022 09:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650966047;
-        bh=UN8z2B0f1uixgrTjJ4GuWq66nLJBNSlOCFUejl7xRG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vRyA9LmX87bAOFVLGVgpQdlLBmlF1yysxasr2dXDjlU1FuDA3gKIYpSzQhJyjc1jN
-         zAbpGKMxQfEazx0Ly+jhnTYqk0TYre0bCdoabvuodL0yFkWhS2+gPwLHgR5jwdmrx+
-         6eV+LPnM1HGKYF3O1uXOrLPnuKW0+eUKSyKbiaSw=
-Date:   Tue, 26 Apr 2022 11:40:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     xkernel.wang@foxmail.com
-Cc:     paskripkin@gmail.com, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] staging: r8188eu: fix potential memory leak in
- _rtw_init_xmit_priv()
-Message-ID: <Yme+HFZ6u2gvMbfz@kroah.com>
-References: <tencent_06FCFF1B2086CCD7B9C51C7C1490E1D64A08@qq.com>
+        Tue, 26 Apr 2022 06:18:01 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B2BD081D;
+        Tue, 26 Apr 2022 02:41:48 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B2D5D5C0191;
+        Tue, 26 Apr 2022 05:41:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 26 Apr 2022 05:41:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1650966105; x=1651052505; bh=F/HwSZkMjQ
+        U215/jSuMrCHNew60q6qc4D+yvCngtnX4=; b=a8yLmBPF/MUSVS6zdhZ2NgcLZw
+        mFkHYcRrRMaTXa6SQEPdsR9Jyf42Oq87ggTQZziTw8728uuKnoGgiFTI33KyScBo
+        ZAfXmnq/wTwpQaR65uZy62PnfxNdiJFJ+qdXHlIMR0hVztaWeIk54ALg1j5k5qr3
+        Tq/Dldvguw+zFwBs8okWmmU36LCQN4z2DGvC5n3vJ7FC//vN3uRFEJYvlO4YQpYn
+        znjKAIVfZtFQ9WnS+8y9bfPG4L4/DtAa9FCVdgjyPcAaxntiV98hgmtQaYJAT+ap
+        VvreX6ebtwJo2RnuRgGiRmvj/lkCtBMtuI+I/W/KKSM8X6TIL9Jxwew9Cg0Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650966105; x=
+        1651052505; bh=F/HwSZkMjQU215/jSuMrCHNew60q6qc4D+yvCngtnX4=; b=d
+        KoA4xIxr72/yBpNaczNYpSVLGKgvyA2/pC1wQCRRkAYiRiSmAvtNUEKp/3mgjQNY
+        udAry4rXEnB9fgTS/WL3foI2tcQS1o7gcWUhNZwnSkEW2axjsCkEQa41Hgb+iysa
+        +c6DFZRzTfK1PvqNESAT8kZxPYS0PBrs+eOBihyYnSeFSSUJYwYiQ8TNHEQx/CxV
+        kSYdTlqkcFzjn5N6DXp9RkCTaf3mF3HLzZT8P1JahxmhFyHJKXkw2+MnEFLAT4Wf
+        LPIq1WjRnS55Eiy3g0ABqXcTirp+d7uIdH0wTeuS766jVPPAlA14RhBAkQvZOlET
+        Az3I3Psn5Xq8vh27bg96Q==
+X-ME-Sender: <xms:Wb5nYo9lyYnV0Vnjg-lGjyS6eFbim0nuF4kx3QmDz3T0QvCLBIcqFg>
+    <xme:Wb5nYgvUyIWTuE37AfBPxCfVqmi-JZDw_g4FD7GaV8rBkRAS14EcuIGWvd89g-j-9
+    hbYGKjHtXLkLA>
+X-ME-Received: <xmr:Wb5nYuCCiGCp0StPOo4CaVt4KeURyZJgzctC3L4FpJkLYoXjWwQWSF7OQIpDZcAnBOSr7k0xkWbaTe9rO_2s55N0wPT1G5gS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgdduhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:Wb5nYodlGOslnH9Z1pGDHYCSeHgryg4rzVt4XjKqIUWQYvt6Q0VqcQ>
+    <xmx:Wb5nYtNIUutEUKUgpFtnboSAybyz6ox9uwfYsSElJYfi5dNN838TeQ>
+    <xmx:Wb5nYikw4bxunidK8Km5cmS586JAt5mg4H3Du7NlD0sz6CRKjJwbrw>
+    <xmx:Wb5nYmjj3RjzNJ72vvEN26junxQtcN3XOMvqUbFqwMHQzPDy1zGYvw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Apr 2022 05:41:44 -0400 (EDT)
+Date:   Tue, 26 Apr 2022 11:41:42 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <Yme+VvNEk3xPcJmU@kroah.com>
+References: <20220426150842.473be40e@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_06FCFF1B2086CCD7B9C51C7C1490E1D64A08@qq.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426150842.473be40e@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 09:37:10AM +0800, xkernel.wang@foxmail.com wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Tue, Apr 26, 2022 at 03:08:42PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> In _rtw_init_xmit_priv(), there are several error paths for allocation
-> failures just jump to the `exit` section. However, there is no action
-> will be performed, so the allocated resources are not properly released,
-> which leads to various memory leaks.
+> Today's linux-next merge of the usb tree got a conflict in:
 > 
-> To properly release them, this patch unifies the error handling code and
-> several error handling paths are added.
-> According to the allocation sequence, if the validation fails, it will
-> jump to its corresponding error tag to release the resources.
+>   drivers/usb/dwc3/drd.c
 > 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> ---
-> ChangeLog:
-> v1->v2 update the description and adjust the sequence of patches.
-> v2->v3 None to this patch, but some to another pathch in this series.
->  drivers/staging/r8188eu/core/rtw_xmit.c | 32 ++++++++++++++++++-------
->  1 file changed, 24 insertions(+), 8 deletions(-)
+> between commit:
+> 
+>   ab7aa2866d29 ("usb: dwc3: Try usb-role-switch first in dwc3_drd_init")
+> 
+> from the usb.current tree and commit:
+> 
+>   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/dwc3/drd.c
+> index 8cad9e7d3368,f277bebdaa09..000000000000
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@@ -585,14 -539,11 +539,10 @@@ int dwc3_drd_init(struct dwc3 *dwc
+>   	int ret, irq;
+>   
+>   	if (ROLE_SWITCH &&
+>  -	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+>  -		ret = dwc3_setup_role_switch(dwc);
+>  -		if (ret < 0)
+>  -			return ret;
+>  -	} else if (dwc->edev) {
+>  +	    device_property_read_bool(dwc->dev, "usb-role-switch"))
+>  +		return dwc3_setup_role_switch(dwc);
+>  +
+> - 	dwc->edev = dwc3_get_extcon(dwc);
+> - 	if (IS_ERR(dwc->edev))
+> - 		return PTR_ERR(dwc->edev);
+> - 
+>  +	if (dwc->edev) {
+>   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>   					       &dwc->edev_nb);
 
-I still have 12 patches in my queue from you, yet no idea which order
-they belong in at all, nor which is the latest versions :(
 
-Please rebase and resubmit them ALL as a single patch series so I can
-have a hint as to what to do here.
 
-thanks,
+Thanks for the report, I'll handle this when I merge them together after
+Linus taks the usb-linus branch.
 
 greg k-h

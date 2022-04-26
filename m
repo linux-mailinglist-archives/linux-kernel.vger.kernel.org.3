@@ -2,196 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5C5510CDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EEA510CDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243690AbiDZX43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
+        id S1356216AbiDZX62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiDZX4X (ORCPT
+        with ESMTP id S243701AbiDZX6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:56:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF3EBB91B;
-        Tue, 26 Apr 2022 16:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651017194; x=1682553194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=khnX1ty93jUwk1ufPotG1fbs/K/3Ddf4V9dX4JV7/uw=;
-  b=RDrWI4+gCuCPbkxN2elDVgQ1+97GO1Cv3ryfzQ5iXuQZv+AzU2jdY4vP
-   88VNmVdSbkWlcdTv0z7sjTBfMWY/65KKwraq6v/g3w0vsEgdrZ1SA0U2w
-   S+egZI2l97Q+EKkVk1km1aS81G8LKKgzXCPZBPlOTK7M47eK/7ansR+SM
-   Nvk+bOrqbWK7/UdxdVb10ZbuWg5VNrQlYzfEY6K3uJ7iejlUclMm9909P
-   QRI2/SOsrha46buwxxl27jNmZS4ZT8Rgzb93GjkCp4Gsr0E/erJK2HUVT
-   O2ouzW0xxBySScAx+wavucFd5H6FRx89JyCMDizeV5DSFDbBMygJr2c9C
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265921491"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="265921491"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:53:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="660942056"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:53:14 -0700
-Date:   Tue, 26 Apr 2022 16:53:13 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [PATCH v4 09/10] trace: platform/x86/intel/ifs: Add trace point
- to track Intel IFS operations
-Message-ID: <YmiF6Rsy04pUHVQo@agluck-desk3.sc.intel.com>
-References: <20220419163859.2228874-1-tony.luck@intel.com>
- <20220422200219.2843823-1-tony.luck@intel.com>
- <20220422200219.2843823-10-tony.luck@intel.com>
- <20220425105251.3f5e8021@gandalf.local.home>
- <1752057af33e4eb28bcea0fd75e44048@intel.com>
- <20220425214928.2aac3391@gandalf.local.home>
+        Tue, 26 Apr 2022 19:58:25 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E930E24
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:55:15 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id r189so509613ybr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 16:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nlt5qC+wvX5QcXEUX3mdcdWLCql1FNsd3/g2ToCHKcU=;
+        b=aO9N7IfdWDlkYSXheT2CnTYqLmWETHZgTvHopWHBxHIRPnCHtG+d2P8fseumLmleiK
+         XCjpLuWHvHtP3sAvSblNcRUz36ij1Ka+uhe4+hxA0JyF8nJWfkSWPLa/K+cqk8VbyoXl
+         qh1AjswHxttcFaICPkdy5Zs8ecRYAZjidd543EcpsqmWRLE7mnlzXwe1OJpMKzYQPKgy
+         KA72QY9Nx0woIqJKKvLZn4dEOoT5ex3klxZv7Ld+xzXikBITIqHj3PryMn/rYTtPmS8y
+         AIg34upVQalYNavbxTu49mipu5FLybaW2WgXFAvQ7hMJGW4DWTXCIDT8Ijct5QZOp6RT
+         MwLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nlt5qC+wvX5QcXEUX3mdcdWLCql1FNsd3/g2ToCHKcU=;
+        b=y0VQQTKRtHuLF3xzkquj4fNunEJ6LoN/KvpEWJU1Yv8N3DhUygSPk0+3JYv/Y3Sl08
+         S+XbHbUiq6Bv5zvJ0BUbNGQMkBAFAiV6yI3WBoDB/7dxE9BK3SgppVkxPPutpqeTFjhy
+         dY6Z5XD9XhHd2WGCrfmjVw9Bmut4CoEYOHNsxnx9MS6qBwsBpORa0a0hc7nrc6ZGx9h1
+         pIJUAXy9R93QEMmv5Y1G3qlEzTG3qD8oAzHQUCEBkbAmdzMrbdVvZIFEvt14Gbaw2mz8
+         TumDfFKgJ2IC8hpTSNgjx3Ds7XnCDSfYGCxd6FAh5+6oqaAVXml0RQ1ehdC9BZXxieQG
+         WyKQ==
+X-Gm-Message-State: AOAM533Kd972L9uTJ1b4J+O9x8x5pd+5q9mcJMoAUg2zGmXll0Uh6yCg
+        qEjKlzzMdsznBeoSHr8lHSyCMzWMVZEtYJCNDCA=
+X-Google-Smtp-Source: ABdhPJw1e5UpoiyY0rnTzfkQyWo+TP1DNsQS+nw0hkXS+1iwawNqWqm0B17hT9qfFi7HJuY7QKDXpWEhpwzdtzMLkOQ=
+X-Received: by 2002:a05:6902:1249:b0:644:d8bb:e741 with SMTP id
+ t9-20020a056902124900b00644d8bbe741mr24530799ybu.585.1651017314763; Tue, 26
+ Apr 2022 16:55:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220425214928.2aac3391@gandalf.local.home>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426014545.628100-1-briannorris@chromium.org> <20220426014545.628100-2-briannorris@chromium.org>
+In-Reply-To: <20220426014545.628100-2-briannorris@chromium.org>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Tue, 26 Apr 2022 19:55:02 -0400
+Message-ID: <CAMdYzYqyDr1HFYB4p8NK8ssq60qfjR2jyoSJ=tcRn8CWsZr16g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] soc: rockchip: power-domain: Replace dsb() with smb()
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 09:49:28PM -0400, Steven Rostedt wrote:
-> On Mon, 25 Apr 2022 16:49:35 +0000
-> "Luck, Tony" <tony.luck@intel.com> wrote:
-> 
-> > I see two paths:
-> > 
-> > 1) Create a new user friendly trace point for each new scan mode.
-> > 2) Just provide a generic one that dumps both the 64-bit WRMSR and RDMSR values.
-> > 
-> > Q: Are trace points "expensive" in some way ... so better to just have one than three?
-> >      Or are the cheap enough that decoding for the user is an OK thing?
-> 
-> Yes, they are expensive as each TRACE_EVENT() can add a few KB of text and
-> data. But you can add a DECLARE_EVENT_CLASS() and then add "printk"
-> differences that are less memory heavy.
-> 
-> See DEFINE_EVENT_PRINT().
+On Mon, Apr 25, 2022 at 9:46 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> It's unclear if these are really needed at all, but seemingly their
+> purpose is only as a write barrier. Use the general macro instead of the
+> ARM-specific one.
+>
+> This driver is partially marked for COMPILE_TEST'ing, but it doesn't
+> build under non-ARM architectures. Fix this up before *really* enabling
+> it for COMPILE_TEST.
+>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+>
+> Changes in v3:
+>  * New in v3
+>
+>  drivers/soc/rockchip/pm_domains.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/soc/rockchip/pm_domains.c
+> index 1b029e494274..cf16ff9b73b3 100644
+> --- a/drivers/soc/rockchip/pm_domains.c
+> +++ b/drivers/soc/rockchip/pm_domains.c
+> @@ -178,7 +178,7 @@ static int rockchip_pmu_set_idle_request(struct rockchip_pm_domain *pd,
+>                 regmap_update_bits(pmu->regmap, pmu->info->req_offset,
+>                                    pd_info->req_mask, idle ? -1U : 0);
+>
+> -       dsb(sy);
+> +       wmb();
 
-I looked at the examples in samples/trace_events/trace-events-sample.h
-and tried to use this. But I'm doing something wrong because the
-compiler barfs on something defined but not used.
+Just curious, shouldn't this be mb() instead of wmb()?
+From the arm64 barrier.h:
 
-Maybe my problem is the TP_printk() in the DECLARE_EVENT_CLASS() that
-is over-ridden by DEFINE_EVENT_PRINT(). I wasn't at all sure what to
-put here ... or how to use the base tracepoint that doesn't have the
-printk() over-ridden.
-
-I think I need my class to just save both the u64 values to the trace
-buffer. Then the different trace points will extract the bits they want
-and print in a user friendly way. While this increases space used in
-the trace buffer, these events are not crazy high frequency. Usually 
-one or two events per core with a gap 30 minutes or more between tests.
-
-In my ".c" file the tracepoint looks like this using the name from
-DEFINE_EVENT_PRINT(), and now passing the full u64 values:
-
-	trace_ifs_status_saf(activate.data, status.data);
-
-and my #include file looks like this:
-
-----------------------------------------------
-/* SPDX-License-Identifier: GPL-2.0 */
-#undef TRACE_SYSTEM
-#define TRACE_SYSTEM intel_ifs
-
-#if !defined(_TRACE_IFS_H) || defined(TRACE_HEADER_MULTI_READ)
-#define _TRACE_IFS_H
-
-#include <linux/ktime.h>
-#include <linux/tracepoint.h>
-
-DECLARE_EVENT_CLASS(ifs_status,
-
-	TP_PROTO(u64 activate, u64 status),
-
-	TP_ARGS(activate, status),
-
-	TP_STRUCT__entry(
-		__field(	u64,	activate	)
-		__field(	u64,	status		)
-	),
-
-	TP_fast_assign(
-		__entry->activate = activate;
-		__entry->status	= status;
-	),
-
-	TP_printk("activate: %llx status: %llx",
-		__entry->activate,
-		__entry->status)
-);
-
-DEFINE_EVENT_PRINT(ifs_status, ifs_status_saf,
-	TP_PROTO(u64 activate, u64 status),
-	TP_ARGS(activate, status),
-	TP_printk("start: %.2x, stop: %.2x, status: %llx",
-		((union ifs_scan *)&(__entry->activate))->start,
-		((union ifs_scan *)&(__entry->activate))->stop,
-		__entry->status)
-);
-
-#endif /* _TRACE_IFS_H */
-
-/* This part must be outside protection */
-#include <trace/define_trace.h>
------------------------------------------------------
-
-GCC messages:
+#define mb() dsb(sy)
+#define wmb() dsb(st)
 
 
-  CC [M]  drivers/platform/x86/intel/ifs/runtest.o
-In file included from /home/agluck/GIT/mywork/include/trace/define_trace.h:102,
-                 from /home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:44,
-                 from /home/agluck/GIT/mywork/drivers/platform/x86/intel/ifs/runtest.c:27:
-/home/agluck/GIT/mywork/include/trace/trace_events.h:426:13: warning: ‘print_fmt_ifs_status’ defined but not used [-Wunused-variable]
-  426 | static char print_fmt_##call[] = print;                                 \
-      |             ^~~~~~~~~~
-/home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:11:1: note: in expansion of macro ‘DECLARE_EVENT_CLASS’
-   11 | DECLARE_EVENT_CLASS(ifs_status,
-      | ^~~~~~~~~~~~~~~~~~~
-In file included from /home/agluck/GIT/mywork/include/trace/define_trace.h:102,
-                 from /home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:44,
-                 from /home/agluck/GIT/mywork/drivers/platform/x86/intel/ifs/runtest.c:27:
-/home/agluck/GIT/mywork/include/trace/trace_events.h:207:37: warning: ‘trace_event_type_funcs_ifs_status’ defined but not used [-Wunused-variable]
-  207 | static struct trace_event_functions trace_event_type_funcs_##call = {   \
-      |                                     ^~~~~~~~~~~~~~~~~~~~~~~
-/home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:11:1: note: in expansion of macro ‘DECLARE_EVENT_CLASS’
-   11 | DECLARE_EVENT_CLASS(ifs_status,
-      | ^~~~~~~~~~~~~~~~~~~
-make[1]: Leaving directory '/home/agluck/GIT/mywork/build/ifsv5-rc1'
-
--Tony
+>
+>         /* Wait util idle_ack = 1 */
+>         target_ack = idle ? pd_info->ack_mask : 0;
+> @@ -285,7 +285,7 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
+>                 regmap_update_bits(pmu->regmap, pmu->info->pwr_offset,
+>                                    pd->info->pwr_mask, on ? 0 : -1U);
+>
+> -       dsb(sy);
+> +       wmb();
+>
+>         if (readx_poll_timeout_atomic(rockchip_pmu_domain_is_on, pd, is_on,
+>                                       is_on == on, 0, 10000)) {
+> --
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip

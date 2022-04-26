@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CAE50F6A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5200B50F776
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345912AbiDZI5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S1347005AbiDZJM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346290AbiDZIos (ORCPT
+        with ESMTP id S1347375AbiDZIvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:44:48 -0400
+        Tue, 26 Apr 2022 04:51:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226AA83B23;
-        Tue, 26 Apr 2022 01:34:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C648CC53A;
+        Tue, 26 Apr 2022 01:40:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5832B81CF2;
-        Tue, 26 Apr 2022 08:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B33BC385A0;
-        Tue, 26 Apr 2022 08:34:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04D6CB81CF0;
+        Tue, 26 Apr 2022 08:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E1C3C385A0;
+        Tue, 26 Apr 2022 08:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962071;
-        bh=0o+/bcfWUb8QZLbrnONbvy8GeqdlyK3Z3oJkehZ0ZEw=;
+        s=korg; t=1650962413;
+        bh=LBQetF4/ux8fiSOBE2AAcfdUo7KiTbfNvfiJn5KCkqE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HcmoZpAEANpvSqZYdF2Mg34lT1uNz7K27X/c1cYSHdiFpT1zzR+Y3cGKu5DjSaHKF
-         6NRgGPrMHRtcNVUfYLnJ1upuB/9JC/K+gEOr/fh8dAOKGKV5crRiRdDGIt/XbMZQT6
-         Yy8BDgpG7liTnTn5UB/lHGO3vKo5MM9ZNYZLG4ZU=
+        b=XtL8vP4fouSPCzzPlzHBLuY6TC3Fu46A6B9EPIdry46LV0KmbGBshowIDQ3YCZTsM
+         ovs+PiPYqEidF33mqOywsFnniXNslHS3hCpc8npqZKfP7wGkaFKF9AIEGqcT90MJzD
+         ILADZLeC/ir6YqtxjzS6Cxh/8DFKoELwi/msD7u8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 62/86] ASoC: soc-dapm: fix two incorrect uses of list iterator
+        stable@vger.kernel.org, kuyo chang <kuyo.chang@mediatek.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 089/124] sched/pelt: Fix attach_entity_load_avg() corner case
 Date:   Tue, 26 Apr 2022 10:21:30 +0200
-Message-Id: <20220426081742.997392899@linuxfoundation.org>
+Message-Id: <20220426081749.829862114@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,59 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: kuyo chang <kuyo.chang@mediatek.com>
 
-commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
+[ Upstream commit 40f5aa4c5eaebfeaca4566217cb9c468e28ed682 ]
 
-These two bug are here:
-	list_for_each_entry_safe_continue(w, n, list,
-					power_list);
-	list_for_each_entry_safe_continue(w, n, list,
-					power_list);
+The warning in cfs_rq_is_decayed() triggered:
 
-After the list_for_each_entry_safe_continue() exits, the list iterator
-will always be a bogus pointer which point to an invalid struct objdect
-containing HEAD member. The funciton poniter 'w->event' will be a
-invalid value which can lead to a control-flow hijack if the 'w' can be
-controlled.
+    SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+		  cfs_rq->avg.util_avg ||
+		  cfs_rq->avg.runnable_avg)
 
-The original intention was to continue the outer list_for_each_entry_safe()
-loop with the same entry if w->event is NULL, but misunderstanding the
-meaning of list_for_each_entry_safe_continue().
+There exists a corner case in attach_entity_load_avg() which will
+cause load_sum to be zero while load_avg will not be.
 
-So just add a 'continue;' to fix the bug.
+Consider se_weight is 88761 as per the sched_prio_to_weight[] table.
+Further assume the get_pelt_divider() is 47742, this gives:
+se->avg.load_avg is 1.
 
-Cc: stable@vger.kernel.org
-Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, calculating load_sum:
+
+  se->avg.load_sum = div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
+  se->avg.load_sum = 1*47742/88761 = 0.
+
+Then enqueue_load_avg() adds this to the cfs_rq totals:
+
+  cfs_rq->avg.load_avg += se->avg.load_avg;
+  cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+
+Resulting in load_avg being 1 with load_sum is 0, which will trigger
+the WARN.
+
+Fixes: f207934fb79d ("sched/fair: Align PELT windows between cfs_rq and its se")
+Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+[peterz: massage changelog]
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lkml.kernel.org/r/20220414090229.342-1-kuyo.chang@mediatek.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-dapm.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ kernel/sched/fair.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -1683,8 +1683,7 @@ static void dapm_seq_run(struct snd_soc_
- 		switch (w->id) {
- 		case snd_soc_dapm_pre:
- 			if (!w->event)
--				list_for_each_entry_safe_continue(w, n, list,
--								  power_list);
-+				continue;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 02766f3fe206..9a4fa22a69ed 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3794,11 +3794,11 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
  
- 			if (event == SND_SOC_DAPM_STREAM_START)
- 				ret = w->event(w,
-@@ -1696,8 +1695,7 @@ static void dapm_seq_run(struct snd_soc_
+ 	se->avg.runnable_sum = se->avg.runnable_avg * divider;
  
- 		case snd_soc_dapm_post:
- 			if (!w->event)
--				list_for_each_entry_safe_continue(w, n, list,
--								  power_list);
-+				continue;
+-	se->avg.load_sum = divider;
+-	if (se_weight(se)) {
+-		se->avg.load_sum =
+-			div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
+-	}
++	se->avg.load_sum = se->avg.load_avg * divider;
++	if (se_weight(se) < se->avg.load_sum)
++		se->avg.load_sum = div_u64(se->avg.load_sum, se_weight(se));
++	else
++		se->avg.load_sum = 1;
  
- 			if (event == SND_SOC_DAPM_STREAM_START)
- 				ret = w->event(w,
+ 	enqueue_load_avg(cfs_rq, se);
+ 	cfs_rq->avg.util_avg += se->avg.util_avg;
+-- 
+2.35.1
+
 
 

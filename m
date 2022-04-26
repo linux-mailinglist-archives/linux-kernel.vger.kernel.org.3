@@ -2,92 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F334D50EECB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE22950EECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242504AbiDZCe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 22:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S242470AbiDZChT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 22:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242464AbiDZCeq (ORCPT
+        with ESMTP id S231448AbiDZChQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 22:34:46 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496CA12635C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 19:31:40 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id b12so14138977plg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 19:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=HYfqHIhGpF7h06NPUNks3StayBg+7Ba4Glt42nafQ6c=;
-        b=m/aFJlQouYbRDOGTpcr3fc2wpt542FoVPjIolTelK+zIKMya1dIjHiXtjf52WnQ4f3
-         0alGlQdiic+RtQDtYANB+5VeVbW7h2El8i2q5Uon6BTkUMKXrE2g1819Nvu9dgUbjjJL
-         QSJHKP/taBEEU2qG4Vpm/XGmdeHBzjdEXYpGHsLAoNAB9tQy69ya0RPYpQyqFSnMOR3S
-         vdf85SOcOKjaXgH5J5fTPJzo/HdxPqfURBJZTTca2z6FLZ4OyyP4Mrf6mcD1BOFj2u2Z
-         +/sOLqxErsIZE/eqRCNroZ3+exVDZMyewR55mgoU4DQ91buUa4C36J4WV5SdldzL8TX/
-         z1/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=HYfqHIhGpF7h06NPUNks3StayBg+7Ba4Glt42nafQ6c=;
-        b=V2tCTIWFrEhd60LNAWkZYb2fc93joE8jZ2wnzlCiKpzykrn7qYOGBuIpEfNt7bX8CK
-         JSggXpZr5HTWK0BBwwMFhUsHS0enberAuRZoePxIW4X+e40XP4bTqUdDpo2cI9T0lc2G
-         FTqWRgHBVIZyeuDRmM+tpcQhXR+Wo9hO60bgmh12UZm5abrXzcxyMUVphxTjV2WwvfTk
-         dHCdnr+oRKZ89h/e1TGY4EQFq8LUqAgKpcf7oZ9PvlBmLEVUi2/Klef+zvk6EMKwUZwr
-         Sy0S7fiAbtEiG6qJU4tvE1pDVk+rwp61v3c3WS1956IONTL90qS1MwfwAJaf38oRHb50
-         753Q==
-X-Gm-Message-State: AOAM531rovJgBMhWdCDeV8+6/4YNqIp43R6wZaCk+0qXBqFmBbN4lkS6
-        xmLN53h1j1ChtaMv3SyGbjsfDw==
-X-Google-Smtp-Source: ABdhPJxvTvc7QIqFoQYPK5fpEOgE2RM5Gz48WDV6YRIgcHkrFcdt/JQ9fCENJM/OR21vt/OkpJM3Ig==
-X-Received: by 2002:a17:902:bd0c:b0:158:f864:4d9d with SMTP id p12-20020a170902bd0c00b00158f8644d9dmr20763991pls.13.1650940299757;
-        Mon, 25 Apr 2022 19:31:39 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j1-20020a17090adc8100b001d9424e49c1sm676371pjv.44.2022.04.25.19.31.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 19:31:39 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     chaitanya.kulkarni@wdc.com, shinichiro.kawasaki@wdc.com,
-        yukuai3@huawei.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-In-Reply-To: <20220426022133.3999006-1-yukuai3@huawei.com>
-References: <20220426022133.3999006-1-yukuai3@huawei.com>
-Subject: Re: [PATCH] null-blk: save memory footprint for struct nullb_cmd
-Message-Id: <165094029875.72509.3390339725421776639.b4-ty@kernel.dk>
-Date:   Mon, 25 Apr 2022 20:31:38 -0600
+        Mon, 25 Apr 2022 22:37:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F1912635C;
+        Mon, 25 Apr 2022 19:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650940450; x=1682476450;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5JFNg6jFJJro93J2ti17S2dZknlyG6NInv6FUGPwQR0=;
+  b=bMlNKxUs1/St7A7UNlpByPEdZgWrgoC2yjrj1d2QNDwqPHuVaaTqUime
+   m1uMEXdhL6X0NHnZim1Uq3hfwY8X29egi2Q2HVJa9xAW6iDudT4IS7GIw
+   lr/H7XZ1oB9QcmQCChiF3sXTUOQT8OvLnGR4z2VNQi9BA49kkINf7RMkc
+   ynuJTH2/jZDHiMZtt7N7L1S2hg+UiBUTguEkdP/PFHCw7HOgDX9KrDmtC
+   P9dh/DxUKlsywNPYp+Diqs6MAaR8QqBul8JWuASBIy6TkT6VRe93MYjvQ
+   /a/WHXbn3uS463kCLsxsKVSakC+5hUWwNfYbH2m9dS7KPJNplDI1q3mG9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="247355058"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="247355058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 19:34:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="595523919"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Apr 2022 19:34:05 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njB1h-00039e-8g;
+        Tue, 26 Apr 2022 02:34:05 +0000
+Date:   Tue, 26 Apr 2022 10:33:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@chromium.org>, quic_kalyant@quicinc.com,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: eDP for herobrine boards
+Message-ID: <202204261039.8xYr3fIO-lkp@intel.com>
+References: <20220425153650.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425153650.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 10:21:33 +0800, Yu Kuai wrote:
-> Total 16 bytes can be saved in two ways:
-> 
-> 1) The field 'bio' will only be used in bio based mode, and the field
->    'rq' will only be used in mq mode. Since they won't be used in the
->    same time, declare a union for them.
-> 2) The field 'bool fake_timeout' can be placed in the hole after the
->    field 'error'.
-> 
-> [...]
+Hi Douglas,
 
-Applied, thanks!
+I love your patch! Yet something to improve:
 
-[1/1] null-blk: save memory footprint for struct nullb_cmd
-      commit: 8ba816b23abd2a9a05705f3d00b8653f8be73015
+[auto build test ERROR on next-20220422]
+[cannot apply to robh/for-next v5.18-rc4 v5.18-rc3 v5.18-rc2 v5.18-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Best regards,
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/arm64-dts-qcom-sc7280-eDP-for-herobrine-boards/20220426-064439
+base:    e7d6987e09a328d4a949701db40ef63fbb970670
+config: arm64-randconfig-r014-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261039.8xYr3fIO-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e620a809a54d1f68056bfee27b7902f96dfa8cf3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Douglas-Anderson/arm64-dts-qcom-sc7280-eDP-for-herobrine-boards/20220426-064439
+        git checkout e620a809a54d1f68056bfee27b7902f96dfa8cf3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi:345.1-13 Label or path pm8350c_pwm not found
+>> Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:448.1-13 Label or path pm8350c_pwm not found
+>> FATAL ERROR: Syntax error parsing input tree
+
 -- 
-Jens Axboe
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

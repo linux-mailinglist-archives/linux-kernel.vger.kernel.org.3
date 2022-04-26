@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D30350F2C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA4F50F2D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344086AbiDZHlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S1344134AbiDZHmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239837AbiDZHlq (ORCPT
+        with ESMTP id S1344098AbiDZHmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:41:46 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05301331B5;
-        Tue, 26 Apr 2022 00:38:39 -0700 (PDT)
+        Tue, 26 Apr 2022 03:42:00 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61B61331AD;
+        Tue, 26 Apr 2022 00:38:53 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X4YAzyFrjis3FXVI05IR4KJt6Ofc8JD0l75WR0TJNupVFdx0sR+JwsVegntj6BLwXDjm9che3bImwqcRBqdRA44hjAJzn5dMqNpZiunrprCGVrYopp0FXvI2dExJOHNa4OHb47/HMrZiLydEOyz14mglMEcOL7dZGvdQ/vqzXU6A9HRUqtbqO69J2g2M7kQhMOHkfEJx8+6pbtqfHFYK42gzfvauO9iEvbhwYs5E0/g1uJv93sne8WlILb9g7gMsVnwKY/mlCLwHJ2nLk/iuVZ3HXZyqp2yIIb8I8DwA70mizpRxbkMceQklxQNJw4LhFY7GiULEOU+HmvjqkrufEQ==
+ b=S+PVu6NpFlAlXb2pESOOfxbmDHtew38bYnwuZsnxpc1nTznGU8HHtVt9IERk2CSWoQvgFran2dspV6bokGQbyOJ0gfmVfVXf8xMlAdw5sOMqVfnYYsCq+jWkHlu7d7yW6vfbKnMXxMkp1E83Lkqvmy2VNxGUXo+CtAzwuCwpQeYULdZnESikvP2nUkMVJBzexuTtG930OrJ6ZGFtfSOBvwaRSkR2AX5mA+KU8tAa78wd0yL3yJZ9pPbWuBb+tiXU2Sosf4Fpbk3nVv+3NgXYwwaE3o12SsDsh+QYGrsawGkJOabAQ5HE2CuTNndSyfqe6SdVfMo45Ev/i7nCS7h84A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fv3L3GRknGHONtvTTaG2WHCghWYxlAxiGUfuIO8RDb4=;
- b=gZOOato8FiaPA6EnchCkCizX7L+uV7gsLcLu2l8muwtMBJdkumduymthqoQ+fSrfxaCBX08UVYuvn84mdj/TJR38pm+wayu0l26cgFQ58FkVFE02qdXMNNlhhnjqVcGjD+Apf305kK1/K7D9MujSXQdeGwQzfHCWLbSB4U9ZsJCzggyHJS2HxLygOJne2iCzxaszN2LkiGIXxq3lOrwL4GA+InTA9lwpybCS/kwZNcCvJkFplmPqNc/7uwPr7NyuwAg3yzi72BdnVp/t9/M5d2XAIdtzIEgH5Nat4fwLFl7LpzJ0TtwKcsB3vBdeuf7E4AbSFC8/R3NlvKoqFh/HKw==
+ bh=O4+iOkMEgxHudzLmFWp4EWIwA3zTti/25MkODhPY9Aw=;
+ b=BZRylmcr3TEVWjeUPYp8BYq3C7xL/T/HVXwVwDkZh+yZA9JqvVXJu4O1qCHImRy4n7fCY+fn4jOcPD3KfTQMX07/OilBTy06VWMzr33zj1hh7bVluk1mQsfSumBF0TvxnXnXrTo6vnG3o5fLp5oQJU1zhbNUMjwemgoY3vevgXHWaMyxLVuIT2hqfK64kCVFpYB+451B4BOCY1aPXAebkHtGpWATSXLnLTeFSAYjMoLz8a+RysImZV8pk+M3Tf4t9MMthqRzZVC0xQpjywz1OoPxkkubiqZI+EijS4W+lmYAyEq3oTvMb74kToYnIXd4hsvkATQ+Q5E/xddRiBm86g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fv3L3GRknGHONtvTTaG2WHCghWYxlAxiGUfuIO8RDb4=;
- b=FHHW65cM/nQVdoMFz0l1WtTzHxRX3V7B3miv1TwN26V3u13khu7F54sK5NUQ+nROBGIJO/8TmhptuDHiALVa1Zq9KKsn+YlUcs9vo+2FxdsV4FK+kgibRH4Q9OJF6hvdQ7EArskJAh0kkNAqk146XZFpcTd6stM2+m10t9Z8t36lMDWffzbq2dd0ZDjIPkm7c11xjD66ia2n101fs3TJJ8svfhiJ1g9q2lE3O/gN+FCu4UwJQXEHS8VMjAEEsv4yUIQEPs+wM2atnouqu6OUTXsFl8gR7MJ6Uhnhglggucd2XzINi8yW1T96c4W2yJzWrmeDS0/nOmdXEKcwy6+qcg==
-Received: from BN0PR07CA0003.namprd07.prod.outlook.com (2603:10b6:408:141::15)
- by BY5PR12MB4935.namprd12.prod.outlook.com (2603:10b6:a03:1d9::9) with
+ bh=O4+iOkMEgxHudzLmFWp4EWIwA3zTti/25MkODhPY9Aw=;
+ b=l74DsnhLK1dX+hyGn/JIY6FlqflnfLGbwp5LZzU2rT0L6H1G9A4XV/S+SFfv1wWBRSVMyiOlR6hcQ43zcxQGXMopbURGTDY8V5l0g/z2lJM2RGyhrjjP8gghwVr30mWV32VTtSv90GqAgB6/Iyxk+DJm2avvMKnWFpwqNikGH7TiBT0C8iEd/FQ81I/4qq7MXFV1FNJ7f92U9xwPY4b+XV/OdPOlmsw1g2wsezGiGr2ieSyaatyNdqAQx2H43TLK1PUlMlRITotIB2qa2tT/r/xWIEvfJf/7HqmsZMl256CqfwCugWYfXsXtouULJTZ74hz0Pb7zhZVaUmA/bUOtdQ==
+Received: from BN9PR03CA0036.namprd03.prod.outlook.com (2603:10b6:408:fb::11)
+ by CY4PR12MB1413.namprd12.prod.outlook.com (2603:10b6:903:39::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Tue, 26 Apr
- 2022 07:38:37 +0000
-Received: from BN8NAM11FT010.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:141:cafe::17) by BN0PR07CA0003.outlook.office365.com
- (2603:10b6:408:141::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
- Transport; Tue, 26 Apr 2022 07:38:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.18; Tue, 26 Apr
+ 2022 07:38:52 +0000
+Received: from BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fb:cafe::d6) by BN9PR03CA0036.outlook.office365.com
+ (2603:10b6:408:fb::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
+ Transport; Tue, 26 Apr 2022 07:38:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT010.mail.protection.outlook.com (10.13.177.53) with Microsoft SMTP
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ BN8NAM11FT061.mail.protection.outlook.com (10.13.177.144) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5186.14 via Frontend Transport; Tue, 26 Apr 2022 07:38:37 +0000
+ 15.20.5186.14 via Frontend Transport; Tue, 26 Apr 2022 07:38:51 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Tue, 26 Apr 2022 07:38:50 +0000
 Received: from drhqmail203.nvidia.com (10.126.190.182) by
- DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Tue, 26 Apr 2022 07:38:36 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 00:38:35 -0700
+ 15.2.986.22; Tue, 26 Apr 2022 00:38:50 -0700
 Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
  (10.126.190.182) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Tue, 26 Apr 2022 00:38:32 -0700
+ Transport; Tue, 26 Apr 2022 00:38:46 -0700
 From:   Ashish Mhetre <amhetre@nvidia.com>
 To:     <krzysztof.kozlowski@linaro.org>, <thierry.reding@gmail.com>,
         <jonathanh@nvidia.com>, <digetx@gmail.com>, <robh+dt@kernel.org>,
@@ -69,33 +69,35 @@ To:     <krzysztof.kozlowski@linaro.org>, <thierry.reding@gmail.com>,
         <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>
 CC:     <vdumpa@nvidia.com>, <Snikam@nvidia.com>,
         Ashish Mhetre <amhetre@nvidia.com>
-Subject: [Patch v9 0/4] memory: tegra: Add MC channels and error logging
-Date:   Tue, 26 Apr 2022 13:08:23 +0530
-Message-ID: <20220426073827.25506-1-amhetre@nvidia.com>
+Subject: [Patch v9 1/4] memory: tegra: Add memory controller channels support
+Date:   Tue, 26 Apr 2022 13:08:24 +0530
+Message-ID: <20220426073827.25506-2-amhetre@nvidia.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220426073827.25506-1-amhetre@nvidia.com>
+References: <20220426073827.25506-1-amhetre@nvidia.com>
 X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6ec0ee3f-a0e0-4a9d-1cf6-08da2757c683
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4935:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB49355EF7834DA52993BE2FD9CAFB9@BY5PR12MB4935.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 6496e785-a644-426e-5f0e-08da2757cf2a
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1413:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1413568C24189E6B233077ACCAFB9@CY4PR12MB1413.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w2xn69P5l6iLtzwHMe8zgzR03yI22ybLzaEIQ/hfG8lm87JU9dd7DRDZEQDYg4NaC6zVj8T0rsOpbazwoTDEMA8Fira8di8tyosxl07A7Fb7+vmnV0ZbhxefqqHG95yRRxKAkqBSc8chs8pf7WgM37bjTFFAu8N8aBl00v8zqsb8e5qnEEfVd7w1GZCiZj7ybyu3NGCDwWBSKxA3zgPWOtF0A/y91SrKXylugLvEXNoMbZeFN2vxR7fgFg7ep1+XiZvZ5E12bkEoL1KXDLB7gtfZG+Nd1Wr3dsQZzcLbcUgTyLEpEQ5dXJbubGvzu4PegIrCUuOPYFbyfU17xnXr8A+Z/PKT/8GK7ZmYjI53ecDCLFuFCiQpu/7Rx9xPbu0DqPkvgFCjjUN3p7Np8a0/uP0/4TrTjAhV+x+ixDRCx5xz3uWatFde779OxMBObmTx7rhGqgaVgOjqpRYZkNBQerMjy0GVNsk33fPsFc1k1/AJMPklFqieaXpY6nFIg9q45oTH02JpJfDqBZ+ZtRd0CzfFZ9rYHcmu44yM9sns9MMT7D3j5rsdlI2UM8KLL9A9dQ0vfEqHEXPZYYvPpSTSJaB5n5NI2NO/CzpxA4mg+f6ZG5+Zz25yZbqpszQAerJjcReILJEdY/UQEO2cMvRmD0ncq46j9gtE7kZ/pVrk3zWyL7bYK6470xg/bjNJN3OLECIBrm5SVVXvFRem9ZNMlWnupePJZsWpvBaeqbeAnHw=
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(1076003)(36756003)(47076005)(2616005)(5660300002)(107886003)(356005)(83380400001)(36860700001)(921005)(186003)(336012)(426003)(82310400005)(81166007)(8936002)(7696005)(86362001)(26005)(6666004)(8676002)(2906002)(70206006)(4326008)(508600001)(70586007)(316002)(40460700003)(54906003)(110136005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ae0KYFVfcPU9QzoXPAyAR6e2mP5upyTd9YF9SLpzUynzvvOPVmARvEGT3HY0Xg2sUMR/UiSoFsLoCGtvl8kyoVdPgNdHtVTPeFQfMibEuah8wh1+yih1wtvWnU7DfHqUFHdWnu0+MVKyxldPWW8yeekGc0kBWdBkZn2puKD20L8LK9D2idEFX1WmXtAIDIYnPn/l/1PI5XkP5/Fp4EEXbKNTzdDE4nVmiw+hK405KkBSy5SCDKfwLYKHVOf5gxjhuC1Vsy9dZyd63sZdnqTget1zVBQqPMOxB+m5sVZkOD1VMFCqjmzevGcLEwPmwZUsem5vTfgiJzgnq9vS1K3sMVFVLzYINo09Efra/gD5YtMwc0ppdQGMEdOlqou4hWo0ZQHYSUe99P/abEEhNnWwuSPQ2JH6llkgjH3qh/938Hy+Qk+YrHEA1g3xGuH0nhInzAxGqkMF0+nOpZMOeTiEtABl7rP98UEKMD/9Z01vZpbDY/7AKwspuZsG62SbB+ZtyGJ3CCAih6zE7WtCYeWzqjoBe1Ffxty1ftd5jHcvMIHFz5UhmdbyByzxhLZ5z1YcMH8S9ueSIy2RqCqy5jtBocxVN2F4Fh7+ikkt1D8Faubd2HcEPO8SNJvxeqd1daimJfGbtby9zJK2zXGqHUrejg2AqAnsAAEDl5d6fUsJtD6cIya79u7VwL1em5XVp7rnH3nEndg0ujkxNl9svV+E/vzViRAO5hiqJEVo0ilxNRA=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(54906003)(110136005)(82310400005)(70586007)(8676002)(81166007)(86362001)(921005)(316002)(356005)(47076005)(83380400001)(36860700001)(107886003)(36756003)(5660300002)(4326008)(2906002)(70206006)(426003)(1076003)(186003)(336012)(2616005)(26005)(508600001)(7696005)(6666004)(8936002)(40460700003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 07:38:37.0747
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 07:38:51.5926
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec0ee3f-a0e0-4a9d-1cf6-08da2757c683
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6496e785-a644-426e-5f0e-08da2757cf2a
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT061.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4935
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1413
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -106,89 +108,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From tegra186 onward, memory controllers support multiple channels.
-Add memory controller channels in device tree and add support to map
-address spaces of these channels in tegra MC driver.
-When memory controller interrupt occurs, registers from these channels
-are required to be read in order to get error information.
-Add error logging support from tegra186 onward for memory controller
-interrupts.
+From tegra186 onwards, memory controller support multiple channels.
+Add support for mapping address spaces of these channels.
+Add number of channels supported by tegra186, tegra194 and tegra234.
+In case of old bindings, channels won't be present. If channels are not
+present then print warning and continue so that backward compatibility
+will be preserved in driver.
+During error interrupts from memory controller, appropriate registers
+from these channels need to be accessed for logging error info.
 
-Ashish Mhetre (4):
-  memory: tegra: Add memory controller channels support
-  memory: tegra: Add MC error logging on tegra186 onward
-  dt-bindings: memory: tegra: Update validation for reg and reg-names
-  arm64: tegra: Add memory controller channels
-
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
 ---
-Changes in v9:
-- Updated data type of loop variable 'i' from int to unsigned int
-- Used sizeof(*mc->ch_regs) instead of sizeof(void __iomem *)
-- Updated commit message
+ drivers/memory/tegra/mc.c       |  6 ++++++
+ drivers/memory/tegra/tegra186.c | 34 +++++++++++++++++++++++++++++++++
+ drivers/memory/tegra/tegra194.c |  1 +
+ drivers/memory/tegra/tegra234.c |  1 +
+ include/soc/tegra/mc.h          |  4 ++++
+ 5 files changed, 46 insertions(+)
 
-Changes in v8:
-- Updated the bindings patch commit message to reflect the ABI change
-  and added "tegra" in subject
-- Updated function name with "mc_" prefix
-- Used snprintf instead of sprintf
-- Set mc->bcast_ch_regs to NULL in case of old bindings and checking for
-  NULL before accessing it
-
-Changes in v7:
-- Updated reg-names as per comments on v6
-- Removed use of of_property_count_elems_of_size() and used broadcast
-  reg for checking whether old or new DTS is getting used
-- Updated variable names as per comments on v6
-- Added helper function for getting global_intstatus bit from channel
-- Used to_platform_device() instead of passing pdev pointer to
-  map_regs()
-- Allocated ch_regs at runtime
-- Updated DT binding documentation to add validation for reg-names
-
-Changes in v6:
-- Added reg-names for each reg item of memory controller node
-- Added logging for interrupts on multiple memory controller channels
-- Added clearing interrupt support for global intstatus
-- Updated DT binding documentation to work with existing DTS as well
-- Updated function to get MC channels
-- Updated variable names
-
-Changes in v5:
-- Updated patch sequence such that driver patches are before DT patches
-- Fixed DT ABI break from v4
-- Fixed smatch bug
-- Updated description in DT binding documentation
-- Updated variable names
-
-Changes in v4:
-- Added memory controller channels support
-- Added newlines after every break statement of all switch cases
-- Fixed compile error with W=1 build
-- Fixed the interrupt mask bit logic
-
-Changes in v3:
-- Removed unnecessary ifdefs
-- Grouped newly added MC registers with existing MC registers
-- Removed unnecessary initialization of variables
-- Updated code to use newly added field 'has_addr_hi_reg' instead of ifdefs
-
-Changes in v2:
-- Updated patch subject and commit message
-- Removed separate irq handlers
-- Updated tegra30_mc_handle_irq to be used for tegra186 onwards as well
-
- .../nvidia,tegra186-mc.yaml                   |  80 +++++++++-
- arch/arm64/boot/dts/nvidia/tegra186.dtsi      |   8 +-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi      |  24 ++-
- arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  24 ++-
- drivers/memory/tegra/mc.c                     | 140 ++++++++++++++++--
- drivers/memory/tegra/mc.h                     |  43 +++++-
- drivers/memory/tegra/tegra186.c               |  43 ++++++
- drivers/memory/tegra/tegra194.c               |   9 ++
- drivers/memory/tegra/tegra234.c               |   8 +
- include/soc/tegra/mc.h                        |   7 +
- 10 files changed, 356 insertions(+), 30 deletions(-)
-
+diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+index bf3abb6d8354..c1dd24542093 100644
+--- a/drivers/memory/tegra/mc.c
++++ b/drivers/memory/tegra/mc.c
+@@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mc->regs))
+ 		return PTR_ERR(mc->regs);
+ 
++	if (mc->soc->ops && mc->soc->ops->map_regs) {
++		err = mc->soc->ops->map_regs(mc);
++		if (err < 0)
++			return err;
++	}
++
+ 	mc->debugfs.root = debugfs_create_dir("mc", NULL);
+ 
+ 	if (mc->soc->ops && mc->soc->ops->probe) {
+diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
+index 3d153881abc1..e20ea38d5f35 100644
+--- a/drivers/memory/tegra/tegra186.c
++++ b/drivers/memory/tegra/tegra186.c
+@@ -139,11 +139,44 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
+ 	return 0;
+ }
+ 
++static int tegra186_mc_map_regs(struct tegra_mc *mc)
++{
++	struct platform_device *pdev = to_platform_device(mc->dev);
++	unsigned int i;
++
++	mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev, "broadcast");
++	if (IS_ERR(mc->bcast_ch_regs)) {
++		if (PTR_ERR(mc->bcast_ch_regs) == -EINVAL) {
++			dev_warn(&pdev->dev, "Broadcast channel is missing, please update your device-tree\n");
++			mc->bcast_ch_regs = NULL;
++			return 0;
++		}
++		return PTR_ERR(mc->bcast_ch_regs);
++	}
++
++	mc->ch_regs = devm_kcalloc(mc->dev, mc->soc->num_channels,
++				   sizeof(*mc->ch_regs), GFP_KERNEL);
++	if (!mc->ch_regs)
++		return -ENOMEM;
++
++	for (i = 0; i < mc->soc->num_channels; i++) {
++		char name[5];
++
++		snprintf(name, sizeof(name), "ch%u", i);
++		mc->ch_regs[i] = devm_platform_ioremap_resource_byname(pdev, name);
++		if (IS_ERR(mc->ch_regs[i]))
++			return PTR_ERR(mc->ch_regs[i]);
++	}
++
++	return 0;
++}
++
+ const struct tegra_mc_ops tegra186_mc_ops = {
+ 	.probe = tegra186_mc_probe,
+ 	.remove = tegra186_mc_remove,
+ 	.resume = tegra186_mc_resume,
+ 	.probe_device = tegra186_mc_probe_device,
++	.map_regs = tegra186_mc_map_regs,
+ };
+ 
+ #if defined(CONFIG_ARCH_TEGRA_186_SOC)
+@@ -875,6 +908,7 @@ const struct tegra_mc_soc tegra186_mc_soc = {
+ 	.num_clients = ARRAY_SIZE(tegra186_mc_clients),
+ 	.clients = tegra186_mc_clients,
+ 	.num_address_bits = 40,
++	.num_channels = 4,
+ 	.ops = &tegra186_mc_ops,
+ };
+ #endif
+diff --git a/drivers/memory/tegra/tegra194.c b/drivers/memory/tegra/tegra194.c
+index cab998b8bd5c..94001174deaf 100644
+--- a/drivers/memory/tegra/tegra194.c
++++ b/drivers/memory/tegra/tegra194.c
+@@ -1347,5 +1347,6 @@ const struct tegra_mc_soc tegra194_mc_soc = {
+ 	.num_clients = ARRAY_SIZE(tegra194_mc_clients),
+ 	.clients = tegra194_mc_clients,
+ 	.num_address_bits = 40,
++	.num_channels = 16,
+ 	.ops = &tegra186_mc_ops,
+ };
+diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
+index e22824a79f45..6335a132be2d 100644
+--- a/drivers/memory/tegra/tegra234.c
++++ b/drivers/memory/tegra/tegra234.c
+@@ -97,5 +97,6 @@ const struct tegra_mc_soc tegra234_mc_soc = {
+ 	.num_clients = ARRAY_SIZE(tegra234_mc_clients),
+ 	.clients = tegra234_mc_clients,
+ 	.num_address_bits = 40,
++	.num_channels = 16,
+ 	.ops = &tegra186_mc_ops,
+ };
+diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
+index 1066b1194a5a..42b9c509773e 100644
+--- a/include/soc/tegra/mc.h
++++ b/include/soc/tegra/mc.h
+@@ -181,6 +181,7 @@ struct tegra_mc_ops {
+ 	int (*resume)(struct tegra_mc *mc);
+ 	irqreturn_t (*handle_irq)(int irq, void *data);
+ 	int (*probe_device)(struct tegra_mc *mc, struct device *dev);
++	int (*map_regs)(struct tegra_mc *mc);
+ };
+ 
+ struct tegra_mc_soc {
+@@ -194,6 +195,7 @@ struct tegra_mc_soc {
+ 	unsigned int atom_size;
+ 
+ 	u8 client_id_mask;
++	u8 num_channels;
+ 
+ 	const struct tegra_smmu_soc *smmu;
+ 
+@@ -212,6 +214,8 @@ struct tegra_mc {
+ 	struct tegra_smmu *smmu;
+ 	struct gart_device *gart;
+ 	void __iomem *regs;
++	void __iomem *bcast_ch_regs;
++	void __iomem **ch_regs;
+ 	struct clk *clk;
+ 	int irq;
+ 
 -- 
 2.17.1
 

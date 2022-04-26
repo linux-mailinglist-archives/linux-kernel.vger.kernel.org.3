@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD8B50F7F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C042850F81C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244672AbiDZJU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S1347897AbiDZJhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345571AbiDZI5Q (ORCPT
+        with ESMTP id S1346190AbiDZJHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE0583B23;
-        Tue, 26 Apr 2022 01:41:50 -0700 (PDT)
+        Tue, 26 Apr 2022 05:07:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7377120A0;
+        Tue, 26 Apr 2022 01:48:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25077604F5;
-        Tue, 26 Apr 2022 08:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1B0C385A0;
-        Tue, 26 Apr 2022 08:41:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 651A2B81A2F;
+        Tue, 26 Apr 2022 08:48:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CA8C385AC;
+        Tue, 26 Apr 2022 08:48:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962509;
-        bh=GTArJCbJt/PH4MavpqXS9m5Og/sdJEC9E8m9WgSVba4=;
+        s=korg; t=1650962897;
+        bh=Wt2pwS5chaUbBRJuBDKVa2Ii4R6pBPHlO8KbXsTNmGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xIri91SeQpF9slsLak5nzixTbGRDQq57AK3o13MuGZK3ENaVYAXzSaehXHh14zZlm
-         C39wRDE4b16/nQSYF/Ly67VrRb4jxkhFXIVnVAuCL7+LnlRGUj5Ajy7oZsfH8Q/c97
-         Jmqepx4E0yYQNSh3LSIB4NedeR72s8vXB6GbfRXU=
+        b=OjWcys8zCWa0OJXcopiGUtpB9JapSiUL/IuSjhZERBaqriyLfb5KpySOTVV8ZlV8R
+         sq7HXCfakbfpJW6XFZSVOOuo4oGecp+2uqz5rAOB+tJ8zJed117J6k4lsLK5hH1OzA
+         L3cwgX2fEZnSu5TOHOnx4FNn5xIGL28wpd0NJ1hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 5.15 118/124] ext4: fix overhead calculation to account for the reserved gdt blocks
-Date:   Tue, 26 Apr 2022 10:21:59 +0200
-Message-Id: <20220426081750.644197809@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sergey Matyukevich <sergey.matyukevich@synopsys.com>,
+        Vineet Gupta <vgupta@kernel.org>
+Subject: [PATCH 5.17 125/146] ARC: entry: fix syscall_trace_exit argument
+Date:   Tue, 26 Apr 2022 10:22:00 +0200
+Message-Id: <20220426081753.576231469@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,35 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
 
-commit 10b01ee92df52c8d7200afead4d5e5f55a5c58b1 upstream.
+commit b1c6ecfdd06907554518ec384ce8e99889d15193 upstream.
 
-The kernel calculation was underestimating the overhead by not taking
-into account the reserved gdt blocks.  With this change, the overhead
-calculated by the kernel matches the overhead calculation in mke2fs.
+Function syscall_trace_exit expects pointer to pt_regs. However
+r0 is also used to keep syscall return value. Restore pointer
+to pt_regs before calling syscall_trace_exit.
 
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
+Signed-off-by: Vineet Gupta <vgupta@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arc/kernel/entry.S |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3697,9 +3697,11 @@ static int count_overhead(struct super_b
- 	ext4_fsblk_t		first_block, last_block, b;
- 	ext4_group_t		i, ngroups = ext4_get_groups_count(sb);
- 	int			s, j, count = 0;
-+	int			has_super = ext4_bg_has_super(sb, grp);
+--- a/arch/arc/kernel/entry.S
++++ b/arch/arc/kernel/entry.S
+@@ -196,6 +196,7 @@ tracesys_exit:
+ 	st  r0, [sp, PT_r0]     ; sys call return value in pt_regs
  
- 	if (!ext4_has_feature_bigalloc(sb))
--		return (ext4_bg_has_super(sb, grp) + ext4_bg_num_gdb(sb, grp) +
-+		return (has_super + ext4_bg_num_gdb(sb, grp) +
-+			(has_super ? le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks) : 0) +
- 			sbi->s_itb_per_group + 2);
- 
- 	first_block = le32_to_cpu(sbi->s_es->s_first_data_block) +
+ 	;POST Sys Call Ptrace Hook
++	mov r0, sp		; pt_regs needed
+ 	bl  @syscall_trace_exit
+ 	b   ret_from_exception ; NOT ret_from_system_call at is saves r0 which
+ 	; we'd done before calling post hook above
 
 

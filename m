@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286DE5100F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D616510058
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351769AbiDZOyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S1351577AbiDZO0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243885AbiDZOyR (ORCPT
+        with ESMTP id S1347196AbiDZO0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:54:17 -0400
-Received: from abedmanico.biharhotel.com (abedmanico.biharhotel.com [194.31.98.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74C33FBF5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=biharhotel.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=mar.veg@biharhotel.com;
- bh=1dWi+UzZAOpqN+E1Lcs0ZpdTUIU=;
- b=fJGj3cO/rFAXwXDl9kkSXbdRBJvmrb6yKt8wdlaHD24Z1Z2UTVo12AKjKtFh+oFxGRM9nu2g1H2t
-   JhgAnNp4A4FDAmsJLmmEgh673keelkuCv/utQPAO8TmgVGfc8qa8H4veEmC5nq1jsQWWBkgQWuvx
-   clMrSvCI+lgKnNz6Sp7DUP8j/wNLjfmsPNoK+qxivQzQ/B/z8GHBxQ2gVbss5HwTplO00huRZHNY
-   URXlf8xkM5s8XQKXpo7H5NulWoil8O9VvxqSa031FCgtnQPBznZEEDGI3kTVit/HmZuoFQKIVbvb
-   N2YPDm0QxqMmli21zVk89iA9LnY9QO/q/bzFIQ==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=biharhotel.com;
- b=TlRgitjoVez1PxfEMEOWEoSt4nE7oQVDeW1lV5gbWpyInl09qkFyuCnUBX6cNB0wJR/9ymCEFlrZ
-   mp74YCC1V3hLhslzeg/SIT7wbNAmryA6O2WnNFZ+SA7GaEKSu3Dg5cm7tSeNjAmYN8IYfh9ihmhz
-   +YxwEmYGfwGSrdN0zV4tQu7ORj0S+lpOr6GX3MrRRgML5FG+8uNk34nTrQtmMa4RABUWCXMQ6UBy
-   PDaM+m0tE/EzMVcB6zaO7mHG4XOKy9SI9QAdnAWbeB7hfGufgg/hNjT+a5JZ4MkRyHQ8LB03XwsN
-   1dvnfkqnb0EfOu/yetfCVDetw8U8zyOlxhkfyA==;
-Reply-To: bradleywrubel@scotts-foundation.org
-From:   "MACKENZIE SCOTT (Scott Foundation)" <mar.veg@biharhotel.com>
-To:     linux-kernel@vger.kernel.org
-Subject: CONGRATULATIONS...
-Date:   26 Apr 2022 16:21:52 +0200
-Message-ID: <20220426162152.ED22B8116CD02A22@biharhotel.com>
+        Tue, 26 Apr 2022 10:26:04 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B1E18E18;
+        Tue, 26 Apr 2022 07:22:57 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id z8so20829165oix.3;
+        Tue, 26 Apr 2022 07:22:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xvzda8Pfpd3wwPcLRsSY8ulA8iZIYiMmmNvBbB50ZBo=;
+        b=eMtzTu+9uo5RpoE29cwdTplDs7/1J23yJE9Pfj9OMPuzbbx+2yLtEYyr2oi2JWlcwK
+         JnF1dVf0VvgaeP9vlxr/bRvjQWsOJEJmffgAcFlsRagXKFtaC4gYAQfWOXV5zFRcql4a
+         mS5DBqzkUxcV/eE1nRqIqtTQy2JLhO5fwkFrok57mckE6EnqUxV+mm2Q3u+vGsivyN5C
+         IMkF9R+jw25h4Zdy8RRp/A5jz6dRgGOEXuspMC49uHQ3AVlX33wJ7TMdAchfHSrjYqA6
+         xjArKKbB7uO1DlCn5Xlk+isirOxoN6j5U5GytQJrZGB52YbIT7nHAQsMqZPSTvBnlA7H
+         eSwA==
+X-Gm-Message-State: AOAM531qEZiePkPLLikWNob41Mv/KZ2XXKph6xyNORB+/3wiC+IS+8Kr
+        xLTU3NJ9OqZRoLfs2g0jJmPoCn70dg==
+X-Google-Smtp-Source: ABdhPJxhcjFhGIM6Fai/2gb+tvQSLuzGNZLP5mUuf7pSQ1nmqeeR538p3fZzoZhebGXVBtICKYmQTw==
+X-Received: by 2002:a54:4f04:0:b0:325:3659:ee90 with SMTP id e4-20020a544f04000000b003253659ee90mr4880405oiy.199.1650982976502;
+        Tue, 26 Apr 2022 07:22:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s6-20020a4ae546000000b0032480834193sm5599150oot.46.2022.04.26.07.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 07:22:56 -0700 (PDT)
+Received: (nullmailer pid 1917494 invoked by uid 1000);
+        Tue, 26 Apr 2022 14:22:55 -0000
+Date:   Tue, 26 Apr 2022 09:22:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: eeprom/at24: Add samsung,s524ad0xd1
+ compatible
+Message-ID: <YmgAP5yrHWJESq8N@robh.at.kernel.org>
+References: <20220422192355.2597523-1-robh@kernel.org>
+ <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,US_DOLLARS_3 autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <469d7ac0-7cf6-af91-7e24-1d9df88c9221@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Apr 23, 2022 at 08:44:21PM +0200, Krzysztof Kozlowski wrote:
+> On 22/04/2022 21:23, Rob Herring wrote:
+> > The samsung,s524ad0xd1 compatible is in use, but not documented. According
+> > to arch/arm/mach-s3c/mach-smdk6410.c, the samsung,s524ad0xd1 is compatible
+> > with the 24c128.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> 
+> The compatible - without 24c128 fallback - is used also in
+> arch/arm/boot/dts/exynos5250-smdk5250.dts and
+> Documentation/devicetree/bindings/i2c/samsung,s3c2410-i2c.yaml, so these
+> files should be fixed as well.
 
-I'm Mackenzie Scott, Ex-wife to Jeff Bezos (Amazon Founder and=20
-CEO). I'm donating $4 billion to charities, churches, individuals,=20
-colleges and businesses across the Globe from Scott's Foundation to=20
-provide immediate support to people and businesses suffering=20
-economically from the impact of COVID-19 pandemic and the ongoing=20
-war in Ukraine. Your email emerged as one of the lucky winners=20
-after an electronically conducted ballot process.
+The dts file I was aware of and I leave that to the Exynos 
+maintainers/users. :)
 
-I have a donation grant worth $8,500,000.00 Dollars for you. You=20
-are to contact Mr. BRADLEY WRUBEL for more information if you're=20
-interested.
+For some reason samsung,s3c2410-i2c.yaml is not getting a warning. I'll 
+have to investigate.
 
-MR. BRADLEY WRUBEL
-bradleywrubel@scotts-foundation.org
-
-Congratulations.
-
-Yours Sincerely
-Mackenzie Scott
-The Scott Foundation
-P.O. Box 1513
-Los Gatos, CA 95031-1513
-USA.
+Rob

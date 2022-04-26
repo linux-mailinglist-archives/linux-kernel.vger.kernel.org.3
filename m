@@ -2,216 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A55D50F2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE80850F2C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344166AbiDZHmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S1344207AbiDZHmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344158AbiDZHmQ (ORCPT
+        with ESMTP id S1344157AbiDZHmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 03:42:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878FD1353B8;
-        Tue, 26 Apr 2022 00:39:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eN8HbouCzTn5ugMMeEsKZmT4jqtPJXIdhURVsjM4cEZCkdrgv3TwD3EEv1fjmXedRUEW09hCoUhFZyjVOiCeSfyFRNniSknI7R51AWuCfuNZsNZO3ttGr7th0IoAK/fFoPPQ+bsWt3AHyqVS78+3H5q9UpNUq4wuFjnY1WT8J4EZiBtyZ9w1K6SCOvBsD7s67I8vqHqXWdZQf6njz/SNegxkiskO16a7GCoU53IzvFrE6sBr8GAAp53j09eLnMTp75V5oTYXTSfLVKZh0l3SaCjeR9z3hqfwIBFr7Fp6f13mSC93W6Sqn3ouSXdRP4pS6bJAO3lv+21QPyVPquYcKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uSWNXPZ5JdkGyK56sc34phNfkcm1OWBMQxvKxmpdRHQ=;
- b=OkY0iiEf0u6fhPxH/gLGsRqSV5R7ItJR31LvFbYpvua6rVptcU4xQV5W+KvuIRYUrW1+sf5T+LOgsehGArHdhlG/GcCt9dhO+9JlaoEE43vfEf2UqJuOU5T3DbT4mkrRN7/eLWrFHgyxZ26hGVJPvowBrZdThBgPYlOC37O0JL5YBzLLGZ22A5mzSvAe3weRj7Qaja9pl9nb/uG0CcpMljsF27gHVXb8xUoO0T7URmPVpV+nlQiCbq3QCb9NbYRuT/gdlJNbzFtXH4fLWfMRiLn1AZgyi8sTU+BuAI+ZBsXYv/rn5GvU+7RQLsJ7x4gZgFiNj1rIt5KG25trM6jGIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uSWNXPZ5JdkGyK56sc34phNfkcm1OWBMQxvKxmpdRHQ=;
- b=Dl9rjE8haNNBoqmVLfuq3i6aKhFXNHfSRc21x03SgibSXtBlhB/I91jtpi8cVwG+gQ1fbFlpgSE6UKStRJCE9HoRYShb+V9hOfO1aOGiXpOZSowiXTZKLxDtRycK32M/auTrbKDSU75PNmvf/X9G3SlyhLQz+BhNCqgFWlJ63yo7GnV+xfU+hwrts6YFat0DV+21yQpakC22wpJNQnitu5WKFYcgu0buNQ8BQZKOnAvwq6BjDudoWMzxgrjD1qpfdvhVFo+I0dciXW7wLX25pC2Zj79NJVxNc6WYAzN5pO7h4EqDpe1kJN8ZZdunQbTQvlOw05eIr6jWwtsW5hVhiA==
-Received: from DM6PR07CA0037.namprd07.prod.outlook.com (2603:10b6:5:74::14) by
- BY5PR12MB4642.namprd12.prod.outlook.com (2603:10b6:a03:1f6::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.20; Tue, 26 Apr
- 2022 07:39:06 +0000
-Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:74:cafe::8) by DM6PR07CA0037.outlook.office365.com
- (2603:10b6:5:74::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
- Transport; Tue, 26 Apr 2022 07:39:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5186.14 via Frontend Transport; Tue, 26 Apr 2022 07:39:06 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Tue, 26 Apr 2022 07:39:05 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 00:39:04 -0700
-Received: from amhetre.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Tue, 26 Apr 2022 00:39:01 -0700
-From:   Ashish Mhetre <amhetre@nvidia.com>
-To:     <krzysztof.kozlowski@linaro.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <digetx@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <dmitry.osipenko@collabora.com>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <vdumpa@nvidia.com>, <Snikam@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>
-Subject: [Patch v9 4/4] arm64: tegra: Add memory controller channels
-Date:   Tue, 26 Apr 2022 13:08:27 +0530
-Message-ID: <20220426073827.25506-5-amhetre@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220426073827.25506-1-amhetre@nvidia.com>
-References: <20220426073827.25506-1-amhetre@nvidia.com>
-X-NVConfidentiality: public
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF5135394;
+        Tue, 26 Apr 2022 00:39:07 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id E166EDFCDD;
+        Tue, 26 Apr 2022 00:38:36 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lnssaegXnrv3; Tue, 26 Apr 2022 00:38:36 -0700 (PDT)
+Message-ID: <c11a58ecc5da2e206fc2b942980223a04a103f19.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1650958716; bh=dTWe+d0dFVklVrAgAChAw0FE5y1BBpVvo//lxX4HxkE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=oaiUBpyZ2GF98CABd1zQjAmoGCryt1LzZH1RthGVWgoJNudGOLt46HWmzoA+z9BbJ
+         ggKwFSKAhWi/TnMos4DZ73a7dXRzUJOco3F2py9Io88PXaOvfOzYJ+PjiYqcKGlSta
+         s4l1Cbyx7BvkK5M4aSdW5JMeDI2MSDWrYhZl8Y7lop8G47KuEvXOJID6v8Q8a05ALh
+         1702lc6bzwuio+ir9Z6Q1VaMVD3Ynxqs781rh9vnt4uGGiwb+Vi/Imq/RhsykO9dU2
+         BGs34TQ1+d+j1BSVg12L1ENzkQAf0xV1LU6AVh8LQ4vXdh+wafTS6RAmPiieyCKIdy
+         ruc1yanbdFBgg==
+Subject: Re: [PATCH V4 07/11] arm64: dts: imx8mq: Enable both G1 and G2
+ VPU's with vpu-blk-ctrl
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
+Cc:     aford@beaconembedded.com, cphealy@gmail.com,
+        kernel test robot <lkp@intel.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Date:   Tue, 26 Apr 2022 09:38:28 +0200
+In-Reply-To: <4b958892ba788a0e9e73a9135c305aacbe33294d.camel@pengutronix.de>
+References: <20220125171129.472775-1-aford173@gmail.com>
+         <20220125171129.472775-8-aford173@gmail.com>
+         <d6c5c5663f8ae904d409240063295cf516e17dd1.camel@puri.sm>
+         <4b958892ba788a0e9e73a9135c305aacbe33294d.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2645b929-9287-4de0-40fc-08da2757d7c4
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4642:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4642747CB95C7E07F52F5103CAFB9@BY5PR12MB4642.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WYcFp29dXOPB5q2ggbJHs0JuGdw5Yj43E4WVyltpdfXDA2FaFM6jTp8Efr8APLTZdbRFnj3yWX6AJw3sGK8AmblYfvSRgD3VEQ5RgOko3Y9F9w/l3ir8ueRrCIbAVOvLlz+8PV6TP340wgfHhKUKtFNTIi4VdwpIDwXh/a0+aSBFH9gQCAGaj4XfMNvFb9B9aDOY83/trc4sYsjGcz/i7ATn2b7jni1IEp4AnO3X/PMLwlXt9/sl24onGJHyBwHUmNz7HNXA88KTt7Pi4k+zpfR9fE8Bw4ULWd5MsSRGR3tfJlVPXW9pYLM0JOrIbabToqOzB/g2WonUQllwXpWM9BORMHuz0zLtKDqX0tmH414jjJAWXfijCoPtsT54eo0qzjqGH0kJfuhAA6svjngfSlUFe3sH6AMFaspyywi3e+fMZrOH4jNuz0HIFf2Pd31scYNX/8Y8NgDh+E2XlaeG5y0ZjKTbuNZ6Xv/xb3CLwb8rOk2I9OL6LtR8QC6enPLg5je31hWS6Q6JNgyHrDeX+XuB86aSx5S8UroHknH06BV38q9aT3h1JVoY8vsRlIz38AmzGO58v2Xt9RW0vKUVQJvZI7PkvxNWEviRyj4E5LZXVr90aETfEExiFEeygGMUC5iazalp+QjCerR0kaTU5H5/1SeXoOO/4tTXrSmB5X0b2YrMlsxzPTnHdd8ZYvpnTbVML/coAG072kzmMRKQOQbPPXNf6/PRahTVF+TIPaE=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2906002)(7696005)(336012)(5660300002)(426003)(83380400001)(1076003)(8936002)(186003)(36860700001)(2616005)(107886003)(36756003)(26005)(82310400005)(47076005)(6666004)(4326008)(508600001)(110136005)(316002)(54906003)(70206006)(70586007)(40460700003)(8676002)(356005)(81166007)(86362001)(921005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 07:39:06.0853
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2645b929-9287-4de0-40fc-08da2757d7c4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4642
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From tegra186 onwards, memory controller support multiple channels.
-During the error interrupts from memory controller, corresponding
-channels need to be accessed for logging error info and clearing the
-interrupt.
-So add address and size of these channels in device tree node of
-tegra186, tegra194 and tegra234 memory controller. Also add reg-names
-for each of these reg items which are used by driver for mapping.
+Am Montag, dem 25.04.2022 um 17:34 +0200 schrieb Lucas Stach:
+> Hi Martin,
+> 
+> Am Montag, dem 25.04.2022 um 17:22 +0200 schrieb Martin Kepplinger:
+> > Am Dienstag, dem 25.01.2022 um 11:11 -0600 schrieb Adam Ford:
+> > > With the Hantro G1 and G2 now setup to run independently, update
+> > > the device tree to allow both to operate.  This requires the
+> > > vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
+> > > certain clock enabled to handle the gating of the G1 and G2
+> > > fuses, the clock-parents and clock-rates for the various VPU's
+> > > to be moved into the pgc_vpu because they cannot get re-parented
+> > > once enabled, and the pgc_vpu is the highest in the chain.
+> > > 
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> > > b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> > > index 2df2510d0118..549b2440f55d 100644
+> > > --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> > > +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+> > > @@ -737,7 +737,21 @@ pgc_gpu: power-domain@5 {
+> > >                                         pgc_vpu: power-domain@6 {
+> > >                                                 #power-domain-
+> > > cells =
+> > > <0>;
+> > >                                                 reg =
+> > > <IMX8M_POWER_DOMAIN_VPU>;
+> > > -                                               clocks = <&clk
+> > > IMX8MQ_CLK_VPU_DEC_ROOT>;
+> > > +                                               clocks = <&clk
+> > > IMX8MQ_CLK_VPU_DEC_ROOT>,
+> > > +                                                        <&clk
+> > > IMX8MQ_CLK_VPU_G1_ROOT>,
+> > > +                                                        <&clk
+> > > IMX8MQ_CLK_VPU_G2_ROOT>;
+> > > +                                               assigned-clocks =
+> > > <&clk IMX8MQ_CLK_VPU_G1>,
+> > > +                                                                
+> > > <&clk IMX8MQ_CLK_VPU_G2>,
+> > > +                                                                
+> > > <&clk IMX8MQ_CLK_VPU_BUS>,
+> > > +                                                                
+> > > <&clk IMX8MQ_VPU_PLL_BYPASS>;
+> > > +                                               assigned-clock-
+> > > parents = <&clk IMX8MQ_VPU_PLL_OUT>,
+> > > +                                                                
+> > >     
+> > >     <&clk IMX8MQ_VPU_PLL_OUT>,
+> > > +                                                                
+> > >     
+> > >     <&clk IMX8MQ_SYS1_PLL_800M>,
+> > > +                                                                
+> > >     
+> > >     <&clk IMX8MQ_VPU_PLL>;
+> > > +                                               assigned-clock-
+> > > rates
+> > > = <600000000>,
+> > > +                                                                
+> > >     
+> > >   <600000000>,
+> > > +                                                                
+> > >     
+> > >   <800000000>,
+> > > +                                                                
+> > >     
+> > >   <0>;
+> > >                                         };
+> > >  
+> > >                                         pgc_disp: power-domain@7
+> > > {
+> > > @@ -1457,30 +1471,31 @@ usb3_phy1: usb-phy@382f0040 {
+> > >                         status = "disabled";
+> > >                 };
+> > >  
+> > > -               vpu: video-codec@38300000 {
+> > > -                       compatible = "nxp,imx8mq-vpu";
+> > > -                       reg = <0x38300000 0x10000>,
+> > > -                             <0x38310000 0x10000>,
+> > > -                             <0x38320000 0x10000>;
+> > > -                       reg-names = "g1", "g2", "ctrl";
+> > > -                       interrupts = <GIC_SPI 7
+> > > IRQ_TYPE_LEVEL_HIGH>,
+> > > -                                    <GIC_SPI 8
+> > > IRQ_TYPE_LEVEL_HIGH>;
+> > > -                       interrupt-names = "g1", "g2";
+> > > +               vpu_g1: video-codec@38300000 {
+> > > +                       compatible = "nxp,imx8mq-vpu-g1";
+> > > +                       reg = <0x38300000 0x10000>;
+> > > +                       interrupts = <GIC_SPI 7
+> > > IRQ_TYPE_LEVEL_HIGH>;
+> > > +                       clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
+> > > +                       power-domains = <&vpu_blk_ctrl
+> > > IMX8MQ_VPUBLK_PD_G1>;
+> > > +               };
+> > > +
+> > > +               vpu_g2: video-codec@38310000 {
+> > > +                       compatible = "nxp,imx8mq-vpu-g2";
+> > > +                       reg = <0x38310000 0x10000>;
+> > > +                       interrupts = <GIC_SPI 8
+> > > IRQ_TYPE_LEVEL_HIGH>;
+> > > +                       clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+> > > +                       power-domains = <&vpu_blk_ctrl
+> > > IMX8MQ_VPUBLK_PD_G2>;
+> > > +               };
+> > > +
+> > > +               vpu_blk_ctrl: blk-ctrl@38320000 {
+> > > +                       compatible = "fsl,imx8mq-vpu-blk-ctrl";
+> > > +                       reg = <0x38320000 0x100>;
+> > > +                       power-domains = <&pgc_vpu>, <&pgc_vpu>,
+> > > <&pgc_vpu>;
+> > > +                       power-domain-names = "bus", "g1", "g2";
+> > >                         clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
+> > > -                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
+> > > -                                <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
+> > > -                       clock-names = "g1", "g2", "bus";
+> > > -                       assigned-clocks = <&clk
+> > > IMX8MQ_CLK_VPU_G1>,
+> > > -                                         <&clk
+> > > IMX8MQ_CLK_VPU_G2>,
+> > > -                                         <&clk
+> > > IMX8MQ_CLK_VPU_BUS>,
+> > > -                                         <&clk
+> > > IMX8MQ_VPU_PLL_BYPASS>;
+> > > -                       assigned-clock-parents = <&clk
+> > > IMX8MQ_VPU_PLL_OUT>,
+> > > -                                                <&clk
+> > > IMX8MQ_VPU_PLL_OUT>,
+> > > -                                                <&clk
+> > > IMX8MQ_SYS1_PLL_800M>,
+> > > -                                                <&clk
+> > > IMX8MQ_VPU_PLL>;
+> > > -                       assigned-clock-rates = <600000000>,
+> > > <600000000>,
+> > > -                                              <800000000>, <0>;
+> > > -                       power-domains = <&pgc_vpu>;
+> > > +                                <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
+> > > +                       clock-names = "g1", "g2";
+> > > +                       #power-domain-cells = <1>;
+> > >                 };
+> > >  
+> > >                 pcie0: pcie@33800000 {
+> > 
+> > With this update, when testing suspend to ram on imx8mq, I get:
+> > 
+> > buck4: failed to disable: -ETIMEDOUT
+> > 
+> > where buck4 is power-supply of pgc_vpu. And thus the transition to
+> > suspend (and resuming) fails.
+> > 
+> > Have you tested system suspend after the imx8m-blk-ctrl update on
+> > imx8mq?
+> 
+> I haven't tested system suspend, don't know if anyone else did.
+> However
+> I guess that this is just uncovering a preexisting issue in the
+> system
+> suspend sequencing, which you would also hit if the video decoders
+> were
+> active at system suspend time.
+> 
+> My guess is that the regulator disable fails, due to the power
+> domains
+> being disabled quite late in the suspend sequence, where i2c
+> communication with the PMIC is no longer possible due to i2c being
+> suspended already or something like that. Maybe you can dig in a bit
+> on
+> the actual sequence on your system and we can see how we can rework
+> things to suspend the power domains at a time where communication
+> with
+> the PMIC is still possible?
 
-Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra186.dtsi |  8 +++++++-
- arch/arm64/boot/dts/nvidia/tegra194.dtsi | 24 +++++++++++++++++++++---
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 24 +++++++++++++++++++++---
- 3 files changed, 49 insertions(+), 7 deletions(-)
+What exactly would you like to see? Here's all gpcv2 regulators
+disabling on suspend. (gpu (domain 5) is disabled by runtime pm often):
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-index e9b40f5d79ec..a7b794de1637 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
-@@ -521,7 +521,13 @@
- 
- 	mc: memory-controller@2c00000 {
- 		compatible = "nvidia,tegra186-mc";
--		reg = <0x0 0x02c00000 0x0 0xb0000>;
-+		reg = <0x0 0x02c00000 0x0 0x10000>,    /* MC-SID */
-+		      <0x0 0x02c10000 0x0 0x10000>,    /* Broadcast channel */
-+		      <0x0 0x02c20000 0x0 0x10000>,    /* MC0 */
-+		      <0x0 0x02c30000 0x0 0x10000>,    /* MC1 */
-+		      <0x0 0x02c40000 0x0 0x10000>,    /* MC2 */
-+		      <0x0 0x02c50000 0x0 0x10000>;    /* MC3 */
-+		reg-names = "sid", "broadcast", "ch0", "ch1", "ch2", "ch3";
- 		interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
- 		status = "disabled";
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-index 1d6be5774fac..26c3a527e99a 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-@@ -604,9 +604,27 @@
- 
- 		mc: memory-controller@2c00000 {
- 			compatible = "nvidia,tegra194-mc";
--			reg = <0x02c00000 0x100000>,
--			      <0x02b80000 0x040000>,
--			      <0x01700000 0x100000>;
-+			reg = <0x02c00000 0x10000>,   /* MC-SID */
-+			      <0x02c10000 0x10000>,   /* MC Broadcast*/
-+			      <0x02c20000 0x10000>,   /* MC0 */
-+			      <0x02c30000 0x10000>,   /* MC1 */
-+			      <0x02c40000 0x10000>,   /* MC2 */
-+			      <0x02c50000 0x10000>,   /* MC3 */
-+			      <0x02b80000 0x10000>,   /* MC4 */
-+			      <0x02b90000 0x10000>,   /* MC5 */
-+			      <0x02ba0000 0x10000>,   /* MC6 */
-+			      <0x02bb0000 0x10000>,   /* MC7 */
-+			      <0x01700000 0x10000>,   /* MC8 */
-+			      <0x01710000 0x10000>,   /* MC9 */
-+			      <0x01720000 0x10000>,   /* MC10 */
-+			      <0x01730000 0x10000>,   /* MC11 */
-+			      <0x01740000 0x10000>,   /* MC12 */
-+			      <0x01750000 0x10000>,   /* MC13 */
-+			      <0x01760000 0x10000>,   /* MC14 */
-+			      <0x01770000 0x10000>;   /* MC15 */
-+			reg-names = "sid", "broadcast", "ch0", "ch1", "ch2", "ch3",
-+				    "ch4", "ch5", "ch6", "ch7", "ch8", "ch9", "ch10",
-+				    "ch11", "ch12", "ch13", "ch14", "ch15";
- 			interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
- 			#interconnect-cells = <1>;
- 			status = "disabled";
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index 8767dbe2d066..69048b450db2 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -507,9 +507,27 @@
- 
- 		mc: memory-controller@2c00000 {
- 			compatible = "nvidia,tegra234-mc";
--			reg = <0x02c00000 0x100000>,
--			      <0x02b80000 0x040000>,
--			      <0x01700000 0x100000>;
-+			reg = <0x02c00000 0x10000>,   /* MC-SID */
-+			      <0x02c10000 0x10000>,   /* MC Broadcast*/
-+			      <0x02c20000 0x10000>,   /* MC0 */
-+			      <0x02c30000 0x10000>,   /* MC1 */
-+			      <0x02c40000 0x10000>,   /* MC2 */
-+			      <0x02c50000 0x10000>,   /* MC3 */
-+			      <0x02b80000 0x10000>,   /* MC4 */
-+			      <0x02b90000 0x10000>,   /* MC5 */
-+			      <0x02ba0000 0x10000>,   /* MC6 */
-+			      <0x02bb0000 0x10000>,   /* MC7 */
-+			      <0x01700000 0x10000>,   /* MC8 */
-+			      <0x01710000 0x10000>,   /* MC9 */
-+			      <0x01720000 0x10000>,   /* MC10 */
-+			      <0x01730000 0x10000>,   /* MC11 */
-+			      <0x01740000 0x10000>,   /* MC12 */
-+			      <0x01750000 0x10000>,   /* MC13 */
-+			      <0x01760000 0x10000>,   /* MC14 */
-+			      <0x01770000 0x10000>;   /* MC15 */
-+			reg-names = "sid", "broadcast", "ch0", "ch1", "ch2", "ch3",
-+				    "ch4", "ch5", "ch6", "ch7", "ch8", "ch9", "ch10",
-+				    "ch11", "ch12", "ch13", "ch14", "ch15";
- 			interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
- 			#interconnect-cells = <1>;
- 			status = "okay";
--- 
-2.17.1
+[   47.138700] imx-pgc imx-pgc-domain.5: disabling regulator
+[   47.298071] Freezing user space processes ... (elapsed 0.008
+seconds) done.
+[   47.313432] OOM killer disabled.
+[   47.316670] Freezing remaining freezable tasks ... (elapsed 2.221
+seconds) done.
+[   49.672052] imx8m-blk-ctrl 38320000.blk-ctrl: imx8m_blk_ctrl_suspend
+start
+[   49.704417] imx-pgc imx-pgc-domain.0: disabling regulator
+[   49.711114] imx-pgc imx-pgc-domain.6: disabling regulator
+[   49.819064] buck4: failed to disable: -ETIMEDOUT
+
+The stack looks pretty much the same for all of them, from pm_suspend()
+over genpd_suspend_noiry().
+
+And as a reminder, power-domain nr 0=mipi, 5=gpu, 6=vpu.
+
+> 
+> Regards,
+> Lucas
+> 
+
 

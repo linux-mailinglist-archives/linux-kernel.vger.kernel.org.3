@@ -2,213 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBA95108E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C605108EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353932AbiDZTYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        id S1354114AbiDZT2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354122AbiDZTXz (ORCPT
+        with ESMTP id S1353986AbiDZT2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:23:55 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEBF2A700;
-        Tue, 26 Apr 2022 12:20:45 -0700 (PDT)
+        Tue, 26 Apr 2022 15:28:12 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A643DE3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:24:59 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so2571060pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651000846; x=1682536846;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=Fmy89Zk4IfdhrvBHV8RGwaA3LuC4mMyB9cHa34B6ROM=;
-  b=xAUQJyoNF7QOYvjCcytxPUKlvs86/Jo1KFsufERmUavaFRIz5AY+xrLt
-   JyStpg5J/iCrYEWpIsIWvCnYGAJYdGWQ4jbQ9T7ckLp41gVAU3Qrq9DSS
-   jD2wsh16JQXMaqUmZ7PqfqSMtcnYAIzlZVvtVZzSlqj5/tiM/GNIYcHac
-   8=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 12:20:45 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 12:20:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 12:20:45 -0700
-Received: from [10.111.160.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
- 2022 12:20:42 -0700
-Message-ID: <517f71e4-785f-ef6f-d30e-fb18974eed57@quicinc.com>
-Date:   Tue, 26 Apr 2022 12:20:40 -0700
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1gRXhqhj/bM5wwRMAh+OmVjooRqWfpept41xU9+vg70=;
+        b=TOFTN7H84kwY6vnbuYIk0C/dboVB39Ds8vAY+DZAx7T/uZfgOApoYgoj/FlFBd8Gtw
+         y4uSAgvX3uzwT5w3Qd3420Ctgp/7rZanshzUCbfG5zPF8/hFLvXWithppQ1K3oS4IOvA
+         aWMhhi1U2IeS3KSGiehirQKJeOLGieKzycUPAKZiX4TXQyWwElMW7jJ8UetVgd1SastI
+         mL7jgr6EN3WCWmEFTvTA7g4cZ2R0YvBp8W/km72mkdYqeOjnk2kek42aZyxoGVZARdUS
+         /BGksTZTgNOK7JuKp/cHt0acE7EfsT2CSviVbXGrnK0MMEGI4Lo7a+wbXXgKM5EYV9GJ
+         yXKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=1gRXhqhj/bM5wwRMAh+OmVjooRqWfpept41xU9+vg70=;
+        b=4TuDA5R5e4k5/sMfHn6r3oXgHpE9Ba8q1TBVq+cA31yYhf1LdYYqEvzHoJGGxFf9n8
+         KCeh4r06Bms5JGYaTAhdXiessCGGuBGdxFa4IYDe7m75eGcKqE+/ahBno6en8wnF+SNW
+         hFGyJsvejR1xsI9TWzgOtHcXHvkMnA7R22UupIBPVxkh1vbD5b4ZuiY2MIqrJsRF3S5S
+         iNOZeBo7fsJssrYz8Xo3VxzN6d+pyLqKMJSgqx5JErbDxD3pmz2f0GuczxFDzpnAH9Hn
+         Nx59V6Zu6gYh1FFSC41rA8lCJvIfo2hoGTOLclz5JKdoEsZx6NYoFSge225POUu+O1w1
+         hPaQ==
+X-Gm-Message-State: AOAM531uMYxhAVxgpKT8jmic/tojpOkcDWZJEBhmOs20KVw/vll3q1Pf
+        Y1xiVduXjg7omHy5A7g0zt9T9FonIo0=
+X-Google-Smtp-Source: ABdhPJzBKsUgopZ3q4lNadS+bEUUni4aRgvxc7eVyOiznOGgervr+qKDpvQVQCNJBoD/8fovUSkY3A==
+X-Received: by 2002:a17:90b:4a8a:b0:1d2:f7ba:8728 with SMTP id lp10-20020a17090b4a8a00b001d2f7ba8728mr28529353pjb.43.1651001098561;
+        Tue, 26 Apr 2022 12:24:58 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:25e7:9cdf:1522:323f])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm17165282pfl.15.2022.04.26.12.24.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 12:24:58 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 26 Apr 2022 12:24:56 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 5/6] mm/page_alloc: Protect PCP lists with a spinlock
+Message-ID: <YmhHCHaUy+zARWxi@google.com>
+References: <20220420095906.27349-1-mgorman@techsingularity.net>
+ <20220420095906.27349-6-mgorman@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 2/2] drm/probe-helper: For DP, add 640x480 if all other
- modes are bad
-Content-Language: en-US
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     Douglas Anderson <dianders@chromium.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <quic_sbillaka@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_khsieh@quicinc.com>, <dmitry.baryshkov@linaro.org>,
-        <quic_aravindh@quicinc.com>, <swboyd@chromium.org>
-References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
- <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
- <fa49384c-76a5-6686-7d4d-cf11f3e98c75@quicinc.com>
-In-Reply-To: <fa49384c-76a5-6686-7d4d-cf11f3e98c75@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420095906.27349-6-mgorman@techsingularity.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Missed one more comment.
+On Wed, Apr 20, 2022 at 10:59:05AM +0100, Mel Gorman wrote:
+> Currently the PCP lists are protected by using local_lock_irqsave to
+> prevent migration and IRQ reentrancy but this is inconvenient. Remote
+> draining of the lists is impossible and a workqueue is required and
+> every task allocation/free must disable then enable interrupts which is
+> expensive.
+> 
+> As preparation for dealing with both of those problems, protect the
+> lists with a spinlock. The IRQ-unsafe version of the lock is used
+> because IRQs are already disabled by local_lock_irqsave. spin_trylock
+> is used in preparation for a time when local_lock could be used instead
+> of lock_lock_irqsave.
+> 
+> The per_cpu_pages still fits within the same number of cache lines after
+> this patch relative to before the series.
+> 
+> struct per_cpu_pages {
+>         spinlock_t                 lock;                 /*     0     4 */
+>         int                        count;                /*     4     4 */
+>         int                        high;                 /*     8     4 */
+>         int                        batch;                /*    12     4 */
+>         short int                  free_factor;          /*    16     2 */
+>         short int                  expire;               /*    18     2 */
+> 
+>         /* XXX 4 bytes hole, try to pack */
+> 
+>         struct list_head           lists[13];            /*    24   208 */
+> 
+>         /* size: 256, cachelines: 4, members: 7 */
+>         /* sum members: 228, holes: 1, sum holes: 4 */
+>         /* padding: 24 */
+> } __attribute__((__aligned__(64)));
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> ---
+>  include/linux/mmzone.h |   1 +
+>  mm/page_alloc.c        | 155 +++++++++++++++++++++++++++++++++++------
+>  2 files changed, 136 insertions(+), 20 deletions(-)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index abe530748de6..8b5757735428 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -385,6 +385,7 @@ enum zone_watermarks {
+>  
+>  /* Fields and list protected by pagesets local_lock in page_alloc.c */
+>  struct per_cpu_pages {
+> +	spinlock_t lock;	/* Protects lists field */
+>  	int count;		/* number of pages in the list */
+>  	int high;		/* high watermark, emptying needed */
+>  	int batch;		/* chunk size for buddy add/remove */
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index dc0fdeb3795c..813c84b67c65 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -132,6 +132,17 @@ static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
+>  	.lock = INIT_LOCAL_LOCK(lock),
+>  };
+>  
+> +#ifdef CONFIG_SMP
+> +/* On SMP, spin_trylock is sufficient protection */
+> +#define pcp_trylock_prepare(flags)	do { } while (0)
+> +#define pcp_trylock_finish(flag)	do { } while (0)
+> +#else
+> +
+> +/* UP spin_trylock always succeeds so disable IRQs to prevent re-entrancy. */
+> +#define pcp_trylock_prepare(flags)	local_irq_save(flags)
+> +#define pcp_trylock_finish(flags)	local_irq_restore(flags)
+> +#endif
+> +
+>  #ifdef CONFIG_USE_PERCPU_NUMA_NODE_ID
+>  DEFINE_PER_CPU(int, numa_node);
+>  EXPORT_PER_CPU_SYMBOL(numa_node);
+> @@ -3082,15 +3093,22 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+>   */
+>  void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+>  {
+> -	unsigned long flags;
+>  	int to_drain, batch;
+>  
+> -	local_lock_irqsave(&pagesets.lock, flags);
+>  	batch = READ_ONCE(pcp->batch);
+>  	to_drain = min(pcp->count, batch);
+> -	if (to_drain > 0)
+> +	if (to_drain > 0) {
+> +		unsigned long flags;
+> +
+> +		/* free_pcppages_bulk expects IRQs disabled for zone->lock */
+> +		local_irq_save(flags);
+> +
+> +		spin_lock(&pcp->lock);
+>  		free_pcppages_bulk(zone, to_drain, pcp, 0);
+> -	local_unlock_irqrestore(&pagesets.lock, flags);
+> +		spin_unlock(&pcp->lock);
+> +
+> +		local_irq_restore(flags);
+> +	}
+>  }
+>  #endif
+>  
+> @@ -3103,16 +3121,21 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
+>   */
+>  static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+>  {
+> -	unsigned long flags;
+>  	struct per_cpu_pages *pcp;
+>  
+> -	local_lock_irqsave(&pagesets.lock, flags);
+> -
+>  	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+> -	if (pcp->count)
+> +	if (pcp->count) {
+> +		unsigned long flags;
+> +
+> +		/* free_pcppages_bulk expects IRQs disabled for zone->lock */
+> +		local_irq_save(flags);
+> +
+> +		spin_lock(&pcp->lock);
+>  		free_pcppages_bulk(zone, pcp->count, pcp, 0);
+> +		spin_unlock(&pcp->lock);
+>  
+> -	local_unlock_irqrestore(&pagesets.lock, flags);
+> +		local_irq_restore(flags);
+> +	}
+>  }
+>  
+>  /*
+> @@ -3380,18 +3403,30 @@ static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone,
+>  	return min(READ_ONCE(pcp->batch) << 2, high);
+>  }
+>  
+> -static void free_unref_page_commit(struct page *page, int migratetype,
+> -				   unsigned int order)
+> +/* Returns true if the page was committed to the per-cpu list. */
+> +static bool free_unref_page_commit(struct page *page, int migratetype,
+> +				   unsigned int order, bool locked)
+>  {
+>  	struct zone *zone = page_zone(page);
+>  	struct per_cpu_pages *pcp;
+>  	int high;
+>  	int pindex;
+>  	bool free_high;
+> +	unsigned long __maybe_unused UP_flags;
+>  
+>  	__count_vm_event(PGFREE);
+>  	pcp = this_cpu_ptr(zone->per_cpu_pageset);
+>  	pindex = order_to_pindex(migratetype, order);
+> +
+> +	if (!locked) {
+> +		/* Protect against a parallel drain. */
+> +		pcp_trylock_prepare(UP_flags);
+> +		if (!spin_trylock(&pcp->lock)) {
+> +			pcp_trylock_finish(UP_flags);
+> +			return false;
+> +		}
+> +	}
+> +
+>  	list_add(&page->pcp_list, &pcp->lists[pindex]);
+>  	pcp->count += 1 << order;
+>  
+> @@ -3409,6 +3444,13 @@ static void free_unref_page_commit(struct page *page, int migratetype,
+>  
+>  		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch, free_high), pcp, pindex);
+>  	}
+> +
+> +	if (!locked) {
+> +		spin_unlock(&pcp->lock);
+> +		pcp_trylock_finish(UP_flags);
+> +	}
+> +
+> +	return true;
+>  }
+>  
+>  /*
+> @@ -3419,6 +3461,7 @@ void free_unref_page(struct page *page, unsigned int order)
+>  	unsigned long flags;
+>  	unsigned long pfn = page_to_pfn(page);
+>  	int migratetype;
+> +	bool freed_pcp = false;
+>  
+>  	if (!free_unref_page_prepare(page, pfn, order))
+>  		return;
+> @@ -3440,8 +3483,11 @@ void free_unref_page(struct page *page, unsigned int order)
+>  	}
+>  
+>  	local_lock_irqsave(&pagesets.lock, flags);
+> -	free_unref_page_commit(page, migratetype, order);
+> +	freed_pcp = free_unref_page_commit(page, migratetype, order, false);
+>  	local_unlock_irqrestore(&pagesets.lock, flags);
+> +
+> +	if (unlikely(!freed_pcp))
+> +		free_one_page(page_zone(page), page, pfn, order, migratetype, FPI_NONE);
+>  }
+>  
+>  /*
+> @@ -3450,10 +3496,19 @@ void free_unref_page(struct page *page, unsigned int order)
+>  void free_unref_page_list(struct list_head *list)
+>  {
+>  	struct page *page, *next;
+> +	struct per_cpu_pages *pcp;
+> +	struct zone *locked_zone;
+>  	unsigned long flags;
+>  	int batch_count = 0;
+>  	int migratetype;
+>  
+> +	/*
+> +	 * An empty list is possible. Check early so that the later
+> +	 * lru_to_page() does not potentially read garbage.
+> +	 */
+> +	if (list_empty(list))
+> +		return;
+> +
+>  	/* Prepare pages for freeing */
+>  	list_for_each_entry_safe(page, next, list, lru) {
+>  		unsigned long pfn = page_to_pfn(page);
+> @@ -3474,8 +3529,26 @@ void free_unref_page_list(struct list_head *list)
+>  		}
+>  	}
+>  
+> +	VM_BUG_ON(in_hardirq());
 
-On 4/26/2022 12:16 PM, Abhinav Kumar wrote:
-> Hi Doug
-> 
-> One minor comment below.
-> 
-> But otherwise, looking at this change this should work for us acc to me.
-> 
-> We will test this out with our equipment and then provide R-b.
-> 
-> Thanks
-> 
-> Abhinav
-> On 4/26/2022 11:46 AM, Douglas Anderson wrote:
->> As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
->> that all detachable sinks shall support 640x480 @60Hz as a fail safe
->> mode.
->>
->> A DP compliance test expected us to utilize the above fact when all
->> modes it presented to the DP source were not achievable. It presented
->> only modes that would be achievable with more lanes and/or higher
->> speeds than we had available and expected that when we couldn't do
->> that then we'd fall back to 640x480 even though it didn't advertise
->> this size.
->>
->> In order to pass the compliance test (and also support any users who
->> might fall into a similar situation with their display), we need to
->> add 640x480 into the list of modes. However, we don't want to add
->> 640x480 all the time. Despite the fact that the DP spec says all sinks
->> _shall support_ 640x480, they're not guaranteed to support it
->> _well_. Continuing to read the spec you can see that the display is
->> not required to really treat 640x480 equal to all the other modes. It
->> doesn't need to scale or anything--just display the pixels somehow for
->> failsafe purposes. It should also be noted that it's not hard to find
->> a display hooked up via DisplayPort that _doesn't_ support 640x480 at
->> all. The HP ZR30w screen I'm sitting in front of has a native DP port
->> and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
->> display via a DP to HDMI adapter and that screen definitely doesn't
->> support 640x480.
->>
->> As a compromise solution, let's only add the 640x480 mode if:
->> * We're on DP.
->> * All other modes have been pruned.
->>
->> This acknowledges that 640x480 might not be the best mode to use but,
->> since sinks are _supposed_ to support it, we will at least fall back
->> to it if there's nothing else.
->>
->> Note that we _don't_ add higher resolution modes like 1024x768 in this
->> case. We only add those modes for a failed EDID read where we have no
->> idea what's going on. In the case where we've pruned all modes then
->> instead we only want 640x480 which is the only defined "Fail Safe"
->> resolution.
->>
->> This patch originated in response to Kuogee Hsieh's patch [1].
->>
->> [1] 
->> https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com 
->>
->>
->> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->> ---
->>
->>   drivers/gpu/drm/drm_probe_helper.c | 26 +++++++++++++++++++++-----
->>   1 file changed, 21 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_probe_helper.c 
->> b/drivers/gpu/drm/drm_probe_helper.c
->> index 819225629010..90cd46cbfec1 100644
->> --- a/drivers/gpu/drm/drm_probe_helper.c
->> +++ b/drivers/gpu/drm/drm_probe_helper.c
->> @@ -476,7 +476,6 @@ int drm_helper_probe_single_connector_modes(struct 
->> drm_connector *connector,
->>       const struct drm_connector_helper_funcs *connector_funcs =
->>           connector->helper_private;
->>       int count = 0, ret;
->> -    bool verbose_prune = true;
->>       enum drm_connector_status old_status;
->>       struct drm_modeset_acquire_ctx ctx;
->> @@ -556,8 +555,8 @@ int drm_helper_probe_single_connector_modes(struct 
->> drm_connector *connector,
->>           DRM_DEBUG_KMS("[CONNECTOR:%d:%s] disconnected\n",
->>               connector->base.id, connector->name);
->>           drm_connector_update_edid_property(connector, NULL);
->> -        verbose_prune = false;
->> -        goto prune;
->> +        drm_mode_prune_invalid(dev, &connector->modes, false);
->> +        goto exit;
->>       }
->>       count = (*connector_funcs->get_modes)(connector);
->> @@ -580,9 +579,26 @@ int 
->> drm_helper_probe_single_connector_modes(struct drm_connector *connector,
->>           }
->>       }
->> -prune:
->> -    drm_mode_prune_invalid(dev, &connector->modes, verbose_prune);
->> +    drm_mode_prune_invalid(dev, &connector->modes, true);
->> +    /*
->> +     * Displayport spec section 5.2.1.2 ("Video Timing Format") says 
->> that
->> +     * all detachable sinks shall support 640x480 @60Hz as a fail safe
->> +     * mode. If all modes were pruned, perhaps because they need more
->> +     * lanes or a higher pixel clock than available, at least try to add
->> +     * in 640x480.
->> +     */
->> +    if (list_empty(&connector->modes) &&
->> +        connector->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
->> +        count = drm_add_modes_noedid(connector, 640, 480);
->> +        if (_drm_helper_update_and_validate(connector, maxX, maxY, 
->> &ctx)) {
->> +            drm_modeset_backoff(&ctx);
->> +            goto retry;
-> 
-> Do we need another retry here? This will again repeat everything from
-> get_modes().
-> The fact that we are hitting this code is because we have already tried 
-> that and this is already a second-pass. So I think another retry isnt 
-> needed?
+You need to check the list_empty here again and bail out if it is.
 
-This will help cover the case of 4.2.2.6 but not fix 4.2.2.1.
-
-For 4.2.2.1, we will have 0 modes and so the original DRM fwk code of 
-adding all modes <= 1024x768 will kick in.
-
-Now, in that list, we will still need to pick/mark 640x480 as the 
-preferred mode.
-
-We still need IGT for that.
-
-So yes, this will cover one of the test but not the other.
-> 
->> +        }
->> +        drm_mode_prune_invalid(dev, &connector->modes, true);
->> +    }
->> +
->> +exit:
->>       drm_modeset_drop_locks(&ctx);
->>       drm_modeset_acquire_fini(&ctx);
+> +
+>  	local_lock_irqsave(&pagesets.lock, flags);
+> +
+> +	page = lru_to_page(list);

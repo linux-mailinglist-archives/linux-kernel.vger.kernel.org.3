@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B834C50F5A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C99B50F48C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345911AbiDZIoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S1345185AbiDZIhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345222AbiDZIh1 (ORCPT
+        with ESMTP id S1345199AbiDZIeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:37:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1981890A7;
-        Tue, 26 Apr 2022 01:29:09 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EB56F9D3;
+        Tue, 26 Apr 2022 01:26:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D2FCB81CED;
-        Tue, 26 Apr 2022 08:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC16CC385A4;
-        Tue, 26 Apr 2022 08:29:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 029AB6179E;
+        Tue, 26 Apr 2022 08:26:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14BEFC385A4;
+        Tue, 26 Apr 2022 08:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961747;
-        bh=w5zQ/smunMnh0oP0dXDgpqizKSPgIVojJ/G14JGHKOY=;
+        s=korg; t=1650961586;
+        bh=e4G0xTSYBF2+KO/eQLTax+MxgRIrhCoscGPppvkspR0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=houV1AQrHoFVBOCgwB1cIkl5IMJMrChoDWE2ifNnViYK3oQyPY0Ufy3JP9KUiHOos
-         QrZez1phyjmgJCzF20oXA2W6PJNT6m/YJQuNlaY8+A78pXBWycT/n8FJM5b3kK8bVR
-         kzekDvBsnc2VuFMl4WjmFdEVGwMoqK4P5HA37Hsg=
+        b=W323hOfnl1kfWlr3cw6gYwVm6cm+p0I0RwmcoWDhGki/Sn7SG/zrXQDBNDglPzLVm
+         YCneBLUTqJwJqZPCaYarupYEUWEOt1mzRnGK9rhlo1sOnINY6OFl9JBTX8vDaXxXcE
+         Bzfz5sAK+50cP7rTdivj9x2pVy41moOPpgCiL2NQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 17/62] net/smc: Fix sock leak when release after smc_shutdown()
+        stable@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 17/53] ARM: vexpress/spc: Avoid negative array index when !SMP
 Date:   Tue, 26 Apr 2022 10:20:57 +0200
-Message-Id: <20220426081737.721078009@linuxfoundation.org>
+Message-Id: <20220426081736.157427205@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lu <tonylu@linux.alibaba.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 1a74e99323746353bba11562a2f2d0aa8102f402 ]
+[ Upstream commit b3f1dd52c991d79118f35e6d1bf4d7cb09882e38 ]
 
-Since commit e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown
-and fallback"), for a fallback connection, __smc_release() does not call
-sock_put() if its state is already SMC_CLOSED.
+When building multi_v7_defconfig+CONFIG_SMP=n, -Warray-bounds exposes
+a couple negative array index accesses:
 
-When calling smc_shutdown() after falling back, its state is set to
-SMC_CLOSED but does not call sock_put(), so this patch calls it.
+arch/arm/mach-vexpress/spc.c: In function 've_spc_clk_init':
+arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
+  583 |   if (init_opp_table[cluster])
+      |       ~~~~~~~~~~~~~~^~~~~~~~~
+arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
+  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
+      |       ^~~~~~~~~~~~~~
+arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
+  592 |    init_opp_table[cluster] = true;
+      |    ~~~~~~~~~~~~~~^~~~~~~~~
+arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
+  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
+      |       ^~~~~~~~~~~~~~
 
-Reported-and-tested-by: syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
-Fixes: e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown and fallback")
-Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Skip this logic when built !SMP.
+
+Link: https://lore.kernel.org/r/20220331190443.851661-1-keescook@chromium.org
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arm-kernel@lists.infradead.org
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/af_smc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm/mach-vexpress/spc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 06684ac346ab..5221092cc66d 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -1698,8 +1698,10 @@ static int smc_shutdown(struct socket *sock, int how)
- 	if (smc->use_fallback) {
- 		rc = kernel_sock_shutdown(smc->clcsock, how);
- 		sk->sk_shutdown = smc->clcsock->sk->sk_shutdown;
--		if (sk->sk_shutdown == SHUTDOWN_MASK)
-+		if (sk->sk_shutdown == SHUTDOWN_MASK) {
- 			sk->sk_state = SMC_CLOSED;
-+			sock_put(sk);
-+		}
- 		goto out;
- 	}
- 	switch (how) {
+diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
+index 55bbbc3b328f..e65c04be86cc 100644
+--- a/arch/arm/mach-vexpress/spc.c
++++ b/arch/arm/mach-vexpress/spc.c
+@@ -580,7 +580,7 @@ static int __init ve_spc_clk_init(void)
+ 		}
+ 
+ 		cluster = topology_physical_package_id(cpu_dev->id);
+-		if (init_opp_table[cluster])
++		if (cluster < 0 || init_opp_table[cluster])
+ 			continue;
+ 
+ 		if (ve_init_opp_table(cpu_dev))
 -- 
 2.35.1
 

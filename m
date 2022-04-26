@@ -2,248 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB15A5103BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626DD5103DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353075AbiDZQoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S1353112AbiDZQrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiDZQov (ORCPT
+        with ESMTP id S1353094AbiDZQra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:44:51 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E85835250
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:41:42 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 09:41:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1650991300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E/MIIOfJhqtHLMJjO2xxhPcOfdjq8JjVLKtUpyg3qj4=;
-        b=JHrIJCj/lia8vmPS4iWtsIgwt+kEs//Fa+z+pFzR37tZB17WAhjtTxmn+St05ErurnN2Zc
-        62aPqEtsfQ9Cws4mOfRAUKIK3eJRwqVcPHZPuV/ZFBRbiL0bbwAE518uIMk6QVR77K7Bc8
-        fes84gGppN6N8yvsCkqkUJXVZjH2SHQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Dave Chinner <dchinner@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH v2 0/7] mm: introduce shrinker debugfs interface
-Message-ID: <Ymggvr4Boc5JIf9j@carbon>
-References: <20220422202644.799732-1-roman.gushchin@linux.dev>
- <YmeK6/eZYaMo2Ltm@rh>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmeK6/eZYaMo2Ltm@rh>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 12:47:30 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B401749E3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:44:21 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id h7-20020a056402094700b00425a52983dfso8254148edz.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=1G8xzyhN/6cC/oSos2efdoQedsBkWbUJY6WrTftKsiQ=;
+        b=H02YMRXjzxy5RjuHuT2YjDfAZIX+tEOSvPyjkJKaXu5+ulq0TbgcmXLetjFPWcy13D
+         uiGMyv/a2fbcqRRKCOf96o+hQg31oHSKQ84VhPuHBU2YX+cUZPDefn41wYo4uuxZUfUe
+         eypPtslL+veHDE2Q/+unvc//ms3IZf8ngdSTrLGQPC/Ww6cyqjGmHWRMhUIK9r3YrzHp
+         DN3ROSkVsjatoSoHdePG9JGyAy6z9dsfpEOYq+xoLMQgSlj+C/SCSAEmCfelgKCY9ZeZ
+         c8GIM8E5AWSvmzgmztZcSLLIZnHCAwsFVe3YWHqFg5H5moRwDe98SyqV2dntakeZ1ntu
+         WNZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=1G8xzyhN/6cC/oSos2efdoQedsBkWbUJY6WrTftKsiQ=;
+        b=y5Y35ZrwYvzA8W/hJWx6nEX4+LF0BSPChyzq3ayiEyYg513aaUm1jjHhXu5o/VknIe
+         V71+nCo9ujd2RD1+7v1h4z3PhGBrp4DRFZD9R9Jx5CPfvdkpTq/pofHE82Xffy4b3Rj+
+         8Z+pGVsYxo/7dy6CLbsr9klGyGDYUl9qhXYOOHWd8wOh36/gPRpMos7iOvqNCPc7KSCj
+         F396WuqeKMvb4zj/YOoY7cN2zAYvnxQ9/YcoW7fFtldkcR3Ykgdfo2EhFb3J88B98o7E
+         KjBLtSd4yG1V/pcX75a/Ey1gXIaZICpD//wJo5Hyt6TS4VuIDhc67K77pBNS+Ni5KmNV
+         0oRA==
+X-Gm-Message-State: AOAM530v0wDymtBNq7ZpIzsfYGozk2AxeOI/6rv+jOsQsmqAm0ryY9py
+        TnVJqJdQZTt8t7J0Du/e+MhDocKfnoE=
+X-Google-Smtp-Source: ABdhPJyG9Bwm26XnDyzw19Wz/Alkzd4tUQQg9l7XaVFBhPlMBLSMTQPUQnAIxNdVAd2sg+QqWCxTIcZwY6M=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:d580:abeb:bf6d:5726])
+ (user=glider job=sendgmr) by 2002:aa7:cb93:0:b0:415:d57a:4603 with SMTP id
+ r19-20020aa7cb93000000b00415d57a4603mr25274990edt.62.1650991460014; Tue, 26
+ Apr 2022 09:44:20 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 18:42:29 +0200
+Message-Id: <20220426164315.625149-1-glider@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH v3 00/46] Add KernelMemorySanitizer infrastructure
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 04:02:19PM +1000, Dave Chinner wrote:
-> On Fri, Apr 22, 2022 at 01:26:37PM -0700, Roman Gushchin wrote:
-> > There are 50+ different shrinkers in the kernel, many with their own bells and
-> > whistles. Under the memory pressure the kernel applies some pressure on each of
-> > them in the order of which they were created/registered in the system. Some
-> > of them can contain only few objects, some can be quite large. Some can be
-> > effective at reclaiming memory, some not.
-> > 
-> > The only existing debugging mechanism is a couple of tracepoints in
-> > do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
-> > covering everything though: shrinkers which report 0 objects will never show up,
-> > there is no support for memcg-aware shrinkers. Shrinkers are identified by their
-> > scan function, which is not always enough (e.g. hard to guess which super
-> > block's shrinker it is having only "super_cache_scan").
-> 
-> In general, I've had no trouble identifying individual shrinker
-> instances because I'm always looking at individual subsystem
-> shrinker tracepoints, too.  Hence I've almost always got the
-> identification information in the traces I need to trace just the
-> individual shrinker tracepoints and a bit of sed/grep/awk and I've
-> got something I can feed to gnuplot or a python script to graph...
-> 
-> > They are a passive
-> > mechanism: there is no way to call into counting and scanning of an individual
-> > shrinker and profile it.
-> 
-> IDGI. profiling shrinkers iunder ideal conditions when there isn't
-> memory pressure is largely a useless exercise because execution
-> patterns under memory pressure are vastly different.
-> 
-> All the problems with shrinkers show up when progress cannot be made
-> as fast as memory reclaim wants memory to be reclaimed. How do you
-> trigger priority windup causing large amounts of deferred processing
-> because shrinkers are running in GFP_NOFS/GFP_NOIO context? How do
-> you simulate objects getting dirtied in memory so they can't be
-> immediately reclaimed so the shrinker can't make any progress at all
-> until IO completes? How do you simulate the unbound concurrency that
-> direct reclaim can drive into the shrinkers that causes massive lock
-> contention on shared structures and locks that need to be accessed
-> to free objects?
-> 
-> IOWs, if all you want to do is profile shrinkers running in the
-> absence of memory pressure, then you can do that perfectly well with
-> the existing 'echo 2 > /proc/sys/vm/drop_caches' mechanism. We don't
-> need some complex debugfs API just to profile the shrinker
-> behaviour.
-> 
-> So why do we need any of the complexity and potential for abuse that
-> comes from exposing control of shrinkers directly to userspace like
-> these patches do?
-> 
-> > To provide a better visibility and debug options for memory shrinkers
-> > this patchset introduces a /sys/kernel/debug/shrinker interface, to some extent
-> > similar to /sys/kernel/slab.
-> 
-> /sys/kernel/slab contains read-only usage information - it is
-> analagous for visibility arguments, but it is not equivalent for
-> the rest of the "active" functionality you want to add here....
-> 
-> > For each shrinker registered in the system a directory is created. The directory
-> > contains "count" and "scan" files, which allow to trigger count_objects()
-> > and scan_objects() callbacks. For memcg-aware and numa-aware shrinkers
-> > count_memcg, scan_memcg, count_node, scan_node, count_memcg_node
-> > and scan_memcg_node are additionally provided. They allow to get per-memcg
-> > and/or per-node object count and shrink only a specific memcg/node.
-> 
-> Great, but why does the shrinker introspection interface need active
-> scan control functions like these?
-> 
-> > To make debugging more pleasant, the patchset also names all shrinkers,
-> > so that debugfs entries can have more meaningful names.
-> > 
-> > Usage examples:
-> > 
-> > 1) List registered shrinkers:
-> >   $ cd /sys/kernel/debug/shrinker/
-> >   $ ls
-> >     dqcache-16          sb-cgroup2-30    sb-hugetlbfs-33  sb-proc-41       sb-selinuxfs-22  sb-tmpfs-40    sb-zsmalloc-19
-> >     kfree_rcu-0         sb-configfs-23   sb-iomem-12      sb-proc-44       sb-sockfs-8      sb-tmpfs-42    shadow-18
-> >     sb-aio-20           sb-dax-11        sb-mqueue-21     sb-proc-45       sb-sysfs-26      sb-tmpfs-43    thp_deferred_split-10
-> >     sb-anon_inodefs-15  sb-debugfs-7     sb-nsfs-4        sb-proc-47       sb-tmpfs-1       sb-tmpfs-46    thp_zero-9
-> >     sb-bdev-3           sb-devpts-28     sb-pipefs-14     sb-pstore-31     sb-tmpfs-27      sb-tmpfs-49    xfs_buf-37
-> >     sb-bpf-32           sb-devtmpfs-5    sb-proc-25       sb-rootfs-2      sb-tmpfs-29      sb-tracefs-13  xfs_inodegc-38
-> >     sb-btrfs-24         sb-hugetlbfs-17  sb-proc-39       sb-securityfs-6  sb-tmpfs-35      sb-xfs-36      zspool-34
-> 
-> Ouch. That's not going to be useful for humans debugging a system as
-> there's no way to cross reference a "superblock" with an actual
-> filesystem mount point. Nor is there any way to reallly know that
-> all the shrinkers in one filesystem are related.
-> 
-> We normally solve this by ensuring that the fs related object has
-> the short bdev name appended to them. e.g:
-> 
-> $ pgrep xfs
-> 1 I root          36       2  0  60 -20 -     0 -      Apr19 ?        00:00:10 [kworker/0:1H-xfs-log/dm-3]
-> 1 I root         679       2  0  60 -20 -     0 -      Apr19 ?        00:00:00 [xfsalloc]
-> 1 I root         680       2  0  60 -20 -     0 -      Apr19 ?        00:00:00 [xfs_mru_cache]
-> 1 I root         681       2  0  60 -20 -     0 -      Apr19 ?        00:00:00 [xfs-buf/dm-1]
-> .....
-> 
-> Here we have a kworker process running log IO completion work on
-> dm-3, two global workqueue rescuer tasks (alloc, mru) and a rescuer
-> task for xfs-buf workqueue on dm-1.
-> 
-> We need the same name discrimination for shrinker information here,
-> too - just saying "this is an XFS superblock shrinker" is just not
-> sufficient when there are hundreds of XFS mount points with a
-> handful of shrinkers each.
-> 
-> > 2) Get information about a specific shrinker:
-> >   $ cd sb-btrfs-24/
-> >   $ ls
-> >     count  count_memcg  count_memcg_node  count_node  scan  scan_memcg  scan_memcg_node  scan_node
-> > 
-> > 3) Count objects on the system/root cgroup level
-> >   $ cat count
-> >     212
-> > 
-> > 4) Count objects on the system/root cgroup level per numa node (on a 2-node machine)
-> >   $ cat count_node
-> >     209 3
-> 
-> So a single space separated line with a number per node?
-> 
-> When you have a few hundred nodes and hundreds of thousands of objects per
-> node, we overrun the 4kB page size with a single line. What then?
-> 
-> > 5) Count objects for each memcg (output format: cgroup inode, count)
-> >   $ cat count_memcg
-> >     1 212
-> >     20 96
-> >     53 817
-> >     2297 2
-> >     218 13
-> >     581 30
-> >     911 124
-> >     <CUT>
-> 
-> What does "<CUT>" mean?
-> 
-> Also, this now iterates separate memcg per line. A parser now needs
-> to know the difference between count/count_node and
-> count_memcg/count_memcg_node because they are subtly different file
-> formats.  These files should have the same format, otherwise it just
-> creates needless complexity.
-> 
-> Indeed, why do we even need count/count_node? They are just the
-> "index 1" memcg output, so are totally redundant.
-> 
-> > 6) Same but with a per-node output
-> >   $ cat count_memcg_node
-> >     1 209 3
-> >     20 96 0
-> >     53 810 7
-> >     2297 2 0
-> >     218 13 0
-> >     581 30 0
-> >     911 124 0
-> >     <CUT>
-> 
-> So now we have a hundred nodes in the machine and thousands of
-> memcgs. And the information we want is in the numerically largest
-> memcg that is last in the list. ANd we want to graph it's behaviour
-> over time at high resolution (say 1Hz). Now we burn huge amounts
-> of CPU counting memcgs that we don't care about and then throwing
-> away most of the information. That's highly in-efficient and really
-> doesn't scale.
-> 
-> [snap active scan interface]
-> 
-> This just seems like a solution looking for a problem to solve.
-> Can you please describe the problem this infrastructure is going
-> to solve?
+KernelMemorySanitizer (KMSAN) is a detector of errors related to uses of
+uninitialized memory. It relies on compile-time Clang instrumentation
+(similar to MSan in the userspace [1]) and tracks the state of every bit
+of kernel memory, being able to report an error if uninitialized value is
+used in a condition, dereferenced, or escapes to userspace, USB or DMA.
 
-Hi Dave!
+KMSAN has reported more than 300 bugs in the past few years (recently
+fixed bugs: [2]), most of them with the help of syzkaller. Such bugs
+keep getting introduced into the kernel despite new compiler warnings and
+other analyses (the 5.16 cycle already resulted in several KMSAN-reported
+bugs, e.g. [3]). Mitigations like total stack and heap initialization are
+unfortunately very far from being deployable.
 
-Thank you for taking a look.
+The proposed patchset contains KMSAN runtime implementation together with
+small changes to other subsystems needed to make KMSAN work.
 
-Can you, please, summarize your position, because it's a bit unclear.
-You made a lot of good points about some details (e.g. shrinkers naming,
-and I totally agree there; machines with hundreds of nodes etc), then
-you said the active scanning is useless and then said the whole thing
-is useless and we're fine with what we have regarding shrinkers debugging.
+The latter changes fall into several categories:
 
-My plan is to work on convert shrinkers API to bytes and experiment
-with different LRU implementations. I find an ability to easily export
-statistics and other data (which doesn't exist now) via debugfs useful
-(and way more convenient than changing existing tracepoints), as well as
-an ability to trigger scanning of individual shrinkers. If nobody else
-seeing any value here, I'm fine to keep these patches private, no reason
-to argue about the output format then.
+1. Changes and refactorings of existing code required to add KMSAN:
+ - [1/46] x86: add missing include to sparsemem.h
+ - [2/46] stackdepot: reserve 5 extra bits in depot_stack_handle_t
+ - [3/46] kasan: common: adapt to the new prototype of __stack_depot_save()
+ - [4/46] instrumented.h: allow instrumenting both sides of copy_from_user()
+ - [5/46] x86: asm: instrument usercopy in get_user() and __put_user_size()
+ - [6/46] asm-generic: instrument usercopy in cacheflush.h
+ - [11/46] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
 
-If you (or somebody else) see some value in at least "count" part, I'm happy
-to answer all questions and incorporate the feedback in the next version.
+2. KMSAN-related declarations in generic code, KMSAN runtime library,
+   docs and configs:
+ - [7/46] kmsan: add ReST documentation
+ - [8/46] kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+ - [10/46] x86: kmsan: pgtable: reduce vmalloc space
+ - [12/46] kmsan: add KMSAN runtime core
+ - [15/46] MAINTAINERS: add entry for KMSAN
+ - [29/46] kmsan: add tests for KMSAN
+ - [36/46] objtool: kmsan: list KMSAN API functions as uaccess-safe
+ - [41/46] x86: kmsan: use __msan_ string functions where possible.
+ - [46/46] x86: kmsan: enable KMSAN builds for x86
 
-Thank you!
+3. Adding hooks from different subsystems to notify KMSAN about memory
+   state changes:
+ - [16/46] kmsan: mm: maintain KMSAN metadata for page operations
+ - [17/46] kmsan: mm: call KMSAN hooks from SLUB code
+ - [18/46] kmsan: handle task creation and exiting
+ - [19/46] kmsan: init: call KMSAN initialization routines
+ - [20/46] instrumented.h: add KMSAN support
+ - [22/46] kmsan: add iomap support
+ - [23/46] Input: libps2: mark data received in __ps2_command() as initialized
+ - [24/46] kmsan: dma: unpoison DMA mappings
+ - [40/46] x86: kmsan: handle open-coded assembly in lib/iomem.c
+ - [42/46] x86: kmsan: sync metadata pages on page fault
+
+4. Changes that prevent false reports by explicitly initializing memory,
+   disabling optimized code that may trick KMSAN, selectively skipping
+   instrumentation:
+ - [13/46] kmsan: implement kmsan_init(), initialize READ_ONCE_NOCHECK()
+ - [14/46] kmsan: disable instrumentation of unsupported common kernel code
+ - [21/46] kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+ - [25/46] kmsan: virtio: check/unpoison scatterlist in vring_map_one_sg()
+ - [26/46] kmsan: handle memory sent to/from USB
+ - [30/46] kmsan: disable strscpy() optimization under KMSAN
+ - [31/46] crypto: kmsan: disable accelerated configs under KMSAN
+ - [32/46] kmsan: disable physical page merging in biovec
+ - [33/46] kmsan: block: skip bio block merging logic for KMSAN
+ - [34/46] kmsan: kcov: unpoison area->list in kcov_remote_area_put()
+ - [35/46] security: kmsan: fix interoperability with auto-initialization
+ - [37/46] x86: kmsan: make READ_ONCE_TASK_STACK() return initialized values
+ - [38/46] x86: kmsan: disable instrumentation of unsupported code
+ - [39/46] x86: kmsan: skip shadow checks in __switch_to()
+ - [43/46] x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for KASAN/KMSAN
+ - [44/46] x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
+
+5. Noinstr handling:
+ - [9/46] kmsan: mark noinstr as __no_sanitize_memory
+ - [27/46] kmsan: instrumentation.h: add instrumentation_begin_with_regs()
+ - [28/46] kmsan: entry: handle register passing from uninstrumented code
+ - [45/46] x86: kmsan: handle register passing from uninstrumented code
+
+This patchset allows one to boot and run a defconfig+KMSAN kernel on a
+QEMU without known false positives. It however doesn't guarantee there
+are no false positives in drivers of certain devices or less tested
+subsystems, although KMSAN is actively tested on syzbot with a large
+config.
+
+The patchset was generated relative to Linux v5.18-rc4. The most
+up-to-date KMSAN tree currently resides at
+https://github.com/google/kmsan/.
+One may find it handy to review these patches in Gerrit:
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/12604/25
+
+A huge thanks goes to the reviewers of the RFC patch series sent to LKML
+in 2020
+(https://lore.kernel.org/all/20200325161249.55095-1-glider@google.com/).
+
+[1] https://clang.llvm.org/docs/MemorySanitizer.html
+[2] https://syzkaller.appspot.com/upstream/fixed?manager=ci-upstream-kmsan-gce
+[3] https://lore.kernel.org/all/20211126124746.761278-1-glider@google.com/
+
+
+Alexander Potapenko (45):
+  stackdepot: reserve 5 extra bits in depot_stack_handle_t
+  kasan: common: adapt to the new prototype of __stack_depot_save()
+  instrumented.h: allow instrumenting both sides of copy_from_user()
+  x86: asm: instrument usercopy in get_user() and __put_user_size()
+  asm-generic: instrument usercopy in cacheflush.h
+  kmsan: add ReST documentation
+  kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+  kmsan: mark noinstr as __no_sanitize_memory
+  x86: kmsan: pgtable: reduce vmalloc space
+  libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+  kmsan: add KMSAN runtime core
+  kmsan: implement kmsan_init(), initialize READ_ONCE_NOCHECK()
+  kmsan: disable instrumentation of unsupported common kernel code
+  MAINTAINERS: add entry for KMSAN
+  kmsan: mm: maintain KMSAN metadata for page operations
+  kmsan: mm: call KMSAN hooks from SLUB code
+  kmsan: handle task creation and exiting
+  kmsan: init: call KMSAN initialization routines
+  instrumented.h: add KMSAN support
+  kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+  kmsan: add iomap support
+  Input: libps2: mark data received in __ps2_command() as initialized
+  kmsan: dma: unpoison DMA mappings
+  kmsan: virtio: check/unpoison scatterlist in vring_map_one_sg()
+  kmsan: handle memory sent to/from USB
+  kmsan: instrumentation.h: add instrumentation_begin_with_regs()
+  kmsan: entry: handle register passing from uninstrumented code
+  kmsan: add tests for KMSAN
+  kmsan: disable strscpy() optimization under KMSAN
+  crypto: kmsan: disable accelerated configs under KMSAN
+  kmsan: disable physical page merging in biovec
+  kmsan: block: skip bio block merging logic for KMSAN
+  kmsan: kcov: unpoison area->list in kcov_remote_area_put()
+  security: kmsan: fix interoperability with auto-initialization
+  objtool: kmsan: list KMSAN API functions as uaccess-safe
+  x86: kmsan: make READ_ONCE_TASK_STACK() return initialized values
+  x86: kmsan: disable instrumentation of unsupported code
+  x86: kmsan: skip shadow checks in __switch_to()
+  x86: kmsan: handle open-coded assembly in lib/iomem.c
+  x86: kmsan: use __msan_ string functions where possible.
+  x86: kmsan: sync metadata pages on page fault
+  x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for
+    KASAN/KMSAN
+  x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
+  x86: kmsan: handle register passing from uninstrumented code
+  x86: kmsan: enable KMSAN builds for x86
+
+Dmitry Vyukov (1):
+  x86: add missing include to sparsemem.h
+
+ Documentation/dev-tools/index.rst       |   1 +
+ Documentation/dev-tools/kmsan.rst       | 414 ++++++++++++++++++
+ MAINTAINERS                             |  12 +
+ Makefile                                |   1 +
+ arch/x86/Kconfig                        |   9 +-
+ arch/x86/boot/Makefile                  |   1 +
+ arch/x86/boot/compressed/Makefile       |   1 +
+ arch/x86/entry/common.c                 |   3 +-
+ arch/x86/entry/vdso/Makefile            |   3 +
+ arch/x86/include/asm/checksum.h         |  16 +-
+ arch/x86/include/asm/idtentry.h         |  10 +-
+ arch/x86/include/asm/page_64.h          |  13 +
+ arch/x86/include/asm/pgtable_64_types.h |  41 +-
+ arch/x86/include/asm/sparsemem.h        |   2 +
+ arch/x86/include/asm/string_64.h        |  23 +-
+ arch/x86/include/asm/uaccess.h          |   7 +
+ arch/x86/include/asm/unwind.h           |  23 +-
+ arch/x86/kernel/Makefile                |   2 +
+ arch/x86/kernel/cpu/Makefile            |   1 +
+ arch/x86/kernel/cpu/mce/core.c          |   2 +-
+ arch/x86/kernel/kvm.c                   |   2 +-
+ arch/x86/kernel/nmi.c                   |   2 +-
+ arch/x86/kernel/process_64.c            |   1 +
+ arch/x86/kernel/sev.c                   |   4 +-
+ arch/x86/kernel/traps.c                 |  14 +-
+ arch/x86/lib/Makefile                   |   2 +
+ arch/x86/lib/iomem.c                    |   5 +
+ arch/x86/mm/Makefile                    |   2 +
+ arch/x86/mm/fault.c                     |  25 +-
+ arch/x86/mm/init_64.c                   |   2 +-
+ arch/x86/mm/ioremap.c                   |   3 +
+ arch/x86/realmode/rm/Makefile           |   1 +
+ block/bio.c                             |   2 +
+ block/blk.h                             |   7 +
+ crypto/Kconfig                          |  30 ++
+ drivers/firmware/efi/libstub/Makefile   |   1 +
+ drivers/input/serio/libps2.c            |   5 +-
+ drivers/net/Kconfig                     |   1 +
+ drivers/nvdimm/nd.h                     |   2 +-
+ drivers/nvdimm/pfn_devs.c               |   2 +-
+ drivers/usb/core/urb.c                  |   2 +
+ drivers/virtio/virtio_ring.c            |  10 +-
+ include/asm-generic/cacheflush.h        |   9 +-
+ include/asm-generic/rwonce.h            |   5 +-
+ include/linux/compiler-clang.h          |  23 +
+ include/linux/compiler-gcc.h            |   6 +
+ include/linux/compiler_types.h          |   3 +-
+ include/linux/fortify-string.h          |   2 +
+ include/linux/highmem.h                 |   3 +
+ include/linux/instrumentation.h         |   6 +
+ include/linux/instrumented.h            |  26 +-
+ include/linux/kmsan-checks.h            | 123 ++++++
+ include/linux/kmsan.h                   | 359 ++++++++++++++++
+ include/linux/mm_types.h                |  12 +
+ include/linux/sched.h                   |   5 +
+ include/linux/stackdepot.h              |   8 +
+ include/linux/uaccess.h                 |  19 +-
+ init/main.c                             |   3 +
+ kernel/Makefile                         |   1 +
+ kernel/dma/mapping.c                    |   9 +-
+ kernel/entry/common.c                   |  22 +-
+ kernel/exit.c                           |   2 +
+ kernel/fork.c                           |   2 +
+ kernel/kcov.c                           |   7 +
+ kernel/locking/Makefile                 |   3 +-
+ lib/Kconfig.debug                       |   1 +
+ lib/Kconfig.kmsan                       |  39 ++
+ lib/Makefile                            |   3 +
+ lib/iomap.c                             |  40 ++
+ lib/iov_iter.c                          |   9 +-
+ lib/stackdepot.c                        |  29 +-
+ lib/string.c                            |   8 +
+ lib/usercopy.c                          |   3 +-
+ mm/Makefile                             |   1 +
+ mm/internal.h                           |   6 +
+ mm/kasan/common.c                       |   2 +-
+ mm/kmsan/Makefile                       |  26 ++
+ mm/kmsan/annotations.c                  |  28 ++
+ mm/kmsan/core.c                         | 468 +++++++++++++++++++++
+ mm/kmsan/hooks.c                        | 384 +++++++++++++++++
+ mm/kmsan/init.c                         | 240 +++++++++++
+ mm/kmsan/instrumentation.c              | 267 ++++++++++++
+ mm/kmsan/kmsan.h                        | 188 +++++++++
+ mm/kmsan/kmsan_test.c                   | 536 ++++++++++++++++++++++++
+ mm/kmsan/report.c                       | 211 ++++++++++
+ mm/kmsan/shadow.c                       | 336 +++++++++++++++
+ mm/memory.c                             |   2 +
+ mm/mmu_gather.c                         |  10 +
+ mm/page_alloc.c                         |  18 +
+ mm/slab.h                               |   1 +
+ mm/slub.c                               |  21 +-
+ mm/vmalloc.c                            |  20 +-
+ scripts/Makefile.kmsan                  |   1 +
+ scripts/Makefile.lib                    |   9 +
+ security/Kconfig.hardening              |   4 +
+ tools/objtool/check.c                   |  19 +
+ 96 files changed, 4211 insertions(+), 87 deletions(-)
+ create mode 100644 Documentation/dev-tools/kmsan.rst
+ create mode 100644 include/linux/kmsan-checks.h
+ create mode 100644 include/linux/kmsan.h
+ create mode 100644 lib/Kconfig.kmsan
+ create mode 100644 mm/kmsan/Makefile
+ create mode 100644 mm/kmsan/annotations.c
+ create mode 100644 mm/kmsan/core.c
+ create mode 100644 mm/kmsan/hooks.c
+ create mode 100644 mm/kmsan/init.c
+ create mode 100644 mm/kmsan/instrumentation.c
+ create mode 100644 mm/kmsan/kmsan.h
+ create mode 100644 mm/kmsan/kmsan_test.c
+ create mode 100644 mm/kmsan/report.c
+ create mode 100644 mm/kmsan/shadow.c
+ create mode 100644 scripts/Makefile.kmsan
+
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
+

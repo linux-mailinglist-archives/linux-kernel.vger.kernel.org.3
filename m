@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AA550F4A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C52050F847
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345236AbiDZIhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S1348030AbiDZJaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345245AbiDZIe0 (ORCPT
+        with ESMTP id S1347681AbiDZJGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0A53AA51;
-        Tue, 26 Apr 2022 01:26:44 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:02 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66BD15CEC5;
+        Tue, 26 Apr 2022 01:45:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AEA3617AE;
-        Tue, 26 Apr 2022 08:26:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ABC2C385A0;
-        Tue, 26 Apr 2022 08:26:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3EB91CE1BC9;
+        Tue, 26 Apr 2022 08:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABEBC385A4;
+        Tue, 26 Apr 2022 08:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961603;
-        bh=q+LJfLznKrQkXW0e24IKQ9gcKHtINcDcGkYCosa7MkM=;
+        s=korg; t=1650962718;
+        bh=LvnkFNrz/vSm7u8FmLhD5GqqbL3/DLWRoe48drE1qRE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OgztPHomQJvWcxrOaWHltKTNmIYx0TbmGFrwrdn2POYS90oFNeregHCo5p2mObOKF
-         eZCIX50XBKPDVz9RArW9oXCJ582B4EldEo+JZhxfaLtegs576KUk+WhIKx+kHnwbAm
-         7OyNpgGEMoEHJ+hBa7Yz3lsf8mwRMfv1/BY9osrY=
+        b=TbP1C7aII25AAK0ASNEmU2q68brVw0pwFLqwVdgd5SF6vvl3pmjbpTr8wTpfIWxr4
+         2kM7XT2h70i1+Rl4dFg6N5pxNbpWcYdSTc1r6HScZRtP02CVu+tPgkJYK3P2DpUDyF
+         0sCxpIFYtyWkSPvoOitjBOtuF0Q0SmIfjHGRXCj0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cifs@vger.kernel.org, Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 22/53] cifs: Check the IOCB_DIRECT flag, not O_DIRECT
+        stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 067/146] ALSA: hda: intel-dsp-config: update AlderLake PCI IDs
 Date:   Tue, 26 Apr 2022 10:21:02 +0200
-Message-Id: <20220426081736.298692942@linuxfoundation.org>
+Message-Id: <20220426081751.947768234@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit 994fd530a512597ffcd713b0f6d5bc916c5698f0 ]
+[ Upstream commit d52eee988597ac2a2c5d17d842946616d7d41070 ]
 
-Use the IOCB_DIRECT indicator flag on the I/O context rather than checking to
-see if the file was opened O_DIRECT.
+Add missing AlderLake-PS and RaptorLake-S PCI IDs (already in HDaudio
+and SOF drivers), add comments and regroup by skew.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: linux-cifs@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Link: https://lore.kernel.org/r/20220406190418.245044-1-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifsfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/hda/intel-dsp-config.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index baa1713d6695..52b1524b40cd 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -813,7 +813,7 @@ cifs_loose_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- 	ssize_t rc;
- 	struct inode *inode = file_inode(iocb->ki_filp);
+diff --git a/sound/hda/intel-dsp-config.c b/sound/hda/intel-dsp-config.c
+index 70fd8b13938e..8b0a16ba27d3 100644
+--- a/sound/hda/intel-dsp-config.c
++++ b/sound/hda/intel-dsp-config.c
+@@ -390,22 +390,36 @@ static const struct config_entry config_table[] = {
  
--	if (iocb->ki_filp->f_flags & O_DIRECT)
-+	if (iocb->ki_flags & IOCB_DIRECT)
- 		return cifs_user_readv(iocb, iter);
- 
- 	rc = cifs_revalidate_mapping(inode);
+ /* Alder Lake */
+ #if IS_ENABLED(CONFIG_SND_SOC_SOF_ALDERLAKE)
++	/* Alderlake-S */
+ 	{
+ 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
+ 		.device = 0x7ad0,
+ 	},
++	/* RaptorLake-S */
+ 	{
+ 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
+-		.device = 0x51c8,
++		.device = 0x7a50,
+ 	},
++	/* Alderlake-P */
+ 	{
+ 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
+-		.device = 0x51cc,
++		.device = 0x51c8,
+ 	},
+ 	{
+ 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
+ 		.device = 0x51cd,
+ 	},
++	/* Alderlake-PS */
++	{
++		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
++		.device = 0x51c9,
++	},
++	/* Alderlake-M */
++	{
++		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
++		.device = 0x51cc,
++	},
++	/* Alderlake-N */
+ 	{
+ 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
+ 		.device = 0x54c8,
 -- 
 2.35.1
 

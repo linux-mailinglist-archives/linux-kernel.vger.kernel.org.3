@@ -2,162 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5933E510283
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196C5510286
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352783AbiDZQHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S1345201AbiDZQHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237871AbiDZQHO (ORCPT
+        with ESMTP id S1352798AbiDZQHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:07:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA91434AA;
-        Tue, 26 Apr 2022 09:04:06 -0700 (PDT)
+        Tue, 26 Apr 2022 12:07:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD5243EC1;
+        Tue, 26 Apr 2022 09:04:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3EFA61A59;
-        Tue, 26 Apr 2022 16:04:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94823C385AA;
-        Tue, 26 Apr 2022 16:04:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 436D061A59;
+        Tue, 26 Apr 2022 16:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7CCC385AA;
+        Tue, 26 Apr 2022 16:04:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650989045;
-        bh=69jqnS80ls4U/ADxnP7PEc7prC9IyzE3eMxJZnp7tAU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OF7ff69aH9WhWwYQqzv8Ol92hHSgQ1EBu3+vmSaVHUEhT5CXy6BJoKpnIuYAhOrt8
-         W1+kix+7UbGMbEfZgWHap4qIKIRg2Ye6XkwFsUB7ytq8MkxS6U4QjlimKB3EUaL4Tl
-         lG+o75zjCy5+kHsfpGM/hBJukTZGFs1jaomfDgYBY1Kv33I3gF4Y/h2hmu16YG4tOI
-         kHd3BWsSDlq/XDUcjLKqULgQd/YhY8S2ZqFQGnW6NepUoyoYTx17eDXhJL7t6mPl//
-         V69PmgBM9PsxdttsmpNYPouZkSizbbwh7Uo5h5cBqpGePVXkk9IKXAYus5nAM8w29n
-         A7gpRf/DVOB8Q==
-Date:   Wed, 27 Apr 2022 01:03:59 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [PATCHv2 bpf-next 1/4] kallsyms: Add kallsyms_lookup_names
- function
-Message-Id: <20220427010359.8400f28813c1ffc62af2ae2b@kernel.org>
-In-Reply-To: <YmflGEbjkp8mynxK@krava>
-References: <20220418124834.829064-1-jolsa@kernel.org>
-        <20220418124834.829064-2-jolsa@kernel.org>
-        <20220418233546.dfe0a1be12193c26b05cdd93@kernel.org>
-        <Yl5yHVOJpCYr+T3r@krava>
-        <YmJPcU9dahEatb0f@krava>
-        <20220426190108.d9c76f5ccff52e27dbef21af@kernel.org>
-        <YmflGEbjkp8mynxK@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1650989051;
+        bh=DF6HiaHX+dY5oLx+lPOr2QI/LdmMgjcLKt3ZE8J8gK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fUz4dsSHHsZ0RthaQqqNVleFK3yj7u6ZWZ3AqxjSzYd816B8v5+wSSrUlbJhbQPxI
+         2EEb+sLh/UV0OfQxxkG/by3e08H39Z/H0OtgKBsYiEz6tkjRb2PAFpSYbUpWSRe7KA
+         JufQJb17P6X/yy0AyPKoNLs+yGdUns/bEH9USJGBTMejgYFh/jRoEaRiI8+AQMoT2Q
+         VYQaIYj+rIqNuf2JVNoZvg/wKfz8LJ0yIr9q3R6MfilJysBWIHdYYBGuk8JaZfTQg/
+         gY9v9s6a0774Gr953EHhaOe6amXWYY43lNAm1Kg8Aq3PDuVB5b/n9+mJjCrBoJiwdH
+         j1/oGcEXQmUhA==
+Date:   Tue, 26 Apr 2022 11:04:09 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [RFC/RFT v2 09/11] dt-bindings: pci: add lane-map to rockchip
+ PCIe binding
+Message-ID: <20220426160409.GA1731042@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426132139.26761-10-linux@fw-web.de>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 14:27:04 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
-
-> On Tue, Apr 26, 2022 at 07:01:08PM +0900, Masami Hiramatsu wrote:
-> > Hi Jiri,
-> > 
-> > Sorry for replying late.
-> > 
-> > On Fri, 22 Apr 2022 08:47:13 +0200
-> > Jiri Olsa <olsajiri@gmail.com> wrote:
-> > 
-> > > On Tue, Apr 19, 2022 at 10:26:05AM +0200, Jiri Olsa wrote:
-> > > 
-> > > SNIP
-> > > 
-> > > > > > +static int kallsyms_callback(void *data, const char *name,
-> > > > > > +			     struct module *mod, unsigned long addr)
-> > > > > > +{
-> > > > > > +	struct kallsyms_data *args = data;
-> > > > > > +
-> > > > > > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> > > > > > +		return 0;
-> > > > > > +
-> > > > > > +	addr = ftrace_location(addr);
-> > > > > > +	if (!addr)
-> > > > > > +		return 0;
-> > > > > 
-> > > > > Ooops, wait. Did you do this last version? I missed this point.
-> > > > > This changes the meanings of the kernel function.
-> > > > 
-> > > > yes, it was there before ;-) and you're right.. so some archs can
-> > > > return different address, I did not realize that
-> > > > 
-> > > > > 
-> > > > > > +
-> > > > > > +	args->addrs[args->found++] = addr;
-> > > > > > +	return args->found == args->cnt ? 1 : 0;
-> > > > > > +}
-> > > > > > +
-> > > > > > +/**
-> > > > > > + * kallsyms_lookup_names - Lookup addresses for array of symbols
-> > > > > 
-> > > > > More correctly "Lookup 'ftraced' addresses for array of sorted symbols", right?
-> > > > > 
-> > > > > I'm not sure, we can call it as a 'kallsyms' API, since this is using
-> > > > > kallsyms but doesn't return symbol address, but ftrace address.
-> > > > > I think this name misleads user to expect returning symbol address.
-> > > > > 
-> > > > > > + *
-> > > > > > + * @syms: array of symbols pointers symbols to resolve, must be
-> > > > > > + * alphabetically sorted
-> > > > > > + * @cnt: number of symbols/addresses in @syms/@addrs arrays
-> > > > > > + * @addrs: array for storing resulting addresses
-> > > > > > + *
-> > > > > > + * This function looks up addresses for array of symbols provided in
-> > > > > > + * @syms array (must be alphabetically sorted) and stores them in
-> > > > > > + * @addrs array, which needs to be big enough to store at least @cnt
-> > > > > > + * addresses.
-> > > > > 
-> > > > > Hmm, sorry I changed my mind. I rather like to expose kallsyms_on_each_symbol()
-> > > > > and provide this API from fprobe or ftrace, because this returns ftrace address
-> > > > > and thus this is only used from fprobe.
-> > > > 
-> > > > ok, so how about:
-> > > > 
-> > > >   int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs);
-> > > 
-> > > quick question.. is it ok if it stays in kalsyms.c object?
-> > 
-> > I think if this is for the ftrace API, I think it should be in the ftrace.c, and
-> > it can remove unneeded #ifdefs in C code.
-> > 
-> > > 
-> > > so we don't need to expose kallsyms_on_each_symbol,
-> > > and it stays in 'kalsyms' place
-> > 
-> > We don't need to expose it to modules, but just make it into a global scope.
-> > I don't think that doesn't cause a problem.
-
-Oops, I meant "I don't think that cause any problem."
-
+On Tue, Apr 26, 2022 at 03:21:37PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> np, will move it to ftrace
-
-Thank you!
-
+> Create new property for (rockchip) PCIe controller binding to
+> define lane mapping.
 > 
-> thanks,
-> jirka
+> Rockchip driver uses this for bifurcation (true/false) based
+> on lanes should be splitted across controllers or not.
+> 
+> On rk3568 there are 2 PCIe Controllers which share 2 PCIe lanes.
+> 
+> pcie3x1: pcie@fe270000 //lane1 when using 1+1
+> pcie3x2: pcie@fe280000 //lane0 when using 1+1
+> 
+> This ends up in one Controller (pcie3x1) uses lane-map = <0 1>; and
+> the other lane-map = <1 0>; (pcie3x2)
+> 
+> This means there are 2 lanes (count of numbers), one (by position)
+> is mapped to the first controller, the other one is used on the other
+> controller.
+> 
+> In rockchip PCIe driver the lane-map is simply converted to the
+> bifurcation bool instead of direct mapping a specific lane to a
+> controller.
+> 
+> There is not yet any slot mapping below one controller.
+> But for binding this may be possible like:
+> 
+> lane-map = <1 2 3 3 4 4 4 4>;
+>             | | | ...
+>         lane0 | |
+>           lane1 |
+>             lane2
+> 
+> on a 8-lane phy.
+> 
+> This can map lane0 to port1 (number used at this position),
+> lane1 to port2, lanes 2+3 to port 3 and lanes 4,5,6,7 to port 4.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> v2:
+> - new patch
+> ---
+>  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> index a992970e8b85..998b20b3a9dc 100644
+> --- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> @@ -52,6 +52,8 @@ properties:
+>        - const: pclk
+>        - const: aux
+>  
+> +  lane-map: true
+> +
+>    msi-map: true
+>  
+>    num-lanes: true
+> @@ -74,8 +76,6 @@ properties:
+>    reset-names:
+>      const: pipe
+>  
+> -  bifurcation: true
+> -
 
+Why are you adding "bifurcation" earlier in the series, then
+immediately removing it?  Why not just add "lane-map" directly and
+never mention "bifurcation" in the DT at all?
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+>    vpcie3v3-supply: true
+>  
+>  required:
+> @@ -115,6 +115,7 @@ examples:
+>                            "aclk_dbi", "pclk",
+>                            "aux";
+>              device_type = "pci";
+> +            lane-map = <0 1>;
+>              linux,pci-domain = <2>;
+>              max-link-speed = <2>;
+>              msi-map = <0x2000 &its 0x2000 0x1000>;
+> -- 
+> 2.25.1
+> 
+> 
+> -- 
+> linux-phy mailing list
+> linux-phy@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/linux-phy

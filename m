@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AA551050A
+	by mail.lfdr.de (Postfix) with ESMTP id 16FEE510508
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 19:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbiDZRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 13:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S231484AbiDZRRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 13:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353659AbiDZRPy (ORCPT
+        with ESMTP id S232441AbiDZRRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 13:15:54 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A953C710;
-        Tue, 26 Apr 2022 10:12:21 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id iq10so5622269pjb.0;
-        Tue, 26 Apr 2022 10:12:21 -0700 (PDT)
+        Tue, 26 Apr 2022 13:17:02 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980571275D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:13:54 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id h1so18525147pfv.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 10:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Xex1L+qhJCY3xuEM8rnY77RhjLIAitywaBH8FnXN2NE=;
-        b=bxXsJwIQmg2ku7et4j8+xq9nMg00udwIkyvPh9/9E/YjIyflfTwylCbsEfjDeJT5M+
-         CwMfZEUY6uRG3oP8T7x8URYwmIyq9akC3TPlTUhzWkNN7GHYJ3vCRUrrpRb9ejan+nc7
-         rsH505UOI3MmkMuYRrvvdLfK4/1gbhOGFH2jPkSNyqzO/qMdGaet/DwzRAdkB2T9kVCk
-         kj1XvRZXdJwZug6iiQQcoHvWgFrcvOIAoX+QR+3K54Mj/suX5EkmG5WfvBmroRPBGQDy
-         48Y0ATvVxJrHZl6T5NAISRCpMmfQ1gS0LLIcJwr3CX0Pkfo2NlAARLHQppCw/KbZFX4M
-         60Ig==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=COISYBtLemURzEtVRJTSOaoU1kvxhQruqFG2UXo9XUw=;
+        b=ICQKMM5VJ8dZCmZ5IDftKBD0tk2p/btzOGUR1kYXd/zFRS/EkvTLCpPCF1BWQ1lKzH
+         Bqh4vxvd9/HnKEhvMjZIYnNj2yFTyCqWnJW+u9sWIKXgfunEJOyiAGcoiGom0Fjw4+ka
+         PLtm7GIGMzzUN3ttrb56TQfPJKwV2PasGCyTFseghYcMYWl+0iS+YumxymWwxECcFY1g
+         JRdSZQT+i9TCp8T5DDInsYfDjIyKVFo702VauqiPnw8KYNWqo4U3LUZim+g67CUif1E7
+         I2M4VxY3Hs8iCvYzmtDEU4yfuI4Q/MIIivgirMZZUMt0ThznOwHSbGUBfWZwJDUpmo8/
+         B/oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Xex1L+qhJCY3xuEM8rnY77RhjLIAitywaBH8FnXN2NE=;
-        b=c56nqED83kCRf4MBoKOj5MXTDjf65zzaKu/hH2XoD5cCB4Yq39AunLscnpg5n5zRu9
-         F61JKoH/uYuTsxckz//TY+DOaxnAXobH4Q0oH44dNuohshx2UioMHFeLRQkgqdGVtpww
-         PIXH/VHCnzqEkqLv7J4oyDFtX9zsiXkx0RZwTpAvDw35y1HjTDwZj5fJqFfQ/A45ykA9
-         QHSme+oCmCpFYyKeuoHqBsrZYDBAJdeoqf58aCHooX6utcKCk4J7lufJJPMqsldd/4gp
-         PEkLVpswbuPIvv+9f8VCJafrw/L07Hs5Fq5sg/DySbUOGKjAXNV4CVEagzi8VPJxia0m
-         BfqA==
-X-Gm-Message-State: AOAM530MzURGZGwkJfCzPYSTL/KmpgZQf+OYzML8423/Qyvjpd7As/hj
-        ncDu79VHi/tzQn+mpyXMqIU=
-X-Google-Smtp-Source: ABdhPJxu8MceZNAOZTO63BsuWJu133Vs0KS3r76F9XhsDtYfhid4pivBZxd0ZvAvKPlpmG9QgmN2Mw==
-X-Received: by 2002:a17:902:e8cf:b0:156:36e0:6bcb with SMTP id v15-20020a170902e8cf00b0015636e06bcbmr23470774plg.105.1650993140487;
-        Tue, 26 Apr 2022 10:12:20 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id i23-20020a056a00225700b0050d38d0f58dsm9035602pfu.213.2022.04.26.10.12.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 10:12:20 -0700 (PDT)
-Message-ID: <53ab8f7d-bf13-c285-b67c-d7e224b581a0@gmail.com>
-Date:   Tue, 26 Apr 2022 10:12:18 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=COISYBtLemURzEtVRJTSOaoU1kvxhQruqFG2UXo9XUw=;
+        b=0sZYFerkSrdTUBMV/wea4vT1xUkPmXkmshNC6zkT2E0EZzYh0ypFdsXicM9kCWgrTt
+         WtGr9hN4Sa0j/18wWtj7BmjmltLFrkXr4TS4suytxzkx0no9NyxF/kWs27yK/Xe7gtCo
+         p3M/28qj8nd7yMvMafSk0q5AtHlbYwBa/1usxpBxchtcuNQB7YCE3kvKeFcn4ifjzGPK
+         8xyynEzNav27NnJnwGVFSHyEkPJUr1Y5uW5ZuMxlGC8FYCs4NUXezul8BUC8H04kxMJI
+         0VW0Hylay1l+s4MPtYl9gyUx2gQGGLIEgd750i+dg2BLPmjVIYXCR0Y1a3vwN039xFwl
+         Wrtw==
+X-Gm-Message-State: AOAM5315iEUjgG1/O6QF1x1WS4eSck7s3WeI6zjX5fOfS7KTg885ESh1
+        TwRo7hsAETa64a6t8T1a/ISRG/z0PYyTP+exX1N+5g==
+X-Google-Smtp-Source: ABdhPJw0Ra1dMBKYFZkjWanWW4cefxv2B97eXQvw3FrcmpDznbuhiQB1ig3w2zhaYU9CkF8BOrp7P30WHnRXgF9Udfk=
+X-Received: by 2002:a62:fb0e:0:b0:505:fd9e:9218 with SMTP id
+ x14-20020a62fb0e000000b00505fd9e9218mr26023121pfm.78.1650993233860; Tue, 26
+ Apr 2022 10:13:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.10 00/86] 5.10.113-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220426081741.202366502@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220426000640.3581446-1-rajatja@google.com> <030f48f4-44d7-c04c-a194-5f4999873ebe@arm.com>
+In-Reply-To: <030f48f4-44d7-c04c-a194-5f4999873ebe@arm.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Tue, 26 Apr 2022 10:13:17 -0700
+Message-ID: <CACK8Z6GEPTaQKbxeBqQuKbNmVkL1DoHDrKwDeosCeRXfHbD_=w@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] PCI/ACPI: Support Microsoft's "DmaProperty"
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,27 +84,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 01:20, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.113 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.113-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Apr 26, 2022 at 4:15 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2022-04-26 01:06, Rajat Jain via iommu wrote:
+> > The "DmaProperty" is supported and currently documented and used by
+> > Microsoft [link 1 below], to flag internal PCIe root ports that need
+> > DMA protection [link 2 below]. We have discussed with them and reached
+> > a common understanding that they shall change their MSDN documentation
+> > to say that the same property can be used to protect any PCI device,
+> > and not just internal PCIe root ports (since there is no point
+> > introducing yet another property for arbitrary PCI devices). This helps
+> > with security from internal devices that offer an attack surface for
+> > DMA attacks (e.g. internal network devices).
+> >
+> > Support DmaProperty to mark DMA from a PCI device as untrusted.
+> >
+> > Link: [1] https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+> > Link: [2] https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> > v6: * Take care of Bjorn's comments:
+> >         - Update the commit log
+> >         - Rename to pci_dev_has_dma_property()
+> >         - Use acpi_dev_get_property()
+> > v5: * Reorder the patches in the series
+> > v4: * Add the GUID.
+> >      * Update the comment and commitlog.
+> > v3: * Use Microsoft's documented property "DmaProperty"
+> >      * Resctrict to ACPI only
+> >
+> >   drivers/acpi/property.c |  3 +++
+> >   drivers/pci/pci-acpi.c  | 21 +++++++++++++++++++++
+> >   2 files changed, 24 insertions(+)
+> >
+> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> > index 12bbfe833609..bafe35c301ac 100644
+> > --- a/drivers/acpi/property.c
+> > +++ b/drivers/acpi/property.c
+> > @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
+> >       /* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
+> >       GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
+> >                 0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
+> > +     /* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
+> > +     GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
+> > +               0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
+> >   };
+> >
+> >   /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
+> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> > index 3ae435beaf0a..d7c6ba48486f 100644
+> > --- a/drivers/pci/pci-acpi.c
+> > +++ b/drivers/pci/pci-acpi.c
+> > @@ -1369,12 +1369,33 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+> >               dev->external_facing = 1;
+> >   }
+> >
+> > +static int pci_dev_has_dma_property(struct pci_dev *dev)
+> > +{
+> > +     struct acpi_device *adev;
+> > +     const union acpi_object *obj;
+> > +
+> > +     adev = ACPI_COMPANION(&dev->dev);
+> > +     if (!adev)
+> > +             return 0;
+> > +
+> > +     /*
+> > +      * Property also used by Microsoft Windows for same purpose,
+> > +      * (to implement DMA protection from a device, using the IOMMU).
+>
+> Nit: there is no context for "same purpose" here, so this comment is
+> more confusing than helpful. Might I suggest a rewording like:
+>
+>         /*
+>          * Property used by Microsoft Windows to enforce IOMMU DMA
+>          * protection for any device that the system might not fully
+>          * trust; we'll honour it the same way.
+>          */
+>
+> ?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Sure, will do.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+>
+> Personally I think it would have been more logical to handle this in
+> pci_set_dma_untrusted(), but I see some of those implementation aspects
+> have already been discussed, and Bjorn's preference definitely wins over
+> mine here :)
+
+Yes, this was discussed. The primary reason is that ACPI properties
+for PCI devices are not available at the time pci_set_untrusted_dma()
+is called.
+
+Thanks & Best Regards,
+
+Rajat
+
+>
+> Thanks,
+> Robin.
+>
+> > +      */
+> > +     if (!acpi_dev_get_property(adev, "DmaProperty", ACPI_TYPE_INTEGER,
+> > +                                &obj) && obj->integer.value == 1)
+> > +             return 1;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >   void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+> >   {
+> >       struct pci_dev *pci_dev = to_pci_dev(dev);
+> >
+> >       pci_acpi_optimize_delay(pci_dev, adev->handle);
+> >       pci_acpi_set_external_facing(pci_dev);
+> > +     pci_dev->untrusted |= pci_dev_has_dma_property(pci_dev); >      pci_acpi_add_edr_notifier(pci_dev);
+> >
+> >       pci_acpi_add_pm_notifier(adev, pci_dev);

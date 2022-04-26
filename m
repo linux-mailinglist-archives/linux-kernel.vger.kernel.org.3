@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0873950F85D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BE850F82B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238523AbiDZJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        id S1347877AbiDZJO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347808AbiDZJGN (ORCPT
+        with ESMTP id S1347167AbiDZIvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43B0A76E8;
-        Tue, 26 Apr 2022 01:45:57 -0700 (PDT)
+        Tue, 26 Apr 2022 04:51:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B89174F56;
+        Tue, 26 Apr 2022 01:39:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DCF061344;
-        Tue, 26 Apr 2022 08:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485A4C385AC;
-        Tue, 26 Apr 2022 08:45:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00B83B81D18;
+        Tue, 26 Apr 2022 08:39:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9CEC385A0;
+        Tue, 26 Apr 2022 08:39:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962756;
-        bh=I0Cv64zZFD3bZSetPVMANX+p6oWXDFDHsq6jsf5ae+w=;
+        s=korg; t=1650962373;
+        bh=NTFmc6yUB3G/+inTJha6H7dnjf/aU7LUIJdiD7wZZfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sC/WOrh6yg2iX2/kT0MrPki3ZrMw47ISZbaz66piStA3znyX3AS/HwCvbgaOPgZyF
-         ohcNL6JLtrP5eblBpRY/gAm/uQefuATI5wGqC1filEsaJLF5sLdb3lQS6WyVyG8qHK
-         /Y51hkIY4VGO1/gZrzcOqV6jfOsBhu15xbjeYZNE=
+        b=1Wha1JePcisWwDcSf3RWyFjQOfr3IxvjuF5nD5wK/ysW3ma2Ve3nGseoY51TVDgX6
+         C+aNzXMj334g0SwEQSbFip5tYgcYhkOHqPhR05569Kfha62uqoeZj91NMKoCAh8au9
+         HB1/2irR3v9ZmiRq1CWthZIORInWPBEF9dW/5QEI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, David Disseldorp <ddiss@suse.de>,
+        Jeff Layton <jlayton@kernel.org>, NeilBrown <neilb@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 079/146] scsi: iscsi: Merge suspend fields
+Subject: [PATCH 5.15 073/124] VFS: filename_create(): fix incorrect intent.
 Date:   Tue, 26 Apr 2022 10:21:14 +0200
-Message-Id: <20220426081752.284959615@linuxfoundation.org>
+Message-Id: <20220426081749.377215935@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,193 +56,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit 5bd856256f8c03e329f8ff36d8c8efcb111fe6df ]
+[ Upstream commit b3d4650d82c71b9c9a8184de9e8bb656012b289e ]
 
-Move the tx and rx suspend fields into one flags field.
+When asked to create a path ending '/', but which is not to be a
+directory (LOOKUP_DIRECTORY not set), filename_create() will never try
+to create the file.  If it doesn't exist, -ENOENT is reported.
 
-Link: https://lore.kernel.org/r/20220408001314.5014-8-michael.christie@oracle.com
-Tested-by: Manish Rangankar <mrangankar@marvell.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Chris Leech <cleech@redhat.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
+->lookup() function, even though there is no intent to create.  This is
+misleading and can cause incorrect behaviour.
+
+If you try
+
+   ln -s foo /path/dir/
+
+where 'dir' is a directory on an NFS filesystem which is not currently
+known in the dcache, this will fail with ENOENT.
+
+But as the name is not in the dcache, nfs_lookup gets called with
+LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
+lookup, with the expectation that a subsequent call to create the target
+will be made, and the lookup can be combined with the creation.  In the
+case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
+made.  Instead filename_create() sees that the dentry is not (yet)
+positive and returns -ENOENT - even though the directory actually
+exists.
+
+So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent to
+create, and use the absence of these flags to decide if -ENOENT should
+be returned.
+
+Note that filename_parentat() is only interested in LOOKUP_REVAL, so we
+split that out and store it in 'reval_flag'.  __lookup_hash() then gets
+reval_flag combined with whatever create flags were determined to be
+needed.
+
+Reviewed-by: David Disseldorp <ddiss@suse.de>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/bnx2i/bnx2i_hwi.c   |  2 +-
- drivers/scsi/bnx2i/bnx2i_iscsi.c |  2 +-
- drivers/scsi/cxgbi/libcxgbi.c    |  6 +++---
- drivers/scsi/libiscsi.c          | 20 ++++++++++----------
- drivers/scsi/libiscsi_tcp.c      |  2 +-
- include/scsi/libiscsi.h          |  9 +++++----
- 6 files changed, 21 insertions(+), 20 deletions(-)
+ fs/namei.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/bnx2i/bnx2i_hwi.c b/drivers/scsi/bnx2i/bnx2i_hwi.c
-index 5521469ce678..e16327a4b4c9 100644
---- a/drivers/scsi/bnx2i/bnx2i_hwi.c
-+++ b/drivers/scsi/bnx2i/bnx2i_hwi.c
-@@ -1977,7 +1977,7 @@ static int bnx2i_process_new_cqes(struct bnx2i_conn *bnx2i_conn)
- 		if (nopin->cq_req_sn != qp->cqe_exp_seq_sn)
- 			break;
- 
--		if (unlikely(test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_rx))) {
-+		if (unlikely(test_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags))) {
- 			if (nopin->op_code == ISCSI_OP_NOOP_IN &&
- 			    nopin->itt == (u16) RESERVED_ITT) {
- 				printk(KERN_ALERT "bnx2i: Unsolicited "
-diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-index e21b053b4f3e..a592ca8602f9 100644
---- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
-+++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-@@ -1721,7 +1721,7 @@ static int bnx2i_tear_down_conn(struct bnx2i_hba *hba,
- 			struct iscsi_conn *conn = ep->conn->cls_conn->dd_data;
- 
- 			/* Must suspend all rx queue activity for this ep */
--			set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_rx);
-+			set_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags);
- 		}
- 		/* CONN_DISCONNECT timeout may or may not be an issue depending
- 		 * on what transcribed in TCP layer, different targets behave
-diff --git a/drivers/scsi/cxgbi/libcxgbi.c b/drivers/scsi/cxgbi/libcxgbi.c
-index 8c7d4dda4cf2..4365d52c6430 100644
---- a/drivers/scsi/cxgbi/libcxgbi.c
-+++ b/drivers/scsi/cxgbi/libcxgbi.c
-@@ -1634,11 +1634,11 @@ void cxgbi_conn_pdu_ready(struct cxgbi_sock *csk)
- 	log_debug(1 << CXGBI_DBG_PDU_RX,
- 		"csk 0x%p, conn 0x%p.\n", csk, conn);
- 
--	if (unlikely(!conn || conn->suspend_rx)) {
-+	if (unlikely(!conn || test_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags))) {
- 		log_debug(1 << CXGBI_DBG_PDU_RX,
--			"csk 0x%p, conn 0x%p, id %d, suspend_rx %lu!\n",
-+			"csk 0x%p, conn 0x%p, id %d, conn flags 0x%lx!\n",
- 			csk, conn, conn ? conn->id : 0xFF,
--			conn ? conn->suspend_rx : 0xFF);
-+			conn ? conn->flags : 0xFF);
- 		return;
- 	}
- 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 059dae8909ee..073c4db79094 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -1392,8 +1392,8 @@ static bool iscsi_set_conn_failed(struct iscsi_conn *conn)
- 	if (conn->stop_stage == 0)
- 		session->state = ISCSI_STATE_FAILED;
- 
--	set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx);
--	set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_rx);
-+	set_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags);
-+	set_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags);
- 	return true;
- }
- 
-@@ -1454,7 +1454,7 @@ static int iscsi_xmit_task(struct iscsi_conn *conn, struct iscsi_task *task,
- 	 * Do this after dropping the extra ref because if this was a requeue
- 	 * it's removed from that list and cleanup_queued_task would miss it.
- 	 */
--	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
-+	if (test_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags)) {
- 		/*
- 		 * Save the task and ref in case we weren't cleaning up this
- 		 * task and get woken up again.
-@@ -1532,7 +1532,7 @@ static int iscsi_data_xmit(struct iscsi_conn *conn)
- 	int rc = 0;
- 
- 	spin_lock_bh(&conn->session->frwd_lock);
--	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
-+	if (test_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags)) {
- 		ISCSI_DBG_SESSION(conn->session, "Tx suspended!\n");
- 		spin_unlock_bh(&conn->session->frwd_lock);
- 		return -ENODATA;
-@@ -1746,7 +1746,7 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 		goto fault;
- 	}
- 
--	if (test_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx)) {
-+	if (test_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags)) {
- 		reason = FAILURE_SESSION_IN_RECOVERY;
- 		sc->result = DID_REQUEUE << 16;
- 		goto fault;
-@@ -1935,7 +1935,7 @@ static void fail_scsi_tasks(struct iscsi_conn *conn, u64 lun, int error)
- void iscsi_suspend_queue(struct iscsi_conn *conn)
+diff --git a/fs/namei.c b/fs/namei.c
+index 3bb65f48fe1d..8882a70dc119 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3625,18 +3625,14 @@ static struct dentry *filename_create(int dfd, struct filename *name,
  {
- 	spin_lock_bh(&conn->session->frwd_lock);
--	set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx);
-+	set_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags);
- 	spin_unlock_bh(&conn->session->frwd_lock);
- }
- EXPORT_SYMBOL_GPL(iscsi_suspend_queue);
-@@ -1953,7 +1953,7 @@ void iscsi_suspend_tx(struct iscsi_conn *conn)
- 	struct Scsi_Host *shost = conn->session->host;
- 	struct iscsi_host *ihost = shost_priv(shost);
+ 	struct dentry *dentry = ERR_PTR(-EEXIST);
+ 	struct qstr last;
++	bool want_dir = lookup_flags & LOOKUP_DIRECTORY;
++	unsigned int reval_flag = lookup_flags & LOOKUP_REVAL;
++	unsigned int create_flags = LOOKUP_CREATE | LOOKUP_EXCL;
+ 	int type;
+ 	int err2;
+ 	int error;
+-	bool is_dir = (lookup_flags & LOOKUP_DIRECTORY);
  
--	set_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx);
-+	set_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags);
- 	if (ihost->workq)
- 		flush_workqueue(ihost->workq);
- }
-@@ -1961,7 +1961,7 @@ EXPORT_SYMBOL_GPL(iscsi_suspend_tx);
+-	/*
+-	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
+-	 * other flags passed in are ignored!
+-	 */
+-	lookup_flags &= LOOKUP_REVAL;
+-
+-	error = filename_parentat(dfd, name, lookup_flags, path, &last, &type);
++	error = filename_parentat(dfd, name, reval_flag, path, &last, &type);
+ 	if (error)
+ 		return ERR_PTR(error);
  
- static void iscsi_start_tx(struct iscsi_conn *conn)
- {
--	clear_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx);
-+	clear_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags);
- 	iscsi_conn_queue_work(conn);
- }
- 
-@@ -3323,8 +3323,8 @@ int iscsi_conn_bind(struct iscsi_cls_session *cls_session,
+@@ -3650,11 +3646,13 @@ static struct dentry *filename_create(int dfd, struct filename *name,
+ 	/* don't fail immediately if it's r/o, at least try to report other errors */
+ 	err2 = mnt_want_write(path->mnt);
  	/*
- 	 * Unblock xmitworker(), Login Phase will pass through.
+-	 * Do the final lookup.
++	 * Do the final lookup.  Suppress 'create' if there is a trailing
++	 * '/', and a directory wasn't requested.
  	 */
--	clear_bit(ISCSI_SUSPEND_BIT, &conn->suspend_rx);
--	clear_bit(ISCSI_SUSPEND_BIT, &conn->suspend_tx);
-+	clear_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags);
-+	clear_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(iscsi_conn_bind);
-diff --git a/drivers/scsi/libiscsi_tcp.c b/drivers/scsi/libiscsi_tcp.c
-index 2e9ffe3d1a55..883005757ddb 100644
---- a/drivers/scsi/libiscsi_tcp.c
-+++ b/drivers/scsi/libiscsi_tcp.c
-@@ -927,7 +927,7 @@ int iscsi_tcp_recv_skb(struct iscsi_conn *conn, struct sk_buff *skb,
+-	lookup_flags |= LOOKUP_CREATE | LOOKUP_EXCL;
++	if (last.name[last.len] && !want_dir)
++		create_flags = 0;
+ 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
+-	dentry = __lookup_hash(&last, path->dentry, lookup_flags);
++	dentry = __lookup_hash(&last, path->dentry, reval_flag | create_flags);
+ 	if (IS_ERR(dentry))
+ 		goto unlock;
+ 
+@@ -3668,7 +3666,7 @@ static struct dentry *filename_create(int dfd, struct filename *name,
+ 	 * all is fine. Let's be bastards - you had / on the end, you've
+ 	 * been asking for (non-existent) directory. -ENOENT for you.
  	 */
- 	conn->last_recv = jiffies;
- 
--	if (unlikely(conn->suspend_rx)) {
-+	if (unlikely(test_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags))) {
- 		ISCSI_DBG_TCP(conn, "Rx suspended!\n");
- 		*status = ISCSI_TCP_SUSPENDED;
- 		return 0;
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 4ee233e5a6ff..bdb0ae11682d 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -52,8 +52,10 @@ enum {
- 
- #define ISID_SIZE			6
- 
--/* Connection suspend "bit" */
--#define ISCSI_SUSPEND_BIT		1
-+/* Connection flags */
-+#define ISCSI_CONN_FLAG_SUSPEND_TX	BIT(0)
-+#define ISCSI_CONN_FLAG_SUSPEND_RX	BIT(1)
-+
- 
- #define ISCSI_ITT_MASK			0x1fff
- #define ISCSI_TOTAL_CMDS_MAX		4096
-@@ -199,8 +201,7 @@ struct iscsi_conn {
- 	struct list_head	cmdqueue;	/* data-path cmd queue */
- 	struct list_head	requeue;	/* tasks needing another run */
- 	struct work_struct	xmitwork;	/* per-conn. xmit workqueue */
--	unsigned long		suspend_tx;	/* suspend Tx */
--	unsigned long		suspend_rx;	/* suspend Rx */
-+	unsigned long		flags;		/* ISCSI_CONN_FLAGs */
- 
- 	/* negotiated params */
- 	unsigned		max_recv_dlength; /* initiator_max_recv_dsl*/
+-	if (unlikely(!is_dir && last.name[last.len])) {
++	if (unlikely(!create_flags)) {
+ 		error = -ENOENT;
+ 		goto fail;
+ 	}
 -- 
 2.35.1
 

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAA5510A8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39076510A95
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355016AbiDZUgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S1355017AbiDZUgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355020AbiDZUgS (ORCPT
+        with ESMTP id S1355010AbiDZUg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:36:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EADC71A816F
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:04 -0700 (PDT)
+        Tue, 26 Apr 2022 16:36:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A4C11AB8D5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651005183;
+        s=mimecast20190719; t=1651005193;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qJupZ9EKBhCX8US4p7GIAW6BSuQyT3fJWSWGs492ld4=;
-        b=XRghbmOtv73zpJl3Ez76GQSI3MdzswbE96Ikcw+PZLeJFEW+OTQLjfX+KHoI2rI0Fng60W
-        6LX0D1rVpirqE8mj920zZkkO15/n9kaze6u8pc//D8bKwF1YdyYy8rgyaFbWQWGBhIuy06
-        gKWRYpQ2C1IaZ8YuZfGP1BksunWk314=
+        bh=Av2XJWYSmxJiVQjp5kZR1hfhT+pdVskMA4VQgdFQOaM=;
+        b=WK9VxpmjoLLrOX/Z94nx1NOwSqYuPD0Yy/ZDXQDXPjHYre1pneNPBH0Hauo0Y0QWpGvTMb
+        +K4zJNZYPIhpKXbzbgtxr2VRbkT9VR/kKBbD8wAeyRO3uTBOSr+R6v9VOtV+ttKZXF/l0E
+        10bXil0mPPSh/OJtaTuyPSU4bMqq85c=
 Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
  [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-aeMKZdY5PzaXP7wfjG-wBw-1; Tue, 26 Apr 2022 16:33:01 -0400
-X-MC-Unique: aeMKZdY5PzaXP7wfjG-wBw-1
-Received: by mail-io1-f71.google.com with SMTP id k20-20020a5e9314000000b00649d55ffa67so15322315iom.20
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:01 -0700 (PDT)
+ us-mta-660-HC9fj3zAOey-BED25hp_Vw-1; Tue, 26 Apr 2022 16:33:12 -0400
+X-MC-Unique: HC9fj3zAOey-BED25hp_Vw-1
+Received: by mail-io1-f71.google.com with SMTP id i19-20020a5d9353000000b006495ab76af6so81415ioo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:33:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qJupZ9EKBhCX8US4p7GIAW6BSuQyT3fJWSWGs492ld4=;
-        b=HVVjsaJPNGfZuDCBzXZuqugGf4fJC1KL1d2VleheMJarWnGEgkVYf+K5f9i7zAcEGT
-         4U45dwXGQ7avdbutMFbmovEKFLXJwj49c/RYq9QhC4BOgaMH2nixVQPkr9nhm5KTAPYl
-         sX2cLljfBL24FQKSDaLS82S8b3C7p3yiR2wKwDDpEuPJ+1zS/tjOlWUWcaWi2iCn2h6F
-         eduy2rhsyn5qm5B6J3priHsFrYeoI8wuJxpl8evZxlmUV9kfyqjSHrOT3PWbE71pqGW6
-         fC6KkKp8obYxgZxQqA8WrXE9760GNedDyI8z32Pm0IA6gteVWC4wvy7IMxmAbBpAN96h
-         JsKw==
-X-Gm-Message-State: AOAM532/3xwXibVa86yyE2wZIFFDG49/vuuMVny3BpiV8Jcu2y3BKAFZ
-        /4l6Is2gC2nm94OSc+B/oPX3ZRbsNQ5HgzhspbLZVkzRBC8EI34eKU5nmojOzlbFAkPJnIVSdK8
-        +FrOv/7MdFWL+UVCFYZ0vN7ND
-X-Received: by 2002:a05:6638:1487:b0:328:6e36:39e4 with SMTP id j7-20020a056638148700b003286e3639e4mr10263033jak.202.1651005181059;
-        Tue, 26 Apr 2022 13:33:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxv3DOWZkK6AhpbIXCeFJ2/lY2z7CXm1JNRmILCaRK5MqEyMqTOfcKl6cB6RwB1JoqOHBf6sQ==
-X-Received: by 2002:a05:6638:1487:b0:328:6e36:39e4 with SMTP id j7-20020a056638148700b003286e3639e4mr10263012jak.202.1651005180758;
-        Tue, 26 Apr 2022 13:33:00 -0700 (PDT)
+        bh=Av2XJWYSmxJiVQjp5kZR1hfhT+pdVskMA4VQgdFQOaM=;
+        b=exrxsVQPDf0/xOcm34AkwgQ4WOlOk/TT6z8pweCeojWRFjhdGjgAyp+I+M1/i4QCRU
+         c//WRiHzilK+btXkUYOXhZSWORG1QqZUFDNRRLBUBP+SDt5PM54t8Pe4EAuJPmHOYtpW
+         YbC+EgaVS0BY7voP6xRSE49tF15vfyVoXxgqNcXsuugX5PSzWxQH4vvKsK3qHO7RVaab
+         xGLS0m3f+rgOCFvLgMJUUh2L4xARXX7OGDLk/EsXqBo4WhZ2N7tVXkoiQ2XlQCfr96d0
+         pcq+byXSgtmlls8Pv4of80WpZvXm8CS6YyALO0nOtbcsQISuLAF/ldMGgkyaWkQoSptb
+         WUDw==
+X-Gm-Message-State: AOAM533vHK1W1vvSs06NyU1slPK5BKNSGi/+xMlhGF+Ks1cb/tyVUoJv
+        27j12l7OSGQ3tBuSS04E21c+ZRz9k+I2PXPvgKZu294MhgDD5EjxaOMYbuyaRBEW+oCgm/zM3c0
+        XPE/56z7BWMrYbEdGKNyUx/SU
+X-Received: by 2002:a05:6638:272c:b0:32a:f95b:fc77 with SMTP id m44-20020a056638272c00b0032af95bfc77mr4011882jav.179.1651005191544;
+        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxd4CFNten6nl0jATzOU1yCBTY6Y58j8Espgob7sbvIFYcRfIXeg+IqFoDNsZPO7cKZaJ3nww==
+X-Received: by 2002:a05:6638:272c:b0:32a:f95b:fc77 with SMTP id m44-20020a056638272c00b0032af95bfc77mr4011865jav.179.1651005191365;
+        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
 Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id x186-20020a6bc7c3000000b00648deae6630sm10449855iof.54.2022.04.26.13.32.58
+        by smtp.gmail.com with ESMTPSA id e18-20020a92d752000000b002cd6dae980fsm8497051ilq.13.2022.04.26.13.33.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:33:00 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 16:32:58 -0400
+        Tue, 26 Apr 2022 13:33:11 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 16:33:08 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -74,15 +74,15 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-Message-ID: <YmhW+mOuQUWsByj4@xz-m1.local>
+Subject: Re: [PATCH v2 1/6] selftests: vm: add hugetlb_shared userfaultfd
+ test to run_vmtests.sh
+Message-ID: <YmhXBHFrXKT/Jqkd@xz-m1.local>
 References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-3-axelrasmussen@google.com>
+ <20220422212945.2227722-2-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220422212945.2227722-3-axelrasmussen@google.com>
+In-Reply-To: <20220422212945.2227722-2-axelrasmussen@google.com>
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
@@ -93,20 +93,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Axel,
+On Fri, Apr 22, 2022 at 02:29:40PM -0700, Axel Rasmussen wrote:
+> This not being included was just a simple oversight. There are certain
+> features (like minor fault support) which are only enabled on shared
+> mappings, so without including hugetlb_shared we actually lose a
+> significant amount of test coverage.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-On Fri, Apr 22, 2022 at 02:29:41PM -0700, Axel Rasmussen wrote:
-> @@ -65,6 +66,8 @@ struct userfaultfd_ctx {
->  	unsigned int flags;
->  	/* features requested from the userspace */
->  	unsigned int features;
-> +	/* whether or not to handle kernel faults */
-> +	bool handle_kernel_faults;
-
-Could you help explain why we need this bool?  I failed to figure out
-myself on the difference against "!(ctx->flags & UFFD_USER_MODE_ONLY)".
-
-Thanks,
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
 -- 
 Peter Xu

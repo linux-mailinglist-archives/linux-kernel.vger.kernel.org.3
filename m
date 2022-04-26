@@ -2,54 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F60150F83E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB7D50F6CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347274AbiDZJf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
+        id S1346371AbiDZJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347934AbiDZJGY (ORCPT
+        with ESMTP id S1346883AbiDZIp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:24 -0400
+        Tue, 26 Apr 2022 04:45:28 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCD2B9F2B;
-        Tue, 26 Apr 2022 01:47:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FD81FA5B;
+        Tue, 26 Apr 2022 01:36:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40A51B81CF2;
-        Tue, 26 Apr 2022 08:47:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809C8C385A0;
-        Tue, 26 Apr 2022 08:47:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3635B81CED;
+        Tue, 26 Apr 2022 08:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FA1C385A4;
+        Tue, 26 Apr 2022 08:36:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962855;
-        bh=ZWkaH3pdNqCq29KU1bW73JViEJ2Ey0ONQ/zc49kpLXQ=;
+        s=korg; t=1650962165;
+        bh=UHRPuTmqGxLHdHpx4pWSZlvt+YX/rS3XZemVEwKUkWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zu7pA4QbVXpiF+yl1q92yl59YHNg5N6ACQTr9n1WX1cXlS00foRM3ZlRqy4bXvNeQ
-         0ExbknhlZTpfBw6hkaHjimeEvnpTtqvpL9Q86IhPgD4K6v1e0gAlkZM6TDPQqyIcC/
-         YVSXpwpi84AID4FiX8pwtWHWJ38Rp57pUtbSwwek=
+        b=Un0A8cf29pzC7mFHeXLVMOTqQa+SWAhXlaY4Cb5QKne2WzSWWVRf/d2qmk/SqRoVZ
+         5Z6pewUo+wquA2MOFPuBoQTDpJn0IiehRQ2ZGemrjx5KW9dgj/saQT/VcR+tLX5boW
+         IzuFEne25+ckeR5XSYlxlITjdS/JODzNm7fFZp8w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Clark <james.clark@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 112/146] perf script: Always allow field data_src for auxtrace
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 5.10 79/86] ext4: fix overhead calculation to account for the reserved gdt blocks
 Date:   Tue, 26 Apr 2022 10:21:47 +0200
-Message-Id: <20220426081753.202534399@linuxfoundation.org>
+Message-Id: <20220426081743.496343497@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,54 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit c6d8df01064333dcf140eda996abdb60a60e24b3 ]
+commit 10b01ee92df52c8d7200afead4d5e5f55a5c58b1 upstream.
 
-If use command 'perf script -F,+data_src' to dump memory samples with
-Arm SPE trace data, it reports error:
+The kernel calculation was underestimating the overhead by not taking
+into account the reserved gdt blocks.  With this change, the overhead
+calculated by the kernel matches the overhead calculation in mke2fs.
 
-  # perf script -F,+data_src
-  Samples for 'dummy:u' event do not have DATA_SRC attribute set. Cannot print 'data_src' field.
-
-This is because the 'dummy:u' event is absent DATA_SRC bit in its sample
-type, so if a file contains AUX area tracing data then always allow
-field 'data_src' to be selected as an option for perf script.
-
-Fixes: e55ed3423c1bb29f ("perf arm-spe: Synthesize memory event")
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: German Gomez <german.gomez@arm.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Clark <james.clark@arm.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220417114837.839896-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/builtin-script.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ext4/super.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index fa478ddcd18a..537a552fe6b3 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -459,7 +459,7 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
- 		return -EINVAL;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -3870,9 +3870,11 @@ static int count_overhead(struct super_b
+ 	ext4_fsblk_t		first_block, last_block, b;
+ 	ext4_group_t		i, ngroups = ext4_get_groups_count(sb);
+ 	int			s, j, count = 0;
++	int			has_super = ext4_bg_has_super(sb, grp);
  
- 	if (PRINT_FIELD(DATA_SRC) &&
--	    evsel__check_stype(evsel, PERF_SAMPLE_DATA_SRC, "DATA_SRC", PERF_OUTPUT_DATA_SRC))
-+	    evsel__do_check_stype(evsel, PERF_SAMPLE_DATA_SRC, "DATA_SRC", PERF_OUTPUT_DATA_SRC, allow_user_set))
- 		return -EINVAL;
+ 	if (!ext4_has_feature_bigalloc(sb))
+-		return (ext4_bg_has_super(sb, grp) + ext4_bg_num_gdb(sb, grp) +
++		return (has_super + ext4_bg_num_gdb(sb, grp) +
++			(has_super ? le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks) : 0) +
+ 			sbi->s_itb_per_group + 2);
  
- 	if (PRINT_FIELD(WEIGHT) &&
--- 
-2.35.1
-
+ 	first_block = le32_to_cpu(sbi->s_es->s_first_data_block) +
 
 

@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C1651024F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB95510252
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352658AbiDZP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
+        id S240525AbiDZP7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352662AbiDZP7R (ORCPT
+        with ESMTP id S1352653AbiDZP70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:59:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABA22FFFD;
-        Tue, 26 Apr 2022 08:56:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DA4DB820FF;
-        Tue, 26 Apr 2022 15:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A60C385AD;
-        Tue, 26 Apr 2022 15:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650988565;
-        bh=jL8Ex0fFj0YQ29/kq6HIIyXXk31sQ5fVS9jJUlgyQYg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h8uFtL2NRwf0wz0eJdckSNfqFs1/O4WkdQLeFybJqG0SJWTriRShVdx9ivPwqlMnD
-         aqX/uR55ROjFTxtARYEG6I0MwecElu32QE7oyTGEej79CbIWVfcUk69fg5dxuJ1dH6
-         9WRiLDrdL+a8wIO1osIAyHmcQg73cx46fZNOK6v+z1dolhLX9syi8eKcp6181R40mg
-         4Hf6AURPLFUd6M/eIrBABJ0CsupujGZQUtOLDa3tyD2SL8iaZfmQ0EQfwnvVST6sy2
-         99Mr6uEcI1m19nPtsXxKA3qcQYawNNkDeV2low4iY912YAEymlb0Nxx8H3TfaZItmU
-         am7vguinoEaoQ==
-Received: by mail-pf1-f179.google.com with SMTP id j6so16031118pfe.13;
-        Tue, 26 Apr 2022 08:56:05 -0700 (PDT)
-X-Gm-Message-State: AOAM533g9gujNterBrR7MBR0Pe3d2vrZMbyTK1KmKCJ5kLPzph7wrtSO
-        /1oXhgegjRou+kOeVdGA1F+THZZmtIqcPBYd6Q==
-X-Google-Smtp-Source: ABdhPJzLlZRUfNOlW5FmxSJSpSkDcigzW7l4BJxuI87gnr9YrF5DfB5aNMdjDW4heZdFNZudm/CVIE4KbMlA9c8qj3o=
-X-Received: by 2002:a63:88c8:0:b0:3ab:1871:13b4 with SMTP id
- l191-20020a6388c8000000b003ab187113b4mr12703553pgd.85.1650988565492; Tue, 26
- Apr 2022 08:56:05 -0700 (PDT)
+        Tue, 26 Apr 2022 11:59:26 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27AA31923;
+        Tue, 26 Apr 2022 08:56:18 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id p6so2732632plf.9;
+        Tue, 26 Apr 2022 08:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gKqBWnCkDhPa/9nmFO0gA+P1ct06PRzyrAfrgkwdtZQ=;
+        b=cdtB0ZKQh5fHXEtqwKZRdRpRpNlc2FA7fzabvWnVsZEh471IpBAHTzhJ0Hmz6aKWju
+         iGjJYFQtjxcn2O+CnbAXLs21Io7RfvyAqUieYCysQE9eqKrhLrmTs6IgnPQ05LEoKoSa
+         mGb/AaJ1wjDcALrwlcoyeqSGW0PSQBfyDAaV1hi6bDju+mYxVqgE6lxoKN62zd+fJ9O4
+         iPU8jjQWHVocjekVmqX3dSl1+stabdTaARusTK8LuCUIxqsZKdGbEIM3iIEtAtkwquPR
+         jtRMz31oDlntY4KAFFP2KyW7KzMcwE3W55d28blpe24GvF4APEchTykTMObnsJMELQls
+         A2bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gKqBWnCkDhPa/9nmFO0gA+P1ct06PRzyrAfrgkwdtZQ=;
+        b=qZj1ifVy0FsD1vYvhdqHtKsrdZ5SuWmt1ip2Octc+2GCWLQamdvjaH0V5N6/qhhslo
+         r3m7MVf8iOd99VwXtEGNYDOjdVsOfPy96OYl4d1JwgDQ67jrqGJO5FKRgq1CgBIaSo3Z
+         JuFo9YUdUpDhNjkCJjZxhx2p1UD5r0k7UenX6gny9GlreRKICCBAWauATFEEbesDkhvu
+         HuQ4JQqtfmzWuRk+5mpl3vzHfbMPUANzHByao5wyn+YEOFGUGQHKBReXxZbbqYHE6Ld2
+         booYhHmnB0FZ4y2J1TtbzsliJujkVIk6oanwh5lcUQbJkydajikAYpwLMMs86du5Nui2
+         nbBw==
+X-Gm-Message-State: AOAM532rPcpED6pwSg2fqIly9p6Sm8spHHaoiZddnSI/GLFFv7dkKE4o
+        cg+dluXXv6NlwVofBgY6bhI=
+X-Google-Smtp-Source: ABdhPJyqc/8SuGr06eAq/HSXJtEMhzP9i+HVQg66AphhwWBy205v6vp9EPzuIdT3+m0E5GQumrVzcQ==
+X-Received: by 2002:a17:90b:1251:b0:1d7:f7ae:9f1 with SMTP id gx17-20020a17090b125100b001d7f7ae09f1mr26323671pjb.65.1650988578270;
+        Tue, 26 Apr 2022 08:56:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id v18-20020a62c312000000b0050d56ae29d4sm3246368pfg.29.2022.04.26.08.56.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 08:56:17 -0700 (PDT)
+Message-ID: <944ffc2f-9f5a-a008-95b8-6812d5895b6d@gmail.com>
+Date:   Tue, 26 Apr 2022 08:56:15 -0700
 MIME-Version: 1.0
-References: <20220426022413.885092-1-jerry.huang@nxp.com>
-In-Reply-To: <20220426022413.885092-1-jerry.huang@nxp.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 26 Apr 2022 10:55:53 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLkUaNpxm0R15Yy7aTjOwK-+Y+o0h9p-kSwSHHyicCKBQ@mail.gmail.com>
-Message-ID: <CAL_JsqLkUaNpxm0R15Yy7aTjOwK-+Y+o0h9p-kSwSHHyicCKBQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3 v5] dt-bindings: dspi: added for MikcroBus socket
-To:     Changming Huang <jerry.huang@nxp.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Aw: Re: [RFC v1 2/3] net: dsa: mt753x: make CPU-Port dynamic
+Content-Language: en-US
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Yang-Leo Li <leoyang.li@nxp.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Heiko Stuebner <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220426134924.30372-1-linux@fw-web.de>
+ <20220426134924.30372-3-linux@fw-web.de>
+ <046a334b-d972-6ab9-5127-f845cef72751@gmail.com>
+ <trinity-5fd6da8c-15f6-488d-a332-0ce7625f41e0-1650988498781@3c-app-gmx-bs69>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <trinity-5fd6da8c-15f6-488d-a332-0ce7625f41e0-1650988498781@3c-app-gmx-bs69>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 9:24 PM Changming Huang <jerry.huang@nxp.com> wrote:
->
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> ---
-> changes in v5:
->   - rename compatible name to mikcroe,mikcroe-socket
+On 4/26/22 08:54, Frank Wunderlich wrote:
+> Hi
+> 
+> thanks for fast review.
+> 
+>> Gesendet: Dienstag, 26. April 2022 um 17:45 Uhr
+>> Von: "Florian Fainelli" <f.fainelli@gmail.com>
+>> On 4/26/22 06:49, Frank Wunderlich wrote:
+>>> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+>>> @@ -1190,8 +1191,8 @@ mt7530_port_bridge_join(struct dsa_switch *ds, int port,
+>>>    			struct netlink_ext_ack *extack)
+>>>    {
+>>>    	struct dsa_port *dp = dsa_to_port(ds, port), *other_dp;
+>>> -	u32 port_bitmap = BIT(MT7530_CPU_PORT);
+>>>    	struct mt7530_priv *priv = ds->priv;
+>>> +	u32 port_bitmap = BIT(priv->cpu_port);
+>>
+>> No need to re-order these two lines.
+> 
+> imho it is needed as i now access priv-struct now ;) which is not available at the "old" position
 
-This is not right. The mikrobus socket is more than just SPI which was
-already pointed out. I also sketched out how I think it needs to look.
-Maybe it ends up looking a bit different, but fundamentally, how you
-remap I2C, SPI, GPIO, PWM, etc. thru a connector in order to have
-overlays which are independent of the base platform has to be solved.
-So far, we have done interrupts and GPIOs.
-
-Rob
+My bad, yes, I was concerned with preserving the reserve christmas tree 
+style, never mind.
+-- 
+Florian

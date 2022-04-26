@@ -2,115 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AC75100EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7445100E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351744AbiDZOxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
+        id S1351714AbiDZOxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351723AbiDZOxE (ORCPT
+        with ESMTP id S1351708AbiDZOw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:53:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487E840E41;
-        Tue, 26 Apr 2022 07:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650984597; x=1682520597;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+cv5qN1igNw1Zx5NSV2OW8gEhkMunXxsP88oD3ZR3ck=;
-  b=kR88/utOkfTzfasYLxAKmUEKYAAwWSAPJeC6y4IB4W1H6vViE+y1R5Gm
-   vV/OiWUxowq1glBYxXKMMhpCNs6XttxzfESQdC6D84QCEyp0JpCmUMgA3
-   tkiASAjHZx3B7QmWXJvS8dGQRrQH9lbU/8sYrPPYNTLyQUVTNrmfBw3g9
-   I5dySo2kSo6FXl2gml9gcMhMtyI4E0iFVJKwUrX9UKkWB7imRBFjbERNo
-   JPins1ZmLjFjv5GNazNKUgIEjwjr5F5cmrflYshAJpQpHrb9U92CguS84
-   L/T2Um7iZ+1jMBQroMwwYC+kV+LFeWdyoycYclGAwy6O9ceXMlBHvrvaS
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="352040437"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="352040437"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 07:49:57 -0700
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="579933023"
-Received: from mmilkovx-mobl.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.47.245])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 07:49:54 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 3/3] tty: Use flow-control char function on closing path
-Date:   Tue, 26 Apr 2022 17:49:35 +0300
-Message-Id: <20220426144935.54893-4-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220426144935.54893-1-ilpo.jarvinen@linux.intel.com>
-References: <20220426144935.54893-1-ilpo.jarvinen@linux.intel.com>
+        Tue, 26 Apr 2022 10:52:56 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CA140A37
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:49:48 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bg25so10660666wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RLGWU04c675XlHK6myuRCpBGcz37JKCbqjttUkQFES0=;
+        b=GCHLhzgWRijFMtvDIhvF6Xefj9n/89975AJj1eZC9ENu6LdHtKNuwzPoa4y4msL63j
+         yzqPOcXjls1/Y/kQLIxN61hvrPrHb8QGvYc6LyeqXQtLAsjQSXSTbPL//zBTw+AxvpzZ
+         NeRHRiYvgpmpU8U0pw7bJOsI6pLoWrj/CMpcwUjrzdtMVeOb3BeddCmWS0qx4MAF/F0T
+         H6QKqIvkRTZy0zcKoPxgN39AYWX7PFxwPAdpSeMOQ5QNKvW8SmIJoj5TvTOxVVpZOA8R
+         lUgC95aGT3pPiW/F0hUuKgCShxOKs1TwARYm1yP9fzrtvQDcNlikLsnHA05mROc1Kphl
+         Gk5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RLGWU04c675XlHK6myuRCpBGcz37JKCbqjttUkQFES0=;
+        b=3sqmavsWFIw8iXw60l+aaGk/KKOqe5P/TZvrtCCZ/fL00kHYsV6P7pEyBFJP++ewC0
+         Qy6wVd/hXfLqItQG0vEcO0KjWqItJLJZqPoqg/y+gpxk+LILroY6U82M0nolGe5sAEnD
+         6UaVUbR9PtX7MYmFCZANO+M7Q1YHxzcGkyLh7EGCsRLjCYz4qlaDEzvGq2pdT0631769
+         Tpp6gYrmBaktVRMwcz1y/+Sp2i4tsWIeHzpHTH8IF9AjO3QAm4ktuQdvST/JnwSGdx2w
+         iuZ2frpd+gtLuGGF1XXPJHvLGUMU4iFJu4v/Cknz3Quq5Afi0001K3oqbnTu8C2sa7Dm
+         /LhQ==
+X-Gm-Message-State: AOAM532XoEfCqofgHMjtNqR7Ld1ZQzl9heXfV9g9HtcsCuEnJTxlxGl7
+        CqqLsr3xczeF/VgE5b/2GKGUXA==
+X-Google-Smtp-Source: ABdhPJwpFyU97+6FmiY+PACooSx+7HoLi14xLzDXm/7xn/H2+QjgPDLvDKPlQxqggw2HUQrD3rHqhA==
+X-Received: by 2002:a05:600c:2f0f:b0:393:fbd1:cc94 with SMTP id r15-20020a05600c2f0f00b00393fbd1cc94mr1960732wmn.162.1650984586898;
+        Tue, 26 Apr 2022 07:49:46 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id e12-20020a056000178c00b0020aaf8d351bsm11338068wrg.103.2022.04.26.07.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 07:49:46 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 15:49:44 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Peter Rosin <peda@axentia.se>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Drop undocumented i.MX iomuxc-gpr bindings
+ in examples
+Message-ID: <YmgGiNCzluNpJOiE@google.com>
+References: <20220422192121.2592030-1-robh@kernel.org>
+ <YmZUko/EQkKl6Npl@google.com>
+ <Ymf+OmNBaZ+7OrxD@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ymf+OmNBaZ+7OrxD@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use n_tty_receive_char_flow_ctrl also on the closing path. This makes
-the code cleaner and consistent.
+On Tue, 26 Apr 2022, Rob Herring wrote:
 
-However, there a small change of regression!
+> On Mon, Apr 25, 2022 at 08:58:10AM +0100, Lee Jones wrote:
+> > On Fri, 22 Apr 2022, Rob Herring wrote:
+> > 
+> > > The i.MX iomuxc-gpr bindings are undocumented and a mess. Drop their use
+> > > from the examples.
+> > > 
+> > > The problem with the binding beyond the just random variations is that
+> > > the iomuxc-gpr is not a separate block, but registers within the iomuxc
+> > > block containing random leftover controls. As a separate DT node, it
+> > > creates nodes with overlapping memory addresses.
+> > > 
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/mfd/syscon.yaml  | 8 --------
+> > >  Documentation/devicetree/bindings/mux/reg-mux.yaml | 1 -
+> > >  2 files changed, 9 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> > > index 13baa452cc9d..fb784045013f 100644
+> > > --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> > > +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> > > @@ -100,12 +100,4 @@ examples:
+> > >          compatible = "allwinner,sun8i-h3-system-controller", "syscon";
+> > >          reg = <0x01c00000 0x1000>;
+> > >      };
+> > > -
+> > > -  - |
+> > > -    gpr: iomuxc-gpr@20e0000 {
+> > > -        compatible = "fsl,imx6q-iomuxc-gpr", "syscon";
+> > > -        reg = <0x020e0000 0x38>;
+> > > -        hwlocks = <&hwlock1 1>;
+> > > -    };
+> > > -
+> > >  ...
+> > > diff --git a/Documentation/devicetree/bindings/mux/reg-mux.yaml b/Documentation/devicetree/bindings/mux/reg-mux.yaml
+> > > index 60d5746eb39d..df4db96b5391 100644
+> > > --- a/Documentation/devicetree/bindings/mux/reg-mux.yaml
+> > > +++ b/Documentation/devicetree/bindings/mux/reg-mux.yaml
+> > > @@ -96,7 +96,6 @@ examples:
+> > >  
+> > >      #include <dt-bindings/mux/mux.h>
+> > >      syscon@1000 {
+> > > -        compatible = "fsl,imx7d-iomuxc-gpr", "fsl,imx6q-iomuxc-gpr", "syscon", "simple-mfd";
+> > >          reg = <0x1000 0x100>;
+> > 
+> > Is leaving no compatible the correct solution here?
+> 
+> Documenting iomuxc-gpr is really the right one, but as I said it is a 
+> mess and I'm not touching that.
+> 
+> But compatible is not really important in terms of what the example 
+> shows. 
+> 
+> > Do we have another (working) platform that we can use in its place?
+> 
+> Not one for video muxing that I'm aware of.
+> 
+> > Does it make sense to leave the "syscon" and "simple-mfd" entries?
+> 
+> No, because we don't allow those on their own.
 
-The earlier closing path has a small difference compared with the
-normal receive path. If START_CHAR and STOP_CHAR are equal, their
-precedence is different depending on which path a character is
-processed. I don't know whether this difference was intentional or
-not, and if equal START_CHAR and STOP_CHAR is actually used anywhere.
-But it feels not so useful corner case.
+Very well.  I applied this for now.
 
-While this change would logically belong to those earlier changes,
-having a separate patch for this is useful. If this regresses, bisect
-can pinpoint this change rather than the large patch. Also, this
-change is not necessary to minimal fix for the issue addressed in
-the previous patch.
+... pending any fall-out from the Mux Maintainer. :)
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/n_tty.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index 917b5970b2e0..ea4dc316eafb 100644
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1434,15 +1434,10 @@ static void n_tty_receive_char_closing(struct tty_struct *tty, unsigned char c,
- 		c = tolower(c);
- 
- 	if (I_IXON(tty)) {
--		if (c == STOP_CHAR(tty)) {
--			if (!lookahead_done)
--				stop_tty(tty);
--		} else if (c == START_CHAR(tty) && lookahead_done) {
--			return;
--		} else if (c == START_CHAR(tty) ||
--			 (tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
--			  c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
--			  c != SUSP_CHAR(tty))) {
-+		if (!n_tty_receive_char_flow_ctrl(tty, c, lookahead_done) &&
-+		    tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
-+		    c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
-+		    c != SUSP_CHAR(tty)) {
- 			start_tty(tty);
- 			process_echoes(tty);
- 		}
 -- 
-2.30.2
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

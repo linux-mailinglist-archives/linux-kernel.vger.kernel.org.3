@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA84D50F754
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D99850F73B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347788AbiDZJeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S1347117AbiDZJT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347869AbiDZJGT (ORCPT
+        with ESMTP id S1346040AbiDZIoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:19 -0400
+        Tue, 26 Apr 2022 04:44:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9948A169409;
-        Tue, 26 Apr 2022 01:46:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2601606BF;
+        Tue, 26 Apr 2022 01:34:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD5EB81CF2;
-        Tue, 26 Apr 2022 08:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838F1C385A0;
-        Tue, 26 Apr 2022 08:46:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2FC4B81D0B;
+        Tue, 26 Apr 2022 08:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43817C385AF;
+        Tue, 26 Apr 2022 08:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962784;
-        bh=9Vd9VfQI/r2lx1eeK2qA6QkTXF4Wdp/LKCeS7dSW+2M=;
+        s=korg; t=1650962044;
+        bh=MloYW9hWeVoGLvgwUKtBkfZ0MZsDwu3/pbcTqCOAJVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qHqQzBREIBaGwMusw5cJeYXQTpe1Ky8ONLslSpDDJiF1R23FcBLZTkG4MSSGA+UkQ
-         UWgb+CXgqxpjxfn+zA+DjDwGkHJ3YjTaKvcswYSXcNA5amukOGfGnLR1s9v2sHQZG/
-         subdC/5m0MqWB8NUzEuLVBGq6863gtlmzGx/iy4c=
+        b=Y0RjSi8+qBJwVM1gDY6yFh/v8z8zfLorNfd3qkgkKgd5ihbZUmpwbFj0vP3DuuO1+
+         QXOhryNWb1Qq7j6o5E6oSVairOHLWX2hNbFjuHuUdcmNdnC0DUrR1LAuLKnq1G3CkN
+         PhEpdTQWLI+JNe2uXwUHmFjciHGURDlaL+o6Sr7o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zqiang <qiang1.zhang@intel.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
+        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 087/146] irq_work: use kasan_record_aux_stack_noalloc() record callstack
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 54/86] mm/mmu_notifier.c: fix race in mmu_interval_notifier_remove()
 Date:   Tue, 26 Apr 2022 10:21:22 +0200
-Message-Id: <20220426081752.504829626@linuxfoundation.org>
+Message-Id: <20220426081742.764495905@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,79 +58,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+From: Alistair Popple <apopple@nvidia.com>
 
-[ Upstream commit 25934fcfb93c4687ad32fd3d062bcf03457129d4 ]
+commit 319561669a59d8e9206ab311ae5433ef92fd79d1 upstream.
 
-On PREEMPT_RT kernel and KASAN is enabled.  the kasan_record_aux_stack()
-may call alloc_pages(), and the rt-spinlock will be acquired, if currently
-in atomic context, will trigger warning:
+In some cases it is possible for mmu_interval_notifier_remove() to race
+with mn_tree_inv_end() allowing it to return while the notifier data
+structure is still in use.  Consider the following sequence:
 
-  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-  in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 239, name: bootlogd
-  Preemption disabled at:
-  [<ffffffffbab1a531>] rt_mutex_slowunlock+0xa1/0x4e0
-  CPU: 3 PID: 239 Comm: bootlogd Tainted: G        W 5.17.1-rt17-yocto-preempt-rt+ #105
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-  Call Trace:
-     __might_resched.cold+0x13b/0x173
-     rt_spin_lock+0x5b/0xf0
-     get_page_from_freelist+0x20c/0x1610
-     __alloc_pages+0x25e/0x5e0
-     __stack_depot_save+0x3c0/0x4a0
-     kasan_save_stack+0x3a/0x50
-     __kasan_record_aux_stack+0xb6/0xc0
-     kasan_record_aux_stack+0xe/0x10
-     irq_work_queue_on+0x6a/0x1c0
-     pull_rt_task+0x631/0x6b0
-     do_balance_callbacks+0x56/0x80
-     __balance_callbacks+0x63/0x90
-     rt_mutex_setprio+0x349/0x880
-     rt_mutex_slowunlock+0x22a/0x4e0
-     rt_spin_unlock+0x49/0x80
-     uart_write+0x186/0x2b0
-     do_output_char+0x2e9/0x3a0
-     n_tty_write+0x306/0x800
-     file_tty_write.isra.0+0x2af/0x450
-     tty_write+0x22/0x30
-     new_sync_write+0x27c/0x3a0
-     vfs_write+0x3f7/0x5d0
-     ksys_write+0xd9/0x180
-     __x64_sys_write+0x43/0x50
-     do_syscall_64+0x44/0x90
-     entry_SYSCALL_64_after_hwframe+0x44/0xae
+  CPU0 - mn_tree_inv_end()            CPU1 - mmu_interval_notifier_remove()
+  ----------------------------------- ------------------------------------
+                                      spin_lock(subscriptions->lock);
+                                      seq = subscriptions->invalidate_seq;
+  spin_lock(subscriptions->lock);     spin_unlock(subscriptions->lock);
+  subscriptions->invalidate_seq++;
+                                      wait_event(invalidate_seq != seq);
+                                      return;
+  interval_tree_remove(interval_sub); kfree(interval_sub);
+  spin_unlock(subscriptions->lock);
+  wake_up_all();
 
-Fix it by using kasan_record_aux_stack_noalloc() to avoid the call to
-alloc_pages().
+As the wait_event() condition is true it will return immediately.  This
+can lead to use-after-free type errors if the caller frees the data
+structure containing the interval notifier subscription while it is
+still on a deferred list.  Fix this by taking the appropriate lock when
+reading invalidate_seq to ensure proper synchronisation.
 
-Link: https://lkml.kernel.org/r/20220402142555.2699582-1-qiang1.zhang@intel.com
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
+I observed this whilst running stress testing during some development.
+You do have to be pretty unlucky, but it leads to the usual problems of
+use-after-free (memory corruption, kernel crash, difficult to diagnose
+WARN_ON, etc).
+
+Link: https://lkml.kernel.org/r/20220420043734.476348-1-apopple@nvidia.com
+Fixes: 99cb252f5e68 ("mm/mmu_notifier: add an interval tree notifier")
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Ralph Campbell <rcampbell@nvidia.com>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/irq_work.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/mmu_notifier.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-index f7df715ec28e..7afa40fe5cc4 100644
---- a/kernel/irq_work.c
-+++ b/kernel/irq_work.c
-@@ -137,7 +137,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
- 	if (!irq_work_claim(work))
- 		return false;
+--- a/mm/mmu_notifier.c
++++ b/mm/mmu_notifier.c
+@@ -1043,6 +1043,18 @@ int mmu_interval_notifier_insert_locked(
+ }
+ EXPORT_SYMBOL_GPL(mmu_interval_notifier_insert_locked);
  
--	kasan_record_aux_stack(work);
-+	kasan_record_aux_stack_noalloc(work);
++static bool
++mmu_interval_seq_released(struct mmu_notifier_subscriptions *subscriptions,
++			  unsigned long seq)
++{
++	bool ret;
++
++	spin_lock(&subscriptions->lock);
++	ret = subscriptions->invalidate_seq != seq;
++	spin_unlock(&subscriptions->lock);
++	return ret;
++}
++
+ /**
+  * mmu_interval_notifier_remove - Remove a interval notifier
+  * @interval_sub: Interval subscription to unregister
+@@ -1090,7 +1102,7 @@ void mmu_interval_notifier_remove(struct
+ 	lock_map_release(&__mmu_notifier_invalidate_range_start_map);
+ 	if (seq)
+ 		wait_event(subscriptions->wq,
+-			   READ_ONCE(subscriptions->invalidate_seq) != seq);
++			   mmu_interval_seq_released(subscriptions, seq));
  
- 	preempt_disable();
- 	if (cpu != smp_processor_id()) {
--- 
-2.35.1
-
+ 	/* pairs with mmgrab in mmu_interval_notifier_insert() */
+ 	mmdrop(mm);
 
 

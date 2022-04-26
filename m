@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9692350F40C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F1450F609
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344859AbiDZIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S1346491AbiDZIuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiDZIaF (ORCPT
+        with ESMTP id S1345943AbiDZIjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:30:05 -0400
+        Tue, 26 Apr 2022 04:39:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97441387D8;
-        Tue, 26 Apr 2022 01:24:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D0F81189;
+        Tue, 26 Apr 2022 01:32:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FD096183B;
-        Tue, 26 Apr 2022 08:24:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73D0C385A4;
-        Tue, 26 Apr 2022 08:24:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D296561864;
+        Tue, 26 Apr 2022 08:32:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D985FC385A4;
+        Tue, 26 Apr 2022 08:32:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961495;
-        bh=38EtxUTv9KFbIZ+ilmEKeTJXq/tbDGVdDcHLtwfx5ns=;
+        s=korg; t=1650961945;
+        bh=QQZAwuXtlmYjYbNl4icFk93rp3roE73Z2oPW1+gEZUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0mUqVgbQjQcpowahlvpw4K6TfqckeTGE8Q9CvUGAv3JFPwxT+RD+g74QurwfFr3as
-         gb8TercMA4wJFxWLh1WVMxzwU2Qhtjp6Vc3s6+oSa0DGZFrYYSvTkkoSa/5LSoh4GW
-         EK1JstJhdjOFDZ+GraiqtjMDwKYq/+MjB8M3NCRA=
+        b=CHhTJJCqh/RD5ySrB3URc8wfGqpG3JFnwWVMxUB3a5fM8qGpFZIQWOJ8dfQcMgw7j
+         58f1H2pmXzwCgA/eWwzp4qFje3pj3C1vIVo1xaM/0dcwOJAQEtWvrQzfUYcgNXkTh+
+         IHLuM3uAfDDZrmOCpulcvIfh73MT0n0v3rlKZhHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>
-Subject: [PATCH 4.14 06/43] gfs2: assign rgrp glock before compute_bitstructs
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 20/86] net/smc: Fix sock leak when release after smc_shutdown()
 Date:   Tue, 26 Apr 2022 10:20:48 +0200
-Message-Id: <20220426081734.703005426@linuxfoundation.org>
+Message-Id: <20220426081741.795071079@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+From: Tony Lu <tonylu@linux.alibaba.com>
 
-commit 428f651cb80b227af47fc302e4931791f2fb4741 upstream.
+[ Upstream commit 1a74e99323746353bba11562a2f2d0aa8102f402 ]
 
-Before this patch, function read_rindex_entry called compute_bitstructs
-before it allocated a glock for the rgrp. But if compute_bitstructs found
-a problem with the rgrp, it called gfs2_consist_rgrpd, and that called
-gfs2_dump_glock for rgd->rd_gl which had not yet been assigned.
+Since commit e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown
+and fallback"), for a fallback connection, __smc_release() does not call
+sock_put() if its state is already SMC_CLOSED.
 
-read_rindex_entry
-   compute_bitstructs
-      gfs2_consist_rgrpd
-         gfs2_dump_glock <---------rgd->rd_gl was not set.
+When calling smc_shutdown() after falling back, its state is set to
+SMC_CLOSED but does not call sock_put(), so this patch calls it.
 
-This patch changes read_rindex_entry so it assigns an rgrp glock before
-calling compute_bitstructs so gfs2_dump_glock does not reference an
-unassigned pointer. If an error is discovered, the glock must also be
-put, so a new goto and label were added.
-
-Reported-by: syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-and-tested-by: syzbot+6e29a053eb165bd50de5@syzkaller.appspotmail.com
+Fixes: e5d5aadcf3cd ("net/smc: fix sk_refcnt underflow on linkdown and fallback")
+Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/rgrp.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ net/smc/af_smc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/gfs2/rgrp.c
-+++ b/fs/gfs2/rgrp.c
-@@ -907,15 +907,15 @@ static int read_rindex_entry(struct gfs2
- 	rgd->rd_bitbytes = be32_to_cpu(buf.ri_bitbytes);
- 	spin_lock_init(&rgd->rd_rsspin);
- 
--	error = compute_bitstructs(rgd);
--	if (error)
--		goto fail;
--
- 	error = gfs2_glock_get(sdp, rgd->rd_addr,
- 			       &gfs2_rgrp_glops, CREATE, &rgd->rd_gl);
- 	if (error)
- 		goto fail;
- 
-+	error = compute_bitstructs(rgd);
-+	if (error)
-+		goto fail_glock;
-+
- 	rgd->rd_rgl = (struct gfs2_rgrp_lvb *)rgd->rd_gl->gl_lksb.sb_lvbptr;
- 	rgd->rd_flags &= ~(GFS2_RDF_UPTODATE | GFS2_RDF_PREFERRED);
- 	if (rgd->rd_data > sdp->sd_max_rg_data)
-@@ -932,6 +932,7 @@ static int read_rindex_entry(struct gfs2
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 4f16d406ad8e..1b98f3241150 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2144,8 +2144,10 @@ static int smc_shutdown(struct socket *sock, int how)
+ 	if (smc->use_fallback) {
+ 		rc = kernel_sock_shutdown(smc->clcsock, how);
+ 		sk->sk_shutdown = smc->clcsock->sk->sk_shutdown;
+-		if (sk->sk_shutdown == SHUTDOWN_MASK)
++		if (sk->sk_shutdown == SHUTDOWN_MASK) {
+ 			sk->sk_state = SMC_CLOSED;
++			sock_put(sk);
++		}
+ 		goto out;
  	}
- 
- 	error = 0; /* someone else read in the rgrp; free it and ignore it */
-+fail_glock:
- 	gfs2_glock_put(rgd->rd_gl);
- 
- fail:
+ 	switch (how) {
+-- 
+2.35.1
+
 
 

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA4250F7F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2306350F42F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbiDZJbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
+        id S1344955AbiDZIde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347831AbiDZJGO (ORCPT
+        with ESMTP id S1344918AbiDZIcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028FE165EDB;
-        Tue, 26 Apr 2022 01:46:08 -0700 (PDT)
+        Tue, 26 Apr 2022 04:32:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDFFBBC;
+        Tue, 26 Apr 2022 01:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D50D1B81CB3;
-        Tue, 26 Apr 2022 08:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C6F1C385A0;
-        Tue, 26 Apr 2022 08:46:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60EDC61839;
+        Tue, 26 Apr 2022 08:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9F3C385A0;
+        Tue, 26 Apr 2022 08:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962765;
-        bh=91IJCXFXrRhxZ3eZykcnYSPjUcHxOjTmk7YsarhCXlc=;
+        s=korg; t=1650961513;
+        bh=X8qnbVXmUWHyuawsIW67ZDlZuk4oW9Z3jmdspdOypBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zWj5gYHndcaYu9vXqC7cJGGP7dkpIRu25sxd0OAA0cS/aX1h2hiG5CVJDRBEVO3uw
-         0GocnwAS4J+gU5KuprMifFoB7OydQhxFvgpTh4hTt8KEX5WGgTyD0sPCKMxYnM7NMM
-         k7a6O8GiYSmI6k/FtFXlQRossXPTCpYH91SqgSuM=
+        b=ENhpwXOWfcmyKlDHUaLOpKLt+DOpPKrO8IxVJjBOPL4mtP41RFHlZ3G59Wc3D4oDw
+         0mwrZC96wfao6yMYsjLe4af4fuJ1UXZ9BhchQ6lgaESgAY2NknRzgRqjFyM88TJfTh
+         FBaLgvUn0KebTbCwm/EN2yLrM1VNxF/LN4sVD8js=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 082/146] stat: fix inconsistency between struct stat and struct compat_stat
-Date:   Tue, 26 Apr 2022 10:21:17 +0200
-Message-Id: <20220426081752.368250706@linuxfoundation.org>
+        Duoming Zhou <duoming@zju.edu.cn>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 36/43] ax25: fix reference count leaks of ax25_dev
+Date:   Tue, 26 Apr 2022 10:21:18 +0200
+Message-Id: <20220426081735.581664889@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,138 +55,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 932aba1e169090357a77af18850a10c256b50819 ]
+commit 87563a043cef044fed5db7967a75741cc16ad2b1 upstream.
 
-struct stat (defined in arch/x86/include/uapi/asm/stat.h) has 32-bit
-st_dev and st_rdev; struct compat_stat (defined in
-arch/x86/include/asm/compat.h) has 16-bit st_dev and st_rdev followed by
-a 16-bit padding.
+The previous commit d01ffb9eee4a ("ax25: add refcount in ax25_dev
+to avoid UAF bugs") introduces refcount into ax25_dev, but there
+are reference leak paths in ax25_ctl_ioctl(), ax25_fwd_ioctl(),
+ax25_rt_add(), ax25_rt_del() and ax25_rt_opt().
 
-This patch fixes struct compat_stat to match struct stat.
+This patch uses ax25_dev_put() and adjusts the position of
+ax25_addr_ax25dev() to fix reference cout leaks of ax25_dev.
 
-[ Historical note: the old x86 'struct stat' did have that 16-bit field
-  that the compat layer had kept around, but it was changes back in 2003
-  by "struct stat - support larger dev_t":
-
-    https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=e95b2065677fe32512a597a79db94b77b90c968d
-
-  and back in those days, the x86_64 port was still new, and separate
-  from the i386 code, and had already picked up the old version with a
-  16-bit st_dev field ]
-
-Note that we can't change compat_dev_t because it is used by
-compat_loop_info.
-
-Also, if the st_dev and st_rdev values are 32-bit, we don't have to use
-old_valid_dev to test if the value fits into them.  This fixes
--EOVERFLOW on filesystems that are on NVMe because NVMe uses the major
-number 259.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Andreas Schwab <schwab@linux-m68k.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d01ffb9eee4a ("ax25: add refcount in ax25_dev to avoid UAF bugs")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220203150811.42256-1-duoming@zju.edu.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+[OP: backport to 4.14: adjust context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/compat.h |  6 ++----
- fs/stat.c                     | 19 ++++++++++---------
- 2 files changed, 12 insertions(+), 13 deletions(-)
+ include/net/ax25.h    |    8 +++++---
+ net/ax25/af_ax25.c    |   12 ++++++++----
+ net/ax25/ax25_dev.c   |   24 +++++++++++++++++-------
+ net/ax25/ax25_route.c |   16 +++++++++++-----
+ 4 files changed, 41 insertions(+), 19 deletions(-)
 
-diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
-index 7516e4199b3c..20fd0acd7d80 100644
---- a/arch/x86/include/asm/compat.h
-+++ b/arch/x86/include/asm/compat.h
-@@ -28,15 +28,13 @@ typedef u16		compat_ipc_pid_t;
- typedef __kernel_fsid_t	compat_fsid_t;
+--- a/include/net/ax25.h
++++ b/include/net/ax25.h
+@@ -290,10 +290,12 @@ static __inline__ void ax25_cb_put(ax25_
+ 	}
+ }
  
- struct compat_stat {
--	compat_dev_t	st_dev;
--	u16		__pad1;
-+	u32		st_dev;
- 	compat_ino_t	st_ino;
- 	compat_mode_t	st_mode;
- 	compat_nlink_t	st_nlink;
- 	__compat_uid_t	st_uid;
- 	__compat_gid_t	st_gid;
--	compat_dev_t	st_rdev;
--	u16		__pad2;
-+	u32		st_rdev;
- 	u32		st_size;
- 	u32		st_blksize;
- 	u32		st_blocks;
-diff --git a/fs/stat.c b/fs/stat.c
-index 28d2020ba1f4..246d138ec066 100644
---- a/fs/stat.c
-+++ b/fs/stat.c
-@@ -334,9 +334,6 @@ SYSCALL_DEFINE2(fstat, unsigned int, fd, struct __old_kernel_stat __user *, stat
- #  define choose_32_64(a,b) b
- #endif
+-#define ax25_dev_hold(__ax25_dev) \
+-	refcount_inc(&((__ax25_dev)->refcount))
++static inline void ax25_dev_hold(ax25_dev *ax25_dev)
++{
++	refcount_inc(&ax25_dev->refcount);
++}
  
--#define valid_dev(x)  choose_32_64(old_valid_dev(x),true)
--#define encode_dev(x) choose_32_64(old_encode_dev,new_encode_dev)(x)
+-static __inline__ void ax25_dev_put(ax25_dev *ax25_dev)
++static inline void ax25_dev_put(ax25_dev *ax25_dev)
+ {
+ 	if (refcount_dec_and_test(&ax25_dev->refcount)) {
+ 		kfree(ax25_dev);
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -370,21 +370,25 @@ static int ax25_ctl_ioctl(const unsigned
+ 	if (copy_from_user(&ax25_ctl, arg, sizeof(ax25_ctl)))
+ 		return -EFAULT;
+ 
+-	if ((ax25_dev = ax25_addr_ax25dev(&ax25_ctl.port_addr)) == NULL)
+-		return -ENODEV;
 -
- #ifndef INIT_STRUCT_STAT_PADDING
- #  define INIT_STRUCT_STAT_PADDING(st) memset(&st, 0, sizeof(st))
- #endif
-@@ -345,7 +342,9 @@ static int cp_new_stat(struct kstat *stat, struct stat __user *statbuf)
- {
- 	struct stat tmp;
+ 	if (ax25_ctl.digi_count > AX25_MAX_DIGIS)
+ 		return -EINVAL;
  
--	if (!valid_dev(stat->dev) || !valid_dev(stat->rdev))
-+	if (sizeof(tmp.st_dev) < 4 && !old_valid_dev(stat->dev))
-+		return -EOVERFLOW;
-+	if (sizeof(tmp.st_rdev) < 4 && !old_valid_dev(stat->rdev))
- 		return -EOVERFLOW;
- #if BITS_PER_LONG == 32
- 	if (stat->size > MAX_NON_LFS)
-@@ -353,7 +352,7 @@ static int cp_new_stat(struct kstat *stat, struct stat __user *statbuf)
- #endif
+ 	if (ax25_ctl.arg > ULONG_MAX / HZ && ax25_ctl.cmd != AX25_KILL)
+ 		return -EINVAL;
  
- 	INIT_STRUCT_STAT_PADDING(tmp);
--	tmp.st_dev = encode_dev(stat->dev);
-+	tmp.st_dev = new_encode_dev(stat->dev);
- 	tmp.st_ino = stat->ino;
- 	if (sizeof(tmp.st_ino) < sizeof(stat->ino) && tmp.st_ino != stat->ino)
- 		return -EOVERFLOW;
-@@ -363,7 +362,7 @@ static int cp_new_stat(struct kstat *stat, struct stat __user *statbuf)
- 		return -EOVERFLOW;
- 	SET_UID(tmp.st_uid, from_kuid_munged(current_user_ns(), stat->uid));
- 	SET_GID(tmp.st_gid, from_kgid_munged(current_user_ns(), stat->gid));
--	tmp.st_rdev = encode_dev(stat->rdev);
-+	tmp.st_rdev = new_encode_dev(stat->rdev);
- 	tmp.st_size = stat->size;
- 	tmp.st_atime = stat->atime.tv_sec;
- 	tmp.st_mtime = stat->mtime.tv_sec;
-@@ -644,11 +643,13 @@ static int cp_compat_stat(struct kstat *stat, struct compat_stat __user *ubuf)
- {
- 	struct compat_stat tmp;
++	ax25_dev = ax25_addr_ax25dev(&ax25_ctl.port_addr);
++	if (!ax25_dev)
++		return -ENODEV;
++
+ 	digi.ndigi = ax25_ctl.digi_count;
+ 	for (k = 0; k < digi.ndigi; k++)
+ 		digi.calls[k] = ax25_ctl.digi_addr[k];
  
--	if (!old_valid_dev(stat->dev) || !old_valid_dev(stat->rdev))
-+	if (sizeof(tmp.st_dev) < 4 && !old_valid_dev(stat->dev))
-+		return -EOVERFLOW;
-+	if (sizeof(tmp.st_rdev) < 4 && !old_valid_dev(stat->rdev))
- 		return -EOVERFLOW;
+-	if ((ax25 = ax25_find_cb(&ax25_ctl.source_addr, &ax25_ctl.dest_addr, &digi, ax25_dev->dev)) == NULL)
++	ax25 = ax25_find_cb(&ax25_ctl.source_addr, &ax25_ctl.dest_addr, &digi, ax25_dev->dev);
++	if (!ax25) {
++		ax25_dev_put(ax25_dev);
+ 		return -ENOTCONN;
++	}
  
- 	memset(&tmp, 0, sizeof(tmp));
--	tmp.st_dev = old_encode_dev(stat->dev);
-+	tmp.st_dev = new_encode_dev(stat->dev);
- 	tmp.st_ino = stat->ino;
- 	if (sizeof(tmp.st_ino) < sizeof(stat->ino) && tmp.st_ino != stat->ino)
- 		return -EOVERFLOW;
-@@ -658,7 +659,7 @@ static int cp_compat_stat(struct kstat *stat, struct compat_stat __user *ubuf)
- 		return -EOVERFLOW;
- 	SET_UID(tmp.st_uid, from_kuid_munged(current_user_ns(), stat->uid));
- 	SET_GID(tmp.st_gid, from_kgid_munged(current_user_ns(), stat->gid));
--	tmp.st_rdev = old_encode_dev(stat->rdev);
-+	tmp.st_rdev = new_encode_dev(stat->rdev);
- 	if ((u64) stat->size > MAX_NON_LFS)
- 		return -EOVERFLOW;
- 	tmp.st_size = stat->size;
--- 
-2.35.1
-
+ 	switch (ax25_ctl.cmd) {
+ 	case AX25_KILL:
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -88,8 +88,8 @@ void ax25_dev_device_up(struct net_devic
+ 	spin_lock_bh(&ax25_dev_lock);
+ 	ax25_dev->next = ax25_dev_list;
+ 	ax25_dev_list  = ax25_dev;
+-	ax25_dev_hold(ax25_dev);
+ 	spin_unlock_bh(&ax25_dev_lock);
++	ax25_dev_hold(ax25_dev);
+ 
+ 	ax25_register_dev_sysctl(ax25_dev);
+ }
+@@ -118,8 +118,8 @@ void ax25_dev_device_down(struct net_dev
+ 
+ 	if ((s = ax25_dev_list) == ax25_dev) {
+ 		ax25_dev_list = s->next;
+-		ax25_dev_put(ax25_dev);
+ 		spin_unlock_bh(&ax25_dev_lock);
++		ax25_dev_put(ax25_dev);
+ 		dev->ax25_ptr = NULL;
+ 		dev_put(dev);
+ 		ax25_dev_put(ax25_dev);
+@@ -129,8 +129,8 @@ void ax25_dev_device_down(struct net_dev
+ 	while (s != NULL && s->next != NULL) {
+ 		if (s->next == ax25_dev) {
+ 			s->next = ax25_dev->next;
+-			ax25_dev_put(ax25_dev);
+ 			spin_unlock_bh(&ax25_dev_lock);
++			ax25_dev_put(ax25_dev);
+ 			dev->ax25_ptr = NULL;
+ 			dev_put(dev);
+ 			ax25_dev_put(ax25_dev);
+@@ -153,25 +153,35 @@ int ax25_fwd_ioctl(unsigned int cmd, str
+ 
+ 	switch (cmd) {
+ 	case SIOCAX25ADDFWD:
+-		if ((fwd_dev = ax25_addr_ax25dev(&fwd->port_to)) == NULL)
++		fwd_dev = ax25_addr_ax25dev(&fwd->port_to);
++		if (!fwd_dev) {
++			ax25_dev_put(ax25_dev);
+ 			return -EINVAL;
+-		if (ax25_dev->forward != NULL)
++		}
++		if (ax25_dev->forward) {
++			ax25_dev_put(fwd_dev);
++			ax25_dev_put(ax25_dev);
+ 			return -EINVAL;
++		}
+ 		ax25_dev->forward = fwd_dev->dev;
+ 		ax25_dev_put(fwd_dev);
++		ax25_dev_put(ax25_dev);
+ 		break;
+ 
+ 	case SIOCAX25DELFWD:
+-		if (ax25_dev->forward == NULL)
++		if (!ax25_dev->forward) {
++			ax25_dev_put(ax25_dev);
+ 			return -EINVAL;
++		}
+ 		ax25_dev->forward = NULL;
++		ax25_dev_put(ax25_dev);
+ 		break;
+ 
+ 	default:
++		ax25_dev_put(ax25_dev);
+ 		return -EINVAL;
+ 	}
+ 
+-	ax25_dev_put(ax25_dev);
+ 	return 0;
+ }
+ 
+--- a/net/ax25/ax25_route.c
++++ b/net/ax25/ax25_route.c
+@@ -78,11 +78,13 @@ static int __must_check ax25_rt_add(stru
+ 	ax25_dev *ax25_dev;
+ 	int i;
+ 
+-	if ((ax25_dev = ax25_addr_ax25dev(&route->port_addr)) == NULL)
+-		return -EINVAL;
+ 	if (route->digi_count > AX25_MAX_DIGIS)
+ 		return -EINVAL;
+ 
++	ax25_dev = ax25_addr_ax25dev(&route->port_addr);
++	if (!ax25_dev)
++		return -EINVAL;
++
+ 	write_lock_bh(&ax25_route_lock);
+ 
+ 	ax25_rt = ax25_route_list;
+@@ -94,6 +96,7 @@ static int __must_check ax25_rt_add(stru
+ 			if (route->digi_count != 0) {
+ 				if ((ax25_rt->digipeat = kmalloc(sizeof(ax25_digi), GFP_ATOMIC)) == NULL) {
+ 					write_unlock_bh(&ax25_route_lock);
++					ax25_dev_put(ax25_dev);
+ 					return -ENOMEM;
+ 				}
+ 				ax25_rt->digipeat->lastrepeat = -1;
+@@ -104,6 +107,7 @@ static int __must_check ax25_rt_add(stru
+ 				}
+ 			}
+ 			write_unlock_bh(&ax25_route_lock);
++			ax25_dev_put(ax25_dev);
+ 			return 0;
+ 		}
+ 		ax25_rt = ax25_rt->next;
+@@ -111,6 +115,7 @@ static int __must_check ax25_rt_add(stru
+ 
+ 	if ((ax25_rt = kmalloc(sizeof(ax25_route), GFP_ATOMIC)) == NULL) {
+ 		write_unlock_bh(&ax25_route_lock);
++		ax25_dev_put(ax25_dev);
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -119,11 +124,11 @@ static int __must_check ax25_rt_add(stru
+ 	ax25_rt->dev          = ax25_dev->dev;
+ 	ax25_rt->digipeat     = NULL;
+ 	ax25_rt->ip_mode      = ' ';
+-	ax25_dev_put(ax25_dev);
+ 	if (route->digi_count != 0) {
+ 		if ((ax25_rt->digipeat = kmalloc(sizeof(ax25_digi), GFP_ATOMIC)) == NULL) {
+ 			write_unlock_bh(&ax25_route_lock);
+ 			kfree(ax25_rt);
++			ax25_dev_put(ax25_dev);
+ 			return -ENOMEM;
+ 		}
+ 		ax25_rt->digipeat->lastrepeat = -1;
+@@ -136,6 +141,7 @@ static int __must_check ax25_rt_add(stru
+ 	ax25_rt->next   = ax25_route_list;
+ 	ax25_route_list = ax25_rt;
+ 	write_unlock_bh(&ax25_route_lock);
++	ax25_dev_put(ax25_dev);
+ 
+ 	return 0;
+ }
+@@ -176,8 +182,8 @@ static int ax25_rt_del(struct ax25_route
+ 			}
+ 		}
+ 	}
+-	ax25_dev_put(ax25_dev);
+ 	write_unlock_bh(&ax25_route_lock);
++	ax25_dev_put(ax25_dev);
+ 
+ 	return 0;
+ }
+@@ -219,8 +225,8 @@ static int ax25_rt_opt(struct ax25_route
+ 	}
+ 
+ out:
+-	ax25_dev_put(ax25_dev);
+ 	write_unlock_bh(&ax25_route_lock);
++	ax25_dev_put(ax25_dev);
+ 	return err;
+ }
+ 
 
 

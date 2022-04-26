@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3D510B0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22164510B14
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355300AbiDZVPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S1355317AbiDZVUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiDZVPf (ORCPT
+        with ESMTP id S1355225AbiDZVUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:15:35 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC6A75E5D;
-        Tue, 26 Apr 2022 14:12:27 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id z16so19077311pfh.3;
-        Tue, 26 Apr 2022 14:12:27 -0700 (PDT)
+        Tue, 26 Apr 2022 17:20:08 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C445C1CB5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:16:59 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id e189so22117253oia.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:16:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dTNHzgfUOL4osO2j/zaJgcQDZH2hhUWA+/riZkN8hcc=;
-        b=qrMvkpn1dhwLTmWBJPXzi8j82SmulVrBUqm+++Hg5yAlQt7JM9rqoaaQVhTL6+Qirj
-         VkJnyWNCuwEF77pl3w3Yn7v1OKFwbznYzvA+WvXSzFqL9xqGq8WxuyLRTsOS/scvDpnx
-         JS0tSuTVCGy0Oy+cOvHHdP9pgB1SHu2Y11M/T/aTLxvVm4AofVOpoX59bRz1GJkHajRb
-         dyX/f65P2Ygha/5H8VxyqInUOsDxU1zXBQDDWwJB7lp6H0O0C7SW1rnjmXMZC/ChgwI+
-         4xGvewgx/OvuNHOJ6X1uXSTWSZJ+eyaDI70Y0KmaG/FzPcX97+XoNr6Bn6LsM1gjSbJJ
-         zxTA==
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z4Mcj3qE3FABBr3ceQyAVJGsIOmy0ODTXxNYrqMyZWI=;
+        b=BD4ZBHSw7m9GKQfPqpRuEXNNFQfNYd+y+Ll8Ansi71HgMJzE+lebfpk48h8pDRw8Ru
+         lyff8qa2ShUoLeuM/5XVP8PiYFkPcWVIuZlswE1z3MFqVrKKkpUS+ZUEVv+WPvmbHWUU
+         zanJcTJltehcTI3Uf5T22s2aeGHTQfrC6yOvQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dTNHzgfUOL4osO2j/zaJgcQDZH2hhUWA+/riZkN8hcc=;
-        b=uwhsM5AKpA+4XB36HZDaNrLtvon15V/k7GmTKXmbQAucaTVGXpqiXFCqhnkL6R8Tqk
-         kTvLF4b9hBLOe26Oz1dEeh+9Ky17tMNzos9m45wZx7QA7T3tMpMNjXWE92JqDmtYesBg
-         sS7GHGXlh+wuFqddnP4N0wV6I7XqloTgV9Xm2xedzeC8zcCcfyTPQZUb3FbkZcG576rc
-         mIhl/XpfEGysztkdHGrwCRK09bz0e+VwVuBRcUVD/V6YsUyg47ZwR4f2r78xWQaYNLxY
-         E71Am5wWTfAvrbCPMJ0qiGMGx20y0Y3+CvYlHHWj/P7uw5+AsK7lBmXxhuIbttWQO6PT
-         fxhw==
-X-Gm-Message-State: AOAM533939sTNKIEeiUQGpKFYTISK8t8QtOqksC/nR7l7V0cNgPdZy7d
-        C/CmvOMaKHLommDcgn125J8=
-X-Google-Smtp-Source: ABdhPJyOnqoegYBSF3apdSPf31rkfnNuc96uFOcVS4nbde0MYTQIrogR4qYfOw1CqlklwjUpY7Oqag==
-X-Received: by 2002:a63:2b8a:0:b0:3aa:f59e:a4a7 with SMTP id r132-20020a632b8a000000b003aaf59ea4a7mr15560768pgr.91.1651007546318;
-        Tue, 26 Apr 2022 14:12:26 -0700 (PDT)
-Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
-        by smtp.gmail.com with ESMTPSA id f14-20020a63380e000000b0038253c4d5casm13765851pga.36.2022.04.26.14.12.24
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Z4Mcj3qE3FABBr3ceQyAVJGsIOmy0ODTXxNYrqMyZWI=;
+        b=X8hhXbII7zJvNKpzpnHpWWZv837OeVbNTtlDx2c9tnydc/rZZud858F0OdQBHKKPwr
+         eveohZU9/7V/nOtKLsUg5BEKzDJYsgZlYsWe2ibSyCsgRSnjpt3oedgAV4rO185WZry9
+         BJdkKradZh0tMftwQEWUaFcL7xu+Up7pbVhv95TU0PyjQGjWDrW0VA4nsXnWNGxwMMTL
+         XWtAADG6u2sXengIYBOGJJSSfanufgXICc9yrgy5VsA2nAa/q7KFtVXSYnEBTg6qe2rT
+         Bz23bTKudUD40gZJL/Xqyb1J3uGM6MLPz5dquBzORfK21VCgUgpBUU49yQwLmSJZW4+K
+         8d3A==
+X-Gm-Message-State: AOAM530ptD81R21ksMe6SkaarNHQHxs4dt64CHhZPFoTM7E3Vxe6YkP2
+        8L4aIj0jLC+QSawuNRiT6ItLNg==
+X-Google-Smtp-Source: ABdhPJxv3SiRXLZffAGNHrKHgjqZol9p0iZc/GOVD7mILmdRVlOvGch854cRHTcU0QOyV5BWSqVuFw==
+X-Received: by 2002:a05:6808:1911:b0:322:c4ec:85e5 with SMTP id bf17-20020a056808191100b00322c4ec85e5mr15933810oib.12.1651007818338;
+        Tue, 26 Apr 2022 14:16:58 -0700 (PDT)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id n21-20020a9d4d15000000b00603fb46ddcbsm5247384otf.65.2022.04.26.14.16.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 14:12:25 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 14:12:23 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sagi Shahar <sagis@google.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH v5 048/104] KVM: x86/tdp_mmu: Support TDX private
- mapping for TDP MMU
-Message-ID: <20220426211223.GA1719560@private.email.ne.jp>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <7a5246c54427952728bd702bd7f2c6963eefa712.1646422845.git.isaku.yamahata@intel.com>
- <fb83aaeed48c7da071f0e9f3e4b36e9145ad5c63.camel@intel.com>
- <CAAhR5DHFi14LzAt+3t-1tSFMLZYmtx-TxXSovh8m4=R=5NsdXA@mail.gmail.com>
+        Tue, 26 Apr 2022 14:16:56 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Tue, 26 Apr 2022 16:16:55 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 000/146] 5.17.5-rc1 review
+Message-ID: <YmhhR213tAjEn+ij@fedora64.linuxtx.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAhR5DHFi14LzAt+3t-1tSFMLZYmtx-TxXSovh8m4=R=5NsdXA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +72,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 12:10:22PM -0700,
-Sagi Shahar <sagis@google.com> wrote:
-
-> On Wed, Apr 6, 2022 at 5:50 PM Kai Huang <kai.huang@intel.com> wrote:
-> >
-> > On Fri, 2022-03-04 at 11:49 -0800, isaku.yamahata@intel.com wrote:
-> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
-...
-> > > @@ -914,14 +1014,23 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
-> > >       u64 new_spte;
-> > >       int ret = RET_PF_FIXED;
-> > >       bool wrprot = false;
-> > > +     unsigned long pte_access = ACC_ALL;
-> > >
-> > >       WARN_ON(sp->role.level != fault->goal_level);
-> > > +
-> > > +     /* TDX shared GPAs are no executable, enforce this for the SDV. */
-> > > +     if (!kvm_is_private_gfn(vcpu->kvm, iter->gfn))
+On Tue, Apr 26, 2022 at 10:19:55AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.5 release.
+> There are 146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This should be:
-> if (kvm_gfn_stolen_mask(vcpu->kvm) && !kvm_is_private_gfn(vcpu->kvm, iter->gfn))
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
 > 
-> Otherwise, when TDX is disabled, all EPTs are going to be considered
-> as shared non-executable EPTs.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.5-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Oops, will fix it. Thank you for pointing it out.
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

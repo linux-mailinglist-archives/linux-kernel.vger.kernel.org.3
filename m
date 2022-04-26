@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428BD510A33
+	by mail.lfdr.de (Postfix) with ESMTP id D3C00510A35
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354820AbiDZUTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S1354864AbiDZUT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354895AbiDZUTB (ORCPT
+        with ESMTP id S1354899AbiDZUTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:19:01 -0400
+        Tue, 26 Apr 2022 16:19:02 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C865F2637;
-        Tue, 26 Apr 2022 13:15:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 310595C0043;
-        Tue, 26 Apr 2022 16:15:50 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A271B3B1;
+        Tue, 26 Apr 2022 13:15:53 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 11B505C00FF;
+        Tue, 26 Apr 2022 16:15:53 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 26 Apr 2022 16:15:50 -0400
+  by compute4.internal (MEProxy); Tue, 26 Apr 2022 16:15:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1651004150; x=1651090550; bh=UvoCEZV2iN
-        YmrEf0Gl3v1FkuJK/y6NUl/vMG5P+QSfE=; b=ET0RQP18f8/Tic5fZOJ13JJKpg
-        1Cyoa9sdGbqgBmEA373pkCuMcwasDMwa9k1V5b042Sy5XtJND9bIMr/7ZmUWfZUy
-        s4mtzxDGf7ar7SYpOcs0e8tyBL9WTw04dYzi8ocIFd6nTFxAUBh1u2DzZ26MLU5T
-        v6gpyru/w/rlBrGC9fAbFhkTWsDyRKWaTWDJy2CZy7QfnsfvtEINf/OEDOaGkAmF
-        5ktOcUMOW+kzDC6YKQOOar5seiShNk+qHdjgUTpwSAI9qCcJII1yjlHDWiQebPys
-        V1L1bMY2a7T04Gsr7pauKZRYJiq7ysQjGzq/U5skqV3DTtaFtWxIvyyVdOlA==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1651004153; x=
+        1651090553; bh=gu8wjFAZS//ewmI6BDwb6NDbCp4RXdlDD2CfzD/0XzY=; b=S
+        zwzOMT1tPSRi5s5VrAwaWpvIPdBYeWKZNlcTvYbWLGQCmT4vTOF1jpbunibHD1SK
+        jgNVwIrF3JsC/rgyxzBGVyLs/ssqjzooNKW92nrGuo2V/CJYxdmTS7h/un6b1OMl
+        l4wKRTYmCTbq8pNLK3dR5/ysRBH1hcn7/HoDeWFECxQKI/mR8Qsq6S6icc12kIPE
+        qkNXAG5egl1ZYfWtLImhWTxe3NMteqd0PTqywWKBDI06IpW7FjPtonQqYG+NWn7+
+        VXo9vk/vQjiYYWoRXtLiNCSodDvEpM4YQyYQZ69AkCBYFeHAPzD6ZSZ4m0dtuyLB
+        R2epG2Wn9a9R6o5G9Pnlg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1651004150; x=1651090550; bh=U
-        voCEZV2iNYmrEf0Gl3v1FkuJK/y6NUl/vMG5P+QSfE=; b=Gcfcf0Bbr7NmvtmK7
-        k8+TH0maJKfpxxqb3VJRkByIrcgMwhmdXnhMrtcnCmHflaiI9x7+sVahvUldWBoa
-        V98UoNXgqa5Cq2oVAwWEtOtJBOV5/o8LQGCGH1vPwuRGAxRotUqz3wzQfE/O87eB
-        vZ3akF3AmI7Pro3GqfH3VmHjogDedB7VAQXb+306lo4m3x4RXtgstPt1OfdmfdmR
-        wjTHeyB3Mr18IUB99BhHYcC09S1TWmiYRjAUxHc+diCcYyAA12TYIAWIP38VJ/1h
-        qXKksR2P4vMtFNFoc/7wnu3xANo196KCaA0eBDBt7BLRgPH+R2e6+hoHRJYigeJ+
-        BPEyQ==
-X-ME-Sender: <xms:9VJoYtrRpW4lYNgU6LzBAmvN79qHNsns6vXMhla5hOesXhF9YZOGXQ>
-    <xme:9VJoYvpREuD_WsTg0VyQsdFTWPnSgK9w1r-x1trEo1wNGE6stiYFG0Ot3KaGrC9Sc
-    bz-1iXj99aLrybLlI0>
-X-ME-Received: <xmr:9VJoYqPbSzP2D2JRPEVP4IRwzS3us41auUhWQPLJj4xF9Rhyz8sF69APGXQlMxvbeOvCmcoL8ScX46FFuOCxeekeX3VaeTB8RFC8ChYvA4lqJBN_cC51ZQ1k>
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1651004153; x=1651090553; bh=gu8wjFAZS//ewmI6BDwb6NDbCp4RXdlDD2C
+        fzD/0XzY=; b=JeJ7VkHKXvxWiPhVb/mq4l1aiKyD91OBCx4FV7QSTbczY8ARInl
+        hmdpSM7CC/pqunoIJaxOWRMl5V+EajyqFdpAQ6HtG6gpIfdu6WVIh9cqkuTq2Qi7
+        w5Yb4niSTOH6PrHFV73Ega66iphw0z0D630ezA1dfcyFfqVkTf/0lP3almXktA6E
+        7n4hs75Eaa3LeufdsgYSe4j0s1JOOI/HTP28Y96b91QueNSpJRkR8Nwfm16NXUyH
+        IwY0kGPtoUKEL+NjRo2ipOE3ZLc3uor4HDT263Zfw7AjXAZ1m3YZD3PKLUIV439i
+        KIL9arLxuhS0bZlv45k/EojrAiXP0GkfxIA==
+X-ME-Sender: <xms:-FJoYv74w3jFjCzKCYqzdg778nCFpvhNP4IoUWOXVxwjuIXv2781Vg>
+    <xme:-FJoYk5UQ5Oqk85xs32MYcexc6lTSuGQ03FHSI9HMdc61HpPhpJvu1nSTX16aeSFc
+    wUMLVgqRFdsNizS_Cw>
+X-ME-Received: <xmr:-FJoYmdRsYRvEwwYZEGLMee-jqz9Rgxnfc3rKzcKRQGlfd6KpBFIJ9qB1C1Orz_73u9XiMlBnH5EnbW7BkjSG8t3rJREyantK_UrK3azCEw4ERzMLPdhRhh1>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefgddugeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    hmihhsshhinhhgucfvqfcufhhivghlugculdeftddmnegoteeftdduqddtudculdduhedm
-    necujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnuc
-    frvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgv
-    rhhnpefggeduffduleefueegtdejueegheeuffduveevgeevkedthfeuheeuueefleehve
-    enucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:9VJoYo5iyBfFydfXf-oO8QrlGYl5XR__7CLLpCF6pJPiO5Fdy2cdHw>
-    <xmx:9VJoYs5OCWRZ8-yDD8-Dj5u0r8ODQang3_DkLrF0MfmAbaJaYOWyDg>
-    <xmx:9VJoYgg-kr9bFl2wFinFz-7-SJcvjzpi2-YexdWB0w6Fr0BKofXAkA>
-    <xmx:9lJoYrTBWFznWQFHILKcD2RA-Uin9bPbXxXq_PDvDAXnL1PIdpALRg>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
+    ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
+    gvrhhnpefhueffgfffgedtfefhfeeujeefgffhleekteduvdffieegffeuvdejgeduleei
+    leenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghr
+    rdguvghv
+X-ME-Proxy: <xmx:-FJoYgKfeXBue2qa2QZS0VCdjTryr6AV9xmCDTBbnV6RJCmvTzSOTg>
+    <xmx:-FJoYjJEwLbp-wlblpXNCrRSlgCVF-dsV5_vxs3CvAUMEnht2KoZiQ>
+    <xmx:-FJoYpyRIEi_DH4eX_Pm7B29ZaTM5LnUBDwbwL40N8UrLWAenTcmQg>
+    <xmx:-VJoYk6RXDx2OJ1n2K__Y6dASNSj6pH8Bjv_7kK8MLxdIG0OuYWRHQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Apr 2022 16:15:47 -0400 (EDT)
+ 26 Apr 2022 16:15:50 -0400 (EDT)
 From:   Sven Peter <sven@svenpeter.dev>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
 Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
         Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
         Sagi Grimberg <sagi@grimberg.me>,
         Marc Zyngier <maz@kernel.org>, Janne Grunau <j@jannau.net>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: [PATCH v3 0/6] Apple M1 (Pro/Max) NVMe driver
-Date:   Tue, 26 Apr 2022 22:15:33 +0200
-Message-Id: <20220426201539.12829-1-sven@svenpeter.dev>
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/6] dt-bindings: iommu: Add Apple SART DMA address filter
+Date:   Tue, 26 Apr 2022 22:15:34 +0200
+Message-Id: <20220426201539.12829-2-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20220426201539.12829-1-sven@svenpeter.dev>
+References: <20220426201539.12829-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,65 +87,100 @@ X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Apple SoCs such as the M1 come with a simple DMA address filter called
+SART. Unlike a real IOMMU no pagetables can be configured but instead
+DMA transactions can be allowed for up to 16 paddr regions. The consumer
+also needs special support since not all DMA allocations have to be
+added to this filter.
 
-This series includes everything[*] required to get NVMe up and running on
-Apple's M1, M1 Pro and M1 Max SoCs.
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+v2 -> v3:
+  - Added Rob's r-b tag
+v1 -> v2:
+  - Moved to bindings/iommu since it is "Close enough to an IOMMU in
+    terms of its purpose" (Rob Herring)
 
-v1: https://lore.kernel.org/linux-nvme/20220321165049.35985-1-sven@svenpeter.dev/T/
-v2: https://lore.kernel.org/linux-nvme/20220415142055.30873-1-sven@svenpeter.dev/T/
-
-Thanks everyone for the reviews of v2 again! There are just some minor
-changes since v2 listed in the individual commits again.
-
-Thanks,
-
-Sven
-
-[*] The only missing part in this series are the device tree updates
-    but since these will go through arm-soc anyway I haven't included
-    them here but will instead submit them once this series is in a shape
-    where it can be merged.
-
-Sven Peter (6):
-  dt-bindings: iommu: Add Apple SART DMA address filter
-  dt-bindings: nvme: Add Apple ANS NVMe
-  soc: apple: Always include Makefile
-  soc: apple: Add SART driver
-  soc: apple: Add RTKit IPC library
-  nvme-apple: Add initial Apple SoC NVMe driver
-
- .../devicetree/bindings/iommu/apple,sart.yaml |   52 +
- .../bindings/nvme/apple,nvme-ans.yaml         |  111 ++
- MAINTAINERS                                   |    4 +
- drivers/nvme/host/Kconfig                     |   13 +
- drivers/nvme/host/Makefile                    |    3 +
- drivers/nvme/host/apple.c                     | 1598 +++++++++++++++++
- drivers/soc/Makefile                          |    2 +-
- drivers/soc/apple/Kconfig                     |   24 +
- drivers/soc/apple/Makefile                    |    6 +
- drivers/soc/apple/rtkit-crashlog.c            |  154 ++
- drivers/soc/apple/rtkit-internal.h            |   62 +
- drivers/soc/apple/rtkit.c                     |  958 ++++++++++
- drivers/soc/apple/sart.c                      |  328 ++++
- include/linux/soc/apple/rtkit.h               |  159 ++
- include/linux/soc/apple/sart.h                |   57 +
- 15 files changed, 3530 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/iommu/apple,sart.yaml | 52 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 53 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/iommu/apple,sart.yaml
- create mode 100644 Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
- create mode 100644 drivers/nvme/host/apple.c
- create mode 100644 drivers/soc/apple/rtkit-crashlog.c
- create mode 100644 drivers/soc/apple/rtkit-internal.h
- create mode 100644 drivers/soc/apple/rtkit.c
- create mode 100644 drivers/soc/apple/sart.c
- create mode 100644 include/linux/soc/apple/rtkit.h
- create mode 100644 include/linux/soc/apple/sart.h
 
+diff --git a/Documentation/devicetree/bindings/iommu/apple,sart.yaml b/Documentation/devicetree/bindings/iommu/apple,sart.yaml
+new file mode 100644
+index 000000000000..1524fa3094ef
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iommu/apple,sart.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iommu/apple,sart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple SART DMA address filter
++
++maintainers:
++  - Sven Peter <sven@svenpeter.dev>
++
++description:
++  Apple SART is a simple address filter for DMA transactions. Regions of
++  physical memory must be added to the SART's allow list before any
++  DMA can target these. Unlike a proper IOMMU no remapping can be done and
++  special support in the consumer driver is required since not all DMA
++  transactions of a single device are subject to SART filtering.
++
++  SART1 has first been used since at least the A11 (iPhone 8 and iPhone X)
++  and allows 36 bit of physical address space and filter entries with sizes
++  up to 24 bit.
++
++  SART2, first seen in A14 and M1, allows 36 bit of physical address space
++  and filter entry size up to 36 bit.
++
++  SART3, first seen in M1 Pro/Max, extends both the address space and filter
++  entry size to 42 bit.
++
++properties:
++  compatible:
++    enum:
++      - apple,t6000-sart
++      - apple,t8103-sart
++
++  reg:
++    maxItems: 1
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    iommu@7bc50000 {
++      compatible = "apple,t8103-sart";
++      reg = <0x7bc50000 0x4000>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fd768d43e048..4961da640e82 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1836,6 +1836,7 @@ F:	Documentation/devicetree/bindings/arm/apple/*
+ F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+ F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
++F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
+ F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
 -- 
 2.25.1
 

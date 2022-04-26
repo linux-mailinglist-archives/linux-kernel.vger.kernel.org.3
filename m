@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224865100A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0715100D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351685AbiDZOoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S242100AbiDZOr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351183AbiDZOn4 (ORCPT
+        with ESMTP id S232570AbiDZOr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:43:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 821E613F14;
-        Tue, 26 Apr 2022 07:40:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A68923A;
-        Tue, 26 Apr 2022 07:40:48 -0700 (PDT)
-Received: from [10.57.12.108] (unknown [10.57.12.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B78D63F73B;
-        Tue, 26 Apr 2022 07:40:46 -0700 (PDT)
-Message-ID: <0bc7e213-ecb5-10f5-4c5a-b809252dac22@arm.com>
-Date:   Tue, 26 Apr 2022 15:40:45 +0100
+        Tue, 26 Apr 2022 10:47:56 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886FD377FD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:44:48 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so1698114wmn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2ZqGkETvEtXhWv+2nhNMHUqNOd0wQzvX0go9oa2PkjM=;
+        b=sCQwd1euImCjwuDYwMBUhtygOnGIpMVSR6mjS5LsN2JoYnD4R6Y5H1J1cDhlTmWYFb
+         iadPuQX7Pu6pl+t9ysee3qGpjerXOTQ1Nh5nX0nAa1OF1ZPbpeZ0D44SisqcDfnpCbYh
+         u+sh8LZ+XmbNvPO/Vj1QWc6ImRR+AeJYju1TfucXetYxvYTLgQDb6Xwh1/rZdBfhSMKl
+         QBw5pPsR5bHm4PIiMgTNqHB6NzNnrnkwJOr45FCnAgeNSdqkai4E6R9w4R1LHtDAuDKb
+         i150mrd4Ha8Q6m1SNn0uno2geM+fA1+2kOdtWTydiyQmcz9/CMr4Ax4txi4/QKqtLnJ5
+         3quw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2ZqGkETvEtXhWv+2nhNMHUqNOd0wQzvX0go9oa2PkjM=;
+        b=g1Hb6V6meYpenVUnmt8KN6CSi98XjwOKRbUZ6ZVMLRkt4gm/sHi04yHkSkYMZaqAIB
+         Am2LKL+EDqp2+/glrNtsqiHsizorOdls9iPC30TxOqFgNCVV8YD23at93n1RBVUKc5pg
+         dqHzC/yI8U+dnrSb4mCtedw1d3PJI9E6QGoPhqPjVRLJl9hvYV0wzyTXF2AmiDXEeP8W
+         bkqc/pY5bhuPy8LNF7STi5eZ4IMHHmtap3aw0Gmd7H5UudKWywLLhXfivanziD3QS1ce
+         x2GRlqtUp1T1g+nnDVz5GDjfSoyo1qrHNk4+A1qTB1Cv4u68E5xLvNA5nt/M8/wHwwQm
+         1cWg==
+X-Gm-Message-State: AOAM532iHbuBIGQsLS+5k0muKT6+ogaLz0YoCGmt4JaQvZrjtFPckKgS
+        TZJfw9aNDNkWK3dBtGRk8Ld7fQ==
+X-Google-Smtp-Source: ABdhPJz5tau/8V/DmFS+tD504POLe+3zrMF4WPcijnPlwUmPdKmc7mXFiVcBlwVQqe8KjG/LcLL2Lw==
+X-Received: by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP id v187-20020a1cacc4000000b003929dd4fbccmr21103737wme.78.1650984287132;
+        Tue, 26 Apr 2022 07:44:47 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f66-20020a1c3845000000b00393e84ea043sm6897855wma.44.2022.04.26.07.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 07:44:46 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 15:44:44 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: sprd: Add SC2730 PMIC to SPI device ID table
+Message-ID: <YmgFXLAGDlQe4LZ4@google.com>
+References: <20220425132410.2708304-1-gengcixi@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, amit.kachhap@gmail.com,
-        linux-pm@vger.kernel.org
-References: <20220406220809.22555-1-lukasz.luba@arm.com>
- <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
- <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
- <20220426075402.qjpato6sqy2kes4x@vireshk-i7>
- <9eac86b6-0221-0f62-ac4f-f9e3b1613422@arm.com>
- <20220426080210.hvzrsa4kmxesn6dv@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220426080210.hvzrsa4kmxesn6dv@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220425132410.2708304-1-gengcixi@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 25 Apr 2022, Cixi Geng wrote:
 
-
-On 4/26/22 09:02, Viresh Kumar wrote:
-> On 26-04-22, 08:59, Lukasz Luba wrote:
->> :) but I didn't dare to make it sysfs. I don't know if anything in
->> user-space would be interested (apart from my test scripts).
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> Sure, I was talking about hierarchy in debugfs only. Will be useful if
-> you can show how it looks and what all data is exposed.
+> Add the SC2730 PMIC support for module autoloading
+> through SPI modalises.
 > 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  drivers/mfd/sprd-sc27xx-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
+> index 55d2c31bdfb2..cf4f89114ae4 100644
+> --- a/drivers/mfd/sprd-sc27xx-spi.c
+> +++ b/drivers/mfd/sprd-sc27xx-spi.c
+> @@ -248,6 +248,7 @@ MODULE_DEVICE_TABLE(of, sprd_pmic_match);
+>  
+>  static const struct spi_device_id sprd_pmic_spi_ids[] = {
+>  	{ .name = "sc2731", .driver_data = (unsigned long)&sc2731_data },
+> +	{ .name = "sc2730", .driver_data = (unsigned long)&sc2730_data },
 
-I've created a new way for sharing such thing. Please check the rendered
-notebook at [1]. You can find raw output of that debugfs at cell 9 or
-in cell 11 as a dictionary. The residency is in ns. You can also find a
-diff from two snapshots for all cpus at cell 16. We randomly use Little
-cpus: 0,3,4,5.
+Nicer if these were ordered with the smallest number at the top.
 
-At the bottom you can find plots for all cpus, their active residency at
-frequencies. Cpu1 and cpu2 are big, cpu2 has been hotplug out so there
-is an empty plot (which is good).
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(spi, sprd_pmic_spi_ids);
 
-BTW, if you are interested in comparison of different input power
-estimation mechanism, you can find them here [2]. There are 4 different
-power signals. One is real from Juno power/energy meters the rest
-is SW estimations of avg power for the 100ms period. As you can see
-there in cell 25 plot, the new proposal in this patch set is better
-that two previous one used in mainline. The last plot shows real
-power signal and the new avg signal. The plot is interactive and
-supports 'Box Zoom' on the right (scroll to right to see that toolbox).
-
-Regards,
-Lukasz
-
-[1] 
-https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/ipa_input_power-debugfs.ipynb
-[2] 
-https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/ipa_input_power.ipynb
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

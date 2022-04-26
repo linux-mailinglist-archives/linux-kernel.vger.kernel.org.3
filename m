@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C1550F7D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB47750F870
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347101AbiDZJfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S1346828AbiDZJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347935AbiDZJGY (ORCPT
+        with ESMTP id S1346358AbiDZIyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:24 -0400
+        Tue, 26 Apr 2022 04:54:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F81BBAB88;
-        Tue, 26 Apr 2022 01:47:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47178DAFCA;
+        Tue, 26 Apr 2022 01:41:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1981FB81A2F;
-        Tue, 26 Apr 2022 08:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47128C385A0;
-        Tue, 26 Apr 2022 08:47:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D11F5B81CED;
+        Tue, 26 Apr 2022 08:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4114EC385AC;
+        Tue, 26 Apr 2022 08:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962857;
-        bh=6u3Lw04ae7BNxpRscauU4CwkkTx3Rv+lfvEmnyV8btA=;
+        s=korg; t=1650962468;
+        bh=ZxgTw4UzvfWbr0evmQdbxSaSvx3FVMuFHEdvOCmww5A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1hEcCaKkSBnLUX/rybJP42RQV55GSm+DkG1iQz9xdQ1tjcLOKlJJb/vjrI69BHzU4
-         Vhfj3ytvWq4lcvpopNX5YgT3wkaojKW6G+R3d2RNwkr/1jkmFKFcp55q1qHhtlLjQ3
-         z1VztyxDRAG+2ey9kJgRuNfqPyZv+2lqaloK2d7M=
+        b=cmIlqoCw8pOdIN/uFdLTjF/fRtPK8h/jviOq8ITy4p7Kjkg5rBlrg7TvVtppQHpKo
+         JMD77Vnzgt/nr/4kOoBbdwDuTjA+K+0THbHok7eEpc2dCVDnUBVTzAZAcCLYN+28E0
+         ttuhCCc4fRJzbrGH8BrlVPUG98Dm3pJGz0mY6DsI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 113/146] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE event
+        stable@vger.kernel.org, Dongli Cao <caodongli@kingsoft.com>,
+        Like Xu <likexu@tencent.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 107/124] KVM: x86/pmu: Update AMD PMC sample period to fix guest NMI-watchdog
 Date:   Tue, 26 Apr 2022 10:21:48 +0200
-Message-Id: <20220426081753.230607369@linuxfoundation.org>
+Message-Id: <20220426081750.337095129@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,78 +56,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Like Xu <likexu@tencent.com>
 
-[ Upstream commit ccb17caecfbd542f49a2a79ae088136ba8bfb794 ]
+commit 75189d1de1b377e580ebd2d2c55914631eac9c64 upstream.
 
-Since commit bb30acae4c4dacfa ("perf report: Bail out --mem-mode if mem
-info is not available") "perf mem report" and "perf report --mem-mode"
-don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-type.
+NMI-watchdog is one of the favorite features of kernel developers,
+but it does not work in AMD guest even with vPMU enabled and worse,
+the system misrepresents this capability via /proc.
 
-The commit ffab487052054162 ("perf: arm-spe: Fix perf report
---mem-mode") partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC
-bit for Arm SPE event, this allows the perf data file generated by
-kernel v5.18-rc1 or later version can be reported properly.
+This is a PMC emulation error. KVM does not pass the latest valid
+value to perf_event in time when guest NMI-watchdog is running, thus
+the perf_event corresponding to the watchdog counter will enter the
+old state at some point after the first guest NMI injection, forcing
+the hardware register PMC0 to be constantly written to 0x800000000001.
 
-On the other hand, perf tool still fails to be backward compatibility
-for a data file recorded by an older version's perf which contains Arm
-SPE trace data.  This patch is a workaround in reporting phase, when
-detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-force to set the bit in the sample type and give a warning info.
+Meanwhile, the running counter should accurately reflect its new value
+based on the latest coordinated pmc->counter (from vPMC's point of view)
+rather than the value written directly by the guest.
 
-Fixes: bb30acae4c4dacfa ("perf report: Bail out --mem-mode if mem info is not available")
-Reviewed-by: James Clark <james.clark@arm.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Tested-by: German Gomez <german.gomez@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220414123201.842754-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 168d918f2643 ("KVM: x86: Adjust counter sample period after a wrmsr")
+Reported-by: Dongli Cao <caodongli@kingsoft.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+Reviewed-by: Yanan Wang <wangyanan55@huawei.com>
+Tested-by: Yanan Wang <wangyanan55@huawei.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220409015226.38619-1-likexu@tencent.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/builtin-report.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/x86/kvm/pmu.h           |    9 +++++++++
+ arch/x86/kvm/svm/pmu.c       |    1 +
+ arch/x86/kvm/vmx/pmu_intel.c |    8 ++------
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 1dd92d8c9279..a6bb35b0af9f 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -349,6 +349,7 @@ static int report__setup_sample_type(struct report *rep)
- 	struct perf_session *session = rep->session;
- 	u64 sample_type = evlist__combined_sample_type(session->evlist);
- 	bool is_pipe = perf_data__is_pipe(session->data);
-+	struct evsel *evsel;
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -141,6 +141,15 @@ static inline u64 get_sample_period(stru
+ 	return sample_period;
+ }
  
- 	if (session->itrace_synth_opts->callchain ||
- 	    session->itrace_synth_opts->add_callchain ||
-@@ -403,6 +404,19 @@ static int report__setup_sample_type(struct report *rep)
- 	}
- 
- 	if (sort__mode == SORT_MODE__MEMORY) {
-+		/*
-+		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
-+		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
-+		 * compatibility, set the bit if it's an old perf data file.
-+		 */
-+		evlist__for_each_entry(session->evlist, evsel) {
-+			if (strstr(evsel->name, "arm_spe") &&
-+				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
-+				evsel->core.attr.sample_type |= PERF_SAMPLE_DATA_SRC;
-+				sample_type |= PERF_SAMPLE_DATA_SRC;
-+			}
-+		}
++static inline void pmc_update_sample_period(struct kvm_pmc *pmc)
++{
++	if (!pmc->perf_event || pmc->is_paused)
++		return;
 +
- 		if (!is_pipe && !(sample_type & PERF_SAMPLE_DATA_SRC)) {
- 			ui__error("Selected --mem-mode but no mem data. "
- 				  "Did you call perf record without -d?\n");
--- 
-2.35.1
-
++	perf_event_period(pmc->perf_event,
++			  get_sample_period(pmc, pmc->counter));
++}
++
+ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel);
+ void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int fixed_idx);
+ void reprogram_counter(struct kvm_pmu *pmu, int pmc_idx);
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -256,6 +256,7 @@ static int amd_pmu_set_msr(struct kvm_vc
+ 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
+ 	if (pmc) {
+ 		pmc->counter += data - pmc_read_counter(pmc);
++		pmc_update_sample_period(pmc);
+ 		return 0;
+ 	}
+ 	/* MSR_EVNTSELn */
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -439,15 +439,11 @@ static int intel_pmu_set_msr(struct kvm_
+ 			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
+ 				data = (s64)(s32)data;
+ 			pmc->counter += data - pmc_read_counter(pmc);
+-			if (pmc->perf_event && !pmc->is_paused)
+-				perf_event_period(pmc->perf_event,
+-						  get_sample_period(pmc, data));
++			pmc_update_sample_period(pmc);
+ 			return 0;
+ 		} else if ((pmc = get_fixed_pmc(pmu, msr))) {
+ 			pmc->counter += data - pmc_read_counter(pmc);
+-			if (pmc->perf_event && !pmc->is_paused)
+-				perf_event_period(pmc->perf_event,
+-						  get_sample_period(pmc, data));
++			pmc_update_sample_period(pmc);
+ 			return 0;
+ 		} else if ((pmc = get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
+ 			if (data == pmc->eventsel)
 
 

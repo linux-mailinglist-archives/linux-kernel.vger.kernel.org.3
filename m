@@ -2,85 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3D95107BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4EF5107C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244582AbiDZS7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S245538AbiDZTAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238868AbiDZS7a (ORCPT
+        with ESMTP id S238868AbiDZTAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:59:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BAE180EC2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:56:21 -0700 (PDT)
-Received: from mail-yw1-f174.google.com ([209.85.128.174]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MqZE0-1oEPat2Xse-00mfWt for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022
- 20:56:19 +0200
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7ca2ce255so93321197b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:56:19 -0700 (PDT)
-X-Gm-Message-State: AOAM530WorSDb1UsbT85ZIRY+VxET+zsQQeEsGxpy8H0UarZFuleHSFe
-        svYKmlBp1tGw9yi2RMMhuz20EkI98ZCGyJx0fIM=
-X-Google-Smtp-Source: ABdhPJybgZUqgMpOK2T9H7xh37uH1Nx8oagA1RYi0h2aSuwy+vDDrluQLSK3yjDmYw3s35MsRHQQ4F+UjNwqIwgPkRY=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr23748703ywk.209.1650999378258; Tue, 26
- Apr 2022 11:56:18 -0700 (PDT)
+        Tue, 26 Apr 2022 15:00:32 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF841815EE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:57:23 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id e24so6862941wrc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YN5oTnEIU4pNM1Sb3nJpdAjaA/oJ2IQFujs0Jps+a9Y=;
+        b=wLkjVxHZBMNNlQ2eMzOmdi1zhi+QqAFf+qfqGanndpXHHK75T5Cx2XtBpV7WJONo0S
+         57Cpy0vv21O9fGFIcYxOaBYK8k8eV9IFefO3gIygGNNkgS49Gfao934wDIvokwr9hdAt
+         KW2KmfNAhdgDVR0tQFIvPnO15AKL+CACbKUkYK+7lChrZwwOX6jUJ3QGhXfVKjcqA7pQ
+         reufn4qSO3+brh0bYiIUAPCuM2Vj05+ca4vWXdmUkNb40B4+uJ6tTP7GXurmfLeAOrBm
+         84Jn+HdJBdzMjFxMRaVqchrseSdroyGzVAIMuLwWWbHR4HC5ZkzJxdEW5h+KdjkupYQH
+         tZNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YN5oTnEIU4pNM1Sb3nJpdAjaA/oJ2IQFujs0Jps+a9Y=;
+        b=31hYURHaGd7tyZdxtFKbRfzYy98wwEr++Dm4v3vUFyZD/pbVANka7a7nFAaPIntKEH
+         Zp71XjAThyr8XHB5v+Q+zHQJXM/XXDT1J77bpibqNYVzSFnXrvXVrUxyzDWsCaNwL9Hj
+         SwDYTlJMR+PRvmVgb3+Flh9c6anU/6h2THLF2Jz7WF6y8PM+BhT+c++TA6OjrSsnsub1
+         ZqTCe5w/JdyrsaHc0vR59LCbYBQv7T2AvRkUZlfn+2fH4NU6Vkl3I7YU/jerH33Rj2tZ
+         4TY0t814pGQIrA6A0xyxzUPm1GA+8SfIQFzfI1EM8q6aiQxYWaXlDoh23MedZ+QldWYU
+         4icg==
+X-Gm-Message-State: AOAM531C86Sx/QwfUh9LtGLZ+Xfclz1+Zucv2nRYuh1XnlBMmYFxq9+d
+        J+Bxpvlr6Z8bglCJQ9mIAxS5bUR71zloUYWvDS6H
+X-Google-Smtp-Source: ABdhPJzCoqSO0HOFjAxjiYwi8hx2T3JoRbTDOzldL2FbJ+czUtRSK699iRUtzHvdC/Nq1+fZFD2YroJ1E21D9zBEv9U=
+X-Received: by 2002:a5d:590d:0:b0:20a:c3eb:2584 with SMTP id
+ v13-20020a5d590d000000b0020ac3eb2584mr18774084wrd.18.1650999442153; Tue, 26
+ Apr 2022 11:57:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426161658.437466-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220426161658.437466-1-mailhol.vincent@wanadoo.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 26 Apr 2022 20:56:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2ZUfpWiHh6yeAy3fFP8k5BcE8crkis7Savxhdym1e-FQ@mail.gmail.com>
-Message-ID: <CAK8P3a2ZUfpWiHh6yeAy3fFP8k5BcE8crkis7Savxhdym1e-FQ@mail.gmail.com>
-Subject: Re: [PATCH] linux/find: ignore -Wtype-limits to reduce W=2 warnings
- by 34% tree-wide
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
+References: <20220418145945.38797-1-casey@schaufler-ca.com>
+ <20220418145945.38797-28-casey@schaufler-ca.com> <f2186f22-5bcd-d962-7e49-c816fc5fbd07@canonical.com>
+In-Reply-To: <f2186f22-5bcd-d962-7e49-c816fc5fbd07@canonical.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 26 Apr 2022 14:57:11 -0400
+Message-ID: <CAHC9VhTXgBTH+7ny-fcMP_HC1ojA1ass38PGHS2tJny0bCGXzA@mail.gmail.com>
+Subject: Re: [PATCH v35 27/29] Audit: Add record for multiple object contexts
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-audit@redhat.com, keescook@chromium.org,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Z7Y0NAE21Ov/j71fNP0k5m/YR0ufPzhpN7B6oSHXq1pyIn7tLAY
- C1c8AXV7PIKRVl6Z6hFpvpRoVjvJkm+KYaOzTnVil3yUExLGb3OeBy7qeYaql4NNIBotWsb
- nFuuZ1ukgqMBV3RCC7mO1Q7/MmpFODkhDbziP8c2KbBZ3E94GQmul1tqHWNjOVlfEpHVZ7N
- Eb4fsmOVsZ40uZpYxgAKw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2fo1Pc45XcA=:TJQdQTagcVe0VoUbcjW70i
- Oo+zqqhwhDflY+DS+jnG+y/0Tb13ndvRbiEuTnYdt7kYzZZGtlRwHKKLoYoU3QzWQ6FlLTAMq
- ljuURNQupMS4Tee39sQf4qINWvLGfCPWQSBOlJV8Wx/aTC9ZVdc/LcoJJaWQi5MBXoYudZGYQ
- HJbobfHXnUkVWtTbz6yBcpO2K9CkRhq0BmN+2DD7HCYOMoyaBmA+6qRYEeJ5dFnop8zcRtuJe
- Uxr5Z8oXd4KwCjDR8bT9vXxCjE486FGH/CMZWMsGl+QAHBjoPvIrJ9JL+0VFnWwKDf9ThDc7w
- KDPpWxpHowmwc2ABEFCk/jMT2kWe5/pMgvYAK8D4OGp77h/+1WHX69hx9ACb3jTokfpZbC5Kf
- xMTR4Fickr4/WPpyYQMWDQNNPOVXqrbgyHbEuKErtIDBK8ip8s1Mj5OgSShOAjea0ruYVheEG
- MUZCZ2ylT0k25krBurV2R7XPnt4eHeMjGS5kmKNC3Kf6pF2Tdu6BwJA9rwtIqLFEF4kgh2ncN
- BMRQxvt2VYN3MPXItDRl7FzftScFGuu6BfrI5/+EZrmQFFFowS/yC+/psIxF4JRpBODYyxDRb
- zzYJgZJbU5A1QEdrNrqhjbJtm5eLaIlj8ZpXhDqzBFPltHNmNPs66/4zpM50hBpsVA04jGZA0
- +stj5QB7Zb4QMfs4Y8WwYIx4++MSc/mdeMi8IsrU3C78snjPfUZY9v3q8moxCiawwdqg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 6:16 PM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
+On Mon, Apr 25, 2022 at 11:38 PM John Johansen
+<john.johansen@canonical.com> wrote:
+> On 4/18/22 07:59, Casey Schaufler wrote:
+> > Create a new audit record AUDIT_MAC_OBJ_CONTEXTS.
+> > An example of the MAC_OBJ_CONTEXTS (1421) record is:
+> >
+> >     type=MAC_OBJ_CONTEXTS[1421]
+> >     msg=audit(1601152467.009:1050):
+> >     obj_selinux=unconfined_u:object_r:user_home_t:s0
+> >
+> > When an audit event includes a AUDIT_MAC_OBJ_CONTEXTS record
+> > the "obj=" field in other records in the event will be "obj=?".
+> > An AUDIT_MAC_OBJ_CONTEXTS record is supplied when the system has
+> > multiple security modules that may make access decisions based
+> > on an object security context.
+> >
+> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> > ---
+> >  include/linux/audit.h      |  5 +++
+> >  include/uapi/linux/audit.h |  1 +
+> >  kernel/audit.c             | 47 +++++++++++++++++++++++
+> >  kernel/auditsc.c           | 79 ++++++++++++--------------------------
+> >  4 files changed, 77 insertions(+), 55 deletions(-)
 
-> +__diag_push();
-> +__diag_ignore(GCC, 8, "-Wtype-limits",
-> +             "GENMASK(size - 1, 0) yields 'comparison of unsigned expression in < 0 is always false' which is OK");
-> +
+...
 
-Are you sure gcc-8 is the correct version to check for? If older
-versions had this
-already, you may have to add the magic bits in the compiler-gcc.h header.
+> > diff --git a/kernel/audit.c b/kernel/audit.c
+> > index 8ed2d717c217..a8c3ec6ba60b 100644
+> > --- a/kernel/audit.c
+> > +++ b/kernel/audit.c
+> > @@ -2226,6 +2226,53 @@ static void audit_buffer_aux_end(struct audit_buffer *ab)
+> >       ab->skb = skb_peek(&ab->skb_list);
+> >  }
+> >
+> > +void audit_log_object_context(struct audit_buffer *ab, struct lsmblob *blob)
+> > +{
+> > +     int i;
+> > +     int error;
+> > +     struct lsmcontext context;
+> > +
+> > +     if (!lsm_multiple_contexts()) {
+> > +             error = security_secid_to_secctx(blob, &context, LSMBLOB_FIRST);
+> > +             if (error) {
+> > +                     if (error != -EINVAL)
+> > +                             goto error_path;
+> > +                     return;
+> > +             }
+> > +             audit_log_format(ab, " obj=%s", context.context);
+> > +             security_release_secctx(&context);
+> > +     } else {
+> > +             audit_log_format(ab, " obj=?");
+> > +             error = audit_buffer_aux_new(ab, AUDIT_MAC_OBJ_CONTEXTS);
+> > +             if (error)
+> > +                     goto error_path;
+> > +
+> > +             for (i = 0; i < LSMBLOB_ENTRIES; i++) {
+> > +                     if (blob->secid[i] == 0)
+> > +                             continue;
+> > +                     error = security_secid_to_secctx(blob, &context, i);
+> > +                     if (error) {
+> > +                             audit_log_format(ab, "%sobj_%s=?",
+> > +                                              i ? " " : "",
+> > +                                              lsm_slot_to_name(i));
+> > +                             if (error != -EINVAL)
+> > +                                     audit_panic("error in audit_log_object_context");
+> > +                     } else {
+> > +                             audit_log_format(ab, "%sobj_%s=%s",
+> > +                                              i ? " " : "",
+> > +                                              lsm_slot_to_name(i),
+> > +                                              context.context);
+> > +                             security_release_secctx(&context);
+> > +                     }
+> > +             }
+> > +
+> > +             audit_buffer_aux_end(ab);
+> > +     }
+> > +     return;
+> > +
+> > +error_path:
+> > +     audit_panic("error in audit_log_object_context");
+>
+> This moves the audit_panic around, so certain operations are not
+> done before the call. I am currently not sure of the implications.
 
-Otherwise, this looks sensible to me.
+Short version: It's okay.
 
-      Arnd
+Longer version: The audit_panic() call is either going to panic the
+kernel (NOT the default), do a pr_err(), or essentially be a no-op.
+In the case of the full blown kernel panic we don't really care, the
+system is going to die before there is any chance of this record in
+progress getting logged.  In the case of a pr_err() or no-op the key
+part is making sure we leave the audit_buffer in a consistent state so
+that we preserve whatever information is already present.  In the
+!lsm_multiple_contexts case we simply return without making any
+changes to the audit_buffer so we're good there; in the multiple LSM
+case we always end the aux record properly (using a "?" when
+necessary) if an aux record has been successfully created.
+
+Feel free to point out a specific scenario that you think looks wrong
+- I may have missed it - but I believe this code to be correct.
+
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index 557713954a69..04bf3c04ef3d 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -1420,18 +1409,10 @@ static void show_special(struct audit_context *context, int *call_panic)
+>
+> If pushing audit_panic into audit_log_object_context() is acceptable then this call_panic arg is
+> no longer needed. The same goes for the call_panic arg in audit_log_name(). And call_panic can
+> be dropped from audit_log_exit()
+
+Good catch.
+
+I suspect this is a vestige from when audit_log_end() used to do the
+record's skb write to userspace, meaning it was possible that you
+might get some of the records written to userspace before the system
+killed itself.  Now with all of the queuing involved it's less likely
+that this would be the case, and even if it does happen in some cases,
+it's basically a toss up depending on how the system is loaded, the
+scheduler, etc.
+
+-- 
+paul-moore.com

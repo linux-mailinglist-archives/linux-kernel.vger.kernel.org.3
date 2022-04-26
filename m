@@ -2,195 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20E2510242
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CA5510243
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352641AbiDZP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S1352589AbiDZP5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352629AbiDZP4b (ORCPT
+        with ESMTP id S236826AbiDZP5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:56:31 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B245A43EE9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:53:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jw1Ua0bFwVtsmkQTE7hR47zwAHck+Yfz4lDtWjQ6NMc4uqv0qNDWk9gCiRTi1W7zTi43KFdA0h/xiKnew7C5RZ5fZ1OAypFVaeAgTh9AFOggBZ+x/XW3qNZECIJ7P3tQEdM1GiacYietRpoo7d1MC7GEeG4cK1vOmlwHtZj052h3db+rAcAVjed1Y2Vi1mZZRXmhXCGUPa+4NMUAy7mcPRkdJASn/UX2jvjB58n1KkJgRzQ3+PpMJszEeqcSVRc5pW8fOu040NkKB8SFFbl0rpfaSYG81y5PG0/5ebuatJak2C5Ijmi8Z9mDR81fnknj5mYu3YCZwrcwVPd1CuGyQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QQ7hmyRiHpg4VDNCoOFwMwr+0vKk8CsINM5rn5jVenk=;
- b=cSSCr05GFzBGeHDeZGHXcQPQGW26kGcTPNUqOfN5Ad2rW2txv2yExqiikQpmgxkRT+gShDcZ0XlxYpZK2c2KsDnnBmj7SrXlUOmsxk4IInkJcQf+TuAiuR/AwUo8CdI1NLsmCzwD/qTaIHaQ+QBym8l32vncLuLOTr5oui/N/7/6IqaQMsMRoQtsnpcuzoM2V8HCbDXK37vnlLWAOgwkCXTx+f0PbaBM+P48qo3h0T4M+mWrtSLIIMtKVfRS5f5YepFQ0ETTmu/vnxpRCBYdjhCaZrKAYxC9i89UpTuSTRbovJ439LQvvRkll8bR8SbeO4ysu5a6JM3brm0ECd3FNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QQ7hmyRiHpg4VDNCoOFwMwr+0vKk8CsINM5rn5jVenk=;
- b=ghBeNaTFQVELSNkpbdh6TiYZB9MYuOfgKDAbF2XnEdoTg6Sr4dIPDtwyWBhgWJ5jO6KzJc29vf0GtAVmGG4ngMQ6wZ7HHZa8mHW6+rDr5m81gN1j9AaYbvnaS3RWEwV4P5BfwZnVavlvaE4VG6ECuSZcZNNjtLAXdPFuHCmhyygHFG1dhkTfO6C03bfgST3pXg8WBsdShAPal1WudI2UGBqAyN7D20m7QZzDYrOVn2h0wOtFSJgjrEu3rGYYwaav7hRBsGhqU+0Nem97glnWGW6+jI9tu/dyqJxjHBc5DT2iPRjhpPvlH+e8o2JGNP9ZLmHzZPIS7fOsasZJImertQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SJ1PR12MB6292.namprd12.prod.outlook.com (2603:10b6:a03:455::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
- 2022 15:53:19 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
- 15:53:19 +0000
-Date:   Tue, 26 Apr 2022 12:53:18 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Wang, Zhi A" <zhi.a.wang@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: Re: [PULL] gvt-next
-Message-ID: <20220426155318.GQ2125828@nvidia.com>
-References: <c5cf6773-e7a2-8ba8-4cde-0bb14007bc6b@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5cf6773-e7a2-8ba8-4cde-0bb14007bc6b@intel.com>
-X-ClientProxiedBy: BL1PR13CA0271.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::6) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 26 Apr 2022 11:57:36 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0676D15CEAE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:54:29 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id r28so1805307iot.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HSvtwZpAkuv6AVEJodrvJP+b239G8tFOswN2WmHZxq8=;
+        b=lXjd8yPyjZf18NMqeiqatwHcNE2dOivYsc7mNkxXwUVYTlkLisfHjlBnK2LoTAp1xa
+         iKTta2kHOKebIQuYChpe4sNbAch9kf/Ed4F+nb0CTtwuSCpGFJU+1/QaxQuM/0K1IXst
+         SnO2WiMbkcVvbJROkbhJ5VUz60X9KqKUruXfkzRgUPiBt/re410DBnH2DVBITuSlx+pW
+         tVWJWMT1NN0hC9p/Qaj3KK1u3tKyjUVa1zgW7KGNP2G6gF53ZVeSz6iK/LJgFbf1oBW9
+         wEPQ12vESNVx2DVIiUmW+ctHr5v/F7eHkZOvXg9P7ipdJ1OHU9F8SzRRmFXY/SinGXnr
+         TqVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HSvtwZpAkuv6AVEJodrvJP+b239G8tFOswN2WmHZxq8=;
+        b=r5gPGcWVU7Jg1FrBYtOBOpmADX/e+ckTKaYzDByYnBwDmi4T4IQTlOT+P3nGdGIuHo
+         2kmzgMC9wqQUFtXVoteAZBR9oglFS9Xp96clfdLNcbMrcCSg94Zsc9jPma0M1p2/7zNk
+         R3EfX/LA6qmJmP0eh6hfz2DfSaT1KKe1iXijEKnHdgVlxZ5V9Wxh9ypilijziBHlHOe8
+         bIm0hgBuQEOT/sfIZCHUTkUVsBAUpGJAuRJZghUNQ48gt6F/lSJT9L5UX0/w14WMSqnT
+         V94THLg7U9JCsklNtyfC/Q0EL8B0XaIZ8vZPneqbsaXzo9+Xmliuv/5+oBcFG2uIDvjF
+         LTkQ==
+X-Gm-Message-State: AOAM5313MO4q8OGUVEIJWcHYrHZX6pUJOkmKaB6EFMf0Hena8axDBwN1
+        K3X1lrA641y1NiNs0CI+ekHia93OZN69wHagh7o=
+X-Google-Smtp-Source: ABdhPJx+h0r4To7YsiEDfg+uv/p+xfZl7R8UmHsNh2Cu9yrM2ynd+3g6PaHcek9Eoux2Vt8DNBXdcNz8uaAfEZJp894=
+X-Received: by 2002:a5d:9f4e:0:b0:652:2323:2eb8 with SMTP id
+ u14-20020a5d9f4e000000b0065223232eb8mr9580794iot.79.1650988468412; Tue, 26
+ Apr 2022 08:54:28 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 80e45027-ea87-44b7-1ff7-08da279ce277
-X-MS-TrafficTypeDiagnostic: SJ1PR12MB6292:EE_
-X-Microsoft-Antispam-PRVS: <SJ1PR12MB6292E70D092864DF1480F89FC2FB9@SJ1PR12MB6292.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CfkYfP3nIqq3pCCdiiF1NhRFbQ3K8qxuK32nUtPCPaGXeLpHqcaU3NAKhmcVlteNHMJ2OmwHAWRNwmOcCufSmeP0cLl6IPAYZ7Kb4F5SIlr34fQDvwVGASpRyOVtgBF9igL5GzRfEUa6OwKelIW42GvszySDqszBee0nRd2sxA0KVedO8vIvmkjOwfNArNAgo+Vwz98DjMuTfEDq8wH4k9onw+GrASjJ9MK3nRs92/4ox8wJ7uvsp/Oj6KjQEvTuEy89EG0scOaS3r5iPJVmumg5DhkybRW1v5ak1TM1EYNXQS5GNnyRjI+wIo5r0KSBac6GDFqNek18VnaozbTqQHd9ys6rgw+6RfLoHYQMcL3efpDLmTeEEQh7KgrFUTlpuGXdG8+BHQ4aNEnWBn0uqe6a1tuzwGAZrxPpv5U/JlgBUF6vNICVhh1uEa2cPH8v/W3CwV4Ptc4Tnx1zPWDdyKFq8bWp5IwW8vKg2wTxvW6qd9RL5GmV8WnSIlTZ3GdVkEE9WCA6fW5m3IBRt26x9ZgsbeeFRp4Rp+vp5Dqq+fUecF0KisTok2B25W2u+hkrcw+be4/4RL87/e5se3MC9j/S6wwgvABozRRUYMTH1a4xEOQG5OzaLcLtcXoCdSkqGss0rCEH4b7RR/SpojyjHW9SnczO2jLne9HeZnwlGjPrvZTUkw76cqDfbdYDuK5JIYbnfFOYrqfSYT+34ZBL1878hjqmnZZdqzd+Vgbk9Hw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(2906002)(33656002)(1076003)(26005)(8936002)(6506007)(6486002)(966005)(86362001)(508600001)(186003)(6512007)(7416002)(5660300002)(316002)(38100700002)(6916009)(4326008)(54906003)(8676002)(36756003)(66476007)(66556008)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bxqqY8w+h1y6yoHLli5Z6lmChgVpQE4+RZal09Jds+crNyboh7MCoV6YbaBs?=
- =?us-ascii?Q?4FEYHxEVqiDzxwiNtrKqZ0hU11SRZz6EVpZf+6vr3OwjOtOfQ50oikFE+jo4?=
- =?us-ascii?Q?jWC5A34ipEHq/mIZoiMb2JbjqvGvALny49+0nv4ZReR25rKzOzQ8YewaQi/z?=
- =?us-ascii?Q?Vd0IjnXUkEO3/3V9IJCVObUMY2O30mxXXweyEBysoUBotkEptRrgqdYNgHXf?=
- =?us-ascii?Q?BzXgE2zvDhlIyedqQo+W65/Q//j8+h/u8Z1TY/itRBp+DzJBCWG1QmOOvYyL?=
- =?us-ascii?Q?slPlUjSFSNuwxQCj4gvU38scHGwRWjkqh0trw+/+JFueR5ezxtYl2C+EMoCK?=
- =?us-ascii?Q?YrKk0N/4V6BhoFSZrHl+PYv/z8X64KRn1837b2nNq/rv9ioJaG5A15Tssx8D?=
- =?us-ascii?Q?bU5SjPoy2L66GRah6E/dn+srJ2ffBQH/kqNZnhctgtisv4vjN21Hn3ZskAqg?=
- =?us-ascii?Q?7ekZbpQ/OqQRFnAjdFb16NvAWPCOgCDIGCkJ/g2R8eiEMKN1Yan0NwShQMWA?=
- =?us-ascii?Q?pbQQH+/qa6ypbh9cUxSyFTqQqS+s8rHdTiV/u/LO07P6o6LB8V4TV8upGI/2?=
- =?us-ascii?Q?tmB+Lr0iZr0Y7KMVhyL4fjq2QcfyZ6JoTT/zyRYIDcu45UyESbLDfSMQrqqk?=
- =?us-ascii?Q?llWtDAqYdNEGQHA9LtBDLgML5zDQ6naeEz+4UtsCdDCy8vDtrUkZHkd/7oVS?=
- =?us-ascii?Q?GIXGckLP9q60qMgZztK+0Hdd5rMWuUS2NIsmTJi2rlrUayEnycO+ZcKpW/XM?=
- =?us-ascii?Q?3tOwgcKksQPGvwSwR7bcyjN+d0AT34/DJ3qJQNhlpiFyVtcg0nQPvfegaY6w?=
- =?us-ascii?Q?JHJX9GdU0KdVg+g0zGPHy4vMdIA3ar10+pI9cpmXrfMjF9EymMh5a85cwQLg?=
- =?us-ascii?Q?Wu30Q/lot9sglG0Mrwz2t3bhBZQKouCUK4bcbg6Kp1XHs0CsWUjoL6JfoH/x?=
- =?us-ascii?Q?Pa4K0HtkAcXNGWOmFGzhkDQwElW3TlNi2CUJADAA0ZzFeEjh9tILHQZPlEYi?=
- =?us-ascii?Q?ZqPwgz6IKSieBpf1R4WJlajgqdlaQD64HlVpJv5XW/SIbIXdfEin7qtVXdYh?=
- =?us-ascii?Q?faJdaujk/cn/Me4/ZJBIoyIM0Y6CSDG2DY3M0qLfq/FKaKlrId73SHxgSsMf?=
- =?us-ascii?Q?+wuDlrltC8xMKVNpOTBJMMYNkkQEJ/otrcjidpxu8NkKpCpzikO6tJxkUKPI?=
- =?us-ascii?Q?IGW4fFSQqB68QCbKbm8iTkx0R92BhUV1gO+Ma3ulFr+o8pY5VikC98W+cYm0?=
- =?us-ascii?Q?kTb7bg5d4Wg79UoDrnuqFlXM41/7Q0XDQd+CMjRmVcxldLQtHjFUxjJyLEoR?=
- =?us-ascii?Q?tMZSjXYssxs7TDUGAimqnYsIJmL/EA7M0HXMznIlwEepyLqwQg4kYopWP39D?=
- =?us-ascii?Q?lKT57VLwHqqYi9dA6+2+QZojQfQ6L+vxB6YAIhdh/r7WAVTqx9Eg3CdQrvrJ?=
- =?us-ascii?Q?vKI+5V/BDfdQy4BkxvaJl3OEUIIrBDfjZIe2wAIOepL0D3lyBxWpsubdlD4k?=
- =?us-ascii?Q?DXTmk2C1Z73T/uuAGWOCc7J3RKaYz/QDbEe2U9NaN5gaPGBKkXf/YghqUacn?=
- =?us-ascii?Q?KY6sk+sWE4zVnOdBgIBTm79zdvgFkv9ErCu3PHuxaqzOjmno8EYqmJ1H6vfe?=
- =?us-ascii?Q?01MeRS0U15aYSD/mVFbEi53qn2qWZW8arcOw84jN1E9z963PcWQxNRggwuk8?=
- =?us-ascii?Q?2VtljqEJdvQCeXtGTN4wFzON21q4u7gDQjZ8xgKItwuPxZz22jusqbOqOSA3?=
- =?us-ascii?Q?+bYxQV/vaQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80e45027-ea87-44b7-1ff7-08da279ce277
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 15:53:19.7791
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7BLCQ00Sa8Nazr1NwL6j7Sb0LvexgOpP1vNrnLPmymsLpaVjcybOcOfZu1K24+RM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6292
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220120162520.570782-1-valentin.schneider@arm.com>
+ <93a20759600c05b6d9e4359a1517c88e06b44834.camel@fb.com> <20220422110903.GW2731@worktop.programming.kicks-ass.net>
+ <056e9bb0d0e3fc20572d42db7386face1d0665d6.camel@fb.com> <CAADnVQKsah4aka-LJ+X+5XHHESKbbw36D8fXTLqcYp2io3PN_w@mail.gmail.com>
+ <YmflVPQlwpiBuxRc@hirez.programming.kicks-ass.net> <20220426140959.op6u5m7id57aq7yc@wubuntu>
+In-Reply-To: <20220426140959.op6u5m7id57aq7yc@wubuntu>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 26 Apr 2022 08:54:17 -0700
+Message-ID: <CAEf4BzaoL5HVc8U16kz7m--RiPhBwuLt8ZGZppwfxV85AXXrcw@mail.gmail.com>
+Subject: Re: [PATCH] sched/tracing: append prev_state to tp args instead
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "legion@kernel.org" <legion@kernel.org>,
+        "adharmap@quicinc.com" <adharmap@quicinc.com>,
+        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
+        "ed.tsai@mediatek.com" <ed.tsai@mediatek.com>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:58:59AM +0000, Wang, Zhi A wrote:
-> Hi folks:
-> 
-> Here is the pull of gvt-next which fixs the compilation error when i915 debug
-> is open after the GVT-g refactor patches.
-> 
-> Thanks so much for the efforts.
-> 
-> Thanks,
-> Zhi.
-> 
-> The following changes since commit 2917f53113be3b7a0f374e02cebe6d6b749366b5:
-> 
->   vfio/mdev: Remove mdev drvdata (2022-04-21 07:36:56 -0400)
-> 
-> are available in the Git repository at:
-> 
->   https://github.com/intel/gvt-linux tags/gvt-next-2022-04-26
-> 
-> for you to fetch changes up to 2da299cee780ea797b3f72558687868072cf5eb5:
-> 
->   drm/i915/gvt: Add missing export of symbols. (2022-04-25 18:03:04 -0400)
-> 
-> gvt-next-2022-04-26
-> 
-> - Add two missing exports of symbols when i915 debug is enabled.
-> 
-> Zhi Wang (1):
->       drm/i915/gvt: Add missing export of symbols.
-> 
->  drivers/gpu/drm/i915/intel_gvt.c | 2 ++
->  1 file changed, 2 insertions(+)
+On Tue, Apr 26, 2022 at 7:10 AM Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> On 04/26/22 14:28, Peter Zijlstra wrote:
+> > On Fri, Apr 22, 2022 at 11:30:12AM -0700, Alexei Starovoitov wrote:
+> > > On Fri, Apr 22, 2022 at 10:22 AM Delyan Kratunov <delyank@fb.com> wrote:
+> > > >
+> > > > On Fri, 2022-04-22 at 13:09 +0200, Peter Zijlstra wrote:
+> > > > > And on the other hand; those users need to be fixed anyway, right?
+> > > > > Accessing prev->__state is equally broken.
+> > > >
+> > > > The users that access prev->__state would most likely have to be fixed, for sure.
+> > > >
+> > > > However, not all users access prev->__state. `offcputime` for example just takes a
+> > > > stack trace and associates it with the switched out task. This kind of user
+> > > > would continue working with the proposed patch.
+> > > >
+> > > > > If bpf wants to ride on them, it needs to suffer the pain of doing so.
+> > > >
+> > > > Sure, I'm just advocating for a fairly trivial patch to avoid some of the suffering,
+> > > > hopefully without being a burden to development. If that's not the case, then it's a
+> > > > clear no-go.
+> > >
+> > >
+> > > Namhyung just sent this patch set:
+> > > https://patchwork.kernel.org/project/netdevbpf/patch/20220422053401.208207-3-namhyung@kernel.org/
+> >
+> > That has:
+> >
+> > + * recently task_struct->state renamed to __state so it made an incompatible
+> > + * change.
+> >
+> > git tells me:
+> >
+> >   2f064a59a11f ("sched: Change task_struct::state")
+> >
+> > is almost a year old by now. That don't qualify as recently in my book.
+> > That says that 'old kernels used to call this...'.
+> >
+> > > to add off-cpu profiling to perf.
+> > > It also hooks into sched_switch tracepoint.
+> > > Notice it deals with state->__state rename just fine.
+> >
+> > So I don't speak BPF much; it always takes me more time to make bpf work
+> > than to just hack up the kernel, which makes it hard to get motivated.
+> >
+> > However, it was not just a rename, state changed type too, which is why I
+> > did the rename, to make sure all users would get a compile fail and
+> > could adjust.
+> >
+> > If you're silently making it work by frobbing the name, you loose that.
+> >
+> > Specifically, task_struct::state used to be 'volatile long', while
+> > task_struct::__state is 'unsigned int'. As such, any user must now be
+> > very careful to use READ_ONCE(). I don't see that happening with just
+> > frobbing the name.
+> >
+> > Additinoally, by shrinking the field, I suppose BE systems get to keep
+> > the pieces?
+> >
+> > > But it will have a hard time without this patch
+> > > until we add all the extra CO-RE features to detect
+> > > and automatically adjust bpf progs when tracepoint
+> > > arguments order changed.
+> >
+> > Could be me, but silently making it work sounds like fail :/ There's a
+> > reason code changes, users need to adapt, not silently pretend stuff is
+> > as before.
+> >
+> > How will you know you need to fix your tool?
+>
+> If libbpf doesn't fail, then yeah it's a big problem. I wonder how users of
+> kprobe who I suppose are more prone to this kind of problems have been coping.
 
-This still has another compile problem:
+See my reply to Peter. libbpf can't know user's intent to fail this
+automatically, in general. In some cases when it can it does
+accommodate this automatically. In other cases it provides instruments
+for user to handle this (bpf_core_field_size(),
+BPF_CORE_READ_BITFIELD(), etc).
 
-ERROR: modpost: "intel_runtime_pm_put" [vmlinux] is a static EXPORT_SYMBOL_GPL
+But in the end no one eliminated the need for testing your application
+for correctness. Tracing programs do break on kernel changes and BPF
+users do adapt to them. Sometimes adapting is easy (like state ->
+__state transition), sometimes it's much more involved (like this
+argument order change).
 
-Because:
-
-#if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
-void intel_runtime_pm_put(struct intel_runtime_pm *rpm, intel_wakeref_t wref);
-#else
-static inline void
-intel_runtime_pm_put(struct intel_runtime_pm *rpm, intel_wakeref_t wref)
-{
-        intel_runtime_pm_put_unchecked(rpm);
-}
-#endif
-
-Looks like it happens if CONFIG_DRM_I915_DEBUG_RUNTIME_PM=n
-
-I think you probably want to #ifdef the export in the same way:
-
---- a/drivers/gpu/drm/i915/intel_gvt.c
-+++ b/drivers/gpu/drm/i915/intel_gvt.c
-@@ -309,7 +309,9 @@ EXPORT_SYMBOL_NS_GPL(__intel_context_do_pin, I915_GVT);
- EXPORT_SYMBOL_NS_GPL(__intel_context_do_unpin, I915_GVT);
- EXPORT_SYMBOL_NS_GPL(intel_ring_begin, I915_GVT);
- EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_get, I915_GVT);
-+#if IS_ENABLED(CONFIG_DRM_I915_DEBUG_RUNTIME_PM)
- EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_put, I915_GVT);
-+#endif
- EXPORT_SYMBOL_NS_GPL(intel_runtime_pm_put_unchecked, I915_GVT);
- EXPORT_SYMBOL_NS_GPL(intel_uncore_forcewake_for_reg, I915_GVT);
- EXPORT_SYMBOL_NS_GPL(intel_uncore_forcewake_get, I915_GVT);
-
-Jason
+>
+> >
+> > > We will do it eventually, of course.
+> > > There will be additional work in llvm, libbpf, kernel, etc.
+> > > But for now I think it would be good to land Delyan's patch
+> > > to avoid unnecessary pain to all the users.
+> > >
+> > > Peter, do you mind?
+> >
+> > I suppose I can help out this time, but I really don't want to set a
+> > precedent for these things. Broken is broken.
+> >
+> > The down-side for me is that the argument order no longer makes any
+> > sense.
+>
+> I'm intending to backport fa2c3254d7cf to 5.10 and 5.15 but waiting for
+> a Tested-by. If you take this one, then it'll need to be backported too.
+>
+> Cheers
+>
+> --
+> Qais Yousef

@@ -2,115 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AFF50FFE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4386650FF96
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351387AbiDZODv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S1351185AbiDZN4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351375AbiDZODs (ORCPT
+        with ESMTP id S1345563AbiDZNz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:03:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBC41A82C;
-        Tue, 26 Apr 2022 07:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650981634; x=1682517634;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cAoqrdeOsrq5KtUjQou6zsgNtf+NljDbb1uC4qNAX4I=;
-  b=EKRG4Rs6rByl/BCPkLHuPQ3gwMyImthUV5swwUBzOyghtaZ7KJ2RjULR
-   Y/00oTXml/7KcWCSAnahE4r7lVEdS00h8xwDKTBRtoi/ampnTrSNLdUxG
-   0fpcaQ21MDgm7eMY2+biuDzna/nRcobegXGdJfQ3dPG4KMhuLkA8R1nmv
-   Ls3Y9LoCeRXUnJKUSx1lFho0HhTNOOS4hYj1gX/3f5e2WQs7/OYXNgTUC
-   815Y/gzZmrm6JujvrI+KycyL041Hrw8yFIs+7bTRc847urLz4AAFgdjXM
-   0o3UiV2P6nvquwskOe2K8JMGux/GN/RttIap+S+haBnRfLYz9+e/8d7qc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265390910"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="265390910"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 07:00:29 -0700
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="558322013"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 07:00:23 -0700
-Date:   Tue, 26 Apr 2022 22:00:18 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
-Subject: Re: [PATCH v8 6/9] KVM: x86: lapic: don't allow to change APIC ID
- unconditionally
-Message-ID: <20220426140013.GA11796@gao-cwp>
-References: <20220411090447.5928-1-guang.zeng@intel.com>
- <20220411090447.5928-7-guang.zeng@intel.com>
- <YlmDtC73u/AouMsu@google.com>
- <080d6ced254e56dbad2910447f81c5ea976fc419.camel@redhat.com>
- <6475522c58aec5db3ee0a5ccd3230c63a2f013a9.camel@redhat.com>
+        Tue, 26 Apr 2022 09:55:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A4A1353A6;
+        Tue, 26 Apr 2022 06:52:47 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Knjwn153Cz1JBly;
+        Tue, 26 Apr 2022 21:51:53 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
+ 2022 21:52:45 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yebin10@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>,
+        <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH v2] ext4: fix race condition between ext4_write and ext4_convert_inline_data
+Date:   Tue, 26 Apr 2022 22:06:58 +0800
+Message-ID: <20220426140658.1046700-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6475522c58aec5db3ee0a5ccd3230c63a2f013a9.camel@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Palo, Sean, Any update?
->
->After thinking more about this, I actualy think I will do something
->different, something that actually was proposed here, and I was against it:
->
->
->1. I will add new inhibit APICV_INHIBIT_REASON_RO_SETTINGS, which will be set
->first time any vCPU touches apic id and/or apic base because why not...
->
->That will take care of non nested case cleanly, and will take care of IPIv
->for now (as long as it does't support nesting).
+Hulk Robot reported a BUG_ON:
+ ==================================================================
+ EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
+ block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
+ kernel BUG at fs/ext4/ext4_jbd2.c:53!
+ invalid opcode: 0000 [#1] SMP KASAN PTI
+ CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
+ RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
+ RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
+ [...]
+ Call Trace:
+  ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
+  generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
+  ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
+  ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
+  do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
+  do_iter_write+0x107/0x430 fs/read_write.c:861
+  vfs_writev fs/read_write.c:934 [inline]
+  do_pwritev+0x1e5/0x380 fs/read_write.c:1031
+ [...]
+ ==================================================================
 
-Yes. This works well with intel IPIv.
+Above issue may happen as follows:
+           cpu1                     cpu2
+__________________________|__________________________
+do_pwritev
+ vfs_writev
+  do_iter_write
+   ext4_file_write_iter
+    ext4_buffered_write_iter
+     generic_perform_write
+      ext4_da_write_begin
+                           vfs_fallocate
+                            ext4_fallocate
+                             ext4_convert_inline_data
+                              ext4_convert_inline_data_nolock
+                               ext4_destroy_inline_data_nolock
+                                clear EXT4_STATE_MAY_INLINE_DATA
+                               ext4_map_blocks
+                                ext4_ext_map_blocks
+                                 ext4_mb_new_blocks
+                                  ext4_mb_regular_allocator
+                                   ext4_mb_good_group_nolock
+                                    ext4_mb_init_group
+                                     ext4_mb_init_cache
+                                      ext4_mb_generate_buddy  --> error
+       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+                                ext4_restore_inline_data
+                                 set EXT4_STATE_MAY_INLINE_DATA
+       ext4_block_write_begin
+      ext4_da_write_end
+       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+       ext4_write_inline_data_end
+        handle=NULL
+        ext4_journal_stop(handle)
+         __ext4_journal_stop
+          ext4_put_nojournal(handle)
+           ref_cnt = (unsigned long)handle
+           BUG_ON(ref_cnt == 0)  ---> BUG_ON
 
->
->2. For my nested AVIC, I will do 2 things:
->
->   a. My code never reads L1 apic ids, and always uses vcpu_id, thus
->      in theory, if I just ignore the problem, and the guest changes apic ids,
->      the nested AVIC will just keep on using initial apic ids, thus there is  no danger
->      of CVE like issue if the guest tries to change theses ids in the 'right' time.
->
->   b. on each nested vm entry I'll just check that apic id is not changed from the default,
->      if AVIC is enabled for the nested guest.
->
->      if so the nested entry will fail (best with kvm_vm_bugged) to get attention of
->      the user, but I can just fail it with standard vm exit reason of 0xFFFFFFFF.
+The lock held by ext4_convert_inline_data is xattr_sem, but the lock
+held by generic_perform_write is i_rwsem. Therefore, the two locks can
+be concurrent. To solve above issue, we just add inode_lock in
+ext4_convert_inline_data.
 
-For sake of simplicity, I prefer to make APIC ID read-only for VMs that
-supports (nested) AVIC or IPIv (KVM can check guest CPUID/MSR to know
-this). When guest attempts to change read-only APIC ID, KVM can raise an
-internal error, saying KVM cannot emulate this action. To get rid of such
-an error, users should launch the VM with nested AVIC/IPIv disabled or
-upgrade VM kernel to not change APIC ID.
+Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
+Cc: stable@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	Increase the range of the inode_lock.
+
+ fs/ext4/inline.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index 9c076262770d..0518edcfc0e1 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -2002,6 +2002,7 @@ int ext4_convert_inline_data(struct inode *inode)
+ 	handle_t *handle;
+ 	struct ext4_iloc iloc;
+ 
++	inode_lock(inode);
+ 	if (!ext4_has_inline_data(inode)) {
+ 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+ 		return 0;
+@@ -2024,6 +2025,7 @@ int ext4_convert_inline_data(struct inode *inode)
+ 	if (ext4_has_inline_data(inode))
+ 		error = ext4_convert_inline_data_nolock(handle, inode, &iloc);
+ 	ext4_write_unlock_xattr(inode, &no_expand);
++	inode_unlock(inode);
+ 	ext4_journal_stop(handle);
+ out_free:
+ 	brelse(iloc.bh);
+-- 
+2.31.1
+

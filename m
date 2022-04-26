@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D80B51063C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27089510639
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345446AbiDZSGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S1353593AbiDZSGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353052AbiDZSGE (ORCPT
+        with ESMTP id S1353590AbiDZSGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:06:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FF527CE6;
-        Tue, 26 Apr 2022 11:02:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BA90B820F9;
-        Tue, 26 Apr 2022 18:02:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B48C385A4;
-        Tue, 26 Apr 2022 18:02:49 +0000 (UTC)
-Date:   Tue, 26 Apr 2022 19:02:46 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
-Message-ID: <YmgzxsrrMlCDYsWp@arm.com>
-References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
- <20220414115720.1887-6-thunder.leizhen@huawei.com>
+        Tue, 26 Apr 2022 14:06:16 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0630427CF6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:08 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id l9-20020a056830268900b006054381dd35so13598671otu.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gtLzLFLewrXQHTJbVImCCDYJrynuyEbueRUS2ATV0U0=;
+        b=AjrbAV8MeBG1TftKOze/fLl/wHpmQ8Rhq7SRWYnnk6QRX7wdha+JlYrp5O7tTdMzUy
+         WqrpM6F+WjaAZwYZpZ2mDTaX4XSFH+e3nzwvRyoi/VCGEQvOsNrYC0eoZTvSLoRw7PaA
+         6QSCdsZtqCQElCl5khit+DPERPtXiRGy1ElHY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gtLzLFLewrXQHTJbVImCCDYJrynuyEbueRUS2ATV0U0=;
+        b=mxIXcJ/ZkJ2V+LO5v7rjzWda/IAIiis4e/tPtzDxTy27b49gJIq40ekHqxvlEOf4mV
+         dQvkHiRjp/z9QlW4lsUdPTtQ4mw9ncZo0UJKsCXHzSU2pok2TUfgoSpyfwDkAYxYdAcV
+         +3r6VFKB4DT2xxkKmmIYK/6pEyEZ5hveg4U4FLmFBQOAFRbTQr+2WDKE2GarCrj/4CMR
+         NKbrp1GQqZP5/zLCecCx0iMPoKbF8cexl96fppPF6wkwofC8XUS/rM35BiaFFlO5y85U
+         L7+NDY1i9+tfV0cQFhtZb/GlpkCM4hun0XadJKzk+vFK6O+2oTwRGT10xE8yua4dsixy
+         mWtg==
+X-Gm-Message-State: AOAM530s/y47Csp5FBZiYXyg3OBhH1rTMOpCq52Dgl2NtnQmr9iFwWan
+        AsBR7pojW3s4UdyZV9IjlZBeGZH94Fc+pQ==
+X-Google-Smtp-Source: ABdhPJy83NMN7nOzhxCWnef7CUTp6YJ8Z3hAH75BE4DKR87rV/78cvj30amXCEorIvhpquOQk8Oh9A==
+X-Received: by 2002:a9d:384:0:b0:604:a8b6:eb85 with SMTP id f4-20020a9d0384000000b00604a8b6eb85mr8488259otf.140.1650996186537;
+        Tue, 26 Apr 2022 11:03:06 -0700 (PDT)
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
+        by smtp.gmail.com with ESMTPSA id d21-20020a4a3c15000000b0033364bde9besm5934109ooa.32.2022.04.26.11.03.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 11:03:04 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id m22-20020a056820051600b0033a41079257so3531974ooj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:03:04 -0700 (PDT)
+X-Received: by 2002:a4a:141:0:b0:353:d3c1:8aa with SMTP id 62-20020a4a0141000000b00353d3c108aamr8682441oor.64.1650996184119;
+ Tue, 26 Apr 2022 11:03:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414115720.1887-6-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1650964532-9379-1-git-send-email-quic_spathi@quicinc.com>
+In-Reply-To: <1650964532-9379-1-git-send-email-quic_spathi@quicinc.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Tue, 26 Apr 2022 11:02:52 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXMkzrqkDdb=y4DpK5Ot=XFtj6aAv7-mSBoGP5rDJZanpA@mail.gmail.com>
+Message-ID: <CA+ASDXMkzrqkDdb=y4DpK5Ot=XFtj6aAv7-mSBoGP5rDJZanpA@mail.gmail.com>
+Subject: Re: [PATCH V1] mmc: core: Select HS mode in device first and then in
+ the host
+To:     Srinivasarao Pathipati <quic_spathi@quicinc.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, avri.altman@wdc.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        vbadigan@codeaurora.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        s.shtylyov@omp.ru, merez@codeaurora.org,
+        wsa+renesas@sang-engineering.com, sayalil@codeaurora.org,
+        linux-mmc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Kishor Krishna Bhat <quic_kishkris@quicinc.com>,
+        kamasali <quic_kamasali@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 07:57:16PM +0800, Zhen Lei wrote:
->  /*
->   * reserve_crashkernel() - reserves memory for crash kernel
->   *
->   * This function reserves memory area given in "crashkernel=" kernel command
->   * line parameter. The memory reserved is used by dump capture kernel when
->   * primary kernel is crashing.
-> + *
-> + * NOTE: Reservation of crashkernel,low is special since its existence
-> + * is not independent, need rely on the existence of crashkernel,high.
-> + * Here, four cases of crashkernel low memory reservation are summarized:
-> + * 1) crashkernel=Y,low is specified explicitly, the size of crashkernel low
-> + *    memory takes Y;
-> + * 2) crashkernel=,low is not given, while crashkernel=,high is specified,
-> + *    take the default crashkernel low memory size;
-> + * 3) crashkernel=X is specified, while fallback to get a memory region
-> + *    in high memory, take the default crashkernel low memory size;
-> + * 4) crashkernel='invalid value',low is specified, failed the whole
-> + *    crashkernel reservation and bail out.
+Hi,
 
-Following the x86 behaviour made sense when we were tried to get that
-code generic. Now that we moved the logic under arch/arm64, we can
-diverge a bit. I lost track of the original (v1/v2) proposal but I
-wonder whether we still need the fallback to high for crashkernel=Y.
-Maybe simpler, no fallbacks:
+On Tue, Apr 26, 2022 at 2:16 AM Srinivasarao Pathipati
+<quic_spathi@quicinc.com> wrote:
+>
+> From: Sayali Lokhande <sayalil@codeaurora.org>
+>
+> While switching from hs400 to hs200 mode, high speed mode
+> timing should be selected in the device before changing the
+> clock frequency in the host. But current implementation,
+> (mmc_hs400_to_hs200) first updates the frequency in the host
+> and then updates mode in the device. This is a spec violation.
+> Hence update the sequence to comply with the spec.
 
-	crashkernel=Y - keep the current behaviour, ignore high,low
-	crashkernel=Y,high - allocate above ZONE_DMA
-	crashkernel=Y,low - allocate within ZONE_DMA
+I'm a bit new to interpreting eMMC specs, but are you sure this is a
+violation? In JESD84-B51, I see:
 
-From your proposal, the difference is that the Y,high option won't
-have any default ZONE_DMA fallback, one would have to explicitly pass
-the Y,low option if needed.
+"The bus frequency can be changed at any time (under the restrictions
+of maximum data transfer frequency, defined by the Device, and the
+identification frequency defined by the standard document)."
 
-Just a thought, maybe it makes the code simpler. But I'm open to
-discussion if there are good arguments for the proposed (x86-like)
-behaviour. One argument could be for crashkernel=Y to fall back to high
-if distros don't want to bother with high/low settings.
+I think that suggests we can lower the host clock first, and then
+lower the device timing. And (according to my limited knowledge) that
+makes sense too: the device timing is a "maximum" (to some extent) and
+we're free to run the host bus somewhat slower.
 
-Another thing I may have asked in the past, what happens if we run a new
-kernel with these patches with old kexec user tools. I suspect the
-crashkernel=Y with the fallback to high will confuse the tools.
+And on the flip side: it sounds like you may be _introducing_ a spec
+violation (that we'll be running the host faster than the device
+timing, briefly)?
 
-BTW, please separate the NO_BLOCK_MAPPINGS optimisations from the
-crashkernel above 4G. Let's get the crashkernel reservations sorted
-first, it's been around for too long.
+Apologies if I'm off base. But you did CC me ;)
 
-Thanks.
-
--- 
-Catalin
+Regards,
+Brian

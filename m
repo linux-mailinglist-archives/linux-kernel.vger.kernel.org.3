@@ -2,243 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0245108C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A5F5108CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353835AbiDZTSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S1349391AbiDZTUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243674AbiDZTSb (ORCPT
+        with ESMTP id S1345128AbiDZTUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:18:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28F935F91
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:15:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BFE823A;
-        Tue, 26 Apr 2022 12:15:19 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 412C53F774;
-        Tue, 26 Apr 2022 12:15:17 -0700 (PDT)
-Message-ID: <2244a7f7-9894-06a0-ea51-edf84f6caada@arm.com>
-Date:   Tue, 26 Apr 2022 21:14:58 +0200
+        Tue, 26 Apr 2022 15:20:01 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8B45675F;
+        Tue, 26 Apr 2022 12:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651000613; x=1682536613;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=p2S48UJ81kg1tmJHs4pMqo36+aoLLTEsyi1TLGaToGo=;
+  b=X483dY8Pt3+KB4ZFLwYMlgxyO5KuMFTcjuH/H3CDxP8lTRo0/BrCYAa2
+   G2poOeKSGGDqng8vn8z2habrBpnKSN/b1eVvLingXB/uezva7vrLCwYqF
+   wVv00mI43ewxEaaNyeT+f9OS1SfzUqGb0+4sd4Sxge4lc8jVF5fEFT98g
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 26 Apr 2022 12:16:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 12:16:51 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Apr 2022 12:16:51 -0700
+Received: from [10.111.160.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
+ 2022 12:16:47 -0700
+Message-ID: <fa49384c-76a5-6686-7d4d-cf11f3e98c75@quicinc.com>
+Date:   Tue, 26 Apr 2022 12:16:45 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] arm64: add SCHED_CLUSTER's dependency on ACPI
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 2/2] drm/probe-helper: For DP, add 640x480 if all other
+ modes are bad
 Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        =?UTF-8?B?546L5pOO?= <wangqing@vivo.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "peterz@infradead.org" <peterz@infradead.org>
-References: <1650855303-91388-1-git-send-email-wangqing@vivo.com>
- <20220425100635.ig4dxvlflglfagpx@bogus>
- <SL2PR06MB308217E24459AB685FBF6FD2BDF89@SL2PR06MB3082.apcprd06.prod.outlook.com>
- <20220425165946.qb6xilgmjahdh4pa@bogus>
- <SL2PR06MB3082544EFB9C6F518A2EBF04BDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
- <20220426064053.h4rwvcdvmwxj2hmt@bogus>
- <SL2PR06MB3082F1AEE684E638C1B5F226BDFB9@SL2PR06MB3082.apcprd06.prod.outlook.com>
- <20220426132511.7zo4w42kauvrq26n@bogus>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220426132511.7zo4w42kauvrq26n@bogus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Douglas Anderson <dianders@chromium.org>,
+        <dri-devel@lists.freedesktop.org>
+CC:     <dmitry.baryshkov@linaro.org>, <swboyd@chromium.org>,
+        <quic_aravindh@quicinc.com>, <robdclark@gmail.com>,
+        <quic_khsieh@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <quic_sbillaka@quicinc.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        <linux-kernel@vger.kernel.org>
+References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+ <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 15:25, Sudeep Holla wrote:
-> On Tue, Apr 26, 2022 at 06:52:34AM +0000, 王擎 wrote:
->>
->>>>>>>> From: Wang Qing <wangqing@vivo.com>
->>>>>>>>
->>>>>>>> cluster sched_domain configured by cpu_topology[].cluster_sibling, 
->>>>>>>> which is set by cluster_id, cluster_id can only get from ACPI.
->>>>>>>>
->>>>>>>> If the system does not enable ACPI, cluster_id is always -1, even enable
->>>>>>>> SCHED_CLUSTER is invalid, this is misleading. 
->>>>>>>>
->>>>>>>> So we add SCHED_CLUSTER's dependency on ACPI here.
->>>>>>>>
->>>>>>>
->>>>>>> Any reason why this can't be extended to support DT based systems via
->>>>>>> cpu-map in the device tree. IMO we almost have everything w.r.t topology
->>>>>>> in DT and no reason to deviate this feature between ACPI and DT.
->>>>>>>
->>>>>> That's the problem, we parse out "cluster" info according to the
->>>>>> description in cpu-map, but do assign it to package_id, which used to
->>>>>> configure the MC sched domain, not cluster sched domain.
->>>>>>
->>>>>
->>>>> Right, we haven't updated the code after updating the bindings to match
->>>>> ACPI sockets which are the physical package boundaries. Clusters are not
->>>>> the physical boundaries and the current topology code is not 100% aligned
->>>>> with the bindings after Commit 849b384f92bc ("Documentation: DT: arm: add
->>>>> support for sockets defining package boundaries")
->>>>
->>>> I see, but this commit is a long time ago, why hasn't it been used widely.
->>>> Maybe I can help about it if you need.
->>>>
->>>
->>> I assume no one cared or had a requirement for the same.
->>
->> It took me a while to find the root cause why enabling SCHED_CLUSTER
->> didn't work.
->>
->> We should add SCHED_CLUSTER's dependency before implementation.
->> Otherwise, everyone who doesn't have ACPI but use SCHED_CLUSTER 
->> will have this problem.
->>
+Hi Doug
+
+One minor comment below.
+
+But otherwise, looking at this change this should work for us acc to me.
+
+We will test this out with our equipment and then provide R-b.
+
+Thanks
+
+Abhinav
+On 4/26/2022 11:46 AM, Douglas Anderson wrote:
+> As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
+> that all detachable sinks shall support 640x480 @60Hz as a fail safe
+> mode.
 > 
-> I am fine with that or mark it broken for DT, but ideally I wouldn't
-> want to create unnecessary dependency on ACPI or DT when both supports
-> the feature.
+> A DP compliance test expected us to utilize the above fact when all
+> modes it presented to the DP source were not achievable. It presented
+> only modes that would be achievable with more lanes and/or higher
+> speeds than we had available and expected that when we couldn't do
+> that then we'd fall back to 640x480 even though it didn't advertise
+> this size.
+> 
+> In order to pass the compliance test (and also support any users who
+> might fall into a similar situation with their display), we need to
+> add 640x480 into the list of modes. However, we don't want to add
+> 640x480 all the time. Despite the fact that the DP spec says all sinks
+> _shall support_ 640x480, they're not guaranteed to support it
+> _well_. Continuing to read the spec you can see that the display is
+> not required to really treat 640x480 equal to all the other modes. It
+> doesn't need to scale or anything--just display the pixels somehow for
+> failsafe purposes. It should also be noted that it's not hard to find
+> a display hooked up via DisplayPort that _doesn't_ support 640x480 at
+> all. The HP ZR30w screen I'm sitting in front of has a native DP port
+> and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
+> display via a DP to HDMI adapter and that screen definitely doesn't
+> support 640x480.
+> 
+> As a compromise solution, let's only add the 640x480 mode if:
+> * We're on DP.
+> * All other modes have been pruned.
+> 
+> This acknowledges that 640x480 might not be the best mode to use but,
+> since sinks are _supposed_ to support it, we will at least fall back
+> to it if there's nothing else.
+> 
+> Note that we _don't_ add higher resolution modes like 1024x768 in this
+> case. We only add those modes for a failed EDID read where we have no
+> idea what's going on. In the case where we've pruned all modes then
+> instead we only want 640x480 which is the only defined "Fail Safe"
+> resolution.
+> 
+> This patch originated in response to Kuogee Hsieh's patch [1].
+> 
+> [1] https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+>   drivers/gpu/drm/drm_probe_helper.c | 26 +++++++++++++++++++++-----
+>   1 file changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+> index 819225629010..90cd46cbfec1 100644
+> --- a/drivers/gpu/drm/drm_probe_helper.c
+> +++ b/drivers/gpu/drm/drm_probe_helper.c
+> @@ -476,7 +476,6 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+>   	const struct drm_connector_helper_funcs *connector_funcs =
+>   		connector->helper_private;
+>   	int count = 0, ret;
+> -	bool verbose_prune = true;
+>   	enum drm_connector_status old_status;
+>   	struct drm_modeset_acquire_ctx ctx;
+>   
+> @@ -556,8 +555,8 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+>   		DRM_DEBUG_KMS("[CONNECTOR:%d:%s] disconnected\n",
+>   			connector->base.id, connector->name);
+>   		drm_connector_update_edid_property(connector, NULL);
+> -		verbose_prune = false;
+> -		goto prune;
+> +		drm_mode_prune_invalid(dev, &connector->modes, false);
+> +		goto exit;
+>   	}
+>   
+>   	count = (*connector_funcs->get_modes)(connector);
+> @@ -580,9 +579,26 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
+>   		}
+>   	}
+>   
+> -prune:
+> -	drm_mode_prune_invalid(dev, &connector->modes, verbose_prune);
+> +	drm_mode_prune_invalid(dev, &connector->modes, true);
+>   
+> +	/*
+> +	 * Displayport spec section 5.2.1.2 ("Video Timing Format") says that
+> +	 * all detachable sinks shall support 640x480 @60Hz as a fail safe
+> +	 * mode. If all modes were pruned, perhaps because they need more
+> +	 * lanes or a higher pixel clock than available, at least try to add
+> +	 * in 640x480.
+> +	 */
+> +	if (list_empty(&connector->modes) &&
+> +	    connector->connector_type == DRM_MODE_CONNECTOR_DisplayPort) {
+> +		count = drm_add_modes_noedid(connector, 640, 480);
+> +		if (_drm_helper_update_and_validate(connector, maxX, maxY, &ctx)) {
+> +			drm_modeset_backoff(&ctx);
+> +			goto retry;
 
-IMHO trying to introduce SCHED_COMPLEX for DT next to the linux-wide
-available SCHED_CLUSTER (used only for ACPI right now) is the wrong way.
+Do we need another retry here? This will again repeat everything from
+get_modes().
+The fact that we are hitting this code is because we have already tried 
+that and this is already a second-pass. So I think another retry isnt 
+needed?
 
-_If_ asymmetric sub-clustering of CPUs underneath LLC (L3) makes any
-sense on ARMv9 single DSU systems like:
-
-      .---------------.
-CPU   |0 1 2 3 4 5 6 7|
-      +---------------+
-uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
-      +---------------+
-  L2  |   |   | | | | |
-      +---------------+
-  L3  |<--         -->|
-      +---------------+
-      |<-- cluster -->|
-      +---------------+
-      |<--   DSU   -->|
-      '---------------'
-
-(and I'm not saying here it does!) then the existing SCHED_CLUSTER
-should be used in DT as well. Since it provides exactly the same
-functionality for the task scheduler no matter whether it's setup from
-ACPI or DT.
-
-parse_cluster() -> parse_core() should be changed to be able to decode
-both id's (package_id and cluster_id) in this case.
-
-DT's cpu_map would have to be changed to code 2 level setups.
-
-For a system like the one above it should look like:
-
-                cpu-map {
-                        cluster0 {
-                                foo0 {
-                                        core0 {
-                                                cpu = <&cpu0>;
-                                        };
-                                        core1 {
-                                                cpu = <&cpu1>;
-                                        };
-                                };
-                                foo2 {
-                                        core2 {
-                                                cpu = <&cpu2>;
-                                        };
-                                        core3 {
-                                                cpu = <&cpu3>;
-                                        };
-                                };
-                        };
-                        cluster1 {
-                                core0 {
-                                        cpu = <&cpu4>;
-                                };
-                                core1 {
-                                        cpu = <&cpu5>;
-                                };
-                                core2 {
-                                        cpu = <&cpu6>;
-                                };
-                        };
-                        cluster2 {
-                                core0 {
-                                        cpu = <&cpu7>;
-                                };
-                        };
-                };
-
-I pimped my Hikey 960 to look like one of those Armv9 4-3-1 systems with
-L2-complexes on the LITTLES and I get:
-
-# cat /sys/kernel/debug/sched/domains/cpu*/domain*/name
-CLS
-MC
-DIE
-
-CLS
-MC
-DIE
-
-CLS
-MC
-DIE
-
-CLS
-MC
-DIE
-
-MC
-DIE
-
-MC
-DIE
-
-MC
-DIE
-
-DIE
-
-cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd]
-
-cpu0 0
-domain0 03
-domain1 0f
-domain2 ff
-cpu1 0
-domain0 03
-domain1 0f
-domain2 ff
-cpu2 0
-domain0 0c
-domain1 0f
-domain2 ff
-cpu3 0
-domain0 0c
-domain1 0f
-domain2 ff
-cpu4 0
-domain0 70
-domain1 ff
-cpu5 0
-domain0 70
-domain1 ff
-cpu6 0
-domain0 70
-domain1 ff
-cpu7 0
-domain0 ff
-
-Like I mentioned earlier, I'm not sure if this additional complexity
-makes sense on mobile systems running EAS (since only CFS load-balancing
-on little CPUs would be affected).
-
-But my hunch is that this setup is what you want for your system. If we
-could agree on this one, that would already be some progress to see the
-entire story here.
+> +		}
+> +		drm_mode_prune_invalid(dev, &connector->modes, true);
+> +	}
+> +
+> +exit:
+>   	drm_modeset_drop_locks(&ctx);
+>   	drm_modeset_acquire_fini(&ctx);
+>   

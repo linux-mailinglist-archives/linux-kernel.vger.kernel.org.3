@@ -2,137 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7D3510989
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF270510986
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354449AbiDZUKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S1354439AbiDZUKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243501AbiDZUKj (ORCPT
+        with ESMTP id S240601AbiDZUKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:10:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183C61597A5;
-        Tue, 26 Apr 2022 13:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651003651; x=1682539651;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zGuFDjNTHvUl3ZoFvwU6qHLIRIwg444s3wCh+hFkgzE=;
-  b=gzLIdFPIeXruBaGbSidqEtthUZv9uyg8StccuBWDRGwd4vRYprOuCHsB
-   N+gctOH264b8FNHFuhOi0Rh8I0c76kVo2UUMm/YmV9s6UYv/eeSekG3TA
-   qRdYm+31d1ljy0q3r/ewlIA3AvB6Jq9+EhKB3huo1rO+KIUDzWrqP9cH2
-   lgLQEzcyxhVHe6wiOmCycvBKznG4378E7Cn9ITQE2mMnRUiEfuJbGsLY7
-   CXODeB8TRPCyJGpbN2P7QxxZaQjdstkC3OU7o7JQ2wdZAtP6jamhV/gGr
-   c+4K+/MYiu1d4sPTcFvEgaDcJMUFaUE/wqu+opbn4SnHczlgOjlWsTZFQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="247636161"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="247636161"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 13:07:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="874925758"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2022 13:07:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njRT4-0003vm-9d;
-        Tue, 26 Apr 2022 20:07:26 +0000
-Date:   Wed, 27 Apr 2022 04:07:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivasarao Pathipati <quic_spathi@quicinc.com>,
-        ulf.hansson@linaro.org, avri.altman@wdc.com,
-        linus.walleij@linaro.org, shawn.lin@rock-chips.com,
-        merez@codeaurora.org, s.shtylyov@omp.ru, huijin.park@samsung.com,
-        briannorris@chromium.org, digetx@gmail.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Veerabhadrarao Badiganti <vbadigan@codeaurora.org>,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kamasali <quic_kamasali@quicinc.com>,
-        Srinivasarao Pathipati <quic_spathi@quicinc.com>
-Subject: Re: [PATCH V1] mmc: core: Add partial initialization support
-Message-ID: <202204270458.l6hjhnD4-lkp@intel.com>
-References: <1650963852-4173-1-git-send-email-quic_spathi@quicinc.com>
+        Tue, 26 Apr 2022 16:10:07 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FCA1594BF
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:06:57 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so3129207pju.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XYZny63Olqdg6ug0jPC0IStZPSKLknIicaEuGEKKAA8=;
+        b=veF8bU8ZuY4+7L01tnkAqnvnIS105JuIyOIc9jEjB2riL9bUNDkywylOlBB9cZ7alg
+         aYHfxFvJn/kPoxsuT4AF/LLIK37UKhDWs5cY8ow5krN42QIvpj+xt9duHH8PwI2F6gMU
+         WQNP0iIq3XlbYhsY04ueU6IU+1pHigr2y5mgo0RAt/awM0logn4wMW/2p7/HXGVAfc0h
+         apCilHYRzF4k/lZh700CN/IGer3dnVLBvkSecCKJLRMjHJHpnseTtm+Fpe4DQkDeHo5X
+         FO7ctl/cV8eo6zuLvl5g6miMsFcEhLNamYo7SY42XDD/fA73pG7gaRa1v1HURA99tO4c
+         rc9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XYZny63Olqdg6ug0jPC0IStZPSKLknIicaEuGEKKAA8=;
+        b=IH1/guTD7x6H8ZUHNXYE+NHn7upJVINMKOAXuZaBnc9RmRERcGIByIh9CDOUc+QlfE
+         mJWUZafDLjLYnvisW6gJ3+nf2/533RdBcoEub1iLxUFAKgQRLTqKNFqKKo1YgBUeM9Ah
+         a/jMVbRfZ2L8T+se2job5pgpAwBi+9Fo5GKDjVL+ywCX9bvH5yNz8ieCsOeX2gcR3ONa
+         FANw/zMgMYVQpY2GotmEh9kXBLKOs27AyiqB4ubiG3l/O4IGaq36AZo1K7kQQ2S968l8
+         zA0NmeiKpQ0utWFkXFQUUrCA0nbzDyjf9SkgqsYDc9hGxydGguyswmg7hyiVH0OsGxni
+         LeWw==
+X-Gm-Message-State: AOAM5334sen22qJSonLWxe4bp1oGep7Z5uVqcibKi91YCGsP3ZcBxZJX
+        TyoNZR7OlrPFRxytpPy8jzvQFazbQGq0ig==
+X-Google-Smtp-Source: ABdhPJwGioRwBB+ZEDr03SJUKywxCI2kMXKUwm+5HMD5y9n1SXucNrhUMQ5dzztjaBew2CyWlubH0A==
+X-Received: by 2002:a17:902:b941:b0:14d:af72:3f23 with SMTP id h1-20020a170902b94100b0014daf723f23mr25933783pls.6.1651003617294;
+        Tue, 26 Apr 2022 13:06:57 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:9bcd:e060:b370:70d8])
+        by smtp.gmail.com with ESMTPSA id o5-20020a62f905000000b0050b5b5efa47sm16203839pfh.191.2022.04.26.13.06.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:06:56 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>
+Subject: [PATCH v3 0/2]  soc: ti: wkup_m3_ipc: support i2c voltage scaling
+Date:   Tue, 26 Apr 2022 13:07:40 -0700
+Message-Id: <20220426200741.712842-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650963852-4173-1-git-send-email-quic_spathi@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivasarao,
+Allow loading of a binary file containing i2c scaling sequences to be
+provided to the Cortex-M3 firmware in order to properly scale voltage
+rails on the PMIC during low power modes like DeepSleep0.
 
-Thank you for the patch! Perhaps something to improve:
+The 'firmware-name' property which contains the name of a binary file.
+    
+A prerequisite for this series is:
+[PATCH v3 0/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
+https://lore.kernel.org/linux-devicetree/20220414192722.2978837-1-dfustini@baylibre.com/
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on ulf-hansson-mmc-mirror/next v5.18-rc4 next-20220426]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Changes from v2:
+- correct the name of the property in the commit message of the bindings
+  patch to firmware-name instead of the old ti,scale-data-fw property
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Srinivasarao-Pathipati/mmc-core-Add-partial-initialization-support/20220426-175124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d615b5416f8a1afeb82d13b238f8152c572d59c0
-config: nios2-randconfig-m031-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270458.l6hjhnD4-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
+Changes from v1:
+- change 'ti,scale-data-fw' to 'firmware-name'
+- add 'firmware-name' property to the examples
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Dave Gerlach (2):
+  dt-bindings: wkup-m3-ipc: Add firmware-name property
+  soc: ti: wkup_m3_ipc: Add support for i2c voltage scaling
 
-smatch warnings:
-drivers/mmc/core/mmc.c:2168 _mmc_suspend() warn: inconsistent indenting
-
-vim +2168 drivers/mmc/core/mmc.c
-
-  2146	
-  2147	static int _mmc_suspend(struct mmc_host *host, bool is_suspend)
-  2148	{
-  2149		int err = 0;
-  2150		unsigned int notify_type = is_suspend ? EXT_CSD_POWER_OFF_SHORT :
-  2151						EXT_CSD_POWER_OFF_LONG;
-  2152	
-  2153		mmc_claim_host(host);
-  2154	
-  2155		if (mmc_card_suspended(host->card))
-  2156			goto out;
-  2157	
-  2158		err = _mmc_flush_cache(host);
-  2159		if (err)
-  2160			goto out;
-  2161	
-  2162		if (mmc_can_poweroff_notify(host->card) &&
-  2163		    ((host->caps2 & MMC_CAP2_FULL_PWR_CYCLE) || !is_suspend ||
-  2164		     (host->caps2 & MMC_CAP2_FULL_PWR_CYCLE_IN_SUSPEND)))
-  2165			err = mmc_poweroff_notify(host->card, notify_type);
-  2166		if (mmc_can_sleepawake(host)) {
-  2167			memcpy(&host->cached_ios, &host->ios, sizeof(host->cached_ios));
-> 2168			 mmc_cache_card_ext_csd(host);
-  2169		}
-  2170		if (mmc_can_sleep(host->card))
-  2171			err = mmc_sleepawake(host, true);
-  2172		else if (!mmc_host_is_spi(host))
-  2173			err = mmc_deselect_cards(host);
-  2174	
-  2175		if (!err) {
-  2176			mmc_power_off(host);
-  2177			mmc_card_set_suspended(host->card);
-  2178		}
-  2179	out:
-  2180		mmc_release_host(host);
-  2181		return err;
-  2182	}
-  2183	
+ .../bindings/soc/ti/wkup-m3-ipc.yaml          | 12 +++
+ drivers/soc/ti/wkup_m3_ipc.c                  | 93 ++++++++++++++++++-
+ include/linux/wkup_m3_ipc.h                   |  9 ++
+ 3 files changed, 113 insertions(+), 1 deletion(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

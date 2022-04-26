@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E210510924
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6ACC510928
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354247AbiDZTgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S1354285AbiDZThV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344071AbiDZTg1 (ORCPT
+        with ESMTP id S237070AbiDZThS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:36:27 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2102.outbound.protection.outlook.com [40.107.113.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EE61A0B3C;
-        Tue, 26 Apr 2022 12:33:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=goNG3eWdCP38x9xWREnafnWXhVkdhTc7oM2cvB7VvJksQ/Vp/0iulUYGfSte8SJX+R4qgwe9XAgqoNLsmEgj7gmy7/kDFJLGwbBhgMsVLD9YuVuLxFG2LKpxnRKgGVGSm2BAQq/i6cHOTqlZA7LRf/cxm3yFNjfrG4uXBY045YW+hcXCjWOe8DHT1OR/t6OQzIX6YFgMFtOUG/7E4XUOQ6Q2kvu3HgXZLyvP/7TibagPkSDRe8pyeg8QSgpcjW3D57y7s4Nfb8tmUP31HZvpjXK7vEbmz2uP8wbBziZKga9dFRF3gK8BjVp3VetTt3ubFRz5UoqH4MBYc5qTGBAwbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TvBaYEsh8ZhxyX3AhrmYg1CxLrZsnAhbVJx9PzFKR48=;
- b=kLywC2Wy/qjPw/uAFJ1NOrZkLvHj7SQyjYALMSgK7MYw5c4VpgtoaAg4ddf/Sfm3tYu/UYq3WMUxwU8TUUdunkLQokt5Vogtd+im/f7uBdKGUjkE8/N2lbbwXHXY4I5XqSjhtnoAYqmFyl+gH85sZSRpabmrNnBV3+dtiuv/B3cSLmIWOCX5AvTCpWcxqBx4fIxX8ENXU01HMORFwjs+8uMzySLoHJ8OfkPy25tz8rJ4Wb8IeE3aBZNFTsp0fTSe/lpDDNdFkJaHz8121wkfJB0ftT49GvHch8Luy+U12npp6PRsVMM1EqbRsmyvaRJb1nKFOuAl+jyCdsnNCgNf0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TvBaYEsh8ZhxyX3AhrmYg1CxLrZsnAhbVJx9PzFKR48=;
- b=ArrMlyik5JYh6nUjmaKZLUQe/GS7DAzvnqk4XH2vxaeuyEI7dsCIX2f50sePWeS6s324QF1Q54yldas59wAhX28qMKkyzdIwFREnT4bsdYTFWLDmj5P0DO3xX2wDgBGKcunu9IlVBk57g9T731izSp8Gg8kl+o7wn/JHDiCQ5jg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from OS3PR01MB6593.jpnprd01.prod.outlook.com (2603:1096:604:101::7)
- by TYAPR01MB6475.jpnprd01.prod.outlook.com (2603:1096:400:a2::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
- 2022 19:33:17 +0000
-Received: from OS3PR01MB6593.jpnprd01.prod.outlook.com
- ([fe80::a07c:4b38:65f3:6663]) by OS3PR01MB6593.jpnprd01.prod.outlook.com
- ([fe80::a07c:4b38:65f3:6663%8]) with mapi id 15.20.5186.023; Tue, 26 Apr 2022
- 19:33:17 +0000
-From:   Min Li <min.li.xe@renesas.com>
-To:     richardcochran@gmail.com, lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Min Li <min.li.xe@renesas.com>
-Subject: [PATCH net 2/2] ptp: ptp_clockmatrix: return -EBUSY if phase pull-in is in progress
-Date:   Tue, 26 Apr 2022 15:32:54 -0400
-Message-Id: <1651001574-32457-2-git-send-email-min.li.xe@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
-References: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BN8PR04CA0044.namprd04.prod.outlook.com
- (2603:10b6:408:d4::18) To OS3PR01MB6593.jpnprd01.prod.outlook.com
- (2603:1096:604:101::7)
+        Tue, 26 Apr 2022 15:37:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F5D1A1D8C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:34:06 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so1125366wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HdglKt24ulKLWyX0LsILT516ozly9pUWvxRymOVkqGI=;
+        b=D9ihhOYCzfSq6PHe75gU3OheUI3W9iH7N3JyrClUp6au/zHYy/RjIQ+jFjvmiw3I9o
+         uU7o/2RsJb0OvTjqDki2JlEYfTgugeTS76dPfA3259nEGmWh42vCXrHa6/5V7/2johUN
+         +QaWhuSllkcd3/yIwhHQc0dL4v+1u2xt3a0+X1HNRFS3ddbQntWN7TwV79pXNZP4tjWY
+         q9oDYLmA6GmRpsibkQ3SJm8PJsmjU0ySPtDfndPYlEEAFXG22uifNwS/0VoF2zqchWyZ
+         YeBZmMfcWMAOzmPfGY/zoiJYCO20nTusS/8yz+ffjxEMcUZ2DMbLY7V/1myPVVFJC4B1
+         X+8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HdglKt24ulKLWyX0LsILT516ozly9pUWvxRymOVkqGI=;
+        b=3Ud0rT6lC0W7i4enK3z4UWOs2eoPtwqnxR2jvZ8roD1XlxgGNfzN5TRJVsBFqZGZVC
+         EXIPcm8x8mSmfUwjKQ6H3QN7cQZCL9bFiDj9CPBWnwWnkG7nSx3w+bywk3/FEhA6awjB
+         xsCMDuhE96JAh6lhpLCf4dXwMvMDw8khBAKlNZ9TUPJlnq8eo+e5e1ItGamgRDW2OeTb
+         kj6rcgbTAiwxz+W3PbAfJCkFJ1AZXyy8KMl6D2K8GNL3G5v15WMtbe0SpJBT/x4dlaGS
+         9ftc3y3pSYh/0WQX4JNHZxQW5Z3ckUVidk2LYrDiNRRdM2OEkQLBuzQhkpUZfUs1v7cn
+         YDjw==
+X-Gm-Message-State: AOAM531Y13KSBbsP/+8TUW5pO41VBjx5bGbMsVgmh16e96gbv53VdRMF
+        RaDFP49eNkJ8Ty+XEopmqMnqAmC68jL617wUSxDyhA==
+X-Google-Smtp-Source: ABdhPJxfcXYYWDf1qEw77YopXVh9hGlDN3ohweZv6hh7qehoXVg7JxTIKYy8mWq0Lcp0jdkpbGhhqEQXGML1k1dn1J0=
+X-Received: by 2002:a05:600c:4e46:b0:393:f5fb:b3df with SMTP id
+ e6-20020a05600c4e4600b00393f5fbb3dfmr4865915wmq.80.1651001644438; Tue, 26 Apr
+ 2022 12:34:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bf6d953c-3a44-49d7-043c-08da27bb9cb0
-X-MS-TrafficTypeDiagnostic: TYAPR01MB6475:EE_
-X-Microsoft-Antispam-PRVS: <TYAPR01MB6475D7E11E3C67893E95FCEBBAFB9@TYAPR01MB6475.jpnprd01.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T3aBPA80m1NuQYbkjWFrFK8JF1sHI4EB7baqCE0UiGGxlqYTZ83BCbSfwU8voqgaLASGr0rJIJeoWv2/kZyzrjEJzHxO4vPuL1ViVdFtLpAnFVy126n8nOhWfRQPdrwWBCnT2ZtWN4TtwWhjwNYdTb2jJvmQ3n7GoOFSpvGnFj6RH/kTM4+8RLVIBjtFhdQgpkVU7NPDjGDigNBWOvAj8o35n4u4kfBZlL68JHf3ay5WgTd+7mMfAP1ktFvv6vHS18hzWzt4D5mU6apZHtny/FQ4EGFneZp27xttiHQ+KpBmGyz8tpxanhwKqt7bgiusVh/D9AfJR8fIOxFUNZyknPIs1pb5faafsWHDX6xUCQvvWpz7XtIdkL+z62flPpWgb/4+suXphCyW5+B+/JXs+oy8qAjby1vBjqMlMeBPJb9M/nEFlPRjcWM6p9JCzWpgrat/JpkkKiBjbvIOcPrPN76SxQv94X2zNV7jKz0TElt/mncn74RUBvJ+9TrwcXNWUa3mdbvhlsx5jFBE4He/nzzK7wRjNI8KnjfN6rIkpJXWtC5kmPkkWPtaUqWacXLJaTPfkuIYCHdz8R1T7ZU/giFN/noiaHG2IGRMyt0KBS/ApIkJheg1yplMV7N4/8QSXlaaBmN9DUv0Uauv+oiMwlHk/ERakzDBVbgZ/7Zrzck+fU4eXPA5OBQHT2EmkumBwY9m+9gu7uSYdSIsdmYKoA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB6593.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(8936002)(36756003)(83380400001)(5660300002)(26005)(4326008)(66476007)(186003)(8676002)(2906002)(107886003)(2616005)(38350700002)(52116002)(86362001)(508600001)(38100700002)(6486002)(316002)(66556008)(66946007)(6666004)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vi14cMr3BzCoyndOahln+9w9Gq9NDiLzLaR+JlVkEH4vSmEXyYE99KHjvlqm?=
- =?us-ascii?Q?2N6vZtMh2rxgZzGQlK9yDx29re5z4KabLMk4ESEiyvsfPkv2XObTUnTQAAXJ?=
- =?us-ascii?Q?wzfWcOBTy3zqVDcw4bymobi60+y7l6LTzSlcEK+j19zD7k/p9jVcVfh1KIJI?=
- =?us-ascii?Q?5YfsBHjhf6aEZmRa3L5KNi2wNb4P8+XHih1lyvjqVHVWMg+Y5bHPSPgoq1OI?=
- =?us-ascii?Q?XZ5AZg3hggySX2XNDo23iTWny5qNNCT0iR+SP+axjQDc+P/EAkdMLUeQOhrK?=
- =?us-ascii?Q?C9SsPJOfShOyNbObhuV1dWMktKAuhdxb9q2Sul9DAt84bJu3hzGPUCMRCRG8?=
- =?us-ascii?Q?3ABb7uZCIvnWiQHPU4OPGtBzGhwGz3tywa5DZr/D9y/6FHk83vDPrWjRDyFq?=
- =?us-ascii?Q?iWY7w7XFjBmGgryU9uvSwbL0MU0Tk/p8O1AKqfPfgtjc9jig+/MFjm2DKcQ7?=
- =?us-ascii?Q?6wl+f5KjTFgCxVY6QqVpk922GpqcYp1id+PsHFBpxG654YBXA5RUsqJqsDiu?=
- =?us-ascii?Q?/GjRZ8lv66RDBOQ2FlYKfXE6mQQxOyZVv2x7Dt+dMCthmPqsEpQt9gusJ1a+?=
- =?us-ascii?Q?xEHjIt1AtPgTiMbxVK4WLY89s7IVLn4PL5b2xV4PXJm3wx1Y3xMlTZEcNNnV?=
- =?us-ascii?Q?YCePCG05/eGQn6SsTjeEmsfTW3evntIOK+KRcuCn3Qq7UOroIkImS7uTbwmi?=
- =?us-ascii?Q?XXLacDp5Sak/5eDLs5PZ1RsEoHJ7LJG2Vbzpy4yquZxaAO7GmTABqLQidY4Z?=
- =?us-ascii?Q?Swe3KScVPdDnm14XmHnlUFll3naao4WrhVdCht4jkB3myW4yKA4yBJuUCZaT?=
- =?us-ascii?Q?bn9hXdumOmQhCUIsvIapLBppijTvUT5SuLQbGJMwSA3kb0MV6M49IBPsDld1?=
- =?us-ascii?Q?44MesMsw5kv2mPPi/UbVi1PPkp199aDQc2jal+O6GS/ATjMAoWm+llx7gtXv?=
- =?us-ascii?Q?5bQXE1qoB2WWNdMPoa4jXr/BcVVi+Jsr98tsxJp2UDN0eKdjTTPb23R7b+b+?=
- =?us-ascii?Q?XDjEvtG2/TAVcEDhghBU7xoJfYhlvwzOq0I0F/UV0UhGWZTMxbpE7VSxayvV?=
- =?us-ascii?Q?cgWV+JGpzWMu7wMkA0MG7RAf7vo9ZpbpchG37AQlaAJCQkaUAz3AxxEUn8VE?=
- =?us-ascii?Q?o5IAFvDpGr8zyTdq+o3UqKyV1yaSVLSCwZqyKv3YkT6xXHOvg/9u2nMTIr6Y?=
- =?us-ascii?Q?SiN+qMR0DRBZRBLrO9gazyr3Dx4u+Ce5XnBUvIIan05IRfwfvdoR2BT7W3XY?=
- =?us-ascii?Q?RmclORAvU+E9vjWCBvg7WwIxnoghiW2lxsbP7R4Rmwo4H2WjakLk8vrfjuzT?=
- =?us-ascii?Q?Y57EQaDkDx47yuw1GBed3csTUlk0O21BeAGUjN2jtBJR9ZQHEyRAIglNAXCk?=
- =?us-ascii?Q?F+2rJ5x2GcQr9NaxsMHoCQSZU1bTnQ089UhTQUB2OMQNnAXH2YIOisFkx2o1?=
- =?us-ascii?Q?2asQsgWbem2FDPPqhrVVnc73/y1YyGX5n3fdM8Qzncu7uvBIp8K2X/eWsW5j?=
- =?us-ascii?Q?q3KbowZqfztCC2/s/cU8S/UgI3j8D79VOekNyx2qKJXbytDa98jYXSF7Jsjg?=
- =?us-ascii?Q?zUhBnC0oIqz27A9WcVInlK2C36k5l7EM5IPeWNje1J5NMGvEKyDZkKPw/ebL?=
- =?us-ascii?Q?GJ8QRpG7WZ1i3kQcw5nyNf+gIpDNt9jF/1ryQptn0RWksxySSoQXdBQnzC7L?=
- =?us-ascii?Q?vTkDlhwR3Lp1ghNXNms/vl68gxE6V506wrYYg0UpkU6S4YIHFWtuJuwy5Nag?=
- =?us-ascii?Q?UtZjcOxMVx1LHAfhLY8KIfcTvljlPbk=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf6d953c-3a44-49d7-043c-08da27bb9cb0
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB6593.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 19:33:16.9995
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Vtlu/xuETKlNImON371VpXEtK04JRF0Z/jxbOztzh/oqZpjV5umAiOWzQVtXrUnVCzogm+JRnDcBOlmf1DjNhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB6475
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20220426053904.3684293-1-yosryahmed@google.com>
+ <20220426053904.3684293-5-yosryahmed@google.com> <874k2falbk.wl-maz@kernel.org>
+In-Reply-To: <874k2falbk.wl-maz@kernel.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 26 Apr 2022 12:33:28 -0700
+Message-ID: <CAJD7tkZ-mrhCXoR0ZONjJ7kuAuzWED8Dcjkw6mv812-3uSo_Cg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] KVM: arm64/mmu: count KVM page table pages in
+ pagetable stats
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        cgroups@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,85 +93,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Also removes PEROUT_ENABLE_OUTPUT_MASK
+Thanks a lot for taking the time to look at this!
 
-Signed-off-by: Min Li <min.li.xe@renesas.com>
----
- drivers/ptp/ptp_clockmatrix.c | 32 ++------------------------------
- drivers/ptp/ptp_clockmatrix.h |  2 --
- 2 files changed, 2 insertions(+), 32 deletions(-)
+On Tue, Apr 26, 2022 at 8:58 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Tue, 26 Apr 2022 06:39:02 +0100,
+> Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > Count the pages used by KVM in arm64 for page tables in pagetable stats.
+> >
+> > Account pages allocated for PTEs in pgtable init functions and
+> > kvm_set_table_pte().
+> >
+> > Since most page table pages are freed using put_page(), add a helper
+> > function put_pte_page() that checks if this is the last ref for a pte
+> > page before putting it, and unaccounts stats accordingly.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  arch/arm64/kernel/image-vars.h |  3 ++
+> >  arch/arm64/kvm/hyp/pgtable.c   | 50 +++++++++++++++++++++-------------
+> >  2 files changed, 34 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
+> > index 241c86b67d01..25bf058714f6 100644
+> > --- a/arch/arm64/kernel/image-vars.h
+> > +++ b/arch/arm64/kernel/image-vars.h
+> > @@ -143,6 +143,9 @@ KVM_NVHE_ALIAS(__hyp_rodata_end);
+> >  /* pKVM static key */
+> >  KVM_NVHE_ALIAS(kvm_protected_mode_initialized);
+> >
+> > +/* Called by kvm_account_pgtable_pages() to update pagetable stats */
+> > +KVM_NVHE_ALIAS(__mod_lruvec_page_state);
+>
+> This cannot be right. It means that this function will be called
+> directly from the EL2 code when in protected mode, and will result in
+> extreme fireworks.  There is no way you can call core kernel stuff
+> like this from this context.
+>
+> Please do not add random symbols to this list just for the sake of
+> being able to link the kernel.
 
-diff --git a/drivers/ptp/ptp_clockmatrix.c b/drivers/ptp/ptp_clockmatrix.c
-index 0e8e698..7f324fd 100644
---- a/drivers/ptp/ptp_clockmatrix.c
-+++ b/drivers/ptp/ptp_clockmatrix.c
-@@ -1363,43 +1363,15 @@ static int idtcm_output_enable(struct idtcm_channel *channel,
- 	return idtcm_write(idtcm, (u16)base, OUT_CTRL_1, &val, sizeof(val));
- }
- 
--static int idtcm_output_mask_enable(struct idtcm_channel *channel,
--				    bool enable)
--{
--	u16 mask;
--	int err;
--	u8 outn;
--
--	mask = channel->output_mask;
--	outn = 0;
--
--	while (mask) {
--		if (mask & 0x1) {
--			err = idtcm_output_enable(channel, enable, outn);
--			if (err)
--				return err;
--		}
--
--		mask >>= 0x1;
--		outn++;
--	}
--
--	return 0;
--}
--
- static int idtcm_perout_enable(struct idtcm_channel *channel,
- 			       struct ptp_perout_request *perout,
- 			       bool enable)
- {
- 	struct idtcm *idtcm = channel->idtcm;
--	unsigned int flags = perout->flags;
- 	struct timespec64 ts = {0, 0};
- 	int err;
- 
--	if (flags == PEROUT_ENABLE_OUTPUT_MASK)
--		err = idtcm_output_mask_enable(channel, enable);
--	else
--		err = idtcm_output_enable(channel, enable, perout->index);
-+	err = idtcm_output_enable(channel, enable, perout->index);
- 
- 	if (err) {
- 		dev_err(idtcm->dev, "Unable to set output enable");
-@@ -1903,7 +1875,7 @@ static int idtcm_adjtime(struct ptp_clock_info *ptp, s64 delta)
- 	int err;
- 
- 	if (channel->phase_pull_in == true)
--		return 0;
-+		return -EBUSY;
- 
- 	mutex_lock(idtcm->lock);
- 
-diff --git a/drivers/ptp/ptp_clockmatrix.h b/drivers/ptp/ptp_clockmatrix.h
-index 4379650..bf1e49409 100644
---- a/drivers/ptp/ptp_clockmatrix.h
-+++ b/drivers/ptp/ptp_clockmatrix.h
-@@ -54,8 +54,6 @@
- #define LOCK_TIMEOUT_MS			(2000)
- #define LOCK_POLL_INTERVAL_MS		(10)
- 
--#define PEROUT_ENABLE_OUTPUT_MASK	(0xdeadbeef)
--
- #define IDTCM_MAX_WRITE_COUNT		(512)
- 
- #define PHASE_PULL_IN_MAX_PPB		(144000)
--- 
-2.7.4
+Excuse my ignorance, this is my first time touching kvm code. Thanks a
+lot for pointing this out.
 
+>
+> > +
+> >  #endif /* CONFIG_KVM */
+> >
+> >  #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index 2cb3867eb7c2..53e13c3313e9 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -152,6 +152,7 @@ static void kvm_set_table_pte(kvm_pte_t *ptep, kvm_pte_t *childp,
+> >
+> >       WARN_ON(kvm_pte_valid(old));
+> >       smp_store_release(ptep, pte);
+> > +     kvm_account_pgtable_pages((void *)childp, +1);
+>
+> Why the + sign?
+
+I am following conventions in other existing stat accounting hooks
+(e.g. kvm_mod_used_mmu_pages(vcpu->kvm, +1) call in
+arch/x86/kvm/mmu/mmu.c), but I can certainly remove it if you think
+this is better.
+
+>
+> >  }
+> >
+> >  static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+> > @@ -326,6 +327,14 @@ int kvm_pgtable_get_leaf(struct kvm_pgtable *pgt, u64 addr,
+> >       return ret;
+> >  }
+> >
+> > +static void put_pte_page(kvm_pte_t *ptep, struct kvm_pgtable_mm_ops *mm_ops)
+> > +{
+> > +     /* If this is the last page ref, decrement pagetable stats first. */
+> > +     if (!mm_ops->page_count || mm_ops->page_count(ptep) == 1)
+> > +             kvm_account_pgtable_pages((void *)ptep, -1);
+> > +     mm_ops->put_page(ptep);
+> > +}
+> > +
+> >  struct hyp_map_data {
+> >       u64                             phys;
+> >       kvm_pte_t                       attr;
+> > @@ -488,10 +497,10 @@ static int hyp_unmap_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+> >
+> >       dsb(ish);
+> >       isb();
+> > -     mm_ops->put_page(ptep);
+> > +     put_pte_page(ptep, mm_ops);
+> >
+> >       if (childp)
+> > -             mm_ops->put_page(childp);
+> > +             put_pte_page(childp, mm_ops);
+> >
+> >       return 0;
+> >  }
+> > @@ -522,6 +531,7 @@ int kvm_pgtable_hyp_init(struct kvm_pgtable *pgt, u32 va_bits,
+> >       pgt->pgd = (kvm_pte_t *)mm_ops->zalloc_page(NULL);
+> >       if (!pgt->pgd)
+> >               return -ENOMEM;
+> > +     kvm_account_pgtable_pages((void *)pgt->pgd, +1);
+> >
+> >       pgt->ia_bits            = va_bits;
+> >       pgt->start_level        = KVM_PGTABLE_MAX_LEVELS - levels;
+> > @@ -541,10 +551,10 @@ static int hyp_free_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
+> >       if (!kvm_pte_valid(pte))
+> >               return 0;
+> >
+> > -     mm_ops->put_page(ptep);
+> > +     put_pte_page(ptep, mm_ops);
+> >
+> >       if (kvm_pte_table(pte, level))
+> > -             mm_ops->put_page(kvm_pte_follow(pte, mm_ops));
+> > +             put_pte_page(kvm_pte_follow(pte, mm_ops), mm_ops);
+>
+> OK, I see the pattern. I don't think this workable as such. I'd rather
+> the callbacks themselves (put_page, zalloc_page*) call into the
+> accounting code when it makes sense, rather than spreading the
+> complexity and having to special case the protected case.
+>
+
+This makes sense. I am working on moving calls to
+kvm_account_pgtable_pages to callbacks in mmu.c in the next version
+(stage2_memcache_zalloc_page, kvm_host_put_page, etc).
+
+
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

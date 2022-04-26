@@ -2,81 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857FE50F25E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEAF50F262
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343889AbiDZH30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S1343894AbiDZH3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245744AbiDZH3X (ORCPT
+        with ESMTP id S235444AbiDZH3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:29:23 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C90CBC26;
-        Tue, 26 Apr 2022 00:26:16 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d14so11992137qtw.5;
-        Tue, 26 Apr 2022 00:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yrE6/KgEQNtC6XhgTjcpn5HXwreHk+7lNm/A5Ylaexs=;
-        b=MMOnHZll5VuB7PYy60Iysska6rZSf2D5NP4yAERa9ryhogeag6xqgyUSPbZb7bCeBK
-         zbPmDR7lIYjgg0DO3yolNQW7Ogg07Z4TUMtWNedywiiUIx0jk/eaAtWyItzk/sxt+yed
-         4SRUSei87FUEuymIi/ktCyE2nuDCXqfJKyc2XXy53P716xjN7yKfexduMdDMsZiv4XEP
-         9vcmY1/aI/VVw/kLKbTXqZ/peUEm3mEvblkK9ttYNhxNT2YqT5nsVou+xnqP34ArGUw9
-         qdsC5WFU/Wo9Z2mZHsrZOr8pR4Yq89/4smKLo3zo3V05YP0f/XOv861ZQoTPtID7L4E2
-         0n8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yrE6/KgEQNtC6XhgTjcpn5HXwreHk+7lNm/A5Ylaexs=;
-        b=fSKD7JcW5cVIdrEHfLMpSbTQfrkWSmSwzlffPlAqzKZ5pxy0Ha5ZpaihMVxtSTT3g8
-         OnU93mAC+Bijv6vP3xjjtTATCW4LPbXHkZowH+rELfFu9vophRx7KmTayZQ9Vs9ItRu/
-         +5i5pvdss6lZo6ezs5ypaglut/E3N4PzrIkCiqEg/yHxGhLBmrhIGMe+tsjLH/e3QByf
-         H+T6KmUOExppkUPKr23s6YNB1zY1ftlBjrUiDWzmbRO97G1a/PSX4i6K0gF6UaTiQett
-         a2aNXuRH9UEke1E6Tlqe5grEPGQK/0uDw8WVljRtdNAEOIebHtm3oZlb7OQyiiSZYiwb
-         n1mg==
-X-Gm-Message-State: AOAM532rfP9m2l3xBjks+LrwTBTAxBQvuyvik0/zrL2widLvVGyE4vTc
-        O7XtbTe5K3dyN3mJ1XpTVncdT4hvZ/QD
-X-Google-Smtp-Source: ABdhPJzHLhUkK0sbZJ+wWcmBR8J6P7yXgVyWf0qd7Fln2lMBrwIRo1ub7hHecfTdSVOahkHtW1uTeA==
-X-Received: by 2002:a05:622a:34d:b0:2f3:44d9:41a8 with SMTP id r13-20020a05622a034d00b002f344d941a8mr14286734qtw.217.1650957975499;
-        Tue, 26 Apr 2022 00:26:15 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id f127-20020a379c85000000b0069c921d6576sm6308392qke.76.2022.04.26.00.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 00:26:14 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 03:26:12 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, hch@lst.de, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-input@vger.kernel.org,
-        rostedt@goodmis.org
-Subject: Re: [PATCH v2 8/8] mm: Centralize & improve oom reporting in
- show_mem.c
-Message-ID: <20220426072612.7wgpzndigr4ybrh4@moria.home.lan>
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
- <20220421234837.3629927-14-kent.overstreet@gmail.com>
- <YmKma/1WUvjjbcO4@dhcp22.suse.cz>
- <YmLFPJTyoE4GYWp4@carbon>
- <20220422234820.plusgyixgybebfmi@moria.home.lan>
- <YmNH/fh8OwTJ6ASC@carbon>
- <20220423004607.q4lbz2mplkhlbyhm@moria.home.lan>
- <YmZpuikkgWeF2RPt@dhcp22.suse.cz>
- <20220425152811.pg2dse4zybpnpaa4@moria.home.lan>
- <Ymeck8AaTwaB29KS@dhcp22.suse.cz>
+        Tue, 26 Apr 2022 03:29:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18AC32181
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:26:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4D6E23A;
+        Tue, 26 Apr 2022 00:26:43 -0700 (PDT)
+Received: from [10.57.12.108] (unknown [10.57.12.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 55D3B3F73B;
+        Tue, 26 Apr 2022 00:26:42 -0700 (PDT)
+Message-ID: <61483e12-c2a2-059a-c157-aea23b8a2f4e@arm.com>
+Date:   Tue, 26 Apr 2022 08:26:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ymeck8AaTwaB29KS@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] arch_topology: Trace the update thermal pressure
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
+        rafael@kernel.org, rostedt@goodmis.org, mingo@redhat.com
+References: <20220425135317.5880-1-lukasz.luba@arm.com>
+ <YmasYv5xHH7EbXXn@kroah.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <YmasYv5xHH7EbXXn@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,39 +47,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 09:17:39AM +0200, Michal Hocko wrote:
-> I have already touched on that but let me reiterate. Allocation context
-> called from the oom path will have an unbound access to memory reserves.
-> Those are a last resort emergency pools of memory that are not available
-> normally and there are areas which really depend on them to make a
-> further progress to release the memory pressure.
+
+
+On 4/25/22 15:12, Greg KH wrote:
+> On Mon, Apr 25, 2022 at 02:53:17PM +0100, Lukasz Luba wrote:
+>> Add trace event to capture the moment of the call for updating the thermal
+>> pressure value. It's helpful to investigate how often those events occurs
+>> in a system dealing with throttling. This trace event is needed since the
+>> old 'cdev_update' might not be used by some drivers. Also, the new trace
+>> event shows capacity value, not a cooling state.
 > 
-> Swap over NFS would be one such example. If some other code path messes
-> with those reserves the swap IO path could fail with all sorts of
-> fallouts.
+> Wait, why are thermal events not going through the thermal system so
+> that thermal_cdev_update() would catch them?  Don't work around broken
+> systems, force them to use the correct apis.
+
+In some platforms the thermal is controlled in FW. In Arm we have
+recently implemented a logic of our Intelligent Power Allocation
+(kernel governor gov_power_allocator.c) (and a bit more) in our
+reference FW [1]. So kernel would not controlling thermal.
+There is another platform which does similar [2]. As you can see
+in that driver, there is no cooling device created, it just handles
+the notification about reduced frequency as an IRQ. Then it
+populates this information to the task scheduler using thermal
+pressure mechanism. Thanks to that the scheduler can avoid mistakes
+in the tasks placement and not put more that that CPU real capacity.
+
+For Arm FW thermal, I can make it, since we don't have it yet.
+We are in the middle of internal design of this FW/kernel glue and I
+haven't sent the kernel patches yet. I will follow your recommendation.
+
+For the driver [2] I have no device, so I cannot change it and prove the
+new works safely.
+
+But we need this trace event to discuss the design for RT task scheduler
+and impact of thermal pressure decaying delays. We have Android systems
+which suffer the RT issues known for years (like audio apps) and we
+started to tackle them. That was the motivation for this new trace
+event - a helper which everyone can 'just use' in their current code
+state and provide measurements.
+
+We can ask maintainers of that driver [2] to follow your guidance and
+fix that cpufreq driver. That might require a split of the logic in
+there and a new thermal driver which would handle the part of thermal
+updates. If that is feasible, since I have heard that some platforms
+can cause a huge noise 'KHz' of those interrupt...
+If that is true, I might see the reason why someone goes lightweight way
+update-thermal-pressure-only and not via thermal cooling complexity.
+
+IMO this trace event doesn't harm the design and brings also benefit
+comparing to the 'cdev_update' trace event which only provides a state
+value: [0, n]. That state value then needs additional tools to translate
+it: state -> freq -> capacity -> thermal pressure. As you can see
+this new event just stores proper value in the trace buffer, no need
+to hassle, just 'cat' the trace file. If anyone would like to help
+us and share it's trace output, we would have everything we need.
+
+Regards,
+Lukasz
+
 > 
-> So to be really exact in my statement. You can allocate from the OOM
-> context but it is _strongly_ discouraged unless there is no other way
-> around that.
+> thanks,
 > 
-> I would even claim that the memory reclaim in general shouldn't rely on
-> memory allocations (other than mempools). If an allocation is really
-> necessary then an extra care has to prevent from complete memory
-> depletion.
+> greg k-h
 
-100% agreement with this, I've always made sure IO paths I touched were fully
-mempool-ified (some of my early work was actually for making sure bio allocation
-underneath generic_make_request() won't deadlock - previously allocated bios
-won't make forward progress and be freed due to generic_make_request() turning
-recursion into iteration, but that's all ancient history).
 
-Anyways, the reason I think this allocation is fine is it's GFP_NOWAIT and it's
-completely fine if it fails - all we lose is some diagnostics, and also it's
-released right away.
-
-But there's also no need for it to be a point of contention, the way I'm going
-with printbufs it'll be trivial to mempool-ify this if we want.
-
-Before I get back to this I'm changing the approach I'm taking with printbufs
-and first using it to clean up vsnprintf() and all the related code, which is..
-a bit of an undertaking. End result is going to be really cool though.
+[1] https://github.com/ARM-software/SCP-firmware
+[2] 
+https://elixir.bootlin.com/linux/v5.17/source/drivers/cpufreq/qcom-cpufreq-hw.c#L300

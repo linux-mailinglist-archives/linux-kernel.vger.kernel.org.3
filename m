@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDE950F60C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA84D50F754
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236092AbiDZIw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S1347788AbiDZJeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345622AbiDZIjS (ORCPT
+        with ESMTP id S1347869AbiDZJGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0572F3EA95;
-        Tue, 26 Apr 2022 01:30:31 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9948A169409;
+        Tue, 26 Apr 2022 01:46:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A71D4617E8;
-        Tue, 26 Apr 2022 08:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB169C385A4;
-        Tue, 26 Apr 2022 08:30:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD5EB81CF2;
+        Tue, 26 Apr 2022 08:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838F1C385A0;
+        Tue, 26 Apr 2022 08:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961830;
-        bh=rb+YQb/RpxOJmP1gc+oK1KQiiyTaws1zPR+KDnqVBNQ=;
+        s=korg; t=1650962784;
+        bh=9Vd9VfQI/r2lx1eeK2qA6QkTXF4Wdp/LKCeS7dSW+2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QZV3Th1UFCnrNnn3Vj+CROLq8VivixLs26Ea4H+J7YccaxDJWWOyDqYwKJEG7+8E9
-         an1mwatNhKZzGC53qFlQOAUDeAf1FxEyDIi10+jZ4k2hH+goekhLl232cIMJzX78Xs
-         i+mkM8u6CCxLnN2qO1nvTJwnpS/Fythn5s2VhUBw=
+        b=qHqQzBREIBaGwMusw5cJeYXQTpe1Ky8ONLslSpDDJiF1R23FcBLZTkG4MSSGA+UkQ
+         UWgb+CXgqxpjxfn+zA+DjDwGkHJ3YjTaKvcswYSXcNA5amukOGfGnLR1s9v2sHQZG/
+         subdC/5m0MqWB8NUzEuLVBGq6863gtlmzGx/iy4c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Zqiang <qiang1.zhang@intel.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 42/62] KVM: PPC: Fix TCE handling for VFIO
+Subject: [PATCH 5.17 087/146] irq_work: use kasan_record_aux_stack_noalloc() record callstack
 Date:   Tue, 26 Apr 2022 10:21:22 +0200
-Message-Id: <20220426081738.428966768@linuxfoundation.org>
+Message-Id: <20220426081752.504829626@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,292 +59,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kardashevskiy <aik@ozlabs.ru>
+From: Zqiang <qiang1.zhang@intel.com>
 
-[ Upstream commit 26a62b750a4e6364b0393562f66759b1494c3a01 ]
+[ Upstream commit 25934fcfb93c4687ad32fd3d062bcf03457129d4 ]
 
-The LoPAPR spec defines a guest visible IOMMU with a variable page size.
-Currently QEMU advertises 4K, 64K, 2M, 16MB pages, a Linux VM picks
-the biggest (16MB). In the case of a passed though PCI device, there is
-a hardware IOMMU which does not support all pages sizes from the above -
-P8 cannot do 2MB and P9 cannot do 16MB. So for each emulated
-16M IOMMU page we may create several smaller mappings ("TCEs") in
-the hardware IOMMU.
+On PREEMPT_RT kernel and KASAN is enabled.  the kasan_record_aux_stack()
+may call alloc_pages(), and the rt-spinlock will be acquired, if currently
+in atomic context, will trigger warning:
 
-The code wrongly uses the emulated TCE index instead of hardware TCE
-index in error handling. The problem is easier to see on POWER8 with
-multi-level TCE tables (when only the first level is preallocated)
-as hash mode uses real mode TCE hypercalls handlers.
-The kernel starts using indirect tables when VMs get bigger than 128GB
-(depends on the max page order).
-The very first real mode hcall is going to fail with H_TOO_HARD as
-in the real mode we cannot allocate memory for TCEs (we can in the virtual
-mode) but on the way out the code attempts to clear hardware TCEs using
-emulated TCE indexes which corrupts random kernel memory because
-it_offset==1<<59 is subtracted from those indexes and the resulting index
-is out of the TCE table bounds.
+  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+  in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 239, name: bootlogd
+  Preemption disabled at:
+  [<ffffffffbab1a531>] rt_mutex_slowunlock+0xa1/0x4e0
+  CPU: 3 PID: 239 Comm: bootlogd Tainted: G        W 5.17.1-rt17-yocto-preempt-rt+ #105
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+  Call Trace:
+     __might_resched.cold+0x13b/0x173
+     rt_spin_lock+0x5b/0xf0
+     get_page_from_freelist+0x20c/0x1610
+     __alloc_pages+0x25e/0x5e0
+     __stack_depot_save+0x3c0/0x4a0
+     kasan_save_stack+0x3a/0x50
+     __kasan_record_aux_stack+0xb6/0xc0
+     kasan_record_aux_stack+0xe/0x10
+     irq_work_queue_on+0x6a/0x1c0
+     pull_rt_task+0x631/0x6b0
+     do_balance_callbacks+0x56/0x80
+     __balance_callbacks+0x63/0x90
+     rt_mutex_setprio+0x349/0x880
+     rt_mutex_slowunlock+0x22a/0x4e0
+     rt_spin_unlock+0x49/0x80
+     uart_write+0x186/0x2b0
+     do_output_char+0x2e9/0x3a0
+     n_tty_write+0x306/0x800
+     file_tty_write.isra.0+0x2af/0x450
+     tty_write+0x22/0x30
+     new_sync_write+0x27c/0x3a0
+     vfs_write+0x3f7/0x5d0
+     ksys_write+0xd9/0x180
+     __x64_sys_write+0x43/0x50
+     do_syscall_64+0x44/0x90
+     entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-This fixes kvmppc_clear_tce() to use the correct TCE indexes.
+Fix it by using kasan_record_aux_stack_noalloc() to avoid the call to
+alloc_pages().
 
-While at it, this fixes TCE cache invalidation which uses emulated TCE
-indexes instead of the hardware ones. This went unnoticed as 64bit DMA
-is used these days and VMs map all RAM in one go and only then do DMA
-and this is when the TCE cache gets populated.
-
-Potentially this could slow down mapping, however normally 16MB
-emulated pages are backed by 64K hardware pages so it is one write to
-the "TCE Kill" per 256 updates which is not that bad considering the size
-of the cache (1024 TCEs or so).
-
-Fixes: ca1fc489cfa0 ("KVM: PPC: Book3S: Allow backing bigger guest IOMMU pages with smaller physical pages")
-
-Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-Tested-by: David Gibson <david@gibson.dropbear.id.au>
-Reviewed-by: Frederic Barrat <fbarrat@linux.ibm.com>
-Reviewed-by: David Gibson <david@gibson.dropbear.id.au>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220420050840.328223-1-aik@ozlabs.ru
+Link: https://lkml.kernel.org/r/20220402142555.2699582-1-qiang1.zhang@intel.com
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/book3s_64_vio.c    | 45 +++++++++++++++--------------
- arch/powerpc/kvm/book3s_64_vio_hv.c | 44 ++++++++++++++--------------
- 2 files changed, 45 insertions(+), 44 deletions(-)
+ kernel/irq_work.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kvm/book3s_64_vio.c b/arch/powerpc/kvm/book3s_64_vio.c
-index 03b947429e4d..4518a0f2d6c6 100644
---- a/arch/powerpc/kvm/book3s_64_vio.c
-+++ b/arch/powerpc/kvm/book3s_64_vio.c
-@@ -420,13 +420,19 @@ static void kvmppc_tce_put(struct kvmppc_spapr_tce_table *stt,
- 	tbl[idx % TCES_PER_PAGE] = tce;
- }
+diff --git a/kernel/irq_work.c b/kernel/irq_work.c
+index f7df715ec28e..7afa40fe5cc4 100644
+--- a/kernel/irq_work.c
++++ b/kernel/irq_work.c
+@@ -137,7 +137,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
+ 	if (!irq_work_claim(work))
+ 		return false;
  
--static void kvmppc_clear_tce(struct mm_struct *mm, struct iommu_table *tbl,
--		unsigned long entry)
-+static void kvmppc_clear_tce(struct mm_struct *mm, struct kvmppc_spapr_tce_table *stt,
-+		struct iommu_table *tbl, unsigned long entry)
- {
--	unsigned long hpa = 0;
--	enum dma_data_direction dir = DMA_NONE;
-+	unsigned long i;
-+	unsigned long subpages = 1ULL << (stt->page_shift - tbl->it_page_shift);
-+	unsigned long io_entry = entry << (stt->page_shift - tbl->it_page_shift);
-+
-+	for (i = 0; i < subpages; ++i) {
-+		unsigned long hpa = 0;
-+		enum dma_data_direction dir = DMA_NONE;
+-	kasan_record_aux_stack(work);
++	kasan_record_aux_stack_noalloc(work);
  
--	iommu_tce_xchg_no_kill(mm, tbl, entry, &hpa, &dir);
-+		iommu_tce_xchg_no_kill(mm, tbl, io_entry + i, &hpa, &dir);
-+	}
- }
- 
- static long kvmppc_tce_iommu_mapped_dec(struct kvm *kvm,
-@@ -485,6 +491,8 @@ static long kvmppc_tce_iommu_unmap(struct kvm *kvm,
- 			break;
- 	}
- 
-+	iommu_tce_kill(tbl, io_entry, subpages);
-+
- 	return ret;
- }
- 
-@@ -544,6 +552,8 @@ static long kvmppc_tce_iommu_map(struct kvm *kvm,
- 			break;
- 	}
- 
-+	iommu_tce_kill(tbl, io_entry, subpages);
-+
- 	return ret;
- }
- 
-@@ -590,10 +600,9 @@ long kvmppc_h_put_tce(struct kvm_vcpu *vcpu, unsigned long liobn,
- 			ret = kvmppc_tce_iommu_map(vcpu->kvm, stt, stit->tbl,
- 					entry, ua, dir);
- 
--		iommu_tce_kill(stit->tbl, entry, 1);
- 
- 		if (ret != H_SUCCESS) {
--			kvmppc_clear_tce(vcpu->kvm->mm, stit->tbl, entry);
-+			kvmppc_clear_tce(vcpu->kvm->mm, stt, stit->tbl, entry);
- 			goto unlock_exit;
- 		}
- 	}
-@@ -669,13 +678,13 @@ long kvmppc_h_put_tce_indirect(struct kvm_vcpu *vcpu,
- 		 */
- 		if (get_user(tce, tces + i)) {
- 			ret = H_TOO_HARD;
--			goto invalidate_exit;
-+			goto unlock_exit;
- 		}
- 		tce = be64_to_cpu(tce);
- 
- 		if (kvmppc_tce_to_ua(vcpu->kvm, tce, &ua)) {
- 			ret = H_PARAMETER;
--			goto invalidate_exit;
-+			goto unlock_exit;
- 		}
- 
- 		list_for_each_entry_lockless(stit, &stt->iommu_tables, next) {
-@@ -684,19 +693,15 @@ long kvmppc_h_put_tce_indirect(struct kvm_vcpu *vcpu,
- 					iommu_tce_direction(tce));
- 
- 			if (ret != H_SUCCESS) {
--				kvmppc_clear_tce(vcpu->kvm->mm, stit->tbl,
--						entry);
--				goto invalidate_exit;
-+				kvmppc_clear_tce(vcpu->kvm->mm, stt, stit->tbl,
-+						 entry + i);
-+				goto unlock_exit;
- 			}
- 		}
- 
- 		kvmppc_tce_put(stt, entry + i, tce);
- 	}
- 
--invalidate_exit:
--	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
--		iommu_tce_kill(stit->tbl, entry, npages);
--
- unlock_exit:
- 	srcu_read_unlock(&vcpu->kvm->srcu, idx);
- 
-@@ -735,20 +740,16 @@ long kvmppc_h_stuff_tce(struct kvm_vcpu *vcpu,
- 				continue;
- 
- 			if (ret == H_TOO_HARD)
--				goto invalidate_exit;
-+				return ret;
- 
- 			WARN_ON_ONCE(1);
--			kvmppc_clear_tce(vcpu->kvm->mm, stit->tbl, entry);
-+			kvmppc_clear_tce(vcpu->kvm->mm, stt, stit->tbl, entry + i);
- 		}
- 	}
- 
- 	for (i = 0; i < npages; ++i, ioba += (1ULL << stt->page_shift))
- 		kvmppc_tce_put(stt, ioba >> stt->page_shift, tce_value);
- 
--invalidate_exit:
--	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
--		iommu_tce_kill(stit->tbl, ioba >> stt->page_shift, npages);
--
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(kvmppc_h_stuff_tce);
-diff --git a/arch/powerpc/kvm/book3s_64_vio_hv.c b/arch/powerpc/kvm/book3s_64_vio_hv.c
-index 35fd67b4ceb4..abb49d863329 100644
---- a/arch/powerpc/kvm/book3s_64_vio_hv.c
-+++ b/arch/powerpc/kvm/book3s_64_vio_hv.c
-@@ -251,13 +251,19 @@ extern void iommu_tce_kill_rm(struct iommu_table *tbl,
- 		tbl->it_ops->tce_kill(tbl, entry, pages, true);
- }
- 
--static void kvmppc_rm_clear_tce(struct kvm *kvm, struct iommu_table *tbl,
--		unsigned long entry)
-+static void kvmppc_rm_clear_tce(struct kvm *kvm, struct kvmppc_spapr_tce_table *stt,
-+		struct iommu_table *tbl, unsigned long entry)
- {
--	unsigned long hpa = 0;
--	enum dma_data_direction dir = DMA_NONE;
-+	unsigned long i;
-+	unsigned long subpages = 1ULL << (stt->page_shift - tbl->it_page_shift);
-+	unsigned long io_entry = entry << (stt->page_shift - tbl->it_page_shift);
-+
-+	for (i = 0; i < subpages; ++i) {
-+		unsigned long hpa = 0;
-+		enum dma_data_direction dir = DMA_NONE;
- 
--	iommu_tce_xchg_no_kill_rm(kvm->mm, tbl, entry, &hpa, &dir);
-+		iommu_tce_xchg_no_kill_rm(kvm->mm, tbl, io_entry + i, &hpa, &dir);
-+	}
- }
- 
- static long kvmppc_rm_tce_iommu_mapped_dec(struct kvm *kvm,
-@@ -320,6 +326,8 @@ static long kvmppc_rm_tce_iommu_unmap(struct kvm *kvm,
- 			break;
- 	}
- 
-+	iommu_tce_kill_rm(tbl, io_entry, subpages);
-+
- 	return ret;
- }
- 
-@@ -383,6 +391,8 @@ static long kvmppc_rm_tce_iommu_map(struct kvm *kvm,
- 			break;
- 	}
- 
-+	iommu_tce_kill_rm(tbl, io_entry, subpages);
-+
- 	return ret;
- }
- 
-@@ -428,10 +438,8 @@ long kvmppc_rm_h_put_tce(struct kvm_vcpu *vcpu, unsigned long liobn,
- 			ret = kvmppc_rm_tce_iommu_map(vcpu->kvm, stt,
- 					stit->tbl, entry, ua, dir);
- 
--		iommu_tce_kill_rm(stit->tbl, entry, 1);
--
- 		if (ret != H_SUCCESS) {
--			kvmppc_rm_clear_tce(vcpu->kvm, stit->tbl, entry);
-+			kvmppc_rm_clear_tce(vcpu->kvm, stt, stit->tbl, entry);
- 			return ret;
- 		}
- 	}
-@@ -571,7 +579,7 @@ long kvmppc_rm_h_put_tce_indirect(struct kvm_vcpu *vcpu,
- 		ua = 0;
- 		if (kvmppc_rm_tce_to_ua(vcpu->kvm, tce, &ua, NULL)) {
- 			ret = H_PARAMETER;
--			goto invalidate_exit;
-+			goto unlock_exit;
- 		}
- 
- 		list_for_each_entry_lockless(stit, &stt->iommu_tables, next) {
-@@ -580,19 +588,15 @@ long kvmppc_rm_h_put_tce_indirect(struct kvm_vcpu *vcpu,
- 					iommu_tce_direction(tce));
- 
- 			if (ret != H_SUCCESS) {
--				kvmppc_rm_clear_tce(vcpu->kvm, stit->tbl,
--						entry);
--				goto invalidate_exit;
-+				kvmppc_rm_clear_tce(vcpu->kvm, stt, stit->tbl,
-+						entry + i);
-+				goto unlock_exit;
- 			}
- 		}
- 
- 		kvmppc_rm_tce_put(stt, entry + i, tce);
- 	}
- 
--invalidate_exit:
--	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
--		iommu_tce_kill_rm(stit->tbl, entry, npages);
--
- unlock_exit:
- 	if (rmap)
- 		unlock_rmap(rmap);
-@@ -635,20 +639,16 @@ long kvmppc_rm_h_stuff_tce(struct kvm_vcpu *vcpu,
- 				continue;
- 
- 			if (ret == H_TOO_HARD)
--				goto invalidate_exit;
-+				return ret;
- 
- 			WARN_ON_ONCE_RM(1);
--			kvmppc_rm_clear_tce(vcpu->kvm, stit->tbl, entry);
-+			kvmppc_rm_clear_tce(vcpu->kvm, stt, stit->tbl, entry + i);
- 		}
- 	}
- 
- 	for (i = 0; i < npages; ++i, ioba += (1ULL << stt->page_shift))
- 		kvmppc_rm_tce_put(stt, ioba >> stt->page_shift, tce_value);
- 
--invalidate_exit:
--	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
--		iommu_tce_kill_rm(stit->tbl, ioba >> stt->page_shift, npages);
--
- 	return ret;
- }
- 
+ 	preempt_disable();
+ 	if (cpu != smp_processor_id()) {
 -- 
 2.35.1
 

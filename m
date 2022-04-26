@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409E1510202
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C70A5101FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352435AbiDZPjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S1352421AbiDZPj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352410AbiDZPjX (ORCPT
+        with ESMTP id S1352403AbiDZPjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 11:39:23 -0400
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C8F1570F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EECFD25;
         Tue, 26 Apr 2022 08:36:15 -0700 (PDT)
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23QFa04J095160;
-        Tue, 26 Apr 2022 10:36:00 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23QFa2fQ095166;
+        Tue, 26 Apr 2022 10:36:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650987360;
-        bh=gRQr7XeEvyTpJ2fKnZIXTDb/h++VKf/bmPBC0uraUJc=;
+        s=ti-com-17Q1; t=1650987362;
+        bh=pE01LlepLn5P9pAdXaezuYxpflC2yPhfl2ruFXlenkk=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=sGuh4to0LAxqj3w9zBtxCf1z+qoC9WaoGcnOAm9ytIJhX81e0EsCcKJbshnGX41Yt
-         uF5Kd3V+iF/MAF3+3oPFVZ58WP1U0MSXIboenpYVFXAnUo23fTLNN3U49Gog8+qrGU
-         ycy1kkAvtS+TsLIGqaE8j6ftujHN6E1EKEUsOu2o=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23QFa0SE130796
+        b=Ay/7sTLlOBJXMWgPOrL+QhhBFsYo5zenazlhExMA2PYV+SqgfzvwPvtukAz4A8+Z7
+         Yi8CtKWpTSxCwNIm5YH059uzjP+Vy+677ulV7rsjGEvWRQ6GeWvzuy7xnTDx5yeowS
+         sneZSbO9JN8Bf/0Xf5ItqcKOhzAIIi3vXCNKp2D8=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23QFa229130816
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 26 Apr 2022 10:36:00 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 26 Apr 2022 10:36:02 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 26
- Apr 2022 10:35:59 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2022 10:36:01 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 26 Apr 2022 10:35:59 -0500
+ Frontend Transport; Tue, 26 Apr 2022 10:36:01 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23QFZwmW081638;
-        Tue, 26 Apr 2022 10:35:59 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23QFa0qR016838;
+        Tue, 26 Apr 2022 10:36:01 -0500
 From:   Rahul T R <r-ravikumar@ti.com>
 To:     <nm@ti.com>
 CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
         <tomi.valkeinen@ideasonboard.com>,
         <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>,
         <r-ravikumar@ti.com>
-Subject: [PATCH v4 1/2] arm64: dts: ti: k3-j721e-*: add DP & DP PHY
-Date:   Tue, 26 Apr 2022 21:05:52 +0530
-Message-ID: <20220426153553.18474-2-r-ravikumar@ti.com>
+Subject: [PATCH v4 2/2] arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+Date:   Tue, 26 Apr 2022 21:05:53 +0530
+Message-ID: <20220426153553.18474-3-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220426153553.18474-1-r-ravikumar@ti.com>
 References: <20220426153553.18474-1-r-ravikumar@ti.com>
@@ -69,183 +69,116 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tomi Valkeinen <tomi.valkeinen@ti.com>
 
-Add DT nodes for DisplayPort and DisplayPort PHY. The DP is Cadence MHDP
-8546 and the PHY is a Cadence Torrent PHY with TI WIZ wrapper.
-
-Also add the required phy link nodes in the board dts files.
-
-A slight irregularity in the bindings is the DPTX PHY register block,
-which is in the MHDP IP, but is needed and mapped by the PHY.
+Add the endpoint nodes to describe connection from
+DSS => MHDP => DisplayPort connector.
+Also add the required pinmux nodes for hotplug.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 Signed-off-by: Rahul T R <r-ravikumar@ti.com>
 ---
- .../dts/ti/k3-j721e-common-proc-board.dts     | 16 ++++
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 75 ++++++++++++++++++-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 16 ++++
- 3 files changed, 105 insertions(+), 2 deletions(-)
+ .../dts/ti/k3-j721e-common-proc-board.dts     | 61 +++++++++++++++++--
+ 1 file changed, 57 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-index f5ca8e26ed99..2f119e94e783 100644
+index 2f119e94e783..4b9e3f671781 100644
 --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
 +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-@@ -793,6 +793,22 @@
+@@ -148,6 +148,28 @@
+ 		pinctrl-0 = <&main_mcan2_gpio_pins_default>;
+ 		standby-gpios = <&main_gpio0 127 GPIO_ACTIVE_HIGH>;
  	};
++
++	dp_pwr_3v3: regulator-dp-prw {
++		compatible = "regulator-fixed";
++		regulator-name = "dp-pwr";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&exp4 0 GPIO_ACTIVE_HIGH>; /* P0 - DP0_PWR_SW_EN */
++		enable-active-high;
++	};
++
++	dp0: connector {
++		compatible = "dp-connector";
++		label = "DP0";
++		type = "full-size";
++		dp-pwr-supply = <&dp_pwr_3v3>;
++
++		port {
++			dp_connector_in: endpoint {
++				remote-endpoint = <&dp0_out>;
++			};
++		};
++	};
  };
  
-+&serdes4 {
-+	torrent_phy_dp: phy@0 {
-+		reg = <0>;
-+		resets = <&serdes_wiz4 1>;
-+		cdns,phy-type = <PHY_TYPE_DP>;
-+		cdns,num-lanes = <4>;
-+		cdns,max-bit-rate = <5400>;
-+		#phy-cells = <0>;
+ &main_pmx0 {
+@@ -190,6 +212,12 @@
+ 		>;
+ 	};
+ 
++	dp0_pins_default: dp0-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x1c4, PIN_INPUT, 5) /* SPI0_CS1.DP0_HPD */
++		>;
++	};
++
+ 	main_i2c1_exp4_pins_default: main-i2c1-exp4-pins-default {
+ 		pinctrl-single,pins = <
+ 			J721E_IOPAD(0x230, PIN_INPUT, 7) /* (U2) ECAP0_IN_APWM_OUT.GPIO1_11 */
+@@ -658,6 +686,33 @@
+ 				 <&k3_clks 152 18>;	/* PLL23_HSDIV0 */
+ };
+ 
++&dss_ports {
++	port {
++		dpi0_out: endpoint {
++			remote-endpoint = <&dp0_in>;
++		};
 +	};
 +};
 +
-+&mhdp {
-+	phys = <&torrent_phy_dp>;
-+	phy-names = "dpphy";
++&dp0_ports {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	port@0 {
++		reg = <0>;
++		dp0_in: endpoint {
++			remote-endpoint = <&dpi0_out>;
++		};
++	};
++
++	port@4 {
++		reg = <4>;
++		dp0_out: endpoint {
++			remote-endpoint = <&dp_connector_in>;
++		};
++	};
 +};
 +
+ &mcasp0 {
+ 	status = "disabled";
+ };
+@@ -807,6 +862,8 @@
+ &mhdp {
+ 	phys = <&torrent_phy_dp>;
+ 	phy-names = "dpphy";
++	pinctrl-names = "default";
++	pinctrl-0 = <&dp0_pins_default>;
+ };
+ 
  &pcie0_rc {
- 	reset-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
- 	phys = <&serdes0_pcie_link>;
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index db0669985e42..43b6cf5791ee 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2016-2020 Texas Instruments Incorporated - https://www.ti.com/
-  */
- #include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/phy/phy-ti.h>
- #include <dt-bindings/mux/mux.h>
- #include <dt-bindings/mux/ti-serdes.h>
- 
-@@ -789,6 +790,47 @@
- 		#size-cells = <2>;
- 	};
- 
-+	serdes_wiz4: wiz@5050000 {
-+		compatible = "ti,am64-wiz-10g";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		power-domains = <&k3_pds 297 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 297 1>, <&k3_clks 297 9>, <&cmn_refclk>;
-+		clock-names = "fck", "core_ref_clk", "ext_ref_clk";
-+		assigned-clocks = <&k3_clks 297 9>;
-+		assigned-clock-parents = <&k3_clks 297 10>;
-+		assigned-clock-rates = <19200000>;
-+		num-lanes = <4>;
-+		#reset-cells = <1>;
-+		#clock-cells = <1>;
-+		ranges = <0x05050000 0x00 0x05050000 0x010000>,
-+			<0x0a030a00 0x00 0x0a030a00 0x40>;
-+
-+		serdes4: serdes@5050000 {
-+			/*
-+			 * Note: we also map DPTX PHY registers as the Torrent
-+			 * needs to manage those.
-+			 */
-+			compatible = "ti,j721e-serdes-10g";
-+			reg = <0x05050000 0x010000>,
-+			      <0x0a030a00 0x40>; /* DPTX PHY */
-+			reg-names = "torrent_phy", "dptx_phy";
-+
-+			resets = <&serdes_wiz4 0>;
-+			reset-names = "torrent_reset";
-+			clocks = <&serdes_wiz4 TI_WIZ_PLL0_REFCLK>;
-+			clock-names = "refclk";
-+			assigned-clocks = <&serdes_wiz4 TI_WIZ_PLL0_REFCLK>,
-+					  <&serdes_wiz4 TI_WIZ_PLL1_REFCLK>,
-+					  <&serdes_wiz4 TI_WIZ_REFCLK_DIG>;
-+			assigned-clock-parents = <&k3_clks 297 9>,
-+						 <&k3_clks 297 9>,
-+						 <&k3_clks 297 9>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+
- 	main_uart0: serial@2800000 {
- 		compatible = "ti,j721e-uart", "ti,am654-uart";
- 		reg = <0x00 0x02800000 0x00 0x100>;
-@@ -1267,6 +1309,37 @@
- 		};
- 	};
- 
-+	mhdp: dp-bridge@a000000 {
-+		compatible = "ti,j721e-mhdp8546";
-+		/*
-+		 * Note: we do not map DPTX PHY area, as that is handled by
-+		 * the PHY driver.
-+		 */
-+		reg = <0x00 0x0a000000 0x00 0x030a00>, /* DSS_EDP0_V2A_CORE_VP_REGS_APB */
-+		      <0x00 0x04f40000 0x00 0x20>;    /* DSS_EDP0_INTG_CFG_VP */
-+		reg-names = "mhdptx", "j721e-intg";
-+
-+		clocks = <&k3_clks 151 36>;
-+
-+		interrupt-parent = <&gic500>;
-+		interrupts = <GIC_SPI 614 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		power-domains = <&k3_pds 151 TI_SCI_PD_EXCLUSIVE>;
-+
-+		dp0_ports: ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+			    reg = <0>;
-+			};
-+
-+			port@4 {
-+			    reg = <4>;
-+			};
-+		};
-+	};
-+
- 	dss: dss@4a00000 {
- 		compatible = "ti,j721e-dss";
- 		reg =
-@@ -1317,8 +1390,6 @@
- 				  "common_s2";
- 
- 		dss_ports: ports {
--			#address-cells = <1>;
--			#size-cells = <0>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index f25d85169e0d..98177a20b45f 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -624,6 +624,22 @@
- 	};
+@@ -859,10 +916,6 @@
+ 	status = "disabled";
  };
  
-+&serdes4 {
-+	torrent_phy_dp: phy@0 {
-+		reg = <0>;
-+		resets = <&serdes_wiz4 1>;
-+		cdns,phy-type = <PHY_TYPE_DP>;
-+		cdns,num-lanes = <4>;
-+		cdns,max-bit-rate = <5400>;
-+		#phy-cells = <0>;
-+	};
-+};
-+
-+&mhdp {
-+	phys = <&torrent_phy_dp>;
-+	phy-names = "dpphy";
-+};
-+
- &usbss0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_usbss0_pins_default>;
+-&dss {
+-	status = "disabled";
+-};
+-
+ &icssg0_mdio {
+ 	status = "disabled";
+ };
 -- 
 2.17.1
 

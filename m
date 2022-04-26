@@ -2,41 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41CF50FB40
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E6250FB45
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 12:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348614AbiDZKrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S1349336AbiDZKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349312AbiDZKqZ (ORCPT
+        with ESMTP id S1349315AbiDZKq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 06:46:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF0C8101D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:37:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A764BED1;
-        Tue, 26 Apr 2022 03:37:56 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.76.208])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3231C3F5A1;
-        Tue, 26 Apr 2022 03:37:55 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 11:37:47 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        akpm@linux-foundation.org, alex.popov@linux.com,
-        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH 0/8] stackleak: fixes and rework
-Message-ID: <YmfLe+UZ85LhshZx@FVFF77S0Q05N>
-References: <20220425115603.781311-1-mark.rutland@arm.com>
- <202204251551.0CFE01DF4@keescook>
- <YmfFLOW5QyF3DKTC@FVFF77S0Q05N>
+        Tue, 26 Apr 2022 06:46:26 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EF21105
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 03:38:00 -0700 (PDT)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KndXQ0PCPz6F94R;
+        Tue, 26 Apr 2022 18:33:58 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 12:37:57 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
+ 2022 11:37:56 +0100
+Date:   Tue, 26 Apr 2022 11:37:55 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+CC:     Jagdish Gediya <jvgediya@linux.ibm.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <akpm@linux-foundation.org>, <baolin.wang@linux.alibaba.com>,
+        <dave.hansen@linux.intel.com>, <shy828301@gmail.com>,
+        <weixugc@google.com>, <gthelen@google.com>,
+        <dan.j.williams@intel.com>
+Subject: Re: [PATCH v3 0/7] mm: demotion: Introduce new node state
+ N_DEMOTION_TARGETS
+Message-ID: <20220426113755.00004721@Huawei.com>
+In-Reply-To: <132150b3-73f8-ea94-2839-91b92e5d2991@linux.ibm.com>
+References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
+        <4b986b46afb2fe888c127d8758221d0f0d3ec55f.camel@intel.com>
+        <YmaC2jw6WaQ4X+8W@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+        <20220425145735.000007ca@Huawei.com>
+        <132150b3-73f8-ea94-2839-91b92e5d2991@linux.ibm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmfFLOW5QyF3DKTC@FVFF77S0Q05N>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml731-chm.china.huawei.com (10.201.108.82) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,57 +62,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:10:52AM +0100, Mark Rutland wrote:
-> On Mon, Apr 25, 2022 at 03:54:00PM -0700, Kees Cook wrote:
-> > On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
-> > > This series reworks the stackleak code. The first patch fixes some
-> > > latent issues on arm64, and the subsequent patches improve the code to
-> > > improve clarity and permit better code generation.
+On Mon, 25 Apr 2022 20:23:56 +0530
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> wrote:
+
+> On 4/25/22 7:27 PM, Jonathan Cameron wrote:
+> > On Mon, 25 Apr 2022 16:45:38 +0530
+> > Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
+> >  
+> 
+> ....
+> 
+> >> $ numactl -H
+> >> available: 2 nodes (0-1)
+> >> node 0 cpus: 0 1 2 3 4 5 6 7
+> >> node 0 size: 14272 MB
+> >> node 0 free: 13392 MB
+> >> node 1 cpus:
+> >> node 1 size: 2028 MB
+> >> node 1 free: 1971 MB
+> >> node distances:
+> >> node   0   1
+> >>    0:  10  40
+> >>    1:  40  10
+> >>
+> >> 1) without N_DEMOTION_TARGETS patch series, 1 is demotion target
+> >>     for 0 even when 1 is DRAM node and there is no demotion targets for 1.  
 > > 
-> > This looks nice; thanks! I'll put this through build testing and get it
-> > applied shortly...
-> 
-> Thanks!
-> 
-> Patch 1 is liable to conflict with come other stacktrace bits that may go in
-> for v5.19, so it'd be good if either that could be queued as a fix for
-> v5.1-rc4, or we'll have to figure out how to deal with conflicts later.
-> 
-> > > While the improvement is small, I think the improvement to clarity and
-> > > code generation is a win regardless.
+> > I'm not convinced the distinction between DRAM and persistent memory is
+> > valid. There will definitely be systems with a large pool
+> > of remote DRAM (and potentially no NV memory) where the right choice
+> > is to demote to that DRAM pool.
 > > 
-> > Agreed. I also want to manually inspect the resulting memory just to
-> > make sure things didn't accidentally regress. There's also an LKDTM test
-> > for basic functionality.
+> > Basing the decision on whether the memory is from kmem or
+> > normal DRAM doesn't provide sufficient information to make the decision.
+> >   
+> >>
+> >> $ cat /sys/bus/nd/devices/dax0.0/target_node
+> >> 2
+> >> $
+> >> # cd /sys/bus/dax/drivers/
+> >> :/sys/bus/dax/drivers# ls
+> >> device_dax  kmem
+> >> :/sys/bus/dax/drivers# cd device_dax/
+> >> :/sys/bus/dax/drivers/device_dax# echo dax0.0 > unbind
+> >> :/sys/bus/dax/drivers/device_dax# echo dax0.0 >  ../kmem/new_id
+> >> :/sys/bus/dax/drivers/device_dax# numactl -H
+> >> available: 3 nodes (0-2)
+> >> node 0 cpus: 0 1 2 3 4 5 6 7
+> >> node 0 size: 14272 MB
+> >> node 0 free: 13380 MB
+> >> node 1 cpus:
+> >> node 1 size: 2028 MB
+> >> node 1 free: 1961 MB
+> >> node 2 cpus:
+> >> node 2 size: 0 MB
+> >> node 2 free: 0 MB
+> >> node distances:
+> >> node   0   1   2
+> >>    0:  10  40  80
+> >>    1:  40  10  80
+> >>    2:  80  80  10
+> >>
+> >> 2) Once this new node brought online,  without N_DEMOTION_TARGETS
+> >> patch series, 1 is demotion target for 0 and 2 is demotion target
+> >> for 1.
+> >>
+> >> With this patch series applied,
+> >> 1) No demotion target for either 0 or 1 before dax device is online  
+> > 
+> > I'd argue that is wrong.  At this state you have a tiered memory system
+> > be it one with just DRAM.  Using it as such is correct behavior that
+> > we should not be preventing.  Sure some usecases wouldn't want that
+> > arrangement but some do want it.
+> >   
 > 
-> I assume that's the STACKLEAK_ERASING test?
+> I missed this in my earlier reply. Are you suggesting that we would want 
+> Node 1 (DRAM only memory numa node) to act as demotion target for Node 
+> 0?  Any reason why we would want to do that? That is clearly opposite of 
+> what we are trying to do here. IMHO node using Node1 as demotion target 
+> for Node0 is a better default?
+
+In this case, because of the small size that probably wouldn't make sense.
+But, if that were a CXL memory pool with multiple TB of DDR then yes
+we would want the default case to use that memory for the demotion path.
+
+So I don't think DDR vs NV via kmem alone is the right basis for a decision
+on the default behavior.
+
+Sure we can make this all a userspace problem.
+
+Jonathan
+
 > 
-> I gave that a spin, but on arm64 that test is flaky even on baseline v5.18-rc1.
-> On x86_64 it seems consistent after 100s of runs. I'll go dig into that now. 
+> 
+> 
+> -aneesh
 
-I hacked in some debug, and it looks like the sp used in the test is far above
-the current lowest_sp. The test is slightly wrong since it grabs the address of
-a local variable rather than using current_stack_pointer, but the offset I see
-is much larger:
-
-# echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT 
-[   27.665221] lkdtm: Performing direct entry STACKLEAK_ERASING
-[   27.665986] lkdtm: FAIL: lowest_stack 0xffff8000083a39e0 is lower than test sp 0xffff8000083a3c80
-[   27.667530] lkdtm: FAIL: the thread stack is NOT properly erased!
-
-That's off by 0x2a0 (AKA 672) bytes, and it seems to be consistent from run to
-run.
-
-I note that an interrupt occuring could cause similar (since on arm64 those are
-taken/triaged on the task stack before moving to the irq stack, and the irq
-regs alone will take 300+ bytes), but that doesn't seem to be the problem here
-given this is consistent, and it appears some prior function consumed a lot of
-stack.
-
-I *think* the same irq problem would apply to x86, but maybe that initial
-triage happens on a trampoline stack.
-
-I'll dig a bit more into the arm64 side...
-
-Thanks,
-Mark.

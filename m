@@ -2,104 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CAE50F32F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D6750F331
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343996AbiDZH64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
+        id S244639AbiDZH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241468AbiDZH6p (ORCPT
+        with ESMTP id S241671AbiDZH6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:58:45 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D5E15A03
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:55:38 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l18so7723731ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:references:in-reply-to:content-transfer-encoding;
-        bh=U1WIMsibwKAIR96y0nfN1dWqQ9y7DvH5uIdNqetGlS8=;
-        b=FyZ/TA1R0QE9jseCnsTKYHivHbJbdV3nJ2NWiZVIhMzQOaldbwN8vuAtrdZD/wP6hA
-         89cSdgErVumgQOt1bPWr1jgCFjfDYqE1mbAiDg6qb/D8DdimLrdY3TAGjiK+sqdO39Dx
-         P1ZSzHXILr9emGF2u8Y2vYQPe2rCIgTHDlhzXsl1p4ZquHvKW9KTCFHeH1cZOqYkJhNQ
-         TnfENNrCmpZu10KT0YcRGPaPzHg76g5U5T7tx7iYUfEnrgCBquNxNS+pahzCw9Jg2lgM
-         ULXAjZ79f8mRQMFXU1DDuCcqcugSK+6CTQCEm+9BEMLHOCiJQQ/XzvbZH3eYZX3dsudZ
-         M87g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=U1WIMsibwKAIR96y0nfN1dWqQ9y7DvH5uIdNqetGlS8=;
-        b=QlHS8ZIycaDWxhGTRMHc0d87KQv11KpTAeUph13skJIJC6lrPhwk/vUUoI6/ExBhG5
-         BR7+fYosde286v3dbRuNAhJdVM9cvY2/YI9hTA4lKxzsVI49HhF7PDbFRCHUUNAI5uox
-         J37bJLW33bctYiQfdRHZ4xtxmBcYAStiTkvdN81MIzjK6tEaQvBckFWGtPCOb1fLMD8Y
-         qXbE8q0Sz2Y0gnZ/qODu/i5EQL7jh1u/cb/+gM2MJawlA8Sudo32bFVNn8HqIUTcHQlp
-         Y1sa+WqrlDZ1UR3QmJRp6FOWd9wEnzEFzw901/U5EvJqmKWy4hmyrgTqSgLKl1ouH21e
-         x1iw==
-X-Gm-Message-State: AOAM531jAKeaHAdp8AElXbc/3NWYkFUG0FdzHnJhaMuiktKVScJmxpal
-        pTx4xL5BfwfBn2HnXwwX2hVcSw==
-X-Google-Smtp-Source: ABdhPJyl6PyJGE7Jjc6hic8TZ5AB9cjeYf4nSNHBpwP4vGGeYWVVrFn2tuH6oToWF4vr+xPevOz/qQ==
-X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id l8-20020a170906794800b006da64ed178emr20831011ejo.523.1650959737278;
-        Tue, 26 Apr 2022 00:55:37 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o18-20020a1709064f9200b006e7f229b332sm4428329eju.36.2022.04.26.00.55.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 00:55:36 -0700 (PDT)
-Message-ID: <2ac59e59-2516-2bca-9db6-e2cfec671cef@linaro.org>
-Date:   Tue, 26 Apr 2022 09:55:35 +0200
+        Tue, 26 Apr 2022 03:58:47 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB85186FA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 00:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650959741; x=1682495741;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qGTVGpOWIBsbz827s0W0H9uEW9OJVBxXGTBDbcXs9XE=;
+  b=SlI1qbfNyX1wnLxFggbCc77ZNj0cA/Umfgt6vi1MmM7FeyoYQzDO/+Nq
+   yPJO9lhT/8R0rTEDIJ+Q+ufVBqW4okv0iCBrgd39JWn9jhvaqTqZVs51u
+   4cenRWNW83lohyF+lIEXRxGbf7i3LhmsnJxBilupc7zWmeJ8t1z7OBWQ/
+   2DH9c1qX4alj83QS82KrhS8NV+uM2kN/AlGKoRUQSoSroHLXCeOdHFbL1
+   7RPQEfy7SHCGrkh2DvA9/gb3Wgloxt+La/a3BH1SLLYwqvZxTy/tsIu/G
+   nu5cIFELeHjSuvuQ0IOmrog5dX3dGvkVnaoKeeE/KLMeB62nqaRJU9/1Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="246052022"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="246052022"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:55:41 -0700
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="579747841"
+Received: from yyu16-mobl.ccr.corp.intel.com ([10.254.212.128])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 00:55:38 -0700
+Message-ID: <085260285e48093f48d889994aaa500a78577bf2.camel@intel.com>
+Subject: Re: [PATCH v3 0/7] mm: demotion: Introduce new node state
+ N_DEMOTION_TARGETS
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Jagdish Gediya <jvgediya@linux.ibm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
+        dave.hansen@linux.intel.com, aneesh.kumar@linux.ibm.com,
+        shy828301@gmail.com, weixugc@google.com, gthelen@google.com,
+        dan.j.williams@intel.com
+Date:   Tue, 26 Apr 2022 15:55:36 +0800
+In-Reply-To: <YmaC2jw6WaQ4X+8W@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
+         <4b986b46afb2fe888c127d8758221d0f0d3ec55f.camel@intel.com>
+         <YmaC2jw6WaQ4X+8W@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] riscv: dts: fu540-c000: fix duplicated dma compatible
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Bin Meng <bmeng.cn@gmail.com>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220421065401.9303-1-krzysztof.kozlowski@linaro.org>
- <f822fc7a-7c47-d8f9-8ef9-fda2c7832926@linaro.org>
-In-Reply-To: <f822fc7a-7c47-d8f9-8ef9-fda2c7832926@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 09:53, Krzysztof Kozlowski wrote:
-> On 21/04/2022 08:54, Krzysztof Kozlowski wrote:
->> Remove duplicated compatible to fix error:
->>
->>   u540-c000.dtsi:171.4-42: ERROR (duplicate_property_names): /soc/dma@3000000:compatible: Duplicate property name
->>
->> Fixes: 7eba954a8de8 ("riscv: dts: Add dma-channels property and modify compatible")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, 2022-04-25 at 16:45 +0530, Jagdish Gediya wrote:
+> On Sun, Apr 24, 2022 at 11:19:53AM +0800, ying.huang@intel.com wrote:
+> > On Sat, 2022-04-23 at 01:25 +0530, Jagdish Gediya wrote:
+> > > Some systems(e.g. PowerVM) can have both DRAM(fast memory) only
+> > > NUMA node which are N_MEMORY and slow memory(persistent memory)
+> > > only NUMA node which are also N_MEMORY. As the current demotion
+> > > target finding algorithm works based on N_MEMORY and best distance,
+> > > it will choose DRAM only NUMA node as demotion target instead of
+> > > persistent memory node on such systems. If DRAM only NUMA node is
+> > > filled with demoted pages then at some point new allocations can
+> > > start falling to persistent memory, so basically cold pages are in
+> > > fast memor (due to demotion) and new pages are in slow memory, this
+> > > is why persistent memory nodes should be utilized for demotion and
+> > > dram node should be avoided for demotion so that they can be used
+> > > for new allocations.
+> > > 
+> > > Current implementation can work fine on the system where the memory
+> > > only numa nodes are possible only for persistent/slow memory but it
+> > > is not suitable for the like of systems mentioned above.
+> > 
+> > Can you share the NUMA topology information of your machine?  And the
+> > demotion order before and after your change?
+> > 
+> > Whether it's good to use the PMEM nodes as the demotion targets of the
+> > DRAM-only node too?
 > 
-> Hi everyone,
+> $ numactl -H
+> available: 2 nodes (0-1)
+> node 0 cpus: 0 1 2 3 4 5 6 7
+> node 0 size: 14272 MB
+> node 0 free: 13392 MB
+> node 1 cpus:
+> node 1 size: 2028 MB
+> node 1 free: 1971 MB
+> node distances:
+> node   0   1
+>   0:  10  40
+>   1:  40  10
 > 
-> This is an error which causes compilation to fail. Such patches should
-> be picked up faster than later, because it breaks various builds.
+> 1) without N_DEMOTION_TARGETS patch series, 1 is demotion target
+>    for 0 even when 1 is DRAM node and there is no demotion targets for 1.
 > 
-> I'll take it via my tree.
+> $ cat /sys/bus/nd/devices/dax0.0/target_node
+> 2
+> $
+> # cd /sys/bus/dax/drivers/
+> :/sys/bus/dax/drivers# ls
+> device_dax  kmem
+> :/sys/bus/dax/drivers# cd device_dax/
+> :/sys/bus/dax/drivers/device_dax# echo dax0.0 > unbind
+> :/sys/bus/dax/drivers/device_dax# echo dax0.0 >  ../kmem/new_id
+> :/sys/bus/dax/drivers/device_dax# numactl -H
+> available: 3 nodes (0-2)
+> node 0 cpus: 0 1 2 3 4 5 6 7
+> node 0 size: 14272 MB
+> node 0 free: 13380 MB
+> node 1 cpus:
+> node 1 size: 2028 MB
+> node 1 free: 1961 MB
+> node 2 cpus:
+> node 2 size: 0 MB
+> node 2 free: 0 MB
+> node distances:
+> node   0   1   2
+>   0:  10  40  80
+>   1:  40  10  80
+>   2:  80  80  10
+> 
 
-Ah, it seems Palmer rebased his tree after it got accepted to next, so
-patch can be dropped.
+This looks like a virtual machine, not a real machine.  That's
+unfortunate.  I am looking forward to a real issue, not a theoritical
+possible issue.
+
+> 2) Once this new node brought online,  without N_DEMOTION_TARGETS
+> patch series, 1 is demotion target for 0 and 2 is demotion target
+> for 1.
+> 
+> With this patch series applied,
+> 1) No demotion target for either 0 or 1 before dax device is online
+> 2) 2 is demotion target for both 0 and 1 after dax device is online.
+> 
+
+So with your change, if a node hasn't N_DEMOTION_TARGETS, it will become
+a top-level demotion source even if it hasn't N_CPU?  If so, I cannot
+clear N_DEMOTION_TARGETS for a node in middle or bottom level?
+
+Best Regards,
+Huang, Ying
+
+> > 
+[snip]
 
 
-Best regards,
-Krzysztof

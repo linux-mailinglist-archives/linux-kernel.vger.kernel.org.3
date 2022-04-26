@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539A750F7B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD2C50F5CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245341AbiDZJLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S240544AbiDZIlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347191AbiDZIvM (ORCPT
+        with ESMTP id S1345106AbiDZIeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:51:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BA7175334;
-        Tue, 26 Apr 2022 01:39:40 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965476D95E;
+        Tue, 26 Apr 2022 01:26:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABDF860C35;
-        Tue, 26 Apr 2022 08:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E77C385A4;
-        Tue, 26 Apr 2022 08:39:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04426B81CED;
+        Tue, 26 Apr 2022 08:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529B7C385A0;
+        Tue, 26 Apr 2022 08:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962379;
-        bh=B3InioJ0s1BEfhArgbznDw7Flh+9DO//FvrKmxvR5iU=;
+        s=korg; t=1650961562;
+        bh=dkv8QN0gQVSZtZdSD5Khr9zcrthMVra0NtgbZ2JmCHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n8tejNDOrBlRX4S3tasIQzvU2wom/Gbr54b9BoUccnLysiRoJaZG72iWV3nHcgGO6
-         9HkzB6qR0iozrI5u3ZQN4a0/OvwAAO2+WYp6bcI3W2HxDM65urJ64vTpoX0DxomgpH
-         99lcOH/NA0T76X1iV19yBdX72g3TG14U5WM9Q2kQ=
+        b=EsQBKkLrJOFzoLEamucKtxOZWK2vchdtXJ4MlwDS4YC0aubuy6HO5F1rbcjQM6/Bz
+         HBxKUMCtqReZFLBEIR+ej5uCE8S4RshMvnMFRe6xkjr8dinQd2W2je5l6EEZG2+bhn
+         Jc167B3vV/ywmZHrQSl36LqB8VKL+xmG6bfPkaLs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 039/124] net/sched: cls_u32: fix possible leak in u32_init_knode()
-Date:   Tue, 26 Apr 2022 10:20:40 +0200
-Message-Id: <20220426081748.414495702@linuxfoundation.org>
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Khem Raj <raj.khem@gmail.com>
+Subject: [PATCH 4.19 01/53] etherdevice: Adjust ether_addr* prototypes to silence -Wstringop-overead
+Date:   Tue, 26 Apr 2022 10:20:41 +0200
+Message-Id: <20220426081735.697201013@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,57 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit ec5b0f605b105457f257f2870acad4a5d463984b ]
+commit 2618a0dae09ef37728dab89ff60418cbe25ae6bd upstream.
 
-While investigating a related syzbot report,
-I found that whenever call to tcf_exts_init()
-from u32_init_knode() is failing, we end up
-with an elevated refcount on ht->refcnt
+With GCC 12, -Wstringop-overread was warning about an implicit cast from
+char[6] to char[8]. However, the extra 2 bytes are always thrown away,
+alignment doesn't matter, and the risk of hitting the edge of unallocated
+memory has been accepted, so this prototype can just be converted to a
+regular char *. Silences:
 
-To avoid that, only increase the refcount after
-all possible errors have been evaluated.
+net/core/dev.c: In function ‘bpf_prog_run_generic_xdp’: net/core/dev.c:4618:21: warning: ‘ether_addr_equal_64bits’ reading 8 bytes from a region of size 6 [-Wstringop-overread]
+ 4618 |         orig_host = ether_addr_equal_64bits(eth->h_dest, > skb->dev->dev_addr);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+net/core/dev.c:4618:21: note: referencing argument 1 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
+net/core/dev.c:4618:21: note: referencing argument 2 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
+In file included from net/core/dev.c:91: include/linux/etherdevice.h:375:20: note: in a call to function ‘ether_addr_equal_64bits’
+  375 | static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: b9a24bb76bf6 ("net_sched: properly handle failure case of tcf_exts_init()")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/netdev/20220212090811.uuzk6d76agw2vv73@pengutronix.de
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: Khem Raj <raj.khem@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/cls_u32.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/linux/etherdevice.h |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-index 81f933ebee05..5d30db0d7157 100644
---- a/net/sched/cls_u32.c
-+++ b/net/sched/cls_u32.c
-@@ -814,10 +814,6 @@ static struct tc_u_knode *u32_init_knode(struct net *net, struct tcf_proto *tp,
- 	new->flags = n->flags;
- 	RCU_INIT_POINTER(new->ht_down, ht);
- 
--	/* bump reference count as long as we hold pointer to structure */
--	if (ht)
--		ht->refcnt++;
--
- #ifdef CONFIG_CLS_U32_PERF
- 	/* Statistics may be incremented by readers during update
- 	 * so we must keep them in tact. When the node is later destroyed
-@@ -839,6 +835,10 @@ static struct tc_u_knode *u32_init_knode(struct net *net, struct tcf_proto *tp,
- 		return NULL;
- 	}
- 
-+	/* bump reference count as long as we hold pointer to structure */
-+	if (ht)
-+		ht->refcnt++;
-+
- 	return new;
+--- a/include/linux/etherdevice.h
++++ b/include/linux/etherdevice.h
+@@ -130,7 +130,7 @@ static inline bool is_multicast_ether_ad
+ #endif
  }
  
--- 
-2.35.1
-
+-static inline bool is_multicast_ether_addr_64bits(const u8 addr[6+2])
++static inline bool is_multicast_ether_addr_64bits(const u8 *addr)
+ {
+ #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
+ #ifdef __BIG_ENDIAN
+@@ -344,8 +344,7 @@ static inline bool ether_addr_equal(cons
+  * Please note that alignment of addr1 & addr2 are only guaranteed to be 16 bits.
+  */
+ 
+-static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
+-					   const u8 addr2[6+2])
++static inline bool ether_addr_equal_64bits(const u8 *addr1, const u8 *addr2)
+ {
+ #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
+ 	u64 fold = (*(const u64 *)addr1) ^ (*(const u64 *)addr2);
 
 

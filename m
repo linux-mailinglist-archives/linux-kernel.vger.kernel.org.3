@@ -2,62 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6DA50F959
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3352350F93F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244230AbiDZJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S1348076AbiDZJ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348055AbiDZJyk (ORCPT
+        with ESMTP id S1348016AbiDZJ4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:54:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930762CE32;
-        Tue, 26 Apr 2022 02:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1650964376; x=1682500376;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0zAif9jBzXvmrx/7G2WQmmHMwGXtNNnCbJ311LDlrkw=;
-  b=kyd7gRPMuK7KO+OBAp/vjvk5cG7h9x789PSBTkT5hwRltIsv0kLhMuFD
-   BEfKQ1PUKqsPRQOoB+2dDklfXvTfAD5A7shTtd10BRG21wO86a9NiI4LE
-   Qz0mjPkzQCN9F+t8QvHc6T/laqG5aKCv4ff/vUIt9D8RnXCFACbGnVdDS
-   Kr5TmyMpnWIQYEuerUEQH4W7JtQ7G6Su7H4ANI9bUSWmZp+Ge+SgW7OPL
-   /Hxqx7TwJTzf15S00EdiYgvcMJbydXGMHpDzo1atg1ukRznced9WPmqxM
-   uj4ulNVu1VEpHghdSFb3FtR9EABgdcA4O9QbAgPPqBMiFhhqPVmOlw/1m
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,290,1643698800"; 
-   d="scan'208";a="153832120"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Apr 2022 02:12:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 26 Apr 2022 02:12:53 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 26 Apr 2022 02:12:49 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [Patch net-next] net: dsa: ksz9477: move get_stats64 to ksz_common.c
-Date:   Tue, 26 Apr 2022 14:40:48 +0530
-Message-ID: <20220426091048.9311-1-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.33.0
+        Tue, 26 Apr 2022 05:56:48 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2118.outbound.protection.outlook.com [40.107.113.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D762340E0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 02:14:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j28MsCG9JQYysQNk3idPiNwHujsiqhdL9BxzOGf4QpEmG6Cax/jLwlkBqJ2q1FzCVEij960q5hg3QUe1q6e8xxXUfDmhUJ0vnF0FbsNQG7+O6uiz76KgKNmX/85UbU/VOM7AZRjPSzAK4ClbnkRRvG1RrZHCN3Ey47CkKeFIGMPQaiu5MwcSddqW6ppnjB18yuOYCZjGqJJsDWIn+cdJwVdpXFCC4dWS4KVguzEZUOHZyAF14hVZDwh0okt+TIRsCHvlbIsN9sym1q1/JbuGEgh5Z0i/pJ4tNUGyA6cv+FtJ+kXZFIdMO/LGSLuMmbonKoSzB5XR5mR0v5hmpEw3sA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ai7oqJQIPPY9UISaDZ4EhDpDMOXSFkabrYddM/PnsgQ=;
+ b=QU/2yc5GbplsCyXCZlOb8hXNsn5OsfizKZ/gbXEuH75qX/lylP5SyaCySTnKM7q0R2a79a6rsf1fP0H9HiPc+KnZGsD3er+BcoTJtDwXev8mA/ABrj3PAfi+cKFYW8jMXtX85BY4yKK8I3NaV5RNHp0FZYIpListrZcIfcsSCy32bjSut099Ka2F1+7jPytBGy5aUE7uw2uxNFPMtM+1cGGmkmxnvLUiVn5D2IlYXhDNYAhSWicr6YjCZXFnyEPeHVdnQ7iV9Up737yXNSD81EnINEx/IZzedNytKgHw3dTcCC3Zz6ST5d1yDMvdwbIwXBOhoClhM4a9tn42Fr4eHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
+ header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ai7oqJQIPPY9UISaDZ4EhDpDMOXSFkabrYddM/PnsgQ=;
+ b=aFlMbLy/01njrwVSspNiyovdUylJKA2ueDFQznXOXf4YMDr1/uZ5+tG8WjG1T1nZFVtxDxacTl/YNEtC7KFbqqwsnpqywr7brE3ydNTnvZ5ATgj99iDn5tRwU+kYQBbkqQhhgQQNfj4qxVH2p0/kKFkEvFvtd2ZB1BtLgJYe7/c=
+Received: from OSAPR01MB5060.jpnprd01.prod.outlook.com (2603:1096:604:6e::17)
+ by TYAPR01MB3870.jpnprd01.prod.outlook.com (2603:1096:404:c5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Tue, 26 Apr
+ 2022 09:14:34 +0000
+Received: from OSAPR01MB5060.jpnprd01.prod.outlook.com
+ ([fe80::15ba:6d34:ba18:2a8a]) by OSAPR01MB5060.jpnprd01.prod.outlook.com
+ ([fe80::15ba:6d34:ba18:2a8a%5]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 09:14:34 +0000
+From:   DLG Adam Thomson <DLG-Adam.Thomson.Opensource@dm.renesas.com>
+To:     Helmut Grohne <helmut.grohne@intenta.de>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        DLG Adam Thomson <DLG-Adam.Thomson.Opensource@dm.renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: RE: [PATCH v2 1/2] mfd: da9062: enable being a
+ system-power-controller
+Thread-Topic: [PATCH v2 1/2] mfd: da9062: enable being a
+ system-power-controller
+Thread-Index: AQHYVhEXwh76FFVKcEK/P5A/Qdaum60B7szg
+Date:   Tue, 26 Apr 2022 09:14:34 +0000
+Message-ID: <OSAPR01MB5060E32302F81F37D17B08A2B0FB9@OSAPR01MB5060.jpnprd01.prod.outlook.com>
+References: <ca76e2bb2f5d47ad189fa1a40bb6dd8a5dc225d2.1650606541.git.helmut.grohne@intenta.de>
+In-Reply-To: <ca76e2bb2f5d47ad189fa1a40bb6dd8a5dc225d2.1650606541.git.helmut.grohne@intenta.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dm.renesas.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f0017b80-2ed5-4064-b18a-08da27652e3e
+x-ms-traffictypediagnostic: TYAPR01MB3870:EE_
+x-microsoft-antispam-prvs: <TYAPR01MB3870A2C222E3FF9EF8AE30D6C1FB9@TYAPR01MB3870.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6cMvA4+ZmaieIPoAd9qUZDcYxYF435dZ5GTN9NgrG9x0Y937fVhhnr8hC+OA/59ej9aHDBl26dDwn+bOLUvht1vU29EbehHTlNy6b83Wf4p/B88OUXtYY6WZMOAPLaqlL29m2HjqEOWfKwiE/ZJHbVoVHLkhc+RZWRNIAbZH7ClQfXz7N4WtPku+Fdcz1B4PA2VY88yM7dqsnwDPb/w8kmcnSYfKQn+oCNXFgRZo5CavAxL8kyRpcO3hqPchsSgftuEugWKSUyTzD08iZiQalwADkdD/EL0rpWU1u77JvarSBNCz8a0M9/ChKaqxNguIcX9UXUd8kUd74otxS86YAa5jbzCR5cL/sYMHq1Lm2Zf1fHarRtIJTJJ7o8wF2RAkQeERliDLX3Fg4JeAYHrjb4GDLE1YBCk/q/eRETHXQAUcXn9JE2enSPwxfyfnemrJQMYi8KBP5K8PPBTyZw8os+ySydY5hWxHUSV2R8qgU+QYxFIGBFqB8iEZwVx3CCkZtZgv0M5VZ1jLgM3TyGOp7zsDOeVR+T9Yro/HcSq4BW/gf8waKvniaoWIAzBpMSkQMM0VB4dcIQj1al3BNFrz6+ffjOjeTBNJkKgS/duXSRoS/wK4xnEM4mFSMjbWk+gLGpN80IVRIrN3Q4loIacyO1WQz4TbI/vCam7dMjS3XvPxRMJwRMb7iqkmgnotG6GNLMGKiaddfGRjGlsLfW8Pq9LFKhetVBPozTNfi+7MucVqAqvTIAbtzWHBNUmBjjXLnCjXQK+6kX0TlnmfnaAW97JozQZ/C4l7OP1Cf/4D+nY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSAPR01MB5060.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(7696005)(71200400001)(4326008)(66476007)(110136005)(54906003)(76116006)(2906002)(33656002)(38100700002)(122000001)(55016003)(38070700005)(6506007)(86362001)(8676002)(316002)(66556008)(53546011)(64756008)(66946007)(83380400001)(186003)(26005)(966005)(508600001)(5660300002)(66446008)(8936002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T0dLWlE2OElrcUxvbXd1d3FTaTl1bkxBTzY4YzN2aUVUOXIzekpmVmNRYVF6?=
+ =?utf-8?B?NGp0TlFndHgxYkp6Sk1jTnNzcFZuazFXQTFEYnoyMVRKWUdaSTdZRUtmbEFW?=
+ =?utf-8?B?Rzl2WHZYS3R2OTZzSWU5VUc0SVlrTWR1UkJZWit4RVJOYXlNVWRUeXJYSkVq?=
+ =?utf-8?B?STZQZ0Y1MVJuallNdlkwd0Zvejg4K3Z4TFRnYlRibzBZcVQrSnhEbE9JdGJD?=
+ =?utf-8?B?dXhDdjQzdWNiQnEzb1Nwdis2WWdoNVlGaGtmYXVod3lJbFAydDVEbmY1UVln?=
+ =?utf-8?B?MjZWU21LQ1ZBOGlGa3RIOWdydDUxVDdnam9CRHgwR1I4dHJ3d1lLM0NobStr?=
+ =?utf-8?B?NzFUZDZjdlZjTUpQUW9PNFNEOEdlRm5MaXFGZGNtVUF4NWFrZ21ZckxrQmNC?=
+ =?utf-8?B?M0dzdE5YZ0lQOHgzUU1CQXN2c0tqMUxxd0l5SUloVzZncXZkM1JhOE52dmsw?=
+ =?utf-8?B?SmtVcWQvT0tSRUlCdVhXNUkwN1R6QnRTR1JmMFB4ZExJbDVLWWJiWDl0MUhP?=
+ =?utf-8?B?SGlXSHc2VXJSK2FZQ0Z0NGUySHJyaW5mMy9rc0kvZmt2d0ZiWjlRK3crUlJ4?=
+ =?utf-8?B?M2x1eDRSMXZpM1FielNPRFUzbWJSdHNTMDhJT2F4SHdTdEo2OG5WUVBRUEdx?=
+ =?utf-8?B?S1B3NUVydFExS0NkM1dXMWhmcjdzYzZUd2JkakdSd3VFVFhnb2FOdGZFaVhY?=
+ =?utf-8?B?Qzc4R1crM2RsWEp2ZnRLdEYzc1ZSNmw2bStxRzE1ZFJ3aFJtSFIrRjdtaFZQ?=
+ =?utf-8?B?Y0xWcExSUEFVajFNQ1FiY1dnMnUvUEwyU2czdFJXeHhFTThPTWZGZmZ0ejdu?=
+ =?utf-8?B?Z2V3WGdaSlF1N3QzRnp4NVFLc3VHUDV4VW0vNkdxUXh0WUsrbUwrY2hJSUJS?=
+ =?utf-8?B?YklTRTdqL0lWbGZRSG5xSCtFWGIrZGNnREJjWGNmUFRxV0tJY0g3MlFKUWJR?=
+ =?utf-8?B?VWZuVkl4WXl0cGJSOGx0SHpuL1Zod1BxYnh5YWlrTEh0ODkzeXhONjdLb0Ru?=
+ =?utf-8?B?SkMxcmEzZFVIT0lIblh1UmlhdmppNWpEcFpQQmtyRlhleHpLTmR2M1BzL3Zn?=
+ =?utf-8?B?RmV4SWFzSVZ5ZU9iV1F6K3BZUDJiL0RiMFlHTVBMQm94QlRGbG1vZ044WTJJ?=
+ =?utf-8?B?bXowakdMTGN2M1Jrd2FvNFVnVzh4K3grUzJ4NTBTSzV3WWFpbXFzSkttSDAw?=
+ =?utf-8?B?cEtSa2Fpb0kvL0Y2UE92SENDL0Y1TEE5NUVNMWhtenZ1WTZvRGtUdytBbDFj?=
+ =?utf-8?B?QllHK3ROUGtnSGVaYWxNN2JXSnFiTzBJcy8wZ01LY2pSWlZ0cTd5Smw5Q0hi?=
+ =?utf-8?B?MUNxZmFsS1BNQzB5c2RLTG1Eb0VvM212VWxmUkpqOUc2SDlwSXdnZVFIOXhs?=
+ =?utf-8?B?VkNDNi9qMGlVbUs1UVY4RUovaWowRHpzcTdUYWY5VkFRcXJveFZWRDRiOEU1?=
+ =?utf-8?B?VWtaWDBHa0VsU08vZ3dhaFZCWWhGNDFHSzgrVDducHIwWVlSU1FoektqdnBD?=
+ =?utf-8?B?V1UzeUtnZUdlVGNSenA2R2JSdjVrTTl6U2h0TnJ0Z3Y5L2h5b0lzU2cyTnRE?=
+ =?utf-8?B?TGVDWFE0M2tyOGF2WDJmRFZVVkdkWExYWThFeFFuT3JSTHhSWXVRblhDdndY?=
+ =?utf-8?B?YU9hZmoyK0NZOU85U3JwNVV6bzF1MHRMZWJjcXNXTlMxVVZKQmlWanB2RHJJ?=
+ =?utf-8?B?Slc2U1ZHYlI4Q1FoaENFenFEd0VwZ1NHYVVGNmtKR0t5Z2hwbEw4aXl2OTNX?=
+ =?utf-8?B?TjZQUFJHMFJReDhvRWVLaHMxRXZkcUZrL3hMQUxpSlVURXovc2VGMTE2Q2FE?=
+ =?utf-8?B?M0tlbFcxb3oxN2ZNRG9KV1dvNStENGcwd01SRW1OYUNGakpIdkpZRGJBbkNR?=
+ =?utf-8?B?b0Y5YmlNKzduYTA3Yi8zTGRxSEFhZWN3VmFMcG82eDM4bk9nVDJjQys4b2lj?=
+ =?utf-8?B?RXZuWENzeDZ5L2dMQ0ZlYmFnSTRaaDVkelRtSTVPN1l3QkZMcDlRbkpHWTA5?=
+ =?utf-8?B?TUsyakxJRDRubFlFREhHQVNPdDllY0dnNXUwOFFOMTRCUDkrOWhuemk0R1U4?=
+ =?utf-8?B?OENoUlZMTFEvS2RML3JUbzd2bVVXazJSQXVsRnVvOGRoU0IvZm03STZ3dFY1?=
+ =?utf-8?B?WDEraU14czlhTG5FTDRJN3gwM0hHeVJIRC90K1NxbHNRVC8ycHlIYllYTDdQ?=
+ =?utf-8?B?czNhL295L2ttaUdoVEQ5Um5aUmpGdmk4cW1TTHNTSXRvOVJPZy9kZEJpQ0RQ?=
+ =?utf-8?B?eTV6M0tiWUJJRlZrMDJrUGxmVTdVRXFPN3FkOWJ6N1U3Vm1KQzFoNEd4Wm4x?=
+ =?utf-8?B?WkFPR2ZBMDhJZ3h4a08vSzJiVVVCRU01VllqMFlaVjRLWW1wZHZRSTVWc1Rw?=
+ =?utf-8?Q?Nj0eYP9Plytt+oXI=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-OriginatorOrg: dm.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSAPR01MB5060.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0017b80-2ed5-4064-b18a-08da27652e3e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2022 09:14:34.7074
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cQNzKZbuEGtFfxaPsnMPA2DRPCQ2HbjmV55UMbFXEDEKQbDcJ0rck0AJJZIN1iCXCrC1kJl1bnWR4MAXBnFmw1rBgnFxnqB/dkH4r2es774=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3870
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,264 +136,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mib counters for the ksz9477 is same for the ksz9477 switch and
-LAN937x switch. Hence moving it to ksz_common.c file in order to have it
-generic function. The DSA hook get_stats64 now can call ksz_get_stats64.
-
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/microchip/ksz9477.c    | 98 +-------------------------
- drivers/net/dsa/microchip/ksz_common.c | 96 +++++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_common.h |  3 +
- 3 files changed, 101 insertions(+), 96 deletions(-)
-
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 4f617fee9a4e..48c90e4cda30 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -65,100 +65,6 @@ static const struct {
- 	{ 0x83, "tx_discards" },
- };
- 
--struct ksz9477_stats_raw {
--	u64 rx_hi;
--	u64 rx_undersize;
--	u64 rx_fragments;
--	u64 rx_oversize;
--	u64 rx_jabbers;
--	u64 rx_symbol_err;
--	u64 rx_crc_err;
--	u64 rx_align_err;
--	u64 rx_mac_ctrl;
--	u64 rx_pause;
--	u64 rx_bcast;
--	u64 rx_mcast;
--	u64 rx_ucast;
--	u64 rx_64_or_less;
--	u64 rx_65_127;
--	u64 rx_128_255;
--	u64 rx_256_511;
--	u64 rx_512_1023;
--	u64 rx_1024_1522;
--	u64 rx_1523_2000;
--	u64 rx_2001;
--	u64 tx_hi;
--	u64 tx_late_col;
--	u64 tx_pause;
--	u64 tx_bcast;
--	u64 tx_mcast;
--	u64 tx_ucast;
--	u64 tx_deferred;
--	u64 tx_total_col;
--	u64 tx_exc_col;
--	u64 tx_single_col;
--	u64 tx_mult_col;
--	u64 rx_total;
--	u64 tx_total;
--	u64 rx_discards;
--	u64 tx_discards;
--};
--
--static void ksz9477_r_mib_stats64(struct ksz_device *dev, int port)
--{
--	struct rtnl_link_stats64 *stats;
--	struct ksz9477_stats_raw *raw;
--	struct ksz_port_mib *mib;
--
--	mib = &dev->ports[port].mib;
--	stats = &mib->stats64;
--	raw = (struct ksz9477_stats_raw *)mib->counters;
--
--	spin_lock(&mib->stats64_lock);
--
--	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast;
--	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast;
--
--	/* HW counters are counting bytes + FCS which is not acceptable
--	 * for rtnl_link_stats64 interface
--	 */
--	stats->rx_bytes = raw->rx_total - stats->rx_packets * ETH_FCS_LEN;
--	stats->tx_bytes = raw->tx_total - stats->tx_packets * ETH_FCS_LEN;
--
--	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
--		raw->rx_oversize;
--
--	stats->rx_crc_errors = raw->rx_crc_err;
--	stats->rx_frame_errors = raw->rx_align_err;
--	stats->rx_dropped = raw->rx_discards;
--	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
--		stats->rx_frame_errors  + stats->rx_dropped;
--
--	stats->tx_window_errors = raw->tx_late_col;
--	stats->tx_fifo_errors = raw->tx_discards;
--	stats->tx_aborted_errors = raw->tx_exc_col;
--	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
--		stats->tx_aborted_errors;
--
--	stats->multicast = raw->rx_mcast;
--	stats->collisions = raw->tx_total_col;
--
--	spin_unlock(&mib->stats64_lock);
--}
--
--static void ksz9477_get_stats64(struct dsa_switch *ds, int port,
--			       struct rtnl_link_stats64 *s)
--{
--	struct ksz_device *dev = ds->priv;
--	struct ksz_port_mib *mib;
--
--	mib = &dev->ports[port].mib;
--
--	spin_lock(&mib->stats64_lock);
--	memcpy(s, &mib->stats64, sizeof(*s));
--	spin_unlock(&mib->stats64_lock);
--}
--
- static void ksz_cfg(struct ksz_device *dev, u32 addr, u8 bits, bool set)
- {
- 	regmap_update_bits(dev->regmap[0], addr, bits, set ? bits : 0);
-@@ -1462,7 +1368,7 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
- 	.port_mdb_del           = ksz9477_port_mdb_del,
- 	.port_mirror_add	= ksz9477_port_mirror_add,
- 	.port_mirror_del	= ksz9477_port_mirror_del,
--	.get_stats64		= ksz9477_get_stats64,
-+	.get_stats64		= ksz_get_stats64,
- 	.port_change_mtu	= ksz9477_change_mtu,
- 	.port_max_mtu		= ksz9477_max_mtu,
- };
-@@ -1653,7 +1559,7 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
- 	.port_setup = ksz9477_port_setup,
- 	.r_mib_cnt = ksz9477_r_mib_cnt,
- 	.r_mib_pkt = ksz9477_r_mib_pkt,
--	.r_mib_stat64 = ksz9477_r_mib_stats64,
-+	.r_mib_stat64 = ksz_r_mib_stats64,
- 	.freeze_mib = ksz9477_freeze_mib,
- 	.port_init_cnt = ksz9477_port_init_cnt,
- 	.shutdown = ksz9477_reset_switch,
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index 9b9f570ebb0b..10f127b09e58 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -20,6 +20,102 @@
- 
- #include "ksz_common.h"
- 
-+struct ksz_stats_raw {
-+	u64 rx_hi;
-+	u64 rx_undersize;
-+	u64 rx_fragments;
-+	u64 rx_oversize;
-+	u64 rx_jabbers;
-+	u64 rx_symbol_err;
-+	u64 rx_crc_err;
-+	u64 rx_align_err;
-+	u64 rx_mac_ctrl;
-+	u64 rx_pause;
-+	u64 rx_bcast;
-+	u64 rx_mcast;
-+	u64 rx_ucast;
-+	u64 rx_64_or_less;
-+	u64 rx_65_127;
-+	u64 rx_128_255;
-+	u64 rx_256_511;
-+	u64 rx_512_1023;
-+	u64 rx_1024_1522;
-+	u64 rx_1523_2000;
-+	u64 rx_2001;
-+	u64 tx_hi;
-+	u64 tx_late_col;
-+	u64 tx_pause;
-+	u64 tx_bcast;
-+	u64 tx_mcast;
-+	u64 tx_ucast;
-+	u64 tx_deferred;
-+	u64 tx_total_col;
-+	u64 tx_exc_col;
-+	u64 tx_single_col;
-+	u64 tx_mult_col;
-+	u64 rx_total;
-+	u64 tx_total;
-+	u64 rx_discards;
-+	u64 tx_discards;
-+};
-+
-+void ksz_r_mib_stats64(struct ksz_device *dev, int port)
-+{
-+	struct rtnl_link_stats64 *stats;
-+	struct ksz_stats_raw *raw;
-+	struct ksz_port_mib *mib;
-+
-+	mib = &dev->ports[port].mib;
-+	stats = &mib->stats64;
-+	raw = (struct ksz_stats_raw *)mib->counters;
-+
-+	spin_lock(&mib->stats64_lock);
-+
-+	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast;
-+	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast;
-+
-+	/* HW counters are counting bytes + FCS which is not acceptable
-+	 * for rtnl_link_stats64 interface
-+	 */
-+	stats->rx_bytes = raw->rx_total - stats->rx_packets * ETH_FCS_LEN;
-+	stats->tx_bytes = raw->tx_total - stats->tx_packets * ETH_FCS_LEN;
-+
-+	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
-+		raw->rx_oversize;
-+
-+	stats->rx_crc_errors = raw->rx_crc_err;
-+	stats->rx_frame_errors = raw->rx_align_err;
-+	stats->rx_dropped = raw->rx_discards;
-+	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
-+		stats->rx_frame_errors  + stats->rx_dropped;
-+
-+	stats->tx_window_errors = raw->tx_late_col;
-+	stats->tx_fifo_errors = raw->tx_discards;
-+	stats->tx_aborted_errors = raw->tx_exc_col;
-+	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
-+		stats->tx_aborted_errors;
-+
-+	stats->multicast = raw->rx_mcast;
-+	stats->collisions = raw->tx_total_col;
-+
-+	spin_unlock(&mib->stats64_lock);
-+}
-+EXPORT_SYMBOL_GPL(ksz_r_mib_stats64);
-+
-+void ksz_get_stats64(struct dsa_switch *ds, int port,
-+		     struct rtnl_link_stats64 *s)
-+{
-+	struct ksz_device *dev = ds->priv;
-+	struct ksz_port_mib *mib;
-+
-+	mib = &dev->ports[port].mib;
-+
-+	spin_lock(&mib->stats64_lock);
-+	memcpy(s, &mib->stats64, sizeof(*s));
-+	spin_unlock(&mib->stats64_lock);
-+}
-+EXPORT_SYMBOL_GPL(ksz_get_stats64);
-+
- void ksz_update_port_member(struct ksz_device *dev, int port)
- {
- 	struct ksz_port *p = &dev->ports[port];
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 4d978832c448..28cda79b090f 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -151,6 +151,9 @@ int ksz9477_switch_register(struct ksz_device *dev);
- 
- void ksz_update_port_member(struct ksz_device *dev, int port);
- void ksz_init_mib_timer(struct ksz_device *dev);
-+void ksz_r_mib_stats64(struct ksz_device *dev, int port);
-+void ksz_get_stats64(struct dsa_switch *ds, int port,
-+		     struct rtnl_link_stats64 *s);
- 
- /* Common DSA access functions */
- 
-
-base-commit: de6dd626d7082eda383ec77a5e06093c82122d10
--- 
-2.33.0
-
+T24gMjIgQXByaWwgMjAyMiAwNzoxNywgSGVsbXV0IEdyb2huZSB3cm90ZToNCg0KPiBUaGUgREE5
+MDYyIGNhbiBiZSB0aGUgZGV2aWNlIHVzZWQgdG8gcG93ZXIgdGhlIENQVS4gSW4gdGhhdCBjYXNl
+LCBpdCBjYW4NCj4gYmUgdXNlZCB0byBwb3dlciBvZmYgdGhlIHN5c3RlbS4gSW4gdGhlIENPTlRS
+T0xfQSByZWdpc3RlciwgdGhlIE1fKl9FTg0KPiBiaXRzIG11c3QgYmUgemVybyBmb3IgdGhlIGNv
+cnJlc3BvbmRpbmcgKl9FTiBiaXRzIHRvIGhhdmUgYW4gZWZmZWN0LiBXZQ0KPiB6ZXJvIHRoZW0g
+YWxsIHRvIHR1cm4gb2ZmIHRoZSBzeXN0ZW0uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBIZWxtdXQg
+R3JvaG5lIDxoZWxtdXQuZ3JvaG5lQGludGVudGEuZGU+DQo+IC0tLQ0KPiAgZHJpdmVycy9tZmQv
+ZGE5MDYyLWNvcmUuYyB8IDMxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDEg
+ZmlsZSBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCspDQo+IA0KPiBUaGlzIHNlcmllcyBlZmZlY3Rp
+dmVseSBpcyBhIHJlYmFzZWQgcmVzZW5kLiBUaGUgZWFybGllciBwb3N0aW5nIHdhcw0KPiBodHRw
+czovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMDAxMDcxMjA1NTkuR0E3MDBAbGF1cmV0aS1kZXYv
+LiBBdCB0aGF0IHRpbWUsDQo+IEFkYW0gVGhvbXNvbiBjcml0aXNpemVkIHRoZSB1c2Ugb2YgcmVn
+bWFwIGFuZCBpMmMgaW5zaWRlIGEgcG1fcG93ZXJfb2ZmIGhvb2sNCj4gc2luY2UgaXJxcyBhcmUg
+ZGlzYWJsZWQuIEhlIHJlYWNoZWQgb3V0IHRvIExlZSBKb25lcywgd2hvIGFza2VkIE1hcmsgQnJv
+d24gYW5kDQo+IFdvbGZyYW0gU2FuZywgYnV0IG5ldmVyIGdvdCBhbnkgcmVwbHkuIEkgbm90ZWQg
+dGhhdCBhIGZhaXIgbnVtYmVyIG9mIG90aGVyDQo+IGRyaXZlcnMgZG8gdXNlIHJlZ21hcCBhbmQg
+aTJjIGRlc3BpdGUgdGhpcyBpc3N1ZS4gSW4gdGhlIG1lYW4gdGltZSwgbW9yZQ0KPiBpbnN0YW5j
+ZXMgd2VyZSBhZGRlZDoNCj4gICogZHJpdmVycy9tZmQvYWNlci1lYy1hNTAwLmMgdXNlcyBpMmMN
+Cj4gICogZHJpdmVycy9tZmQvbnR4ZWMuYyB1c2VzIGkyYw0KPiAgKiBkcml2ZXJzL21mZC9yazgw
+OC5jIHVzZXMgcmVnbWFwIGFuZCBpMmMNCj4gR2l2ZW4gdGhhdCB3ZSBwcm9jZWVkZWQgd2l0aCBh
+Y2NlcHRpbmcgdGhlIHVzZSBvZiBpMmMgYW5kIHJlZ21hcCBpbnNpZGUNCj4gcG1fcG93ZXJfb2Zm
+IGhvb2tzLCBJIHRoaW5rIHdlIGNhbiBwcm9jZWVkIHdpdGggdGhpcyBwYXRjaCBhcyB3ZWxsLg0K
+PiANCj4gSGVsbXV0DQoNCkkgc3RpbGwgaGF2ZSBjb25jZXJucywgYnV0IG1heWJlIGl0J3MgdXAg
+dG8gdGhlIGludGVncmF0b3Igb2YgYSBwbGF0Zm9ybSB0bw0KZGV0ZXJtaW5lIGlmIHRoaXMgYXBw
+cm9hY2ggZm9yIHBvd2Vyb2ZmIGlzIHZhbGlkIGFuZCB1c2FibGUsIGFsdGhvdWdoIEkgc3RpbGwN
+CnRoaW5rIGl0IHdvdWxkIGJlIGdvb2QgdG8gaGF2ZSBjaGVja3Mgc29tZXdoZXJlIGFzIHRvIHdo
+ZXRoZXIgYSBwbGF0Zm9ybSBjYW4NCmFjdHVhbGx5IHBlcmZvcm0gYXRtb2ljIEkyQyBhY2Nlc3Mg
+d2hlbiBJUlFzIGFyZSBkaXNhYmxlZC4gSG93ZXZlciwgd2l0aG91dA0KZnVydGhlciBpbnNpZ2h0
+IHJpZ2h0IG5vdzoNCg0KUmV2aWV3ZWQtYnk6IEFkYW0gVGhvbXNvbiA8RExHLUFkYW0uVGhvbXNv
+bi5PcGVuc291cmNlQGRtLnJlbmVzYXMuY29tPg0K

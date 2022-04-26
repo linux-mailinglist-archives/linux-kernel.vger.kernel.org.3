@@ -2,206 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3615108F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC115108FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354141AbiDZTae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S238080AbiDZTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241779AbiDZTaa (ORCPT
+        with ESMTP id S1346703AbiDZTcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:30:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490396E8C9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651001242; x=1682537242;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zEcnyTYpfpi+xvrA/4iSPgFr1ehTLK7seCqFqpN4H1Q=;
-  b=jKVN5ZXcDP3dVRkELAkoBgNtWlPOXPsEgi4NF1RlFZ88p6IG/UDuOVxp
-   wj944vscV5N5b1kin6UOXezUZ3cd+lhsNgq6JgwfvNrMAjy3JHr+cOxa6
-   OLzN6Zb8PirdPkiNXDQpA9aapwchDjFv6cnoTCxqaC9gNAnhjEziQWvrs
-   coyo5PCzVwXRMdf75PChN7R12h573V92luDFk9SMlRfABieLI7Y7EzCKe
-   rfBJE5UeL2+KDjLghmc47FnM+98/DCVPoL9nEiINlAmsZ7giK62MdGlhr
-   cbC+AWV7UbIaBcSZ3DEZtPS9TXk6df7oBs2qk5ShcV/xLejX0WX7qjcn8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326187679"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="326187679"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 12:27:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="532825890"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Apr 2022 12:27:20 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njQqF-0003v0-Rc;
-        Tue, 26 Apr 2022 19:27:19 +0000
-Date:   Wed, 27 Apr 2022 03:26:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [niks:has_ioport 37/37] drivers/tty/serial/8250/8250_port.c:398:9:
- error: implicit declaration of function 'outb'
-Message-ID: <202204270334.n8Pu6AGm-lkp@intel.com>
+        Tue, 26 Apr 2022 15:32:06 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E65FAC04F
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:28:42 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id q20so11864733wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 12:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iQFCk4jvRcDNbkwKt80r8M9Ev1zqOHCdGqGh5NtELGk=;
+        b=kXX2A5pPeYzQ7cMHjUay8+MRco1JY+qcFRaRS08NAVmtfBRdvFVDmNjStpeUWkd6Zl
+         vQU5f0FWDf6xsz3RbldyIy9/g5QXdZSQZuDeQifodlFGCf1YGsKpdQYyR2g9y7Y6oB7V
+         /fsu0vO21DVFRug79wN6ff9wbCwuMNbpj0fPxn9wyJ+3cQTLW9PimSQ9f6xgnaxtH2fO
+         AlrXyAXCzlK49e6n1Ju/HDLsl9jTbgxFH3GdBJYGeSidfswDSkOpdP8/KDLnQJLtqZUp
+         IpGuwUWRrQLmAANIliRHGcWrJVnvTEjLAdmNwn2651HlpB30PBm/qWLfwGYSI3Qrg/mB
+         i7nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iQFCk4jvRcDNbkwKt80r8M9Ev1zqOHCdGqGh5NtELGk=;
+        b=WvljTzucjF0uhGH2Np1aZkTR4AGgHmRV6ti0rrXkyHDI1xfIoaGsquqlMYdPXEyyy+
+         m5+BpfTBqFvfi5pMJ2Q8lAolqVr8ahsVbrZhZG+/YgotDJw71S+WzZd74H5OQvFowTwS
+         xuX4w5CoUvXvtWZ8e/8+ZxCr84G4uGEAsrbzK+o3p/zeo3Db4qvbsMYpKuE3Qa2aOfWQ
+         VBWR5ZDd9nMsQupPYhp5DPy+L9SJn2NPd2xUHZoFTOyhoTh2QwITw5hzCttNyKdb6NTL
+         PjO4MkrPtqLmt1zLXvIKPQtd63NbUuJuH12UThVbno+NBmZ+NhbDjM/V/FGxVQsWUvUh
+         +kpw==
+X-Gm-Message-State: AOAM531t0GhjCWcsAqKPokIU/3iua1sYjj3P1qDudVAlLpg5IwyfLNyi
+        Ua9bAQrafXlYDEr6D0Rq+ZD0DXS986sI53NeWebW+Q==
+X-Google-Smtp-Source: ABdhPJxE4uF7k63kUhII0yfWNs5hqWLsW6+10S6JtH7VxMkI6vG6IvE9QqtG19aVEP77InoCW4FL0NJd1Gr2ps0f3PU=
+X-Received: by 2002:a05:600c:1c90:b0:393:e5b9:b567 with SMTP id
+ k16-20020a05600c1c9000b00393e5b9b567mr16137822wms.27.1651001314470; Tue, 26
+ Apr 2022 12:28:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426053904.3684293-1-yosryahmed@google.com>
+ <20220426053904.3684293-5-yosryahmed@google.com> <YmegoB/fBkfwaE5z@google.com>
+In-Reply-To: <YmegoB/fBkfwaE5z@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 26 Apr 2022 12:27:57 -0700
+Message-ID: <CAJD7tkY-WZKcyer=TbWF0dVfOhvZO7hqPN=AYCDZe1f+2HA-QQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] KVM: arm64/mmu: count KVM page table pages in
+ pagetable stats
+To:     Oliver Upton <oupton@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        cgroups@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport
-head:   497d83d316c82255fcfbbefd3be766eeb46926d7
-commit: 497d83d316c82255fcfbbefd3be766eeb46926d7 [37/37] asm-generic/io.h: drop inb() etc for HAS_IOPORT=n
-config: m68k-randconfig-r023-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270334.n8Pu6AGm-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=497d83d316c82255fcfbbefd3be766eeb46926d7
-        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
-        git fetch --no-tags niks has_ioport
-        git checkout 497d83d316c82255fcfbbefd3be766eeb46926d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/tty/serial/8250/ lib/
+Hi Oliver,
+Thanks so much for taking the time to take a look at this!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, Apr 26, 2022 at 12:35 AM Oliver Upton <oupton@google.com> wrote:
+>
+> Hi Yosry,
+>
+> On Tue, Apr 26, 2022 at 05:39:02AM +0000, Yosry Ahmed wrote:
+> > Count the pages used by KVM in arm64 for page tables in pagetable stats.
+> >
+> > Account pages allocated for PTEs in pgtable init functions and
+> > kvm_set_table_pte().
+> >
+> > Since most page table pages are freed using put_page(), add a helper
+> > function put_pte_page() that checks if this is the last ref for a pte
+> > page before putting it, and unaccounts stats accordingly.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  arch/arm64/kernel/image-vars.h |  3 ++
+> >  arch/arm64/kvm/hyp/pgtable.c   | 50 +++++++++++++++++++++-------------
+> >  2 files changed, 34 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
+> > index 241c86b67d01..25bf058714f6 100644
+> > --- a/arch/arm64/kernel/image-vars.h
+> > +++ b/arch/arm64/kernel/image-vars.h
+> > @@ -143,6 +143,9 @@ KVM_NVHE_ALIAS(__hyp_rodata_end);
+> >  /* pKVM static key */
+> >  KVM_NVHE_ALIAS(kvm_protected_mode_initialized);
+> >
+> > +/* Called by kvm_account_pgtable_pages() to update pagetable stats */
+> > +KVM_NVHE_ALIAS(__mod_lruvec_page_state);
+> > +
+> >  #endif /* CONFIG_KVM */
+> >
+> >  #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index 2cb3867eb7c2..53e13c3313e9 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -152,6 +152,7 @@ static void kvm_set_table_pte(kvm_pte_t *ptep, kvm_pte_t *childp,
+> >
+> >       WARN_ON(kvm_pte_valid(old));
+> >       smp_store_release(ptep, pte);
+> > +     kvm_account_pgtable_pages((void *)childp, +1);
+>
+> What page tables do we want to account? KVM on ARM manages several page
+> tables.
+>
+> For regular KVM, the host kernel manages allocations for the hyp stage 1
+> tables in addition to the stage 2 tables used for a particular VM. The
+> former is system overhead whereas the latter could be attributed to a
+> guest VM.
 
-All errors (new ones prefixed by >>):
+Honestly I would love to get your input on this. The main motivation
+here is to give users insights on the kernel memory usage on their
+system (or in a cgroup). We currently have NR_PAGETABLE stats for
+normal kernel page tables (allocated using
+__pte_alloc_one()/pte_free()), this shows up in /proc/meminfo,
+/path/to/cgroup/memory.stat, and node stats. The idea is to add
+NR_SECONDARY_PAGETABLE that should include the memory used for kvm
+pagetables, which should be a separate category (no overlap). What
+gets included or not depends on the semantics of KVM and what exactly
+falls under the category of secondary pagetables from the user's pov.
 
-   drivers/tty/serial/8250/8250_port.c: In function 'hub6_serial_in':
->> drivers/tty/serial/8250/8250_port.c:398:9: error: implicit declaration of function 'outb' [-Werror=implicit-function-declaration]
-     398 |         outb(p->hub6 - 1 + offset, p->iobase);
-         |         ^~~~
->> drivers/tty/serial/8250/8250_port.c:399:16: error: implicit declaration of function 'inb' [-Werror=implicit-function-declaration]
-     399 |         return inb(p->iobase + 1);
-         |                ^~~
-   drivers/tty/serial/8250/8250_port.c: In function 'autoconfig_irq':
->> drivers/tty/serial/8250/8250_port.c:1395:28: error: implicit declaration of function 'inb_p'; did you mean 'int_pow'? [-Werror=implicit-function-declaration]
-    1395 |                 save_ICP = inb_p(ICP);
-         |                            ^~~~~
-         |                            int_pow
->> drivers/tty/serial/8250/8250_port.c:1396:17: error: implicit declaration of function 'outb_p' [-Werror=implicit-function-declaration]
-    1396 |                 outb_p(0x80, ICP);
-         |                 ^~~~~~
-   cc1: some warnings being treated as errors
---
-   lib/iomap.c: In function 'ioread8':
->> lib/iomap.c:75:30: error: implicit declaration of function 'inb' [-Werror=implicit-function-declaration]
-      75 |         IO_COND(addr, return inb(port), return readb(addr));
-         |                              ^~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'ioread16':
->> lib/iomap.c:80:30: error: implicit declaration of function 'inw' [-Werror=implicit-function-declaration]
-      80 |         IO_COND(addr, return inw(port), return readw(addr));
-         |                              ^~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'ioread32':
->> lib/iomap.c:90:30: error: implicit declaration of function 'inl' [-Werror=implicit-function-declaration]
-      90 |         IO_COND(addr, return inl(port), return readl(addr));
-         |                              ^~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'iowrite8':
->> lib/iomap.c:191:23: error: implicit declaration of function 'outb' [-Werror=implicit-function-declaration]
-     191 |         IO_COND(addr, outb(val,port), writeb(val, addr));
-         |                       ^~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'iowrite16':
->> lib/iomap.c:195:23: error: implicit declaration of function 'outw' [-Werror=implicit-function-declaration]
-     195 |         IO_COND(addr, outw(val,port), writew(val, addr));
-         |                       ^~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'iowrite32':
->> lib/iomap.c:203:23: error: implicit declaration of function 'outl' [-Werror=implicit-function-declaration]
-     203 |         IO_COND(addr, outl(val,port), writel(val, addr));
-         |                       ^~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'ioread8_rep':
->> lib/iomap.c:330:23: error: implicit declaration of function 'insb' [-Werror=implicit-function-declaration]
-     330 |         IO_COND(addr, insb(port,dst,count), mmio_insb(addr, dst, count));
-         |                       ^~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'ioread16_rep':
->> lib/iomap.c:334:23: error: implicit declaration of function 'insw' [-Werror=implicit-function-declaration]
-     334 |         IO_COND(addr, insw(port,dst,count), mmio_insw(addr, dst, count));
-         |                       ^~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'ioread32_rep':
->> lib/iomap.c:338:23: error: implicit declaration of function 'insl' [-Werror=implicit-function-declaration]
-     338 |         IO_COND(addr, insl(port,dst,count), mmio_insl(addr, dst, count));
-         |                       ^~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'iowrite8_rep':
->> lib/iomap.c:346:23: error: implicit declaration of function 'outsb' [-Werror=implicit-function-declaration]
-     346 |         IO_COND(addr, outsb(port, src, count), mmio_outsb(addr, src, count));
-         |                       ^~~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'iowrite16_rep':
->> lib/iomap.c:350:23: error: implicit declaration of function 'outsw' [-Werror=implicit-function-declaration]
-     350 |         IO_COND(addr, outsw(port, src, count), mmio_outsw(addr, src, count));
-         |                       ^~~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   lib/iomap.c: In function 'iowrite32_rep':
->> lib/iomap.c:354:23: error: implicit declaration of function 'outsl' [-Werror=implicit-function-declaration]
-     354 |         IO_COND(addr, outsl(port, src,count), mmio_outsl(addr, src, count));
-         |                       ^~~~~
-   lib/iomap.c:57:17: note: in definition of macro 'IO_COND'
-      57 |                 is_pio;                                         \
-         |                 ^~~~~~
-   cc1: some warnings being treated as errors
+Currently it looks like s2 page table allocations get accounted to
+kmem of memory control groups (GFP_KERNEL_ACCOUNT), while hyp page
+table allocations do not (GFP_KERNEL). So we could either follow this
+and only account s2 page table allocations in the stats, or make hyp
+allocations use GFP_KERNEL_ACCOUNT as well and add them to the stats.
+Let me know what you think.
 
+>
+> I imagine protected KVM is out of scope, since it actually manages its
+> own allocations outside of the host kernel.
+>
+> Given this, I would recommend adding the accounting hooks to mmu.c as
+> that is where we alloc/free table pages and it is in the host address
+> space. kvm_s2_mm_ops and kvm_hyp_mm_ops point to all the relevant
+> functions, though the latter is only relevant if we want to count system
+> page tables too.
 
-vim +/outb +398 drivers/tty/serial/8250/8250_port.c
+Yeah moving the accounting hooks to mmu.c is much cleaner, I will do
+this in the next version. The only reason I did not do this is that I
+found other kvm_pgtable_mm_ops structs (such as pkvm_pgtable_mm_ops),
+but it looks like these may be irrelevant here.
 
-b6830f6df8914fa Peter Hurley 2015-06-27  394  
-b6830f6df8914fa Peter Hurley 2015-06-27  395  static unsigned int hub6_serial_in(struct uart_port *p, int offset)
-b6830f6df8914fa Peter Hurley 2015-06-27  396  {
-b6830f6df8914fa Peter Hurley 2015-06-27  397  	offset = offset << p->regshift;
-b6830f6df8914fa Peter Hurley 2015-06-27 @398  	outb(p->hub6 - 1 + offset, p->iobase);
-b6830f6df8914fa Peter Hurley 2015-06-27 @399  	return inb(p->iobase + 1);
-b6830f6df8914fa Peter Hurley 2015-06-27  400  }
-b6830f6df8914fa Peter Hurley 2015-06-27  401  
-
-:::::: The code at line 398 was first introduced by commit
-:::::: b6830f6df8914faae9561bb245860c21af9b9e9b serial: 8250: Split base port operations from universal driver
-
-:::::: TO: Peter Hurley <peter@hurleysoftware.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> --
+> Thanks,
+> Oliver

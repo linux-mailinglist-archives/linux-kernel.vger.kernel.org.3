@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B6250F4EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152C050F727
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345340AbiDZIke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S1346538AbiDZJN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344897AbiDZIdu (ORCPT
+        with ESMTP id S1347107AbiDZIvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:33:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EF045533;
-        Tue, 26 Apr 2022 01:25:43 -0700 (PDT)
+        Tue, 26 Apr 2022 04:51:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D7C174A00;
+        Tue, 26 Apr 2022 01:39:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA12617F3;
-        Tue, 26 Apr 2022 08:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C33C385AE;
-        Tue, 26 Apr 2022 08:25:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B5AE6090C;
+        Tue, 26 Apr 2022 08:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55D7C385A0;
+        Tue, 26 Apr 2022 08:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961542;
-        bh=3xo6pEwR/yVVx0foppT126wijozUjjQDOotLcWhFktk=;
+        s=korg; t=1650962370;
+        bh=91IJCXFXrRhxZ3eZykcnYSPjUcHxOjTmk7YsarhCXlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zZVBYfP0eklgPyS1/aEFCyRD1V5Zo29mJ5it0WsWN8k6rqFaSKw/pnV53gxPGnGSF
-         OLBHhz+CkDTaM+MMq6nT5aWgwaU17CNS5uFsMa5Uk3D05WQYQ3/yoAOV+ZGuByCj9Z
-         5ZPOkvw2dYGT26GHm198FAnxPXsEDxLZfr/j96rY=
+        b=jcl79l8X9vqlEt4w5KYGjlQxg353RuXMYeZSm0nCLq4sawsIwfml6NG4CXIvTF/p0
+         NM+6Le4I1Q0940JRIjzGDjsqDQ637rT+iOIuEkG3W5BTCf2uSUIhq26ib5h03idMge
+         HHdFsxz2SmiUH3HsbRuZq1ZsgoZU+GBuTKgs/yR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 4.14 30/43] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
-Date:   Tue, 26 Apr 2022 10:21:12 +0200
-Message-Id: <20220426081735.405917149@linuxfoundation.org>
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 072/124] stat: fix inconsistency between struct stat and struct compat_stat
+Date:   Tue, 26 Apr 2022 10:21:13 +0200
+Message-Id: <20220426081749.348732389@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +57,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit 2da376228a2427501feb9d15815a45dbdbdd753e upstream.
+[ Upstream commit 932aba1e169090357a77af18850a10c256b50819 ]
 
-Syzbot found an issue [1] in ext4_fallocate().
-The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-and offset 0x1000000ul, which, when added together exceed the
-bitmap_maxbytes for the inode. This triggers a BUG in
-ext4_ind_remove_space(). According to the comments in this function
-the 'end' parameter needs to be one block after the last block to be
-removed. In the case when the BUG is triggered it points to the last
-block. Modify the ext4_punch_hole() function and add constraint that
-caps the length to satisfy the one before laster block requirement.
+struct stat (defined in arch/x86/include/uapi/asm/stat.h) has 32-bit
+st_dev and st_rdev; struct compat_stat (defined in
+arch/x86/include/asm/compat.h) has 16-bit st_dev and st_rdev followed by
+a 16-bit padding.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
+This patch fixes struct compat_stat to match struct stat.
 
-Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Link: https://lore.kernel.org/r/20220331200515.153214-1-tadeusz.struk@linaro.org
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[ Historical note: the old x86 'struct stat' did have that 16-bit field
+  that the compat layer had kept around, but it was changes back in 2003
+  by "struct stat - support larger dev_t":
+
+    https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=e95b2065677fe32512a597a79db94b77b90c968d
+
+  and back in those days, the x86_64 port was still new, and separate
+  from the i386 code, and had already picked up the old version with a
+  16-bit st_dev field ]
+
+Note that we can't change compat_dev_t because it is used by
+compat_loop_info.
+
+Also, if the st_dev and st_rdev values are 32-bit, we don't have to use
+old_valid_dev to test if the value fits into them.  This fixes
+-EOVERFLOW on filesystems that are on NVMe because NVMe uses the major
+number 259.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Andreas Schwab <schwab@linux-m68k.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/compat.h |  6 ++----
+ fs/stat.c                     | 19 ++++++++++---------
+ 2 files changed, 12 insertions(+), 13 deletions(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -4224,7 +4224,8 @@ int ext4_punch_hole(struct inode *inode,
- 	struct super_block *sb = inode->i_sb;
- 	ext4_lblk_t first_block, stop_block;
- 	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	handle_t *handle;
- 	unsigned int credits;
- 	int ret = 0;
-@@ -4270,6 +4271,14 @@ int ext4_punch_hole(struct inode *inode,
- 		   offset;
- 	}
+diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+index 7516e4199b3c..20fd0acd7d80 100644
+--- a/arch/x86/include/asm/compat.h
++++ b/arch/x86/include/asm/compat.h
+@@ -28,15 +28,13 @@ typedef u16		compat_ipc_pid_t;
+ typedef __kernel_fsid_t	compat_fsid_t;
  
-+	/*
-+	 * For punch hole the length + offset needs to be within one block
-+	 * before last range. Adjust the length if it goes beyond that limit.
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
-+	if (offset + length > max_length)
-+		length = max_length - offset;
-+
- 	if (offset & (sb->s_blocksize - 1) ||
- 	    (offset + length) & (sb->s_blocksize - 1)) {
- 		/*
+ struct compat_stat {
+-	compat_dev_t	st_dev;
+-	u16		__pad1;
++	u32		st_dev;
+ 	compat_ino_t	st_ino;
+ 	compat_mode_t	st_mode;
+ 	compat_nlink_t	st_nlink;
+ 	__compat_uid_t	st_uid;
+ 	__compat_gid_t	st_gid;
+-	compat_dev_t	st_rdev;
+-	u16		__pad2;
++	u32		st_rdev;
+ 	u32		st_size;
+ 	u32		st_blksize;
+ 	u32		st_blocks;
+diff --git a/fs/stat.c b/fs/stat.c
+index 28d2020ba1f4..246d138ec066 100644
+--- a/fs/stat.c
++++ b/fs/stat.c
+@@ -334,9 +334,6 @@ SYSCALL_DEFINE2(fstat, unsigned int, fd, struct __old_kernel_stat __user *, stat
+ #  define choose_32_64(a,b) b
+ #endif
+ 
+-#define valid_dev(x)  choose_32_64(old_valid_dev(x),true)
+-#define encode_dev(x) choose_32_64(old_encode_dev,new_encode_dev)(x)
+-
+ #ifndef INIT_STRUCT_STAT_PADDING
+ #  define INIT_STRUCT_STAT_PADDING(st) memset(&st, 0, sizeof(st))
+ #endif
+@@ -345,7 +342,9 @@ static int cp_new_stat(struct kstat *stat, struct stat __user *statbuf)
+ {
+ 	struct stat tmp;
+ 
+-	if (!valid_dev(stat->dev) || !valid_dev(stat->rdev))
++	if (sizeof(tmp.st_dev) < 4 && !old_valid_dev(stat->dev))
++		return -EOVERFLOW;
++	if (sizeof(tmp.st_rdev) < 4 && !old_valid_dev(stat->rdev))
+ 		return -EOVERFLOW;
+ #if BITS_PER_LONG == 32
+ 	if (stat->size > MAX_NON_LFS)
+@@ -353,7 +352,7 @@ static int cp_new_stat(struct kstat *stat, struct stat __user *statbuf)
+ #endif
+ 
+ 	INIT_STRUCT_STAT_PADDING(tmp);
+-	tmp.st_dev = encode_dev(stat->dev);
++	tmp.st_dev = new_encode_dev(stat->dev);
+ 	tmp.st_ino = stat->ino;
+ 	if (sizeof(tmp.st_ino) < sizeof(stat->ino) && tmp.st_ino != stat->ino)
+ 		return -EOVERFLOW;
+@@ -363,7 +362,7 @@ static int cp_new_stat(struct kstat *stat, struct stat __user *statbuf)
+ 		return -EOVERFLOW;
+ 	SET_UID(tmp.st_uid, from_kuid_munged(current_user_ns(), stat->uid));
+ 	SET_GID(tmp.st_gid, from_kgid_munged(current_user_ns(), stat->gid));
+-	tmp.st_rdev = encode_dev(stat->rdev);
++	tmp.st_rdev = new_encode_dev(stat->rdev);
+ 	tmp.st_size = stat->size;
+ 	tmp.st_atime = stat->atime.tv_sec;
+ 	tmp.st_mtime = stat->mtime.tv_sec;
+@@ -644,11 +643,13 @@ static int cp_compat_stat(struct kstat *stat, struct compat_stat __user *ubuf)
+ {
+ 	struct compat_stat tmp;
+ 
+-	if (!old_valid_dev(stat->dev) || !old_valid_dev(stat->rdev))
++	if (sizeof(tmp.st_dev) < 4 && !old_valid_dev(stat->dev))
++		return -EOVERFLOW;
++	if (sizeof(tmp.st_rdev) < 4 && !old_valid_dev(stat->rdev))
+ 		return -EOVERFLOW;
+ 
+ 	memset(&tmp, 0, sizeof(tmp));
+-	tmp.st_dev = old_encode_dev(stat->dev);
++	tmp.st_dev = new_encode_dev(stat->dev);
+ 	tmp.st_ino = stat->ino;
+ 	if (sizeof(tmp.st_ino) < sizeof(stat->ino) && tmp.st_ino != stat->ino)
+ 		return -EOVERFLOW;
+@@ -658,7 +659,7 @@ static int cp_compat_stat(struct kstat *stat, struct compat_stat __user *ubuf)
+ 		return -EOVERFLOW;
+ 	SET_UID(tmp.st_uid, from_kuid_munged(current_user_ns(), stat->uid));
+ 	SET_GID(tmp.st_gid, from_kgid_munged(current_user_ns(), stat->gid));
+-	tmp.st_rdev = old_encode_dev(stat->rdev);
++	tmp.st_rdev = new_encode_dev(stat->rdev);
+ 	if ((u64) stat->size > MAX_NON_LFS)
+ 		return -EOVERFLOW;
+ 	tmp.st_size = stat->size;
+-- 
+2.35.1
+
 
 

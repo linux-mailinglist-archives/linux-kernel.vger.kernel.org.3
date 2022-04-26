@@ -2,258 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654A950EF8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC3650EF91
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 06:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242825AbiDZEKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 00:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S243920AbiDZELM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 00:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiDZEKx (ORCPT
+        with ESMTP id S243880AbiDZELC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 00:10:53 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EBA167C1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:07:47 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q2l3xL002390;
-        Tue, 26 Apr 2022 04:07:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pqkWyecMge/6I1fcugoqtiWAmpA2pe5e8BJe8Y8A7MU=;
- b=Qd1blKFLRkaXk40q/h84T7y48l8/JaN1J6BXnwa8NnA2oFQLZ2pTYbhr7l30tYsx/SnW
- 9be4t7dVHRFjSEIG06vC9gwGAMghT3zIxJuKoT8mvbCVIw6KUMK1hT8hV78vTYwb1kYS
- lCR7sBLiIqd6eyEWNdNdLOw7e8ZATIjYQBUzGCk85b2rb3qceGFk0hpFrUvIhy+sY+G9
- NVnv3sjuSXKCZWtqgPkrmT6b3szfVbzS0idY3ONzxdBj95C1AmpKjh+prz5nT8xiYboV
- SRuUjL+3vmtOH6Iz23dmEN+mzzID8pyvVJef1g35rnCk2mjONdaT2zxnpEvhF6h53R0P IA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fp88s12rs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 04:07:11 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23Q3cvlq008103;
-        Tue, 26 Apr 2022 04:07:11 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fp88s12r8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 04:07:11 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23Q42OIU026813;
-        Tue, 26 Apr 2022 04:07:09 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938ubt4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 04:07:09 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23Q476WE42139904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Apr 2022 04:07:06 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A386611C04C;
-        Tue, 26 Apr 2022 04:07:06 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 528F011C050;
-        Tue, 26 Apr 2022 04:07:01 +0000 (GMT)
-Received: from [9.43.122.72] (unknown [9.43.122.72])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 Apr 2022 04:07:01 +0000 (GMT)
-Message-ID: <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
-Date:   Tue, 26 Apr 2022 09:36:59 +0530
+        Tue, 26 Apr 2022 00:11:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71D98167EB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650946074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AuGMiVQ54UHeSvg8sdwlcgbUOg1bzj5/F3tz+KJ+Q24=;
+        b=E81ve1K6nSzXW0qyCp9KTTqaKVQl0gUrDeKWHWVc7nJebgr4G4ggRFtUM+P61cv7i7m19n
+        aqWYQ0qg0IIJ3jdrnWkBU2PpG6MuyFbzVkhIYJYInMqbbdiOQwkvFCwafQBfx9h88yVRn3
+        yZ37nUsNxlG2dqp001b+4QStDpfB2Tg=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-509-83D199Z8P8e1XelT_xdyTw-1; Tue, 26 Apr 2022 00:07:53 -0400
+X-MC-Unique: 83D199Z8P8e1XelT_xdyTw-1
+Received: by mail-lj1-f197.google.com with SMTP id u19-20020a2e8553000000b0024f222a942aso42244ljj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 21:07:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AuGMiVQ54UHeSvg8sdwlcgbUOg1bzj5/F3tz+KJ+Q24=;
+        b=ji8Jl4veWDt5LFau8VD9+Fur2KGzBD3OL1DpQN5IXd81ZW+4wu33y7Oh8WTEqJf6n4
+         WcLrNFH3rhK9VTnie1IeMPEVGXGlY6bleJFuasJHdEDEhiQ3yeLr5QfDpX6WB657HPAT
+         Hl1nQc//Slg/j3De5PYmNo7ktvqx42WY0C/UVEKHVC8W9sfXYGJdhDHFlC+Gi8EHelIz
+         QQwhDUWx5jU8jbA2DpGmkb4GoH9JPvrDFtPDiyA6Ox5QjlNkiuN/mMKVpoOHz2kHoX0f
+         fjbB7c2/UUJIK3kiUuQljgMeAEsW8SRJwvo+EWI7NMXHhMEY5UB/aSInu2i+16W1hyrM
+         9ruw==
+X-Gm-Message-State: AOAM531WlUZxqXZoB+k/6eapN7lDfQ7ND4ttcLdLS4IMsm8S2W/nqyH1
+        SQwjmuFk+Vh4RYo+ZbRKEuFdVUrfy4a9ithO3dc84vwT7W+vd4WCSJN6jo+remiwyTLcN48xOai
+        A+SrYZD3ppXBXd5hQnsYSntDOuh7FAcb6UVOOFECE
+X-Received: by 2002:a05:6512:b81:b0:448:b342:513c with SMTP id b1-20020a0565120b8100b00448b342513cmr15264136lfv.257.1650946071294;
+        Mon, 25 Apr 2022 21:07:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw8cMRgeJdLRR9nm75CnO2Nx0KqwdQSMGUUkDvsKw8o5celdKNAmeZb54EkxXEys10n8QzGyW2l09PAXlsiqFA=
+X-Received: by 2002:a05:6512:b81:b0:448:b342:513c with SMTP id
+ b1-20020a0565120b8100b00448b342513cmr15264132lfv.257.1650946071111; Mon, 25
+ Apr 2022 21:07:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 4/8] crash: add generic infrastructure for crash
- hotplug support
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220413164237.20845-1-eric.devolder@oracle.com>
- <20220413164237.20845-5-eric.devolder@oracle.com>
- <YleK3J/4HNuFioIh@MiWiFi-R3L-srv>
- <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: yQPamVVC4RE6RrNwhM9qjkASlwn2XiBg
-X-Proofpoint-ORIG-GUID: Y0Wwda48UVdsG6dwkcfMdbHX9WI698L6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_01,2022-04-25_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- spamscore=0 suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1011 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204260024
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425024418.8415-1-jasowang@redhat.com> <20220425024418.8415-7-jasowang@redhat.com>
+ <20220425040512-mutt-send-email-mst@kernel.org> <87a6c98rwf.fsf@redhat.com>
+ <20220425095742-mutt-send-email-mst@kernel.org> <20220426042911.544477f9.pasic@linux.ibm.com>
+ <20220425233434-mutt-send-email-mst@kernel.org> <20220425233604-mutt-send-email-mst@kernel.org>
+ <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com> <20220425235134-mutt-send-email-mst@kernel.org>
+ <20220425235415-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220425235415-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 26 Apr 2022 12:07:39 +0800
+Message-ID: <CACGkMEve+3ugK-Kgao3_2wbjb=fbF7AO2uEuArGjKgEAQcGdiQ@mail.gmail.com>
+Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 15/04/22 03:59, Eric DeVolder wrote:
-> Hi Baoquan,
-> Inline comments below.
-> Thanks!
-> eric
+On Tue, Apr 26, 2022 at 11:55 AM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
-> On 4/13/22 21:45, Baoquan He wrote:
->> On 04/13/22 at 12:42pm, Eric DeVolder wrote:
->>> Upon CPU and memory changes, a generic crash_hotplug_handler()
->>> dispatches the hot plug/unplug event to the architecture specific
->>> arch_crash_hotplug_handler(). During the process, the kexec_mutex
->>> is held.
->>>
->>> To support cpu hotplug, a callback is registered to capture the
->>> CPUHP_AP_ONLINE_DYN online and ofline events via
->>> cpuhp_setup_state_nocalls().
->>>
->>> To support memory hotplug, a notifier is registered to capture the
->>> MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
->>>
->>> The cpu callback and memory notifier then call crash_hotplug_handler()
->>> to handle the hot plug/unplug event.
->>>
->>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
->>> ---
->>>   include/linux/kexec.h |  16 +++++++
->>>   kernel/crash_core.c   | 101 
->>> ++++++++++++++++++++++++++++++++++++++++++
->>>   2 files changed, 117 insertions(+)
->>>
->>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->>> index f93f2591fc1e..02daff1f47dd 100644
->>> --- a/include/linux/kexec.h
->>> +++ b/include/linux/kexec.h
->>> @@ -306,6 +306,13 @@ struct kimage {
->>>         /* Information for loading purgatory */
->>>       struct purgatory_info purgatory_info;
->>> +
->>> +#ifdef CONFIG_CRASH_HOTPLUG
->>> +    bool hotplug_event;
->>> +    unsigned int offlinecpu;
->>> +    bool elfcorehdr_index_valid;
->>> +    int elfcorehdr_index;
->>> +#endif
->>>   #endif
->>>     #ifdef CONFIG_IMA_KEXEC
->>> @@ -322,6 +329,15 @@ struct kimage {
->>>       unsigned long elf_load_addr;
->>>   };
->>>   +#ifdef CONFIG_CRASH_HOTPLUG
->>> +void arch_crash_hotplug_handler(struct kimage *image,
->>> +    unsigned int hp_action, unsigned int cpu);
->>> +#define KEXEC_CRASH_HP_REMOVE_CPU   0
->>> +#define KEXEC_CRASH_HP_ADD_CPU      1
->>> +#define KEXEC_CRASH_HP_REMOVE_MEMORY 2
->>> +#define KEXEC_CRASH_HP_ADD_MEMORY   3
->>> +#endif /* CONFIG_CRASH_HOTPLUG */
->>> +
->>>   /* kexec interface functions */
->>>   extern void machine_kexec(struct kimage *image);
->>>   extern int machine_kexec_prepare(struct kimage *image);
->>> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
->>> index 256cf6db573c..ecf746243ab2 100644
->>> --- a/kernel/crash_core.c
->>> +++ b/kernel/crash_core.c
->>> @@ -9,12 +9,17 @@
->>>   #include <linux/init.h>
->>>   #include <linux/utsname.h>
->>>   #include <linux/vmalloc.h>
->>> +#include <linux/highmem.h>
->>> +#include <linux/memory.h>
->>> +#include <linux/cpuhotplug.h>
->>>     #include <asm/page.h>
->>>   #include <asm/sections.h>
->>>     #include <crypto/sha1.h>
->>>   +#include "kexec_internal.h"
->>> +
->>>   /* vmcoreinfo stuff */
->>>   unsigned char *vmcoreinfo_data;
->>>   size_t vmcoreinfo_size;
->>> @@ -491,3 +496,99 @@ static int __init crash_save_vmcoreinfo_init(void)
->>>   }
->>>     subsys_initcall(crash_save_vmcoreinfo_init);
->>> +
->>> +#ifdef CONFIG_CRASH_HOTPLUG
->>> +void __weak arch_crash_hotplug_handler(struct kimage *image,
->>> +    unsigned int hp_action, unsigned int cpu)
->>> +{
->>> +    pr_warn("crash hp: %s not implemented", __func__);
->>> +}
->>> +
->>> +static void crash_hotplug_handler(unsigned int hp_action,
->>> +    unsigned int cpu)
->>> +{
->>> +    /* Obtain lock while changing crash information */
->>> +    if (!mutex_trylock(&kexec_mutex))
->>> +        return;
->>> +
->>> +    /* Check kdump is loaded */
->>> +    if (kexec_crash_image) {
->>> +        pr_debug("crash hp: hp_action %u, cpu %u", hp_action, cpu);
->>> +
->>> +        /* Needed in order for the segments to be updated */
->>> +        arch_kexec_unprotect_crashkres();
->>> +
->>> +        /* Flag to differentiate between normal load and hotplug */
->>> +        kexec_crash_image->hotplug_event = true;
->>> +
->>> +        /* Now invoke arch-specific update handler */
->>> +        arch_crash_hotplug_handler(kexec_crash_image, hp_action, cpu);
->>> +
->>> +        /* No longer handling a hotplug event */
->>> +        kexec_crash_image->hotplug_event = false;
->>> +
->>> +        /* Change back to read-only */
->>> +        arch_kexec_protect_crashkres();
->>> +    }
->>> +
->>> +    /* Release lock now that update complete */
->>> +    mutex_unlock(&kexec_mutex);
->>> +}
->>> +
->>> +#if defined(CONFIG_MEMORY_HOTPLUG)
->>> +static int crash_memhp_notifier(struct notifier_block *nb,
->>> +    unsigned long val, void *v)
->>> +{
->>> +    struct memory_notify *mhp = v;
->>> +
->>> +    switch (val) {
->>> +    case MEM_ONLINE:
->>> +        crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY, -1U);
->> We don't differentiate the memory add/remove, cpu add, except of cpu
->> remove. Means the hp_action only differentiate cpu remove from the other
->> action. Maybe only making two types?
->>
->> #define KEXEC_CRASH_HP_REMOVE_CPU   0
->> #define KEXEC_CRASH_HP_UPDATE_OTHER      1
->>
-> Sourabh Jain's work with PPC uses REMOVE_CPU, REMOVE_MEMORY, and 
-> ADD_MEMORY.
-> Do you still want to consolidate these?
+> On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote:
+> > On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
+> > >
+> > > =E5=9C=A8 2022/4/26 11:38, Michael S. Tsirkin =E5=86=99=E9=81=93:
+> > > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin wrote:
+> > > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote:
+> > > > > > On Mon, 25 Apr 2022 09:59:55 -0400
+> > > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck wrote=
+:
+> > > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> =
+wrote:
+> > > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrot=
+e:
+> > > > > > > > > > This patch tries to implement the synchronize_cbs() for=
+ ccw. For the
+> > > > > > > > > > vring_interrupt() that is called via virtio_airq_handle=
+r(), the
+> > > > > > > > > > synchronization is simply done via the airq_info's lock=
+. For the
+> > > > > > > > > > vring_interrupt() that is called via virtio_ccw_int_han=
+dler(), a per
+> > > > > > > > > > device spinlock for irq is introduced ans used in the s=
+ynchronization
+> > > > > > > > > > method.
+> > > > > > > > > >
+> > > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+> > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > > > > >
+> > > > > > > > > This is the only one that is giving me pause. Halil, Corn=
+elia,
+> > > > > > > > > should we be concerned about the performance impact here?
+> > > > > > > > > Any chance it can be tested?
+> > > > > > > > We can have a bunch of devices using the same airq structur=
+e, and the
+> > > > > > > > sync cb creates a choke point, same as registering/unregist=
+ering.
+> > > > > > > BTW can callbacks for multiple VQs run on multiple CPUs at th=
+e moment?
+> > > > > > I'm not sure I understand the question.
+> > > > > >
+> > > > > > I do think we can have multiple CPUs that are executing some po=
+rtion of
+> > > > > > virtio_ccw_int_handler(). So I guess the answer is yes. Connie =
+what do you think?
+> > > > > >
+> > > > > > On the other hand we could also end up serializing synchronize_=
+cbs()
+> > > > > > calls for different devices if they happen to use the same airq=
+_info. But
+> > > > > > this probably was not your question
+> > > > >
+> > > > > I am less concerned about  synchronize_cbs being slow and more ab=
+out
+> > > > > the slowdown in interrupt processing itself.
+> > > > >
+> > > > > > > this patch serializes them on a spinlock.
+> > > > > > >
+> > > > > > Those could then pile up on the newly introduced spinlock.
+> > > > > >
+> > > > > > Regards,
+> > > > > > Halil
+> > > > > Hmm yea ... not good.
+> > > > Is there any other way to synchronize with all callbacks?
+> > >
+> > >
+> > > Maybe using rwlock as airq handler?
+> > >
+> > > Thanks
+> > >
+> >
+> > rwlock is still a shared cacheline bouncing between CPUs and
+> > a bunch of ordering instructions.
 
-On PowerPC different actions are needed for CPU add and memory add/remove.
-For CPU add case only FDT is updated whereas for the memory hotplug we 
-will be
-updating FDT and elfcorehdr.
+Yes, but it should be faster than spinlocks anyhow.
 
-Ideally, I would prefer the crash hotplug handler to report all four 
-actions separately.
+> > Maybe something per-cpu + some IPIs to run things on all CPUs instead?
 
-Thanks,
-Sourabh Jain
+Is this something like a customized version of synchronzie_rcu_expedited()?
+
+>
+> ... and I think classic and device interrupts are different enough
+> here ...
+
+Yes.
+
+Thanks
+
+>
+> > > >
+> > > > > --
+> > > > > MST
+>
 

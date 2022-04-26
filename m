@@ -2,208 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01C250F431
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C5950F48A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiDZIff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S1345109AbiDZIgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243337AbiDZIdq (ORCPT
+        with ESMTP id S1345139AbiDZIeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:33:46 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9A13CFC2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:25:38 -0700 (PDT)
-Received: from [172.16.4.143] (unknown [87.190.40.202])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 086E861EA1928;
-        Tue, 26 Apr 2022 10:25:35 +0200 (CEST)
-Message-ID: <44c145a8-cbfd-c8e4-8391-76abb9562f97@molgen.mpg.de>
-Date:   Tue, 26 Apr 2022 10:25:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 01/11] aach: arm: mach-hpe: Introduce the HPE GXP
- architecture
-Content-Language: en-US
-To:     Nick Hawkins <nick.hawkins@hpe.com>
-Cc:     verdun@hpe.com, joel@jms.id.au, arnd@arndb.de,
-        openbmc@lists.ozlabs.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220421192132.109954-1-nick.hawkins@hpe.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220421192132.109954-1-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 26 Apr 2022 04:34:07 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D844B6E550
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:26:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bcFJhbzWsoI6F+6NYxYYNJv0+/w6Hdms+3mppbUVdJFLp/uTUjEh8AdQBx1LYX5JbX3151MhATMX0lhT1byVtb824Zvb0Lgb770xs7CrvQBWIb9KmD48S1TE1iO+deK3uViJrIItvTLGFrekO13I1BJVrXyLT8FFd37gVVH7daVFC0Llpq+uLbwQpWoxUKNzVeDeZ73nq74fE9FWkXLRfN3+i/QQRm0nLUZ6MKmrnTV3zgUTTvMNupYT2LrubiVbiaca371wRZC2m3xUv1VRWq+bxkwBVxBa1qtYgDbiOvUUFTB4pgs5QP5OPFP5tnTyZ3ZjRedNMfAo7kP1eKB9jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lFqXuY219pQYqdcnExefYu3BoAMa/pMzNdZVT5eZxrU=;
+ b=ms3U5QcZXLpPYFYJqdqknkeqBqvOx96fiDNcbbKMCNCvQeDsNpc6ZPcfULyNxJxCK3bD+cOtKiOtlQjmo9hzK1hyajNGhJTZCU/dl+yjLPYv9+G2xMgPXLHG8p3qXAgD1LBxxSGtFLBnVgCifEJFnIhkSvm3vIjWV/8DGi5CKTgx53hYjrDJJALkLk8RddV6BCpRfkHR3LB8xOPc4myweqSZfaRnGEHzyFB500TU2/AS6PUA5eCXxyg0b8bZcUtsk5TDiGDYQncEwF1udKIxThKoNe61e7+UiXtWebvh7lcyd7PBln8JNHwt0/oWrvqkhIdv0vtgM5IA5Hx9B3gHcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lFqXuY219pQYqdcnExefYu3BoAMa/pMzNdZVT5eZxrU=;
+ b=dW5Ot29LSIcdKdhAXEcdH+fFPs1yPCloAQNiE4H/62cfhKq4bNB62Gj5l0WOBhZXUO/8CYde4xC2/WC/g/eokSGzFLJ3p/d4ClRZ/cWCehzA8Cki52nfjsSys1CRJ+AblWR8wbuWMfBCi4VgJWEMfORYsv2CxWWTdUygJ3nbZDk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ TYZPR06MB3952.apcprd06.prod.outlook.com (2603:1096:400:6::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.14; Tue, 26 Apr 2022 08:26:10 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 08:26:09 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Howells <dhowells@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] mm/filemap: Fix NULL pointer dereference in pagecache_get_page
+Date:   Tue, 26 Apr 2022 16:25:48 +0800
+Message-Id: <20220426082549.590899-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.3
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0069.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::33) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cdec9c02-e6d4-4b3a-8996-08da275e6a72
+X-MS-TrafficTypeDiagnostic: TYZPR06MB3952:EE_
+X-Microsoft-Antispam-PRVS: <TYZPR06MB3952AD1C799A2DB1E7DE27EBABFB9@TYZPR06MB3952.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lmTCgQR1BPJktKI97vqL1Hx0FTWJT+5zsCWd7Yi+7g6nloknufiy0nSPUYiK2/5fM+l3EMDjG0HmpbojTj04f4X0PxP13laXvWOkRsmKXKQzuHQREiCNWbIkBwVGJ5ZZbnMHI6XgNy+Yaj1pCu4imOJd85Cn79SL26GIrnANPitjHY9EmHSleoterG18RI4WHZzh6LDOsuWYJ/sM09c0uQV/uPthD87iFzSGXnujOBqAdTpMj4g3m+ugNIWbRtnJQfD80MplMQ728cq1pmEVkF9k8pYtad7POfBkyde6ltEKfgw41Hq89GrEQ52hW7x02YkXNt5W5ovs9jTxavBjS7wofsm8s/uDYIET05D0HaVDBOZm3QbUCv7H5PtEkF2QKWk9VUuIjDadPV5bA/KrCU+fqoacQp+1eDI93YN20d4YE6YXP9vS4EBJD9n7WLNy/zy28pgXlN9TPtof3xZEJ9qYxJYDvv+9PtbfRTbdWvfEYs+r2kFssYJHwc4fhROxiLLD7j/e2uaclXrYkEc/oPujjEdt12P6M53jkY8Tb/Bu85ccNH9UDqW6JvlLcXjPxWJpPL2OMAcNkCmFRmGYsA187Gzrn4DOnXx2zSjuYdYPdymLXq5NggQlZO4hS4+uCQOkAPSyKIGtxSnq+TpHnZP2RjXhnDLbPfYi5fRRXiNHq1O9suDN9Wk9wCfZBo9GXycBeOFiA1zFcIgdPa5EBQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(6666004)(66476007)(66556008)(66946007)(4326008)(8676002)(4744005)(38350700002)(38100700002)(8936002)(6486002)(6512007)(6506007)(508600001)(86362001)(186003)(26005)(83380400001)(36756003)(5660300002)(2906002)(107886003)(316002)(110136005)(2616005)(1076003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fk73PeyQcVh5/TrjXIOCRrIa7x0uSShtF4cxddDyzc9aKxtWVP2z6nH1UxgD?=
+ =?us-ascii?Q?WWwKr74f2W2ne3D8qb0iWhwD1njIqo+tVNgPlnv9QMaTRMguZAHeoAlhXMvT?=
+ =?us-ascii?Q?/JC7ah3iGtezsdE5KbDVi+JsJkcbv56Ear/y8ezkYrSe7oIwzrX3amnMoCOi?=
+ =?us-ascii?Q?8Spww3oiCc9kCVU0AHwq3No0opeqC7uVMV+6HBoXap5ZJK6GBCQ0DInoKmb+?=
+ =?us-ascii?Q?27gplmriAgVlSmC/WwASh9TvzqTe13u8onDoSnt9F/ZyxNWGehPryfKCa94R?=
+ =?us-ascii?Q?QxmNrHHetljcwaI16eMHRp6RGnciNBK6Yjef7cDlKDa+E2i/MrVDBcfo4ogg?=
+ =?us-ascii?Q?VK8KcBBM6vpYFVJ/Al6PhPgaSSRvdq+pW1xJrKRaZ9nU7CEjWZF9JD4SURDE?=
+ =?us-ascii?Q?8ybQBHyAANZGHlfX7It70ndlWZz8qmy7nuQso4JoB+g09J/5KxGFu5Dt5axh?=
+ =?us-ascii?Q?j4mN3lltyANDRZ5GfR/UCGR+0tWs3oEtZfmjlRGfwHSG0q9d00wJaKP1QpO4?=
+ =?us-ascii?Q?vcl7eQ7kfLl72YQO1wKeYD4NCHzxmVjXW+Qf71nE99yNtgJqef26qt48/G60?=
+ =?us-ascii?Q?BMWC+e6PWjHnKqaI9z07STjsMDxeb/wt2E+TsLXv3PR9ABPY7+Ber3D2l4Bm?=
+ =?us-ascii?Q?sgwfGYsFOP88gITsTakA8URWlsGKUa9mbWDvBVgmi2FGPnEG7F9gEmdP0BAk?=
+ =?us-ascii?Q?Mp8ojSAuO9i2/qXH0RN2jIWvl2x1p5ArzaHhWUtMpwOX7DdfsTOTmVc9ZDBV?=
+ =?us-ascii?Q?caOabmW3MiTLj23ml0sYfw70+hSyT0V8p4ObfAK2tkN8dhM7DKRiSHR8OnjW?=
+ =?us-ascii?Q?8PQVJ3C1fjUnOXVKaWrHB5refTFUMT57H8VS+jS00g/+CBnuuSn+bIyYz7Dl?=
+ =?us-ascii?Q?iqnPx/8/o/+0WBnSnonRhZbaqIbqtb53m4TUgAB+NYfaJvKtFrN40LV7zpod?=
+ =?us-ascii?Q?+75+tRnh5elGIIvl6hzHZxUgr7ojDgrEJf/MmuBuHGQ9qYDMwbdBkDt5+gxX?=
+ =?us-ascii?Q?BfT9wzvTiRz9QZFugpAZMLXYk1G+v1HmGgVOqtktNA9o3eg4syURDn5mT/tk?=
+ =?us-ascii?Q?1D9mJWwVZ/CTASUyUb4X1VTAE7frAqBH2g16w815iBsTeTECasdXm0O5YR6X?=
+ =?us-ascii?Q?NxSdD4KWLMQo9M/JOSobIBWdZIy6kEeSBTjrpA+gwis+M6uJBt+btpByV4fT?=
+ =?us-ascii?Q?FFmem12OCaTGeT5NulvBh5eLk+WDxFz7tM+raHp2iur687dEX3Djxxive2RY?=
+ =?us-ascii?Q?BfeF8GVKbNBDouv4wZK0LWLJlGLYmfyOyQMzanzU0Ga3NB5UnbreevlWS/pl?=
+ =?us-ascii?Q?EJNTyyLPDPtx0YSE4tFzMRXkRm/oqvNhbd/FuG37X1ScDp1k+8i+BSB/SExu?=
+ =?us-ascii?Q?qUX/8NXtzWSX/YLTtFHkrzZ3jPhgs8zYT75ielE48Lt/eeqxxt5ycahpSsS6?=
+ =?us-ascii?Q?FrLIa3iixc3QQFuRaL5l0xSr1UGjjv5fLWR3AhFlpTxlG9GUhoZglIOtCRr7?=
+ =?us-ascii?Q?W4EwC9CNAWe9b0CM6vgbVgIb8DiN0Z5ZiT96IRowXl1kNzDMntYqmn/xFnSz?=
+ =?us-ascii?Q?MRKb4X9Pf/sx3DG1XdQOmrZgGZWbkfA7b5vBZLDGq/u+IJgBt2SBAFc2a5uB?=
+ =?us-ascii?Q?g+MZ39yuN3gB8L+lYC9LJwh1AmdWCVeilhnVMTpXG7a+2pvWZV8nw/dxIQmy?=
+ =?us-ascii?Q?fprL3PziTwL4W45SKnHylu/Yd3V37z6FL+P1O6U2jZ1VW8SafsJqhZhRDgVy?=
+ =?us-ascii?Q?xkQZE6Lpjg=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdec9c02-e6d4-4b3a-8996-08da275e6a72
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 08:26:09.5615
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /25ix0cXy5j2yhGsjdwyfW0ECH/BVw8g9IrdXtlmvm4sFy2N81B5jNnNvU8lG1fW8dtPl5PGsVwxN13ee3YNLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB3952
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Nick,
+Fix following coccicheck error:
+mm/folio-compat.c:128:17-21: ERROR: folio is NULL but dereferenced.
 
+'folio' would be NULL when getting a reference to a folio failed.
+Add a NULL check before dereferring 'folio'.
 
-Thank you for the patches.
+Fixes: 3f0c6a07fee6 ("mm/filemap: Add filemap_get_folio")
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ mm/folio-compat.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Am 21.04.22 um 21:21 schrieb nick.hawkins@hpe.com:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+diff --git a/mm/folio-compat.c b/mm/folio-compat.c
+index 46fa179e32fb..54b17c1246c4 100644
+--- a/mm/folio-compat.c
++++ b/mm/folio-compat.c
+@@ -124,7 +124,9 @@ struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
+ 	struct folio *folio;
+ 
+ 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
+-	if ((fgp_flags & FGP_HEAD) || !folio || xa_is_value(folio))
++	if (!folio)
++		return NULL;
++	if ((fgp_flags & FGP_HEAD) || xa_is_value(folio))
+ 		return &folio->page;
+ 	return folio_file_page(folio, index);
+ }
+-- 
+2.35.3
 
-Type in the prefix: s/aach/arch/. Looking at `git log --oneline 
-arch/arm`, *ARM* or *arm* seems to be commonly used though.
-
-> The GXP is the HPE BMC SoC that is used in the majority
-> of HPE Generation 10 servers. Traditionally the asic will
-> last multiple generations of server before being replaced.
-
-Please mention what kind of documentation (datasheets, …) are available.
-
-> In gxp.c we reset the EHCI controller early to boot the asic.
-
-Why does the EHCI controller need to be reset?
-
-> Info about SoC:
-> 
-> HPE GXP is the name of the HPE Soc. This SoC is used to implement
-> many BMC features at HPE. It supports ARMv7 architecture based on
-> the Cortex A9 core. It is capable of using an AXI bus to which
-> a memory controller is attached. It has multiple SPI interfaces
-> to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
-> for network connectivity. It has multiple i2c engines to drive
-> connectivity with a host infrastructure. The initial patches
-> enable the watchdog and timer enabling the host to be able to
-> boot.
-
-Maybe doe that in separate commits?
-
-Please reflow the commit message for 75 characters per line.
-
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> ---
-> v5:
-> * Fixed version log
-> v4:
-> * Removed unecessary code: restart, iomap, init_machine
-
-unnecessary
-
-> * Reordered Kconfig depends
-> * Removed SPARSE_IRQ, MULTI_IRQ_HANDLER, IRQ_DOMAIN, PINCTL from
->    Kconfig
-> v3:
-> * Put into proper patchset format
-> v2:
-> * No change
-> ---
->   arch/arm/Kconfig           |  2 ++
->   arch/arm/Makefile          |  1 +
->   arch/arm/mach-hpe/Kconfig  | 17 +++++++++++++++++
->   arch/arm/mach-hpe/Makefile |  1 +
->   arch/arm/mach-hpe/gxp.c    | 16 ++++++++++++++++
->   5 files changed, 37 insertions(+)
->   create mode 100644 arch/arm/mach-hpe/Kconfig
->   create mode 100644 arch/arm/mach-hpe/Makefile
->   create mode 100644 arch/arm/mach-hpe/gxp.c
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 2e8091e2d8a8..13f77eec7c40 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -620,6 +620,8 @@ source "arch/arm/mach-highbank/Kconfig"
->   
->   source "arch/arm/mach-hisi/Kconfig"
->   
-> +source "arch/arm/mach-hpe/Kconfig"
-> +
->   source "arch/arm/mach-imx/Kconfig"
->   
->   source "arch/arm/mach-integrator/Kconfig"
-> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-> index a2391b8de5a5..97a89023c10f 100644
-> --- a/arch/arm/Makefile
-> +++ b/arch/arm/Makefile
-> @@ -179,6 +179,7 @@ machine-$(CONFIG_ARCH_FOOTBRIDGE)	+= footbridge
->   machine-$(CONFIG_ARCH_GEMINI)		+= gemini
->   machine-$(CONFIG_ARCH_HIGHBANK)		+= highbank
->   machine-$(CONFIG_ARCH_HISI)		+= hisi
-> +machine-$(CONFIG_ARCH_HPE)		+= hpe
->   machine-$(CONFIG_ARCH_INTEGRATOR)	+= integrator
->   machine-$(CONFIG_ARCH_IOP32X)		+= iop32x
->   machine-$(CONFIG_ARCH_IXP4XX)		+= ixp4xx
-> diff --git a/arch/arm/mach-hpe/Kconfig b/arch/arm/mach-hpe/Kconfig
-> new file mode 100644
-> index 000000000000..c075248b259e
-> --- /dev/null
-> +++ b/arch/arm/mach-hpe/Kconfig
-> @@ -0,0 +1,17 @@
-> +menuconfig ARCH_HPE
-> +	bool "HPE SoC support"
-> +	depends on ARCH_MULTI_V7
-> +	help
-> +	  This enables support for HPE ARM based SoC chips
-
-Add a dot/period at the end?
-
-> +if ARCH_HPE
-> +
-> +config ARCH_HPE_GXP
-> +	bool "HPE GXP SoC"
-> +	depends on ARCH_MULTI_V7
-> +	select ARM_VIC
-> +	select GENERIC_IRQ_CHIP
-> +	select CLKSRC_MMIO
-> +	help
-> +	  Support for GXP SoCs
-
-Please elaborate here, maybe copying parts of the commit message, in 
-what servers it is used.
-
-> +
-> +endif
-> diff --git a/arch/arm/mach-hpe/Makefile b/arch/arm/mach-hpe/Makefile
-> new file mode 100644
-> index 000000000000..8b0a91234df4
-> --- /dev/null
-> +++ b/arch/arm/mach-hpe/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_ARCH_HPE_GXP) += gxp.o
-> diff --git a/arch/arm/mach-hpe/gxp.c b/arch/arm/mach-hpe/gxp.c
-> new file mode 100644
-> index 000000000000..e2f0c3ae6bd8
-> --- /dev/null
-> +++ b/arch/arm/mach-hpe/gxp.c
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.*/
-
-Space before closing comment delimiter.
-
-> +
-> +#include <linux/of_platform.h>
-> +#include <asm/mach/arch.h>
-> +
-> +static const char * const gxp_board_dt_compat[] = {
-> +	"hpe,gxp",
-> +	NULL,
-> +};
-> +
-> +DT_MACHINE_START(GXP_DT, "HPE GXP")
-> +	.dt_compat	= gxp_board_dt_compat,
-> +	.l2c_aux_val = 0,
-> +	.l2c_aux_mask = 0,
-> +MACHINE_END
-
-Where is the EHCI controller reset?
-
-
-Kind regards,
-
-Paul

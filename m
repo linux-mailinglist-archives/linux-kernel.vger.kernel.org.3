@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601B250F650
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F81250F623
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345716AbiDZIoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S245560AbiDZIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345103AbiDZIfi (ORCPT
+        with ESMTP id S1345147AbiDZIeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:35:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84D28595F;
-        Tue, 26 Apr 2022 01:28:57 -0700 (PDT)
+        Tue, 26 Apr 2022 04:34:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9B36E579;
+        Tue, 26 Apr 2022 01:26:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A0ADB81CAF;
-        Tue, 26 Apr 2022 08:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A39C385A4;
-        Tue, 26 Apr 2022 08:28:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6347F617D2;
+        Tue, 26 Apr 2022 08:26:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73501C385A0;
+        Tue, 26 Apr 2022 08:26:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961735;
-        bh=k6LJWplTqIP4iynBoUVkI1G6phkHQXVkwOV33uvQP48=;
+        s=korg; t=1650961574;
+        bh=Mj66qixG3oF4aDbL/DAMbAe6GzKNhUn8FPQd/ng7zIA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jemHM3HQ2jjnM6MdASnuRBI8djAqstp6Dky2241sHnY/xSEl9kxk8v0+iz3DJBghN
-         u7eBGSB9HsT7TvBlO9rjdN+oenUWx2f+nX9Rz7MTQSv6D5gUbq16pHZNAYkNlq/WD+
-         Yy8quIUYL54JyycVgmUEmIRQOMOTUS1sXbopnidM=
+        b=OyhdNiHJHriIbKpjxORS7KY/A40newrNMHM3Z7XBuX+Uw63FrmsY8L3FxUKaQpbPs
+         9AOixKkrwC0dWFdi3bt741+4zhK6nSJ9qdJC9m+78qnRmMgI45h0EOGA+q8q6sO7i/
+         LnY3cJ+muxFNxUzbBqGBKAlO7/Zwa0Ofg5/YuR10=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 13/62] dmaengine: mediatek:Fix PM usage reference leak of mtk_uart_apdma_alloc_chan_resources
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 13/53] rxrpc: Restore removed timer deletion
 Date:   Tue, 26 Apr 2022 10:20:53 +0200
-Message-Id: <20220426081737.607593955@linuxfoundation.org>
+Message-Id: <20220426081736.044392387@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,63 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhangqilong <zhangqilong3@huawei.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 545b2baac89b859180e51215468c05d85ea8465a ]
+[ Upstream commit ee3b0826b4764f6c13ad6db67495c5a1c38e9025 ]
 
-pm_runtime_get_sync will increment pm usage counter even it failed.
-Forgetting to putting operation will result in reference leak here.
-We fix it:
-1) Replacing it with pm_runtime_resume_and_get to keep usage counter
-   balanced.
-2) Add putting operation before returning error.
+A recent patch[1] from Eric Dumazet flipped the order in which the
+keepalive timer and the keepalive worker were cancelled in order to fix a
+syzbot reported issue[2].  Unfortunately, this enables the mirror image bug
+whereby the timer races with rxrpc_exit_net(), restarting the worker after
+it has been cancelled:
 
-Fixes:9135408c3ace4 ("dmaengine: mediatek: Add MediaTek UART APDMA support")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-Link: https://lore.kernel.org/r/20220319022142.142709-1-zhangqilong3@huawei.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+	CPU 1		CPU 2
+	===============	=====================
+			if (rxnet->live)
+			<INTERRUPT>
+	rxnet->live = false;
+ 	cancel_work_sync(&rxnet->peer_keepalive_work);
+			rxrpc_queue_work(&rxnet->peer_keepalive_work);
+	del_timer_sync(&rxnet->peer_keepalive_timer);
+
+Fix this by restoring the removed del_timer_sync() so that we try to remove
+the timer twice.  If the timer runs again, it should see ->live == false
+and not restart the worker.
+
+Fixes: 1946014ca3b1 ("rxrpc: fix a race in rxrpc_exit_net()")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/20220404183439.3537837-1-eric.dumazet@gmail.com/ [1]
+Link: https://syzkaller.appspot.com/bug?extid=724378c4bb58f703b09a [2]
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/mediatek/mtk-uart-apdma.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ net/rxrpc/net_ns.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/dma/mediatek/mtk-uart-apdma.c b/drivers/dma/mediatek/mtk-uart-apdma.c
-index 9c0ea13ca788..7718d09e3d29 100644
---- a/drivers/dma/mediatek/mtk-uart-apdma.c
-+++ b/drivers/dma/mediatek/mtk-uart-apdma.c
-@@ -274,7 +274,7 @@ static int mtk_uart_apdma_alloc_chan_resources(struct dma_chan *chan)
- 	unsigned int status;
- 	int ret;
+diff --git a/net/rxrpc/net_ns.c b/net/rxrpc/net_ns.c
+index 1b403c2573da..39579cfcf9b8 100644
+--- a/net/rxrpc/net_ns.c
++++ b/net/rxrpc/net_ns.c
+@@ -117,7 +117,9 @@ static __net_exit void rxrpc_exit_net(struct net *net)
+ 	struct rxrpc_net *rxnet = rxrpc_net(net);
  
--	ret = pm_runtime_get_sync(mtkd->ddev.dev);
-+	ret = pm_runtime_resume_and_get(mtkd->ddev.dev);
- 	if (ret < 0) {
- 		pm_runtime_put_noidle(chan->device->dev);
- 		return ret;
-@@ -288,18 +288,21 @@ static int mtk_uart_apdma_alloc_chan_resources(struct dma_chan *chan)
- 	ret = readx_poll_timeout(readl, c->base + VFF_EN,
- 			  status, !status, 10, 100);
- 	if (ret)
--		return ret;
-+		goto err_pm;
- 
- 	ret = request_irq(c->irq, mtk_uart_apdma_irq_handler,
- 			  IRQF_TRIGGER_NONE, KBUILD_MODNAME, chan);
- 	if (ret < 0) {
- 		dev_err(chan->device->dev, "Can't request dma IRQ\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto err_pm;
- 	}
- 
- 	if (mtkd->support_33bits)
- 		mtk_uart_apdma_write(c, VFF_4G_SUPPORT, VFF_4G_SUPPORT_CLR_B);
- 
-+err_pm:
-+	pm_runtime_put_noidle(mtkd->ddev.dev);
- 	return ret;
- }
- 
+ 	rxnet->live = false;
++	del_timer_sync(&rxnet->peer_keepalive_timer);
+ 	cancel_work_sync(&rxnet->peer_keepalive_work);
++	/* Remove the timer again as the worker may have restarted it. */
+ 	del_timer_sync(&rxnet->peer_keepalive_timer);
+ 	rxrpc_destroy_all_calls(rxnet);
+ 	rxrpc_destroy_all_connections(rxnet);
 -- 
 2.35.1
 

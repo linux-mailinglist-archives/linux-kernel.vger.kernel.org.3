@@ -2,189 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4490B50F0F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B0850F0F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245169AbiDZGdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S245227AbiDZGdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245102AbiDZGdT (ORCPT
+        with ESMTP id S245102AbiDZGdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:33:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D69EF13F7E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650954609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7VQIxc2enYPlbUgW2+LE7wrg1Lnj3sGptBhnMeOEwQ=;
-        b=G6uZqiyZPZ5Pn0vFV15w9tBPFiV/2W76moZRXlGPxagnulzHa4GkWzKLEJM7UNtfJd9P0+
-        RexIK25zPG3lV39v0sjoWIwhKz9WPRCdLntwd8e3incW2bC/gC0Yi4fT9JUQN+xCLPdcbZ
-        DA9PBoOOBlKOtj6XSPt+SFo0dnnhRgY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-KdkKx96RPAa0OCX2X6Civw-1; Tue, 26 Apr 2022 02:30:07 -0400
-X-MC-Unique: KdkKx96RPAa0OCX2X6Civw-1
-Received: by mail-wm1-f72.google.com with SMTP id r186-20020a1c44c3000000b00393f52ed5ceso10722wma.7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:30:06 -0700 (PDT)
+        Tue, 26 Apr 2022 02:33:22 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED702617F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:30:15 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y76so1892151ybe.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xk1fRrXwMY49fkEklzghzXkAbwf3cL6niuJY5FykJaY=;
+        b=XKpip720WjbGzHfP5YW9gSB8hFdf4hNkRtU+Adgc2GptypWuimrKfm4d/jTk1AJN2S
+         wvD9Q6Sle0BhWy7kUbqvV8S9J14hP2H7Xf0KqXsQ5ogF+LBDqfcEYPCdNRdqYphLhYst
+         22mhzSuTfN0lo3t2tx9A3sGF+U1uEyp9clr9Xx3jpUbJiTz+16DdaivMegtOh6JHgpou
+         X1AELsmWoTmVvYVEFo3ay4KIKBVJs94KXqylK86UsUPhaTfWV1lgeshVI4fyRf3mURus
+         SOGA0Snj1/dFaXKuZs3n2+NlRmHfLxPyes/tTiY6eQBGZM5hOAjIUScfKhZrHCgCDqiq
+         8mHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=V7VQIxc2enYPlbUgW2+LE7wrg1Lnj3sGptBhnMeOEwQ=;
-        b=fjM9KDhazEU07Oisdq1Kb2Nwq70wB5is4a7JU+0cN/86QYSES9IZtGKjBdOPoK36Xu
-         SGzPIZQ2FUQhMJOXJIyNQs/S6LO1CNMoDNx4A+L1JitxH4Xhfcr/RH5ElekabpgU+DGl
-         GgTvWEIt8SjbWfuQRMXVeqHnLiQKMIqdZuo72H3lWkJYgWzTpWsdl6SO4+Wg7sfZ/HDQ
-         abZ+J8eMY5hFkgUWbuXBSlllSSo6lGLlU2UvKrYrPlP1jiMSfryKpH7O/gdaOMVzBf7j
-         0H4e4Dx5M1fF6ooYntXkXydkrz9waFAbU7jYXVEMIlEHZ+TArDqfsjS5h5w3koKxIaWS
-         l8Kw==
-X-Gm-Message-State: AOAM531odHxl3CeFYe9TmO8n5EGJXeAE8luB+ibNhm3cq8PJ/d0EPk6y
-        UQIB54xfbGXpyOZV7GXBGqCQrYkXEW2Z2vgg83m3lLe3mOxdf3RLqcWm/J4HIVqw1pHT4/3GX9b
-        kWHV3IPPxL8LH+eMFkoRve+V6
-X-Received: by 2002:adf:db46:0:b0:20a:c903:4711 with SMTP id f6-20020adfdb46000000b0020ac9034711mr15430195wrj.625.1650954605944;
-        Mon, 25 Apr 2022 23:30:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNRarFYV3D7gCGqSQ56FDt3rR3NZYRd0yD8ep+RHjYur6XMku/TQPdgMHlcQhhlsKNogy/Pg==
-X-Received: by 2002:adf:db46:0:b0:20a:c903:4711 with SMTP id f6-20020adfdb46000000b0020ac9034711mr15430177wrj.625.1650954605766;
-        Mon, 25 Apr 2022 23:30:05 -0700 (PDT)
-Received: from redhat.com ([2.53.22.137])
-        by smtp.gmail.com with ESMTPSA id l5-20020adfa385000000b0020adb3ae75dsm4701707wrb.3.2022.04.25.23.30.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 23:30:04 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 02:30:00 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-Message-ID: <20220426022420-mutt-send-email-mst@kernel.org>
-References: <20220425040512-mutt-send-email-mst@kernel.org>
- <87a6c98rwf.fsf@redhat.com>
- <20220425095742-mutt-send-email-mst@kernel.org>
- <20220426042911.544477f9.pasic@linux.ibm.com>
- <20220425233434-mutt-send-email-mst@kernel.org>
- <20220425233604-mutt-send-email-mst@kernel.org>
- <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
- <20220425235134-mutt-send-email-mst@kernel.org>
- <20220425235415-mutt-send-email-mst@kernel.org>
- <CACGkMEve+3ugK-Kgao3_2wbjb=fbF7AO2uEuArGjKgEAQcGdiQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xk1fRrXwMY49fkEklzghzXkAbwf3cL6niuJY5FykJaY=;
+        b=prOERVXfwZFreAtj4zwtsTZumAQievtT0IW3iwOLU1XQ5ENn/9LBbqpXwbiiDeVqnr
+         Wr6OROL8G1nmVD/wkpnvQEIYT8ioZ8PkgoDDQuyxftIsNIwQqBU3Jw0LWZHBddKxiMGg
+         m36o4SDc4aNIgX53pVFa0XgbhV7PjIRKbG2KZgHONXNe9NYROfpFc9aomRE63awq1Sx+
+         g9wkhdjZpV4kCCt6uK3bSnWYEmTwRUC4Rh1jsPD54AIy3dRydc51ZPmhsJDLMz9+jdcu
+         UnqV1JmdCjOkwFwLjzuRLGH5sJB4/1jGeCLiMxGP5mN7LpcCd3kwG3/JlBPULh0Ri/I0
+         Ue2A==
+X-Gm-Message-State: AOAM531cy/tuo+KnCr9Bj6S2wGw89J4KeG6h4gAKBMXEfEYcjVO+4Qgo
+        odow2vbc+6VanjisN7PYig1WhGO2fgi1pQSqzHi8mexjTnViog==
+X-Google-Smtp-Source: ABdhPJxb4B+LcT0jivCZF2yrHw8bSTLtmXMFcK6VBuul7ICiYr9UHhwQS8Dhk2Q4vrNahhA+41kQRQ5ZuNsamNIR9Ec=
+X-Received: by 2002:a05:6902:1242:b0:644:c30c:cfcc with SMTP id
+ t2-20020a056902124200b00644c30ccfccmr18900379ybu.509.1650954614961; Mon, 25
+ Apr 2022 23:30:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEve+3ugK-Kgao3_2wbjb=fbF7AO2uEuArGjKgEAQcGdiQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420095906.27349-1-mgorman@techsingularity.net> <CAJuCfpH=U9E-46wZgKEYQZVKjw=2qq_KXDRF=tqDBvqpR+BBbg@mail.gmail.com>
+In-Reply-To: <CAJuCfpH=U9E-46wZgKEYQZVKjw=2qq_KXDRF=tqDBvqpR+BBbg@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 25 Apr 2022 23:30:03 -0700
+Message-ID: <CAJuCfpG6fU-AfB+_RfRHwq8-i3=H4RF5UmHeuH+70xz8m61k9g@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Drain remote per-cpu directly
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:07:39PM +0800, Jason Wang wrote:
-> On Tue, Apr 26, 2022 at 11:55 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Mon, Apr 25, 2022 at 7:49 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Wed, Apr 20, 2022 at 2:59 AM Mel Gorman <mgorman@techsingularity.net> wrote:
 > >
-> > On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote:
-> > > On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
-> > > >
-> > > > 在 2022/4/26 11:38, Michael S. Tsirkin 写道:
-> > > > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin wrote:
-> > > > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote:
-> > > > > > > On Mon, 25 Apr 2022 09:59:55 -0400
-> > > > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > > >
-> > > > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck wrote:
-> > > > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wang wrote:
-> > > > > > > > > > > This patch tries to implement the synchronize_cbs() for ccw. For the
-> > > > > > > > > > > vring_interrupt() that is called via virtio_airq_handler(), the
-> > > > > > > > > > > synchronization is simply done via the airq_info's lock. For the
-> > > > > > > > > > > vring_interrupt() that is called via virtio_ccw_int_handler(), a per
-> > > > > > > > > > > device spinlock for irq is introduced ans used in the synchronization
-> > > > > > > > > > > method.
-> > > > > > > > > > >
-> > > > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > > > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
-> > > > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
-> > > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > > >
-> > > > > > > > > > This is the only one that is giving me pause. Halil, Cornelia,
-> > > > > > > > > > should we be concerned about the performance impact here?
-> > > > > > > > > > Any chance it can be tested?
-> > > > > > > > > We can have a bunch of devices using the same airq structure, and the
-> > > > > > > > > sync cb creates a choke point, same as registering/unregistering.
-> > > > > > > > BTW can callbacks for multiple VQs run on multiple CPUs at the moment?
-> > > > > > > I'm not sure I understand the question.
-> > > > > > >
-> > > > > > > I do think we can have multiple CPUs that are executing some portion of
-> > > > > > > virtio_ccw_int_handler(). So I guess the answer is yes. Connie what do you think?
-> > > > > > >
-> > > > > > > On the other hand we could also end up serializing synchronize_cbs()
-> > > > > > > calls for different devices if they happen to use the same airq_info. But
-> > > > > > > this probably was not your question
-> > > > > >
-> > > > > > I am less concerned about  synchronize_cbs being slow and more about
-> > > > > > the slowdown in interrupt processing itself.
-> > > > > >
-> > > > > > > > this patch serializes them on a spinlock.
-> > > > > > > >
-> > > > > > > Those could then pile up on the newly introduced spinlock.
-> > > > > > >
-> > > > > > > Regards,
-> > > > > > > Halil
-> > > > > > Hmm yea ... not good.
-> > > > > Is there any other way to synchronize with all callbacks?
-> > > >
-> > > >
-> > > > Maybe using rwlock as airq handler?
-> > > >
-> > > > Thanks
-> > > >
-> > >
-> > > rwlock is still a shared cacheline bouncing between CPUs and
-> > > a bunch of ordering instructions.
-> 
-> Yes, but it should be faster than spinlocks anyhow.
-> 
-> > > Maybe something per-cpu + some IPIs to run things on all CPUs instead?
-> 
-> Is this something like a customized version of synchronzie_rcu_expedited()?
+> > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
+> > per-cpu lists drain support" -- avoid interference of a high priority
+> > task due to a workqueue item draining per-cpu page lists. While many
+> > workloads can tolerate a brief interruption, it may be cause a real-time
+> > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
+> > the draining in non-deterministic.
+> >
+> > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
+> > The local_lock on its own prevents migration and the IRQ disabling protects
+> > from corruption due to an interrupt arriving while a page allocation is
+> > in progress. The locking is inherently unsafe for remote access unless
+> > the CPU is hot-removed.
+> >
+> > This series adjusts the locking. A spin-lock is added to struct
+> > per_cpu_pages to protect the list contents while local_lock_irq continues
+> > to prevent migration and IRQ reentry. This allows a remote CPU to safely
+> > drain a remote per-cpu list.
+> >
+> > This series is a partial series. Follow-on work would allow the
+> > local_irq_save to be converted to a local_irq to avoid IRQs being
+> > disabled/enabled in most cases. However, there are enough corner cases
+> > that it deserves a series on its own separated by one kernel release and
+> > the priority right now is to avoid interference of high priority tasks.
+> >
+> > Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
+> >         and when it is storing per-cpu pages.
+> >
+> > Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
+> >         this is not necessary but it avoids per_cpu_pages consuming another
+> >         cache line.
+> >
+> > Patch 3 is a preparation patch to avoid code duplication.
+> >
+> > Patch 4 is a simple micro-optimisation that improves code flow necessary for
+> >         a later patch to avoid code duplication.
+> >
+> > Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
+> >         relying on local_lock to prevent migration, stabilise the pcp
+> >         lookup and prevent IRQ reentrancy.
+> >
+> > Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+>
+> This quite possibly solves the issue I was trying to fix in
+> https://lore.kernel.org/all/20220225012819.1807147-1-surenb@google.com.
+> I will give it a try and see how it looks.
 
-With interrupts running in an RCU read size critical section?
-Quite possibly that is also an option.
-This will need a bunch of documentation since this is not
-a standard use of RCU, and probably get a confirmation
-from RCU maintainers that whatever assumptions we make
-are guaranteed to hold down the road.
+My test shows sizable improvement for the worst case drain_all_pages
+duration. Before the change I caught cases when a drain_local_pages_wq
+in the workqueue was delayed by 100+ms (not even counting
+drain_local_pages_wq execution time itself). With this patchset the
+worst time I was able to record for drain_all_pages duration was 17ms.
 
+> Thanks!
+>
 > >
-> > ... and I think classic and device interrupts are different enough
-> > here ...
-> 
-> Yes.
-> 
-> Thanks
-> 
+> >  include/linux/mm_types.h |   5 +
+> >  include/linux/mmzone.h   |  12 +-
+> >  mm/page_alloc.c          | 333 ++++++++++++++++++++++++---------------
+> >  3 files changed, 222 insertions(+), 128 deletions(-)
 > >
-> > > > >
-> > > > > > --
-> > > > > > MST
+> > --
+> > 2.34.1
 > >
-
+> >

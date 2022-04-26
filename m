@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC3C50F552
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1059050F896
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiDZIrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S234161AbiDZJVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345811AbiDZIje (ORCPT
+        with ESMTP id S1345651AbiDZI5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D124F7561B;
-        Tue, 26 Apr 2022 01:31:33 -0700 (PDT)
+        Tue, 26 Apr 2022 04:57:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67976256;
+        Tue, 26 Apr 2022 01:42:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81C3EB81CFA;
-        Tue, 26 Apr 2022 08:31:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DECC385A0;
-        Tue, 26 Apr 2022 08:31:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 410BC60C49;
+        Tue, 26 Apr 2022 08:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48747C385A4;
+        Tue, 26 Apr 2022 08:42:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961891;
-        bh=54ru7jmsYeb+6NcxA9Lx7UBKfdTBBkj99yZhfnF44SM=;
+        s=korg; t=1650962529;
+        bh=GWcUtf3UQVYWNlTxcZ+Z1ItyTx0lhByWckaw0QEi8uk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ca5v25Fe6bOEPOFhVRuskX73f6CuWOTU19rzU11+gEW64ix+Pu5d4B4f1K3M1f+/j
-         JwnGBZy8II/izJMDBg907+34Fdzq1H4AnTMM8V/7Lv9egJpDcU++pcM1dcT7RdUajc
-         0RGCqnhy4l0F6xgeCqPehaIeD+yEzGI0+Q3ELgA8=
+        b=Vqkn3rUZo+hcXXqWRT+XPSYA33iswCmRvRkBLQj1EiNlMjweecjBQogJXIP3ROlmG
+         vqH2IlVmo5oabd3dWm2YVKnWiqsgkCsvmDjy97q5z1aMXgXhrPTFqTMZcvbsAsvZaJ
+         +Q0tiTdnbQYkQUUaHFPBijt5P04cFI8UJmWytemQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.4 48/62] ASoC: soc-dapm: fix two incorrect uses of list iterator
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 087/124] Input: omap4-keypad - fix pm_runtime_get_sync() error checking
 Date:   Tue, 26 Apr 2022 10:21:28 +0200
-Message-Id: <20220426081738.599580762@linuxfoundation.org>
+Message-Id: <20220426081749.773512486@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,59 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
+[ Upstream commit 81022a170462d38ea10612cb67e8e2c529d58abe ]
 
-These two bug are here:
-	list_for_each_entry_safe_continue(w, n, list,
-					power_list);
-	list_for_each_entry_safe_continue(w, n, list,
-					power_list);
+If the device is already in a runtime PM enabled state
+pm_runtime_get_sync() will return 1, so a test for negative
+value should be used to check for errors.
 
-After the list_for_each_entry_safe_continue() exits, the list iterator
-will always be a bogus pointer which point to an invalid struct objdect
-containing HEAD member. The funciton poniter 'w->event' will be a
-invalid value which can lead to a control-flow hijack if the 'w' can be
-controlled.
-
-The original intention was to continue the outer list_for_each_entry_safe()
-loop with the same entry if w->event is NULL, but misunderstanding the
-meaning of list_for_each_entry_safe_continue().
-
-So just add a 'continue;' to fix the bug.
-
-Cc: stable@vger.kernel.org
-Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f77621cc640a ("Input: omap-keypad - dynamically handle register offsets")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220412070131.19848-1-linmq006@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-dapm.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/input/keyboard/omap4-keypad.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -1676,8 +1676,7 @@ static void dapm_seq_run(struct snd_soc_
- 		switch (w->id) {
- 		case snd_soc_dapm_pre:
- 			if (!w->event)
--				list_for_each_entry_safe_continue(w, n, list,
--								  power_list);
-+				continue;
- 
- 			if (event == SND_SOC_DAPM_STREAM_START)
- 				ret = w->event(w,
-@@ -1689,8 +1688,7 @@ static void dapm_seq_run(struct snd_soc_
- 
- 		case snd_soc_dapm_post:
- 			if (!w->event)
--				list_for_each_entry_safe_continue(w, n, list,
--								  power_list);
-+				continue;
- 
- 			if (event == SND_SOC_DAPM_STREAM_START)
- 				ret = w->event(w,
+diff --git a/drivers/input/keyboard/omap4-keypad.c b/drivers/input/keyboard/omap4-keypad.c
+index 43375b38ee59..8a7ce41b8c56 100644
+--- a/drivers/input/keyboard/omap4-keypad.c
++++ b/drivers/input/keyboard/omap4-keypad.c
+@@ -393,7 +393,7 @@ static int omap4_keypad_probe(struct platform_device *pdev)
+ 	 * revision register.
+ 	 */
+ 	error = pm_runtime_get_sync(dev);
+-	if (error) {
++	if (error < 0) {
+ 		dev_err(dev, "pm_runtime_get_sync() failed\n");
+ 		pm_runtime_put_noidle(dev);
+ 		return error;
+-- 
+2.35.1
+
 
 

@@ -2,126 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60936510707
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50BB510705
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347826AbiDZSee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S1351554AbiDZSei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351058AbiDZSe3 (ORCPT
+        with ESMTP id S241797AbiDZSea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:34:29 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0C91CB17;
-        Tue, 26 Apr 2022 11:31:17 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id e23so2384842eda.11;
-        Tue, 26 Apr 2022 11:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CtivK/lbjkFn6fCJitHMAm73ZL6+X5IagBxOgsbgoFw=;
-        b=ah1fX5YhJKRbkl+xlw+Gun6kLxP6FBDciSqczj3fapwkuEbS7nsMr7mlTDVtKJ1EUl
-         CvYuRt7OKaa2x4WC3Ov4dKXFA91FO0RGO2RCrJhnO9TZa0V9JmgcNWreiw0dpFxJiEto
-         oCU5egWOMJr9SFwZhP8ZpezrzNDQLbQkflTlcFhzqz7y6XdzaH5LqWR4edEyGlnishXZ
-         5ymYVmGlemkREtdQoT/iYs08oFnqCVoD/t5MrcqZfyK/u129VbxWppE5lb1+bwf1RWK6
-         L9UpILm7HT1PkQXpP/8IPzwCfNBUBwE10QWwativi/VOGN0tn4iUIRYc400hEhugKVey
-         tHHg==
+        Tue, 26 Apr 2022 14:34:30 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426AF1CFE9;
+        Tue, 26 Apr 2022 11:31:21 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id q129so21652408oif.4;
+        Tue, 26 Apr 2022 11:31:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CtivK/lbjkFn6fCJitHMAm73ZL6+X5IagBxOgsbgoFw=;
-        b=BAiJwGLRAtj5/fy6s5viLF0aHkkayHE9Dd4d15523jJInO0SXJzUjMbFKTuKYS3R9J
-         tH+1HRFCLK24fH20DQo9dZxdlEakbGlU4+xFJkDYqC3eNGAxAFE+vLLaal7ULuMVEIHF
-         v7VORL6hz/L8YEJkDmjk3+t7GLez8FkuDBkbtYDaLABDZH3u9PIQRTcCdCrwcSjBLgt3
-         zsoLw109jOrXtt0KnooXbGCuBVjzk0UDFnk3SXU7HyPEMsJsILk/qbNoGoMABpXCxTsA
-         4rnlyvUIIYeYEG4iLc049/sNplrbUL9xj7GJDyMRWeepVl9G4VPjdcluQCjKvddpmjik
-         Gjeg==
-X-Gm-Message-State: AOAM531cR6wV+1sxdRdXhSD3pEZXXUu+RxXjtUeASTqd+w+5OUVMuq/Q
-        rRNlt5NVyBZWIFp+ISPrqDE=
-X-Google-Smtp-Source: ABdhPJy5U8SX/X1DAwEV03AhVM1LZD7u+G9Vyhc7qZDg06eobpf3P/8ZRCfEaMn2oPl979RDTw6Swg==
-X-Received: by 2002:a05:6402:2318:b0:413:7645:fa51 with SMTP id l24-20020a056402231800b004137645fa51mr26535565eda.201.1650997876370;
-        Tue, 26 Apr 2022 11:31:16 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id d11-20020a1709067f0b00b006f395247b5esm2817517ejr.84.2022.04.26.11.31.14
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qgmDW0PWpCTN6QAQccW/HQMdlWsW6QW4exSJtmSe5+o=;
+        b=KKNUIBt/8wiFdOADyn6aZUavslE75mX5FeoLxox+VwwLvFITe3sZ1ffux/ndFx6jWg
+         Umjkw33pIBnu42qOPHwEcVhccRN886hjJu9QECXfydHWS2MBrEIKbwRAvJ7VCh0rVMwS
+         35hQob783Czak+1bqFHelUtoFegMDS6aT8seGT5dFO/SHk5vKfOc6HNI6DR6qXjJYbjW
+         VnrohWp7RMKk5puuBeI01ZH+wFrmNrPfgh530c4GmpS8356IHoMvLirMkKca8d0uKjkh
+         aHzvyRdVkBcby6DoWfjPqTy3bjFcuEiY4/kFr3HV0qFtEu9jFHGIqmEWf+CEbVo/tDD9
+         hx9Q==
+X-Gm-Message-State: AOAM531bGC1OG+RPAVw3Vxu2NnC6lzo3zElSXO2koZ9Ili5b62FA6daP
+        RNjEb62wsP7O22LmfPSBsWHAugqxIA==
+X-Google-Smtp-Source: ABdhPJzIL1Yhrx2OPNJPgILC3RYcFne6c582YL6nl/ypM4+HqTvmQMy38qg7I2jfWGPUHp/r+AUExA==
+X-Received: by 2002:aca:c46:0:b0:323:1b2b:77de with SMTP id i6-20020aca0c46000000b003231b2b77demr12069221oiy.113.1650997880448;
+        Tue, 26 Apr 2022 11:31:20 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s2-20020a05687087c200b000e686d1386asm1079738oam.4.2022.04.26.11.31.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 11:31:15 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        outreachy@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 4/4] Documentation/vm: Rework "Temporary Virtual Mappings" section
-Date:   Tue, 26 Apr 2022 20:31:12 +0200
-Message-ID: <3429395.iIbC2pHGDl@leap>
-In-Reply-To: <Ymfb1saaHVuq4IUl@linutronix.de>
-References: <20220425162400.11334-1-fmdefrancesco@gmail.com> <3610796.MHq7AAxBmi@leap> <Ymfb1saaHVuq4IUl@linutronix.de>
+        Tue, 26 Apr 2022 11:31:20 -0700 (PDT)
+Received: (nullmailer pid 2314030 invoked by uid 1000);
+        Tue, 26 Apr 2022 18:31:18 -0000
+Date:   Tue, 26 Apr 2022 13:31:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
+        nancy.lin@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH 1/5] dt-bindings: arm: mediatek: mmsys: add power and gce
+ properties
+Message-ID: <Ymg6dn3PotTeWbqF@robh.at.kernel.org>
+References: <20220419033237.23405-1-rex-bc.chen@mediatek.com>
+ <20220419033237.23405-2-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419033237.23405-2-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 26 aprile 2022 13:47:34 CEST Sebastian Andrzej Siewior wrot=
-e:
->=20
-> Hmm. It is thread-local in the end. There are slots 0 =E2=80=A6 KM_MAX_ID=
-X for
-> the mappings. Slot 0 for task A can be different from slot 0 for task B
-> while both run on CPU0. So the same address, that is returned from
-> kmap_local(), will point to a different page for both tasks. Both tasks
-> can't be migrated to another CPU while the mapping is active.
-> "CPU local" sounds like something that is same to everyone on the same
-> CPU which is what this_cpu_read() for instance does.
->=20
+On Tue, Apr 19, 2022 at 11:32:33AM +0800, Rex-BC Chen wrote:
+> From: "jason-jh.lin" <jason-jh.lin@mediatek.com>
+> 
+> Power:
+> 1. Add description for power-domains property.
+> 
+> GCE:
+> 1. Add description for mboxes property.
+> 2. Add description for mediatek,gce-client-reg property.
+> 
+> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> ---
+>  .../bindings/arm/mediatek/mediatek,mmsys.yaml | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> index b31d90dc9eb4..6c2c3edcd443 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> @@ -41,6 +41,30 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  power-domains:
 
-OK, I agree with you :)=20
+How many and what are they.
 
-I just got three notices from Greg K-H stating that he has applied three of=
-=20
-my driver / Android patches. The patches are some conversions from kmap()=20
-and / or kmap_atomic() to kmap_local_page() (or wrappers around it):
+> +    description:
+> +      A phandle and PM domain specifier as defined by bindings
+> +      of the power controller specified by phandle. See
+> +      Documentation/devicetree/bindings/power/power-domain.yaml for details.
 
-https://lore.kernel.org/lkml/20220425175754.8180-4-fmdefrancesco@gmail.com/
-https://lore.kernel.org/lkml/20220425175754.8180-3-fmdefrancesco@gmail.com/
-https://lore.kernel.org/lkml/20220425175754.8180-2-fmdefrancesco@gmail.com/
+Drop. Don't need generic descriptions of common properties.
 
-I had forgotten that I wrote the following sentence in all three commit=20
-messages: "[] With kmap_local_page(), the mapping is per thread, CPU local=
-=20
-and not globally visible. []"
+> +
+> +  mboxes:
 
-Therefore, I'll add "thread-local" or "per thread". I probably like your=20
-wording more than mine: "thread-local" is more suitable.
+How many?
 
-=46or consistency (again) I like the other change you proposed, which is to=
-=20
-add "deprecated!" also in kunmap_atomic(), exactly as it is already in=20
-kmap_atomic() kernel-docs.
+> +    description:
+> +      Using mailbox to communicate with GCE, it should have this
 
-However, I will wait one more day before sending v3, in case there are=20
-other people who want to suggest further changes.
+If using?
 
-If I remember correctly, I'm overlooking nothing else. Do I overlook=20
-something?
+> +      property and list of phandle, mailbox specifiers. See
+> +      Documentation/devicetree/bindings/mailbox/mtk-gce.txt for details.
 
-Thanks for your help,
+Drop
 
-=46abio
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
 
+Already has a type.
 
+> +
+> +  mediatek,gce-client-reg:
+> +    description:
+> +      The register of client driver can be configured by gce with 4 arguments
+> +      defined in this property, such as phandle of gce, subsys id,
+> +      register offset and size.
+> +      Each subsys id is mapping to a base address of display function blocks
+> +      register which is defined in the gce header
+> +      include/dt-bindings/gce/<chip>-gce.h.
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    maxItems: 1
+
+This needs to define exact sizes.
+
+items:
+  - items:
+      - description: phandle to GCE
+      - description: subsy id
+      - description: register offset
+      - description: register size
+
+> +
+>    "#clock-cells":
+>      const: 1
+>  
+> @@ -56,9 +80,16 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> +    #include <dt-bindings/power/mt8173-power.h>
+> +    #include <dt-bindings/gce/mt8173-gce.h>
+> +
+>      mmsys: syscon@14000000 {
+>          compatible = "mediatek,mt8173-mmsys", "syscon";
+>          reg = <0x14000000 0x1000>;
+> +        power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
+>          #clock-cells = <1>;
+>          #reset-cells = <1>;
+> +        mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
+> +                 <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
+> +        mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+>      };
+> -- 
+> 2.18.0
+> 
+> 

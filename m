@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DC1510B28
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE02510B2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355378AbiDZVXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S1355380AbiDZVYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355369AbiDZVW5 (ORCPT
+        with ESMTP id S1346507AbiDZVY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:22:57 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2DC8BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:19:47 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id s21-20020a0568301e1500b006054da8e72dso13954936otr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:19:47 -0700 (PDT)
+        Tue, 26 Apr 2022 17:24:29 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661EF14C3F0;
+        Tue, 26 Apr 2022 14:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=MWHv2TFewrJAPnTOlW4qxlIxjpJGKW/g1lpO6FHxMAU=;
-        b=mpzPEMETgbUkrlArfjYnb6ZpqroDw1mZAkpGqiBB5PVb8cmmQ01gcb3oyxdNlLfPAK
-         nRTKFA5C3mK0kiSXAA6f+Oai3vDQMqoLiwrSZ8SL7jDgzbvo5scQZePIJ+ldIeuGYEst
-         pzjRUCWOBhnGjrLKOYtmAvWh95ioiy9ZfJ6Lg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=MWHv2TFewrJAPnTOlW4qxlIxjpJGKW/g1lpO6FHxMAU=;
-        b=KvQCUM+kYV10pEc7eyrLQUKwpzEtqE3R3uzWhNx0xTKngPUgeVXiJwVH7qUmTg4nis
-         KAhZrkvgKRcA9Sg5oi8cD1QDnMjsszI1iU5+Aa2cBgvMs+fyIeCehDxdsdOEXe8qRtl2
-         DctxtpHVRw9an0NkDyR+UjR4b1bKpO5i3alqzR0ocZC79vlN88YQAV1xuoCD55Is2/LS
-         /Gc9pgP6BiQYJcVfmHOoaVncx5+Vjdww7ihwJZ49jbRDp5ONTcnA9EBzW7h1xcMeuAsM
-         qPlyq00gEgg5eek0QA9GQ4MZzqThulHbCw0UVHyhW0iRBljOdmGeSPeMLCot0KDlKhDW
-         /aWg==
-X-Gm-Message-State: AOAM532CDzoLp+vghwR1oLEDrN0ohx9iSB6OxwXPuJMfp3VOjjmaJnpW
-        /nGENmP2cCieXwBm9GHrCyO4TWDAVew482NPT4Qdpw==
-X-Google-Smtp-Source: ABdhPJyzV9/i01if8INa4Tse6Ei8JcXrrFht2ib4YZe3NjXFYsSVY7NwTbRGnIZk4GbC1jHhniYThM3EsJRShwv8Oas=
-X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
- x30-20020a9d20a1000000b005e8d2b6f63fmr8859832ota.159.1651007987265; Tue, 26
- Apr 2022 14:19:47 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 26 Apr 2022 14:19:46 -0700
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651008081; x=1682544081;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7l9C4gQ0vxbIfaHRcIWmjzTFC2VNgKKoipVIzF1dwfw=;
+  b=ym5+oSf7ukNwkEhU2vXcNxDCPbS932hFMuHSU1wkfpuKJBVtd42L+hx/
+   tVX8bKH4fXd5vIYKIcwKd+P+bUi9sZnfx8EHZQRogqHnORO+XqO07QAnf
+   CSzKtcxKnRNm03U/SP3ZGkxflpUQrZSB/uOrXm1PUpSLvom6eg3BShIVV
+   4=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 14:21:21 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 14:21:21 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Apr 2022 14:21:20 -0700
+Received: from [10.111.160.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
+ 2022 14:21:18 -0700
+Message-ID: <61d98a8a-1c0f-346a-1e66-2e647d2f3088@quicinc.com>
+Date:   Tue, 26 Apr 2022 14:21:16 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220426124053.v2.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
-References: <20220426124053.v2.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 26 Apr 2022 14:19:46 -0700
-Message-ID: <CAE-0n53Oc2Ni=dgMPLxDXLUzOPXzAQOFm2fTiimTJA_K84M=5g@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: eDP for herobrine boards
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-msm@vger.kernel.org,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        quic_kalyant@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
+ resolution as preferred
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>
+References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
+ <a21a6ad5-5ed3-6207-8af7-655d19197041@quicinc.com>
+ <CAD=FV=XOWfz39imimoijNM14dUJNiwr8_aqPFCR=LmgH7yYzQQ@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAD=FV=XOWfz39imimoijNM14dUJNiwr8_aqPFCR=LmgH7yYzQQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-04-26 12:41:03)
-> Add eDP support to herobrine boards, splitting up amongst the
-> different files as makes sense. Rationale for the current split of
-> things:
-> * The eDP connector itself is on qcard. However, not all devices with
->   a qcard will use an eDP panel. Some might use MIPI and, presumably,
->   someone could build a device with qcard that had no display at all.
-> * The qcard provides a PWM for backlight that goes to the eDP
->   connector. This PWM is also provided to the board and it's expected
->   that it would be used as the backlight PWM even for herobrine
->   devices with MIPI displays.
-> * It's currently assumed that all herobrine boards will have some sort
->   of display, either MIPI or eDP (but not both).
-> * We will assume herobrine-rev1 has eDP. The schematics allow for a
->   MIPI panel to be hooked up but, aside from some testing, nobody is
->   doing this and most boards don't have all the parts stuffed for
->   it. The two panels would also share a PWM for backlight, which is
->   weird.
-> * herobrine-villager and herobrine-hoglin (crd) also have eDP.
-> * herobrine-hoglin (crd) has slightly different regulator setup for
->   the backlight. It's expected that this is unique to this board. See
->   comments in the dts file.
-> * There are some regulators that are defined in the qcard schematic
->   but provided by the board like "vreg_edp_bl" and
->   "vreg_edp_3p3". While we could put references to these regulators
->   straight in the qcard.dtsi file, this would force someone using
->   qcard that didn't provide those regulators to provide a dummy or do
->   an ugly /delete-node/. Instead, we'll add references in
->   herobrine.dtsi.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+
+On 4/26/2022 1:52 PM, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, Apr 26, 2022 at 1:46 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>>
+>> On 4/26/2022 1:21 PM, Douglas Anderson wrote:
+>>> If we're unable to read the EDID for a display because it's corrupt /
+>>> bogus / invalid then we'll add a set of standard modes for the
+>>> display. When userspace looks at these modes it doesn't really have a
+>>> good concept for which mode to pick and it'll likely pick the highest
+>>> resolution one by default. That's probably not ideal because the modes
+>>> were purely guesses on the part of the Linux kernel.
+>>>
+>>> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
+>>>
+>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>
+>> drm_dmt_modes array is sorted but you are also relying on this check to
+>> eliminate the non-60fps modes
+>>
+>> 5611            if (drm_mode_vrefresh(ptr) > 61)
+>> 5612                    continue;
+>>
+>> I am not sure why we filter out the modes > 61 vrefresh.
+>>
+>> If that check will remain this is okay.
+>>
+>> If its not, its not reliable that the first mode will be 640x480@60
+> 
+> I suspect that the check will remain. I guess I could try to do
+> something fancier if people want, but I'd be interested in _what_
+> fancier thing I should do if so. Do we want the rule to remain that we
+> always prefer 640x480, or do we want to prefer the lowest resolution?
+> ...do we want to prefer 60 Hz or the lowest refresh rate? Do we do
+> this only for DP (which explicitly calls out 640x480 @60Hz as the best
+> failsafe) or for everything?
+> 
+> For now, the way it's coded up seems reasonable (to me). It's the
+> lowest resolution _and_ it's 640x480 just because of the current
+> values of the table. I suspect that extra lower resolution failsafe
+> modes won't be added, but we can always change the rules here if/when
+> they are.
+> 
+> -Doug
+
+Alright, agreed. The way the API is today, I dont see anything getting 
+broken with this.
+
+So typically, as per spec, when a preferred mode is not set by the sink, 
+the first entry becomes the preferred mode.
+
+This also aligns with that expectation.
+
+So FWIW,
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+We will test this one also out with our equipment, then give tested-by tags.
+
+Thanks
+
+Abhinav
+

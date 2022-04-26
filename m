@@ -2,46 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2053950FD23
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8885050FD96
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 14:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350023AbiDZMjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 08:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S1346783AbiDZMyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 08:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349993AbiDZMjI (ORCPT
+        with ESMTP id S1350193AbiDZMxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 08:39:08 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A1FC31;
-        Tue, 26 Apr 2022 05:35:57 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KnhD63m1Xz1JBhH;
-        Tue, 26 Apr 2022 20:35:02 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 20:35:55 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
- 2022 20:35:54 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <grygorii.strashko@ti.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-Subject: [PATCH -next] net: cpsw: add missing of_node_put() in cpsw_probe_dt()
-Date:   Tue, 26 Apr 2022 20:47:57 +0800
-Message-ID: <20220426124757.373587-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 26 Apr 2022 08:53:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE28237037
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 05:50:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7925B23A;
+        Tue, 26 Apr 2022 05:50:42 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9096C3F774;
+        Tue, 26 Apr 2022 05:50:41 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 13:50:39 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>, will@kernel.org
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: kcsan: Fix kcsan test_barrier fail and panic
+Message-ID: <Ymfqn+I5szGeB5dU@lakrids>
+References: <20220426081700.1376542-1-wangkefeng.wang@huawei.com>
+ <YmfhHuPDilwR/Wgp@elver.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmfhHuPDilwR/Wgp@elver.google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,30 +42,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If devm_kcalloc() fails, 'tmp_node' should be put in cpsw_probe_dt().
+On Tue, Apr 26, 2022 at 02:10:06PM +0200, Marco Elver wrote:
+> On Tue, Apr 26, 2022 at 08:17AM +0000, Kefeng Wang wrote:
+> > diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> > index fd7e8fbaeef1..18863c50e9ce 100644
+> > --- a/include/asm-generic/barrier.h
+> > +++ b/include/asm-generic/barrier.h
+> > @@ -38,6 +38,10 @@
+> >  #define wmb()	do { kcsan_wmb(); __wmb(); } while (0)
+> >  #endif
+> >  
+> > +#ifdef __dma_mb
+> > +#define dma_mb()	do { kcsan_mb(); __dma_mb(); } while (0)
+> > +#endif
+> > +
+> 
+> So it looks like arm64 is the only arch that defines dma_mb(). By adding
+> it to asm-generic, we'd almost be encouraging other architectures to add
+> it, which I don't know we want.
+> 
+> Documentation/memory-barriers.txt doesn't mention dma_mb() either - so
+> perhaps dma_mb() doesn't belong in asm-generic/barrier.h, and you could
+> only change arm64's definition of dma_mb() to add the kcsan_mb().
+> 
+> Preferences? Maybe arch64 maintainers have more background on why arm64
+> is an anomaly here.
 
-Fixes: ed3525eda4c4 ("net: ethernet: ti: introduce cpsw switchdev based driver part 1 - dual-emac")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/net/ethernet/ti/cpsw_new.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Looking around, there's a single user:
 
-diff --git a/drivers/net/ethernet/ti/cpsw_new.c b/drivers/net/ethernet/ti/cpsw_new.c
-index bd4b1528cf99..b81179f7d738 100644
---- a/drivers/net/ethernet/ti/cpsw_new.c
-+++ b/drivers/net/ethernet/ti/cpsw_new.c
-@@ -1246,8 +1246,10 @@ static int cpsw_probe_dt(struct cpsw_common *cpsw)
- 	data->slave_data = devm_kcalloc(dev, CPSW_SLAVE_PORTS_NUM,
- 					sizeof(struct cpsw_slave_data),
- 					GFP_KERNEL);
--	if (!data->slave_data)
-+	if (!data->slave_data) {
-+		of_node_put(tmp_node);
- 		return -ENOMEM;
-+	}
- 
- 	/* Populate all the child nodes here...
- 	 */
--- 
-2.25.1
+[mark@lakrids:~/src/linux]% git grep -w dma_mb 
+arch/arm64/include/asm/barrier.h:#define dma_mb()       dmb(osh)
+arch/arm64/include/asm/io.h:#define __iomb()            dma_mb()
 
+[mark@lakrids:~/src/linux]% git grep -w __iomb 
+arch/arm64/include/asm/io.h:#define __iomb()            dma_mb()
+drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:    __iomb();
+
+... and that was introduced in commit:
+
+  a76a37777f2c936b ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer")
+
+... where it is used to ensure that prior (read and write) accesses to
+memory by a CPU are ordered w.r.t. a subsequent MMIO write.
+
+That seems like it could be a generic shape of problem (especially for
+IOMMUs), even if arm64 is the only architecture with an implementation
+today. From my PoV it would weem to make sense as a generic thing, and
+should probably be added to Documentation/memory-barriers.txt.
+
+Will, thoughts?
+
+Thanks,
+Mark.

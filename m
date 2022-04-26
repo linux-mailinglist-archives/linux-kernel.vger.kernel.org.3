@@ -2,278 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C17550F90D
+	by mail.lfdr.de (Postfix) with ESMTP id F1F9450F911
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346277AbiDZJm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S241369AbiDZJqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346103AbiDZJky (ORCPT
+        with ESMTP id S1348226AbiDZJoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:40:54 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E839BE0A6;
-        Tue, 26 Apr 2022 02:00:20 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a02:3030:3:7d2:2277:ba57:a2c0:3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sebastianfricke)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id CD9761F43333;
-        Tue, 26 Apr 2022 10:00:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650963619;
-        bh=JWzHHqsDVjvzoXUfBDOneFZ7mx/VURCmp50B/NxeSuk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DA6X1vGhsm/i5dePTZBlxAzPpOGb8RFbxkY5iUrfjy/GVu165ZCYB6UqN+/DZALcj
-         qfWCX1YP5ZauWR9gBNmqk3yY8yQYbKlV1Fh6Fk1qsAnZU8aoYLWsq5c7LClWv2pITK
-         yH4R1dnsaxoupMljqNHGvAxBCYnl/CpuCoKHkEASYpCon1ObdxdmTDR4+8qdYzzkd6
-         u8MOlm0V1xWv+kCddo1LDh/rEHk6L5diAJI1AcrInPX4FOiw4+kfx082w2S/mqr6aI
-         O74ujZWhMbzgz43hJ5XHbFxxMHCUZtyktJNgW57+6wp/Xwf10F7DIyhmbOikWNIeFs
-         O8yYN7cQ2spNQ==
-Date:   Tue, 26 Apr 2022 11:00:15 +0200
-From:   Sebastian Fricke <sebastian.fricke@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v5 04/17] media: uapi: HEVC: Add missing fields in HEVC
- controls
-Message-ID: <20220426090015.4xhl5ubkptnvqjr2@basti-XPS-13-9310>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
- <20220407152940.738159-5-benjamin.gaignard@collabora.com>
- <20220425135449.oapsrqqyq34s2ii3@basti-XPS-13-9310>
- <d1ba4e57-2f13-ab3b-f79a-dc812cd4c2bf@collabora.com>
- <20220426075234.6gk72hzf2bgaxwqw@basti-XPS-13-9310>
- <8e6977ac-53bb-53f0-3fdc-75aa2643cb77@collabora.com>
+        Tue, 26 Apr 2022 05:44:25 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B0B1E030D;
+        Tue, 26 Apr 2022 02:00:59 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id v65so15242108oig.10;
+        Tue, 26 Apr 2022 02:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Nwb8/mmKZO6P2XfY+52W/cShYVLjOcMT6tDHNN8mOew=;
+        b=HCXSqQvdAuaIFTCy251ccV6oh0hasfXDX64YFOgQJLaxeXoOUyhm8W1g7IUsXtWN/p
+         1UsVYx5fub55CfJPvEdF8A10srT9i+AlW5L21I5QLvTc5JTJj4mZKslJIKwXl6EsACNY
+         JwNRTFdGZbf/wI/FcRNS2knVV+2UQHKYjfmms2joZ/Excnab5Ouly0ys3DDra6fkmPsv
+         nGZDGwlmfo8VqCuLwlLf66LDMZBjzd7KU2nT9KU1/cSi+Rnkl1d4gPNsQJPqW4QKfsCt
+         k508Jcg/8ZeyslKYcSZaKXGmAcChWmwcVGvVC7UUtdoq31/wk32NyA9WIINLOukCk2HN
+         WZNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Nwb8/mmKZO6P2XfY+52W/cShYVLjOcMT6tDHNN8mOew=;
+        b=P2aPJ9zI53waj3GjHAPGV0uXMpw0kePXU1zUgpPPiuW+DwuiMF7gUx0kzliZLtKjXy
+         6HNqPHK6y2BeW8bRCMC06KOQuH5PWYlJypCTzISScJsYpF1L3lPSBD5dImAcN/qi0SIx
+         RTeENC/j1ns/8f5a9iQSVruWn/3QzwQXeyd5bYY1Q0FU5k6yEGD1lUkHbjJeXJgJUYPW
+         TwKH+9fVuKIcl+PmOBsBWp/AX/ytdkTXNX9taxXm/wr5YnpC9eKYCES0c9j9cu3T3iDB
+         fY31LQlVtCtzN1Ub1oUH4j7+gXHKvWLqweQPkb0w33O1ES2Ytt+k2pIztXubi/Lhgb+K
+         a0Bw==
+X-Gm-Message-State: AOAM531neZfoq+ee6tlR3Lmyge6Z7xShRi0zHGghivtoc7OjenxG8BXr
+        0PC9UBzxuZDZO2JYzSOs7ysuK4x/eLM=
+X-Google-Smtp-Source: ABdhPJwUaViFkskduZFOqEI2ZLyl0iibEjD7lEBlQbzcpENqkhFic3BipIG+zKYZGGVjXTKPXso+rQ==
+X-Received: by 2002:a05:6808:2189:b0:322:e874:e8f2 with SMTP id be9-20020a056808218900b00322e874e8f2mr10197307oib.289.1650963655383;
+        Tue, 26 Apr 2022 02:00:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bp17-20020a056808239100b00322c34c4afbsm4812214oib.25.2022.04.26.02.00.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 02:00:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f07ef9bd-2a1d-6aec-a490-4c419ca0daab@roeck-us.net>
+Date:   Tue, 26 Apr 2022 02:00:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8e6977ac-53bb-53f0-3fdc-75aa2643cb77@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5] watchdog: wdat_wdg: Using the existed function to
+ check parameter timeout
+Content-Language: en-US
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>, wim@linux-watchdog.org,
+        tzungbi@kernel.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1650962589-1992-1-git-send-email-liuxp11@chinatelecom.cn>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <1650962589-1992-1-git-send-email-liuxp11@chinatelecom.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.04.2022 10:50, Benjamin Gaignard wrote:
->
->Le 26/04/2022 à 09:52, Sebastian Fricke a écrit :
->>Hey Benjamin,
->>
->>On 25.04.2022 18:16, Benjamin Gaignard wrote:
->>>
->>>Le 25/04/2022 à 15:54, Sebastian Fricke a écrit :
->>>>On 07.04.2022 17:29, Benjamin Gaignard wrote:
->>>>>Complete the HEVC controls with missing fields from H.265 
->>>>>specifications.
->>>>>Even if these fields aren't used by the current mainlined drivers
->>>>>they will be need for (at least) rkvdec driver.
->>>>
->>>>s/be need/be required/
->>>>or
->>>>s/be need/be needed/
->>>>
->>>>s/rkvdec/the rkvdec/
->>>>
->>>>>
->>>>>Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>>>>---
->>>>>.../media/v4l/ext-ctrls-codec.rst             | 19 +++++++++++++++++++
->>>>>include/media/hevc-ctrls.h                    |  6 +++++-
->>>>>2 files changed, 24 insertions(+), 1 deletion(-)
->>>>>
->>>>>diff --git 
->>>>>a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst 
->>>>>b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>>index 4cd7c541fc30..dbb08603217b 100644
->>>>>--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>>+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->>>>>@@ -2661,6 +2661,16 @@ enum 
->>>>>v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>    :stub-columns: 0
->>>>>    :widths:       1 1 2
->>>>>
->>>>>+    * - __u8
->>>>>+      - ``video_parameter_set_id``
->>>>>+      - Specifies the value of the vps_video_parameter_set_id 
->>>>>of the active VPS
->>>>>+        as descibed in section "7.4.3.2.1 General sequence 
->>>>>parameter set RBSP semantics"
->>>>>+        of H.265 specifications.
->>>>>+    * - __u8
->>>>>+      - ``seq_parameter_set_id``
->>>>>+      - Provides an identifier for the SPS for reference by 
->>>>>other syntax elements
->>>>>+        as descibed in section "7.4.3.2.1 General sequence 
->>>>>parameter set RBSP semantics"
->>>>>+        of H.265 specifications.
->>>>>    * - __u16
->>>>>      - ``pic_width_in_luma_samples``
->>>>>      -
->>>>>@@ -2800,6 +2810,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>    :stub-columns: 0
->>>>>    :widths:       1 1 2
->>>>>
->>>>>+    * - __u8
->>>>>+      - ``pic_parameter_set_id``
->>>>>+      - Identifies the PPS for reference by other syntax elements.
->>>>>    * - __u8
->>>>>      - ``num_extra_slice_header_bits``
->>>>>      -
->>>>>@@ -3026,6 +3039,12 @@ enum 
->>>>>v4l2_mpeg_video_hevc_size_of_length_field -
->>>>>    * - __u8
->>>>>      - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->>>>>      - The list of L1 reference elements as indices in the DPB.
->>>>>+    * - __u16
->>>>>+      - ``short_term_ref_pic_set_size``
->>>>>+      - Specifies the size of short-term reference pictures 
->>>>>set included in the SPS.
->>>>
->>>>s/size of/size of the/
->>>>
->>>>Section 7.4.8 depicts that the st_ref_pic_set syntax
->>>>structure can be part of the SPS or the slice header.
->>>>
->>>>I think we should mention that we talk about the size of the 
->>>>st_ref_pic_set
->>>>syntax structure from section 7.4.8 of the specification.
->>>>>+    * - __u16
->>>>>+      - ``long_term_ref_pic_set_size``
->>>>>+      - Specifies the size of long-term reference pictures 
->>>>>set include in the SPS.
->>>>
->>>>s/size of/size of the/
->>>>
->>>>Can we make this a bit more helpful? The specification doesn't contain
->>>>a similar structure to `st_ref_pic_set` for long term pictures. 
->>>>So, as a
->>>>programmer this leaves me guessing:
->>>>- Which syntax structure's size are we talking about?
->>>>- Does this correlate to any of the existing sections of the
->>>>specification?
->>>>Because in the end, I feel like this documentation should be able to
->>>>help a programmer to provide the correct data for the uABI.
->>>
->>>I will reword it like that:
->>>
->>>  * - __u16
->>>    - ``short_term_ref_pic_set_size``
->>>    - Specifies the size, in bits, of the short-term reference 
->>>pictures set, described as st_ref_pic_set()
->>
->>Just ...
->>
->>s/reference pictures set/reference picture set/
->>
->>>     in the specification, included in the slice header (section 
->>>7.3.6.1).
->>
->>s/slice header/slice header or SPS/
->>
->>
->>>
->>>* - __u16
->>>   - ``long_term_ref_pic_set_size``
->>>   - Specifies the size, in bits, of the long-term reference 
->>>pictures set include in the slice header.
->>
->>s/reference pictures set/reference picture set/
->>
->>Looking at the documentation it looks like: s/slice header/slice 
->>header or SPS/
->>(For example in section 7.3.6.1:
->>```
->>if( long_term_ref_pics_present_flag ) {
->>  if( num_long_term_ref_pics_sps > 0 )
->>    num_long_term_sps
->>  num_long_term_pics
->>  for( i = 0; i < num_long_term_sps + num_long_term_pics; i++ ) {
->>    ...
->>```
->>)
->>
->>... and then it looks very good!
->
->I don't know the syntax to insert this kind of comment inside an array in the documentation
->so it will remain as before :-)
+On 4/26/22 01:43, Liu Xinpeng wrote:
+> Context: If max_hw_heartbeat_ms is provided, the configured maximum timeout
 
-Ah, no I didn't mean the pseudo code, I only gave that as an *example*
-why just `slice header` seems incorrect to me.
-The changes I suggest for that line are only:
+I am quite sure I asked you to drop "Context: " and to change "existed" in
+the subject to "existing".
 
-s/reference pictures set/reference picture set/ (grammatical error)
-s/slice header/slice header or SPS/ (correct statement)
+Guenter
 
->
->Benjamin
+> is not limited by it. The limit check in this driver therefore doesn't make
+> much sense. Similar, the watchdog core ensures that minimum timeout limits
+> are met if min_hw_heartbeat_ms is set. Using watchdog_timeout_invalid()
+> makes more sense because it takes this into account.
+> 
+> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+> ---
+>   drivers/watchdog/wdat_wdt.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
+> index 195c8c004b69..9db01d165310 100644
+> --- a/drivers/watchdog/wdat_wdt.c
+> +++ b/drivers/watchdog/wdat_wdt.c
+> @@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>   		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>   
+>   #define WDAT_DEFAULT_TIMEOUT	30
+> +#define WDAT_MIN_TIMEOUT     1
+>   
+>   static int timeout = WDAT_DEFAULT_TIMEOUT;
+>   module_param(timeout, int, 0);
+> @@ -344,6 +345,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   	wdat->period = tbl->timer_period;
+>   	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
+>   	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
+> +	wdat->wdd.min_timeout = WDAT_MIN_TIMEOUT;
+>   	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
+>   	wdat->wdd.info = &wdat_wdt_info;
+>   	wdat->wdd.ops = &wdat_wdt_ops;
+> @@ -450,8 +452,7 @@ static int wdat_wdt_probe(struct platform_device *pdev)
+>   	 * watchdog properly after it has opened the device. In some cases
+>   	 * the BIOS default is too short and causes immediate reboot.
+>   	 */
+> -	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+> -	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
+> +	if (watchdog_timeout_invalid(&wdat->wdd, timeout)) {
+>   		dev_warn(dev, "Invalid timeout %d given, using %d\n",
+>   			 timeout, WDAT_DEFAULT_TIMEOUT);
+>   		timeout = WDAT_DEFAULT_TIMEOUT;
 
-Greetings,
-Sebastian
-
->
->>
->>Greetings,
->>Sebastian
->>
->>>     It is the number of bits in the conditional block if( 
->>>long_term_ref_pics_present_flag ) {...}
->>>     in section 7.3.6.1 of the specification.
->>>
->>>Benjamin
->>>
->>>
->>>>
->>>>Greetings,
->>>>Sebastian
->>>>
->>>>>    * - __u8
->>>>>      - ``padding``
->>>>>      - Applications and drivers must set this to zero.
->>>>>diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->>>>>index 01ccda48d8c5..a329e086a89a 100644
->>>>>--- a/include/media/hevc-ctrls.h
->>>>>+++ b/include/media/hevc-ctrls.h
->>>>>@@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
->>>>>/* The controls are not stable at the moment and will likely 
->>>>>be reworked. */
->>>>>struct v4l2_ctrl_hevc_sps {
->>>>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
->>>>>+    __u8    video_parameter_set_id;
->>>>>+    __u8    seq_parameter_set_id;
->>>>>    __u16    pic_width_in_luma_samples;
->>>>>    __u16    pic_height_in_luma_samples;
->>>>>    __u8    bit_depth_luma_minus8;
->>>>>@@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
->>>>>
->>>>>struct v4l2_ctrl_hevc_pps {
->>>>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
->>>>>+    __u8    pic_parameter_set_id;
->>>>>    __u8    num_extra_slice_header_bits;
->>>>>    __u8    num_ref_idx_l0_default_active_minus1;
->>>>>    __u8    num_ref_idx_l1_default_active_minus1;
->>>>>@@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
->>>>>    __u32    slice_segment_addr;
->>>>>    __u8    ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->>>>>    __u8    ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->>>>>-
->>>>>+    __u16    short_term_ref_pic_set_size;
->>>>>+    __u16    long_term_ref_pic_set_size;
->>>>>    __u8    padding;
->>>>>
->>>>>    /* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction 
->>>>>parameter */
->>>>>-- 
->>>>>2.32.0
->>>>>

@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F81250F623
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0838B50F770
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245560AbiDZIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        id S1347031AbiDZJJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345147AbiDZIeI (ORCPT
+        with ESMTP id S1346615AbiDZIuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:34:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9B36E579;
-        Tue, 26 Apr 2022 01:26:15 -0700 (PDT)
+        Tue, 26 Apr 2022 04:50:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEC5155294;
+        Tue, 26 Apr 2022 01:38:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6347F617D2;
-        Tue, 26 Apr 2022 08:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73501C385A0;
-        Tue, 26 Apr 2022 08:26:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AD0BB81D0B;
+        Tue, 26 Apr 2022 08:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6905EC385A4;
+        Tue, 26 Apr 2022 08:38:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961574;
-        bh=Mj66qixG3oF4aDbL/DAMbAe6GzKNhUn8FPQd/ng7zIA=;
+        s=korg; t=1650962305;
+        bh=y4FzcMqIYjP6yJMMswEni40ksnSonHHl5KEbQHYCCgw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OyhdNiHJHriIbKpjxORS7KY/A40newrNMHM3Z7XBuX+Uw63FrmsY8L3FxUKaQpbPs
-         9AOixKkrwC0dWFdi3bt741+4zhK6nSJ9qdJC9m+78qnRmMgI45h0EOGA+q8q6sO7i/
-         LnY3cJ+muxFNxUzbBqGBKAlO7/Zwa0Ofg5/YuR10=
+        b=NmzFfO9mbqis2ybtAWfm+sPAeBcstgq0d4e14gtd+Myxd69Wes5emxq3/8F9S58YD
+         EvE0DnBJ6rbixOMqYDZtAijh1ItXp8llvd1vd3MUD8WOi5p8J2oNMi3Lr4hUfde98t
+         tc/nqLDshpkp53V47Cu0FdqHvOs0X717W9y5WMkk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 13/53] rxrpc: Restore removed timer deletion
-Date:   Tue, 26 Apr 2022 10:20:53 +0200
-Message-Id: <20220426081736.044392387@linuxfoundation.org>
+Subject: [PATCH 5.15 053/124] ARM: vexpress/spc: Avoid negative array index when !SMP
+Date:   Tue, 26 Apr 2022 10:20:54 +0200
+Message-Id: <20220426081748.809250586@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit ee3b0826b4764f6c13ad6db67495c5a1c38e9025 ]
+[ Upstream commit b3f1dd52c991d79118f35e6d1bf4d7cb09882e38 ]
 
-A recent patch[1] from Eric Dumazet flipped the order in which the
-keepalive timer and the keepalive worker were cancelled in order to fix a
-syzbot reported issue[2].  Unfortunately, this enables the mirror image bug
-whereby the timer races with rxrpc_exit_net(), restarting the worker after
-it has been cancelled:
+When building multi_v7_defconfig+CONFIG_SMP=n, -Warray-bounds exposes
+a couple negative array index accesses:
 
-	CPU 1		CPU 2
-	===============	=====================
-			if (rxnet->live)
-			<INTERRUPT>
-	rxnet->live = false;
- 	cancel_work_sync(&rxnet->peer_keepalive_work);
-			rxrpc_queue_work(&rxnet->peer_keepalive_work);
-	del_timer_sync(&rxnet->peer_keepalive_timer);
+arch/arm/mach-vexpress/spc.c: In function 've_spc_clk_init':
+arch/arm/mach-vexpress/spc.c:583:21: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
+  583 |   if (init_opp_table[cluster])
+      |       ~~~~~~~~~~~~~~^~~~~~~~~
+arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
+  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
+      |       ^~~~~~~~~~~~~~
+arch/arm/mach-vexpress/spc.c:592:18: warning: array subscript -1 is below array bounds of 'bool[2]' {aka '_Bool[2]'} [-Warray-bounds]
+  592 |    init_opp_table[cluster] = true;
+      |    ~~~~~~~~~~~~~~^~~~~~~~~
+arch/arm/mach-vexpress/spc.c:556:7: note: while referencing 'init_opp_table'
+  556 |  bool init_opp_table[MAX_CLUSTERS] = { false };
+      |       ^~~~~~~~~~~~~~
 
-Fix this by restoring the removed del_timer_sync() so that we try to remove
-the timer twice.  If the timer runs again, it should see ->live == false
-and not restart the worker.
+Skip this logic when built !SMP.
 
-Fixes: 1946014ca3b1 ("rxrpc: fix a race in rxrpc_exit_net()")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/20220404183439.3537837-1-eric.dumazet@gmail.com/ [1]
-Link: https://syzkaller.appspot.com/bug?extid=724378c4bb58f703b09a [2]
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/r/20220331190443.851661-1-keescook@chromium.org
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arm-kernel@lists.infradead.org
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rxrpc/net_ns.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/mach-vexpress/spc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/rxrpc/net_ns.c b/net/rxrpc/net_ns.c
-index 1b403c2573da..39579cfcf9b8 100644
---- a/net/rxrpc/net_ns.c
-+++ b/net/rxrpc/net_ns.c
-@@ -117,7 +117,9 @@ static __net_exit void rxrpc_exit_net(struct net *net)
- 	struct rxrpc_net *rxnet = rxrpc_net(net);
+diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
+index 1da11bdb1dfb..1c6500c4e6a1 100644
+--- a/arch/arm/mach-vexpress/spc.c
++++ b/arch/arm/mach-vexpress/spc.c
+@@ -580,7 +580,7 @@ static int __init ve_spc_clk_init(void)
+ 		}
  
- 	rxnet->live = false;
-+	del_timer_sync(&rxnet->peer_keepalive_timer);
- 	cancel_work_sync(&rxnet->peer_keepalive_work);
-+	/* Remove the timer again as the worker may have restarted it. */
- 	del_timer_sync(&rxnet->peer_keepalive_timer);
- 	rxrpc_destroy_all_calls(rxnet);
- 	rxrpc_destroy_all_connections(rxnet);
+ 		cluster = topology_physical_package_id(cpu_dev->id);
+-		if (init_opp_table[cluster])
++		if (cluster < 0 || init_opp_table[cluster])
+ 			continue;
+ 
+ 		if (ve_init_opp_table(cpu_dev))
 -- 
 2.35.1
 

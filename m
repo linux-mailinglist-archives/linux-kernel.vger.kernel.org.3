@@ -2,227 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1500750F180
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2B450F183
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343526AbiDZGwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S239010AbiDZGzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242936AbiDZGv5 (ORCPT
+        with ESMTP id S229838AbiDZGzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:51:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49A112C8E9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:48:50 -0700 (PDT)
+        Tue, 26 Apr 2022 02:55:09 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF8F31DDE;
+        Mon, 25 Apr 2022 23:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650955731; x=1682491731;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Nqrgrw/s0vxaROpu8xZWOWGHSnX8rXEaIq3SmjGDH4c=;
-  b=GbwRPkgLgSF+GsTSECcc4gzVS2P9+HGtQ+qoSAC1JG4x/ztCYLvqWt2E
-   6z1eid8IPuxWTQbSJy6zKOwWly+eJaFkjM9PS2B+m5NCkXjRj3932hRB+
-   fMoUdFcL4fzbNgT74qdQIOWfdURuMgYgTSMSMJLpNtLIw6I/qz9P+UtOf
-   sAwisGskj9IoxCysOSI901+0+6pZP2O6PAwEJNCcIoIOJuwdPFIWnjOzD
-   bucCu7zN/j1jI+3mmWwshCUwzvvFx7NIVYP2NlPgeBSm+UisMs2PmIS6r
-   W9ZCq85pUc1C3TGMDJ6blifeNnjm5u+aDLSIzeWFUpcTdIOUSm9l2Wzlz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="264996576"
+  t=1650955922; x=1682491922;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7N+AkLZICdgvisk/KZV8bky8vfCRSJNl9xIZ2mypSW8=;
+  b=UEPlNMhJNFSsZ5WN6Ut0RQi1ZMpNVa3ow5qDmcm4/C0D7YjWfVkoeUY8
+   7PViwJbDF19S9wKY0nash9lMiTG7K/nOSUDjzLMUI2Se7yhT1IT4m3V5b
+   FGLlqWgPF/7VV46StpBmnuTWYalZHoi+ZzvB0h3WFqXQN8Ggn8gVno69r
+   l9bpc0ScrtKS8nLrWU8NnMp6I5Tkwdvx/ItVCOLf1s+2EANu8e2GsFHV0
+   LO9PSM+hkucaiyGO4yaTszmjr3SuUA5ilbbJzUjcMbm8KisCN9tbgXO7n
+   5hATppTkGvUprQ/deuNCNMr1PccZ6DBcAx+83nusPrdz3vAzoYEglDkL2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="263068459"
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="264996576"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:48:50 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="263068459"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:52:02 -0700
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="628384521"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Apr 2022 23:48:48 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njF0B-0003Ii-Hp;
-        Tue, 26 Apr 2022 06:48:47 +0000
-Date:   Tue, 26 Apr 2022 14:48:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
-Subject: [yu-chen-surf:sis 1/3] kernel/sched/debug.c:765:50: warning: format
- specifies type 'long' but the argument has type 'int'
-Message-ID: <202204261453.3774zcNd-lkp@intel.com>
+   d="scan'208";a="558145715"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.98])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:51:56 -0700
+Message-ID: <c8033229-97a0-3e4c-66d5-74c0d1d4e15c@intel.com>
+Date:   Tue, 26 Apr 2022 09:51:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds as
+ a perf event clock
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "sdeep@vmware.com" <sdeep@vmware.com>,
+        "pv-drivers@vmware.com" <pv-drivers@vmware.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "Andrew.Cooper3@citrix.com" <Andrew.Cooper3@citrix.com>,
+        "Hall, Christopher S" <christopher.s.hall@intel.com>
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-4-adrian.hunter@intel.com>
+ <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
+ <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
+ <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+ <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
+ <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
+ <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
+ <6f07a7d4e1ad4440bf6c502c8cb6c2ed@intel.com>
+ <c3e1842b-79c3-634a-3121-938b5160ca4c@intel.com>
+ <50fd2671-6070-0eba-ea68-9df9b79ccac3@intel.com> <87ilqx33vk.ffs@tglx>
+ <ff1e190a-95e6-e2a6-dc01-a46f7ffd2162@intel.com> <87fsm114ax.ffs@tglx>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <87fsm114ax.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/yu-chen-surf/linux.git sis
-head:   96e5c4a99150281df27ecef59d05229a609afd17
-commit: 0c1952e6258a04d69b2b862a11f037f125dcfe05 [1/3] sched/fair: Track efficiency of select_idle_sibling
-config: hexagon-randconfig-r041-20220425 (https://download.01.org/0day-ci/archive/20220426/202204261453.3774zcNd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/yu-chen-surf/linux/commit/0c1952e6258a04d69b2b862a11f037f125dcfe05
-        git remote add yu-chen-surf https://github.com/yu-chen-surf/linux.git
-        git fetch --no-tags yu-chen-surf sis
-        git checkout 0c1952e6258a04d69b2b862a11f037f125dcfe05
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
+On 25/04/22 20:05, Thomas Gleixner wrote:
+> On Mon, Apr 25 2022 at 16:15, Adrian Hunter wrote:
+>> On 25/04/22 12:32, Thomas Gleixner wrote:
+>>> It's hillarious, that we still cling to this pvclock abomination, while
+>>> we happily expose TSC deadline timer to the guest. TSC virt scaling was
+>>> implemented in hardware for a reason.
+>>
+>> So you are talking about changing VMX TCS Offset on every VM-Entry to try to hide
+>> the time jumps when the VM is scheduled out?  Or neglect that and just let the time
+>> jumps happen?
+>>
+>> If changing VMX TCS Offset, how can TSC be kept consistent between each VCPU i.e.
+>> wouldn't that mean each VCPU has to have the same VMX TSC Offset?
+> 
+> Obviously so. That's the only thing which makes sense, no?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[ Sending this again, because I notice I messed up the email "From" ]
 
-All warnings (new ones prefixed by >>):
+But wouldn't that mean changing all the VCPUs VMX TSC Offset at the same time,
+which means when none are currently executing?  How could that be done?
 
-   In file included from kernel/sched/build_utility.c:72:
->> kernel/sched/debug.c:765:50: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_search", schedstat_val(rq->sis_search));
-                                            ~~~                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:17:17: note: expanded from macro 'SEQ_printf'
-                   seq_printf(m, x);               \
-                                 ^
->> kernel/sched/debug.c:765:50: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_search", schedstat_val(rq->sis_search));
-                                            ~~~                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:19:11: note: expanded from macro 'SEQ_printf'
-                   pr_cont(x);                     \
-                           ^
-   include/linux/printk.h:531:26: note: expanded from macro 'pr_cont'
-           printk(KERN_CONT fmt, ##__VA_ARGS__)
-                            ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   In file included from kernel/sched/build_utility.c:72:
-   kernel/sched/debug.c:766:57: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_domain_search", schedstat_val(rq->sis_domain_search));
-                                            ~~~                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:17:17: note: expanded from macro 'SEQ_printf'
-                   seq_printf(m, x);               \
-                                 ^
-   kernel/sched/debug.c:766:57: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_domain_search", schedstat_val(rq->sis_domain_search));
-                                            ~~~                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:19:11: note: expanded from macro 'SEQ_printf'
-                   pr_cont(x);                     \
-                           ^
-   include/linux/printk.h:531:26: note: expanded from macro 'pr_cont'
-           printk(KERN_CONT fmt, ##__VA_ARGS__)
-                            ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   In file included from kernel/sched/build_utility.c:72:
-   kernel/sched/debug.c:767:51: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_scanned", schedstat_val(rq->sis_scanned));
-                                            ~~~                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:17:17: note: expanded from macro 'SEQ_printf'
-                   seq_printf(m, x);               \
-                                 ^
-   kernel/sched/debug.c:767:51: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_scanned", schedstat_val(rq->sis_scanned));
-                                            ~~~                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:19:11: note: expanded from macro 'SEQ_printf'
-                   pr_cont(x);                     \
-                           ^
-   include/linux/printk.h:531:26: note: expanded from macro 'pr_cont'
-           printk(KERN_CONT fmt, ##__VA_ARGS__)
-                            ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   In file included from kernel/sched/build_utility.c:72:
-   kernel/sched/debug.c:768:50: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_failed", schedstat_val(rq->sis_failed));
-                                            ~~~                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:17:17: note: expanded from macro 'SEQ_printf'
-                   seq_printf(m, x);               \
-                                 ^
-   kernel/sched/debug.c:768:50: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                   SEQ_printf(m, "  .%-30s: %ld\n", "sis_failed", schedstat_val(rq->sis_failed));
-                                            ~~~                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                            %d
-   kernel/sched/stats.h:82:32: note: expanded from macro 'schedstat_val'
-   # define   schedstat_val(var)           0
-                                           ^
-   kernel/sched/debug.c:19:11: note: expanded from macro 'SEQ_printf'
-                   pr_cont(x);                     \
-                           ^
-   include/linux/printk.h:531:26: note: expanded from macro 'pr_cont'
-
-
-vim +765 kernel/sched/debug.c
-
-   757	
-   758	#define P(n) SEQ_printf(m, "  .%-30s: %d\n", #n, schedstat_val(rq->n));
-   759		if (schedstat_enabled()) {
-   760			P(yld_count);
-   761			P(sched_count);
-   762			P(sched_goidle);
-   763			P(ttwu_count);
-   764			P(ttwu_local);
- > 765			SEQ_printf(m, "  .%-30s: %ld\n", "sis_search", schedstat_val(rq->sis_search));
-   766			SEQ_printf(m, "  .%-30s: %ld\n", "sis_domain_search", schedstat_val(rq->sis_domain_search));
-   767			SEQ_printf(m, "  .%-30s: %ld\n", "sis_scanned", schedstat_val(rq->sis_scanned));
-   768			SEQ_printf(m, "  .%-30s: %ld\n", "sis_failed", schedstat_val(rq->sis_failed));
-   769		}
-   770	#undef P
-   771	
-   772		print_cfs_stats(m, cpu);
-   773		print_rt_stats(m, cpu);
-   774		print_dl_stats(m, cpu);
-   775	
-   776		print_rq(m, rq, cpu);
-   777		SEQ_printf(m, "\n");
-   778	}
-   779	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCD450F8E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E36350F888
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348925AbiDZJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S1348960AbiDZJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348050AbiDZJPH (ORCPT
+        with ESMTP id S1345813AbiDZJRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:15:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C171900B3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:52:58 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KnbDr2r5kzGpRl;
-        Tue, 26 Apr 2022 16:50:20 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 16:52:56 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 16:52:55 +0800
-Subject: Re: [PATCH 1/2] riscv: ftrace: Fix the comments about the number of
- ftrace instruction
-To:     Guo Ren <guoren@kernel.org>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        "Anil S Keshavamurthy" <anil.s.keshavamurthy@intel.com>,
-        David Miller <davem@davemloft.net>, <jszhang@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, <liaochang1@huawei.com>,
-        =?UTF-8?Q?Patrick_St=c3=a4hlin?= <me@packi.ch>,
-        Pekka Enberg <penberg@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-References: <20220426015751.88582-1-lihuafei1@huawei.com>
- <CAJF2gTR6hL1DfaGpPqfVwtmCHaVYK1nz_-W-h_mye34UjeeAcg@mail.gmail.com>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <3bf77687-61c1-6d05-eea8-afe11a268421@huawei.com>
-Date:   Tue, 26 Apr 2022 16:52:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Tue, 26 Apr 2022 05:17:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB9419A486;
+        Tue, 26 Apr 2022 01:53:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27798B81C76;
+        Tue, 26 Apr 2022 08:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA4BCC385A4;
+        Tue, 26 Apr 2022 08:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650963221;
+        bh=el/6i0KSNcueiz7574hLB0Xq14egIyCJgB4a4fvIvWA=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=BRaz1oPVwUTnqVovkB0aOEn8l3EzvRL/bu7pyRR90LDtF6q62n42N+9V86K6DiGFS
+         c2FsrYXQc/33ZO5OGswH+Xacv97XeR+IoA9fRhUQ7h28cL86qKenWzsh86HJUyjmeu
+         aXbRZv8EylMlORYRj1mVLkvrHNUc4EfOMD5CrnqIu3oJI1hVZuyYvJZ4yXxr9tCssP
+         qAERgpBolu6EaCkzxFBo4GKIZ+MeYdC3bJW1gbuhz/pLp3XhIC6n3UEVEvgi7YmyfG
+         zXVURgfcbhexP5gGDe/KlNQUEmTBL5bMIAOmdcs1aP12kJWKGRJqM5FC7A53yHdxJ4
+         PPBkZUY4a0pRg==
+Message-ID: <bbd09bf0-4027-a250-e305-e59c7f7ecb60@kernel.org>
+Date:   Tue, 26 Apr 2022 10:53:38 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAJF2gTR6hL1DfaGpPqfVwtmCHaVYK1nz_-W-h_mye34UjeeAcg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the mediatek tree
 Content-Language: en-US
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220426080706.26c6816b@canb.auug.org.au>
+ <60b73431-ea41-bcca-8374-1836488b399c@gmail.com>
+ <55c9dd79-2703-b7f5-f593-3324d09085e5@kernel.org>
+In-Reply-To: <55c9dd79-2703-b7f5-f593-3324d09085e5@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,49 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/4/26 14:22, Guo Ren wrote:
-> On Tue, Apr 26, 2022 at 9:59 AM Li Huafei <lihuafei1@huawei.com> wrote:
->> When DYNAMIC_FTRACE is enabled, we put four instructions in front of the
->> function for ftrace use, not five.
+On 26/04/2022 10:52, Krzysztof Kozlowski wrote:
+> On 26/04/2022 10:48, Matthias Brugger wrote:
+>> Hi Stephen,
 >>
->> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
->> ---
->>   arch/riscv/kernel/ftrace.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>> On 26/04/2022 00:07, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Commits
+>>>
+>>>    775ef8aaa66e ("arm64: dts: mediatek: align thermal zone node names with dtschema")
+>>>    c8b8db1a173d ("arm64: dts: mediatek: align operating-points table name with dtschema")
+>>>    c01d9aa630b8 ("arm64: dts: mediatek: mt8183: align Google CROS EC PWM node name with dtschema")
+>>>    75a3c81bc634 ("arm64: dts: hisilicon: align 'freq-table-hz' with dtschema in UFS")
+>>>
+>>> are missing a Signed-off-by from their committer.
+>>>
 >>
->> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
->> index 4716f4cdc038..63f457650fa4 100644
->> --- a/arch/riscv/kernel/ftrace.c
->> +++ b/arch/riscv/kernel/ftrace.c
->> @@ -73,7 +73,7 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
->>   }
->>
->>   /*
->> - * Put 5 instructions with 16 bytes at the front of function within
->> + * Put 4 instructions with 16 bytes at the front of function within
-> Yeah, 5 instructions are for mcount, -fpatchable-function-entry=8
-> cause 8 16bit instructions.
-I misunderstood, thanks for the clarification.
->
-> Fixes: afc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
-There is no functional fix here, do we need to add the fix tag?
->
-> I recommend just delete "4 instructions with"
-> - * Put 5 instructions with 16 bytes at the front of function within
-> - * patchable function entry nops' area.
-> + * Put 16 bytes at the front of the function within the patchable
-> + * function entry nops' area.
+>> These patches are taken by Krysztof and merge into my tree via a tag [1] to 
+>> avoid any conflicts. Please let me know if there is anything I need to do to fix 
+>> this problem.
+> 
+> Hi Matthias,
+> 
+> Before you merged my branch, which was fine, but later you rebased all
+> this thus making yourself committer. Commits pulled from other trees
+> should in general not be rebased, because it creates duplicates - there
+> are ones in my tree, and separate in yours.
+> 
+> Additionally, such rebase changes the author, so you need your SoB.
 
-I agree and will use this modification for the next version, thanks!
+Minor update - you not only rebased these commits, but also kept my
+branch so even in your tree they are duplicated.
 
+> Since you already rebased it, I propose you add your own SoB to Mediatek
+> patches and drop the one hisilicon (75a3c81bc634). I will do the reverse
+> - drop Mediatek and keep hisilicon.
 
-Huafei
->
->>    * patchable function entry nops' area.
->>    *
->>    * 0: REG_S  ra, -SZREG(sp)
->> --
->> 2.17.1
->>
->
+Best regards,
+Krzysztof

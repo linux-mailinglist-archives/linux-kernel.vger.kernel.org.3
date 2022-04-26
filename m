@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAA450F5A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778AD50F801
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346591AbiDZIpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S1347081AbiDZJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345416AbiDZIjF (ORCPT
+        with ESMTP id S1346669AbiDZIpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02F77E598;
-        Tue, 26 Apr 2022 01:29:43 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65985659C;
+        Tue, 26 Apr 2022 01:35:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 392B96185A;
-        Tue, 26 Apr 2022 08:29:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486F1C385A4;
-        Tue, 26 Apr 2022 08:29:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AC1EB81D09;
+        Tue, 26 Apr 2022 08:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948C6C385A4;
+        Tue, 26 Apr 2022 08:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961782;
-        bh=Ur+qrFp95DSa9IMjlSvxCSHi7EATab9Fnm0+mekuBe4=;
+        s=korg; t=1650962115;
+        bh=o/R0aJ4jPfYY10v7Gc2Gjzn6zzboIP/onUXcr2KTwLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E5hoaxeSFpn1d2uhKSvVMW6mLwkG85nxi17wUqcBtxMhQmWq8La8J1vtQeDRyv3aE
-         qH9WNAIhw5CYl6VnvH25wsOK5p9MmD14jGF+k29ZKLe8IqkNXHee0PKpuD/rGuzR1Q
-         qeSRtp9FrzL/+7t2Cc3iKGR7tX6UCqNGkUhS06Jg=
+        b=QPkyHwPJ75Y/d/EVJsy0pRzAzxJATuAAsKJoRUF4ZsPNWIGptgiMNZ+Mf1MwqlUEu
+         mfnoxoydeccwVp5YAGsID8EFc5ZKlIiRET82fy8u6sE+JgDNXthItOQTz9wvsyVEZH
+         l5V0eCyeGXzzAl7UCZNExq55Qp4G5ouR7iK/PpDw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,20 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rohith Surabattula <rohiths.msft@gmail.com>,
         linux-cifs@vger.kernel.org, Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 28/62] cifs: Check the IOCB_DIRECT flag, not O_DIRECT
+Subject: [PATCH 5.10 40/86] cifs: Check the IOCB_DIRECT flag, not O_DIRECT
 Date:   Tue, 26 Apr 2022 10:21:08 +0200
-Message-Id: <20220426081738.032445614@linuxfoundation.org>
+Message-Id: <20220426081742.362639259@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,10 +77,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index f44b6f9d0777..79a18692b84c 100644
+index aa5a4d759ca2..370188b2a55d 100644
 --- a/fs/cifs/cifsfs.c
 +++ b/fs/cifs/cifsfs.c
-@@ -889,7 +889,7 @@ cifs_loose_read_iter(struct kiocb *iocb, struct iov_iter *iter)
+@@ -898,7 +898,7 @@ cifs_loose_read_iter(struct kiocb *iocb, struct iov_iter *iter)
  	ssize_t rc;
  	struct inode *inode = file_inode(iocb->ki_filp);
  

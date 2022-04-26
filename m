@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CF050F3D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E209150F86E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344648AbiDZI0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S237671AbiDZJcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344299AbiDZI0C (ORCPT
+        with ESMTP id S1347767AbiDZJGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:26:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1770D39B8F;
-        Tue, 26 Apr 2022 01:22:56 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE38513D29;
+        Tue, 26 Apr 2022 01:45:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7EB26179E;
-        Tue, 26 Apr 2022 08:22:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A0CC385A0;
-        Tue, 26 Apr 2022 08:22:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87908B81CF0;
+        Tue, 26 Apr 2022 08:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEFEDC385A0;
+        Tue, 26 Apr 2022 08:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961375;
-        bh=yx8av04Y5xxLJJnNv+WtjSdUDUvPluHDdTSScXGxX4s=;
+        s=korg; t=1650962739;
+        bh=qmlk7RokZF/lJHMgXkXxFzwtYZ21SxX7MjgtQRqnqr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eH01vc+/dD+5dznQIdPe/TJ4fF+Mu44+rhak/8KVRGl+bNDqLTxsxIEpw9jjU6W71
-         iiwXBCGL0WoXjHty6c1GROqwyFQIEKyLFh9MFpToLFvl7KoTbRntWWIZ2ksUqwKMdZ
-         edj/uUKf2zPXWQ9jcKiOB5lPeITdRusUdoX2rV1o=
+        b=q2WrfombuunFMNtAcAi/uXHHonWNxbOkG5LFd/bKtIvsF5+NHmUNUfn6eLDOZC2zC
+         4OovvkB2cZB19AoyARO9O9pN5f9kcj4QD8oW+oaICKPlptFPXd1BkmlqpzAy4UqHoY
+         EMM1B/rgV5q8KOTC6U+i8vzcchZjOl0rJ3zqcra8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 4.9 15/24] ata: pata_marvell: Check the bmdma_addr beforing reading
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 074/146] dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
 Date:   Tue, 26 Apr 2022 10:21:09 +0200
-Message-Id: <20220426081731.823926698@linuxfoundation.org>
+Message-Id: <20220426081752.142173937@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
-References: <20220426081731.370823950@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-commit aafa9f958342db36c17ac2a7f1b841032c96feb4 upstream.
+[ Upstream commit 1a7eb80d170c28be2928433702256fe2a0bd1e0f ]
 
-Before detecting the cable type on the dma bar, the driver should check
-whether the 'bmdma_addr' is zero, which means the adapter does not
-support DMA, otherwise we will get the following error:
+Both of of_get_parent() and of_parse_phandle() return node pointer with
+refcount incremented, use of_node_put() on it to decrease refcount
+when done.
 
-[    5.146634] Bad IO access at port 0x1 (return inb(port))
-[    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
-[    5.150856] RIP: 0010:ioread8+0x4a/0x60
-[    5.160238] Call Trace:
-[    5.160470]  <TASK>
-[    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
-[    5.161728]  ata_eh_recover+0x3520/0x6cc0
-[    5.168075]  ata_do_eh+0x49/0x3c0
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/pata_marvell.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/ata/pata_marvell.c
-+++ b/drivers/ata/pata_marvell.c
-@@ -82,6 +82,8 @@ static int marvell_cable_detect(struct a
- 	switch(ap->port_no)
- 	{
- 	case 0:
-+		if (!ap->ioaddr.bmdma_addr)
-+			return ATA_CBL_PATA_UNK;
- 		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
- 			return ATA_CBL_PATA40;
- 		return ATA_CBL_PATA80;
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
+index 763d2c7b5fb1..5750f9a56393 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
+@@ -489,11 +489,15 @@ static int dpaa_get_ts_info(struct net_device *net_dev,
+ 	info->phc_index = -1;
+ 
+ 	fman_node = of_get_parent(mac_node);
+-	if (fman_node)
++	if (fman_node) {
+ 		ptp_node = of_parse_phandle(fman_node, "ptimer-handle", 0);
++		of_node_put(fman_node);
++	}
+ 
+-	if (ptp_node)
++	if (ptp_node) {
+ 		ptp_dev = of_find_device_by_node(ptp_node);
++		of_node_put(ptp_node);
++	}
+ 
+ 	if (ptp_dev)
+ 		ptp = platform_get_drvdata(ptp_dev);
+-- 
+2.35.1
+
 
 

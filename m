@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA9C50F84C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A7950F741
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347955AbiDZJ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S1347983AbiDZJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347591AbiDZJF6 (ORCPT
+        with ESMTP id S1347612AbiDZJF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:05:58 -0400
+        Tue, 26 Apr 2022 05:05:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD605BCC;
-        Tue, 26 Apr 2022 01:45:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BEC6249;
+        Tue, 26 Apr 2022 01:45:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53A68B81C76;
-        Tue, 26 Apr 2022 08:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B34C385A4;
-        Tue, 26 Apr 2022 08:45:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0311BB81C76;
+        Tue, 26 Apr 2022 08:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC83C385A4;
+        Tue, 26 Apr 2022 08:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962701;
-        bh=trXIu8XHmAnC0fElf80oY0FbsOH2cP1tf1pUgA0Dk4Q=;
+        s=korg; t=1650962703;
+        bh=im8fWudeT1VX4m99OVKg5QRNtoJ3f+uKLxsKH0N9C7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t0ZUfzrP8LlImrxQlbAMd7QDXs9ALZ5yMCksW0BOSUOUMd/rTINPRdma0485eyGmn
-         eUjqj/SQBuW+5boeNzSjcoIYBraZoYppjglgEm+4GeIHwPca5cgtMEG2rLPKX06vh9
-         N4l42XPXZnQZgGevUUrfqOs0CqeMkDbFvckEfAHQ=
+        b=cTIrFkF+oED7i97icZ3YEBWZi+9l2gpw9vNei5LSrfTJl81IVeb1nflGCgy5aU5k1
+         /JEYfqaA8hmiDAvpxPBtsnGh4wIi+TRPvrqmZeBe/y8u3EEmPzeb++78E4c03llHgd
+         AmVsFnBulr2v/T4bIZQ1EIfzZvB9JoAvxbdBHf4E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 020/146] spi: spi-mtk-nor: initialize spi controller after resume
-Date:   Tue, 26 Apr 2022 10:20:15 +0200
-Message-Id: <20220426081750.633307968@linuxfoundation.org>
+Subject: [PATCH 5.17 021/146] firmware: cs_dsp: Fix overrun of unterminated control name string
+Date:   Tue, 26 Apr 2022 10:20:16 +0200
+Message-Id: <20220426081750.660475827@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
 References: <20220426081750.051179617@linuxfoundation.org>
@@ -56,51 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
 
-[ Upstream commit 317c2045618cc1f8d38beb8c93a7bdb6ad8638c6 ]
+[ Upstream commit 5b933c7262c5b0ea11ea3c3b3ea81add04895954 ]
 
-After system resumes, the registers of nor controller are
-initialized with default values. The nor controller will
-not function properly.
+For wmfw format v2 and later the coefficient name strings have a length
+field and are NOT null-terminated. Use kasprintf() to convert the
+unterminated string into a null-terminated string in an allocated buffer.
 
-To handle both issues above, we add mtk_nor_init() in
-mtk_nor_resume after pm_runtime_force_resume().
+The previous code handled this duplication incorrectly using kmemdup()
+and getting the length from a strlen() of the (unterminated) source string.
+This resulted in creating a string that continued up to the next byte in
+the firmware file that just happened to be 0x00.
 
-Fixes: 3bfd9103c7af ("spi: spi-mtk-nor: Add power management support")
-
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Link: https://lore.kernel.org/r/20220412115743.22641-1-allen-kh.cheng@mediatek.com
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Fixes: f6bc909e7673 ("firmware: cs_dsp: add driver to support firmware loading on Cirrus Logic DSPs")
+Link: https://lore.kernel.org/r/20220412163927.1303470-1-rf@opensource.cirrus.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-mtk-nor.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/firmware/cirrus/cs_dsp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-index 5c93730615f8..6d203477c04b 100644
---- a/drivers/spi/spi-mtk-nor.c
-+++ b/drivers/spi/spi-mtk-nor.c
-@@ -909,7 +909,17 @@ static int __maybe_unused mtk_nor_suspend(struct device *dev)
- 
- static int __maybe_unused mtk_nor_resume(struct device *dev)
- {
--	return pm_runtime_force_resume(dev);
-+	struct spi_controller *ctlr = dev_get_drvdata(dev);
-+	struct mtk_nor *sp = spi_controller_get_devdata(ctlr);
-+	int ret;
-+
-+	ret = pm_runtime_force_resume(dev);
-+	if (ret)
-+		return ret;
-+
-+	mtk_nor_init(sp);
-+
-+	return 0;
- }
- 
- static const struct dev_pm_ops mtk_nor_pm_ops = {
+diff --git a/drivers/firmware/cirrus/cs_dsp.c b/drivers/firmware/cirrus/cs_dsp.c
+index e48108e694f8..7dad6f57d970 100644
+--- a/drivers/firmware/cirrus/cs_dsp.c
++++ b/drivers/firmware/cirrus/cs_dsp.c
+@@ -955,8 +955,7 @@ static int cs_dsp_create_control(struct cs_dsp *dsp,
+ 	ctl->alg_region = *alg_region;
+ 	if (subname && dsp->fw_ver >= 2) {
+ 		ctl->subname_len = subname_len;
+-		ctl->subname = kmemdup(subname,
+-				       strlen(subname) + 1, GFP_KERNEL);
++		ctl->subname = kasprintf(GFP_KERNEL, "%.*s", subname_len, subname);
+ 		if (!ctl->subname) {
+ 			ret = -ENOMEM;
+ 			goto err_ctl;
 -- 
 2.35.1
 

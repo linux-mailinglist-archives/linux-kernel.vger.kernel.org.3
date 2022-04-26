@@ -2,150 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E470E50F17F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30AF950F17A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343524AbiDZGvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 02:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S240678AbiDZGuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 02:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242936AbiDZGu7 (ORCPT
+        with ESMTP id S231560AbiDZGum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 02:50:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E936627171
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:47:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650955671; x=1682491671;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vZKprBkj/vC5IYENQi9CmGVZ3nkyIgQl414kNXEGvsw=;
-  b=fF2Ch0mjs6O0MQvbbmb99PMXxX0UmG/v5lyn6dAjL2PT4EgX31C6Z5UX
-   o8dje6AZX/kboXVao4xv5riDI51uENiW4ux7Y4AaWbSmMcgq9104IhzrD
-   jQufdYHt+Lh06CbRFGwx9qZ1URLUT+fzbIUzDT2xiKnDRQvre8XbTMHvN
-   sO31/eRNdopO4dwPclAWJyfJeIORaekcTR3Q9H5/DXkZm3ePw3Ma4OA8I
-   ovzDH9lbfiGwzOShVCJqxK/kb5UqTNdKtZs6IGgIlxnghoW07RS5kcwdv
-   F/JWuub3CTinYpyYZvB5Kr3Sb1nPwS1VpJnEZ/4G72Xd9Cn2ek+w6AaZd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="328416131"
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="328416131"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:47:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="595614745"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Apr 2022 23:47:50 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njEzD-0003IZ-FW;
-        Tue, 26 Apr 2022 06:47:47 +0000
-Date:   Tue, 26 Apr 2022 14:47:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 8da18e1d2df3cc2b503bb75733f41eca040c4381
-Message-ID: <62679581.Jv/72GnRcfwBx1uT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Tue, 26 Apr 2022 02:50:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FB5237E3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:47:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 822B261347
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5388CC385A0;
+        Tue, 26 Apr 2022 06:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650955654;
+        bh=XH7q6MHWA3rgijXbIu3rZDrO4X+yfP3UQJasn1WX37I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sAA5HHA5tnJNMKDa2GKNi2FCIjdCp96jJouQ1lUlrOAdy5/yWCSbDVjYuSRKPoQUT
+         YLZN6MKj2Gsg3ZIPnnp2gmaDngeqUVW5aykR7g3JXEBfn9SXCpR9++yCyb4M/cYom0
+         f6PeeKKpmpcKxlkfc/aMJCOgdSOQwozyr9hxNAUYMQiotF86G+lEmelCTscic6w3tP
+         YbSafvWK/qVAFny23rcgzpY6dQTJ/Z0RRYHye326zvGXjaxdi4RC5ZR5ZB28jYGk3W
+         WbPg0fccxouXEPqPHodbNO7mDi9hg/WwyzZg+R1q5P0X/o0TMPziV5ExiH+/8ae5Gt
+         +TlJAVSgBCDcw==
+Date:   Tue, 26 Apr 2022 15:47:30 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [linux-stable-rc:queue/4.19 3886/9999]
+ arch/ia64/kernel/kprobes.c:414:24: error: implicit declaration of function
+ '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'?
+Message-Id: <20220426154730.3b5b934990faf267176dcf7c@kernel.org>
+In-Reply-To: <YmbEU4t57gEJAdi8@kroah.com>
+References: <202204130102.JZPa6KCQ-lkp@intel.com>
+        <20220422221312.f1bc4222cd2eb871ff066e24@kernel.org>
+        <YmbEU4t57gEJAdi8@kroah.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 8da18e1d2df3cc2b503bb75733f41eca040c4381  Merge ras/core into tip/master
+On Mon, 25 Apr 2022 17:54:59 +0200
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-elapsed time: 880m
+> On Fri, Apr 22, 2022 at 10:13:12PM +0900, Masami Hiramatsu wrote:
+> > Hi Greg,
+> > 
+> > Can you revert/drop this patch from 4.19 stable tree?
+> 
+> Can you please send a revert as I do not know what commit you are
+> referring to exactly.
+> 
+> > This patch is a part of bigger series, which introduces a generic
+> > arch-independent kretprobe trampoline handler, but that is not for the
+> > stable tree.
+> > 
+> > Also, the commit f5f96e3643dc33d6117cf7047e73512046e4858b is in the 4.19
+> > stable tree, which fixes this commit. Thus that must be removed too.
+> 
+> Same for this, can you send a revert?
 
-configs tested: 69
-configs skipped: 92
+OK, let me send it.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks!
 
-gcc tested configs:
-i386                 randconfig-c001-20220425
-arm                         lubbock_defconfig
-arc                     haps_hs_smp_defconfig
-arm                           h3600_defconfig
-xtensa                  nommu_kc705_defconfig
-x86_64               randconfig-c001-20220425
-arm                  randconfig-c002-20220425
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-i386                   debian-10.3-kselftests
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a015-20220425
-x86_64               randconfig-a014-20220425
-x86_64               randconfig-a011-20220425
-x86_64               randconfig-a013-20220425
-x86_64               randconfig-a012-20220425
-x86_64               randconfig-a016-20220425
-i386                 randconfig-a012-20220425
-i386                 randconfig-a011-20220425
-i386                 randconfig-a015-20220425
-i386                 randconfig-a013-20220425
-i386                 randconfig-a016-20220425
-arc                  randconfig-r043-20220425
-s390                 randconfig-r044-20220425
-riscv                randconfig-r042-20220425
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
+> 
+> thanks,
+> 
+> greg k-h
 
-clang tested configs:
-arm                        magician_defconfig
-powerpc                       ebony_defconfig
-i386                 randconfig-a006-20220425
-i386                 randconfig-a002-20220425
-i386                 randconfig-a005-20220425
-i386                 randconfig-a003-20220425
-i386                 randconfig-a001-20220425
-i386                 randconfig-a004-20220425
-x86_64               randconfig-a002-20220425
-x86_64               randconfig-a004-20220425
-x86_64               randconfig-a003-20220425
-x86_64               randconfig-a001-20220425
-x86_64               randconfig-a005-20220425
-x86_64               randconfig-a006-20220425
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu <mhiramat@kernel.org>

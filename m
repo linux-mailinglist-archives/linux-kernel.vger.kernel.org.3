@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C803C51097E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED18D510980
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354432AbiDZUIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S245521AbiDZUJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241568AbiDZUIh (ORCPT
+        with ESMTP id S232492AbiDZUJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:08:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFC8156E11;
-        Tue, 26 Apr 2022 13:05:28 -0700 (PDT)
+        Tue, 26 Apr 2022 16:09:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F026513C67E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:06:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A5661B24;
-        Tue, 26 Apr 2022 20:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B57BC385A0;
-        Tue, 26 Apr 2022 20:05:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651003527;
-        bh=QWgul7HAB1RcDGdmXdnICZZRpH60irXzWM9/XdJ5fwA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QPds3CSf+Z7dsxqXbOs7fJ46K7Th0dd+1zhD5ngQ16n4orKG6TB7ShXVinLmzpWkA
-         fhO1+/yYLDCsdANre//TIXf2ik/bsocj0iuHF8SmJR4W6cT/gCyjMQ1CyjsP5aeBPd
-         lqWevR2B12AhoKhe6noGZ1rz/6jbIf5fy4t0Kf9OneTmy2Jk5XV/JYFfqAO5kg9C+3
-         yf5T8u//fqad5b4VOhYDYz/rYeZrqy/F2IAh2qCL13X9K+mhbDW+7SPO1jytPC9vvm
-         nYVDSCbT6UKhDtsr9wGMzdxdEkEYE6BxDNYiMgwh5H7jImmtELi4r+AYjISFZLT5lG
-         1TI9blZkYJxZA==
-Date:   Tue, 26 Apr 2022 13:05:26 -0700
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net/mlx5: Remove useless kfree
-Message-ID: <20220426200526.erhfmwlm62vaz7jc@sx1>
-References: <1650607713-23409-1-git-send-email-baihaowen@meizu.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1650607713-23409-1-git-send-email-baihaowen@meizu.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 527A0B8228F
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0237C385A0;
+        Tue, 26 Apr 2022 20:06:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1651003565;
+        bh=otG+m8WO8dgV9HmWE1Q0aI4ceMjbtO+nIixWzrPrKUU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kNRWgAys7fGJ5dIvy67a0ZM205Ni9wXslKgweTZHCAimZY2jjnRxsH/gsmF9nqr4y
+         +ryBKYHUwDS7HAUMopzL2ruTCXQMwbQ97WxYH9RsGTUwOARBjj0Jw5jHENhudRBpru
+         b4IfXqhq0KuZt75/dvaMf/6VFMfy2qOiTP2nHdxo=
+Date:   Tue, 26 Apr 2022 13:06:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v8 00/70] Introducing the Maple Tree
+Message-Id: <20220426130603.2fa538088d10d38a740a0bdd@linux-foundation.org>
+In-Reply-To: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
+References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,10 +53,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22 Apr 14:08, Haowen Bai wrote:
->After alloc fail, we do not need to kfree.
->
->Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-applied to net-next-mlx5, thanks!
+On Tue, 26 Apr 2022 15:06:19 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
 
+> Please replace the patches in your mglru-maple branch with this set.  It should
+> be a drop in replacement for my patch range with the fixes into these
+> patches.  Adding the preallocation to work around the fs-reclaim LOCKDEP
+> issue caused enough changes to the patches to warrant a respin.
+
+OK, thanks.  I'll give these a bit of testing locally with a view to
+having a run in -next soon.
+
+It's all not looking very reviewed.  Any thoughts on who we could
+attempt to presuade to hep out here?
+
+> The last patch on the branch is still needed to fix vmscan after mglru
+> is applied.  ee4b1fc24f30 "mm/vmscan: Use VMA_ITERATOR in
+> get_next_vma()"
+
+OK, someone please send that at me when the next rev of mglru surfaces?
 

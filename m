@@ -2,145 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F136651026D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7F651027A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352736AbiDZQCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S1352749AbiDZQEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352731AbiDZQCt (ORCPT
+        with ESMTP id S1352828AbiDZQEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:02:49 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257D816A5EE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:59:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l7so37057492ejn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:59:39 -0700 (PDT)
+        Tue, 26 Apr 2022 12:04:12 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDFC38BFD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:01:03 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id r28so1841003iot.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IE5WdDoFR9vCBN7dCO3EiE00nBi4kE/GvRYTPFuengA=;
-        b=uAJmI3Pj5Ngxs35JNs0qJ/cLsAm6ZoUCdy76uRTYT9+Z1/KhgAaieAS8CSZNRJdiGC
-         4icruyLaS2b3j68ffd1FQii1CRcoKYiGEsi1WkjqyCQEST0CeCVJputyIDElvsb0MIvL
-         ZZUFcuTf1rogLT79mSdLkCMMwfBd1LoMFDVRvduF9/wjNBPtaI5Ef/uK4PHTPU181ZxI
-         JOT9lurbEVBv68bOo/IT+AKBxBBhQEktpdyCp/8MfkCZ8yhP39IUls/sfEKYogPU00+n
-         RMi3N2n0pPksskrRF0l5AL0/Z8YSuaL9P2DmZsw3MvuYRexm3WsKL3bvIu3O4KinMIqL
-         vhmA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dyCNcdxP+OP+ZEEDkKpS4dIut/dFXRkxuAQItAbC2hk=;
+        b=kkI2HO5/ZEBb6dwCosEFba8Hqs93phXW7y7LQIwDiDweskbxzWfkhJOxUXgbksafGv
+         Cj9I3+VUsMtqzbQ+FRheYG7Jnp0nCQoqCtylg9A9uVvjFZFE+gYUol4vZnJS8L/D7fcH
+         IXLA9h7oaFPNuHm4FrQjgkuQGxMTT+zn4y0Dc3ZUaMQ6grfstTlV1uURhTu7yZhAB2CR
+         S15Az/6PGwq5RzEtyE76iZSrukPtIepHVy15uTIKCKRfoQGMqwl6nQ2Wcrtywgqq4l9K
+         yrTT7rEccOM0wyFm2LgURZQ9atXRmAewK37yNCUoS/4n8PFFGhjVqFY7J9psP2v3Z2G9
+         KjGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IE5WdDoFR9vCBN7dCO3EiE00nBi4kE/GvRYTPFuengA=;
-        b=5/iwoz993pK8jaoeQHlHzrgHyqExeG8mugeNY9lhvCnLhTTFwXLgrw6EzDDcnoEcDQ
-         UsKaZMfXKK12aMTqLb5VRncxM0hAVdEAVrrDylc0zJTCMRzYRY5DBUIMPWaNGaC60XFS
-         0Hz0ESjwJXHZ9jTs77PginaXrFZe9MEnmKL5WadgdRGSlLnL0NQXJJepjLUuu64LqGDP
-         DJIvS9E3dQLep7C2INCsg71vv2oh831qO9ks7AwObcHoc3ZLFu3yvZM4MEL21AdCHqS1
-         aiZWu3ckcs68mk8NbrpP7ylWAF9OFg7xgvz8AgHfaRg4BZ+Rig2JF/iUuV+Oy2i1ey2G
-         Sapw==
-X-Gm-Message-State: AOAM533fI34aGnHJv8SIN53NnnYbL4w/vEXki1bvYEJv1loLVaz/0rsC
-        m4m6an4gRCbcEhw7kJXZoKZFOA==
-X-Google-Smtp-Source: ABdhPJyD555vYRh8BhSe3kVw/JNEcQgwHjOkSDdSDmnLNaL5jq9Crlx6eOVDsZNck52443oEXklXCw==
-X-Received: by 2002:a17:906:7c5:b0:6e8:7c6f:4f49 with SMTP id m5-20020a17090607c500b006e87c6f4f49mr22050294ejc.378.1650988777608;
-        Tue, 26 Apr 2022 08:59:37 -0700 (PDT)
-Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q16-20020a056402519000b00425f60d7109sm1294360edd.54.2022.04.26.08.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 08:59:36 -0700 (PDT)
-Message-ID: <3171818a-82c2-3f29-03e4-fd2b7d8947fc@linaro.org>
-Date:   Tue, 26 Apr 2022 17:59:36 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dyCNcdxP+OP+ZEEDkKpS4dIut/dFXRkxuAQItAbC2hk=;
+        b=eH5gkjr2yQHmMCuS+thTzXcROtHldocMg4RdagMQoAR5Jv2UKU02V1JVwZ57OgeG/M
+         65mu35Y3Td+rcj1coTujvvWmy3V+j3jN/1LOJwgaold5GOqMimXgseFtQ6AK1VFXOrKq
+         tZF1jINq64dAKNtAPIYqn8GQRfeBK8fcX0XMSZ5t1XdwFUVkPku34mIeMDU0Lshqkybb
+         YS7FKnQpbRTMc69nzijT+ljPK7ID0/vuTXO6RTMPGBaIEf4pNlnW/8ktK8Lj9WQyqH0I
+         zGgXIZWGNUWne/zm0AMzXzM6hBM9xqlGsIj9C/U9B1afT7CFBWJDjEOWTN+1VCUQXbdv
+         R1ig==
+X-Gm-Message-State: AOAM531wPS9Tya5ZOfRXBYBQHPpSavx8BmNhgWUx7MW3Szjc4Aldz4LA
+        kXNzAV8uWwh8mAYTWNdHuy3eXllHl4H0A71ceZNdbQ==
+X-Google-Smtp-Source: ABdhPJy2p2YsSAWaLRUyeCx9GIenmVZnYXSr1zBWwbH2S+IZQF4NN6DuvWqwwrbZ5neEqlH8OPqJygq6V4YSc9feqz0=
+X-Received: by 2002:a05:6638:1695:b0:32a:a178:98bc with SMTP id
+ f21-20020a056638169500b0032aa17898bcmr10205311jat.167.1650988862310; Tue, 26
+ Apr 2022 09:01:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: fsl,ls-extirq:
- convert to YAML
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220425140214.32448-1-michael@walle.cc>
- <658851ed-33fd-8e2b-7db7-ef1ca9e31c33@linaro.org>
- <83b596d0570c779c61c3c37c6f512679@walle.cc>
- <c324eec7-79b1-33da-c38e-4a480fe23126@linaro.org>
- <6fec63c911c88a375fc024f6ca0e946d@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6fec63c911c88a375fc024f6ca0e946d@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-3-axelrasmussen@google.com> <20220425203249.GA5814@altlinux.org>
+In-Reply-To: <20220425203249.GA5814@altlinux.org>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 26 Apr 2022 09:00:26 -0700
+Message-ID: <CAJHvVchLSpbKXn6u451pjaRpW=SwbOFSdpQpaC47WBFa0660xw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     "Dmitry V. Levin" <ldv@altlinux.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 09:28, Michael Walle wrote:
-> Am 2022-04-26 08:53, schrieb Krzysztof Kozlowski:
->> On 25/04/2022 23:58, Michael Walle wrote:
->>>>> +  reg:
->>>>> +    maxItems: 1
->>>>> +    description:
->>>>> +      Specifies the Interrupt Polarity Control Register (INTPCR) in
->>>>> the
->>>>> +      SCFG or the External Interrupt Control Register (IRQCR) in 
->>>>> the
->>>>> ISC.
->>>>> +
->>>>> +  interrupt-map:
->>>
->>> btw.
->>>
->>> minItems: 12
->>> maxItems: 12
->>>
->>> Isn't working here, is that expected? The validator seem to get the
->>> count
->>> of the elements of one tuple wrong.
->>>
->>> I.e.
->>> arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dtb:
->>> interrupt-controller@14: interrupt-map: [[0, 0, 1, 0, 0, 4, 1, 0], [1,
->>> 0, 1, 4, 2, 0, 1, 0], [2, 4, 3, 0, 1, 0, 3, 4], [4, 0, 1, 0, 4, 4, 5,
->>> 0], [1, 0, 5, 4, 6, 0, 1, 0], [6, 4, 7, 0, 1, 0, 7, 4], [8, 0, 1, 0, 
->>> 8,
->>> 4, 9, 0], [1, 0, 9, 4, 10, 0, 1, 0], [10, 4, 11, 0, 1, 0, 11, 4]] is 
->>> too
->>> short
->>
->>
->> Works for me (in different schema)... maybe update your dtschema?
-> 
-> Just updated to the latest one. But I'm still getting the same errors.
-> 
-> $ dt-validate -V
-> 2022.4
-> 
-> /home/mwalle/repos/b-linux-arm64/arch/arm64/boot/dts/freescale/fsl-ls1088a-qds.dtb: 
-> interrupt-controller@14: interrupt-map: [[0, 0, 1, 0, 0, 4, 1, 0], [1, 
-> 0, 1, 4, 2, 0, 1, 0], [2, 4, 3, 0, 1, 0, 3, 4], [4, 0, 1, 0, 4, 4, 5, 
-> 0], [1, 0, 5, 4, 6, 0, 1, 0], [6, 4, 7, 0, 1, 0, 7, 4], [8, 0, 1, 0, 8, 
-> 4, 9, 0], [1, 0, 9, 4, 10, 0, 1, 0], [10, 4, 11, 0, 1, 0, 11, 4]] is too 
-> short
-> 	From schema: 
-> /home/mwalle/repos/linux-mw/Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
-> 
-> How is the length of one entry calculated?
+You're right, [1] says _IO is appropriate for ioctls which only take
+an integer argument. I'll send a v3 with this fix, although I might
+wait a bit for any other review comments before doing so. Thanks for
+taking a look!
 
-If you add maxItems to your original v2 binding example, it works. If
-you replace your example with ls1088a and use maxItems:12, it works.
+https://www.kernel.org/doc/html/latest/driver-api/ioctl.html
 
-So maybe something is wrong in your modified patch (which we do not have
-so we cannot test it)?
-
-Best regards,
-Krzysztof
+On Mon, Apr 25, 2022 at 1:32 PM Dmitry V. Levin <ldv@altlinux.org> wrote:
+>
+> On Fri, Apr 22, 2022 at 02:29:41PM -0700, Axel Rasmussen wrote:
+> [...]
+> > --- a/include/uapi/linux/userfaultfd.h
+> > +++ b/include/uapi/linux/userfaultfd.h
+> > @@ -12,6 +12,10 @@
+> >
+> >  #include <linux/types.h>
+> >
+> > +/* ioctls for /dev/userfaultfd */
+> > +#define USERFAULTFD_IOC 0xAA
+> > +#define USERFAULTFD_IOC_NEW _IOWR(USERFAULTFD_IOC, 0x00, int)
+>
+> Why this new ioctl is defined using _IOWR()?  Since it neither reads from
+> user memory nor writes into user memory, it should rather be defined using
+> _IO(), shouldn't it?
+>
+>
+> --
+> ldv

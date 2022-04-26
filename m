@@ -2,318 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08BE50EE75
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DE750EE7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 04:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237294AbiDZCHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 22:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S239471AbiDZCLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 22:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiDZCHb (ORCPT
+        with ESMTP id S231364AbiDZCK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 22:07:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE1EBF511;
-        Mon, 25 Apr 2022 19:04:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 488341F388;
-        Tue, 26 Apr 2022 02:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650938663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6nYE1T80Q4pVXvl6ogOnS+yktdtMLiql/MvHNtl9Bb4=;
-        b=ze2aky3/lIT7P7jgfMWCqYHYFeSA+s9O4i1l7+RT0w/caou6ubsWoQ71kZF+NQb3B1bZYt
-        Ls0KJq/fVZIIAjM8jEauiUz2sR32G6APSx7wBgvPXZlbimBeOQZmoSrmbMlFrADIoaKgHL
-        vXUUMd5Li/J1+BPGLObu4qJOhoW7w8Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650938663;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6nYE1T80Q4pVXvl6ogOnS+yktdtMLiql/MvHNtl9Bb4=;
-        b=bc9KLUdaSWZCm+iDH45UAI2nXaTTJhJNH8HqCNO+CZbuTquXNjGBvpwmlvLskuIBcRzkY4
-        HF2HYY1saF7tqBDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D2EF713A97;
-        Tue, 26 Apr 2022 02:04:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lVGzIyRTZ2LFEAAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 26 Apr 2022 02:04:20 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Apr 2022 22:10:58 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F531F62E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 19:07:51 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id y19so8842296ljd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 19:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pXEkOmmSsTJFz31b0SJkYcwiI42fXsEpYKdly29pDBQ=;
+        b=Em6lIrQk6KiF2V8eI7qtoUbCg0vszwwLhceUQHk5KfYy/P4khEcaZefP7UcLqsEM95
+         M4pYQUKnrz+VfmUhnU0WeKoVRxWnTHYtsoBaiApKdnnvx3bp7m59R/GGdnuJmRunXpeu
+         l1KYOP2hyQks/N8ipWt/77FMTvjayTeKT1LIZ98B41WW60AI38uSJ5qHnVqa7wUWAanC
+         heTua7mwRvm0O8FxwEXIBal4nrOrp02dbUnWrwZ85XwD7fpKp4CMKVfT19jIVUYVthUO
+         oA46BnlyWjq1zHdcBTcrwJZT0fwVC+OUbg9CDkdMSs5VvzuspVgKoIMPCUgqZJhOoWfx
+         GT9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pXEkOmmSsTJFz31b0SJkYcwiI42fXsEpYKdly29pDBQ=;
+        b=RmMiCveuFnMEm88md1NDtsUfbKM9lKbuqeANgg4KDdDKnYK8bRltv8lJADQJESA85z
+         q0htcWR+YHuv6L16EKmHfieGyi5wzfQdHsXaraUlffcEXimwKIiWQ1VE29BWkYOid2fC
+         R4ZoelFuO2KJYFWpn4aVIsQHG5Yi2L+f9yEIEYVYm3dHng4oSgTCju9Uh8SNjc8HUg22
+         z0jAOb6xuOQhH88rTOc9/AgEdHaj9ljMAqdZXd3jg1W0LUwQKEgR+mfEL1RolewpN0Z6
+         lmcVtQPpyDEMP5Qld3ra3Sji64CeFlyZxn8S7DbcccTrHeH5aT2LNZl3aJn72bTPDzKD
+         t/2Q==
+X-Gm-Message-State: AOAM530SmtpPQ4YYnL9ojP15alny4/q6LGJVsqiWQGTgd2ClCOfViiCR
+        PpH0FfhiMBnTci7sYuhZIYfb/KIjDu+GI9R7BTRHEDLuAgw=
+X-Google-Smtp-Source: ABdhPJx0hNE0LbwawJRi+bqnBmcrYzVzr31Ay7Su+c0Xc4+VVAqDBtBzPeQNhLi2xXH/FDDv318RmPxKccYMSC8EZDw=
+X-Received: by 2002:a2e:a78b:0:b0:24e:f008:fbe0 with SMTP id
+ c11-20020a2ea78b000000b0024ef008fbe0mr13128096ljf.416.1650938870055; Mon, 25
+ Apr 2022 19:07:50 -0700 (PDT)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "David Howells" <dhowells@redhat.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
-        "Linux MM" <linux-mm@kvack.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/10] MM changes to improve swap-over-NFS support
-In-reply-to: <CAMuHMdVJZmjM0yc=-iVi0y5ML6u8E4pG_RpLpwbZKu35Y9vOZQ@mail.gmail.com>
-References: <164859751830.29473.5309689752169286816.stgit@noble.brown>,
- <2923577.1648635976@warthog.procyon.org.uk>,
- <164868916197.25542.11845352976146070176@noble.neil.brown.name>,
- <CAMuHMdVJZmjM0yc=-iVi0y5ML6u8E4pG_RpLpwbZKu35Y9vOZQ@mail.gmail.com>
-Date:   Tue, 26 Apr 2022 12:04:17 +1000
-Message-id: <165093865754.1648.10694052999744348900@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407051932.4071-1-xuewen.yan@unisoc.com> <20220420135127.o7ttm5tddwvwrp2a@airbuntu>
+ <CAB8ipk-tWjkeAbV=BDhNy04Yq6rdLf80x_7twuLV=HqT4nc1+w@mail.gmail.com>
+ <20220421161509.asz25zmh25eurgrk@airbuntu> <CAB8ipk_rZnwDrMaY-zJxR3pByYWD1XOP2waCgU9DZzQNpCN2zA@mail.gmail.com>
+ <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
+In-Reply-To: <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Tue, 26 Apr 2022 10:07:39 +0800
+Message-ID: <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
+        lukasz.luba@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022, Geert Uytterhoeven wrote:
-> Hi Neil,
->=20
-> On Thu, Mar 31, 2022 at 4:54 AM NeilBrown <neilb@suse.de> wrote:
-> > On Wed, 30 Mar 2022, David Howells wrote:
-> > > Do you have a branch with your patches on?
+On Tue, Apr 26, 2022 at 12:12 AM Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> On 04/25/22 09:31, Xuewen Yan wrote:
+> > On Fri, Apr 22, 2022 at 12:15 AM Qais Yousef <qais.yousef@arm.com> wrot=
+e:
+> > > Is it okay to share what the capacities of the littles, mediums and b=
+igs on
+> > > your system? And how they change under worst case scenario thermal pr=
+essure?
+> > > Only IF you have these numbers handy :-)
 > >
-> > http://git.neil.brown.name/?p=3Dlinux.git;a=3Dshortlog;h=3Drefs/heads/swa=
-p-nfs
+> > Okay, the little/mid/big cpu scale capacity is 350/930/1024, but the
+> > cpu frequency point is discrete, the big core's high freq point may is
+> > just a few more than the mid core's highest.
+> > In this case, once the thermal decrease the scaling_max_freq, the
+> > maximum frequency of the large core is easily lower than that of the
+> > medium core.
+> > Of course, the corner case is due to the frequency design of the soc
+> > and  our thermal algorithm.
+>
+> Okay, thanks for the info!
+>
 > >
-> > git://neil.brown.name/linux  branch swap-nfs
+> > >
+> > > Is it actually an indication of a potential other problem if you swin=
+g into
+> > > capacity inversion in the bigs that often? I've seen a lot of systems=
+ where the
+> > > difference between the meds and bigs is small. But frequent inversion=
+ could be
+> > > suspicious still.
+> > >
+> > > Do the littles and the mediums experience any significant thermal pre=
+ssure too?
 > >
-> > Also  on https://github.com/neilbrown/linux.git same branch
+> > In our platform, it's not.
+>
+> Good.
+>
+> > > It doesn't seem it'll cause a significant error, but still it seems t=
+o me this
+> > > function wants the original capacity passed to it.
+> > >
+> > > There are similar questions to be asked since you modify sg_cpu->max.=
+ Every
+> > > user needs to be audited if they're fine with this change or not.
+> > >
+> > > I'm not sure still what we are achieving here. You want to force sche=
+dutil not
+> > > to request higher frequencies if thermal pressure is high? Should sch=
+edutil
+> > > actually care? Shouldn't the cpufreq driver reject this request and p=
+ick the
+> > > next best thing if it can't satisfy it? I could be missing something,=
+ I haven't
+> > > looked that hard tbh :-)
 > >
-> > (it seems 1GB is no longer enough to run a git server for the kernel
-> >  effectively)
+> > I changed this just want to make it more responsive to the real
+> > capacity of the cpu, if it will cause other problems, maybe it would
+> > be better not to change it.:)
+>
+> There are others who can give you a better opinion. But AFAICS we're not =
+fixing
+> anything but risking breaking other things. So I vote for not to change i=
+t :)
+>
+> > > It depends on the severity of the problem. The simplest thing I can s=
+uggest is
+> > > to check if the cpu is in capacity inversion state, and if it is, the=
+n make
+> > > rt_task_fits_capacity() return false always.
+> > >
+> > > If we need a generic solution to handle thermal pressure omitting OPP=
+s, then
+> > > the search needs to become more complex. The proposal in this patch i=
+s not
+> > > adequate because tasks that want to run at capacity_orig_of(cpu) will=
+ wrongly
+> > > omit some cpus because of any tiny thermal pressure. For example if t=
+he
+> > > capacity_orig_of(medium_cpu) =3D 700, and uclamp_min for RT is set to=
+ 700, then
+> > > any small thermal pressure on mediums will cause these tasks to run o=
+n big cpus
+> > > only, which is not what we want. Especially if these big cpus can end=
+ up in
+> > > capacity inversion later ;-)
+> > >
+> > > So if we want to handle this case, then we need to ensure the search =
+returns
+> > > false only if
+> > >
+> > >         1. Thermal pressure results in real OPP to be omitted.
+> > >         2. Another CPU that can provide this performance level is ava=
+ilable.
+> > >
+> > > Otherwise we should still fit it on this CPU because it'll give us th=
+e closest
+> > > thing to what was requested.
+> > >
+> > > I can think of 2 ways to implement this, but none of them seem partic=
+ularly
+> > > pretty :-/
 > >
-> > This contains
-> >  - recent HEAD from Linus, which includes the NFS work
-> >  - the patches I sent to akpm
-> >  - the patch to switch NFS over to using the new swap_rw
-> >  - a SUNRPC patch to fix an easy crash.  But has always been there,
-> >     but recent changes to how kmalloc is called makes it much easier to
-> >     trigger.
->=20
-> Thanks for your series!
->=20
-> I gave this a try on Renesas RSK+RZA1 (RZ/A1H with 32 MiB of RAM)
-> and RZA2MEVB (RZ/A2M with 64 MiB of RAM) with a Debian nfsroot.
-> Seems to work, so
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Maybe as Lukasz Luba said:
+> >
+> > https://lore.kernel.org/all/ae98a861-8945-e630-8d4c-8112723d1007@arm.co=
+m/
+> >
+> > > Let's meet in the middle:
+> > > 1) use the thermal PELT signal in RT:
+> > > capacity =3D capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu))
+> > > 2) introduce a more configurable thermal_pressure shifter instead
+> > > 'sched_thermal_decay_shift', which would allow not only to make the
+> > > decaying longer, but also shorter when the platform already might do
+> > > that, to not cause too much traffic.
+> >
+> > But even if this is changed, there will still be the same problem, I
+> > look forward to Lukasz's patch:)
+>
+> This will not address my concern unless I missed something.
+>
+> The best (simplest) way forward IMHO is to introduce a new function
+>
+>         bool cpu_in_capacity_inversion(int cpu);
+>
+> (feel free to pick another name) which will detect the scenario you're in=
+. You
+> can use this function then in rt_task_fits_capacity()
+>
+>         diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>         index a32c46889af8..d48811a7e956 100644
+>         --- a/kernel/sched/rt.c
+>         +++ b/kernel/sched/rt.c
+>         @@ -462,6 +462,9 @@ static inline bool rt_task_fits_capacity(stru=
+ct task_struct *p, int cpu)
+>                 if (!static_branch_unlikely(&sched_asym_cpucapacity))
+>                         return true;
+>
+>         +       if (cpu_in_capacity_inversion(cpu))
+>         +               return false;
+>         +
+>                 min_cap =3D uclamp_eff_value(p, UCLAMP_MIN);
+>                 max_cap =3D uclamp_eff_value(p, UCLAMP_MAX);
+>
+> You'll probably need to do something similar in dl_task_fits_capacity().
+>
+> This might be a bit aggressive though as we'll steer away all RT tasks fr=
+om
+> this CPU (as long as there's another CPU that can fit it). I need to thin=
+k more
+> about it. But we could do something like this too
+>
+>         diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>         index a32c46889af8..f2a34946a7ab 100644
+>         --- a/kernel/sched/rt.c
+>         +++ b/kernel/sched/rt.c
+>         @@ -462,11 +462,14 @@ static inline bool rt_task_fits_capacity(st=
+ruct task_struct *p, int cpu)
+>                 if (!static_branch_unlikely(&sched_asym_cpucapacity))
+>                         return true;
+>
+>         +       cpu_cap =3D capacity_orig_of(cpu);
+>         +
+>         +       if (cpu_in_capacity_inversion(cpu))
 
-Thanks for testing!!!!
+It's  a good idea, but as you said, in mainline, the
+sysctl_sched_uclamp_util_min_rt_default is always 1024,
+Maybe it's better to add it to the judgment?
 
->=20
-> However, I still managed to trigger memory allocation failures,
-> even on the RZ/A2, which I don't remember seeing last time I tried.
->=20
-> root@rza2mevb:~# free
->               total        used        free      shared  buff/cache   avail=
-able
-> Mem:          57428       12400       20024        1212       25004       4=
-0028
-> Swap:             0           0           0
-> root@rza2mevb:~# swapon /swap
-> Adding 1048572k swap on /swap.  Priority:-2 extents:1 across:1048572k
-> root@rza2mevb:~# apt update
-> Ign:1 http://ftp.be.debian.org/debian stretch InRelease
-> Get:2 http://security.debian.org stretch/updates InRelease [53.0 kB]
-> Hit:3 http://ftp.be.debian.org/debian stretch Release
-> Get:5 http://security.debian.org stretch/updates/main armhf Packages [738 k=
-B]
-> Get:6 http://security.debian.org stretch/updates/main Translation-en [356 k=
-B]
-> Fetched 1,147 kB in 12s (89.5 kB/s)
-> apt: page allocation failure: order:0,
-> mode:0x40cc0(GFP_KERNEL|__GFP_COMP), nodemask=3D(null)
-> CPU: 0 PID: 455 Comm: apt Not tainted
-> 5.18.0-rc3-rza2mevb-00734-g98e2a6b7a591 #186
-> Hardware name: Generic R7S9210 (Flattened Device Tree)
->  unwind_backtrace from show_stack+0x10/0x14
->  show_stack from warn_alloc+0xa0/0x150
->  warn_alloc from __alloc_pages+0x3a0/0x8c0
->  __alloc_pages from ____cache_alloc+0x194/0x734
->  ____cache_alloc from kmem_cache_alloc+0x60/0xd0
->  kmem_cache_alloc from nfs_writehdr_alloc+0x28/0x70
->  nfs_writehdr_alloc from nfs_pgio_header_alloc+0x10/0x28
+ +       if (sysctl_sched_uclamp_util_min_rt_default !=3D
+SCHED_CAPACITY_SCALE && cpu_in_capacity_inversion(cpu))
 
-This is due to a recent change in NFS code which I don't think actually
-makes sense.
-  Commit 0bae835b63c5 ("NFS: Avoid writeback threads getting stuck in mempool=
-_alloc()")
+>         +               cpu_cap -=3D thermal_load_avg(cpu_rq(cpu));
 
-I need to find an alternate approach which addresses Trond's concerns
-but also works.  I'm just now back from leave and will try to look at
-this over the next week or two.
+Why use thermal_load_avg? If thermal is always in effect=EF=BC=8Cthe
+thermal_load_avg would get bigger and bigger, as a result, the cpu_cap
+maybe smaller than (capacity_orig - thermal_pressure).
 
-Thanks,
-NeilBrown
+Thanks!
 
+>         +
+>                 min_cap =3D uclamp_eff_value(p, UCLAMP_MIN);
+>                 max_cap =3D uclamp_eff_value(p, UCLAMP_MAX);
+>
+>         -       cpu_cap =3D capacity_orig_of(cpu);
+>         -
+>                 return cpu_cap >=3D min(min_cap, max_cap);
+>          }
+>          #else
+>
+> Thoughts?
 
-
->  nfs_pgio_header_alloc from nfs_generic_pg_pgios+0x14/0xa8
->  nfs_generic_pg_pgios from nfs_pageio_doio+0x2c/0x4c
->  nfs_pageio_doio from __nfs_pageio_add_request+0x34c/0x3c8
->  __nfs_pageio_add_request from nfs_pageio_add_request_mirror+0x18/0x44
->  nfs_pageio_add_request_mirror from nfs_pageio_add_request+0x1b8/0x1c8
->  nfs_pageio_add_request from nfs_direct_write_schedule_iovec+0x208/0x28c
->  nfs_direct_write_schedule_iovec from nfs_file_direct_write+0x128/0x21c
->  nfs_file_direct_write from nfs_swap_rw+0x24/0x28
->  nfs_swap_rw from swap_write_unplug+0x54/0x94
->  swap_write_unplug from __swap_writepage+0x10c/0x20c
->  __swap_writepage from shrink_page_list+0x86c/0xabc
->  shrink_page_list from shrink_inactive_list+0xfc/0x2b0
->  shrink_inactive_list from shrink_node+0x598/0x80c
->  shrink_node from try_to_free_pages+0x2bc/0x3e8
->  try_to_free_pages from __alloc_pages+0x55c/0x8c0
->  __alloc_pages from __filemap_get_folio+0x1b4/0x260
->  __filemap_get_folio from pagecache_get_page+0x10/0x68
->  pagecache_get_page from nfs_write_begin+0x30/0x148
->  nfs_write_begin from generic_perform_write+0xa4/0x1b8
->  generic_perform_write from nfs_file_write+0xf0/0x2a4
->  nfs_file_write from vfs_write+0x140/0x19c
->  vfs_write from ksys_write+0x74/0xc8
->  ksys_write from ret_fast_syscall+0x0/0x54
-> Exception stack(0xc4c1dfa8 to 0xc4c1dff0)
-> dfa0:                   b6ec4025 00000000 00000004 b1d0e000 019f12ac befee5=
-2c
-> dfc0: b6ec4025 00000000 019f12ac 00000004 019f12ac b1d0e000 befee52c befee7=
-ac
-> dfe0: 00000000 befee4d4 b6ec0b43 b6cb1cf6
-> Mem-Info:
-> active_anon:1772 inactive_anon:7471 isolated_anon:64
->  active_file:679 inactive_file:392 isolated_file:0
->  unevictable:0 dirty:0 writeback:2891
->  slab_reclaimable:417 slab_unreclaimable:2863
->  mapped:32 shmem:52 pagetables:107 bounce:0
->  kernel_misc_reclaimable:0
->  free:0 free_pcp:6 free_cma:0
-> Node 0 active_anon:7088kB inactive_anon:29884kB active_file:2716kB
-> inactive_file:1568kB unevictable:0kB isolated(anon):256kB
-> isolated(file):0kB mapped:128kB dirty:0kB writeback:11564kB
-> shmem:208kB writeback_tmp:0kB kernel_stack:408kB pagetables:428kB
-> all_unreclaimable? no
-> Normal free:0kB boost:4096kB min:5044kB low:5280kB high:5516kB
-> reserved_highatomic:0KB active_anon:7088kB inactive_anon:29884kB
-> active_file:2716kB inactive_file:1568kB unevictable:0kB
-> writepending:10296kB present:65536kB managed:57428kB mlocked:0kB
-> bounce:0kB free_pcp:24kB local_pcp:24kB free_cma:0kB
-> lowmem_reserve[]: 0 0
-> Normal: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB
-> 0*1024kB 0*2048kB 0*4096kB =3D 0kB
-> 7385 total pagecache pages
-> 6262 pages in swap cache
-> Swap cache stats: add 6787, delete 525, find 58/74
-> Free swap  =3D 1021476kB
-> Total swap =3D 1048572kB
-> 16384 pages RAM
-> 0 pages HighMem/MovableOnly
-> 2027 pages reserved
-> Write error -12 on dio swapfile (27660288)
-> Write error -12 on dio swapfile (29679616)
-> Write error -12 on dio swapfile (8572928)
-> Write error 0 on dio swapfile (8441856)
-> Write error 0 on dio swapfile (8704000)
-> Write error -12 on dio swapfile (8966144)
-> Write error -12 on dio swapfile (9097216)
-> Write error 0 on dio swapfile (8835072)
-> Write error 0 on dio swapfile (9228288)
-> Write error 0 on dio swapfile (9359360)
-> sio_write_complete: 2731 callbacks suppressed
-> Write error 0 on dio swapfile (34705408)
-> Write error 0 on dio swapfile (23470080)
-> Write error 0 on dio swapfile (23601152)
-> Write error 0 on dio swapfile (23732224)
-> Write error 0 on dio swapfile (4202496)
-> Write error 0 on dio swapfile (4304896)
-> Write error 0 on dio swapfile (4435968)
-> Write error 0 on dio swapfile (4567040)
-> Write error 0 on dio swapfile (4698112)
-> Write error 0 on dio swapfile (4829184)
-> warn_alloc: 125849 callbacks suppressed
-> kworker/u2:7: page allocation failure: order:0,
-> mode:0x60c40(GFP_NOFS|__GFP_COMP|__GFP_MEMALLOC), nodemask=3D(null)
-> CPU: 0 PID: 457 Comm: kworker/u2:7 Not tainted
-> 5.18.0-rc3-rza2mevb-00734-g98e2a6b7a591 #186
-> Hardware name: Generic R7S9210 (Flattened Device Tree)
-> Workqueue: rpciod rpc_async_schedule
->  unwind_backtrace from show_stack+0x10/0x14
->  show_stack from warn_alloc+0xa0/0x150
->  warn_alloc from __alloc_pages+0x3a0/0x8c0
->  __alloc_pages from ____cache_alloc+0x194/0x734
->  ____cache_alloc from __kmalloc_track_caller+0x74/0xf0
->  __kmalloc_track_caller from kmalloc_reserve.constprop.0+0x4c/0x60
->  kmalloc_reserve.constprop.0 from __alloc_skb+0x88/0x154
->  __alloc_skb from tcp_stream_alloc_skb+0x68/0x13c
->  tcp_stream_alloc_skb from tcp_sendmsg_locked+0x4b8/0xabc
->  tcp_sendmsg_locked from tcp_sendmsg+0x24/0x38
->  tcp_sendmsg from sock_sendmsg_nosec+0x14/0x24
->  sock_sendmsg_nosec from xprt_sock_sendmsg+0x1d8/0x244
->  xprt_sock_sendmsg from xs_tcp_send_request+0x11c/0x20c
->  xs_tcp_send_request from xprt_transmit+0x84/0x234
->  xprt_transmit from call_transmit+0x6c/0x7c
->  call_transmit from __rpc_execute+0xe4/0x2f0
->  __rpc_execute from rpc_async_schedule+0x18/0x24
->  rpc_async_schedule from process_one_work+0x170/0x210
->  process_one_work from worker_thread+0x204/0x2a4
->  worker_thread from kthread+0xb0/0xbc
->  kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xc4e0dfb0 to 0xc4e0dff8)
-> dfa0:                                     00000000 00000000 00000000 000000=
-00
-> dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 000000=
-00
-> dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> Mem-Info:
-> active_anon:2703 inactive_anon:6291 isolated_anon:209
->  active_file:541 inactive_file:530 isolated_file:0
->  unevictable:0 dirty:0 writeback:3781
->  slab_reclaimable:391 slab_unreclaimable:2993
->  mapped:0 shmem:0 pagetables:107 bounce:0
->  kernel_misc_reclaimable:0
->  free:0 free_pcp:26 free_cma:0
-> Node 0 active_anon:10812kB inactive_anon:25164kB active_file:2164kB
-> inactive_file:2120kB unevictable:0kB isolated(anon):836kB
-> isolated(file):0kB mapped:0kB dirty:0kB writeback:15124kB shmem:0kB
-> writeback_tmp:0kB kernel_stack:408kB pagetables:428kB
-> all_unreclaimable? yes
-> Normal free:0kB boost:0kB min:948kB low:1184kB high:1420kB
-> reserved_highatomic:0KB active_anon:10812kB inactive_anon:25164kB
-> active_file:2164kB inactive_file:2120kB unevictable:0kB
-> writepending:13284kB present:65536kB managed:57428kB mlocked:0kB
-> bounce:0kB free_pcp:104kB local_pcp:104kB free_cma:0kB
-> lowmem_reserve[]: 0 0
-> Normal: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB
-> 0*1024kB 0*2048kB 0*4096kB =3D 0kB
-> 10274 total pagecache pages
-> 9203 pages in swap cache
-> Swap cache stats: add 9834, delete 631, find 61/77
-> Free swap  =3D 1009180kB
-> Total swap =3D 1048572kB
-> 16384 pages RAM
-> 0 pages HighMem/MovableOnly
-> 2027 pages reserved
-> sio_write_complete: 29066 callbacks suppressed
-> ...
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
+>
+>
+> Thanks!
+>
 > --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
->=20
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like t=
-hat.
->                                 -- Linus Torvalds
->=20
+> Qais Yousef

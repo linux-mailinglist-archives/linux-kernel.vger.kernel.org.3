@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E441651027D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A889510280
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237946AbiDZQEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S1352789AbiDZQFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237871AbiDZQEp (ORCPT
+        with ESMTP id S237871AbiDZQF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:04:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B578B3BFB9;
-        Tue, 26 Apr 2022 09:01:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 26 Apr 2022 12:05:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2EF42EE7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:02:19 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9785CE1F73;
-        Tue, 26 Apr 2022 16:01:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC57C385AA;
-        Tue, 26 Apr 2022 16:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650988894;
-        bh=V9bqxROuLoIKwO7jBdqPsf9/DBBXipHAZ1xgMxIrwxc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=lZkoCILrM0a540ltNPfzBZw+KIGbs4o67Vfcqb0kEq1d0i/snNsZGdNE1pSmcf0mB
-         h/yCk72Itf+O/wLTMqFm3kJI54aKe+D4p/cj1tb7N2+V0jZI9NfMZV/7Ti5nPCe4Sj
-         kzzxrWTvu5dDz9ZKFQrwD+p5luJrRL6LeZmddGgW0RIHci4pmO8VQzk1hYdugZSNOm
-         1MfYeJ1JfhhAqZZ/nk0yGl3w35hrzh2EkbiaVlrbo4H/T16ki0b1yapu+31ippsUcZ
-         dXnjDP3s9gSSOEF96HbzT8CS2uMK4400Q5gUS2RMUsFuuxDEJf78veGXM12WkVsG19
-         cfVESoP/NLSIQ==
-Date:   Tue, 26 Apr 2022 11:01:32 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [RFC/RFT v2 00/11] RK3568 PCIe V3 support
-Message-ID: <20220426160132.GA1724099@bhelgaas>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8897A1F388;
+        Tue, 26 Apr 2022 16:02:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650988938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rhUCnfLaLVR3gKOvJDs3VsH1Owqoy0EyHHUnNelrzz8=;
+        b=FUeN2KN3Y4LRX09Snuy+dqHQLQ7yIRxsLMnO5Xbopwj20SsLx+EyN00Oq6CsX/hOrTPlWQ
+        RKhhw5M4zO/Y2IqILzvDiqRTeuCQ0jj154pY4kuSNmzXXzWrk5Tej1UZlDMCECF/Bo48kI
+        D9Bz39BV7K3LNRhIEpkcrNg1rOGUWRc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650988938;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rhUCnfLaLVR3gKOvJDs3VsH1Owqoy0EyHHUnNelrzz8=;
+        b=Ztj4sEhh40VCp+3uJZbgUl8r3xxZ1oZvtgm3dkbgOWZ2UL5dSgmcWVHtmMEp7dCcxaOspJ
+        o3HFSBNnOVPlYfBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E57013223;
+        Tue, 26 Apr 2022 16:02:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X2dWFooXaGIBdgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 26 Apr 2022 16:02:18 +0000
+Message-ID: <768d4216-232e-6c67-b395-83c2f34c7970@suse.cz>
+Date:   Tue, 26 Apr 2022 18:02:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426132139.26761-1-linux@fw-web.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 05/23] mm/slab_common: cleanup __kmalloc()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+ <20220414085727.643099-6-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220414085727.643099-6-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,83 +81,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:21:28PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> This series adds Rockchip PCIe V3 support found on rk3568 SOC.
-> 
-> It is based on "Enable rk356x PCIe controller" series of Peter Geis
-> v8: https://patchwork.kernel.org/project/linux-rockchip/list/?series=634925
-> 
-> Compared to PCIeV2 which uses the Naneng combphy, pciev3
-> uses a dedicated pci-phy.
-> 
-> This Version is still an RFC/RFT because i cannot only test PCIe-slot on R2Pro
-> as the other is a M.2 Key-E where i don't have any Hardware.
-> 
-> last 3 Patches show a replacement for bifurcation setting to make it more
-> useful for vendor-indepent lane-mapping.
-> 
-> Frank Wunderlich (11):
->   dt-bindings: phy: rockchip: add PCIe v3 phy
->   dt-bindings: soc: grf: add pcie30-{phy,pipe}-grf
->   dt-bindings: phy: rockchip: add PCIe v3 constants
->   phy: rockchip: Support PCIe v3
->   dt-bindings: pci: add bifurcation option to Rockchip DesignWare
->     binding
->   PCI: rockchip-dwc: add PCIe bifurcation
->   arm64: dts: rockchip: rk3568: Add PCIe v3 nodes
->   arm64: dts: rockchip: Add PCIe v3 nodes to BPI-R2-Pro
->   dt-bindings: pci: add lane-map to rockchip PCIe binding
->   PCI: rockchip: add a lane-map to rockchip pcie driver
->   arm64: dts: rockchip: add basic lane-map and drop bifurcation from
->     r2pro
+On 4/14/22 10:57, Hyeonggon Yoo wrote:
+> Make __kmalloc() wrapper of __kmalloc_node().
 
-Don't just make up new prefixes; copy what's been done in the past.
+Again/similarly, looks like this will make SLUB not miss trace for
+kmalloc_large() anymore.
 
-  PCI: rockchip-dwc: add PCIe bifurcation
-  PCI: rockchip: add a lane-map to rockchip pcie driver
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-I think we decided [1] to use "rockchip-dwc" for this driver to
-distinguish it from the pcie-rockchip-host.c driver.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-So both of these should use "PCI: rockchip-dwc:" as the prefix.
+Nit below:
 
-At least for the drivers/pci/ patches, capitalize the first word of
-the subject, i.e., "Add PCIe bifurcation" and "Add lane-map ..."  I
-don't know the dt-bindings convention (I would use "git log --oneline"
-to find out).
-
-s/pcie/PCIe/ in subjects, commit logs, comments, etc.
-
-Wrap commit logs to fill 75 columns and add blank lines between
-paragraphs.  Readers should not need to wonder "oh, the previous line
-was shorter than usual; is this one a new paragraph?"
-
-[1] https://lore.kernel.org/r/20210624180723.GA3543267@bjorn-Precision-5520
-
->  .../bindings/pci/rockchip-dw-pcie.yaml        |   3 +
->  .../bindings/phy/rockchip,pcie3-phy.yaml      |  84 ++++++
->  .../devicetree/bindings/soc/rockchip/grf.yaml |   3 +
->  .../boot/dts/rockchip/rk3568-bpi-r2-pro.dts   |  79 +++++
->  arch/arm64/boot/dts/rockchip/rk3568.dtsi      | 122 ++++++++
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c |  22 ++
->  drivers/phy/rockchip/Kconfig                  |   9 +
->  drivers/phy/rockchip/Makefile                 |   1 +
->  .../phy/rockchip/phy-rockchip-snps-pcie3.c    | 278 ++++++++++++++++++
->  include/dt-bindings/phy/phy-rockchip-pcie3.h  |  21 ++
->  include/linux/phy/pcie.h                      |  12 +
->  11 files changed, 634 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
->  create mode 100644 drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
->  create mode 100644 include/dt-bindings/phy/phy-rockchip-pcie3.h
->  create mode 100644 include/linux/phy/pcie.h
+> ---
+>  include/linux/slab.h | 13 ++++++++++---
+>  mm/slab.c            | 34 ----------------------------------
+>  mm/slob.c            |  6 ------
+>  mm/slub.c            | 23 -----------------------
+>  4 files changed, 10 insertions(+), 66 deletions(-)
 > 
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index acdb4b7428f9..4c06d15f731c 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -419,7 +419,16 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
+>  #define kmalloc_index(s) __kmalloc_index(s, true)
+>  #endif /* !CONFIG_SLOB */
+>  
+> -void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
+> +extern void *__kmalloc_node(size_t size, gfp_t flags, int node)
+> +			    __assume_kmalloc_alignment
+> +			    __alloc_size(1);
+> +
+
+Again, no 'extern' please.
+
+> +static __always_inline __alloc_size(1) __assume_kmalloc_alignment
+> +void *__kmalloc(size_t size, gfp_t flags)
+> +{
+> +	return __kmalloc_node(size, flags, NUMA_NO_NODE);
+> +}
+> +
+>  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
+>  void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+>  			   gfp_t gfpflags) __assume_slab_alignment __malloc;

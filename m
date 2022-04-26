@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EC650F8CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0A150F720
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348366AbiDZJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S237064AbiDZJHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346950AbiDZJJ3 (ORCPT
+        with ESMTP id S1346402AbiDZIpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:09:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22417B9B5;
-        Tue, 26 Apr 2022 01:49:28 -0700 (PDT)
+        Tue, 26 Apr 2022 04:45:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5008789329;
+        Tue, 26 Apr 2022 01:34:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E25460C42;
-        Tue, 26 Apr 2022 08:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D69C385A4;
-        Tue, 26 Apr 2022 08:49:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E1D21CE1BC3;
+        Tue, 26 Apr 2022 08:34:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CA1C385A0;
+        Tue, 26 Apr 2022 08:34:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962967;
-        bh=bZ0Xe/AYFJWiHqb195AYspAhCa1rCBvLLVFu9aa1DhM=;
+        s=korg; t=1650962080;
+        bh=cO5fCD0ZzNkZaR/zh4/84j4XIbL0lFAwsD0hABYmrS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DeebPXnqML4U6FwiK3QYj6Ct4O6G1Gb1+qwSxb02/7+Wi0diExv8gwK9+HQZlDMP4
-         8N+9c7XIjQK6AlNZaYc5jiJMBNzH34AWpUIVoIDDO/m75+fn5LDVD0IQgIMpjG+F9a
-         WxZmp+lHsO44+q4UF/w7ROfKoxXY+oEMA4JV1ZKI=
+        b=ZPDlixFUwmRQiXC0c/CBzObZEcVbCpMcaR/8xhRm46vk2Sv32xEI1PWFS1l/xFUyS
+         in1F0+HHe1QpPFDVkkv6Ezzo3Nm7fw3yEyr3V72Q+ksRQMQXtqStxi2MceDCQwACQG
+         DNq4XuJ4Mgv2IOo8EdMr+e8+T6lnIctm0E0A36P4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 098/146] drm/radeon: fix logic inversion in radeon_sync_resv
+        stable@vger.kernel.org, Al Grant <al.grant@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 5.10 65/86] arm_pmu: Validate single/group leader events
 Date:   Tue, 26 Apr 2022 10:21:33 +0200
-Message-Id: <20220426081752.811178065@linuxfoundation.org>
+Message-Id: <20220426081743.084793776@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+References: <20220426081741.202366502@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian König <christian.koenig@amd.com>
+From: Rob Herring <robh@kernel.org>
 
-[ Upstream commit 022074918042465668db9b0f768e2260b1e39c59 ]
+commit e5c23779f93d45e39a52758ca593bd7e62e9b4be upstream.
 
-Shared is the opposite of write/exclusive.
+In the case where there is only a cycle counter available (i.e.
+PMCR_EL0.N is 0) and an event other than CPU cycles is opened, the open
+should fail as the event can never possibly be scheduled. However, the
+event validation when an event is opened is skipped when the group
+leader is opened. Fix this by always validating the group leader events.
 
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Fixes: 0597ca7b43e4 ("drm/radeon: use new iterator in radeon_sync_resv")
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1970
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220412093626.608767-1-christian.koenig@amd.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Al Grant <al.grant@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20220408203330.4014015-1-robh@kernel.org
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/radeon/radeon_sync.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/perf/arm_pmu.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_sync.c b/drivers/gpu/drm/radeon/radeon_sync.c
-index b991ba1bcd51..f63efd8d5e52 100644
---- a/drivers/gpu/drm/radeon/radeon_sync.c
-+++ b/drivers/gpu/drm/radeon/radeon_sync.c
-@@ -96,7 +96,7 @@ int radeon_sync_resv(struct radeon_device *rdev,
- 	struct dma_fence *f;
- 	int r = 0;
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -398,6 +398,9 @@ validate_group(struct perf_event *event)
+ 	if (!validate_event(event->pmu, &fake_pmu, leader))
+ 		return -EINVAL;
  
--	dma_resv_for_each_fence(&cursor, resv, shared, f) {
-+	dma_resv_for_each_fence(&cursor, resv, !shared, f) {
- 		fence = to_radeon_fence(f);
- 		if (fence && fence->rdev == rdev)
- 			radeon_sync_fence(sync, fence);
--- 
-2.35.1
-
++	if (event == leader)
++		return 0;
++
+ 	for_each_sibling_event(sibling, leader) {
+ 		if (!validate_event(event->pmu, &fake_pmu, sibling))
+ 			return -EINVAL;
+@@ -487,12 +490,7 @@ __hw_perf_event_init(struct perf_event *
+ 		local64_set(&hwc->period_left, hwc->sample_period);
+ 	}
+ 
+-	if (event->group_leader != event) {
+-		if (validate_group(event) != 0)
+-			return -EINVAL;
+-	}
+-
+-	return 0;
++	return validate_group(event);
+ }
+ 
+ static int armpmu_event_init(struct perf_event *event)
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857CD50F79E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD6450F3AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346475AbiDZJE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        id S1343897AbiDZI0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346792AbiDZIpW (ORCPT
+        with ESMTP id S1344674AbiDZI0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244223AA5D;
-        Tue, 26 Apr 2022 01:35:39 -0700 (PDT)
+        Tue, 26 Apr 2022 04:26:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1876D3A19F;
+        Tue, 26 Apr 2022 01:23:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3BB7B81D1C;
-        Tue, 26 Apr 2022 08:35:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2379AC385A4;
-        Tue, 26 Apr 2022 08:35:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2B7B6179E;
+        Tue, 26 Apr 2022 08:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D005CC385A0;
+        Tue, 26 Apr 2022 08:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962136;
-        bh=l9uC7Jd/JtduUprt9DTiagtw6UvvCPakC11dX7OhYYk=;
+        s=korg; t=1650961384;
+        bh=Zp0ODmEopr5z1F8ZsmkfyyFrMWNW4ooKim+LgFu0NRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=owHLbfJC3++i22I0pKxzjPbNHh0Jrde6hIMovt9pmKpPAvqLiTKDVKxa+jUsIRO6m
-         V2dMbXEmN8SBx7ubjfg6eCtMapEZT3UEASbKpvQyJt/MhRV9oqRtMGDe9gR0H3bro2
-         Ks45rt+fYwbZahgq/wcEruUOaJmsFs46ge5qYI3g=
+        b=NskFkqdo3SUyDickFvT0oT8mKABfiYK4biINV6AdWAjmhRGq43Y0936rpFix/3Nrp
+         sbZfaF6N8wVe6GeD0i6wp8k/3oQe8KjLy/pHWFhweMMHo8JsBfN/3OS17arEdbQyi5
+         99QWYhiNM0gBJGmDSyIyC+J0nbDUQUWD2kwSR/bU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 44/86] dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 4.9 18/24] ASoC: soc-dapm: fix two incorrect uses of list iterator
 Date:   Tue, 26 Apr 2022 10:21:12 +0200
-Message-Id: <20220426081742.478241645@linuxfoundation.org>
+Message-Id: <20220426081731.911260704@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081731.370823950@linuxfoundation.org>
+References: <20220426081731.370823950@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 1a7eb80d170c28be2928433702256fe2a0bd1e0f ]
+commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
 
-Both of of_get_parent() and of_parse_phandle() return node pointer with
-refcount incremented, use of_node_put() on it to decrease refcount
-when done.
+These two bug are here:
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+After the list_for_each_entry_safe_continue() exits, the list iterator
+will always be a bogus pointer which point to an invalid struct objdect
+containing HEAD member. The funciton poniter 'w->event' will be a
+invalid value which can lead to a control-flow hijack if the 'w' can be
+controlled.
+
+The original intention was to continue the outer list_for_each_entry_safe()
+loop with the same entry if w->event is NULL, but misunderstanding the
+meaning of list_for_each_entry_safe_continue().
+
+So just add a 'continue;' to fix the bug.
+
+Cc: stable@vger.kernel.org
+Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ sound/soc/soc-dapm.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
-index 1268996b7030..2f9075429c43 100644
---- a/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
-+++ b/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
-@@ -489,11 +489,15 @@ static int dpaa_get_ts_info(struct net_device *net_dev,
- 	info->phc_index = -1;
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -1569,8 +1569,7 @@ static void dapm_seq_run(struct snd_soc_
+ 		switch (w->id) {
+ 		case snd_soc_dapm_pre:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
  
- 	fman_node = of_get_parent(mac_node);
--	if (fman_node)
-+	if (fman_node) {
- 		ptp_node = of_parse_phandle(fman_node, "ptimer-handle", 0);
-+		of_node_put(fman_node);
-+	}
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
+@@ -1582,8 +1581,7 @@ static void dapm_seq_run(struct snd_soc_
  
--	if (ptp_node)
-+	if (ptp_node) {
- 		ptp_dev = of_find_device_by_node(ptp_node);
-+		of_node_put(ptp_node);
-+	}
+ 		case snd_soc_dapm_post:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
  
- 	if (ptp_dev)
- 		ptp = platform_get_drvdata(ptp_dev);
--- 
-2.35.1
-
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
 
 

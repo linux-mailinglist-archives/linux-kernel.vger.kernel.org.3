@@ -2,146 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0908E50F416
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01C250F431
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344901AbiDZIcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S229992AbiDZIff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344899AbiDZIbF (ORCPT
+        with ESMTP id S243337AbiDZIdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:31:05 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AF67DAAF;
-        Tue, 26 Apr 2022 01:24:59 -0700 (PDT)
-X-UUID: 8e75016a60514b81be909cfb7eeb1e30-20220426
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:3fd02bc8-e753-422f-add6-d674bf6e7ff4,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:cac083c6-85ee-4ac1-ac05-bd3f1e72e732,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 8e75016a60514b81be909cfb7eeb1e30-20220426
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1336388002; Tue, 26 Apr 2022 16:24:55 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 26 Apr 2022 16:24:54 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 26 Apr 2022 16:24:54 +0800
-Message-ID: <edaf444b9c45e5f36757116fe098749348cb54b7.camel@mediatek.com>
-Subject: Re: [PATCH V3 11/17] dt-bindings: arm: mediatek: Add #reset-cells
- property for MT8192-sys-clock
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 26 Apr 2022 16:24:54 +0800
-In-Reply-To: <64411bc7-ce4d-9f85-be8f-c93d6b2a0360@linaro.org>
-References: <20220422060152.13534-1-rex-bc.chen@mediatek.com>
-         <20220422060152.13534-12-rex-bc.chen@mediatek.com>
-         <288f55f3-b3ed-32b8-9a44-652f3d53617d@linaro.org>
-         <fdedea6f20738bfe2ede7e526aa653af1ac35768.camel@mediatek.com>
-         <64411bc7-ce4d-9f85-be8f-c93d6b2a0360@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 26 Apr 2022 04:33:46 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9A13CFC2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 01:25:38 -0700 (PDT)
+Received: from [172.16.4.143] (unknown [87.190.40.202])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 086E861EA1928;
+        Tue, 26 Apr 2022 10:25:35 +0200 (CEST)
+Message-ID: <44c145a8-cbfd-c8e4-8391-76abb9562f97@molgen.mpg.de>
+Date:   Tue, 26 Apr 2022 10:25:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v5 01/11] aach: arm: mach-hpe: Introduce the HPE GXP
+ architecture
+Content-Language: en-US
+To:     Nick Hawkins <nick.hawkins@hpe.com>
+Cc:     verdun@hpe.com, joel@jms.id.au, arnd@arndb.de,
+        openbmc@lists.ozlabs.org, Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220421192132.109954-1-nick.hawkins@hpe.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220421192132.109954-1-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-25 at 15:44 +0800, Krzysztof Kozlowski wrote:
-> On 25/04/2022 04:37, Rex-BC Chen wrote:
-> > > > +  '#reset-cells':
-> > > > +    maximum: 2
-> > > 
-> > > Why this is a maximum? Usually this is const, so how do you use
-> > > it
-> > > (with
-> > > what values)?
-> > > 
-> > 
-> > We need to let the driver compatible with previous setting in
-> > drivers/clk/mediatek/reset.c
-> 
-> Then it should be enum [1, 2], because '0' is not valid.
-> 
-> > There are two use cases in our reset driver:
-> > (Refer to [1])
-> > 
-> > 1. #reset-cells = <1>
-> >    When we input the argument, the older driver
-> > use is to calculate  
-> >    bank and bit by different method. From the implementation of
-> >    reset_xlate(), we can see if the argument number is 1, it will
-> >    return directly.
-> 
-> I understand this is an old binding with older compatibles, so this
-> should be restricted per each variant (allOf:if:then)... but wait,
-> old
-> binding did not allow any reset-cells! You add an entirely new
-> binding
-> property and already want to support some older (deprecated?) way.
-> 
-> > 
-> > 2. #reset-cells = <2>
-> >    The input arguments is offset and bit. When we input two
-> > arguments,
-> >    we can use reset_xlate() to calculate the corresponding id to
-> > assert
-> >    and deassert.
-> > 
-> > [1]:
-> > 
-https://urldefense.com/v3/__https://lore.kernel.org/all/20220422060152.13534-10-rex-bc.chen@mediatek.com/__;!!CTRNKA9wMg0ARbw!0U0Yrp6WQxZ0YNMjaLJbAdq6Zyc524B4CY57-TP7QJ5FoSkCM72VI7mHJyWa1SZCnYTK$
-> >  
-> > 
-> > If it's acceptable, I will add this in commit message.
-> 
-> 
-> Best regards,
-> Krzysztof
+Dear Nick,
 
-Hello Krzysztof,
 
-I will let #reset-cells = <1> in next version and abandon the
-modification of reset_xlate().
+Thank you for the patches.
 
-Thanks!
+Am 21.04.22 um 21:21 schrieb nick.hawkins@hpe.com:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 
-BRs,
-Rex
+Type in the prefix: s/aach/arch/. Looking at `git log --oneline 
+arch/arm`, *ARM* or *arm* seems to be commonly used though.
 
+> The GXP is the HPE BMC SoC that is used in the majority
+> of HPE Generation 10 servers. Traditionally the asic will
+> last multiple generations of server before being replaced.
+
+Please mention what kind of documentation (datasheets, …) are available.
+
+> In gxp.c we reset the EHCI controller early to boot the asic.
+
+Why does the EHCI controller need to be reset?
+
+> Info about SoC:
+> 
+> HPE GXP is the name of the HPE Soc. This SoC is used to implement
+> many BMC features at HPE. It supports ARMv7 architecture based on
+> the Cortex A9 core. It is capable of using an AXI bus to which
+> a memory controller is attached. It has multiple SPI interfaces
+> to connect boot flash and BIOS flash. It uses a 10/100/1000 MAC
+> for network connectivity. It has multiple i2c engines to drive
+> connectivity with a host infrastructure. The initial patches
+> enable the watchdog and timer enabling the host to be able to
+> boot.
+
+Maybe doe that in separate commits?
+
+Please reflow the commit message for 75 characters per line.
+
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> ---
+> v5:
+> * Fixed version log
+> v4:
+> * Removed unecessary code: restart, iomap, init_machine
+
+unnecessary
+
+> * Reordered Kconfig depends
+> * Removed SPARSE_IRQ, MULTI_IRQ_HANDLER, IRQ_DOMAIN, PINCTL from
+>    Kconfig
+> v3:
+> * Put into proper patchset format
+> v2:
+> * No change
+> ---
+>   arch/arm/Kconfig           |  2 ++
+>   arch/arm/Makefile          |  1 +
+>   arch/arm/mach-hpe/Kconfig  | 17 +++++++++++++++++
+>   arch/arm/mach-hpe/Makefile |  1 +
+>   arch/arm/mach-hpe/gxp.c    | 16 ++++++++++++++++
+>   5 files changed, 37 insertions(+)
+>   create mode 100644 arch/arm/mach-hpe/Kconfig
+>   create mode 100644 arch/arm/mach-hpe/Makefile
+>   create mode 100644 arch/arm/mach-hpe/gxp.c
+> 
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index 2e8091e2d8a8..13f77eec7c40 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -620,6 +620,8 @@ source "arch/arm/mach-highbank/Kconfig"
+>   
+>   source "arch/arm/mach-hisi/Kconfig"
+>   
+> +source "arch/arm/mach-hpe/Kconfig"
+> +
+>   source "arch/arm/mach-imx/Kconfig"
+>   
+>   source "arch/arm/mach-integrator/Kconfig"
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index a2391b8de5a5..97a89023c10f 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -179,6 +179,7 @@ machine-$(CONFIG_ARCH_FOOTBRIDGE)	+= footbridge
+>   machine-$(CONFIG_ARCH_GEMINI)		+= gemini
+>   machine-$(CONFIG_ARCH_HIGHBANK)		+= highbank
+>   machine-$(CONFIG_ARCH_HISI)		+= hisi
+> +machine-$(CONFIG_ARCH_HPE)		+= hpe
+>   machine-$(CONFIG_ARCH_INTEGRATOR)	+= integrator
+>   machine-$(CONFIG_ARCH_IOP32X)		+= iop32x
+>   machine-$(CONFIG_ARCH_IXP4XX)		+= ixp4xx
+> diff --git a/arch/arm/mach-hpe/Kconfig b/arch/arm/mach-hpe/Kconfig
+> new file mode 100644
+> index 000000000000..c075248b259e
+> --- /dev/null
+> +++ b/arch/arm/mach-hpe/Kconfig
+> @@ -0,0 +1,17 @@
+> +menuconfig ARCH_HPE
+> +	bool "HPE SoC support"
+> +	depends on ARCH_MULTI_V7
+> +	help
+> +	  This enables support for HPE ARM based SoC chips
+
+Add a dot/period at the end?
+
+> +if ARCH_HPE
+> +
+> +config ARCH_HPE_GXP
+> +	bool "HPE GXP SoC"
+> +	depends on ARCH_MULTI_V7
+> +	select ARM_VIC
+> +	select GENERIC_IRQ_CHIP
+> +	select CLKSRC_MMIO
+> +	help
+> +	  Support for GXP SoCs
+
+Please elaborate here, maybe copying parts of the commit message, in 
+what servers it is used.
+
+> +
+> +endif
+> diff --git a/arch/arm/mach-hpe/Makefile b/arch/arm/mach-hpe/Makefile
+> new file mode 100644
+> index 000000000000..8b0a91234df4
+> --- /dev/null
+> +++ b/arch/arm/mach-hpe/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_ARCH_HPE_GXP) += gxp.o
+> diff --git a/arch/arm/mach-hpe/gxp.c b/arch/arm/mach-hpe/gxp.c
+> new file mode 100644
+> index 000000000000..e2f0c3ae6bd8
+> --- /dev/null
+> +++ b/arch/arm/mach-hpe/gxp.c
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.*/
+
+Space before closing comment delimiter.
+
+> +
+> +#include <linux/of_platform.h>
+> +#include <asm/mach/arch.h>
+> +
+> +static const char * const gxp_board_dt_compat[] = {
+> +	"hpe,gxp",
+> +	NULL,
+> +};
+> +
+> +DT_MACHINE_START(GXP_DT, "HPE GXP")
+> +	.dt_compat	= gxp_board_dt_compat,
+> +	.l2c_aux_val = 0,
+> +	.l2c_aux_mask = 0,
+> +MACHINE_END
+
+Where is the EHCI controller reset?
+
+
+Kind regards,
+
+Paul

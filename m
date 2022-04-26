@@ -2,131 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213C051006C
+	by mail.lfdr.de (Postfix) with ESMTP id 69A7A51006D
 	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351622AbiDZO3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
+        id S1351637AbiDZO3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351430AbiDZO3i (ORCPT
+        with ESMTP id S1351430AbiDZO3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:29:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7E65EDEC;
-        Tue, 26 Apr 2022 07:26:31 -0700 (PDT)
+        Tue, 26 Apr 2022 10:29:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C37C60AAB;
+        Tue, 26 Apr 2022 07:26:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C217FB82048;
-        Tue, 26 Apr 2022 14:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024D9C385A0;
-        Tue, 26 Apr 2022 14:26:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650983188;
-        bh=0ea5hGTk0TwU3R/tjGkehgQxlYdP8U3LnMt1hpRQvZw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aSJqhlqdjCOstRQhUpvxUoryYNSA5dt5jyjBwA4E+glj3V3QTtVddlIVU+c3Qg0VZ
-         8165XnhymAqFHOr2wMo4O4LGDLGXA6PyKsmONODO0M89cRqG0gV1guu6y7evhtAEzf
-         0x4bUFgDC2LDEiQMQoksvHqq+ml5qYvCyT+TYVGF1zl3y2zKd9alhQJOOFgcs8CcIt
-         wIyFpqhjqUErvc8oHvjIOZ5sd8HIuaTOl15qAIaWc2aA0fkUbGz4vyhDCIKo/yhGWE
-         ookoZ1AsD5X/oZtx7b19ZK4Lbw+9U+ocyqxZg7fN1B2iSg/AuA9CjQCpLbzGjELn1l
-         CMMGOvBXtvnfg==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19.y 3/3] ia64: kprobes: Fix to pass correct trampoline address to the handler
-Date:   Tue, 26 Apr 2022 23:26:24 +0900
-Message-Id: <165098318419.1366179.670272113133163758.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <165098315444.1366179.5950180330185498273.stgit@devnote2>
-References: <165098315444.1366179.5950180330185498273.stgit@devnote2>
-User-Agent: StGit/0.19
+        by ams.source.kernel.org (Postfix) with ESMTPS id 149EBB8204E;
+        Tue, 26 Apr 2022 14:26:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916BFC385AA;
+        Tue, 26 Apr 2022 14:26:31 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 15:26:28 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v22 4/9] arm64: kdump: Don't force page-level mappings
+ for memory above 4G
+Message-ID: <YmgBFPMbyyOH/52y@arm.com>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-5-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414115720.1887-5-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit a7fe2378454cf46cd5e2776d05e72bbe8f0a468c upstream.
+On Thu, Apr 14, 2022 at 07:57:15PM +0800, Zhen Lei wrote:
+> @@ -540,13 +540,31 @@ static void __init map_mem(pgd_t *pgdp)
+>  	for_each_mem_range(i, &start, &end) {
+>  		if (start >= end)
+>  			break;
+> +
+> +#ifdef CONFIG_KEXEC_CORE
+> +		if (eflags && (end >= SZ_4G)) {
+> +			/*
+> +			 * The memory block cross the 4G boundary.
+> +			 * Forcibly use page-level mappings for memory under 4G.
+> +			 */
+> +			if (start < SZ_4G) {
+> +				__map_memblock(pgdp, start, SZ_4G - 1,
+> +					       pgprot_tagged(PAGE_KERNEL), flags | eflags);
+> +				start  = SZ_4G;
+> +			}
+> +
+> +			/* Page-level mappings is not mandatory for memory above 4G */
+> +			eflags = 0;
+> +		}
+> +#endif
 
-The following commit:
+That's a bit tricky if a SoC has all RAM above 4G. IIRC AMD Seattle had
+this layout. See max_zone_phys() for how we deal with this, basically
+extending ZONE_DMA to the whole range if RAM starts above 4GB. In that
+case, crashkernel reservation would fall in the range above 4GB.
 
-   Commit e792ff804f49 ("ia64: kprobes: Use generic kretprobe trampoline handler")
+BTW, we changed the max_zone_phys() logic with commit 791ab8b2e3db
+("arm64: Ignore any DMA offsets in the max_zone_phys() calculation").
 
-Passed the wrong trampoline address to __kretprobe_trampoline_handler(): it
-passes the descriptor address instead of function entry address.
-
-Pass the right parameter.
-
-Also use correct symbol dereference function to get the function address
-from 'kretprobe_trampoline' - an IA64 special.
-
-Link: https://lkml.kernel.org/r/163163042696.489837.12551102356265354730.stgit@devnote2
-
-Fixes: e792ff804f49 ("ia64: kprobes: Use generic kretprobe trampoline handler")
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: X86 ML <x86@kernel.org>
-Cc: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Abhishek Sagar <sagar.abhishek@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Paul McKenney <paulmck@kernel.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
- arch/ia64/kernel/kprobes.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/ia64/kernel/kprobes.c b/arch/ia64/kernel/kprobes.c
-index aa41bd5cf9b7..7fc0806bbdc9 100644
---- a/arch/ia64/kernel/kprobes.c
-+++ b/arch/ia64/kernel/kprobes.c
-@@ -424,7 +424,7 @@ int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
- 	struct hlist_node *tmp;
- 	unsigned long flags, orig_ret_address = 0;
- 	unsigned long trampoline_address =
--		((struct fnptr *)kretprobe_trampoline)->ip;
-+		(unsigned long)dereference_function_descriptor(kretprobe_trampoline);
- 
- 	INIT_HLIST_HEAD(&empty_rp);
- 	kretprobe_hash_lock(current, &head, &flags);
-@@ -500,7 +500,7 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
- 	ri->ret_addr = (kprobe_opcode_t *)regs->b0;
- 
- 	/* Replace the return addr with trampoline addr */
--	regs->b0 = ((struct fnptr *)kretprobe_trampoline)->ip;
-+	regs->b0 = (unsigned long)dereference_function_descriptor(kretprobe_trampoline);
- }
- 
- /* Check the instruction in the slot is break */
-@@ -1030,14 +1030,14 @@ static struct kprobe trampoline_p = {
- int __init arch_init_kprobes(void)
- {
- 	trampoline_p.addr =
--		(kprobe_opcode_t *)((struct fnptr *)kretprobe_trampoline)->ip;
-+		dereference_function_descriptor(kretprobe_trampoline);
- 	return register_kprobe(&trampoline_p);
- }
- 
- int __kprobes arch_trampoline_kprobe(struct kprobe *p)
- {
- 	if (p->addr ==
--		(kprobe_opcode_t *)((struct fnptr *)kretprobe_trampoline)->ip)
-+		dereference_function_descriptor(kretprobe_trampoline))
- 		return 1;
- 
- 	return 0;
-
+-- 
+Catalin

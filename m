@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4830F50F6C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB1950F77B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345942AbiDZI6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
+        id S1347977AbiDZJPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346674AbiDZIpR (ORCPT
+        with ESMTP id S1345813AbiDZIw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:45:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A1CA18D;
-        Tue, 26 Apr 2022 01:35:19 -0700 (PDT)
+        Tue, 26 Apr 2022 04:52:29 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599B4D64DD;
+        Tue, 26 Apr 2022 01:41:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 388F861899;
-        Tue, 26 Apr 2022 08:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AD5C385A4;
-        Tue, 26 Apr 2022 08:35:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8907CCE1BBB;
+        Tue, 26 Apr 2022 08:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745ECC385A0;
+        Tue, 26 Apr 2022 08:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962118;
-        bh=l81742xI3Ylbe0ksZLNhZOvPHz47hhqQju7fLSizQAU=;
+        s=korg; t=1650962456;
+        bh=BYqfI8ZIYsspdxUeiglQ4TrkrQOzO7vjnIDW9rFWqmE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PI7ohQxsEuNsoD38030JiAzgOtMMqh5zWJ9axWO0ghJawdsrtDPJ5KhVG7cjcxC9w
-         3rRRAXxHhnmqfAUkWcVU4uUrI4qoAA7LtRzC3S4IvCOCWaz8/dCHyOleBmjdmocppg
-         WOYl0WMJEbJAAn+yBlWbVTlTlpCa2qn3rv9hMybA=
+        b=kN5AeDPQCeOVxdHVFnnpmHMleyEyUQxeXcXhkDUXs+LKAmNLBxDK7iY2HMj3S2Awu
+         ei85DmzghTMvmz9QAF0VQrR7SGfr6dlev1gDtgJzMVbrFSk9Jx1m7Yo8fPOuNiSPZi
+         xXRKbLhzRNMbnwMNch+IHPfRAB76TqI8iDtlByq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        stable@kernel.org
-Subject: [PATCH 5.10 76/86] ext4: fix use-after-free in ext4_search_dir
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 103/124] ASoC: soc-dapm: fix two incorrect uses of list iterator
 Date:   Tue, 26 Apr 2022 10:21:44 +0200
-Message-Id: <20220426081743.403331226@linuxfoundation.org>
+Message-Id: <20220426081750.225761259@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,125 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit c186f0887fe7061a35cebef024550ec33ef8fbd8 upstream.
+commit f730a46b931d894816af34a0ff8e4ad51565b39f upstream.
 
-We got issue as follows:
-EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
-==================================================================
-BUG: KASAN: use-after-free in ext4_search_dir fs/ext4/namei.c:1394 [inline]
-BUG: KASAN: use-after-free in search_dirblock fs/ext4/namei.c:1199 [inline]
-BUG: KASAN: use-after-free in __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
-Read of size 1 at addr ffff8881317c3005 by task syz-executor117/2331
+These two bug are here:
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
+	list_for_each_entry_safe_continue(w, n, list,
+					power_list);
 
-CPU: 1 PID: 2331 Comm: syz-executor117 Not tainted 5.10.0+ #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:83 [inline]
- dump_stack+0x144/0x187 lib/dump_stack.c:124
- print_address_description+0x7d/0x630 mm/kasan/report.c:387
- __kasan_report+0x132/0x190 mm/kasan/report.c:547
- kasan_report+0x47/0x60 mm/kasan/report.c:564
- ext4_search_dir fs/ext4/namei.c:1394 [inline]
- search_dirblock fs/ext4/namei.c:1199 [inline]
- __ext4_find_entry+0xdca/0x1210 fs/ext4/namei.c:1553
- ext4_lookup_entry fs/ext4/namei.c:1622 [inline]
- ext4_lookup+0xb8/0x3a0 fs/ext4/namei.c:1690
- __lookup_hash+0xc5/0x190 fs/namei.c:1451
- do_rmdir+0x19e/0x310 fs/namei.c:3760
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x445e59
-Code: 4d c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 1b c7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fff2277fac8 EFLAGS: 00000246 ORIG_RAX: 0000000000000054
-RAX: ffffffffffffffda RBX: 0000000000400280 RCX: 0000000000445e59
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000002
-R10: 00007fff2277f990 R11: 0000000000000246 R12: 0000000000000000
-R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+After the list_for_each_entry_safe_continue() exits, the list iterator
+will always be a bogus pointer which point to an invalid struct objdect
+containing HEAD member. The funciton poniter 'w->event' will be a
+invalid value which can lead to a control-flow hijack if the 'w' can be
+controlled.
 
-The buggy address belongs to the page:
-page:0000000048cd3304 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1317c3
-flags: 0x200000000000000()
-raw: 0200000000000000 ffffea0004526588 ffffea0004528088 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+The original intention was to continue the outer list_for_each_entry_safe()
+loop with the same entry if w->event is NULL, but misunderstanding the
+meaning of list_for_each_entry_safe_continue().
 
-Memory state around the buggy address:
- ffff8881317c2f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8881317c2f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8881317c3000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                   ^
- ffff8881317c3080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881317c3100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
+So just add a 'continue;' to fix the bug.
 
-ext4_search_dir:
-  ...
-  de = (struct ext4_dir_entry_2 *)search_buf;
-  dlimit = search_buf + buf_size;
-  while ((char *) de < dlimit) {
-  ...
-    if ((char *) de + de->name_len <= dlimit &&
-	 ext4_match(dir, fname, de)) {
-	    ...
-    }
-  ...
-    de_len = ext4_rec_len_from_disk(de->rec_len, dir->i_sb->s_blocksize);
-    if (de_len <= 0)
-      return -1;
-    offset += de_len;
-    de = (struct ext4_dir_entry_2 *) ((char *) de + de_len);
-  }
-
-Assume:
-de=0xffff8881317c2fff
-dlimit=0x0xffff8881317c3000
-
-If read 'de->name_len' which address is 0xffff8881317c3005, obviously is
-out of range, then will trigger use-after-free.
-To solve this issue, 'dlimit' must reserve 8 bytes, as we will read
-'de->name_len' to judge if '(char *) de + de->name_len' out of range.
-
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220324064816.1209985-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
+Cc: stable@vger.kernel.org
+Fixes: 163cac061c973 ("ASoC: Factor out DAPM sequence execution")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220329012134.9375-1-xiam0nd.tong@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/ext4.h  |    4 ++++
- fs/ext4/namei.c |    4 ++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ sound/soc/soc-dapm.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -2159,6 +2159,10 @@ static inline int ext4_forced_shutdown(s
-  * Structure of a directory entry
-  */
- #define EXT4_NAME_LEN 255
-+/*
-+ * Base length of the ext4 directory entry excluding the name length
-+ */
-+#define EXT4_BASE_DIR_LEN (sizeof(struct ext4_dir_entry_2) - EXT4_NAME_LEN)
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -1685,8 +1685,7 @@ static void dapm_seq_run(struct snd_soc_
+ 		switch (w->id) {
+ 		case snd_soc_dapm_pre:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
  
- struct ext4_dir_entry {
- 	__le32	inode;			/* Inode number */
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -1388,10 +1388,10 @@ int ext4_search_dir(struct buffer_head *
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
+@@ -1698,8 +1697,7 @@ static void dapm_seq_run(struct snd_soc_
  
- 	de = (struct ext4_dir_entry_2 *)search_buf;
- 	dlimit = search_buf + buf_size;
--	while ((char *) de < dlimit) {
-+	while ((char *) de < dlimit - EXT4_BASE_DIR_LEN) {
- 		/* this code is executed quadratically often */
- 		/* do minimal checking `by hand' */
--		if ((char *) de + de->name_len <= dlimit &&
-+		if (de->name + de->name_len <= dlimit &&
- 		    ext4_match(dir, fname, de)) {
- 			/* found a match - just to be sure, do
- 			 * a full check */
+ 		case snd_soc_dapm_post:
+ 			if (!w->event)
+-				list_for_each_entry_safe_continue(w, n, list,
+-								  power_list);
++				continue;
+ 
+ 			if (event == SND_SOC_DAPM_STREAM_START)
+ 				ret = w->event(w,
 
 

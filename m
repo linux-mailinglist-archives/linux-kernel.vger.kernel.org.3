@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CB4510A13
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F494510A15
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354309AbiDZURu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 16:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
+        id S1354399AbiDZUSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354118AbiDZURs (ORCPT
+        with ESMTP id S1354545AbiDZUR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:17:48 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808691A3242
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:38 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id m13so8253123iob.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:38 -0700 (PDT)
+        Tue, 26 Apr 2022 16:17:58 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F031F1A15D5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:43 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so20575189fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3ZRttf/U2CPkMsmdwAz9Q/AlEKBoW2uqMf7iGu455RE=;
-        b=KbYufQdIxBgeN14b87nS4XfHAeLZOHi1VXCG+QnH+J5qernIBHEgyXKvhOqpdwBVkT
-         nIS+qFFKIaSw+OaRpZZXY9xIUNPWH8dNcdFWHt8EvLMc/XLYlTQHKE7mdh3qejDWT2L+
-         /8PGrBFpcO3PiidYmDk7Z/wwNgCb3pdFLs2pU=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=avrL8kBGOAtHrlufWidGzW1SmL7urHwKdn/4+Y9ZapU=;
+        b=ekwF9H5Lj4Esed2D7g0ZUxlVHCSLuJ639rdDmoSOqIXBY3XdEIHYO22C8h1/MujRSd
+         JM+nnb9rUVZTY941rNSAtVeqzY1AVWUnpT0BpKB0m1L88RNWJr8llN9wDMolf7GjsaGc
+         ZuQxQq5xU67IJb3sZ0x4kQm1JzrkYCC0CC9KbMZAIdVEo3MNXS5iB9U0P0+V4h71J4qZ
+         OUVLMaztRxOBpZTQtW2l/TjH0qJ9+WvHmGi5/AIVzlAjcvio383qf5MJcUwbU8tBjXOM
+         +/ggS4GDBBmiqwk6w8KJWSiJBKPono+ukIA8elVgStzLeHt70xT8Zel4SxrJ6KuI42u7
+         x5Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3ZRttf/U2CPkMsmdwAz9Q/AlEKBoW2uqMf7iGu455RE=;
-        b=guGnFzPFERFxulqcKzfqXKxqaLRGmx4LER35KjkJBLLPPpiRxJ0IzTuIW2FzEf1IBc
-         UYLYGW2CrbZyPLP+E+H0sQ7U5RhRGmbxN7+mvXO/FDzVQTj/fDPqdkNcLhpMGa6gcAhu
-         QMePb9glCkYil1lYjy6Auy64GGMKgaNmFqSzoqdE9Aa1Wkzpj1hu0ZwoRKqhlTf22HSw
-         kS6y4DLDFBPg2qTJpY9ccZFOrHrVi0cz3VLQJ2YvPiaa0WkGNDfRYLJbfebH5R1VtnEF
-         6BVUuVitBhSzpN+YReCYF2NBvwppkWOPdo+Vnw5CR+CiU9eBjt4vIKckWAQznhrtMrGy
-         zsfQ==
-X-Gm-Message-State: AOAM531ZLloO99Y7xC+9/mNUXKg1r/K1EqK3bzIeirb5lvvZUKIpF1nN
-        BUnGcaAU2lGvae7Q7nWS5kZCfg==
-X-Google-Smtp-Source: ABdhPJwA9FzSWWsii3nbszNxaqJY14bYrfy1LWGN6/PaspOIrAcnkSgoY8W77ie6olQGMiVbr7H+xA==
-X-Received: by 2002:a05:6638:25c2:b0:32a:9cfc:1d7b with SMTP id u2-20020a05663825c200b0032a9cfc1d7bmr11631255jat.22.1651004077839;
-        Tue, 26 Apr 2022 13:14:37 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y4-20020a92d0c4000000b002cd8a7db5f5sm5587715ila.11.2022.04.26.13.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 13:14:37 -0700 (PDT)
-Subject: Re: [PATCH 5.10 00/86] 5.10.113-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220426081741.202366502@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <094fe3fa-edb7-f326-cbf1-11618c2c0182@linuxfoundation.org>
-Date:   Tue, 26 Apr 2022 14:14:36 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=avrL8kBGOAtHrlufWidGzW1SmL7urHwKdn/4+Y9ZapU=;
+        b=xCSKCmtSqOp6DTPYgu9Ulp+0MWq+RqnP859QVJlgDf9G8RhzNifyHQ8dtGkCOnRSVS
+         unXxicRryRnW8G3M9q+3iTD4+ByClLmhHhhbzXpICwsnE4olUFr/JMHDxsKFVDnPcfqG
+         vhib3AfRZseC3ruf7GfMRNnzs8gi94ddTUZXN7GN/BCUkIi0swZt7wEVp5sOe4hChH0y
+         xpsHR0poFCQqIBZDm59Pjo5XF1Qbs3H5vVg0bYxo3Bg/lscDch7WWCDNHrxY+QbDF+yv
+         okdNvOxiVfN0umKu6j09X6SR9nzWwWWq0enHx02u1o9tPJd4kfL08Td1g/VlftnboMs5
+         /ikw==
+X-Gm-Message-State: AOAM5318pprQkgSetOaeGuyJqWO908nsT/bAUdx2c+NLVWyXT6nV88qO
+        Kulo8r9siZGuCGBDM9Og8nE=
+X-Google-Smtp-Source: ABdhPJyLGBKirk1hBPpVS+1Z9qsk4+S0BscWuLt5Raf+YLahHgrw6ExNxnQyBMPC1NF+gSFUJSzLJw==
+X-Received: by 2002:a05:6870:4728:b0:e9:4272:fe3 with SMTP id b40-20020a056870472800b000e942720fe3mr4875695oaq.61.1651004083313;
+        Tue, 26 Apr 2022 13:14:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j72-20020a9d17ce000000b005e6b89f9f54sm5321108otj.32.2022.04.26.13.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:14:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 26 Apr 2022 13:14:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@arndb.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] soc: rockchip: Fix compile-testing SoC drivers
+Message-ID: <20220426201441.GJ4093517@roeck-us.net>
+References: <20220426014545.628100-1-briannorris@chromium.org>
+ <20220425184503.v3.3.Id5f16dec920f620120c0a143a97a12e16d401760@changeid>
 MIME-Version: 1.0
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425184503.v3.3.Id5f16dec920f620120c0a143a97a12e16d401760@changeid>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,29 +74,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 2:20 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.113 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Apr 25, 2022 at 06:45:44PM -0700, Brian Norris wrote:
+> Similar to commit 7f94b69ece51 ("ARM: ixp4xx: fix compile-testing soc
+> drivers").
 > 
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
+> drivers/soc/rockchip/Kconfig makes plenty of provision for configuring
+> drivers either for ARCH_ROCKCHIP or for COMPILE_TEST. But
+> drivers/soc/Makefile pulls the rug out from under us, by refusing to
+> build anything if we specified COMPILE_TEST but not ARCH_ROCKCHIP.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.113-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Currently, I'm not aware of anything that breaks without this patch, but
+> it certainly makes for confusing builds (CONFIG_ROCKCHIP_PM_DOMAINS=y,
+> but we didn't actually compile the driver?) and leaves room for future
+> error (I have pending patches that break confusingly with COMPILE_TEST=y
+> even though their Kconfig dependencies seem correct [1]).
 > 
-> thanks,
+> Defer to drivers/soc/rockchip/{Makefile,Kconfig} to do the right thing.
 > 
-> greg k-h
+> [1] e.g.,
+> https://lore.kernel.org/linux-rockchip/20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid/
+> [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
 > 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-Compiled and booted on my test system. No dmesg regressions.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+> ---
+> 
+> Changes in v3:
+>  * Drop ARM||ARM64 dependency, now that bare dsb()s have been removed
+> 
+> Changes in v2:
+>  * Depend on ARM||ARM64
+> 
+>  drivers/soc/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index fd7717d597fc..4c91705a8bb3 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -23,7 +23,7 @@ obj-y				+= pxa/
+>  obj-y				+= amlogic/
+>  obj-y				+= qcom/
+>  obj-y				+= renesas/
+> -obj-$(CONFIG_ARCH_ROCKCHIP)	+= rockchip/
+> +obj-y				+= rockchip/
+>  obj-$(CONFIG_SOC_SAMSUNG)	+= samsung/
+>  obj-$(CONFIG_SOC_SIFIVE)	+= sifive/
+>  obj-y				+= sunxi/
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 

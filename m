@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7788510B25
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DC1510B28
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 23:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355361AbiDZVWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 17:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S1355378AbiDZVXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 17:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355327AbiDZVWr (ORCPT
+        with ESMTP id S1355369AbiDZVW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 17:22:47 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5E9C8677;
-        Tue, 26 Apr 2022 14:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651007979; x=1682543979;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EpwUa4TvzlVvOHJi5+yOiqfv4c3h+/WtFw0HkynHRMc=;
-  b=jw0FGDzob5T0ofLUw3h07A5ZmFhNoI8V8bjB7MsxC+bSOyqc2YzYGWOQ
-   zhZC2+MwAqzcokjlaf8QzkN/fjzviRqEi4lDA/36pPsoyV/9JAhWmCUTo
-   y269u+E89CqLF6R6pQ/4LX7DmkIKb8yNyfGwGr42OVVCK/jF3Quvuqwp/
-   QZBLOC+GM+Pun7UD/KrV98+j+1hA9xqzKQqjm5IWKSAdJBwc3yjF2Rx1z
-   Vb9HdBtozEv5Pjukx+0Fw3TnZ12WymRMznpADYW4p7JmvUNYERGJOFDLD
-   RnPiyrgkoCHT18Iee7DZb/RnZhx3hCOXKjMb8IjhBL0sNEEWzGIf1O+/D
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263317228"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="263317228"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 14:19:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="595960382"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 14:19:36 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njSau-0003zy-4H;
-        Tue, 26 Apr 2022 21:19:36 +0000
-Date:   Wed, 27 Apr 2022 05:18:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yogesh Lal <quic_ylal@quicinc.com>, bjorn.andersson@linaro.org,
-        quic_sibis@quicinc.com
-Cc:     kbuild-all@lists.01.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yogesh Lal <quic_ylal@quicinc.com>
-Subject: Re: [PATCH v2] remoteproc: qcom: Add fallback mechanism for full
- coredump collection
-Message-ID: <202204270556.J6HOrXrU-lkp@intel.com>
-References: <1650969374-19245-1-git-send-email-quic_ylal@quicinc.com>
+        Tue, 26 Apr 2022 17:22:57 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2DC8BCD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:19:47 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id s21-20020a0568301e1500b006054da8e72dso13954936otr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=MWHv2TFewrJAPnTOlW4qxlIxjpJGKW/g1lpO6FHxMAU=;
+        b=mpzPEMETgbUkrlArfjYnb6ZpqroDw1mZAkpGqiBB5PVb8cmmQ01gcb3oyxdNlLfPAK
+         nRTKFA5C3mK0kiSXAA6f+Oai3vDQMqoLiwrSZ8SL7jDgzbvo5scQZePIJ+ldIeuGYEst
+         pzjRUCWOBhnGjrLKOYtmAvWh95ioiy9ZfJ6Lg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=MWHv2TFewrJAPnTOlW4qxlIxjpJGKW/g1lpO6FHxMAU=;
+        b=KvQCUM+kYV10pEc7eyrLQUKwpzEtqE3R3uzWhNx0xTKngPUgeVXiJwVH7qUmTg4nis
+         KAhZrkvgKRcA9Sg5oi8cD1QDnMjsszI1iU5+Aa2cBgvMs+fyIeCehDxdsdOEXe8qRtl2
+         DctxtpHVRw9an0NkDyR+UjR4b1bKpO5i3alqzR0ocZC79vlN88YQAV1xuoCD55Is2/LS
+         /Gc9pgP6BiQYJcVfmHOoaVncx5+Vjdww7ihwJZ49jbRDp5ONTcnA9EBzW7h1xcMeuAsM
+         qPlyq00gEgg5eek0QA9GQ4MZzqThulHbCw0UVHyhW0iRBljOdmGeSPeMLCot0KDlKhDW
+         /aWg==
+X-Gm-Message-State: AOAM532CDzoLp+vghwR1oLEDrN0ohx9iSB6OxwXPuJMfp3VOjjmaJnpW
+        /nGENmP2cCieXwBm9GHrCyO4TWDAVew482NPT4Qdpw==
+X-Google-Smtp-Source: ABdhPJyzV9/i01if8INa4Tse6Ei8JcXrrFht2ib4YZe3NjXFYsSVY7NwTbRGnIZk4GbC1jHhniYThM3EsJRShwv8Oas=
+X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
+ x30-20020a9d20a1000000b005e8d2b6f63fmr8859832ota.159.1651007987265; Tue, 26
+ Apr 2022 14:19:47 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 26 Apr 2022 14:19:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1650969374-19245-1-git-send-email-quic_ylal@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426124053.v2.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
+References: <20220426124053.v2.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 26 Apr 2022 14:19:46 -0700
+Message-ID: <CAE-0n53Oc2Ni=dgMPLxDXLUzOPXzAQOFm2fTiimTJA_K84M=5g@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: eDP for herobrine boards
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-msm@vger.kernel.org,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_kalyant@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yogesh,
+Quoting Douglas Anderson (2022-04-26 12:41:03)
+> Add eDP support to herobrine boards, splitting up amongst the
+> different files as makes sense. Rationale for the current split of
+> things:
+> * The eDP connector itself is on qcard. However, not all devices with
+>   a qcard will use an eDP panel. Some might use MIPI and, presumably,
+>   someone could build a device with qcard that had no display at all.
+> * The qcard provides a PWM for backlight that goes to the eDP
+>   connector. This PWM is also provided to the board and it's expected
+>   that it would be used as the backlight PWM even for herobrine
+>   devices with MIPI displays.
+> * It's currently assumed that all herobrine boards will have some sort
+>   of display, either MIPI or eDP (but not both).
+> * We will assume herobrine-rev1 has eDP. The schematics allow for a
+>   MIPI panel to be hooked up but, aside from some testing, nobody is
+>   doing this and most boards don't have all the parts stuffed for
+>   it. The two panels would also share a PWM for backlight, which is
+>   weird.
+> * herobrine-villager and herobrine-hoglin (crd) also have eDP.
+> * herobrine-hoglin (crd) has slightly different regulator setup for
+>   the backlight. It's expected that this is unique to this board. See
+>   comments in the dts file.
+> * There are some regulators that are defined in the qcard schematic
+>   but provided by the board like "vreg_edp_bl" and
+>   "vreg_edp_3p3". While we could put references to these regulators
+>   straight in the qcard.dtsi file, this would force someone using
+>   qcard that didn't provide those regulators to provide a dummy or do
+>   an ugly /delete-node/. Instead, we'll add references in
+>   herobrine.dtsi.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on remoteproc/rproc-next]
-[also build test ERROR on v5.18-rc4 next-20220426]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yogesh-Lal/remoteproc-qcom-Add-fallback-mechanism-for-full-coredump-collection/20220426-184634
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220427/202204270556.J6HOrXrU-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/679fb5eca3c1ce97bbd22b4f082d9db24f13b878
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yogesh-Lal/remoteproc-qcom-Add-fallback-mechanism-for-full-coredump-collection/20220426-184634
-        git checkout 679fb5eca3c1ce97bbd22b4f082d9db24f13b878
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "rproc_coredump" [drivers/remoteproc/qcom_common.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8944E510AAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FFF510AB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 22:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354661AbiDZUnr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Apr 2022 16:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
+        id S1355024AbiDZUos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 16:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiDZUnp (ORCPT
+        with ESMTP id S236609AbiDZUor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 16:43:45 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8453139B91
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:40:35 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-215-Rl5h__tWMV6h7ynZt8pZJg-1; Tue, 26 Apr 2022 21:40:32 +0100
-X-MC-Unique: Rl5h__tWMV6h7ynZt8pZJg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 26 Apr 2022 21:40:31 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 26 Apr 2022 21:40:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Matthew Wilcox' <willy@infradead.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "ying.huang@intel.com" <ying.huang@intel.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "adobriyan@gmail.com" <adobriyan@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "rf@opensource.cirrus.com" <rf@opensource.cirrus.com>,
-        "pmladek@suse.com" <pmladek@suse.com>
-Subject: RE: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
- kstrtobool()
-Thread-Topic: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
- kstrtobool()
-Thread-Index: AQHYWaQPIReaMXdvC0yn2siMv2N/Ya0Cp+Iw
-Date:   Tue, 26 Apr 2022 20:40:31 +0000
-Message-ID: <09211d4bba86400bbc27fa3a2d38cd76@AcuMS.aculab.com>
-References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
- <YmhEqCCfUvYYPmci@casper.infradead.org>
-In-Reply-To: <YmhEqCCfUvYYPmci@casper.infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 26 Apr 2022 16:44:47 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF2EA6E32
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:41:39 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id d2so11607049vsd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 13:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zJBy1hbZt68WEk6SIaZM+0UU7boTE8o9Xhoq4o3jH4Y=;
+        b=QbjLcZhsGv3ygkk2GSkkObLN6QykS2ivoxR+4z3i/LEp+tG3DOQQOeWfscLmuGyzQP
+         NdFQpxsfGhHvbZoFyjdoMeTC4LQe7hboGX7WVKB0PQS1bEHMJI/ZLDH97X8sNIdIv30i
+         y1cdMlCKJ1Yf8GAiO0x9fQmy5Ov00A20wV956c18lTy4ZD3vvT8J2+EZtZt9PRUY3/fW
+         ZN3i6XGa0tPTHQIldqDgJO3Skqonv9Ws4oGHQLvUODGoJX4210WxLWr17pqphzX4xL/i
+         vdsTT3kWxGsN7Fs7+EWk+XyKIZItevWsbsOyuDS1AtOlCI2ICY6nxGof01SfTJrU4pPU
+         3iXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zJBy1hbZt68WEk6SIaZM+0UU7boTE8o9Xhoq4o3jH4Y=;
+        b=48WZo6pSd08VBnpIdnEuQg208vBsqR+zHJPvtDWvxZO8E/LqSB80eJE+MCTqgMwMTX
+         4LZ/H1lQHdBtS0/BOegFJB2Cf45P49BuNkWPog27hkBNF5dQxaV5CgKQo4cQaEOkh6An
+         KvhMkhzkmvfMFZOSo3cp5FiIUieLN5IMUCi/s6uOQ0FkX0KnInkgEiVxLgRgCwntqclK
+         fB3o1QWLGxAEIKqXa7hkBKm3d742V6GWaRykzOXRhEAq0gKbHt5saw6Uh0tcSGx+qTwJ
+         B6zpNB7eObHnX2cpSXM3NvZHO8rH8Nc1fu1c8CH9DTI7F/eFrQSvFo4Px610RwU4LxyD
+         HUyQ==
+X-Gm-Message-State: AOAM5315usUXb44cA9mU9lPUORvQTB0EiZRim7oEs1yLiHzl72aLtq7P
+        2pfQ0ZsF5ubrlLOuddoUY64r3DEWfVH3rd3ZpyrVzUtCtOpa
+X-Google-Smtp-Source: ABdhPJxZSyX4HNi4z4KG+5TQK9ohWRnHzLmb5Yv36YBL7fDsIHDVenXZtclDj8gqE9u/r0Uo9yGJVED3zA+nmlTL9rs=
+X-Received: by 2002:a67:f749:0:b0:32c:dd5a:ace4 with SMTP id
+ w9-20020a67f749000000b0032cdd5aace4mr2716361vso.25.1651005697085; Tue, 26 Apr
+ 2022 13:41:37 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.21.2204211556270.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204240148220.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204240148220.9383@angie.orcam.me.uk>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 26 Apr 2022 13:41:25 -0700
+Message-ID: <CANDhNCpL1S0s0nLfWKsHF+59kaO1Aj5N3NbEYMgazHVaRwJX9g@mail.gmail.com>
+Subject: Re: [PATCH 3/3] sched_clock: Fix formatting of frequency reporting code
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox
-> Sent: 26 April 2022 20:15
- ()
-> 
-> On Tue, Apr 26, 2022 at 11:32:02PM +0530, Jagdish Gediya wrote:
-> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> 
-> HEY!  You still have the buggy IFF -> IF change.  FIX IT.
-> My R-b was very clearly conditional on you fixing it.
-> 
-> > - * This routine returns 0 iff the first character is one of 'Yy1Nn0', or
-> > + * This routine returns 0 if the first character is one of 'YyTt1NnFf0', or
+On Sun, Apr 24, 2022 at 4:47 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> Use flat rather than nested indentation for chained else/if clauses as
+> per coding-style.rst:
+>
+>         if (x == y) {
+>                 ..
+>         } else if (x > y) {
+>                 ...
+>         } else {
+>                 ....
+>         }
+>
+> This also improves readability.
+>
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 32fea568aec5b ("timers, sched/clock: Clean up the code a bit")
 
-my 2c
+This patch seems fine to me. Though as Ingo was the one to introduce
+the change, his style preference may override in this case.
 
-Iff doesn't really go with an 'or' clause.
-(With a maths degree I know what it means!)
+Acked-by: John Stultz <jstultz@google.com>
 
-so it probably reads better as 'if'.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+thanks
+-john

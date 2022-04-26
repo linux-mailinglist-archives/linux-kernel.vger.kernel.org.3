@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B5F50F7F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE17A50F589
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346816AbiDZJfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        id S241622AbiDZInU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347901AbiDZJGV (ORCPT
+        with ESMTP id S1345706AbiDZIfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:21 -0400
+        Tue, 26 Apr 2022 04:35:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6FFAD129;
-        Tue, 26 Apr 2022 01:46:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71A27B55A;
+        Tue, 26 Apr 2022 01:28:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77D7E604F5;
-        Tue, 26 Apr 2022 08:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CCACC385A0;
-        Tue, 26 Apr 2022 08:46:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A666185D;
+        Tue, 26 Apr 2022 08:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF7DC385A0;
+        Tue, 26 Apr 2022 08:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962814;
-        bh=kh1oM6zhDY2AfxWFZwSmhLWkWY21yY0iNrd9a3v9HKw=;
+        s=korg; t=1650961689;
+        bh=jbbmtksSfJI1eUfbKZ/USS771t/kdVO6YQFAeSBx6J4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=okTw30RaZZRt0gaMVkGIa0DNkHILQDa1KALlLXbDtVCTJD1F4xrcR/6dwxZtyOwYg
-         jG7DBU3vKi0rU6/AvHHtNmJLJ/XI3/gJWdclayWqM2wcdZ9VMDGeurOQCFPrylYwDT
-         HE7TM22FnyoPNYJ4CzXa7AeGjRS1xZmJsl1JkuFg=
+        b=JgjZgQXdCO49PZ5PYovupyvpAEur4IePqO9QNmgASRfv65YkIB1Ad7wSEijrk7s6o
+         xBt34MRpV1DvCnhlM8jncrllhFbyzlwvgorvrJTpwW47lBlObc04olD3PGxlgJq7c4
+         9XKOPok6lNeDKvS1IWQ2UE2tOtaI8k+dmWnefVb8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.17 096/146] dmaengine: imx-sdma: fix init of uart scripts
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.19 51/53] ax25: Fix NULL pointer dereferences in ax25 timers
 Date:   Tue, 26 Apr 2022 10:21:31 +0200
-Message-Id: <20220426081752.756427771@linuxfoundation.org>
+Message-Id: <20220426081737.149560487@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,103 +54,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit a3ae97f4c87d9570e7e9a3e3324c443757f6e29a upstream.
+commit fc6d01ff9ef03b66d4a3a23b46fc3c3d8cf92009 upstream.
 
-Commit b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script") broke
-uart rx on imx5 when using sdma firmware from older Freescale 2.6.35
-kernel. In this case reading addr->uartXX_2_mcu_addr was going out of
-bounds of the firmware memory and corrupting the uart script addresses.
+The previous commit 7ec02f5ac8a5 ("ax25: fix NPD bug in ax25_disconnect")
+move ax25_disconnect into lock_sock() in order to prevent NPD bugs. But
+there are race conditions that may lead to null pointer dereferences in
+ax25_heartbeat_expiry(), ax25_t1timer_expiry(), ax25_t2timer_expiry(),
+ax25_t3timer_expiry() and ax25_idletimer_expiry(), when we use
+ax25_kill_by_device() to detach the ax25 device.
 
-Simply adding a bounds check before accessing addr->uartXX_2_mcu_addr
-does not work as the uartXX_2_mcu_addr members are now beyond the size
-of the older firmware and the uart addresses would never be populated
-in that case. There are other ways to fix this but overall the logic
-seems clearer to me to revert the uartXX_2_mcu_ram_addr structure
-entries back to uartXX_2_mcu_addr, change the newer entries to
-uartXX_2_mcu_rom_addr and update the logic accordingly.
+One of the race conditions that cause null pointer dereferences can be
+shown as below:
 
-I have tested this patch on:
-1. An i.MX53 system with sdma firmware from Freescale 2.6.35 kernel.
-   Without this patch uart rx is broken in this scenario, with the
-   patch uart rx is restored.
-2. An i.MX6D system with no external sdma firmware. uart is okay with
-   or without this patch.
-3. An i.MX8MM system using current sdma-imx7d.bin firmware from
-   linux-firmware. uart is okay with or without this patch and I
-   confirmed the rom version of the uart script is being used which was
-   the intention and reason for commit b98ce2f4e32b ("dmaengine:
-   imx-sdma: add uart rom script") in the first place.
+      (Thread 1)                    |      (Thread 2)
+ax25_connect()                      |
+ ax25_std_establish_data_link()     |
+  ax25_start_t1timer()              |
+   mod_timer(&ax25->t1timer,..)     |
+                                    | ax25_kill_by_device()
+   (wait a time)                    |  ...
+                                    |  s->ax25_dev = NULL; //(1)
+   ax25_t1timer_expiry()            |
+    ax25->ax25_dev->values[..] //(2)|  ...
+     ...                            |
 
-Fixes: b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Link: https://lore.kernel.org/r/20220410223118.15086-1-kgroeneveld@lenbrook.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+We set null to ax25_cb->ax25_dev in position (1) and dereference
+the null pointer in position (2).
+
+The corresponding fail log is shown below:
+===============================================================
+BUG: kernel NULL pointer dereference, address: 0000000000000050
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc6-00794-g45690b7d0
+RIP: 0010:ax25_t1timer_expiry+0x12/0x40
+...
+Call Trace:
+ call_timer_fn+0x21/0x120
+ __run_timers.part.0+0x1ca/0x250
+ run_timer_softirq+0x2c/0x60
+ __do_softirq+0xef/0x2f3
+ irq_exit_rcu+0xb6/0x100
+ sysvec_apic_timer_interrupt+0xa2/0xd0
+...
+
+This patch moves ax25_disconnect() before s->ax25_dev = NULL
+and uses del_timer_sync() to delete timers in ax25_disconnect().
+If ax25_disconnect() is called by ax25_kill_by_device() or
+ax25->ax25_dev is NULL, the reason in ax25_disconnect() will be
+equal to ENETUNREACH, it will wait all timers to stop before we
+set null to s->ax25_dev in ax25_kill_by_device().
+
+Fixes: 7ec02f5ac8a5 ("ax25: fix NPD bug in ax25_disconnect")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 4.19: adjust context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/imx-sdma.c |   28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ net/ax25/af_ax25.c   |    4 ++--
+ net/ax25/ax25_subr.c |   20 ++++++++++++++------
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -198,12 +198,12 @@ struct sdma_script_start_addrs {
- 	s32 per_2_firi_addr;
- 	s32 mcu_2_firi_addr;
- 	s32 uart_2_per_addr;
--	s32 uart_2_mcu_ram_addr;
-+	s32 uart_2_mcu_addr;
- 	s32 per_2_app_addr;
- 	s32 mcu_2_app_addr;
- 	s32 per_2_per_addr;
- 	s32 uartsh_2_per_addr;
--	s32 uartsh_2_mcu_ram_addr;
-+	s32 uartsh_2_mcu_addr;
- 	s32 per_2_shp_addr;
- 	s32 mcu_2_shp_addr;
- 	s32 ata_2_mcu_addr;
-@@ -232,8 +232,8 @@ struct sdma_script_start_addrs {
- 	s32 mcu_2_ecspi_addr;
- 	s32 mcu_2_sai_addr;
- 	s32 sai_2_mcu_addr;
--	s32 uart_2_mcu_addr;
--	s32 uartsh_2_mcu_addr;
-+	s32 uart_2_mcu_rom_addr;
-+	s32 uartsh_2_mcu_rom_addr;
- 	/* End of v3 array */
- 	s32 mcu_2_zqspi_addr;
- 	/* End of v4 array */
-@@ -1780,17 +1780,17 @@ static void sdma_add_scripts(struct sdma
- 			saddr_arr[i] = addr_arr[i];
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -92,20 +92,20 @@ again:
+ 			sk = s->sk;
+ 			if (!sk) {
+ 				spin_unlock_bh(&ax25_list_lock);
+-				s->ax25_dev = NULL;
+ 				ax25_disconnect(s, ENETUNREACH);
++				s->ax25_dev = NULL;
+ 				spin_lock_bh(&ax25_list_lock);
+ 				goto again;
+ 			}
+ 			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
++			ax25_disconnect(s, ENETUNREACH);
+ 			s->ax25_dev = NULL;
+ 			if (sk->sk_socket) {
+ 				dev_put(ax25_dev->dev);
+ 				ax25_dev_put(ax25_dev);
+ 			}
+-			ax25_disconnect(s, ENETUNREACH);
+ 			release_sock(sk);
+ 			spin_lock_bh(&ax25_list_lock);
+ 			sock_put(sk);
+--- a/net/ax25/ax25_subr.c
++++ b/net/ax25/ax25_subr.c
+@@ -264,12 +264,20 @@ void ax25_disconnect(ax25_cb *ax25, int
+ {
+ 	ax25_clear_queues(ax25);
  
- 	/*
--	 * get uart_2_mcu_addr/uartsh_2_mcu_addr rom script specially because
--	 * they are now replaced by uart_2_mcu_ram_addr/uartsh_2_mcu_ram_addr
--	 * to be compatible with legacy freescale/nxp sdma firmware, and they
--	 * are located in the bottom part of sdma_script_start_addrs which are
--	 * beyond the SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V1.
-+	 * For compatibility with NXP internal legacy kernel before 4.19 which
-+	 * is based on uart ram script and mainline kernel based on uart rom
-+	 * script, both uart ram/rom scripts are present in newer sdma
-+	 * firmware. Use the rom versions if they are present (V3 or newer).
- 	 */
--	if (addr->uart_2_mcu_addr)
--		sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_addr;
--	if (addr->uartsh_2_mcu_addr)
--		sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_addr;
--
-+	if (sdma->script_number >= SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V3) {
-+		if (addr->uart_2_mcu_rom_addr)
-+			sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_rom_addr;
-+		if (addr->uartsh_2_mcu_rom_addr)
-+			sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_rom_addr;
+-	if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
+-		ax25_stop_heartbeat(ax25);
+-	ax25_stop_t1timer(ax25);
+-	ax25_stop_t2timer(ax25);
+-	ax25_stop_t3timer(ax25);
+-	ax25_stop_idletimer(ax25);
++	if (reason == ENETUNREACH) {
++		del_timer_sync(&ax25->timer);
++		del_timer_sync(&ax25->t1timer);
++		del_timer_sync(&ax25->t2timer);
++		del_timer_sync(&ax25->t3timer);
++		del_timer_sync(&ax25->idletimer);
++	} else {
++		if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
++			ax25_stop_heartbeat(ax25);
++		ax25_stop_t1timer(ax25);
++		ax25_stop_t2timer(ax25);
++		ax25_stop_t3timer(ax25);
++		ax25_stop_idletimer(ax25);
 +	}
- }
  
- static void sdma_load_firmware(const struct firmware *fw, void *context)
+ 	ax25->state = AX25_STATE_0;
+ 
 
 

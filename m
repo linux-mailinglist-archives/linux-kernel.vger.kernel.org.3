@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAEE50F41D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223E850F795
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344965AbiDZId0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S243946AbiDZJQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344778AbiDZIbu (ORCPT
+        with ESMTP id S1347236AbiDZIvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:31:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901DB37A3C;
-        Tue, 26 Apr 2022 01:25:10 -0700 (PDT)
+        Tue, 26 Apr 2022 04:51:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC13158F45;
+        Tue, 26 Apr 2022 01:39:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2434B81D00;
-        Tue, 26 Apr 2022 08:25:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243D5C385A0;
-        Tue, 26 Apr 2022 08:25:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C46E60C35;
+        Tue, 26 Apr 2022 08:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16355C385A0;
+        Tue, 26 Apr 2022 08:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961507;
-        bh=neyDk7t4Z/jpUoviJWkV1ENMxBM0RE0WTia6Z9s6V4U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IYpTEi+xvm7FzafU/4YxK3eAAtkKC+HeCJEeEBUGrKnq7hU0VVUQXJbhu39Gl+lDG
-         lrNC4OqhaVm56y9ay//9kerH2VI0W4qXsaZ8vdF4wvUV5aGYYgVz8FIoHSZjzj+dac
-         P8WpE88CkvF9xCCSU4H92OlBCOLjRkqI8jVsh8qI=
+        s=korg; t=1650962396;
+        bh=EOw5hbKDTnYGfUcDibtjJA+xhAnCFPcdHRjqYVUw9Hc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PDHReWnlzL5qY0lyPxdbsRYQFSqZBa/UMQ6ThLlssWlILesVO6I6ZuMqOkfsRSyJJ
+         5hZwAvekon9Le0CjUcFIbiHyxd59EYr0ijsMb33c2RLp1mlvfnNAZrWoZyIhK8DRMs
+         h6ymvxRifmVbx+kB0VS0A9i60S9usc7ILgIYgk38=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.14 00/43] 4.14.277-rc1 review
-Date:   Tue, 26 Apr 2022 10:20:42 +0200
-Message-Id: <20220426081734.509314186@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 042/124] can: isotp: stop timeout monitoring when no first frame was sent
+Date:   Tue, 26 Apr 2022 10:20:43 +0200
+Message-Id: <20220426081748.498664094@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-MIME-Version: 1.0
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+References: <20220426081747.286685339@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.277-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.277-rc1
-X-KernelTest-Deadline: 2022-04-28T08:17+00:00
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -61,209 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.277 release.
-There are 43 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-Anything received after that time might be too late.
+[ Upstream commit d73497081710c876c3c61444445512989e102152 ]
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.277-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+The first attempt to fix a the 'impossible' WARN_ON_ONCE(1) in
+isotp_tx_timer_handler() focussed on the identical CAN IDs created by
+the syzbot reproducer and lead to upstream fix/commit 3ea566422cbd
+("can: isotp: sanitize CAN ID checks in isotp_bind()"). But this did
+not catch the root cause of the wrong tx.state in the tx_timer handler.
 
-thanks,
+In the isotp 'first frame' case a timeout monitoring needs to be started
+before the 'first frame' is send. But when this sending failed the timeout
+monitoring for this specific frame has to be disabled too.
 
-greg k-h
+Otherwise the tx_timer is fired with the 'warn me' tx.state of ISOTP_IDLE.
 
--------------
-Pseudo-Shortlog of commits:
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://lore.kernel.org/all/20220405175112.2682-1-socketcan@hartkopp.net
+Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/can/isotp.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.277-rc1
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 5bce7c66c121..8c753dcefe7f 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -866,6 +866,7 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	struct canfd_frame *cf;
+ 	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
+ 	int wait_tx_done = (so->opt.flags & CAN_ISOTP_WAIT_TX_DONE) ? 1 : 0;
++	s64 hrtimer_sec = 0;
+ 	int off;
+ 	int err;
+ 
+@@ -964,7 +965,9 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 		isotp_create_fframe(cf, so, ae);
+ 
+ 		/* start timeout for FC */
+-		hrtimer_start(&so->txtimer, ktime_set(1, 0), HRTIMER_MODE_REL_SOFT);
++		hrtimer_sec = 1;
++		hrtimer_start(&so->txtimer, ktime_set(hrtimer_sec, 0),
++			      HRTIMER_MODE_REL_SOFT);
+ 	}
+ 
+ 	/* send the first or only CAN frame */
+@@ -977,6 +980,11 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	if (err) {
+ 		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
+ 			       __func__, ERR_PTR(err));
++
++		/* no transmission -> no timeout monitoring */
++		if (hrtimer_sec)
++			hrtimer_cancel(&so->txtimer);
++
+ 		goto err_out_drop;
+ 	}
+ 
+-- 
+2.35.1
 
-Marek Vasut <marex@denx.de>
-    Revert "net: micrel: fix KS8851_MLL Kconfig"
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: Fix UAF bugs in ax25 timers
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: Fix NULL pointer dereferences in ax25 timers
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: fix NPD bug in ax25_disconnect
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: fix UAF bug in ax25_send_control()
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: Fix refcount leaks caused by ax25_cb_del()
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: fix UAF bugs of net_device caused by rebinding operation
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: fix reference count leaks of ax25_dev
-
-Duoming Zhou <duoming@zju.edu.cn>
-    ax25: add refcount in ax25_dev to avoid UAF bugs
-
-Khazhismel Kumykov <khazhy@google.com>
-    block/compat_ioctl: fix range check in BLKGETSIZE
-
-Lee Jones <lee.jones@linaro.org>
-    staging: ion: Prevent incorrect reference counting behavour
-
-Theodore Ts'o <tytso@mit.edu>
-    ext4: force overhead calculation if the s_overhead_cluster makes no sense
-
-Theodore Ts'o <tytso@mit.edu>
-    ext4: fix overhead calculation to account for the reserved gdt blocks
-
-Tadeusz Struk <tadeusz.struk@linaro.org>
-    ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
-
-Ye Bin <yebin10@huawei.com>
-    ext4: fix symlink file size not match to file content
-
-Sergey Matyukevich <sergey.matyukevich@synopsys.com>
-    ARC: entry: fix syscall_trace_exit argument
-
-Sasha Neftin <sasha.neftin@intel.com>
-    e1000e: Fix possible overflow in LTR decoding
-
-Xiaomeng Tong <xiam0nd.tong@gmail.com>
-    ASoC: soc-dapm: fix two incorrect uses of list iterator
-
-Paolo Valerio <pvalerio@redhat.com>
-    openvswitch: fix OOB access in reserve_sfa_size()
-
-Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-    powerpc/perf: Fix power9 event alternatives
-
-Xiaomeng Tong <xiam0nd.tong@gmail.com>
-    dma: at_xdmac: fix a missing check on list iterator
-
-Zheyu Ma <zheyuma97@gmail.com>
-    ata: pata_marvell: Check the 'bmdma_addr' beforing reading
-
-Mikulas Patocka <mpatocka@redhat.com>
-    stat: fix inconsistency between struct stat and struct compat_stat
-
-Tomas Melin <tomas.melin@vaisala.com>
-    net: macb: Restart tx only if queue pointer is lagging
-
-Xiaoke Wang <xkernel.wang@foxmail.com>
-    drm/msm/mdp5: check the return of kzalloc()
-
-Borislav Petkov <bp@alien8.de>
-    brcmfmac: sdio: Fix undefined behavior due to shift overflowing the constant
-
-David Howells <dhowells@redhat.com>
-    cifs: Check the IOCB_DIRECT flag, not O_DIRECT
-
-Hongbin Wang <wh_bin@126.com>
-    vxlan: fix error return code in vxlan_fdb_append
-
-Borislav Petkov <bp@suse.de>
-    ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
-
-Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-    platform/x86: samsung-laptop: Fix an unsigned comparison which can never be negative
-
-Kees Cook <keescook@chromium.org>
-    ARM: vexpress/spc: Avoid negative array index when !SMP
-
-Eric Dumazet <edumazet@google.com>
-    netlink: reset network and mac headers in netlink_dump()
-
-Hangbin Liu <liuhangbin@gmail.com>
-    net/packet: fix packet_sock xmit return value checking
-
-Miaoqian Lin <linmq006@gmail.com>
-    dmaengine: imx-sdma: Fix error checking in sdma_event_remap
-
-Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-    tcp: Fix potential use-after-free due to double kfree()
-
-Ricardo Dias <rdias@singlestore.com>
-    tcp: fix race condition when creating child sockets from syncookies
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: usb-audio: Clear MIDI port active flag after draining
-
-Bob Peterson <rpeterso@redhat.com>
-    gfs2: assign rgrp glock before compute_bitstructs
-
-Hangyu Hua <hbh25y@gmail.com>
-    can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in error path
-
-Daniel Bristot de Oliveira <bristot@kernel.org>
-    tracing: Dump stacktrace trigger to the corresponding instance
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    tracing: Have traceon and traceoff trigger honor the instance
-
-Xiongwei Song <sxwjean@gmail.com>
-    mm: page_alloc: fix building error on -Werror=array-compare
-
-Kees Cook <keescook@chromium.org>
-    etherdevice: Adjust ether_addr* prototypes to silence -Wstringop-overead
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |  4 +-
- arch/arc/kernel/entry.S                            |  1 +
- arch/arm/mach-vexpress/spc.c                       |  2 +-
- arch/powerpc/perf/power9-pmu.c                     |  8 +--
- arch/x86/include/asm/compat.h                      |  6 +-
- block/compat_ioctl.c                               |  2 +-
- drivers/ata/pata_marvell.c                         |  2 +
- drivers/dma/at_xdmac.c                             | 12 ++--
- drivers/dma/imx-sdma.c                             |  4 +-
- drivers/gpu/drm/msm/mdp/mdp5/mdp5_plane.c          |  3 +
- drivers/net/can/usb/usb_8dev.c                     | 30 +++++-----
- drivers/net/ethernet/cadence/macb_main.c           |  8 +++
- drivers/net/ethernet/intel/e1000e/ich8lan.c        |  4 +-
- drivers/net/ethernet/micrel/Kconfig                |  1 -
- drivers/net/vxlan.c                                |  4 +-
- .../wireless/broadcom/brcm80211/brcmfmac/sdio.c    |  2 +-
- drivers/platform/x86/samsung-laptop.c              |  2 -
- drivers/staging/android/ion/ion.c                  |  3 +
- fs/cifs/cifsfs.c                                   |  2 +-
- fs/ext4/inode.c                                    | 11 +++-
- fs/ext4/page-io.c                                  |  4 +-
- fs/ext4/super.c                                    | 19 ++++--
- fs/gfs2/rgrp.c                                     |  9 +--
- fs/stat.c                                          | 19 +++---
- include/linux/etherdevice.h                        |  5 +-
- include/net/ax25.h                                 | 12 ++++
- include/net/inet_hashtables.h                      |  5 +-
- kernel/trace/trace_events_trigger.c                | 61 ++++++++++++++++---
- mm/page_alloc.c                                    |  2 +-
- net/ax25/af_ax25.c                                 | 38 +++++++++---
- net/ax25/ax25_dev.c                                | 28 +++++++--
- net/ax25/ax25_route.c                              | 13 ++++-
- net/ax25/ax25_subr.c                               | 20 +++++--
- net/dccp/ipv4.c                                    |  2 +-
- net/dccp/ipv6.c                                    |  2 +-
- net/ipv4/inet_connection_sock.c                    |  2 +-
- net/ipv4/inet_hashtables.c                         | 68 +++++++++++++++++++---
- net/ipv4/tcp_ipv4.c                                | 13 ++++-
- net/ipv6/tcp_ipv6.c                                | 13 ++++-
- net/netlink/af_netlink.c                           |  7 +++
- net/openvswitch/flow_netlink.c                     |  2 +-
- net/packet/af_packet.c                             | 13 +++--
- sound/soc/soc-dapm.c                               |  6 +-
- sound/usb/midi.c                                   |  1 +
- sound/usb/usbaudio.h                               |  2 +-
- 45 files changed, 357 insertions(+), 120 deletions(-)
 
 

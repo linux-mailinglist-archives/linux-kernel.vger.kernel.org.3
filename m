@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFB451005A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B356510060
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 16:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351595AbiDZO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S1351597AbiDZO2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 10:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351588AbiDZO00 (ORCPT
+        with ESMTP id S1346461AbiDZO2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 10:26:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052B847AED
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:23:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A265B82047
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 14:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E0EEC385AA;
-        Tue, 26 Apr 2022 14:23:14 +0000 (UTC)
-Date:   Tue, 26 Apr 2022 10:23:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH v2 2/4] tracing: Remove usage of list iterator variable
- after the loop
-Message-ID: <20220426102312.70319297@gandalf.local.home>
-In-Reply-To: <20220402103341.1763932-3-jakobkoschel@gmail.com>
-References: <20220402103341.1763932-1-jakobkoschel@gmail.com>
-        <20220402103341.1763932-3-jakobkoschel@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 26 Apr 2022 10:28:06 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FCC5A082
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:24:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l18so9797509ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 07:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=vGi2xWo0glztPoHlb3pGflxD9oTprLjQ3hPK/vMNf9g=;
+        b=hQ7W0BWcpUkQc/T8HXofDKebFeuGCBNPA5SZVDUfqR/Wgw7Qois8SYRnyk9WOoAHeu
+         F/9jI9kUIifVKMlpQKopUdI/JZsUhYq/vQcqeQK4/nxr9MspWekGKFdgaWjZZsQVqxhu
+         tmS+2B+y3iD7cVRg0aBWsQnviwtyJcRl60tsNuO09pmmr2LGiuSl+b9edYTc8nrargte
+         ufPok664AcZ7cV+an88gvuWIEVSJMo3IR31ozD8FfRbz1dZEA5V21oxe1GZ9V7jSg/cU
+         hgKUeLqYaG8JBRTtZFaqg06j5HFctbBkAB4mjjXcEmG4ci7ClXQz0YfqeQxhVk0uUDy0
+         5fKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=vGi2xWo0glztPoHlb3pGflxD9oTprLjQ3hPK/vMNf9g=;
+        b=GSHmb/ISu6xbuvwAAPJ7dkdlW7gYDu7WS5A+C/EcVuUoUNCuFZ5v8MB5dOvX4nIT4t
+         nODLFujCVqI0v27lvT/O3mVQk2Ajh/0qqePgJljs0ptrMldVcyaWqb6O25Q2TDn6agIY
+         nNyUEXxI42nqcuLGk5oD5WtNRZS/c5C9sQZSBQgHKnGkbRhS/AO+p5VvDFF8nlqLsvgN
+         VdKt5Q5fItN0EAcTO4tRK7wvkoOcOoYCgAc3cWyjy54eQvsQ8yIf6E4DXOFjeUZZbG9G
+         tOZRUTCVQMomzseRXqgIGi8MKdxcGpS3/ANo0UCG4KwuauVYM1Df3xa27cUpkr/co+qI
+         /IKg==
+X-Gm-Message-State: AOAM5315gXc6PCiXZlJXZ6v4qeqHkg4Qo/hn81FISRRvwSZatm34n+43
+        tyUJ8GphKwOTGoeDQ/iyy1Y3vg==
+X-Google-Smtp-Source: ABdhPJwqgfbj1kmKNaRApziMfN3y1y0mgZBxvHxiI0QR5TzVpevciWSnaiC3oLvOhLwmBH4Io+45bQ==
+X-Received: by 2002:a17:907:86ab:b0:6e8:d60e:d6c3 with SMTP id qa43-20020a17090786ab00b006e8d60ed6c3mr21366841ejc.346.1650983095263;
+        Tue, 26 Apr 2022 07:24:55 -0700 (PDT)
+Received: from [192.168.0.13] ([83.216.184.132])
+        by smtp.gmail.com with ESMTPSA id l20-20020a1709062a9400b006ce71a88bf5sm4976128eje.183.2022.04.26.07.24.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Apr 2022 07:24:54 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next 00/11] support concurrent sync io for bfq on a
+ specail occasion
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20220413111216.npgrdzaubsvjsmy3@quack3.lan>
+Date:   Tue, 26 Apr 2022 16:24:51 +0200
+Cc:     Yu Kuai <yukuai3@huawei.com>, Tejun Heo <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <7C91FB1F-0690-4D1C-A631-98236F6DC55F@linaro.org>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+ <20220413111216.npgrdzaubsvjsmy3@quack3.lan>
+To:     Jan Kara <jack@suse.cz>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  2 Apr 2022 12:33:39 +0200
-Jakob Koschel <jakobkoschel@gmail.com> wrote:
-
-This patch crashed in my testing.
-
-> @@ -1734,14 +1734,16 @@ static int subsystem_open(struct inode *inode, struct file *filp)
->  	/* Make sure the system still exists */
->  	mutex_lock(&event_mutex);
->  	mutex_lock(&trace_types_lock);
-> -	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
-> -		list_for_each_entry(dir, &tr->systems, list) {
-> -			if (dir == inode->i_private) {
-> +	list_for_each_entry(iter_tr, &ftrace_trace_arrays, list) {
-> +		list_for_each_entry(iter_dir, &iter_tr->systems, list) {
-> +			if (iter_dir == inode->i_private) {
->  				/* Don't open systems with no events */
-> -				if (dir->nr_events) {
-> +				if (iter_dir->nr_events) {
->  					__get_system_dir(dir);
->  					system = dir->subsystem;
-
-					system = NULL->subsystem
 
 
->  				}
-> +				tr = iter_tr;
-> +				dir = iter_dir;
+> Il giorno 13 apr 2022, alle ore 13:12, Jan Kara <jack@suse.cz> ha scritto:
+> 
+> On Sat 05-03-22 17:11:54, Yu Kuai wrote:
+>> Currently, bfq can't handle sync io concurrently as long as they
+>> are not issued from root group. This is because
+>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>> bfq_asymmetric_scenario().
+>> 
+>> This patchset tries to support concurrent sync io if all the sync ios
+>> are issued from the same cgroup:
+>> 
+>> 1) Count root_group into 'num_groups_with_pending_reqs', patch 1-5;
+> 
+> Seeing the complications and special casing for root_group I wonder: Won't
+> we be better off to create fake bfq_sched_data in bfq_data and point
+> root_group->sched_data there? AFAICS it would simplify the code
+> considerably as root_group would be just another bfq_group, no need to
+> special case it in various places, no games with bfqg->my_entity, etc.
+> Paolo, do you see any problem with that?
+> 
 
-But do not change that dir, move the setting above it. That is:
+I do see the benefits.  My only concern is that then we also need to
+check/change the places that rely on the assumption that we would
+change.
 
-				tr = iter_tr;
-				dir = iter_dir;
-				if (iter_dir->nr_events) {
- 					__get_system_dir(dir);
- 					system = dir->subsystem;
-				}
+Thanks,
+Paolo
 
--- Steve
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
 
-				
->  				goto exit_loop;
->  			}
->  		}

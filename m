@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386C750F733
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9616F50F3EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346975AbiDZJJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S1344733AbiDZI3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346485AbiDZIuG (ORCPT
+        with ESMTP id S1344828AbiDZI1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:50:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8D413C672;
-        Tue, 26 Apr 2022 01:38:20 -0700 (PDT)
+        Tue, 26 Apr 2022 04:27:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1623B00D;
+        Tue, 26 Apr 2022 01:23:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8CE1DCE1BB0;
-        Tue, 26 Apr 2022 08:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E90C385A4;
-        Tue, 26 Apr 2022 08:38:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 426ECB81CF5;
+        Tue, 26 Apr 2022 08:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96354C385A4;
+        Tue, 26 Apr 2022 08:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962296;
-        bh=dI4Xk1fyAX6wbNw/beUqTsvwcMn0SxWUnzr0b0qBVtM=;
+        s=korg; t=1650961435;
+        bh=d4jCmASu9EKrvewEvtP/pAH79Q1mTSWiBtjlW4+Aqck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y8z+LpG0R84XoZqZ3oS40X7zCauD4FgqV+W77YpTXe8pigLPCWbqZyeANrkFJPKOK
-         YvAnYOS92KmcnEaKKD/kll20eF3IJfIKiWZeOwgaSvlKd0SWnPDDdWNZjVztQPTCSz
-         xipH3KIJTP/IN5vZozGraKFbjOEFVZqyk8GZxvVg=
+        b=pTMxkSd44IRyTVqQkcvFV1Dt3O7rQpJVygdrROZNIvSgDh4Y+qKOa7B/cBQQJvrZE
+         SeIXDORqxQGm/JeE0g3FTgzIMDDHy4clo+tbrkgmjwq0sxdx6H1lxWTxfpp+rYMWkB
+         q/MI3ckv4ynmEArkAoJGVj/UwZmkXemE0HFz7gOs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Zhu <tony.zhu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 050/124] dmaengine: idxd: skip clearing device context when device is read-only
-Date:   Tue, 26 Apr 2022 10:20:51 +0200
-Message-Id: <20220426081748.723423013@linuxfoundation.org>
+Subject: [PATCH 4.14 10/43] dmaengine: imx-sdma: Fix error checking in sdma_event_remap
+Date:   Tue, 26 Apr 2022 10:20:52 +0200
+Message-Id: <20220426081734.820953385@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1cd8e751d96c43ece3f6842ac2244a37d9332c3a ]
+[ Upstream commit 7104b9cb35a33ad803a1adbbfa50569b008faf15 ]
 
-If the device shows up as read-only configuration, skip the clearing of the
-state as the context must be preserved for device re-enable after being
-disabled.
+of_parse_phandle() returns NULL on errors, rather than error
+pointers. Using NULL check on grp_np to fix this.
 
-Fixes: 0dcfe41e9a4c ("dmanegine: idxd: cleanup all device related bits after disabling device")
-Reported-by: Tony Zhu <tony.zhu@intel.com>
-Tested-by: Tony Zhu <tony.zhu@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Link: https://lore.kernel.org/r/164971479479.2200566.13980022473526292759.stgit@djiang5-desk3.ch.intel.com
+Fixes: d078cd1b4185 ("dmaengine: imx-sdma: Add imx6sx platform support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220308064952.15743-1-linmq006@gmail.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/idxd/device.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/dma/imx-sdma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-index a67bafc596b7..e622245c9380 100644
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@ -730,6 +730,9 @@ static void idxd_device_wqs_clear_state(struct idxd_device *idxd)
+diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+index 99f3f22ed647..02d13a44ba45 100644
+--- a/drivers/dma/imx-sdma.c
++++ b/drivers/dma/imx-sdma.c
+@@ -1528,7 +1528,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
+ 	u32 reg, val, shift, num_map, i;
+ 	int ret = 0;
  
- void idxd_device_clear_state(struct idxd_device *idxd)
- {
-+	if (!test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags))
-+		return;
-+
- 	idxd_groups_clear_state(idxd);
- 	idxd_engines_clear_state(idxd);
- 	idxd_device_wqs_clear_state(idxd);
+-	if (IS_ERR(np) || IS_ERR(gpr_np))
++	if (IS_ERR(np) || !gpr_np)
+ 		goto out;
+ 
+ 	event_remap = of_find_property(np, propname, NULL);
+@@ -1576,7 +1576,7 @@ static int sdma_event_remap(struct sdma_engine *sdma)
+ 	}
+ 
+ out:
+-	if (!IS_ERR(gpr_np))
++	if (gpr_np)
+ 		of_node_put(gpr_np);
+ 
+ 	return ret;
 -- 
 2.35.1
 

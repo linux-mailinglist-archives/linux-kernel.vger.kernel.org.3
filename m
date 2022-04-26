@@ -2,372 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE6250FE56
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB37250FE65
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350642AbiDZNMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S1350670AbiDZNM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349073AbiDZNMV (ORCPT
+        with ESMTP id S1346973AbiDZNMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:12:21 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F98527E6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:09:13 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id k27so7088730edk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 06:09:13 -0700 (PDT)
+        Tue, 26 Apr 2022 09:12:54 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F7755212;
+        Tue, 26 Apr 2022 06:09:43 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q9JMIL027852;
+        Tue, 26 Apr 2022 13:09:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=EUdBZ3j9JY9XPwphTKQr47plx1FTfo+GS3QIqWozjCI=;
+ b=Bpe3XSKs+yREVaDOvanLPYvWkCbq2RLZ3DhuB8KPX5nVssTWXJFV3nUWJ7L2kV/c416u
+ 5PReN3mOgSNILWVfZx4dOvcAnBJ5UPnBpORrc2zkMqR4Kv38wGYUM14X2IyC/xbxpBnG
+ TZn+GHaUtTJgtcRWTP1jGate3juGdJZo07Esn+xPHySRpRleKTeqWtp3ahSb29VHtyah
+ +hQ7wvFHVnFsWznY9IHMisg8jjTazNH3nxoMu3MFR1i8gjPG+aWsOqo/fHUMHmhTSPMg
+ qU1gU2yFWLHy3kChJ1n0keHgoFz1WImCwT+2cNDtbbhp0AA5YyjvWJmgtjlXlJnOFCKk vw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fmb9any8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 13:09:38 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23QD5GtB029050;
+        Tue, 26 Apr 2022 13:09:35 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2047.outbound.protection.outlook.com [104.47.51.47])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fm7w3bwbj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 13:09:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CguRwp1omtydHyNuc9NhEJEeSDneb0IKSnvpR13RRie4cOdDsHzcwII+IFW2ZccdaH9FVU4OTg37kOhIOeVXzcju71/CrxTCiu3rXgKxxuPO/84RArHOeGg/xMF4R0HKeP2wP3GsvtTi6EMOZsx95WODlDwn58OT2O5O8Iu0slvBRfBZI9HcZRQ/tvfMeR6p0YVj/tC42w3I6MRT+yAHo6pSbJLt2mQxKXlUjVY/pfg4thlxQhSO/RV8ZzL+JJJwV9SUS+Xsa+VTx0LTbM93fYdpak32H+AWBLUSiNGHkZxOYwgx87bz4GDaLoxhQgmJX0e84yqyhnC1WfPhk7wneg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EUdBZ3j9JY9XPwphTKQr47plx1FTfo+GS3QIqWozjCI=;
+ b=hLwvC27nY2ESmPYbccUQwC6DvPPlOlPT21Y2exFvHUedYsGFir8v4v6ZTMzOZ+zWEfNkZtQya8hMcDc2j5vEJxH0yPtdHGaHpf7lHxcjgcEY91iJyH9WiRQPjCGdhiO8hsnuNClaYKkjp+xwzDVNmU0fzHbwk4PnGfI5FhC97EZVv+n0P6Ijzn4VySzpGe9M/ZgVC40b6tQtAszZeBm1AwbJVBg84M20h658SonnLmhR5FJLSVtBu3Zs48ztCmDybxgT6TilATinaob7QDdyF9rEdLrgl+owqxvnQaM3K/HaekEKfWUjIuqC5lkftviPPIVo+n6A7AVS0eJ0IsUU+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VdN4pWw1gFHOQoY+oG3aMlLwfFdnNeJvy8yld8aLNZY=;
-        b=h9eIxIlj8VlMyJtF8rAipZvas4ylrtXbM0hqwo7YY5TNioud6/RuQ78vi1FtKhPMwx
-         aQU0m4bB8FiWzJb6aNIT7OfCpOhL4d2qn0kmOnQYYUSDlBC7J99crI4KwUXybbZJnWnV
-         oEO84zPRqvWKMYf46FTtaIYUvYznA/dEsYHEk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VdN4pWw1gFHOQoY+oG3aMlLwfFdnNeJvy8yld8aLNZY=;
-        b=EAbgkyk1a5QdntK08pSobYbNucnesBXMy7j/hkopT8r+CQ54n3DlcwpQCuLtwBkoP7
-         i4Slqi0b/fZQ/Qxl2oVJIhbCV00h0kLxKsAz23kXkEsj8vOtDKLPwC4dJO/uazbLB0/2
-         c77nhKRQyL2m7MLJGK/mWekkRVaepieGjjXB7RnNPMDzOpnen4zz2Bn6xFxklyfKlOk4
-         Gkc7Hz64J0V+QR05v/BXgAF4oRxjkFTF3kXc0tyzLuAY4fmw7U5huv46YdTZYbtp2e5h
-         qoObW+FoRLO2hFBJ6lr8F9tuKQzBc6x91OmamTLJ7UQMK0pfP9tVKvLL1Rc5fUtobx3M
-         cbJQ==
-X-Gm-Message-State: AOAM530fOli7HXIYpIFuBs/xfRXRXFuuJb5O0dfXHhc+BSKGKQAfV0Ip
-        OSmwmCn+pUsIoAoxaupzDmZWug==
-X-Google-Smtp-Source: ABdhPJwoEgGyFlADhZL2+OS+zU1EASVg1k8ks63rb41Idnhg6YfoUENziFMMN4nFvKLmsbj4O1A3xw==
-X-Received: by 2002:a50:9f06:0:b0:425:c1ba:5037 with SMTP id b6-20020a509f06000000b00425c1ba5037mr21686551edf.285.1650978552055;
-        Tue, 26 Apr 2022 06:09:12 -0700 (PDT)
-Received: from miu.piliscsaba.redhat.com (catv-178-48-189-3.catv.fixed.vodafone.hu. [178.48.189.3])
-        by smtp.gmail.com with ESMTPSA id lb4-20020a170907784400b006e0d13f65e5sm4857331ejc.167.2022.04.26.06.09.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:09:11 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 15:09:05 +0200
-From:   Miklos Szeredi <miklos@szeredi.hu>
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xie Yongji <xieyongji@bytedance.com>
-Subject: Re: Re: Re: [RFC PATCH] fuse: support cache revalidation in
- writeback_cache mode
-Message-ID: <Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com>
-References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
- <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
- <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
- <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
- <CAFQAk7hakYNfBaOeMKRmMPTyxFb2xcyUTdugQG1D6uZB_U1zBg@mail.gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EUdBZ3j9JY9XPwphTKQr47plx1FTfo+GS3QIqWozjCI=;
+ b=TDfWeYyWtgRw+yW9of9j1YFVVEdiGDlFo4JrvDpI04/Kmz4XBYZGrKA6tVDWPfWFL0aftEWt1q397TsQhJtibpE3T/DaezdtP8pGH7sBIzwnbIH90aRAgOff78gkQFcSTXVwVXQ1GXBoXJriB3OxZpoStHqDhsDc3ZXrsvgfoL8=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CY4PR10MB1943.namprd10.prod.outlook.com (2603:10b6:903:11a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Tue, 26 Apr
+ 2022 13:09:34 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::d1db:de4e:9b71:3192]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::d1db:de4e:9b71:3192%9]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 13:09:34 +0000
+To:     cgel.zte@gmail.com
+Cc:     alim.akhtar@samsung.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] scsi: ufs: using pm_runtime_resume_and_get instead of
+ pm_runtime_get_sync
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1pml4rny8.fsf@ca-mkp.ca.oracle.com>
+References: <20220420090353.2588804-1-chi.minghao@zte.com.cn>
+Date:   Tue, 26 Apr 2022 09:09:31 -0400
+In-Reply-To: <20220420090353.2588804-1-chi.minghao@zte.com.cn> (cgel zte's
+        message of "Wed, 20 Apr 2022 09:03:52 +0000")
+Content-Type: text/plain
+X-ClientProxiedBy: SN7PR04CA0055.namprd04.prod.outlook.com
+ (2603:10b6:806:120::30) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFQAk7hakYNfBaOeMKRmMPTyxFb2xcyUTdugQG1D6uZB_U1zBg@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a9f56abb-b9e1-4c78-84ce-08da27860201
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1943:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB19430F0603FC44D8E43E5EF88EFB9@CY4PR10MB1943.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vdjh/HYrr+gIZet27/1Bou7X1IsH5alJvtsW8wTeDf0ppDekcTKFo2KmHOvy+dxgp73dUxhBIyyYrCOOpiDh8KgCDZpm9tRtXVInH8oYZZiH06FufAwF2cnCmVBGzHPDieGY1oQMijRV1HPnamOQauHG+8mSjNux/MvKU49TsaMUjlfaNf9xDyUUlqV7twPywJbsoUVrVwrMYSDYtrx0mJ8otqe2BSsgWiSXPTYCHbMP1cmd7AppddOAVvntrJoOy7AZacEMCMUJ1pE/5qC4Ks6FZ59Csg9xXY5qu5rvMV/5QLZv7pSKEJNhuwDAWiDrPnH+L2Czmk51IY3uG/o8FULuDIAAZHz2+JQqmx0OY0i5px+fBVAX+wVN284W159nLSVbRzxXjOItrnlcaXhDWjjBMM+xiit2vjp+FCDQrjeIvfYmwnnPRFxB08FDL8Lrqr6H1toAudkKRvNCr8ztozTr4wBHq+ifijN89EX9DJ03TaQQ/J8VKIknRD8CyNI+K2cvzb5jZuLvxYABH5idQ3T2bR5cQAT7sDvJfZYS2nskpOxFKx+YPHfYkBrgsYzmzjU0TvgEEBqyx6RJ+ss5ZhDvBhoaOKhXqlZ1/0nnAmXXSferLfS5b/j1r4X0otqubEAZttxkjL9kq1WtA3OenDuKauTb5pja7blyFcGYfZNdGUC/zPe+vLfNuS8O8SmULIa0He46jRnrdpO1Hzs1mw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(38350700002)(38100700002)(66946007)(54906003)(36916002)(52116002)(2906002)(508600001)(316002)(6916009)(6486002)(558084003)(8676002)(86362001)(26005)(6506007)(6512007)(6666004)(8936002)(66556008)(4326008)(66476007)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RYDHA+bXx1GF8sZj3tky1UrqRMELY8IhZ0vYf8KmdWgsq9t3uR5FQoBEag1m?=
+ =?us-ascii?Q?D4Zmk31aDYRtAFPasgMtqxoKuETbdZZO2f0o6x6Z+txLiMsV7rx3kJhNqtIz?=
+ =?us-ascii?Q?SWYUDW0FYcGsyn1TmtC/qmP4K59AK/IPxdmlh2emnCvMgsAARFHelYe7hFf4?=
+ =?us-ascii?Q?F6C86rx/TShGhn3eW3POwwmuaeVWNfkPPiS54Cwf5BMx9qNHTrZG5Jt/dbnl?=
+ =?us-ascii?Q?TBny72XJnqZiJT34F54bTBDNYz+aOa8iCSA8iql4CacRCPLMEE96JGyWUYfZ?=
+ =?us-ascii?Q?VDZDm0c0CbGcLERDlB9qo5XgHCgWFku7cGoiZwDhlABdhGhHuPBiw708ShEH?=
+ =?us-ascii?Q?ofqszkQP0p9PQaxMcZb57TdwSoOdLBFksyO3Nx3qpLTnrptXoraXffqxK0MJ?=
+ =?us-ascii?Q?thw4FLj9WlurRVPiW7oTvDGeZTSsD+h475VW3iWdrrfpuAKJEmcFXNeU7Q0Q?=
+ =?us-ascii?Q?Qqopsh2ssaVa7x771BnxVpUTrfwaCKBYXDg9FsMJH1kyUWOo+pGET49I92V8?=
+ =?us-ascii?Q?TSRQyLcB8M8aSyNqHBMPxZnFHxhYpIICmX3Pm85tLMv8f2ynphrx8QMD0Pjy?=
+ =?us-ascii?Q?2Bna1rqvB9PNj2NoLl7qcmhe0skizf+eOhcrbjzuaCnEOr26bzL2ufEtErW3?=
+ =?us-ascii?Q?SlJnH67MuQews4R0paRcKgSgg0i7048i2c2BxGLGje4sw71uEvt9UsMOAlRX?=
+ =?us-ascii?Q?9YUkhdKqQ/hZ4060JbLTmmpCe2CCgFzowCfCV3xrMp8OqqOicK544TtY1xUe?=
+ =?us-ascii?Q?NKyQtGtaRnRIQhwcLxhGWiz/fqA2KGZ997OOO3TT2kmSVqMswYAX2Au1KFCU?=
+ =?us-ascii?Q?hFWkE0emnzbTdPahEiuG1MwijfVBvG//5UpCY/5pkdTof8OkO9RZQDMAZuVv?=
+ =?us-ascii?Q?pI0ORN09M4x6C58lQMMVPZJ3NpC4PI2KTE5mSzUJkG/+vYkRpn08qZjHKbTs?=
+ =?us-ascii?Q?53Wyn5rWsjZfiAl+unS3mPMj3+brhuWvDU4ksaL1tlA4WL1h6KqBulouDrU7?=
+ =?us-ascii?Q?/vIdz6+6xpjyijFPFoLObPKx3TJ4X45TTqxYBl+4oxp1N557hn/O/TC1GudA?=
+ =?us-ascii?Q?HrpXoQmO3ZaiQnoQIJ8SAazuJeIfgbfVleDgXyxbafRP4/TjK3QnFdHMOFKw?=
+ =?us-ascii?Q?md9op7TWHs5r5w2nVEwQB20UxfeRz9OzUAKKoPqreEVHP5GVRDirK0vgb9l5?=
+ =?us-ascii?Q?Mk56w01K7KsnTTir2usp+Ufj1f+ejemGWooX/sDOo8FCqCk06B6Fxb3Jc0aG?=
+ =?us-ascii?Q?egQQ4yTNrxH8wk1jQMuv3NVXx3ykJy+jd3TMjEJ/XvQbB07qBAq/ep9ejJ22?=
+ =?us-ascii?Q?MvLxlarv9pY4K44tygX3zea4p1DC3sk9J6ANzkkckzbDNv2wlvrotpPRErIy?=
+ =?us-ascii?Q?+0s28LJIa24F4e7BTtZw/znUBV5wlYsuA6NI4pTjJZgCtS/sX79Hb0/znRiw?=
+ =?us-ascii?Q?4iXAErJslmtc89f3gX1dyoWqnqyddDAqedDJLi0rizsoneZb8/9EmOHAjUnw?=
+ =?us-ascii?Q?376ZoH0pC586ls/jtMUENBdGyeSOpe6GCpJrESpv2tel6n9knWXWQ5xBnU49?=
+ =?us-ascii?Q?uCUVuvbbun/3Ne7gzmiMVDKWCcwP7vuexksQOHnRpfVT0vdUZcO69Z1TEp+8?=
+ =?us-ascii?Q?bfWye3yJNw8nCffwWLi3vh2xXdWFlsUcgf/Z7AWu589kSrKuo2VD6b4wnO3J?=
+ =?us-ascii?Q?xe3QvQ7OvdhdVhvDAfDPZcs9gRa0GowpvNK7Ll3+juDY08iqvKIr4H1K4AXN?=
+ =?us-ascii?Q?mM1xIY2I649wM3/0zm16j93mXkhIYDs=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9f56abb-b9e1-4c78-84ce-08da27860201
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 13:09:34.1301
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DBPUeybwS+tzgilmBPY/if7K7M7ONAJWsxLftXbQGPmAojB2AfmWAA87PkBIhmAr4OgH1MxI0weeeIM5RXy2/6CRD2rGmo4ILBYxXqlIKZ8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1943
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-26_02:2022-04-26,2022-04-26 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=829
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204260083
+X-Proofpoint-ORIG-GUID: HrlgWTRKt-Vn96xSIqjzQUmdG0eiT2UG
+X-Proofpoint-GUID: HrlgWTRKt-Vn96xSIqjzQUmdG0eiT2UG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 09:52:44PM +0800, Jiachen Zhang wrote:
 
-> Some users may want both the high performance of writeback mode and a
-> little bit more consistency among FUSE mounts. In the current
-> writeback mode implementation, users of one FUSE mount can never see
-> the file expansion done by other FUSE mounts.
+> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+> pm_runtime_put_noidle. This change is just to simplify the code, no
+> actual functional changes.
 
-Okay.
+Applied to 5.19/scsi-staging, thanks!
 
-Here's a preliminary patch that you could try.
-
-Thanks,
-Miklos
-
----
- fs/fuse/dir.c             |   35 ++++++++++++++++++++++-------------
- fs/fuse/file.c            |   17 +++++++++++++++--
- fs/fuse/fuse_i.h          |   14 +++++++++++++-
- fs/fuse/inode.c           |   32 +++++++++++++++++++++++++++-----
- include/uapi/linux/fuse.h |    5 +++++
- 5 files changed, 82 insertions(+), 21 deletions(-)
-
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -194,6 +194,7 @@
-  *  - add FUSE_SECURITY_CTX init flag
-  *  - add security context to create, mkdir, symlink, and mknod requests
-  *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
-+ *  - add FUSE_WRITEBACK_CACHE_V2 init flag
-  */
- 
- #ifndef _LINUX_FUSE_H
-@@ -353,6 +354,9 @@ struct fuse_file_lock {
-  * FUSE_SECURITY_CTX:	add security context to create, mkdir, symlink, and
-  *			mknod
-  * FUSE_HAS_INODE_DAX:  use per inode DAX
-+ * FUSE_WRITEBACK_CACHE_V2:
-+ *			- allow time/size to be refreshed if no pending write
-+ * 			- time/size not cached for falocate/copy_file_range
-  */
- #define FUSE_ASYNC_READ		(1 << 0)
- #define FUSE_POSIX_LOCKS	(1 << 1)
-@@ -389,6 +393,7 @@ struct fuse_file_lock {
- /* bits 32..63 get shifted down 32 bits into the flags2 field */
- #define FUSE_SECURITY_CTX	(1ULL << 32)
- #define FUSE_HAS_INODE_DAX	(1ULL << 33)
-+#define FUSE_WRITEBACK_CACHE_V2	(1ULL << 34)
- 
- /**
-  * CUSE INIT request/reply flags
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -222,19 +222,37 @@ void fuse_change_attributes_common(struc
- u32 fuse_get_cache_mask(struct inode *inode)
- {
- 	struct fuse_conn *fc = get_fuse_conn(inode);
-+	struct fuse_inode *fi = get_fuse_inode(inode);
- 
- 	if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
- 		return 0;
- 
-+	/*
-+	 * In writeback_cache_v2 mode if all the following conditions are met,
-+	 * then allow the attributes to be refreshed:
-+	 *
-+	 * - inode is not dirty (I_DIRTY_INODE)
-+	 * - inode is not in the process of being written (I_SYNC)
-+	 * - inode has no dirty pages (I_DIRTY_PAGES)
-+	 * - inode does not have any page writeback in progress
-+	 *
-+	 * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
-+	 * since inode can appear to have no PageWriteback pages, yet still have
-+	 * outstanding write request.
-+	 */
-+	if (fc->writeback_cache_v2 && !(inode->i_state & (I_DIRTY | I_SYNC)) &&
-+	    RB_EMPTY_ROOT(&fi->writepages))
-+		return 0;
-+
- 	return STATX_MTIME | STATX_CTIME | STATX_SIZE;
- }
- 
--void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
--			    u64 attr_valid, u64 attr_version)
-+void fuse_change_attributes_mask(struct inode *inode, struct fuse_attr *attr,
-+				 u64 attr_valid, u64 attr_version,
-+				 u32 cache_mask)
- {
- 	struct fuse_conn *fc = get_fuse_conn(inode);
- 	struct fuse_inode *fi = get_fuse_inode(inode);
--	u32 cache_mask;
- 	loff_t oldsize;
- 	struct timespec64 old_mtime;
- 
-@@ -244,7 +262,7 @@ void fuse_change_attributes(struct inode
- 	 * may update i_size.  In these cases trust the cached value in the
- 	 * inode.
- 	 */
--	cache_mask = fuse_get_cache_mask(inode);
-+	cache_mask |= fuse_get_cache_mask(inode);
- 	if (cache_mask & STATX_SIZE)
- 		attr->size = i_size_read(inode);
- 
-@@ -1153,6 +1171,10 @@ static void process_init_reply(struct fu
- 				fc->async_dio = 1;
- 			if (flags & FUSE_WRITEBACK_CACHE)
- 				fc->writeback_cache = 1;
-+			if (flags & FUSE_WRITEBACK_CACHE_V2) {
-+				fc->writeback_cache = 1;
-+				fc->writeback_cache_v2 = 1;
-+			}
- 			if (flags & FUSE_PARALLEL_DIROPS)
- 				fc->parallel_dirops = 1;
- 			if (flags & FUSE_HANDLE_KILLPRIV)
-@@ -1234,7 +1256,7 @@ void fuse_send_init(struct fuse_mount *f
- 		FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
- 		FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
- 		FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
--		FUSE_SECURITY_CTX;
-+		FUSE_SECURITY_CTX | FUSE_WRITEBACK_CACHE_V2;
- #ifdef CONFIG_FUSE_DAX
- 	if (fm->fc->dax)
- 		flags |= FUSE_MAP_ALIGNMENT;
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -213,6 +213,7 @@ static int fuse_dentry_revalidate(struct
- 		FUSE_ARGS(args);
- 		struct fuse_forget_link *forget;
- 		u64 attr_version;
-+		u32 cache_mask;
- 
- 		/* For negative dentries, always do a fresh lookup */
- 		if (!inode)
-@@ -230,6 +231,7 @@ static int fuse_dentry_revalidate(struct
- 			goto out;
- 
- 		attr_version = fuse_get_attr_version(fm->fc);
-+		cache_mask = fuse_get_cache_mask(inode);
- 
- 		parent = dget_parent(entry);
- 		fuse_lookup_init(fm->fc, &args, get_node_id(d_inode(parent)),
-@@ -259,9 +261,9 @@ static int fuse_dentry_revalidate(struct
- 			goto invalid;
- 
- 		forget_all_cached_acls(inode);
--		fuse_change_attributes(inode, &outarg.attr,
--				       entry_attr_timeout(&outarg),
--				       attr_version);
-+		fuse_change_attributes_mask(inode, &outarg.attr,
-+					    entry_attr_timeout(&outarg),
-+					    attr_version, cache_mask);
- 		fuse_change_entry_timeout(entry, &outarg);
- 	} else if (inode) {
- 		fi = get_fuse_inode(inode);
-@@ -836,16 +838,23 @@ static int fuse_symlink(struct user_name
- 
- void fuse_flush_time_update(struct inode *inode)
- {
--	int err = sync_inode_metadata(inode, 1);
-+	struct fuse_conn *fc = get_fuse_conn(inode);
-+	int err;
- 
--	mapping_set_error(inode->i_mapping, err);
-+	if (!fc->writeback_cache_v2) {
-+		err = sync_inode_metadata(inode, 1);
-+		mapping_set_error(inode->i_mapping, err);
-+	}
- }
- 
- static void fuse_update_ctime_in_cache(struct inode *inode)
- {
- 	if (!IS_NOCMTIME(inode)) {
-+		struct fuse_conn *fc = get_fuse_conn(inode);
-+
- 		inode->i_ctime = current_time(inode);
--		mark_inode_dirty_sync(inode);
-+		if (!fc->writeback_cache_v2)
-+			mark_inode_dirty_sync(inode);
- 		fuse_flush_time_update(inode);
- 	}
- }
-@@ -1065,7 +1074,7 @@ static void fuse_fillattr(struct inode *
- }
- 
- static int fuse_do_getattr(struct inode *inode, struct kstat *stat,
--			   struct file *file)
-+			   struct file *file, u32 cache_mask)
- {
- 	int err;
- 	struct fuse_getattr_in inarg;
-@@ -1100,9 +1109,9 @@ static int fuse_do_getattr(struct inode
- 			fuse_make_bad(inode);
- 			err = -EIO;
- 		} else {
--			fuse_change_attributes(inode, &outarg.attr,
--					       attr_timeout(&outarg),
--					       attr_version);
-+			fuse_change_attributes_mask(inode, &outarg.attr,
-+						    attr_timeout(&outarg),
-+						    attr_version, cache_mask);
- 			if (stat)
- 				fuse_fillattr(inode, &outarg.attr, stat);
- 		}
-@@ -1131,7 +1140,7 @@ static int fuse_update_get_attr(struct i
- 
- 	if (sync) {
- 		forget_all_cached_acls(inode);
--		err = fuse_do_getattr(inode, stat, file);
-+		err = fuse_do_getattr(inode, stat, file, cache_mask);
- 	} else if (stat) {
- 		generic_fillattr(&init_user_ns, inode, stat);
- 		stat->mode = fi->orig_i_mode;
-@@ -1277,7 +1286,7 @@ static int fuse_perm_getattr(struct inod
- 		return -ECHILD;
- 
- 	forget_all_cached_acls(inode);
--	return fuse_do_getattr(inode, NULL, NULL);
-+	return fuse_do_getattr(inode, NULL, NULL, 0);
- }
- 
- /*
-@@ -1833,7 +1842,7 @@ static int fuse_setattr(struct user_name
- 			 * ia_mode calculation may have used stale i_mode.
- 			 * Refresh and recalculate.
- 			 */
--			ret = fuse_do_getattr(inode, NULL, file);
-+			ret = fuse_do_getattr(inode, NULL, file, 0);
- 			if (ret)
- 				return ret;
- 
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -2949,6 +2949,19 @@ static int fuse_writeback_range(struct i
- 	return err;
- }
- 
-+static void fuse_update_time(struct file *file)
-+{
-+	struct inode *inode = file_inode(file);
-+	struct fuse_conn *fc = get_fuse_conn(inode);
-+
-+	if (!IS_NOCMTIME(inode)) {
-+		if (fc->writeback_cache_v2)
-+			inode->i_mtime = inode->i_ctime = current_time(inode);
-+		else
-+			file_update_time(file);
-+	}
-+}
-+
- static long fuse_file_fallocate(struct file *file, int mode, loff_t offset,
- 				loff_t length)
- {
-@@ -3021,7 +3034,7 @@ static long fuse_file_fallocate(struct f
- 	/* we could have extended the file */
- 	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
- 		if (fuse_write_update_attr(inode, offset + length, length))
--			file_update_time(file);
-+			fuse_update_time(file);
- 	}
- 
- 	if (mode & (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_ZERO_RANGE))
-@@ -3135,7 +3148,7 @@ static ssize_t __fuse_copy_file_range(st
- 				   ALIGN_DOWN(pos_out, PAGE_SIZE),
- 				   ALIGN(pos_out + outarg.size, PAGE_SIZE) - 1);
- 
--	file_update_time(file_out);
-+	fuse_update_time(file_out);
- 	fuse_write_update_attr(inode_out, pos_out + outarg.size, outarg.size);
- 
- 	err = outarg.size;
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -654,6 +654,9 @@ struct fuse_conn {
- 	/* show legacy mount options */
- 	unsigned int legacy_opts_show:1;
- 
-+	/* Improved writeback cache policy */
-+	unsigned writeback_cache_v2:1;
-+
- 	/*
- 	 * fs kills suid/sgid/cap on write/chown/trunc. suid is killed on
- 	 * write/trunc only if caller did not have CAP_FSETID.  sgid is killed
-@@ -1049,8 +1052,17 @@ void fuse_init_symlink(struct inode *ino
- /**
-  * Change attributes of an inode
-  */
-+void fuse_change_attributes_mask(struct inode *inode, struct fuse_attr *attr,
-+				 u64 attr_valid, u64 attr_version,
-+				 u32 cache_mask);
-+
-+static inline
- void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
--			    u64 attr_valid, u64 attr_version);
-+			    u64 attr_valid, u64 attr_version)
-+{
-+	return fuse_change_attributes_mask(inode, attr,
-+					   attr_valid, attr_version, 0);
-+}
- 
- void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
- 				   u64 attr_valid, u32 cache_mask);
+-- 
+Martin K. Petersen	Oracle Linux Engineering

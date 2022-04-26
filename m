@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A889510280
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E043510288
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352789AbiDZQFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S1352804AbiDZQHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237871AbiDZQF1 (ORCPT
+        with ESMTP id S1352785AbiDZQHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:05:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2EF42EE7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:02:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8897A1F388;
-        Tue, 26 Apr 2022 16:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650988938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rhUCnfLaLVR3gKOvJDs3VsH1Owqoy0EyHHUnNelrzz8=;
-        b=FUeN2KN3Y4LRX09Snuy+dqHQLQ7yIRxsLMnO5Xbopwj20SsLx+EyN00Oq6CsX/hOrTPlWQ
-        RKhhw5M4zO/Y2IqILzvDiqRTeuCQ0jj154pY4kuSNmzXXzWrk5Tej1UZlDMCECF/Bo48kI
-        D9Bz39BV7K3LNRhIEpkcrNg1rOGUWRc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650988938;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rhUCnfLaLVR3gKOvJDs3VsH1Owqoy0EyHHUnNelrzz8=;
-        b=Ztj4sEhh40VCp+3uJZbgUl8r3xxZ1oZvtgm3dkbgOWZ2UL5dSgmcWVHtmMEp7dCcxaOspJ
-        o3HFSBNnOVPlYfBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5E57013223;
-        Tue, 26 Apr 2022 16:02:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id X2dWFooXaGIBdgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 26 Apr 2022 16:02:18 +0000
-Message-ID: <768d4216-232e-6c67-b395-83c2f34c7970@suse.cz>
-Date:   Tue, 26 Apr 2022 18:02:18 +0200
+        Tue, 26 Apr 2022 12:07:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A943AEC;
+        Tue, 26 Apr 2022 09:04:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650989069; x=1682525069;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mqAl6GT0VmvVsoiieDZ39Jw7aD8/OaezIaNnGD3XhX0=;
+  b=GMO1UOVeRGcWOBPOqi9WE+zgHoHJ00CpBAOhk9YQz6058jmtQFgSYMGZ
+   dmj1n46ybuG9MpzY8CjVdad1VCHzU25GIK1E33D3Iq9/AIpOMMTfMdTXd
+   vOzmqWaAoMnYBwc9cLkli97tTmUZFH/fGljD3CVvzzIX2nQtuy7iiF2Z7
+   O9WReeaP38e8j1UGMfcD7BTfqiqmfqMMnFdWp2qEDVdY37A/9adRTTX3s
+   ekVDNAl/0E/87t8JtxcXjJhgr0/eqvynJm9qW1hHIQC7qu8yx8dy6HAiI
+   fjUaHPGHxmH9DnKr3x2DrSbNLj1snwtSbTcHyZ+fSnPf2Lz30GyQELa95
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328566878"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="328566878"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:03:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="874822226"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2022 09:03:42 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njNfC-0003mk-5b;
+        Tue, 26 Apr 2022 16:03:42 +0000
+Date:   Wed, 27 Apr 2022 00:02:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v4 1/5] usb: host: export symbols for xhci-exynos to use
+ xhci hooks
+Message-ID: <202204262306.mzMIKFKO-lkp@intel.com>
+References: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 05/23] mm/slab_common: cleanup __kmalloc()
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
- <20220414085727.643099-6-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220414085727.643099-6-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650964728-175347-2-git-send-email-dh10.jung@samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 10:57, Hyeonggon Yoo wrote:
-> Make __kmalloc() wrapper of __kmalloc_node().
+Hi Daehwan,
 
-Again/similarly, looks like this will make SLUB not miss trace for
-kmalloc_large() anymore.
+Thank you for the patch! Perhaps something to improve:
 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on krzk/for-next char-misc/char-misc-testing v5.18-rc4 next-20220426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+url:    https://github.com/intel-lab-lkp/linux/commits/Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220426/202204262306.mzMIKFKO-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/05a4937860cedb97b77200b7312a6f009aca2fc6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daehwan-Jung/usb-host-export-symbols-for-xhci-exynos-to-use-xhci-hooks/20220426-181936
+        git checkout 05a4937860cedb97b77200b7312a6f009aca2fc6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/usb/host/
 
-Nit below:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  include/linux/slab.h | 13 ++++++++++---
->  mm/slab.c            | 34 ----------------------------------
->  mm/slob.c            |  6 ------
->  mm/slub.c            | 23 -----------------------
->  4 files changed, 10 insertions(+), 66 deletions(-)
-> 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index acdb4b7428f9..4c06d15f731c 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -419,7 +419,16 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
->  #define kmalloc_index(s) __kmalloc_index(s, true)
->  #endif /* !CONFIG_SLOB */
->  
-> -void *__kmalloc(size_t size, gfp_t flags) __assume_kmalloc_alignment __alloc_size(1);
-> +extern void *__kmalloc_node(size_t size, gfp_t flags, int node)
-> +			    __assume_kmalloc_alignment
-> +			    __alloc_size(1);
-> +
+All warnings (new ones prefixed by >>):
 
-Again, no 'extern' please.
+   drivers/usb/host/xhci-mem.c:68:6: warning: no previous prototype for 'xhci_segment_free' [-Wmissing-prototypes]
+      68 | void xhci_segment_free(struct xhci_hcd *xhci, struct xhci_segment *seg)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-mem.c:100:6: warning: no previous prototype for 'xhci_link_segments' [-Wmissing-prototypes]
+     100 | void xhci_link_segments(struct xhci_segment *prev,
+         |      ^~~~~~~~~~~~~~~~~~
+>> drivers/usb/host/xhci-mem.c:261:6: warning: no previous prototype for 'xhci_remove_stream_mapping' [-Wmissing-prototypes]
+     261 | void xhci_remove_stream_mapping(struct xhci_ring *ring)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/usb/host/xhci-mem.c:1974:5: warning: no previous prototype for 'xhci_check_trb_in_td_math' [-Wmissing-prototypes]
+    1974 | int xhci_check_trb_in_td_math(struct xhci_hcd *xhci)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-> +static __always_inline __alloc_size(1) __assume_kmalloc_alignment
-> +void *__kmalloc(size_t size, gfp_t flags)
-> +{
-> +	return __kmalloc_node(size, flags, NUMA_NO_NODE);
-> +}
-> +
->  void *kmem_cache_alloc(struct kmem_cache *s, gfp_t flags) __assume_slab_alignment __malloc;
->  void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
->  			   gfp_t gfpflags) __assume_slab_alignment __malloc;
+
+vim +/xhci_remove_stream_mapping +261 drivers/usb/host/xhci-mem.c
+
+   260	
+ > 261	void xhci_remove_stream_mapping(struct xhci_ring *ring)
+   262	{
+   263		struct xhci_segment *seg;
+   264	
+   265		if (WARN_ON_ONCE(ring->trb_address_map == NULL))
+   266			return;
+   267	
+   268		seg = ring->first_seg;
+   269		do {
+   270			xhci_remove_segment_mapping(ring->trb_address_map, seg);
+   271			seg = seg->next;
+   272		} while (seg != ring->first_seg);
+   273	}
+   274	EXPORT_SYMBOL_GPL(xhci_remove_stream_mapping);
+   275	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

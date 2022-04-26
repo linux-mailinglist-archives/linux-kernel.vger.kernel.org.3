@@ -2,175 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799FD5102EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AD95102F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352808AbiDZQOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        id S1352762AbiDZQPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345168AbiDZQOp (ORCPT
+        with ESMTP id S1345245AbiDZQPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:14:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CDD9A9A7;
-        Tue, 26 Apr 2022 09:11:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0E3051F380;
-        Tue, 26 Apr 2022 16:11:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650989496; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=g6ykGUukp+fKk1ilY1BWV9rT8pwISCf1/1RZl1i49JA=;
-        b=Z5wMDSSH0NV5rrH+auRARz46CA/8MFeIT0UvniY0GVWXTqMvxNB801SQsuV3sBROWLRGXH
-        CNDi0jtEJ0sNp+KCzFEjL/CQVFT+rAdPiW59KeT9TSNOUGFTNMTQWXGiH97lT26XcbPQKw
-        4SCaa+VP+1/X/NivBkm0dGhK+0YUIX0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650989496;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=g6ykGUukp+fKk1ilY1BWV9rT8pwISCf1/1RZl1i49JA=;
-        b=DVhesvHl3LDTQowiqc8Y5a0pc9N3V/wJCLuJj5cEpx4AkQfSe+9+p9SQ76jG67d8lZXCbW
-        qIQ69bHlu9MwjTAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8000E13223;
-        Tue, 26 Apr 2022 16:11:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o5WRHLcZaGLJeQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Tue, 26 Apr 2022 16:11:35 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 8bd29aa5;
-        Tue, 26 Apr 2022 16:12:06 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Ryan Taylor <rptaylor@uvic.ca>
-Subject: [PATCH] ceph: fix statfs for subdir mounts
-Date:   Tue, 26 Apr 2022 17:12:04 +0100
-Message-Id: <20220426161204.17896-1-lhenriques@suse.de>
+        Tue, 26 Apr 2022 12:15:46 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71584996AE;
+        Tue, 26 Apr 2022 09:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650989559; x=1682525559;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0RIR7mb999d1172gD+dJU/ULf/cy2ZbhtoDViRJG+bI=;
+  b=akxPOGmwj8OoVXM6KLBkU7Yd1qEQIybwgbLqf+n+q0P9ii73iuBJi/RI
+   IFYQA/8lM2o/MKVk/EC67g/Yh2TulTZFKH+XMdY0FOX6595t/ZaPp63rc
+   V8DjW8Iq/BhmhtniqxEvV+LKiJoszwKNskGI3/JgugA2qliLcuCEtbU0U
+   aC8oASDWhubjUFtme/IuM1JgDUYZtJrnwpKaxzPumG91n1aG0hrndIzCH
+   ny2zeBwR8/HpquljsnlpjzpF6itkefcYFplO5tl3w6RkYJxbili4uQjCj
+   wesIkF01qm0I2IFumxpUmHCR36s4d5b1qXJrB0AHOoQvofDPLHgcaWumz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="245552675"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="245552675"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:12:38 -0700
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="617063201"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:12:38 -0700
+Date:   Tue, 26 Apr 2022 09:12:37 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
+        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
+        ashok.raj@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com
+Subject: Re: [PATCH v4 04/10] platform/x86/intel/ifs: Read IFS firmware image
+Message-ID: <YmgZ9d54sjKllh6U@agluck-desk3.sc.intel.com>
+References: <20220419163859.2228874-1-tony.luck@intel.com>
+ <20220422200219.2843823-1-tony.luck@intel.com>
+ <20220422200219.2843823-5-tony.luck@intel.com>
+ <YmfNVG0qLahv7TzL@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmfNVG0qLahv7TzL@kroah.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing a mount using as base a directory that has 'max_bytes' quotas
-statfs uses that value as the total; if a subdirectory is used instead,
-the same 'max_bytes' too in statfs, unless there is another quota set.
+On Tue, Apr 26, 2022 at 12:45:40PM +0200, Greg KH wrote:
+> On Fri, Apr 22, 2022 at 01:02:13PM -0700, Tony Luck wrote:
+> >  drivers/platform/x86/intel/ifs/Makefile |  2 +-
+> >  drivers/platform/x86/intel/ifs/core.c   | 36 ++++++++++++++++++++++++-
+> >  drivers/platform/x86/intel/ifs/ifs.h    | 25 +++++++++++++++++
+> >  drivers/platform/x86/intel/ifs/load.c   | 28 +++++++++++++++++++
 
-Unfortunately, if this subdirectory only has the 'max_files' quota set,
-then statfs uses the filesystem total.  Fix this by making sure we only
-lookup realms that contain the 'max_bytes' quota.
+You haven't commented on the source tree location. With the change
+to use misc_register() this isn't a "platform" device anymore.
 
-Link: https://tracker.ceph.com/issues/55090
-Cc: Ryan Taylor <rptaylor@uvic.ca>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
-Hi!
+Should I move to "drivers/misc/"? Or is there some better spot that
+preseves the detail that this is an x86/intel driver in the path?
 
-Unfortunately, I don't think this is the real fix for the bug reported in
-the tracker (or by Ryan on the mailing-list).  I haven't seen any
-reference to 'max_files' so I suspect Ryan and Dan are hitting another
-bug.  This can be easily checked by 'getfattr -n ceph.quota <subdir>'.
+> > +static struct ifs_device ifs_devices[] = {
+> > +	[IFS_SAF] = {
+> > +		.data = {
+> > +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+> > +		},
+> > +		.misc = {
+> > +			.name = "intel_ifs_0",
+> > +			.nodename = "intel_ifs/0",
+> > +			.minor = MISC_DYNAMIC_MINOR,
+> > +		},
+> > +	},
+> > +};
+> > +
+> > +#define IFS_NUMTESTS ARRAY_SIZE(ifs_devices)
+> 
+> Cute way to do this, but I don't see you ever have any more devices
+> added to this list in this series.  Did I miss them?
 
-Also, Dan (in the tracker) states the bug is on the kernel client only but
-I can also see if in the fuse client.
+That's in part 11/10 ... I have hardware, so I'm pretty sure that this
+is a real thing. Just not ready to post until Intel announces the
+details of the new test type.
 
-Anyway, this patch fixes a real bug.
+> If not, why all the overhead and complexity involved here for just a
+> single misc device?
 
- fs/ceph/quota.c | 35 +++++++++++++++++++++++++++--------
- 1 file changed, 27 insertions(+), 8 deletions(-)
+It didn't seem like a lot of complexity here. It makes the changes to
+this file to add an extra test trivial (just a new name in the "enum"
+and a new initializer in ifs_devices[]).
 
-diff --git a/fs/ceph/quota.c b/fs/ceph/quota.c
-index a338a3ec0dc4..235a8d06a8ee 100644
---- a/fs/ceph/quota.c
-+++ b/fs/ceph/quota.c
-@@ -193,11 +193,17 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
- 	mutex_unlock(&mdsc->quotarealms_inodes_mutex);
- }
- 
-+enum quota_get_realm {
-+	QUOTA_GET_MAX_FILES,
-+	QUOTA_GET_MAX_BYTES,
-+	QUOTA_GET_ANY
-+};
-+
- /*
-  * This function walks through the snaprealm for an inode and returns the
-- * ceph_snap_realm for the first snaprealm that has quotas set (either max_files
-- * or max_bytes).  If the root is reached, return the root ceph_snap_realm
-- * instead.
-+ * ceph_snap_realm for the first snaprealm that has quotas set (max_files,
-+ * max_bytes, or any, depending on the 'which_quota' argument).  If the root is
-+ * reached, return the root ceph_snap_realm instead.
-  *
-  * Note that the caller is responsible for calling ceph_put_snap_realm() on the
-  * returned realm.
-@@ -209,7 +215,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
-  * will be restarted.
-  */
- static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
--					       struct inode *inode, bool retry)
-+					       struct inode *inode,
-+					       enum quota_get_realm which_quota,
-+					       bool retry)
- {
- 	struct ceph_inode_info *ci = NULL;
- 	struct ceph_snap_realm *realm, *next;
-@@ -248,7 +256,17 @@ static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
- 		}
- 
- 		ci = ceph_inode(in);
--		has_quota = __ceph_has_any_quota(ci);
-+		switch (which_quota) {
-+		case QUOTA_GET_MAX_BYTES:
-+			has_quota = ci->i_max_bytes;
-+			break;
-+		case QUOTA_GET_MAX_FILES:
-+			has_quota = ci->i_max_files;
-+			break;
-+		default: /* QUOTA_GET_ANY */
-+			has_quota = __ceph_has_any_quota(ci);
-+			break;
-+		}
- 		iput(in);
- 
- 		next = realm->parent;
-@@ -279,8 +297,8 @@ bool ceph_quota_is_same_realm(struct inode *old, struct inode *new)
- 	 * dropped and we can then restart the whole operation.
- 	 */
- 	down_read(&mdsc->snap_rwsem);
--	old_realm = get_quota_realm(mdsc, old, true);
--	new_realm = get_quota_realm(mdsc, new, false);
-+	old_realm = get_quota_realm(mdsc, old, QUOTA_GET_ANY, true);
-+	new_realm = get_quota_realm(mdsc, new, QUOTA_GET_ANY, false);
- 	if (PTR_ERR(new_realm) == -EAGAIN) {
- 		up_read(&mdsc->snap_rwsem);
- 		if (old_realm)
-@@ -483,7 +501,8 @@ bool ceph_quota_update_statfs(struct ceph_fs_client *fsc, struct kstatfs *buf)
- 	bool is_updated = false;
- 
- 	down_read(&mdsc->snap_rwsem);
--	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root), true);
-+	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root),
-+				QUOTA_GET_MAX_BYTES, true);
- 	up_read(&mdsc->snap_rwsem);
- 	if (!realm)
- 		return false;
+Obviously some more code in load.c and runtest.c to handle the new
+test type.
+
+If it really is too much now, I can rip it out from this submission
+and add it back when the second test is ready for public view.
+
+-Tony

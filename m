@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12AA5101E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7C35101ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352279AbiDZPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S1352330AbiDZPdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiDZPcX (ORCPT
+        with ESMTP id S1352336AbiDZPdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:32:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 043B331DE2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650986955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ERALpKB9DaX1cW8EvRCpNXwECZ3wYEIi3CvVE426efA=;
-        b=dk+NBxZ4jkjVtvtvAJwGZYoy3Gfhyxchxd1gsLi5s2DJJEnNyoRMEwGdLzoimyCkNiP5B4
-        lKTGjuOzKa0Lm4a4v6yw32mFB7ewB32uNGL3vjyp3ZoNhQbugZn92Onxg1KbdSk74+uUcZ
-        AbFw0KPgpA0KbtyFzm+gB1O3dUfwgkQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-67-RyI-idt9M1CjY84O7BMLyg-1; Tue, 26 Apr 2022 11:29:11 -0400
-X-MC-Unique: RyI-idt9M1CjY84O7BMLyg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F3DF3811A20;
-        Tue, 26 Apr 2022 15:29:11 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FC9214682C4;
-        Tue, 26 Apr 2022 15:29:11 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 23QFTBWs005239;
-        Tue, 26 Apr 2022 11:29:11 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 23QFTB7b005235;
-        Tue, 26 Apr 2022 11:29:11 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Tue, 26 Apr 2022 11:29:11 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Milan Broz <gmazyland@gmail.com>
-Subject: Re: [PATCH v2] hex2bin: fix access beyond string end
-In-Reply-To: <YmfxaB1j65p8dOyj@smile.fi.intel.com>
-Message-ID: <alpine.LRH.2.02.2204261128220.5129@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2204241643030.17244@file01.intranet.prod.int.rdu2.redhat.com> <CAHp75VdHnvv6FH1BKcs8WgGF3nJpj77TsrmsQGBSpsAQU_S-bw@mail.gmail.com> <alpine.LRH.2.02.2204260759540.2737@file01.intranet.prod.int.rdu2.redhat.com>
- <YmfxaB1j65p8dOyj@smile.fi.intel.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Tue, 26 Apr 2022 11:33:13 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC341105
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 08:30:01 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23QFTUSp126025;
+        Tue, 26 Apr 2022 10:29:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650986970;
+        bh=dJ6NxkWukewDN74R+Z5GQH5zfuUg1xk50F5FGiyQ3v8=;
+        h=From:To:CC:Subject:Date;
+        b=m+iyUMt2/SebOOlfEb1HWWPM0XGkqe6OWPrTaXdSIGVpFe00gLz/mEFrGbaP6IPpF
+         gbZTB2RriZPvzBT+wj1tbn6G1S5JhVLhkvqw51XJ5q+uElJ+KzhxMBe9QUV1LRgK0l
+         fBhGOhcfID2qw/lHVUQvn1cJR7lipYemint4Pg8I=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23QFTUYR028449
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 Apr 2022 10:29:30 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 26
+ Apr 2022 10:29:30 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 26 Apr 2022 10:29:30 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23QFTSA9074180;
+        Tue, 26 Apr 2022 10:29:29 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <bjorn.andersson@linaro.org>, <arnd@arndb.de>,
+        <shawnguo@kernel.org>, <krzk@kernel.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>
+CC:     <biju.das.jz@bp.renesas.com>, <vkoul@kernel.org>,
+        <enric.balletbo@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <nm@ti.com>, <vigneshr@ti.com>
+Subject: [PATCH v4] arm64: defconfig: Enable configs for DisplayPort on J721e
+Date:   Tue, 26 Apr 2022 20:59:26 +0530
+Message-ID: <20220426152926.20953-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enable DRM and PHY configs required for supporting
+DisplayPort on J721e
 
+Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+---
 
-On Tue, 26 Apr 2022, Andy Shevchenko wrote:
+Notes:
+    v2:
+        Fixed the places using savedefconfig
+        Added more info in notes
 
-> On Tue, Apr 26, 2022 at 08:07:44AM -0400, Mikulas Patocka wrote:
-> > On Tue, 26 Apr 2022, Andy Shevchenko wrote:
-> > > On Sun, Apr 24, 2022 at 10:48 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
-> 
-> ...
-> 
-> > > You need to provide a Fixes tag.
-> > 
-> > OK. Here I resend it with the "Fixes" tag.
-> 
-> Still shadows error codes.
-> 
-> > +			return -EINVAL;
-> 
-> >  			return -EINVAL;
+    v3:
+        rebased to next-20220330
 
-What do you mean? What's wrong with "return -EINVAL"?
+    v4:
+        rebased to next-20220422
 
-Mikulas
+    No change in vmlinux:
+
+        add/remove: 0/0 grow/shrink: 0/0 up/down: 0/0 (0)
+        Function                                     old     new   delta
+        Total: Before=24042991, After=24042991, chg +0.00%
+
+    boot logs:
+        https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/2327c9894c3236950a00f4511ae668ac4399b71e/j7_DP_upstream.log
+
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 6906b83f5e45..4ebbab95cd61 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -742,6 +742,7 @@ CONFIG_DRM_THINE_THC63LVD1024=m
+ CONFIG_DRM_TI_SN65DSI86=m
+ CONFIG_DRM_I2C_ADV7511=m
+ CONFIG_DRM_I2C_ADV7511_AUDIO=y
++CONFIG_DRM_CDNS_MHDP8546=m
+ CONFIG_DRM_DW_HDMI_AHB_AUDIO=m
+ CONFIG_DRM_DW_HDMI_CEC=m
+ CONFIG_DRM_IMX_DCSS=m
+@@ -756,6 +757,7 @@ CONFIG_DRM_MESON=m
+ CONFIG_DRM_PL111=m
+ CONFIG_DRM_LIMA=m
+ CONFIG_DRM_PANFROST=m
++CONFIG_DRM_TIDSS=m
+ CONFIG_FB=y
+ CONFIG_FB_MODE_HELPERS=y
+ CONFIG_FB_EFI=y
+@@ -1169,6 +1171,7 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
+ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
++CONFIG_PHY_CADENCE_TORRENT=m
+ CONFIG_PHY_CADENCE_SIERRA=m
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
+ CONFIG_PHY_FSL_IMX8M_PCIE=y
+-- 
+2.17.1
 

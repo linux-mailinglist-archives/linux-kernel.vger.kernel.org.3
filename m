@@ -2,235 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E9950F945
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D758D50F93B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbiDZKAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 06:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S236503AbiDZKAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 06:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348223AbiDZJ77 (ORCPT
+        with ESMTP id S1348318AbiDZKAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:59:59 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C243AC7;
-        Tue, 26 Apr 2022 02:18:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RlA7Ya2qxh5ll0X2mIQw7by0LBK1DGG55UrnY1xBzruRByPzL8amQj4MGBgeq+k0b96db72iBqIyfxz5DftbGR6m/yZ0+hAjbJefxaQ/SOmZh8spcdQCNaQPWZfjD1PkCpnHN2EBbt+JxRUNUfJunZYzzGzftL1paZrlx/Bxk2Y8mpSpWJU3tK6libG8qUO0G+RJMw0GAQ4y+iIXwrnEOzKZRawFb7YBKYRVUDpWUOOhTnuaRDYVR+1rTxqY4ty5jRyfXEIgCcCOfCkOvef+0d0qozDC7gMtQWFhzn1HA28+MsoPQQABeWZsw6NrtahWsCnSepSLTQfeN2ovXG1D9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=clZOEyd5mGPu48DgfKTO763lXp1b3kcHNw3vqh94gZQ=;
- b=QlvByKtcVnXZ8AJxfzY0a8Uf8ZAs8E+eYgF90kWpxBjQcU7SDJsUbYdzjYkkggeYdiEarD61hwPHpeJThqOpEOInTgU9T45w5nXRxE9ZrTwhLH3BlvosDABcA8CWo+ytDg1o8vd33HqQbYL0POG7/K/kaum9RJUmWa6QgLpAcpramuLOKq1dbsWmAkc+Yfg95NdJt2SLhkw8zYzvYMVAx4gw248PaTJ1BwEHzpJCAvshkjQfitQrtnrw4CshDK6lEnlrFQX96CBmcqWSqIegV+4wni+oqfJ3kY3S3gtB5tfIFmDKMNBWJSrTpBE/Q9P/+ed1jt60XyYwYEel+1pprw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=clZOEyd5mGPu48DgfKTO763lXp1b3kcHNw3vqh94gZQ=;
- b=tSZb06794OjtmZBbyM1+6Gz5YU4oA67mMmyB9oQ0SHQUl6kJGHEBBtnIBhAdEcCMVUARyRCCtnko/9C13AwzUSV8DTNN6ECe/qnqYTh474TQK+PioxrHOox5qWs6KSYfYcc96jEvq7z82KBw7Sir1iT4HxqP8Lc6QrW2bzCYcpM=
-Received: from DS7PR03CA0124.namprd03.prod.outlook.com (2603:10b6:5:3b4::9) by
- BL0PR12MB4994.namprd12.prod.outlook.com (2603:10b6:208:1ca::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
- 2022 09:18:16 +0000
-Received: from DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b4:cafe::5c) by DS7PR03CA0124.outlook.office365.com
- (2603:10b6:5:3b4::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
- Transport; Tue, 26 Apr 2022 09:18:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT068.mail.protection.outlook.com (10.13.173.67) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5186.14 via Frontend Transport; Tue, 26 Apr 2022 09:18:15 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
- 2022 04:18:11 -0500
-Date:   Tue, 26 Apr 2022 11:18:08 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-CC:     <peterz@infradead.org>, <acme@kernel.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <tglx@linutronix.de>, <bp@alien8.de>, <irogers@google.com>,
-        <yao.jin@linux.intel.com>, <james.clark@arm.com>,
-        <leo.yan@linaro.org>, <kan.liang@linux.intel.com>,
-        <ak@linux.intel.com>, <eranian@google.com>,
-        <like.xu.linux@gmail.com>, <x86@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
-        <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: Re: [PATCH 1/6] perf/amd/ibs: Add support for L3 miss filtering
-Message-ID: <Yme40JIJzdVTsC1h@rric.localdomain>
-References: <20220425044323.2830-1-ravi.bangoria@amd.com>
- <20220425044323.2830-2-ravi.bangoria@amd.com>
+        Tue, 26 Apr 2022 06:00:12 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CA14550F;
+        Tue, 26 Apr 2022 02:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650964728; x=1682500728;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oWeM/fVTUrTIq0QBF8aM/jCYR3/+l0d/e9f8ZsVQNnc=;
+  b=xCAUK86dDTh3PLlh/UzSlW6PGsM5gZRQU2mFhAvohoBqwFUh429Eu6cE
+   6BACQQX+AE6IrBwBDNUW3ZC6MlkBctkMD0hjuR4SXh3OUIF/VfITpjajt
+   ksZ73mJgCSwrXHiEhvs2K7+NdaNv7zk6ZyXwJpi72/8Ur77urWAYt5u2P
+   E=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 02:18:48 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 02:18:47 -0700
+Received: from [10.253.37.230] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
+ 2022 02:18:45 -0700
+Message-ID: <23ab1e90-fc3c-117c-01e2-bc73288b7d47@quicinc.com>
+Date:   Tue, 26 Apr 2022 17:18:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220425044323.2830-2-ravi.bangoria@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee6afc1f-8887-424c-f089-08da2765b229
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4994:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB4994A5F8C617785CFA7A57159CFB9@BL0PR12MB4994.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V0camWokpeShMNiZ85BJ3VpNh4ZFMXKfP7LrkV0263IURE7AF57inhGKH9646SyT27uu6ihAED3Hhj1KcKaguPxoZBSJeZmOstsR9ISpoVGbKdeEqxMhg7Mmnc4PQUAAwfOBfw7YuOwGv7kffAGMhAI+FyrY/crVH97tVDueE8E1cc6KzGAM5IIyfVVtGnm7JJx6/yehaQ/PjFceILoqePNmtZSu3f6c7VrEDyNu+H0FbrcdoXVDV0ipGfA5USpdDJbskmGy0LynSXo6yVWoPaq+Q5/DqvBprRD4jwwuBZi+APvmWDIXcbZk5I/3BtHkqMWGFBZhWREtv9u43FfiWeRIXPmTNWBlgN6ZN+muSKbl36A29CLedEBuLT0dncSPYtzrAJWTYb3LQMZMv0M9eIWKyOHEKBXLWv8w6qJYrOrmrrkHiPvv19XIkxqHsxYwMHGdoT4M1y0Sl+uezvX1+4MK6BiARx6H+1iJswnzzg6PHtH9XDlzAOTJoeK8utqJySXkwspShEeVcA4Wd4QJMfBB43yCeK7aKAifqYNkvFhAoVuriEmOM7OZXrfo1NK7RvSxjvpzYfEi3CH7r6MFncXENIkC5gLs3I3ZbJm8OzgbhxNtVQ3ip4fy7p9ssmEwWdfHLiSwRrSaOIeZh7jsHIzDKTea5KYz2q7WnHehz7wT8gqcVPHX7fZfbwDipWZKEBZfrO6Dg7aPSMeQOxx61A==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(426003)(336012)(47076005)(16526019)(186003)(6862004)(70206006)(70586007)(316002)(83380400001)(9686003)(508600001)(8676002)(4326008)(7696005)(26005)(6666004)(82310400005)(5660300002)(53546011)(356005)(2906002)(6636002)(8936002)(54906003)(7416002)(36860700001)(55016003)(40460700003)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 09:18:15.9682
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee6afc1f-8887-424c-f089-08da2765b229
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4994
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1] Bluetooth: btusb: Set
+ HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA
+Content-Language: en-US
+To:     Marcel Holtmann <marcel@holtmann.org>
+CC:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+References: <1650012368-13505-1-git-send-email-quic_zijuhu@quicinc.com>
+ <1D02DBF7-9368-43D5-9062-96CC73E22B57@holtmann.org>
+From:   quic_zijuhu <quic_zijuhu@quicinc.com>
+In-Reply-To: <1D02DBF7-9368-43D5-9062-96CC73E22B57@holtmann.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.22 10:13:18, Ravi Bangoria wrote:
-> IBS L3 miss filtering works by tagging an instruction on IBS counter
-> overflow and generating an NMI if the tagged instruction causes an L3
-> miss. Samples without an L3 miss are discarded and counter is reset
-> with random value (between 1-15 for fetch pmu and 1-127 for op pmu).
-> This helps in reducing sampling overhead when user is interested only
-> in such samples. One of the use case of such filtered samples is to
-> feed data to page-migration daemon in tiered memory systems.
+On 4/22/2022 5:17 PM, Marcel Holtmann wrote:
+> Hi Zijun,
 > 
-> Add support for L3 miss filtering in IBS driver via new pmu attribute
-> "l3missonly". Example usage:
+>> Set HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA controllers since
+>> they answer HCI_OP_READ_DEF_ERR_DATA_REPORTING with error code
+>> "UNKNOWN HCI COMMAND" as shown below:
+>>
+>> [  580.517552] Bluetooth: hci0: unexpected cc 0x0c5a length: 1 < 2
+>> [  580.517660] Bluetooth: hci0: Opcode 0x c5a failed: -38
+>>
+>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+>> ---
+>> drivers/bluetooth/btusb.c | 2 ++
+>> 1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+>> index 06a854a2507e..a33f8705f147 100644
+>> --- a/drivers/bluetooth/btusb.c
+>> +++ b/drivers/bluetooth/btusb.c
+>> @@ -3340,6 +3340,8 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+>> 	 */
+>> 	set_bit(HCI_QUIRK_BROKEN_ENHANCED_SETUP_SYNC_CONN, &hdev->quirks);
+>>
+>> +	set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
+>> +
+>> 	return 0;
+>> }
 > 
->   # perf record -a -e ibs_op/l3missonly=1/ --raw-samples sleep 5
+> please include the supported commands output from btmon that indicates that this hardware declares support for this command.
 > 
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
->  arch/x86/events/amd/ibs.c         | 42 ++++++++++++++++++++++---------
->  arch/x86/include/asm/perf_event.h |  3 +++
->  2 files changed, 33 insertions(+), 12 deletions(-)
+hcitool -i hci0 cmd 0x04 0x02
+< HCI Command: ogf 0x04, ocf 0x0002, plen 0
+> HCI Event: 0x0e plen 68
+  01 02 10 00 FF FF FB 03 CE FF EF FF FF FF FF 1F F2 0F E8 FE
+  3F F7 8F FF 1C 00 04 00 61 FF FF FF 7F BE 20 F5 FF F0 FF FF
+  FF FF FF FF FF EF FF FF FF FF 03 00 00 00 00 00 00 00 00 00
+  00 00 00 00 00 00 00 00
+
+btmon output:
+< HCI Command: Read Local Supported Commands (0x04|0x0002) plen 0                                                                                 5.414488
+> HCI Event: Command Complete (0x0e) plen 68                                                                                                      5.419751
+      Read Local Supported Commands (0x04|0x0002) ncmd 1
+        Status: Success (0x00)
+        Commands: 288 entries
+          Inquiry (Octet 0 - Bit 0)
+          Inquiry Cancel (Octet 0 - Bit 1)
+          Periodic Inquiry Mode (Octet 0 - Bit 2)
+          Exit Periodic Inquiry Mode (Octet 0 - Bit 3)
+          Create Connection (Octet 0 - Bit 4)
+          Disconnect (Octet 0 - Bit 5)
+          Add SCO Connection (Octet 0 - Bit 6)
+          Create Connection Cancel (Octet 0 - Bit 7)
+          Accept Connection Request (Octet 1 - Bit 0)
+          Reject Connection Request (Octet 1 - Bit 1)
+          Link Key Request Reply (Octet 1 - Bit 2)
+          Link Key Request Negative Reply (Octet 1 - Bit 3)
+          PIN Code Request Reply (Octet 1 - Bit 4)
+          PIN Code Request Negative Reply (Octet 1 - Bit 5)
+          Change Connection Packet Type (Octet 1 - Bit 6)
+          Authentication Requested (Octet 1 - Bit 7)
+          Set Connection Encryption (Octet 2 - Bit 0)
+          Change Connection Link Key (Octet 2 - Bit 1)
+          Remote Name Request (Octet 2 - Bit 3)
+          Remote Name Request Cancel (Octet 2 - Bit 4)
+          Read Remote Supported Features (Octet 2 - Bit 5)
+          Read Remote Extended Features (Octet 2 - Bit 6)
+          Read Remote Version Information (Octet 2 - Bit 7)
+          Read Clock Offset (Octet 3 - Bit 0)
+          Read LMP Handle (Octet 3 - Bit 1)
+          Hold Mode (Octet 4 - Bit 1)
+          Sniff Mode (Octet 4 - Bit 2)
+          Exit Sniff Mode (Octet 4 - Bit 3)
+          QoS Setup (Octet 4 - Bit 6)
+          Role Discovery (Octet 4 - Bit 7)
+          Switch Role (Octet 5 - Bit 0)
+          Read Link Policy Settings (Octet 5 - Bit 1)
+          Write Link Policy Settings (Octet 5 - Bit 2)
+          Read Default Link Policy Settings (Octet 5 - Bit 3)
+          Write Default Link Policy Settings (Octet 5 - Bit 4)
+          Flow Specification (Octet 5 - Bit 5)
+          Set Event Mask (Octet 5 - Bit 6)
+          Reset (Octet 5 - Bit 7)
+          Set Event Filter (Octet 6 - Bit 0)
+          Flush (Octet 6 - Bit 1)
+          Read PIN Type (Octet 6 - Bit 2)
+          Write PIN Type (Octet 6 - Bit 3)
+          Read Stored Link Key (Octet 6 - Bit 5)
+          Write Stored Link Key (Octet 6 - Bit 6)
+          Delete Stored Link Key (Octet 6 - Bit 7)
+          Write Local Name (Octet 7 - Bit 0)
+          Read Local Name (Octet 7 - Bit 1)
+          Read Connection Accept Timeout (Octet 7 - Bit 2)
+          Write Connection Accept Timeout (Octet 7 - Bit 3)
+          Read Page Timeout (Octet 7 - Bit 4)
+          Write Page Timeout (Octet 7 - Bit 5)
+          Read Scan Enable (Octet 7 - Bit 6)
+          Write Scan Enable (Octet 7 - Bit 7)
+          Read Page Scan Activity (Octet 8 - Bit 0)
+          Write Page Scan Activity (Octet 8 - Bit 1)
+          Read Inquiry Scan Activity (Octet 8 - Bit 2)
+          Write Inquiry Scan Activity (Octet 8 - Bit 3)
+          Read Authentication Enable (Octet 8 - Bit 4)
+          Write Authentication Enable (Octet 8 - Bit 5)
+          Read Encryption Mode (Octet 8 - Bit 6)
+          Write Encryption Mode (Octet 8 - Bit 7)
+          Read Class of Device (Octet 9 - Bit 0)
+          Write Class of Device (Octet 9 - Bit 1)
+          Read Voice Setting (Octet 9 - Bit 2)
+          Write Voice Setting (Octet 9 - Bit 3)
+          Read Automatic Flush Timeout (Octet 9 - Bit 4)
+          Write Automatic Flush Timeout (Octet 9 - Bit 5)
+          Read Num Broadcast Retransmissions (Octet 9 - Bit 6)
+          Write Num Broadcast Retransmissions (Octet 9 - Bit 7)
+          Read Hold Mode Activity (Octet 10 - Bit 0)
+          Write Hold Mode Activity (Octet 10 - Bit 1)
+          Read Transmit Power Level (Octet 10 - Bit 2)
+          Read Sync Flow Control Enable (Octet 10 - Bit 3)
+          Write Sync Flow Control Enable (Octet 10 - Bit 4)
+          Set Controller To Host Flow Control (Octet 10 - Bit 5)
+          Host Buffer Size (Octet 10 - Bit 6)
+          Host Number of Completed Packets (Octet 10 - Bit 7)
+          Read Link Supervision Timeout (Octet 11 - Bit 0)
+          Write Link Supervision Timeout (Octet 11 - Bit 1)
+          Read Number of Supported IAC (Octet 11 - Bit 2)
+          Read Current IAC LAP (Octet 11 - Bit 3)
+          Write Current IAC LAP (Octet 11 - Bit 4)
+          Set AFH Host Channel Classification (Octet 12 - Bit 1)
+          Read Inquiry Scan Type (Octet 12 - Bit 4)
+          Write Inquiry Scan Type (Octet 12 - Bit 5)
+          Read Inquiry Mode (Octet 12 - Bit 6)
+          Write Inquiry Mode (Octet 12 - Bit 7)
+          Read Page Scan Type (Octet 13 - Bit 0)
+          Write Page Scan Type (Octet 13 - Bit 1)
+          Read AFH Channel Assessment Mode (Octet 13 - Bit 2)
+          Write AFH Channel Assessment Mode (Octet 13 - Bit 3)
+          Read Local Version Information (Octet 14 - Bit 3)
+          Read Local Supported Features (Octet 14 - Bit 5)
+          Read Local Extended Features (Octet 14 - Bit 6)
+          Read Buffer Size (Octet 14 - Bit 7)
+          Read BD ADDR (Octet 15 - Bit 1)
+          Read Failed Contact Counter (Octet 15 - Bit 2)
+          Reset Failed Contact Counter (Octet 15 - Bit 3)
+          Read Link Quality (Octet 15 - Bit 4)
+          Read RSSI (Octet 15 - Bit 5)
+          Read AFH Channel Map (Octet 15 - Bit 6)
+          Read Clock (Octet 15 - Bit 7)
+          Read Loopback Mode (Octet 16 - Bit 0)
+          Write Loopback Mode (Octet 16 - Bit 1)
+          Enable Device Under Test Mode (Octet 16 - Bit 2)
+          Setup Synchronous Connection (Octet 16 - Bit 3)
+          Accept Synchronous Connection Request (Octet 16 - Bit 4)
+          Reject Synchronous Connection Request (Octet 16 - Bit 5)
+          Read Extended Inquiry Response (Octet 17 - Bit 0)
+          Write Extended Inquiry Response (Octet 17 - Bit 1)
+          Refresh Encryption Key (Octet 17 - Bit 2)
+          Sniff Subrating (Octet 17 - Bit 4)
+          Read Simple Pairing Mode (Octet 17 - Bit 5)
+          Write Simple Pairing Mode (Octet 17 - Bit 6)
+          Read Local OOB Data (Octet 17 - Bit 7)
+          Read Inquiry Response TX Power Level (Octet 18 - Bit 0)
+          Write Inquiry Transmit Power Level (Octet 18 - Bit 1)
+          Read Default Erroneous Data Reporting (Octet 18 - Bit 2)
+          Write Default Erroneous Data Reporting (Octet 18 - Bit 3)
+          IO Capability Request Reply (Octet 18 - Bit 7)
+          User Confirmation Request Reply (Octet 19 - Bit 0)
+          User Confirmation Request Neg Reply (Octet 19 - Bit 1)
+          User Passkey Request Reply (Octet 19 - Bit 2)
+          User Passkey Request Negative Reply (Octet 19 - Bit 3)
+          Remote OOB Data Request Reply (Octet 19 - Bit 4)
+          Write Simple Pairing Debug Mode (Octet 19 - Bit 5)
+          Enhanced Flush (Octet 19 - Bit 6)
+          Remote OOB Data Request Neg Reply (Octet 19 - Bit 7)
+          Send Keypress Notification (Octet 20 - Bit 2)
+          IO Capability Request Negative Reply (Octet 20 - Bit 3)
+          Read Encryption Key Size (Octet 20 - Bit 4)
+          Set Event Mask Page 2 (Octet 22 - Bit 2)
+          Read Enhanced Transmit Power Level (Octet 24 - Bit 0)
+          Read LE Host Supported (Octet 24 - Bit 5)
+          Write LE Host Supported (Octet 24 - Bit 6)
+          LE Set Event Mask (Octet 25 - Bit 0)
+          LE Read Buffer Size (Octet 25 - Bit 1)
+          LE Read Local Supported Features (Octet 25 - Bit 2)
+          Octet 25 - Bit 3
+          LE Set Random Address (Octet 25 - Bit 4)
+          LE Set Advertising Parameters (Octet 25 - Bit 5)
+          LE Read Advertising Channel TX Power (Octet 25 - Bit 6)
+          LE Set Advertising Data (Octet 25 - Bit 7)
+          LE Set Scan Response Data (Octet 26 - Bit 0)
+          LE Set Advertise Enable (Octet 26 - Bit 1)
+          LE Set Scan Parameters (Octet 26 - Bit 2)
+          LE Set Scan Enable (Octet 26 - Bit 3)
+          LE Create Connection (Octet 26 - Bit 4)
+          LE Create Connection Cancel (Octet 26 - Bit 5)
+          LE Read White List Size (Octet 26 - Bit 6)
+          LE Clear White List (Octet 26 - Bit 7)
+          LE Add Device To White List (Octet 27 - Bit 0)
+          LE Remove Device From White List (Octet 27 - Bit 1)
+          LE Connection Update (Octet 27 - Bit 2)
+          LE Set Host Channel Classification (Octet 27 - Bit 3)
+          LE Read Channel Map (Octet 27 - Bit 4)
+          LE Read Remote Used Features (Octet 27 - Bit 5)
+          LE Encrypt (Octet 27 - Bit 6)
+          LE Rand (Octet 27 - Bit 7)
+          LE Start Encryption (Octet 28 - Bit 0)
+          LE Long Term Key Request Reply (Octet 28 - Bit 1)
+          LE Long Term Key Request Neg Reply (Octet 28 - Bit 2)
+          LE Read Supported States (Octet 28 - Bit 3)
+          LE Receiver Test (Octet 28 - Bit 4)
+          LE Transmitter Test (Octet 28 - Bit 5)
+          LE Test End (Octet 28 - Bit 6)
+          Octet 29 - Bit 1
+          Octet 29 - Bit 2
+          Enhanced Setup Synchronous Connection (Octet 29 - Bit 3)
+          Enhanced Accept Synchronous Connection Request (Octet 29 - Bit 4)
+          Read Local Supported Codecs (Octet 29 - Bit 5)
+          Set External Frame Configuration (Octet 29 - Bit 7)
+          Set Triggered Clock Capture (Octet 30 - Bit 5)
+          Set Connectionless Slave Broadcast (Octet 31 - Bit 0)
+          Start Synchronization Train (Octet 31 - Bit 2)
+          Set Reserved LT_ADDR (Octet 31 - Bit 4)
+          Delete Reserved LT_ADDR (Octet 31 - Bit 5)
+          Set Connectionless Slave Broadcast Data (Octet 31 - Bit 6)
+          Read Synchronization Train Parameters (Octet 31 - Bit 7)
+          Write Synchronization Train Parameters (Octet 32 - Bit 0)
+          Remote OOB Extended Data Request Reply (Octet 32 - Bit 1)
+          Read Secure Connections Host Support (Octet 32 - Bit 2)
+          Write Secure Connections Host Support (Octet 32 - Bit 3)
+          Read Authenticated Payload Timeout (Octet 32 - Bit 4)
+          Write Authenticated Payload Timeout (Octet 32 - Bit 5)
+          Read Local OOB Extended Data (Octet 32 - Bit 6)
+          Write Secure Connections Test Mode (Octet 32 - Bit 7)
+          LE Remote Connection Parameter Request Reply (Octet 33 - Bit 4)
+          LE Remote Connection Parameter Request Negative Reply (Octet 33 - Bit 5)
+          LE Set Data Length (Octet 33 - Bit 6)
+          LE Read Suggested Default Data Length (Octet 33 - Bit 7)
+          LE Write Suggested Default Data Length (Octet 34 - Bit 0)
+          LE Read Local P-256 Public Key (Octet 34 - Bit 1)
+          LE Generate DHKey (Octet 34 - Bit 2)
+          LE Add Device To Resolving List (Octet 34 - Bit 3)
+          LE Remove Device From Resolving List (Octet 34 - Bit 4)
+          LE Clear Resolving List (Octet 34 - Bit 5)
+          LE Read Resolving List Size (Octet 34 - Bit 6)
+          LE Read Peer Resolvable Address (Octet 34 - Bit 7)
+          LE Read Local Resolvable Address (Octet 35 - Bit 0)
+          LE Set Address Resolution Enable (Octet 35 - Bit 1)
+          LE Set Resolvable Private Address Timeout (Octet 35 - Bit 2)
+          LE Read Maximum Data Length (Octet 35 - Bit 3)
+          Octet 35 - Bit 4
+          Octet 35 - Bit 5
+          Octet 35 - Bit 6
+          Octet 35 - Bit 7
+          Octet 36 - Bit 0
+          Octet 36 - Bit 1
+          Octet 36 - Bit 2
+          Octet 36 - Bit 3
+          Octet 36 - Bit 4
+          Octet 36 - Bit 5
+          Octet 36 - Bit 6
+          Octet 36 - Bit 7
+          Octet 37 - Bit 0
+          Octet 37 - Bit 1
+          Octet 37 - Bit 2
+          Octet 37 - Bit 3
+          Octet 37 - Bit 4
+          Octet 37 - Bit 5
+          Octet 37 - Bit 6
+          Octet 37 - Bit 7
+          Octet 38 - Bit 0
+          Octet 38 - Bit 1
+          Octet 38 - Bit 2
+          Octet 38 - Bit 3
+          Octet 38 - Bit 4
+          Octet 38 - Bit 5
+          Octet 38 - Bit 6
+          Octet 38 - Bit 7
+          Octet 39 - Bit 0
+          Octet 39 - Bit 1
+          Octet 39 - Bit 2
+          Octet 39 - Bit 3
+          Octet 39 - Bit 4
+          Octet 39 - Bit 5
+          Octet 39 - Bit 6
+          Octet 39 - Bit 7
+          Octet 40 - Bit 0
+          Octet 40 - Bit 1
+          Octet 40 - Bit 2
+          Octet 40 - Bit 3
+          Octet 40 - Bit 4
+          Octet 40 - Bit 5
+          Octet 40 - Bit 6
+          Octet 40 - Bit 7
+          Octet 41 - Bit 0
+          Octet 41 - Bit 1
+          Octet 41 - Bit 2
+          Octet 41 - Bit 3
+          Octet 41 - Bit 5
+          Octet 41 - Bit 6
+          Octet 41 - Bit 7
+          Octet 42 - Bit 0
+          Octet 42 - Bit 1
+          Octet 42 - Bit 2
+          Octet 42 - Bit 3
+          Octet 42 - Bit 4
+          Octet 42 - Bit 5
+          Octet 42 - Bit 6
+          Octet 42 - Bit 7
+          Octet 43 - Bit 0
+          Octet 43 - Bit 1
+          Octet 43 - Bit 2
+          Octet 43 - Bit 3
+          Octet 43 - Bit 4
+          Octet 43 - Bit 5
+          Octet 43 - Bit 6
+          Octet 43 - Bit 7
+          Octet 44 - Bit 0
+          Octet 44 - Bit 1
+          Octet 44 - Bit 2
+          Octet 44 - Bit 3
+          Octet 44 - Bit 4
+          Octet 44 - Bit 5
+          Octet 44 - Bit 6
+          Octet 44 - Bit 7
+          Octet 45 - Bit 0
+          Octet 45 - Bit 1
+          Octet 45 - Bit 2
+          Octet 45 - Bit 3
+          Octet 45 - Bit 4
+          Octet 45 - Bit 5
+          Octet 45 - Bit 6
+          Octet 45 - Bit 7
+          Octet 46 - Bit 0
+          Octet 46 - Bit 1
+> Regards
 > 
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index 9739019d4b67..a5303d62060c 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -520,16 +520,12 @@ static void perf_ibs_read(struct perf_event *event) { }
->  
->  PMU_FORMAT_ATTR(rand_en,	"config:57");
->  PMU_FORMAT_ATTR(cnt_ctl,	"config:19");
-> +PMU_EVENT_ATTR_STRING(l3missonly, fetch_l3missonly, "config:59");
-> +PMU_EVENT_ATTR_STRING(l3missonly, op_l3missonly, "config:16");
->  
-> -static struct attribute *ibs_fetch_format_attrs[] = {
-> -	&format_attr_rand_en.attr,
-> -	NULL,
-> -};
-> -
-> -static struct attribute *ibs_op_format_attrs[] = {
-> -	NULL,	/* &format_attr_cnt_ctl.attr if IBS_CAPS_OPCNT */
-> -	NULL,
-> -};
-> +/* size = nr attrs plus NULL at the end */
-> +static struct attribute *ibs_fetch_format_attrs[3];
-> +static struct attribute *ibs_op_format_attrs[3];
+> Marcel
+> 
 
-Define a macro for the array size.
-
->  
->  static struct perf_ibs perf_ibs_fetch = {
->  	.pmu = {
-> @@ -759,9 +755,9 @@ static __init int perf_ibs_pmu_init(struct perf_ibs *perf_ibs, char *name)
->  	return ret;
->  }
->  
-> -static __init void perf_event_ibs_init(void)
-> +static __init void perf_ibs_fetch_prepare(void)
-
-Since this actually initializes the pmu, let's call that
-perf_ibs_fetch_init().
-
-For low level init functions it would be good to keep track of the
-return code even if it is later not evaluated. So these kind of
-function should return an error code.
-
->  {
-> -	struct attribute **attr = ibs_op_format_attrs;
-> +	struct attribute **format_attrs = perf_ibs_fetch.format_attrs;
-
-I think we could keep this short here with 'attr'.
-
->  
->  	/*
->  	 * Some chips fail to reset the fetch count when it is written; instead
-> @@ -773,11 +769,22 @@ static __init void perf_event_ibs_init(void)
->  	if (boot_cpu_data.x86 == 0x19 && boot_cpu_data.x86_model < 0x10)
->  		perf_ibs_fetch.fetch_ignore_if_zero_rip = 1;
->  
-> +	*format_attrs++ = &format_attr_rand_en.attr;
-> +	if (ibs_caps & IBS_CAPS_ZEN4IBSEXTENSIONS) {
-> +		perf_ibs_fetch.config_mask |= IBS_FETCH_L3MISSONLY;
-> +		*format_attrs++ = &fetch_l3missonly.attr.attr;
-> +	}
-
-You should also write the terminating NULL pointer here, though the
-mem is preinitialized zero.
-
-> +
->  	perf_ibs_pmu_init(&perf_ibs_fetch, "ibs_fetch");
-> +}
-> +
-> +static __init void perf_ibs_op_prepare(void)
-> +{
-> +	struct attribute **format_attrs = perf_ibs_op.format_attrs;
->  
->  	if (ibs_caps & IBS_CAPS_OPCNT) {
->  		perf_ibs_op.config_mask |= IBS_OP_CNT_CTL;
-> -		*attr++ = &format_attr_cnt_ctl.attr;
-> +		*format_attrs++ = &format_attr_cnt_ctl.attr;
->  	}
->  
->  	if (ibs_caps & IBS_CAPS_OPCNTEXT) {
-> @@ -786,7 +793,18 @@ static __init void perf_event_ibs_init(void)
->  		perf_ibs_op.cnt_mask    |= IBS_OP_MAX_CNT_EXT_MASK;
->  	}
->  
-> +	if (ibs_caps & IBS_CAPS_ZEN4IBSEXTENSIONS) {
-> +		perf_ibs_op.config_mask |= IBS_OP_L3MISSONLY;
-> +		*format_attrs++ = &op_l3missonly.attr.attr;
-> +	}
-> +
->  	perf_ibs_pmu_init(&perf_ibs_op, "ibs_op");
-> +}
-
-Same for this function: *_init(), error code, attrs, terminating NULL.
-
-> +
-> +static __init void perf_event_ibs_init(void)
-> +{
-> +	perf_ibs_fetch_prepare();
-> +	perf_ibs_op_prepare();
->  
->  	register_nmi_handler(NMI_LOCAL, perf_ibs_nmi_handler, 0, "perf_ibs");
->  	pr_info("perf: AMD IBS detected (0x%08x)\n", ibs_caps);
-
-The function is now small enough to be squashed into amd_ibs_init().
-
--Robert

@@ -2,102 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D975101BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C746E5101BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 17:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352163AbiDZPXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 11:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S245232AbiDZPXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 11:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352338AbiDZPXE (ORCPT
+        with ESMTP id S1352364AbiDZPXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 11:23:04 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C10C1759EE;
-        Tue, 26 Apr 2022 08:17:00 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id j25-20020a4a7519000000b0035e6db06150so1114565ooc.6;
-        Tue, 26 Apr 2022 08:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JMv0lACNSYZoaK4Imij/2QqoYoRHCxnEs4tYjd0AuZY=;
-        b=nF81iYuyzj2BsCHaIPslpKnx4nDb5cAJ+C2ZnzS7poY9waQZjFtmRKhfZwY2tByMwa
-         C2CW5JzL3SfXKFhbz5xJKR3DO8ato84l8Z0aMtLcsCe6DOXr1iLv0gJAeGQ2fBd6drbB
-         6mJ+R+JQzHA0w2EFP3M26J8Y0yh4ZFZl6vCXYDeBgZvVOg13WddhnxscdKusx5c2U5oL
-         b/sZdIslprpaRMUF//yyip7DXQUMJjCaxMO6SApZ3JKdT9y+H2QBUPUYqh3X7SBuCGU3
-         xDCvXv8iiJclRUzBSi/0zHp3o0qZZQ4mSqTZlY1r0pSw1DX61zZJQ/0Xh8/ft4i/ZJ2D
-         BmsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JMv0lACNSYZoaK4Imij/2QqoYoRHCxnEs4tYjd0AuZY=;
-        b=DoFodKVgWG2KPcvj+7ZclXiCulZ2FpByf3x+MkqAjZkTbU/wNQYji1Cl6AxsI3YVnf
-         PstPerdRJj+vVegF4K3LEMl3zGGPI8eEINoeDazlsvXuYdaFjZSndUNSnj9J6jrM/B+L
-         Kbyt8a6eu4tuezfFwH8mQCZ6WBu65LVqh2YfkYH8uArQ4DJ6nGnEOH9c0fmmRElM5Nm9
-         88GZkW804/lo+kVwZkTwNeFFFJeH9/oU2QM63r70GGVlqUGtpS9a7ICmqYksSdkdjfIF
-         ZYS5IsXvcKccoJWjOlTF2fG49MgHqoVP8uYjX556IyLjlI1E/lv45LiMIofM5Ik+el0c
-         il2g==
-X-Gm-Message-State: AOAM533fLYJv3W0euIJqLu5Iqh8plGjUTRdezSox9S+i/13xbnCdxKvh
-        PuC7x/QZLb7i5lkKJ0MZjSk=
-X-Google-Smtp-Source: ABdhPJyHAw9fGB73HaOb1RQA+A+aDbE1QKOQv61rWFhkDPkMLHpMbaUo7MAJPP6SW7kOpAsYEspI3Q==
-X-Received: by 2002:a05:6820:151b:b0:33a:6aa4:2d6e with SMTP id ay27-20020a056820151b00b0033a6aa42d6emr8474432oob.54.1650986219219;
-        Tue, 26 Apr 2022 08:16:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j19-20020a056830271300b006057ca85f79sm4998706otu.62.2022.04.26.08.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 08:16:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Apr 2022 08:16:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-Message-ID: <20220426151656.GA3119637@roeck-us.net>
-References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
- <20220426092340.495704-2-eugene.shalygin@gmail.com>
+        Tue, 26 Apr 2022 11:23:13 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570DD369E0;
+        Tue, 26 Apr 2022 08:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650986324;
+        bh=E+Hg8XB0uplXpNREVgCkI8/u05xO4CQqpmVf+gTT7wY=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=bo5MO2ICe2f0JE3WvbKHu5Reo0qEuFJrDy3qzhFhqykQZp//CmngMH2g4Mz2h45l0
+         PzZRoRS1cAW/OTlGbT9aGGf0qrBx2zBGiwsqjpguirMQPGwV/KW40dvuY3Zsi7oRsZ
+         nymvB5JZBAM3T/Arn4EBr0euhSr+5uI90881qnhw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.164.205]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3bSt-1ntEgR2owV-010ZBp; Tue, 26
+ Apr 2022 17:18:44 +0200
+Date:   Tue, 26 Apr 2022 17:18:42 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [GIT PULL] fbdev updates & fixes for v5.18-rc5
+Message-ID: <YmgNUgK/FeNcX0MG@ls3530>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426092340.495704-2-eugene.shalygin@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:yiY1Xgsfm/t116KfFvkQOFaBDvx2+7IMm7NAfFr/xG2YuqgxNS4
+ msZ6vS75sv5bAowYt1Qs2CKdelJ0gy0w44CV6mZmDUVZC59OjpObznSVs5CT3dSnZteE76u
+ uyd2Hc7mVwfVT925LAeRZ8eBrRicyqAJZathX1NBGxvF+IEkfe972l0G5O+HUFdJ65ne6Ku
+ R4hk2BKWUPA1tCW6FMlkg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qL696Dzs5uQ=:UgDe8enbU4oVBhSd5mi6qa
+ IhAkDUaWzXEfYhkhoAcnISx9WdHfpt4Sr1DHI1uuf242oyhisrzqZ4X3XIwOLGUuuupL+j17a
+ JhbE+VSaXo3d3vUW44m0UVrAI2nxfrBlYJRMRbJOo/KKd5oSWH9w1MJ1qnbFStRAxbn5WHBGN
+ AMpcW5HK7NJIfvSmU+jkDpW7OXCDk9tc88yY24FjIUpzjwyIHO+30G/B2Tjrm7BgYsJMV5dJv
+ CONMrivpkBSt8sy/TdEpGrBXtOD6Y3ii5lv6nunFyQtqiAIDTZR4Acvlxtk8PLUxDJDI1Sbq2
+ NLO1Ilpu92wzOpxIm48xuMNsSkPRs97TaU/zpIw1eyytVGfz2U8JFSh92w15cqdUGh9XQLLJ7
+ uCfF5XAdbcja+eDMFzN0NdXeEmD5h39oZ8gGsDuHGea7pPOzcF/ZMRlB7CkS9TTc8Wl1sat+l
+ m7OXTUjx+BqXEHJO/gJ8ZIWKp+2TW67bOdxCjJVKY3XWXWql9T3UoBONTqgUxhndpChjG4Pmy
+ 9L7e0HzMj/fSIv4e7E4z8hUZuJxVpgfdvTDqFOrZwFTLr++keYQgRLrznNNTWxr1KOHiYUkYA
+ k/LZ0XHp3+Gwk3b2fiJfa29bQyFBcQrJnJv80FBiZZeS9zOk08Q8eemr8sA0kLGEqIll1Xi6z
+ B2S+5DI98Og9LnyTHkBJCfmQ4jlK+M659NfTVQLBopHFeSHzmgIOkgl/JOIo5a9hfdX7j2LYm
+ IekoV9V89QJUIzKYIskkMor7sIo5iqz8DqtTrgFMTIKlqOOyl1xfuhNdZ5VyE3cF3eDjvPJ7D
+ UiFdX91QFUBCocsSREsqAT/ebGu8uoyXeqnVYHpbro4JAgGs8jpGdyI3ZOtT2apYpdiXm6uOl
+ YZGDMgEqlaXabGCeyooikuoFgvTBlo4bhVU7sSUIDFc9fK0nh6s9cq3Vlm7NNLqM0lEo9mid6
+ kiqEI76hJF5nBV+vxAGBF9FYGGcd93y2CnFUa6wE063hJhja71xxUF8Cfbh0Hs8lZzq13jSdF
+ DsSGC6kdMMUGDmJ80QOvrfVKl6+RMhmVtk7lWY0VL9FFO+ZNV7FJ4mHTnsU2RX4WCw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:23:37AM +0200, Eugene Shalygin wrote:
-> We need to keep some more information about the current board than just
-> the sensors set, and with more boards to add the dmi id array grows
-> quickly. Our probe code is always the same so let's switch to a custom
-> test code and a custom board info array. That allows us to omit board
-> vendor string (ASUS uses two strings that differ in case) in the board
-> info and use case-insensitive comparison, and also do not duplicate
-> sensor definitions for such board variants as " (WI-FI)" when sensors
-> are identical to the base variant.
-> 
-> Also saves a quarter of the module size by replacing big dmi_system_id
-> structs with smaller ones.
-> 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-> ---
-...
->  
-> -MODULE_DEVICE_TABLE(dmi, asus_ec_dmi_table);
-> +MODULE_DEVICE_TABLE(acpi, acpi_ec_ids);
->  module_platform_driver_probe(asus_ec_sensors_platform_driver, asus_ec_probe);
+Hi Linus,
 
-Since this is now tied to MODULE_DEVICE_TABLE(acpi, ...), I think the
-probe function should be referenced in asus_ec_sensors_platform_driver,
-and it should be module_platform_driver() instead of
-module_platform_driver_probe().
+I've finished checking all outstanding fbdev patches which had queued up
+during the last few months. This is now the last bunch.
+All are either trivial and/or small.
+The changelog is below.
 
-Guenter
+Please pull.
+
+Thanks,
+Helge
+
+----------------------------------------------------------------
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git tags/for-5.18/fbdev-2
+
+for you to fetch changes up to 6fbe0cc53a1b5f7abe2c44399c18e943adbebe2f:
+
+  video: fbdev: clps711x-fb: Use syscon_regmap_lookup_by_phandle (2022-04-25 20:12:12 +0200)
+
+----------------------------------------------------------------
+fbdev fixes and updates for kernel v5.18-rc5
+
+A bunch of outstanding fbdev patches:
+
+neofb:
+	Fix the check of 'var->pixclock'
+
+kyro, vt8623fb, tridentfb, arkfb, s3fb, i740fb:
+	Error out if 'lineclock' equals zero
+
+sis:
+	Fix potential NULL dereference in sisfb_post_sis300()
+
+fb.h:
+	Spelling fix: palette/palette/
+
+pm2fb:
+	Fix kernel-doc formatting issue
+
+clps711x-fb:
+	Use syscon_regmap_lookup_by_phandle()
+
+of:
+	display_timing: Remove a redundant zeroing of memory
+
+aty & matrox:
+	Cleanup for powerpc's asm/prom.h
+
+sh_mobile_lcdcfb:
+	Remove sh_mobile_lcdc_check_var() declaration
+
+mmp:
+	Replace usage of found with dedicated list iterator variable
+
+omap:
+	Make it CCF clk API compatible
+
+imxfb:
+	Fix missing of_node_put in imxfb_probe
+
+i740fb:
+	Use memset_io() to clear screen
+
+udlfb:
+	Properly check endpoint type
+
+pxafb:
+	Use if else instead
+
+----------------------------------------------------------------
+Alexander Shiyan (1):
+      video: fbdev: clps711x-fb: Use syscon_regmap_lookup_by_phandle
+
+Christophe JAILLET (1):
+      video: fbdev: of: display_timing: Remove a redundant zeroing of memory
+
+Christophe Leroy (1):
+      video: fbdev: aty/matrox/...: Prepare cleanup of powerpc's asm/prom.h
+
+Geert Uytterhoeven (2):
+      linux/fb.h: Spelling s/palette/palette/
+      video: fbdev: sh_mobile_lcdcfb: Remove sh_mobile_lcdc_check_var() declaration
+
+Haowen Bai (2):
+      video: fbdev: sis: fix potential NULL dereference in sisfb_post_sis300()
+      video: fbdev: pm2fb: Fix a kernel-doc formatting issue
+
+Jakob Koschel (1):
+      video: fbdev: mmp: replace usage of found with dedicated list iterator variable
+
+Janusz Krzysztofik (1):
+      video: fbdev: omap: Make it CCF clk API compatible
+
+Lv Ruyi (1):
+      video: fbdev: imxfb: Fix missing of_node_put in imxfb_probe
+
+Ondrej Zary (1):
+      video: fbdev: i740fb: use memset_io() to clear screen
+
+Pavel Skripkin (1):
+      video: fbdev: udlfb: properly check endpoint type
+
+Wang Qing (1):
+      video: fbdev: pxafb: use if else instead
+
+Zheyu Ma (7):
+      video: fbdev: neofb: Fix the check of 'var->pixclock'
+      video: fbdev: kyro: Error out if 'lineclock' equals zero
+      video: fbdev: vt8623fb: Error out if 'pixclock' equals zero
+      video: fbdev: tridentfb: Error out if 'pixclock' equals zero
+      video: fbdev: arkfb: Error out if 'pixclock' equals zero
+      video: fbdev: s3fb: Error out if 'pixclock' equals zero
+      video: fbdev: i740fb: Error out if 'pixclock' equals zero
+
+ drivers/video/fbdev/arkfb.c                |  3 +++
+ drivers/video/fbdev/aty/aty128fb.c         |  1 -
+ drivers/video/fbdev/aty/atyfb_base.c       |  1 -
+ drivers/video/fbdev/aty/radeon_pm.c        |  1 -
+ drivers/video/fbdev/aty/radeonfb.h         |  2 +-
+ drivers/video/fbdev/clps711x-fb.c          |  3 +--
+ drivers/video/fbdev/controlfb.c            |  3 ---
+ drivers/video/fbdev/i740fb.c               |  5 ++++-
+ drivers/video/fbdev/imxfb.c                |  2 ++
+ drivers/video/fbdev/kyro/fbdev.c           |  2 ++
+ drivers/video/fbdev/matrox/matroxfb_base.h |  1 -
+ drivers/video/fbdev/mb862xx/mb862xxfbdrv.c |  2 ++
+ drivers/video/fbdev/mmp/core.c             | 11 +++++------
+ drivers/video/fbdev/neofb.c                |  2 +-
+ drivers/video/fbdev/omap/hwa742.c          |  6 +++---
+ drivers/video/fbdev/omap/lcdc.c            |  6 +++---
+ drivers/video/fbdev/omap/sossi.c           |  5 +++--
+ drivers/video/fbdev/platinumfb.c           |  2 +-
+ drivers/video/fbdev/pm2fb.c                |  8 ++------
+ drivers/video/fbdev/pxafb.c                |  4 ++--
+ drivers/video/fbdev/s3fb.c                 |  3 +++
+ drivers/video/fbdev/sh_mobile_lcdcfb.c     |  3 ---
+ drivers/video/fbdev/sis/sis_main.c         |  2 +-
+ drivers/video/fbdev/tridentfb.c            |  3 +++
+ drivers/video/fbdev/udlfb.c                | 14 ++++++++++++--
+ drivers/video/fbdev/valkyriefb.c           |  3 +--
+ drivers/video/fbdev/vt8623fb.c             |  3 +++
+ drivers/video/of_display_timing.c          |  2 +-
+ include/uapi/linux/fb.h                    |  2 +-
+ 29 files changed, 60 insertions(+), 45 deletions(-)

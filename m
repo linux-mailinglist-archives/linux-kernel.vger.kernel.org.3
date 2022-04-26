@@ -2,178 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307A750FEBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BACB350FEC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 15:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349979AbiDZNYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 09:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S1350834AbiDZNZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 09:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiDZNYR (ORCPT
+        with ESMTP id S230226AbiDZNZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 09:24:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0E12AE3B;
-        Tue, 26 Apr 2022 06:21:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5962EB81FD1;
-        Tue, 26 Apr 2022 13:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFFDC385AA;
-        Tue, 26 Apr 2022 13:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650979266;
-        bh=hw2OdPlDK9lTbP803YMLGXahK+IAG253KwqouXqDKQk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mPJO7c2n3vKRvA7OW2hhQ7yai4/fgi7Cjw9hrsNJmo/upGtAJTW7IBO6nECxLczQp
-         2iUOFOgCp22fNi+7Bat2fCf8k1rNIbEfrNahaJb77pOhVHIFHjdCn7CJIpt9ILfGTH
-         GJJz34GqG2znqCh43Um1JwstiUo/vcxsbpZ8XevTVINYUdEdUG9uag+fH/pirDzEJm
-         Bv6BjVPoMwvIUGYO40dLy/QKRP+VdHejFfo3hQUbVaAdBSYWr2NJIAXkGu1OuH6zD6
-         TRl/3lhuvKMH9av4Eq8fIMgtNdKa9YnaKlSUcsheMTAU4vVbykC0zFzCRvhduKe86F
-         BwwMq69zrK8Qw==
-Date:   Tue, 26 Apr 2022 16:20:55 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-Subject: Re: [PATCH v7 1/8] mm/memblock: Tag memblocks with crypto
- capabilities
-Message-ID: <Ymfxt/ccab3DQENo@kernel.org>
-References: <20220425171526.44925-1-martin.fernandez@eclypsium.com>
- <20220425171526.44925-2-martin.fernandez@eclypsium.com>
- <YmeM5fklUssR/74e@kernel.org>
- <CAKgze5YwTD3neYjKNZzLz6DLWxpGPohGCDGT6oJn-KUdAxyCfg@mail.gmail.com>
+        Tue, 26 Apr 2022 09:25:02 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2131.outbound.protection.outlook.com [40.107.215.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3954227FF8;
+        Tue, 26 Apr 2022 06:21:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TJDSe0sgfr8I/HCZMsJLRcLtanhrldp4FOYrh7+iofdMZfYZW2JFlRfX+XAIxRI726bYmI5x4ZaPR5owKENYH+K+iJNzsPxqJOwXGszYuj/ylg7NqoNRU4cRnmrQz7kwKOwiqVCdUEVq+bLBW2rUAYzqQIOUosf1b4qQ1gY274BfiFkt8o8mbcG4oHcWFWTyRtjGo+QPWdpA4AsW6jkPq1lKNr613xLW0BPXjFcnqWC9IRmxurIwE1mUjl2y2bR7qsYxycXZFhS+W7p+mKxROUbbKTudtuwjlkBdGBu8CDdEd+xTTKR51+4Iqb8DStTq4xxxAxstD3D2YGK+EvJwMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MbH/hT7j4xY6emUZBWeVi5ms9E26ZhDvilsL1BNUG/w=;
+ b=crIOQxU7AeSLD/eTONUKaGbwqbeCfL68+0M6oveuCoqx6ZYGOjBgShoaOzDx60WtnNwQdKYMqWYr72vVsRAA5aaH376kXf7QXsw5AB1WXGlJx8VuiY4VqmXrV6VaaPAcA2WHN5GqYTzkpK9FOftA9SVdEJPG0w3fe6zpGp+JMxO6JjznKjB3qV1FnCHUHlJPhc5Sdx5ubSP9MdaNDnSgYKZux4KBsrnx+y5qPwNUfkfS60IZEzMjONsg5ZB9NFTkyix6Tt5oVUNsUv5QCSQPlB/cgBd6Zhh+wxuDhlqTYAGq92Uci0m+W/fYW26LMZVHnH6dyRSm+CNvgZtsZjtUuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MbH/hT7j4xY6emUZBWeVi5ms9E26ZhDvilsL1BNUG/w=;
+ b=hIKZvJNLk+VizGupm3U+8f8r+axoORGvhxdvCT/VHSh2sgg6uIMbTl4egi0bjEW+J1ixoLnoD/OawDI2jnK2dQBJZICUroVv544OFLGPzt51hhhNg1XwUBc+K1nOruF+wkonTMJJrsibDr6J5wLq4jeCe1HZYdtKZZ9xJsle6JE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ KL1PR0601MB4939.apcprd06.prod.outlook.com (2603:1096:820:96::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Tue, 26 Apr
+ 2022 13:21:46 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Tue, 26 Apr 2022
+ 13:21:46 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] drm/msm: Use div64_ul instead of do_div
+Date:   Tue, 26 Apr 2022 21:21:26 +0800
+Message-Id: <20220426132126.686447-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0127.apcprd02.prod.outlook.com
+ (2603:1096:202:16::11) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKgze5YwTD3neYjKNZzLz6DLWxpGPohGCDGT6oJn-KUdAxyCfg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d9901219-c31c-48c8-a267-08da2787b644
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4939:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB4939232C8944BBFE8884EB45ABFB9@KL1PR0601MB4939.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B61C6wkGkFp5xHgCf1jV1FJIJ5v+1ViMwkzdI6YKVsedAoDlzr8fY4mgrF2Z+vawS1fWAsj4huMOmbX96NWHdtkmiCCmaI2M2HHZkq2iC2pA4IVkse8prYRtV1ktCxWAFACio9Cz2EG7gDHjp1PiNqDfLtoaf0Q9SWt+3fZxyEwl6iRJkkK05UyXZJVFiScliJRICb4qwVnsk5OGFt3lxRE0rTAayW1wsaihrDQwTpcxU9EivdIF6to+4fTbGkxQo6ZT1fgG1etmGaR4wSwSS9svWP99GYfHEyt3HeGJUWKRrVlOMgNPgOaov2ZMolo9DaB1jZYbderYnnTwgnMtLDP1b2LO0fNkd6xPWtDl/h0IJT/5PApPbekBVjCY6JfxTTXav2dXZfiTbFEUpxAZGJxy6F+Mue05oQ2EobyRGsU0jBfw5M9vM2MHJRH8HPRNLQNE0nUwJx/kfar3sMXrcZlfoQZWhqWlHmhvNIRJ1fHKozxvp+x/fcZKvLX42g5/zCipFIW9Y+2dW9ybpB8fhQZaCs5JjEibHYytonIWEVP8A6S6V2+6jxCmjK305ny/vkjhwXRPmERvbsc0Rpo2U8jtk62sWjhQEBZXFZ2Zv8f94/fqWVAyAXAp/1F3JUBu1DfI+9PjUucosotx/BjCzahe5hyjactHsQJ468SlIoARifSDpCEBYDoixwxxgr+JGY4WEVbXQWk/06+1Qb3lng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(2906002)(52116002)(6506007)(6512007)(8936002)(2616005)(186003)(107886003)(1076003)(36756003)(4744005)(26005)(83380400001)(6666004)(4326008)(110136005)(508600001)(316002)(6486002)(66946007)(38100700002)(38350700002)(8676002)(66556008)(66476007)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hf9BkgBRXsC0qRahiJ2F8AldYikTI6ADL5M13tfwfkv1OBFPj8UeKoRqCB6i?=
+ =?us-ascii?Q?SZZE36j82j1eyLT8rQAokBvWugqStSwWGYkFoYWOlwYycmlQmehMhWkjPgG7?=
+ =?us-ascii?Q?sR9SWKXbGb0cmYzU+LW4w/O7gk2YqGjdNauQYW48nATFyQFgkD/CxMhZWoyI?=
+ =?us-ascii?Q?W9IMCwNcUEfbyrLsaEKsPJqO43bDxT3N5O2TuEJLByRaM5QT6tIpg8XmQTmW?=
+ =?us-ascii?Q?29NLGZYtky6vA+MLPZ6WeXQPmgYtiVcGmlIzg0Vaxg69jUQswyTr2CZSj9EQ?=
+ =?us-ascii?Q?GY3xxBj0m3LK8P8og0W6GdJyo9YyWnEaAXnsU18BQCsPJIv0LBYdEC4L+Lzx?=
+ =?us-ascii?Q?MiEcIDHDkD2/rQZvmoQ0wMuAnj9sLHapX+/8zeBkRbcs8kJ+WXpMMKO+a95S?=
+ =?us-ascii?Q?X6HdahQBCc3kejsldYCh9NRzp0JDlCtlbWjGq35nIfxNnL6xG5XV/65j1TyX?=
+ =?us-ascii?Q?fWL1i2MuGMPn0+vi92x7RuAsp9T2/J80VmlJVL54v9oTUPLhlcv3NQtExorJ?=
+ =?us-ascii?Q?lcVEQ92lZJTPcPX5QKysmbheeIcSLSjccvQUbCk3K9rCPJpv4uaZR2Z/ghJ4?=
+ =?us-ascii?Q?dC4RebP/6FDezGVgBRip+iQApT31jMMokU0hRsDpUBL87uGtWfuM5Yx5GM6N?=
+ =?us-ascii?Q?qg3hNcymjK/iLmTeVw8+CHoShQy4jjPoxz1Q/vQHAz/vldJsjiPts5CqYzrK?=
+ =?us-ascii?Q?dSdtyt79clQojSt2owWCZnectfwzfoQcB2AmbJ7ruceMEvxatMWRkPTHVFk2?=
+ =?us-ascii?Q?2CrbZ+gfJ7+isF25k0hT3ZZhnh4DVFiOmpMYYhapXGHt67TtFwfzM1smzesd?=
+ =?us-ascii?Q?gL3GgzuGQAdOXSM86BRVnRxdBqKeSojawPsl7zk1YHxz/hiLXoHk0ZaPT1jb?=
+ =?us-ascii?Q?XGHXQEMM5QtnsIEztJ3NTM9zORmLjpw7cgC+wdLxJ89yOd+crjYBiiCNJUBd?=
+ =?us-ascii?Q?PHt8iLuVNfV5FI+LSg56PQiJE0P+sBC4OCKRZHv9LZ1Etn4vhdtYAECo6Tlo?=
+ =?us-ascii?Q?8H5ejDWG27tbHoLjD9rsFt/ALtaapSVk9pWv4GV7oWZtIgVBoFmyfSqY5OfN?=
+ =?us-ascii?Q?POSGoYy/dUXukf8ETi4XPs8dYkVMJZiziwtGZZlgkgDpnB6V7do+/+Ektltu?=
+ =?us-ascii?Q?qOmLHWe5T9W29HrE8m0vVFWzcJsDRd0GtTRpll9v1Y51DQEvii0fZWU+Y4bY?=
+ =?us-ascii?Q?4ES++j0+etmCQqPXR4pdbxHVtGffFsaYZPDuXBbgBfNNu43lehmGMH9gsoFM?=
+ =?us-ascii?Q?14OZpuib/+wbZR/V84uyYN0PSYXjXQMbRK/JvEGEzilpGJqqnA5OCj5dEZLc?=
+ =?us-ascii?Q?b5t4lrgs4HTsyGqo8PlFq+yhPevFcfENTB4E9sHkcxMYynHca9KdzLHkO3m/?=
+ =?us-ascii?Q?/LAPwCXoYFJcKD/cJCMgqgnE6yYq+ZJ3GdoUuEpNegbhM4ToC3ai5Oom67Mq?=
+ =?us-ascii?Q?keDgCoh/UQoanr0rUHGUJaxS5tur9s+LoaoE9evWrZ9hxejXlz3U0uk42xyd?=
+ =?us-ascii?Q?daobb7qAM3/RyxX0GgC1z2arSdyNWrevVwpkDfaO1TPAHy/OxfmjrrdMaA8c?=
+ =?us-ascii?Q?qACFfjO7fouZzgkRkd0cp+cx2Ii8ZjCP9XN1QD+6SjORSSW2/qywe1g/cZSg?=
+ =?us-ascii?Q?7BM1vLveYdqPWIaU4RC6/0Dm80U8ry229PEwnGnRTaqW8R5X4EvU4R6+LHIT?=
+ =?us-ascii?Q?ruQe8oXUVn14n/L2RR7iqJlxhADrpBGl86dTeY9+BXhSUox3iIXUdkusuXCT?=
+ =?us-ascii?Q?KZyqN+zuoQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9901219-c31c-48c8-a267-08da2787b644
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2022 13:21:46.1022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kUArpZIYlIiStGHEeVO7m9Xop8ZqgrzhvFdMNwFQd4wMlnM8GWV5tlBkDDSyyImdHAEQwVsWS2Xu6SIDvZKfMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4939
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 09:59:04AM -0300, Martin Fernandez wrote:
-> On 4/26/22, Mike Rapoport <rppt@kernel.org> wrote:
-> > On Mon, Apr 25, 2022 at 02:15:19PM -0300, Martin Fernandez wrote:
-> >> Add the capability to mark regions of the memory memory_type able of
-> >> hardware memory encryption.
-> >>
-> >> Also add the capability to query if all regions of a memory node are
-> >> able to do hardware memory encryption to call it when initializing the
-> >> nodes. Warn the user if a node has both encryptable and
-> >> non-encryptable regions.
-> >>
-> >> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-> >> ---
-> >>  include/linux/memblock.h |  5 ++++
-> >>  mm/memblock.c            | 62 ++++++++++++++++++++++++++++++++++++++++
-> >>  2 files changed, 67 insertions(+)
-> >>
-> >> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> >> index 50ad19662a32..00c4f1a20335 100644
-> >> --- a/include/linux/memblock.h
-> >> +++ b/include/linux/memblock.h
-> >> @@ -40,6 +40,7 @@ extern unsigned long long max_possible_pfn;
-> >>   * via a driver, and never indicated in the firmware-provided memory map
-> >> as
-> >>   * system RAM. This corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED in
-> >> the
-> >>   * kernel resource tree.
-> >> + * @MEMBLOCK_CRYPTO_CAPABLE: capable of hardware encryption
-> >>   */
-> >>  enum memblock_flags {
-> >>  	MEMBLOCK_NONE		= 0x0,	/* No special request */
-> >> @@ -47,6 +48,7 @@ enum memblock_flags {
-> >>  	MEMBLOCK_MIRROR		= 0x2,	/* mirrored region */
-> >>  	MEMBLOCK_NOMAP		= 0x4,	/* don't add to kernel direct mapping */
-> >>  	MEMBLOCK_DRIVER_MANAGED = 0x8,	/* always detected via a driver */
-> >> +	MEMBLOCK_CRYPTO_CAPABLE = 0x10,	/* capable of hardware encryption */
-> >>  };
-> >>
-> >>  /**
-> >> @@ -120,6 +122,9 @@ int memblock_physmem_add(phys_addr_t base, phys_addr_t
-> >> size);
-> >>  void memblock_trim_memory(phys_addr_t align);
-> >>  bool memblock_overlaps_region(struct memblock_type *type,
-> >>  			      phys_addr_t base, phys_addr_t size);
-> >> +bool memblock_node_is_crypto_capable(int nid);
-> >> +int memblock_mark_crypto_capable(phys_addr_t base, phys_addr_t size);
-> >> +int memblock_clear_crypto_capable(phys_addr_t base, phys_addr_t size);
-> >>  int memblock_mark_hotplug(phys_addr_t base, phys_addr_t size);
-> >>  int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
-> >>  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
-> >> diff --git a/mm/memblock.c b/mm/memblock.c
-> >> index e4f03a6e8e56..fe62f81572e6 100644
-> >> --- a/mm/memblock.c
-> >> +++ b/mm/memblock.c
-> >> @@ -191,6 +191,40 @@ bool __init_memblock memblock_overlaps_region(struct
-> >> memblock_type *type,
-> >>  	return i < type->cnt;
-> >>  }
-> >>
-> >> +/**
-> >> + * memblock_node_is_crypto_capable - get if whole node is capable
-> >> + * of encryption
-> >> + * @nid: number of node
-> >> + *
-> >> + * Iterate over all memory memblock_type and find if all regions under
-> >> + * node @nid are capable of hardware encryption.
-> >> + *
-> >> + * Return:
-> >> + * true if every region in memory memblock_type is capable of
-> >
-> > I'd s/in memory memblock_type/in @nid
-> >
-> 
-> Good, thanks.
-> 
-> >> + * encryption, false otherwise.
-> >> + */
-> >> +bool __init_memblock memblock_node_is_crypto_capable(int nid)
-> >> +{
-> >> +	struct memblock_region *region;
-> >> +	int crypto_capables = 0;
-> >> +	int not_crypto_capables = 0;
-> >> +
-> >> +	for_each_mem_region(region) {
-> >> +		if (memblock_get_region_node(region) == nid) {
-> >> +			if (region->flags & MEMBLOCK_CRYPTO_CAPABLE)
-> >> +				crypto_capables++;
-> >> +			else
-> >> +				not_crypto_capables++;
-> >> +		}
-> >> +	}
-> >> +
-> >> +	if (crypto_capables > 0 && not_crypto_capables > 0)
-> >> +		pr_warn("Node %d has %d regions that are encryptable and %d regions
-> >> that aren't",
-> >> +			nid, not_crypto_capables, crypto_capables);
-> >> +
-> >> +	return not_crypto_capables == 0;
-> >
-> > This will return true for memoryless nodes as well. Do you mean to consider
-> > them as capable of encryption?
-> >
-> 
-> Not really, I didn't think about that to be honest. I don't think it's
-> a good idea to consider them as capable, right?
+Fix following coccicheck warning:
+drivers/gpu/drm/msm/msm_gpu_devfreq.c:72:1-7: WARNING: do_div() does a 64-by-32 division, please consider using div64_ul instead.
 
-I think capable of encryption would mean
+Use div64_ul instead of do_div to avoid a possible truncation.
 
-	crypto_capables && !not_crypto_capables 
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/gpu/drm/msm/msm_gpu_devfreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+index d2539ca78c29..c2ea978c8921 100644
+--- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
++++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
+@@ -69,7 +69,7 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
+ 	df->time = time;
+ 
+ 	busy_time *= USEC_PER_SEC;
+-	do_div(busy_time, sample_rate);
++	busy_time = div64_ul(busy_time, sample_rate);
+ 	if (WARN_ON(busy_time > ~0LU))
+ 		busy_time = ~0LU;
+ 
 -- 
-Sincerely yours,
-Mike.
+2.35.3
+

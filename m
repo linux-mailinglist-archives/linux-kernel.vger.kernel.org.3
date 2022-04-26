@@ -2,133 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0F7510684
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3653351068D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 20:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353663AbiDZSSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 14:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S1351467AbiDZST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 14:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237097AbiDZSSn (ORCPT
+        with ESMTP id S1350866AbiDZSTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 14:18:43 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E7C21E1F
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:15:35 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso2020775wme.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hbRg3+D0qvDncNTkVqOcbyfIAlM3Zlr4GMjtiFZIfZM=;
-        b=01gTfT0gcVgLiKXhgLBlbwibmeAHTTbph2mbBpIfbM+VBaogBEcxO1BC68Vv4+P7gd
-         EtZ3XYD33SqbEAJxKGaqxTt3ZELkStaKc/inWJ/oOdUUxuldxDnT4OXLoV+ntuwvX9q2
-         VaUqJHTpva6CnlBikyb4eyUSqCpx2X2VVr2pUuv73s9fNFp6/HW5CRuY2Rr65j5QT7mT
-         aKaPjB0CajSuCxj08E7oDIEwAr3UggP2TUFSu7R0mIqwhATIPA6lAerJeXmfqAjsvFR6
-         KQK/sXmjJEoVHl0qmx5lF482kkrJXG/3eUh1EBlRVAV9teY2m1DPOQwtWva2KaHGasDb
-         HpQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hbRg3+D0qvDncNTkVqOcbyfIAlM3Zlr4GMjtiFZIfZM=;
-        b=XUTtQB/2a+h9W2kbHpOWx1m1js0gizGIuANNMwMqub2pn+YHRFKlk2bLKgnN0C1776
-         se6+O7WiXGBXUc6CqpYd/E/HiihR6CZavR4XJToJV9mJBPz9Crp6I1AULZYsUNjElFGk
-         ecPCK8/U6LJckX6QesMhDsgRVwwTvDtwgS8byIexkXFnOFWuU3656g1w4xUboQg8VLP7
-         ab2Fl1rslPymST48z8+eE9YXm/KxIPRkhygRMqC7prmwT8C6r/4q8B3aBjucuDsdwB/p
-         5AcJWvTRpLitY6Y1V3hckiyIh2pfyS0cAYe8YnX0MUeAYzmy7mbz7iaKsTpPpF11sJ3t
-         dUqA==
-X-Gm-Message-State: AOAM5312VYXMmr9vly5fKnPXPhuzQ3HSk2kKE4wMPDsu2heqbVrpPiKf
-        hiwbiBJmmjFaWEE2H5ChH3oNlj89kcbhr2q8cAQ3
-X-Google-Smtp-Source: ABdhPJzsQMvzjT3zCpAssxoYUdMMx+uX/m7hjgtVQrQQXoBmGGpReRk+J6g64zUtXpR0bHk3ZTZXK0lO+sdMqdmQ/zI=
-X-Received: by 2002:a1c:f009:0:b0:387:6fea:8ebc with SMTP id
- a9-20020a1cf009000000b003876fea8ebcmr32002327wmb.84.1650996933878; Tue, 26
- Apr 2022 11:15:33 -0700 (PDT)
+        Tue, 26 Apr 2022 14:19:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0E39137B
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 11:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650996975; x=1682532975;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JW9g477eFo5T/YbxZ6fEAgD7lLOuo7kBu55PzoCbgHs=;
+  b=flZjjGfVqf/CNGu9/WF30IlVTpds0c+zeOkgw1+lCSVwcmix+6pDPsFu
+   50oi0EQCwE3DdSXB+oOeP1ADOr1E/edD+2Pagp3FFPXRn4F3txGyC2bny
+   gkkjR/lGcpLoDjimpnn+moZp+pmJBzAz3OEOvzMnNvA+m1sBmOFQ4mTVP
+   lJoMu72y4+0msaQug4LAGChki6TPR1IAS05L4NkhtFqkDPLh1fAUQx6ur
+   iCrh/aBtey7Xs5e9sW90mRkaHRVN7VMfRfy4AOuAzuUGBzpiFqrh743eY
+   /u5gOMAfTR2hrPU9laO41nbAopL8lIbj8pwS8EtTThE7Bjdroiwsio4n8
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265484311"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="265484311"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 11:16:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="617124827"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2022 11:16:11 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njPjP-0003so-Aj;
+        Tue, 26 Apr 2022 18:16:11 +0000
+Date:   Wed, 27 Apr 2022 02:15:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qing Wang <wangqing@vivo.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        Wang Qing <wangqing@vivo.com>
+Subject: Re: [PATCH V2 2/2] arm64: Add complex scheduler level for arm64
+Message-ID: <202204270201.FkymxKhn-lkp@intel.com>
+References: <1650628289-67716-3-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-References: <20220418145945.38797-1-casey@schaufler-ca.com>
- <20220418145945.38797-27-casey@schaufler-ca.com> <ad1e85e1-8706-7b93-59cd-99ccef273be4@canonical.com>
-In-Reply-To: <ad1e85e1-8706-7b93-59cd-99ccef273be4@canonical.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 26 Apr 2022 14:15:23 -0400
-Message-ID: <CAHC9VhS0ht0wWtruDjVvOsy_1LOCswF0kjmd9u8XZXm00jHvOw@mail.gmail.com>
-Subject: Re: [PATCH v35 26/29] Audit: Add record for multiple task security contexts
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-audit@redhat.com, keescook@chromium.org,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650628289-67716-3-git-send-email-wangqing@vivo.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 9:08 PM John Johansen
-<john.johansen@canonical.com> wrote:
-> On 4/18/22 07:59, Casey Schaufler wrote:
-> > Create a new audit record AUDIT_MAC_TASK_CONTEXTS.
-> > An example of the MAC_TASK_CONTEXTS (1420) record is:
-> >
-> >     type=MAC_TASK_CONTEXTS[1420]
-> >     msg=audit(1600880931.832:113)
-> >     subj_apparmor=unconfined
-> >     subj_smack=_
-> >
-> > When an audit event includes a AUDIT_MAC_TASK_CONTEXTS record
-> > the "subj=" field in other records in the event will be "subj=?".
-> > An AUDIT_MAC_TASK_CONTEXTS record is supplied when the system has
-> > multiple security modules that may make access decisions based
-> > on a subject security context.
-> >
-> > Functions are created to manage the skb list in the audit_buffer.
-> >
-> > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->
-> Besides moving the aux fns, and the whining below
-> Reviewed-by: John Johansen <john.johansen@canonical.com>
+Hi Qing,
 
-...
+Thank you for the patch! Yet something to improve:
 
-> > diff --git a/kernel/audit.c b/kernel/audit.c
-> > index 4d44c05053b0..8ed2d717c217 100644
-> > --- a/kernel/audit.c
-> > +++ b/kernel/audit.c
-> > @@ -2185,16 +2238,44 @@ int audit_log_task_context(struct audit_buffer *ab)
-> >       if (!lsmblob_is_set(&blob))
-> >               return 0;
-> >
-> > -     error = security_secid_to_secctx(&blob, &context, LSMBLOB_FIRST);
-> > +     if (!lsm_multiple_contexts()) {
-> > +             error = security_secid_to_secctx(&blob, &context,
-> > +                                              LSMBLOB_FIRST);
-> > +             if (error) {
-> > +                     if (error != -EINVAL)
-> > +                             goto error_path;
-> > +                     return 0;
-> > +             }
-> >
-> > -     if (error) {
-> > -             if (error != -EINVAL)
-> > +             audit_log_format(ab, " subj=%s", context.context);
-> > +             security_release_secctx(&context);
-> > +     } else {
-> > +             /* Multiple LSMs provide contexts. Include an aux record. */
-> > +             audit_log_format(ab, " subj=?");
->
-> just me whining, you sure we can't just drop subj= here
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on driver-core/driver-core-testing linus/master arm-perf/for-next/perf v5.18-rc4 next-20220422]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Have I recently given you my "the audit code is crap" speech? ;)
+url:    https://github.com/intel-lab-lkp/linux/commits/Qing-Wang/Add-complex-scheduler-level-for-arm64/20220422-201107
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204270201.FkymxKhn-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3b18155ccd99fb790e719fa432366dfdb97ab57c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qing-Wang/Add-complex-scheduler-level-for-arm64/20220422-201107
+        git checkout 3b18155ccd99fb790e719fa432366dfdb97ab57c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-I more or less answered this with my comments on the earlier patch,
-but we need to keep this around for compatibility.  It will get better
-in the future.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/kernel/smp.c:752:4: error: use of undeclared identifier 'arm64_complex_mask'
+           { arm64_complex_mask, arm64_complex_flags, SD_INIT_NAME(CPL) },
+             ^
+>> arch/arm64/kernel/smp.c:752:24: error: use of undeclared identifier 'arm64_complex_flags'
+           { arm64_complex_mask, arm64_complex_flags, SD_INIT_NAME(CPL) },
+                                 ^
+   2 errors generated.
+
+
+vim +/arm64_complex_mask +752 arch/arm64/kernel/smp.c
+
+   746	
+   747	static struct sched_domain_topology_level arm64_topology[] = {
+   748	#ifdef CONFIG_SCHED_SMT
+   749		{ cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
+   750	#endif
+   751	#ifdef CONFIG_SCHED_COMPLEX
+ > 752		{ arm64_complex_mask, arm64_complex_flags, SD_INIT_NAME(CPL) },
+   753	#endif
+   754	#ifdef CONFIG_SCHED_CLUSTER
+   755		{ cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
+   756	#endif
+   757	#ifdef CONFIG_SCHED_MC
+   758		{ cpu_coregroup_mask, cpu_core_flags, SD_INIT_NAME(MC) },
+   759	#endif
+   760		{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
+   761		{ NULL, },
+   762	};
+   763	
 
 -- 
-paul-moore.com
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEC350F819
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD83F50F7FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347545AbiDZJUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S1343648AbiDZJVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345849AbiDZI5B (ORCPT
+        with ESMTP id S239353AbiDZI5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001A98300C;
-        Tue, 26 Apr 2022 01:41:40 -0700 (PDT)
+        Tue, 26 Apr 2022 04:57:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040FC8302A;
+        Tue, 26 Apr 2022 01:41:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8AC1B81CED;
-        Tue, 26 Apr 2022 08:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17279C385A4;
-        Tue, 26 Apr 2022 08:41:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADEE4B81CF2;
+        Tue, 26 Apr 2022 08:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5446C385A0;
+        Tue, 26 Apr 2022 08:41:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962498;
-        bh=Wky2LVegEVbuR6r6OwodDevRj0k5Ql7r04s9AbO0HOM=;
+        s=korg; t=1650962501;
+        bh=uKEYDWt3OoW+HTLnKcurD0UcjrAlNyV6usIFyO9hi1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IjZKQwiyFFuGETzD+UKJv+Vyv5d450ofyw+ezR3/AOi2gztryhWujKnM/5Lhb8VkW
-         1gLdWGad0x1t/aZowGpI6p+XkYtdzhnOJjSE8bSLJDurWr+Iy5IJBbq0agNaNIYiX8
-         1DiFzIfEF8PMsoOR61vqPTBIGvp2dkOvpb4K55EE=
+        b=bKtLkeh2Fpc072TkaCKomioVjdSpvtAJTmhoLyWLfTE4pmg6X2HWllCF3uJaHFqgc
+         OBPMuNBc4oTrGy8Qtd1UTcStQHKEP64+LyAvSxjDqxDG33ChM+965QF33vuYvpqNqx
+         ccSCKjSdjvGr7reM2h3i0R6/hx45b/z1z1acD3r0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        stable@vger.kernel.org, Wang Jianjian <wangjianjian3@huawei.com>,
         Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 5.15 116/124] ext4: limit length to bitmap_maxbytes - blocksize in punch_hole
-Date:   Tue, 26 Apr 2022 10:21:57 +0200
-Message-Id: <20220426081750.588477544@linuxfoundation.org>
+Subject: [PATCH 5.15 117/124] ext4, doc: fix incorrect h_reserved size
+Date:   Tue, 26 Apr 2022 10:21:58 +0200
+Message-Id: <20220426081750.616408406@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
 References: <20220426081747.286685339@linuxfoundation.org>
@@ -55,60 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: wangjianjian (C) <wangjianjian3@huawei.com>
 
-commit 2da376228a2427501feb9d15815a45dbdbdd753e upstream.
+commit 7102ffe4c166ca0f5e35137e9f9de83768c2d27d upstream.
 
-Syzbot found an issue [1] in ext4_fallocate().
-The C reproducer [2] calls fallocate(), passing size 0xffeffeff000ul,
-and offset 0x1000000ul, which, when added together exceed the
-bitmap_maxbytes for the inode. This triggers a BUG in
-ext4_ind_remove_space(). According to the comments in this function
-the 'end' parameter needs to be one block after the last block to be
-removed. In the case when the BUG is triggered it points to the last
-block. Modify the ext4_punch_hole() function and add constraint that
-caps the length to satisfy the one before laster block requirement.
+According to document and code, ext4_xattr_header's size is 32 bytes, so
+h_reserved size should be 3.
 
-LINK: [1] https://syzkaller.appspot.com/bug?id=b80bd9cf348aac724a4f4dff251800106d721331
-LINK: [2] https://syzkaller.appspot.com/text?tag=ReproC&x=14ba0238700000
-
-Fixes: a4bb6b64e39a ("ext4: enable "punch hole" functionality")
-Reported-by: syzbot+7a806094edd5d07ba029@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Link: https://lore.kernel.org/r/20220331200515.153214-1-tadeusz.struk@linaro.org
+Signed-off-by: Wang Jianjian <wangjianjian3@huawei.com>
+Link: https://lore.kernel.org/r/92fcc3a6-7d77-8c09-4126-377fcb4c46a5@huawei.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ Documentation/filesystems/ext4/attributes.rst |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -3945,7 +3945,8 @@ int ext4_punch_hole(struct file *file, l
- 	struct super_block *sb = inode->i_sb;
- 	ext4_lblk_t first_block, stop_block;
- 	struct address_space *mapping = inode->i_mapping;
--	loff_t first_block_offset, last_block_offset;
-+	loff_t first_block_offset, last_block_offset, max_length;
-+	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	handle_t *handle;
- 	unsigned int credits;
- 	int ret = 0, ret2 = 0;
-@@ -3988,6 +3989,14 @@ int ext4_punch_hole(struct file *file, l
- 		   offset;
- 	}
+--- a/Documentation/filesystems/ext4/attributes.rst
++++ b/Documentation/filesystems/ext4/attributes.rst
+@@ -76,7 +76,7 @@ The beginning of an extended attribute b
+      - Checksum of the extended attribute block.
+    * - 0x14
+      - \_\_u32
+-     - h\_reserved[2]
++     - h\_reserved[3]
+      - Zero.
  
-+	/*
-+	 * For punch hole the length + offset needs to be within one block
-+	 * before last range. Adjust the length if it goes beyond that limit.
-+	 */
-+	max_length = sbi->s_bitmap_maxbytes - inode->i_sb->s_blocksize;
-+	if (offset + length > max_length)
-+		length = max_length - offset;
-+
- 	if (offset & (sb->s_blocksize - 1) ||
- 	    (offset + length) & (sb->s_blocksize - 1)) {
- 		/*
+ The checksum is calculated against the FS UUID, the 64-bit block number
 
 

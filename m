@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2035650F884
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283B250F601
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347292AbiDZJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
+        id S1346154AbiDZItz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347833AbiDZJGP (ORCPT
+        with ESMTP id S1345569AbiDZIjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 05:06:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C5B165EDC;
-        Tue, 26 Apr 2022 01:46:09 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622981B782;
+        Tue, 26 Apr 2022 01:30:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7657F60C42;
-        Tue, 26 Apr 2022 08:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61BB9C385A4;
-        Tue, 26 Apr 2022 08:46:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DA3BB81A2F;
+        Tue, 26 Apr 2022 08:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 759F0C385A0;
+        Tue, 26 Apr 2022 08:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962768;
-        bh=HOgeKlCf4sqtrj3ClAaRqNeqkJt/YPupukSLzHNogWA=;
+        s=korg; t=1650961815;
+        bh=H2GVOsN4Wlnmq7iS7cjQO3AXAVt7hMVJpGRKNMcx78Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XA+AF2o2G1jI8uVf2XHl/cdyPIM+P+vPt3gW/PrjWx5bakfcEEMmNnOoS0q4SFqML
-         mcT0OOA1ssOyhSgU9rrUNnnoqWvQy7E99nBzhrOG7TJUwL+LA2i7zuUc8UciFs2pqE
-         SnjAKc2CHht1kCXiDnoGVdmyMPmqcBHMFm1P9lZk=
+        b=rDwszEN6JZ9N+wraZG0lEidqxzt9ci1HYrfS65ai2yixmau2RB16iuAO6ypx3mwbI
+         oro4gUFNC362PyhLk2eunPpzKw+e/uTbuzjAwJ3EIQkBUy4DQDw1HE42LIyb0UxWYE
+         TkMCkvqt+2UlaUahiidTV4EKAqyIoVzLb2WwPSHA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Disseldorp <ddiss@suse.de>,
-        Jeff Layton <jlayton@kernel.org>, NeilBrown <neilb@suse.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 083/146] VFS: filename_create(): fix incorrect intent.
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.4 38/62] ata: pata_marvell: Check the bmdma_addr beforing reading
 Date:   Tue, 26 Apr 2022 10:21:18 +0200
-Message-Id: <20220426081752.395819931@linuxfoundation.org>
+Message-Id: <20220426081738.315038318@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-References: <20220426081750.051179617@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,108 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: NeilBrown <neilb@suse.de>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit b3d4650d82c71b9c9a8184de9e8bb656012b289e ]
+commit aafa9f958342db36c17ac2a7f1b841032c96feb4 upstream.
 
-When asked to create a path ending '/', but which is not to be a
-directory (LOOKUP_DIRECTORY not set), filename_create() will never try
-to create the file.  If it doesn't exist, -ENOENT is reported.
+Before detecting the cable type on the dma bar, the driver should check
+whether the 'bmdma_addr' is zero, which means the adapter does not
+support DMA, otherwise we will get the following error:
 
-However, it still passes LOOKUP_CREATE|LOOKUP_EXCL to the filesystems
-->lookup() function, even though there is no intent to create.  This is
-misleading and can cause incorrect behaviour.
+[    5.146634] Bad IO access at port 0x1 (return inb(port))
+[    5.147206] WARNING: CPU: 2 PID: 303 at lib/iomap.c:44 ioread8+0x4a/0x60
+[    5.150856] RIP: 0010:ioread8+0x4a/0x60
+[    5.160238] Call Trace:
+[    5.160470]  <TASK>
+[    5.160674]  marvell_cable_detect+0x6e/0xc0 [pata_marvell]
+[    5.161728]  ata_eh_recover+0x3520/0x6cc0
+[    5.168075]  ata_do_eh+0x49/0x3c0
 
-If you try
-
-   ln -s foo /path/dir/
-
-where 'dir' is a directory on an NFS filesystem which is not currently
-known in the dcache, this will fail with ENOENT.
-
-But as the name is not in the dcache, nfs_lookup gets called with
-LOOKUP_CREATE|LOOKUP_EXCL and so it returns NULL without performing any
-lookup, with the expectation that a subsequent call to create the target
-will be made, and the lookup can be combined with the creation.  In the
-case with a trailing '/' and no LOOKUP_DIRECTORY, that call is never
-made.  Instead filename_create() sees that the dentry is not (yet)
-positive and returns -ENOENT - even though the directory actually
-exists.
-
-So only set LOOKUP_CREATE|LOOKUP_EXCL if there really is an intent to
-create, and use the absence of these flags to decide if -ENOENT should
-be returned.
-
-Note that filename_parentat() is only interested in LOOKUP_REVAL, so we
-split that out and store it in 'reval_flag'.  __lookup_hash() then gets
-reval_flag combined with whatever create flags were determined to be
-needed.
-
-Reviewed-by: David Disseldorp <ddiss@suse.de>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: NeilBrown <neilb@suse.de>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/namei.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/ata/pata_marvell.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 3f1829b3ab5b..509657fdf4f5 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3673,18 +3673,14 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- {
- 	struct dentry *dentry = ERR_PTR(-EEXIST);
- 	struct qstr last;
-+	bool want_dir = lookup_flags & LOOKUP_DIRECTORY;
-+	unsigned int reval_flag = lookup_flags & LOOKUP_REVAL;
-+	unsigned int create_flags = LOOKUP_CREATE | LOOKUP_EXCL;
- 	int type;
- 	int err2;
- 	int error;
--	bool is_dir = (lookup_flags & LOOKUP_DIRECTORY);
- 
--	/*
--	 * Note that only LOOKUP_REVAL and LOOKUP_DIRECTORY matter here. Any
--	 * other flags passed in are ignored!
--	 */
--	lookup_flags &= LOOKUP_REVAL;
--
--	error = filename_parentat(dfd, name, lookup_flags, path, &last, &type);
-+	error = filename_parentat(dfd, name, reval_flag, path, &last, &type);
- 	if (error)
- 		return ERR_PTR(error);
- 
-@@ -3698,11 +3694,13 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- 	/* don't fail immediately if it's r/o, at least try to report other errors */
- 	err2 = mnt_want_write(path->mnt);
- 	/*
--	 * Do the final lookup.
-+	 * Do the final lookup.  Suppress 'create' if there is a trailing
-+	 * '/', and a directory wasn't requested.
- 	 */
--	lookup_flags |= LOOKUP_CREATE | LOOKUP_EXCL;
-+	if (last.name[last.len] && !want_dir)
-+		create_flags = 0;
- 	inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT);
--	dentry = __lookup_hash(&last, path->dentry, lookup_flags);
-+	dentry = __lookup_hash(&last, path->dentry, reval_flag | create_flags);
- 	if (IS_ERR(dentry))
- 		goto unlock;
- 
-@@ -3716,7 +3714,7 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- 	 * all is fine. Let's be bastards - you had / on the end, you've
- 	 * been asking for (non-existent) directory. -ENOENT for you.
- 	 */
--	if (unlikely(!is_dir && last.name[last.len])) {
-+	if (unlikely(!create_flags)) {
- 		error = -ENOENT;
- 		goto fail;
- 	}
--- 
-2.35.1
-
+--- a/drivers/ata/pata_marvell.c
++++ b/drivers/ata/pata_marvell.c
+@@ -83,6 +83,8 @@ static int marvell_cable_detect(struct a
+ 	switch(ap->port_no)
+ 	{
+ 	case 0:
++		if (!ap->ioaddr.bmdma_addr)
++			return ATA_CBL_PATA_UNK;
+ 		if (ioread8(ap->ioaddr.bmdma_addr + 1) & 1)
+ 			return ATA_CBL_PATA40;
+ 		return ATA_CBL_PATA80;
 
 

@@ -2,57 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EF850F037
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2485550F042
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240267AbiDZFlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 01:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S244449AbiDZFm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 01:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236170AbiDZFlQ (ORCPT
+        with ESMTP id S241685AbiDZFmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 01:41:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6184829801
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:38:09 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KnVy25GdFzfbCX;
-        Tue, 26 Apr 2022 13:37:14 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 13:38:07 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 13:38:06 +0800
-Message-ID: <a5b58a66-bdc3-94df-6af5-c647da888c17@huawei.com>
-Date:   Tue, 26 Apr 2022 13:38:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] mm: use pgprot_val to get value of pgprot
-Content-Language: en-US
-To:     liusongtang <liusongtang@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <nixiaoming@huawei.com>, <young.liuyang@huawei.com>,
-        <trivial@kernel.org>
-References: <20220425081736.249130-1-liusongtang@huawei.com>
- <f9e48ed2-0e90-1a2d-c62e-739c33c4cc53@arm.com>
- <22536b1c-f38d-45b1-8187-636c158b8e4b@huawei.com>
- <a22d0e25-cc72-3cf8-c893-e962c0001028@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <a22d0e25-cc72-3cf8-c893-e962c0001028@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 26 Apr 2022 01:42:25 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA8E326ED
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:39:18 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id g23-20020aa78197000000b0050adbdbbec8so9740671pfi.23
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=wiy4ZFErG6M19mqQHUKpS1yTWJiAAlT4dR/xLvJk6Hw=;
+        b=FnVqBEYT/x+/otkeQ3+MGU8nRgioALOZEJyWRms+DoU60vLvG4knvZ85+k1mr3tVc0
+         vqArKWu7LcXihZYZOL7dZijR1qW/fUI1ogYdryU7KR30je7tEjpL7SWeqEnnd/Z0l+6p
+         oQzkcbfWngpMAliZPhAsfXTSWCnwz8fWFa74DRSIzlIoZx+NC9CPJeMNUZ3R63A72PJf
+         QZcKxPUm3H1SOIAqby7P9meP48e3oR4Bh8C/ma3u+fJEHhbZdFo9brPFPEbwbLiTho1C
+         Qvh2BmXNRXBqnJccxzxqqdYZqemamQonwCzTKOX5d0cQHIkgbJ7rHfmHl0679wZSmYIx
+         AFng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=wiy4ZFErG6M19mqQHUKpS1yTWJiAAlT4dR/xLvJk6Hw=;
+        b=DouQNZEu3L6mF4Gs8JuVWHo6Qn/dwT9TDNscBPP9EU0Ypjcru27hc6zRDaDFaJe3vl
+         7RaAGcNj3vVa5+h3ytEc2i/d0G6plvvRkYdREigIRZvTKS+elNQMqeLP6nn6MEE4M96H
+         DsZgoxENScLGPDdflYFYfRkaFxZgSi9Ir53cJ1WrFvujAkvW7K4YUc2Knv68apvp3JbL
+         thP6ohKwn+unICX3d4Bvbdm6LTij08Sea3PF/KlvknvY0SfZKNid94eZt1sRQgFnoEaO
+         cBNg0eHI6oloWtkvuKl7fB8QI/WcTANXBtrBizHBWe034U2Ih5AVTwrovhLUPKwttHIf
+         x++w==
+X-Gm-Message-State: AOAM533br7YWSGED3noWJZpahqPAclrWmOMVud0cnBS7tnwmhaIwkM48
+        OA+ostCJtlO9BrmVaHyX3kwHvR/hQZ3d62BT
+X-Google-Smtp-Source: ABdhPJxvg8pZpaAGbW2v0JTDOhNhWaI7b9G2UFmwsQAHLCDtYBjVtAQ+AyjheoLnE1s4SzV5HxUjB6H2aYquwIV1
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a05:6a00:8c8:b0:4fe:ecb:9b8f with SMTP
+ id s8-20020a056a0008c800b004fe0ecb9b8fmr22623121pfu.55.1650951557634; Mon, 25
+ Apr 2022 22:39:17 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 05:38:58 +0000
+Message-Id: <20220426053904.3684293-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH v3 0/6] KVM: mm: count KVM page table pages in memory stats
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +87,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We keep track of several kernel memory stats (total kernel memory, page
+tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+per-memcg, etc). These stats give insights to users to how much memory
+is used by the kernel and for what purposes.
 
-On 2022/4/25 21:48, liusongtang wrote:
-> OK, Shall I add "Suggested-by: Kefeng Wang 
-> <wangkefeng.wang@huawei.com>" to these patches?
->
-It is unnecessary ；）
+Currently, memory used by kvm for its page tables is not accounted in
+any of those kernel memory stats. This patch series accounts the memory
+pages used by KVM for page tables in those stats in a new
+NR_SECONDARY_PAGETABLE stat.
 
-> On 2022/4/25 18:40, Kefeng Wang wrote:
->>
->> On 2022/4/25 18:29, Anshuman Khandual wrote:
->>> Should have added 'memory_hotplug' in the subject line. Otherwise
->>> this does not specify where the change is (neither does the commit
->>> message below).
->>>
->>> mm/memory_hotplug: use pgprot_val to get value of pgprot
->>
->>
->> $ git grep "pgprot\.pgprot"
->> arch/ia64/mm/init.c:    if (WARN_ON_ONCE(params->pgprot.pgprot != 
->> PAGE_KERNEL.pgprot))
->> arch/s390/mm/init.c:    if (WARN_ON_ONCE(params->pgprot.pgprot != 
->> PAGE_KERNEL.pgprot))
->> arch/sh/mm/init.c:      if (WARN_ON_ONCE(params->pgprot.pgprot != 
->> PAGE_KERNEL.pgprot))
->> mm/memory_hotplug.c:    if (WARN_ON_ONCE(!params->pgprot.pgprot))
->>
->> You can change other's codes too.
->>
+The riscv and mips patches are not tested due to lack of
+resources. Feel free to test or drop them.
+
+Changes in V3:
+- Added NR_SECONDARY_PAGETABLE instead of piggybacking on NR_PAGETABLE
+  stats.
+
+Changes in V2:
+- Added accounting stats for other archs than x86.
+- Changed locations in the code where x86 KVM page table stats were
+  accounted based on suggestions from Sean Christopherson.
+
+
+Yosry Ahmed (6):
+  mm: add NR_SECONDARY_PAGETABLE stat
+  KVM: mmu: add a helper to account page table pages used by KVM.
+  KVM: x86/mmu: count KVM page table pages in pagetable stats
+  KVM: arm64/mmu: count KVM page table pages in pagetable stats
+  KVM: riscv/mmu: count KVM page table pages in pagetable stats
+  KVM: mips/mmu: count KVM page table pages in pagetable stats
+
+ arch/arm64/kernel/image-vars.h |  3 ++
+ arch/arm64/kvm/hyp/pgtable.c   | 50 +++++++++++++++++++++-------------
+ arch/mips/kvm/mips.c           |  1 +
+ arch/mips/kvm/mmu.c            |  9 +++++-
+ arch/riscv/kvm/mmu.c           | 26 +++++++++++++-----
+ arch/x86/kvm/mmu/mmu.c         | 16 +++++++++--
+ arch/x86/kvm/mmu/tdp_mmu.c     | 16 +++++++++--
+ drivers/base/node.c            |  2 ++
+ fs/proc/meminfo.c              |  2 ++
+ include/linux/kvm_host.h       |  9 ++++++
+ include/linux/mmzone.h         |  1 +
+ mm/memcontrol.c                |  1 +
+ mm/page_alloc.c                |  6 +++-
+ mm/vmstat.c                    |  1 +
+ 14 files changed, 111 insertions(+), 32 deletions(-)
+
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
+

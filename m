@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A6950F651
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A3C50F503
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346653AbiDZIpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S1345242AbiDZIlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345512AbiDZIjL (ORCPT
+        with ESMTP id S1345022AbiDZId7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D043FBD7;
-        Tue, 26 Apr 2022 01:30:02 -0700 (PDT)
+        Tue, 26 Apr 2022 04:33:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694373BBF4;
+        Tue, 26 Apr 2022 01:25:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80736B81CAF;
-        Tue, 26 Apr 2022 08:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3635C385A0;
-        Tue, 26 Apr 2022 08:29:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7635EB81CFA;
+        Tue, 26 Apr 2022 08:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C162DC385A0;
+        Tue, 26 Apr 2022 08:25:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961800;
-        bh=GdhV+M7q++CPNc+w2fY6C6AGEQb4sYzOfXOJmXL+AZM=;
+        s=korg; t=1650961545;
+        bh=K/69QxVv7T4FTeKHdSZVJbXT07k+FI7rMWMGgv0/yCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WmpSpAeKPnT/1Dyg7jtgepPjO46ObVgwHBKgfmFo+qoDCTHf/pGixKezmKBZ9dc1J
-         MnmUl8N7ywU5jmbw3666FR1cvtzMSkFyeKlw8UJs0BKiRrH8Kvp9l/0KOHlvOyDQeh
-         HBUyd04gu9E6d+Rp/eUgfPMwh4jIEEzyvzBDl5og=
+        b=ahBUvQFU8Djx1IXRbGVXaLQXlwLdyuPu7f6q4M953GijxiG+U+FZNSpROcSyb+36r
+         UMVHq8XPgi98Qmk2Is5UeZCtq++jp9cUMumKk/E3Sm+DR4bE0hBmxvHGGgm5cK39VN
+         C3YFgkiBzvsjFmL3fc8Qqj7jwJbetxaoY31J56wM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomas Melin <tomas.melin@vaisala.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 33/62] net: macb: Restart tx only if queue pointer is lagging
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 4.14 31/43] ext4: fix overhead calculation to account for the reserved gdt blocks
 Date:   Tue, 26 Apr 2022 10:21:13 +0200
-Message-Id: <20220426081738.175168427@linuxfoundation.org>
+Message-Id: <20220426081735.434788860@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+References: <20220426081734.509314186@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomas Melin <tomas.melin@vaisala.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit 5ad7f18cd82cee8e773d40cc7a1465a526f2615c ]
+commit 10b01ee92df52c8d7200afead4d5e5f55a5c58b1 upstream.
 
-commit 4298388574da ("net: macb: restart tx after tx used bit read")
-added support for restarting transmission. Restarting tx does not work
-in case controller asserts TXUBR interrupt and TQBP is already at the end
-of the tx queue. In that situation, restarting tx will immediately cause
-assertion of another TXUBR interrupt. The driver will end up in an infinite
-interrupt loop which it cannot break out of.
+The kernel calculation was underestimating the overhead by not taking
+into account the reserved gdt blocks.  With this change, the overhead
+calculated by the kernel matches the overhead calculation in mke2fs.
 
-For cases where TQBP is at the end of the tx queue, instead
-only clear TX_USED interrupt. As more data gets pushed to the queue,
-transmission will resume.
-
-This issue was observed on a Xilinx Zynq-7000 based board.
-During stress test of the network interface,
-driver would get stuck on interrupt loop within seconds or minutes
-causing CPU to stall.
-
-Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
-Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220407161659.14532-1-tomas.melin@vaisala.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/ext4/super.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 480d2ca369e6..002a374f197b 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1378,6 +1378,7 @@ static void macb_tx_restart(struct macb_queue *queue)
- 	unsigned int head = queue->tx_head;
- 	unsigned int tail = queue->tx_tail;
- 	struct macb *bp = queue->bp;
-+	unsigned int head_idx, tbqp;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -3366,9 +3366,11 @@ static int count_overhead(struct super_b
+ 	ext4_fsblk_t		first_block, last_block, b;
+ 	ext4_group_t		i, ngroups = ext4_get_groups_count(sb);
+ 	int			s, j, count = 0;
++	int			has_super = ext4_bg_has_super(sb, grp);
  
- 	if (bp->caps & MACB_CAPS_ISR_CLEAR_ON_WRITE)
- 		queue_writel(queue, ISR, MACB_BIT(TXUBR));
-@@ -1385,6 +1386,13 @@ static void macb_tx_restart(struct macb_queue *queue)
- 	if (head == tail)
- 		return;
+ 	if (!ext4_has_feature_bigalloc(sb))
+-		return (ext4_bg_has_super(sb, grp) + ext4_bg_num_gdb(sb, grp) +
++		return (has_super + ext4_bg_num_gdb(sb, grp) +
++			(has_super ? le16_to_cpu(sbi->s_es->s_reserved_gdt_blocks) : 0) +
+ 			sbi->s_itb_per_group + 2);
  
-+	tbqp = queue_readl(queue, TBQP) / macb_dma_desc_get_size(bp);
-+	tbqp = macb_adj_dma_desc_idx(bp, macb_tx_ring_wrap(bp, tbqp));
-+	head_idx = macb_adj_dma_desc_idx(bp, macb_tx_ring_wrap(bp, head));
-+
-+	if (tbqp == head_idx)
-+		return;
-+
- 	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
- }
- 
--- 
-2.35.1
-
+ 	first_block = le32_to_cpu(sbi->s_es->s_first_data_block) +
 
 

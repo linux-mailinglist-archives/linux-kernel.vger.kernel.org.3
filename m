@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0488250F618
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE8E50F489
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346377AbiDZIuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S1345045AbiDZIgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345730AbiDZIj1 (ORCPT
+        with ESMTP id S1345113AbiDZIeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:27 -0400
+        Tue, 26 Apr 2022 04:34:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF0C3CA59;
-        Tue, 26 Apr 2022 01:30:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07176E4C1;
+        Tue, 26 Apr 2022 01:26:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A3B617D2;
-        Tue, 26 Apr 2022 08:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF06DC385A4;
-        Tue, 26 Apr 2022 08:30:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 506AF61842;
+        Tue, 26 Apr 2022 08:26:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61887C385A0;
+        Tue, 26 Apr 2022 08:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961844;
-        bh=E6X3ptirYwat2tUUxAHSXLZPRaN7WMBiq59cx1MfAMI=;
+        s=korg; t=1650961565;
+        bh=6+QctaSr/hBOUwCHEottWVCkAyN343hqOCaKvjdq/xI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x/VNc29ibksIY/xSC+fu5Iu+kVWSae3k8Wv7+ffRy5eRJDnBtphUZ8jZ+FmbmCrRV
-         xULkXEjJw/3TyI591Fd8seKKfwlZNxwYZj5fTUOInKIMtG/CXVZswQ0VvvpWKmJYdK
-         P4r/QMprk58Vbcj0DBoDYCH4CgzGW+gfRNSP/8+k=
+        b=SzWOoQ/RRO784M4Idt0GP3e7g7RjFpt1BkVt3k1k0Ui1HHhhwEh3VnJP36OoD5ppD
+         GAlwnswiHjrjjdPOlAFyQz5NVl24lJArl3j3QI2PFIWJrQtoanAGbehOVG2h6Hq0Zi
+         PE23sQzdHeKfEXwOPbYfnBLzPM3DB+IUMSwPnfF0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 10/62] ASoC: atmel: Remove system clock tree configuration for at91sam9g20ek
+Subject: [PATCH 4.19 10/53] ASoC: atmel: Remove system clock tree configuration for at91sam9g20ek
 Date:   Tue, 26 Apr 2022 10:20:50 +0200
-Message-Id: <20220426081737.521931311@linuxfoundation.org>
+Message-Id: <20220426081735.958006682@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 61 deletions(-)
 
 diff --git a/sound/soc/atmel/sam9g20_wm8731.c b/sound/soc/atmel/sam9g20_wm8731.c
-index 05277a88e20d..d1579896f3a1 100644
+index 5041f43ee5f7..06d32257ddb6 100644
 --- a/sound/soc/atmel/sam9g20_wm8731.c
 +++ b/sound/soc/atmel/sam9g20_wm8731.c
-@@ -46,35 +46,6 @@
+@@ -59,35 +59,6 @@
   */
  #undef ENABLE_MIC_INPUT
  
@@ -122,7 +121,7 @@ index 05277a88e20d..d1579896f3a1 100644
  static const struct snd_soc_dapm_widget at91sam9g20ek_dapm_widgets[] = {
  	SND_SOC_DAPM_MIC("Int Mic", NULL),
  	SND_SOC_DAPM_SPK("Ext Spk", NULL),
-@@ -135,7 +106,6 @@ static struct snd_soc_card snd_soc_at91sam9g20ek = {
+@@ -146,7 +117,6 @@ static struct snd_soc_card snd_soc_at91sam9g20ek = {
  	.owner = THIS_MODULE,
  	.dai_link = &at91sam9g20ek_dai,
  	.num_links = 1,
@@ -130,7 +129,7 @@ index 05277a88e20d..d1579896f3a1 100644
  
  	.dapm_widgets = at91sam9g20ek_dapm_widgets,
  	.num_dapm_widgets = ARRAY_SIZE(at91sam9g20ek_dapm_widgets),
-@@ -148,7 +118,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
+@@ -159,7 +129,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
  {
  	struct device_node *np = pdev->dev.of_node;
  	struct device_node *codec_np, *cpu_np;
@@ -138,7 +137,7 @@ index 05277a88e20d..d1579896f3a1 100644
  	struct snd_soc_card *card = &snd_soc_at91sam9g20ek;
  	int ret;
  
-@@ -162,31 +131,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
+@@ -173,31 +142,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
  		return -EINVAL;
  	}
  
@@ -170,7 +169,7 @@ index 05277a88e20d..d1579896f3a1 100644
  	card->dev = &pdev->dev;
  
  	/* Parse device node info */
-@@ -230,9 +174,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
+@@ -241,9 +185,6 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
  
  	return ret;
  
@@ -180,7 +179,7 @@ index 05277a88e20d..d1579896f3a1 100644
  err:
  	atmel_ssc_put_audio(0);
  	return ret;
-@@ -242,8 +183,6 @@ static int at91sam9g20ek_audio_remove(struct platform_device *pdev)
+@@ -253,8 +194,6 @@ static int at91sam9g20ek_audio_remove(struct platform_device *pdev)
  {
  	struct snd_soc_card *card = platform_get_drvdata(pdev);
  

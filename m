@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8609750F675
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97BF50F4AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346878AbiDZIp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S242128AbiDZIh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345590AbiDZIjP (ORCPT
+        with ESMTP id S1345354AbiDZIec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:15 -0400
+        Tue, 26 Apr 2022 04:34:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77DE3BA51;
-        Tue, 26 Apr 2022 01:30:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8432374867;
+        Tue, 26 Apr 2022 01:27:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27666617A4;
-        Tue, 26 Apr 2022 08:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347F0C385A4;
-        Tue, 26 Apr 2022 08:30:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B70E6179E;
+        Tue, 26 Apr 2022 08:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE22C385A0;
+        Tue, 26 Apr 2022 08:27:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961824;
-        bh=yZENq/8ZBM097ec/1kJ8azYzdONE7y6eJJK+S4E1NgI=;
+        s=korg; t=1650961627;
+        bh=eHIuRoQIdPxgG8oN0IWERZQhX1NYrprx+LxNoPGH7wY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FK+j1VYse4kJzz1pPELx95enn1SGEwj30gNebKV8wytmZpSjPVtu3ocr2m0oowD/S
-         CdH+R5Rod69WdZqfbBKW/587uGTPdswSY51Z4X54+zsj5gyypR9Q8kYoGHZaWWczLc
-         lYyqe1NGPppXWam16LoV46urswN8RsIFcqnELK2k=
+        b=fPGWZPo3MAUWuWEmhO8XBeSQ5MQ8CuL/Lh63MkSF6/hSr5AclzXrYBfpHA6I9c/0D
+         mDMq+KUHkA2LCzW6L7CxIHTUA85ln7puaW8gP44EEx9nVUXHQp0Lz+WDgUd/LUXlv0
+         vcgKFXKNgXOy6WOQw42OU60coD45fPvcOY/lCAto=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>
-Subject: [PATCH 5.4 05/62] gfs2: assign rgrp glock before compute_bitstructs
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 4.19 05/53] dm integrity: fix memory corruption when tag_size is less than digest size
 Date:   Tue, 26 Apr 2022 10:20:45 +0200
-Message-Id: <20220426081737.375074321@linuxfoundation.org>
+Message-Id: <20220426081735.813142442@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+References: <20220426081735.651926456@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit 428f651cb80b227af47fc302e4931791f2fb4741 upstream.
+commit 08c1af8f1c13bbf210f1760132f4df24d0ed46d6 upstream.
 
-Before this patch, function read_rindex_entry called compute_bitstructs
-before it allocated a glock for the rgrp. But if compute_bitstructs found
-a problem with the rgrp, it called gfs2_consist_rgrpd, and that called
-gfs2_dump_glock for rgd->rd_gl which had not yet been assigned.
+It is possible to set up dm-integrity in such a way that the
+"tag_size" parameter is less than the actual digest size. In this
+situation, a part of the digest beyond tag_size is ignored.
 
-read_rindex_entry
-   compute_bitstructs
-      gfs2_consist_rgrpd
-         gfs2_dump_glock <---------rgd->rd_gl was not set.
+In this case, dm-integrity would write beyond the end of the
+ic->recalc_tags array and corrupt memory. The corruption happened in
+integrity_recalc->integrity_sector_checksum->crypto_shash_final.
 
-This patch changes read_rindex_entry so it assigns an rgrp glock before
-calling compute_bitstructs so gfs2_dump_glock does not reference an
-unassigned pointer. If an error is discovered, the glock must also be
-put, so a new goto and label were added.
+Fix this corruption by increasing the tags array so that it has enough
+padding at the end to accomodate the loop in integrity_recalc() being
+able to write a full digest size for the last member of the tags
+array.
 
-Reported-by: syzbot+c6fd14145e2f62ca0784@syzkaller.appspotmail.com
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Cc: stable@vger.kernel.org # v4.19+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/gfs2/rgrp.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/md/dm-integrity.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/fs/gfs2/rgrp.c
-+++ b/fs/gfs2/rgrp.c
-@@ -925,15 +925,15 @@ static int read_rindex_entry(struct gfs2
- 	rgd->rd_bitbytes = be32_to_cpu(buf.ri_bitbytes);
- 	spin_lock_init(&rgd->rd_rsspin);
- 
--	error = compute_bitstructs(rgd);
--	if (error)
--		goto fail;
--
- 	error = gfs2_glock_get(sdp, rgd->rd_addr,
- 			       &gfs2_rgrp_glops, CREATE, &rgd->rd_gl);
- 	if (error)
- 		goto fail;
- 
-+	error = compute_bitstructs(rgd);
-+	if (error)
-+		goto fail_glock;
-+
- 	rgd->rd_rgl = (struct gfs2_rgrp_lvb *)rgd->rd_gl->gl_lksb.sb_lvbptr;
- 	rgd->rd_flags &= ~(GFS2_RDF_UPTODATE | GFS2_RDF_PREFERRED);
- 	if (rgd->rd_data > sdp->sd_max_rg_data)
-@@ -950,6 +950,7 @@ static int read_rindex_entry(struct gfs2
+--- a/drivers/md/dm-integrity.c
++++ b/drivers/md/dm-integrity.c
+@@ -3504,6 +3504,7 @@ try_smaller_buffer:
  	}
  
- 	error = 0; /* someone else read in the rgrp; free it and ignore it */
-+fail_glock:
- 	gfs2_glock_put(rgd->rd_gl);
- 
- fail:
+ 	if (ic->sb->flags & cpu_to_le32(SB_FLAG_RECALCULATING)) {
++		size_t recalc_tags_size;
+ 		if (!ic->internal_hash) {
+ 			r = -EINVAL;
+ 			ti->error = "Recalculate is only valid with internal hash";
+@@ -3522,8 +3523,10 @@ try_smaller_buffer:
+ 			r = -ENOMEM;
+ 			goto bad;
+ 		}
+-		ic->recalc_tags = kvmalloc_array(RECALC_SECTORS >> ic->sb->log2_sectors_per_block,
+-						 ic->tag_size, GFP_KERNEL);
++		recalc_tags_size = (RECALC_SECTORS >> ic->sb->log2_sectors_per_block) * ic->tag_size;
++		if (crypto_shash_digestsize(ic->internal_hash) > ic->tag_size)
++			recalc_tags_size += crypto_shash_digestsize(ic->internal_hash) - ic->tag_size;
++		ic->recalc_tags = kvmalloc(recalc_tags_size, GFP_KERNEL);
+ 		if (!ic->recalc_tags) {
+ 			ti->error = "Cannot allocate tags for recalculating";
+ 			r = -ENOMEM;
 
 

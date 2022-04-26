@@ -2,41 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DD9510294
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D16A510297
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 18:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352822AbiDZQKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 12:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+        id S1350899AbiDZQMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 12:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbiDZQKT (ORCPT
+        with ESMTP id S234448AbiDZQM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:10:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCE4C68F91
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:07:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88BB323A;
-        Tue, 26 Apr 2022 09:07:11 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A4EF3F73B;
-        Tue, 26 Apr 2022 09:07:10 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 17:07:08 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Popov <alex.popov@linux.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH 0/8] stackleak: fixes and rework
-Message-ID: <YmgYrFHC0o8O1WcX@lakrids>
-References: <20220425115603.781311-1-mark.rutland@arm.com>
- <202204251551.0CFE01DF4@keescook>
- <91238500-61a6-1e2e-1dc2-931c0a23cca8@linux.com>
+        Tue, 26 Apr 2022 12:12:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3910173048
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 09:09:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A1AE2210E8;
+        Tue, 26 Apr 2022 16:09:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650989359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XlBpaGo31htw44cELqk1nP5QrpL931cVvjwPWxcqiIw=;
+        b=G0brHfDRp6/jozN4ch+TnhvQI1d60GJSxBhIqRPxgOLC1L9J+jWsBXcVNqcCmk8L9G4Rjn
+        UzgQKBOfnnXPsNHq3zLgQvNa6QzhArgHNzQmrB7sx7V3lOvNMdejbgEfmaqc2NUphgOAQH
+        Ddl0+68F3V6Kh3Vj2V0YCBWa1MQ006Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650989359;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XlBpaGo31htw44cELqk1nP5QrpL931cVvjwPWxcqiIw=;
+        b=FUGUeiFnNOxUf8Nz3Wc9EqAAULhQFZ7VGNudwHF/sq6n5RKR5hdMdonCQz9zksWktJS74u
+        g9UUiE6li98EhPCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 772D413223;
+        Tue, 26 Apr 2022 16:09:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pyZ9HC8ZaGLeeAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 26 Apr 2022 16:09:19 +0000
+Message-ID: <4c85b7b4-e2b3-79b0-f5c1-ae318b856750@suse.cz>
+Date:   Tue, 26 Apr 2022 18:09:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <91238500-61a6-1e2e-1dc2-931c0a23cca8@linux.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 06/23] mm/sl[auo]b: fold kmalloc_order_trace() into
+ kmalloc_large()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+ <20220414085727.643099-7-42.hyeyoo@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220414085727.643099-7-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,38 +82,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 06:51:04PM +0300, Alexander Popov wrote:
-> On 26.04.2022 01:54, Kees Cook wrote:
-> > On Mon, Apr 25, 2022 at 12:55:55PM +0100, Mark Rutland wrote:
-> > > This series reworks the stackleak code. The first patch fixes some
-> > > latent issues on arm64, and the subsequent patches improve the code to
-> > > improve clarity and permit better code generation.
-> > 
-> > This looks nice; thanks! I'll put this through build testing and get it
-> > applied shortly...
-> > 
-> > > While the improvement is small, I think the improvement to clarity and
-> > > code generation is a win regardless.
-> > 
-> > Agreed. I also want to manually inspect the resulting memory just to
-> > make sure things didn't accidentally regress. There's also an LKDTM test
-> > for basic functionality.
+On 4/14/22 10:57, Hyeonggon Yoo wrote:
+> There is no caller of kmalloc_order_trace() except kmalloc_large().
+> Fold it into kmalloc_large() and remove kmalloc_order{,_trace}().
 > 
-> Hi Mark and Kees!
+> Also add tracepoint in kmalloc_large() that was previously
+> in kmalloc_order_trace().
 > 
-> Glad to see this patch series.
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+> Changes from v1:
+> - updated some changelog (kmalloc_order() -> kmalloc_order_trace())
 > 
-> I've looked at it briefly. Mark, I see your questions in the patches that I
-> can answer.
+>  include/linux/slab.h | 22 ++--------------------
+>  mm/slab_common.c     | 14 +++-----------
+>  2 files changed, 5 insertions(+), 31 deletions(-)
 > 
-> Please give me some time, I'm going to work on your patch series next week.
-> I'll return with review and testing.
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 4c06d15f731c..6f6e22959b39 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -484,26 +484,8 @@ static __always_inline void *kmem_cache_alloc_node_trace(struct kmem_cache *s, g
+>  }
+>  #endif /* CONFIG_TRACING */
+>  
+> -extern void *kmalloc_order(size_t size, gfp_t flags, unsigned int order) __assume_page_alignment
+> -									 __alloc_size(1);
+> -
+> -#ifdef CONFIG_TRACING
+> -extern void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
+> -				__assume_page_alignment __alloc_size(1);
+> -#else
+> -static __always_inline __alloc_size(1) void *kmalloc_order_trace(size_t size, gfp_t flags,
+> -								 unsigned int order)
+> -{
+> -	return kmalloc_order(size, flags, order);
+> -}
+> -#endif
+> -
+> -static __always_inline __alloc_size(1) void *kmalloc_large(size_t size, gfp_t flags)
+> -{
+> -	unsigned int order = get_order(size);
+> -	return kmalloc_order_trace(size, flags, order);
+> -}
+> -
+> +extern void *kmalloc_large(size_t size, gfp_t flags) __assume_page_alignment
+> +						     __alloc_size(1);
 
-Sure thing, thanks!
+I missed this extern in v1, please drop.
 
-FWIW, I spotted a couple of issues in my patches today while testing,
-and if you're happy I can post a v2 later this week with those fixed, so
-you don't need to waste time with those.
+>  /**
+>   * kmalloc - allocate memory
+>   * @size: how many bytes of memory are required.
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index c4d63f2c78b8..308cd5449285 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -925,10 +925,11 @@ gfp_t kmalloc_fix_flags(gfp_t flags)
+>   * directly to the page allocator. We use __GFP_COMP, because we will need to
+>   * know the allocation order to free the pages properly in kfree.
+>   */
+> -void *kmalloc_order(size_t size, gfp_t flags, unsigned int order)
+> +void *kmalloc_large(size_t size, gfp_t flags)
+>  {
+>  	void *ret = NULL;
+>  	struct page *page;
+> +	unsigned int order = get_order(size);
+>  
+>  	if (unlikely(flags & GFP_SLAB_BUG_MASK))
+>  		flags = kmalloc_fix_flags(flags);
+> @@ -943,19 +944,10 @@ void *kmalloc_order(size_t size, gfp_t flags, unsigned int order)
+>  	ret = kasan_kmalloc_large(ret, size, flags);
+>  	/* As ret might get tagged, call kmemleak hook after KASAN. */
+>  	kmemleak_alloc(ret, size, 1, flags);
+> -	return ret;
+> -}
+> -EXPORT_SYMBOL(kmalloc_order);
+> -
+> -#ifdef CONFIG_TRACING
+> -void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
+> -{
+> -	void *ret = kmalloc_order(size, flags, order);
+>  	trace_kmalloc(_RET_IP_, ret, size, PAGE_SIZE << order, flags);
+>  	return ret;
+>  }
+> -EXPORT_SYMBOL(kmalloc_order_trace);
+> -#endif
+> +EXPORT_SYMBOL(kmalloc_large);
+>  
+>  #ifdef CONFIG_SLAB_FREELIST_RANDOM
+>  /* Randomize a generic freelist */
 
-Thanks,
-Mark.

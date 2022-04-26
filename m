@@ -2,227 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6092251094C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5803510953
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 21:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354274AbiDZTtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 15:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S1354299AbiDZTzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 15:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiDZTtt (ORCPT
+        with ESMTP id S1354278AbiDZTzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 15:49:49 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C122C2DD6F;
-        Tue, 26 Apr 2022 12:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651002400; x=1682538400;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=hwvV40yuftcbV3vyTi9JaXKPJEHRLNAffYIMHJpqEtw=;
-  b=mRtQV3vtwJlXgpawgx3qIUhiqVMI0bYnT4Xvc+wtG9pPgcW9IYfXONpy
-   5SZihLLYC/Mmfthtt18nwuudfUCSQ8pNrZ2PMMAtnBJcBzzUQ54g1zeAt
-   jN/TkkBet9Vrv7ICf0wpO6eF8JaBTVOoYSnWfrlJRtHmDyRmW/5JJU+1J
-   Y=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Apr 2022 12:46:40 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 12:46:40 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 12:46:39 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 12:46:39 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] drm/msm/dp: remove fail safe mode related code
-Date:   Tue, 26 Apr 2022 12:46:30 -0700
-Message-ID: <1651002390-4926-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 26 Apr 2022 15:55:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9D76B09C;
+        Tue, 26 Apr 2022 12:51:54 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QJkQTs009986;
+        Tue, 26 Apr 2022 19:51:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=T7bjvQ3BcrN7Z6h9Fc26vG+y3bdOGAaPUHj4pY8LJ6g=;
+ b=QeOf0hyzkXYEwHLGJeMuxaoU0I2z5QQl1+8yQ4GSOYpEz5DjVDEJ5fb5ZOnyoQYxtAE3
+ PCCpMW+rY0ABr25y3jvM5Ui4chmZPzyrlHB23ylD2cFNe1RQEniJQsxu5MP7u4U9L7HU
+ ooxYy1CtyntH96ekCadJEhrl3bMjIOLx79gQwSU3sZxh0NlNLyY6XLIsM/7liWm9LM0g
+ p5oASzZjl7hA3sw7QYuw/sVTffwcdD5mCLVPGSjBSIc/fNoDWnI+kliGBCbNh0YwpZGX
+ UKjnrIE19mrpMvNv2iTk6D3YobHaKqSKQKGzZxv/81fycEyJDdApP7p/udYx7z0LVpia Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpq6e82kw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 19:51:27 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23QJm8dW021744;
+        Tue, 26 Apr 2022 19:51:26 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpq6e82kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 19:51:26 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23QJo8mP006577;
+        Tue, 26 Apr 2022 19:51:24 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fm938vvdt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Apr 2022 19:51:24 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23QJcJDq48038304
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Apr 2022 19:38:19 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38D2111C050;
+        Tue, 26 Apr 2022 19:51:21 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F97E11C04C;
+        Tue, 26 Apr 2022 19:51:20 +0000 (GMT)
+Received: from osiris (unknown [9.145.34.143])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 26 Apr 2022 19:51:20 +0000 (GMT)
+Date:   Tue, 26 Apr 2022 21:51:18 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: Re: [PATCH 2/2] virtio: replace
+ arch_has_restricted_virtio_memory_access()
+Message-ID: <YmhNNrLW+tM2gnZB@osiris>
+References: <20220426134021.11210-1-jgross@suse.com>
+ <20220426134021.11210-3-jgross@suse.com>
+ <Ymgtb2dSNYz7DBqx@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ymgtb2dSNYz7DBqx@zn.tnic>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: q9gEbp0-esGpLxC7emUANKdeJL4GNy7u
+X-Proofpoint-ORIG-GUID: ikyLc1vizVQ4dnq38vPU_YoCIQAl4_o-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-26_06,2022-04-26_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=648
+ suspectscore=0 impostorscore=0 bulkscore=0 clxscore=1011 spamscore=0
+ mlxscore=0 priorityscore=1501 malwarescore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204260123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current DP driver implementation has adding safe mode done at
-dp_hpd_plug_handle() which is expected to be executed under event
-thread context.
+On Tue, Apr 26, 2022 at 07:35:43PM +0200, Borislav Petkov wrote:
+> On Tue, Apr 26, 2022 at 03:40:21PM +0200, Juergen Gross wrote:
+> >  /* protected virtualization */
+> >  static void pv_init(void)
+> >  {
+> >  	if (!is_prot_virt_guest())
+> >  		return;
+> >  
+> > +	platform_set_feature(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
+> 
+> Kinda long-ish for my taste. I'll probably call it:
+> 
+> 	platform_set()
+> 
+> as it is implicit that it sets a feature bit.
 
-However there is possible circular locking happen (see blow stack trace)
-after edp driver call dp_hpd_plug_handle() from dp_bridge_enable() which
-is executed under drm_thread context.
+...and platform_clear(), instead of platform_reset_feature() please.
 
-After review all possibilities methods and as discussed on
-https://patchwork.freedesktop.org/patch/483155/, supporting EDID
-compliance tests in the driver is quite hacky. As seen with other
-vendor drivers, supporting these will be much easier with IGT. Hence
-removing all the related fail safe code for it so that no possibility
-of circular lock will happen.
+> In any case, yeah, looks ok at a quick glance. It would obviously need
+> for more people to look at it and say whether it makes sense to them and
+> whether that's fine to have in generic code but so far, the experience
+> with cc_platform_* says that it seems to work ok in generic code.
 
-======================================================
- WARNING: possible circular locking dependency detected
- 5.15.35-lockdep #6 Tainted: G        W
- ------------------------------------------------------
- frecon/429 is trying to acquire lock:
- ffffff808dc3c4e8 (&dev->mode_config.mutex){+.+.}-{3:3}, at:
-dp_panel_add_fail_safe_mode+0x4c/0xa0
-
- but task is already holding lock:
- ffffff808dc441e0 (&kms->commit_lock[i]){+.+.}-{3:3}, at: lock_crtcs+0xb4/0x124
-
- which lock already depends on the new lock.
-
- the existing dependency chain (in reverse order) is:
-
- -> #3 (&kms->commit_lock[i]){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        lock_crtcs+0xb4/0x124
-        msm_atomic_commit_tail+0x330/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #2 (crtc_ww_class_mutex){+.+.}-{3:3}:
-        __mutex_lock_common+0x174/0x1a64
-        ww_mutex_lock+0xb8/0x278
-        modeset_lock+0x304/0x4ac
-        drm_modeset_lock+0x4c/0x7c
-        drmm_mode_config_init+0x4a8/0xc50
-        msm_drm_init+0x274/0xac0
-        msm_drm_bind+0x20/0x2c
-        try_to_bring_up_master+0x3dc/0x470
-        __component_add+0x18c/0x3c0
-        component_add+0x1c/0x28
-        dp_display_probe+0x954/0xa98
-        platform_probe+0x124/0x15c
-        really_probe+0x1b0/0x5f8
-        __driver_probe_device+0x174/0x20c
-        driver_probe_device+0x70/0x134
-        __device_attach_driver+0x130/0x1d0
-        bus_for_each_drv+0xfc/0x14c
-        __device_attach+0x1bc/0x2bc
-        device_initial_probe+0x1c/0x28
-        bus_probe_device+0x94/0x178
-        deferred_probe_work_func+0x1a4/0x1f0
-        process_one_work+0x5d4/0x9dc
-        worker_thread+0x898/0xccc
-        kthread+0x2d4/0x3d4
-        ret_from_fork+0x10/0x20
-
- -> #1 (crtc_ww_class_acquire){+.+.}-{0:0}:
-        ww_acquire_init+0x1c4/0x2c8
-        drm_modeset_acquire_init+0x44/0xc8
-        drm_helper_probe_single_connector_modes+0xb0/0x12dc
-        drm_mode_getconnector+0x5dc/0xfe8
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
- -> #0 (&dev->mode_config.mutex){+.+.}-{3:3}:
-        __lock_acquire+0x2650/0x672c
-        lock_acquire+0x1b4/0x4ac
-        __mutex_lock_common+0x174/0x1a64
-        mutex_lock_nested+0x98/0xac
-        dp_panel_add_fail_safe_mode+0x4c/0xa0
-        dp_hpd_plug_handle+0x1f0/0x280
-        dp_bridge_enable+0x94/0x2b8
-        drm_atomic_bridge_chain_enable+0x11c/0x168
-        drm_atomic_helper_commit_modeset_enables+0x500/0x740
-        msm_atomic_commit_tail+0x3e4/0x748
-        commit_tail+0x19c/0x278
-        drm_atomic_helper_commit+0x1dc/0x1f0
-        drm_atomic_commit+0xc0/0xd8
-        drm_atomic_helper_set_config+0xb4/0x134
-        drm_mode_setcrtc+0x688/0x1248
-        drm_ioctl_kernel+0x1e4/0x338
-        drm_ioctl+0x3a4/0x684
-        __arm64_sys_ioctl+0x118/0x154
-        invoke_syscall+0x78/0x224
-        el0_svc_common+0x178/0x200
-        do_el0_svc+0x94/0x13c
-        el0_svc+0x5c/0xec
-        el0t_64_sync_handler+0x78/0x108
-        el0t_64_sync+0x1a4/0x1a8
-
-Changes in v2:
--- re text commit title
--- remove all fail safe mode
-
-Changes in v3:
--- remove dp_panel_add_fail_safe_mode() from dp_panel.h
--- add Fixes
-
-Fixes: 8b2c181 ("drm/msm/dp: add fail safe mode outside of event_mutex context")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-Fixes: f1b47e6a8df8 ("drm/msm/dp: remove fail safe mode related code")
-Reported-by: Douglas Anderson <dianders@chromium.org>
----
- drivers/gpu/drm/msm/dp/dp_panel.c | 11 -----------
- 1 file changed, 11 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index f141872..26f4b695 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -206,17 +206,6 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
- 			rc = -ETIMEDOUT;
- 			goto end;
- 		}
--
--		/* fail safe edid */
--		mutex_lock(&connector->dev->mode_config.mutex);
--		if (drm_add_modes_noedid(connector, 640, 480))
--			drm_set_preferred_mode(connector, 640, 480);
--		mutex_unlock(&connector->dev->mode_config.mutex);
--	} else {
--		/* always add fail-safe mode as backup mode */
--		mutex_lock(&connector->dev->mode_config.mutex);
--		drm_add_modes_noedid(connector, 640, 480);
--		mutex_unlock(&connector->dev->mode_config.mutex);
- 	}
- 
- 	if (panel->aux_cfg_update_done) {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+We _could_ convert s390's machine flags to this mechanism. Those flags
+are historically per-cpu, but if I'm not mistaken none of them is
+performance critical anymore, and those who are could/should probably
+transformed to jump labels or alternatives anyway.

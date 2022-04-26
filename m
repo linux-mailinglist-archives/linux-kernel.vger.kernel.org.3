@@ -2,103 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B0750F786
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143BD50F397
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235190AbiDZJVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        id S1344592AbiDZIZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345841AbiDZI5B (ORCPT
+        with ESMTP id S1344591AbiDZIZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:57:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E7382D1D;
-        Tue, 26 Apr 2022 01:41:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 719E3604F5;
-        Tue, 26 Apr 2022 08:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793C6C385A0;
-        Tue, 26 Apr 2022 08:41:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962492;
-        bh=mt4oTxRDRytd2sDxSUA4c6vTrTy49Qqxkea0a5v82a8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hto/VQKuTT6FLoJsqjiGUipyRgz/EM2bm64XjNYyGVzdvccCjywhL4hv5405R5wrz
-         cs9gJesRLGhsMigN0w9pF+AGgS3JZVyfFhD1aSy+2e+Dc7ExCm7HkrGTfZztemwKE7
-         EQ/xfnz2DCT/dba0KeO6mpdi4N19Oa62bwdE7dwA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ye Bin <yebin10@huawei.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 114/124] ext4: fix symlink file size not match to file content
-Date:   Tue, 26 Apr 2022 10:21:55 +0200
-Message-Id: <20220426081750.532641271@linuxfoundation.org>
+        Tue, 26 Apr 2022 04:25:23 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF903A5C3;
+        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id bx5so8040613pjb.3;
+        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ry61oQOw1TxefJWFjV86DTJxbbTM3u3aRIyja+cc07w=;
+        b=hYJberNWpJnZgnTf9pcAYGQU8G2uGwQ2H/D/mBrao6r6L3a1I5qEFJkqTZs4lJea0q
+         ctvAk6eqcD2ijFAs7BGRcE0NXBVDrJsP5Ff2/ZUetBi7VGCIMp/dr+E++nYuYJQ6Jlh9
+         gp5hFY/7219vQgRGSf5PglWn/eBG4mcEu+hNp/JWpOviLN4sPKKOVq8/SzswSPVvMLHM
+         APUJGGc246PwSz7zG0VxqC2cETjCATQuy/z3U5uJn7sCQlBNhhMzS2IkHTH6euQ6H/Kw
+         Hj0x+4nk/QT4/kzlUQAuwXJjB3vjImdFqxox0NBReIszeeZNyysFeZKCwUO/DOlKYyEx
+         s5pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ry61oQOw1TxefJWFjV86DTJxbbTM3u3aRIyja+cc07w=;
+        b=miiCMD2tsr/YmB+jQkQXDk2/oR5y0tKJihe8whwCnVkKY060X7mvbBU0cQ2I/vkIX0
+         bOhxeulxbKhuJfCg2xTfrzk7UaWLijm4pVVfacHcq+c/yILJ3gO2Xlun8NKS5zRcgbqG
+         55CQtzIpms4FzQybpm7aH25nEC7RogOY+OQ1M40ohX5cwC8/YzWJ8VJY6QqxkKXJPspP
+         Z+Vt+w6HbmH6jV8ZlLXvBpN0gjc+d9wL8IRmfmamYln6copYez+WPEGmmwpyvIfYZEhH
+         /TmCBgFYzmucrzOpCekJhr70h+OtVlnaakJworPWRM58uHsZ+1P1GHs44wrdsmq7ANsS
+         cq+g==
+X-Gm-Message-State: AOAM531nd6bN63Ktv12vyWZp9ue0gBr/a7KcH7dFhQ6PUphyiUo3f7i+
+        xw+d+nVsdHNgiGwwQly4HlA=
+X-Google-Smtp-Source: ABdhPJxNiF8zanUQKYJ607EC0HUpOomtgJ/TOStVYGUmh9XKjhgzkTyZdlRXyDGwNaSRPD1rBszaCA==
+X-Received: by 2002:a17:90b:304:b0:1d9:752b:437f with SMTP id ay4-20020a17090b030400b001d9752b437fmr10486148pjb.242.1650961336347;
+        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.111])
+        by smtp.gmail.com with ESMTPSA id s61-20020a17090a69c300b001cd4c118b07sm1879143pjj.16.2022.04.26.01.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 01:22:15 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+Subject: [PATCH] bitops: remove unnecessary assignment in fls()
+Date:   Tue, 26 Apr 2022 16:21:55 +0800
+Message-Id: <20220426082155.10571-1-imagedong@tencent.com>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Menglong Dong <imagedong@tencent.com>
 
-commit a2b0b205d125f27cddfb4f7280e39affdaf46686 upstream.
+The last bits left move for the various 'x' in fls() is unnecessary,
+and remove it.
 
-We got issue as follows:
-[home]# fsck.ext4  -fn  ram0yb
-e2fsck 1.45.6 (20-Mar-2020)
-Pass 1: Checking inodes, blocks, and sizes
-Pass 2: Checking directory structure
-Symlink /p3/d14/d1a/l3d (inode #3494) is invalid.
-Clear? no
-Entry 'l3d' in /p3/d14/d1a (3383) has an incorrect filetype (was 7, should be 0).
-Fix? no
-
-As the symlink file size does not match the file content. If the writeback
-of the symlink data block failed, ext4_finish_bio() handles the end of IO.
-However this function fails to mark the buffer with BH_write_io_error and
-so when unmount does journal checkpoint it cannot detect the writeback
-error and will cleanup the journal. Thus we've lost the correct data in the
-journal area. To solve this issue, mark the buffer as BH_write_io_error in
-ext4_finish_bio().
-
-Cc: stable@kernel.org
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220321144438.201685-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Mengen Sun <mengensun@tencent.com>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
 ---
- fs/ext4/page-io.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/asm-generic/bitops/fls.h       | 4 +---
+ tools/include/asm-generic/bitops/fls.h | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
---- a/fs/ext4/page-io.c
-+++ b/fs/ext4/page-io.c
-@@ -134,8 +134,10 @@ static void ext4_finish_bio(struct bio *
- 				continue;
- 			}
- 			clear_buffer_async_write(bh);
--			if (bio->bi_status)
-+			if (bio->bi_status) {
-+				set_buffer_write_io_error(bh);
- 				buffer_io_error(bh);
-+			}
- 		} while ((bh = bh->b_this_page) != head);
- 		spin_unlock_irqrestore(&head->b_uptodate_lock, flags);
- 		if (!under_io) {
-
+diff --git a/include/asm-generic/bitops/fls.h b/include/asm-generic/bitops/fls.h
+index b168bb10e1be..07e5cdfc3b98 100644
+--- a/include/asm-generic/bitops/fls.h
++++ b/include/asm-generic/bitops/fls.h
+@@ -32,10 +32,8 @@ static __always_inline int fls(unsigned int x)
+ 		x <<= 2;
+ 		r -= 2;
+ 	}
+-	if (!(x & 0x80000000u)) {
+-		x <<= 1;
++	if (!(x & 0x80000000u))
+ 		r -= 1;
+-	}
+ 	return r;
+ }
+ 
+diff --git a/tools/include/asm-generic/bitops/fls.h b/tools/include/asm-generic/bitops/fls.h
+index b168bb10e1be..07e5cdfc3b98 100644
+--- a/tools/include/asm-generic/bitops/fls.h
++++ b/tools/include/asm-generic/bitops/fls.h
+@@ -32,10 +32,8 @@ static __always_inline int fls(unsigned int x)
+ 		x <<= 2;
+ 		r -= 2;
+ 	}
+-	if (!(x & 0x80000000u)) {
+-		x <<= 1;
++	if (!(x & 0x80000000u))
+ 		r -= 1;
+-	}
+ 	return r;
+ }
+ 
+-- 
+2.36.0
 

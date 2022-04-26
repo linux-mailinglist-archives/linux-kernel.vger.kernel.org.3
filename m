@@ -2,128 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF44A50ED26
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 02:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E00550ED2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 02:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239428AbiDZAJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Apr 2022 20:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
+        id S229658AbiDZAJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Apr 2022 20:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbiDZAJB (ORCPT
+        with ESMTP id S233780AbiDZAJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Apr 2022 20:09:01 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D077113C89
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:05:55 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id w19so29058673lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:05:55 -0700 (PDT)
+        Mon, 25 Apr 2022 20:09:50 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52FA120112
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:06:44 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 9-20020a250909000000b006484b89c979so4658195ybj.21
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 17:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I4wZrpcqpY23HjGTdRVWpcxvWKlwdsGGFL/N6W8CJ2U=;
-        b=UO9vEjaKrcoqWvgG7eshOb470xBd9TV7qtKJw9FOm3/SsdEthQOUpHamqL+aYO+9ty
-         IauEV7r0129/CyoX1opTQjt6dCvpH/kHVkSLujjNFZvGTSfDKq6+ZcpTIrlGkwY4Oa/w
-         Uyr7PvS0/G73+PbJ3XC2NQzVVnaugewgJCzXEFSgixQ58rTnCIS/aNW89FSpMnEKTvgk
-         YLOJDNigCxYBL9z8aXKazwUJngwZFtTAObfGNGh1fP61Td4/5uEh/HYZOxmpDJ1FPZpi
-         nbb4rJ0lJv5y97IQK25pFg/pi06CFse1clI5VloNTRlNQqH1GfSwdRM8Dg7VXQ3m62FW
-         8N9A==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=EQ6VT6w46Hd44XRTan9TInx0ubvgoNtxDCqLgonw/Fw=;
+        b=HS1HO9FzmdSJFLMep5JjzcdD/vAauAAiJdJtzVrco1UZk50LeqYCzwhWCfRJZ34zuo
+         qofqkRZyy6+RFdFh2w+QDW8VSe7d6xxNp46ta/i+iF8YOjRw3+5tLbnRtaro28Cio8o4
+         OiNAeSDzHohgt4vbhCl/9Wvc9F6y3USITzJ10+JX+o97t3jdebP1nHALnKme07MYlKGU
+         mxH/cmQgkqRAOh5TyDU0LaZ+kzTDPONTBv2KsgkeszUMtpbaBxIlgTjQx1ZHJGgr9rAO
+         X8d6uZP7cZOeMc6TODikbj71Y+Li4qUszasbi90W6haTph6MsBXtG6XPJ0xdp8YxPd40
+         2tBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I4wZrpcqpY23HjGTdRVWpcxvWKlwdsGGFL/N6W8CJ2U=;
-        b=twBJFn4sQf4gME9S44rC0A3+GwAgXa0DARSczdT3EW+GkE2OUhtS1nWroCxdyVT2fe
-         pSTvOkJA7QOacqCDkuJyPCOHxGrdgjodRBkvvgGALjhOheUgXPmzL36vMToWPxSxjEtu
-         tHyaUjNVNjxYRflS0Sa6wzen4t6MBo9AOTaS9FC8Fi8Y32xiw5Qal4+zMUyTkbkFHdji
-         KH8bcJ4iObX1wiNUryOSB/4NIdp3v53BzZVbYr2cTOHrqd3ALF0WEe/MYug617NiHHj5
-         AjgQVb8ypCKTHtTFPMo9iF6qkTloRaUSvTjMz380+zfFINOTq8XZK+MZAkdDS1KGGPQW
-         zl2w==
-X-Gm-Message-State: AOAM530+Bp2dJfTt4eLr8bXtK7dWvwJLYOjaU4genvbuz6AeXBHCYhtk
-        tBmrTt8G+JbbcFZG0el7fJnpBw==
-X-Google-Smtp-Source: ABdhPJy7QiuGL02pBXE/dt8cSME5KdzlIgZ/vty8ZsP14pDWE/qTuFuSxDNKp6DRPFZBoGZySvRwNw==
-X-Received: by 2002:a19:ad46:0:b0:46b:b1a4:ffd5 with SMTP id s6-20020a19ad46000000b0046bb1a4ffd5mr14627769lfd.103.1650931553470;
-        Mon, 25 Apr 2022 17:05:53 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f22-20020a2e6a16000000b0024f0cf6fdb0sm736179ljc.138.2022.04.25.17.05.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 17:05:53 -0700 (PDT)
-Message-ID: <36150c01-9146-cebf-bd86-8e096135cbcd@linaro.org>
-Date:   Tue, 26 Apr 2022 03:05:51 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm/msm/disp/dpu1: set vbif hw config to NULL to avoid
- use after memory free during pm runtime resume
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, quic_kalyant@quicinc.com
-References: <1650857213-30075-1-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1650857213-30075-1-git-send-email-quic_vpolimer@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=EQ6VT6w46Hd44XRTan9TInx0ubvgoNtxDCqLgonw/Fw=;
+        b=rEC3WQpafOHoQVkvHHxwBfXCiMUSthUpUL0ttzxfmqo4zfLyUT6zpdmFflbRkNDJ9B
+         5CX09yOMFwk/4VSPIX+tVyyQa3cYaOOqHB5ZXt1YlRv2ZbK3b4QI8t9CUgnrnI6JfXc6
+         QYQdnQgaoxF2ewsZmNtAnIIhpKbKd4TB8zGfPIRIB42vqxMpKwUb3LDI4NnDRhye/M/m
+         ixmtKlb3TvUjCYyDb/1PpzkvK2BCEyJhtJadnaNr3IkXBmYwQnd0S157+hoCOtBcVIJO
+         Bo7+ofJEJmP89HL1u/L3qUQhEbv9KRHGjv/EtkR3ypx7mrCyTVs0TSRT1x78gr4QC78N
+         SPig==
+X-Gm-Message-State: AOAM531c+xywznXN9AMiywOqBwXuCSbDouP/dp3vUMHMqp5FnQCBz8H1
+        x0HGbSMjs9Eb4MRK12Lj+GeDPyPzMdLO
+X-Google-Smtp-Source: ABdhPJwNNzWNR0miZ2gObmHApAL+Qq+RPW++GHIubAxH7gus9hz33wGevQAaQAJC9bdTGWNEfprWQMSD7v1q
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:9590:6ed7:be38:9068])
+ (user=rajatja job=sendgmr) by 2002:a25:f30f:0:b0:648:6d75:614 with SMTP id
+ c15-20020a25f30f000000b006486d750614mr6652624ybs.558.1650931604103; Mon, 25
+ Apr 2022 17:06:44 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 17:06:39 -0700
+Message-Id: <20220426000640.3581446-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH v6 1/2] PCI/ACPI: Support Microsoft's "DmaProperty"
+From:   Rajat Jain <rajatja@google.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org
+Cc:     Rajat Jain <rajatja@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2022 06:26, Vinod Polimera wrote:
-> BUG: Unable to handle kernel paging request at virtual address 006b6b6b6b6b6be3
-> 
-> Call trace:
->    dpu_vbif_init_memtypes+0x40/0xb8
->    dpu_runtime_resume+0xcc/0x1c0
->    pm_generic_runtime_resume+0x30/0x44
->    __genpd_runtime_resume+0x68/0x7c
->    genpd_runtime_resume+0x134/0x258
->    __rpm_callback+0x98/0x138
->    rpm_callback+0x30/0x88
->    rpm_resume+0x36c/0x49c
->    __pm_runtime_resume+0x80/0xb0
->    dpu_core_irq_uninstall+0x30/0xb0
->    dpu_irq_uninstall+0x18/0x24
->    msm_drm_uninit+0xd8/0x16c
-> 
-> Fixes: 25fdd5933e4 ("drm/msm: Add SDM845 DPU support")
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+The "DmaProperty" is supported and currently documented and used by
+Microsoft [link 1 below], to flag internal PCIe root ports that need
+DMA protection [link 2 below]. We have discussed with them and reached
+a common understanding that they shall change their MSDN documentation
+to say that the same property can be used to protect any PCI device,
+and not just internal PCIe root ports (since there is no point
+introducing yet another property for arbitrary PCI devices). This helps
+with security from internal devices that offer an attack surface for
+DMA attacks (e.g. internal network devices).
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Support DmaProperty to mark DMA from a PCI device as untrusted.
 
-Let's merge this fix now. However I think that a proper solution would 
-be to disable pm_runtime once we are in the uninit path.
+Link: [1] https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+Link: [2] https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
+Signed-off-by: Rajat Jain <rajatja@google.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+v6: * Take care of Bjorn's comments:
+       - Update the commit log
+       - Rename to pci_dev_has_dma_property()
+       - Use acpi_dev_get_property()
+v5: * Reorder the patches in the series
+v4: * Add the GUID. 
+    * Update the comment and commitlog.
+v3: * Use Microsoft's documented property "DmaProperty"
+    * Resctrict to ACPI only
 
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 9c346ce..59982d3 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -793,8 +793,10 @@ static void _dpu_kms_hw_destroy(struct dpu_kms *dpu_kms)
->   		for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
->   			u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
->   
-> -			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx])
-> +			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx]) {
->   				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[vbif_idx]);
-> +				dpu_kms->hw_vbif[vbif_idx] = NULL;
-> +			}
->   		}
->   	}
->   
+ drivers/acpi/property.c |  3 +++
+ drivers/pci/pci-acpi.c  | 21 +++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-
+diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+index 12bbfe833609..bafe35c301ac 100644
+--- a/drivers/acpi/property.c
++++ b/drivers/acpi/property.c
+@@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
+ 	/* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
+ 	GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
+ 		  0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
++	/* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
++	GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
++		  0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
+ };
+ 
+ /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
+diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+index 3ae435beaf0a..d7c6ba48486f 100644
+--- a/drivers/pci/pci-acpi.c
++++ b/drivers/pci/pci-acpi.c
+@@ -1369,12 +1369,33 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+ 		dev->external_facing = 1;
+ }
+ 
++static int pci_dev_has_dma_property(struct pci_dev *dev)
++{
++	struct acpi_device *adev;
++	const union acpi_object *obj;
++
++	adev = ACPI_COMPANION(&dev->dev);
++	if (!adev)
++		return 0;
++
++	/*
++	 * Property also used by Microsoft Windows for same purpose,
++	 * (to implement DMA protection from a device, using the IOMMU).
++	 */
++	if (!acpi_dev_get_property(adev, "DmaProperty", ACPI_TYPE_INTEGER,
++				   &obj) && obj->integer.value == 1)
++		return 1;
++
++	return 0;
++}
++
+ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+ {
+ 	struct pci_dev *pci_dev = to_pci_dev(dev);
+ 
+ 	pci_acpi_optimize_delay(pci_dev, adev->handle);
+ 	pci_acpi_set_external_facing(pci_dev);
++	pci_dev->untrusted |= pci_dev_has_dma_property(pci_dev);
+ 	pci_acpi_add_edr_notifier(pci_dev);
+ 
+ 	pci_acpi_add_pm_notifier(adev, pci_dev);
 -- 
-With best wishes
-Dmitry
+2.36.0.rc2.479.g8af0fa9b8e-goog
+

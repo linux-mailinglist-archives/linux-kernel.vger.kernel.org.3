@@ -2,422 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF9D510CA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C9B510CA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356093AbiDZX2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 19:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S1356080AbiDZX20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 19:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240844AbiDZX2j (ORCPT
+        with ESMTP id S240844AbiDZX2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 19:28:39 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B62D1D32E;
-        Tue, 26 Apr 2022 16:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651015529; x=1682551529;
+        Tue, 26 Apr 2022 19:28:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5F79FE5;
+        Tue, 26 Apr 2022 16:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651015511; x=1682551511;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=VBHhZTUndDoE3XZwQ3zJr364tYVtcvh1w48A7WY8HM4=;
-  b=T4V+XCwKf6GKo+0Q1rn7/D6D1Izao6YMgYOxnIeQHEYsRc2r5aQzR4oo
-   CNzfTHgr05lsYf6iwnK1h8O4XsrxvJUdrgG9EaB5JTVZinGDDLoodIkK+
-   lEY+/w9VPR/+OqZnVoxiGhYz3C2bxNYK9l23YnzWWgEb+bZypr5AgQUeV
-   o=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Apr 2022 16:25:27 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:25:27 -0700
-Received: from [10.253.37.230] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
- 2022 16:25:25 -0700
-Message-ID: <e557a608-f488-2c3b-8e81-458e28f28520@quicinc.com>
-Date:   Wed, 27 Apr 2022 07:25:23 +0800
+  bh=Ynl19ZLOspjN8QGU+VF6OwmDawwZGa5YZ/a8Uq9KqFo=;
+  b=OSd8aPGG8W/Mkk/m9gLAsq7oXAFd6XrwtYrilxJlXsKX+vi6KKhpyNPJ
+   Ln5Yx2Z4xfmC/eTlGGsy+1LMezpm0zFtcOzzTTkO4d74ZoTP3B7c2wc/P
+   /MK5b/TlCZqindwyjrfyuk+DVjQx3S2htKKsGDNva9+jNL9mnox1H8hcR
+   78k0kIkhPxprbn0TVqDXjLMwabckRK7qd/fmPgPMjXpeyIofMTmSgCTwf
+   1Akc7mn1dzlcvjsP0B3wWJNkxyKdtjU9yokYIjLnYLZ5TxhOQibHZ5Bn7
+   u6FI0nGunRsEVGpEm4zWzf2x9BPaqlPxO9hW15g8Q8ekOTrPf9BIUah5w
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="352193643"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="352193643"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:25:08 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="580225175"
+Received: from dsocek-mobl2.amr.corp.intel.com (HELO [10.212.69.119]) ([10.212.69.119])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 16:25:07 -0700
+Message-ID: <15b34b16-b0e9-b1de-4de8-d243834caf9a@intel.com>
+Date:   Tue, 26 Apr 2022 16:28:00 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1] Bluetooth: btusb: Set
- HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 01/21] x86/virt/tdx: Detect SEAM
 Content-Language: en-US
-To:     Marcel Holtmann <marcel@holtmann.org>
-CC:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-References: <1650012368-13505-1-git-send-email-quic_zijuhu@quicinc.com>
- <1D02DBF7-9368-43D5-9062-96CC73E22B57@holtmann.org>
- <23ab1e90-fc3c-117c-01e2-bc73288b7d47@quicinc.com>
- <389C696B-0A23-4033-A047-922EB2E7A997@holtmann.org>
-From:   quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <389C696B-0A23-4033-A047-922EB2E7A997@holtmann.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
+ <334c4b90-52c4-cffc-f3e2-4bd6a987eb69@intel.com>
+ <ce325155bada13c829b6213a3ec65294902c72c8.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ce325155bada13c829b6213a3ec65294902c72c8.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/2022 2:14 AM, Marcel Holtmann wrote:
-> Hi,
+On 4/26/22 16:12, Kai Huang wrote:
+> Hi Dave,
 > 
->>>> Set HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA controllers since
->>>> they answer HCI_OP_READ_DEF_ERR_DATA_REPORTING with error code
->>>> "UNKNOWN HCI COMMAND" as shown below:
->>>>
->>>> [ 580.517552] Bluetooth: hci0: unexpected cc 0x0c5a length: 1 < 2
->>>> [ 580.517660] Bluetooth: hci0: Opcode 0x c5a failed: -38
->>>>
->>>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
->>>> ---
->>>> drivers/bluetooth/btusb.c | 2 ++
->>>> 1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
->>>> index 06a854a2507e..a33f8705f147 100644
->>>> --- a/drivers/bluetooth/btusb.c
->>>> +++ b/drivers/bluetooth/btusb.c
->>>> @@ -3340,6 +3340,8 @@ static int btusb_setup_qca(struct hci_dev *hdev)
->>>> 	 */
->>>> 	set_bit(HCI_QUIRK_BROKEN_ENHANCED_SETUP_SYNC_CONN, &hdev->quirks);
->>>>
->>>> +	set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
->>>> +
->>>> 	return 0;
->>>> }
->>>
->>> please include the supported commands output from btmon that indicates that this hardware declares support for this command.
->>>
->> hcitool -i hci0 cmd 0x04 0x02
->> < HCI Command: ogf 0x04, ocf 0x0002, plen 0
->>> HCI Event: 0x0e plen 68
->> 01 02 10 00 FF FF FB 03 CE FF EF FF FF FF FF 1F F2 0F E8 FE
->> 3F F7 8F FF 1C 00 04 00 61 FF FF FF 7F BE 20 F5 FF F0 FF FF
->> FF FF FF FF FF EF FF FF FF FF 03 00 00 00 00 00 00 00 00 00
->> 00 00 00 00 00 00 00 00
+> Thanks for review!
+> 
+> On Tue, 2022-04-26 at 13:21 -0700, Dave Hansen wrote:
+>>> +config INTEL_TDX_HOST
+>>> +	bool "Intel Trust Domain Extensions (TDX) host support"
+>>> +	default n
+>>> +	depends on CPU_SUP_INTEL
+>>> +	depends on X86_64
+>>> +	help
+>>> +	  Intel Trust Domain Extensions (TDX) protects guest VMs from
+>>> malicious
+>>> +	  host and certain physical attacks.  This option enables necessary
+>>> TDX
+>>> +	  support in host kernel to run protected VMs.
+>>> +
+>>> +	  If unsure, say N.
 >>
->> btmon output:
->> < HCI Command: Read Local Supported Commands (0x04|0x0002) plen 0 5.414488
->>> HCI Event: Command Complete (0x0e) plen 68 5.419751
->>      Read Local Supported Commands (0x04|0x0002) ncmd 1
->>        Status: Success (0x00)
->>        Commands: 288 entries
->>          Inquiry (Octet 0 - Bit 0)
->>          Inquiry Cancel (Octet 0 - Bit 1)
->>          Periodic Inquiry Mode (Octet 0 - Bit 2)
->>          Exit Periodic Inquiry Mode (Octet 0 - Bit 3)
->>          Create Connection (Octet 0 - Bit 4)
->>          Disconnect (Octet 0 - Bit 5)
->>          Add SCO Connection (Octet 0 - Bit 6)
->>          Create Connection Cancel (Octet 0 - Bit 7)
->>          Accept Connection Request (Octet 1 - Bit 0)
->>          Reject Connection Request (Octet 1 - Bit 1)
->>          Link Key Request Reply (Octet 1 - Bit 2)
->>          Link Key Request Negative Reply (Octet 1 - Bit 3)
->>          PIN Code Request Reply (Octet 1 - Bit 4)
->>          PIN Code Request Negative Reply (Octet 1 - Bit 5)
->>          Change Connection Packet Type (Octet 1 - Bit 6)
->>          Authentication Requested (Octet 1 - Bit 7)
->>          Set Connection Encryption (Octet 2 - Bit 0)
->>          Change Connection Link Key (Octet 2 - Bit 1)
->>          Remote Name Request (Octet 2 - Bit 3)
->>          Remote Name Request Cancel (Octet 2 - Bit 4)
->>          Read Remote Supported Features (Octet 2 - Bit 5)
->>          Read Remote Extended Features (Octet 2 - Bit 6)
->>          Read Remote Version Information (Octet 2 - Bit 7)
->>          Read Clock Offset (Octet 3 - Bit 0)
->>          Read LMP Handle (Octet 3 - Bit 1)
->>          Hold Mode (Octet 4 - Bit 1)
->>          Sniff Mode (Octet 4 - Bit 2)
->>          Exit Sniff Mode (Octet 4 - Bit 3)
->>          QoS Setup (Octet 4 - Bit 6)
->>          Role Discovery (Octet 4 - Bit 7)
->>          Switch Role (Octet 5 - Bit 0)
->>          Read Link Policy Settings (Octet 5 - Bit 1)
->>          Write Link Policy Settings (Octet 5 - Bit 2)
->>          Read Default Link Policy Settings (Octet 5 - Bit 3)
->>          Write Default Link Policy Settings (Octet 5 - Bit 4)
->>          Flow Specification (Octet 5 - Bit 5)
->>          Set Event Mask (Octet 5 - Bit 6)
->>          Reset (Octet 5 - Bit 7)
->>          Set Event Filter (Octet 6 - Bit 0)
->>          Flush (Octet 6 - Bit 1)
->>          Read PIN Type (Octet 6 - Bit 2)
->>          Write PIN Type (Octet 6 - Bit 3)
->>          Read Stored Link Key (Octet 6 - Bit 5)
->>          Write Stored Link Key (Octet 6 - Bit 6)
->>          Delete Stored Link Key (Octet 6 - Bit 7)
->>          Write Local Name (Octet 7 - Bit 0)
->>          Read Local Name (Octet 7 - Bit 1)
->>          Read Connection Accept Timeout (Octet 7 - Bit 2)
->>          Write Connection Accept Timeout (Octet 7 - Bit 3)
->>          Read Page Timeout (Octet 7 - Bit 4)
->>          Write Page Timeout (Octet 7 - Bit 5)
->>          Read Scan Enable (Octet 7 - Bit 6)
->>          Write Scan Enable (Octet 7 - Bit 7)
->>          Read Page Scan Activity (Octet 8 - Bit 0)
->>          Write Page Scan Activity (Octet 8 - Bit 1)
->>          Read Inquiry Scan Activity (Octet 8 - Bit 2)
->>          Write Inquiry Scan Activity (Octet 8 - Bit 3)
->>          Read Authentication Enable (Octet 8 - Bit 4)
->>          Write Authentication Enable (Octet 8 - Bit 5)
->>          Read Encryption Mode (Octet 8 - Bit 6)
->>          Write Encryption Mode (Octet 8 - Bit 7)
->>          Read Class of Device (Octet 9 - Bit 0)
->>          Write Class of Device (Octet 9 - Bit 1)
->>          Read Voice Setting (Octet 9 - Bit 2)
->>          Write Voice Setting (Octet 9 - Bit 3)
->>          Read Automatic Flush Timeout (Octet 9 - Bit 4)
->>          Write Automatic Flush Timeout (Octet 9 - Bit 5)
->>          Read Num Broadcast Retransmissions (Octet 9 - Bit 6)
->>          Write Num Broadcast Retransmissions (Octet 9 - Bit 7)
->>          Read Hold Mode Activity (Octet 10 - Bit 0)
->>          Write Hold Mode Activity (Octet 10 - Bit 1)
->>          Read Transmit Power Level (Octet 10 - Bit 2)
->>          Read Sync Flow Control Enable (Octet 10 - Bit 3)
->>          Write Sync Flow Control Enable (Octet 10 - Bit 4)
->>          Set Controller To Host Flow Control (Octet 10 - Bit 5)
->>          Host Buffer Size (Octet 10 - Bit 6)
->>          Host Number of Completed Packets (Octet 10 - Bit 7)
->>          Read Link Supervision Timeout (Octet 11 - Bit 0)
->>          Write Link Supervision Timeout (Octet 11 - Bit 1)
->>          Read Number of Supported IAC (Octet 11 - Bit 2)
->>          Read Current IAC LAP (Octet 11 - Bit 3)
->>          Write Current IAC LAP (Octet 11 - Bit 4)
->>          Set AFH Host Channel Classification (Octet 12 - Bit 1)
->>          Read Inquiry Scan Type (Octet 12 - Bit 4)
->>          Write Inquiry Scan Type (Octet 12 - Bit 5)
->>          Read Inquiry Mode (Octet 12 - Bit 6)
->>          Write Inquiry Mode (Octet 12 - Bit 7)
->>          Read Page Scan Type (Octet 13 - Bit 0)
->>          Write Page Scan Type (Octet 13 - Bit 1)
->>          Read AFH Channel Assessment Mode (Octet 13 - Bit 2)
->>          Write AFH Channel Assessment Mode (Octet 13 - Bit 3)
->>          Read Local Version Information (Octet 14 - Bit 3)
->>          Read Local Supported Features (Octet 14 - Bit 5)
->>          Read Local Extended Features (Octet 14 - Bit 6)
->>          Read Buffer Size (Octet 14 - Bit 7)
->>          Read BD ADDR (Octet 15 - Bit 1)
->>          Read Failed Contact Counter (Octet 15 - Bit 2)
->>          Reset Failed Contact Counter (Octet 15 - Bit 3)
->>          Read Link Quality (Octet 15 - Bit 4)
->>          Read RSSI (Octet 15 - Bit 5)
->>          Read AFH Channel Map (Octet 15 - Bit 6)
->>          Read Clock (Octet 15 - Bit 7)
->>          Read Loopback Mode (Octet 16 - Bit 0)
->>          Write Loopback Mode (Octet 16 - Bit 1)
->>          Enable Device Under Test Mode (Octet 16 - Bit 2)
->>          Setup Synchronous Connection (Octet 16 - Bit 3)
->>          Accept Synchronous Connection Request (Octet 16 - Bit 4)
->>          Reject Synchronous Connection Request (Octet 16 - Bit 5)
->>          Read Extended Inquiry Response (Octet 17 - Bit 0)
->>          Write Extended Inquiry Response (Octet 17 - Bit 1)
->>          Refresh Encryption Key (Octet 17 - Bit 2)
->>          Sniff Subrating (Octet 17 - Bit 4)
->>          Read Simple Pairing Mode (Octet 17 - Bit 5)
->>          Write Simple Pairing Mode (Octet 17 - Bit 6)
->>          Read Local OOB Data (Octet 17 - Bit 7)
->>          Read Inquiry Response TX Power Level (Octet 18 - Bit 0)
->>          Write Inquiry Transmit Power Level (Octet 18 - Bit 1)
->>          Read Default Erroneous Data Reporting (Octet 18 - Bit 2)
->>          Write Default Erroneous Data Reporting (Octet 18 - Bit 3)
->>          IO Capability Request Reply (Octet 18 - Bit 7)
->>          User Confirmation Request Reply (Octet 19 - Bit 0)
->>          User Confirmation Request Neg Reply (Octet 19 - Bit 1)
->>          User Passkey Request Reply (Octet 19 - Bit 2)
->>          User Passkey Request Negative Reply (Octet 19 - Bit 3)
->>          Remote OOB Data Request Reply (Octet 19 - Bit 4)
->>          Write Simple Pairing Debug Mode (Octet 19 - Bit 5)
->>          Enhanced Flush (Octet 19 - Bit 6)
->>          Remote OOB Data Request Neg Reply (Octet 19 - Bit 7)
->>          Send Keypress Notification (Octet 20 - Bit 2)
->>          IO Capability Request Negative Reply (Octet 20 - Bit 3)
->>          Read Encryption Key Size (Octet 20 - Bit 4)
->>          Set Event Mask Page 2 (Octet 22 - Bit 2)
->>          Read Enhanced Transmit Power Level (Octet 24 - Bit 0)
->>          Read LE Host Supported (Octet 24 - Bit 5)
->>          Write LE Host Supported (Octet 24 - Bit 6)
->>          LE Set Event Mask (Octet 25 - Bit 0)
->>          LE Read Buffer Size (Octet 25 - Bit 1)
->>          LE Read Local Supported Features (Octet 25 - Bit 2)
->>          Octet 25 - Bit 3
->>          LE Set Random Address (Octet 25 - Bit 4)
->>          LE Set Advertising Parameters (Octet 25 - Bit 5)
->>          LE Read Advertising Channel TX Power (Octet 25 - Bit 6)
->>          LE Set Advertising Data (Octet 25 - Bit 7)
->>          LE Set Scan Response Data (Octet 26 - Bit 0)
->>          LE Set Advertise Enable (Octet 26 - Bit 1)
->>          LE Set Scan Parameters (Octet 26 - Bit 2)
->>          LE Set Scan Enable (Octet 26 - Bit 3)
->>          LE Create Connection (Octet 26 - Bit 4)
->>          LE Create Connection Cancel (Octet 26 - Bit 5)
->>          LE Read White List Size (Octet 26 - Bit 6)
->>          LE Clear White List (Octet 26 - Bit 7)
->>          LE Add Device To White List (Octet 27 - Bit 0)
->>          LE Remove Device From White List (Octet 27 - Bit 1)
->>          LE Connection Update (Octet 27 - Bit 2)
->>          LE Set Host Channel Classification (Octet 27 - Bit 3)
->>          LE Read Channel Map (Octet 27 - Bit 4)
->>          LE Read Remote Used Features (Octet 27 - Bit 5)
->>          LE Encrypt (Octet 27 - Bit 6)
->>          LE Rand (Octet 27 - Bit 7)
->>          LE Start Encryption (Octet 28 - Bit 0)
->>          LE Long Term Key Request Reply (Octet 28 - Bit 1)
->>          LE Long Term Key Request Neg Reply (Octet 28 - Bit 2)
->>          LE Read Supported States (Octet 28 - Bit 3)
->>          LE Receiver Test (Octet 28 - Bit 4)
->>          LE Transmitter Test (Octet 28 - Bit 5)
->>          LE Test End (Octet 28 - Bit 6)
->>          Octet 29 - Bit 1
->>          Octet 29 - Bit 2
->>          Enhanced Setup Synchronous Connection (Octet 29 - Bit 3)
->>          Enhanced Accept Synchronous Connection Request (Octet 29 - Bit 4)
->>          Read Local Supported Codecs (Octet 29 - Bit 5)
->>          Set External Frame Configuration (Octet 29 - Bit 7)
->>          Set Triggered Clock Capture (Octet 30 - Bit 5)
->>          Set Connectionless Slave Broadcast (Octet 31 - Bit 0)
->>          Start Synchronization Train (Octet 31 - Bit 2)
->>          Set Reserved LT_ADDR (Octet 31 - Bit 4)
->>          Delete Reserved LT_ADDR (Octet 31 - Bit 5)
->>          Set Connectionless Slave Broadcast Data (Octet 31 - Bit 6)
->>          Read Synchronization Train Parameters (Octet 31 - Bit 7)
->>          Write Synchronization Train Parameters (Octet 32 - Bit 0)
->>          Remote OOB Extended Data Request Reply (Octet 32 - Bit 1)
->>          Read Secure Connections Host Support (Octet 32 - Bit 2)
->>          Write Secure Connections Host Support (Octet 32 - Bit 3)
->>          Read Authenticated Payload Timeout (Octet 32 - Bit 4)
->>          Write Authenticated Payload Timeout (Octet 32 - Bit 5)
->>          Read Local OOB Extended Data (Octet 32 - Bit 6)
->>          Write Secure Connections Test Mode (Octet 32 - Bit 7)
->>          LE Remote Connection Parameter Request Reply (Octet 33 - Bit 4)
->>          LE Remote Connection Parameter Request Negative Reply (Octet 33 - Bit 5)
->>          LE Set Data Length (Octet 33 - Bit 6)
->>          LE Read Suggested Default Data Length (Octet 33 - Bit 7)
->>          LE Write Suggested Default Data Length (Octet 34 - Bit 0)
->>          LE Read Local P-256 Public Key (Octet 34 - Bit 1)
->>          LE Generate DHKey (Octet 34 - Bit 2)
->>          LE Add Device To Resolving List (Octet 34 - Bit 3)
->>          LE Remove Device From Resolving List (Octet 34 - Bit 4)
->>          LE Clear Resolving List (Octet 34 - Bit 5)
->>          LE Read Resolving List Size (Octet 34 - Bit 6)
->>          LE Read Peer Resolvable Address (Octet 34 - Bit 7)
->>          LE Read Local Resolvable Address (Octet 35 - Bit 0)
->>          LE Set Address Resolution Enable (Octet 35 - Bit 1)
->>          LE Set Resolvable Private Address Timeout (Octet 35 - Bit 2)
->>          LE Read Maximum Data Length (Octet 35 - Bit 3)
->>          Octet 35 - Bit 4
->>          Octet 35 - Bit 5
->>          Octet 35 - Bit 6
->>          Octet 35 - Bit 7
->>          Octet 36 - Bit 0
->>          Octet 36 - Bit 1
->>          Octet 36 - Bit 2
->>          Octet 36 - Bit 3
->>          Octet 36 - Bit 4
->>          Octet 36 - Bit 5
->>          Octet 36 - Bit 6
->>          Octet 36 - Bit 7
->>          Octet 37 - Bit 0
->>          Octet 37 - Bit 1
->>          Octet 37 - Bit 2
->>          Octet 37 - Bit 3
->>          Octet 37 - Bit 4
->>          Octet 37 - Bit 5
->>          Octet 37 - Bit 6
->>          Octet 37 - Bit 7
->>          Octet 38 - Bit 0
->>          Octet 38 - Bit 1
->>          Octet 38 - Bit 2
->>          Octet 38 - Bit 3
->>          Octet 38 - Bit 4
->>          Octet 38 - Bit 5
->>          Octet 38 - Bit 6
->>          Octet 38 - Bit 7
->>          Octet 39 - Bit 0
->>          Octet 39 - Bit 1
->>          Octet 39 - Bit 2
->>          Octet 39 - Bit 3
->>          Octet 39 - Bit 4
->>          Octet 39 - Bit 5
->>          Octet 39 - Bit 6
->>          Octet 39 - Bit 7
->>          Octet 40 - Bit 0
->>          Octet 40 - Bit 1
->>          Octet 40 - Bit 2
->>          Octet 40 - Bit 3
->>          Octet 40 - Bit 4
->>          Octet 40 - Bit 5
->>          Octet 40 - Bit 6
->>          Octet 40 - Bit 7
->>          Octet 41 - Bit 0
->>          Octet 41 - Bit 1
->>          Octet 41 - Bit 2
->>          Octet 41 - Bit 3
->>          Octet 41 - Bit 5
->>          Octet 41 - Bit 6
->>          Octet 41 - Bit 7
->>          Octet 42 - Bit 0
->>          Octet 42 - Bit 1
->>          Octet 42 - Bit 2
->>          Octet 42 - Bit 3
->>          Octet 42 - Bit 4
->>          Octet 42 - Bit 5
->>          Octet 42 - Bit 6
->>          Octet 42 - Bit 7
->>          Octet 43 - Bit 0
->>          Octet 43 - Bit 1
->>          Octet 43 - Bit 2
->>          Octet 43 - Bit 3
->>          Octet 43 - Bit 4
->>          Octet 43 - Bit 5
->>          Octet 43 - Bit 6
->>          Octet 43 - Bit 7
->>          Octet 44 - Bit 0
->>          Octet 44 - Bit 1
->>          Octet 44 - Bit 2
->>          Octet 44 - Bit 3
->>          Octet 44 - Bit 4
->>          Octet 44 - Bit 5
->>          Octet 44 - Bit 6
->>          Octet 44 - Bit 7
->>          Octet 45 - Bit 0
->>          Octet 45 - Bit 1
->>          Octet 45 - Bit 2
->>          Octet 45 - Bit 3
->>          Octet 45 - Bit 4
->>          Octet 45 - Bit 5
->>          Octet 45 - Bit 6
->>          Octet 45 - Bit 7
->>          Octet 46 - Bit 0
->>          Octet 46 - Bit 1
+>> Nothing about KVM?
 > 
-> you might want to use a recent btmon. However can you show how the Read Default Erroneous Data Reporting is failing? It sounds like this hardware is fundamentally broken.
+> I'll add KVM into the context. How about below?
 > 
-# hcitool -i hci0 cmd 0x03 0x5a
-< HCI Command: ogf 0x03, ocf 0x005a, plen 0
-> HCI Event: 0x0e plen 4
-  01 5A 0C 01
+> "Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
+> host and certain physical attacks.  This option enables necessary TDX
+> support in host kernel to allow KVM to run protected VMs called Trust
+> Domains (TD)."
 
-btmon output:
-@ RAW Open: hcitool (privileged) version 2.22                                                                                          {0x0002} 331.950253
-< HCI Command: Read Default Erroneous Data Reporting (0x03|0x005a) plen 0                                                                    #1 331.950535
-> HCI Event: Command Complete (0x0e) plen 4                                                                                                  #2 331.951421
-      Read Default Erroneous Data Reporting (0x03|0x005a) ncmd 1
-        Status: Unknown HCI Command (0x01)
-@ RAW Close: hcitool                                                                                                                   
+What about a dependency?  Isn't this dead code without CONFIG_KVM=y/m?
 
-> Regards
+>>> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+>>> new file mode 100644
+>>> index 000000000000..03f35c75f439
+>>> --- /dev/null
+>>> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+>>> @@ -0,0 +1,102 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Copyright(c) 2022 Intel Corporation.
+>>> + *
+>>> + * Intel Trusted Domain Extensions (TDX) support
+>>> + */
+>>> +
+>>> +#define pr_fmt(fmt)	"tdx: " fmt
+>>> +
+>>> +#include <linux/types.h>
+>>> +#include <linux/cpumask.h>
+>>> +#include <asm/msr-index.h>
+>>> +#include <asm/msr.h>
+>>> +#include <asm/cpufeature.h>
+>>> +#include <asm/cpufeatures.h>
+>>> +#include <asm/tdx.h>
+>>> +
+>>> +/* Support Intel Secure Arbitration Mode Range Registers (SEAMRR) */
+>>> +#define MTRR_CAP_SEAMRR			BIT(15)
+>>> +
+>>> +/* Core-scope Intel SEAMRR base and mask registers. */
+>>> +#define MSR_IA32_SEAMRR_PHYS_BASE	0x00001400
+>>> +#define MSR_IA32_SEAMRR_PHYS_MASK	0x00001401
+>>> +
+>>> +#define SEAMRR_PHYS_BASE_CONFIGURED	BIT_ULL(3)
+>>> +#define SEAMRR_PHYS_MASK_ENABLED	BIT_ULL(11)
+>>> +#define SEAMRR_PHYS_MASK_LOCKED		BIT_ULL(10)
+>>> +
+>>> +#define SEAMRR_ENABLED_BITS	\
+>>> +	(SEAMRR_PHYS_MASK_ENABLED | SEAMRR_PHYS_MASK_LOCKED)
+>>> +
+>>> +/* BIOS must configure SEAMRR registers for all cores consistently */
+>>> +static u64 seamrr_base, seamrr_mask;
+>>> +
+>>> +static bool __seamrr_enabled(void)
+>>> +{
+>>> +	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
+>>> +}
+>>
+>> But there's no case where seamrr_mask is non-zero and where
+>> _seamrr_enabled().  Why bother checking the SEAMRR_ENABLED_BITS?
 > 
-> Marcel
-> 
+> seamrr_mask will only be non-zero when SEAMRR is enabled by BIOS, otherwise it
+> is 0.  It will also be cleared when BIOS mis-configuration is detected on any
+> AP.  SEAMRR_ENABLED_BITS is used to check whether SEAMRR is enabled.
 
+The point is that this could be:
+
+	return !!seamrr_mask;
+
+
+>>> +static void detect_seam_ap(struct cpuinfo_x86 *c)
+>>> +{
+>>> +	u64 base, mask;
+>>> +
+>>> +	/*
+>>> +	 * Don't bother to detect this AP if SEAMRR is not
+>>> +	 * enabled after earlier detections.
+>>> +	 */
+>>> +	if (!__seamrr_enabled())
+>>> +		return;
+>>> +
+>>> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
+>>> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
+>>> +
+>>
+>> This is the place for a comment about why the values have to be equal.
+> 
+> I'll add below:
+> 
+> /* BIOS must configure SEAMRR consistently across all cores */
+
+What happens if the BIOS doesn't do this?  What actually breaks?  In
+other words, do we *NEED* error checking here?
+
+>>> +	if (base == seamrr_base && mask == seamrr_mask)
+>>> +		return;
+>>> +
+>>> +	pr_err("Inconsistent SEAMRR configuration by BIOS\n");
+>>> +	/* Mark SEAMRR as disabled. */
+>>> +	seamrr_base = 0;
+>>> +	seamrr_mask = 0;
+>>> +}
+>>> +
+>>> +static void detect_seam(struct cpuinfo_x86 *c)
+>>> +{
+>>> +	if (c == &boot_cpu_data)
+>>> +		detect_seam_bsp(c);
+>>> +	else
+>>> +		detect_seam_ap(c);
+>>> +}
+>>> +
+>>> +void tdx_detect_cpu(struct cpuinfo_x86 *c)
+>>> +{
+>>> +	detect_seam(c);
+>>> +}
+>>
+>> The extra function looks a bit silly here now.  Maybe this gets filled
+>> out later, but it's goofy-looking here.
+> 
+> Thomas suggested to put all TDX detection related in one function call, so I
+> added tdx_detect_cpu().  I'll move this to the next patch when detecting TDX
+> KeyIDs.
+
+That's fine, or just add a comment or a changelog sentence about this
+being filled out later.

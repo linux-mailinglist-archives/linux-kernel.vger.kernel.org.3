@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BDC50F19F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 09:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2658850F19A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 08:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343579AbiDZHCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 03:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
+        id S1343570AbiDZHCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 03:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343573AbiDZHCl (ORCPT
+        with ESMTP id S1343552AbiDZHCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 03:02:41 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1F1606C8;
-        Mon, 25 Apr 2022 23:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650956374; x=1682492374;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aw5r7BrW1vwKf05/8tJIj1dopbQ3n7YUHorQBJQ/h8o=;
-  b=v1QPtj84natss33sTLNDCdQ0LyYa8U3o3aR1ZiP/fU11uCBFYS0RzWVK
-   2j2LrdnYSs6J8ZWs/ibJjyc/9TWoKuOxm4hkSWqdQ02w4pUkYv37miY28
-   5+Z492nh2gPQjaXpTxa2upR1SEq248iT0lvvNEirnxS2/9Zptv1Y7MvHJ
-   o=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Apr 2022 23:59:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2022 23:59:33 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Apr 2022 23:59:33 -0700
-Received: from [10.216.40.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Apr
- 2022 23:59:29 -0700
-Message-ID: <c625c66b-54f6-1796-4ccc-b807ca821ef3@quicinc.com>
-Date:   Tue, 26 Apr 2022 12:29:25 +0530
+        Tue, 26 Apr 2022 03:02:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A4C60055
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 23:59:33 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id ADF3B1F388;
+        Tue, 26 Apr 2022 06:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650956371; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dQZAfakINXXUF6QkmKLshpcGVsJFPzKHe9GL9BtpKHQ=;
+        b=gCaf9t121tHQp1fEYxinnaNc7/2/j88so7AtrAFXPKKCZKHFB15rIc0owCHyFx+J7ojKCy
+        aXivEz47i1AhOBwwKe+ytyEcoOJ+8hqqjtifEmWnraD/Yb7gfZodnr2Chyz2YxDjZziKLU
+        TVGMsvLaRRGTbV3wfG3YGche3u1h1h0=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 601DC2C149;
+        Tue, 26 Apr 2022 06:59:31 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 08:59:29 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Nico Pache <npache@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Rientjes <rientjes@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [RFC 3/3] exit: Check for MMF_OOM_SKIP in exit_mmap
+Message-ID: <YmeYUX7Nh47j3gKc@dhcp22.suse.cz>
+References: <20220421190533.1601879-1-npache@redhat.com>
+ <20220421190533.1601879-4-npache@redhat.com>
+ <YmLMBDkHmcjf9Nem@dhcp22.suse.cz>
+ <19303483-5700-fb6e-ba4a-398913370100@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v10 00/12] Add soundcard support for sc7280 based
- platforms.
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-References: <1650636521-18442-1-git-send-email-quic_srivasam@quicinc.com>
- <YmbotwGzLn/Z9Fq5@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YmbotwGzLn/Z9Fq5@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19303483-5700-fb6e-ba4a-398913370100@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 25-04-22 15:00:24, Nico Pache wrote:
+> 
+> 
+> On 4/22/22 11:38, Michal Hocko wrote:
+> > On Thu 21-04-22 15:05:33, Nico Pache wrote:
+> >> The MMF_OOM_SKIP bit is used to indicate weather a mm_struct can not be
+> >> invalided or has already been invalided. exit_mmap currently calls
+> >> __oom_reap_task_mm unconditionally despite the fact that the oom reaper
+> >> may have already called this.
+> >>
+> >> Add a check for the MMF_OOM_SKIP bit being set in exit_mmap to avoid
+> >> unnessary calls to the invalidate code.
+> > 
+> > Why do we care about this?
+> Is there no cost to the MMU/TLB invalidation? The MMU notifier contains a lock
+> too so perhaps we can also avoids some unnecessary MMU notifier lock contention.
 
-On 4/26/2022 12:00 AM, Matthias Kaehlcke wrote:
-> On Fri, Apr 22, 2022 at 07:38:29PM +0530, Srinivasa Rao Mandadapu wrote:
->> This patch set is to add bolero digital macros, WCD and maxim codecs nodes
->> for audio on sc7280 based platforms.
->>
->> This patch set depends on:
->>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=631506
-> There's a newer version (v10) [1]
->
-> which should be ready to land now that 'Add pin control support for lpass
-> sc7280' [2] has landed in Linus' pinctrl tree
-Yes. It's ready for landing. But will post the next version, as per new 
-herobrine dts files for rev5+ boards.
->
->>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=601249
-> These are flagged as 'Queued', so probably landing soon.
-Yes. They may land soon.
->
->>      -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=634203
-> There is a newer version [3] which seems ready to land.
-Yes. It's reviewed.
->
->>      -- Clock reset control patches
-> What is this? I don't think I have seen an upstream version of this.
-> Please provide a link, or if it hasn't be posted upstream yet make sure
-> it is done ASAP.
-These patches are yet to upstream by Clock team. Requested them to do ASAP.
->
-> [1]https://patchwork.kernel.org/project/linux-arm-msm/list/?series=632316
-> [2] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=633019&state=*
-> [3] https://patchwork.kernel.org/project/linux-arm-msm/patch/1650621734-10297-1-git-send-email-quic_srivasam@quicinc.com/
+I am pretty sure that this area can be micro optimized but I do not
+really see a strong reason for that. OOM victims are/should be really
+rare so I do not think that any performance optimization would be really
+visible.
+
+If you want to improve the code then I think a much better plan would be
+to get rid of the whole oom special case altogether. This might be much
+closer than ever after Hugh's recent m{un}lock changes. I didn't have
+time to think that through though. I believe Suren Baghdasaryan has been
+looking into that as well.
+-- 
+Michal Hocko
+SUSE Labs

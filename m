@@ -2,63 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C996D50F8B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDE950F60C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347061AbiDZJTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 05:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S236092AbiDZIw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 04:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243613AbiDZI4E (ORCPT
+        with ESMTP id S1345622AbiDZIjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:56:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4034EDBD21;
-        Tue, 26 Apr 2022 01:41:16 -0700 (PDT)
+        Tue, 26 Apr 2022 04:39:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0572F3EA95;
+        Tue, 26 Apr 2022 01:30:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EEEF3CE1BBB;
-        Tue, 26 Apr 2022 08:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49563C385A0;
-        Tue, 26 Apr 2022 08:41:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A71D4617E8;
+        Tue, 26 Apr 2022 08:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB169C385A4;
+        Tue, 26 Apr 2022 08:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650962472;
-        bh=YAmrpXp5MIOEjNwuTsH5CRX5ibmuaGAFJGk50UW8Nak=;
+        s=korg; t=1650961830;
+        bh=rb+YQb/RpxOJmP1gc+oK1KQiiyTaws1zPR+KDnqVBNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U+Wamz4kNWy5PmrjfZE5nibZJH4zHvxcWjKFNaT/h3b8HkcQ7H7vU74pjOFa2mUy9
-         +lPXhoE31TEinIpvrpycRL9omse1jKxbtQ38RZwCiXG8euzFgDGG31Tz+MRXvaQ2qx
-         XgjUDA+sjW0QWMiozlyuGy93Lb4ScnDqOiXFepBg=
+        b=QZV3Th1UFCnrNnn3Vj+CROLq8VivixLs26Ea4H+J7YccaxDJWWOyDqYwKJEG7+8E9
+         an1mwatNhKZzGC53qFlQOAUDeAf1FxEyDIi10+jZ4k2hH+goekhLl232cIMJzX78Xs
+         i+mkM8u6CCxLnN2qO1nvTJwnpS/Fythn5s2VhUBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Savitz <jsavitz@redhat.com>,
-        Nico Pache <npache@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michal Hocko <mhocko@suse.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        "Herton R. Krzesinski" <herton@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 081/124] oom_kill.c: futex: delay the OOM reaper to allow time for proper futex cleanup
+        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 42/62] KVM: PPC: Fix TCE handling for VFIO
 Date:   Tue, 26 Apr 2022 10:21:22 +0200
-Message-Id: <20220426081749.603734947@linuxfoundation.org>
+Message-Id: <20220426081738.428966768@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
-References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+References: <20220426081737.209637816@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,206 +56,294 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nico Pache <npache@redhat.com>
+From: Alexey Kardashevskiy <aik@ozlabs.ru>
 
-commit e4a38402c36e42df28eb1a5394be87e6571fb48a upstream.
+[ Upstream commit 26a62b750a4e6364b0393562f66759b1494c3a01 ]
 
-The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which
-can be targeted by the oom reaper.  This mapping is used to store the
-futex robust list head; the kernel does not keep a copy of the robust
-list and instead references a userspace address to maintain the
-robustness during a process death.
+The LoPAPR spec defines a guest visible IOMMU with a variable page size.
+Currently QEMU advertises 4K, 64K, 2M, 16MB pages, a Linux VM picks
+the biggest (16MB). In the case of a passed though PCI device, there is
+a hardware IOMMU which does not support all pages sizes from the above -
+P8 cannot do 2MB and P9 cannot do 16MB. So for each emulated
+16M IOMMU page we may create several smaller mappings ("TCEs") in
+the hardware IOMMU.
 
-A race can occur between exit_mm and the oom reaper that allows the oom
-reaper to free the memory of the futex robust list before the exit path
-has handled the futex death:
+The code wrongly uses the emulated TCE index instead of hardware TCE
+index in error handling. The problem is easier to see on POWER8 with
+multi-level TCE tables (when only the first level is preallocated)
+as hash mode uses real mode TCE hypercalls handlers.
+The kernel starts using indirect tables when VMs get bigger than 128GB
+(depends on the max page order).
+The very first real mode hcall is going to fail with H_TOO_HARD as
+in the real mode we cannot allocate memory for TCEs (we can in the virtual
+mode) but on the way out the code attempts to clear hardware TCEs using
+emulated TCE indexes which corrupts random kernel memory because
+it_offset==1<<59 is subtracted from those indexes and the resulting index
+is out of the TCE table bounds.
 
-    CPU1                               CPU2
-    --------------------------------------------------------------------
-    page_fault
-    do_exit "signal"
-    wake_oom_reaper
-                                        oom_reaper
-                                        oom_reap_task_mm (invalidates mm)
-    exit_mm
-    exit_mm_release
-    futex_exit_release
-    futex_cleanup
-    exit_robust_list
-    get_user (EFAULT- can't access memory)
+This fixes kvmppc_clear_tce() to use the correct TCE indexes.
 
-If the get_user EFAULT's, the kernel will be unable to recover the
-waiters on the robust_list, leaving userspace mutexes hung indefinitely.
+While at it, this fixes TCE cache invalidation which uses emulated TCE
+indexes instead of the hardware ones. This went unnoticed as 64bit DMA
+is used these days and VMs map all RAM in one go and only then do DMA
+and this is when the TCE cache gets populated.
 
-Delay the OOM reaper, allowing more time for the exit path to perform
-the futex cleanup.
+Potentially this could slow down mapping, however normally 16MB
+emulated pages are backed by 64K hardware pages so it is one write to
+the "TCE Kill" per 256 updates which is not that bad considering the size
+of the cache (1024 TCEs or so).
 
-Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
+Fixes: ca1fc489cfa0 ("KVM: PPC: Book3S: Allow backing bigger guest IOMMU pages with smaller physical pages")
 
-Based on a patch by Michal Hocko.
-
-Link: https://elixir.bootlin.com/glibc/glibc-2.35/source/nptl/allocatestack.c#L370 [1]
-Link: https://lkml.kernel.org/r/20220414144042.677008-1-npache@redhat.com
-Fixes: 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Cc: Rafael Aquini <aquini@redhat.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Herton R. Krzesinski <herton@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Joel Savitz <jsavitz@redhat.com>
-Cc: Darren Hart <dvhart@infradead.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+Tested-by: David Gibson <david@gibson.dropbear.id.au>
+Reviewed-by: Frederic Barrat <fbarrat@linux.ibm.com>
+Reviewed-by: David Gibson <david@gibson.dropbear.id.au>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220420050840.328223-1-aik@ozlabs.ru
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched.h |    1 
- mm/oom_kill.c         |   54 +++++++++++++++++++++++++++++++++++++-------------
- 2 files changed, 41 insertions(+), 14 deletions(-)
+ arch/powerpc/kvm/book3s_64_vio.c    | 45 +++++++++++++++--------------
+ arch/powerpc/kvm/book3s_64_vio_hv.c | 44 ++++++++++++++--------------
+ 2 files changed, 45 insertions(+), 44 deletions(-)
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1436,6 +1436,7 @@ struct task_struct {
- 	int				pagefault_disabled;
- #ifdef CONFIG_MMU
- 	struct task_struct		*oom_reaper_list;
-+	struct timer_list		oom_reaper_timer;
- #endif
- #ifdef CONFIG_VMAP_STACK
- 	struct vm_struct		*stack_vm_area;
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -635,7 +635,7 @@ done:
- 	 */
- 	set_bit(MMF_OOM_SKIP, &mm->flags);
- 
--	/* Drop a reference taken by wake_oom_reaper */
-+	/* Drop a reference taken by queue_oom_reaper */
- 	put_task_struct(tsk);
+diff --git a/arch/powerpc/kvm/book3s_64_vio.c b/arch/powerpc/kvm/book3s_64_vio.c
+index 03b947429e4d..4518a0f2d6c6 100644
+--- a/arch/powerpc/kvm/book3s_64_vio.c
++++ b/arch/powerpc/kvm/book3s_64_vio.c
+@@ -420,13 +420,19 @@ static void kvmppc_tce_put(struct kvmppc_spapr_tce_table *stt,
+ 	tbl[idx % TCES_PER_PAGE] = tce;
  }
  
-@@ -645,12 +645,12 @@ static int oom_reaper(void *unused)
- 		struct task_struct *tsk = NULL;
- 
- 		wait_event_freezable(oom_reaper_wait, oom_reaper_list != NULL);
--		spin_lock(&oom_reaper_lock);
-+		spin_lock_irq(&oom_reaper_lock);
- 		if (oom_reaper_list != NULL) {
- 			tsk = oom_reaper_list;
- 			oom_reaper_list = tsk->oom_reaper_list;
- 		}
--		spin_unlock(&oom_reaper_lock);
-+		spin_unlock_irq(&oom_reaper_lock);
- 
- 		if (tsk)
- 			oom_reap_task(tsk);
-@@ -659,22 +659,48 @@ static int oom_reaper(void *unused)
- 	return 0;
- }
- 
--static void wake_oom_reaper(struct task_struct *tsk)
-+static void wake_oom_reaper(struct timer_list *timer)
+-static void kvmppc_clear_tce(struct mm_struct *mm, struct iommu_table *tbl,
+-		unsigned long entry)
++static void kvmppc_clear_tce(struct mm_struct *mm, struct kvmppc_spapr_tce_table *stt,
++		struct iommu_table *tbl, unsigned long entry)
  {
--	/* mm is already queued? */
--	if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
-+	struct task_struct *tsk = container_of(timer, struct task_struct,
-+			oom_reaper_timer);
-+	struct mm_struct *mm = tsk->signal->oom_mm;
-+	unsigned long flags;
+-	unsigned long hpa = 0;
+-	enum dma_data_direction dir = DMA_NONE;
++	unsigned long i;
++	unsigned long subpages = 1ULL << (stt->page_shift - tbl->it_page_shift);
++	unsigned long io_entry = entry << (stt->page_shift - tbl->it_page_shift);
 +
-+	/* The victim managed to terminate on its own - see exit_mmap */
-+	if (test_bit(MMF_OOM_SKIP, &mm->flags)) {
-+		put_task_struct(tsk);
- 		return;
++	for (i = 0; i < subpages; ++i) {
++		unsigned long hpa = 0;
++		enum dma_data_direction dir = DMA_NONE;
+ 
+-	iommu_tce_xchg_no_kill(mm, tbl, entry, &hpa, &dir);
++		iommu_tce_xchg_no_kill(mm, tbl, io_entry + i, &hpa, &dir);
 +	}
- 
--	get_task_struct(tsk);
--
--	spin_lock(&oom_reaper_lock);
-+	spin_lock_irqsave(&oom_reaper_lock, flags);
- 	tsk->oom_reaper_list = oom_reaper_list;
- 	oom_reaper_list = tsk;
--	spin_unlock(&oom_reaper_lock);
-+	spin_unlock_irqrestore(&oom_reaper_lock, flags);
- 	trace_wake_reaper(tsk->pid);
- 	wake_up(&oom_reaper_wait);
  }
  
-+/*
-+ * Give the OOM victim time to exit naturally before invoking the oom_reaping.
-+ * The timers timeout is arbitrary... the longer it is, the longer the worst
-+ * case scenario for the OOM can take. If it is too small, the oom_reaper can
-+ * get in the way and release resources needed by the process exit path.
-+ * e.g. The futex robust list can sit in Anon|Private memory that gets reaped
-+ * before the exit path is able to wake the futex waiters.
-+ */
-+#define OOM_REAPER_DELAY (2*HZ)
-+static void queue_oom_reaper(struct task_struct *tsk)
-+{
-+	/* mm is already queued? */
-+	if (test_and_set_bit(MMF_OOM_REAP_QUEUED, &tsk->signal->oom_mm->flags))
-+		return;
-+
-+	get_task_struct(tsk);
-+	timer_setup(&tsk->oom_reaper_timer, wake_oom_reaper, 0);
-+	tsk->oom_reaper_timer.expires = jiffies + OOM_REAPER_DELAY;
-+	add_timer(&tsk->oom_reaper_timer);
-+}
-+
- static int __init oom_init(void)
- {
- 	oom_reaper_th = kthread_run(oom_reaper, NULL, "oom_reaper");
-@@ -682,7 +708,7 @@ static int __init oom_init(void)
- }
- subsys_initcall(oom_init)
- #else
--static inline void wake_oom_reaper(struct task_struct *tsk)
-+static inline void queue_oom_reaper(struct task_struct *tsk)
- {
- }
- #endif /* CONFIG_MMU */
-@@ -933,7 +959,7 @@ static void __oom_kill_process(struct ta
- 	rcu_read_unlock();
- 
- 	if (can_oom_reap)
--		wake_oom_reaper(victim);
-+		queue_oom_reaper(victim);
- 
- 	mmdrop(mm);
- 	put_task_struct(victim);
-@@ -969,7 +995,7 @@ static void oom_kill_process(struct oom_
- 	task_lock(victim);
- 	if (task_will_free_mem(victim)) {
- 		mark_oom_victim(victim);
--		wake_oom_reaper(victim);
-+		queue_oom_reaper(victim);
- 		task_unlock(victim);
- 		put_task_struct(victim);
- 		return;
-@@ -1067,7 +1093,7 @@ bool out_of_memory(struct oom_control *o
- 	 */
- 	if (task_will_free_mem(current)) {
- 		mark_oom_victim(current);
--		wake_oom_reaper(current);
-+		queue_oom_reaper(current);
- 		return true;
+ static long kvmppc_tce_iommu_mapped_dec(struct kvm *kvm,
+@@ -485,6 +491,8 @@ static long kvmppc_tce_iommu_unmap(struct kvm *kvm,
+ 			break;
  	}
  
++	iommu_tce_kill(tbl, io_entry, subpages);
++
+ 	return ret;
+ }
+ 
+@@ -544,6 +552,8 @@ static long kvmppc_tce_iommu_map(struct kvm *kvm,
+ 			break;
+ 	}
+ 
++	iommu_tce_kill(tbl, io_entry, subpages);
++
+ 	return ret;
+ }
+ 
+@@ -590,10 +600,9 @@ long kvmppc_h_put_tce(struct kvm_vcpu *vcpu, unsigned long liobn,
+ 			ret = kvmppc_tce_iommu_map(vcpu->kvm, stt, stit->tbl,
+ 					entry, ua, dir);
+ 
+-		iommu_tce_kill(stit->tbl, entry, 1);
+ 
+ 		if (ret != H_SUCCESS) {
+-			kvmppc_clear_tce(vcpu->kvm->mm, stit->tbl, entry);
++			kvmppc_clear_tce(vcpu->kvm->mm, stt, stit->tbl, entry);
+ 			goto unlock_exit;
+ 		}
+ 	}
+@@ -669,13 +678,13 @@ long kvmppc_h_put_tce_indirect(struct kvm_vcpu *vcpu,
+ 		 */
+ 		if (get_user(tce, tces + i)) {
+ 			ret = H_TOO_HARD;
+-			goto invalidate_exit;
++			goto unlock_exit;
+ 		}
+ 		tce = be64_to_cpu(tce);
+ 
+ 		if (kvmppc_tce_to_ua(vcpu->kvm, tce, &ua)) {
+ 			ret = H_PARAMETER;
+-			goto invalidate_exit;
++			goto unlock_exit;
+ 		}
+ 
+ 		list_for_each_entry_lockless(stit, &stt->iommu_tables, next) {
+@@ -684,19 +693,15 @@ long kvmppc_h_put_tce_indirect(struct kvm_vcpu *vcpu,
+ 					iommu_tce_direction(tce));
+ 
+ 			if (ret != H_SUCCESS) {
+-				kvmppc_clear_tce(vcpu->kvm->mm, stit->tbl,
+-						entry);
+-				goto invalidate_exit;
++				kvmppc_clear_tce(vcpu->kvm->mm, stt, stit->tbl,
++						 entry + i);
++				goto unlock_exit;
+ 			}
+ 		}
+ 
+ 		kvmppc_tce_put(stt, entry + i, tce);
+ 	}
+ 
+-invalidate_exit:
+-	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
+-		iommu_tce_kill(stit->tbl, entry, npages);
+-
+ unlock_exit:
+ 	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+ 
+@@ -735,20 +740,16 @@ long kvmppc_h_stuff_tce(struct kvm_vcpu *vcpu,
+ 				continue;
+ 
+ 			if (ret == H_TOO_HARD)
+-				goto invalidate_exit;
++				return ret;
+ 
+ 			WARN_ON_ONCE(1);
+-			kvmppc_clear_tce(vcpu->kvm->mm, stit->tbl, entry);
++			kvmppc_clear_tce(vcpu->kvm->mm, stt, stit->tbl, entry + i);
+ 		}
+ 	}
+ 
+ 	for (i = 0; i < npages; ++i, ioba += (1ULL << stt->page_shift))
+ 		kvmppc_tce_put(stt, ioba >> stt->page_shift, tce_value);
+ 
+-invalidate_exit:
+-	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
+-		iommu_tce_kill(stit->tbl, ioba >> stt->page_shift, npages);
+-
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(kvmppc_h_stuff_tce);
+diff --git a/arch/powerpc/kvm/book3s_64_vio_hv.c b/arch/powerpc/kvm/book3s_64_vio_hv.c
+index 35fd67b4ceb4..abb49d863329 100644
+--- a/arch/powerpc/kvm/book3s_64_vio_hv.c
++++ b/arch/powerpc/kvm/book3s_64_vio_hv.c
+@@ -251,13 +251,19 @@ extern void iommu_tce_kill_rm(struct iommu_table *tbl,
+ 		tbl->it_ops->tce_kill(tbl, entry, pages, true);
+ }
+ 
+-static void kvmppc_rm_clear_tce(struct kvm *kvm, struct iommu_table *tbl,
+-		unsigned long entry)
++static void kvmppc_rm_clear_tce(struct kvm *kvm, struct kvmppc_spapr_tce_table *stt,
++		struct iommu_table *tbl, unsigned long entry)
+ {
+-	unsigned long hpa = 0;
+-	enum dma_data_direction dir = DMA_NONE;
++	unsigned long i;
++	unsigned long subpages = 1ULL << (stt->page_shift - tbl->it_page_shift);
++	unsigned long io_entry = entry << (stt->page_shift - tbl->it_page_shift);
++
++	for (i = 0; i < subpages; ++i) {
++		unsigned long hpa = 0;
++		enum dma_data_direction dir = DMA_NONE;
+ 
+-	iommu_tce_xchg_no_kill_rm(kvm->mm, tbl, entry, &hpa, &dir);
++		iommu_tce_xchg_no_kill_rm(kvm->mm, tbl, io_entry + i, &hpa, &dir);
++	}
+ }
+ 
+ static long kvmppc_rm_tce_iommu_mapped_dec(struct kvm *kvm,
+@@ -320,6 +326,8 @@ static long kvmppc_rm_tce_iommu_unmap(struct kvm *kvm,
+ 			break;
+ 	}
+ 
++	iommu_tce_kill_rm(tbl, io_entry, subpages);
++
+ 	return ret;
+ }
+ 
+@@ -383,6 +391,8 @@ static long kvmppc_rm_tce_iommu_map(struct kvm *kvm,
+ 			break;
+ 	}
+ 
++	iommu_tce_kill_rm(tbl, io_entry, subpages);
++
+ 	return ret;
+ }
+ 
+@@ -428,10 +438,8 @@ long kvmppc_rm_h_put_tce(struct kvm_vcpu *vcpu, unsigned long liobn,
+ 			ret = kvmppc_rm_tce_iommu_map(vcpu->kvm, stt,
+ 					stit->tbl, entry, ua, dir);
+ 
+-		iommu_tce_kill_rm(stit->tbl, entry, 1);
+-
+ 		if (ret != H_SUCCESS) {
+-			kvmppc_rm_clear_tce(vcpu->kvm, stit->tbl, entry);
++			kvmppc_rm_clear_tce(vcpu->kvm, stt, stit->tbl, entry);
+ 			return ret;
+ 		}
+ 	}
+@@ -571,7 +579,7 @@ long kvmppc_rm_h_put_tce_indirect(struct kvm_vcpu *vcpu,
+ 		ua = 0;
+ 		if (kvmppc_rm_tce_to_ua(vcpu->kvm, tce, &ua, NULL)) {
+ 			ret = H_PARAMETER;
+-			goto invalidate_exit;
++			goto unlock_exit;
+ 		}
+ 
+ 		list_for_each_entry_lockless(stit, &stt->iommu_tables, next) {
+@@ -580,19 +588,15 @@ long kvmppc_rm_h_put_tce_indirect(struct kvm_vcpu *vcpu,
+ 					iommu_tce_direction(tce));
+ 
+ 			if (ret != H_SUCCESS) {
+-				kvmppc_rm_clear_tce(vcpu->kvm, stit->tbl,
+-						entry);
+-				goto invalidate_exit;
++				kvmppc_rm_clear_tce(vcpu->kvm, stt, stit->tbl,
++						entry + i);
++				goto unlock_exit;
+ 			}
+ 		}
+ 
+ 		kvmppc_rm_tce_put(stt, entry + i, tce);
+ 	}
+ 
+-invalidate_exit:
+-	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
+-		iommu_tce_kill_rm(stit->tbl, entry, npages);
+-
+ unlock_exit:
+ 	if (rmap)
+ 		unlock_rmap(rmap);
+@@ -635,20 +639,16 @@ long kvmppc_rm_h_stuff_tce(struct kvm_vcpu *vcpu,
+ 				continue;
+ 
+ 			if (ret == H_TOO_HARD)
+-				goto invalidate_exit;
++				return ret;
+ 
+ 			WARN_ON_ONCE_RM(1);
+-			kvmppc_rm_clear_tce(vcpu->kvm, stit->tbl, entry);
++			kvmppc_rm_clear_tce(vcpu->kvm, stt, stit->tbl, entry + i);
+ 		}
+ 	}
+ 
+ 	for (i = 0; i < npages; ++i, ioba += (1ULL << stt->page_shift))
+ 		kvmppc_rm_tce_put(stt, ioba >> stt->page_shift, tce_value);
+ 
+-invalidate_exit:
+-	list_for_each_entry_lockless(stit, &stt->iommu_tables, next)
+-		iommu_tce_kill_rm(stit->tbl, ioba >> stt->page_shift, npages);
+-
+ 	return ret;
+ }
+ 
+-- 
+2.35.1
+
 
 

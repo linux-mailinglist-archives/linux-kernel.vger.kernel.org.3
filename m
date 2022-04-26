@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42750F58B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 10:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9F050F7F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 11:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346018AbiDZItc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 04:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S1347209AbiDZJda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 05:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345580AbiDZIjO (ORCPT
+        with ESMTP id S1347851AbiDZJGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 04:39:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9F19C34;
-        Tue, 26 Apr 2022 01:30:24 -0700 (PDT)
+        Tue, 26 Apr 2022 05:06:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DAE167F12;
+        Tue, 26 Apr 2022 01:46:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAF11B81CF9;
-        Tue, 26 Apr 2022 08:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 344FDC385A0;
-        Tue, 26 Apr 2022 08:30:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9598460C42;
+        Tue, 26 Apr 2022 08:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDA1C385A4;
+        Tue, 26 Apr 2022 08:46:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650961821;
-        bh=MyWmK+PsAZoXKuUVRcLqfbxwM+xdMH/P2sk7Eu3KX8w=;
+        s=korg; t=1650962775;
+        bh=YPTj9OOrUeZwZkfCIZpAkWUxMPpzXgHJJrP8oXqzkWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rwy2DfoP7aEsev8zoWfodw1eWJSAI8MIMiuqc/1CD9BtJe1RDyQ/3elvUITcon44H
-         Le+wv7COtXtb2wGuPtN+kZUO2cyN5kKchjUONSZfAjZF4PfJ0N7++MuaJOtiOEdnYx
-         /PHHV98k9X5GvZ8XjlwyBPxJMD6w7P1DJ+h4yQkQ=
+        b=SzBLoDyu7yHHqZZDU7EsskIjk1rrqRD+c9JEXSvO6NsQAgNAt5FVhRpOAffhJhwsT
+         hIUBpsMlYOVlEaRF12P1iD1BU0nTfu9x8rvKMXs5lkfXyB/0P//2j3dsIG4fuslBUp
+         rctaDUejtCGMiYjVkpavvFw1UvwbXB+S2BZYCWYA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?q?=E9=87=91=E9=9F=AC?= <me@kingtous.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 40/62] drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialised
+Subject: [PATCH 5.17 085/146] nvme-pci: disable namespace identifiers for the MAXIO MAP1002/1202
 Date:   Tue, 26 Apr 2022 10:21:20 +0200
-Message-Id: <20220426081738.370466024@linuxfoundation.org>
+Message-Id: <20220426081752.450072201@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
-References: <20220426081737.209637816@linuxfoundation.org>
+In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
+References: <20220426081750.051179617@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit f92055ae0acb035891e988ce345d6b81a0316423 ]
+[ Upstream commit a98a945b80f8684121d477ae68ebc01da953da1f ]
 
-If a call to rpi_touchscreen_i2c_write from rpi_touchscreen_probe
-fails before mipi_dsi_device_register_full is called, then
-in trying to log the error message if uses ts->dsi->dev when
-it is still NULL.
+The MAXIO MAP1002/1202 controllers reports completely bogus Namespace
+identifiers that even change after suspend cycles.  Disable using
+the Identifiers entirely.
 
-Use ts->i2c->dev instead, which is initialised earlier in probe.
-
-Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220415162513.42190-2-stefan.wahren@i2se.com
+Reported-by: 金韬 <me@kingtous.cn>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Tested-by: 金韬 <me@kingtous.cn>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvme/host/pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index bdb4d59c8127..6906f522521d 100644
---- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-+++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -232,7 +232,7 @@ static void rpi_touchscreen_i2c_write(struct rpi_touchscreen *ts,
- 
- 	ret = i2c_smbus_write_byte_data(ts->i2c, reg, val);
- 	if (ret)
--		dev_err(&ts->dsi->dev, "I2C write failed: %d\n", ret);
-+		dev_err(&ts->i2c->dev, "I2C write failed: %d\n", ret);
- }
- 
- static int rpi_touchscreen_write(struct rpi_touchscreen *ts, u16 reg, u32 val)
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 6a99ed680915..6be611f49a45 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3443,6 +3443,10 @@ static const struct pci_device_id nvme_id_table[] = {
+ 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
+ 	{ PCI_DEVICE(0x2646, 0x2263),   /* KINGSTON A2000 NVMe SSD  */
+ 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
++	{ PCI_DEVICE(0x1e4B, 0x1002),   /* MAXIO MAP1002 */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
++	{ PCI_DEVICE(0x1e4B, 0x1202),   /* MAXIO MAP1202 */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0061),
+ 		.driver_data = NVME_QUIRK_DMA_ADDRESS_BITS_48, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0065),
 -- 
 2.35.1
 

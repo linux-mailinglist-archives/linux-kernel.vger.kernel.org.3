@@ -2,71 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F8350F02E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C5B50F030
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Apr 2022 07:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237795AbiDZF2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 01:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S240352AbiDZFbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 01:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiDZF2S (ORCPT
+        with ESMTP id S231786AbiDZFax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 01:28:18 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74105FE2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:25:08 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id k2-20020a0566022a4200b00654c0f121a9so12995554iov.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Apr 2022 22:25:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=tgsKMbOiC15FFfOgbeMnUZPqv7EQvB7ObCUGCkrvd6U=;
-        b=nQmIE5PwSL3GOgQ41IVBCVp7uLprd7LSosiJkksG3ETGMzzGfzEY6C+eR11/uWaixy
-         gyRgjaHIk0lAxKiXGNDHPz9/NAKe//8xbcVTTWnrNRUxT2Eio86thf0BAySL56WQyqki
-         kI/MHplHLaHUR5qgfBqL/UEPM3KoPaPn4tcA/+mq4xkUk1WNn8NJzZgtEyE4UVQD+vxc
-         7d4aWjp1eu4Ki+b5aTv0JG+kfDrv4ZpZ1brbryeGkx6QpQA7YkyCeUYT5ixPAIt+OVUH
-         WnarUwY+C4nY3AhuCdDIzqFqdO0g074ejPrXU9D/dbAcLx+jjF6vbopqQWpmBiNPwGzH
-         uBhw==
-X-Gm-Message-State: AOAM533kZf03C3bkVOigT5JOu7l8bnc3wGp0uoLEVym4qFPvephUtPVy
-        c1LLczKNNCVKC14At4gjQIJFFioVZrK1oQN+pV7FOKdALZkM
-X-Google-Smtp-Source: ABdhPJwdFXTufHSVHOix19svb6S9paLA20EomGHktnbLr5uRxImD/RxWppNpcwfVQW0pTxr+Rl2qHZjB4L8sMtugsx2Cs6BszAmb
+        Tue, 26 Apr 2022 01:30:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05312AD6;
+        Mon, 25 Apr 2022 22:27:46 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KnVl03kKKz4xXW;
+        Tue, 26 Apr 2022 15:27:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650950861;
+        bh=VP83oNnfSmxK+GqykxZKWgk2eDZxQ/ru3oQHu9AxHbE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ItQJutjyqzlY8udohpP5+LFu27eZgJ4HSZcm0wL5R+edaLS598Bi+VVL2gi+vSnEa
+         5UGi54OUKdLnVbQ+Z4qzwm/tMWEnbNr1d0jfDYFjuvUi4q/9T6YPEJTUsPo5k1UaMz
+         gZjAzUApb49Ulh6NSInVAT5bich/00kMYOZWXp8S/FdzNYvxQJIhZtY6OtJRtZ+7CI
+         QPaRpYcAMhUnfnyZuQgn1vzIyH/tJDvcDvtF50U/9ifIkG7L9gkBt7a2DLcdeIOswp
+         ySIOl2tA/0t9DL3O0PhfqCvap3dbJwSfVd4LfpossKa31b1s8JkkVZUzFNE9CJY+pE
+         NS85lyq0UO7Og==
+Date:   Tue, 26 Apr 2022 15:27:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chanwoo Choi <cw00.choi@samsung.com>, Greg KH <greg@kroah.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the extcon tree with the usb tree
+Message-ID: <20220426152739.62f6836e@canb.auug.org.au>
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca4f:0:b0:2cc:4571:3cd3 with SMTP id
- q15-20020a92ca4f000000b002cc45713cd3mr8374154ilo.110.1650950707853; Mon, 25
- Apr 2022 22:25:07 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 22:25:07 -0700
-In-Reply-To: <20220426050846.3267-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007bc02105dd87eab5@google.com>
-Subject: Re: [syzbot] WARNING: suspicious RCU usage in hsr_node_get_first
-From:   syzbot <syzbot+d4de7030f60c07837e60@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/FeCk1B0BdNXZDJMsTzOyuNv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/FeCk1B0BdNXZDJMsTzOyuNv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Hi all,
 
-Reported-and-tested-by: syzbot+d4de7030f60c07837e60@syzkaller.appspotmail.com
+Today's linux-next merge of the extcon tree got a conflict in:
 
-Tested on:
+  drivers/usb/dwc3/drd.c
 
-commit:         22da5264 Merge tag '5.18-rc3-ksmbd-fixes' of git://git..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71bf5c8488a4e33a
-dashboard link: https://syzkaller.appspot.com/bug?extid=d4de7030f60c07837e60
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1789a8fcf00000
+between commit:
 
-Note: testing is done by a robot and is best-effort only.
+  0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is pre=
+sent")
+
+from the usb tree and commit:
+
+  88490c7f43c4 ("extcon: Fix extcon_get_extcon_dev() error handling")
+
+from the extcon tree.
+
+I fixed it up (the former moved the code modified by the latter, so I
+used the former version of this files and added the following merge fix
+patch) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 26 Apr 2022 15:24:04 +1000
+Subject: [PATCH] fixup for "usb: dwc3: Don't switch OTG -> peripheral if ex=
+tcon is present"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/usb/dwc3/core.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 2345a54b848b..950e238c65bf 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1649,13 +1649,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc=
+3 *dwc)
+ 	 * This device property is for kernel internal use only and
+ 	 * is expected to be set by the glue code.
+ 	 */
+-	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D 0=
+) {
+-		edev =3D extcon_get_extcon_dev(name);
+-		if (!edev)
+-			return ERR_PTR(-EPROBE_DEFER);
+-
+-		return edev;
+-	}
++	if (device_property_read_string(dev, "linux,extcon-name", &name) =3D=3D 0)
++		return extcon_get_extcon_dev(name);
+=20
+ 	/*
+ 	 * Try to get an extcon device from the USB PHY controller's "port"
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/FeCk1B0BdNXZDJMsTzOyuNv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJngssACgkQAVBC80lX
+0GwbRgf/c9hKe+5y1t7rehI0/4/CSFI9pvrcGvrZIYV1wAU7L10AgYaMNqAxEf5T
+wXFyX3Qer9TGM0/8+HOgVXxzty0/Hbx816FjTsbiOZRSH4BOtfvn1GPiueP8MYrY
+Ie1CkqJATAh6yQ7CJaSlwfGNCJu938JuY9X57TRlryF8yu01ls30FMuJZFJXMrg0
+6BfmnhO6a7E8ci3CrzeYP0IlLXKxQ7vshG0KMQjhbJqJpsQ05MfMsE8BAm21kWWU
+ZdzsCdExF4FM+FE4nlNrK5+8MnBdiGm8wKWEcU6DQQKw+xC51lVKU91SGt9cxTpb
+h8NHM30ShaZTHbhneqUgmDGvdK98SQ==
+=ruC8
+-----END PGP SIGNATURE-----
+
+--Sig_/FeCk1B0BdNXZDJMsTzOyuNv--

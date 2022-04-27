@@ -2,104 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF92B5123F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC2F5123FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbiD0Ug2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S236854AbiD0Uhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237070AbiD0UgU (ORCPT
+        with ESMTP id S236676AbiD0Uhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:36:20 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5FBB6D11;
-        Wed, 27 Apr 2022 13:32:50 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id EB5F61C0B8F; Wed, 27 Apr 2022 22:32:48 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 22:32:48 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.10 14/86] dmaengine: mediatek:Fix PM usage reference
- leak of mtk_uart_apdma_alloc_chan_resources
-Message-ID: <20220427203248.GA2175@duo.ucw.cz>
-References: <20220426081741.202366502@linuxfoundation.org>
- <20220426081741.617352615@linuxfoundation.org>
- <20220427202836.GA1337@duo.ucw.cz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
-Content-Disposition: inline
-In-Reply-To: <20220427202836.GA1337@duo.ucw.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 16:37:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16954EF5A;
+        Wed, 27 Apr 2022 13:34:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39076B82AA7;
+        Wed, 27 Apr 2022 20:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2B9C385A7;
+        Wed, 27 Apr 2022 20:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1651091661;
+        bh=QhjW6sqbQQAgxviJKBe4aWpl0/FEQUpaXuQ5s4h6qWg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q7Ns2THonpI64rhc55ciDClC+/tZwbo74ep5sf07OFCb26oZ1kUe9z79CZSpHNgzN
+         VGMMisHTfPF3UFsfvxZ0AEUddllyF0mAQ72EsVMFRXrTjUdgq9z58WzHBUfQPEqp0O
+         W6dNwKJCwvp4aKEyZx9Z3zIMHTeQ0j/etEQ7Dh8M=
+Date:   Wed, 27 Apr 2022 13:34:20 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Daniel Colascione <dancol@google.com>,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm/smaps_rollup: return empty file for kthreads instead
+ of ESRCH
+Message-Id: <20220427133420.2847e62203b9e10a106c86b2@linux-foundation.org>
+In-Reply-To: <83f49beb-52f7-15f6-3b53-97cac0030ca4@suse.cz>
+References: <20220413211357.26938-1-alex_y_xu.ref@yahoo.ca>
+        <20220413211357.26938-1-alex_y_xu@yahoo.ca>
+        <20220413142748.a5796e31e567a6205c850ae7@linux-foundation.org>
+        <1649886492.rqei1nn3vm.none@localhost>
+        <20220413160613.385269bf45a9ebb2f7223ca8@linux-foundation.org>
+        <YleToQbgeRalHTwO@casper.infradead.org>
+        <YlfFaPhNFWNP+1Z7@localhost.localdomain>
+        <83f49beb-52f7-15f6-3b53-97cac0030ca4@suse.cz>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 14 Apr 2022 09:38:14 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
 
---82I3+IH0IqGh5yIs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > Returning ESRCH is better so that programs don't waste time reading and
+> > closing empty files and instantiating useless inodes.
+> 
+> Hm, unfortunately I don't remember why I put return -ESRCH for this case in
+> addition to get_proc_task() failing. I doubt it was a conscious decision to
+> treat kthreads differently - I think I would have preferred consistency with
+> maps/smaps.
+> 
+> Can the awk use case be fixed with some flag to make it ignore the errors?
 
-Hi!
-
-> > pm_runtime_get_sync will increment pm usage counter even it failed.
-> > Forgetting to putting operation will result in reference leak here.
-> > We fix it:
-> > 1) Replacing it with pm_runtime_resume_and_get to keep usage counter
-> >    balanced.
->=20
-> Suspect.
->=20
-> > 2) Add putting operation before returning error.
->=20
-> Yes but you also put in success case, which is likely
-> wrong. mtk_uart_apdma_free_chan_resources() does second put.
-
-This is possible fix for the second problem:
-
-Signed-off-by: Pavel Machek <pavel@denx.de>
-
-diff --git a/drivers/dma/mediatek/mtk-uart-apdma.c b/drivers/dma/mediatek/m=
-tk-uart-apdma.c
-index a1517ef1f4a0..8ec046a7e714 100644
---- a/drivers/dma/mediatek/mtk-uart-apdma.c
-+++ b/drivers/dma/mediatek/mtk-uart-apdma.c
-@@ -300,7 +300,8 @@ static int mtk_uart_apdma_alloc_chan_resources(struct d=
-ma_chan *chan)
-=20
- 	if (mtkd->support_33bits)
- 		mtk_uart_apdma_write(c, VFF_4G_SUPPORT, VFF_4G_SUPPORT_CLR_B);
--
-+	return 0;
-+=09
- err_pm:
- 	pm_runtime_put_noidle(mtkd->ddev.dev);
- 	return ret;
-
-Best regards,
-								Pavel
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---82I3+IH0IqGh5yIs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYmmocAAKCRAw5/Bqldv6
-8vfVAJ9QZloVylqz/nLmks05g9Rf0EI/aQCfXpqsymRDI4DHgSkcuxU3sBVBJAE=
-=BoSZ
------END PGP SIGNATURE-----
-
---82I3+IH0IqGh5yIs--
+This is all too hard.  I think I'll drop the patch for now.

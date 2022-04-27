@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358095112F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94EB5112F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359101AbiD0H4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S235482AbiD0H5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359090AbiD0H4E (ORCPT
+        with ESMTP id S1359132AbiD0H45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:56:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CC1B13FDA0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:52:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 383FCED1;
-        Wed, 27 Apr 2022 00:52:54 -0700 (PDT)
-Received: from [10.57.7.196] (unknown [10.57.7.196])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF4A63F5A1;
-        Wed, 27 Apr 2022 00:52:52 -0700 (PDT)
-Message-ID: <38c8a684-5fcc-cfb3-424c-d353a7bafe03@arm.com>
-Date:   Wed, 27 Apr 2022 08:52:50 +0100
+        Wed, 27 Apr 2022 03:56:57 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB5C1430EB;
+        Wed, 27 Apr 2022 00:53:46 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id C1B55221D4;
+        Wed, 27 Apr 2022 09:53:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651046024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MWEUJ65xXWxsOJoEBYb6OiJI9nm2vcZAzwPP79rJezw=;
+        b=ISwvpTkTdIjkH410nQc3wKfzj5HuNCcoV6P66P38iTcySXiCcerHt70giJyG2GQ5O1z6a7
+        lEBreCV41bbcHA5i4ZrRVrNE1jAxVRV0HlKth63PW9VPzQzDA24h4CCbFJHx35T2oI27x5
+        Tkf8Ov2C9+ylnCxcF4Fq+RhlTi49EiM=
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Li Yang <leoyang.li@nxp.com>, Michael Walle <michael@walle.cc>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] dt-bindings: convert freescale extirq and scfg schemas
+Date:   Wed, 27 Apr 2022 09:53:34 +0200
+Message-Id: <20220427075338.1156449-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] arch_topology: Trace the update thermal pressure
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        rafael@kernel.org, rostedt@goodmis.org, mingo@redhat.com
-References: <20220427073551.19032-1-lukasz.luba@arm.com>
- <Ymj0ZZeUnhq4W/Ws@kroah.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <Ymj0ZZeUnhq4W/Ws@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The first two patches will be resend to the soc tree once the schema is
+approved/picked up.
 
+Please note, I'm still getting these weird "is too short" errors for
+for interrupt-map entries, but it seems to work for you, so.. ;)
 
-On 4/27/22 08:44, Greg KH wrote:
-> On Wed, Apr 27, 2022 at 08:35:51AM +0100, Lukasz Luba wrote:
->> Add trace event to capture the moment of the call for updating the thermal
->> pressure value. It's helpful to investigate how often those events occur
->> in a system dealing with throttling. This trace event is needed since the
->> old 'cdev_update' might not be used by some drivers.
->>
->> The old 'cdev_update' trace event only provides a cooling state
->> value: [0, n]. That state value then needs additional tools to translate
->> it: state -> freq -> capacity -> thermal pressure. This new trace event
->> just stores proper thermal pressure value in the trace buffer, no need
->> for additional logic. This is helpful for cooperation when someone can
->> simply sends to the list the trace buffer output from the platform (no
->> need from additional information from other subsystems).
->>
->> There are also platforms which due to some design reasons don't use
->> cooling devices and thus don't trigger old 'cdev_update' trace event.
->> They are also important and measuring latency for the thermal signal
->> raising/decaying characteristics is in scope. This new trace event
->> would cover them as well.
->>
->> We already have a trace point 'pelt_thermal_tp' which after a change to
->> trace event can be paired with this new 'thermal_pressure_update' and
->> derive more insight what is going on in the system under thermal pressure
->> (and why).
->>
->> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> The kernel test robot did not report that you needed to add a new trace
-> event :(
-> 
+Michael Walle (4):
+  ARM: dts: ls1021a: reduce the interrupt-map-mask
+  arm64: dts: freescale: reduce the interrup-map-mask
+  dt-bindings: interrupt-controller: fsl,ls-extirq: convert to YAML
+  dt-bindings: fsl: convert fsl,layerscape-scfg to YAML
 
-I got feedback from the test robot for v1, which figured out that
-the riscv configuration is broken. You can find it here
-https://lore.kernel.org/lkml/202204201654.vcszVDGb-lkp@intel.com/
+ .../arm/freescale/fsl,layerscape-scfg.txt     |  19 ---
+ .../interrupt-controller/fsl,ls-extirq.txt    |  53 --------
+ .../interrupt-controller/fsl,ls-extirq.yaml   | 118 ++++++++++++++++++
+ .../bindings/soc/fsl/fsl,layerscape-scfg.yaml |  58 +++++++++
+ arch/arm/boot/dts/ls1021a.dtsi                |   2 +-
+ .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |   2 +-
+ .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |   2 +-
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |   2 +-
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |   2 +-
+ .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |   2 +-
+ 10 files changed, 182 insertions(+), 78 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-scfg.txt
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
 
-So, I've added that tag following:
-"If you fix the issue, kindly add following tag as appropriate"
+-- 
+2.30.2
 
-Should this only be honored when a patch actually got into next
-and then following patch with a fix would have that tag?

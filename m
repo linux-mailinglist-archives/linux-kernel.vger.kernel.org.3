@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6BF511B3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F2B51199E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbiD0N07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S235806AbiD0N1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbiD0N0s (ORCPT
+        with ESMTP id S235722AbiD0N0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 09:26:48 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D42DD60;
-        Wed, 27 Apr 2022 06:23:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8659C2DD66;
+        Wed, 27 Apr 2022 06:23:37 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 295841F44713
+        with ESMTPSA id CD93E1F44716
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651065815;
-        bh=RYxkRKR/3cb3vO8LFUsbVomDNF2N7fZfsSHl253gbJo=;
+        s=mail; t=1651065816;
+        bh=DmoK0UuR6v0KpHbytvgVmKG60bVewljbgv1egm4cK/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GvauR+UFrvlr16NuXikZ4xqvxHUuYosy7/elmDi1uLZJ/0qtujA+fxTIF4GgIrfML
-         51OuOWqZdmphgHexTugZIhUq66T7pTs60Tp+yuCaIL3+gwdRIRzNxLe5GfwgHxiz/j
-         QhOwC0e/9swV2+fk8Hp/hom9QA4Y/kmK95qwoPLeziviiXjK6bBTvMZO1EWiI3qC5Y
-         UQ3hUwjF2LOhIkmORZnegIhXYEK5m63eUuWcyV6KieJKeFa1QuMexmmM15pfaYWvIn
-         P+7w1KsiZNZg0jl2PavK9mu/ztDgcKUge51kgFjT+KQEJQmuqp391Ela1nrV6L3yfj
-         3jmXh7Pjo18pQ==
+        b=IvT6aF6BxtYKQDJmcGXm54ZVfHKQuAwNDg1kNCCy3eEcAhO1olbkSIAadBtFoY2qL
+         tbgrM/unQKwMq5ZcHl7NsBqivWgIw0ThY+9E29fUyQiMoP9zqIOYVwUrg9tdNftBkf
+         E66pCVA65kafC7IWLGpoYojTL8oNVjhVqptymXiJV0Q7Xh5Vpl3MyFShwtZRyE/3p5
+         9O6JGABSPB4OSeEvXfXbkh3gnkKDx9rScLFgOJCGIl/bK4vah5EiuMF9HE3c3VEvsg
+         BD3WVR+7GSY1X/ZBf/sTiTVtTvDDo3CCgg/Rdeqd+HtJKEfu5jx5MrIHhMXkvfbqHl
+         Fx96R6HVv0RBA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     gregkh@linuxfoundation.org
@@ -36,9 +36,9 @@ Cc:     jirislaby@kernel.org, matthias.bgg@gmail.com,
         colin.king@intel.com, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] serial: 8250_mtk: Fix UART_EFR register address
-Date:   Wed, 27 Apr 2022 15:23:26 +0200
-Message-Id: <20220427132328.228297-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/3] serial: 8250_mtk: Make sure to select the right FEATURE_SEL
+Date:   Wed, 27 Apr 2022 15:23:27 +0200
+Message-Id: <20220427132328.228297-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220427132328.228297-1-angelogioacchino.delregno@collabora.com>
 References: <20220427132328.228297-1-angelogioacchino.delregno@collabora.com>
@@ -53,88 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On MediaTek SoCs, the UART IP is 16550A compatible, but there are some
-specific quirks: we are declaring a register shift of 2, but this is
-only valid for the majority of the registers, as there are some that
-are out of the standard layout.
+Set the FEATURE_SEL at probe time to make sure that BIT(0) is enabled:
+this guarantees that when the port is configured as AP UART, the
+right register layout is interpreted by the UART IP.
 
-Specifically, this driver is using definitions from serial_reg.h, where
-we have a UART_EFR register defined as 2: this results in a 0x8 offset,
-but there we have the FCR register instead.
-
-The right offset for the EFR register on MediaTek UART is at 0x98,
-so, following the decimal definition convention in serial_reg.h and
-accounting for the register left shift of two, add and use the correct
-register address for this IP, defined as decimal 38, so that the final
-calculation results in (0x26 << 2) = 0x98.
-
-Fixes: bdbd0a7f8f03 ("serial: 8250-mtk: modify baudrate setting")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/tty/serial/8250/8250_mtk.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/tty/serial/8250/8250_mtk.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index f4a0caa56f84..cd62a5f34014 100644
+index cd62a5f34014..28e36459642c 100644
 --- a/drivers/tty/serial/8250/8250_mtk.c
 +++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -37,6 +37,7 @@
- #define MTK_UART_IER_RTSI	0x40	/* Enable RTS Modem status interrupt */
- #define MTK_UART_IER_CTSI	0x80	/* Enable CTS Modem status interrupt */
+@@ -54,6 +54,9 @@
+ #define MTK_UART_TX_TRIGGER	1
+ #define MTK_UART_RX_TRIGGER	MTK_UART_RX_SIZE
  
-+#define MTK_UART_EFR		38	/* I/O: Extended Features Register */
- #define MTK_UART_EFR_EN		0x10	/* Enable enhancement feature */
- #define MTK_UART_EFR_RTS	0x40	/* Enable hardware rx flow control */
- #define MTK_UART_EFR_CTS	0x80	/* Enable hardware tx flow control */
-@@ -169,7 +170,7 @@ static void mtk8250_dma_enable(struct uart_8250_port *up)
- 		   MTK_UART_DMA_EN_RX | MTK_UART_DMA_EN_TX);
++#define MTK_UART_FEATURE_SEL	39	/* Feature Selection register */
++#define MTK_UART_FEAT_NEWRMAP	BIT(0)	/* Use new register map */
++
+ #ifdef CONFIG_SERIAL_8250_DMA
+ enum dma_rx_status {
+ 	DMA_RX_START = 0,
+@@ -569,6 +572,10 @@ static int mtk8250_probe(struct platform_device *pdev)
+ 		uart.dma = data->dma;
+ #endif
  
- 	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
--	serial_out(up, UART_EFR, UART_EFR_ECB);
-+	serial_out(up, MTK_UART_EFR, UART_EFR_ECB);
- 	serial_out(up, UART_LCR, lcr);
- 
- 	if (dmaengine_slave_config(dma->rxchan, &dma->rxconf) != 0)
-@@ -232,7 +233,7 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
- 	int lcr = serial_in(up, UART_LCR);
- 
- 	serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
--	serial_out(up, UART_EFR, UART_EFR_ECB);
-+	serial_out(up, MTK_UART_EFR, UART_EFR_ECB);
- 	serial_out(up, UART_LCR, lcr);
- 	lcr = serial_in(up, UART_LCR);
- 
-@@ -241,7 +242,7 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
- 		serial_out(up, MTK_UART_ESCAPE_DAT, MTK_UART_ESCAPE_CHAR);
- 		serial_out(up, MTK_UART_ESCAPE_EN, 0x00);
- 		serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
--		serial_out(up, UART_EFR, serial_in(up, UART_EFR) &
-+		serial_out(up, MTK_UART_EFR, serial_in(up, MTK_UART_EFR) &
- 			(~(MTK_UART_EFR_HW_FC | MTK_UART_EFR_SW_FC_MASK)));
- 		serial_out(up, UART_LCR, lcr);
- 		mtk8250_disable_intrs(up, MTK_UART_IER_XOFFI |
-@@ -255,8 +256,8 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
- 		serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
- 
- 		/*enable hw flow control*/
--		serial_out(up, UART_EFR, MTK_UART_EFR_HW_FC |
--			(serial_in(up, UART_EFR) &
-+		serial_out(up, MTK_UART_EFR, MTK_UART_EFR_HW_FC |
-+			(serial_in(up, MTK_UART_EFR) &
- 			(~(MTK_UART_EFR_HW_FC | MTK_UART_EFR_SW_FC_MASK))));
- 
- 		serial_out(up, UART_LCR, lcr);
-@@ -270,8 +271,8 @@ static void mtk8250_set_flow_ctrl(struct uart_8250_port *up, int mode)
- 		serial_out(up, UART_LCR, UART_LCR_CONF_MODE_B);
- 
- 		/*enable sw flow control */
--		serial_out(up, UART_EFR, MTK_UART_EFR_XON1_XOFF1 |
--			(serial_in(up, UART_EFR) &
-+		serial_out(up, MTK_UART_EFR, MTK_UART_EFR_XON1_XOFF1 |
-+			(serial_in(up, MTK_UART_EFR) &
- 			(~(MTK_UART_EFR_HW_FC | MTK_UART_EFR_SW_FC_MASK))));
- 
- 		serial_out(up, UART_XON1, START_CHAR(port->state->port.tty));
++	/* Set AP UART new register map */
++	writel(MTK_UART_FEAT_NEWRMAP, uart.port.membase +
++	       (MTK_UART_FEATURE_SEL << uart.port.regshift));
++
+ 	/* Disable Rate Fix function */
+ 	writel(0x0, uart.port.membase +
+ 			(MTK_UART_RATE_FIX << uart.port.regshift));
 -- 
 2.35.1
 

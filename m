@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829A9512554
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A024551255B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238104AbiD0Wjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S232909AbiD0Wjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiD0Wj2 (ORCPT
+        with ESMTP id S238234AbiD0Wj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:39:28 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660CD6383;
-        Wed, 27 Apr 2022 15:36:12 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 15:36:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651098970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YptwFdA8KWuDmjvuchBNuhhYcNiTn83Pm656usmn0sI=;
-        b=xurUMpP3QLqUoZxw1BdoFkYM+0wVMIHfRfnM/Miz+pyrSnam+pUfOqzeu4w7WEtz+vscdO
-        t8sZhvk29FJHTf9oMznLUlDzxrKSBESrMWIxTbOsTmuGq6MX7UWPvgVN2r6Q4pckJigj3y
-        prcDwZAQTSSNCJlRUCceBDukatZZNz4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH memcg v4] net: set proper memcg for net_init hooks
- allocations
-Message-ID: <YmnFUwhmqJwYGQ5j@carbon>
-References: <YmdeCqi6wmgiSiWh@carbon>
- <33085523-a8b9-1bf6-2726-f456f59015ef@openvz.org>
- <CALvZod4oaj9MpBDVUp9KGmnqu4F3UxjXgOLkrkvmRfFjA7F1dw@mail.gmail.com>
- <20220427122232.GA9823@blackbody.suse.cz>
- <CALvZod7v0taU51TNRu=OM5iJ-bnm1ryu9shjs80PuE-SWobqFg@mail.gmail.com>
- <6b18f82d-1950-b38e-f3f5-94f6c23f0edb@openvz.org>
+        Wed, 27 Apr 2022 18:39:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575ABA7;
+        Wed, 27 Apr 2022 15:36:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpYW926KGz4xNl;
+        Thu, 28 Apr 2022 08:36:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651098966;
+        bh=CVc1pHXe+LoYxpb4zAZj3he9Z6Nbc6APPLnq8Jgno6o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AnBbwbA0PagS7YZTrZBE75UovDEebnSt+SVxlAb9qwWDmfmvSxYylLXXfnR9+7oUX
+         kTQVKngLkJX0br0fZDPLDmUC983haO0JwwHunFRqvRcy8ru//nC/qQnILa9O8t0ZD0
+         Lcs8IdUiyFknc+DG3sINbBodNdHsTAJwLw0Dyd60c9c8YgbcqNwKwjsCwHu+Q+gStG
+         rFckYiXE5WAfBzC8pn8386coTVsBiM3K/ZFOH/5USE4kQnfKylUXN7Ei40GjxVYN5R
+         27CIoIFCps5eYZYWdMnk3rXyi3fvyz1DgKJG0AaEzS0cI/IPPiKHrYv4sofFUlC9Ty
+         Raon1ALEBW3xA==
+Date:   Thu, 28 Apr 2022 08:36:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Xu Yu <xuyu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm-hotfixes tree
+Message-ID: <20220428083604.0872e25a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6b18f82d-1950-b38e-f3f5-94f6c23f0edb@openvz.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/tEeY0os.jP=m3xOo1jZg+2u";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 01:16:53AM +0300, Vasily Averin wrote:
-> On 4/27/22 18:06, Shakeel Butt wrote:
-> > On Wed, Apr 27, 2022 at 5:22 AM Michal Koutný <mkoutny@suse.com> wrote:
-> >>
-> >> On Tue, Apr 26, 2022 at 10:23:32PM -0700, Shakeel Butt <shakeelb@google.com> wrote:
-> >>> [...]
-> >>>>
-> >>>> +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
-> >>>> +{
-> >>>> +       struct mem_cgroup *memcg;
-> >>>> +
-> >>>
-> >>> Do we need memcg_kmem_enabled() check here or maybe
-> >>> mem_cgroup_from_obj() should be doing memcg_kmem_enabled() instead of
-> >>> mem_cgroup_disabled() as we can have "cgroup.memory=nokmem" boot
-> >>> param.
-> 
-> Shakeel, unfortunately I'm not ready to answer this question right now.
-> I even did not noticed that memcg_kmem_enabled() and mem_cgroup_disabled()
-> have a different nature.
-> If you have no objections I'm going to keep this place as is and investigate
-> this question later. 
-> 
-> >> I reckon such a guard is on the charge side and readers should treat
-> >> NULL and root_mem_group equally. Or is there a case when these two are
-> >> different?
-> >>
-> >> (I can see it's different semantics when stored in current->active_memcg
-> >> (and active_memcg() getter) but for such "outer" callers like here it
-> >> seems equal.)
-> 
-> Dear Michal,
-> I may have misunderstood your point of view, so let me explain my vision
-> in more detail.
-> I do not think that NULL and root_mem_cgroup are equal here:
-> - we have enabled cgroups and well-defined root_mem_cgroup,
-> - this function is called from inside memcg-limited container,
-> - we tried to get memcg from net, but without success,
->   and as result got NULL from  mem_cgroup_from_obj()
->   (frankly speaking I do not think this situation is really possible)
-> If we keep memcg = NULL, then current's memcg will not be masked and
-> net_init's allocations will be accounted to current's memcg. 
-> So we need to set active_memcg to root_mem_cgroup, it helps to avoid
-> incorrect accounting.
+--Sig_/tEeY0os.jP=m3xOo1jZg+2u
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It's way out of scope of this patch, but I think we need to stop
-using NULL as root_mem_cgroup/system scope indicator. Remaining use cases
-will be like end of cgroup iteration, active memcg not set, parent of the
-root memcg, etc.
-We can point root_mem_cgroup at a statically allocated structure
-on both CONFIG_MEMCG and !CONFIG_MEMCG.
-Does it sound reasonable or I'm missing some important points?
+Hi all,
 
-Thanks!
+In commit
+
+  9d4dacd9cc3f ("Revert "mm/memory-failure.c: skip huge_zero_page in memory=
+_failure()"")
+
+Fixes tag
+
+  Fixes: d173d5417fb ("mm/memory-failure.c: skip huge_zero_page in memory_f=
+ailure()")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+In commit
+
+  7b5cc291112f ("mm/huge_memory: do not overkill when splitting huge_zero_p=
+age")
+
+Fixes tag
+
+  Fixes: d173d5417fb ("mm/memory-failure.c: skip huge_zero_page in memory_f=
+ailure()")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+
+These are probably not worth rebasing for but this can be fixed for the
+future by setting core.abbrev to 12 (or more) or (for git v2.11 or later)
+just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/tEeY0os.jP=m3xOo1jZg+2u
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJpxVQACgkQAVBC80lX
+0Gy6IAgAplqiDG6SrYozWsfSrqR383BGVsmzctGlEQtOElxcIzx1ibqymLYTnB5+
+fHoRwVzbyvN56y0SwV2C2jO7Oo326d4l6jvo88XanDlMX6nmOqREbzAor8h+UOqK
+O33t2aNeg8562E3dIls12ciNSYCF4BIaD/jT5GbqcVqmGEk4BD/bCp+z6cH0dbvA
+ZLze02RVVzxCuoyiLPs54/3kXoBm+ARiyZRZiijBp08xlycZdNnHpk+HL4rRSVBM
+m3Oq485eC2ZroTwWxJWDgXeNImzI9jnTYoxzyeDZgF27T6Yp/Q8ZVJH1ONL2Z7D0
+gEYrHwHl16k32icQN9A/8owc2ZAIuQ==
+=o7L/
+-----END PGP SIGNATURE-----
+
+--Sig_/tEeY0os.jP=m3xOo1jZg+2u--

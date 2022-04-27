@@ -2,144 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48578510FD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9675D510FD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357615AbiD0EH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S1357622AbiD0EIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236301AbiD0EHZ (ORCPT
+        with ESMTP id S233082AbiD0EIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:07:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00909CE10D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651032253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OH86V8owPQ8N+aMjzBoR2fcN3m/CqaWBYAhno71vU5g=;
-        b=Q6cMYHUmbQgWIBehckXTK7JXSrwRdqwVG6ixOWdZgoTTHhx0VUK1YYURPY94fBW//pThAv
-        vujGdqDJ7Nl1+FUeOcRzNG+jnaOcnfZtsqyFp9Ty6WKbCSMlw6ZNv+kGicfGSicoQqxA4o
-        Gbnk/fwRnzQQsrXh6Ti9Xq7pgr1GCrc=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-QE_jTCxJPyyh6hOlxQqRxg-1; Wed, 27 Apr 2022 00:04:04 -0400
-X-MC-Unique: QE_jTCxJPyyh6hOlxQqRxg-1
-Received: by mail-pj1-f72.google.com with SMTP id a23-20020a17090a6d9700b001d60327d73aso2678905pjk.7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:04:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OH86V8owPQ8N+aMjzBoR2fcN3m/CqaWBYAhno71vU5g=;
-        b=l/d6YBiyNjbLfCuF/x/I37nyZyahOFhuIR6rOapNYUvPlARAqn+UZdl7RgZQNpN9B6
-         hIh86jwK2fE/h3xv1uSZs+ELwVWm9a7/WcVClXfa7n+GxmHC4nObamEaqbTe7UlX2+y6
-         4l0uHjdiRZEEWplfkHGjIE6+m2dSaW5gaP8LhSs7xqfF2DTlalw1utC1zu32HrUgyEfp
-         HUu/894fO+ncoxqgR9SDUmYx2T1MGYFhmHYkh8g77VKZRg7srW9Bu45fH8ENKjE+61sf
-         j0hB/651Qz4qL67SOadPvAEU56ZPqs1v7iuKXjAFXIbS+2rVfUgSPCMflwl7GDjRFtPf
-         fyWw==
-X-Gm-Message-State: AOAM533D9dCPH/wrLuS6EqFMNHF7g3gxut80qbbpPY89P0VtPiUjFifV
-        T+JpgRGQaDH541nZ1q9mD/KiLOtiYpsb+zyntTcwiKDBCTcuqQu+KicfSw/JJaKj5RJggZpvZgK
-        JxWsa3zscXxXPIuuvKdF5ax7x
-X-Received: by 2002:a17:902:7897:b0:15d:318d:706b with SMTP id q23-20020a170902789700b0015d318d706bmr7975411pll.16.1651032243639;
-        Tue, 26 Apr 2022 21:04:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy/GVt4L0b3NsfyKmTgh5DsBLXHJFRjd28qfTAKnNcKsAPZ1TXoZmkTwbFM+AWJr7AUoaFRfQ==
-X-Received: by 2002:a17:902:7897:b0:15d:318d:706b with SMTP id q23-20020a170902789700b0015d318d706bmr7975394pll.16.1651032243379;
-        Tue, 26 Apr 2022 21:04:03 -0700 (PDT)
-Received: from [10.72.12.60] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id t63-20020a625f42000000b0050a7eaff8c9sm16925270pfb.189.2022.04.26.21.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 21:04:02 -0700 (PDT)
-Message-ID: <46c9f96a-8fcf-fae8-5fd7-53557d59c324@redhat.com>
-Date:   Wed, 27 Apr 2022 12:03:59 +0800
+        Wed, 27 Apr 2022 00:08:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1271CB31
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651032326; x=1682568326;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FZHtsAFaRuQD3iQqtoOKS8GLIsWSCXJtA8Y7MOpLAxw=;
+  b=md2DCqKoqRMEZ0l/QVU+17064wdV5eqmCDIwF5n2lqMhNlmkTLZZbpfE
+   jHccZeG85YUCITfoyC3OxeRdrgv0+LRpERhG3/gdnAwQwi485YAFf0DG0
+   DcnFEvvc5QKmZQho2GyE8SUNB9+87iG64Cg+x26kzDRKpe42BIi3M0G6M
+   b6m4JZqzPziGmQkjVRJipGHN3npVUIZn2NE6mdCK/fABDsox2ido8/8nF
+   rcwk6oGhhQkiModVznwXgHrYUN8QHC8WFTcpQox8MPdVtqxXE5Sly2RXx
+   RzCpS7eZLuXZul3RuplBJN+lEsDIlB0n9euy5L288HCSuCkGhGD+mD5eX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328748426"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="328748426"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:05:25 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="730594987"
+Received: from jsaetton-mobl1.amr.corp.intel.com (HELO [10.209.41.167]) ([10.209.41.167])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:05:24 -0700
+Message-ID: <405a4f3c-3d49-f3c2-441b-8d8b9d5eec23@linux.intel.com>
+Date:   Tue, 26 Apr 2022 21:05:22 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct
- vdpa_mgmt_dev
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
 Content-Language: en-US
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220425062735.172576-1-lulu@redhat.com>
- <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
- <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com>
+To:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Kai,
 
-在 2022/4/27 10:01, Cindy Lu 写道:
-> On Mon, Apr 25, 2022 at 5:00 PM Jason Wang <jasowang@redhat.com> wrote:
->> On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
->>> To support the dynamic ids in vp_vdpa, we need to add the check for
->>> id table. If the id table is NULL, will not set the device type
->>>
->>> Signed-off-by: Cindy Lu <lulu@redhat.com>
->>> ---
->>>   drivers/vdpa/vdpa.c | 11 +++++++----
->>>   1 file changed, 7 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
->>> index 1ea525433a5c..09edd92cede0 100644
->>> --- a/drivers/vdpa/vdpa.c
->>> +++ b/drivers/vdpa/vdpa.c
->>> @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdpa_mgmt_dev *mdev, struct sk_buff *m
->>>          if (err)
->>>                  goto msg_err;
->>>
->>> -       while (mdev->id_table[i].device) {
->>> -               if (mdev->id_table[i].device <= 63)
->>> -                       supported_classes |= BIT_ULL(mdev->id_table[i].device);
->>> -               i++;
->>> +       if (mdev->id_table != NULL) {
->>> +               while (mdev->id_table[i].device) {
->>> +                       if (mdev->id_table[i].device <= 63)
->>> +                               supported_classes |=
->>> +                                       BIT_ULL(mdev->id_table[i].device);
->>> +                       i++;
->>> +               }
->>>          }
->> This will cause 0 to be advertised as the supported classes.
+On 4/24/22 10:44 PM, Kai Huang wrote:
+>> In TDX guest, attestation is used to verify the trustworthiness of a TD
+>> to other entities before making any secure communication.
+> Before provisioning secrets to the TD.
+> 
+>> One usage example is, when a TD guest uses encrypted drive and the
+>> decryption keys required to access the drive are stored in a secure
+>> 3rd party keyserver, TD guest can use the quote generated via the
+>> attestation process to prove its trustworthiness with keyserver and
+>> get access to the storage keys.
+> "The key server can use attestation to verify TD's trustworthiness and release
+> the decryption keys to the TD".
+> 
+> It is the key server who starts the attestation request, but not the TD.
+> 
+>> General steps involved in attestation process are,
 >>
->> I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
->> export it to via uAPI probably).
+>>    1. TD guest generates the TDREPORT that contains version information
+>>       about the Intel TDX module, measurement of the TD, along with a
+>>       TD-specified nonce.
+>>    2. TD guest shares the TDREPORT with TD host via GetQuote hypercall
+>>       which is used by the host to generate a quote via quoting
+>>       enclave (QE).
+>>    3. Quote generation completion notification is sent to TD OS via
+>>       callback interrupt vector configured by TD using
+>>       SetupEventNotifyInterrupt hypercall.
+>>    4. After receiving the generated TDQUOTE, a remote verifier can be
+>>       used to verify the quote and confirm the trustworthiness of the
+>>       TD.
+> Let's separate TDREPORT generation and Quote generation, and get rid of details
+> of how to get Quote part for now. Detail of GetQuote belongs to the patch which
+> implements it.  Here I think we should focus on explaining why we need such a
+> basic driver to allow userspace to get the TDREPORT.
+> 
+> Below is for your reference:
+> 
+> "
+> The attestation process consists of two steps: TDREPORT generation and Quote
+> generation.  TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated
+> by the TDX module to contain the TD-specific informatin (such as TD
+> measurements), platform information such as the security version of the platform
+> and the TDX module and the MAC to protect the integrity of the TDREPORT. TD
+> kernel uses TDCALL[TDG.MR.REPORT] to get the TDREPORT from the TDX module.  A
+> user-provided 64-Byte REPORTDATA is used as input and included in the TDREPORT.
+> Typically it can be some nonce provided by attestation service so the TDREPORT
+> can be verified uniquely.
+> 
+> TDREPORT can only be verified locally as the MAC key is bound to the platform.
+> TDX attestation leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT
+> locally and convert it to a remote verifiable Quote to support remote
+> attestation of the TDREPORT.  After getting the TDREPORT, the second step of
+> attestation process is to send the TDREPORT to QE to generate the Quote.
+> 
+> How is the QE, or Quote Generation Service (QGS) in general, implemented and
+> deployed is implementation specific.  As a result, how to send the TDREPORT to
+> QE/QGS also depends on QE/QGS implementation and the deployment.  TDX doesn't
+> support SGX inside a TD, so the QE/QGS can be deployed in the host, or inside a
+> dedicated legacy VM.
+> 
+> A typical implementation is TD userspace attestation software gets the TDREPORT
+> from TD kernel, sends it to QE/QGS, and QE/QGS returns the Quote.  The data and
+> data format that TD userspace attestation software sends to the QE/QGS is also
+> implementation specific, but not necessarily just the raw TDREPORT.  TD
+> attestation software can use any available communication channel to talk to
+> QE/QGS, such as using vsock and tcp/ip.
+> 
+> To support the case that those communication channels are not directly available
+> to the TD, TDX also defines TDVMCALLs to allow TD to use TDVMCALL to ask VMM to
+> help with sending the TDREPORT and receiving the Quote.  This support is
+> documented in the GHCI spec "5.4 TD attestation".
+> 
+> Implement a basic attestation driver to allow TD userspace to get the TDREPORT
+> so the attestation software can send it to the QE to generate a Quote for remote
+> verification.
+> "
+> 
+> 
+>>       
+>> More details on above mentioned steps can be found in TDX Guest-Host
+>> Communication Interface (GHCI) for Intel TDX 1.0, section titled
+>> "TD attestation".
 >>
->> Thanks
+>> To allow the attestation agent (user application) to implement this
+>> feature, add an IOCTL interface to get TDREPORT and TDQUOTE from the
+>> user space. Since attestation agent can also use methods like vosck or
+>> TCP/IP to get the TDQUOTE, adding an IOCTL interface for it is an
+>> optional feature. So to simplify the driver, first add support for
+>> TDX_CMD_GET_TDREPORT IOCTL. Support for TDQUOTE IOCTL will be added by
+>> follow-on patches.
 >>
-> like the below one? not sure if this ok to use like this?
-> static struct virtio_device_id vp_vdpa_id_table[] = {
-> { VIRTIO_DEV_ANY_ID, VIRTIO_DEV_ANY_ID },
-> { 0 },
-> };
+>> TDREPORT can be generated by sending a TDCALL with leaf ID as 0x04.
+>> More details about the TDREPORT TDCALL can be found in Intel Trust
+>> Domain Extensions (Intel TDX) Module specification, section titled
+>> "TDG.MR.REPORT Leaf". Add a wrapper function (tdx_mcall_tdreport())
+>> to get the TDREPORT from the TDX Module. This API will be used by the
+>> interface driver to request for TDREPORT.
+>>
+>> Also note that explicit access permissions are not enforced in this
+>> driver because the quote and measurements are not a secret. However
+>> the access permissions of the device node can be used to set any
+>> desired access policy. The udev default is usually root access
+>> only.
+
+How about the following summary? It includes important notes mentioned
+by you and some more driver info.
+
+x86/tdx: Add TDX Guest attestation interface driver
+
+In TDX guest, attestation is used to verify the trustworthiness of a TD
+to other entities before provisioning secrets to the TD.
+
+One usage example is, when a TD guest uses encrypted drive and if the
+decryption keys required to access the drive are stored in a secure 3rd
+party key server, the key server can use attestation to verify TD's
+trustworthiness and release the decryption keys to the TD.
+
+The attestation process consists of two steps: TDREPORT generation and
+Quote generation.
+
+TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+the TDX module which contains TD-specific information (such as TD
+measurements), platform security version, and the MAC to protect the
+integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+get the TDREPORT from the TDX module. A user-provided 64-Byte
+REPORTDATA is used as input and included in the TDREPORT. Typically it
+can be some nonce provided by attestation service so the TDREPORT can
+be verified uniquely. More details about TDREPORT can be found in
+Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+
+After getting the TDREPORT, the second step of the attestation process
+is to send the TDREPORT to Quoting Enclave (QE) or Quote Generation
+Service (QGS) to generate the Quote. However, the method of sending the
+TDREPORT to QE/QGS, communication channel used and data format used is
+specific to the implementation of QE/QGS.
+
+A typical implementation is, TD userspace attestation software gets the
+TDREPORT from TD kernel, sends it to QE/QGS, and QE/QGS returns the
+Quote. TD attestation software can use any available communication
+channel to talk to QE/QGS, such as using vsock and tcp/ip.
+
+To support the case that those communication channels are not directly
+available to the TD, TDX also defines TDVMCALL
+(TDG.VP.VMCALL<GetQuote>) to allow TD to ask VMM to help with sending
+the TDREPORT and receiving the Quote. This support is documented in the
+GHCI spec section titled "5.4 TD attestation".
+
+Implement a basic attestation driver to allow TD userspace to get the
+TDREPORT, which is sent to QE by the attestation software to generate
+a Quote for remote verification. Add a wrapper function
+(tdx_mcall_tdreport()) to get the TDREPORT from the TDX Module. This
+API will be used by the interface driver to request for TDREPORT.
+
+Also note that explicit access permissions are not enforced in this
+driver because the quote and measurements are not a secret. However
+the access permissions of the device node can be used to set any
+desired access policy. The udev default is usually root access
+only.
 
 
-Something like this.
-
-Thanks
 
 
->
->
->>>          if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLASSES,
->>> --
->>> 2.34.1
->>>
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

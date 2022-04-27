@@ -2,203 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3447510F15
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AFA510F18
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357332AbiD0DET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S1357343AbiD0DEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 23:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239060AbiD0DEO (ORCPT
+        with ESMTP id S1357339AbiD0DEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:04:14 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD8633E2E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:00:57 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220427030051epoutp047026342dc143f85ede405c592edf9304~poaENdlWz2909329093epoutp046
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:00:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220427030051epoutp047026342dc143f85ede405c592edf9304~poaENdlWz2909329093epoutp046
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651028451;
-        bh=M+qF4DXxSPrRE9hFKeagdW70MBluH+VPhyv/ruHbtFk=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=ZPSNEyzGhFo2+BL72wZ0TVcQnl5kcrX/8UGGkwnccnFjxN2ytDl/57vkDHUzvzHBL
-         338C36tSBEC6CxJOx72CE/PxQWtve6fYAKwt2ngg2MrgCafxhobsiwgsvwLmONd/r3
-         hEwWaQYf5LFrrIWhP4QPt9h24fMrdKYaRVyMbTPg=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220427030051epcas1p29f7ba0710c568a6890428aaaede4cea0~poaD1ZqqB1652716527epcas1p2S;
-        Wed, 27 Apr 2022 03:00:51 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.226]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Kp3R65LLZz4x9Q9; Wed, 27 Apr
-        2022 03:00:50 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        20.0F.10038.2E1B8626; Wed, 27 Apr 2022 12:00:50 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220427030050epcas1p377eb744ed82b0e4a80747da6229fedca~poaDPkY5P1145211452epcas1p3E;
-        Wed, 27 Apr 2022 03:00:50 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220427030050epsmtrp2f0e0c68b59840001182e56cc8997775e~poaDOqag-2127921279epsmtrp2S;
-        Wed, 27 Apr 2022 03:00:50 +0000 (GMT)
-X-AuditID: b6c32a37-111ff70000002736-c3-6268b1e2e061
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EE.79.08924.2E1B8626; Wed, 27 Apr 2022 12:00:50 +0900 (KST)
-Received: from VDBS1418.vd.sec.samsung.net (unknown [168.219.244.30]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220427030050epsmtip115f5c27c8549c2acc80d468540c5f98e~poaC-4Jr42314923149epsmtip1j;
-        Wed, 27 Apr 2022 03:00:50 +0000 (GMT)
-From:   bumwoo lee <bw365.lee@samsung.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tue, 26 Apr 2022 23:04:36 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6289635A85;
+        Tue, 26 Apr 2022 20:01:26 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id e24so325869pjt.2;
+        Tue, 26 Apr 2022 20:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YFRxO/r5+25A3ri2yhfDFSr+8xdRCcRJYthCA85JqcQ=;
+        b=K1Q2UxF/3GoOvh7IcM7PMhrYYxuk/fttGjz5MOklYiQT+XKXcUyvBefte56ClIFBvB
+         74qaaxun4xBECJrwYtU+rpfozcIaiW7K3sm0s/3rcmqItySScz4mV/dK8Z1dbfIQJK03
+         6qB7v2jvah5TcSa/70kLVzHACv4IoabG3Pt2rRJikhLkym9iSGtba5v5TmhadOTHQuXH
+         d/1Fk3XEWrMsAw+l6Yofn3wrWdc/JeIUtw77a7woKYJ3+PS75DxlaHlerviDpHEbfA1S
+         VkxSoKe2bls6tV8OumP9a+Wh2Icp3Xp0olQ+531BAGdifF+IyLmuqU9tq3cA3fh/EWJj
+         ybMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YFRxO/r5+25A3ri2yhfDFSr+8xdRCcRJYthCA85JqcQ=;
+        b=5l4SZiTPkU2u22+mM9uyHfDrCCWR9i69OoiLypgnrQIdhoOFpISYHTys2UtcUT6oiF
+         2jePV4ZmA++IogHYhgaF51rYWDuf5lVYwZ5r7tJFyvgyo3uqyO6Xu5fW4Jv5z4sdnkbn
+         DX8NEP/Czlx5eRNSOHPxgZt3J2meO/rLYOboBE/R+MytrugbEtfCHF/fJ/hw2AFBCDt0
+         vKe9Qwl+FmL0bkpjB0sA6MzkWuAeG9rY3WJED9c8uyR+Slqx0b4Z2tAAUGsXmlNutGlo
+         P1IMUrDNzjJVFi9fqNTWF9fzmNdzWWJcz+95YqpKnMAnwGCJ3HyeyoSn5WYS8TtsWRrd
+         IHiQ==
+X-Gm-Message-State: AOAM532E4MSLu30LmcUdgD/ahIjWLseky5Rj2d4n4vBSeKof5XqfAEQ5
+        h+ekGiAde+leDdDnIzbWXZA=
+X-Google-Smtp-Source: ABdhPJxlGRM2PNdLt5aZbnAxAcHXkd1gDOPqO85JodxC+Oj77+ihJFifLCy5Xm3v7BWxQNWbMW8N6A==
+X-Received: by 2002:a17:902:8547:b0:15c:f02f:cd0b with SMTP id d7-20020a170902854700b0015cf02fcd0bmr18672461plo.117.1651028485671;
+        Tue, 26 Apr 2022 20:01:25 -0700 (PDT)
+Received: from jagath-PC ([27.7.30.122])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a0023cf00b004e17e11cb17sm18438245pfc.111.2022.04.26.20.01.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 26 Apr 2022 20:01:25 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 08:31:21 +0530
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, dan@dlrobertson.com,
+        andy.shevchenko@gmail.com, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     bumwoo lee <bw365.lee@samsung.com>
-Subject: [PATCH V1] extcon: modify extcon device to be created after driver
- data is set
-Date:   Wed, 27 Apr 2022 12:00:05 +0900
-Message-Id: <20220427030005.706-1-bw365.lee@samsung.com>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH v4 9/9] iio: accel: bma400: Add support for activity and
+ inactivity events
+Message-ID: <20220427030119.GA31584@jagath-PC>
+References: <20220420211105.14654-10-jagathjog1996@gmail.com>
+ <202204211211.febbJ6fy-lkp@intel.com>
+ <20220424172002.7dd48dfa@jic23-huawei>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHKsWRmVeSWpSXmKPExsWy7bCmru6jjRlJBke3a1ucWLOIyeL6l+es
-        Fpd3zWGzuN24gs2BxaNvyypGj8+b5AKYorJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1
-        DS0tzJUU8hJzU22VXHwCdN0yc4AWKSmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIK
-        zAr0ihNzi0vz0vXyUkusDA0MjEyBChOyMz40TmEr+CFa8e3PKpYGxu1CXYwcHBICJhI7+3y7
-        GDk5hAR2MEqcO2XYxcgFZH9ilHg+6ycLhPOZUaLr3CV2kCqQhrPdP9khErsYJSZebWKCcH4x
-        Shx+coIJpIpNQEPi4sXrzCArRAQKJQ73Z4OEmQXUJP6c6QErERaIlFi/bRcjiM0ioCqxevcc
-        sAW8AhYSS84eY4ZYJi/R/e8PC0RcUOLkzCcsEHPkJZq3zoaqWcYu8fl9EITtIrFk/S8mCFtY
-        4tXxLVBHS0l8freXDcJOl1h55Q5UPEfi9f12RgjbWOLd27VgJzMLaEqs36UPEVaU2Pl7LiPE
-        Wj6Jd197WCEBxyvR0SYEUaIs0f3gBdRWSYnFT+9ATfSQWDH/AiMkcGMlenbNZ5rAKD8LyTOz
-        kDwzC2HxAkbmVYxiqQXFuempxYYFxvAYTc7P3cQITmha5jsYp739oHeIkYmD8RCjBAezkgjv
-        PcWMJCHelMTKqtSi/Pii0pzU4kOMpsDgncgsJZqcD0ypeSXxhiaWBiZmRiYWxpbGZkrivKum
-        nU4UEkhPLEnNTk0tSC2C6WPi4JRqYPL+YGb2ozXlY2VD4/rdq2rUJVNPPFI2PXr6i5p+3Z/j
-        jXwu9gUZqz6wlH/+rNxtfzFRY86Exdx37+/Z++rqshsRB7P+qLzu2L33MusyxQLdhTvOd7gu
-        /i+01cJt2oL9jz7PmhNhpzX1oekS4cVdV5V1yp7sDK+cmyKk0frj70POHSycv9qm7eB4xiJn
-        +Tnvs//1wxJ7kg2kdxg//nA6qnlHglNZr3TAyi+RSRMrth7k7K3/sz37pna47IspDk9/SizI
-        /+3JVZxWUF60e3tAqN08uUg/WznnF/yCH2u/Nn3OXO5/eDV7aPxiz00P1jhEvlsUkrx/zpWS
-        teZ/JAT9DI8kP7NXFfJ2ulvkvVllzgslluKMREMt5qLiRABjWJ3i8QMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnluLIzCtJLcpLzFFi42LZdlhJTvfRxowkg74NwhYn1ixisrj+5Tmr
-        xeVdc9gsbjeuYHNg8ejbsorR4/MmuQCmKC6blNSczLLUIn27BK6MD41T2Ap+iFZ8+7OKpYFx
-        u1AXIyeHhICJxNnun+xdjFwcQgI7GCUu/tjNDpGQlDi7/BGQzQFkC0scPlwMUfODUeLe4c3M
-        IDVsAhoSFy9eB7NFBIolLhxYzAJiMwuoSfw508ME0issEC5xbncESJhFQFVi9e45YON5BSwk
-        lpw9xgyxSl6i+98fFoi4oMTJmU+gxshLNG+dzTyBkW8WktQsJKkFjEyrGCVTC4pz03OLDQuM
-        8lLL9YoTc4tL89L1kvNzNzGCw0xLawfjnlUf9A4xMnEwHmKU4GBWEuG9p5iRJMSbklhZlVqU
-        H19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVAPT5BsP+HbxbLY6lb1tXV3D
-        m4gdU1m4p71Vkrj3/0jB681POzQ+3d3Htb+s7umJ5tmnnxYKyl/Q+n+CY8Hc/Puab0s3zf99
-        Z/GvH1d8PnW7bfZxUlSzurkt8tfnNw8KzVsVoqaGcMXfXW6S/23/NHstxajvHvLLdldo//6w
-        Lv35I/UJngo3BGMzeVN2f6jx/X952j6TSeE3tuZ/jdc96P5D+HPyhM8CAQfcXLvMPSZ42l94
-        PWHOIdusaaHlR7ZMXnEl5Xj4oXtzZd/H/+Wdc4hxXpxE7xTZxN+6q7RdXy4qj6oo+v6UbWbw
-        7LD9M/X2Bq1Jt7xY1zerXDF2QXSwhLz/wvn60tqmRjv+3+X47BB36JQSS3FGoqEWc1FxIgB2
-        y7A1ogIAAA==
-X-CMS-MailID: 20220427030050epcas1p377eb744ed82b0e4a80747da6229fedca
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220427030050epcas1p377eb744ed82b0e4a80747da6229fedca
-References: <CGME20220427030050epcas1p377eb744ed82b0e4a80747da6229fedca@epcas1p3.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220424172002.7dd48dfa@jic23-huawei>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, someone can invoke the sysfs such as state_show()
-intermittently before dev_set_drvdata() is done.
-And it can be a cause of kernel Oops because of edev is Null at that time.
-So modified the driver registration to after setting drviver data.
+Hello Jonathan,
 
-- Oops's backtrace.
+On Sun, Apr 24, 2022 at 05:20:02PM +0100, Jonathan Cameron wrote:
+> On Thu, 21 Apr 2022 14:45:05 +0800
+> kernel test robot <lkp@intel.com> wrote:
+> 
+> > Hi Jagath,
+> > 
+> > Thank you for the patch! Perhaps something to improve:
+> > 
+> > [auto build test WARNING on jic23-iio/togreg]
+> > [also build test WARNING on linus/master v5.18-rc3 next-20220420]
+> > [cannot apply to linux/master]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> > config: mips-randconfig-r031-20220420 (https://download.01.org/0day-ci/archive/20220421/202204211211.febbJ6fy-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mips-linux-gnu
+> >         # https://github.com/intel-lab-lkp/linux/commit/b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220421-051244
+> >         git checkout b33d9910aa7588ec8db7c1694dbc03c3ed200ebb
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iio/accel/
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> drivers/iio/accel/bma400_core.c:1047:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]  
+> >                    field_value = FIELD_PREP(msk, state);
+> >                                  ^~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+> >                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+> >                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+> >                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+> >                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+> >    include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+> >            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+> >            __compiletime_assert(condition, msg, prefix, suffix)
+> >            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+> >                    if (!(condition))                                       \
+> >                          ^~~~~~~~~
+> >    drivers/iio/accel/bma400_core.c:1053:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((msk), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (msk)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+> >                    field_value = FIELD_PREP(msk, state);
+> >                                  ^~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+> >                    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+> >                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+> >                    BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+> >                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+> >    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> >    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> >                                        ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+> >    include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+> >            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> >            ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+> >            __compiletime_assert(condition, msg, prefix, suffix)
+> >            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+> >                    if (!(condition))                                       \
+> >                          ^~~~~~~~~
+> >    2 warnings generated.
+> > 
+> > 
+> > vim +1047 drivers/iio/accel/bma400_core.c
+> > 
+> >   1035	
+> >   1036	static int bma400_activity_event_en(struct bma400_data *data,
+> >   1037					    enum iio_event_direction dir,
+> >   1038					    int state)
+> >   1039	{
+> >   1040		int ret, reg, msk, value, field_value;
+> >   1041	
+> >   1042		switch (dir) {
+> >   1043		case IIO_EV_DIR_RISING:
+> >   1044			reg = BMA400_GEN1INT_CONFIG0;
+> >   1045			msk = BMA400_INT_GEN1_MSK;
+> >   1046			value = 2;
+> > > 1047			field_value = FIELD_PREP(msk, state);
+> 
+> Ah.  Will need to clamp state to 0/1
+> 
+> 				field_value = FIELD_PREP(msk, state ? 1 : 0);
+> perhaps?
 
-Backtrace:
-[<c067865c>] (state_show) from [<c05222e8>] (dev_attr_show)
-[<c05222c0>] (dev_attr_show) from [<c02c66e0>] (sysfs_kf_seq_show)
-[<c02c6648>] (sysfs_kf_seq_show) from [<c02c496c>] (kernfs_seq_show)
-[<c02c4938>] (kernfs_seq_show) from [<c025e2a0>] (seq_read)
-[<c025e11c>] (seq_read) from [<c02c50a0>] (kernfs_fop_read)
-[<c02c5064>] (kernfs_fop_read) from [<c0231cac>] (__vfs_read)
-[<c0231c5c>] (__vfs_read) from [<c0231ee0>] (vfs_read)
-[<c0231e34>] (vfs_read) from [<c0232464>] (ksys_read)
-[<c02323f0>] (ksys_read) from [<c02324fc>] (sys_read)
-[<c02324e4>] (sys_read) from [<c00091d0>] (__sys_trace_return)
+For this also compiler shows warning.
 
-Signed-off-by: bumwoo lee <bw365.lee@samsung.com>
----
- drivers/extcon/extcon.c | 29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+To compile for mips I used
+COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir
+ARCH=mips SHELL=/bin/bash drivers/iio/accel/
 
-diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index d27cd9f88f86..d3a32b806499 100644
---- a/drivers/extcon/extcon.c
-+++ b/drivers/extcon/extcon.c
-@@ -1224,19 +1224,14 @@ int extcon_dev_register(struct extcon_dev *edev)
- 		edev->dev.type = &edev->extcon_dev_type;
- 	}
- 
--	ret = device_register(&edev->dev);
--	if (ret) {
--		put_device(&edev->dev);
--		goto err_dev;
--	}
--
- 	spin_lock_init(&edev->lock);
--	edev->nh = devm_kcalloc(&edev->dev, edev->max_supported,
--				sizeof(*edev->nh), GFP_KERNEL);
--	if (!edev->nh) {
--		ret = -ENOMEM;
--		device_unregister(&edev->dev);
--		goto err_dev;
-+	if (edev->max_supported) {
-+		edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh),
-+				GFP_KERNEL);
-+		if (!edev->nh) {
-+			ret = -ENOMEM;
-+			goto err_alloc_nh;
-+		}
- 	}
- 
- 	for (index = 0; index < edev->max_supported; index++)
-@@ -1247,6 +1242,12 @@ int extcon_dev_register(struct extcon_dev *edev)
- 	dev_set_drvdata(&edev->dev, edev);
- 	edev->state = 0;
- 
-+	ret = device_register(&edev->dev);
-+	if (ret) {
-+		put_device(&edev->dev);
-+		goto err_dev;
-+	}
-+
- 	mutex_lock(&extcon_dev_list_lock);
- 	list_add(&edev->entry, &extcon_dev_list);
- 	mutex_unlock(&extcon_dev_list_lock);
-@@ -1254,6 +1255,9 @@ int extcon_dev_register(struct extcon_dev *edev)
- 	return 0;
- 
- err_dev:
-+	if (edev->max_supported)
-+		kfree(edev->nh);
-+err_alloc_nh:
- 	if (edev->max_supported)
- 		kfree(edev->extcon_dev_type.groups);
- err_alloc_groups:
-@@ -1314,6 +1318,7 @@ void extcon_dev_unregister(struct extcon_dev *edev)
- 	if (edev->max_supported) {
- 		kfree(edev->extcon_dev_type.groups);
- 		kfree(edev->cables);
-+		kfree(edev->nh);
- 	}
- 
- 	put_device(&edev->dev);
--- 
-2.35.1
+../drivers/iio/accel/bma400_core.c:1047:17: warning: result of comparison of
+constant 18446744073709551615 with expression of type 'typeof (_Generic((msk)...
 
+                field_value = FIELD_PREP(msk, state ? 1 : 0);
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+
+
+
+To avoid warning can I do like this
+field_value = FIELD_PREP(BMA400_INT_GEN1_MSK, state);
+
+>   
+> >   1048			break;
+> >   1049		case IIO_EV_DIR_FALLING:
+> >   1050			reg = BMA400_GEN2INT_CONFIG0;
+> >   1051			msk = BMA400_INT_GEN2_MSK;
+> >   1052			value = 0;
+> >   1053			field_value = FIELD_PREP(msk, state);
+> >   1054			break;
+> >   1055		default:
+> >   1056			return -EINVAL;
+> >   1057		}
+> >   1058	
+> >   1059		/* Enabling all axis for interrupt evaluation */
+> >   1060		ret = regmap_write(data->regmap, reg, 0xF8);
+> >   1061		if (ret)
+> >   1062			return ret;
+> >   1063	
+> >   1064		/* OR combination of all axis for interrupt evaluation */
+> >   1065		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG1_OFF, value);
+> >   1066		if (ret)
+> >   1067			return ret;
+> >   1068	
+> >   1069		/* Initial value to avoid interrupts while enabling*/
+> >   1070		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG2_OFF, 0x0A);
+> >   1071		if (ret)
+> >   1072			return ret;
+> >   1073	
+> >   1074		/* Initial duration value to avoid interrupts while enabling*/
+> >   1075		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG31_OFF, 0x0F);
+> >   1076		if (ret)
+> >   1077			return ret;
+> >   1078	
+> >   1079		ret = regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG, msk,
+> >   1080					 field_value);
+> >   1081		if (ret)
+> >   1082			return ret;
+> >   1083	
+> >   1084		ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG, msk,
+> >   1085					 field_value);
+> >   1086		if (ret)
+> >   1087			return ret;
+> >   1088	
+> >   1089		set_mask_bits(&data->generic_event_en, msk, field_value);
+> >   1090		return 0;
+> >   1091	}
+> >   1092	
+> > 
+> 
+
+
+Thank you,
+Jagath

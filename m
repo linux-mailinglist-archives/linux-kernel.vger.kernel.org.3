@@ -2,646 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530A2510F9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B09510F9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357544AbiD0DmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S1357555AbiD0Dm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 23:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244576AbiD0DmF (ORCPT
+        with ESMTP id S244576AbiD0Dm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:42:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC0F74DC5;
-        Tue, 26 Apr 2022 20:38:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kp4H03v8fz4xLS;
-        Wed, 27 Apr 2022 13:38:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651030732;
-        bh=6Re7NS6zeMbnfZ6+OS0kwjcSX7gccswbyAJdHPaTY5w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eWhbWk2W0/SLtRjhUfOSgsPKP8/6B+H6gjc3R7pGxz4DNkip6rImW6vO2bJwDOqdm
-         H/9Lb9LszwUWuj8Nezc3O4W3t0hs9HI9nihrozR1DdUEV4+bWn9PHq/qoMsZlFzvMv
-         jMzYXgUDuQsukSZW32fCJ6blH0JkbmhjyWpcf3NAwcyaDau7QxKqPiFz0/OpbS2gMl
-         uts9wx+9x+E933X89f9U9uVer7WiHWobrVDCcZkFWCYmGh23B7iRNl8CCUj7Xr7Pn0
-         9dMvdRVRHbf9y+QlXRqJsxpyvlptLbEMfCOEw9rnwVeZz1hCiQ07DGJ6Fvnm4+k09m
-         X+NQ6YSzsCT4A==
-Date:   Wed, 27 Apr 2022 13:38:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Sumit Saxena <sumit.saxena@broadcom.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20220427133851.6ff8b0cf@canb.auug.org.au>
+        Tue, 26 Apr 2022 23:42:26 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2114.outbound.protection.outlook.com [40.107.117.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453C774DD0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:39:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JZC08xt3KzhLnL61bymzPGMhKW1cNYQWjacd6UyskUvjcEwm7ZF9w4QmBWbcgYDeqdglXUXCkQA+FFuKmpxcNOCxIizvYy6zc4lTIAX3jga+17YHBaiV+UkEal7yCLAaCQxNM4il54ujxgHfQK3zmsl5/kEHV4hMGyBuu6GZU02aGJWHeh7to+S42Go4ZSVb20Nrz1iNkUC1DyOz6yjuJ3+9CeiI0d4xi1W/OOwL3ZJ6km5oDuPeqptxCrOB1azXAmPLSkIBpLBg1DlUgWMETE+dIe0LocTm6HUjzXmPuDGR3y+fnTcbJitQW78qfIyCEmDzcnQCmtmyEglsqd1YcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wSsinbvTtvQf8HZvZIKPVWD1ZbypylbIVlJUJ+bianU=;
+ b=eU52U/fe746RVoXgvUpSNWX7u93ejnCK+gHOkWdhM+6ZGyBFAR/kTfLiYG6/n3RblgR6vwOJvG2Ly/AwvrgqW5M5/q6VPTxivr+CCtDY+yjPXWcE8egEQkmY2Cn9sdiSrb3cq7CCyHkz4xAY8nSfDGj8167stHLX94oW0WqC4iIdmq6RhkyblPV6ghJDO979TPsqXtJa4rlJJKIVWhgHA24n0r0ntjGjBzMdsmkzj1vtL2gbD82u3t7PnzM8zn07jsC5OE+JuESlcC2K+fm3TKMa5WJ00MsMUIJSQ+zIJJO+5u3OKfuYhA7PTJZkuezIVRpMzhkGM58mZi0YJc9zjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wSsinbvTtvQf8HZvZIKPVWD1ZbypylbIVlJUJ+bianU=;
+ b=lEN+EZosubUTJVZc7u1e5b4VS7NgklUN2QpPUCyvLnXogMZbvEFK08rdnZdaEEpLom3HRiEdB9A6nDxoimvXHE2WGN7QvcvSS7aa8vUbx8u67SsyPB6q2GQ2y6jSEYz5cNGKBKAl2m1yP9xCeuz5ZfyXR6/cgBWRofwC0qeEkV4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (20.177.94.19) by
+ HK0PR06MB3185.apcprd06.prod.outlook.com (20.177.160.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.18; Wed, 27 Apr 2022 03:39:11 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
+ 03:39:11 +0000
+Date:   Wed, 27 Apr 2022 11:39:08 +0800
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kael_w@qq.com" <kael_w@qq.com>
+Subject: Re: [PATCH] mailbox: imx: Fix duplicate field initialization in imx
+Message-ID: <Ymi63CIzGLOCniVo@myhostname>
+References: <20220316014128.89315-1-wanjiabing@vivo.com>
+ <DU0PR04MB9417A00C2F5BA3F8D6F2C7E088119@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU0PR04MB9417A00C2F5BA3F8D6F2C7E088119@DU0PR04MB9417.eurprd04.prod.outlook.com>
+X-ClientProxiedBy: HK2PR03CA0055.apcprd03.prod.outlook.com
+ (2603:1096:202:17::25) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3qmWCjs5.G.SBIzxA3FR/cj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d8fadc03-87cc-4821-4b4a-08da27ff7e04
+X-MS-TrafficTypeDiagnostic: HK0PR06MB3185:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB3185312F6612F48F74495239ABFA9@HK0PR06MB3185.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fK1aFYctDkZ7SXcOggxISDVgeCAhyYukcZYYwU/0PrVzrdnzN4KFKS+O2eKQDw7I0BxhmnwLKipKrg82UF2K8MC6Ke3ejGiuQFCWYNVrKqXy3FFovIbIQh0dWnVnRAH8tIMv3987fho5ymU014ZjOXTihGKkETdggcnrUqZSJKrGjxv9HfXiraQR7w3+HwFGGDQ7U//no1tsDO0pop+hVnHWpiqIObzguBMbYy+X3Md/4EGPkUJW9OdtzoDjiEhxWX3hAwRvoB42cmJp9kOOKFlBxw8ivAfYsEWi6Bv5wthD5PYY/mJSbtAHsE6qErPMR2CvvFMG3pCL1P8HgncwrmAW7XwWot2r+X242sFVj8OWV3bx6ZV8hLAphxsyWBOznF5/undpzYYGXLabzqFHqYdsLEBIpnCcyqP3GFps8/X/rCduVEmMsDFNK6fUX+ps9Fd1utO/0RrSthLEOBWAoSZsNi0DuPyhxebSHYWcOI6+XgSwRclJsgyN6PcfSGXVQ678uoDVtIfjE6UxewYrbOzGf+HsNRfFoA0utw78cTSCAZxJPBfTqLE+KFTShZpOp11oAxMa4WDHQ3hgS38a8B9e2auR2uSYFQ4e32qhDq6531nzyzlNprxvqeZgBjwbcUtuH34RFEcLmophjg7E53uKUk89bCmcnaRjbys2QvRmAK6KJupyXoPB7rzuStXjVUeEPn80kfvFEzWdp1XQO4HT55m5qlpaIfc1rfrfxRIgWpIRiDZSUlSO1zpkZQRISAt7aLMAehsI0SMjmWlF1ukKx3TJDZcPQmIJXMOslW4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(15650500001)(508600001)(6512007)(8936002)(9686003)(26005)(6666004)(38350700002)(38100700002)(86362001)(2906002)(5660300002)(66946007)(52116002)(66556008)(6506007)(7416002)(66476007)(33716001)(186003)(83380400001)(8676002)(4326008)(6486002)(966005)(316002)(54906003)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J2V5CIZWI9smH3J4ex1fX0+kZXCYEvD8NSXh/ZvPK+5xeB9HQYLjw+SU2NEX?=
+ =?us-ascii?Q?iKYPC2U4xnpEki13R8ejSg1bJrq9X4RLr9p3KCuLm73pyKklfUITUzBheESQ?=
+ =?us-ascii?Q?tBOVlbbDC5EvCGoYawd/h3amgbLfOHWCpyoOCmfGqMBCgP0QcPXSH+4gtvmq?=
+ =?us-ascii?Q?8AHbcVQRIoQ6kE7jif2ky1BblsFEWKzpwEQYeXUiecRv44G+34sLUzbDR680?=
+ =?us-ascii?Q?AURtMiHss6S2Xe299PAkfPPlOAt6pfJVWLXevTfma2BuwXQAx3iz8fxvwmV1?=
+ =?us-ascii?Q?d1V09JlMt/r5tETt1YpVI1TCSAGLQ3/dXqFuaEqquzGa2Tch+bPHbAiQEcXG?=
+ =?us-ascii?Q?QKFpBrWff+hMHHtQObCdVAbvi3TgRlnICpFXG6zh5XFcnQw9zqvk1yxndphU?=
+ =?us-ascii?Q?dkoTlyN190dMMkChMWHlahH+kbNSh3cv546G5QZsu5JkSr0mUFsl6V+DFoAD?=
+ =?us-ascii?Q?vSHH3OSsFDRyodcJpWnHYbiFQAm3J/kzo0dxw7FrDNMUmGAp+YSl0Di59xBB?=
+ =?us-ascii?Q?OP5ycKQj/xIkn0seu/CSYDEOTNfHOeUvUGwyX2jBttCPEsbeSX4eCc1QMTR4?=
+ =?us-ascii?Q?pyJ+p8Odj3EGA71fAg+L0iMayMK1Jpjp0NhSPuxkFoYSyOrEhOxG/NQtSP0I?=
+ =?us-ascii?Q?bKa3G/c/N/W2IFx4ks1SB6VPbYsZ9lGETDSh8wi2p4EGUMeLzu0z2jjggMik?=
+ =?us-ascii?Q?FDXASmh1XvkEX4ASiX4cG2DKDXFhqdoxi6lzYmGH1CrI+6NZRjTub65+W7t0?=
+ =?us-ascii?Q?KlypUDjk5vwlgo7jVh9ikeIooys7THhb/6atQNVJzKtRu3xB6IflU7oQcXNS?=
+ =?us-ascii?Q?T/1z/9Ehn+3VwBw+kUPj4FkmkqJNdtIX0clRXTdtGwoKqsdW1ZwmeoOtS0Xh?=
+ =?us-ascii?Q?yDWB1OIbEqDPwYOstEbmEs3UafDK8lgUUiAVmSaSLibSkjs9tMreUxiP5Xic?=
+ =?us-ascii?Q?uOwgWliGoqMnTuKyDzqRCJ1/vjnEd7drtjbmYyDbW6zLwkavKphMYAKcjU6r?=
+ =?us-ascii?Q?eAskDjVCGy2X5bvrYCRIN/CESw5IkXVagjRYcTMx36QUtKBOR3dp/e3XO8yW?=
+ =?us-ascii?Q?ig63+66WkRoIXLJrDSWfDE7xzQsWi8icfHiqD99ax1sDuUFCZFu1pMB4Qjvw?=
+ =?us-ascii?Q?aMZf724ZeP4oBfWSpcJfsOYRQahaMV4ZRB5WDTfSAYCkpLFcknY8oBDaAXCP?=
+ =?us-ascii?Q?2nEz0WL6XULTpgrbWfVWTqvvEod4lqUMEzvXk7xeaCQBu0aIls8LkX2ZIkoQ?=
+ =?us-ascii?Q?m6Fsafwdisy2tjMubq2CM6s8eGKSutEkdUozBVytBHYAG0ZkIIz/ImbTTtUN?=
+ =?us-ascii?Q?MWpUoX7JAaAeQBZfWk7e7Wk2SH8bPYjoeELYjnw1CGqa6897Y+9rkza7m+z/?=
+ =?us-ascii?Q?K8QB4I9DgzSrwiByOqZ2ym6UCeYu2/vnD3tDfVZoKU7ZPO+wIC8Au6ZPTu9h?=
+ =?us-ascii?Q?x/MZwBNVqIBe5w3tzUvqu55h3Mh0Iaf2lq7Nj6Jl0jjyl8lSQkK/5InlI1FB?=
+ =?us-ascii?Q?Df4xY5bvrULhow4ctJgisJwg0QuGrupgpMgS/hIlxKzAnrxw31N19m/Izddi?=
+ =?us-ascii?Q?oax4s3Q3gXMMfaA4dR7McOV5VTkrXR2SFKCDnE77WsRXj28MDk1TWRlgSUEp?=
+ =?us-ascii?Q?3xmxwmwVK57StJ7u5IaLqkZLnMuKUDIPTU+3ZA1JwD4ntZfc58mi5NcvrN/c?=
+ =?us-ascii?Q?QxX13niwzArU5sR4mScTVjJkCffEC1x7nTD9wMb1dsp2e3OR5LhNvMrZ2J3+?=
+ =?us-ascii?Q?7Msa8crtWQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8fadc03-87cc-4821-4b4a-08da27ff7e04
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 03:39:11.3981
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EzjXhj2O6K/+ZbiMNgNdidwT6uk6FSn1TaC4tKrar4giFp3T+o0fVTR9IWrz6lyd9eYXZisHpaBS6oZcEpfJ2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3185
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3qmWCjs5.G.SBIzxA3FR/cj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Mar 16, 2022 at 02:03:49AM +0000, Peng Fan wrote:
+> > Subject: [PATCH] mailbox: imx: Fix duplicate field initialization in imx
+> > 
+> > Fix the following coccicheck warning:
+> > ./drivers/mailbox/imx-mailbox.c:884:51-52: rxdb: first occurrence line 887,
+> > second occurrence line 889
+> > 
+> > Fixes: 315d2e562418 ("mailbox: imx: introduce rxdb callback")
+> > Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> 
+> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> 
+> > ---
+> >  drivers/mailbox/imx-mailbox.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/mailbox/imx-mailbox.c b/drivers/mailbox/imx-mailbox.c
+> > index e88f544a1548..df8a785be324 100644
+> > --- a/drivers/mailbox/imx-mailbox.c
+> > +++ b/drivers/mailbox/imx-mailbox.c
+> > @@ -886,7 +886,6 @@ static const struct imx_mu_dcfg imx_mu_cfg_imx8ulp
+> > = {
+> >  	.rx	= imx_mu_generic_rx,
+> >  	.rxdb	= imx_mu_generic_rxdb,
+> >  	.init	= imx_mu_init_generic,
+> > -	.rxdb	= imx_mu_generic_rxdb,
+> >  	.type	= IMX_MU_V2,
+> >  	.xTR	= 0x200,
+> >  	.xRR	= 0x280,
+> > --
+> > 2.35.1
+> 
 
-Hi all,
+Hi, all
 
-After merging the scsi-mkp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+I notice the status of this patch hasn't been updated for
+a long time.
 
-In file included from <command-line>:
-./usr/include/scsi/scsi_bsg_mpi3mr.h:96:9: error: unknown type name '__le32'
-   96 |         __le32             information_length;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:97:9: error: unknown type name 'u8'
-   97 |         u8                 driver_signature[12];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:98:9: error: unknown type name 'u8'
-   98 |         u8                 os_name[16];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:99:9: error: unknown type name 'u8'
-   99 |         u8                 os_version[12];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:100:9: error: unknown type name 'u8'
-  100 |         u8                 driver_name[20];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:101:9: error: unknown type name 'u8'
-  101 |         u8                 driver_version[32];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:102:9: error: unknown type name 'u8'
-  102 |         u8                 driver_release_date[20];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:103:9: error: unknown type name '__le3=
-2'
-  103 |         __le32             driver_capabilities;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:128:9: error: unknown type name 'uint3=
-2_t'
-  128 |         uint32_t adp_type;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:129:9: error: unknown type name 'uint3=
-2_t'
-  129 |         uint32_t rsvd1;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:130:9: error: unknown type name 'uint3=
-2_t'
-  130 |         uint32_t pci_dev_id;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:131:9: error: unknown type name 'uint3=
-2_t'
-  131 |         uint32_t pci_dev_hw_rev;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:132:9: error: unknown type name 'uint3=
-2_t'
-  132 |         uint32_t pci_subsys_dev_id;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:133:9: error: unknown type name 'uint3=
-2_t'
-  133 |         uint32_t pci_subsys_ven_id;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:134:9: error: unknown type name 'uint3=
-2_t'
-  134 |         uint32_t pci_dev:5;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:135:9: error: unknown type name 'uint3=
-2_t'
-  135 |         uint32_t pci_func:3;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:136:9: error: unknown type name 'uint3=
-2_t'
-  136 |         uint32_t pci_bus:8;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:137:9: error: unknown type name 'uint1=
-6_t'
-  137 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:138:9: error: unknown type name 'uint3=
-2_t'
-  138 |         uint32_t pci_seg_id;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:139:9: error: unknown type name 'uint3=
-2_t'
-  139 |         uint32_t app_intfc_ver;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:140:9: error: unknown type name 'uint8=
-_t'
-  140 |         uint8_t adp_state;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:141:9: error: unknown type name 'uint8=
-_t'
-  141 |         uint8_t rsvd3;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:142:9: error: unknown type name 'uint1=
-6_t'
-  142 |         uint16_t rsvd4;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:143:9: error: unknown type name 'uint3=
-2_t'
-  143 |         uint32_t rsvd5[2];
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:156:9: error: unknown type name 'uint8=
-_t'
-  156 |         uint8_t reset_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:157:9: error: unknown type name 'uint8=
-_t'
-  157 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:158:9: error: unknown type name 'uint1=
-6_t'
-  158 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:169:9: error: unknown type name 'uint1=
-6_t'
-  169 |         uint16_t change_count;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:170:9: error: unknown type name 'uint1=
-6_t'
-  170 |         uint16_t rsvd;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:185:9: error: unknown type name 'uint1=
-6_t'
-  185 |         uint16_t handle;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:186:9: error: unknown type name 'uint1=
-6_t'
-  186 |         uint16_t perst_id;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:187:9: error: unknown type name 'uint3=
-2_t'
-  187 |         uint32_t target_id;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:188:9: error: unknown type name 'uint8=
-_t'
-  188 |         uint8_t bus_id;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:189:9: error: unknown type name 'uint8=
-_t'
-  189 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:190:9: error: unknown type name 'uint1=
-6_t'
-  190 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:203:9: error: unknown type name 'uint1=
-6_t'
-  203 |         uint16_t num_devices;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:204:9: error: unknown type name 'uint1=
-6_t'
-  204 |         uint16_t rsvd1;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:205:9: error: unknown type name 'uint3=
-2_t'
-  205 |         uint32_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:218:9: error: unknown type name 'uint1=
-6_t'
-  218 |         uint16_t max_entries;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:219:9: error: unknown type name 'uint1=
-6_t'
-  219 |         uint16_t rsvd;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:231:9: error: unknown type name 'uint1=
-6_t'
-  231 |         uint16_t pel_locale;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:232:9: error: unknown type name 'uint8=
-_t'
-  232 |         uint8_t pel_class;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:233:9: error: unknown type name 'uint8=
-_t'
-  233 |         uint8_t rsvd;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:246:9: error: unknown type name 'uint8=
-_t'
-  246 |         uint8_t valid_entry;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:247:9: error: unknown type name 'uint8=
-_t'
-  247 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:248:9: error: unknown type name 'uint1=
-6_t'
-  248 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:249:9: error: unknown type name 'uint8=
-_t'
-  249 |         uint8_t data[1]; /* Variable length Array */
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:277:9: error: unknown type name 'uint8=
-_t'
-  277 |         uint8_t buf_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:278:9: error: unknown type name 'uint8=
-_t'
-  278 |         uint8_t status;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:279:9: error: unknown type name 'uint8=
-_t'
-  279 |         uint8_t trigger_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:280:9: error: unknown type name 'uint8=
-_t'
-  280 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:281:9: error: unknown type name 'uint1=
-6_t'
-  281 |         uint16_t size;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:282:9: error: unknown type name 'uint1=
-6_t'
-  282 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:283:9: error: unknown type name 'uint6=
-4_t'
-  283 |         uint64_t trigger_data;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:284:9: error: unknown type name 'uint3=
-2_t'
-  284 |         uint32_t rsvd3;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:285:9: error: unknown type name 'uint3=
-2_t'
-  285 |         uint32_t rsvd4;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:303:9: error: unknown type name 'uint8=
-_t'
-  303 |         uint8_t num_hdb_types;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:304:9: error: unknown type name 'uint8=
-_t'
-  304 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:305:9: error: unknown type name 'uint1=
-6_t'
-  305 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:306:9: error: unknown type name 'uint3=
-2_t'
-  306 |         uint32_t rsvd3;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:319:9: error: unknown type name 'uint8=
-_t'
-  319 |         uint8_t buf_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:320:9: error: unknown type name 'uint8=
-_t'
-  320 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:321:9: error: unknown type name 'uint1=
-6_t'
-  321 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:335:9: error: unknown type name 'uint8=
-_t'
-  335 |         uint8_t buf_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:336:9: error: unknown type name 'uint8=
-_t'
-  336 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:337:9: error: unknown type name 'uint1=
-6_t'
-  337 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:338:9: error: unknown type name 'uint3=
-2_t'
-  338 |         uint32_t start_offset;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:339:9: error: unknown type name 'uint3=
-2_t'
-  339 |         uint32_t length;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:351:9: error: unknown type name 'uint8=
-_t'
-  351 |         uint8_t page_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:352:9: error: unknown type name 'uint8=
-_t'
-  352 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:353:9: error: unknown type name 'uint1=
-6_t'
-  353 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:365:9: error: unknown type name 'uint8=
-_t'
-  365 |         uint8_t mrioc_id;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:366:9: error: unknown type name 'uint8=
-_t'
-  366 |         uint8_t opcode;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:367:9: error: unknown type name 'uint1=
-6_t'
-  367 |         uint16_t rsvd1;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:368:9: error: unknown type name 'uint3=
-2_t'
-  368 |         uint32_t rsvd2[4];
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:380:9: error: unknown type name 'uint8=
-_t'
-  380 |         uint8_t mpi_reply_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:381:9: error: unknown type name 'uint8=
-_t'
-  381 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:382:9: error: unknown type name 'uint1=
-6_t'
-  382 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:383:9: error: unknown type name 'uint8=
-_t'
-  383 |         uint8_t reply_buf[1];
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:396:9: error: unknown type name 'uint8=
-_t'
-  396 |         uint8_t buf_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:397:9: error: unknown type name 'uint8=
-_t'
-  397 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:398:9: error: unknown type name 'uint1=
-6_t'
-  398 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:399:9: error: unknown type name 'uint3=
-2_t'
-  399 |         uint32_t buf_len;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:412:9: error: unknown type name 'uint8=
-_t'
-  412 |         uint8_t num_of_entries;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:413:9: error: unknown type name 'uint8=
-_t'
-  413 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:414:9: error: unknown type name 'uint1=
-6_t'
-  414 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:415:9: error: unknown type name 'uint3=
-2_t'
-  415 |         uint32_t rsvd3;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:428:9: error: unknown type name 'uint8=
-_t'
-  428 |         uint8_t mrioc_id;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:429:9: error: unknown type name 'uint8=
-_t'
-  429 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:430:9: error: unknown type name 'uint1=
-6_t'
-  430 |         uint16_t timeout;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:431:9: error: unknown type name 'uint3=
-2_t'
-  431 |         uint32_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:446:9: error: unknown type name 'uint8=
-_t'
-  446 |         uint8_t cmd_type;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:447:9: error: unknown type name 'uint8=
-_t'
-  447 |         uint8_t rsvd1;
-      |         ^~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:448:9: error: unknown type name 'uint1=
-6_t'
-  448 |         uint16_t rsvd2;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:449:9: error: unknown type name 'uint3=
-2_t'
-  449 |         uint32_t rsvd3;
-      |         ^~~~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:463:9: error: unknown type name '__le1=
-6'
-  463 |         __le16                     host_tag;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:464:9: error: unknown type name 'u8'
-  464 |         u8                         ioc_use_only02;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:465:9: error: unknown type name 'u8'
-  465 |         u8                         function;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:466:9: error: unknown type name '__le1=
-6'
-  466 |         __le16                     ioc_use_only04;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:467:9: error: unknown type name 'u8'
-  467 |         u8                         ioc_use_only06;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:468:9: error: unknown type name 'u8'
-  468 |         u8                         msg_flags;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:469:9: error: unknown type name '__le1=
-6'
-  469 |         __le16                     change_count;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:470:9: error: unknown type name '__le1=
-6'
-  470 |         __le16                     dev_handle;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:471:9: error: unknown type name '__le1=
-6'
-  471 |         __le16                     encapsulated_command_length;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:472:9: error: unknown type name '__le1=
-6'
-  472 |         __le16                     flags;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:473:9: error: unknown type name '__le3=
-2'
-  473 |         __le32                     data_length;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:474:9: error: unknown type name '__le3=
-2'
-  474 |         __le32                     reserved14[3];
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:475:9: error: unknown type name '__le3=
-2'
-  475 |         __le32                     command[MPI3_NVME_ENCAP_CMD_MAX];
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:479:9: error: unknown type name '__le1=
-6'
-  479 |         __le16                     host_tag;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:480:9: error: unknown type name 'u8'
-  480 |         u8                         ioc_use_only02;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:481:9: error: unknown type name 'u8'
-  481 |         u8                         function;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:482:9: error: unknown type name '__le1=
-6'
-  482 |         __le16                     ioc_use_only04;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:483:9: error: unknown type name 'u8'
-  483 |         u8                         ioc_use_only06;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:484:9: error: unknown type name 'u8'
-  484 |         u8                         msg_flags;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:485:9: error: unknown type name '__le1=
-6'
-  485 |         __le16                     ioc_use_only08;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:486:9: error: unknown type name '__le1=
-6'
-  486 |         __le16                     ioc_status;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:487:9: error: unknown type name '__le3=
-2'
-  487 |         __le32                     ioc_log_info;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:488:9: error: unknown type name '__le3=
-2'
-  488 |         __le32                     nvme_completion_entry[4];
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:501:9: error: unknown type name '__le1=
-6'
-  501 |         __le16                     host_tag;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:502:9: error: unknown type name 'u8'
-  502 |         u8                         ioc_use_only02;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:503:9: error: unknown type name 'u8'
-  503 |         u8                         function;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:504:9: error: unknown type name '__le1=
-6'
-  504 |         __le16                     ioc_use_only04;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:505:9: error: unknown type name 'u8'
-  505 |         u8                         ioc_use_only06;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:506:9: error: unknown type name 'u8'
-  506 |         u8                         msg_flags;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:507:9: error: unknown type name '__le1=
-6'
-  507 |         __le16                     change_count;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:508:9: error: unknown type name '__le1=
-6'
-  508 |         __le16                     dev_handle;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:509:9: error: unknown type name '__le1=
-6'
-  509 |         __le16                     task_host_tag;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:510:9: error: unknown type name 'u8'
-  510 |         u8                         task_type;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:511:9: error: unknown type name 'u8'
-  511 |         u8                         reserved0f;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:512:9: error: unknown type name '__le1=
-6'
-  512 |         __le16                     task_request_queue_id;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:513:9: error: unknown type name '__le1=
-6'
-  513 |         __le16                     reserved12;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:514:9: error: unknown type name '__le3=
-2'
-  514 |         __le32                     reserved14;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:515:9: error: unknown type name 'u8'
-  515 |         u8                         lun[8];
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:530:9: error: unknown type name '__le1=
-6'
-  530 |         __le16                     host_tag;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:531:9: error: unknown type name 'u8'
-  531 |         u8                         ioc_use_only02;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:532:9: error: unknown type name 'u8'
-  532 |         u8                         function;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:533:9: error: unknown type name '__le1=
-6'
-  533 |         __le16                     ioc_use_only04;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:534:9: error: unknown type name 'u8'
-  534 |         u8                         ioc_use_only06;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:535:9: error: unknown type name 'u8'
-  535 |         u8                         msg_flags;
-      |         ^~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:536:9: error: unknown type name '__le1=
-6'
-  536 |         __le16                     ioc_use_only08;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:537:9: error: unknown type name '__le1=
-6'
-  537 |         __le16                     ioc_status;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:538:9: error: unknown type name '__le3=
-2'
-  538 |         __le32                     ioc_log_info;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:539:9: error: unknown type name '__le3=
-2'
-  539 |         __le32                     termination_count;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:540:9: error: unknown type name '__le3=
-2'
-  540 |         __le32                     response_data;
-      |         ^~~~~~
-./usr/include/scsi/scsi_bsg_mpi3mr.h:541:9: error: unknown type name '__le3=
-2'
-  541 |         __le32                     reserved18;
-      |         ^~~~~~
+Could someone pick it up to avoid warning again?
 
-Caused by commit
+[0] https://lore.kernel.org/all/20220403145304.685443-1-trix@redhat.com/
 
-  a212ebe7d4b1 ("scsi: mpi3mr: Add support for driver commands")
-  455aac4f7a13 ("scsi: mpi3mr: Move data structures/definitions from MPI he=
-aders to uapi header")
-
-I used the scsi-mkp tree from next-20220426 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3qmWCjs5.G.SBIzxA3FR/cj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJoussACgkQAVBC80lX
-0Gzd2wgAjYKkH0Rq5+mAWi9vEXdKMUSO4E2XmCaIqoPSLDgSC8KprAfDttIlNGPc
-1WnVkHQwsuXR5g9vCuuX/+bjA47seBJSLLOa0gp+Qon9bWsaE2qmV9NZA5K+a3FX
-B83wd9eoWVoEdSoEFNO5+OnBAMX9DzJYtzj3b3PwYVE7s0hVaPNdsJBzVUtB4tEB
-mMq7eeu4vNWBZ+uMsVPYIEtEyDWTbpCS1HlYcHgJgArvIUbxOc01I8PglzFDnxjm
-5BOhFjM0bZr9leKadUaK7dpuOIkT1NXBp2nfSwtpW3HLawiR496VRwxpEsgqWGF6
-DdO6Mj6fxJvNyyagYxTQkT9XTJGtDA==
-=RTjw
------END PGP SIGNATURE-----
-
---Sig_/3qmWCjs5.G.SBIzxA3FR/cj--
+Thanks,
+Wan Jiabing 

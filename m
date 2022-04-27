@@ -2,132 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1F45122F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C6F5122EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbiD0TmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S234458AbiD0Tl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbiD0Tj6 (ORCPT
+        with ESMTP id S233800AbiD0Tj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 15:39:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FD8FEE
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:36:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7E71B82950
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3323C385B1;
-        Wed, 27 Apr 2022 19:36:43 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.95)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1njnSs-002Ixf-Oc;
-        Wed, 27 Apr 2022 15:36:42 -0400
-Message-ID: <20220427193642.592092169@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 27 Apr 2022 15:36:40 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jun Miao <jun.miao@intel.com>
-Subject: [for-next][PATCH 17/21] tracing: Fix sleeping function called from invalid context on RT
- kernel
-References: <20220427193623.529296556@goodmis.org>
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64BC2199;
+        Wed, 27 Apr 2022 12:36:45 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g23so3097398edy.13;
+        Wed, 27 Apr 2022 12:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=laBiheI0U75LASrHjB6ZdZZMpe4PBQO0pkzvkJ7BACU=;
+        b=TulO57A6xlTWM81rj8A7o39sFF9xM0Zptw/Ml8zYreU+dZwZRnR37mY8wfAX69Pl5x
+         vevGv03GOgpcWWfNg0fkxu0LbIduDQWkoWknoefGIPQIhjj+ibdDYYBUMWuivk8jQAZX
+         63/1XotXCRd9FMUS9yENF+Yj6l/RTcc18WXBPonnB1mzsuflpIGQJqC6NzguPgUC1iVT
+         zI2JPYKmsWvUT+1ARi8HHaDwhTnuwvobYjADNWNrlJInIY+fXpZ0HWzbUY6FWdZYZXWE
+         BWc1FXpF1vITNBJvc8DEQ1QuA4XRar+hl/GkfpGhxN1K8aeiEkJKXahYYfF5idA70JE9
+         AsGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=laBiheI0U75LASrHjB6ZdZZMpe4PBQO0pkzvkJ7BACU=;
+        b=z1O+I2ne+RnfJZVdk4BjO9zPg8EzjyOcqJRJMlWeS20NCreOhG8Z/qjALzlWy1VPYD
+         q+o+d5DcQ+Nq4FPO+kOUS8FIf35ZGdIqOjEUSsTEYPQU0aDabk/ccEeLEj3ksfvdzT7p
+         ZQsdUvbc6ZbhzonQ9mxa/QcpgVFm9h3KGsTtFFNvi7iglYqbJHVpkKZ1nXROX3Y6TI4j
+         WSkbnjM4I2IXwUn9LkQnZdrjg2Wwjkux47rIbRa546QZ56EbNYbbDuBjaiuiTa8yj+qQ
+         JZuln9jk7YPdLDPghI73qusQkWGGFlWKkkgVTstYx4KUEPFm+d3/M6m7ITZr8erZgq8v
+         Xkfw==
+X-Gm-Message-State: AOAM530iB4MoMGjCLNqfg8/z5wZkH246PyWds3Vc76sRAigFRatwY5iT
+        oLeSm/8Khyq2k1fmQVXVtxV9+1OpPuN2Ew==
+X-Google-Smtp-Source: ABdhPJzUC30k74cycMu9f4Mp6MtRykBINJsEHSFD9PcJj5evGPN9Hbr/wtuK/7K6Ga/Tdb5i/Zq+ZQ==
+X-Received: by 2002:a05:6402:d0a:b0:421:10e6:2ecc with SMTP id eb10-20020a0564020d0a00b0042110e62eccmr32710929edb.329.1651088203273;
+        Wed, 27 Apr 2022 12:36:43 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id kj11-20020a170907764b00b006f3a41bbdeesm3811224ejc.38.2022.04.27.12.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 12:36:42 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 30/45] media: sun6i-csi: Introduce bridge format structure, list and helper
+Date:   Wed, 27 Apr 2022 21:36:41 +0200
+Message-ID: <1787704.atdPhlSkOF@jernej-laptop>
+In-Reply-To: <20220415152811.636419-31-paul.kocialkowski@bootlin.com>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-31-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jun Miao <jun.miao@intel.com>
+Dne petek, 15. april 2022 ob 17:27:56 CEST je Paul Kocialkowski napisal(a):
+> Introduce a more informative format list for the bridge, with
+> information about how to configure the input. This separation will
+> later be useful when using the bridge standalone (without capture)
+> for the isp workflow.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-When setting bootparams="trace_event=initcall:initcall_start tp_printk=1" in the
-cmdline, the output_printk() was called, and the spin_lock_irqsave() was called in the
-atomic and irq disable interrupt context suitation. On the PREEMPT_RT kernel,
-these locks are replaced with sleepable rt-spinlock, so the stack calltrace will
-be triggered.
-Fix it by raw_spin_lock_irqsave when PREEMPT_RT and "trace_event=initcall:initcall_start
-tp_printk=1" enabled.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
- BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
- in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
- preempt_count: 2, expected: 0
- RCU nest depth: 0, expected: 0
- Preemption disabled at:
- [<ffffffff8992303e>] try_to_wake_up+0x7e/0xba0
- CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt17+ #19 34c5812404187a875f32bee7977f7367f9679ea7
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x60/0x8c
-  dump_stack+0x10/0x12
-  __might_resched.cold+0x11d/0x155
-  rt_spin_lock+0x40/0x70
-  trace_event_buffer_commit+0x2fa/0x4c0
-  ? map_vsyscall+0x93/0x93
-  trace_event_raw_event_initcall_start+0xbe/0x110
-  ? perf_trace_initcall_finish+0x210/0x210
-  ? probe_sched_wakeup+0x34/0x40
-  ? ttwu_do_wakeup+0xda/0x310
-  ? trace_hardirqs_on+0x35/0x170
-  ? map_vsyscall+0x93/0x93
-  do_one_initcall+0x217/0x3c0
-  ? trace_event_raw_event_initcall_level+0x170/0x170
-  ? push_cpu_stop+0x400/0x400
-  ? cblist_init_generic+0x241/0x290
-  kernel_init_freeable+0x1ac/0x347
-  ? _raw_spin_unlock_irq+0x65/0x80
-  ? rest_init+0xf0/0xf0
-  kernel_init+0x1e/0x150
-  ret_from_fork+0x22/0x30
-  </TASK>
+Best regards,
+Jernej
 
-Link: https://lkml.kernel.org/r/20220419013910.894370-1-jun.miao@intel.com
 
-Signed-off-by: Jun Miao <jun.miao@intel.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index aceeeea21c11..27bb486c3f97 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -2835,7 +2835,7 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
- }
- EXPORT_SYMBOL_GPL(trace_event_buffer_lock_reserve);
- 
--static DEFINE_SPINLOCK(tracepoint_iter_lock);
-+static DEFINE_RAW_SPINLOCK(tracepoint_iter_lock);
- static DEFINE_MUTEX(tracepoint_printk_mutex);
- 
- static void output_printk(struct trace_event_buffer *fbuffer)
-@@ -2863,14 +2863,14 @@ static void output_printk(struct trace_event_buffer *fbuffer)
- 
- 	event = &fbuffer->trace_file->event_call->event;
- 
--	spin_lock_irqsave(&tracepoint_iter_lock, flags);
-+	raw_spin_lock_irqsave(&tracepoint_iter_lock, flags);
- 	trace_seq_init(&iter->seq);
- 	iter->ent = fbuffer->entry;
- 	event_call->event.funcs->trace(iter, 0, event);
- 	trace_seq_putc(&iter->seq, 0);
- 	printk("%s", iter->seq.buffer);
- 
--	spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
-+	raw_spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
- }
- 
- int tracepoint_printk_sysctl(struct ctl_table *table, int write,
--- 
-2.35.1

@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F22511B42
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC7E5118F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbiD0NAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S235114AbiD0NBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiD0NAy (ORCPT
+        with ESMTP id S235076AbiD0NBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:00:54 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C3A4BFEF;
-        Wed, 27 Apr 2022 05:57:41 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CB96AE0008;
-        Wed, 27 Apr 2022 12:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651064259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qc5/U3N1o7dvPqfVXlG1fPptC5KuXavUKRblgiRmNqU=;
-        b=TZkkQkztssaeZibsd9DvPtSIw63vA5l50nicSNeYGhgvWumLdbG0K9pUUH+HCdh1HKxkpt
-        /YSlUELOllBLwoi5EQbAyNSzrAcSAd/ceiBZlbxt0bhvdLEsEOkFeAJBFFuzajIItSUT1R
-        s4xs0y/A0T6YStQfCQF7sHLD0mAnSQuPjlIVvwtQS1AUlAvVldtrA33+IRp5BpJUP9rl52
-        Ud+Wq8NKo4eWWKylPamqMUkHNNuZt4nO0tD+Hi82amiyCCG7b2lyAch8MKrmglSUqpOHqp
-        msNl2pufqL8qVtnyXwJ/NKQWXbWDKE8fPGPNjlDRv2fbFEGxCndPG0Xx6Qo+bw==
-Date:   Wed, 27 Apr 2022 14:56:17 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next 05/12] dt-bindings: net: dsa: add bindings for
- Renesas RZ/N1 Advanced 5 port switch
-Message-ID: <20220427145617.0b36e9dc@fixe.home>
-In-Reply-To: <CAMuHMdU+kosUPavthyPcWVAC_WhdwXiFKt61oSmgdV6Qxk_0xg@mail.gmail.com>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-6-clement.leger@bootlin.com>
-        <CAMuHMdU+kosUPavthyPcWVAC_WhdwXiFKt61oSmgdV6Qxk_0xg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Wed, 27 Apr 2022 09:01:16 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011134C42C;
+        Wed, 27 Apr 2022 05:58:05 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R8mTZq008893;
+        Wed, 27 Apr 2022 07:58:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=cTo4iGCRI0TEr3heseNQsJDxVX4XVWJW4qEdcisdkVQ=;
+ b=mapUDoCtKZ+ZPfK7g0JFvMDSp+lT+lA/vZhJm8H6PGwB6XF7C5LSB6MgKr6rI6A0IFdV
+ U5UOQsrtKsyVeze7eXHyCGq+FTRrQ78j1V8dR5oKc0taTmjeT75jlREspJfxsCQ/Jtsr
+ a2mSfBKHvAxqHUbeELjn7qwFXYnsYI3ASwh+JE4mAEccNlbRlQavj1E70LPMZhZMc4ff
+ qoh4veull4nmAg165f/l7o/29godByKpDDyEM3QBLUuA3bVpBcEJMIDu4Ula24g2bKmj
+ aLmcVrpXObNQTjeWM4MPAzpcpVd6IKzfuKqGzClpiELieRQNz3h4P62kNsNiVh140RPx Ww== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fprt60s4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 27 Apr 2022 07:58:02 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
+ 2022 13:58:01 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Wed, 27 Apr 2022 13:58:01 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 10EF1B1A;
+        Wed, 27 Apr 2022 12:58:01 +0000 (UTC)
+Date:   Wed, 27 Apr 2022 12:58:01 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: mfd: wlf,arizona: Add spi-max-frequency
+Message-ID: <20220427125801.GC38351@ediswmail.ad.cirrus.com>
+References: <20220427065102.109046-1-krzysztof.kozlowski@linaro.org>
+ <20220427122143.GB38351@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220427122143.GB38351@ediswmail.ad.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: 1aNiCFYk_OTQ-KiXfbYWMPbq02RgVaDl
+X-Proofpoint-ORIG-GUID: 1aNiCFYk_OTQ-KiXfbYWMPbq02RgVaDl
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,64 +69,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, 27 Apr 2022 14:20:33 +0200,
-Geert Uytterhoeven <geert@linux-m68k.org> a =C3=A9crit :
+On Wed, Apr 27, 2022 at 12:21:43PM +0000, Charles Keepax wrote:
+> On Wed, Apr 27, 2022 at 08:51:02AM +0200, Krzysztof Kozlowski wrote:
+> > The Wolfson Microelectronics Arizona audio can be connected via SPI bus
+> > (e.g. WM5110 on Exynos5433 TM2 board), so allow spi-max-frequency
+> > property.
+> > 
+> > Reported-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> 
+> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> 
 
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-> > @@ -0,0 +1,128 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/dsa/renesas,rzn1-a5psw.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Renesas RZ/N1 Advanced 5 ports ethernet switch
-> > +
-> > +maintainers:
-> > +  - Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > +
-> > +description: |
-> > +  The advanced 5 ports switch is present on the Renesas RZ/N1 SoC fami=
-ly and
-> > +  handles 4 ports + 1 CPU management port.
-> > +
-> > +allOf:
-> > +  - $ref: dsa.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: renesas,rzn1-a5psw =20
->=20
-> Please document an SoC-specific compatible value
-> "renesas,r9a06g032-a5psw", too, so we can easily handle differences
-> between members within the RZ/N1 family, if ever needed.
+Apologies but looking at this again I can't quite see why this is
+necessary. The Arizona schema should allow properties that arn't
+specified. Do you have an example of what failed to warrant this?
 
-Hi Geert,
-
-Thanks, I already did that for the V2 after your first comment on the
-MII converter bindings ! I'll sent a V2 soon.
-
-Cl=C3=A9ment
-
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
->=20
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Thanks,
+Charles

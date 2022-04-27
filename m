@@ -2,77 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC2F5123FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40F5512402
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiD0Uhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S229896AbiD0UoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236676AbiD0Uhg (ORCPT
+        with ESMTP id S231310AbiD0UoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:37:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16954EF5A;
-        Wed, 27 Apr 2022 13:34:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Apr 2022 16:44:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79786273B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651092060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gFMPjJE+QXYf1X/XGRpB326TaYnBoulTgNBrURc+les=;
+        b=TgDHGE8BAvvJd18m/qT6QBOc1sOhsUvFOckY8BQ1cVkfyQepU0hhtlLo0eSsy56Vi1+pu2
+        Z1ZCSxT12LgpoJb2Hzc/jGLMI14jVOmhvRCMBiOrHPAMRUF8CNFkTTpat4JmGdBL3SO9hM
+        ho5kA3dODb0FflM675OnRD3hSi2X9Fk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-mWbQvKmbN8GaGizkGLS-GA-1; Wed, 27 Apr 2022 16:40:57 -0400
+X-MC-Unique: mWbQvKmbN8GaGizkGLS-GA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39076B82AA7;
-        Wed, 27 Apr 2022 20:34:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2B9C385A7;
-        Wed, 27 Apr 2022 20:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651091661;
-        bh=QhjW6sqbQQAgxviJKBe4aWpl0/FEQUpaXuQ5s4h6qWg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q7Ns2THonpI64rhc55ciDClC+/tZwbo74ep5sf07OFCb26oZ1kUe9z79CZSpHNgzN
-         VGMMisHTfPF3UFsfvxZ0AEUddllyF0mAQ72EsVMFRXrTjUdgq9z58WzHBUfQPEqp0O
-         W6dNwKJCwvp4aKEyZx9Z3zIMHTeQ0j/etEQ7Dh8M=
-Date:   Wed, 27 Apr 2022 13:34:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Daniel Colascione <dancol@google.com>,
-        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm/smaps_rollup: return empty file for kthreads instead
- of ESRCH
-Message-Id: <20220427133420.2847e62203b9e10a106c86b2@linux-foundation.org>
-In-Reply-To: <83f49beb-52f7-15f6-3b53-97cac0030ca4@suse.cz>
-References: <20220413211357.26938-1-alex_y_xu.ref@yahoo.ca>
-        <20220413211357.26938-1-alex_y_xu@yahoo.ca>
-        <20220413142748.a5796e31e567a6205c850ae7@linux-foundation.org>
-        <1649886492.rqei1nn3vm.none@localhost>
-        <20220413160613.385269bf45a9ebb2f7223ca8@linux-foundation.org>
-        <YleToQbgeRalHTwO@casper.infradead.org>
-        <YlfFaPhNFWNP+1Z7@localhost.localdomain>
-        <83f49beb-52f7-15f6-3b53-97cac0030ca4@suse.cz>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C409381D8A1;
+        Wed, 27 Apr 2022 20:40:56 +0000 (UTC)
+Received: from starship (unknown [10.40.192.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B8939400E436;
+        Wed, 27 Apr 2022 20:40:54 +0000 (UTC)
+Message-ID: <f38141478fa37ddff287b48c146261fe7d878379.camel@redhat.com>
+Subject: Re: [PATCH 1/3] KVM: x86: make vendor code check for all nested
+ events
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, stable@vger.kernel.org
+Date:   Wed, 27 Apr 2022 23:40:53 +0300
+In-Reply-To: <20220427173758.517087-2-pbonzini@redhat.com>
+References: <20220427173758.517087-1-pbonzini@redhat.com>
+         <20220427173758.517087-2-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 09:38:14 +0200 Vlastimil Babka <vbabka@suse.cz> wrote:
-
-> > Returning ESRCH is better so that programs don't waste time reading and
-> > closing empty files and instantiating useless inodes.
+On Wed, 2022-04-27 at 13:37 -0400, Paolo Bonzini wrote:
+> Right now, the VMX preemption timer is special cased via the
+> hv_timer_pending, but the purpose of the callback can be easily
+> extended to observing any event that can occur only in non-root
+> mode.  Interrupts, NMIs etc. are already handled properly by
+> the *_interrupt_allowed callbacks, so what is missing is only
+> MTF.  Check it in the newly-renamed callback, so that
+> kvm_vcpu_running's call to kvm_check_nested_events
+> becomes redundant.
 > 
-> Hm, unfortunately I don't remember why I put return -ESRCH for this case in
-> addition to get_proc_task() failing. I doubt it was a conscious decision to
-> treat kthreads differently - I think I would have preferred consistency with
-> maps/smaps.
+> Cc: stable@vger.kernel.org
+> Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 2 +-
+>  arch/x86/kvm/vmx/nested.c       | 7 ++++++-
+>  arch/x86/kvm/x86.c              | 8 ++++----
+>  3 files changed, 11 insertions(+), 6 deletions(-)
 > 
-> Can the awk use case be fixed with some flag to make it ignore the errors?
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 4ff36610af6a..e2e4f60159e9 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1504,7 +1504,7 @@ struct kvm_x86_ops {
+>  struct kvm_x86_nested_ops {
+>  	void (*leave_nested)(struct kvm_vcpu *vcpu);
+>  	int (*check_events)(struct kvm_vcpu *vcpu);
+> -	bool (*hv_timer_pending)(struct kvm_vcpu *vcpu);
+> +	bool (*has_events)(struct kvm_vcpu *vcpu);
+>  	void (*triple_fault)(struct kvm_vcpu *vcpu);
+>  	int (*get_state)(struct kvm_vcpu *vcpu,
+>  			 struct kvm_nested_state __user *user_kvm_nested_state,
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 856c87563883..54672025c3a1 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3857,6 +3857,11 @@ static bool nested_vmx_preemption_timer_pending(struct kvm_vcpu *vcpu)
+>  	       to_vmx(vcpu)->nested.preemption_timer_expired;
+>  }
+>  
+> +static bool vmx_has_nested_events(struct kvm_vcpu *vcpu)
+> +{
+Typo: needs struct vcpu_vmx *vmx = to_vmx(vcpu);
 
-This is all too hard.  I think I'll drop the patch for now.
+> +	return nested_vmx_preemption_timer_pending(vcpu) || vmx->nested.mtf_pending;
+> +}
+> +
+>  static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_vmx *vmx = to_vmx(vcpu);
+> @@ -6809,7 +6814,7 @@ __init int nested_vmx_hardware_setup(int (*exit_handlers[])(struct kvm_vcpu *))
+>  struct kvm_x86_nested_ops vmx_nested_ops = {
+>  	.leave_nested = vmx_leave_nested,
+>  	.check_events = vmx_check_nested_events,
+> -	.hv_timer_pending = nested_vmx_preemption_timer_pending,
+> +	.has_events = vmx_has_nested_events,
+>  	.triple_fault = nested_vmx_triple_fault,
+>  	.get_state = vmx_get_nested_state,
+>  	.set_state = vmx_set_nested_state,
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index a6ab19afc638..0e73607b02bd 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9471,8 +9471,8 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
+>  	}
+>  
+>  	if (is_guest_mode(vcpu) &&
+> -	    kvm_x86_ops.nested_ops->hv_timer_pending &&
+> -	    kvm_x86_ops.nested_ops->hv_timer_pending(vcpu))
+> +	    kvm_x86_ops.nested_ops->has_events &&
+> +	    kvm_x86_ops.nested_ops->has_events(vcpu))
+>  		*req_immediate_exit = true;
+>  
+>  	WARN_ON(vcpu->arch.exception.pending);
+> @@ -12183,8 +12183,8 @@ static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
+>  		return true;
+>  
+>  	if (is_guest_mode(vcpu) &&
+> -	    kvm_x86_ops.nested_ops->hv_timer_pending &&
+> -	    kvm_x86_ops.nested_ops->hv_timer_pending(vcpu))
+> +	    kvm_x86_ops.nested_ops->has_events &&
+> +	    kvm_x86_ops.nested_ops->has_events(vcpu))
+Nitpick: Won't it make sense to use conditional static call here instead?
+
+>  		return true;
+>  
+>  	return false;
+
+
+Besides nitpicks,
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+
+Wasn't able to test on my intel laptop, I am getting out of sudden in qemu:
+
+'cpuid_data is full, no space for cpuid(eax:0x8000001d,ecx:0x3e)'
+
+I will investigate tomorrow.
+
+Best regards,
+	Maxim Levitsky
+
+

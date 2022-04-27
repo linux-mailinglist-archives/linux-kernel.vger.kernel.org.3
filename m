@@ -2,250 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303C7511206
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7305D51120A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358606AbiD0HL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
+        id S1358607AbiD0HM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358571AbiD0HLs (ORCPT
+        with ESMTP id S242219AbiD0HMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:11:48 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A88531934
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:08:37 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220427070834euoutp02575351f0869572dec7bcbbde2cb7ff05~pryWPdfbM1060810608euoutp02V
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:08:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220427070834euoutp02575351f0869572dec7bcbbde2cb7ff05~pryWPdfbM1060810608euoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651043314;
-        bh=3IlMOM9G9dkX+aI1gLuWuQ/q1pYg4/JUIIqa3Qn4A/U=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=dUAoHmh1uVCJ+DRA2PG9lVryb7voBtyjlPHs8El93Y//OtdmQV7iWa8C9hHksLbBA
-         hGaBR0MX8i3PMSUisGgP1DXAbuQgEiw2EVlqWSbSUowcI5c4Qe41qD78p9YgHBTLIL
-         A3glTpMrolwdjreuRfujB/l029cbWj57Vo1NOvWk=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220427070834eucas1p223b41220406dc980cbe68fb7359b7870~pryWArwXP1581815818eucas1p25;
-        Wed, 27 Apr 2022 07:08:34 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id D4.75.10260.1FBE8626; Wed, 27
-        Apr 2022 08:08:33 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c~pryVldXMz2272022720eucas1p2V;
-        Wed, 27 Apr 2022 07:08:33 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220427070833eusmtrp251fe7356a4fee93d3869c7c52d61025a~pryVko3Oj0148001480eusmtrp2_;
-        Wed, 27 Apr 2022 07:08:33 +0000 (GMT)
-X-AuditID: cbfec7f5-bddff70000002814-79-6268ebf1a8f7
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id F8.90.09522.1FBE8626; Wed, 27
-        Apr 2022 08:08:33 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220427070832eusmtip17049ccfdbadafd9f178fc6d8e21a8850~pryVCzENk1882418824eusmtip19;
-        Wed, 27 Apr 2022 07:08:32 +0000 (GMT)
-Message-ID: <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
-Date:   Wed, 27 Apr 2022 09:08:33 +0200
+        Wed, 27 Apr 2022 03:12:53 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98D914D288;
+        Wed, 27 Apr 2022 00:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651043382; x=1682579382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uPctFvVUp/90RjGt37SzGewuilKpZhaTrSX2P6USs1Y=;
+  b=SfAuSMx0kT8VsYjU/QQ73qaYfuyhFdkimJTC5uyyG/60JPWKrWZ8rwm+
+   IdnDqDybYZ3kBZ5c53KD3RlewEjSuY24BozvloIsNvukgu4jcDktzbytP
+   O9jtpNZoUXbBYpA5m5ZJDeWk8sXUv5OMzTueuLAzc66xSaNTT5BW5sIE/
+   DAykdltEgPHiTBlnHTMSUUxTIiF2WrF9AUcVMmW9ChguKCw63ycOXztsf
+   ZfDfdDb/n4AY7RvpXzIWmw3etDZLgEULVCPZI3JOHWWnP/+lZa+1GJ/82
+   f6DxWltXvoLe+ZRy+m4punQFVAqpNGlZeCGRRdLW/gBCO/cO8J0LrDLUk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="253222330"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="253222330"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:09:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="680102079"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 27 Apr 2022 00:09:31 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njbnm-0004RW-8a;
+        Wed, 27 Apr 2022 07:09:30 +0000
+Date:   Wed, 27 Apr 2022 15:09:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
+        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     kbuild-all@lists.01.org, khilman@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
+Message-ID: <202204271534.xh4s4n5E-lkp@intel.com>
+References: <20220425125546.4129-3-johnson.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <Ymfwk+X0CHq6ex3s@alley>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7ofX2ckGZz+YG7RvHg9m8W2K/MZ
-        LRbM5ra4vGsOm8X/x19ZLfZ1PGCy2L1xEZvF5k1TmR04PGY3XGTxaNl3i93j3blz7B77565h
-        99i8pN5j/ZarLB6fN8kFsEdx2aSk5mSWpRbp2yVwZezuaGcpOKpVsWjTOvYGxhbFLkZODgkB
-        E4nNk46xdDFycQgJrGCUeHFyLROE84VR4vGLjewQzmdGidtnljDCtDS+bYRqWc4o0fdnHTOE
-        85FR4vzb6cwgVbwCdhIrOrawgtgsAqoSm2YsZ4WIC0qcnPmEBcQWFUiSmLvvHlA9B4ewQIRE
-        295QkDCzgLjErSfzmUBsEQFvibdnz4BdwSzwlVFi8uT/YFewCRhKdL3tYgOxOYHmT/twgAWi
-        WV5i+9s5YAdJCHzgkDi59xEryAIJAReJr43ZEB8IS7w6voUdwpaR+L8TZBlISb7E3xnGEOEK
-        iWuv1zBD2NYSd879YgMpYRbQlFi/Sx8i7Cgx5VcfO0Qnn8SNt4IQB/BJTNo2nRkizCvR0SYE
-        Ua0mMev4OridBy9cYp7AqDQLKUhmIfl9FpJXZiHsXcDIsopRPLW0ODc9tdg4L7Vcrzgxt7g0
-        L10vOT93EyMwMZ3+d/zrDsYVrz7qHWJk4mA8xCjBwawkwvtld0aSEG9KYmVValF+fFFpTmrx
-        IUZpDhYlcd7kzA2JQgLpiSWp2ampBalFMFkmDk6pBqZ1+9TWezExHvqjMPFJT+DE+bJB/aHz
-        LrYZXPbKl34wW1jCQoTH6fS7vsb08Ne/r9+7zv7y1J46kVL1OPPUZ2UbFOr2Pc3sf5xoZHzE
-        K+ZM7i8Gl+PLW9p9dm239fz2W72QeY1P/797/1rXOKxi6J6dfvH8yoUaX0Jf7Z67wLlydkoj
-        74XPlxZwnA6xSryp9OOw4b/8KqWjad3y18ruxC774SVjvvGzVdzvlRVu3xbLHta7aLXo4Zf8
-        pwt/7khRkk5hVmwPrP94Nf7L2sfd0Q8PPYtpYzTiPNFrXeUhkZttziVyc+6l8FlNskEsm6RL
-        rbmeHN6yTGm/hv/c5rvn5H0f5i84p6rgc9dyS/NtfX4lluKMREMt5qLiRAB7FVYUuwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xu7ofX2ckGXyeImXRvHg9m8W2K/MZ
-        LRbM5ra4vGsOm8X/x19ZLfZ1PGCy2L1xEZvF5k1TmR04PGY3XGTxaNl3i93j3blz7B77565h
-        99i8pN5j/ZarLB6fN8kFsEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb
-        2aSk5mSWpRbp2yXoZezuaGcpOKpVsWjTOvYGxhbFLkZODgkBE4nGt40sXYxcHEICSxklJky4
-        wgqRkJE4Oa0ByhaW+HOtiw2i6D2jxMffh5hBErwCdhIrOraAFbEIqEpsmrGcFSIuKHFy5hMW
-        EFtUIEnixbbnjF2MHBzCAhES73vBwswC4hK3nsxnArFFBLwl3p49ww4yn1ngK6PE2g/PGCGW
-        XWaUmLflFlgHm4ChRNdbkCs4OTiBlk37cABqkplE19YuRghbXmL72znMExiFZiG5YxaShbOQ
-        tMxC0rKAkWUVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYERuO/Zz8w7Gea8+6h1iZOJgPMQo
-        wcGsJML7ZXdGkhBvSmJlVWpRfnxRaU5q8SFGU2BgTGSWEk3OB6aEvJJ4QzMDU0MTM0sDU0sz
-        YyVxXs+CjkQhgfTEktTs1NSC1CKYPiYOTqkGpt1Sr45Je3OILyqUf9Z0KWeKuuG9bR/m56+9
-        f8futiX7gs9RD9rmGjzK2+hdVrLy99Hl614tjUmZtzdcSuLuEnb7ru62JxuWVH9aXcG7jMf2
-        psCBd3fao8+4+hz+oGey063zba49q8LuyiveSSfTclO9/DRPXu55IrzHI3Bd4JUN9U+5a85m
-        hBifUm+V9XPXyfmhk1rKVmk9gaHNIlE0RpaHjUVYfHFPps3KAsXes9a+TuHG87qsY7UvuDlI
-        m3rd/T3zjVBuj1PzXq0Nt0uiAiRV9oaazWQ/IPPyp7x/6sm0C8a1iULcuu+XtP3Kciz8lJyy
-        Voa/43fhWh9LifY5lRc8+c+8EZ0fbJVxbbESS3FGoqEWc1FxIgC/b4I7UQMAAA==
-X-CMS-MailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
-        <20220421212250.565456-15-john.ogness@linutronix.de>
-        <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
-        <Ymfwk+X0CHq6ex3s@alley>
-        <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425125546.4129-3-johnson.wang@mediatek.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Johnson,
 
-On 26.04.2022 15:16, Petr Mladek wrote:
-> On Tue 2022-04-26 14:07:42, Petr Mladek wrote:
->> On Mon 2022-04-25 23:04:28, John Ogness wrote:
->>> Currently threaded console printers synchronize against each
->>> other using console_lock(). However, different console drivers
->>> are unrelated and do not require any synchronization between
->>> each other. Removing the synchronization between the threaded
->>> console printers will allow each console to print at its own
->>> speed.
->>>
->>> But the threaded consoles printers do still need to synchronize
->>> against console_lock() callers. Introduce a per-console mutex
->>> and a new console boolean field @blocked to provide this
->>> synchronization.
->>>
->>> console_lock() is modified so that it must acquire the mutex
->>> of each console in order to set the @blocked field. Console
->>> printing threads will acquire their mutex while printing a
->>> record. If @blocked was set, the thread will go back to sleep
->>> instead of printing.
->>>
->>> The reason for the @blocked boolean field is so that
->>> console_lock() callers do not need to acquire multiple console
->>> mutexes simultaneously, which would introduce unnecessary
->>> complexity due to nested mutex locking. Also, a new field
->>> was chosen instead of adding a new @flags value so that the
->>> blocked status could be checked without concern of reading
->>> inconsistent values due to @flags updates from other contexts.
->>>
->>> Threaded console printers also need to synchronize against
->>> console_trylock() callers. Since console_trylock() may be
->>> called from any context, the per-console mutex cannot be used
->>> for this synchronization. (mutex_trylock() cannot be called
->>> from atomic contexts.) Introduce a global atomic counter to
->>> identify if any threaded printers are active. The threaded
->>> printers will also check the atomic counter to identify if the
->>> console has been locked by another task via console_trylock().
->>>
->>> Note that @console_sem is still used to provide synchronization
->>> between console_lock() and console_trylock() callers.
->>>
->>> A locking overview for console_lock(), console_trylock(), and the
->>> threaded printers is as follows (pseudo code):
->>>
->>> console_lock()
->>> {
->>>          down(&console_sem);
->>>          for_each_console(con) {
->>>                  mutex_lock(&con->lock);
->>>                  con->blocked = true;
->>>                  mutex_unlock(&con->lock);
->>>          }
->>>          /* console_lock acquired */
->>> }
->>>
->>> console_trylock()
->>> {
->>>          if (down_trylock(&console_sem) == 0) {
->>>                  if (atomic_cmpxchg(&console_kthreads_active, 0, -1) == 0) {
->>>                          /* console_lock acquired */
->>>                  }
->>>          }
->>> }
->>>
->>> threaded_printer()
->>> {
->>>          mutex_lock(&con->lock);
->>>          if (!con->blocked) {
->>> 		/* console_lock() callers blocked */
->>>
->>>                  if (atomic_inc_unless_negative(&console_kthreads_active)) {
->>>                          /* console_trylock() callers blocked */
->>>
->>>                          con->write();
->>>
->>>                          atomic_dec(&console_lock_count);
->>>                  }
->>>          }
->>>          mutex_unlock(&con->lock);
->>> }
->>>
->>> The console owner and waiter logic now only applies between contexts
->>> that have taken the console_lock via console_trylock(). Threaded
->>> printers never take the console_lock, so they do not have a
->>> console_lock to handover. Tasks that have used console_lock() will
->>> block the threaded printers using a mutex and if the console_lock
->>> is handed over to an atomic context, it would be unable to unblock
->>> the threaded printers. However, the console_trylock() case is
->>> really the only scenario that is interesting for handovers anyway.
->>>
->>> @panic_console_dropped must change to atomic_t since it is no longer
->>> protected exclusively by the console_lock.
->>>
->>> Since threaded printers remain asleep if they see that the console
->>> is locked, they now must be explicitly woken in __console_unlock().
->>> This means wake_up_klogd() calls following a console_unlock() are
->>> no longer necessary and are removed.
->>>
->>> Also note that threaded printers no longer need to check
->>> @console_suspended. The check for the @blocked field implicitly
->>> covers the suspended console case.
->>>
->>> Signed-off-by: John Ogness <john.ogness@linutronix.de>
->> Nice, it it better than v4. I am going to push this for linux-next.
->>
->> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> JFYI, I have just pushed this patch instead of the one
-> from v4 into printk/linux.git, branch rework/kthreads.
->
-> It means that this branch has been rebased. It will be
-> used in the next refresh of linux-next.
+Thank you for the patch! Yet something to improve:
 
-This patchset landed in linux next-20220426. In my tests I've found that 
-it causes deadlock on all my Amlogic Meson G12B/SM1 based boards: Odroid 
-C4/N2 and Khadas VIM3/VIM3l. The deadlock happens when system boots to 
-userspace and getty (with automated login) is executed. I even see the 
-bash prompt, but then the console is freezed. Reverting this patch 
-(e00cc0e1cbf4) on top of linux-next (together with 6b3d71e87892 to make 
-revert clean) fixes the issue.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v5.18-rc4 next-20220426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204271534.xh4s4n5E-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
+        git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/devfreq/mtk-cci-devfreq.c: In function 'mtk_ccifreq_probe':
+>> drivers/devfreq/mtk-cci-devfreq.c:372:21: error: 'struct devfreq_passive_data' has no member named 'parent_type'
+     372 |         passive_data->parent_type = CPUFREQ_PARENT_DEV;
+         |                     ^~
+>> drivers/devfreq/mtk-cci-devfreq.c:372:37: error: 'CPUFREQ_PARENT_DEV' undeclared (first use in this function)
+     372 |         passive_data->parent_type = CPUFREQ_PARENT_DEV;
+         |                                     ^~~~~~~~~~~~~~~~~~
+   drivers/devfreq/mtk-cci-devfreq.c:372:37: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from include/linux/device.h:15,
+                    from include/linux/devfreq.h:13,
+                    from drivers/devfreq/mtk-cci-devfreq.c:7:
+   drivers/devfreq/mtk-cci-devfreq.c:378:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'long int' [-Wformat=]
+     378 |                 dev_err(dev, "failed to add devfreq device: %d\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/devfreq/mtk-cci-devfreq.c:378:17: note: in expansion of macro 'dev_err'
+     378 |                 dev_err(dev, "failed to add devfreq device: %d\n",
+         |                 ^~~~~~~
+   drivers/devfreq/mtk-cci-devfreq.c:378:62: note: format string is defined here
+     378 |                 dev_err(dev, "failed to add devfreq device: %d\n",
+         |                                                             ~^
+         |                                                              |
+         |                                                              int
+         |                                                             %ld
 
 
-Best regards
+vim +372 drivers/devfreq/mtk-cci-devfreq.c
+
+   255	
+   256	static int mtk_ccifreq_probe(struct platform_device *pdev)
+   257	{
+   258		struct device *dev = &pdev->dev;
+   259		struct mtk_ccifreq_drv *drv;
+   260		struct devfreq_passive_data *passive_data;
+   261		struct dev_pm_opp *opp;
+   262		unsigned long rate, opp_volt;
+   263		int ret;
+   264	
+   265		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+   266		if (!drv)
+   267			return -ENOMEM;
+   268	
+   269		drv->dev = dev;
+   270		drv->soc_data = (const struct mtk_ccifreq_platform_data *)
+   271					of_device_get_match_data(&pdev->dev);
+   272		mutex_init(&drv->reg_lock);
+   273		platform_set_drvdata(pdev, drv);
+   274	
+   275		drv->cci_clk = devm_clk_get(dev, "cci");
+   276		if (IS_ERR(drv->cci_clk)) {
+   277			ret = PTR_ERR(drv->cci_clk);
+   278			return dev_err_probe(dev, ret,
+   279					     "failed to get cci clk: %d\n", ret);
+   280		}
+   281	
+   282		drv->inter_clk = devm_clk_get(dev, "intermediate");
+   283		if (IS_ERR(drv->inter_clk)) {
+   284			ret = PTR_ERR(drv->inter_clk);
+   285			dev_err_probe(dev, ret,
+   286				      "failed to get intermediate clk: %d\n", ret);
+   287			goto out_free_resources;
+   288		}
+   289	
+   290		drv->proc_reg = devm_regulator_get_optional(dev, "proc");
+   291		if (IS_ERR(drv->proc_reg)) {
+   292			ret = PTR_ERR(drv->proc_reg);
+   293			dev_err_probe(dev, ret,
+   294				      "failed to get proc regulator: %d\n", ret);
+   295			goto out_free_resources;
+   296		}
+   297	
+   298		ret = regulator_enable(drv->proc_reg);
+   299		if (ret) {
+   300			dev_err(dev, "failed to enable proc regulator\n");
+   301			goto out_free_resources;
+   302		}
+   303	
+   304		drv->sram_reg = regulator_get_optional(dev, "sram");
+   305		if (IS_ERR(drv->sram_reg))
+   306			drv->sram_reg = NULL;
+   307		else {
+   308			ret = regulator_enable(drv->sram_reg);
+   309			if (ret) {
+   310				dev_err(dev, "failed to enable sram regulator\n");
+   311				goto out_free_resources;
+   312			}
+   313		}
+   314	
+   315		/*
+   316		 * We assume min voltage is 0 and tracking target voltage using
+   317		 * min_volt_shift for each iteration.
+   318		 * The retry_max is 3 times of expeted iteration count.
+   319		 */
+   320		drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv->soc_data->sram_max_volt,
+   321						       drv->soc_data->proc_max_volt),
+   322						   drv->soc_data->min_volt_shift);
+   323	
+   324		ret = clk_prepare_enable(drv->cci_clk);
+   325		if (ret)
+   326			goto out_free_resources;
+   327	
+   328		ret = clk_prepare_enable(drv->inter_clk);
+   329		if (ret)
+   330			goto out_disable_cci_clk;
+   331	
+   332		ret = dev_pm_opp_of_add_table(dev);
+   333		if (ret) {
+   334			dev_err(dev, "failed to add opp table: %d\n", ret);
+   335			goto out_disable_inter_clk;
+   336		}
+   337	
+   338		rate = clk_get_rate(drv->inter_clk);
+   339		opp = dev_pm_opp_find_freq_ceil(dev, &rate);
+   340		if (IS_ERR(opp)) {
+   341			ret = PTR_ERR(opp);
+   342			dev_err(dev, "failed to get intermediate opp: %d\n", ret);
+   343			goto out_remove_opp_table;
+   344		}
+   345		drv->inter_voltage = dev_pm_opp_get_voltage(opp);
+   346		dev_pm_opp_put(opp);
+   347	
+   348		rate = U32_MAX;
+   349		opp = dev_pm_opp_find_freq_floor(drv->dev, &rate);
+   350		if (IS_ERR(opp)) {
+   351			dev_err(dev, "failed to get opp\n");
+   352			ret = PTR_ERR(opp);
+   353			goto out_remove_opp_table;
+   354		}
+   355	
+   356		opp_volt = dev_pm_opp_get_voltage(opp);
+   357		dev_pm_opp_put(opp);
+   358		ret = mtk_ccifreq_set_voltage(drv, opp_volt);
+   359		if (ret) {
+   360			dev_err(dev, "failed to scale to highest voltage %lu in proc_reg\n",
+   361				opp_volt);
+   362			goto out_remove_opp_table;
+   363		}
+   364	
+   365		passive_data = devm_kzalloc(dev, sizeof(struct devfreq_passive_data),
+   366					    GFP_KERNEL);
+   367		if (!passive_data) {
+   368			ret = -ENOMEM;
+   369			goto out_remove_opp_table;
+   370		}
+   371	
+ > 372		passive_data->parent_type = CPUFREQ_PARENT_DEV;
+   373		drv->devfreq = devm_devfreq_add_device(dev, &mtk_ccifreq_profile,
+   374						       DEVFREQ_GOV_PASSIVE,
+   375						       passive_data);
+   376		if (IS_ERR(drv->devfreq)) {
+   377			ret = -EPROBE_DEFER;
+   378			dev_err(dev, "failed to add devfreq device: %d\n",
+   379				PTR_ERR(drv->devfreq));
+   380			goto out_remove_opp_table;
+   381		}
+   382	
+   383		drv->opp_nb.notifier_call = mtk_ccifreq_opp_notifier;
+   384		ret = dev_pm_opp_register_notifier(dev, &drv->opp_nb);
+   385		if (ret) {
+   386			dev_err(dev, "failed to register opp notifier: %d\n", ret);
+   387			goto out_remove_devfreq_device;
+   388		}
+   389		return 0;
+   390	
+   391	out_remove_devfreq_device:
+   392		devm_devfreq_remove_device(dev, drv->devfreq);
+   393	
+   394	out_remove_opp_table:
+   395		dev_pm_opp_of_remove_table(dev);
+   396	
+   397	out_disable_inter_clk:
+   398		clk_disable_unprepare(drv->inter_clk);
+   399	
+   400	out_disable_cci_clk:
+   401		clk_disable_unprepare(drv->cci_clk);
+   402	
+   403	out_free_resources:
+   404		if (regulator_is_enabled(drv->proc_reg))
+   405			regulator_disable(drv->proc_reg);
+   406		if (drv->sram_reg && regulator_is_enabled(drv->sram_reg))
+   407			regulator_disable(drv->sram_reg);
+   408	
+   409		if (!IS_ERR(drv->proc_reg))
+   410			regulator_put(drv->proc_reg);
+   411		if (!IS_ERR(drv->sram_reg))
+   412			regulator_put(drv->sram_reg);
+   413		if (!IS_ERR(drv->cci_clk))
+   414			clk_put(drv->cci_clk);
+   415		if (!IS_ERR(drv->inter_clk))
+   416			clk_put(drv->inter_clk);
+   417	
+   418		return ret;
+   419	}
+   420	
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

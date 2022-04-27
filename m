@@ -2,408 +2,579 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C12B511282
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D085112AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358859AbiD0Hdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S1358956AbiD0HmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358847AbiD0Hd3 (ORCPT
+        with ESMTP id S1349001AbiD0HmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:33:29 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0342E6BB;
-        Wed, 27 Apr 2022 00:30:18 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23R7U9pj068683;
-        Wed, 27 Apr 2022 02:30:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651044609;
-        bh=sIOKpjvrFR3wcsRK3YXQWQvGM9AXgkkb2+jGhhPAVEY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=UUXvQipvhSSGkNKU9yaplmp9nvgB5br/MSIMOrRJmNjlTlHrk6fXGckzt2N/EObP6
-         zfD9F8yZC2XP8f7lN7KhrqOFncfyup6zSZzvFTOpjZOC9iwUyF3PWcxXSmT6Lx9r9u
-         fsaJLQY4z6a3C5UhijtDpGSm2tWNVro3Bz0Ddxx8=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23R7U9JN012960
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 Apr 2022 02:30:09 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
- Apr 2022 02:30:09 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 27 Apr 2022 02:30:09 -0500
-Received: from ula0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23R7TujK090553;
-        Wed, 27 Apr 2022 02:30:05 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: [PATCH v4 2/2] arm64: dts: ti: k3-am625-sk: Enable on board peripherals
-Date:   Wed, 27 Apr 2022 12:59:54 +0530
-Message-ID: <20220427072954.8821-3-vigneshr@ti.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220427072954.8821-1-vigneshr@ti.com>
-References: <20220427072954.8821-1-vigneshr@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 03:42:01 -0400
+X-Greylist: delayed 478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Apr 2022 00:38:50 PDT
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B949C8486;
+        Wed, 27 Apr 2022 00:38:50 -0700 (PDT)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 3D9EF80074E;
+        Wed, 27 Apr 2022 15:30:45 +0800 (CST)
+From:   Sugar Zhang <sugar.zhang@rock-chips.com>
+To:     vkoul@kernel.org
+Cc:     Sugar Zhang <sugar.zhang@rock-chips.com>,
+        Huibin Hong <huibin.hong@rock-chips.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: pl330: Improve dma cyclic transfers efficiency
+Date:   Wed, 27 Apr 2022 15:30:23 +0800
+Message-Id: <1651044623-594-1-git-send-email-sugar.zhang@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRpIGRhWTB5NHUpMHx
+        1JTUNCVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITkJVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OC46KSo5DT0*SR06DhUONQMj
+        CB0wCy1VSlVKTU5KS09PTU9OQ0hPVTMWGhIXVQgOHBoJVQETGhUcOwkUGBBWGBMSCwhVGBQWRVlX
+        WRILWUFZTkNVSUlVTFVKSk9ZV1kIAVlBSk5NS043Bg++
+X-HM-Tid: 0a8069edfa08b03akuuu3d9ef80074e
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for I2C IO expander, OSPI Flash, Eth PHYs, SD and eMMC that
-are present on AM625 SK board.
+Currently, the driver implements cyclic transfers by desc list.
+Each desc describes one period and started by CPU after last
+one done(tasklet), which maybe delayed due to schedule or
+heavy system load, which will cause device FIFO xrun.
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-Reviewed-by: Bryan Brattlof <bb@ti.com>
+Now, We introduced infinitely cyclic without CPU intervention
+to fix this case: each period buffer elapsed, just throwing one
+irq to CPU, and keep going transfer without CPU.
+
+e.g. aplay with period-size: 1024, buffer-size: 4096
+
+/# aplay -D hw:0,0 --period-size=1024 --buffer-size=4096 -r 48000
+-c 2 -f s16_le /dev/zero
+
+Dump MCGEN:
+
++ #define PL330_DEBUG_MCGEN
+
+Before:
+
+ 916000:  DMAMOV CCR 0x9d0275
+ 916006:  DMAMOV SAR 0xa34000
+ 91600c:  DMAMOV DAR 0xffae8030
+ 916012:  DMALP_1 127
+ 916014:  DMAFLUSHP 22
+ 916016:  DMAWFPB 22
+ 916018:  DMALDB
+ 916019:  DMASTPB 22
+ 91601b:  DMALPENDA_1 bjmpto_7
+ 91601d:  DMASEV 0
+ 91601f:  DMAEND
+
+ 916100:  DMAMOV CCR 0x9d0275
+ 916106:  DMAMOV SAR 0xa35000
+ 91610c:  DMAMOV DAR 0xffae8030
+ 916112:  DMALP_1 127
+ 916114:  DMAFLUSHP 22
+ 916116:  DMAWFPB 22
+ 916118:  DMALDB
+ 916119:  DMASTPB 22
+ 91611b:  DMALPENDA_1 bjmpto_7
+ 91611d:  DMASEV 0
+ 91611f:  DMAEND
+
+ 916000:  DMAMOV CCR 0x9d0275
+ 916006:  DMAMOV SAR 0xa36000
+ 91600c:  DMAMOV DAR 0xffae8030
+ 916012:  DMALP_1 127
+ 916014:  DMAFLUSHP 22
+ 916016:  DMAWFPB 22
+ 916018:  DMALDB
+ 916019:  DMASTPB 22
+ 91601b:  DMALPENDA_1 bjmpto_7
+ 91601d:  DMASEV 0
+ 91601f:  DMAEND
+
+ 916100:  DMAMOV CCR 0x9d0275
+ 916106:  DMAMOV SAR 0xa37000
+ 91610c:  DMAMOV DAR 0xffae8030
+ 916112:  DMALP_1 127
+ 916114:  DMAFLUSHP 22
+ 916116:  DMAWFPB 22
+ 916118:  DMALDB
+ 916119:  DMASTPB 22
+ 91611b:  DMALPENDA_1 bjmpto_7
+ 91611d:  DMASEV 0
+ 91611f:  DMAEND
+
+ 916000:  DMAMOV CCR 0x9d0275
+ 916006:  DMAMOV SAR 0xa34000
+ 91600c:  DMAMOV DAR 0xffae8030
+ 916012:  DMALP_1 127
+ 916014:  DMAFLUSHP 22
+ 916016:  DMAWFPB 22
+ 916018:  DMALDB
+ 916019:  DMASTPB 22
+ 91601b:  DMALPENDA_1 bjmpto_7
+ 91601d:  DMASEV 0
+ 91601f:  DMAEND
+
+ ...
+
+After:
+
+ 916000:  DMAMOV CCR 0x9d0275
+ 916006:  DMAMOV SAR 0xa34000
+ 91600c:  DMAMOV DAR 0xffae8030
+ 916012:  DMALP_0 3
+ 916014:  DMALP_1 127
+ 916016:  DMAFLUSHP 22
+ 916018:  DMAWFPB 22
+ 91601a:  DMALDB
+ 91601b:  DMASTPB 22
+ 91601d:  DMALPENDA_1 bjmpto_7
+ 91601f:  DMASEV 0
+ 916021:  DMALPENDA_0 bjmpto_d
+ 916023:  DMALPFEA_1 bjmpto_1d
+
+Signed-off-by: Huibin Hong <huibin.hong@rock-chips.com>
+Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
 ---
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 273 +++++++++++++++++++++++++
- 1 file changed, 273 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 0de4113ccd5d..5c38ee5ff9b2 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -9,6 +9,7 @@
+ drivers/dma/pl330.c | 300 ++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 197 insertions(+), 103 deletions(-)
+
+diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
+index ccd430e..884b3f6 100644
+--- a/drivers/dma/pl330.c
++++ b/drivers/dma/pl330.c
+@@ -239,6 +239,7 @@ enum pl330_byteswap {
  
- #include <dt-bindings/leds/common.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/net/ti-dp83867.h>
- #include "k3-am625.dtsi"
+ #define BYTE_TO_BURST(b, ccr)	((b) / BRST_SIZE(ccr) / BRST_LEN(ccr))
+ #define BURST_TO_BYTE(c, ccr)	((c) * BRST_SIZE(ccr) * BRST_LEN(ccr))
++#define BYTE_MOD_BURST_LEN(b, ccr)	(((b) / BRST_SIZE(ccr)) % BRST_LEN(ccr))
  
- / {
-@@ -17,6 +18,12 @@ / {
+ /*
+  * With 256 bytes, we can do more than 2.5MB and 5MB xfers per req
+@@ -449,9 +450,6 @@ struct dma_pl330_chan {
+ 	enum dma_data_direction dir;
+ 	struct dma_slave_config slave_config;
  
- 	aliases {
- 		serial2 = &main_uart0;
-+		mmc0 = &sdhci0;
-+		mmc1 = &sdhci1;
-+		mmc2 = &sdhci2;
-+		spi0 = &ospi0;
-+		ethernet0 = &cpsw_port1;
-+		ethernet1 = &cpsw_port2;
- 	};
- 
- 	chosen {
-@@ -87,6 +94,33 @@ vcc_3v3_sys: regulator-2 {
- 		regulator-boot-on;
- 	};
- 
-+	vdd_mmc1: regulator-3 {
-+		/* TPS22918DBVR */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_mmc1";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		enable-active-high;
-+		vin-supply = <&vcc_3v3_sys>;
-+		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
-+	};
+-	/* for cyclic capability */
+-	bool cyclic;
+-
+ 	/* for runtime pm tracking */
+ 	bool active;
+ };
+@@ -539,6 +537,10 @@ struct dma_pl330_desc {
+ 	unsigned peri:5;
+ 	/* Hook to attach to DMAC's list of reqs with due callback */
+ 	struct list_head rqd;
 +
-+	vdd_sd_dv: regulator-4 {
-+		/* Output of TLV71033 */
-+		compatible = "regulator-gpio";
-+		regulator-name = "tlv71033";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		vin-supply = <&vcc_5v0>;
-+		gpios = <&main_gpio0 31 GPIO_ACTIVE_HIGH>;
-+		states = <1800000 0x0>,
-+			 <3300000 0x1>;
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 		pinctrl-names = "default";
-@@ -124,11 +158,114 @@ AM62X_IOPAD(0x1ec, PIN_INPUT_PULLUP, 0) /* (A17) I2C1_SDA */
- 		>;
- 	};
- 
-+	main_i2c2_pins_default: main-i2c2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0b0, PIN_INPUT_PULLUP, 1) /* (K22) GPMC0_CSn2.I2C2_SCL */
-+			AM62X_IOPAD(0x0b4, PIN_INPUT_PULLUP, 1) /* (K24) GPMC0_CSn3.I2C2_SDA */
-+		>;
-+	};
-+
-+	main_mmc0_pins_default: main-mmc0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x220, PIN_INPUT, 0) /* (Y3) MMC0_CMD */
-+			AM62X_IOPAD(0x218, PIN_INPUT, 0) /* (AB1) MMC0_CLK */
-+			AM62X_IOPAD(0x214, PIN_INPUT, 0) /* (AA2) MMC0_DAT0 */
-+			AM62X_IOPAD(0x210, PIN_INPUT, 0) /* (AA1) MMC0_DAT1 */
-+			AM62X_IOPAD(0x20c, PIN_INPUT, 0) /* (AA3) MMC0_DAT2 */
-+			AM62X_IOPAD(0x208, PIN_INPUT, 0) /* (Y4) MMC0_DAT3 */
-+			AM62X_IOPAD(0x204, PIN_INPUT, 0) /* (AB2) MMC0_DAT4 */
-+			AM62X_IOPAD(0x200, PIN_INPUT, 0) /* (AC1) MMC0_DAT5 */
-+			AM62X_IOPAD(0x1fc, PIN_INPUT, 0) /* (AD2) MMC0_DAT6 */
-+			AM62X_IOPAD(0x1f8, PIN_INPUT, 0) /* (AC2) MMC0_DAT7 */
-+		>;
-+	};
-+
-+	main_mmc1_pins_default: main-mmc1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x23c, PIN_INPUT, 0) /* (A21) MMC1_CMD */
-+			AM62X_IOPAD(0x234, PIN_INPUT, 0) /* (B22) MMC1_CLK */
-+			AM62X_IOPAD(0x230, PIN_INPUT, 0) /* (A22) MMC1_DAT0 */
-+			AM62X_IOPAD(0x22c, PIN_INPUT, 0) /* (B21) MMC1_DAT1 */
-+			AM62X_IOPAD(0x228, PIN_INPUT, 0) /* (C21) MMC1_DAT2 */
-+			AM62X_IOPAD(0x224, PIN_INPUT, 0) /* (D22) MMC1_DAT3 */
-+			AM62X_IOPAD(0x240, PIN_INPUT, 0) /* (D17) MMC1_SDCD */
-+		>;
-+	};
-+
- 	usr_led_pins_default: usr-led-pins-default {
- 		pinctrl-single,pins = <
- 			AM62X_IOPAD(0x244, PIN_OUTPUT, 7) /* (C17) MMC1_SDWP.GPIO1_49 */
- 		>;
- 	};
-+
-+	main_mdio1_pins_default: main-mdio1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x160, PIN_OUTPUT, 0) /* (AD24) MDIO0_MDC */
-+			AM62X_IOPAD(0x15c, PIN_INPUT, 0) /* (AB22) MDIO0_MDIO */
-+		>;
-+	};
-+
-+	main_rgmii1_pins_default: main-rgmii1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x14c, PIN_INPUT, 0) /* (AB17) RGMII1_RD0 */
-+			AM62X_IOPAD(0x150, PIN_INPUT, 0) /* (AC17) RGMII1_RD1 */
-+			AM62X_IOPAD(0x154, PIN_INPUT, 0) /* (AB16) RGMII1_RD2 */
-+			AM62X_IOPAD(0x158, PIN_INPUT, 0) /* (AA15) RGMII1_RD3 */
-+			AM62X_IOPAD(0x148, PIN_INPUT, 0) /* (AD17) RGMII1_RXC */
-+			AM62X_IOPAD(0x144, PIN_INPUT, 0) /* (AE17) RGMII1_RX_CTL */
-+			AM62X_IOPAD(0x134, PIN_OUTPUT, 0) /* (AE20) RGMII1_TD0 */
-+			AM62X_IOPAD(0x138, PIN_OUTPUT, 0) /* (AD20) RGMII1_TD1 */
-+			AM62X_IOPAD(0x13c, PIN_OUTPUT, 0) /* (AE18) RGMII1_TD2 */
-+			AM62X_IOPAD(0x140, PIN_OUTPUT, 0) /* (AD18) RGMII1_TD3 */
-+			AM62X_IOPAD(0x130, PIN_OUTPUT, 0) /* (AE19) RGMII1_TXC */
-+			AM62X_IOPAD(0x12c, PIN_OUTPUT, 0) /* (AD19) RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	main_rgmii2_pins_default: main-rgmii2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x184, PIN_INPUT, 0) /* (AE23) RGMII2_RD0 */
-+			AM62X_IOPAD(0x188, PIN_INPUT, 0) /* (AB20) RGMII2_RD1 */
-+			AM62X_IOPAD(0x18c, PIN_INPUT, 0) /* (AC21) RGMII2_RD2 */
-+			AM62X_IOPAD(0x190, PIN_INPUT, 0) /* (AE22) RGMII2_RD3 */
-+			AM62X_IOPAD(0x180, PIN_INPUT, 0) /* (AD23) RGMII2_RXC */
-+			AM62X_IOPAD(0x17c, PIN_INPUT, 0) /* (AD22) RGMII2_RX_CTL */
-+			AM62X_IOPAD(0x16c, PIN_OUTPUT, 0) /* (Y18) RGMII2_TD0 */
-+			AM62X_IOPAD(0x170, PIN_OUTPUT, 0) /* (AA18) RGMII2_TD1 */
-+			AM62X_IOPAD(0x174, PIN_OUTPUT, 0) /* (AD21) RGMII2_TD2 */
-+			AM62X_IOPAD(0x178, PIN_OUTPUT, 0) /* (AC20) RGMII2_TD3 */
-+			AM62X_IOPAD(0x168, PIN_OUTPUT, 0) /* (AE21) RGMII2_TXC */
-+			AM62X_IOPAD(0x164, PIN_OUTPUT, 0) /* (AA19) RGMII2_TX_CTL */
-+		>;
-+	};
-+
-+	ospi0_pins_default: ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x000, PIN_OUTPUT, 0) /* (H24) OSPI0_CLK */
-+			AM62X_IOPAD(0x02c, PIN_OUTPUT, 0) /* (F23) OSPI0_CSn0 */
-+			AM62X_IOPAD(0x00c, PIN_INPUT, 0) /* (E25) OSPI0_D0 */
-+			AM62X_IOPAD(0x010, PIN_INPUT, 0) /* (G24) OSPI0_D1 */
-+			AM62X_IOPAD(0x014, PIN_INPUT, 0) /* (F25) OSPI0_D2 */
-+			AM62X_IOPAD(0x018, PIN_INPUT, 0) /* (F24) OSPI0_D3 */
-+			AM62X_IOPAD(0x01c, PIN_INPUT, 0) /* (J23) OSPI0_D4 */
-+			AM62X_IOPAD(0x020, PIN_INPUT, 0) /* (J25) OSPI0_D5 */
-+			AM62X_IOPAD(0x024, PIN_INPUT, 0) /* (H25) OSPI0_D6 */
-+			AM62X_IOPAD(0x028, PIN_INPUT, 0) /* (J22) OSPI0_D7 */
-+			AM62X_IOPAD(0x008, PIN_INPUT, 0) /* (J24) OSPI0_DQS */
-+		>;
-+	};
-+
-+	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
-+		>;
-+	};
-+
-+	main_gpio1_ioexp_intr_pins_default: main-gpio1-ioexp-intr-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
-+		>;
-+	};
++	/* For cyclic capability */
++	bool cyclic;
++	size_t num_periods;
  };
  
- &wkup_uart0 {
-@@ -188,6 +325,33 @@ &main_i2c1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_i2c1_pins_default>;
- 	clock-frequency = <400000>;
-+
-+	exp1: gpio@22 {
-+		compatible = "ti,tca6424";
-+		reg = <0x22>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		gpio-line-names = "GPIO_CPSW2_RST", "GPIO_CPSW1_RST",
-+				   "PRU_DETECT", "MMC1_SD_EN",
-+				   "VPP_LDO_EN", "EXP_PS_3V3_En",
-+				   "EXP_PS_5V0_En", "EXP_HAT_DETECT",
-+				   "GPIO_AUD_RSTn", "GPIO_eMMC_RSTn",
-+				   "UART1_FET_BUF_EN", "WL_LT_EN",
-+				   "GPIO_HDMI_RSTn", "CSI_GPIO1",
-+				   "CSI_GPIO2", "PRU_3V3_EN",
-+				   "HDMI_INTn", "TEST_GPIO2",
-+				   "MCASP1_FET_EN", "MCASP1_BUF_BT_EN",
-+				   "MCASP1_FET_SEL", "UART1_FET_SEL",
-+				   "TSINT#", "IO_EXP_TEST_LED";
-+
-+		interrupt-parent = <&main_gpio1>;
-+		interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&main_gpio1_ioexp_intr_pins_default>;
-+	};
- };
+ struct _xfer_spec {
+@@ -1362,6 +1364,108 @@ static inline int _loop(struct pl330_dmac *pl330, unsigned dry_run, u8 buf[],
+ 	return off;
+ }
  
- &main_i2c2 {
-@@ -198,9 +362,118 @@ &main_i2c3 {
- 	status = "disabled";
- };
++static int _period(struct pl330_dmac *pl330, unsigned int dry_run, u8 buf[],
++		   unsigned long bursts, const struct _xfer_spec *pxs, int ev)
++{
++	unsigned int lcnt1, ljmp1;
++	int cyc, off = 0, num_dregs = 0;
++	struct _arg_LPEND lpend;
++	struct pl330_xfer *x = &pxs->desc->px;
++
++	if (bursts > 256) {
++		lcnt1 = 256;
++		cyc = bursts / 256;
++	} else {
++		lcnt1 = bursts;
++		cyc = 1;
++	}
++
++	/* loop1 */
++	off += _emit_LP(dry_run, &buf[off], 1, lcnt1);
++	ljmp1 = off;
++	off += _bursts(pl330, dry_run, &buf[off], pxs, cyc);
++	lpend.cond = ALWAYS;
++	lpend.forever = false;
++	lpend.loop = 1;
++	lpend.bjump = off - ljmp1;
++	off += _emit_LPEND(dry_run, &buf[off], &lpend);
++
++	/* remainder */
++	lcnt1 = bursts - (lcnt1 * cyc);
++
++	if (lcnt1) {
++		off += _emit_LP(dry_run, &buf[off], 1, lcnt1);
++		ljmp1 = off;
++		off += _bursts(pl330, dry_run, &buf[off], pxs, 1);
++		lpend.cond = ALWAYS;
++		lpend.forever = false;
++		lpend.loop = 1;
++		lpend.bjump = off - ljmp1;
++		off += _emit_LPEND(dry_run, &buf[off], &lpend);
++	}
++
++	num_dregs = BYTE_MOD_BURST_LEN(x->bytes, pxs->ccr);
++
++	if (num_dregs) {
++		off += _dregs(pl330, dry_run, &buf[off], pxs, num_dregs);
++		off += _emit_MOV(dry_run, &buf[off], CCR, pxs->ccr);
++	}
++
++	off += _emit_SEV(dry_run, &buf[off], ev);
++
++	return off;
++}
++
++static inline int _loop_cyclic(struct pl330_dmac *pl330, unsigned int dry_run,
++			       u8 buf[], unsigned long bursts,
++			       const struct _xfer_spec *pxs, int ev)
++{
++	int off, periods, residue, i;
++	unsigned int lcnt0, ljmp0, ljmpfe;
++	struct _arg_LPEND lpend;
++	struct pl330_xfer *x = &pxs->desc->px;
++
++	off = 0;
++	ljmpfe = off;
++	lcnt0 = pxs->desc->num_periods;
++	periods = 1;
++
++	while (lcnt0 > 256) {
++		periods++;
++		lcnt0 = pxs->desc->num_periods / periods;
++	}
++
++	residue = pxs->desc->num_periods % periods;
++
++	/* forever loop */
++	off += _emit_MOV(dry_run, &buf[off], SAR, x->src_addr);
++	off += _emit_MOV(dry_run, &buf[off], DAR, x->dst_addr);
++
++	/* loop0 */
++	off += _emit_LP(dry_run, &buf[off], 0,  lcnt0);
++	ljmp0 = off;
++
++	for (i = 0; i < periods; i++)
++		off += _period(pl330, dry_run, &buf[off], bursts, pxs, ev);
++
++	lpend.cond = ALWAYS;
++	lpend.forever = false;
++	lpend.loop = 0;
++	lpend.bjump = off - ljmp0;
++	off += _emit_LPEND(dry_run, &buf[off], &lpend);
++
++	for (i = 0; i < residue; i++)
++		off += _period(pl330, dry_run, &buf[off], bursts, pxs, ev);
++
++	lpend.cond = ALWAYS;
++	lpend.forever = true;
++	lpend.loop = 1;
++	lpend.bjump = off - ljmpfe;
++	off +=  _emit_LPEND(dry_run, &buf[off], &lpend);
++
++	return off;
++}
++
+ static inline int _setup_loops(struct pl330_dmac *pl330,
+ 			       unsigned dry_run, u8 buf[],
+ 			       const struct _xfer_spec *pxs)
+@@ -1401,6 +1505,21 @@ static inline int _setup_xfer(struct pl330_dmac *pl330,
+ 	return off;
+ }
  
-+&sdhci0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc0_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
++static inline int _setup_xfer_cyclic(struct pl330_dmac *pl330,
++				     unsigned int dry_run, u8 buf[],
++				     const struct _xfer_spec *pxs, int ev)
++{
++	struct pl330_xfer *x = &pxs->desc->px;
++	u32 ccr = pxs->ccr;
++	unsigned long bursts = BYTE_TO_BURST(x->bytes, ccr);
++	int off = 0;
 +
-+&sdhci1 {
-+	/* SD/MMC */
-+	vmmc-supply = <&vdd_mmc1>;
-+	vqmmc-supply = <&vdd_sd_dv>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc1_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
++	/* Setup Loop(s) */
++	off += _loop_cyclic(pl330, dry_run, &buf[off], bursts, pxs, ev);
 +
-+&cpsw3g {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mdio1_pins_default
-+		     &main_rgmii1_pins_default
-+		     &main_rgmii2_pins_default>;
-+};
++	return off;
++}
 +
-+&cpsw_port1 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy0>;
-+};
+ /*
+  * A req is a sequence of one or more xfer units.
+  * Returns the number of bytes taken to setup the MC for the req.
+@@ -1418,12 +1537,17 @@ static int _setup_req(struct pl330_dmac *pl330, unsigned dry_run,
+ 	/* DMAMOV CCR, ccr */
+ 	off += _emit_MOV(dry_run, &buf[off], CCR, pxs->ccr);
+ 
+-	off += _setup_xfer(pl330, dry_run, &buf[off], pxs);
++	if (!pxs->desc->cyclic) {
++		off += _setup_xfer(pl330, dry_run, &buf[off], pxs);
+ 
+-	/* DMASEV peripheral/event */
+-	off += _emit_SEV(dry_run, &buf[off], thrd->ev);
+-	/* DMAEND */
+-	off += _emit_END(dry_run, &buf[off]);
++		/* DMASEV peripheral/event */
++		off += _emit_SEV(dry_run, &buf[off], thrd->ev);
++		/* DMAEND */
++		off += _emit_END(dry_run, &buf[off]);
++	} else {
++		off += _setup_xfer_cyclic(pl330, dry_run, &buf[off],
++					  pxs, thrd->ev);
++	}
+ 
+ 	return off;
+ }
+@@ -1697,15 +1821,17 @@ static int pl330_update(struct pl330_dmac *pl330)
+ 
+ 			/* Detach the req */
+ 			descdone = thrd->req[active].desc;
+-			thrd->req[active].desc = NULL;
+-
+-			thrd->req_running = -1;
+-
+-			/* Get going again ASAP */
+-			_start(thrd);
+-
+-			/* For now, just make a list of callbacks to be done */
+-			list_add_tail(&descdone->rqd, &pl330->req_done);
++			if (descdone) {
++				if (!descdone->cyclic) {
++					thrd->req[active].desc = NULL;
++					thrd->req_running = -1;
++					/* Get going again ASAP */
++					_start(thrd);
++				}
 +
-+&cpsw_port2 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy1>;
-+};
++				/* For now, just make a list of callbacks to be done */
++				list_add_tail(&descdone->rqd, &pl330->req_done);
++			}
+ 		}
+ 	}
+ 
+@@ -2070,12 +2196,25 @@ static void pl330_tasklet(struct tasklet_struct *t)
+ 	spin_lock_irqsave(&pch->lock, flags);
+ 
+ 	/* Pick up ripe tomatoes */
+-	list_for_each_entry_safe(desc, _dt, &pch->work_list, node)
++	list_for_each_entry_safe(desc, _dt, &pch->work_list, node) {
+ 		if (desc->status == DONE) {
+-			if (!pch->cyclic)
++			if (!desc->cyclic) {
+ 				dma_cookie_complete(&desc->txd);
+-			list_move_tail(&desc->node, &pch->completed_list);
++				list_move_tail(&desc->node, &pch->completed_list);
++			} else {
++				struct dmaengine_desc_callback cb;
 +
-+&cpsw3g_mdio {
-+	cpsw3g_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
++				desc->status = BUSY;
++				dmaengine_desc_get_callback(&desc->txd, &cb);
 +
-+	cpsw3g_phy1: ethernet-phy@1 {
-+		reg = <1>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
++				if (dmaengine_desc_callback_valid(&cb)) {
++					spin_unlock_irqrestore(&pch->lock, flags);
++					dmaengine_desc_callback_invoke(&cb, NULL);
++					spin_lock_irqsave(&pch->lock, flags);
++				}
++			}
+ 		}
++	}
+ 
+ 	/* Try to submit a req imm. next to the last completed cookie */
+ 	fill_queue(pch);
+@@ -2101,20 +2240,8 @@ static void pl330_tasklet(struct tasklet_struct *t)
+ 
+ 		dmaengine_desc_get_callback(&desc->txd, &cb);
+ 
+-		if (pch->cyclic) {
+-			desc->status = PREP;
+-			list_move_tail(&desc->node, &pch->work_list);
+-			if (power_down) {
+-				pch->active = true;
+-				spin_lock(&pch->thread->dmac->lock);
+-				_start(pch->thread);
+-				spin_unlock(&pch->thread->dmac->lock);
+-				power_down = false;
+-			}
+-		} else {
+-			desc->status = FREE;
+-			list_move_tail(&desc->node, &pch->dmac->desc_pool);
+-		}
++		desc->status = FREE;
++		list_move_tail(&desc->node, &pch->dmac->desc_pool);
+ 
+ 		dma_descriptor_unmap(&desc->txd);
+ 
+@@ -2162,7 +2289,6 @@ static int pl330_alloc_chan_resources(struct dma_chan *chan)
+ 	spin_lock_irqsave(&pl330->lock, flags);
+ 
+ 	dma_cookie_init(chan);
+-	pch->cyclic = false;
+ 
+ 	pch->thread = pl330_request_channel(pl330);
+ 	if (!pch->thread) {
+@@ -2356,8 +2482,7 @@ static void pl330_free_chan_resources(struct dma_chan *chan)
+ 	pl330_release_channel(pch->thread);
+ 	pch->thread = NULL;
+ 
+-	if (pch->cyclic)
+-		list_splice_tail_init(&pch->work_list, &pch->dmac->desc_pool);
++	list_splice_tail_init(&pch->work_list, &pch->dmac->desc_pool);
+ 
+ 	spin_unlock_irqrestore(&pl330->lock, flags);
+ 	pm_runtime_mark_last_busy(pch->dmac->ddma.dev);
+@@ -2420,7 +2545,7 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
+ 
+ 	/* Check in pending list */
+ 	list_for_each_entry(desc, &pch->work_list, node) {
+-		if (desc->status == DONE)
++		if (desc->status == DONE && !desc->cyclic)
+ 			transferred = desc->bytes_requested;
+ 		else if (running && desc == running)
+ 			transferred =
+@@ -2502,10 +2627,7 @@ static dma_cookie_t pl330_tx_submit(struct dma_async_tx_descriptor *tx)
+ 	/* Assign cookies to all nodes */
+ 	while (!list_empty(&last->node)) {
+ 		desc = list_entry(last->node.next, struct dma_pl330_desc, node);
+-		if (pch->cyclic) {
+-			desc->txd.callback = last->txd.callback;
+-			desc->txd.callback_param = last->txd.callback_param;
+-		}
 +
- &mailbox0_cluster0 {
- 	mbox_m4_0: mbox-m4-0 {
- 		ti,mbox-rx = <0 0 0>;
- 		ti,mbox-tx = <1 0 0>;
- 	};
- };
+ 		desc->last = false;
+ 
+ 		dma_cookie_assign(&desc->txd);
+@@ -2607,6 +2729,9 @@ static struct dma_pl330_desc *pl330_get_desc(struct dma_pl330_chan *pch)
+ 	desc->peri = peri_id ? pch->chan.chan_id : 0;
+ 	desc->rqcfg.pcfg = &pch->dmac->pcfg;
+ 
++	desc->cyclic = false;
++	desc->num_periods = 1;
 +
-+&ospi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ospi0_pins_default>;
-+
-+	flash@0{
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "ospi.tiboot3";
-+				reg = <0x0 0x80000>;
-+			};
-+
-+			partition@80000 {
-+				label = "ospi.tispl";
-+				reg = <0x80000 0x200000>;
-+			};
-+
-+			partition@280000 {
-+				label = "ospi.u-boot";
-+				reg = <0x280000 0x400000>;
-+			};
-+
-+			partition@680000 {
-+				label = "ospi.env";
-+				reg = <0x680000 0x40000>;
-+			};
-+
-+			partition@6c0000 {
-+				label = "ospi.env.backup";
-+				reg = <0x6c0000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "ospi.rootfs";
-+				reg = <0x800000 0x37c0000>;
-+			};
-+
-+			partition@3fc0000 {
-+				label = "ospi.phypattern";
-+				reg = <0x3fc0000 0x40000>;
-+			};
-+		};
-+	};
-+};
+ 	dma_async_tx_descriptor_init(&desc->txd, &pch->chan);
+ 
+ 	return desc;
+@@ -2670,12 +2795,10 @@ static struct dma_async_tx_descriptor *pl330_prep_dma_cyclic(
+ 		size_t period_len, enum dma_transfer_direction direction,
+ 		unsigned long flags)
+ {
+-	struct dma_pl330_desc *desc = NULL, *first = NULL;
++	struct dma_pl330_desc *desc = NULL;
+ 	struct dma_pl330_chan *pch = to_pchan(chan);
+-	struct pl330_dmac *pl330 = pch->dmac;
+-	unsigned int i;
+-	dma_addr_t dst;
+-	dma_addr_t src;
++	dma_addr_t dst = 0;
++	dma_addr_t src = 0;
+ 
+ 	if (len % period_len != 0)
+ 		return NULL;
+@@ -2691,67 +2814,38 @@ static struct dma_async_tx_descriptor *pl330_prep_dma_cyclic(
+ 	if (!pl330_prep_slave_fifo(pch, direction))
+ 		return NULL;
+ 
+-	for (i = 0; i < len / period_len; i++) {
+-		desc = pl330_get_desc(pch);
+-		if (!desc) {
+-			unsigned long iflags;
+-
+-			dev_err(pch->dmac->ddma.dev, "%s:%d Unable to fetch desc\n",
+-				__func__, __LINE__);
+-
+-			if (!first)
+-				return NULL;
+-
+-			spin_lock_irqsave(&pl330->pool_lock, iflags);
+-
+-			while (!list_empty(&first->node)) {
+-				desc = list_entry(first->node.next,
+-						struct dma_pl330_desc, node);
+-				list_move_tail(&desc->node, &pl330->desc_pool);
+-			}
+-
+-			list_move_tail(&first->node, &pl330->desc_pool);
+-
+-			spin_unlock_irqrestore(&pl330->pool_lock, iflags);
+-
+-			return NULL;
+-		}
++	desc = pl330_get_desc(pch);
++	if (!desc) {
++		dev_err(pch->dmac->ddma.dev, "%s:%d Unable to fetch desc\n",
++			__func__, __LINE__);
++		return NULL;
++	}
+ 
+-		switch (direction) {
+-		case DMA_MEM_TO_DEV:
+-			desc->rqcfg.src_inc = 1;
+-			desc->rqcfg.dst_inc = 0;
+-			src = dma_addr;
+-			dst = pch->fifo_dma;
+-			break;
+-		case DMA_DEV_TO_MEM:
+-			desc->rqcfg.src_inc = 0;
+-			desc->rqcfg.dst_inc = 1;
+-			src = pch->fifo_dma;
++	switch (direction) {
++	case DMA_MEM_TO_DEV:
++		desc->rqcfg.src_inc = 1;
++		desc->rqcfg.dst_inc = 0;
++		src = dma_addr;
++		dst = pch->fifo_dma;
++		break;
++	case DMA_DEV_TO_MEM:
++		desc->rqcfg.src_inc = 0;
++		desc->rqcfg.dst_inc = 1;
++		src = pch->fifo_dma;
+ 			dst = dma_addr;
+-			break;
+-		default:
+-			break;
+-		}
+-
+-		desc->rqtype = direction;
+-		desc->rqcfg.brst_size = pch->burst_sz;
+-		desc->rqcfg.brst_len = pch->burst_len;
+-		desc->bytes_requested = period_len;
+-		fill_px(&desc->px, dst, src, period_len);
+-
+-		if (!first)
+-			first = desc;
+-		else
+-			list_add_tail(&desc->node, &first->node);
+-
+-		dma_addr += period_len;
++		break;
++	default:
++		break;
+ 	}
+ 
+-	if (!desc)
+-		return NULL;
++	desc->rqtype = direction;
++	desc->rqcfg.brst_size = pch->burst_sz;
++	desc->rqcfg.brst_len = pch->burst_len;
++	desc->bytes_requested = len;
++	fill_px(&desc->px, dst, src, period_len);
+ 
+-	pch->cyclic = true;
++	desc->cyclic = true;
++	desc->num_periods = len / period_len;
+ 	desc->txd.flags = flags;
+ 
+ 	return &desc->txd;
 -- 
-2.36.0
+2.7.4
 

@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C9351222B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC15A51222F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiD0TLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S229590AbiD0TMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiD0TL3 (ORCPT
+        with ESMTP id S232790AbiD0TMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:11:29 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3103226EF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:01:11 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id fv2so2230118pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:01:11 -0700 (PDT)
+        Wed, 27 Apr 2022 15:12:24 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909011113;
+        Wed, 27 Apr 2022 12:02:33 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id dk23so5240407ejb.8;
+        Wed, 27 Apr 2022 12:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u0vK5DOioCsOu8Z5Tn39+iFk9MTYah9fv3mNsqNjdus=;
-        b=VGuPkdx1C2SRHqVcIOD3NwOHKSTxdpr4/FzXdBdKcq2ZkJoaKu1TdlHaunnM1K3WWH
-         ipIbve51Y5/tGawUbxvvl+Z+mfKq/RaIKffRWPl9r/XSXVtYV2QmHGLuzwN1agT47SDk
-         MMoLN8/y5f60qTWzGTHdt/D/ZVrjYDvshq31rMp05SxQnyn39XUTplndeYoZ8y0830Hx
-         IR89RPQj3m8xWVmzXLp0X6+QP22DYHuMYdOnIVUiSGJXQreK//f2PqS6EFoIojGFaqLE
-         548thIYFnoXHMcqh013B8sJsZVFYHfYCCvks/RLoLFb1RYtTDW/yLhmpSZfjtDgR+qQx
-         ykbw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nRsrSZUdccGt8LRLTvc1f3066sqUlL3H8wQB+8CbAZM=;
+        b=oI3+Pk0O84Q7xhxIXyeolKjcngLs7+jcTCJHTa0ksRxWgXNWFSMxJIA0UmAccbtqA7
+         F2VjRBWqGNDcNP6jbMzBuINw/oc5sK1/EZD9x1kC7GrfCVGrjq3GRqjGpC8SvSy2rbEM
+         dDpK7HnogLvq+qPCx7mybM5IaoBXavO9uXmytlp58AjkbukUaUMsjzCY4cPJMx8Fnxyl
+         8jKcrvHJ/Lo+rfLgfgv7+6WP0qIWBEypKOlvY0DPPkLtPtF0ccjRFRtm2/3B0vRmw21B
+         MF2BTA3bGpyVP6Zsh03jPM1HwD3XSDSJ+81lVtKJ8mQS/s4bILCpChYQd7migae76qFV
+         iDyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u0vK5DOioCsOu8Z5Tn39+iFk9MTYah9fv3mNsqNjdus=;
-        b=hTxgYT/OBwJoiuKk/JXcSkd+QRws8/Qq4z7HZTgboaml+r7sAZ5z4+vby/PAanQQbr
-         7WSYRAyZGJuhde+fOC6A4jT7QK9+3zrOCTCLZuuv6qn9Pw3u/S10/jL4h7UrPHYgNPui
-         oFL4E0grgkowSc1/r0GVzjDF4eV1D6QowC4IKzQWjLOwf6f46FaMlqYFFL7oomZH/tYv
-         SeeN5Hijsu2UKNXO5RtL77lRU4g+0cR1GEfAEXXdpRu1SRoyee+ITmFq8lzmjWDmOojh
-         5R6ASwVG0ZDAhG3ZL12Tn+0+Q/wvED15kWA7eMbeewLZ7vjK/AptFK7YKqYvzvIkvhWQ
-         UTeA==
-X-Gm-Message-State: AOAM532MBzFJpPqLuGKQnUIqDrOEeZcZlQLUJe6V3ieJuFKuFISkqoVP
-        aFvfpX+/8VUmro+Okb+I0hc=
-X-Google-Smtp-Source: ABdhPJyEJ8yHmRhG5rBMwXHXYAHKMAwjdAhqOfNHguOBLZjVoCrmkuf7G/MW+zXsWCSaMhQB7WqVgA==
-X-Received: by 2002:a17:903:290:b0:15c:1c87:e66c with SMTP id j16-20020a170903029000b0015c1c87e66cmr28402806plr.61.1651086070650;
-        Wed, 27 Apr 2022 12:01:10 -0700 (PDT)
-Received: from makvihas.localhost.com ([2405:201:202b:15:e0d6:603e:265d:6bf])
-        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b0050d4246fbedsm11349661pfd.187.2022.04.27.12.01.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nRsrSZUdccGt8LRLTvc1f3066sqUlL3H8wQB+8CbAZM=;
+        b=EwRdhMSuQUHIBBXTA7Rp2NoN8zau7L9Cyf+8Asgcd8RJLcBFSrq3GTaoAd/MN9oW5D
+         9pPRypW3sHtEqwulsIr4jcfNqsn/cjSLFA4fdwevYNVkIz8XTO8ewB3MsA/kFrOiTU4U
+         pAV5VvesIr4zl0CI/9N5HiUEf9nBX2r7VzoFRzoLbzmYvHQFU3XrT6PxpGBFVs5Fofcw
+         BfuzHDlgHvvGP1g8r1iJbJd6mKvdFWoANCfQgXc02dunr6LcX2fS2MhtbtzGOsI98chr
+         V6KkvPPHi55ZoxaeHWgllWDkRSVs5Yo0ZnffEyCz2izEr5mrqQEsQ+cnGfUb9jOFEWmC
+         eGdg==
+X-Gm-Message-State: AOAM530zrxdVtonZFMrzA46d/ONBmyJfjRb+gs9+eGI0ZxBggahqG1TZ
+        k1yceMKnU8oVUo+aIbrbvbBGN0RSSKA07Q==
+X-Google-Smtp-Source: ABdhPJy0Mjet+HjxsoEJgp/AwTr+A8CehTApQ33EoGLfYGLxo9jXmuRR5VCj1fk2EiLPzrIUAMNxYQ==
+X-Received: by 2002:a17:906:b50:b0:6f3:ce99:3c39 with SMTP id v16-20020a1709060b5000b006f3ce993c39mr3446298ejg.52.1651086152184;
+        Wed, 27 Apr 2022 12:02:32 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id d11-20020a1709067f0b00b006f395247b5esm4652604ejr.84.2022.04.27.12.02.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:01:10 -0700 (PDT)
-From:   Vihas Makwana <makvihas@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH] staging: r8188eu: remove unused semaphore "allrxreturnevt"
-Date:   Thu, 28 Apr 2022 00:30:54 +0530
-Message-Id: <20220427190054.17841-1-makvihas@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 27 Apr 2022 12:02:31 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 42/45] media: sun6i-csi: Request a shared interrupt
+Date:   Wed, 27 Apr 2022 21:02:30 +0200
+Message-ID: <2179026.iZASKD2KPV@jernej-laptop>
+In-Reply-To: <20220415152811.636419-43-paul.kocialkowski@bootlin.com>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-43-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The semaphore allrxreturnevt of struct recv_priv is initialized but not 
-used anywhere in the code.
-Remove the initialization and the structure member.
+Dne petek, 15. april 2022 ob 17:28:08 CEST je Paul Kocialkowski napisal(a):
+> Request our interrupt shared since it is typically shared with the isp
+> block. The interrupt routine looks good to go for shared irq.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-Signed-off-by: Vihas Makwana <makvihas@gmail.com>
----
- Compile tested only.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
- drivers/staging/r8188eu/core/rtw_recv.c    | 2 --
- drivers/staging/r8188eu/include/rtw_recv.h | 1 -
- 2 files changed, 3 deletions(-)
+Best regards,
+Jernej
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index c1005ddaa..4060c0457 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -80,8 +80,6 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
- 	}
- 	precvpriv->rx_pending_cnt = 1;
- 
--	sema_init(&precvpriv->allrxreturnevt, 0);
--
- 	res = rtl8188eu_init_recv_priv(padapter);
- 
- 	timer_setup(&precvpriv->signal_stat_timer, rtw_signal_stat_timer_hdl, 0);
-diff --git a/drivers/staging/r8188eu/include/rtw_recv.h b/drivers/staging/r8188eu/include/rtw_recv.h
-index e57e48a51..66d240a71 100644
---- a/drivers/staging/r8188eu/include/rtw_recv.h
-+++ b/drivers/staging/r8188eu/include/rtw_recv.h
-@@ -166,7 +166,6 @@ struct recv_priv {
- 	uint  rx_largepacket_crcerr;
- 	uint  rx_smallpacket_crcerr;
- 	uint  rx_middlepacket_crcerr;
--	struct semaphore allrxreturnevt;
- 	u8	rx_pending_cnt;
- 
- 	struct tasklet_struct recv_tasklet;
--- 
-2.30.2
+> ---
+>  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
+> 3963a88a2e0b..a88deb8ba1e7 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> @@ -264,8 +264,8 @@ static int sun6i_csi_resources_setup(struct
+> sun6i_csi_device *csi_dev, goto error_clock_rate_exclusive;
+>  	}
+> 
+> -	ret = devm_request_irq(dev, irq, sun6i_csi_interrupt, 0, 
+SUN6I_CSI_NAME,
+> -			       csi_dev);
+> +	ret = devm_request_irq(dev, irq, sun6i_csi_interrupt, IRQF_SHARED,
+> +			       SUN6I_CSI_NAME, csi_dev);
+>  	if (ret) {
+>  		dev_err(dev, "failed to request interrupt\n");
+>  		goto error_clock_rate_exclusive;
+
+
+
 

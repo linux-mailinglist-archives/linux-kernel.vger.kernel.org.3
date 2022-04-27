@@ -2,187 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6985115BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCEE511509
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 12:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiD0Kvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 06:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S229942AbiD0Kpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 06:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiD0Kve (ORCPT
+        with ESMTP id S229805AbiD0Kpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:51:34 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CAA3AB7CF;
-        Wed, 27 Apr 2022 03:22:57 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id ke5so733441qvb.5;
-        Wed, 27 Apr 2022 03:22:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DFvDs4UX2zax4adbziwn0RYfIrK/tqgpmI5wyJl9xWk=;
-        b=txl9N971Mitb19L/rporh9pX+gSFiofYsUEsWQqmAP8yoWcvMfaiKi0HoyXVykX9YZ
-         +BVFExqw44qOaaUGTGPFgGsoZAAXlnhsT5fnc8/c3iMQJjWJ1gcKbNW5isoK/0ed9a1b
-         mwZFgZW4D/xhp6dg6tRjHzCNE0fvbrW0PVeReKZ86PIzkjJ62+uQDDjd13yID1y7rgh0
-         jh2EvZt07FXfG5Ifg0KIiw0NjqR5xgMV05b08n6HiwsVYmmC2NEeqmxF2inFogQrb/k6
-         3lepXM4uGARxFNsaXcicxgi49dphhOZZPDSvttlPoIZYo7AzgPgLL26ZxY4aQDlUykCy
-         abHA==
-X-Gm-Message-State: AOAM530unhwEdaKc69mkv3lc8vhloUsAkN+WoZkhGEIadOmoln2zpnhq
-        qFdW2V/89CK7ahJkCjNVzhtZt5Xkje/Fag==
-X-Google-Smtp-Source: ABdhPJz6UTZZL4BURTn67KGPUyleLdhEDIehR5hbmEP7UX3/qw0Fi0yopLbmmzlkt/pHta1qP3CD8w==
-X-Received: by 2002:a05:6214:248c:b0:441:2a61:659d with SMTP id gi12-20020a056214248c00b004412a61659dmr19331590qvb.59.1651054976735;
-        Wed, 27 Apr 2022 03:22:56 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id q17-20020a05622a031100b002f1d478c218sm10090861qtw.62.2022.04.27.03.22.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 03:22:56 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7bb893309so12858617b3.12;
-        Wed, 27 Apr 2022 03:22:56 -0700 (PDT)
-X-Received: by 2002:a81:8489:0:b0:2f7:edff:239f with SMTP id
- u131-20020a818489000000b002f7edff239fmr14119456ywf.256.1651054976217; Wed, 27
- Apr 2022 03:22:56 -0700 (PDT)
+        Wed, 27 Apr 2022 06:45:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A499284D47;
+        Wed, 27 Apr 2022 03:29:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 63E961F388;
+        Wed, 27 Apr 2022 10:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651055356; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJ68u8jd1pGMMpvwjEOkdhZXSNG8xLLCdO1Cn+Xq+gA=;
+        b=gDV+xrS2GbcllQPvhcHYRsIZ5JmMF2CTqkJH2hZzzFtDP0TXmtJZrpUuuojh3t96ebXcco
+        MAc0BQ67VewzXUn+zMa2QyCdDcBvaXF2/Fq9ddaIFETQCt9fte7B7E4o+krYi72nEXZLYM
+        2ZEuZ2TIjVXu6V9ocZWj7LvaM3Bftfc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651055356;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJ68u8jd1pGMMpvwjEOkdhZXSNG8xLLCdO1Cn+Xq+gA=;
+        b=EkM4US2Ur6JYETOSv0kVXMTGm4wfX9NWB6vWzYaHSmzhLafSzMfv1PShz4hn4/DwHAF+XD
+        EYzGw+r4D0s0dBCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 193711323E;
+        Wed, 27 Apr 2022 10:29:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 24OHBfwaaWJ/AQAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 27 Apr 2022 10:29:16 +0000
+Message-ID: <2082148f-890f-e5f4-c304-b99212aa377e@suse.de>
+Date:   Wed, 27 Apr 2022 12:29:15 +0200
 MIME-Version: 1.0
-References: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Apr 2022 12:22:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWJZM=-Py=W+qKUfCQU=Y5=G6qdp9uubNv56o+5JztaGA@mail.gmail.com>
-Message-ID: <CAMuHMdWJZM=-Py=W+qKUfCQU=Y5=G6qdp9uubNv56o+5JztaGA@mail.gmail.com>
-Subject: Re: [RFC PATCH] memory: renesas-rpc-if: Correct QSPI data transfer in
- Manual mode
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     chaitanyak@nvidia.com, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        axboe@kernel.dk, msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, kbusch@kernel.org, hch@lst.de,
+        Frederick.Knight@netapp.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, nitheshshetty@gmail.com, gost.dev@samsung.com,
+        Arnav Dawn <arnav.dawn@samsung.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+References: <20220426101241.30100-1-nj.shetty@samsung.com>
+ <CGME20220426101921epcas5p341707619b5e836490284a42c92762083@epcas5p3.samsung.com>
+ <20220426101241.30100-3-nj.shetty@samsung.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v4 02/10] block: Add copy offload support infrastructure
+In-Reply-To: <20220426101241.30100-3-nj.shetty@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-On Wed, Sep 22, 2021 at 11:10 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> This patch fixes 2 problems:
-> [1] The output warning logs and data loss when performing
-> mount/umount then remount the device with jffs2 format.
-> [2] The access width of SMWDR[0:1]/SMRDR[0:1] register is wrong.
-
-Revisiting commit fff53a551db50f5e ("memory: renesas-rpc-if: Correct
-QSPI data transfer in Manual mode") in  v5.16-rc1...
-
-> --- a/drivers/memory/renesas-rpc-if.c
-> +++ b/drivers/memory/renesas-rpc-if.c
-
->  int rpcif_manual_xfer(struct rpcif *rpc)
->  {
-> -       u32 smenr, smcr, pos = 0, max = 4;
-> +       u32 smenr, smcr, pos = 0, max = rpc->bus_size == 2 ? 8 : 4;
->         int ret = 0;
->
-> -       if (rpc->bus_size == 2)
-> -               max = 8;
-> -
->         pm_runtime_get_sync(rpc->dev);
->
->         regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
-> @@ -378,37 +424,36 @@ int rpcif_manual_xfer(struct rpcif *rpc)
->         regmap_write(rpc->regmap, RPCIF_SMOPR, rpc->option);
->         regmap_write(rpc->regmap, RPCIF_SMDMCR, rpc->dummy);
->         regmap_write(rpc->regmap, RPCIF_SMDRENR, rpc->ddr);
-> +       regmap_write(rpc->regmap, RPCIF_SMADR, rpc->smadr);
->         smenr = rpc->enable;
->
->         switch (rpc->dir) {
->         case RPCIF_DATA_OUT:
->                 while (pos < rpc->xferlen) {
-> -                       u32 nbytes = rpc->xferlen - pos;
-> -                       u32 data[2];
-> +                       u32 bytes_left = rpc->xferlen - pos;
-> +                       u32 nbytes, data[2];
->
->                         smcr = rpc->smcr | RPCIF_SMCR_SPIE;
-> -                       if (nbytes > max) {
-> -                               nbytes = max;
+On 4/26/22 12:12, Nitesh Shetty wrote:
+> Introduce blkdev_issue_copy which supports source and destination bdevs,
+> and an array of (source, destination and copy length) tuples.
+> Introduce REQ_COPY copy offload operation flag. Create a read-write
+> bio pair with a token as payload and submitted to the device in order.
+> Read request populates token with source specific information which
+> is then passed with write request.
+> This design is courtesy Mikulas Patocka's token based copy
+> 
+> Larger copy will be divided, based on max_copy_sectors,
+> max_copy_range_sector limits.
+> 
+> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+> Signed-off-by: Arnav Dawn <arnav.dawn@samsung.com>
+> ---
+>   block/blk-lib.c           | 232 ++++++++++++++++++++++++++++++++++++++
+>   block/blk.h               |   2 +
+>   include/linux/blk_types.h |  21 ++++
+>   include/linux/blkdev.h    |   2 +
+>   include/uapi/linux/fs.h   |  14 +++
+>   5 files changed, 271 insertions(+)
+> 
+> diff --git a/block/blk-lib.c b/block/blk-lib.c
+> index 09b7e1200c0f..ba9da2d2f429 100644
+> --- a/block/blk-lib.c
+> +++ b/block/blk-lib.c
+> @@ -117,6 +117,238 @@ int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
+>   }
+>   EXPORT_SYMBOL(blkdev_issue_discard);
+>   
+> +/*
+> + * Wait on and process all in-flight BIOs.  This must only be called once
+> + * all bios have been issued so that the refcount can only decrease.
+> + * This just waits for all bios to make it through bio_copy_end_io. IO
+> + * errors are propagated through cio->io_error.
+> + */
+> +static int cio_await_completion(struct cio *cio)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
 > +
-> +                       /* nbytes may only be 1, 2, 4, or 8 */
-> +                       nbytes = bytes_left >= max ? max : (1 << ilog2(bytes_left));
-> +                       if (bytes_left > nbytes)
->                                 smcr |= RPCIF_SMCR_SSLKP;
-> -                       }
+> +	spin_lock_irqsave(&cio->lock, flags);
+> +	if (cio->refcount) {
+> +		cio->waiter = current;
+> +		__set_current_state(TASK_UNINTERRUPTIBLE);
+> +		spin_unlock_irqrestore(&cio->lock, flags);
+> +		blk_io_schedule();
+> +		/* wake up sets us TASK_RUNNING */
+> +		spin_lock_irqsave(&cio->lock, flags);
+> +		cio->waiter = NULL;
+> +		ret = cio->io_err;
+> +	}
+> +	spin_unlock_irqrestore(&cio->lock, flags);
+> +	kvfree(cio);
 > +
-> +                       smenr |= RPCIF_SMENR_SPIDE(rpcif_bits_set(rpc, nbytes));
-> +                       regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
->
->                         memcpy(data, rpc->buffer + pos, nbytes);
-> -                       if (nbytes > 4) {
-> +                       if (nbytes == 8) {
->                                 regmap_write(rpc->regmap, RPCIF_SMWDR1,
->                                              data[0]);
->                                 regmap_write(rpc->regmap, RPCIF_SMWDR0,
->                                              data[1]);
-> -                       } else if (nbytes > 2) {
-> +                       } else {
->                                 regmap_write(rpc->regmap, RPCIF_SMWDR0,
->                                              data[0]);
-> -                       } else  {
-> -                               regmap_write(rpc->regmap, RPCIF_SMWDR0,
-> -                                            data[0] << 16);
->                         }
->
-> -                       regmap_write(rpc->regmap, RPCIF_SMADR,
-> -                                    rpc->smadr + pos);
+> +	return ret;
+> +}
+> +
+> +static void bio_copy_end_io(struct bio *bio)
+> +{
+> +	struct copy_ctx *ctx = bio->bi_private;
+> +	struct cio *cio = ctx->cio;
+> +	sector_t clen;
+> +	int ri = ctx->range_idx;
+> +	unsigned long flags;
+> +	bool wake = false;
+> +
+> +	if (bio->bi_status) {
+> +		cio->io_err = bio->bi_status;
+> +		clen = (bio->bi_iter.bi_sector << SECTOR_SHIFT) - ctx->start_sec;
+> +		cio->rlist[ri].comp_len = min_t(sector_t, clen, cio->rlist[ri].comp_len);
+> +	}
+> +	__free_page(bio->bi_io_vec[0].bv_page);
+> +	kfree(ctx);
+> +	bio_put(bio);
+> +
+> +	spin_lock_irqsave(&cio->lock, flags);
+> +	if (((--cio->refcount) <= 0) && cio->waiter)
+> +		wake = true;
+> +	spin_unlock_irqrestore(&cio->lock, flags);
+> +	if (wake)
+> +		wake_up_process(cio->waiter);
+> +}
+> +
+> +/*
+> + * blk_copy_offload	- Use device's native copy offload feature
+> + * Go through user provide payload, prepare new payload based on device's copy offload limits.
+> + */
+> +int blk_copy_offload(struct block_device *src_bdev, int nr_srcs,
+> +		struct range_entry *rlist, struct block_device *dst_bdev, gfp_t gfp_mask)
+> +{
+> +	struct request_queue *sq = bdev_get_queue(src_bdev);
+> +	struct request_queue *dq = bdev_get_queue(dst_bdev);
+> +	struct bio *read_bio, *write_bio;
+> +	struct copy_ctx *ctx;
+> +	struct cio *cio;
+> +	struct page *token;
+> +	sector_t src_blk, copy_len, dst_blk;
+> +	sector_t remaining, max_copy_len = LONG_MAX;
+> +	unsigned long flags;
+> +	int ri = 0, ret = 0;
+> +
+> +	cio = kzalloc(sizeof(struct cio), GFP_KERNEL);
+> +	if (!cio)
+> +		return -ENOMEM;
+> +	cio->rlist = rlist;
+> +	spin_lock_init(&cio->lock);
+> +
+> +	max_copy_len = min_t(sector_t, sq->limits.max_copy_sectors, dq->limits.max_copy_sectors);
+> +	max_copy_len = min3(max_copy_len, (sector_t)sq->limits.max_copy_range_sectors,
+> +			(sector_t)dq->limits.max_copy_range_sectors) << SECTOR_SHIFT;
+> +
+> +	for (ri = 0; ri < nr_srcs; ri++) {
+> +		cio->rlist[ri].comp_len = rlist[ri].len;
+> +		src_blk = rlist[ri].src;
+> +		dst_blk = rlist[ri].dst;
+> +		for (remaining = rlist[ri].len; remaining > 0; remaining -= copy_len) {
+> +			copy_len = min(remaining, max_copy_len);
+> +
+> +			token = alloc_page(gfp_mask);
+> +			if (unlikely(!token)) {
+> +				ret = -ENOMEM;
+> +				goto err_token;
+> +			}
+> +
+> +			ctx = kzalloc(sizeof(struct copy_ctx), gfp_mask);
+> +			if (!ctx) {
+> +				ret = -ENOMEM;
+> +				goto err_ctx;
+> +			}
+> +			ctx->cio = cio;
+> +			ctx->range_idx = ri;
+> +			ctx->start_sec = dst_blk;
+> +
+> +			read_bio = bio_alloc(src_bdev, 1, REQ_OP_READ | REQ_COPY | REQ_NOMERGE,
+> +					gfp_mask);
+> +			if (!read_bio) {
+> +				ret = -ENOMEM;
+> +				goto err_read_bio;
+> +			}
+> +			read_bio->bi_iter.bi_sector = src_blk >> SECTOR_SHIFT;
+> +			__bio_add_page(read_bio, token, PAGE_SIZE, 0);
+> +			/*__bio_add_page increases bi_size by len, so overwrite it with copy len*/
+> +			read_bio->bi_iter.bi_size = copy_len;
+> +			ret = submit_bio_wait(read_bio);
+> +			bio_put(read_bio);
+> +			if (ret)
+> +				goto err_read_bio;
+> +
+> +			write_bio = bio_alloc(dst_bdev, 1, REQ_OP_WRITE | REQ_COPY | REQ_NOMERGE,
+> +					gfp_mask);
+> +			if (!write_bio) {
+> +				ret = -ENOMEM;
+> +				goto err_read_bio;
+> +			}
+> +			write_bio->bi_iter.bi_sector = dst_blk >> SECTOR_SHIFT;
+> +			__bio_add_page(write_bio, token, PAGE_SIZE, 0);
+> +			/*__bio_add_page increases bi_size by len, so overwrite it with copy len*/
+> +			write_bio->bi_iter.bi_size = copy_len;
+> +			write_bio->bi_end_io = bio_copy_end_io;
+> +			write_bio->bi_private = ctx;
+> +
+> +			spin_lock_irqsave(&cio->lock, flags);
+> +			++cio->refcount;
+> +			spin_unlock_irqrestore(&cio->lock, flags);
+> +
+> +			submit_bio(write_bio);
+> +			src_blk += copy_len;
+> +			dst_blk += copy_len;
+> +		}
+> +	}
+> +
 
-Removing this implies SMADR is auto-incrementing for writes...
+Hmm. I'm not sure if I like the copy loop.
+What I definitely would do is to allocate the write bio before reading 
+data; after all, if we can't allocate the write bio reading is pretty 
+much pointless.
 
-> -                       regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
->                         regmap_write(rpc->regmap, RPCIF_SMCR, smcr);
->                         ret = wait_msg_xfer_end(rpc);
->                         if (ret)
-> @@ -448,14 +493,16 @@ int rpcif_manual_xfer(struct rpcif *rpc)
->                         break;
->                 }
->                 while (pos < rpc->xferlen) {
-> -                       u32 nbytes = rpc->xferlen - pos;
-> -                       u32 data[2];
-> +                       u32 bytes_left = rpc->xferlen - pos;
-> +                       u32 nbytes, data[2];
->
-> -                       if (nbytes > max)
-> -                               nbytes = max;
-> +                       /* nbytes may only be 1, 2, 4, or 8 */
-> +                       nbytes = bytes_left >= max ? max : (1 << ilog2(bytes_left));
->
->                         regmap_write(rpc->regmap, RPCIF_SMADR,
->                                      rpc->smadr + pos);
+But the real issue I have with this is that it's doing synchronous 
+reads, thereby limiting the performance.
 
-... while keeping this assumes SMADR is not auto-incrementing for
-reads?
+Can't you submit the write bio from the end_io function of the read bio?
+That would disentangle things, and we should be getting a better 
+performance.
 
-Figure 62.17 "Example of Data Transfer Setting Flow in Manual Operating
-Mode" does show writing SMADR in each loop iteration.
-I cannot find anything about auto-incrementing in the documentation,
-except for Figure 62.28 "Write Buffer Usage Sequence", which does
-not apply as Linux does not support the write buffer yet.
+Cheers,
 
-Given you tested this, and the BSP commit 0d37f69cacb33435 ("memory:
-renesas-rpc-if: Correct QSPI data transfer in Manual mode") does the
-same, I assume it's working fine?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

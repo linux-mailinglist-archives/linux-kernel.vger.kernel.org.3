@@ -2,328 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6F251178C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820465117ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbiD0L6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S233262AbiD0L7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbiD0L6n (ORCPT
+        with ESMTP id S233331AbiD0L7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:58:43 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B352ED5A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:55:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VBT62Mb_1651060523;
-Received: from 30.240.99.9(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VBT62Mb_1651060523)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 27 Apr 2022 19:55:24 +0800
-Message-ID: <a51c1e9f-53fe-a558-4edd-990c2ecafc9f@linux.alibaba.com>
-Date:   Wed, 27 Apr 2022 19:55:22 +0800
+        Wed, 27 Apr 2022 07:59:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8B93121E;
+        Wed, 27 Apr 2022 04:56:26 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 11:56:22 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651060584;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hBosDWnBLV6rAp4sXkLwdAbmZkXBSaaJRn0sEnYXPrc=;
+        b=mTSMo1jZ7PnjOCTIt/VY1dExSclpx56hf45qzeeFlouPhLfpR4vtR+dt751QbmyoSHDy6I
+        17sQiYRb6iLmlZ3o2LlrQoIPC7iJilW8IyjmbmlDGkNzEAs8u+DnRmSYSd+92GoyaKdRcd
+        S15EY/GdVZl2Eia+cjTHxRTC1PJ47tX1nSWkWaFW1LKNbAWEL6Q9Kllfi6c7fZj793JBPt
+        ulTVAkh4Tgmnm3aQzjKF9Gj2EfCDObAG/euAiTz7EF+fQe7V2QwYR0Ce2FLZYvj2Gr17aC
+        S8rsf+WSGhlTpOOfvmUT0MJpaXouV0BX3Jp3Nm5lrFxkh694cLD+7u/7mz4+Sg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651060584;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hBosDWnBLV6rAp4sXkLwdAbmZkXBSaaJRn0sEnYXPrc=;
+        b=UD+rrcmy5o86t7u8tvN25BKQzMKvqdfY2IJNdkrAWfQP2kld1dDN4Ec+LyPG+ESRa2rL0g
+        Ok6sZCpBTvcQpGBw==
+From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/sev] x86/sev: Get the AP jump table address from secrets page
+Cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220422135624.114172-3-michael.roth@amd.com>
+References: <20220422135624.114172-3-michael.roth@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0)
- Gecko/20100101 Thunderbird/100.0
-Subject: Re: DAMON VA regions don't split on an large Android APP
-Content-Language: en-US
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
-        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
-        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
-        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        xhao@linux.alibaba.com
-References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
- <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
- <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
- <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <165106058282.4207.6903605581485804335.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/sev branch of tip:
 
+Commit-ID:     c2106a231c2ba36ff9af50cdf2867b9a5f8150a6
+Gitweb:        https://git.kernel.org/tip/c2106a231c2ba36ff9af50cdf2867b9a5f8150a6
+Author:        Brijesh Singh <brijesh.singh@amd.com>
+AuthorDate:    Fri, 22 Apr 2022 08:56:24 -05:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 27 Apr 2022 13:31:38 +02:00
 
-On 4/27/22 5:22 PM, Barry Song wrote:
-> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
->>
->> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
->> <rongwei.wang@linux.alibaba.com> wrote:
->>>
->>>
->>>
->>> On 4/27/22 7:19 AM, Barry Song wrote:
->>>> Hi SeongJae & Andrew,
->>>> (also Cc-ed main damon developers)
->>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
->>>> that vaddr regions don't split well on large Android Apps though
->>>> everything works well on native Apps.
->>>>
->>>> I have tried the below two cases on an Android phone with 12GB memory
->>>> and snapdragon 888 CPU.
->>>> 1. a native program with small memory working set  as below,
->>>> #define size (1024*1024*100)
->>>> main()
->>>> {
->>>>           volatile int *p = malloc(size);
->>>>           memset(p, 0x55, size);
->>>>
->>>>           while(1) {
->>>>                   int i;
->>>>                   for (i = 0; i < size / 4; i++)
->>>>                           (void)*(p + i);
->>>>                   usleep(1000);
->>>>
->>>>                   for (i = 0; i < size / 16; i++)
->>>>                           (void)*(p + i);
->>>>                   usleep(1000);
->>>>
->>>>           }
->>>> }
->>>> For this application, the Damon vaddr monitor works very well.
->>>> I have modified monitor.py in the damo userspace tool a little bit to
->>>> show the raw data getting from the kernel.
->>>> Regions can split decently on this kind of applications, a typical raw
->>>> data is as below,
->>>>
->>>> monitoring_start:             2.224 s
->>>> monitoring_end:               2.329 s
->>>> monitoring_duration:       104.336 ms
->>>> target_id: 0
->>>> nr_regions: 24
->>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
->>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
->>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
->>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
->>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
->>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
->>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
->>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
->>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
->>>> 007661c59000-007661ee4000(   2.543 MiB): 2
->>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
->>>> 0076623e4000-007662837000(   4.324 MiB): 2
->>>> 007662837000-0076630f1000(   8.727 MiB): 3
->>>> 0076630f1000-007663494000(   3.637 MiB): 2
->>>> 007663494000-007663753000(   2.746 MiB): 1
->>>> 007663753000-007664251000(  10.992 MiB): 3
->>>> 007664251000-0076666fd000(  36.672 MiB): 2
->>>> 0076666fd000-007666e73000(   7.461 MiB): 1
->>>> 007666e73000-007667c89000(  14.086 MiB): 2
->>>> 007667c89000-007667f97000(   3.055 MiB): 0
->>>> 007667f97000-007668112000(   1.480 MiB): 1
->>>> 007668112000-00766820f000(1012.000 KiB): 0
->>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
->>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
->>>>
->>>> 2. a large Android app like Asphalt 9
->>>> For this case, basically regions can't split very well, but monitor
->>>> works on small vma:
->>>>
->>>> monitoring_start:             2.220 s
->>>> monitoring_end:               2.318 s
->>>> monitoring_duration:        98.576 ms
->>>> target_id: 0
->>>> nr_regions: 15
->>>> 000012c00000-0001c301e000(   6.754 GiB): 0
->>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
->>>> 000371b6c000-000400000000(   2.223 GiB): 0
->>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
->>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
->>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
->>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
->>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
->>>> 0077e863e000-00798e214000(   6.590 GiB): 0
->>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
->>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
->>>> 007c62f00000-007defb19000(   6.199 GiB): 0
->>>> 007defb19000-007f794ef000(   6.150 GiB): 0
->>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
->>>>
->>>> As you can see, we have some regions which are very very big and they
->>>> are losing the chance to be splitted. But
->>>> Damon can still monitor memory access for those small VMA areas very well like:
->>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>> Hi, Barry
->>>
->>> Actually, we also had found the same problem in redis by ourselves
->>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
->>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
->>> hot areas to been monitored or found by DAMON, likes one or more address
->>> choose by DAMON not been accessed during sample period.
->>
->> Hi Rongwei,
->> Thanks  for your comments and thanks for sharing your tools.
->>
->> I guess the cause might be:
->> in case a region is very big like 10GiB, we have only 1MiB hot pages
->> in this large region.
->> damon will randomly pick one page to sample, but the page has only
->> 1MiB/10GiB, thus
->> less than 1/10000 chance to hit the hot 1MiB. so probably we need
->> 10000 sample periods
->> to hit the hot 1MiB in order to split this large region?
->>
->> @SeongJae, please correct me if I am wrong.
->>
->>>
->>> I'm not sure whether sets init_regions can deal with the above problem,
->>> or dynamic choose one or limited number VMA to monitor.
->>>
->>
->> I won't set a limited number of VMA as this will make the damon too hard to use
->> as nobody wants to make such complex operations, especially an Android
->> app might have more than 8000 VMAs.
->>
->> I agree init_regions might be the right place to enhance the situation.
->>
->>> I'm not sure, just share my idea.
->>>
->>> [1] https://github.com/aliyun/data-profile-tools.git
->>
->> I suppose this tool is based on damon? How do you finally resolve the problem
->> that large anon VMAs can't be splitted?
->> Anyway, I will give your tool a try.
-> 
-> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
-> though autogen.sh
-> runs successfully.
-> 
-> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
-> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
-> reference to `wgetch'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
-> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
-> reference to `subwin'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
-> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
-> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
-> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
-> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
-> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
-> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
-> reference to `wattr_off'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
-> reference to `wattr_on'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
-> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
-> reference to `wattr_off'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
-> reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
-> reference to `wattr_off'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
-> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
-> reference to `wclear'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
-> reference to `wrefresh'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
-> reference to `endwin'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
-> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
-> reference to `initscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
-> reference to `wrefresh'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
-> reference to `use_default_colors'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
-> reference to `start_color'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
-> reference to `keypad'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
-> reference to `nonl'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
-> reference to `cbreak'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
-> reference to `noecho'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
-> reference to `curs_set'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
-> reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
-> reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
-> reference to `wrefresh'
-> collect2: error: ld returned 1 exit status
-> make[1]: *** [Makefile:592: datop] Error 1
-> make[1]: Leaving directory '/root/data-profile-tools'
-> make: *** [Makefile:438: all] Error 2
-Hi, Barry
+x86/sev: Get the AP jump table address from secrets page
 
-Thank you for this bug report.
-It seems this tool had not supported with ubuntu. And we just support 
-for CentOS or AnolisOS. I am trying to fix this bug.
+The GHCB specification section 2.7 states that when SEV-SNP is enabled,
+a guest should not rely on the hypervisor to provide the address of the
+AP jump table. Instead, if a guest BIOS wants to provide an AP jump
+table, it should record the address in the SNP secrets page so the guest
+operating system can obtain it directly from there.
 
-I see all these errors reported by you are extensions to the course 
-library? I am not familiar with Ubuntu and It looks that these errors 
-can be fixed if course relevant library installed.
+Fix this on the guest kernel side by having SNP guests use the AP jump
+table address published in the secrets page rather than issuing a GHCB
+request to get it.
 
-Anyway, I will try to fix it next.
+  [ mroth:
+    - Improve error handling when ioremap()/memremap() return NULL
+    - Don't mix function calls with declarations
+    - Add missing __init
+    - Tweak commit message ]
 
-Thanks.
+Fixes: 0afb6b660a6b ("x86/sev: Use SEV-SNP AP creation to start secondary CPUs")
+Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+Signed-off-by: Michael Roth <michael.roth@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220422135624.114172-3-michael.roth@amd.com
+---
+ arch/x86/include/asm/sev.h              | 35 +++++++++++-
+ arch/x86/kernel/sev.c                   | 76 ++++++++++++++++--------
+ drivers/virt/coco/sev-guest/sev-guest.h | 35 +-----------
+ 3 files changed, 87 insertions(+), 59 deletions(-)
 
-
-> 
->>
->>>>
->>>> Typical characteristics of a large Android app is that it has
->>>> thousands of vma and very large virtual address spaces:
->>>> ~/damo # pmap 2550 | wc -l
->>>> 8522
->>>>
->>>> ~/damo # pmap 2550
->>>> ...
->>>> 0000007992bbe000      4K r----   [ anon ]
->>>> 0000007992bbf000     24K rw---   [ anon ]
->>>> 0000007fe8753000      4K -----   [ anon ]
->>>> 0000007fe8754000   8188K rw---   [ stack ]
->>>>    total         36742112K
->>>>
->>>> Because the whole vma list is too long, I have put the list here for
->>>> you to download:
->>>> wget http://www.linuxep.com/patches/android-app-vmas
->>>>
->>>> I can reproduce this problem on other Apps like youtube as well.
->>>> I suppose we need to boost the algorithm of splitting regions for this
->>>> kind of application.
->>>> Any thoughts?
->>>>
->>
->> Thanks
->> Barry
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index 6e3dda4..1951452 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -99,6 +99,41 @@ struct sev_guest_platform_data {
+ 	u64 secrets_gpa;
+ };
+ 
++/*
++ * The secrets page contains 96-bytes of reserved field that can be used by
++ * the guest OS. The guest OS uses the area to save the message sequence
++ * number for each VMPCK.
++ *
++ * See the GHCB spec section Secret page layout for the format for this area.
++ */
++struct secrets_os_area {
++	u32 msg_seqno_0;
++	u32 msg_seqno_1;
++	u32 msg_seqno_2;
++	u32 msg_seqno_3;
++	u64 ap_jump_table_pa;
++	u8 rsvd[40];
++	u8 guest_usage[32];
++} __packed;
++
++#define VMPCK_KEY_LEN		32
++
++/* See the SNP spec version 0.9 for secrets page format */
++struct snp_secrets_page_layout {
++	u32 version;
++	u32 imien	: 1,
++	    rsvd1	: 31;
++	u32 fms;
++	u32 rsvd2;
++	u8 gosvw[16];
++	u8 vmpck0[VMPCK_KEY_LEN];
++	u8 vmpck1[VMPCK_KEY_LEN];
++	u8 vmpck2[VMPCK_KEY_LEN];
++	u8 vmpck3[VMPCK_KEY_LEN];
++	struct secrets_os_area os_area;
++	u8 rsvd3[3840];
++} __packed;
++
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ extern struct static_key_false sev_es_enable_key;
+ extern void __sev_es_ist_enter(struct pt_regs *regs);
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index b7fd191..1663750 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -558,6 +558,55 @@ void noinstr __sev_es_nmi_complete(void)
+ 	__sev_put_ghcb(&state);
+ }
+ 
++static u64 __init get_secrets_page(void)
++{
++	u64 pa_data = boot_params.cc_blob_address;
++	struct cc_blob_sev_info info;
++	void *map;
++
++	/*
++	 * The CC blob contains the address of the secrets page, check if the
++	 * blob is present.
++	 */
++	if (!pa_data)
++		return 0;
++
++	map = early_memremap(pa_data, sizeof(info));
++	if (!map) {
++		pr_err("Unable to locate SNP secrets page: failed to map the Confidential Computing blob.\n");
++		return 0;
++	}
++	memcpy(&info, map, sizeof(info));
++	early_memunmap(map, sizeof(info));
++
++	/* smoke-test the secrets page passed */
++	if (!info.secrets_phys || info.secrets_len != PAGE_SIZE)
++		return 0;
++
++	return info.secrets_phys;
++}
++
++static u64 __init get_snp_jump_table_addr(void)
++{
++	struct snp_secrets_page_layout *layout;
++	u64 pa, addr;
++
++	pa = get_secrets_page();
++	if (!pa)
++		return 0;
++
++	layout = (__force void *)ioremap_encrypted(pa, PAGE_SIZE);
++	if (!layout) {
++		pr_err("Unable to locate AP jump table address: failed to map the SNP secrets page.\n");
++		return 0;
++	}
++
++	addr = layout->os_area.ap_jump_table_pa;
++	iounmap(layout);
++
++	return addr;
++}
++
+ static u64 __init get_jump_table_addr(void)
+ {
+ 	struct ghcb_state state;
+@@ -565,6 +614,9 @@ static u64 __init get_jump_table_addr(void)
+ 	struct ghcb *ghcb;
+ 	u64 ret = 0;
+ 
++	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
++		return get_snp_jump_table_addr();
++
+ 	local_irq_save(flags);
+ 
+ 	ghcb = __sev_get_ghcb(&state);
+@@ -2171,30 +2223,6 @@ static struct platform_device sev_guest_device = {
+ 	.id		= -1,
+ };
+ 
+-static u64 __init get_secrets_page(void)
+-{
+-	u64 pa_data = boot_params.cc_blob_address;
+-	struct cc_blob_sev_info info;
+-	void *map;
+-
+-	/*
+-	 * The CC blob contains the address of the secrets page, check if the
+-	 * blob is present.
+-	 */
+-	if (!pa_data)
+-		return 0;
+-
+-	map = early_memremap(pa_data, sizeof(info));
+-	memcpy(&info, map, sizeof(info));
+-	early_memunmap(map, sizeof(info));
+-
+-	/* smoke-test the secrets page passed */
+-	if (!info.secrets_phys || info.secrets_len != PAGE_SIZE)
+-		return 0;
+-
+-	return info.secrets_phys;
+-}
+-
+ static int __init snp_init_platform_device(void)
+ {
+ 	struct sev_guest_platform_data data;
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.h b/drivers/virt/coco/sev-guest/sev-guest.h
+index d39bdd0..21bda26 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.h
++++ b/drivers/virt/coco/sev-guest/sev-guest.h
+@@ -60,39 +60,4 @@ struct snp_guest_msg {
+ 	u8 payload[4000];
+ } __packed;
+ 
+-/*
+- * The secrets page contains 96-bytes of reserved field that can be used by
+- * the guest OS. The guest OS uses the area to save the message sequence
+- * number for each VMPCK.
+- *
+- * See the GHCB spec section Secret page layout for the format for this area.
+- */
+-struct secrets_os_area {
+-	u32 msg_seqno_0;
+-	u32 msg_seqno_1;
+-	u32 msg_seqno_2;
+-	u32 msg_seqno_3;
+-	u64 ap_jump_table_pa;
+-	u8 rsvd[40];
+-	u8 guest_usage[32];
+-} __packed;
+-
+-#define VMPCK_KEY_LEN		32
+-
+-/* See the SNP spec version 0.9 for secrets page format */
+-struct snp_secrets_page_layout {
+-	u32 version;
+-	u32 imien	: 1,
+-	    rsvd1	: 31;
+-	u32 fms;
+-	u32 rsvd2;
+-	u8 gosvw[16];
+-	u8 vmpck0[VMPCK_KEY_LEN];
+-	u8 vmpck1[VMPCK_KEY_LEN];
+-	u8 vmpck2[VMPCK_KEY_LEN];
+-	u8 vmpck3[VMPCK_KEY_LEN];
+-	struct secrets_os_area os_area;
+-	u8 rsvd3[3840];
+-} __packed;
+-
+ #endif /* __VIRT_SEVGUEST_H__ */

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F150511AD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8708A511AA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236407AbiD0NuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S236605AbiD0NvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiD0NuP (ORCPT
+        with ESMTP id S236554AbiD0NvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:50:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12A0404AC3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:47:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F4EFB82767
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714F6C385A9;
-        Wed, 27 Apr 2022 13:47:00 +0000 (UTC)
-Date:   Wed, 27 Apr 2022 09:46:58 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] ftrace: Drop duplicate mcount locations
-Message-ID: <20220427094658.502fcaee@gandalf.local.home>
-In-Reply-To: <9b1b816cff1f479c8de0e9baa5a6ac680b84e17e.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <9b1b816cff1f479c8de0e9baa5a6ac680b84e17e.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        Wed, 27 Apr 2022 09:51:09 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 731C3766A;
+        Wed, 27 Apr 2022 06:47:58 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1C85520E97B0;
+        Wed, 27 Apr 2022 06:47:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1C85520E97B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1651067278;
+        bh=s71BKG69g523heKe1yEo9VKmSL/5EGLlD50AE/SchRU=;
+        h=From:To:Subject:Date:From;
+        b=ifbwO0m7s/jATQqceeCrnmVeEIvhHzX2cXKpEfhAwiCd74/M8VzUv42AlybCLlOns
+         rXoAQoxBIm3S8+db/8ujimleKpMTVlNzlj3vui3OcfDgu45PD4JteeDG+oO42hHoVq
+         pFFnzL2EG/CJS60yxHsd3dFozwBleudDIoiEp79k=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        deller@gmx.de, linux-hyperv@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] video: hyperv_fb: Allow resolutions with size > 64 MB for Gen1
+Date:   Wed, 27 Apr 2022 06:47:53 -0700
+Message-Id: <1651067273-6635-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,71 +46,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 15:01:21 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+This patch fixes a bug where GEN1 VMs doesn't allow resolutions greater
+than 64 MB size (eg 7680x4320). Unnecessary PCI check limits Gen1 VRAM
+to legacy PCI BAR size only (ie 64MB). Thus any, resolution requesting
+greater then 64MB (eg 7680x4320) would fail. MMIO region assigning this
+memory shouldn't be limited by PCI bar size.
 
-> In the absence of section symbols [1], objtool (today) and recordmcount
-> (with a subsequent patch) generate __mcount_loc relocation records with
-> weak symbols as the base. This works fine as long as those weak symbols
-> are not overridden, but if they are, these can result in duplicate
-> entries in the final vmlinux mcount location table. This will cause
-> ftrace to fail when trying to patch the same location twice. Fix this by
-> dropping duplicate locations during ftrace init.
-> 
-> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
-> 
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> ---
->  kernel/trace/ftrace.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 4f1d2f5e726341..8bc4f282bb3ff4 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6496,7 +6496,7 @@ static int ftrace_process_locs(struct module *mod,
->  	struct dyn_ftrace *rec;
->  	unsigned long count;
->  	unsigned long *p;
-> -	unsigned long addr;
-> +	unsigned long addr, prev_addr = 0;
->  	unsigned long flags = 0; /* Shut up gcc */
->  	int ret = -ENOMEM;
->  
-> @@ -6550,6 +6550,16 @@ static int ftrace_process_locs(struct module *mod,
->  	while (p < end) {
->  		unsigned long end_offset;
->  		addr = ftrace_call_adjust(*p++);
-> +
-> +		/*
-> +		 * Drop duplicate entries, which can happen when weak
-> +		 * functions are overridden, and __mcount_loc relocation
-> +		 * records were generated against function names due to
-> +		 * absence of non-weak section symbols
-> +		 */
-> +		if (addr == prev_addr)
-> +			addr = 0;
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+ drivers/video/fbdev/hyperv_fb.c | 19 +------------------
+ 1 file changed, 1 insertion(+), 18 deletions(-)
 
-Please don't use the side effect of addr == 0 causing the loop to continue
-for this logic. The two are not related. Simply call continue.
-
-		if (addr == prev_addr)
-			continue;
-
-
--- Steve
-
-
-> +
->  		/*
->  		 * Some architecture linkers will pad between
->  		 * the different mcount_loc sections of different
-> @@ -6569,6 +6579,7 @@ static int ftrace_process_locs(struct module *mod,
->  
->  		rec = &pg->records[pg->index++];
->  		rec->ip = addr;
-> +		prev_addr = addr;
->  	}
->  
->  	/* We should have used all pages */
+diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
+index c8e0ea2..58c304a 100644
+--- a/drivers/video/fbdev/hyperv_fb.c
++++ b/drivers/video/fbdev/hyperv_fb.c
+@@ -1009,7 +1009,6 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
+ 	struct pci_dev *pdev  = NULL;
+ 	void __iomem *fb_virt;
+ 	int gen2vm = efi_enabled(EFI_BOOT);
+-	resource_size_t pot_start, pot_end;
+ 	phys_addr_t paddr;
+ 	int ret;
+ 
+@@ -1060,23 +1059,7 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
+ 	dio_fb_size =
+ 		screen_width * screen_height * screen_depth / 8;
+ 
+-	if (gen2vm) {
+-		pot_start = 0;
+-		pot_end = -1;
+-	} else {
+-		if (!(pci_resource_flags(pdev, 0) & IORESOURCE_MEM) ||
+-		    pci_resource_len(pdev, 0) < screen_fb_size) {
+-			pr_err("Resource not available or (0x%lx < 0x%lx)\n",
+-			       (unsigned long) pci_resource_len(pdev, 0),
+-			       (unsigned long) screen_fb_size);
+-			goto err1;
+-		}
+-
+-		pot_end = pci_resource_end(pdev, 0);
+-		pot_start = pot_end - screen_fb_size + 1;
+-	}
+-
+-	ret = vmbus_allocate_mmio(&par->mem, hdev, pot_start, pot_end,
++	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
+ 				  screen_fb_size, 0x100000, true);
+ 	if (ret != 0) {
+ 		pr_err("Unable to allocate framebuffer memory\n");
+-- 
+1.8.3.1
 

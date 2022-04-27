@@ -2,108 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB95510FE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9F4510FEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357631AbiD0EXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S1357642AbiD0EZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbiD0EXD (ORCPT
+        with ESMTP id S230232AbiD0EZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:23:03 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D3115377E;
-        Tue, 26 Apr 2022 21:19:53 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id bg25so424560wmb.4;
-        Tue, 26 Apr 2022 21:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=0l8iGzLC+8Iysz4+NCCVWeC/6mq/EOtsI3Hk6PUgHpM=;
-        b=o/uvS1gPGDfuiug23IEXyICjRpiEgxXu33dLFg0eUyWHFzXFPGIgN3DOrpmetZrdiH
-         zYOiBmgnr/mxSgUMiBPFzJVI9nlouT74saccvgVbMEKhrSVo2JejDiDm8DJIRHVsJruE
-         6rpTa9A+o+zfB+NJ9ZI+ObSklGgaRvjaIL0W195O+8ci7MJCAu0PuI9jfM0iethzWVwt
-         6wkFVmfSO7cp/ueoT0ZPD3dzP21sTksRJBJ0AxZytdgjf/8ZUcrg2TOjntWe1h20D9n+
-         wVCnGp7czdbmqOxfV1px4Lj2VnOHTxInX4RWIOApaVSNYHwBo6sPXA5JZo7FbYgXjKQG
-         NbLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=0l8iGzLC+8Iysz4+NCCVWeC/6mq/EOtsI3Hk6PUgHpM=;
-        b=H820Uvz5b53NopvYzguoDq3pZMkBYJyxPNjedZZJ/mJjMFmRkCNNfzk7KU+AVqP32q
-         qxfAtBtB7eADII11U+tqZfsWKU5zK5VXaBwv+QGyerb1M8vfR4OOoHZlyFoyHb+hd3zg
-         5rhkqelTscySpb+q8PdvIXd60YhStg6KQ8xgSm/4qCYNFBPpO/Q8B+Y7dduCXs51iHGg
-         JJLlidutUGiXuJkpdRBS9OUWQ+Gs/TbQ9TwB9c2Mvhdn9YoykrNRoqfxKYxddbvQnsrk
-         Zit0nAYOiW3nmmRiXMDEzYm8amzSnXgRf1oplnhQ2mQzsJvrbhe89/RpqZXAbquPo8nl
-         +TSA==
-X-Gm-Message-State: AOAM532KhEOXmWn2k3ayeeDsWqPAAlSEBW3MDMpRPxYK1rQBTXgfu3Qe
-        vX/BD36LsMqCrY0OKCmELPCDUSMu2PNpCGvj
-X-Google-Smtp-Source: ABdhPJx1+9cUHunJZn+UhSUQlhNHdcXkYafXB18PrkREzNQeI+L5n3fCv9DeAg/425mkk6BCV3f61g==
-X-Received: by 2002:a1c:f605:0:b0:37b:b5de:89a0 with SMTP id w5-20020a1cf605000000b0037bb5de89a0mr23552615wmc.88.1651033191647;
-        Tue, 26 Apr 2022 21:19:51 -0700 (PDT)
-Received: from giga-mm.localdomain ([195.245.23.54])
-        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b0037c91e085ddsm708987wmq.40.2022.04.26.21.19.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 21:19:50 -0700 (PDT)
-Message-ID: <a752f2d7d45d7f57b14cf45a01e583f9d8da0754.camel@gmail.com>
-Subject: Re: [PATCH] ep93xx: clock: Fix UAF in mach-ep93xx/clock.c
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Date:   Wed, 27 Apr 2022 06:19:50 +0200
-In-Reply-To: <20220427022111.772457-1-wanjiabing@vivo.com>
-References: <20220427022111.772457-1-wanjiabing@vivo.com>
+        Wed, 27 Apr 2022 00:25:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D25013CDB;
+        Tue, 26 Apr 2022 21:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651033366; x=1682569366;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CWasAYxrQPq1jPx4H4LOu7butVeeUPTCdbMjR9mVIsM=;
+  b=Ym3nUC9zgXbMPQ6Vrhy0lXU0epPAbCFxE2HxUV+cEXKkzmxjBjjefj4D
+   6sXyLGeOR8BEEjaI7D71QolDqLItssPc8OcCr763ghtnvMrRP2D6EHDNS
+   pKkDzVRlee1Tii0rQeHLWjEfU6WpfT1oE3DCWyFOzwpkFdpKOpJ5PnDX5
+   T8E4e9+pLruyB1A7FYrXJt78wD1159MjTvH26Sx+62t/3yasjCDC+dMQD
+   n8pS/EAY0pf0Vz3Zings1toW83t58k0re4zZGIZC3hFsCxKsS7G0ztRB3
+   lElW2rlVyULBfceaGjUbAEWi7w8609ubaQYzsfSN+2+klgtZNUtfwd9u0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="290957547"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="290957547"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:22:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="679847763"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 26 Apr 2022 21:22:45 -0700
+Received: from fyang16-mobl1.amr.corp.intel.com (unknown [10.209.85.115])
+        by linux.intel.com (Postfix) with ESMTP id 380C7580689;
+        Tue, 26 Apr 2022 21:22:45 -0700 (PDT)
+Message-ID: <15876cf0cf8c1b158397f1a17f52938a6c633b48.camel@linux.intel.com>
+Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "koba.ko@canonical.com" <koba.ko@canonical.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Date:   Tue, 26 Apr 2022 21:22:44 -0700
+In-Reply-To: <20220426165031.GA1731758@bhelgaas>
+References: <20220426165031.GA1731758@bhelgaas>
+Organization: David E. Box
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1 
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmsgeW91LCBXYW4hCgpPbiBXZWQsIDIwMjItMDQtMjcgYXQgMTA6MjEgKzA4MDAsIFdhbiBK
-aWFiaW5nIHdyb3RlOgo+IEZpeCBmb2xsb3dpbmcgY29jY2ljaGVjayBlcnJvcnM6Cj4gLi9hcmNo
-L2FybS9tYWNoLWVwOTN4eC9jbG9jay5jOjM1MTo5LTEyOiBFUlJPUjogcmVmZXJlbmNlIHByZWNl
-ZGVkIGJ5IGZyZWUgb24gbGluZSAzNDkKPiAuL2FyY2gvYXJtL21hY2gtZXA5M3h4L2Nsb2NrLmM6
-NDU4OjktMTI6IEVSUk9SOiByZWZlcmVuY2UgcHJlY2VkZWQgYnkgZnJlZSBvbiBsaW5lIDQ1Ngo+
-IAo+IEZpeCB0d28gbW9yZSBwb3RlbnRpYWwgVUFGIGVycm9ycy4KPiAKPiBMaW5rOiBodHRwczov
-L2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjA0MTgxMjEyMTIuNjM0MjU5MDYxQGxpbnV4Zm91bmRh
-dGlvbi5vcmcvCj4gRml4ZXM6IDk2NDVjY2M3YmQ3YSAoImVwOTN4eDogY2xvY2s6IGNvbnZlcnQg
-aW4tcGxhY2UgdG8gQ09NTU9OX0NMSyIpCj4gU2lnbmVkLW9mZi1ieTogV2FuIEppYWJpbmcgPHdh
-bmppYWJpbmdAdml2by5jb20+CgpBY2tlZC1ieTogQWxleGFuZGVyIFN2ZXJkbGluIDxhbGV4YW5k
-ZXIuc3ZlcmRsaW5AZ21haWwuY29tPgoKPiAtLS0KPiDCoGFyY2gvYXJtL21hY2gtZXA5M3h4L2Ns
-b2NrLmMgfCA4ICsrKysrKy0tCj4gwqAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCAy
-IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLWVwOTN4eC9jbG9j
-ay5jIGIvYXJjaC9hcm0vbWFjaC1lcDkzeHgvY2xvY2suYwo+IGluZGV4IDRmYTZlYTU0NjFiNy4u
-MzVmMzczNGU1MTJjIDEwMDY0NAo+IC0tLSBhL2FyY2gvYXJtL21hY2gtZXA5M3h4L2Nsb2NrLmMK
-PiArKysgYi9hcmNoL2FybS9tYWNoLWVwOTN4eC9jbG9jay5jCj4gQEAgLTM0NSw4ICszNDUsMTAg
-QEAgc3RhdGljIHN0cnVjdCBjbGtfaHcgKmNsa19od19yZWdpc3Rlcl9kZGl2KGNvbnN0IGNoYXIg
-Km5hbWUsCj4gwqDCoMKgwqDCoMKgwqDCoHBzYy0+aHcuaW5pdCA9ICZpbml0Owo+IMKgCj4gwqDC
-oMKgwqDCoMKgwqDCoGNsayA9IGNsa19yZWdpc3RlcihOVUxMLCAmcHNjLT5odyk7Cj4gLcKgwqDC
-oMKgwqDCoMKgaWYgKElTX0VSUihjbGspKQo+ICvCoMKgwqDCoMKgwqDCoGlmIChJU19FUlIoY2xr
-KSkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKga2ZyZWUocHNjKTsKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9DQVNUKGNsayk7Cj4gK8KgwqDC
-oMKgwqDCoMKgfQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAmcHNjLT5odzsKPiDCoH0K
-PiBAQCAtNDUyLDggKzQ1NCwxMCBAQCBzdGF0aWMgc3RydWN0IGNsa19odyAqY2xrX2h3X3JlZ2lz
-dGVyX2Rpdihjb25zdCBjaGFyICpuYW1lLAo+IMKgwqDCoMKgwqDCoMKgwqBwc2MtPmh3LmluaXQg
-PSAmaW5pdDsKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBjbGsgPSBjbGtfcmVnaXN0ZXIoTlVMTCwg
-JnBzYy0+aHcpOwo+IC3CoMKgwqDCoMKgwqDCoGlmIChJU19FUlIoY2xrKSkKPiArwqDCoMKgwqDC
-oMKgwqBpZiAoSVNfRVJSKGNsaykpIHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGtmcmVlKHBzYyk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBFUlJf
-Q0FTVChjbGspOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqByZXR1
-cm4gJnBzYy0+aHc7Cj4gwqB9CgotLSAKQWxleGFuZGVyIFN2ZXJkbGluLgoK
+On Tue, 2022-04-26 at 11:50 -0500, Bjorn Helgaas wrote:
+> On Mon, Apr 25, 2022 at 11:32:54AM -0700, David E. Box wrote:
+> > On Sat, 2022-04-23 at 10:01 -0500, Bjorn Helgaas wrote:
+> > > On Sat, Apr 23, 2022 at 12:43:14AM +0000, Jingar, Rajvi wrote:
+> > > > > -----Original Message-----
+> > > > > From: Bjorn Helgaas <helgaas@kernel.org>
+> > > > > On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
+> > > > > > On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
+> > > > > > > For the PCIe devices (like nvme) that do not go into D3 state
+> > > > > > > still
+> > > > > > > need to
+> > > > > > > disable PTM on PCIe root ports to allow the port to enter a lower-
+> > > > > > > power PM
+> > > > > > > state and the SoC to reach a lower-power idle state as a whole.
+> > > > > > > Move
+> > > > > > > the
+> > > > > > > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path
+> > > > > > > is
+> > > > > > > not
+> > > > > > > followed for devices that do not go into D3. This patch fixes the
+> > > > > > > issue
+> > > > > > > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530
+> > > > > > > with
+> > > > > > > Coffee
+> > > > > > > Lake CPU platforms to get improved residency in low power idle
+> > > > > > > states.
+> > > > > > > 
+> > > > > > > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save
+> > > > > > > power")
+> > > > > > > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > > > > > > Suggested-by: David E. Box <david.e.box@linux.intel.com>
+> > > > > > > ---
+> > > > > > >   drivers/pci/pci-driver.c | 10 ++++++++++
+> > > > > > >   drivers/pci/pci.c        | 10 ----------
+> > > > > > >   2 files changed, 10 insertions(+), 10 deletions(-)
+> > > > > > > 
+> > > > > > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > > > > > > index 8b55a90126a2..ab733374a260 100644
+> > > > > > > --- a/drivers/pci/pci-driver.c
+> > > > > > > +++ b/drivers/pci/pci-driver.c
+> > > > > > > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device
+> > > > > > > *dev)
+> > > > > > >   	if (!pci_dev->state_saved) {
+> > > > > > >   		pci_save_state(pci_dev);
+> > > > > > > +		/*
+> > > > > > > +		 * There are systems (for example, Intel mobile chips
+> > > > > > > since
+> > > > > Coffee
+> > > > > > > +		 * Lake) where the power drawn while suspended can be
+> > > > > significantly
+> > > > > > > +		 * reduced by disabling PTM on PCIe root ports as this
+> > > > > > > allows the
+> > > > > > > +		 * port to enter a lower-power PM state and the SoC to
+> > > > > > > reach a
+> > > > > > > +		 * lower-power idle state as a whole.
+> > > > > > > +		 */
+> > > > > > > +		if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
+> > > > > > > +			pci_disable_ptm(pci_dev);
+> > > > > 
+> > > > > Why is disabling PTM dependent on pci_dev->state_saved?  The
+> > > > > point of this is to change the behavior of the device, and it
+> > > > > seems like we want to do that regardless of whether the driver
+> > > > > has used pci_save_state().
+> > > > 
+> > > > Because we use the saved state to restore PTM on the root port.
+> > > > And it's under this condition that the root port state gets
+> > > > saved.
+> > > 
+> > > Yes, I understand that pci_restore_ptm_state() depends on a
+> > > previous call to pci_save_ptm_state().
+> > > 
+> > > The point I'm trying to make is that pci_disable_ptm() changes the
+> > > state of the device, and that state change should not depend on
+> > > whether the driver has used pci_save_state().
+> > 
+> > We do it here because D3 depends on whether the device state was
+> > saved by the driver.
+> > 
+> > 	if (!pci_dev->state_saved) {
+> >         	pci_save_state(pci_dev);
+> > 
+> > 		/* disable PTM here */
+> > 
+> > 		if (pci_power_manageable(pci_dev))
+> > 			pci_prepare_to_sleep(pci_dev);
+> > 	}
+> > 
+> > 
+> > If we disable PTM before the check, we will have saved "PTM
+> > disabled" as the restore state. And we can't do it after the check
+> > as the device will be in D3.
+> 
+> Are you suggesting that PTM should be left enabled if the driver
+> called pci_save_state(), but disabled otherwise?  I don't see the
+> rationale for that.
+
+No. I was saying that because pci_power_manageable() depends on the state not
+being saved, we depended on it too ...
+
+> 
+> I don't understand all the paths through pci_pm_suspend_noirq() (e.g.,
+> skip_bus_pm), but for this one, I think we could do something like
+> this:
+> 
+>   driver_saved = pci_dev->state_saved;
+>   if (!driver_saved)
+>     pci_save_state(pci_dev);
+> 
+>   pci_disable_ptm(pci_dev);
+> 
+>   if (!driver_saved) {
+>     if (pci_power_manageable(pci_dev))
+>       pci_prepare_to_sleep(pci_dev);
+>   }
+
+... but this solution gets us away from dependency. We'll make this change.
+
+> 
+> Or I guess one could argue that a driver calling pci_save_state() is
+> implicitly taking responsibility for all PCI-related suspend work, and
+> it should be disabling PTM itself.  But that doesn't really seem
+> maintainable.
+> 
+> > As to disabling PTM on all devices, I see no problem with this, but the
+> > reasoning is different. We disabled the root port PTM for power savings.
+> 
+> The power saving is good.  I'm trying to make the argument that we
+> need to disable PTM on all devices for correctness.
+> 
+> If we disable PTM on the root port, are we guaranteed that it will
+> never receive a PTM Request from a downstream device?  Per PCIe r6.0,
+> sec 6.21.3, such a request would cause an Unsupported Request error.
+> 
+> I sort of expect that if we're putting a root port in a low-power
+> state, all downstream devices are already in the same or a lower-power
+> state (but I don't understand PM well enough to be confident).
+> 
+> And I don't really *expect* devices in a low-power state to generate
+> PTM Requests, but I haven't seen anything in the spec that prohibits
+> it.
+> 
+> This leads me to believe that if we disable PTM in a root port, we
+> must first disable PTM in any downstream devices.  Otherwise, the root
+> port may log UR errors if the downstream device issues a PTM Request.
+
+I don't know that Kai-Heng's case is due to this, but it's a fair reading of the
+spec that downstream devices should be disabled first. We'll change the patch to
+disable PTM on all devices. Thanks.
+
+David
+
+> 
+> > > When we're putting a device into a low-power state, I think we want to
+> > > disable PTM *always*, no matter what the driver did.  And I think we
+> > > want to do it for all devices, not just Root Ports.
+> > > 
+> > > Bjorn
 

@@ -2,222 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719A7511737
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D423C5117FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbiD0Mst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S234881AbiD0MuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiD0Mso (ORCPT
+        with ESMTP id S234709AbiD0MuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:48:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8593525B;
-        Wed, 27 Apr 2022 05:45:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7A51F1F74D;
-        Wed, 27 Apr 2022 12:45:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651063532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f7ZHfk6vc4zgMEvq1EHLWCpOl8Ctk3WE3DXvA6Vjt/4=;
-        b=LiLK+JGui8QqQfh8W0x16+mObrzQ4Fje12HfJW7hZ94icLHhk5/gxq7NXXopwsraglIWhT
-        Qd+AOsn2O2Sdx7LAy0xcvnBIeKxo3jyuqUv8fKgeFG52VhHZAC84a1GKao9KAOQYtVsvJz
-        LsOjzmiktuf5OEUJjFiQxiW5Rg42mrI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8719C1323E;
-        Wed, 27 Apr 2022 12:45:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KZu6H+s6aWKXRAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 27 Apr 2022 12:45:31 +0000
-Message-ID: <3f15f128-4d77-14e2-20ca-ea2e4a7d4181@suse.com>
-Date:   Wed, 27 Apr 2022 14:45:31 +0200
+        Wed, 27 Apr 2022 08:50:07 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D49E127;
+        Wed, 27 Apr 2022 05:46:55 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id a1so1819326edt.3;
+        Wed, 27 Apr 2022 05:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=xzaxKfYDUlsCnW3X9n/1WVpaWQCTU0x4d05vWNBDsmQ=;
+        b=dJbLOB2mgx/wt5SqqKjnlrG6ijyQ6LfraqVvmxxOpxxIhvAJ0/PKjg/d/NoI/PQdfL
+         N+b+jN6uTbzoAkFGZgRpCMVIx+m8o4GmwG09pddz7iOFKDP706v8XZK+QI3bKvGYl9WR
+         oQpScB8a/M8XH70af0E/hk392HhjPUPHuPoGa4IvO7OeCWKWVRDpOERqrB40NBS2/uB9
+         d9dCcl2tTY3o2FP7DFDnZzPzdZu12J4O+cRhRWzfG6DiqRjv/hrX/ijcNfYauXL9nok2
+         sEfkGwTH2FYxjMpa17f2+BdzfIgOT/cFi9HSVHG3iQxGZ7c4daRY8oFA+uwe7RP0q8dF
+         Xyyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xzaxKfYDUlsCnW3X9n/1WVpaWQCTU0x4d05vWNBDsmQ=;
+        b=mUHcsshozUlXnZhPf+BmJtfSsZ9yDponEuOICYFozLBKHZlLkfXut7z46y3fQ+D6JT
+         f5SvkhbmEIFiBmI0gxlWvF278Yq2dBdM/BfsfsD0T6spkbDR1/S7CIej/MQMMOnKLv64
+         pxUM58Yc/7BAWir+HgWz8P8sI3a+L2SpQFlppaQ3MVN+EW6dImM0bEIHljI+nqeuO1BB
+         bkxDqghaAHjEpAqStujZXGWnheRA88vQPxAp5NZDrBxPTn49XniJvDkjebOncq5SQrS/
+         MGbLjtfnypG6/ZRMsltXdzO7156dAMTe3OrPkT3rpzdxi7GTD0ID7BXgVdDFlsR2laJk
+         EfcQ==
+X-Gm-Message-State: AOAM530BcoHzceIzNvqIV9PZ/456nEc/uegkx54qAos2pp09G0cRyWYu
+        sEOkoS+f6LJmYkVpMk+KoLg=
+X-Google-Smtp-Source: ABdhPJyhmPj/21nMtM13faPSRhQ6Rb3wpdLNvWGzoTZaCIstR1iVp1UUjvNwQSFixmD3Lyo87gB30g==
+X-Received: by 2002:a05:6402:3496:b0:425:ece9:1a99 with SMTP id v22-20020a056402349600b00425ece91a99mr15231423edc.319.1651063613320;
+        Wed, 27 Apr 2022 05:46:53 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id lb18-20020a170907785200b006efe7bb40b0sm6705391ejc.74.2022.04.27.05.46.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 05:46:52 -0700 (PDT)
+Message-ID: <4054f0df-1c1f-da21-71fb-96fb7b3358ff@gmail.com>
+Date:   Wed, 27 Apr 2022 14:46:51 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-References: <20220426134021.11210-1-jgross@suse.com>
- <20220426134021.11210-3-jgross@suse.com> <Ymgtb2dSNYz7DBqx@zn.tnic>
- <YmhNNrLW+tM2gnZB@osiris> <49e33b14-b439-340b-aa59-a6c77daa4929@suse.com>
- <Ymk2gXuNGFhIQ2zQ@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH 2/2] virtio: replace
- arch_has_restricted_virtio_memory_access()
-In-Reply-To: <Ymk2gXuNGFhIQ2zQ@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------5RSoFKl9gkDkNvOmD7dR6fME"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH] dt-bindings: mtd: partitions: add UBI binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rini <trini@konsulko.com>,
+        Ricardo Salveti <ricardo@foundries.io>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Jorge Ramirez-Ortiz <jorge@foundries.io>,
+        Sean Anderson <seanga2@gmail.com>, u-boot@lists.denx.de,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220217102448.27586-1-zajec5@gmail.com>
+ <Yh/ovYMV104jc+CE@robh.at.kernel.org>
+ <fb18b5e2-d273-adf6-3e14-77628abc4560@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <fb18b5e2-d273-adf6-3e14-77628abc4560@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------5RSoFKl9gkDkNvOmD7dR6fME
-Content-Type: multipart/mixed; boundary="------------WqbtrtgMwxh4M25yqpBhfhy8";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux-foundation.org,
- Arnd Bergmann <arnd@arndb.de>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>,
- Stephen Hemminger <sthemmin@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, "Michael S. Tsirkin"
- <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Christoph Hellwig <hch@infradead.org>,
- Oleksandr Tyshchenko <olekstysh@gmail.com>
-Message-ID: <3f15f128-4d77-14e2-20ca-ea2e4a7d4181@suse.com>
-Subject: Re: [PATCH 2/2] virtio: replace
- arch_has_restricted_virtio_memory_access()
-References: <20220426134021.11210-1-jgross@suse.com>
- <20220426134021.11210-3-jgross@suse.com> <Ymgtb2dSNYz7DBqx@zn.tnic>
- <YmhNNrLW+tM2gnZB@osiris> <49e33b14-b439-340b-aa59-a6c77daa4929@suse.com>
- <Ymk2gXuNGFhIQ2zQ@zn.tnic>
-In-Reply-To: <Ymk2gXuNGFhIQ2zQ@zn.tnic>
+Hi Rob, could you re-review my patch as I provided answers (see below), please?
 
---------------WqbtrtgMwxh4M25yqpBhfhy8
-Content-Type: multipart/mixed; boundary="------------lFn82CY4z1MtnopLJeWnduYk"
+On 3.03.2022 09:32, Rafał Miłecki wrote:
+> On 2.03.2022 22:59, Rob Herring wrote:
+>> On Thu, Feb 17, 2022 at 11:24:48AM +0100, Rafał Miłecki wrote:
+>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>
+>>> UBI is often used on embedded devices to store UBI volumes with device
+>>> configuration / calibration data. Such volumes may need to be documented
+>>> and referenced for proper boot & setup.
+>>>
+>>> Some examples:
+>>> 1. U-Boot environment variables
+>>> 2. Device calibration data
+>>> 3. Default setup (e.g. initial password)
+>>>
+>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>>> ---
+>>>   .../bindings/mtd/partitions/ubi.yaml          | 67 +++++++++++++++++++
+>>>   1 file changed, 67 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/mtd/partitions/ubi.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mtd/partitions/ubi.yaml b/Documentation/devicetree/bindings/mtd/partitions/ubi.yaml
+>>> new file mode 100644
+>>> index 000000000000..cd081f06d4cb
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/mtd/partitions/ubi.yaml
+>>> @@ -0,0 +1,67 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/mtd/partitions/ubi.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: UBI (Unsorted Block Images) device
+>>> +
+>>> +description: |
+>>> +  UBI is a layer providing logical volumes (consisting of logical blocks) on top
+>>> +  of raw flash devices. It deals with low-level flash issues (bit-flips, bad
+>>> +  physical eraseblocks, wearing) providing a reliable data storage.
+>>> +
+>>> +  UBI device is built and stored in a single flash partition.
+>>> +
+>>> +  Some (usually embedded) devices use UBI volumes of specific names or indexes
+>>> +  to store setup / configuration data. This binding allows describing such
+>>> +  volumes so they can be identified and referenced by consumers.
+>>> +
+>>> +maintainers:
+>>> +  - Rafał Miłecki <rafal@milecki.pl>
+>>> +
+>>> +allOf:
+>>> +  - $ref: partition.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: ubi
+>>> +
+>>> +patternProperties:
+>>> +  "^volume-[0-9a-f]+$":
+>>> +    type: object
+>>> +    description: UBI volume
+>>> +    properties:
+>>> +      volume-name:
+>>> +        $ref: /schemas/types.yaml#/definitions/string
+>>> +      volume-id:
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    anyOf:
+>>> +      - required:
+>>> +          - volume-name
+>>> +      - required:
+>>> +          - volume-id
+>>> +
+>>> +unevaluatedProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    partitions {
+>>> +        compatible = "fixed-partitions";
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <1>;
+>>> +
+>>> +        partition@0 {
+>>> +            compatible = "ubi";
+>>> +            reg = <0x0000000 0x1000000>;
+>>> +            label = "filesystem";
+>>> +
+>>> +            env: volume-0 {
+>>> +                volume-name = "u-boot-env";
+>>
+>> Why not do 'compatible = "u-boot,env";' to align with normal partitions?
+> 
+> I mean to reserve "compatible" for describing UBI volume content.
+> 
+> If I manage to get
+> [PATCH V3] dt-bindings: nvmem: add U-Boot environment variables binding
+> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220228131250.16943-1-zajec5@gmail.com/
+> accepted, it'll allow me to later work on something like:
+> 
+> env: volume-0 {
+>      compatible = "u-boot,env";
+>      volume-name = "u-boot-env";
+> };
+> 
+> (I believe) I'll need (in the final shape) two properties:
+> 1. One for describing UBI volume ("compatible")
+> 2. One for identifying UBI volume ("volume-name" / "volume-id")
+> 
+> It's similar design to the "compatible" vs. "reg" in IO hw blocks.
+> 
+> 
+>> Or 'label'?
+> 
+> I could replace "volume-name" with "label" but someone once told me that:
+>  > 'label' is supposed to correspond to a sticker on a port or something
+>  > human identifiable
+> 
+> ;) https://patchwork.ozlabs.org/comment/2812214/
+> 
+> So I don't want to abuse "label" here.
+> 
+> 
+>> We have enough ways to identify things, I don't think we need another.
+>>
+>>> +            };
+>>> +
+>>> +            calibration: volume-1 {
+>>
+>> Are 0 and 1 meaningful or just made up indexing?
+> 
+> Made up indexing. I need unique nodenames but @[0-9a-f] doesn't appply here.
+> 
+> 
+>>> +                volume-id = <99>;
+>>> +            };
+>>> +        };
+>>> +    };
+>>> -- 
+>>> 2.34.1
 
---------------lFn82CY4z1MtnopLJeWnduYk
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjcuMDQuMjIgMTQ6MjYsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gV2VkLCBB
-cHIgMjcsIDIwMjIgYXQgMDg6NDA6MDhBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IEkgd2FzIHBsYW5uaW5nIHRvIGxvb2sgYXQgdGhlIHg4NiBjcHUgZmVhdHVyZXMgdG8g
-c2VlIHdoZXRoZXIgc29tZSBvZg0KPj4gdGhvc2UgbWlnaHQgYmUgY2FuZGlkYXRlcyB0byBi
-ZSBzd2l0Y2hlZCB0byBwbGF0Zm9ybSBmZWF0dXJlcyBpbnN0ZWFkLg0KPiANCj4gSSdkIHNh
-eSAibmV2ZXIgdG91Y2ggYSBydW5uaW5nIHN5c3RlbSIgdW5sZXNzIHRoZSBwbGF0Zm9ybSBm
-ZWF0dXJlcyBhcmUNCj4gb2YgYW4gYWR2YW50YWdlLi4uDQoNCkRlcGVuZHMgb24gdGhlIHVz
-ZSBjYXNlIElNSE8uDQoNCkFsbCBmZWF0dXJlcyBiZWluZyBiYXNlZCBvbiBhIGNwdWlkIGJp
-dCBhcmUgbm8gY2FuZGlkYXRlcy4gU2FtZSBhcHBsaWVzDQp0byBhbGwgZmVhdHVyZXMgdXNl
-ZCBmb3IgYWx0ZXJuYXRpdmUgaGFuZGxpbmcgKGFzc3VtaW5nIHdlIGRvbid0IHdhbnQNCnRv
-IGV4cGFuZCB0aGF0IHRvIHBsYXRmb3JtIGZlYXR1cmVzKS4NCg0KSSByZWFsbHkgaGF2ZSBu
-byBpZGVhIHdoZXRoZXIgdGhpcyB3aWxsIGxlYXZlIGFueSBjYW5kaWRhdGVzLiBJbiBjYXNl
-DQppdCBkb2VzLCBpdCBtaWdodCBiZSBpbnRlcmVzdGluZyB0byBzd2l0Y2ggdGhvc2UgaW4g
-b3JkZXIgdG8gc2F2ZSBzb21lDQpwZXItY3B1IGJpdHMuDQoNCk90aGVyIGNhbmRpZGF0ZXMg
-bWlnaHQgYmUgdGhlIHg4Nl9sZWdhY3lfZmVhdHVyZXMuDQoNCg0KSnVlcmdlbg0K
---------------lFn82CY4z1MtnopLJeWnduYk
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------lFn82CY4z1MtnopLJeWnduYk--
-
---------------WqbtrtgMwxh4M25yqpBhfhy8--
-
---------------5RSoFKl9gkDkNvOmD7dR6fME
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJpOusFAwAAAAAACgkQsN6d1ii/Ey+J
-OQf/eUrJzkec/zE1iDKcyCbxADGvHuoQyWnYHfvAB7VqIJ5P8IyobJW0GEt+L9K8PkJ+fgDqhl+Q
-DLBculdTiZCP7wh6Q0zXUvrPHMyUQafp9NHctNSSJurMdndFqvSM+TKuNGZaVDTvsSZfgAGaBy63
-VKKADB1mJo2S0fG9wvLrirCyn1rKvPYhfdErZuqS078u9Mj4V4YmE3uz6WqSFUfnqJwBlAGZXM4X
-4cbBEgQ8WPfhkyNKi18UOMTQaWEnVkLBJjmeXJ4hGtbTcJFLpAbSKPIJTWv6jI+U9Ca5xjSIw6zt
-PgaS84cJYWG2/xJoqqxt6EVIA4wCf66w6+bFTXyOCw==
-=lXDm
------END PGP SIGNATURE-----
-
---------------5RSoFKl9gkDkNvOmD7dR6fME--

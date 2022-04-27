@@ -2,143 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1A4511D36
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98F2511DED
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243699AbiD0RAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        id S243702AbiD0RAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243570AbiD0RAi (ORCPT
+        with ESMTP id S243546AbiD0RAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:00:38 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9033638B;
-        Wed, 27 Apr 2022 09:57:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id i27so4612816ejd.9;
-        Wed, 27 Apr 2022 09:57:25 -0700 (PDT)
+        Wed, 27 Apr 2022 13:00:52 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2AC1580E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:57:41 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id 125so3876493iov.10
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:57:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J7iWWU5DbOIvLxFewMmC/eOeW4lAauh4Mm/EuelB7bk=;
-        b=ck/k3U/nN3UksK/sqlJmCJOICVnTW841IWX6OO4SVKyNLZeMR0BfGBOs9Bir/e1N3j
-         lJKf60yq8KMj0bAYh8u03VNb7mSWy+90+l8MyJlz5M6RpcX5ws3tEfo6suyuCXvsYXlS
-         KSuTf3+jJaG7vVXmT538qCa6n7i4b4NNmBJ7YX+6EesFMO0iHA+4+ly9ioBylTiphgld
-         2yuFVvlqjr/7Ai2I9UPSX7btrJaBsldRRU5bNk9wVe4E/v6Xk0B3ayvGXEebJeQPL3jj
-         BV657zUm1VIO+mxoFquonU5ZxFIlsOjlWosM9G10QoFgZGTtg1rZ0e2PJRpqAsO6FlsR
-         P7iA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc
+         :content-transfer-encoding;
+        bh=Y1ivuFVRU8wdS3czu8kzEmQaRPo5keRKWPeKEDXR+3o=;
+        b=JZeV1kjxZ/ZzHdw55o2kSE9D+HMmVwGIl8+GAA5u2RUt5s3+o2pIPJM+2f7/XYrKP2
+         SsZXaiw0KbT4pOzj3Anhlj3ZM+A+dMroAbe/jBaT46HdHwfSHCO56i5/Qb+fMvHs3wnD
+         xid6EnijbQI/+T5lNZjVRa1oOHQ/XVB1BMEpNmq4ZsncIJ2diWuwZr+/F6804O+rgAbs
+         qlvm6H9/96S5zGREGS6dCstYxPHHYiPTZC3zfZoVsJWCHQwOqY9i6EicAf1QOvDiRUUY
+         yIT93zZTNidx/xcdigE+cJJrGZgYWwA58I0nML0QxTCfB0LYNHJwh0WoeIzyPy1tVuZH
+         jxcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J7iWWU5DbOIvLxFewMmC/eOeW4lAauh4Mm/EuelB7bk=;
-        b=iXX2wFrH9yC18OX+uMUzDeRnWQv51EamJb/fvIfZOECL+E7TluDJB90TLyDix4W2yP
-         OQRrQtBcnequXeTDQ3f112iKAJb8cOylM8ynpDtVj40HscNAEIU14Zv/DMKviAino9VF
-         vN6f3LhPH9FuJp0aRA4etyZ9YbuJhVwK4A7Ar/K4awdJVeVJgTioBw1ntvX3ar8Mj+Q6
-         B5L2O6fWx898GVwDMW6g6x/cCdvq2TuXMwEKs62CtQMaA0eetiZtbD8SQw7JWB9jcIkL
-         iorj4f0HrOOnu1c+dUHU2m0wUF3eYLjKTX6eO58JzBy9pLKUuzBYH0hoka13r2v1fAaf
-         RWSw==
-X-Gm-Message-State: AOAM5325ltJvsBWeruhrVKskjZr9hki/PrOz16HFLI6TxLZm/oQjedwh
-        L9x90gLHxXs4R7L6p32H4MY=
-X-Google-Smtp-Source: ABdhPJzDLUCAaxJ8C6EauPCu3/glTPM0yGsfrgt5yrS467fot8UOF5bZziTQpX0W9ometbayK6kB6g==
-X-Received: by 2002:a17:907:3f1a:b0:6f3:8de5:aee5 with SMTP id hq26-20020a1709073f1a00b006f38de5aee5mr16782005ejc.474.1651078644370;
-        Wed, 27 Apr 2022 09:57:24 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id a94-20020a509ee7000000b00425e7035c4bsm5683584edf.61.2022.04.27.09.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:57:23 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 19:57:22 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [RFC patch net-next 3/3] net: dsa: ksz: moved ksz9477 port
- mirror to ksz_common.c
-Message-ID: <20220427165722.vwruo5q63stahkby@skbuf>
-References: <20220427162343.18092-1-arun.ramadoss@microchip.com>
- <20220427162343.18092-4-arun.ramadoss@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:cc:content-transfer-encoding;
+        bh=Y1ivuFVRU8wdS3czu8kzEmQaRPo5keRKWPeKEDXR+3o=;
+        b=XKP/NHoRpQxScm/E4Q/SKjBkWMoC58SJMgMecxarEvuDvu6zJXvWfaYOLdv4p9M1eJ
+         bbb9DLqc6KmJg4hctehWpeqFEqwBgDEYOVZGiBNH0/r12POBfoB1azI/DtQu4YEZhTg7
+         nhIMQBoNwCNDnxE6zJqRaXxMwC+0qbclpVckwOVY1ySMX2J0ZD0kALIvjKKz0NNPBcvX
+         hJiMtPmGpGjOIOZzF7h4iltism4bCrxpLVMA2Mv8vJFmRqtfQTDolFC4+oaL+Ol/RPn/
+         aSvhfP0Dq87RngunDzRWykl/AiTbTMV8pvnpIhjE6SZ/YsfH7F4QzBx+3d1bTUa+71m9
+         GA5A==
+X-Gm-Message-State: AOAM531prrkEhY5ZoDaU875UD92CtWIs49L6OU6ixJ58BF32It8hC3nf
+        9nEn24xN5izCUzJJ3Gbe6bKC7EQ4WxR4/etkdas=
+X-Received: by 2002:a05:6638:16cc:b0:32a:7375:8472 with SMTP id
+ g12-20020a05663816cc00b0032a73758472mt12612390jat.256.1651078660862; Wed, 27
+ Apr 2022 09:57:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427162343.18092-4-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220427143001.1443605-1-eugene.shalygin@gmail.com> <20220427143001.1443605-5-eugene.shalygin@gmail.com>
+In-Reply-To: <20220427143001.1443605-5-eugene.shalygin@gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Wed, 27 Apr 2022 18:57:29 +0200
+Message-ID: <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:53:43PM +0530, Arun Ramadoss wrote:
-> Moved the port_mirror_add and port_mirror_del function from ksz9477 to
+G=C3=BCnter,
 
-Present tense (move)
+I forgot to add PRIME X470-PRO to the list of supported boards in
+Documentation/hwmon/asus_ec_sensors.rst. Could you, please, add that?
+It should be the first entry. Commit
+8f8db4b5d10cc4a2a801514e677dd5205651b771. Or should I resend this
+patch?
 
-> ksz_common, to make it generic function which can be used by KSZ9477
-> based switch.
+Thank you,
+Eugene
 
-Presumably you mean "which can be used by other switches" (it can
-already be used by ksz9477, so that can't be the argument for moving it)
-
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+On Wed, 27 Apr 2022 at 16:30, Eugene Shalygin <eugene.shalygin@gmail.com> w=
+rote:
+>
+> This board is supposed to be handled by the asus-wmi-sensors driver,
+> but due to a buggy WMI implementation the driver and the official ASUS
+> software make the BIOS hang together with fan controls [1, 2].
+>
+> This driver complements values provided by the SIO chip and does not
+> freeze the BIOS, as tested by a user [2].
+>
+> [1] https://github.com/electrified/asus-wmi-sensors/blob/master/README.md
+> [2] https://github.com/zeule/asus-ec-sensors/issues/12
+>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 > ---
-
-Looks good, except for the spelling mistakes in the code that is being
-moved (introduced in patch 1), which I expect you will update in the new
-code as well.
-
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-
-> diff --git a/drivers/net/dsa/microchip/ksz_reg.h b/drivers/net/dsa/microchip/ksz_reg.h
-> new file mode 100644
-> index 000000000000..ccd4a6568e34
-> --- /dev/null
-> +++ b/drivers/net/dsa/microchip/ksz_reg.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Microchip KSZ Switch register definitions
-> + *
-> + * Copyright (C) 2017-2022 Microchip Technology Inc.
-> + */
+>  drivers/hwmon/asus-ec-sensors.c | 43 +++++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sens=
+ors.c
+> index 109c3920d77c..998d49d6b799 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -137,10 +137,41 @@ enum ec_sensors {
+>
+>  enum board_family {
+>         family_unknown,
+> +       family_amd_400_series,
+>         family_amd_500_series,
+>  };
+>
+>  /* All the known sensors for ASUS EC controllers */
+> +static const struct ec_sensor_info sensors_family_amd_400[] =3D {
+> +       [ec_sensor_temp_chipset] =3D
+> +               EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
+> +       [ec_sensor_temp_cpu] =3D
+> +               EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
+> +       [ec_sensor_temp_mb] =3D
+> +               EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
+> +       [ec_sensor_temp_t_sensor] =3D
+> +               EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
+> +       [ec_sensor_temp_vrm] =3D
+> +               EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
+> +       [ec_sensor_in_cpu_core] =3D
+> +               EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
+> +       [ec_sensor_fan_cpu_opt] =3D
+> +               EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
+> +       [ec_sensor_fan_vrm_hs] =3D
+> +               EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
+> +       [ec_sensor_fan_chipset] =3D
+> +               /* no chipset fans in this generation */
+> +               EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
+> +       [ec_sensor_fan_water_flow] =3D
+> +               EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
+> +       [ec_sensor_curr_cpu] =3D
+> +               EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
+> +       [ec_sensor_temp_water_in] =3D
+> +               EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
+> +       [ec_sensor_temp_water_out] =3D
+> +               EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
+> +};
 > +
-> +#ifndef __KSZ_REGS_H
-> +#define __KSZ_REGS_H
-> +
-> +#define REG_SW_MRI_CTRL_0		0x0370
-> +
-> +#define SW_IGMP_SNOOP			BIT(6)
-> +#define SW_IPV6_MLD_OPTION		BIT(3)
-> +#define SW_IPV6_MLD_SNOOP		BIT(2)
-> +#define SW_MIRROR_RX_TX			BIT(0)
-> +
-> +/* 8 - Classification and Policing */
-> +#define REG_PORT_MRI_MIRROR_CTRL	0x0800
-> +
-> +#define PORT_MIRROR_RX			BIT(6)
-> +#define PORT_MIRROR_TX			BIT(5)
-> +#define PORT_MIRROR_SNIFFER		BIT(1)
-> +
-> +#define P_MIRROR_CTRL			REG_PORT_MRI_MIRROR_CTRL
-> +
-> +#define S_MIRROR_CTRL			REG_SW_MRI_CTRL_0
-
-Small comment: if P_MIRROR_CTRL and S_MIRROR_CTRL are expected to be at
-the same register offset for all switch families, why is there a macro
-behind a macro for their addresses?
-
-> +
-> +#endif
-> -- 
-> 2.33.0
-> 
+>  static const struct ec_sensor_info sensors_family_amd_500[] =3D {
+>         [ec_sensor_temp_chipset] =3D
+>                 EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
+> @@ -186,6 +217,15 @@ struct ec_board_info {
+>  };
+>
+>  static const struct ec_board_info board_info[] =3D {
+> +       {
+> +               .board_names =3D {"PRIME X470-PRO"},
+> +               .sensors =3D SENSOR_SET_TEMP_CHIPSET_CPU_MB |
+> +                       SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
+> +                       SENSOR_FAN_CPU_OPT |
+> +                       SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
+> +               .mutex_path =3D ACPI_GLOBAL_LOCK_PSEUDO_PATH,
+> +               .family =3D family_amd_400_series,
+> +       },
+>         {
+>                 .board_names =3D {"PRIME X570-PRO"},
+>                 .sensors =3D SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP=
+_VRM |
+> @@ -753,6 +793,9 @@ static int __init asus_ec_probe(struct platform_devic=
+e *pdev)
+>         ec_data->board_info =3D pboard_info;
+>
+>         switch (ec_data->board_info->family) {
+> +       case family_amd_400_series:
+> +               ec_data->sensors_info =3D sensors_family_amd_400;
+> +               break;
+>         case family_amd_500_series:
+>                 ec_data->sensors_info =3D sensors_family_amd_500;
+>                 break;
+> --
+> 2.35.1
+>

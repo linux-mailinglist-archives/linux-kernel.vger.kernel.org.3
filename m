@@ -2,164 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EFF511F9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074DF511E64
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbiD0R73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S244521AbiD0R7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244508AbiD0R71 (ORCPT
+        with ESMTP id S244534AbiD0R7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:59:27 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9486E2FC89A;
-        Wed, 27 Apr 2022 10:56:15 -0700 (PDT)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KpRCZ106zz67gQT;
-        Thu, 28 Apr 2022 01:52:10 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Apr 2022 19:56:13 +0200
-Received: from localhost (10.81.200.74) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Wed, 27 Apr
- 2022 18:56:12 +0100
-Date:   Wed, 27 Apr 2022 18:56:10 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V8 08/10] cxl/cdat: Introduce cxl_cdat_valid()
-Message-ID: <20220427185610.0000201a@Huawei.com>
-In-Reply-To: <20220414203237.2198665-9-ira.weiny@intel.com>
-References: <20220414203237.2198665-1-ira.weiny@intel.com>
-        <20220414203237.2198665-9-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 27 Apr 2022 13:59:39 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CECD2FF8EB;
+        Wed, 27 Apr 2022 10:56:27 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e656032735so2815607fac.0;
+        Wed, 27 Apr 2022 10:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ay70JJfxgI4f1cvx3A4AnPQKdrRnK/Iw4p4S0x3nnCs=;
+        b=OLHjF71WP1J3jvDhuaKlm3iXD/mcjC5RVhiKmJgBGUQ1xKFkLWbrl5AqL8s4exhYvF
+         uUmQK6YlYPorVXyH4XbVv82Nr14izTfeAx4GBFBr0S4CdZF43X/2Bt9j5O8EJfPB7YZP
+         FQxZejmUmpWq88LzHg0ytZLaL+P7UvOIiXvzRqQt6lpnbkRlGb9X2VlqRNMCQ4hl7Cxh
+         /TKiFhg0mNb15LB+hLY00nZIIChJ41lGCrMMjxfrHTP/REPLbodSb2hpj+hx9+fDpJAr
+         s4U0VhwRQTWtC14uh/VlnXAVWpxGfgkR+EYjaOsYp7NzYI5rfOzVC2ClmoacJNvG5RRW
+         pzmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ay70JJfxgI4f1cvx3A4AnPQKdrRnK/Iw4p4S0x3nnCs=;
+        b=2Ev8OclgSmXad/NlvFho7wdEoILWvfmL4UZkhIKE52N8P2jPmC78zDkIrwN7LOHCYu
+         dVWo6avWRTWWcOEbJ4rM+nOHO9Z3E+pAcUCmvP4q0I5WPfVtR9+FnX43fs1WlC2/AQ5J
+         iTJSqVXw4sEW3pIXS9pAjtcKWxHlIDaQJO6GxzzW5q/vkyT9H5m/XRWF8sQre9RzKgIh
+         xgTTLEFTBB1lo7xdk9qRlGW5Kz3NenfLizlKGgQo7xJIOLl1q92/MiBzxGPxq9I/zSAa
+         w5n/8KhZRW3nVxbhaVs2Jl1rkf25mZZAMA2L60OkXhq9ALLrhGMHLJGbv+PWOVuCI5vq
+         mLNg==
+X-Gm-Message-State: AOAM530hBLW0ETmfZ0EqPk3F52Y0odJBWS9bZ7g1Rr1LeUavkwETUyTi
+        bIVLDCYPfxchcLKsgpJg4VA=
+X-Google-Smtp-Source: ABdhPJx74Us6sVSM3wgpFzy70DwQH/Athg2ooakdq3IzGXxabs5U5jeUwxfGbR+8CcSjOp3EALI+fg==
+X-Received: by 2002:a05:6870:3112:b0:ce:c0c9:62b with SMTP id v18-20020a056870311200b000cec0c9062bmr16062307oaa.125.1651082186620;
+        Wed, 27 Apr 2022 10:56:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id dv2-20020a056870d88200b000e93d386d97sm915229oab.31.2022.04.27.10.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 10:56:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <588c401c-6b68-53b3-e2d9-542f40b5e4d3@roeck-us.net>
+Date:   Wed, 27 Apr 2022 10:56:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.200.74]
-X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+ <20220427143001.1443605-5-eugene.shalygin@gmail.com>
+ <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAB95QAQ0jwgQyV+PCVy1swN8hXC9U2oRbtbPqU13oW8_1v9zaw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 13:32:35 -0700
-ira.weiny@intel.com wrote:
-
-> From: Ira Weiny <ira.weiny@intel.com>
+On 4/27/22 09:57, Eugene Shalygin wrote:
+> Günter,
 > 
-> The CDAT data is protected by a checksum and should be the proper
-> length.
-> 
-> Introduce cxl_cdat_valid() to validate the data.  While at it check and
-> store the sequence number.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> I forgot to add PRIME X470-PRO to the list of supported boards in
+> Documentation/hwmon/asus_ec_sensors.rst. Could you, please, add that?
+> It should be the first entry. Commit
+> 8f8db4b5d10cc4a2a801514e677dd5205651b771. Or should I resend this
+> patch?
 > 
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Just send a follow-up patch.
 
-> ---
-> Changes from V6
-> 	Change name to cxl_cdat_valid() as this validates all the CDAT
-> 		data not just the header
-> 	Add error and debug prints
-> 
-> Changes from V5
-> 	New patch, split out
-> 	Update cdat_hdr_valid()
-> 		Remove revision and cs field parsing
-> 			There is no point in these
-> 		Add seq check and debug print.
-> ---
->  drivers/cxl/cdat.h |  2 ++
->  drivers/cxl/pci.c  | 36 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 38 insertions(+)
-> 
-> diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-> index 4722b6bbbaf0..a7725d26f2d2 100644
-> --- a/drivers/cxl/cdat.h
-> +++ b/drivers/cxl/cdat.h
-> @@ -88,10 +88,12 @@
->   *
->   * @table: cache of CDAT table
->   * @length: length of cached CDAT table
-> + * @seq: Last read Sequence number of the CDAT table
->   */
->  struct cxl_cdat {
->  	void *table;
->  	size_t length;
-> +	u32 seq;
->  };
->  
->  #endif /* !__CXL_CDAT_H__ */
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index aecb327911a0..d7952156dd02 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -781,6 +781,40 @@ static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
->  	return 0;
->  }
->  
-> +static bool cxl_cdat_valid(struct device *dev, struct cxl_cdat *cdat)
-> +{
-> +	u32 *table = cdat->table;
-> +	u8 *data8 = cdat->table;
-> +	u32 length, seq;
-> +	u8 check;
-> +	int i;
-> +
-> +	length = FIELD_GET(CDAT_HEADER_DW0_LENGTH, table[0]);
-> +	if ((length < CDAT_HEADER_LENGTH_BYTES) || (length > cdat->length)) {
-> +		dev_err(dev, "Invalid length %u (%lu-%lu)\n", length,
-> +			CDAT_HEADER_LENGTH_BYTES, cdat->length);
-> +		return false;
-> +	}
-> +
-> +	for (check = 0, i = 0; i < length; i++)
-> +		check += data8[i];
-> +
-> +	dev_dbg(dev, "CDAT length %u CS %u\n", length, check);
-> +	if (check != 0) {
-> +		dev_err(dev, "Invalid checksum %u\n", check);
-> +		return false;
-> +	}
-> +
-> +	seq = FIELD_GET(CDAT_HEADER_DW3_SEQUENCE, table[3]);
-> +	/* Store the sequence for now. */
-> +	if (cdat->seq != seq) {
-> +		dev_info(dev, "CDAT seq change %x -> %x\n", cdat->seq, seq);
-> +		cdat->seq = seq;
-> +	}
-> +
-> +	return true;
-> +}
-> +
->  #define CDAT_DOE_REQ(entry_handle)					\
->  	(FIELD_PREP(CXL_DOE_TABLE_ACCESS_REQ_CODE,			\
->  		    CXL_DOE_TABLE_ACCESS_REQ_CODE_READ) |		\
-> @@ -892,6 +926,8 @@ static int cxl_cdat_read_table(struct cxl_dev_state *cxlds,
->  
->  release_driver:
->  	cxl_pci_doe_put_drv(doe_dev);
-> +	if (!rc && !cxl_cdat_valid(cxlds->dev, cdat))
-> +		return -EIO;
->  	return rc;
->  }
->  
+Guenter
+
 

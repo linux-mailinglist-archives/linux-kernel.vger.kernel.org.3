@@ -2,137 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A249511CD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048D8512054
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240085AbiD0Pnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S240397AbiD0Pxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240052AbiD0Pnp (ORCPT
+        with ESMTP id S240216AbiD0Pxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:43:45 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB0EC55;
-        Wed, 27 Apr 2022 08:40:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id BB1C332001FC;
-        Wed, 27 Apr 2022 11:40:27 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Wed, 27 Apr 2022 11:40:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1651074027; x=1651160427; bh=lI
-        Wz78PXI7EvKN4ruQoCnzZz8BZ4fRFfgiYMqQWccK0=; b=RmY9+5eB5Vq++BL8o+
-        VTpJ/iDtxGEOKbZCVf5L9Dl7J8kDgqcQ5NgDkGeu7PFLnZFTMEqr8Igp5PQoiRCf
-        k/LUhEfpnP6bcWP3Tp7pLS6ZXZrxJpFQkR42672be7Tt0N2FEinFXijbhFB86KAE
-        Pg7UWBpkPTLYYGIKe+GGmV9Vc6H85+Z2cJASz5GydnbIhFn+QnVZdAwjQOOG5FVZ
-        hQ5rQs/f9vS5CllLbUfFoeCiNTHcBHzjlub59x0fYhG0i8ZigbmkxxLHXx78+aWG
-        udpFvkIX0ldB1QGoTAYf3JZh5b/+s0TQt7NMSAGlHgqLtF3FIUt15jbJAdrLYhXc
-        lPUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651074027; x=
-        1651160427; bh=lIWz78PXI7EvKN4ruQoCnzZz8BZ4fRFfgiYMqQWccK0=; b=n
-        kiS0LOiIp8Z8bSpVnvLzNjqYZ2HpMZXUwaUluGM810L5cbAdbhgG+scxzStn4q5j
-        XykjtVrdxHj8ICZGNCQblIk9VmJ0g8BAYNMcWRlV9OQa09D1X1FXPxL31+CWSAH/
-        cz6lZRXxNumweJleksDpQQrhx+iXGXEJbV4jtsDiDpMnYM8zeR/XNknNQmGxp7Nx
-        FyEjH2n98z1jL3NseqzsOX5ALHLUPJWs6G5QMNbEEjsSF5OL2MkVdlTcX8GR136x
-        KkOY7kX6WNvedpDzEemMUw9KePilF1f2AFx7Pw8Cj4ZYjUHCS7PgJuIevNC6J9s0
-        BASKitzX8JL8ZCCMALTuQ==
-X-ME-Sender: <xms:6mNpYkdGwy6wqaWrPpLxCF9nP3aJokd_AGLugP9ORTRsFup6IaRQFw>
-    <xme:6mNpYmPSsv1ByunrT5DX2TRJti0RzB498vc3cthg7c-MoUjs3GPD_OuHH_FG-jYzg
-    RoVJ4ml7ZpP3KyZiHA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehgdekkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
-    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:6mNpYljezHIxLz1T3ljEI0yTgeJ94PKw11pdL0O-6kpuXrxHuqqPEg>
-    <xmx:6mNpYp8nAX-RmTfq0IcoBHyJW0Amoief1Ti9_63zx00TOsReStiphg>
-    <xmx:6mNpYgt97sFg30IXXBZDFQq3txcVMd_sEA2r_L3uwgPcL6pakvyGxQ>
-    <xmx:62NpYhFnXEuXJrd4act2W5PBc08Qa0Q3jC-LettFmjNwGGtOM9sRfA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E67EC27400F9; Wed, 27 Apr 2022 11:40:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-569-g7622ad95cc-fm-20220421.002-g7622ad95
-Mime-Version: 1.0
-Message-Id: <cd6c9623-60c6-44dc-8ff3-addfb31efd6d@www.fastmail.com>
-In-Reply-To: <YmhdVJgd6DGRHPXd@kbusch-mbp.dhcp.thefacebook.com>
-References: <20220426201539.12829-1-sven@svenpeter.dev>
- <20220426201539.12829-7-sven@svenpeter.dev>
- <YmhdVJgd6DGRHPXd@kbusch-mbp.dhcp.thefacebook.com>
-Date:   Wed, 27 Apr 2022 17:40:06 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Keith Busch" <kbusch@kernel.org>
-Cc:     "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, "Marc Zyngier" <maz@kernel.org>,
-        "Janne Grunau" <j@jannau.net>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH v3 6/6] nvme-apple: Add initial Apple SoC NVMe driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 11:53:35 -0400
+X-Greylist: delayed 560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Apr 2022 08:50:20 PDT
+Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C5B255B8;
+        Wed, 27 Apr 2022 08:50:19 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id DC539C8009E;
+        Wed, 27 Apr 2022 17:40:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        tuxedocomputers.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from; s=
+        default; t=1651074056; x=1652888457; bh=ui/bYejcnY9R7gBn0GwVOE0a
+        OmURfjgUyCjFPF6MREo=; b=n8XCr1STHK241socn1WHSfKD21WWP2LAGi7MTPGU
+        j/Uq1oAycVmT5ZSnrm/4BzD2zdqa8OtmRrhdBlAS4lW2sQWvjFdBe2lCogdTtCmp
+        hu57SHi1r8B6u6ADkGGtvT/nxPlnXdvSj+SPfrfSLxBiDDZvNUMv89PmRDOR40Pi
+        lwY=
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id Y-ujsk8TkqNA; Wed, 27 Apr 2022 17:40:56 +0200 (CEST)
+Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPA id 7B75DC8006F;
+        Wed, 27 Apr 2022 17:40:56 +0200 (CEST)
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] acpi/battery: Make "not-charging" the default on no charging or full info
+Date:   Wed, 27 Apr 2022 17:40:53 +0200
+Message-Id: <20220427154053.499203-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the battery is neither charging or discharging and is not full,
+"not-charging" is a useful status description for the case in general.
+Currently this state is set as "unknown" by default, expect when this is
+explicitly replaced with "not-charging" on a per device or per vendor
+basis.
 
+A lot of devices have this state without a BIOS specification available
+explicitly describing it. e.g. some current Clevo barebones have a BIOS
+setting to stop charging at a user defined battery level.
 
-On Tue, Apr 26, 2022, at 23:00, Keith Busch wrote:
-> On Tue, Apr 26, 2022 at 10:15:39PM +0200, Sven Peter wrote:
->> +static enum blk_eh_timer_return apple_nvme_timeout(struct request *req,
->> +						   bool reserved)
->> +{
->> +	struct apple_nvme_iod *iod = blk_mq_rq_to_pdu(req);
->> +	struct apple_nvme_queue *q = iod->q;
->> +	struct apple_nvme *anv = queue_to_apple_nvme(q);
->> +	unsigned long flags;
->> +	u32 csts = readl(anv->mmio_nvme + NVME_REG_CSTS);
->> +
->> +	if (anv->ctrl.state != NVME_CTRL_LIVE) {
->> +		/*
->> +		 * From rdma.c:
->> +		 * If we are resetting, connecting or deleting we should
->> +		 * complete immediately because we may block controller
->> +		 * teardown or setup sequence
->> +		 * - ctrl disable/shutdown fabrics requests
->> +		 * - connect requests
->> +		 * - initialization admin requests
->> +		 * - I/O requests that entered after unquiescing and
->> +		 *   the controller stopped responding
->> +		 *
->> +		 * All other requests should be cancelled by the error
->> +		 * recovery work, so it's fine that we fail it here.
->> +		 */
->> +		dev_warn(anv->dev,
->> +			 "I/O %d(aq:%d) timeout while not in live state\n",
->> +			 req->tag, q->is_adminq);
->> +		if (blk_mq_request_started(req) &&
->> +		    !blk_mq_request_completed(req)) {
->> +			nvme_req(req)->status = NVME_SC_HOST_ABORTED_CMD;
->> +			blk_mq_complete_request(req);
->
-> I think you need a 'nvme_req(req)->flags |= NVME_REQ_CANCELLED' here to get the
-> expected -EINTR for any admin command timeouts during a reset. Without it, the
-> resetting task is going to think it got a real response from the controller.
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+---
+ drivers/acpi/battery.c | 24 +-----------------------
+ 1 file changed, 1 insertion(+), 23 deletions(-)
 
-Makes sense, will add it.
+diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+index dc208f5f5a1f..306513fec1e1 100644
+--- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -52,7 +52,6 @@ static bool battery_driver_registered;
+ static int battery_bix_broken_package;
+ static int battery_notification_delay_ms;
+ static int battery_ac_is_broken;
+-static int battery_quirk_notcharging;
+ static unsigned int cache_time = 1000;
+ module_param(cache_time, uint, 0644);
+ MODULE_PARM_DESC(cache_time, "cache time in milliseconds");
+@@ -216,10 +215,8 @@ static int acpi_battery_get_property(struct power_supply *psy,
+ 			val->intval = POWER_SUPPLY_STATUS_CHARGING;
+ 		else if (acpi_battery_is_charged(battery))
+ 			val->intval = POWER_SUPPLY_STATUS_FULL;
+-		else if (battery_quirk_notcharging)
+-			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 		else
+-			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
++			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 		break;
+ 	case POWER_SUPPLY_PROP_PRESENT:
+ 		val->intval = acpi_battery_present(battery);
+@@ -1105,12 +1102,6 @@ battery_ac_is_broken_quirk(const struct dmi_system_id *d)
+ 	return 0;
+ }
+ 
+-static int __init battery_quirk_not_charging(const struct dmi_system_id *d)
+-{
+-	battery_quirk_notcharging = 1;
+-	return 0;
+-}
+-
+ static const struct dmi_system_id bat_dmi_table[] __initconst = {
+ 	{
+ 		/* NEC LZ750/LS */
+@@ -1139,19 +1130,6 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
+ 			DMI_MATCH(DMI_BIOS_DATE, "08/22/2014"),
+ 		},
+ 	},
+-	{
+-		/*
+-		 * On Lenovo ThinkPads the BIOS specification defines
+-		 * a state when the bits for charging and discharging
+-		 * are both set to 0. That state is "Not Charging".
+-		 */
+-		.callback = battery_quirk_not_charging,
+-		.ident = "Lenovo ThinkPad",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+-			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
+-		},
+-	},
+ 	{
+ 		/* Microsoft Surface Go 3 */
+ 		.callback = battery_notification_delay_quirk,
+-- 
+2.25.1
 
-
-Sven

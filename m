@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769B45123AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C1D5123A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236180AbiD0UMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        id S236221AbiD0ULO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236002AbiD0UL7 (ORCPT
+        with ESMTP id S235985AbiD0UK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:11:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2C50939F9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:06:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651089966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lggN3RfeBWkcrXGP2XX4hq9ENBmADwLyyEqxgrx+HuM=;
-        b=TY2uqEX6lE76WCXt9eLZ4pQ6o62lEI0EN7H+a2WWxuQPTZIdFwbW1Uon/RVQbCqtmSuaVX
-        E8B2gB0WK29+8FMybLNFisdQXcEyh7pmJ002YiYYdQE4ic7f6W8XhpJ80A3j2xbVoHbBEd
-        U5IqXWpyG0hR3PVZpbZJ8hbpydvUP/w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-Gz4Bkn4gMvCnTjdaHLk12w-1; Wed, 27 Apr 2022 16:05:59 -0400
-X-MC-Unique: Gz4Bkn4gMvCnTjdaHLk12w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 27 Apr 2022 16:10:59 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189E8D6B1;
+        Wed, 27 Apr 2022 13:05:15 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 389A43834C16;
-        Wed, 27 Apr 2022 20:05:58 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.192.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C3AE49E74;
-        Wed, 27 Apr 2022 20:05:51 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        Sean Christopherson <seanjc@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [RFC PATCH v3 19/19] KVM: x86: nSVM: expose the nested AVIC to the guest
-Date:   Wed, 27 Apr 2022 23:03:14 +0300
-Message-Id: <20220427200314.276673-20-mlevitsk@redhat.com>
-In-Reply-To: <20220427200314.276673-1-mlevitsk@redhat.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 458971B3;
+        Wed, 27 Apr 2022 13:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1651089915;
+        bh=AzzWe17kKgZeNsSnsRwYyjYR0RFU8QrYdE2Ktfuuz84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FY+xcXaWw3zGKKIyu1dm2aux8IMX2r0891MpmNdwga37mMnfzQQPk0IsR03Kf43EZ
+         CTPVVjerFH7AhswXy+mw5OZO6+fwQswlO6HEi+To0u4VpTorqVc1WziVWqLH65JOrM
+         nkUSd3AqgCkUFqrr5H9+ISEXb0uXmg/n9+DWQ2BA=
+Date:   Wed, 27 Apr 2022 13:05:11 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
+Message-ID: <Ymmh93CW8nIGD0YI@hatter.bewilderbeest.net>
+References: <20220427010154.29749-1-zev@bewilderbeest.net>
+ <20220427010154.29749-2-zev@bewilderbeest.net>
+ <178b9310-a854-dfa6-a4f3-f971b608abe3@linaro.org>
+ <YmjmWNUpCAFYesyk@hatter.bewilderbeest.net>
+ <5139dc9f-96c3-9f20-4c62-feee902cb5e6@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <5139dc9f-96c3-9f20-4c62-feee902cb5e6@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables and exposes to the nested guest
-the support for the nested AVIC.
+On Wed, Apr 27, 2022 at 09:37:20AM PDT, Krzysztof Kozlowski wrote:
+>On 27/04/2022 08:44, Zev Weiss wrote:
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  nuvoton,tsi-channel-mask:
+>>>> +    description:
+>>>> +      Bitmask indicating which TSI temperature sensor channels are
+>>>> +      active.  LSB is TSI0, bit 1 is TSI1, etc.
+>>>
+>>> Need a type/ref.
+>>>
+>>
+>> Ack, thanks.
+>
+>Did you test the bindings after the changes? Using reviewers time
+>instead of testing by yourself with an automated tool is quite a waste.
+>
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/svm/svm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Yeah, sorry about that -- with uint32 $ref added it passes dt_binding_check;
+I'll re-send with that change.
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 099329711ad13..431281ccc40ef 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4087,6 +4087,9 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 		if (guest_cpuid_has(vcpu, X86_FEATURE_X2APIC))
- 			kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_X2APIC);
- 	}
-+
-+	svm->avic_enabled = enable_apicv && guest_cpuid_has(vcpu, X86_FEATURE_AVIC);
-+
- 	init_vmcb_after_set_cpuid(vcpu);
- }
- 
-@@ -4827,6 +4830,9 @@ static __init void svm_set_cpu_caps(void)
- 		if (vgif)
- 			kvm_cpu_cap_set(X86_FEATURE_VGIF);
- 
-+		if (enable_apicv)
-+			kvm_cpu_cap_set(X86_FEATURE_AVIC);
-+
- 		/* Nested VM can receive #VMEXIT instead of triggering #GP */
- 		kvm_cpu_cap_set(X86_FEATURE_SVME_ADDR_CHK);
- 	}
--- 
-2.26.3
+
+Zev
 

@@ -2,206 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6067C511D21
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F97B51206B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiD0Pcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S239904AbiD0PdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239885AbiD0Pcc (ORCPT
+        with ESMTP id S239885AbiD0Pc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:32:32 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E905545034F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:29:19 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id k23so4164099ejd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3cBviZz3q70FXsDK6Pj1JdnEGmCPg6mI5zD0RZKDTEY=;
-        b=WLWwH3ssCLmcWNZ33bt9H7KImp7hphdU2v9gSO8zxLJhUMGhXT4QeWvm/Q7TnpXJrM
-         cMk8EhpN8CCSdeZYX2qyprbRN0OAYoTZ12K6aFpYBW1cCNwEAHj2sgr/eAM2tTXnJyvj
-         iLGa8jWGrTTQFLSeWJo5MGHC5fPZO2iMU8W8I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=3cBviZz3q70FXsDK6Pj1JdnEGmCPg6mI5zD0RZKDTEY=;
-        b=iUwHpt4hdiQFgDuk4/Bct5doVLXw6DfN1mffhMCXp+2hXVnFPiTI/4iLSTm71CwOTk
-         CgUdAe2kR1/WNIWIJqh2ykCbRBqPx+WS1MrbvK10nkaacKCPgON/iCQZxpjCXUUUpiAN
-         gWa7BBJ/jafMkiZ7hL7pQaJICkvZJXFmVoonsMz7g1S2e/i2edI7pJlhiItRAr5kotfM
-         MgNbpD73vgGsTn4OPNzYQTirH7yjXP+jn4I8WuH/UyvyxmXEudAVAZDwBmgnc1N2enjE
-         Gg2tvLcN8TFf1CmzHl6owrp+1I6wK7T9+w5ZNiXqLNc6+XD7uxjdvT1T7lv61mV4sMRy
-         1wdQ==
-X-Gm-Message-State: AOAM533vByKZeJZvVnmBk89QMJPmkNFzPQhQeRX9MAKQW+8QloLJH+72
-        s4p796PHFdmLSi6KQCYXFnxK3g==
-X-Google-Smtp-Source: ABdhPJxXXY4DNiqJmyyWuTbHk9BD3Ld/bvNZHbHUZ0P3YcRixcsu/nk/7xBwqKh+V7a1bfsISAFw/A==
-X-Received: by 2002:a17:907:86a3:b0:6ec:aaa:7f82 with SMTP id qa35-20020a17090786a300b006ec0aaa7f82mr27262059ejc.651.1651073358267;
-        Wed, 27 Apr 2022 08:29:18 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id gk20-20020a17090790d400b006f3a85db71csm3241190ejb.49.2022.04.27.08.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 08:29:17 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 17:29:15 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3] drm/doc: Add sections about tiny drivers and external
- refs to intro page
-Message-ID: <YmlhS3m6se0sqhnn@phenom.ffwll.local>
-Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>, Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-References: <20220420072411.15104-1-javierm@redhat.com>
+        Wed, 27 Apr 2022 11:32:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FE645996A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:29:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D415615BA
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:29:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA558C385B0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651073385;
+        bh=SuocwpCjqTu/RoO5/j9WegMtN6XL9gDtWCu5vHJx2sc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KvZdEbjUqXZL11mWpStvoG9h4FTYk6ORMVlEOqu1DVKCADU3IERjZqJ2RYgDrYZJk
+         RXCh4WrBoxZVxxrDIN2Y/5lTCi2LljZywJvPtDwzuYcEQZQk14VVq8pGAVKNUjTid7
+         OGBrMO8qbFwwusN77C9SIcR+dAc1DObzfTZrvM6UVE+U/Y4k/rGDh/ZrFw3nRs2u+B
+         YjSZ5s86x/vqJm012mVc66kHt5CyLChOdiNjoTNAWsWdFEXFcRgUpM03W3Cbm4XqRC
+         0yFbKlf6+Dny6IXiySMJEzCMJya5MjaT/EzNRs/Y/3JKiAN741hhibP7ZCzGL46lJA
+         WrbYny02tMAow==
+Received: by mail-oi1-f170.google.com with SMTP id 12so2304131oix.12
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:29:45 -0700 (PDT)
+X-Gm-Message-State: AOAM5337cXYj9YzjkJKBYkLul4AQBA3zx+5SasYSxRLsrAoo5RGNZqbc
+        K/8squzW1VMzR0WD9dJKV5hy99zKfdoqY+4xpOE=
+X-Google-Smtp-Source: ABdhPJxyWgdJAnW+Gww5XnytDuqvsPuywxLHfla7SRSoMVZcTzGv9B7Q5QKSuuOeHUEgFtxkIpBUG2TFUYcM2GGkogo=
+X-Received: by 2002:a05:6808:e8d:b0:322:bac0:2943 with SMTP id
+ k13-20020a0568080e8d00b00322bac02943mr13439392oil.126.1651073384687; Wed, 27
+ Apr 2022 08:29:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220420072411.15104-1-javierm@redhat.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220427142647.1736658-1-daniel.thompson@linaro.org>
+In-Reply-To: <20220427142647.1736658-1-daniel.thompson@linaro.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 27 Apr 2022 17:29:33 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEYO_HRwZ=Wz5aTWN8XZctemVv2op4B2=DbFEozuxTNVw@mail.gmail.com>
+Message-ID: <CAMj1kXEYO_HRwZ=Wz5aTWN8XZctemVv2op4B2=DbFEozuxTNVw@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/exiu: Fix acknowledgment of edge triggered interrupts
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 09:24:11AM +0200, Javier Martinez Canillas wrote:
-> Learning about the DRM subsystem could be quite overwhelming for newcomers
-> but there are lots of useful talks, slides and articles available that can
-> help to understand the needed concepts and ease the learning curve.
-> 
-> There are also simple DRM drivers that can be used as example about how a
-> DRM driver should look like.
-> 
-> Add sections to the introduction page, that contains references to these.
-> 
-> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+On Wed, 27 Apr 2022 at 16:27, Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+>
+> Currently the EXIU uses the fasteoi interrupt flow that is configured by
+> it's parent (irq-gic-v3.c). With this flow the only chance to clear the
+> interrupt request happens during .irq_eoi() and (obviously) this happens
+> after the interrupt handler has run. EXIU requires edge triggered
+> interrupts to be acked prior to interrupt handling. Without this we
+> risk incorrect interrupt dismissal when a new interrupt is delivered
+> after the handler reads and acknowledges the peripheral but before the
+> irq_eoi() takes place.
+>
+> Fix this by clearing the interrupt request from .irq_ack() instead. This
+> requires switching to the fasteoi-ack flow instead of the fasteoi flow.
+> This approach is inspired by the nmi code found in irq-sun6i-r.c .
+>
 
-Maybe needs more acks to land?
+How are level triggered EXIU interrupts affected by this change?
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Note: It *is* intentional not to call irq_chip_ack_parent() from
+>       exiu_irq_ack(). Parents that implement the fasteoi-ack flow don't
+>       want us to do that (and we'd crash if we tried).
+>
+> This problem was discovered through code review rather then reproducing
+> missed interrupts in a real platform. Nevertheless the change has been
+> tested for regression on a Developerbox/SC2A11 using the power button
+> (which is edge triggered and is the only thing connected to the EXIU on
+> this platform).
+>
 
-Would be good we can hand out links to pretty htmldocs instead of lore
-links to this patch, the latter is rather hard on the eyes :-)
+This is not entirely true. The PHY interrupt is also wired to the
+EXIU, but this never worked reliably, so we don't expose this in the
+DT or ACPI tables.
+I wonder if this change would help, but I don't remember exactly what
+the problem was.
 
-Cheers, Daniel
-
+> Fixes: 706cffc1b912 ("irqchip/exiu: Add support for Socionext Synquacer EXIU controller")
+> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
 > ---
-> 
-> Changes in v3:
-> - Fix typos and grammar errors that found when re-reading the changes.
-> 
-> Changes in v2:
-> - Remove paragraph that gave wrong impression that DRM is complex (Pekka Paalanen).
-> - Add Thomas Zimmermann's and Pekka Paalanen's Acked-by tags.
-> - Replace "Learning material" title with "External References" (Thomas Zimmermann).
-> - Add a section about tiny DRM drivers being a good first example (Daniel Vetter).
-> - Add some more external references that I found interesting since v1 was posted.
-> 
->  Documentation/gpu/introduction.rst | 60 ++++++++++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
-> 
-> diff --git a/Documentation/gpu/introduction.rst b/Documentation/gpu/introduction.rst
-> index 25a56e9c0cfd..f05eccd2c07c 100644
-> --- a/Documentation/gpu/introduction.rst
-> +++ b/Documentation/gpu/introduction.rst
-> @@ -112,3 +112,63 @@ Please conduct yourself in a respectful and civilised manner when
->  interacting with community members on mailing lists, IRC, or bug
->  trackers. The community represents the project as a whole, and abusive
->  or bullying behaviour is not tolerated by the project.
+>  arch/arm64/Kconfig.platforms   |  1 +
+>  drivers/irqchip/irq-sni-exiu.c | 16 ++++++++++++----
+>  2 files changed, 13 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index 30b123cde02c..aaeaf57c8222 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -253,6 +253,7 @@ config ARCH_INTEL_SOCFPGA
+>
+>  config ARCH_SYNQUACER
+>         bool "Socionext SynQuacer SoC Family"
+> +       select IRQ_FASTEOI_HIERARCHY_HANDLERS
+>
+>  config ARCH_TEGRA
+>         bool "NVIDIA Tegra SoC Family"
+> diff --git a/drivers/irqchip/irq-sni-exiu.c b/drivers/irqchip/irq-sni-exiu.c
+> index abd011fcecf4..1cc2ec272ebd 100644
+> --- a/drivers/irqchip/irq-sni-exiu.c
+> +++ b/drivers/irqchip/irq-sni-exiu.c
+> @@ -37,12 +37,11 @@ struct exiu_irq_data {
+>         u32             spi_base;
+>  };
+>
+> -static void exiu_irq_eoi(struct irq_data *d)
+> +static void exiu_irq_ack(struct irq_data *d)
+>  {
+>         struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
+>
+>         writel(BIT(d->hwirq), data->base + EIREQCLR);
+> -       irq_chip_eoi_parent(d);
+>  }
+>
+>  static void exiu_irq_mask(struct irq_data *d)
+> @@ -104,7 +103,8 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
+>
+>  static struct irq_chip exiu_irq_chip = {
+>         .name                   = "EXIU",
+> -       .irq_eoi                = exiu_irq_eoi,
+> +       .irq_ack                = exiu_irq_ack,
+> +       .irq_eoi                = irq_chip_eoi_parent,
+>         .irq_enable             = exiu_irq_enable,
+>         .irq_mask               = exiu_irq_mask,
+>         .irq_unmask             = exiu_irq_unmask,
+> @@ -148,6 +148,7 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
+>         struct irq_fwspec parent_fwspec;
+>         struct exiu_irq_data *info = dom->host_data;
+>         irq_hw_number_t hwirq;
+> +       int i, ret;
+>
+>         parent_fwspec = *fwspec;
+>         if (is_of_node(dom->parent->fwnode)) {
+> @@ -165,7 +166,14 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
+>         irq_domain_set_hwirq_and_chip(dom, virq, hwirq, &exiu_irq_chip, info);
+>
+>         parent_fwspec.fwnode = dom->parent->fwnode;
+> -       return irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
+> +       ret = irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
+> +       if (ret)
+> +               return ret;
 > +
-> +Simple DRM drivers to use as examples
-> +=====================================
+> +       for (i = 0; i < nr_irqs; i++)
+> +               irq_set_handler(virq+i, handle_fasteoi_ack_irq);
 > +
-> +The DRM subsystem contains a lot of helper functions to ease writing drivers for
-> +simple graphic devices. For example, the `drivers/gpu/drm/tiny/` directory has a
-> +set of drivers that are simple enough to be implemented in a single source file.
-> +
-> +These drivers make use of the `struct drm_simple_display_pipe_funcs`, that hides
-> +any complexity of the DRM subsystem and just requires drivers to implement a few
-> +functions needed to operate the device. This could be used for devices that just
-> +need a display pipeline with one full-screen scanout buffer feeding one output.
-> +
-> +The tiny DRM drivers are good examples to understand how DRM drivers should look
-> +like. Since are just a few hundreds lines of code, they are quite easy to read.
-> +
-> +External References
-> +===================
-> +
-> +Delving into a Linux kernel subsystem for the first time can be an overwhelming
-> +experience, one needs to get familiar with all the concepts and learn about the
-> +subsystem's internals, among other details.
-> +
-> +To shallow the learning curve, this section contains a list of presentations
-> +and documents that can be used to learn about DRM/KMS and graphics in general.
-> +
-> +There are different reasons why someone might want to get into DRM: porting an
-> +existing fbdev driver, write a DRM driver for a new hardware, fixing bugs that
-> +could face when working on the graphics user-space stack, etc. For this reason,
-> +the learning material covers many aspects of the Linux graphics stack. From an
-> +overview of the kernel and user-space stacks to very specific topics.
-> +
-> +The list is sorted in reverse chronological order, to keep the most up-to-date
-> +material at the top. But all of them contain useful information, and it can be
-> +valuable to go through older material to understand the rationale and context
-> +in which the changes to the DRM subsystem were made.
-> +
-> +Conference talks
-> +----------------
-> +
-> +* `An Overview of the Linux and Userspace Graphics Stack <https://www.youtube.com/watch?v=wjAJmqwg47k>`_ - Paul Kocialkowski (2020)
-> +* `Getting pixels on screen on Linux: introduction to Kernel Mode Setting <https://www.youtube.com/watch?v=haes4_Xnc5Q>`_ - Simon Ser (2020)
-> +* `Everything Great about Upstream Graphics <https://www.youtube.com/watch?v=kVzHOgt6WGE>`_ - Daniel Vetter (2019)
-> +* `An introduction to the Linux DRM subsystem <https://www.youtube.com/watch?v=LbDOCJcDRoo>`_ - Maxime Ripard (2017)
-> +* `Embrace the Atomic (Display) Age <https://www.youtube.com/watch?v=LjiB_JeDn2M>`_ - Daniel Vetter (2016)
-> +* `Anatomy of an Atomic KMS Driver <https://www.youtube.com/watch?v=lihqR9sENpc>`_ - Laurent Pinchart (2015)
-> +* `Atomic Modesetting for Drivers <https://www.youtube.com/watch?v=kl9suFgbTc8>`_ - Daniel Vetter (2015)
-> +* `Anatomy of an Embedded KMS Driver <https://www.youtube.com/watch?v=Ja8fM7rTae4>`_ - Laurent Pinchart (2013)
-> +
-> +Slides and articles
-> +-------------------
-> +
-> +* `Understanding the Linux Graphics Stack <https://bootlin.com/doc/training/graphics/graphics-slides.pdf>`_ - Bootlin (2022)
-> +* `DRM KMS overview <https://wiki.st.com/stm32mpu/wiki/DRM_KMS_overview>`_ - STMicroelectronics (2021)
-> +* `Linux graphic stack <https://studiopixl.com/2017-05-13/linux-graphic-stack-an-overview>`_ - Nathan Gauër (2017)
-> +* `Atomic mode setting design overview, part 1 <https://lwn.net/Articles/653071/>`_ - Daniel Vetter (2015)
-> +* `Atomic mode setting design overview, part 2 <https://lwn.net/Articles/653466/>`_ - Daniel Vetter (2015)
-> +* `The DRM/KMS subsystem from a newbie’s point of view <https://bootlin.com/pub/conferences/2014/elce/brezillon-drm-kms/brezillon-drm-kms.pdf>`_ - Boris Brezillon (2014)
-> +* `A brief introduction to the Linux graphics stack <https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/>`_ - Iago Toral (2014)
-> +* `The Linux Graphics Stack <https://blog.mecheye.net/2012/06/the-linux-graphics-stack/>`_ - Jasper St. Pierre (2012)
-> -- 
+> +       return 0;
+>  }
+>
+>  static const struct irq_domain_ops exiu_domain_ops = {
+>
+> base-commit: b2d229d4ddb17db541098b83524d901257e93845
+> --
 > 2.35.1
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+>

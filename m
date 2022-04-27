@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0013F512548
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570B25125D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbiD0WeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S234784AbiD0WzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiD0WeR (ORCPT
+        with ESMTP id S238416AbiD0Wyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:34:17 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36846B641
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:31:04 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d15so2772531plh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:31:04 -0700 (PDT)
+        Wed, 27 Apr 2022 18:54:35 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C048CCCA
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:50:58 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id m11so3575216oib.11
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jf9KoOg1H3jqjBGppZ/xxewMSo8dDOurdWUb3cYmU3c=;
-        b=J86DG36ucbx0DlDChH/QyA2qGW9ZzuTV7lPr4Yhhk3+pV9+Qw+iYZfs23hrlx4+rfD
-         giclbY4+1PxmOyj+mAHsv9VmlcODeRZorL+++DJBAt9RJIWnhq1wlvZL0JvKpHuHICLm
-         dxEKItjNOKe2JxdIPAzsQ5baFAnBGf2Vh3niiGtwf9zwcMz93g13wjD3YEk9QkeLE+YK
-         eFBdwJmwsg7s6P8IKgVpVGlIcKASf75RQGMzBKCQ7cQziovaXYvVEqGxP7AJ5aMa2M26
-         RzZiEP14nT+f6jEpI0c9BCalzL328U8Fwv1zPeSnLj5NaVl3egPq1TcLnDuB8YzNCPxq
-         C43g==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uO1mjNT4t8QFE2H4UTWyMQ/O+XjoVk8wmcfJNXUjbrc=;
+        b=SgqFgdXosM/ZYsAUz16MKVkJJBdinSAq5DNb8Wfpvs6H36XROkz/tVPkTu6r0qbWKC
+         W3EMwHETOmhuJAJPXayfGbXzUYzGsQLRRP6gDoh6MdqvZmBtm3zYnfYLJatRV/pLeTPP
+         +RzlgD1IS4LZAJR1eL5lkO4KHr1YxJ9pDDpK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jf9KoOg1H3jqjBGppZ/xxewMSo8dDOurdWUb3cYmU3c=;
-        b=MkfbtjqZyE+gJRijcvPf3O1aQS5vLNI8BNDJB3KabMqtIkv6Xokdio+2KsJoCu9Z7p
-         S6p4bjWUnF3AzRrGdszXzi0oJBFxjAR/1HYtd/0nFd7iCexXXhGIc03kiOq3GPnYdqjI
-         aJYT3Woil5M0zS9Y2EbcmTzgUQwRi0CqYG8UHBPxNGFMX8SxLIxi8EbjgO9dRsrWnUYr
-         Yp4Bqbf3oNqgI1XSaKOiQ/oJW/eZ7I+uk0gZTXDXHsQrrPE9ZDd7TGYdl2sfHKsijSD7
-         98CrQRUtl3kwRWwW0h9dZROjEeS6KEAaXmiXjusmgizaPhAEZDmXRzszCKKb4T4YhO48
-         huaw==
-X-Gm-Message-State: AOAM531y6xtnaBKqOleF1Cf9mQ6wxeCVN9ouovBWhXQmkGEVeKISvEIj
-        FKz6t9tyaRGnN81KP97VHVvKzIpdKBP2XQ==
-X-Google-Smtp-Source: ABdhPJyq+J76gHLpln3JZEsplM+ovXJH6AdQaG55HLv9cJpdF5NGETNJmQVeoVqtoV2YZmZe7GOcPQ==
-X-Received: by 2002:a0c:f3d2:0:b0:456:34aa:5978 with SMTP id f18-20020a0cf3d2000000b0045634aa5978mr13519939qvm.59.1651095423111;
-        Wed, 27 Apr 2022 14:37:03 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:d588])
-        by smtp.gmail.com with ESMTPSA id b9-20020a05620a0f8900b0069e84c5352asm8370423qkn.47.2022.04.27.14.37.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 14:37:02 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 17:36:26 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
-Message-ID: <Ymm3WpvJWby4gaD/@cmpxchg.org>
-References: <20220427160016.144237-1-hannes@cmpxchg.org>
- <20220427160016.144237-5-hannes@cmpxchg.org>
- <Ymmnrkn0mSWcuvmH@google.com>
- <YmmznQ8AO5RLxicA@cmpxchg.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uO1mjNT4t8QFE2H4UTWyMQ/O+XjoVk8wmcfJNXUjbrc=;
+        b=segJ+/ZiHu4y2027Oq8U1Vslur8CndStCYwja7tcIeORYrA4o0HesN7+YHd+9PJmuk
+         kNhTRlgk9+wuz2/ezjZdb/UhSvCoygqexgq23qIfVBq8T0r3Zq37t+SvoCZpYan/al2R
+         yfhIU4oPsCqonaTA0Ka6I8KpAoe8heHucnCFs9UH9oRLqK74PsPiqzsNEQ/gtvzET5aJ
+         NyntecQNZRQCYtoVKrZfZ/X3ownA45LbOEgOnHGQPDc0raik9pQ4TrxjJzGSwLyaPEOq
+         IOHmCk1b7yoiyqiLi3l/EsdZbAD0OCUynSByDg3YyycUDt37SPEAm0u8osQTgQ3ERPKf
+         97VA==
+X-Gm-Message-State: AOAM5304CMqslLcwKbZdw0Z8UYQmUtSV28Nm5mXY4D6B4qr12t3FoJjT
+        GHz15/zUJlzNYkR1DNtEuxVMh6RZCyGWZg==
+X-Google-Smtp-Source: ABdhPJwGQsxcEYHsElbh2khGaacRxR9nbyIgxqzl06IrsWFZAjxk7PRRQAWnOisR1XouvQSGymxDbg==
+X-Received: by 2002:a05:6808:114c:b0:322:a749:2d1b with SMTP id u12-20020a056808114c00b00322a7492d1bmr18616781oiu.64.1651099858023;
+        Wed, 27 Apr 2022 15:50:58 -0700 (PDT)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com. [209.85.160.41])
+        by smtp.gmail.com with ESMTPSA id t11-20020a9d7f8b000000b00605e7880924sm221559otp.58.2022.04.27.15.50.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 15:50:57 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e68392d626so3555012fac.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:50:57 -0700 (PDT)
+X-Received: by 2002:a05:6870:4201:b0:e6:47c4:e104 with SMTP id
+ u1-20020a056870420100b000e647c4e104mr16438606oac.257.1651096086895; Wed, 27
+ Apr 2022 14:48:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmmznQ8AO5RLxicA@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220426014545.628100-1-briannorris@chromium.org>
+ <20220426014545.628100-2-briannorris@chromium.org> <CAMdYzYqyDr1HFYB4p8NK8ssq60qfjR2jyoSJ=tcRn8CWsZr16g@mail.gmail.com>
+ <d72eb7a7-f922-3270-422b-4e27505de530@arm.com>
+In-Reply-To: <d72eb7a7-f922-3270-422b-4e27505de530@arm.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Wed, 27 Apr 2022 14:47:55 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXNFPfp6J9bLpYh4uyZDtmhrbSb6Y3=T26_qxd4-YDMtcw@mail.gmail.com>
+Message-ID: <CA+ASDXNFPfp6J9bLpYh4uyZDtmhrbSb6Y3=T26_qxd4-YDMtcw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] soc: rockchip: power-domain: Replace dsb() with smb()
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 05:20:31PM -0400, Johannes Weiner wrote:
-> On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
-> > Hi Johannes,
-> > 
-> > On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
-> > > Currently it requires poking at debugfs to figure out the size and
-> > > population of the zswap cache on a host. There are no counters for
-> > > reads and writes against the cache. As a result, it's difficult to
-> > > understand zswap behavior on production systems.
-> > > 
-> > > Print zswap memory consumption and how many pages are zswapped out in
-> > > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
-> > > 
-> > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > > ---
-> > >  fs/proc/meminfo.c             |  7 +++++++
-> > >  include/linux/swap.h          |  5 +++++
-> > >  include/linux/vm_event_item.h |  4 ++++
-> > >  mm/vmstat.c                   |  4 ++++
-> > >  mm/zswap.c                    | 13 ++++++-------
-> > >  5 files changed, 26 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-> > > index 6fa761c9cc78..6e89f0e2fd20 100644
-> > > --- a/fs/proc/meminfo.c
-> > > +++ b/fs/proc/meminfo.c
-> > > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
-> > >  
-> > >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
-> > >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
-> > > +#ifdef CONFIG_ZSWAP
-> > > +	seq_printf(m,  "Zswap:          %8lu kB\n",
-> > > +		   (unsigned long)(zswap_pool_total_size >> 10));
-> > > +	seq_printf(m,  "Zswapped:       %8lu kB\n",
-> > > +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
-> > > +		   (PAGE_SHIFT - 10));
-> > > +#endif
-> > 
-> > I agree it would be very handy to have the memory consumption in meminfo
-> > 
-> > https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
-> > 
-> > If we really go this Zswap only metric instead of general term
-> > "Compressed", I'd like to post maybe "Zram:" with same reason
-> > in this patchset. Do you think that's better idea instead of
-> > introducing general term like "Compressed:" or something else?
-> 
-> I'm fine with changing it to Compressed. If somebody cares about a
-> more detailed breakdown, we can add Zswap, Zram subsets as needed.
+On Tue, Apr 26, 2022 at 5:25 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> On 2022-04-27 00:55, Peter Geis wrote:
+> > On Mon, Apr 25, 2022 at 9:46 PM Brian Norris <briannorris@chromium.org> wrote:
+> >>
+> >> It's unclear if these are really needed at all, but seemingly their
+> >> purpose is only as a write barrier. Use the general macro instead of the
+> >> ARM-specific one.
+...
+> >> -       dsb(sy);
+> >> +       wmb();
+> >
+> > Just curious, shouldn't this be mb() instead of wmb()?
+> >  From the arm64 barrier.h:
+> >
+> > #define mb() dsb(sy)
+> > #define wmb() dsb(st)
+>
+> As I mentioned on v2, that would be the literal translation, however
+> there's no concurrency since this is happening under a mutex, so there's
+> no other agent against whose accesses loads would need to be
+> synchronised, therefore the only logical reason those DSBs were ever
+> there at all must be to ensure that the prior store(s) have been issued
+> to their destination before proceeding. The history implies that this
+> dates all the way back to RK3288, where Armv7's argument-less DSB lacked
+> that distinction anyway.
 
-It does raise the question what to do about cgroup, though. Should the
-control files (memory.zswap.current & memory.zswap.max) apply to zram
-in the future? If so, we should rename them, too.
+Thanks Robin. I already tried to capture part of this in the commit message:
 
-I'm not too familiar with zram, maybe you can provide some
-background. AFAIU, Google uses zram quite widely; all the more
-confusing why there is no container support for it yet.
+"It's unclear if these are really needed at all, but seemingly their
+purpose is only as a write barrier."
 
-Could you shed some light?
+i.e., it's intentional that I'm making a change, not a literal translation.
 
-Thanks
+I ran through a few tests on Rockchip RK3399, FWIW, although I suppose
+some nasty memory ordering bugs are not exactly the kind of thing that
+would fall out in smoke tests.
+
+Brian

@@ -2,68 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB32B511EEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB9B511F70
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239835AbiD0P3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S239842AbiD0PaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239861AbiD0P3e (ORCPT
+        with ESMTP id S239573AbiD0P36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:29:34 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E910A3528AF;
-        Wed, 27 Apr 2022 08:26:21 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E26F11BF203;
-        Wed, 27 Apr 2022 15:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651073177;
+        Wed, 27 Apr 2022 11:29:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDA3036A67E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651073205;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=k9Rf97iebmoDfy15ErOJ4xhdjVjGSFyAVnacL6ziYLY=;
-        b=lM9P1GbmTn5Xmb4Sf0bbbpTN1qlRPeRwz35/sn0FJwJcJ9w7esHk+i1kmH5FS9FHy558/i
-        FtxYLtpZajg1fHuoWPcjagHEd0AFvm1UOYBU2huxi5Q9Lq5VWPRPdPEn2YsjMbTNe7m3tc
-        OP0RTxf8c5UyQwPIJDX/XZRcMueXtAqbioj0Usm4rBK95YorjDdRfNIICmywZ+XqLkkF8W
-        FWUJgAY2jvjDqwGnuFKVe2PI9jYWaicTs8AM2aTwt5km5avNMVxtwqcD1jBaFTANmpmhWr
-        sZo+wrhVB06/T7GRw1QNPj1hn4itFS1Acmy+tFmXnJTjyhIntt6QWD9w7I/xIg==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>, richard@nod.at
-Subject: Re: [PATCH 1/3] mtd: rawnand: cadence: fix possible null-ptr-deref in cadence_nand_dt_probe()
-Date:   Wed, 27 Apr 2022 17:26:15 +0200
-Message-Id: <20220427152615.101037-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220426084913.4021868-1-yangyingliang@huawei.com>
-References: 
+        bh=1dggXmtnParX3s6CWVf4SQVhg+VlIqzTsxVQxpElgZI=;
+        b=aUNvG9AY53v8FJjD357xpKljxdGbatOPR2o5iSa7PcJWfgQi2L0XVcfBhySuZJt7jMY+ng
+        dJirazro2EKiGmhkAKWD/z9ES0EkLgzlIizUoLeYbpbsexn3dsRITnP3OPMWkoQ5phbwVj
+        FrnPOfO6WyzyRKMeWC7o2gIzvdjrYnw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-nkRfXIeJN3utbjYLsU_mqA-1; Wed, 27 Apr 2022 11:26:41 -0400
+X-MC-Unique: nkRfXIeJN3utbjYLsU_mqA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0617029DD991;
+        Wed, 27 Apr 2022 15:26:41 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EEF52401475;
+        Wed, 27 Apr 2022 15:26:40 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 23RFQeCt021649;
+        Wed, 27 Apr 2022 11:26:40 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 23RFQehO021645;
+        Wed, 27 Apr 2022 11:26:40 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Wed, 27 Apr 2022 11:26:40 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Snitzer <msnitzer@redhat.com>,
+        Milan Broz <gmazyland@gmail.com>
+Subject: [PATCH v3] hex2bin: fix access beyond string end
+In-Reply-To: <CAHp75Vf=sEeoHwzb2RdVFsmZ_mWAyg2zdMKgtW9RQFM_bTMHPw@mail.gmail.com>
+Message-ID: <alpine.LRH.2.02.2204271112080.20348@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2204241643030.17244@file01.intranet.prod.int.rdu2.redhat.com> <CAHp75VdHnvv6FH1BKcs8WgGF3nJpj77TsrmsQGBSpsAQU_S-bw@mail.gmail.com> <alpine.LRH.2.02.2204260759540.2737@file01.intranet.prod.int.rdu2.redhat.com>
+ <YmfxaB1j65p8dOyj@smile.fi.intel.com> <alpine.LRH.2.02.2204261128220.5129@file01.intranet.prod.int.rdu2.redhat.com> <CAHp75Vc8kb+dpT_i93No+0_==tLuYKxu9t1Nnv1KRomRc+Ke1w@mail.gmail.com> <alpine.LRH.2.02.2204271000020.1114@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHp75Vf=sEeoHwzb2RdVFsmZ_mWAyg2zdMKgtW9RQFM_bTMHPw@mail.gmail.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'a28ed09dafee20da51eb26452950839633afd824'
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 08:49:11 UTC, Yang Yingliang wrote:
-> It will cause null-ptr-deref when using 'res', if platform_get_resource()
-> returns NULL, so move using 'res' after devm_ioremap_resource() that
-> will check it to avoid null-ptr-deref.
-> And use devm_platform_get_and_ioremap_resource() to simplify code.
-> 
-> Fixes: ec4ba01e894d ("mtd: rawnand: Add new Cadence NAND driver to MTD subsystem")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+If we pass too short string to "hex2bin" (and the string size without the
+terminating NUL character is even), "hex2bin" reads one byte after the
+terminating NUL character. This patch fixes it.
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Note that hex_to_bin returns -1 on error and hex2bin return -EINVAL on
+error - so we can't just return the variable "hi" or "lo" on error. This
+inconsistency may be fixed in the next merge window, but for the purpose
+of fixing this bug, we just preserve the existing behavior and return -1
+and -EINVAL.
 
-Miquel
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Fixes: b78049831ffe ("lib: add error checking to hex2bin")
+Cc: stable@vger.kernel.org
+
+---
+ lib/hexdump.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+Index: linux-2.6/lib/hexdump.c
+===================================================================
+--- linux-2.6.orig/lib/hexdump.c	2022-04-24 18:51:16.000000000 +0200
++++ linux-2.6/lib/hexdump.c	2022-04-27 17:16:38.000000000 +0200
+@@ -45,10 +45,13 @@ EXPORT_SYMBOL(hex_to_bin);
+ int hex2bin(u8 *dst, const char *src, size_t count)
+ {
+ 	while (count--) {
+-		int hi = hex_to_bin(*src++);
+-		int lo = hex_to_bin(*src++);
++		int hi, lo;
+ 
+-		if ((hi < 0) || (lo < 0))
++		hi = hex_to_bin(*src++);
++		if (unlikely(hi < 0))
++			return -EINVAL;
++		lo = hex_to_bin(*src++);
++		if (unlikely(lo < 0))
+ 			return -EINVAL;
+ 
+ 		*dst++ = (hi << 4) | lo;
+

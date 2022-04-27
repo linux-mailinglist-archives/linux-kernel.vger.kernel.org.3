@@ -2,213 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFBA5113B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E305113B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359531AbiD0Ipu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S1359538AbiD0IrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359525AbiD0Ipn (ORCPT
+        with ESMTP id S1359533AbiD0IrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:45:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7418596B;
-        Wed, 27 Apr 2022 01:42:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 73459210E4;
-        Wed, 27 Apr 2022 08:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651048951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3MkX2zo0TuNDwvlqYwsfgILpgDcnb8YbF+QB6zauRZg=;
-        b=pCdqJSl1MrLnFHAPIckgSOTJTKm/z57vnNEAHETqYr8r/4EM6TF1+d4oBJ/GzBceOROwt5
-        Hi6vTxleGEviVdVpKAkgdEWnYTUmG2vbQWWZhlLWC3Zr4KTkmPA1LoW4/dvd4lW+iD7k+I
-        XP1fi8TsYQSbho44dCsq/wuVB47wx7o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651048951;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3MkX2zo0TuNDwvlqYwsfgILpgDcnb8YbF+QB6zauRZg=;
-        b=R1CzZPweX+qaaBwQxjIl3mQsoiVkAy7q8/+r5sdTXdWfrfrkaUIvykHqixB3rJtwaUh5zf
-        jcZnAMUraWEbIMDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 082281323E;
-        Wed, 27 Apr 2022 08:42:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id L7+dOvYBaWISSwAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 27 Apr 2022 08:42:30 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id ff7efcaf;
-        Wed, 27 Apr 2022 08:43:01 +0000 (UTC)
-Date:   Wed, 27 Apr 2022 09:43:01 +0100
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Ceph Development <ceph-devel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, rptaylor@uvic.ca
-Subject: Re: [PATCH] ceph: fix statfs for subdir mounts
-Message-ID: <YmkCFeymZjoCZjQH@suse.de>
-References: <20220426161204.17896-1-lhenriques@suse.de>
- <461ed973-0d09-5049-7ffc-48e499448e63@redhat.com>
+        Wed, 27 Apr 2022 04:47:12 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1450D8BE0A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:44:02 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id d12so2108603ybc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:44:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TMxK2aQcel/+UWJA0z1eqdZBidlHy7JtAHyoQ82VNGI=;
+        b=Ugr1frXBT+AtHa3GNev28FpadJLvReGBPfzm8W/ldKNimUPKPYRv6SxlKgA/ixqEUs
+         8kcGJvbfrxx8zY6z5QDbzjQk3WmTHJAWyxt6xped+9yFLnqMSg9UjFLBrb3bKF1KEGIN
+         nskq7djOd/KIJozOciUMMmPPavwoXdIboUn9U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TMxK2aQcel/+UWJA0z1eqdZBidlHy7JtAHyoQ82VNGI=;
+        b=X8eUGFzC2eWNNtv4kkUQFn2hnR4toXgvnKLUxrJmEBmmfo5kqzOuvl3sodhYeI8W7O
+         04MJ1+qTWvkb6H97I2mEJrnULWf5hSoj/4c3bBMe2trhyGMALxsQ+tL/lTJpL92nm1eS
+         RbvBjBSVdW4/FN6cce2mUHtZdQFxEEGfcOUof+T2J29ZRfb4/wXQiA7OIiioBtq+e6IZ
+         ufa23OcjmMWRYVpTbAjbAJzl5BRLtrgMlRZaRlnpyZ0z7GYANUTeEzHo/2c8Wez1cjuL
+         riCCypGHmlUTzjmxIUrl5UXEfE5fvzLf03ujC/9R2ddqs4I6vl4zmj7AXJV4Qr6KW3rr
+         0LEg==
+X-Gm-Message-State: AOAM531WYRd9f07xsPxElxyGSnmp3mEUdXpsNrW1BBEuDKx5pqiooa6S
+        0Swq1GAjjE8CHzBFbuNFJhL4Xd/LQWnyQLymJ6nAIg==
+X-Google-Smtp-Source: ABdhPJz83pUAtp8fqad7w1dU3n80V4h/UV5lfR51MqjDhb0/CI98QaW9J0vuB8c3BFqGgiw0WY/WcgKZ+WZ4bxX5Lc4=
+X-Received: by 2002:a5b:50b:0:b0:645:d576:7699 with SMTP id
+ o11-20020a5b050b000000b00645d5767699mr22130922ybp.278.1651049041315; Wed, 27
+ Apr 2022 01:44:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <461ed973-0d09-5049-7ffc-48e499448e63@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220316151327.564214-1-nfraprado@collabora.com> <20220316151327.564214-2-nfraprado@collabora.com>
+In-Reply-To: <20220316151327.564214-2-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 27 Apr 2022 16:43:50 +0800
+Message-ID: <CAGXv+5Gv2pjPXynz6HCdgux+giPDC5qRk+KW1aFduVz82rM=+g@mail.gmail.com>
+Subject: Re: [PATCH v1 01/10] arm64: dts: mediatek: Introduce MT8192-based
+ Asurada board family
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 01:54:08PM +0800, Xiubo Li wrote:
-> 
-> On 4/27/22 12:12 AM, Luís Henriques wrote:
-> > When doing a mount using as base a directory that has 'max_bytes' quotas
-> > statfs uses that value as the total; if a subdirectory is used instead,
-> > the same 'max_bytes' too in statfs, unless there is another quota set.
-> > 
-> > Unfortunately, if this subdirectory only has the 'max_files' quota set,
-> > then statfs uses the filesystem total.  Fix this by making sure we only
-> > lookup realms that contain the 'max_bytes' quota.
-> > 
-> > Link: https://tracker.ceph.com/issues/55090
-> > Cc: Ryan Taylor <rptaylor@uvic.ca>
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > ---
-> > Hi!
-> > 
-> > Unfortunately, I don't think this is the real fix for the bug reported in
-> > the tracker (or by Ryan on the mailing-list).  I haven't seen any
-> > reference to 'max_files' so I suspect Ryan and Dan are hitting another
-> > bug.  This can be easily checked by 'getfattr -n ceph.quota <subdir>'.
-> > 
-> > Also, Dan (in the tracker) states the bug is on the kernel client only but
-> > I can also see if in the fuse client.
-> > 
-> > Anyway, this patch fixes a real bug.
-> > 
-> >   fs/ceph/quota.c | 35 +++++++++++++++++++++++++++--------
-> >   1 file changed, 27 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/fs/ceph/quota.c b/fs/ceph/quota.c
-> > index a338a3ec0dc4..235a8d06a8ee 100644
-> > --- a/fs/ceph/quota.c
-> > +++ b/fs/ceph/quota.c
-> > @@ -193,11 +193,17 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
-> >   	mutex_unlock(&mdsc->quotarealms_inodes_mutex);
-> >   }
-> > +enum quota_get_realm {
-> > +	QUOTA_GET_MAX_FILES,
-> > +	QUOTA_GET_MAX_BYTES,
-> > +	QUOTA_GET_ANY
-> > +};
-> > +
-> >   /*
-> >    * This function walks through the snaprealm for an inode and returns the
-> > - * ceph_snap_realm for the first snaprealm that has quotas set (either max_files
-> > - * or max_bytes).  If the root is reached, return the root ceph_snap_realm
-> > - * instead.
-> > + * ceph_snap_realm for the first snaprealm that has quotas set (max_files,
-> > + * max_bytes, or any, depending on the 'which_quota' argument).  If the root is
-> > + * reached, return the root ceph_snap_realm instead.
-> >    *
-> >    * Note that the caller is responsible for calling ceph_put_snap_realm() on the
-> >    * returned realm.
-> > @@ -209,7 +215,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
-> >    * will be restarted.
-> >    */
-> >   static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
-> > -					       struct inode *inode, bool retry)
-> > +					       struct inode *inode,
-> > +					       enum quota_get_realm which_quota,
-> > +					       bool retry)
-> >   {
-> >   	struct ceph_inode_info *ci = NULL;
-> >   	struct ceph_snap_realm *realm, *next;
-> > @@ -248,7 +256,17 @@ static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
-> >   		}
-> >   		ci = ceph_inode(in);
-> > -		has_quota = __ceph_has_any_quota(ci);
-> > +		switch (which_quota) {
-> > +		case QUOTA_GET_MAX_BYTES:
-> > +			has_quota = ci->i_max_bytes;
-> > +			break;
-> > +		case QUOTA_GET_MAX_FILES:
-> > +			has_quota = ci->i_max_files;
-> > +			break;
-> > +		default: /* QUOTA_GET_ANY */
-> > +			has_quota = __ceph_has_any_quota(ci);
-> 
-> How about moving this logic to __ceph_has_any_quota() by renaming it to
-> __ceph_has_quota(ci, enum quota_get_realm which) ?
-> 
-> + static inline bool __ceph_has_quota(ci, enum quota_get_realm which) {
-> +		switch (which) {
-> +		case QUOTA_GET_MAX_BYTES:
-> +			return !!ci->i_max_bytes;
-> +			break;
-> +		case QUOTA_GET_MAX_FILES:
-> +			return !!ci->i_max_files;
-> +			break;
-> +		default: /* QUOTA_GET_ANY */
-> +			return !!(ci->i_max_files || ci->i_max_bytes);
-> + }
-> 
-> The other LGTM.
+Hi,
 
-Thank you for the review, Xiubo.  Your suggestion makes sense, I'll send
-out v2 shortly.
+On Wed, Mar 16, 2022 at 11:17 PM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> Introduce the MT8192 Asurada Chromebook platform, including the Asurada
+> Spherion and Asurada Hayato boards.
+>
+> This is enough configuration to get serial output working on Spherion
+> and Hayato.
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+>
+> ---
+>
+>  arch/arm64/boot/dts/mediatek/Makefile         |  2 ++
+>  .../dts/mediatek/mt8192-asurada-hayato-r1.dts | 11 ++++++++
+>  .../mediatek/mt8192-asurada-spherion-r0.dts   | 13 ++++++++++
+>  .../boot/dts/mediatek/mt8192-asurada.dtsi     | 26 +++++++++++++++++++
+>  4 files changed, 52 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1=
+.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-=
+r0.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/=
+mediatek/Makefile
+> index 8c1e18032f9f..034cba17276b 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -37,5 +37,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8183-kukui-kodama-sk=
+u32.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8183-kukui-krane-sku0.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8183-kukui-krane-sku176.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8183-pumpkin.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8192-asurada-hayato-r1.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8192-asurada-spherion-r0.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8192-evb.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) +=3D mt8516-pumpkin.dtb
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts b/=
+arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+> new file mode 100644
+> index 000000000000..e18e14b13d61
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+> @@ -0,0 +1,11 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright 2020 Google LLC
+> + */
+> +/dts-v1/;
+> +#include "mt8192-asurada.dtsi"
+> +
+> +/ {
+> +       model =3D "MediaTek Hayato rev1";
 
-Cheers,
---
-Luís
+I think this should be "Google Hayato ...", and the one in spherion should
+read "Google Spherion" as well?
+
+These are project code names used in Google. Both devices use the common
+"Asurada" hardware design, also done by Google.
+
+> +       compatible =3D "google,hayato-rev1", "google,hayato", "mediatek,m=
+t8192";
+
+You should add a patch adding this to the DT binding doc
+Documentation/devicetree/bindings/arm/mediatek.yaml
+
+Same for Spherion.
 
 
-> 
-> -- Xiubo
-> 
-> 
-> > +			break;
-> > +		}
-> >   		iput(in);
-> >   		next = realm->parent;
-> > @@ -279,8 +297,8 @@ bool ceph_quota_is_same_realm(struct inode *old, struct inode *new)
-> >   	 * dropped and we can then restart the whole operation.
-> >   	 */
-> >   	down_read(&mdsc->snap_rwsem);
-> > -	old_realm = get_quota_realm(mdsc, old, true);
-> > -	new_realm = get_quota_realm(mdsc, new, false);
-> > +	old_realm = get_quota_realm(mdsc, old, QUOTA_GET_ANY, true);
-> > +	new_realm = get_quota_realm(mdsc, new, QUOTA_GET_ANY, false);
-> >   	if (PTR_ERR(new_realm) == -EAGAIN) {
-> >   		up_read(&mdsc->snap_rwsem);
-> >   		if (old_realm)
-> > @@ -483,7 +501,8 @@ bool ceph_quota_update_statfs(struct ceph_fs_client *fsc, struct kstatfs *buf)
-> >   	bool is_updated = false;
-> >   	down_read(&mdsc->snap_rwsem);
-> > -	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root), true);
-> > +	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root),
-> > +				QUOTA_GET_MAX_BYTES, true);
-> >   	up_read(&mdsc->snap_rwsem);
-> >   	if (!realm)
-> >   		return false;
-> > 
-> 
-> 
+Regards
+ChenYu
+
+> +};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts =
+b/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
+> new file mode 100644
+> index 000000000000..b5372ce6bd95
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright 2021 Google LLC
+> + */
+> +/dts-v1/;
+> +#include "mt8192-asurada.dtsi"
+> +
+> +/ {
+> +       model =3D "MediaTek Spherion (rev0 - 3)";
+> +       compatible =3D "google,spherion-rev3", "google,spherion-rev2",
+> +                    "google,spherion-rev1", "google,spherion-rev0",
+> +                    "google,spherion", "mediatek,mt8192";
+> +};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm6=
+4/boot/dts/mediatek/mt8192-asurada.dtsi
+> new file mode 100644
+> index 000000000000..277bd38943fe
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2020 MediaTek Inc.
+> + * Author: Seiya Wang <seiya.wang@mediatek.com>
+> + */
+> +/dts-v1/;
+> +#include "mt8192.dtsi"
+> +
+> +/ {
+> +       aliases {
+> +               serial0 =3D &uart0;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path =3D "serial0:115200n8";
+> +       };
+> +
+> +       memory@40000000 {
+> +               device_type =3D "memory";
+> +               reg =3D <0 0x40000000 0 0x80000000>;
+> +       };
+> +};
+> +
+> +&uart0 {
+> +       status =3D "okay";
+> +};
+> --
+> 2.35.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

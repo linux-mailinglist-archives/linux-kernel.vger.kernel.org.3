@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E91511940
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263BE5119B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238156AbiD0Ogn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S238193AbiD0Ogs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238075AbiD0Ogb (ORCPT
+        with ESMTP id S238090AbiD0Ogc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:36:31 -0400
+        Wed, 27 Apr 2022 10:36:32 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA05A5FD1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:33:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A5A32711
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:33:20 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AF18ED1;
-        Wed, 27 Apr 2022 07:33:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4494E1474;
+        Wed, 27 Apr 2022 07:33:20 -0700 (PDT)
 Received: from localhost.localdomain (unknown [10.57.44.232])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B94663F5A1;
-        Wed, 27 Apr 2022 07:33:16 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BDAB23F5A1;
+        Wed, 27 Apr 2022 07:33:18 -0700 (PDT)
 From:   Vincent Donnefort <vincent.donnefort@arm.com>
 To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v7 2/7] sched/fair: Decay task PELT values during wakeup migration
-Date:   Wed, 27 Apr 2022 15:32:59 +0100
-Message-Id: <20220427143304.3950488-3-vincent.donnefort@arm.com>
+        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
+Subject: [PATCH v7 3/7] sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
+Date:   Wed, 27 Apr 2022 15:33:00 +0100
+Message-Id: <20220427143304.3950488-4-vincent.donnefort@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220427143304.3950488-1-vincent.donnefort@arm.com>
 References: <20220427143304.3950488-1-vincent.donnefort@arm.com>
@@ -42,315 +41,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before being migrated to a new CPU, a task sees its PELT values
-synchronized with rq last_update_time. Once done, that same task will also
-have its sched_avg last_update_time reset. This means the time between
-the migration and the last clock update (B) will not be accounted for in
-util_avg and a discontinuity will appear. This issue is amplified by the
-PELT clock scaling. If the clock hasn't been updated while the CPU is
-idle, clock_pelt will not be aligned with clock_task and that time (A)
-will be also lost.
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-   ---------|----- A -----|-----------|------- B -----|>
-        clock_pelt   clock_task     clock            now
+effective_cpu_util() already has a `int cpu' parameter which allows to
+retrieve the CPU capacity scale factor (or maximum CPU capacity) inside
+this function via an arch_scale_cpu_capacity(cpu).
 
-This is especially problematic for asymmetric CPU capacity systems which
-need stable util_avg signals for task placement and energy estimation.
+A lot of code calling effective_cpu_util() (or the shim
+sched_cpu_util()) needs the maximum CPU capacity, i.e. it will call
+arch_scale_cpu_capacity() already.
+But not having to pass it into effective_cpu_util() will make the EAS
+wake-up code easier, especially when the maximum CPU capacity reduced
+by the thermal pressure is passed through the EAS wake-up functions.
 
-Ideally, this problem would be solved by updating the runqueue clocks
-before the migration. But that would require taking the runqueue lock
-which is quite expensive [1]. Instead estimate the missing time and update
-the task util_avg with that value:
+Due to the asymmetric CPU capacity support of arm/arm64 architectures,
+arch_scale_cpu_capacity(int cpu) is a per-CPU variable read access via
+per_cpu(cpu_scale, cpu) on such a system.
+On all other architectures it is a a compile-time constant
+(SCHED_CAPACITY_SCALE).
 
-  A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-sched_clock_cpu() is a costly function. Limit the usage to the case where
-the source CPU is idle as we know this is when the clock is having the
-biggest risk of being outdated.
-
-Neither clock_task, clock_pelt nor clock can be accessed without the
-runqueue lock. We then need to store those values in a timestamp variable
-which can be accessed during the migration. rq's enter_idle will give the
-wall-clock time when the rq went idle. We have then:
-
-  B = sched_clock_cpu() - rq->enter_idle.
-
-Then, to catch-up the PELT clock scaling (A), two cases:
-
-  * !CFS_BANDWIDTH: We can simply use clock_task(). This value is stored
-    in rq's clock_pelt_idle, before the rq enters idle. The estimated time
-    is then:
-
-      rq->clock_pelt_idle + sched_clock_cpu() - rq->enter_idle.
-
-  * CFS_BANDWIDTH: We can't catch-up with clock_task because of the
-    throttled_clock_task_time offset. cfs_rq's clock_pelt_idle is then
-    giving the PELT clock when the cfs_rq becomes idle. This gives:
-
-      A = rq->clock_pelt_idle - cfs_rq->clock_pelt_idle
-
-    And gives the following estimated time:
-
-      cfs_rq->last_update_time +
-      rq->clock_pelt_idle - cfs_rq->clock_pelt_idle + (A)
-      sched_clock_cpu() - rq->enter_idle (B)
-
-The (B) part of the missing time is however an estimation that doesn't
-take into account IRQ and Paravirt time.
-
-[1] https://lore.kernel.org/all/20190709115759.10451-1-chris.redpath@arm.com/
-
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index bca2f912d349..024dba4e6575 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -71,34 +71,19 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+ 
+ static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
+ {
+-	unsigned long max = 0, sum_util = 0;
++	unsigned long max, sum_util = 0;
+ 	int cpu;
+ 
+-	for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
+-
+-		/*
+-		 * The capacity is the same for all CPUs belonging to
+-		 * the same perf domain, so a single call to
+-		 * arch_scale_cpu_capacity() is enough. However, we
+-		 * need the CPU parameter to be initialized by the
+-		 * loop, so the call ends up in this block.
+-		 *
+-		 * We can initialize 'max' with a cpumask_first() call
+-		 * before the loop but the bits computation is not
+-		 * worth given the arch_scale_cpu_capacity() just
+-		 * returns a value where the resulting assembly code
+-		 * will be optimized by the compiler.
+-		 */
+-		max = arch_scale_cpu_capacity(cpu);
+-		sum_util += sched_cpu_util(cpu, max);
+-	}
+-
+ 	/*
+-	 * In the improbable case where all the CPUs of the perf
+-	 * domain are offline, 'max' will be zero and will lead to an
+-	 * illegal operation with a zero division.
++	 * The capacity is the same for all CPUs belonging to
++	 * the same perf domain.
+ 	 */
+-	return max ? (power * ((sum_util << 10) / max)) >> 10 : 0;
++	max = arch_scale_cpu_capacity(cpumask_first(pd_mask));
++
++	for_each_cpu_and(cpu, pd_mask, cpu_online_mask)
++		sum_util += sched_cpu_util(cpu);
++
++	return (power * ((sum_util << 10) / max)) >> 10;
+ }
+ 
+ static u64 get_pd_power_uw(struct dtpm *dtpm)
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index 0bfb8eebd126..3f514ff3d9aa 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -137,11 +137,9 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+ static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
+ 		    int cpu_idx)
+ {
+-	unsigned long max = arch_scale_cpu_capacity(cpu);
+-	unsigned long util;
++	unsigned long util = sched_cpu_util(cpu);
+ 
+-	util = sched_cpu_util(cpu, max);
+-	return (util * 100) / max;
++	return (util * 100) / arch_scale_cpu_capacity(cpu);
+ }
+ #else /* !CONFIG_SMP */
+ static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 67f06f72c50e..c1705effb3a4 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2255,7 +2255,7 @@ static inline bool owner_on_cpu(struct task_struct *owner)
+ }
+ 
+ /* Returns effective CPU energy utilization, as seen by the scheduler */
+-unsigned long sched_cpu_util(int cpu, unsigned long max);
++unsigned long sched_cpu_util(int cpu);
+ #endif /* CONFIG_SMP */
+ 
+ #ifdef CONFIG_RSEQ
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 068c088e9584..a62d25ec5b0d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -7061,12 +7061,14 @@ struct task_struct *idle_task(int cpu)
+  * required to meet deadlines.
+  */
+ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+-				 unsigned long max, enum cpu_util_type type,
++				 enum cpu_util_type type,
+ 				 struct task_struct *p)
+ {
+-	unsigned long dl_util, util, irq;
++	unsigned long dl_util, util, irq, max;
+ 	struct rq *rq = cpu_rq(cpu);
+ 
++	max = arch_scale_cpu_capacity(cpu);
++
+ 	if (!uclamp_is_used() &&
+ 	    type == FREQUENCY_UTIL && rt_rq_is_runnable(&rq->rt)) {
+ 		return max;
+@@ -7146,10 +7148,9 @@ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+ 	return min(max, util);
+ }
+ 
+-unsigned long sched_cpu_util(int cpu, unsigned long max)
++unsigned long sched_cpu_util(int cpu)
+ {
+-	return effective_cpu_util(cpu, cpu_util_cfs(cpu), max,
+-				  ENERGY_UTIL, NULL);
++	return effective_cpu_util(cpu, cpu_util_cfs(cpu), ENERGY_UTIL, NULL);
+ }
+ #endif /* CONFIG_SMP */
+ 
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 3dbf351d12d5..1207c78f85c1 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -157,11 +157,10 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+ {
+ 	struct rq *rq = cpu_rq(sg_cpu->cpu);
+-	unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
+ 
+-	sg_cpu->max = max;
++	sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+ 	sg_cpu->bw_dl = cpu_bw_dl(rq);
+-	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu), max,
++	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+ 					  FREQUENCY_UTIL, NULL);
+ }
+ 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index abd1feeec0c2..9cd506dc682c 100644
+index 9cd506dc682c..e0d5b1ba565d 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -3694,6 +3694,57 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
- 
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- 
-+#ifdef CONFIG_NO_HZ_COMMON
-+static inline void migrate_se_pelt_lag(struct sched_entity *se)
-+{
-+	struct cfs_rq *cfs_rq;
-+	struct rq *rq;
-+	bool is_idle;
-+	u64 now;
-+
-+	cfs_rq = cfs_rq_of(se);
-+	rq = rq_of(cfs_rq);
-+
-+	rcu_read_lock();
-+	is_idle = is_idle_task(rcu_dereference(rq->curr));
-+	rcu_read_unlock();
-+
-+	/*
-+	 * The lag estimation comes with a cost we don't want to pay all the
-+	 * time. Hence, limiting to the case where the source CPU is idle and
-+	 * we know we are at the greatest risk to have an outdated clock.
-+	 */
-+	if (!is_idle)
-+		return;
-+
-+	/*
-+	 * estimated "now" is:
-+	 *   last_update_time +
-+	 *   PELT scaling (rq->clock_pelt_idle - cfs_rq->clock_pelt_idle) +
-+	 *   rq clock lag (sched_clock_cpu() - rq->enter_idle)
-+	 *
-+	 *   The PELT scaling contribution is always 0 when !CFS_BANDWIDTH.
-+	 *   (see clock_pelt = clock_task in _update_idle_rq_clock_pelt())
-+	 */
-+#ifdef CONFIG_CFS_BANDWIDTH
-+	now = u64_u32_load(cfs_rq->clock_pelt_idle);
-+	/* The clock has been stopped for throttling */
-+	if (now == U64_MAX)
-+		return;
-+
-+	now = u64_u32_load(rq->clock_pelt_idle) - now;
-+	now += cfs_rq_last_update_time(cfs_rq);
-+#else
-+	now = u64_u32_load(rq->clock_pelt_idle);
-+#endif
-+	now += sched_clock_cpu(cpu_of(rq)) - u64_u32_load(rq->enter_idle);
-+
-+	__update_load_avg_blocked_se(now, se);
-+}
-+#else
-+static void migrate_se_pelt_lag(struct sched_entity *se) {}
-+#endif
-+
- /**
-  * update_cfs_rq_load_avg - update the cfs_rq's load/util averages
-  * @now: current time, as per cfs_rq_clock_pelt()
-@@ -4429,6 +4480,9 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 	 */
- 	if ((flags & (DEQUEUE_SAVE | DEQUEUE_MOVE)) != DEQUEUE_SAVE)
- 		update_min_vruntime(cfs_rq);
-+
-+	if (cfs_rq->nr_running == 0)
-+		update_idle_cfs_rq_clock_pelt(cfs_rq);
- }
- 
- /*
-@@ -6946,6 +7000,8 @@ static void detach_entity_cfs_rq(struct sched_entity *se);
-  */
- static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+@@ -6699,12 +6699,11 @@ static long
+ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
  {
-+	struct sched_entity *se = &p->se;
-+
+ 	struct cpumask *pd_mask = perf_domain_span(pd);
+-	unsigned long cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
+-	unsigned long max_util = 0, sum_util = 0;
+-	unsigned long _cpu_cap = cpu_cap;
++	unsigned long max_util = 0, sum_util = 0, cpu_cap;
+ 	int cpu;
+ 
+-	_cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
++	cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
++	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
+ 
  	/*
- 	 * As blocked tasks retain absolute vruntime the migration needs to
- 	 * deal with this by subtracting the old and adding the new
-@@ -6953,7 +7009,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	 * the task on the new runqueue.
- 	 */
- 	if (READ_ONCE(p->__state) == TASK_WAKING) {
--		struct sched_entity *se = &p->se;
- 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
- 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-@@ -6965,25 +7020,29 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 		 * rq->lock and can modify state directly.
+ 	 * The capacity state of CPUs of the current rd can be driven by CPUs
+@@ -6741,10 +6740,10 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+ 		 * is already enough to scale the EM reported power
+ 		 * consumption at the (eventually clamped) cpu_capacity.
  		 */
- 		lockdep_assert_rq_held(task_rq(p));
--		detach_entity_cfs_rq(&p->se);
-+		detach_entity_cfs_rq(se);
+-		cpu_util = effective_cpu_util(cpu, util_running, cpu_cap,
+-					      ENERGY_UTIL, NULL);
++		cpu_util = effective_cpu_util(cpu, util_running, ENERGY_UTIL,
++					      NULL);
  
- 	} else {
-+		remove_entity_load_avg(se);
-+
+-		sum_util += min(cpu_util, _cpu_cap);
++		sum_util += min(cpu_util, cpu_cap);
+ 
  		/*
--		 * We are supposed to update the task to "current" time, then
--		 * its up to date and ready to go to new CPU/cfs_rq. But we
--		 * have difficulty in getting what current time is, so simply
--		 * throw away the out-of-date time. This will result in the
--		 * wakee task is less decayed, but giving the wakee more load
--		 * sounds not bad.
-+		 * Here, the task's PELT values have been updated according to
-+		 * the current rq's clock. But if that clock hasn't been
-+		 * updated in a while, a substantial idle time will be missed,
-+		 * leading to an inflation after wake-up on the new rq.
-+		 *
-+		 * Estimate the missing time from the cfs_rq last_update_time
-+		 * and update sched_avg to improve the PELT continuity after
-+		 * migration.
+ 		 * Performance domain frequency: utilization clamping
+@@ -6753,12 +6752,12 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+ 		 * NOTE: in case RT tasks are running, by default the
+ 		 * FREQUENCY_UTIL's utilization can be max OPP.
  		 */
--		remove_entity_load_avg(&p->se);
-+		migrate_se_pelt_lag(se);
+-		cpu_util = effective_cpu_util(cpu, util_freq, cpu_cap,
+-					      FREQUENCY_UTIL, tsk);
+-		max_util = max(max_util, min(cpu_util, _cpu_cap));
++		cpu_util = effective_cpu_util(cpu, util_freq, FREQUENCY_UTIL,
++					      tsk);
++		max_util = max(max_util, min(cpu_util, cpu_cap));
  	}
  
- 	/* Tell new CPU we are migrated */
--	p->se.avg.last_update_time = 0;
-+	se->avg.last_update_time = 0;
- 
- 	/* We have migrated, no longer consider this task hot */
--	p->se.exec_start = 0;
-+	se->exec_start = 0;
- 
- 	update_scan_period(p, new_cpu);
- }
-@@ -8149,6 +8208,10 @@ static bool __update_blocked_fair(struct rq *rq, bool *done)
- 		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq);
- 
-+			/* sync clock_pelt_idle with last update */
-+			if (cfs_rq->nr_running == 0)
-+				update_idle_cfs_rq_clock_pelt(cfs_rq);
-+
- 			if (cfs_rq == &rq->cfs)
- 				decayed = true;
- 		}
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index 4ff2ed4f8fa1..6b39e07b2919 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -61,6 +61,23 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
- 	WRITE_ONCE(avg->util_est.enqueued, enqueued);
+-	return em_cpu_energy(pd->em_pd, max_util, sum_util, _cpu_cap);
++	return em_cpu_energy(pd->em_pd, max_util, sum_util, cpu_cap);
  }
  
-+static inline u64 rq_clock_pelt(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	assert_clock_updated(rq);
-+
-+	return rq->clock_pelt - rq->lost_idle_time;
-+}
-+
-+/* The rq is idle, we can sync to clock_task */
-+static inline void _update_idle_rq_clock_pelt(struct rq *rq)
-+{
-+	rq->clock_pelt  = rq_clock_task(rq);
-+
-+	u64_u32_store(rq->enter_idle, rq_clock(rq));
-+	u64_u32_store(rq->clock_pelt_idle, rq_clock_pelt(rq));
-+}
-+
  /*
-  * The clock_pelt scales the time to reflect the effective amount of
-  * computation done during the running delta time but then sync back to
-@@ -76,8 +93,7 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
- static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
- {
- 	if (unlikely(is_idle_task(rq->curr))) {
--		/* The rq is idle, we can sync to clock_task */
--		rq->clock_pelt  = rq_clock_task(rq);
-+		_update_idle_rq_clock_pelt(rq);
- 		return;
- 	}
- 
-@@ -130,17 +146,20 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
- 	 */
- 	if (util_sum >= divider)
- 		rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
-+
-+	_update_idle_rq_clock_pelt(rq);
- }
- 
--static inline u64 rq_clock_pelt(struct rq *rq)
-+#ifdef CONFIG_CFS_BANDWIDTH
-+static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
--	lockdep_assert_rq_held(rq);
--	assert_clock_updated(rq);
--
--	return rq->clock_pelt - rq->lost_idle_time;
-+	if (unlikely(cfs_rq->throttle_count))
-+		u64_u32_store(cfs_rq->clock_pelt_idle, U64_MAX);
-+	else
-+		u64_u32_store(cfs_rq->clock_pelt_idle,
-+			      rq_clock_pelt(rq_of(cfs_rq)));
- }
- 
--#ifdef CONFIG_CFS_BANDWIDTH
- /* rq->task_clock normalized against any time this cfs_rq has spent throttled */
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
-@@ -150,6 +169,7 @@ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- 	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
- }
- #else
-+static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
- 	return rq_clock_pelt(rq_of(cfs_rq));
-@@ -204,6 +224,7 @@ update_rq_clock_pelt(struct rq *rq, s64 delta) { }
- static inline void
- update_idle_rq_clock_pelt(struct rq *rq) { }
- 
-+static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
- #endif
- 
- 
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e2cf6e48b165..07014e8cbae2 100644
+index 07014e8cbae2..f902f3e27e48 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -641,6 +641,10 @@ struct cfs_rq {
- 	int			runtime_enabled;
- 	s64			runtime_remaining;
+@@ -2878,7 +2878,7 @@ enum cpu_util_type {
+ };
  
-+	u64			clock_pelt_idle;
-+#ifndef CONFIG_64BIT
-+	u64                     clock_pelt_idle_copy;
-+#endif
- 	u64			throttled_clock;
- 	u64			throttled_clock_pelt;
- 	u64			throttled_clock_pelt_time;
-@@ -1013,6 +1017,12 @@ struct rq {
- 	u64			clock_task ____cacheline_aligned;
- 	u64			clock_pelt;
- 	unsigned long		lost_idle_time;
-+	u64			clock_pelt_idle;
-+	u64			enter_idle;
-+#ifndef CONFIG_64BIT
-+	u64			clock_pelt_idle_copy;
-+	u64			enter_idle_copy;
-+#endif
+ unsigned long effective_cpu_util(int cpu, unsigned long util_cfs,
+-				 unsigned long max, enum cpu_util_type type,
++				 enum cpu_util_type type,
+ 				 struct task_struct *p);
  
- 	atomic_t		nr_iowait;
- 
+ static inline unsigned long cpu_bw_dl(struct rq *rq)
 -- 
 2.25.1
 

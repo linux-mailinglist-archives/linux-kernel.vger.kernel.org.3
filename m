@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7437C5123F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6371F5123F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236505AbiD0Udp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S236613AbiD0Uds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235608AbiD0Udl (ORCPT
+        with ESMTP id S230488AbiD0Udm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:33:41 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122E8BF69
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:30:29 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id p6so2552283plf.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:30:29 -0700 (PDT)
+        Wed, 27 Apr 2022 16:33:42 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3E6E0B1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:30:30 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id b12so2570870plg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:30:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0An4PsvfV0601Q48LoUPqvVr8Bqsk0vm3xIqSwfj0Xo=;
-        b=C1jLISe/eHjTAY7Yp96I7k+1AB2QekHwbYrjOoF6fNLDKBX394wxFdxk7wumcpQIo0
-         zDRxwZnw9o9TOxnsypU1mn4zAd1Bni+SjNoxpVt2QxvYm56wioHwufVYBrnlt3aGc6tN
-         mdVln6h2XLZ3Fjf4UMvmUnzxgWVXhzRHDpYu4=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TyZE4JpHRVYo+b1SEajVG8GhKCg8WLvC1BfKNFX1vtU=;
+        b=jirR79zAFiifoqz7FtzliwnKnv17qWOW+UwmHM2v9GRUTPDv6LWEOC80Ih6So3HBj2
+         Rb4lp1LlQIXWsNIzcpYnrW5NyOrOrDAWZ7idusCJSEzWfpBRSxMGltfIy3gBPaaZ1Y9K
+         aQbvc5XyxPyBFLhwhizo2B378UZOQkt+iRc+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0An4PsvfV0601Q48LoUPqvVr8Bqsk0vm3xIqSwfj0Xo=;
-        b=OzDd9ogha4zwsjiMV7uo9P2aoseBqixcQWTSSieM/f/NQVnQcp1VckMRyv/biK8FPj
-         74sxDZ5HfZ1JZaD80n6QXQkHgj3N4PMdZtpXh/A5r4HfQC3adLzSTkuZx1t1pwuBgshU
-         pu/Rq/iCL1HQIebjOZsJQ/tSAvWZlICKYECOHPKpbNdFlK+FWpLS+eJ67HkXLGZEsI3r
-         te/2YSy3R1+0Si3rkRTRtFpHnyI4uMCr8V1ak+7T7Q9dHym09dQozWW3KSvRmlZbeNOi
-         dXz2R5DZANTTtamhSsUDDSEzIXnZnji2USJ/jrSwRejivnCOzzULvDSrxwk+ZDF9ZhQa
-         h5zQ==
-X-Gm-Message-State: AOAM533ye9XtblExhcBE7HOjN2aw98U0uWsDiCV+/3CXkPtfgjOG1htQ
-        7fP/HQ/4w0E6ogY6Jz7E3E1Z8g==
-X-Google-Smtp-Source: ABdhPJzZNWd2rOVEB4rsikOmKbzoJwM/16jcMtIJTw1nlAHLR+EFFNGpmmgtG99tnrf4SY15QyBCZQ==
-X-Received: by 2002:a17:902:edc5:b0:158:4065:a5ce with SMTP id q5-20020a170902edc500b001584065a5cemr30951557plk.55.1651091428570;
-        Wed, 27 Apr 2022 13:30:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TyZE4JpHRVYo+b1SEajVG8GhKCg8WLvC1BfKNFX1vtU=;
+        b=T9p3U250gKDIiWtTnSvaO1BXQ5HOruoiKLGvpKZWMefwtPdJGgMREllaAdnEmGKnYG
+         vVcVnVAyFZiHDh+rSWuYjDB2jCVh7WJTWapcvqjZUx0kVTDQtGlUa8EKtbtZNgv77QwI
+         P6aE4Um+iflisW7NlJJ0BdHYwibYlw3F8rSFehkjpQ5Uz8MXFz0RDojaFN7rsnNNJluZ
+         78D2j2qYF2XzwTz/bfQ4jhZ3fhpoChhpJGbMFRCQ3LKT8/yvuszE/rQVGRIiKdWvN1la
+         cSE71aKdbjERe9GuqE+IoQNyiVFNOJtXyYSmRrvcPfikr7vNk9VOWWXKtf/2RK726gwf
+         eUrw==
+X-Gm-Message-State: AOAM531JWNfBXncMttWxTdrnpEjDq9tIaB+ySmMVVLSJS7C9o/hz/CNs
+        h9JT/UO8Brdq2lgiupFqxya6Cw==
+X-Google-Smtp-Source: ABdhPJzUplOYCCpBIP7HPJMb8z9JjKFKfxTZoNnut9NrCdsHgehpOduEV/HjLmFf905jcUmVzMOtUA==
+X-Received: by 2002:a17:902:b7c1:b0:15b:3c09:3ed3 with SMTP id v1-20020a170902b7c100b0015b3c093ed3mr30053180plz.73.1651091429660;
+        Wed, 27 Apr 2022 13:30:29 -0700 (PDT)
 Received: from smtp.gmail.com ([2620:15c:202:201:482e:60bc:84d1:bf5c])
-        by smtp.gmail.com with ESMTPSA id 7-20020a17090a000700b001da3920d985sm3858552pja.12.2022.04.27.13.30.27
+        by smtp.gmail.com with ESMTPSA id 7-20020a17090a000700b001da3920d985sm3858552pja.12.2022.04.27.13.30.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 13:30:28 -0700 (PDT)
+        Wed, 27 Apr 2022 13:30:29 -0700 (PDT)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
@@ -55,10 +55,12 @@ Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         Douglas Anderson <dianders@chromium.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         "Joseph S. Barrera III" <joebar@chromium.org>
-Subject: [PATCH 0/2] Input: cros-ec-keyb: Better matrixless support
-Date:   Wed, 27 Apr 2022 13:30:24 -0700
-Message-Id: <20220427203026.828183-1-swboyd@chromium.org>
+Subject: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches only compatible
+Date:   Wed, 27 Apr 2022 13:30:25 -0700
+Message-Id: <20220427203026.828183-2-swboyd@chromium.org>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+In-Reply-To: <20220427203026.828183-1-swboyd@chromium.org>
+References: <20220427203026.828183-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,18 +72,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a followup to my previous patch[1] that skips keyboard registration
-when the matrix properties aren't present. This adds a compatible string
-for this scenario so we can ease existing DTBs over to the new design.
-
-Stephen Boyd (2):
-  dt-bindings: google,cros-ec-keyb: Introduce switches only compatible
-  Input: cros-ec-keyb - skip keyboard registration for switches
-    compatible
-
- .../bindings/input/google,cros-ec-keyb.yaml          | 12 +++++++++---
- drivers/input/keyboard/cros_ec_keyb.c                |  8 ++++++++
- 2 files changed, 17 insertions(+), 3 deletions(-)
+If the device is a detachable, this device won't have a matrix keyboard
+but it may have some button switches, e.g. volume buttons and power
+buttons. Let's add a more specific compatible for this type of device
+that indicates to the OS that there are only switches and no matrix
+keyboard present.
 
 Cc: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Rob Herring <robh+dt@kernel.org>
@@ -91,10 +86,47 @@ Cc: Guenter Roeck <groeck@chromium.org>
 Cc: Douglas Anderson <dianders@chromium.org>
 Cc: Hsin-Yi Wang <hsinyi@chromium.org>
 Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ .../bindings/input/google,cros-ec-keyb.yaml          | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-[1] https://lore.kernel.org/all/20220425210726.3813477-1-swboyd@chromium.org/
-
-base-commit: 4352e23a7ff2f8a4ff229dd1283ed2f2b708ec51
+diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+index e8f137abb03c..edc1194d558d 100644
+--- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
++++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+@@ -15,14 +15,20 @@ description: |
+   Google's ChromeOS EC Keyboard is a simple matrix keyboard
+   implemented on a separate EC (Embedded Controller) device. It provides
+   a message for reading key scans from the EC. These are then converted
+-  into keycodes for processing by the kernel.
++  into keycodes for processing by the kernel. This device also supports
++  switches/buttons like power and volume buttons.
+ 
+ allOf:
+   - $ref: "/schemas/input/matrix-keymap.yaml#"
+ 
+ properties:
+   compatible:
+-    const: google,cros-ec-keyb
++    oneOf:
++      - items:
++          - const: google,cros-ec-keyb-switches
++          - const: google,cros-ec-keyb
++      - items:
++          - const: google,cros-ec-keyb
+ 
+   google,needs-ghost-filter:
+     description:
+@@ -50,7 +56,7 @@ examples:
+   - |
+     #include <dt-bindings/input/input.h>
+     cros-ec-keyb {
+-        compatible = "google,cros-ec-keyb";
++        compatible = "google,cros-ec-keyb-switches", "google,cros-ec-keyb";
+         keypad,num-rows = <8>;
+         keypad,num-columns = <13>;
+         google,needs-ghost-filter;
 -- 
 https://chromeos.dev
 

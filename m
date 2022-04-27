@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EE2511FEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9F25120EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbiD0PE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S238869AbiD0PFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238886AbiD0PEw (ORCPT
+        with ESMTP id S236491AbiD0PFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:04:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92ED247472
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F22661E83
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDA3C385A7;
-        Wed, 27 Apr 2022 15:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651071700;
-        bh=uT8KmHeI6bEJWYMat3yaxNgP5uwItUD4qVKDN3oBXoo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=bnpBtUKQW0evw/CyAm/6VLk9g4H8i682oTDskwAj6V0nARPAbUNcLBcfHCKvEMClh
-         KYLZwrP6zJZc8+3E5KYSmkUgcrE0THvPL+fjlfFySUM3szUSyYCJgtl5ScL3DukzBo
-         IuyZUekqzbRIFXkixDC2KpQkSLwAWPzO5lJPAQ1x3L1b401KlQygsbrbBBQkDHU2Bd
-         QOBjWqYn7wjXOBNmYr9rIUTA7Atg1SVyc3ADYq2+5gZWEZR5q+dvYeHtjUSy+YdYMR
-         SEglg2k2N7GTf860ZOpcU32dbgr10Zd06ixhF/WpH/I4CdQkRmBawsZ9Q0k1mWaDUI
-         hcUOWQM0zltmQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 922DF5C0387; Wed, 27 Apr 2022 08:01:39 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 08:01:39 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Chris Mason <clm@fb.com>
-Cc:     Christoph Bartoschek <bartoschek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "riel@surriel.com" <riel@surriel.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH RFC fs/namespace] Make kern_unmount() use
- synchronize_rcu_expedited()
-Message-ID: <20220427150139.GO4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <8E281DF1-248F-4861-A3C0-2573A5EFEE61@fb.com>
- <20220426065917.3123488-1-bartoschek@google.com>
- <20220426140919.GD4285@paulmck-ThinkPad-P17-Gen-1>
- <CAAQBG5jnvSxcjwr+L5nuxwh87bv=D=tzU325W2Zp3DVpn-VmcQ@mail.gmail.com>
- <20220426231100.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <2A61C695-450E-499B-BCFA-411A36008D72@fb.com>
+        Wed, 27 Apr 2022 11:05:36 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB434D63D;
+        Wed, 27 Apr 2022 08:02:25 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z16so1819395pfh.3;
+        Wed, 27 Apr 2022 08:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=QnoE3ffrzubputntu4ko6+9+tzF97FQTX2tI8ulxeLc=;
+        b=Ms/PKWQsVHy3HpCrfrT9M/J4BkWp7ChQewNIPTgiueXQ8w1EqAk/yYTHQBzWHJYwt5
+         hxGByZmvtN8ZuQmTa3GSa/T8PQj07zeyFCMI/1x7AeI9ts0jCJFknKYvZ/PgTn6q+kpI
+         pLXeXB2ra5JpS/GWACgQQxkDSc4aRvx5XSJ5vVTDg66+aL58vrxtl2BEb6gvDWpNbEdY
+         ms+SaYf0d6nWh7W99Xz88/aZy9cuNZqw0+utdDhj9Z7jKwsrOEYlYURt2TmPI/p22AXm
+         I7TDJh6Bio9d/VxL+mo8KCIf41y02NPMxxhH6BXKahrpywX1ibk4ehl1X9LTeqVjy61t
+         dv1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=QnoE3ffrzubputntu4ko6+9+tzF97FQTX2tI8ulxeLc=;
+        b=u+ikt4dqZs+sA5+xbiCQ5zdhPRzQkpdcsYBqSEHHt+TfKkdGewrbzxkzj4/5PmuCaD
+         93+6SlvONuRI1GwNNZfcgYoP5Hj4TBRHuzs3CCzML7ISqNrtqp9ZWRCNL+SPT9gPRp80
+         kv2EI0dC37hMgbvn6gt6CM8uKAgBZUafr1xEuObdBPgceneHiBaJlSmUx9qdQGXjVncn
+         NLpXUxcMf4UL8DOjvRSZms16cXn+xQD3cX93FGMnc+JTcZnz3zc7X7DwI4gjkf2opX6a
+         YNM8oaVmViC8pxwOiECyfC2b7xNdHpnz5ngdMjRAzB3MWfNJAlH3wKJda+ay8PuXkQZQ
+         EK3g==
+X-Gm-Message-State: AOAM533Ze9A3pn/uIE2OdFMbW2DKit3GBSOBaa8SDJ41tCKg12x5GA8E
+        YDFyLyaNq8cU7TRHNMB4DKU=
+X-Google-Smtp-Source: ABdhPJz1gtWGqiJfDP8DiYowXbQqmh0I+6OR0KFoHUC0RF8SJu1dCym+Qe17bc/KRkZxO9WMn8gjww==
+X-Received: by 2002:a63:175a:0:b0:3aa:4360:242 with SMTP id 26-20020a63175a000000b003aa43600242mr24649650pgx.120.1651071744592;
+        Wed, 27 Apr 2022 08:02:24 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.111])
+        by smtp.gmail.com with ESMTPSA id z188-20020a6265c5000000b0050602bec574sm18949547pfb.209.2022.04.27.08.02.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 08:02:24 -0700 (PDT)
+Message-ID: <12015d66-8505-0c68-c27c-46725f6b2cc4@gmail.com>
+Date:   Wed, 27 Apr 2022 23:02:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2A61C695-450E-499B-BCFA-411A36008D72@fb.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH v3 00/11] KVM: x86/pmu: More refactoring to get rid of
+ PERF_TYPE_HARDWAR
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20220411093537.11558-1-likexu@tencent.com>
+Organization: Tencent
+In-Reply-To: <20220411093537.11558-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:19:56PM +0000, Chris Mason wrote:
-> 
-> > On Apr 26, 2022, at 7:11 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > On Wed, Apr 27, 2022 at 12:58:34AM +0200, Christoph Bartoschek wrote:
-> >>> 3. https://lore.kernel.org/lkml/20220218183114.2867528-1-riel@surriel.com/
-> >>> Refined queue_rcu_work() approach.
-> >>> 
-> >>> #1 should work, but the resulting IPIs are not going to make the real-time
-> >>> guys happy. #2 and #3 have been subject to reasonably heavy testing
-> >>> and did fix a very similar issue to the one that you are reporting,
-> >>> but last I knew there were doubts about the concurrency consequences.
-> >>> 
-> >>> Could you please give at least #3 a shot and see if it helps you?
-> >> 
-> >> I have tried #3 and it works well with my testcases as far as I can see it.
-> > 
-> > Thank you for giving it a try!
-> > 
-> > Al, are further adjustments needed to make this patch cover all the
-> > corner cases?
-> 
-> Did we end up addressing all of Al’s comments here?
-> 
-> https://lore.kernel.org/lkml/YhCFKyVMtOSyBDJh@zeniv-ca.linux.org.uk/
-
-Indeed we have not!  Thank you for the reminder, and I will get with
-Rik to look into this.
-
-							Thanx, Paul
+A kind ping on this collection of minor changes. :D

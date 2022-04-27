@@ -2,194 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B212511440
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 11:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93207511479
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 11:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiD0JY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 05:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S231330AbiD0Jkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 05:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiD0JYY (ORCPT
+        with ESMTP id S230380AbiD0Jkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 05:24:24 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe1e::61b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA6728E35D;
-        Wed, 27 Apr 2022 02:20:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lxi0vVAkwHPhbf+4wNTSdaj+2e5T2c3w0YsWhOmuHOW50SJ0X+HQCFNNT9CFvfLBAF08hndZ6wEl6inkg99WJl9TdI9dtpfKtH3tmXoBElhkrsxv/lr2+EJgzuoMbOevf0okHcFsXg872L2OfXQ84jkGyOTI/ymqfhx/L5za44Jg2TO6a/cORXVhpylCeYeM/vZ7RvBWFnbAtiSIQAXI17F6moRJQ7udySQU0XNBLiFsDOYYPAjXuhtGE0P8OvY3InYKGD91cllC/33+QdqbRE/j5MU7YRn7w/vCXR2Gz47wYu8vxwxJqDxg9SBeSwT8B2Vr5vQawD70a4RR50IlmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VL6x8Q83Ck96DTCFE962M7gT794X42qpo/xnHvLGlhs=;
- b=SVaHfDToLFyTIwYdzREFvwnblDQlqfOxwG8VwkAjmWngYGX6e2Tu97HuJxfUR86Q0kiIaGa/60SQdB9dPoSVUje1FH+vuHoEkJgnnV6cH2t1gIbvw2tD3ohVznMfr5dQMhtI3ZV7JxIIZY+ISEPQnZ4OZGKWRCg/jG6vQrdt0vR82vGBDCkk4Zog/7JBnwgkPsB6ZZQkCyHZS1dlTnzPaiWCF4lSepK5168h3FBHyndbcr0+Jx0UkqMJje65VrZO5VPTgmaxwHm1T9LmrDx+yYaGaAh5cU9bu+DmJy8Q6erdSgptsi6bxmSEzXQBCPWaLSRe/O+HOpCT+FIqg8ttLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VL6x8Q83Ck96DTCFE962M7gT794X42qpo/xnHvLGlhs=;
- b=CxO4WhcYYNodI/rs5lrfjN85YFuuvhVspVgMCdJXCna+v4a346l/cNhol00VTpYW8nQqqLlj4o4mN109LteNHPXH/dner8PZGp02R7G1sAd+EVEGNhMdaueMtMOi4rSKVHSxeAsP+UPy3RT5iCzM1VHCVOb8EK2NZXI/77iNx7M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
- by VI1PR04MB6848.eurprd04.prod.outlook.com (2603:10a6:803:13c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 27 Apr
- 2022 09:19:25 +0000
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::587c:b068:1987:da36]) by PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::587c:b068:1987:da36%4]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
- 09:19:25 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 2/2] remoteproc: imx_rproc: support i.MX93
-Date:   Wed, 27 Apr 2022 17:20:54 +0800
-Message-Id: <20220427092054.3765690-3-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220427092054.3765690-1-peng.fan@oss.nxp.com>
-References: <20220427092054.3765690-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGBP274CA0023.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::35)
- To PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
+        Wed, 27 Apr 2022 05:40:39 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E9F32A9C9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 02:35:53 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id gh6so2301796ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 02:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4LTyR8UB37SXdMl9yuS16DmVZpnS4u7r7t8WllL+jL8=;
+        b=PHPr67DeNhKTyLRGFHybFUz7f0LIJev5hLq/DPabZo1SyiIM9CJnFBN13jUs3KW7TM
+         /VqaCYYsiggLa1O405VoX/ualkqn/7ZxNd5KXddcHOuGzqRHRvqy/JEIPUz0nsfGeIzN
+         w/L8vYTdXxqSuwxnkHi3gpfZ3H/smqZnLCKJpkpt2nEAitC4paTkDMnp1TUMi4Fbh/Jg
+         LswqY5H20mw23JSgFa+3zwpc9yP0yian2HbtlpklsVuzBCqebvo8MwCpZ28zrSdjWdMO
+         vCliS9EnZIRL9zFUqjtfX2pgzMLHmHzNZDwdmhDkdnOd49XM22yQwl24quttIsaaRub2
+         CcHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4LTyR8UB37SXdMl9yuS16DmVZpnS4u7r7t8WllL+jL8=;
+        b=Df9YLltY6/vMstDdZoT1oK8n3HJHA10/z+nZIj2WPk7jpDyWtCEmpOBvrFOXF2we18
+         D54STyVLhlkUBrFeZjevS/MqzbMfRiboVw5eAUz4HaQfXQYrXYPYOpbIEQHJxSWs5MSs
+         cr6TNz6qH1qdhTOxnYcipht+L7u50wdrKgLnDz+BeVhZDfeluOG+PnCiuXQkMyDrSe7f
+         AKHd8BCOhpnEQt4rQgdeuijWTm7QmH9eGCcuaroTo4nrmof+1H0FAC+NN5WH2/G45C76
+         rBQE96KcuQ//NvlJ6oRl685yYQAkib7nw0JpDZauJnj42/I+H3DPaDApyXZW1FQiHzd8
+         IzAA==
+X-Gm-Message-State: AOAM531VQQWFNEhoJy8HuNWubRQgFmJccnxfRsZhoEF3+brUTumorxyI
+        KH3OpWmBz2rUQ4FmeT20NU8vrXxhyNMTk7g/AU6P/lbeXak=
+X-Google-Smtp-Source: ABdhPJw+YQ7hvV+HqyrXaNrfASy0gpoFAVI3OafOuDNQycb2BmAAhN42/Js6lx/iRmacnIVJkq7G8cz/cESnPpJ7wUI=
+X-Received: by 2002:a17:906:2991:b0:6cd:ac19:ce34 with SMTP id
+ x17-20020a170906299100b006cdac19ce34mr26048920eje.746.1651051364641; Wed, 27
+ Apr 2022 02:22:44 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 98587aff-341f-4dd5-52e2-08da282f0605
-X-MS-TrafficTypeDiagnostic: VI1PR04MB6848:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <VI1PR04MB6848065A72B6ADAA612CACFDC9FA9@VI1PR04MB6848.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +smWnbyZF1w0e8YWSkczfjgAsL+Rf2Zza17ANaJsdCFTwA4EuYb6eipK4Z0M32msAhJ22nUaNl5tLRY9Z+4duZtVN+Nv6zCPH3Eq7PKj6JQMQAN/xBaVz7IOl/022yhZa/2z80jI8WlfkktLgcg7MTqMoLf24wZ7HwxK6mA+wfpTO3vLcq0WVQDG+IrCWCiJ2Yp7fAdRb8tSpSvEh/CDMMP9/WQfB30+R/pV+NsF2MHbiHtp+lCVULfk/lkItYBrVtzNQFl0qCqINs2GT1TOkbZAJpjHyHxUMpRZzfVYWlMnaOfndgCrcl/ab2UG6Uj9hbPSiFwcnL7pS2RUNPwIFtIg+KBfs0DtnWlbf2MFy9Ap6B3E+EFOoko89+/XHgw0Mp+wAkulCxRTxVRAuw3G1+5eNH3rdG/i6s6Geq5HCjfDgWz7H38D7sOeBZVTIIyt+Np4zO4S4RWMwRLWvanV9Y/qW+QFOpqJuqSJiE2kowH/mQFhGP7k0w5ZClZ0cFYaoK9YG/Mr2u/igTGWr0xouOTl3DcIyPpuOt48jpTGHoRWgImGWge18PLINtBp9c8OcRapaH53W7ONjGG7b2frtpx7jEVLx637uQW9T9v1uODfPp3VCi1j/ZVGRiNB401+86wyrqwN56z12VbPxTTK5dc9kXSeBAlWMeOAlYeZhp4RcKtzSA+3CejUassV06qD2GpEsD205Xr+4fvyIvwnx3pUI4xMv4mzpA+Fr1z5HSU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(38350700002)(921005)(2616005)(508600001)(6486002)(52116002)(316002)(6666004)(6512007)(5660300002)(26005)(2906002)(6506007)(86362001)(186003)(66476007)(1076003)(66556008)(8676002)(66946007)(4326008)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qsAZvjHQHtvRo+Bizwn6WW36pW34599sGd5p9EVD7rgHm6wslBQ9VYJVLtYL?=
- =?us-ascii?Q?djtlS6srnnwmZs8rcYlLc6ns+FN5hBhoHF/v+DgeA2OgTN0IWrlyZCYKYFwT?=
- =?us-ascii?Q?4txEGBj/BUU7YvUItirWTbnJ5SwnsdHTOumHLCxN4XzoXIH6HBMUxurGCp2L?=
- =?us-ascii?Q?RyufLmLXN1WRygcXOLKEkyrFUQeAJHyPXPl3m76GIGsKYvAF+9CKKHEwjpkv?=
- =?us-ascii?Q?5cdGIY6dvMUI5SDl76+5NjNXmu3UuCEP9fl752D4BuMH5S9X3ZbyRCGAjd0v?=
- =?us-ascii?Q?10I0fRG/84n1V7xHDF88uiT2U+BS1eMQIkETbHKozCNhO3F4lQahSpGvOALJ?=
- =?us-ascii?Q?w0H2UGWji5dtUXa3JNwDNHdzgN6rFh4GPNKSSGmqOxDQnnfRuZ7fhLdmvgT4?=
- =?us-ascii?Q?HoRJd3SObPFobrfp7oRy1ap4rtjWHzCpNNm5VgyAK25AtBbx/iU6CAvKe4Z4?=
- =?us-ascii?Q?W406RKOsoOulis8by4T0g6wj3EBEOjJ57mxwU3h48UrHbJl7FNXbBqZKaHf2?=
- =?us-ascii?Q?aYpxdgFyDlMWKWoYEmU3CAFZ/kBuEPlFkU134TDliAStB/aPHBvLycpatIL3?=
- =?us-ascii?Q?DwvafdHfe6xUqUxm5jziIRXzdp6WydD1RSuvZvkq02mehCXcKzs4CALVDDhB?=
- =?us-ascii?Q?uePV7jTSaWwjwcpbMfWxcpNXwOUtAFAe5lmuSDaDqc3TomlMyo0PTmyQ5nbE?=
- =?us-ascii?Q?v/jEJLrl56MJka5664L3VrZu1OUnwAMgrJVCJcgwcUk5QVt5qoRqTSvUK8xY?=
- =?us-ascii?Q?DXjKqpwjd5MbayKxxknLVaD36Dvo9x9gfpc/HyD1+Kt8whOc6CZiddVuFbRo?=
- =?us-ascii?Q?IqyZCORXqRZ7Dcm5dYFlyT+cvJUaoxgD6LhYJFaaoOEKyah27QLu44OFIflp?=
- =?us-ascii?Q?kZndlGU884G7ICMOAYS6Wz6g+31vjLae5bucKAg6CVK511MSU/yOVxGjCvOA?=
- =?us-ascii?Q?JFrywnF/nvU9c0tloTjmITF0lWM60h4QseTqgo4O7s3qfGwyZA6QZOZFGWQW?=
- =?us-ascii?Q?2paapT5YnNCVna2+nMBRnovBMJHanwLAYvHgOVOCwLMdhQQR6vLtIdHQRRbA?=
- =?us-ascii?Q?2GKu/iIloiaDaAIXuTdqpDRRNi/y9PNUfzY+yKCzy2JSsiopA4EXNIpRHkwo?=
- =?us-ascii?Q?z3a9h3cZKz2dFCXhqfrklsz9XOC9E58x9c0RNyVQS43tWWfABXcCdVIC6Rz0?=
- =?us-ascii?Q?1VB3saawaBl28g/utS8pHB/8QnEfM1jKNroxwY7QyyP4zxQ+bXdKeJFmM82D?=
- =?us-ascii?Q?/2d9RHEZVtcGgY0wQqUGALDqhb92IaY6SiJzpAIvmXCXaISXP5+V4hNhiucK?=
- =?us-ascii?Q?QwmQxpkCc2Voo6cCdTltg3teaH8cvnJZ7Fv9Qcg0tJyvLsJH8oBAZWDaAsy2?=
- =?us-ascii?Q?BPmMB6LXSGcH1YStmKco35DO/4gB8kgSiXliVYxL5rv8shbwX6t276TKxszi?=
- =?us-ascii?Q?UebLwNWwy5KP+En9Y8R4rJXYB7fImaq01HEkOa25vuxyR8ggixkNaU2qK8Og?=
- =?us-ascii?Q?cQwRjQH6JrFFJHd5AGa6i4yTvGVfWu4vZArfNejcRk59IZMNw6no841l1qi3?=
- =?us-ascii?Q?rmyaoIQSPKe+smG1nvbzMVq6YLnKbovIG1WDhH21nWX3UEDQ6mKuSDPM/b7z?=
- =?us-ascii?Q?YXJbf5uhfBZHdw55jX/vFOw0/1pBK42gd9GQomeZo5smLrJELJn8HGrK2JnA?=
- =?us-ascii?Q?mLKdECNyqkg3swhD2g4FKvSXY88Jw3krHmvUo0FB1lw9TUxn4P/GSpBBCNrh?=
- =?us-ascii?Q?AlLvfdQk2w=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98587aff-341f-4dd5-52e2-08da282f0605
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 09:19:25.7509
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3ZNQS57+zvpeeX+6wJsK0jhgtwWxR0OnLT3OyCJfiFv5ebAsYaEq0E+aGJfGYR3YYElVSdGt2vrR36iVz3+vEw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6848
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,SPF_HELO_PASS,T_SPF_PERMERROR autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
+ <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com> <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+In-Reply-To: <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Wed, 27 Apr 2022 21:22:32 +1200
+Message-ID: <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
+Subject: Re: DAMON VA regions don't split on an large Android APP
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
+        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
+        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
+        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        xhao@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
+>
+> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
+> <rongwei.wang@linux.alibaba.com> wrote:
+> >
+> >
+> >
+> > On 4/27/22 7:19 AM, Barry Song wrote:
+> > > Hi SeongJae & Andrew,
+> > > (also Cc-ed main damon developers)
+> > > On an Android phone, I tried to use the DAMON vaddr monitor and found
+> > > that vaddr regions don't split well on large Android Apps though
+> > > everything works well on native Apps.
+> > >
+> > > I have tried the below two cases on an Android phone with 12GB memory
+> > > and snapdragon 888 CPU.
+> > > 1. a native program with small memory working set  as below,
+> > > #define size (1024*1024*100)
+> > > main()
+> > > {
+> > >          volatile int *p = malloc(size);
+> > >          memset(p, 0x55, size);
+> > >
+> > >          while(1) {
+> > >                  int i;
+> > >                  for (i = 0; i < size / 4; i++)
+> > >                          (void)*(p + i);
+> > >                  usleep(1000);
+> > >
+> > >                  for (i = 0; i < size / 16; i++)
+> > >                          (void)*(p + i);
+> > >                  usleep(1000);
+> > >
+> > >          }
+> > > }
+> > > For this application, the Damon vaddr monitor works very well.
+> > > I have modified monitor.py in the damo userspace tool a little bit to
+> > > show the raw data getting from the kernel.
+> > > Regions can split decently on this kind of applications, a typical raw
+> > > data is as below,
+> > >
+> > > monitoring_start:             2.224 s
+> > > monitoring_end:               2.329 s
+> > > monitoring_duration:       104.336 ms
+> > > target_id: 0
+> > > nr_regions: 24
+> > > 005fb37b2000-005fb734a000(  59.594 MiB): 0
+> > > 005fb734a000-005fbaf95000(  60.293 MiB): 0
+> > > 005fbaf95000-005fbec0b000(  60.461 MiB): 0
+> > > 005fbec0b000-005fc2910000(  61.020 MiB): 0
+> > > 005fc2910000-005fc6769000(  62.348 MiB): 0
+> > > 005fc6769000-005fca33f000(  59.836 MiB): 0
+> > > 005fca33f000-005fcdc8b000(  57.297 MiB): 0
+> > > 005fcdc8b000-005fd115a000(  52.809 MiB): 0
+> > > 005fd115a000-005fd45bd000(  52.387 MiB): 0
+> > > 007661c59000-007661ee4000(   2.543 MiB): 2
+> > > 007661ee4000-0076623e4000(   5.000 MiB): 3
+> > > 0076623e4000-007662837000(   4.324 MiB): 2
+> > > 007662837000-0076630f1000(   8.727 MiB): 3
+> > > 0076630f1000-007663494000(   3.637 MiB): 2
+> > > 007663494000-007663753000(   2.746 MiB): 1
+> > > 007663753000-007664251000(  10.992 MiB): 3
+> > > 007664251000-0076666fd000(  36.672 MiB): 2
+> > > 0076666fd000-007666e73000(   7.461 MiB): 1
+> > > 007666e73000-007667c89000(  14.086 MiB): 2
+> > > 007667c89000-007667f97000(   3.055 MiB): 0
+> > > 007667f97000-007668112000(   1.480 MiB): 1
+> > > 007668112000-00766820f000(1012.000 KiB): 0
+> > > 007ff27b7000-007ff27d6000( 124.000 KiB): 0
+> > > 007ff27d6000-007ff27d8000(   8.000 KiB): 8
+> > >
+> > > 2. a large Android app like Asphalt 9
+> > > For this case, basically regions can't split very well, but monitor
+> > > works on small vma:
+> > >
+> > > monitoring_start:             2.220 s
+> > > monitoring_end:               2.318 s
+> > > monitoring_duration:        98.576 ms
+> > > target_id: 0
+> > > nr_regions: 15
+> > > 000012c00000-0001c301e000(   6.754 GiB): 0
+> > > 0001c301e000-000371b6c000(   6.730 GiB): 0
+> > > 000371b6c000-000400000000(   2.223 GiB): 0
+> > > 005c6759d000-005c675a2000(  20.000 KiB): 0
+> > > 005c675a2000-005c675a3000(   4.000 KiB): 3
+> > > 005c675a3000-005c675a7000(  16.000 KiB): 0
+> > > 0072f1e14000-0074928d4000(   6.510 GiB): 0
+> > > 0074928d4000-00763c71f000(   6.655 GiB): 0
+> > > 00763c71f000-0077e863e000(   6.687 GiB): 0
+> > > 0077e863e000-00798e214000(   6.590 GiB): 0
+> > > 00798e214000-007b0e48a000(   6.002 GiB): 0
+> > > 007b0e48a000-007c62f00000(   5.323 GiB): 0
+> > > 007c62f00000-007defb19000(   6.199 GiB): 0
+> > > 007defb19000-007f794ef000(   6.150 GiB): 0
+> > > 007f794ef000-007fe8f53000(   1.745 GiB): 0
+> > >
+> > > As you can see, we have some regions which are very very big and they
+> > > are losing the chance to be splitted. But
+> > > Damon can still monitor memory access for those small VMA areas very well like:
+> > > 005c675a2000-005c675a3000(   4.000 KiB): 3
+> > Hi, Barry
+> >
+> > Actually, we also had found the same problem in redis by ourselves
+> > tool[1]. The DAMON can not split the large anon VMA well, and the anon
+> > VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
+> > hot areas to been monitored or found by DAMON, likes one or more address
+> > choose by DAMON not been accessed during sample period.
+>
+> Hi Rongwei,
+> Thanks  for your comments and thanks for sharing your tools.
+>
+> I guess the cause might be:
+> in case a region is very big like 10GiB, we have only 1MiB hot pages
+> in this large region.
+> damon will randomly pick one page to sample, but the page has only
+> 1MiB/10GiB, thus
+> less than 1/10000 chance to hit the hot 1MiB. so probably we need
+> 10000 sample periods
+> to hit the hot 1MiB in order to split this large region?
+>
+> @SeongJae, please correct me if I am wrong.
+>
+> >
+> > I'm not sure whether sets init_regions can deal with the above problem,
+> > or dynamic choose one or limited number VMA to monitor.
+> >
+>
+> I won't set a limited number of VMA as this will make the damon too hard to use
+> as nobody wants to make such complex operations, especially an Android
+> app might have more than 8000 VMAs.
+>
+> I agree init_regions might be the right place to enhance the situation.
+>
+> > I'm not sure, just share my idea.
+> >
+> > [1] https://github.com/aliyun/data-profile-tools.git
+>
+> I suppose this tool is based on damon? How do you finally resolve the problem
+> that large anon VMAs can't be splitted?
+> Anyway, I will give your tool a try.
 
-i.MX93 features a Cortex-M33 core which could be kicked by ROM/Bootloader
-/Linux. Similar with i.MX8MN/P, we use SMC to trap into Arm Trusted
-Firmware to start/stop the M33 core.
+Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
+though autogen.sh
+runs successfully.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/remoteproc/imx_rproc.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+/usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
+/root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+reference to `wgetch'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
+/root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+reference to `subwin'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
+/root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
+/root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
+/root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
+/root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
+/root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
+/root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
+reference to `wattr_off'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
+reference to `wattr_on'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
+/root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+reference to `wattr_off'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
+reference to `mvwprintw'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+reference to `wattr_off'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
+/root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+reference to `wclear'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
+reference to `wrefresh'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
+reference to `endwin'
+/usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
+/root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
+reference to `initscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+reference to `wrefresh'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
+reference to `use_default_colors'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
+reference to `start_color'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
+reference to `keypad'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
+reference to `nonl'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
+reference to `cbreak'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
+reference to `noecho'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
+reference to `curs_set'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+reference to `stdscr'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+reference to `mvwprintw'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
+reference to `mvwprintw'
+/usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
+reference to `wrefresh'
+collect2: error: ld returned 1 exit status
+make[1]: *** [Makefile:592: datop] Error 1
+make[1]: Leaving directory '/root/data-profile-tools'
+make: *** [Makefile:438: all] Error 2
 
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 91eb037089ef..4a3352821b1d 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -91,6 +91,32 @@ struct imx_rproc {
- 	void __iomem			*rsc_table;
- };
- 
-+static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-+	/* dev addr , sys addr  , size	    , flags */
-+	/* TCM CODE NON-SECURE */
-+	{ 0x0FFC0000, 0x201C0000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+	{ 0x0FFE0000, 0x201E0000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+
-+	/* TCM CODE SECURE */
-+	{ 0x1FFC0000, 0x201C0000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+	{ 0x1FFE0000, 0x201E0000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+
-+	/* TCM SYS NON-SECURE*/
-+	{ 0x20000000, 0x20200000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+	{ 0x20020000, 0x20220000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+
-+	/* TCM SYS SECURE*/
-+	{ 0x30000000, 0x20200000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+	{ 0x30020000, 0x20220000, 0x00020000, ATT_OWN | ATT_IOMEM },
-+
-+	/* DDR */
-+	{ 0x80000000, 0x80000000, 0x10000000, 0 },
-+	{ 0x90000000, 0x80000000, 0x10000000, 0 },
-+
-+	{ 0xC0000000, 0xa0000000, 0x10000000, 0 },
-+	{ 0xD0000000, 0xa0000000, 0x10000000, 0 },
-+};
-+
- static const struct imx_rproc_att imx_rproc_att_imx8mn[] = {
- 	/* dev addr , sys addr  , size	    , flags */
- 	/* ITCM   */
-@@ -261,6 +287,12 @@ static const struct imx_rproc_dcfg imx_rproc_cfg_imx6sx = {
- 	.method		= IMX_RPROC_MMIO,
- };
- 
-+static const struct imx_rproc_dcfg imx_rproc_cfg_imx93 = {
-+	.att		= imx_rproc_att_imx93,
-+	.att_size	= ARRAY_SIZE(imx_rproc_att_imx93),
-+	.method		= IMX_RPROC_SMC,
-+};
-+
- static int imx_rproc_start(struct rproc *rproc)
- {
- 	struct imx_rproc *priv = rproc->priv;
-@@ -824,6 +856,7 @@ static const struct of_device_id imx_rproc_of_match[] = {
- 	{ .compatible = "fsl,imx8mn-cm7", .data = &imx_rproc_cfg_imx8mn },
- 	{ .compatible = "fsl,imx8mp-cm7", .data = &imx_rproc_cfg_imx8mn },
- 	{ .compatible = "fsl,imx8ulp-cm33", .data = &imx_rproc_cfg_imx8ulp },
-+	{ .compatible = "fsl,imx93-cm33", .data = &imx_rproc_cfg_imx93 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, imx_rproc_of_match);
--- 
-2.25.1
-
+>
+> > >
+> > > Typical characteristics of a large Android app is that it has
+> > > thousands of vma and very large virtual address spaces:
+> > > ~/damo # pmap 2550 | wc -l
+> > > 8522
+> > >
+> > > ~/damo # pmap 2550
+> > > ...
+> > > 0000007992bbe000      4K r----   [ anon ]
+> > > 0000007992bbf000     24K rw---   [ anon ]
+> > > 0000007fe8753000      4K -----   [ anon ]
+> > > 0000007fe8754000   8188K rw---   [ stack ]
+> > >   total         36742112K
+> > >
+> > > Because the whole vma list is too long, I have put the list here for
+> > > you to download:
+> > > wget http://www.linuxep.com/patches/android-app-vmas
+> > >
+> > > I can reproduce this problem on other Apps like youtube as well.
+> > > I suppose we need to boost the algorithm of splitting regions for this
+> > > kind of application.
+> > > Any thoughts?
+> > >
+>
+> Thanks
+> Barry

@@ -2,128 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18DF511ED7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CD7511CE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiD0PEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S238931AbiD0PEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238888AbiD0PE1 (ORCPT
+        with ESMTP id S238889AbiD0PEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:04:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C46E627D178
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651071675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Egehvqg27Nr6FMLxE+ww4T3/EHzKsHjYMiC2xu74Aa0=;
-        b=LVaAvq3pUdzDDz4KdkbPEz2iAxUDvXcsUqC+oKrsPAkbeJWD19W+xU35PK+1Uz0M2EkxqT
-        cxuBWTXcmzX1wHogjTb3Wxqv7NhwfoGFcOYhvTmHKqOFPrpezLbu7ZuRFV1dqQJLYg7AWS
-        HweuLIL2lFEa0PQI+Z3r3tUjj6VT5Cw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-220-bpgZATshNN-iftRBC2UfHA-1; Wed, 27 Apr 2022 11:01:12 -0400
-X-MC-Unique: bpgZATshNN-iftRBC2UfHA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13E673839772;
-        Wed, 27 Apr 2022 15:01:00 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 83842C4C7A1;
-        Wed, 27 Apr 2022 15:00:55 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 27 Apr 2022 17:00:59 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 17:00:54 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
- siglock held
-Message-ID: <20220427150053.GD17421@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-6-ebiederm@xmission.com>
- <20220427145646.GC17421@redhat.com>
-MIME-Version: 1.0
+        Wed, 27 Apr 2022 11:04:52 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2052.outbound.protection.outlook.com [40.107.95.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B531D28F956;
+        Wed, 27 Apr 2022 08:01:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N4SCpPuxHUfDswGUUT1FQcmivyyNgRIh9XvCoGCck99esS/qd4cAFzSCn+PtlS9+dwvkDuMUI2JO7E9gqFxoUZtVG2CUxImj9MLaMlGrEQxKBIJhuv76n7uc0to88zQCWEhadMEyn158bNKjMTKGqdNVxxc60rkGAtkt0aOcvPnBXxZRM+Seq5G4BGBflBnzRwrwOXp2WIdF31iJd0jqEbJxG3p8r3dxzcVkMZykd1EJ2Mp+dlg8zKAAwIrfw1Q7xHN/9YvewB+Pls4bzdPAm0Q4l2bJNiET9PURyR4zJs72Bbn5PqFLmU0CkiaZ/nchfqQjXj1w8gAHiqmUqz0fMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pWj9drGXcatzOv3mQofl+hSEGNeTNTSI886KsULYRJ4=;
+ b=OFASa2JIdGilRUmw13OVXHPLgurAqH4NHn+Syhi4Jul4cRuajkFI81bcdLzR9QluUyh1uKZp4ISJXZD9pncSakByIml3HwgEuqYFijcZxQnNwBkKan+TarHwXUmFwNziq5mn2TlAoha6o9boMPNOKIbs84JQ+TwpsjgWXaabzwxJnLWYCGmrVbA3RLOcLUWiTEql1ckbNVCZ9o9q0kk3Gs80zjLrGakEv2MAJjxuiL8jOTyhnWNiaYsVtjWelvZYGLpNjHUwegzU2XS+Tu7ddgkQaco26ekTuljtQQPhUHQhOTQo0u2gkNPrYvRyQJVD42baq7vSJSR7Vv1om8IItQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pWj9drGXcatzOv3mQofl+hSEGNeTNTSI886KsULYRJ4=;
+ b=hBgFftSqQ+xPfXFP8JO4uZ+G1clpflgNBpAbSjyIeTHqODuvAODPgThKk4nFWAiYcYVnED3GYMac3Ly4rCg8sort6KhXqeojQWhbskGGn0dRpYkUJn3jj+gorVv1+BgpbrTfMI3edy9s0/FzDFRPWSsP3xrQ4E3PkHVnc4znYUT0ndiv/JUiALRPlU6OVHoWBH3cAJxPgaJLUWwsj2Eoe2iIKhRzW0XbSYmC0WK5uaMSqD+JE705Fk485Ty5jFUB95ealdf9932L8HDrbK9UFkVuRcFlqlTUoB6QYnz6l8kXpflkr0IaDqTsozi0481AeiLELeDGW+rGdTIGyfWZwQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM4PR12MB6135.namprd12.prod.outlook.com (2603:10b6:8:ac::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.15; Wed, 27 Apr 2022 15:01:39 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
+ 15:01:39 +0000
+Date:   Wed, 27 Apr 2022 12:01:38 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
+        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 16/21] vfio-pci/zdev: add open/close device hooks
+Message-ID: <20220427150138.GA2512703@nvidia.com>
+References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
+ <20220426200842.98655-17-mjrosato@linux.ibm.com>
+ <20220427140410.GX2125828@nvidia.com>
+ <f6c78792-9cf7-0cde-f760-76166f9b7eb7@linux.ibm.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427145646.GC17421@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f6c78792-9cf7-0cde-f760-76166f9b7eb7@linux.ibm.com>
+X-ClientProxiedBy: MN2PR05CA0064.namprd05.prod.outlook.com
+ (2603:10b6:208:236::33) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 73efaabd-bbae-47bf-d8d5-08da285ed507
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6135:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB6135B26F68A378CEDB201C3EC2FA9@DM4PR12MB6135.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nh5GtmsTFbjwLwM0TFJZ3EnMA380mERb7GxVmGOUTNdsa93AyA3t7mVITjB7MZTu74qlG3ErkFEFjp9FKirErSW64q0DZ1A3hd9CTX+EOu89Fus7NWIVJGeHy9oCKFiiUr/6IvV2cMg6JIn28+9vfORZClmZw5ydy7+zfHYY0uojEjCkhU7l25pky+R93PTGDVV+VcdrcJDowEgh8d9LObF2bzl+3Xjy8jjlu/yKGP5Wb+4d9fAhds7b2GMH3lanyCV68c2GkOWIV+zGhrfby6uIHa2pey7dHItfhHf/ngth+DthqE7u1wQ1x5J7RotUkb7AxxJ/PCTIFen/l8KC5gkZDLFVxn208ISe/jbCzsUzbuQoF4tusE5hxJbgx96bV91fi7Udw47JX3eB4HT76bkXliWitYWlEQg+NPfYWoUc7VA+9t5GTfRnP65/IzosL3MQDTVu69png/OZNPezPaaHSWG/EXFkAEaG6vm3ZvRmLi2O4YyTisxOotZAVMIgvM6adeAHUE5IgaU61n13+tmD7RRuMaWTBWKHM4v0xbVnpXwAarh2Gqo/QmrwlV87kWma31vzi2+5iLb9Vy7cbF9Atu6QbiRddY7fkfHPQ7Q1pz6DZMnvMMemQTuq3IJCqnIBUzH7+Socy0wlnvUsNA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(26005)(6506007)(6512007)(2906002)(33656002)(508600001)(53546011)(6486002)(86362001)(2616005)(5660300002)(8936002)(7416002)(186003)(316002)(38100700002)(6916009)(36756003)(66946007)(66556008)(66476007)(8676002)(4326008)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RSZNyvliBmRf9F95iZCtH/YzZMcJbuWlahPZddLEk5qyE1BAReYBmt732Dbg?=
+ =?us-ascii?Q?ekOWaxeU8dYTq+1hNcGG8KzEX4ppzlnoy927LCnakt6e60+jkiyWoHRc9L3C?=
+ =?us-ascii?Q?XqWz3Zv8LPbmAzQfV6sxOdAIy0pYo34dtIA8idl1uuT/TtYE2bealSD6vmkW?=
+ =?us-ascii?Q?8iJbXZsbZZuYfgV3/KMRi4DehfexA/mBK2l6pm1Jr9JueJyd6ZFqke/vMAIB?=
+ =?us-ascii?Q?eRDUdU0FRXuj2LZx6qPJj291LHwlWLUtFZcQObdorDN1tNxcU559sEzKwU9w?=
+ =?us-ascii?Q?b2/qxDvP2ePh7g/+Z3xG5lj8Z3FvBty0x4phTzuYWwiecgGOUpfNdkG1rRcO?=
+ =?us-ascii?Q?fnr6GLz1SQYp5glHu6/vid3b88a/MzvQVY8qVCwoGvDyqjPMIM11BuDe9MpZ?=
+ =?us-ascii?Q?Xrpbd+s+aeAFcUBUzwMY64RwUz6q4BXmEwzo2iNUJXK/hrvhGniwLQSQGTZ3?=
+ =?us-ascii?Q?Kd3nlYjP3rGmEA8fhcLsv+pk1FgWPxeIF1pRe3YPmkQd6KWswGSPiaq5kRhu?=
+ =?us-ascii?Q?wFxg50Ss7FqNIXvbCuP7rmTYgBXnsFjQkR1K1vRH/jC8myiKGB6hl/ljEm8y?=
+ =?us-ascii?Q?WGVXNfz3eZYpHBjdWArc73L0uje52oyHuEarN3QFIX+Y8nKGvaNiMUleKsLZ?=
+ =?us-ascii?Q?nV47mcSYAEtC06IsoZUcTdyXQ32qkUrCbW0mhHnLyypczYwP58lcYiuki8EK?=
+ =?us-ascii?Q?ljFQGZ6QvQ1PyPIFqa1tuPbIkN3BH3QpnraEiXs5+n9iZCAwYlZ2a87nYV7Q?=
+ =?us-ascii?Q?FufOMPfe7QUkAaQZPdbSBeRj56FF82LXbI3NyeL7N533EAMh4j99UWZQjGw2?=
+ =?us-ascii?Q?GXnPLekiC6DSIBkbgVUnm6h5oFPKxPPww4nnTiudAubzi9FxCgKxjLUGDOlv?=
+ =?us-ascii?Q?9ND6HF7S1EdRuKjq9hjH7DiXvQRWvPBdBTUypp1jgXXnFDN091vGNL63v0Ds?=
+ =?us-ascii?Q?hEcQ1GaWw06kY2oEqOBu4J4Y89DRB0NyYyWpyLJK1QVGfZoH0OYv+9cXHJOg?=
+ =?us-ascii?Q?EU9aM7H2CFwYkrodxQ3K2NCsOPM0EeeDPbmFa7iDZ1MqRlvHJLFVzDO+3evg?=
+ =?us-ascii?Q?Hz70+jOPzAz1FMzNrD1BvWConK16O8ou+zCG7BQKHTm4vNVaE6ahE8LCrkVd?=
+ =?us-ascii?Q?1hnUEOt7oYo52jF9yYmn3HVeqzXKpNp4OypvHnAfpxunsssI0K6QbC0FvByJ?=
+ =?us-ascii?Q?MLJ6UI9/tItHmwBeDL/KvtXJRteApfNK/bZEoSsahtF4nMiXLSrU88Ra9p26?=
+ =?us-ascii?Q?DizAKFUC0hn9r/Lo9yiE5h7SC7MpFzKnpzHEzOnyV6Whndb8o0TlR7lIYLgN?=
+ =?us-ascii?Q?QZkm3U9xmSF/5cTTT2js1P9eVSahbeZWdEiSOPoKblx5rNRzByhz5TK19zDM?=
+ =?us-ascii?Q?5TALQ/Xc2OPvsPvAw0AdBSU2JygEOTWWjJsOQIN2XSGjY/onohtFpnhphAOc?=
+ =?us-ascii?Q?woa7/Bk2L63ogwgrY0Jlj3ZGgVP2oCPZ3gf5rqpdtFl4raGsm6cAyKtcqnIZ?=
+ =?us-ascii?Q?b54rifAt/KKrdRr+5+roI2fRqSLxC1gQotikWckDEK6PMuZGoWgnAbu+1sti?=
+ =?us-ascii?Q?PE4j5R6+U1t9vWUeJg/0V4NfBJGM/4u3FjT8+FbvY/noeGaAnvqXIKs65xNl?=
+ =?us-ascii?Q?Hls9aFuu+8OsD0tgvwz8XxDb0nzKa5htC07XtWnkZGVo9G1zImQ1kgeilSSc?=
+ =?us-ascii?Q?oUAMCaQd4xeHyZC4sh0w/5YAlCTK6kNCy5VbdWGXRkgwlPkB0tGhgHIYbyoc?=
+ =?us-ascii?Q?Tx4fhXgvDg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73efaabd-bbae-47bf-d8d5-08da285ed507
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 15:01:39.4163
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HLPONy7iws3SHaSZl2AEr+4hyJke4qE50Vg5eRdPH6vJ0Q7ZLYupWr44Prb7Nr12
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6135
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/27, Oleg Nesterov wrote:
->
-> On 04/26, Eric W. Biederman wrote:
-> >
-> > @@ -2209,6 +2213,34 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
-> >  		spin_lock_irq(&current->sighand->siglock);
-> >  	}
-> >
-> > +	/* Don't stop if current is not ptraced */
-> > +	if (unlikely(!current->ptrace))
-> > +		return (clear_code) ? 0 : exit_code;
-> > +
-> > +	/*
-> > +	 * If @why is CLD_STOPPED, we're trapping to participate in a group
-> > +	 * stop.  Do the bookkeeping.  Note that if SIGCONT was delievered
-> > +	 * across siglock relocks since INTERRUPT was scheduled, PENDING
-> > +	 * could be clear now.  We act as if SIGCONT is received after
-> > +	 * TASK_TRACED is entered - ignore it.
-> > +	 */
-> > +	if (why == CLD_STOPPED && (current->jobctl & JOBCTL_STOP_PENDING))
-> > +		gstop_done = task_participate_group_stop(current);
-> > +
-> > +	/*
-> > +	 * Notify parents of the stop.
-> > +	 *
-> > +	 * While ptraced, there are two parents - the ptracer and
-> > +	 * the real_parent of the group_leader.  The ptracer should
-> > +	 * know about every stop while the real parent is only
-> > +	 * interested in the completion of group stop.  The states
-> > +	 * for the two don't interact with each other.  Notify
-> > +	 * separately unless they're gonna be duplicates.
-> > +	 */
-> > +	do_notify_parent_cldstop(current, true, why);
-> > +	if (gstop_done && ptrace_reparented(current))
-> > +		do_notify_parent_cldstop(current, false, why);
->
-> This doesn't look right too. The parent should be notified only after
-> we set __state = TASK_TRACED and ->exit code.
->
-> Suppose that debugger sleeps in do_wait(). do_notify_parent_cldstop()
-> wakes it up, debugger calls wait_task_stopped() and then it will sleep
-> again, task_stopped_code() returns 0.
->
-> This can be probably fixed if you remove the lockless (fast path)
-> task_stopped_code() check in wait_task_stopped(), but this is not
-> nice performance-wise...
+On Wed, Apr 27, 2022 at 10:42:07AM -0400, Matthew Rosato wrote:
+> On 4/27/22 10:04 AM, Jason Gunthorpe wrote:
+> > On Tue, Apr 26, 2022 at 04:08:37PM -0400, Matthew Rosato wrote:
+> > 
+> > > +static int vfio_pci_zdev_group_notifier(struct notifier_block *nb,
+> > > +					unsigned long action, void *data)
+> > > +{
+> > > +	struct zpci_dev *zdev = container_of(nb, struct zpci_dev, nb);
+> > > +	int (*fn)(struct zpci_dev *zdev, struct kvm *kvm);
+> > > +	int rc = NOTIFY_OK;
+> > > +
+> > > +	if (action == VFIO_GROUP_NOTIFY_SET_KVM) {
+> > > +		if (!zdev)
+> > > +			return NOTIFY_DONE;
+> > > +
+> > > +		fn = symbol_get(kvm_s390_pci_register_kvm);
+> > > +		if (!fn)
+> > > +			return NOTIFY_DONE;
+> > > +
+> > > +		if (fn(zdev, (struct kvm *)data))
+> > > +			rc = NOTIFY_BAD;
+> > > +
+> > > +		symbol_put(kvm_s390_pci_register_kvm);
+> > 
+> > Is it possible this function can be in statically linked arch code?
+> > 
+> > Or, actually, is zPCI useful anyhow without kvm ie can you just have a
+> > direct dependency here?
+> > 
+> 
+> zPCI devices (zpci_dev) exist regardless of whether kvm is configured or
+> not, and you can e.g. bind the associated PCI device to vfio-pci when KVM is
+> not configured (or module not loaded) and get the existing vfio-pci-zdev
+> extensions for that device (extra VFIO_DEVICE_INFO response data).  Making a
+> direct dependency on KVM would remove that; this was discussed in a prior
+> version because this extra info is not used today outside of a KVM usecase
+> are not specific to kvm that need vfio-pci-zdev).
 
-On the other hand, I don't understand why did you move the callsite
-of do_notify_parent_cldstop() up... just don't do this?
+I'm a bit confused, what is the drawback of just having a direct
+symbol dependency here? It means vfio loads a little extra kernel
+module code, but is that really a big worry given almost all vfio
+users on s390 will be using it with kvm?
 
-Oleg.
+Or is there some technical blocker? (circular dep or something?)
 
+Jason

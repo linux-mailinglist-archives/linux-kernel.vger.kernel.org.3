@@ -2,115 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1062512757
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C43C512767
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbiD0XKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 19:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S234029AbiD0XNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 19:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbiD0XKu (ORCPT
+        with ESMTP id S231615AbiD0XNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 19:10:50 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A9E4F9FD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:07:38 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m62so1941784wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yCMuMxFVDueXSdsssZ7NkvR2GebkCDSm3O2foS8iyt0=;
-        b=lI03Sf6n1sFHiTmB3QuhD2zTIpq2cQaW9ilXhtkjF+ugvzsH8im7FgHQByrq960XNv
-         +PudeiasGjWqQsZ9eq9+aUe1TDWptD89pBn7jXPIU5iELE5eIYaLjgSEX71trF6mkMeA
-         1ZmaWbOLmZwXk0K+jfK3C98Duq0l+wREvqWA8T1e5JBN9z6zU0H7+n1KHHchR7rkVzIj
-         LpNhgP0SAGX2MQ2n9MLo9azwBX78Vvn4Jo1xmitsUBQljGQkdd76ga29sQx3ZvVWkM+S
-         UMjFrTKITNp+wJ9AYUuTJ3i+g5mMCyJntgDRBihhidQUDBtuKVrUrxH663Zj5y02z/ds
-         q15Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yCMuMxFVDueXSdsssZ7NkvR2GebkCDSm3O2foS8iyt0=;
-        b=FotYyi+TpK7v+SXMzsUR8Erv3c/qQXRixHh61tE3xKvMvsZmWaR6nVqJCAk5I7wF1h
-         8jYGRIjS1z7siV5ulxiVKkUkgG2tsKftZI8kj8ksmEFsawVpv8r096Wu8/zrPHBuxiJn
-         UsGwuR4FI4szWOvzX8PKUtPl07MUtkMKiV6H4VjBryTsgMzR2M/BNeEQtuoYePM3Rnf2
-         Gy1jN+B/QGaBAdYnvYFo9DvD5aD4ANYif/LBWzBD2H3XhCKlCM75qz4zV9eZqiwNqGTd
-         NTOKiAlnfp2tLtnfUytMPiWi+UJCe1MVUtLdqrxCOFyfbAz5yjmIyPXWZnCOSWv74Yhd
-         AZUg==
-X-Gm-Message-State: AOAM5337stk1QYLAT4Z7AlaS5Z61e1PoSYuSdXNH6qviJbu7/6ZkAzVh
-        k6owAhLZh+f332vh+YVwHzW9x2RzTdgVgpKqcCjc512kggM=
-X-Google-Smtp-Source: ABdhPJz76n8vrNwnrnWIGpRemBC6D8/Dji5ku3bVo0ANrd/hiH+XDReSHjhODQT92FyrlaNmynjVZKLvV0H/Zhl2w5I=
-X-Received: by 2002:a1c:f605:0:b0:37b:b5de:89a0 with SMTP id
- w5-20020a1cf605000000b0037bb5de89a0mr27476548wmc.88.1651100856343; Wed, 27
- Apr 2022 16:07:36 -0700 (PDT)
+        Wed, 27 Apr 2022 19:13:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC1626ACB;
+        Wed, 27 Apr 2022 16:10:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651101023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0f+m2Dqb3x2CVJe4DM+W9cwvXPiNqPC/6H9asGUciw=;
+        b=hQC4wdHr3uIvFPLUK37KcFVlQVbuVrdB2JhO9mWr032woo0CTs1XzrrJ9w8d51QXkif9AL
+        iqq/CtSS3SAVCOsErIZhntagIalkjek2CKzYlZKbY+1yquvkEQ+SYGxLFEeOfB9K8/iuiJ
+        sJTeeJ3hD6Z+Wnv3S4GSGuF5a9lTEeyQcTKwL6ILvd79BejzkSsxSC6T5rE5aZP3TBP/n3
+        +jg4S8nbkCWy5yCMu6ql/RNoji2O4gWL9/3jqEHHpACl6ssvK5LjT19uU9SgW5SHZbttuD
+        IIpdWuU+v3ZLfrZlGAvsGInIufO9oQU50N6f2e5WaZw6mwwzzdp4oghy6QGLww==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651101023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d0f+m2Dqb3x2CVJe4DM+W9cwvXPiNqPC/6H9asGUciw=;
+        b=GNkovCpOnyHDDop7r43RmNJOWpj1X6I0zE9A0pAj3SrYiDPcex+a91CWpFL9fN5aLfGBcx
+        y5Us2rg+kicvELDA==
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        H Peter Anvin <hpa@zytor.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "sdeep@vmware.com" <sdeep@vmware.com>,
+        "pv-drivers@vmware.com" <pv-drivers@vmware.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "Andrew.Cooper3@citrix.com" <Andrew.Cooper3@citrix.com>,
+        "Hall, Christopher S" <christopher.s.hall@intel.com>
+Subject: Re: [PATCH V2 03/11] perf/x86: Add support for TSC in nanoseconds
+ as a perf event clock
+In-Reply-To: <c8033229-97a0-3e4c-66d5-74c0d1d4e15c@intel.com>
+References: <20220214110914.268126-1-adrian.hunter@intel.com>
+ <20220214110914.268126-4-adrian.hunter@intel.com>
+ <YiIXFmA4vpcTSk2L@hirez.programming.kicks-ass.net>
+ <853ce127-25f0-d0fe-1d8f-0b0dd4f3ce71@intel.com>
+ <YiXVgEk/1UClkygX@hirez.programming.kicks-ass.net>
+ <30383f92-59cb-2875-1e1b-ff1a0eacd235@intel.com>
+ <YiYZv+LOmjzi5wcm@hirez.programming.kicks-ass.net>
+ <013b5425-2a60-e4d4-b846-444a576f2b28@intel.com>
+ <6f07a7d4e1ad4440bf6c502c8cb6c2ed@intel.com>
+ <c3e1842b-79c3-634a-3121-938b5160ca4c@intel.com>
+ <50fd2671-6070-0eba-ea68-9df9b79ccac3@intel.com> <87ilqx33vk.ffs@tglx>
+ <ff1e190a-95e6-e2a6-dc01-a46f7ffd2162@intel.com> <87fsm114ax.ffs@tglx>
+ <c8033229-97a0-3e4c-66d5-74c0d1d4e15c@intel.com>
+Date:   Thu, 28 Apr 2022 01:10:23 +0200
+Message-ID: <87ee1iw2ao.ffs@tglx>
 MIME-Version: 1.0
-References: <20220422150507.222488-1-namhyung@kernel.org> <20220422150507.222488-3-namhyung@kernel.org>
-In-Reply-To: <20220422150507.222488-3-namhyung@kernel.org>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 27 Apr 2022 16:07:25 -0700
-Message-ID: <CA+khW7gvDaDiA458StkOEvUfvr1Rx4d65+530z2tq52VkJqaoA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] perf record: Enable off-cpu analysis with BPF
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Namhyung,
-
-On Fri, Apr 22, 2022 at 8:05 AM Namhyung Kim <namhyung@kernel.org> wrote:
+On Tue, Apr 26 2022 at 09:51, Adrian Hunter wrote:
+> On 25/04/22 20:05, Thomas Gleixner wrote:
+>> On Mon, Apr 25 2022 at 16:15, Adrian Hunter wrote:
+>>> On 25/04/22 12:32, Thomas Gleixner wrote:
+>>>> It's hillarious, that we still cling to this pvclock abomination, while
+>>>> we happily expose TSC deadline timer to the guest. TSC virt scaling was
+>>>> implemented in hardware for a reason.
+>>>
+>>> So you are talking about changing VMX TCS Offset on every VM-Entry to try to hide
+>>> the time jumps when the VM is scheduled out?  Or neglect that and just let the time
+>>> jumps happen?
+>>>
+>>> If changing VMX TCS Offset, how can TSC be kept consistent between each VCPU i.e.
+>>> wouldn't that mean each VCPU has to have the same VMX TSC Offset?
+>> 
+>> Obviously so. That's the only thing which makes sense, no?
 >
-
-[...]
-
+> [ Sending this again, because I notice I messed up the email "From" ]
 >
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/Makefile.perf               |   1 +
->  tools/perf/builtin-record.c            |  21 +++
->  tools/perf/util/Build                  |   1 +
->  tools/perf/util/bpf_off_cpu.c          | 208 +++++++++++++++++++++++++
->  tools/perf/util/bpf_skel/off_cpu.bpf.c | 137 ++++++++++++++++
->  tools/perf/util/off_cpu.h              |  22 +++
->  6 files changed, 390 insertions(+)
->  create mode 100644 tools/perf/util/bpf_off_cpu.c
->  create mode 100644 tools/perf/util/bpf_skel/off_cpu.bpf.c
->  create mode 100644 tools/perf/util/off_cpu.h
->
+> But wouldn't that mean changing all the VCPUs VMX TSC Offset at the same time,
+> which means when none are currently executing?  How could that be done?
 
-[...]
+Why would you change TSC offset after the point where a VM is started
+and why would it be different per vCPU?
 
-> diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> new file mode 100644
-> index 000000000000..2bc6f7cc59ea
-> --- /dev/null
-> +++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
->
-> +struct {
-> +       __uint(type, BPF_MAP_TYPE_HASH);
-> +       __uint(key_size, sizeof(__u32));
-> +       __uint(value_size, sizeof(struct tstamp_data));
-> +       __uint(max_entries, MAX_ENTRIES);
-> +} tstamp SEC(".maps");
+Time is global and time moves on when a vCPU is scheduled out. Anything
+else is bonkers, really. If the hypervisor tries to screw with that then
+how does the guest do timekeeping in a consistent way?
 
-I think using task local storage for this tstamp would be more
-efficient. There is an example in
-tools/bpf/runqslower/runqslower.bpf.c
+    CLOCK_REALTIME = CLOCK_MONOTONIC + offset
+
+That offset changes when something sets the clock, i.e. clock_settime(),
+settimeofday() or adjtimex() in case that NTP cannot compensate or for
+the beloved leap seconds adjustment. At any other time the offset is
+constant.
+
+CLOCK_MONOTONIC is derived from the underlying clocksource which is
+expected to increment with constant frequency and that has to be
+consistent accross _all_ vCPUs of a particular VM.
+
+So how would a hypervisor 'hide' scheduled out time w/o screwing up
+timekeeping completely?
+
+The guest TSC which is based on the host TSC is:
+
+    guestTSC = offset + hostTSC * factor;
+
+If you make offset different between guest vCPUs then timekeeping in the
+guest is screwed.
+
+The whole point of that paravirt clock was to handle migration between
+hosts which did not have the VMCS TSC scaling/offset mechanism. The CPUs
+which did not have that went EOL at least 10 years ago.
+
+So what are you concerned about?
+
+Thanks,
+
+        tglx

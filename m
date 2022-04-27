@@ -2,77 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91753510DD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F517510DD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356604AbiD0BTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S1344391AbiD0BWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344391AbiD0BTr (ORCPT
+        with ESMTP id S1356601AbiD0BWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:19:47 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C06B2E08C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:16:38 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id n33-20020a17090a5aa400b001d28f5ee3f9so481159pji.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:16:38 -0700 (PDT)
+        Tue, 26 Apr 2022 21:22:08 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25114174430
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:18:59 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id w21so92431uan.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6jFJtCmRVi276uO+VGW/oZwgeFrr/SjrfPgb9kCh74I=;
-        b=Ejd4R30p2LtyMa6p1euHblC5a1PVQG8JIbo3FgFvBREIipq68XnWsPcVw3rbNVlVRa
-         CYj87Ri/LwP/YWntee2iUJqvqxwWFM3jAusTkeJfiv8yq9O8OvyGsQgrTL1UTj05O+km
-         YacRIRrHQGJ+covG3L+RjDcC0IcLAAm0+KNZh2/AQ5bDgpj9Inpi9my7dWTK3D3NjLFC
-         Xw7p+j7POZgPmFxHPIO0N/CnNquhCXal967FLD6DN355ExH/wgFEaziKN8XZCjlKTESm
-         X7zL532ggJvHsq5PEf+o9o5LDBz2JSjOcZrYR1bcVR2VzLSGPRkQXIm5pk4pF5ubp6Nn
-         hycQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dkaom6jGHiqXJJvzANNgQPiwnUpwsfzq/QVSUZefRFM=;
+        b=CNABcSddX5b6n+TQdqiZuhToeSYgN8qqRcrhLTf2cbtNpqOpITOw0HoUW1VxeheSqr
+         +kIHNlxEm7JA7PbBw9bvynk3vAS1zjmQEequdqIu7eonYeGOKX1RbYd4eXS4EL7Cnlm7
+         Wi8acyLCuqs+uqGQDo0rBN9uQkgZ45oK5xeF1xKHiAeYfZZu4409vPwkLv8mkEOmuhRN
+         gxvSR+Fa/kK898TJTUuGLY5PaLuM7wYYzf5ZxA16B0IMmvu8tPBoxRFky8sOUqW9+Xyz
+         04/FOMsq62xn0mP4AjRhUQRea/OIEEJpkItR6Q3DMQikK/BMkmfkfFRsGadzVE77x5+x
+         1sIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6jFJtCmRVi276uO+VGW/oZwgeFrr/SjrfPgb9kCh74I=;
-        b=vjw17d6IN4ZetBp5Rl68bghMWLVC3+tp/LT9LakAvjZoBJBAHitL+zydtxyZaVDD6i
-         EZ31u9vBsjCgKeuQhRt8G/p6um/hclaerCyh48h3WKrbGpEZq4Y3FVXAjbcJJTtJAhVQ
-         kXHdu+KoKdsXgHHSnbemYisNf5r/9v1vf2QbFbyd+ZXE/MK9Ws9Dyri2mw5en494Q3aG
-         4QqPqHtN0mI+LfLgpYsiBU1U8HMyPHihT0xhWug+d8zWTS81TG94aQqDezBFOQpKPPoW
-         wcuCbuyCitpRgPS2LldiWh8Kixd0WnHvise9jDLnRQgFnbtUJVwixZMzCTcreUf6MNsD
-         iU3Q==
-X-Gm-Message-State: AOAM530i1xtrnvSv35TWZyzoJObos5gh7BvQ/wxeFwO1nZHq/wh7X9XV
-        3I49JFu4tVW+77MM55OZ6haglw==
-X-Google-Smtp-Source: ABdhPJyJeG+jCHswMiFsLr+KMoQRT+wuqnbu0rLT1G337/GLjVem5pDjXGgenb11IZ0toAkWne8LxA==
-X-Received: by 2002:a17:90a:d3d1:b0:1bb:fdc5:182 with SMTP id d17-20020a17090ad3d100b001bbfdc50182mr41137810pjw.206.1651022197458;
-        Tue, 26 Apr 2022 18:16:37 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n4-20020a637204000000b00398522203a2sm14599905pgc.80.2022.04.26.18.16.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 18:16:36 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 01:16:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before
- lookup_address_in_mm()
-Message-ID: <YmiZcZf9YXxMVcfx@google.com>
-References: <20220327205803.739336-1-mizhang@google.com>
- <YkHRYY6x1Ewez/g4@google.com>
- <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
- <YkH7KZbamhKpCidK@google.com>
- <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
- <Ymg1lzsYAd6v/vGw@google.com>
- <CAL715WK8-cOJWK+iai=ygdOTzPb-QUvEwa607tVEkmGOu3gyQA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dkaom6jGHiqXJJvzANNgQPiwnUpwsfzq/QVSUZefRFM=;
+        b=k/FmqkevWdHvE8MkA0TGJF9vIpUv3U8V0aZFDtaH3BWhzGGc5bXKsNIbXetnQ32ega
+         bnusnzXdQ55+TtjWfNRm73FBTAQZVLERuafESWdJ4HM7vamrJaFHka5DlHIrHcmKxXV0
+         Qmc3wfRb36bSo8k77/+v8JTLTw1d6rv2SWuBMz2mxxSKIRi3ty3tPwLHAJD8jOecjHiy
+         44rsMcXgkteAm7QVaPo78ElscFEFbxbgQy4p4PDIdndUqBjxjrPl/Pe1lGZgrHscJ8rA
+         gYOxz8Fx4vdl+gC/qdUpl9MP0szuRFv+3kCIa1tvH6hocsd2GtV6t/Lwk8FForzV4qew
+         jI3w==
+X-Gm-Message-State: AOAM531IQ1SB2rPBlA/LgyGO8ybl4xtujyaHCBNGDqoH0+02p7hwxF8i
+        XheTW2f/5ddD2UYi+PgFB1lB+ibEfqvuFTfdm1MEMQ==
+X-Google-Smtp-Source: ABdhPJwdvDGouIH2ciLL1gxZrezu13HylZKO7y/rVDTnJd8+6pCaQT17EsqSX68jOcxM2tD03lALxOCQHXmVvOnDW5M=
+X-Received: by 2002:ab0:2695:0:b0:352:5fc9:4132 with SMTP id
+ t21-20020ab02695000000b003525fc94132mr7877586uao.29.1651022338107; Tue, 26
+ Apr 2022 18:18:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL715WK8-cOJWK+iai=ygdOTzPb-QUvEwa607tVEkmGOu3gyQA@mail.gmail.com>
+References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-6-yuzhao@google.com>
+ <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
+ <CAOUHufaeNzDJnDqatHe0MwsN-D6M_tw6JX2UBJFc+JpZNP86hQ@mail.gmail.com> <20220426164241.99e6a283c371ed75fa5c12a0@linux-foundation.org>
+In-Reply-To: <20220426164241.99e6a283c371ed75fa5c12a0@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 26 Apr 2022 19:18:21 -0600
+Message-ID: <CAOUHufbMA7VutATpDYZ15JT_WuP9MGL_Vp6q5KFk72OjzRV+qQ@mail.gmail.com>
+Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -84,23 +104,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022, Mingwei Zhang wrote:
-> > I completely agree that lookup_address() and friends are unnecessarily fragile,
-> > but I think that attempting to harden them to fix this KVM bug will open a can
-> > of worms and end up delaying getting KVM fixed.
-> 
-> So basically, we need to:
->  - choose perf_get_page_size() instead of using any of the
-> lookup_address*() in mm.
->  - add a wrapper layer to adapt: 1) irq disabling/enabling and 2) size
-> -> level translation.
-> 
-> Agree?
+On Tue, Apr 26, 2022 at 5:42 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue, 26 Apr 2022 16:39:07 -0600 Yu Zhao <yuzhao@google.com> wrote:
+>
+> > On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Wed,  6 Apr 2022 21:15:17 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > > Evictable pages are divided into multiple generations for each lruvec.
+> > > > The youngest generation number is stored in lrugen->max_seq for both
+> > > > anon and file types as they are aged on an equal footing. The oldest
+> > > > generation numbers are stored in lrugen->min_seq[] separately for anon
+> > > > and file types as clean file pages can be evicted regardless of swap
+> > > > constraints. These three variables are monotonically increasing.
+> > > >
+> > > > ...
+> > > >
+> > > > +static inline bool lru_gen_del_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
+> > >
+> > > There's a lot of function inlining here.  Fortunately the compiler will
+> > > ignore it all, because some of it looks wrong.  Please review (and
+> > > remeasure!).  If inlining is reqlly justified, use __always_inline, and
+> > > document the reasons for doing so.
+> >
+> > I totally expect modern compilers to make better decisions than I do.
+> > And personally, I'd never use __always_inline; instead, I'd strongly
+> > recommend FDO/LTO.
+>
+> My (badly expressed) point is that there's a lot of inlining of large
+> functions here.
+>
+> For example, lru_gen_add_folio() is huge and has 4(?) call sites.  This
+> may well produce slower code due to the icache footprint.
+>
+> Experiment: moving lru_gen_del_folio() into mm/vmscan.c shrinks that
+> file's .text from 80612 bytes to 78956.
+>
+> I tend to think that out-of-line regular old C functions should be the
+> default and that the code should be inlined only when a clear benefit
+> is demonstrable, or has at least been seriously thought about.
 
-Drat, I didn't see that it returns the page size, not the level.  That's a bit
-unfortunate.  It definitely makes me less averse to fixing lookup_address_in_pgd()
+I can move those functions to vmscan.c if you think it would improve
+performance. I don't have a strong opinion here -- I was able to
+measure the bloat but not the performance impact.
 
-Hrm.  I guess since we know there's at least one broken user, and in theory
-fixing lookup_address_in_pgd() should do no harm to users that don't need protection,
-it makes sense to just fix lookup_address_in_pgd() and see if the x86 maintainers
-push back.
+> > > > --- a/mm/Kconfig
+> > > > +++ b/mm/Kconfig
+> > > > @@ -909,6 +909,14 @@ config ANON_VMA_NAME
+> > > >         area from being merged with adjacent virtual memory areas due to the
+> > > >         difference in their name.
+> > > >
+> > > > +config LRU_GEN
+> > > > +     bool "Multi-Gen LRU"
+> > > > +     depends on MMU
+> > > > +     # the following options can use up the spare bits in page flags
+> > > > +     depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+> > > > +     help
+> > > > +       A high performance LRU implementation to overcommit memory.
+> > > > +
+> > > >  source "mm/damon/Kconfig"
+> > >
+> > > This is a problem.  I had to jump through hoops just to be able to
+> > > compile-test this.  Turns out I had to figure out how to disable
+> > > MAXSMP.
+> > >
+> > > Can we please figure out a way to ensure that more testers are at least
+> > > compile testing this?  Allnoconfig, defconfig, allyesconfig, allmodconfig.
+> > >
+> > > Also, I suggest that we actually make MGLRU the default while in linux-next.
+> >
+> > The !MAXSMP is to work around [1], which I haven't had the time to
+> > fix. That BUILD_BUG_ON() shouldn't assert sizeof(struct page) == 64
+> > since the true size depends on WANT_PAGE_VIRTUAL as well as
+> > LAST_CPUPID_NOT_IN_PAGE_FLAGS. My plan is here [2].
+> >
+> > [1] https://lore.kernel.org/r/20190905154603.10349-4-aneesh.kumar@linux.ibm.com/
+> > [2] https://lore.kernel.org/r/Ygl1Gf+ATBuI%2Fm2q@google.com/
+>
+> OK, thanks.  This is fairly urgent for -next and -rc inclusion.  If
+> practically nobody is compiling the feature then practically nobody is
+> testing it.  Let's come up with a way to improves the expected coverage
+> by a lot.
+
+Let me just remove !MAXSMP, since I wasn't able to reproduce this
+build error [1] anymore.
+
+[1] https://lore.kernel.org/r/1792f0b2e29.d72f70c9807100.8179330337708563324@xanmod.org/

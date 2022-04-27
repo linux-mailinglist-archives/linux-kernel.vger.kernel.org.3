@@ -2,129 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258F8511B81
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169CF511B87
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238780AbiD0O6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S239025AbiD0O7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238746AbiD0O6E (ORCPT
+        with ESMTP id S235360AbiD0O7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:58:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86E6B5B8BC
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651071292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0IQvTcMEBnE+yly3Jqj1m7ej/vPl078aXENmc+H4j+E=;
-        b=GkVibiWNS5WRFKg0wXWXhekxEi3tzxg80foLhAQvhFjFBYrQc9uCogeR/3QrlpWg9XT1Yz
-        GFdfOIY4QiR62TyUXsOowPbChsKj+4haArB5MPAcHJt6riJPLpq1Epv0IV1KgdyMEA1DzP
-        t0lJTnCLo8apdoflq2sTeeEJu6+wW2Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-390-Ady9gyINNF6aO5JBgqcudA-1; Wed, 27 Apr 2022 10:54:51 -0400
-X-MC-Unique: Ady9gyINNF6aO5JBgqcudA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6E42185A5BE;
-        Wed, 27 Apr 2022 14:54:50 +0000 (UTC)
-Received: from llong.com (unknown [10.22.11.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A33FD20296A5;
-        Wed, 27 Apr 2022 14:54:41 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>, ying.huang@intel.com,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH v3] cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in cpuset_init_smp()
-Date:   Wed, 27 Apr 2022 10:54:28 -0400
-Message-Id: <20220427145428.1411867-1-longman@redhat.com>
+        Wed, 27 Apr 2022 10:59:33 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95E872475
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:56:20 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so3919871ejd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3kzcmQQ6qe9BuAfgJ/H9FnVAxTClpIB9Ec1O4pt+pto=;
+        b=SuM2kKvg9MIOsrbRnXK49sswjYDmhNL5auXZSawiQyqu/3r96paw8FAO/3qj4Q/cJ8
+         QYQrKWJdSqC8sHYmnj3Ta4awWKPn4feNlwgOplnY7O9t/jqCVdEUVFAP5imygZIAANnr
+         MT+u4rZ8Ba81rIDlGcH2OVlTjOJklsHfmI/CvtwDKGXyxegRBceREqeeVyyVY+NdL1yi
+         48cfxCNoL2cXq0oZV0ZSE1VeyCIF54D3kppj5UtOzfj51E71+6ttlj1FBAsklxpRdBWu
+         Id+SYXX+XrwwMOYDLDN7Sxv6Zzl7dmcpeukJ4DRd47WwLDuP8LwIWVeT1R8N0zs12UHs
+         OdFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3kzcmQQ6qe9BuAfgJ/H9FnVAxTClpIB9Ec1O4pt+pto=;
+        b=lM1GYOSex4POp736+OBmsDQxZyRGFixrdwgm2LQrtpyanMql1LT+M6QQ1EkEDohAX1
+         cErCOk6CQBTAoNig8uCVlNUqBNbS1m+gWnhE8phJe0aOKA89P0j7j3exqn4LBlJKSZoF
+         gweypVjyZM4Pjc836en3t/6NdQbsSEWZDZsniF8WIm9W+cZop6tpOSulRUUxi3Vy/A0k
+         f1LWPUS4wgG4lKLpoL/rkxVToV/tXzHyJvJJzvOucX3iDCOyJkSa/RETf9QQtgajGeHC
+         If8dZT+hO7dKVweUHS6k1A6RtetGnpZ+CwtSGMwUdPf/HpGPals6oFLhojMZw5foBvjq
+         eM5Q==
+X-Gm-Message-State: AOAM533HGAeQrpMPCI8z3lznN4DIH/yQ1iLbtbsCt3Dgc/I36T/7dE8n
+        7GVJh2cU1PEJgNyicSrnxwrZcw==
+X-Google-Smtp-Source: ABdhPJx+Vs5y8HA3NpMU0R2RfFBUtP1VAq77R6zckJbYjK/ihkSS/J5AT+rfpaCiLUn1ZhdDvQMSIw==
+X-Received: by 2002:a17:907:3f9c:b0:6f0:28d1:3ad6 with SMTP id hr28-20020a1709073f9c00b006f028d13ad6mr27009349ejc.365.1651071379475;
+        Wed, 27 Apr 2022 07:56:19 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm8475284edt.70.2022.04.27.07.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:56:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] interconnect: qcom: use icc_sync_state
+Date:   Wed, 27 Apr 2022 16:56:16 +0200
+Message-Id: <20220427145616.523557-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 3 places where the cpu and node masks of the top cpuset can
-be initialized in the order they are executed:
- 1) start_kernel -> cpuset_init()
- 2) start_kernel -> cgroup_init() -> cpuset_bind()
- 3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
+Use icc_sync_state for interconnect providers, so that the bandwidth
+request doesn't need to stay on maximum value.
 
-The first cpuset_init() call just sets all the bits in the masks.
-The second cpuset_bind() call sets cpus_allowed and mems_allowed to the
-default v2 values. The third cpuset_init_smp() call sets them back to
-v1 values.
-
-For systems with cgroup v2 setup, cpuset_bind() is called once.  As a
-result, cpu and memory node hot add may fail to update the cpu and node
-masks of the top cpuset to include the newly added cpu or node in a
-cgroup v2 environment.
-
-For systems with cgroup v1 setup, cpuset_bind() is called again by
-rebind_subsystem() when the v1 cpuset filesystem is mounted as shown
-in the dmesg log below with an instrumented kernel.
-
-  [    2.609781] cpuset_bind() called - v2 = 1
-  [    3.079473] cpuset_init_smp() called
-  [    7.103710] cpuset_bind() called - v2 = 0
-
-smp_init() is called after the first two init functions.  So we don't
-have a complete list of active cpus and memory nodes until later in
-cpuset_init_smp() which is the right time to set up effective_cpus
-and effective_mems.
-
-To fix this cgroup v2 mask setup problem, the potentially incorrect
-cpus_allowed & mems_allowed setting in cpuset_init_smp() are removed.
-For cgroup v2 systems, the initial cpuset_bind() call will set the masks
-correctly.  For cgroup v1 systems, the second call to cpuset_bind()
-will do the right setup.
-
-cc: stable@vger.kernel.org
-Signed-off-by: Waiman Long <longman@redhat.com>
-Tested-by: Feng Tang <feng.tang@intel.com>
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- kernel/cgroup/cpuset.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/interconnect/qcom/msm8916.c | 1 +
+ drivers/interconnect/qcom/qcm2290.c | 1 +
+ drivers/interconnect/qcom/qcs404.c  | 1 +
+ drivers/interconnect/qcom/sdm660.c  | 1 +
+ drivers/interconnect/qcom/sm8150.c  | 1 +
+ drivers/interconnect/qcom/sm8250.c  | 1 +
+ drivers/interconnect/qcom/sm8350.c  | 1 +
+ drivers/interconnect/qcom/sm8450.c  | 1 +
+ 8 files changed, 8 insertions(+)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 9390bfd9f1cd..71a418858a5e 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3390,8 +3390,11 @@ static struct notifier_block cpuset_track_online_nodes_nb = {
-  */
- void __init cpuset_init_smp(void)
- {
--	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
--	top_cpuset.mems_allowed = node_states[N_MEMORY];
-+	/*
-+	 * cpus_allowd/mems_allowed set to v2 values in the initial
-+	 * cpuset_bind() call will be reset to v1 values in another
-+	 * cpuset_bind() call when v1 cpuset is mounted.
-+	 */
- 	top_cpuset.old_mems_allowed = top_cpuset.mems_allowed;
+diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+index 2f397a7c3322..811370fcd211 100644
+--- a/drivers/interconnect/qcom/msm8916.c
++++ b/drivers/interconnect/qcom/msm8916.c
+@@ -1347,6 +1347,7 @@ static struct platform_driver msm8916_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-msm8916",
+ 		.of_match_table = msm8916_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(msm8916_noc_driver);
+diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
+index 74404e0b2080..6cf75da91428 100644
+--- a/drivers/interconnect/qcom/qcm2290.c
++++ b/drivers/interconnect/qcom/qcm2290.c
+@@ -1355,6 +1355,7 @@ static struct platform_driver qcm2290_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-qcm2290",
+ 		.of_match_table = qcm2290_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qcm2290_noc_driver);
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index 416c8bff8efa..d82f9add4933 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -1086,6 +1086,7 @@ static struct platform_driver qcs404_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-qcs404",
+ 		.of_match_table = qcs404_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qcs404_noc_driver);
+diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
+index 274a7139fe1a..706b49a4bb70 100644
+--- a/drivers/interconnect/qcom/sdm660.c
++++ b/drivers/interconnect/qcom/sdm660.c
+@@ -1716,6 +1716,7 @@ static struct platform_driver sdm660_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sdm660",
+ 		.of_match_table = sdm660_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(sdm660_noc_driver);
+diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+index 745e3c36a61a..2a85f53802b5 100644
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -535,6 +535,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8150",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
+index aa707582ea01..8dfb5dea562a 100644
+--- a/drivers/interconnect/qcom/sm8250.c
++++ b/drivers/interconnect/qcom/sm8250.c
+@@ -551,6 +551,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8250",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
+index c79f93a1ac73..3e26a2175b28 100644
+--- a/drivers/interconnect/qcom/sm8350.c
++++ b/drivers/interconnect/qcom/sm8350.c
+@@ -531,6 +531,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8350",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+index 8d99ee6421df..d573018a6324 100644
+--- a/drivers/interconnect/qcom/sm8450.c
++++ b/drivers/interconnect/qcom/sm8450.c
+@@ -1968,6 +1968,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8450",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
  
- 	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
 -- 
-2.27.0
+2.32.0
 

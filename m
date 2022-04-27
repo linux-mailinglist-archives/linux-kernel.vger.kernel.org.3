@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C1E510F85
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F040510F88
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357436AbiD0D0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S234621AbiD0D1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 23:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350567AbiD0D0h (ORCPT
+        with ESMTP id S1350567AbiD0D0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:26:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BA327B33;
-        Tue, 26 Apr 2022 20:23:25 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kp3w55Lt8z1JBnc;
-        Wed, 27 Apr 2022 11:22:29 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Apr 2022 11:23:22 +0800
-Subject: Re: [PATCH -next v2] jbd2: Fix null-ptr-deref when process reserved
- list in jbd2_journal_commit_transaction
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-References: <20220317142137.1821590-1-yebin10@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <6268B72A.6080506@huawei.com>
-Date:   Wed, 27 Apr 2022 11:23:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+        Tue, 26 Apr 2022 23:26:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3BE2B1A9;
+        Tue, 26 Apr 2022 20:23:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kp3xF0z74z4xLS;
+        Wed, 27 Apr 2022 13:23:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651029809;
+        bh=XnjvLrwvW4y9J7qh4nJRdLclh3aMRKZh5WBNUhgIeEo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E4ev3FPRzpHrWUg/ygZhOxn7yDgrMdgYwaIuB0xQLkV6IDoeUGxO4Rn5lYIl2Id8S
+         qtxa0gZ+EhxyTJyhjUxgW/1+XxpcxdifLVOWxDPpe+bBN5jegS424A8v1fLdvsYpqa
+         /wLGu2ke3u5HmBkt8Y67AOAcHuPQE9pu9wduLvc7bjYdNMlmI60WUWy0PGhsg0kMy1
+         07GNfvfbYS8X3tBgAgvRN638MiW2jegtoTMGK8O2r2n9+1hbTPVVN5IY/seYxy7deC
+         vfSMHxMmmgsB17h3Gs2m3yRHERK6kQFg7HQWm2910z9BSp7iowTYw4LYF25KiV8V3S
+         /v/Re7GX4Nwwg==
+Date:   Wed, 27 Apr 2022 13:23:27 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>, Peter Gonda <pgonda@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kvm tree
+Message-ID: <20220427132327.731b35d8@canb.auug.org.au>
+In-Reply-To: <20220419153423.644c0fa1@canb.auug.org.au>
+References: <20220419153423.644c0fa1@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220317142137.1821590-1-yebin10@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/IDM=qF2qCz+YLhDGHsq9ATh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,111 +53,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping...
+--Sig_/IDM=qF2qCz+YLhDGHsq9ATh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2022/3/17 22:21, Ye Bin wrote:
-> we got issue as follows:
-> [   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
-> [   72.826847] EXT4-fs (sda): Remounting filesystem read-only
-> fallocate: fallocate failed: Read-only file system
-> [   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
-> [   74.793597] ------------[ cut here ]------------
-> [   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
-> [   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> [   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
-> [   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
-> [   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
-> [   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> [   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
-> [   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
-> [   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
-> [   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
-> [   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
-> [   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
-> [   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   74.811897] Call Trace:
-> [   74.812241]  <TASK>
-> [   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
-> [   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
-> [   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
-> [   74.817550]  kjournald2+0xf8/0x3e0
-> [   74.819056]  kthread+0x153/0x1c0
-> [   74.819963]  ret_from_fork+0x22/0x30
+Hi all,
+
+On Tue, 19 Apr 2022 15:34:23 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Above issue may happen as follows:
->          write                   truncate                   kjournald2
-> generic_perform_write
->   ext4_write_begin
->    ext4_walk_page_buffers
->     do_journal_get_write_access ->add BJ_Reserved list
->   ext4_journalled_write_end
->    ext4_walk_page_buffers
->     write_end_fn
->      ext4_handle_dirty_metadata
->                  ***************JBD2 ABORT**************
->       jbd2_journal_dirty_metadata
->   -> return -EROFS, jh in reserved_list
->                                                     jbd2_journal_commit_transaction
->                                                      while (commit_transaction->t_reserved_list)
->                                                        jh = commit_transaction->t_reserved_list;
->                          truncate_pagecache_range
->                           do_invalidatepage
-> 			  ext4_journalled_invalidatepage
-> 			   jbd2_journal_invalidatepage
-> 			    journal_unmap_buffer
-> 			     __dispose_buffer
-> 			      __jbd2_journal_unfile_buffer
-> 			       jbd2_journal_put_journal_head ->put last ref_count
-> 			        __journal_remove_journal_head
-> 				 bh->b_private = NULL;
-> 				 jh->b_bh = NULL;
-> 				                      jbd2_journal_refile_buffer(journal, jh);
-> 							bh = jh2bh(jh);
-> 							->bh is NULL, later will trigger null-ptr-deref
-> 				 journal_free_journal_head(jh);
->
-> As after 96f1e0974575 commit, handle reserved list will not hold "journal->j_state_lock"
-> when kjournald2 commit transaction. So journal_unmap_buffer maybe free
-> journal_head when handle reserved list. And lead to null-ptr-deref or some
-> strange errors.
-> As reserved list almost time is empty. Use "journal->j_state_lock" to protect
-> handle reserved list can simply solve above issue.
->
-> Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> After merging the kvm tree, today's linux-next build (arm64 defconfig)
+> failed like this:
+>=20
+> arch/arm64/kvm/psci.c: In function 'kvm_prepare_system_event':
+> arch/arm64/kvm/psci.c:184:32: error: 'struct <anonymous>' has no member n=
+amed 'flags'
+>   184 |         vcpu->run->system_event.flags =3D flags;
+>       |                                ^
+>=20
+> Caused by commit
+>=20
+>   c24a950ec7d6 ("KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES")
+>=20
+> In this commit, the uapi structure changes do not match the documentation
+> changes :-(  Does it matter that the ABI may be changed by this commit
+> (depending on the alignment of the structure members)?
+>=20
+> I have added the following patch or today:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 19 Apr 2022 15:25:17 +1000
+> Subject: [PATCH] fix up for "KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for=
+ SEV-ES"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
->   fs/jbd2/commit.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
-> index 5b9408e3b370..ac7f067b7bdd 100644
-> --- a/fs/jbd2/commit.c
-> +++ b/fs/jbd2/commit.c
-> @@ -488,7 +488,6 @@ void jbd2_journal_commit_transaction(journal_t *journal)
->   	jbd2_journal_wait_updates(journal);
->   
->   	commit_transaction->t_state = T_SWITCH;
-> -	write_unlock(&journal->j_state_lock);
->   
->   	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
->   			journal->j_max_transaction_buffers);
-> @@ -508,6 +507,8 @@ void jbd2_journal_commit_transaction(journal_t *journal)
->   	 * has reserved.  This is consistent with the existing behaviour
->   	 * that multiple jbd2_journal_get_write_access() calls to the same
->   	 * buffer are perfectly permissible.
-> +	 * We use journal->j_state_lock here to serialize processing of
-> +	 * t_reserved_list with eviction of buffers from journal_unmap_buffer().
->   	 */
->   	while (commit_transaction->t_reserved_list) {
->   		jh = commit_transaction->t_reserved_list;
-> @@ -527,6 +528,7 @@ void jbd2_journal_commit_transaction(journal_t *journal)
->   		jbd2_journal_refile_buffer(journal, jh);
->   	}
->   
-> +	write_unlock(&journal->j_state_lock);
->   	/*
->   	 * Now try to drop any written-back buffers from the journal's
->   	 * checkpoint lists.  We do this *before* commit because it potentially
+>  include/uapi/linux/kvm.h | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index dd1d8167e71f..68ce07185f03 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -448,6 +448,7 @@ struct kvm_run {
+>  #define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+>  			__u32 type;
+>  			__u32 ndata;
+> +			__u64 flags;
+>  			__u64 data[16];
+>  		} system_event;
+>  		/* KVM_EXIT_S390_STSI */
+> --=20
+> 2.35.1
 
+I am still applying the above patch.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/IDM=qF2qCz+YLhDGHsq9ATh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJoty8ACgkQAVBC80lX
+0Gwo4gf/f1aF8HkvpQr5NQGYClKCx9kcT4HjASqNGY9k60ZE2qmo4vnOVu0eZuSi
+4klm5J1tfXE+rbxGDbNm8ibiT6JXB5NkLv+eRPTxZYsyoGaNNs6k54N29BRnRLK9
+I/DHK5Bz47VjEebaO3ew8IP6YWG22wzL30Cu155sVfQG9rEAa4c/vnOtwvI13Clx
+nyt2BmgRvESF+3Rv+XHxkQ4ja56VfimPgqsU2V3ufOjocsmRAQI8eP81xzKYAeUV
+PxdVBOEHlmlEHnpxzy6pC2k5UIJDLVYfY5PMwBMU9n6XSHwG6XX4AP2JpXc5w2Ie
+dHCxiytb7yzPjU50iydYmuYOAImfnQ==
+=6NtF
+-----END PGP SIGNATURE-----
+
+--Sig_/IDM=qF2qCz+YLhDGHsq9ATh--

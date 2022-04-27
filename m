@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6227A511FC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035A1512000
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238959AbiD0PIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S239345AbiD0PJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236491AbiD0PIc (ORCPT
+        with ESMTP id S238923AbiD0PJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:08:32 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE93CE0F0;
-        Wed, 27 Apr 2022 08:05:20 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id f14so1328515qtq.1;
-        Wed, 27 Apr 2022 08:05:20 -0700 (PDT)
+        Wed, 27 Apr 2022 11:09:33 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFCB506D4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:06:22 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id p6so1773522plf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XS75V+e2Ct78C2HTr9fzu0rvESRlSHMev5cWIVD79uw=;
+        b=r/YR+XZjsNKfW6ntLhVS2qvC7q4aKCieabb65nb4ICf0i6WPU76Rc+tkeTTxtOSp4r
+         Cp4ikH5UOnW0RwHI0VWzuKZyB2yx+/3AEW56212jW8nk916NwlrBUrYbb5yh6HFUn/3g
+         7C24RG1alHoU/CY45Nv2Q+KqmGQGYipv6EK7gRTDqW9eWMqt2je5/dYX0pSpvobCGJ2U
+         T++YUMItnBRWW3mLRtwxTf5lcgwHzksUW2ykha3mFO2hChZdUZ9YL6VgaQRSBgXZJ1CA
+         KE42kd5aMrtcbglmkWfum3XmBqsylzcpg0FRfxBDKbVvhz6YeFwQIJ/RD9fCyF/VAJ6e
+         4lcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=agafgRIcyKU96KX9arNKc39rksJmBWgsdHHVPeJSabE=;
-        b=uG55K86Ebxit2/XpbwBAahXZpgZX4byNpCDUtn6K1R6w/2u+Mt8neOoF+sS3+zEciS
-         syGPDX2KrABwtmFUlSmBYT8cQ0WGkby6uQTedBW33y5cee6GSx4y2CY0CVnlszwbfagb
-         jfWPGwz/fCb6otop9yBxXnmS8H071Vc0Zv9U0JXwv/SuVbvgciFcRHNJrMXWX24v4L6U
-         pVAVm+b6Ic/VTh4bgRnPn7JVky8LzAL3ytbsWIWVzBO7Hf7xXm6cc6UwbfRNW9o5ncoG
-         8HC6vbH7K5GnjnJHIvscKxdEbqR9rxSqzL34f0Z4glvfrblQ9d8U8HwxZLPmE3pPt8Mx
-         jG7g==
-X-Gm-Message-State: AOAM531yFzOhinldpEXF54TCxgOVe+LWG1zVyHQ3/huiDeqbUrb5wYNl
-        FFE53VoVCL+Iq4Rg15y8PiNsjIy71E8f1w==
-X-Google-Smtp-Source: ABdhPJywoYYJlCD0rNO39LCYyn49J4PvQ/tUMmDdSANKZwOSr0eX0hJwhsA9rtF9qxOVJrum/ZwF8Q==
-X-Received: by 2002:a05:622a:608c:b0:2f1:e3fa:b603 with SMTP id hf12-20020a05622a608c00b002f1e3fab603mr19200084qtb.48.1651071919469;
-        Wed, 27 Apr 2022 08:05:19 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id r83-20020a37a856000000b0069ed4436a49sm8194957qke.87.2022.04.27.08.05.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 08:05:19 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id d12so3917920ybc.4;
-        Wed, 27 Apr 2022 08:05:18 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
- c4-20020a5b0984000000b0063f8c38676cmr26972135ybq.393.1651071918482; Wed, 27
- Apr 2022 08:05:18 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XS75V+e2Ct78C2HTr9fzu0rvESRlSHMev5cWIVD79uw=;
+        b=1F1MmfBkW/lp87t9HxPdrkVKRSpNM4rd/mz71zSWPl4fld2smamZsr7HQKb8Dq7nzc
+         19WG5K17eMsAtUL7fWKmPkf+2bVNU0eXZB0Lf6Q3x/E5FeXVPbIEK/kNT7bSXHVXHAmx
+         ekfrkIQ6gTyVQ9cQ0CnqtodSRlNwskyZLFqE1mAu0Vuy047ybe5oYngSSgcYxSyLlbjr
+         zaX3DaYWbPr02GF+zvH/eprSehaYBu4bKAcUmJa56s3Arz6Y2Qn5gOmWj7uGz4kunpvx
+         b6ed/+Q5x9Y52X0I9AyogJRAorBm/zUIncRaPcJE1HrodVpg2evKjLh5n0dplPMUmriQ
+         bHww==
+X-Gm-Message-State: AOAM532o/KeO2AkD1b3N5eJ8SiLhrsFP2i8OA6S+2zwQPcvoSqmmUqB1
+        u17KxCI4Wa07z8CEzN52ZaT9W89mFjUTgSSjzAxPnRIh9T4BRw==
+X-Google-Smtp-Source: ABdhPJyhFsA6EuYCCsjkboZqyERAvCzNstvehUDrJwgfZmF4YkAReKOkOhEXO+4ruAdhtV07MECBNmLql1kgnul+17A=
+X-Received: by 2002:a17:903:2285:b0:15b:cd9e:f018 with SMTP id
+ b5-20020a170903228500b0015bcd9ef018mr27793510plh.106.1651071981975; Wed, 27
+ Apr 2022 08:06:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220422120850.769480-1-herve.codina@bootlin.com> <20220422120850.769480-2-herve.codina@bootlin.com>
-In-Reply-To: <20220422120850.769480-2-herve.codina@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Apr 2022 17:05:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVk-UkFqqFEeUn+ZqrdSy7u+S6Mz2GeDmx=mr33khzO6A@mail.gmail.com>
-Message-ID: <CAMuHMdVk-UkFqqFEeUn+ZqrdSy7u+S6Mz2GeDmx=mr33khzO6A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] dt-bindings: PCI: pci-rcar-gen2: Convert bindings
- to json-schema
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <YmdeCqi6wmgiSiWh@carbon> <33085523-a8b9-1bf6-2726-f456f59015ef@openvz.org>
+ <CALvZod4oaj9MpBDVUp9KGmnqu4F3UxjXgOLkrkvmRfFjA7F1dw@mail.gmail.com> <20220427122232.GA9823@blackbody.suse.cz>
+In-Reply-To: <20220427122232.GA9823@blackbody.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 27 Apr 2022 08:06:10 -0700
+Message-ID: <CALvZod7v0taU51TNRu=OM5iJ-bnm1ryu9shjs80PuE-SWobqFg@mail.gmail.com>
+Subject: Re: [PATCH memcg v4] net: set proper memcg for net_init hooks allocations
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Vasily Averin <vvs@openvz.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> Convert Renesas PCI bridge bindings documentation to json-schema.
+On Wed, Apr 27, 2022 at 5:22 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
+:
 >
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> On Tue, Apr 26, 2022 at 10:23:32PM -0700, Shakeel Butt <shakeelb@google.c=
+om> wrote:
+> > [...]
+> > >
+> > > +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
+> > > +{
+> > > +       struct mem_cgroup *memcg;
+> > > +
+> >
+> > Do we need memcg_kmem_enabled() check here or maybe
+> > mem_cgroup_from_obj() should be doing memcg_kmem_enabled() instead of
+> > mem_cgroup_disabled() as we can have "cgroup.memory=3Dnokmem" boot
+> > param.
+>
+> I reckon such a guard is on the charge side and readers should treat
+> NULL and root_mem_group equally. Or is there a case when these two are
+> different?
+>
+> (I can see it's different semantics when stored in current->active_memcg
+> (and active_memcg() getter) but for such "outer" callers like here it
+> seems equal.)
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+I was more thinking about possible shortcut optimization and unrelated
+to this patch.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Vasily, can you please add documentation for get_mem_cgroup_from_obj()
+similar to get_mem_cgroup_from_mm()? Also for mem_cgroup_or_root().
+Please note that root_mem_cgroup can be NULL during early boot.

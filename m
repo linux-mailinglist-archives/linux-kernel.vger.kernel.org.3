@@ -2,305 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7905F511207
+	by mail.lfdr.de (Postfix) with ESMTP id 303C7511206
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358569AbiD0HLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
+        id S1358606AbiD0HL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240796AbiD0HLp (ORCPT
+        with ESMTP id S1358571AbiD0HLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:11:45 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F5631934;
-        Wed, 27 Apr 2022 00:08:35 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id u7so782896plg.13;
-        Wed, 27 Apr 2022 00:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LA+lIWlKJHJNsFg/tTuklJgSyoSg6bZZY0onRO3E9GI=;
-        b=b3DoGQtxEeDET/u7R4lDa6hJ/Rht+ReM/kJc9afpeiuLLNMtPSwJyb+zqvfANVrT4N
-         mZATO86fRlos5bQ7fMbQFLsMUnOdAkOp5YDze81Jui9SoCulqogVRbsqbTBLl1RlXP6h
-         eJyCDKAP7MH6SjVMjkYLbvY23oCzOHwkH9e7ee5M2DTQCEEIrqdU6BHsNOaYJdvGIDWA
-         37oc9uPCcLsISG1MPYkr6XqKmPjq7+qHUAxKXqGGXlV1aNC+/RljYbGjjOAZZuB94P07
-         d+HnC8Ia7FrCtGtnmtMXBGN0krUyMPGVYx+7Mq2g52F6Y8jAyOUPGDDFbOZagDog+95A
-         o+GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LA+lIWlKJHJNsFg/tTuklJgSyoSg6bZZY0onRO3E9GI=;
-        b=mMeQOaAjSZTPYE+7AsN/yNGLEQARshAlJjFpqrrGn4Iit4SP6fRZbt9AHK7OIylopp
-         lWTXm5WnJXzRCnUT7WzR0tqp44Ge+knYelbhRt4xi3JpwkRWhNINhalZ/78C8GPDfli2
-         Rb7+sBQO3kj3FDHW7w/dXANMHtWT2g4iUAs37skdcOb7oNypnJ82f8NlFnmpPzKoaAo3
-         JjL9qfdbfCsv8M2sW2PAZ/AmkEXDmzrtj242eiJ8UqvbBpsKHKvgjt0IJEMuvH4G8FQw
-         DjD/pqwDQLRJYhMy9lzHxEVvulc0dGSqTT/rm20Qba8ro8LBSHhzB3gKs8MBAoVrn09J
-         iUYg==
-X-Gm-Message-State: AOAM532i5ZPsJ3jaAeBw2v3hcBvBXQ0oKnX+5YfdkSjkP7m/tECxQWOW
-        jbZdfBL22OQ9Qk8Dkv6Usos=
-X-Google-Smtp-Source: ABdhPJxTJUjkqPe2DXzILwV+z7KDjrLWr2XioYKZRHJaXuWKVXfjidYA4Um4bqV5tGq1TL48CZQlog==
-X-Received: by 2002:a17:902:d5c3:b0:154:c472:de80 with SMTP id g3-20020a170902d5c300b00154c472de80mr27010650plh.87.1651043315130;
-        Wed, 27 Apr 2022 00:08:35 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.111])
-        by smtp.gmail.com with ESMTPSA id t15-20020a63b70f000000b00381510608e9sm14404314pgf.14.2022.04.27.00.08.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 00:08:34 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Subject: [PATCH bpf-next] net: bpf: support direct packet access in tracing program
-Date:   Wed, 27 Apr 2022 15:06:44 +0800
-Message-Id: <20220427070644.319661-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.0
+        Wed, 27 Apr 2022 03:11:48 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A88531934
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:08:37 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220427070834euoutp02575351f0869572dec7bcbbde2cb7ff05~pryWPdfbM1060810608euoutp02V
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:08:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220427070834euoutp02575351f0869572dec7bcbbde2cb7ff05~pryWPdfbM1060810608euoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651043314;
+        bh=3IlMOM9G9dkX+aI1gLuWuQ/q1pYg4/JUIIqa3Qn4A/U=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=dUAoHmh1uVCJ+DRA2PG9lVryb7voBtyjlPHs8El93Y//OtdmQV7iWa8C9hHksLbBA
+         hGaBR0MX8i3PMSUisGgP1DXAbuQgEiw2EVlqWSbSUowcI5c4Qe41qD78p9YgHBTLIL
+         A3glTpMrolwdjreuRfujB/l029cbWj57Vo1NOvWk=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220427070834eucas1p223b41220406dc980cbe68fb7359b7870~pryWArwXP1581815818eucas1p25;
+        Wed, 27 Apr 2022 07:08:34 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id D4.75.10260.1FBE8626; Wed, 27
+        Apr 2022 08:08:33 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c~pryVldXMz2272022720eucas1p2V;
+        Wed, 27 Apr 2022 07:08:33 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220427070833eusmtrp251fe7356a4fee93d3869c7c52d61025a~pryVko3Oj0148001480eusmtrp2_;
+        Wed, 27 Apr 2022 07:08:33 +0000 (GMT)
+X-AuditID: cbfec7f5-bddff70000002814-79-6268ebf1a8f7
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F8.90.09522.1FBE8626; Wed, 27
+        Apr 2022 08:08:33 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220427070832eusmtip17049ccfdbadafd9f178fc6d8e21a8850~pryVCzENk1882418824eusmtip19;
+        Wed, 27 Apr 2022 07:08:32 +0000 (GMT)
+Message-ID: <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
+Date:   Wed, 27 Apr 2022 09:08:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <Ymfwk+X0CHq6ex3s@alley>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7ofX2ckGZz+YG7RvHg9m8W2K/MZ
+        LRbM5ra4vGsOm8X/x19ZLfZ1PGCy2L1xEZvF5k1TmR04PGY3XGTxaNl3i93j3blz7B77565h
+        99i8pN5j/ZarLB6fN8kFsEdx2aSk5mSWpRbp2yVwZezuaGcpOKpVsWjTOvYGxhbFLkZODgkB
+        E4nNk46xdDFycQgJrGCUeHFyLROE84VR4vGLjewQzmdGidtnljDCtDS+bYRqWc4o0fdnHTOE
+        85FR4vzb6cwgVbwCdhIrOrawgtgsAqoSm2YsZ4WIC0qcnPmEBcQWFUiSmLvvHlA9B4ewQIRE
+        295QkDCzgLjErSfzmUBsEQFvibdnz4BdwSzwlVFi8uT/YFewCRhKdL3tYgOxOYHmT/twgAWi
+        WV5i+9s5YAdJCHzgkDi59xEryAIJAReJr43ZEB8IS7w6voUdwpaR+L8TZBlISb7E3xnGEOEK
+        iWuv1zBD2NYSd879YgMpYRbQlFi/Sx8i7Cgx5VcfO0Qnn8SNt4IQB/BJTNo2nRkizCvR0SYE
+        Ua0mMev4OridBy9cYp7AqDQLKUhmIfl9FpJXZiHsXcDIsopRPLW0ODc9tdg4L7Vcrzgxt7g0
+        L10vOT93EyMwMZ3+d/zrDsYVrz7qHWJk4mA8xCjBwawkwvtld0aSEG9KYmVValF+fFFpTmrx
+        IUZpDhYlcd7kzA2JQgLpiSWp2ampBalFMFkmDk6pBqZ1+9TWezExHvqjMPFJT+DE+bJB/aHz
+        LrYZXPbKl34wW1jCQoTH6fS7vsb08Ne/r9+7zv7y1J46kVL1OPPUZ2UbFOr2Pc3sf5xoZHzE
+        K+ZM7i8Gl+PLW9p9dm239fz2W72QeY1P/797/1rXOKxi6J6dfvH8yoUaX0Jf7Z67wLlydkoj
+        74XPlxZwnA6xSryp9OOw4b/8KqWjad3y18ruxC774SVjvvGzVdzvlRVu3xbLHta7aLXo4Zf8
+        pwt/7khRkk5hVmwPrP94Nf7L2sfd0Q8PPYtpYzTiPNFrXeUhkZttziVyc+6l8FlNskEsm6RL
+        rbmeHN6yTGm/hv/c5rvn5H0f5i84p6rgc9dyS/NtfX4lluKMREMt5qLiRAB7FVYUuwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xu7ofX2ckGXyeImXRvHg9m8W2K/MZ
+        LRbM5ra4vGsOm8X/x19ZLfZ1PGCy2L1xEZvF5k1TmR04PGY3XGTxaNl3i93j3blz7B77565h
+        99i8pN5j/ZarLB6fN8kFsEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb
+        2aSk5mSWpRbp2yXoZezuaGcpOKpVsWjTOvYGxhbFLkZODgkBE4nGt40sXYxcHEICSxklJky4
+        wgqRkJE4Oa0ByhaW+HOtiw2i6D2jxMffh5hBErwCdhIrOraAFbEIqEpsmrGcFSIuKHFy5hMW
+        EFtUIEnixbbnjF2MHBzCAhES73vBwswC4hK3nsxnArFFBLwl3p49ww4yn1ngK6PE2g/PGCGW
+        XWaUmLflFlgHm4ChRNdbkCs4OTiBlk37cABqkplE19YuRghbXmL72znMExiFZiG5YxaShbOQ
+        tMxC0rKAkWUVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYERuO/Zz8w7Gea8+6h1iZOJgPMQo
+        wcGsJML7ZXdGkhBvSmJlVWpRfnxRaU5q8SFGU2BgTGSWEk3OB6aEvJJ4QzMDU0MTM0sDU0sz
+        YyVxXs+CjkQhgfTEktTs1NSC1CKYPiYOTqkGpt1Sr45Je3OILyqUf9Z0KWeKuuG9bR/m56+9
+        f8futiX7gs9RD9rmGjzK2+hdVrLy99Hl614tjUmZtzdcSuLuEnb7ru62JxuWVH9aXcG7jMf2
+        psCBd3fao8+4+hz+oGey063zba49q8LuyiveSSfTclO9/DRPXu55IrzHI3Bd4JUN9U+5a85m
+        hBifUm+V9XPXyfmhk1rKVmk9gaHNIlE0RpaHjUVYfHFPps3KAsXes9a+TuHG87qsY7UvuDlI
+        m3rd/T3zjVBuj1PzXq0Nt0uiAiRV9oaazWQ/IPPyp7x/6sm0C8a1iULcuu+XtP3Kciz8lJyy
+        Voa/43fhWh9LifY5lRc8+c+8EZ0fbJVxbbESS3FGoqEWc1FxIgC/b4I7UQMAAA==
+X-CMS-MailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+        <20220421212250.565456-15-john.ogness@linutronix.de>
+        <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
+        <Ymfwk+X0CHq6ex3s@alley>
+        <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Hi,
 
-For now, eBPF program of type TRACING is able to access the arguments
-of the function or raw_tracepoint directly, which makes data access
-easier and efficient. And we can also output the raw data in skb to
-user space in tracing program by bpf_skb_output() helper.
+On 26.04.2022 15:16, Petr Mladek wrote:
+> On Tue 2022-04-26 14:07:42, Petr Mladek wrote:
+>> On Mon 2022-04-25 23:04:28, John Ogness wrote:
+>>> Currently threaded console printers synchronize against each
+>>> other using console_lock(). However, different console drivers
+>>> are unrelated and do not require any synchronization between
+>>> each other. Removing the synchronization between the threaded
+>>> console printers will allow each console to print at its own
+>>> speed.
+>>>
+>>> But the threaded consoles printers do still need to synchronize
+>>> against console_lock() callers. Introduce a per-console mutex
+>>> and a new console boolean field @blocked to provide this
+>>> synchronization.
+>>>
+>>> console_lock() is modified so that it must acquire the mutex
+>>> of each console in order to set the @blocked field. Console
+>>> printing threads will acquire their mutex while printing a
+>>> record. If @blocked was set, the thread will go back to sleep
+>>> instead of printing.
+>>>
+>>> The reason for the @blocked boolean field is so that
+>>> console_lock() callers do not need to acquire multiple console
+>>> mutexes simultaneously, which would introduce unnecessary
+>>> complexity due to nested mutex locking. Also, a new field
+>>> was chosen instead of adding a new @flags value so that the
+>>> blocked status could be checked without concern of reading
+>>> inconsistent values due to @flags updates from other contexts.
+>>>
+>>> Threaded console printers also need to synchronize against
+>>> console_trylock() callers. Since console_trylock() may be
+>>> called from any context, the per-console mutex cannot be used
+>>> for this synchronization. (mutex_trylock() cannot be called
+>>> from atomic contexts.) Introduce a global atomic counter to
+>>> identify if any threaded printers are active. The threaded
+>>> printers will also check the atomic counter to identify if the
+>>> console has been locked by another task via console_trylock().
+>>>
+>>> Note that @console_sem is still used to provide synchronization
+>>> between console_lock() and console_trylock() callers.
+>>>
+>>> A locking overview for console_lock(), console_trylock(), and the
+>>> threaded printers is as follows (pseudo code):
+>>>
+>>> console_lock()
+>>> {
+>>>          down(&console_sem);
+>>>          for_each_console(con) {
+>>>                  mutex_lock(&con->lock);
+>>>                  con->blocked = true;
+>>>                  mutex_unlock(&con->lock);
+>>>          }
+>>>          /* console_lock acquired */
+>>> }
+>>>
+>>> console_trylock()
+>>> {
+>>>          if (down_trylock(&console_sem) == 0) {
+>>>                  if (atomic_cmpxchg(&console_kthreads_active, 0, -1) == 0) {
+>>>                          /* console_lock acquired */
+>>>                  }
+>>>          }
+>>> }
+>>>
+>>> threaded_printer()
+>>> {
+>>>          mutex_lock(&con->lock);
+>>>          if (!con->blocked) {
+>>> 		/* console_lock() callers blocked */
+>>>
+>>>                  if (atomic_inc_unless_negative(&console_kthreads_active)) {
+>>>                          /* console_trylock() callers blocked */
+>>>
+>>>                          con->write();
+>>>
+>>>                          atomic_dec(&console_lock_count);
+>>>                  }
+>>>          }
+>>>          mutex_unlock(&con->lock);
+>>> }
+>>>
+>>> The console owner and waiter logic now only applies between contexts
+>>> that have taken the console_lock via console_trylock(). Threaded
+>>> printers never take the console_lock, so they do not have a
+>>> console_lock to handover. Tasks that have used console_lock() will
+>>> block the threaded printers using a mutex and if the console_lock
+>>> is handed over to an atomic context, it would be unable to unblock
+>>> the threaded printers. However, the console_trylock() case is
+>>> really the only scenario that is interesting for handovers anyway.
+>>>
+>>> @panic_console_dropped must change to atomic_t since it is no longer
+>>> protected exclusively by the console_lock.
+>>>
+>>> Since threaded printers remain asleep if they see that the console
+>>> is locked, they now must be explicitly woken in __console_unlock().
+>>> This means wake_up_klogd() calls following a console_unlock() are
+>>> no longer necessary and are removed.
+>>>
+>>> Also note that threaded printers no longer need to check
+>>> @console_suspended. The check for the @blocked field implicitly
+>>> covers the suspended console case.
+>>>
+>>> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+>> Nice, it it better than v4. I am going to push this for linux-next.
+>>
+>> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> JFYI, I have just pushed this patch instead of the one
+> from v4 into printk/linux.git, branch rework/kthreads.
+>
+> It means that this branch has been rebased. It will be
+> used in the next refresh of linux-next.
 
-However, we still can't access the packet data in 'struct sk_buff'
-directly and have to use the helper bpf_probe_read_kernel() to analyse
-packet data.
+This patchset landed in linux next-20220426. In my tests I've found that 
+it causes deadlock on all my Amlogic Meson G12B/SM1 based boards: Odroid 
+C4/N2 and Khadas VIM3/VIM3l. The deadlock happens when system boots to 
+userspace and getty (with automated login) is executed. I even see the 
+bash prompt, but then the console is freezed. Reverting this patch 
+(e00cc0e1cbf4) on top of linux-next (together with 6b3d71e87892 to make 
+revert clean) fixes the issue.
 
-Network tools, which based on eBPF TRACING, often do packet analyse
-works in tracing program for filtering, statistics, etc. For example,
-we want to trace abnormal skb free through 'kfree_skb' tracepoint with
-special ip address or tcp port.
 
-In this patch, 2 helpers are introduced: bpf_skb_get_header() and
-bpf_skb_get_end(). The pointer returned by bpf_skb_get_header() has
-the same effect with the 'data' in 'struct __sk_buff', and
-bpf_skb_get_end() has the same effect with the 'data_end'.
-
-Therefore, we can now access packet data in tracing program in this
-way:
-
-  SEC("fentry/icmp_rcv")
-  int BPF_PROG(tracing_open, struct sk_buff* skb)
-  {
-  	void *data, *data_end;
-  	struct ethhdr *eth;
-
-  	data = bpf_skb_get_header(skb, BPF_SKB_HEADER_MAC);
-  	data_end = bpf_skb_get_end(skb);
-
-  	if (!data || !data_end)
-  		return 0;
-
-  	if (data + sizeof(*eth) > data_end)
-  		return 0;
-
-  	eth = data;
-  	bpf_printk("proto:%d\n", bpf_ntohs(eth->h_proto));
-
-  	return 0;
-  }
-
-With any positive reply, I'll complete the selftests programs.
-
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/linux/bpf.h      |  4 +++
- include/uapi/linux/bpf.h | 29 ++++++++++++++++++++
- kernel/bpf/verifier.c    |  6 +++++
- kernel/trace/bpf_trace.c | 58 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 97 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdb5298735ce..69dff736331a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -419,6 +419,8 @@ enum bpf_return_type {
- 	RET_PTR_TO_ALLOC_MEM,		/* returns a pointer to dynamically allocated memory */
- 	RET_PTR_TO_MEM_OR_BTF_ID,	/* returns a pointer to a valid memory or a btf_id */
- 	RET_PTR_TO_BTF_ID,		/* returns a pointer to a btf_id */
-+	RET_PTR_TO_PACKET,		/* returns a pointer to packet */
-+	RET_PTR_TO_PACKET_END,		/* returns a pointer to skb->data + headlen */
- 	__BPF_RET_TYPE_MAX,
- 
- 	/* Extended ret_types. */
-@@ -428,6 +430,8 @@ enum bpf_return_type {
- 	RET_PTR_TO_SOCK_COMMON_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COMMON,
- 	RET_PTR_TO_ALLOC_MEM_OR_NULL	= PTR_MAYBE_NULL | MEM_ALLOC | RET_PTR_TO_ALLOC_MEM,
- 	RET_PTR_TO_BTF_ID_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
-+	RET_PTR_TO_PACKET_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_PACKET,
-+	RET_PTR_TO_PACKET_END_OR_NULL	= PTR_MAYBE_NULL | RET_PTR_TO_PACKET_END,
- 
- 	/* This must be the last entry. Its purpose is to ensure the enum is
- 	 * wide enough to hold the higher bits reserved for bpf_type_flag.
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index d14b10b85e51..841f6e7216f4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5143,6 +5143,27 @@ union bpf_attr {
-  *		The **hash_algo** is returned on success,
-  *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
-  *		invalid arguments are passed.
-+ *
-+ * void *bpf_skb_get_header(struct sk_buff *skb, u32 flags)
-+ *	Description
-+ *		Get packet header from skb in tracing program, which can
-+ *		be access (read) directly. According to the *flags*,
-+ *		different packet header is returned:
-+ *
-+ *			**BPF_SKB_HEADER_MAC**: get mac (L2) header
-+ *			**BPF_SKB_HEADER_NETWORK**: get network (L3) header
-+ *			**BPF_SKB_HEADER_TRANSPORT**:
-+ *				get transport (L4) header
-+ *	Return
-+ *		The pointer to packet header on success, NULL on fail.
-+ *
-+ * void *bpf_skb_get_end(struct sk_buff *skb)
-+ *	Description
-+ *		Get packet head end pointer from skb in tracing program,
-+ *		which is equal to *data_end* in *struct __sk_buff*.
-+ *	Return
-+ *		The pointer to packet head end on success, and NULL on
-+ *		failing.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5339,6 +5360,8 @@ union bpf_attr {
- 	FN(copy_from_user_task),	\
- 	FN(skb_set_tstamp),		\
- 	FN(ima_file_hash),		\
-+	FN(skb_get_header),		\
-+	FN(skb_get_end),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-@@ -5537,6 +5560,12 @@ enum {
- 	 */
- };
- 
-+enum {
-+	BPF_SKB_HEADER_MAC,
-+	BPF_SKB_HEADER_NETWORK,
-+	BPF_SKB_HEADER_TRANSPORT,
-+};
-+
- /* user accessible mirror of in-kernel sk_buff.
-  * new fields can only be added to the end of this structure
-  */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9c1a02b82ecd..caf4e09cc114 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6877,6 +6877,12 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		 */
- 		regs[BPF_REG_0].btf = btf_vmlinux;
- 		regs[BPF_REG_0].btf_id = ret_btf_id;
-+	} else if (base_type(ret_type) == RET_PTR_TO_PACKET) {
-+		mark_reg_known_zero(env, regs, BPF_REG_0);
-+		regs[BPF_REG_0].type = PTR_TO_PACKET | ret_flag;
-+	} else if (base_type(ret_type) == RET_PTR_TO_PACKET_END) {
-+		mark_reg_known_zero(env, regs, BPF_REG_0);
-+		regs[BPF_REG_0].type = PTR_TO_PACKET_END | ret_flag;
- 	} else {
- 		verbose(env, "unknown return type %u of func %s#%d\n",
- 			base_type(ret_type), func_id_name(func_id), func_id);
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index b26f3da943de..6f2cd30aac07 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -810,6 +810,60 @@ static const struct bpf_func_proto bpf_current_task_under_cgroup_proto = {
- 	.arg2_type      = ARG_ANYTHING,
- };
- 
-+BPF_CALL_2(bpf_skb_get_header, struct sk_buff *, skb, u32, flags)
-+{
-+	void *header = NULL;
-+
-+	if (!skb)
-+		return (unsigned long)NULL;
-+
-+	switch (flags) {
-+	case BPF_SKB_HEADER_MAC:
-+		if (skb_mac_header_was_set(skb) && skb->mac_header)
-+			header = skb_mac_header(skb);
-+		break;
-+	case BPF_SKB_HEADER_TRANSPORT:
-+		if (skb_transport_header_was_set(skb) &&
-+		    skb->transport_header)
-+			header = skb_transport_header(skb);
-+		break;
-+	case BPF_SKB_HEADER_NETWORK:
-+		if (skb->network_header)
-+			header = skb_network_header(skb);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return (unsigned long)header;
-+}
-+
-+BTF_ID_LIST_SINGLE(bpf_get_skb_ids, struct, sk_buff);
-+static const struct bpf_func_proto bpf_skb_get_header_proto = {
-+	.func           = bpf_skb_get_header,
-+	.gpl_only       = false,
-+	.ret_type       = RET_PTR_TO_PACKET_OR_NULL,
-+	.arg1_type      = ARG_PTR_TO_BTF_ID,
-+	.arg1_btf_id	= &bpf_get_skb_ids[0],
-+	.arg2_type      = ARG_ANYTHING,
-+};
-+
-+BPF_CALL_1(bpf_skb_get_end, struct sk_buff *, skb)
-+{
-+	if (!skb)
-+		return (unsigned long)NULL;
-+
-+	return (unsigned long)skb->data + skb_headlen(skb);
-+}
-+
-+static const struct bpf_func_proto bpf_skb_get_end_proto = {
-+	.func           = bpf_skb_get_end,
-+	.gpl_only       = false,
-+	.ret_type       = RET_PTR_TO_PACKET_END_OR_NULL,
-+	.arg1_type      = ARG_PTR_TO_BTF_ID,
-+	.arg1_btf_id	= &bpf_get_skb_ids[0],
-+};
-+
- struct send_signal_irq_work {
- 	struct irq_work irq_work;
- 	struct task_struct *task;
-@@ -1282,6 +1336,10 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_branch_snapshot_proto;
- 	case BPF_FUNC_find_vma:
- 		return &bpf_find_vma_proto;
-+	case BPF_FUNC_skb_get_header:
-+		return &bpf_skb_get_header_proto;
-+	case BPF_FUNC_skb_get_end:
-+		return &bpf_skb_get_end_proto;
- 	case BPF_FUNC_trace_vprintk:
- 		return bpf_get_trace_vprintk_proto();
- 	default:
+Best regards
 -- 
-2.36.0
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

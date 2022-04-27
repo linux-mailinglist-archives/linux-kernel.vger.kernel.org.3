@@ -2,238 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9F4510FEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC4C511020
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357642AbiD0EZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S1357654AbiD0Ea0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiD0EZ4 (ORCPT
+        with ESMTP id S1357635AbiD0EaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:25:56 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D25013CDB;
-        Tue, 26 Apr 2022 21:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651033366; x=1682569366;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CWasAYxrQPq1jPx4H4LOu7butVeeUPTCdbMjR9mVIsM=;
-  b=Ym3nUC9zgXbMPQ6Vrhy0lXU0epPAbCFxE2HxUV+cEXKkzmxjBjjefj4D
-   6sXyLGeOR8BEEjaI7D71QolDqLItssPc8OcCr763ghtnvMrRP2D6EHDNS
-   pKkDzVRlee1Tii0rQeHLWjEfU6WpfT1oE3DCWyFOzwpkFdpKOpJ5PnDX5
-   T8E4e9+pLruyB1A7FYrXJt78wD1159MjTvH26Sx+62t/3yasjCDC+dMQD
-   n8pS/EAY0pf0Vz3Zings1toW83t58k0re4zZGIZC3hFsCxKsS7G0ztRB3
-   lElW2rlVyULBfceaGjUbAEWi7w8609ubaQYzsfSN+2+klgtZNUtfwd9u0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="290957547"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="290957547"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:22:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="679847763"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 26 Apr 2022 21:22:45 -0700
-Received: from fyang16-mobl1.amr.corp.intel.com (unknown [10.209.85.115])
-        by linux.intel.com (Postfix) with ESMTP id 380C7580689;
-        Tue, 26 Apr 2022 21:22:45 -0700 (PDT)
-Message-ID: <15876cf0cf8c1b158397f1a17f52938a6c633b48.camel@linux.intel.com>
-Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "koba.ko@canonical.com" <koba.ko@canonical.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Date:   Tue, 26 Apr 2022 21:22:44 -0700
-In-Reply-To: <20220426165031.GA1731758@bhelgaas>
-References: <20220426165031.GA1731758@bhelgaas>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 27 Apr 2022 00:30:24 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8C113DE0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:27:14 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id bc42so365302vkb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZP5hHWgOyitdI74hmT/MtqQOkUerntDv5R3vS847K7c=;
+        b=msHG7B/GXY/y31IUcUaVHCWDF7Hw61PO55rLvlbKp1on35EG8XwTxDQMO6DyFAGTrY
+         ni8A+Qnp9vNN2P9fros/klc7Ws0ffGCc6zOIOuiZe6Ca/tWGyfy5llUgfrilNXwaKpOV
+         toFnsSxxk438vmHEsrURVtNNtv4Bwq8qT01y+M+fTwxj53JV+oKOc3N/GRV1Ren99YHl
+         DtyVD8V2jno/3EcFX9BAKmSX6mPlwM4OA1OXiE/eSm3aUxZL2Y3gY7VOBfIPV4BukeqS
+         jrjJTZw0gX3wSqN65P30/rS0/IpxPAYeKwN0eXVZ1uFtquaArK8+RvuWjaUA7MnvaEeI
+         T1XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZP5hHWgOyitdI74hmT/MtqQOkUerntDv5R3vS847K7c=;
+        b=ieSXoEHl3fT33WeTKV39ENeImh95X+kdoTgLD69qXTAgEB5fGsb1/m7jATFMqma+0q
+         fab4qnI5Ack9qMT+Av7YFa0C0k0Wt1urFLQE3gpnb+Ivi4am3NwE9qRNW/+/ZoTUXUxh
+         tdVBpyahHJafEk6Ldcs70728fwN3mv4/NDuyhDME+uFLNVAGm8q2dJOkqk4sUMV9DEuI
+         4TEV+jdjZ7NU5icBW00ZvPn9ogyM12Xuz3fCXSj/6FM+3IU01xCdrlZue9sM6/cn8wBK
+         duQJY3Gmp96KnucOy9cyWIgIppdHvoa8jKRl9VHqWCIQ99uuBh/OaHDPMK+d8ZVh/g+9
+         /X3w==
+X-Gm-Message-State: AOAM533JOLGbt1c2m3m2RrTS4Oh590b7eK7ATw/wSaG1My8uftlG9aI+
+        8bvI5ua+JjwwobMOOVYYyJXBsYeVFOlIX6H0GRPCSQ==
+X-Google-Smtp-Source: ABdhPJwvryGFVUfJKXOoOIJLt5p0ocVqbSvHREAnjaOFYYjecqgwQZBPWFSqo1OPWWplBFIbDy7MnB1JhoCooK+S9tg=
+X-Received: by 2002:a1f:38c2:0:b0:349:9667:9232 with SMTP id
+ f185-20020a1f38c2000000b0034996679232mr8140821vka.16.1651033632966; Tue, 26
+ Apr 2022 21:27:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
+ <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
+ <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
+ <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
+ <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
+ <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
+ <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
+ <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
+ <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
+ <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
+ <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+ <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
+ <8735i1zurt.fsf@linux.ibm.com> <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
+ <c576a992-5a50-5dd3-644c-a45d4338fc85@linux.ibm.com> <9a0fe756ae3af78f2612dcf2df9673053a7ebab2.camel@intel.com>
+In-Reply-To: <9a0fe756ae3af78f2612dcf2df9673053a7ebab2.camel@intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Tue, 26 Apr 2022 21:27:01 -0700
+Message-ID: <CAAPL-u_17CveHuWa1JN1NTTUxLCUnXEAdnQwPvigc5BMGa=D1w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state N_DEMOTION_TARGETS
+To:     "ying.huang@intel.com" <ying.huang@intel.com>
+Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Greg Thelen <gthelen@google.com>,
+        MichalHocko <mhocko@kernel.org>,
+        Brice Goglin <brice.goglin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 11:50 -0500, Bjorn Helgaas wrote:
-> On Mon, Apr 25, 2022 at 11:32:54AM -0700, David E. Box wrote:
-> > On Sat, 2022-04-23 at 10:01 -0500, Bjorn Helgaas wrote:
-> > > On Sat, Apr 23, 2022 at 12:43:14AM +0000, Jingar, Rajvi wrote:
-> > > > > -----Original Message-----
-> > > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > > On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
-> > > > > > On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
-> > > > > > > For the PCIe devices (like nvme) that do not go into D3 state
-> > > > > > > still
-> > > > > > > need to
-> > > > > > > disable PTM on PCIe root ports to allow the port to enter a lower-
-> > > > > > > power PM
-> > > > > > > state and the SoC to reach a lower-power idle state as a whole.
-> > > > > > > Move
-> > > > > > > the
-> > > > > > > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path
-> > > > > > > is
-> > > > > > > not
-> > > > > > > followed for devices that do not go into D3. This patch fixes the
-> > > > > > > issue
-> > > > > > > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530
-> > > > > > > with
-> > > > > > > Coffee
-> > > > > > > Lake CPU platforms to get improved residency in low power idle
-> > > > > > > states.
-> > > > > > > 
-> > > > > > > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save
-> > > > > > > power")
-> > > > > > > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
-> > > > > > > Suggested-by: David E. Box <david.e.box@linux.intel.com>
-> > > > > > > ---
-> > > > > > >   drivers/pci/pci-driver.c | 10 ++++++++++
-> > > > > > >   drivers/pci/pci.c        | 10 ----------
-> > > > > > >   2 files changed, 10 insertions(+), 10 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> > > > > > > index 8b55a90126a2..ab733374a260 100644
-> > > > > > > --- a/drivers/pci/pci-driver.c
-> > > > > > > +++ b/drivers/pci/pci-driver.c
-> > > > > > > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device
-> > > > > > > *dev)
-> > > > > > >   	if (!pci_dev->state_saved) {
-> > > > > > >   		pci_save_state(pci_dev);
-> > > > > > > +		/*
-> > > > > > > +		 * There are systems (for example, Intel mobile chips
-> > > > > > > since
-> > > > > Coffee
-> > > > > > > +		 * Lake) where the power drawn while suspended can be
-> > > > > significantly
-> > > > > > > +		 * reduced by disabling PTM on PCIe root ports as this
-> > > > > > > allows the
-> > > > > > > +		 * port to enter a lower-power PM state and the SoC to
-> > > > > > > reach a
-> > > > > > > +		 * lower-power idle state as a whole.
-> > > > > > > +		 */
-> > > > > > > +		if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
-> > > > > > > +			pci_disable_ptm(pci_dev);
-> > > > > 
-> > > > > Why is disabling PTM dependent on pci_dev->state_saved?  The
-> > > > > point of this is to change the behavior of the device, and it
-> > > > > seems like we want to do that regardless of whether the driver
-> > > > > has used pci_save_state().
-> > > > 
-> > > > Because we use the saved state to restore PTM on the root port.
-> > > > And it's under this condition that the root port state gets
-> > > > saved.
-> > > 
-> > > Yes, I understand that pci_restore_ptm_state() depends on a
-> > > previous call to pci_save_ptm_state().
-> > > 
-> > > The point I'm trying to make is that pci_disable_ptm() changes the
-> > > state of the device, and that state change should not depend on
-> > > whether the driver has used pci_save_state().
-> > 
-> > We do it here because D3 depends on whether the device state was
-> > saved by the driver.
-> > 
-> > 	if (!pci_dev->state_saved) {
-> >         	pci_save_state(pci_dev);
-> > 
-> > 		/* disable PTM here */
-> > 
-> > 		if (pci_power_manageable(pci_dev))
-> > 			pci_prepare_to_sleep(pci_dev);
-> > 	}
-> > 
-> > 
-> > If we disable PTM before the check, we will have saved "PTM
-> > disabled" as the restore state. And we can't do it after the check
-> > as the device will be in D3.
-> 
-> Are you suggesting that PTM should be left enabled if the driver
-> called pci_save_state(), but disabled otherwise?  I don't see the
-> rationale for that.
+On Tue, Apr 26, 2022 at 1:43 AM ying.huang@intel.com
+<ying.huang@intel.com> wrote:
+>
+> On Mon, 2022-04-25 at 13:39 +0530, Aneesh Kumar K V wrote:
+> > On 4/25/22 11:40 AM, ying.huang@intel.com wrote:
+> > > On Mon, 2022-04-25 at 09:20 +0530, Aneesh Kumar K.V wrote:
+> > > > "ying.huang@intel.com" <ying.huang@intel.com> writes:
+> > > >
+> > > > > Hi, All,
+> > > > >
+> > > > > On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
+> > > > >
+> > > > > [snip]
+> > > > >
+> > > > > > I think it is necessary to either have per node demotion targets
+> > > > > > configuration or the user space interface supported by this patch
+> > > > > > series. As we don't have clear consensus on how the user interface
+> > > > > > should look like, we can defer the per node demotion target set
+> > > > > > interface to future until the real need arises.
+> > > > > >
+> > > > > > Current patch series sets N_DEMOTION_TARGET from dax device kmem
+> > > > > > driver, it may be possible that some memory node desired as demotion
+> > > > > > target is not detected in the system from dax-device kmem probe path.
+> > > > > >
+> > > > > > It is also possible that some of the dax-devices are not preferred as
+> > > > > > demotion target e.g. HBM, for such devices, node shouldn't be set to
+> > > > > > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
+> > > > > > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
+> > > > > > kernel, but for now this user space interface will be useful to avoid
+> > > > > > such devices as demotion targets.
+> > > > > >
+> > > > > > We can add read only interface to view per node demotion targets
+> > > > > > from /sys/devices/system/node/nodeX/demotion_targets, remove
+> > > > > > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
+> > > > > > make /sys/devices/system/node/demotion_targets writable.
+> > > > > >
+> > > > > > Huang, Wei, Yang,
+> > > > > > What do you suggest?
+> > > > >
+> > > > > We cannot remove a kernel ABI in practice.  So we need to make it right
+> > > > > at the first time.  Let's try to collect some information for the kernel
+> > > > > ABI definitation.
+> > > > >
+> > > > > The below is just a starting point, please add your requirements.
+> > > > >
+> > > > > 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
+> > > > > want to use that as the demotion targets.  But I don't think this is a
+> > > > > issue in practice for now, because demote-in-reclaim is disabled by
+> > > > > default.
+> > > >
+> > > > It is not just that the demotion can be disabled. We should be able to
+> > > > use demotion on a system where we can find DRAM only NUMA nodes. That
+> > > > cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
+> > > > something similar to to N_DEMOTION_TARGETS
+> > > >
+> > >
+> > > Can you show NUMA information of your machines with DRAM-only nodes and
+> > > PMEM nodes?  We can try to find the proper demotion order for the
+> > > system.  If you can not show it, we can defer N_DEMOTION_TARGETS until
+> > > the machine is available.
+> >
+> >
+> > Sure will find one such config. As you might have noticed this is very
+> > easy to have in a virtualization setup because the hypervisor can assign
+> > memory to a guest VM from a numa node that doesn't have CPU assigned to
+> > the same guest. This depends on the other guest VM instance config
+> > running on the system. So on any virtualization config that has got
+> > persistent memory attached, this can become an easy config to end up with.
+> >
+>
+> Why they want to do that?  I am looking forward to a real issue, not
+> theoritical possibility.
+>
+> >
+> > > > > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
+> > > > >
+> > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow
+> > > > > memory node near node 0,
+> > > > >
+> > > > > available: 3 nodes (0-2)
+> > > > > node 0 cpus: 0 1
+> > > > > node 0 size: n MB
+> > > > > node 0 free: n MB
+> > > > > node 1 cpus:
+> > > > > node 1 size: n MB
+> > > > > node 1 free: n MB
+> > > > > node 2 cpus: 2 3
+> > > > > node 2 size: n MB
+> > > > > node 2 free: n MB
+> > > > > node distances:
+> > > > > node   0   1   2
+> > > > >    0:  10  40  20
+> > > > >    1:  40  10  80
+> > > > >    2:  20  80  10
+> > > > >
+> > > > > We have 2 choices,
+> > > > >
+> > > > > a)
+> > > > > node    demotion targets
+> > > > > 0       1
+> > > > > 2       1
+> > > >
+> > > > This is achieved by
+> > > >
+> > > > [PATCH v2 1/5] mm: demotion: Set demotion list differently
+> > > >
+> > > > >
+> > > > > b)
+> > > > > node    demotion targets
+> > > > > 0       1
+> > > > > 2       X
+> > > >
+> > > >
+> > > > >
+> > > > > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
+> > > > > traffic.  Both are OK as defualt configuration.  But some users may
+> > > > > prefer the other one.  So we need a user space ABI to override the
+> > > > > default configuration.
+> > > > >
+> > > > > 3. For machines with HBM (High Bandwidth Memory), as in
+> > > > >
+> > > > > https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
+> > > > >
+> > > > > > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
+> > > > >
+> > > > > Although HBM has better performance than DDR, in ACPI SLIT, their
+> > > > > distance to CPU is longer.  We need to provide a way to fix this.  The
+> > > > > user space ABI is one way.  The desired result will be to use local DDR
+> > > > > as demotion targets of local HBM.
+> > > >
+> > > >
+> > > > IMHO the above (2b and 3) can be done using per node demotion targets. Below is
+> > > > what I think we could do with a single slow memory NUMA node 4.
+> > >
+> > > If we can use writable per-node demotion targets as ABI, then we don't
+> > > need N_DEMOTION_TARGETS.
+> >
+> >
+> > Not sure I understand that. Yes, once you have a writeable per node
+> > demotion target it is easy to build any demotion order.
+>
+> Yes.
+>
+> > But that doesn't
+> > mean we should not improve the default unless you have reason to say
+> > that using N_DEMOTTION_TARGETS breaks any existing config.
+> >
+>
+> Becuase N_DEMOTTION_TARGETS is a new kernel ABI to override the default,
+> not the default itself.  [1/5] of this patchset improve the default
+> behavior itself, and I think that's good.
+>
+> Because we must maintain the kernel ABI almost for ever, we need to be
+> careful about adding new ABI and add less if possible.  If writable per-
+> node demotion targets can address your issue.  Then it's unnecessary to
+> add another redundant kernel ABI for that.
 
-No. I was saying that because pci_power_manageable() depends on the state not
-being saved, we depended on it too ...
+I still think the kernel should initialize the per-node demotion order
+in a way similar to allocation fallback order and there is no need for
+a userspace interface to override per-node demotion order. But I don't
+object to such a per-node demotion order override interface proposed
+here.
 
-> 
-> I don't understand all the paths through pci_pm_suspend_noirq() (e.g.,
-> skip_bus_pm), but for this one, I think we could do something like
-> this:
-> 
->   driver_saved = pci_dev->state_saved;
->   if (!driver_saved)
->     pci_save_state(pci_dev);
-> 
->   pci_disable_ptm(pci_dev);
-> 
->   if (!driver_saved) {
->     if (pci_power_manageable(pci_dev))
->       pci_prepare_to_sleep(pci_dev);
->   }
+On the other hand, I think it is better to preserve the system-wide
+/sys/devices/system/node/demotion_targets as writable.  If the
+userspace only wants to specify a specific set of nodes as the
+demotion tier and is perfectly fine with the per-node demotion order
+generated by the kernel, why should we enforce the userspace to have
+to manually define the per-node demotion order as well?
 
-... but this solution gets us away from dependency. We'll make this change.
-
-> 
-> Or I guess one could argue that a driver calling pci_save_state() is
-> implicitly taking responsibility for all PCI-related suspend work, and
-> it should be disabling PTM itself.  But that doesn't really seem
-> maintainable.
-> 
-> > As to disabling PTM on all devices, I see no problem with this, but the
-> > reasoning is different. We disabled the root port PTM for power savings.
-> 
-> The power saving is good.  I'm trying to make the argument that we
-> need to disable PTM on all devices for correctness.
-> 
-> If we disable PTM on the root port, are we guaranteed that it will
-> never receive a PTM Request from a downstream device?  Per PCIe r6.0,
-> sec 6.21.3, such a request would cause an Unsupported Request error.
-> 
-> I sort of expect that if we're putting a root port in a low-power
-> state, all downstream devices are already in the same or a lower-power
-> state (but I don't understand PM well enough to be confident).
-> 
-> And I don't really *expect* devices in a low-power state to generate
-> PTM Requests, but I haven't seen anything in the spec that prohibits
-> it.
-> 
-> This leads me to believe that if we disable PTM in a root port, we
-> must first disable PTM in any downstream devices.  Otherwise, the root
-> port may log UR errors if the downstream device issues a PTM Request.
-
-I don't know that Kai-Heng's case is due to this, but it's a fair reading of the
-spec that downstream devices should be disabled first. We'll change the patch to
-disable PTM on all devices. Thanks.
-
-David
-
-> 
-> > > When we're putting a device into a low-power state, I think we want to
-> > > disable PTM *always*, no matter what the driver did.  And I think we
-> > > want to do it for all devices, not just Root Ports.
-> > > 
-> > > Bjorn
-
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 4
+> > > > 4
+> > > > 4
+> > > >
+> > > > /sys/devices/system/node# echo 1 > node1/demotion_targets
+> > > > bash: echo: write error: Invalid argument
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 4
+> > > > 4
+> > > > 4
+> > > >
+> > > > /sys/devices/system/node# echo 0 > node1/demotion_targets
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 0
+> > > > 4
+> > > > 4
+> > > >
+> > > > /sys/devices/system/node# echo 1 > node0/demotion_targets
+> > > > bash: echo: write error: Invalid argument
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 0
+> > > > 4
+> > > > 4
+> > > >
+> > > > Disable demotion for a specific node.
+> > > > /sys/devices/system/node# echo > node1/demotion_targets
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > >
+> > > > 4
+> > > > 4
+> > > >
+> > > > Reset demotion to default
+> > > > /sys/devices/system/node# echo -1 > node1/demotion_targets
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 4
+> > > > 4
+> > > > 4
+> > > >
+> > > > When a specific device/NUMA node is used for demotion target via the user interface, it is taken
+> > > > out of other NUMA node targets.
+> > >
+> > > IMHO, we should be careful about interaction between auto-generated and
+> > > overridden demotion order.
+> > >
+> >
+> > yes, we should avoid loop between that.
+>
+> In addition to that, we need to get same result after hot-remove then
+> hot-add the same node.  That is, the result should be stable after NOOP.
+> I guess we can just always,
+>
+> - Generate the default demotion order automatically without any
+> overriding.
+>
+> - Apply the overriding, after removing the invalid targets, etc.
+>
+> > But if you agree for the above
+> > ABI we could go ahead and share the implementation code.
+>
+> I think we need to add a way to distinguish auto-generated and overriden
+> demotion targets in the output of nodeX/demotion_targets.  Otherwise it
+> looks good to me.
+>
+> Best Regards,
+> Huang, Ying
+>
+> > > > root@ubuntu-guest:/sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 4
+> > > > 4
+> > > > 4
+> > > >
+> > > > /sys/devices/system/node# echo 4 > node1/demotion_targets
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > >
+> > > > 4
+> > > >
+> > > >
+> > > >
+> > > > If more than one node requies the same demotion target
+> > > > /sys/devices/system/node# echo 4 > node0/demotion_targets
+> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
+> > > > 4
+> > > > 4
+> > > >
+> > > >
+> > > >
+> > > > -aneesh
+> > >
+> > >
+> >
+> > -aneesh
+>
+>

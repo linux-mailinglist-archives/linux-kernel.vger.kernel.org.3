@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161A551174C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAD55117EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiD0Mez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S234279AbiD0MfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiD0Mex (ORCPT
+        with ESMTP id S234278AbiD0MfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:34:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ECE44A05
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:31:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 27 Apr 2022 08:35:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4DE4B1F7;
+        Wed, 27 Apr 2022 05:31:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 25822210E1;
+        Wed, 27 Apr 2022 12:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651062710; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C3N+181NGxO23xtLtvgHl8EcRvfl2YIztgq+N5zcc0Q=;
+        b=kWUZDuXbv8n2l/4bg7OILM4Wfr0TQMfM5n6UhSLLBFO7QYMTHTlbH+FN7XNsg/mci/2Rx7
+        I2lkStWKbWmrJEWTtKeJ3rmPz4ywrN5IbbBdWTo7xlqxFERARNsiPV213biZtVVk/prgZw
+        LBdLLHuyIdfvp1EFx7JNWnosE4JstNo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651062710;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C3N+181NGxO23xtLtvgHl8EcRvfl2YIztgq+N5zcc0Q=;
+        b=YDFmMRH5H6YmEcStLmEwyHz/6yKosU9Gn1KxGeR6GXSKAKCWA/0JT4zdiRl/XcfLXUj4ki
+        wXIOqfgdtdVLYTBQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CCBB61A55
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948CCC385A9;
-        Wed, 27 Apr 2022 12:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651062702;
-        bh=BU9qY+XoM68QIbx1aHHAymlamdmVa5QGEfjIOMc87d8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f5v1vSSdUGxSLCIl/JBz1bjSPnwn+wpbDGZenPI/j5SYXT2GS1YfhbEaMMZydLxEo
-         mzXUJINcFnvFZUNF/JLvGDBxzUwlJ/OzaDpXUq7FPq9eMJNU0//8ciJLBvq9kyAjuK
-         dAdSCGAS6HXeCWmjzhnVwQuz78Zpj3MKRhkVbrLA=
-Date:   Wed, 27 Apr 2022 14:31:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
-Cc:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
-Message-ID: <Ymk3qimGl1tTjpSL@kroah.com>
-References: <cover.1650321310.git.codeagain@codeagain.dev>
- <YmA4QIRfx2QPhEJi@kroah.com>
- <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
- <YmJNqMjXEc4KGrJ8@kroah.com>
- <20220427121851.4e2rjbbabw5sh3lk@AN5Bruno>
+        by relay2.suse.de (Postfix) with ESMTPS id 0C0EB2C141;
+        Wed, 27 Apr 2022 12:31:49 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 95379A0620; Wed, 27 Apr 2022 14:31:46 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 14:31:46 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com, stable@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH v2] ext4: fix race condition between ext4_write and
+ ext4_convert_inline_data
+Message-ID: <20220427123146.ymm7lodedvtot2ij@quack3.lan>
+References: <20220426140658.1046700-1-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427121851.4e2rjbbabw5sh3lk@AN5Bruno>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426140658.1046700-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:18:51AM -0300, Bruno Moreira-Guedes wrote:
-> Hello,
+On Tue 26-04-22 22:06:58, Baokun Li wrote:
+> Hulk Robot reported a BUG_ON:
+>  ==================================================================
+>  EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
+>  block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
+>  kernel BUG at fs/ext4/ext4_jbd2.c:53!
+>  invalid opcode: 0000 [#1] SMP KASAN PTI
+>  CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
+>  RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
+>  RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
+>  [...]
+>  Call Trace:
+>   ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
+>   generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
+>   ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
+>   ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
+>   do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
+>   do_iter_write+0x107/0x430 fs/read_write.c:861
+>   vfs_writev fs/read_write.c:934 [inline]
+>   do_pwritev+0x1e5/0x380 fs/read_write.c:1031
+>  [...]
+>  ==================================================================
 > 
-> On Fri, Apr 22, 2022 at 08:39:36AM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Apr 21, 2022 at 08:16:05PM +0100, Martyn Welch wrote:
-> > > On Wed, 2022-04-20 at 18:43 +0200, Greg Kroah-Hartman wrote:
-> > > > On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wrote:
-> > > > > This patch series modify the vme_user driver's place in
-> > > > > menuconfig (1/3), fixes a missing `depends on` line in a Kconfig
-> > > > > file
-> > > > > (2/3), and rearrages the directory tree for the driver allowing a
-> > > > > more
-> > > > > straightforward comprehension of its contents (3/3).
-> > > > > 
-> > > > > The 'vme_user/' driver is the only remaining vme-family driver in
-> > > > > the
-> > > > > 'staging/' tree, but its structure, entry in menuconfig and
-> > > > > building
-> > > > > routines are still attached to the 'vme/' subtree now outside
-> > > > > 'staging/'. The present patchset fixes it.
-> > > > > 
-> > > > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
-> > > > 
-> > > > What about deleting the vme drivers entirely?
-> > > 
-> > > I assume you're suggesting deleting the "vme_user" driver from the
-> > > staging directory?
-> > 
-> > Yes, at the very least given that no one has tried to fix it up and get
-> > it out of staging in many years.
+> Above issue may happen as follows:
+>            cpu1                     cpu2
+> __________________________|__________________________
+> do_pwritev
+>  vfs_writev
+>   do_iter_write
+>    ext4_file_write_iter
+>     ext4_buffered_write_iter
+>      generic_perform_write
+>       ext4_da_write_begin
+>                            vfs_fallocate
+>                             ext4_fallocate
+>                              ext4_convert_inline_data
+>                               ext4_convert_inline_data_nolock
+>                                ext4_destroy_inline_data_nolock
+>                                 clear EXT4_STATE_MAY_INLINE_DATA
+>                                ext4_map_blocks
+>                                 ext4_ext_map_blocks
+>                                  ext4_mb_new_blocks
+>                                   ext4_mb_regular_allocator
+>                                    ext4_mb_good_group_nolock
+>                                     ext4_mb_init_group
+>                                      ext4_mb_init_cache
+>                                       ext4_mb_generate_buddy  --> error
+>        ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+>                                 ext4_restore_inline_data
+>                                  set EXT4_STATE_MAY_INLINE_DATA
+>        ext4_block_write_begin
+>       ext4_da_write_end
+>        ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+>        ext4_write_inline_data_end
+>         handle=NULL
+>         ext4_journal_stop(handle)
+>          __ext4_journal_stop
+>           ext4_put_nojournal(handle)
+>            ref_cnt = (unsigned long)handle
+>            BUG_ON(ref_cnt == 0)  ---> BUG_ON
 > 
-> While I cannot comment anything on that regard, I imagine the v4 I sent
-> a couple of days ago will wait for that decision, right?
+> The lock held by ext4_convert_inline_data is xattr_sem, but the lock
+> held by generic_perform_write is i_rwsem. Therefore, the two locks can
+> be concurrent. To solve above issue, we just add inode_lock in
+> ext4_convert_inline_data.
+> 
+> Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
+> Cc: stable@vger.kernel.org
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-I do not know what you are referring to, sorry.  My staging patch queue
-is empty right now.
+Thanks for the report and the patch. I agree inode_lock is needed to
+protect the conversion.  However you cannot lock it inside
+ext4_convert_inline_data() because it is often called with inode_lock
+already held (in fact in most of the other cases as far as I have checked).
+So the right fix is to reorganize ext4_fallocate() a bit to do something
+like:
 
-> Should I prepare a patch removing them and also submit so when it's
-> decided you can just pick one patch or the other?
+	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+	if (ext4_has_inline_data(inode)) {
+		inode_lock(inode);
+		ret = ext4_convert_inline_data(inode);
+		inode_unlock(inode);
+		if (ret)
+			goto exit;
+	}
 
-Let's wait on a removal patch for now.
+and remove similar handling from ext4_punch_hole() (and make sure it uses
+the new handling in ext4_fallocate()).
 
-thanks,
-
-greg k-h
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

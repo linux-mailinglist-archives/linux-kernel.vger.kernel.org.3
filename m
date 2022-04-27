@@ -2,217 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B842C51162C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4EF511595
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiD0LAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S231356AbiD0LAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiD0LAL (ORCPT
+        with ESMTP id S231655AbiD0LAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:00:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D153C762D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:37:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bu29so2438575lfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:37:54 -0700 (PDT)
+        Wed, 27 Apr 2022 07:00:41 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277143D1240
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1651055929; x=1682591929;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=s/quhmMASiGQDOZQOLFqMz4GMkyRanzbD0FJL4tsntA=;
+  b=api0zCrNbZkZMEMUBMb7v02hyhPxIt3HAGwUa2vc/MkiJeCAaqcYGXcG
+   zCC/r/0+uOayGYZ0JCodhzkY7GxFm1p6vvJLcMRMrKIYKJNOb/5qLDCkb
+   6w4Ro7xytTgiuExzwCRiTYfTve3G6E3aI/RCgFgRrqNZF1804KnlyJEgf
+   fpmVZi7qnqkDP+aaXi48OUnUeX39qH/YL/LfFBO8jQHEyyAhzhc/X0NQs
+   KMfKY3U8iC2Uv04awfUBEppJljA/z6STaGbUmboaXwuDVwqPM0d6kYUWE
+   F/9uCpDa3xEL7YlZFuh3FWZ9LaQvPOuBQytFHlWhROQyteUIIJLgGfD3x
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,292,1643644800"; 
+   d="scan'208";a="203818395"
+Received: from mail-co1nam11lp2171.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.171])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Apr 2022 18:38:46 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SX2Hh9u9TEIeLvZ19C2M39U9QBXUSsoorpMuCWgpAf/evdHQaoGL86A469hQcTfsNI5xQ1ZYRmlRW0+5GOKQzYmkXfLHE2L3NMVBZBtkjnGJsn+pvEEiomWvna0ob94rVQEk7pchJE++/ShSa/w/YgNSP88mXKhJYYiq2Sn+DKXlYocpiRL3favzn8hvq4leMKn/HrbNQiznkTEdCEx46hVnpS7Gzd2Eur7OpBrpLxRFQ3WqkkS52X5kjz4DJ3r11G1hylGmTnU4zJoikrJ4GofcqdkaisZBEBrhCJlSWOVriE48cSRYInyTRlAWiYaRoZOhjEeby3N7ZPKVu6ziXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s/quhmMASiGQDOZQOLFqMz4GMkyRanzbD0FJL4tsntA=;
+ b=fKPC9l6C1kQ7terLZuHu7tvCI7+Ina0yPz+RjKGmo8o+HcFeIUdsQsQc1cznoSeOmytE7uQBUz/BF/SJgjBgmAb6VrFUBdqAlAB+6QDy6DBtDKNFvq4kcsNQINx6T1Jr6YA/6TTA7BgiGidePR4hVMC5Hc+5+yZOXomcV6COPxdBK1qdpWTcSF1Ref9zejEFJYwcYsFOHdkqwdlDlk6W/vxrOQMtpha9bh367qczgq3cXdPE5yvGGuT3T1pQ1mySh08XiSLIgJbPaIN7zMhKgd+3G/BXt1QLjGR2JrWFRB4iu7Gebng5Nb4zB5irj1XqKv2Zx4EWhL1P+jSu4ZTRqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=jRN8XksCdAf0+x8Uj8a/DButwn5KzLonnaobSsBfglg=;
-        b=DK23ya2EJ5weoMmh1t7kx/QodejkNkn8M5NyBLC6YNDDq/iyYjlsNadZ2EHYSJ5Fqg
-         v6gIuXZexBcUPt7oHC2h4qRgCgC/5A3dmpZmQsJ+8GqVCb1x/lOqbf91P7uw5Ww0uqKD
-         uyHVfyKv/F1Mc0YNVKPWcoHW3ohxieUlWta8+KHFA8/SQJvfuKwbBS+TFPT4bO6XlV24
-         H/uUZxi93xoDkhBCqfXOOKQhO/48gVdV2wprUxrQeRwT2K32euRbJz7E7YXAoFNXApwv
-         SLu4nXXcpWgbpsAiiuxu+zsOGeWaGuKPZ7cmgu84GIuIDg25iFm84RkrJJ73rKF+8/gg
-         IwGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=jRN8XksCdAf0+x8Uj8a/DButwn5KzLonnaobSsBfglg=;
-        b=xurPRvdhwZUfAn5MHUTCPyOa1HNZ6Ot5i1FOU/C3rIPVWBm0UZxJKeCXt+MZ4lpjnU
-         JCMbRp9BNdlhBlw7IDycLEFsyy2F1E9cbK+iUFzWR/xqrp+w7FiUHf+bZS56MNTvljIh
-         SPaXseVgLe9KCpEzl97SHAHu+Thisj1c5nEUKcD93ClrAwyn/O+6fbPBXvbJoKINUsq5
-         aZSju/7tLrCd826xpkErZYTw2wuKJ8VQVx6OEwp/parz7aACqYHpU35xLZvQpNSsiWOe
-         QtoZppXnlgBveQ/PuMDx8KPAUkJUoLpdBg3sSlU3piqETHX+Hl7YkcCeuUcZbrlvT2mB
-         2B4A==
-X-Gm-Message-State: AOAM5309VBPWvupmolZQQuA5EgZvOztjEYayagIZJpXEJFqo/+owAe+1
-        AgNlgHwGeePExhsntGN1Xq1lwg==
-X-Google-Smtp-Source: ABdhPJydThKNwg1fAKcAA4XC9MwiqCQDBZ2EHrvqh41Hwk2uoGINd3w/CMeX10Khz/ZzztPAo5aBuw==
-X-Received: by 2002:a05:6512:400a:b0:46b:8cd9:1af8 with SMTP id br10-20020a056512400a00b0046b8cd91af8mr20687452lfb.545.1651055872441;
-        Wed, 27 Apr 2022 03:37:52 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id m4-20020a197104000000b00471ebfc7a0bsm1840776lfc.191.2022.04.27.03.37.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 03:37:51 -0700 (PDT)
-Message-ID: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
-Date:   Wed, 27 Apr 2022 13:37:50 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH] memcg: accounting for objects allocated for new netdevice
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>
-Cc:     kernel@openvz.org, Florian Westphal <fw@strlen.de>,
-        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        linux-fsdevel@vger.kernel.org
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s/quhmMASiGQDOZQOLFqMz4GMkyRanzbD0FJL4tsntA=;
+ b=iNm8vMWZmS4jXKMlvXfayeGrcap1/wXbZjtb4aD0REveA1iZuWe8lDvZFq7Y3b4KPNfXB7sRkFflmeW0A+Bxi3iN+SVr6G/+16KgbxrNj05WZXw2ywGb1ES+I5vUg3Sd/J3WXFsrZRmGmFJJn+A9zEAD4ZTo368EVy2es94lpt8=
+Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
+ SN4PR0401MB3696.namprd04.prod.outlook.com (2603:10b6:803:48::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21; Wed, 27 Apr
+ 2022 10:38:47 +0000
+Received: from DM8PR04MB8037.namprd04.prod.outlook.com
+ ([fe80::2839:2ab4:7871:416e]) by DM8PR04MB8037.namprd04.prod.outlook.com
+ ([fe80::2839:2ab4:7871:416e%8]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
+ 10:38:47 +0000
+From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v2] bus: fsl-mc-msi: fix MSI descriptor mutex lock for
+ msi_first_desc()
+Thread-Topic: [PATCH v2] bus: fsl-mc-msi: fix MSI descriptor mutex lock for
+ msi_first_desc()
+Thread-Index: AQHYTkLZyTZGrgBEjUuE0crYEsKlAK0DqWwA
+Date:   Wed, 27 Apr 2022 10:38:46 +0000
+Message-ID: <20220427103846.hjnkfn5fpuqlzuap@shindev>
+References: <20220412075636.755454-1-shinichiro.kawasaki@wdc.com>
+In-Reply-To: <20220412075636.755454-1-shinichiro.kawasaki@wdc.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2166fe34-f782-4de4-498c-08da283a1c17
+x-ms-traffictypediagnostic: SN4PR0401MB3696:EE_
+x-microsoft-antispam-prvs: <SN4PR0401MB3696353162D15260043BB27BEDFA9@SN4PR0401MB3696.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZZNVxd+ovuJDwO+1oDrX4AE+Giobp+ze9YtMn+LEaO8Bo9s9uaiLR1BuU5tq7j0YmPjWIVSSitTuPRt+Uz8p/FDj2lpKOAV8Eo34BkZmHNNwi2KK6x/ILeUHsC54WfzBCu2vPGlQbLBrqsiNH23zi7ow1x6xih4L5Yexsnq6hPc89QyddOWQyZv/xFAL2SAyaHEjrlcOpBWTJ8jQhuZtHUKYuqSeAuH+BEzoJJsLzYTm5qzMApOYtN/p7hlpiPXmzZdAeD5yXgJzyLrTzpDAmAVOQaWznUwSWDCUqIUrARWAQ2PuU2gRLI7DQwf6XpDMwNgWAzcy2f7bg11K8/loSFNA3fxqGPcvM2eYAQq/wZA0ETi6y6cxuv8cI8agfWpjlftRZ+a7aHsEq4nxwS/XpL1+pXT4ZzvsmHKGh29kKXpwfjXdlvHdCb7pm5fhzEiljDh/fA/sp8jbVnGmyAhRldBTbf6nVSFs147Lv0Gd8dODifV9gHmgAPsajcZ3xgGS15Jec9SMhX31NS0GMShmQVgUYP0mnyTZzlp5ud01OSgkulEcau+YnObGnyxPnfb2c9/DBvWBPT0PuvYvIEcTAM8ztqG8aYNgaebl7xS1ulB4Ie0LmTRM9MXk59/HdWtbJDwj6AWfZKUmVOH7HMZ2A66lxmUzoREcdr+lnvt4S/RTpN44cX/39WFZcLgsVHCWUi5ORsOC3Tt9VwTWUHv88Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(44832011)(33716001)(76116006)(38100700002)(71200400001)(38070700005)(5660300002)(4326008)(66946007)(66556008)(66476007)(64756008)(8936002)(8676002)(66446008)(508600001)(91956017)(122000001)(9686003)(6486002)(316002)(6512007)(83380400001)(26005)(86362001)(2906002)(82960400001)(4744005)(6506007)(54906003)(110136005)(1076003)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IEV5StX3CPlIkwDyGQrHQmt+GlNNyeBGIWkU8IUWTIUu5iSfjvy3vV/OGmpw?=
+ =?us-ascii?Q?z3LygV1kCckVAxdGlehzfQOPSDKbGE98JfcOsgs/N5k/U8azEBntcb1KcNBs?=
+ =?us-ascii?Q?Uk2IVrEeFv6ebB+++dkmuEp62gJmxJtGLGBHuNipcGL58UqavgGjqPZ1Hez2?=
+ =?us-ascii?Q?i08Wo3mG/QFsURXJPsXcoRYghdhI0L4pKPkNWdGLxhMklqnMtVjEqnoK95kA?=
+ =?us-ascii?Q?iSKthxMmhQ6Oc+nv3Y0haiufCAtnr7GnuSHKfgTjFr3d3S1kX9xt1t+iGJdr?=
+ =?us-ascii?Q?ftIcxDEbVhWdnqeP8LqCaQvz/rjnTzxQNs8QoX5RX6ta7h/naJcn0DIM4nuw?=
+ =?us-ascii?Q?IW8De217nBQV4B2RN3aFsmp/uGEBFCB8G/idxQC6yXHBatxQdAxkIpmOL8RO?=
+ =?us-ascii?Q?PuMalseJpv2uPTwnzlNcq1gI1HxGxhnlL2147MjXcIGN3TpHL0nVied492LL?=
+ =?us-ascii?Q?VCgLMlQnw1jkcz9ZXohQt4pkdn0UAfCgXBCjykwFCt9+/PgRyu4X+t9pMU6c?=
+ =?us-ascii?Q?sugmorTb30bB8SAN0+rb3YYveVovjOnclZC1lTTYZ29FWkT7xbiWdAY2oX88?=
+ =?us-ascii?Q?Mv42eY7JSYS4vmkanW+FKvUr1hoQpa8aPhare3mr/m0O52k5DGlZC6s7NZof?=
+ =?us-ascii?Q?LbS9S+9Ven/wOhyRWJEeiDEvsvocyJSfArUf2alyQAOVzYkA876Q50KutAlT?=
+ =?us-ascii?Q?RmmQmjWWwmttKiQDgWr6eF12fG7dlT/rzDulLiOQfy0bgECdy965bcPzlZqU?=
+ =?us-ascii?Q?m3hNtxXHHyeADrH13LAXRfK/ervHmk7tJDO6bePsC+bBoiUTvDDU8xAoKEVO?=
+ =?us-ascii?Q?nbt6UJET5iDHcp39teiheKVe6sl3gqan4j4cdRYZ0Z7MPcDZ4EEzNi1NIymh?=
+ =?us-ascii?Q?Lm+Iov5qEIT4RSUbRyCBLtbUPMIe83yLwZ260qDhApGpDLkGK6ynkaxrIxLO?=
+ =?us-ascii?Q?iU3MFkottns8ISGDHDVASCuEoUvWrC2co+rx126Ngh64aIcnVO4hFr5EIxSN?=
+ =?us-ascii?Q?ur2zRFGcVtfDXbFlef1UZHl0BCh5G9d0pYHWNhu9zt3INh9mI7JEyy7Di3rm?=
+ =?us-ascii?Q?uvr1bQodtUvFsVypMxPcWyhUUKXVxhBUaHDk8QViPE6wPUoEx3Uznt1HEYsi?=
+ =?us-ascii?Q?t1JmqUQMImboXCVIxq4+5/q4eKK0IThThPzRk/fONlGF28KXphmvDbCEuw/N?=
+ =?us-ascii?Q?T5csuLKetzpRCIrqnf7HwJDhjaSkWnHi85g8K5KVzksZtVKv2r1oKnnAhFG7?=
+ =?us-ascii?Q?3Yrwxac83+Ag3w5dSO15ee9Lfri3x0x2W1JBDpdgM43aMjHqHkzy4+GxX48k?=
+ =?us-ascii?Q?YyN83N1xkwu/2+OQyY1/nFTflWNvHceS4OwFINXVufJssB7jeMzu3QFdIHmh?=
+ =?us-ascii?Q?63WPzLvNKOy7Zlykf4Z0byE7CmzjH6LhCTDmsmDmCt6zhybjvq72DVYNLs+N?=
+ =?us-ascii?Q?G4U2ICXk8gbYbjfPi1oy7qCAfCQDMWmb8UeRcOBq73NgcMQNsM0s3KOrvKHL?=
+ =?us-ascii?Q?m9Mz07mQrKFm1TPYNbABkQDcDk4qRLDyfCry27+DIoEkTIfto3jF6SMmwKjM?=
+ =?us-ascii?Q?NST0ZG6BGyW9WYeoe7vWxbf91WQTTx+YVUKTA5KHecq4G3WL65IT5kYO50Fz?=
+ =?us-ascii?Q?qYbrW8OJcT6N47vd85Jcc+6Bm1Rt22vtha2UkzLxehBGekP1KkMHJIujxorn?=
+ =?us-ascii?Q?3MZwOCC/JniJNqY5XYAYC1N4xW8FLIZltw6dM8HyS9hkL1NyxSQ9WQQ11Xvn?=
+ =?us-ascii?Q?NPdmE8Ny7h2tyZJ1o1OSjHnv79oDZwIub3yVEkFemQQo5e9XzEQ8?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1C2550650578DC4697607F1DE135A973@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2166fe34-f782-4de4-498c-08da283a1c17
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2022 10:38:47.0692
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: L5GWfutzWOEtwKJEu938qSmt/yMb4E90+D0HobUJlinX8mCTLOgz0EeuH6rTufgtkke9ewRMoJmS0wqYnUDz30XUd5P1mLcCrBus+97I2Ag=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0401MB3696
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Creating a new netdevice allocates at least ~50Kb of memory for various
-kernel objects, but only ~5Kb of them are accounted to memcg. As a result,
-creating an unlimited number of netdevice inside a memcg-limited container
-does not fall within memcg restrictions, consumes a significant part
-of the host's memory, can cause global OOM and lead to random kills of
-host processes.
+On Apr 12, 2022 / 16:56, Shin'ichiro Kawasaki wrote:
+> Commit e8604b1447b4 ("bus: fsl-mc-msi: Simplify MSI descriptor
+> handling") introduced a call to the helper function msi_first_desc(),
+> which needs MSI descriptor mutex lock before call. However, the required
+> mutex lock was not added. This resulted in lockdep assert WARNING [1].
+> Fix this by adding the mutex lock and unlock around the function call.
 
-The main consumers of non-accounted memory are:
- ~10Kb   80+ kernfs nodes
- ~6Kb    ipv6_add_dev() allocations
-  6Kb    __register_sysctl_table() allocations
-  4Kb    neigh_sysctl_register() allocations
-  4Kb    __devinet_sysctl_register() allocations
-  4Kb    __addrconf_sysctl_register() allocations
+This is a gentle reminder. Comments or merge to upstream will be appreciate=
+d.
 
-Accounting of these objects allows to increase the share of memcg-related
-memory up to 60-70% (~38Kb accounted vs ~54Kb total for dummy netdevice
-on typical VM with default Fedora 35 kernel) and this should be enough
-to somehow protect the host from misuse inside container.
-
-Other related objects are quite small and may not be taken into account
-to minimize the expected performance degradation.
-
-It should be separately mentonied ~300 bytes of percpu allocation
-of struct ipstats_mib in snmp6_alloc_dev(), on huge multi-cpu nodes
-it can become the main consumer of memory.
-
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
-RFC was discussed here:
-https://lore.kernel.org/all/a5e09e93-106d-0527-5b1e-48dbf3b48b4e@virtuozzo.com/
----
- fs/kernfs/mount.c     | 2 +-
- fs/proc/proc_sysctl.c | 2 +-
- net/core/neighbour.c  | 2 +-
- net/ipv4/devinet.c    | 2 +-
- net/ipv6/addrconf.c   | 8 ++++----
- 5 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
-index cfa79715fc1a..2881aeeaa880 100644
---- a/fs/kernfs/mount.c
-+++ b/fs/kernfs/mount.c
-@@ -391,7 +391,7 @@ void __init kernfs_init(void)
- {
- 	kernfs_node_cache = kmem_cache_create("kernfs_node_cache",
- 					      sizeof(struct kernfs_node),
--					      0, SLAB_PANIC, NULL);
-+					      0, SLAB_PANIC | SLAB_ACCOUNT, NULL);
- 
- 	/* Creates slab cache for kernfs inode attributes */
- 	kernfs_iattrs_cache  = kmem_cache_create("kernfs_iattrs_cache",
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 7d9cfc730bd4..df4604fea4f8 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1333,7 +1333,7 @@ struct ctl_table_header *__register_sysctl_table(
- 		nr_entries++;
- 
- 	header = kzalloc(sizeof(struct ctl_table_header) +
--			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL);
-+			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL_ACCOUNT);
- 	if (!header)
- 		return NULL;
- 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index ec0bf737b076..3dcda2a54f86 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -3728,7 +3728,7 @@ int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
- 	char neigh_path[ sizeof("net//neigh/") + IFNAMSIZ + IFNAMSIZ ];
- 	char *p_name;
- 
--	t = kmemdup(&neigh_sysctl_template, sizeof(*t), GFP_KERNEL);
-+	t = kmemdup(&neigh_sysctl_template, sizeof(*t), GFP_KERNEL_ACCOUNT);
- 	if (!t)
- 		goto err;
- 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index fba2bffd65f7..47523fe5b891 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2566,7 +2566,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
- 	struct devinet_sysctl_table *t;
- 	char path[sizeof("net/ipv4/conf/") + IFNAMSIZ];
- 
--	t = kmemdup(&devinet_sysctl, sizeof(*t), GFP_KERNEL);
-+	t = kmemdup(&devinet_sysctl, sizeof(*t), GFP_KERNEL_ACCOUNT);
- 	if (!t)
- 		goto out;
- 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f908e2fd30b2..e79621ee4a0a 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -342,7 +342,7 @@ static int snmp6_alloc_dev(struct inet6_dev *idev)
- {
- 	int i;
- 
--	idev->stats.ipv6 = alloc_percpu(struct ipstats_mib);
-+	idev->stats.ipv6 = alloc_percpu_gfp(struct ipstats_mib, GFP_KERNEL_ACCOUNT);
- 	if (!idev->stats.ipv6)
- 		goto err_ip;
- 
-@@ -358,7 +358,7 @@ static int snmp6_alloc_dev(struct inet6_dev *idev)
- 	if (!idev->stats.icmpv6dev)
- 		goto err_icmp;
- 	idev->stats.icmpv6msgdev = kzalloc(sizeof(struct icmpv6msg_mib_device),
--					   GFP_KERNEL);
-+					   GFP_KERNEL_ACCOUNT);
- 	if (!idev->stats.icmpv6msgdev)
- 		goto err_icmpmsg;
- 
-@@ -382,7 +382,7 @@ static struct inet6_dev *ipv6_add_dev(struct net_device *dev)
- 	if (dev->mtu < IPV6_MIN_MTU)
- 		return ERR_PTR(-EINVAL);
- 
--	ndev = kzalloc(sizeof(struct inet6_dev), GFP_KERNEL);
-+	ndev = kzalloc(sizeof(struct inet6_dev), GFP_KERNEL_ACCOUNT);
- 	if (!ndev)
- 		return ERR_PTR(err);
- 
-@@ -7029,7 +7029,7 @@ static int __addrconf_sysctl_register(struct net *net, char *dev_name,
- 	struct ctl_table *table;
- 	char path[sizeof("net/ipv6/conf/") + IFNAMSIZ];
- 
--	table = kmemdup(addrconf_sysctl, sizeof(addrconf_sysctl), GFP_KERNEL);
-+	table = kmemdup(addrconf_sysctl, sizeof(addrconf_sysctl), GFP_KERNEL_ACCOUNT);
- 	if (!table)
- 		goto out;
- 
--- 
-2.31.1
-
+--=20
+Best Regards,
+Shin'ichiro Kawasaki=

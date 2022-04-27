@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B5C5111D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DCE5111D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358493AbiD0HCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S1358505AbiD0HDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241979AbiD0HC0 (ORCPT
+        with ESMTP id S242563AbiD0HDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:02:26 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F7186D7
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:59:16 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id y21so846705edo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:59:16 -0700 (PDT)
+        Wed, 27 Apr 2022 03:03:50 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB953220FB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:00:39 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id j6so1452141ejc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bK82D9oiFTeFkJ58x1A+6byrQ5w9F1pcq60Qto3VPFY=;
-        b=IOslx8w+I67QW4Gw7u7XjV1f/VZn5ZL68eRvJSzAEdXGT8F1XSKAvRanc/fz1Kflx1
-         cq5yW/+4F8v0d1vxx40u5cIg0EFPoTG2XMQfCIjHI2w/9LUch1+2A8IeGwPF0YAEmycy
-         GY3/SNPPnb8v+oa87JIJg/gldtpauXUylQzGs=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=knB5re2yE+knNYDwWLwV5oj9zfgG60eQTuuGICfcavo=;
+        b=c3w0b4MoE63PeggJZgNSDCaIH6w9y7ctbyjC63+q6frBaZhU1HZvhDLJnumNuLC5u4
+         Nom3enBsHvBvXVYwcflIWz5ouuAp0idEknyYRARXXG4rjRntZCpRwOtsqBnDB4TAfLEf
+         r2Lnae9ns34uBM2GarNe07PaIw6KiCNkM4+I9D/Fv4rmkCXUEVfZxKuoeBmjGXV6gReW
+         c49FxJSSDom/8zrKN9OB0FNklDPH9QDZZ19SAc61MAjWGZADreyaxIsn4AWtkWGuC3ue
+         gzsMFhQanpPLoglKdHGfJptXIr+Jx61vIfGynY7IYeqvqrdM70GtgZ4Ywc9roPGKEQfs
+         Ld1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bK82D9oiFTeFkJ58x1A+6byrQ5w9F1pcq60Qto3VPFY=;
-        b=tm5EmsDFGk854Mf/fNM7zgblhb7bcOv3Uaqw+t+SRwpD5Ovrc5q2rh5Il2H5wrbGNC
-         08QuM/6kaGgcamfvSkTxlq6xd7VPocAotK0+NjrVkwEON70QP4hjQRDanJD1oiNKlIKZ
-         q3I+06YOapQmh52ExpiDsfQAOX0THh27SgZiR0PaMuq4DSbInVQG12l+bZpFBlp0kwmu
-         g++KZDZ+qX86HI0R3s6HIrccxOTyPQ0dWt/cieJeWLhnPIhLmLiY75fy/B/dFsofSkRL
-         F7S0PAqcbfpk7xOhTRhm/T4SiBMVyyxwdJyCJAdyKrZcByxTkVh9kBT8uhVKks1MGSIP
-         qR7g==
-X-Gm-Message-State: AOAM532fn3msJo4FIHecLsk9GGbLl+8K2YK5XLemol3uhu2Zc0unHX1T
-        5RayvZw18j8n6hC5dKrn44ktJzWU+fSJbBjUljPkfg==
-X-Google-Smtp-Source: ABdhPJwChhqWc3Zlm/e181I9ur5sdpaiHGYSj0JhOgOl+NxLqV5Z3fdK4kERVFHsCEXtsJAipshrpvbeGa8UzKrfOh8=
-X-Received: by 2002:a05:6402:11cd:b0:425:ee49:58cb with SMTP id
- j13-20020a05640211cd00b00425ee4958cbmr13163292edw.157.1651042755556; Tue, 26
- Apr 2022 23:59:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=knB5re2yE+knNYDwWLwV5oj9zfgG60eQTuuGICfcavo=;
+        b=qkcuU/KYfV3imNHe5blEH56yAxW7sLy/pEiko5R+TgLfD5+P95qVkBi9UIsL+d+Ra9
+         AMzvEdI2ExX4wkg3l427FrAMjX7/B0HglMQqxDz/9laQt7/mbzR0I/FU05jd0bYrSzmT
+         6VGyhghKXr904e0r+uR0nRgYDcxvUTqGxbFM++foafsFDFXSegdai7Yl4YNVuNnaO0S4
+         rFKqVVDR2pKhkxPnQ+o8lIicD2F+6eRzI6NxbS++7Uszxxl2OPv/topA8DdOK2eRKStg
+         wAfbAfKclr517zmxyTRQfSyGDu17VlH07ebn6KhnotqjKY81O3HIRTG8p7Ax25wS1B+k
+         uIBQ==
+X-Gm-Message-State: AOAM530TKMSBQ8vsGUgssPWB9PlT69Gaw7NxqlujsRcy6ZmUTJSKw1jf
+        9qESyn68PF5zWAZ2OI33n3qwDg==
+X-Google-Smtp-Source: ABdhPJy42PnL5k6WxDMHs9qpbs1kW+ltaQb338xJc6J452058yJtzF813cfMVtTrgpuVYaW3axL7/g==
+X-Received: by 2002:a17:906:8982:b0:6f3:95f4:4adf with SMTP id gg2-20020a170906898200b006f395f44adfmr13223466ejc.524.1651042838202;
+        Wed, 27 Apr 2022 00:00:38 -0700 (PDT)
+Received: from [192.168.0.252] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id x14-20020a1709064bce00b006f006948581sm6267366ejv.170.2022.04.27.00.00.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 00:00:37 -0700 (PDT)
+Message-ID: <a3d9f68d-9101-2749-a7cd-5a4b3595a07a@linaro.org>
+Date:   Wed, 27 Apr 2022 09:00:36 +0200
 MIME-Version: 1.0
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org> <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat>
-In-Reply-To: <20220421082358.ivpmtak3ednvddrc@houat>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Wed, 27 Apr 2022 12:29:04 +0530
-Message-ID: <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
+Content-Language: en-US
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220427010154.29749-1-zev@bewilderbeest.net>
+ <20220427010154.29749-2-zev@bewilderbeest.net>
+ <178b9310-a854-dfa6-a4f3-f971b608abe3@linaro.org>
+ <YmjmWNUpCAFYesyk@hatter.bewilderbeest.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YmjmWNUpCAFYesyk@hatter.bewilderbeest.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 1:54 PM Maxime Ripard <maxime@cerno.tech> wrote:
->
-> On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > + Linus
-> > + Marek
-> > + Laurent
-> > + Robert
-> >
-> > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
-> > <bjorn.andersson@linaro.org> wrote:
-> > >
-> > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > bridge")' attempted to simplify the case of expressing a simple panel
-> > > under a DSI controller, by assuming that the first non-graph child node
-> > > was a panel or bridge.
-> > >
-> > > Unfortunately for non-trivial cases the first child node might not be a
-> > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > DisplayPort, or an opp-table represented before the panel node.
-> > >
-> > > In these cases the reverted commit prevents the caller from ever finding
-> > > a reference to the panel.
-> > >
-> > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > > panel or bridge")', in favor of using an explicit graph reference to the
-> > > panel in the trivial case as well.
-> >
-> > This eventually breaks many child-based devm_drm_of_get_bridge
-> > switched drivers.  Do you have any suggestions on how to proceed to
-> > succeed in those use cases as well?
->
-> I guess we could create a new helper for those, like
-> devm_drm_of_get_bridge_with_panel, or something.
+On 27/04/2022 08:44, Zev Weiss wrote:
+> 
+>>> +    maximum: 0xff
+>>> +    default: 0
+>>
+>> Since by default it is disabled, doesn't it make a required property?
+>> IOW, if you add a node without this mask, will the device operate
+>> properly and usefully?
+>>
+> 
+> Yeah, zero active TSI channels is a totally legitimate way for these 
+> devices to operate.  TSI is just an optional source of additional 
+> temperature readings that's used on some (AMD) systems; all the basic 
+> Super I/O functionality works fine without it.
 
-I think using the same existing helper and updating child support is
-make sense, as there is a possibility to use the same host for child
-and OF-graph bindings.
 
-I can see two possible solutions (as of now)
+OK, thanks.
 
-1. adding "dcs-child-type" bindings for child-based panel or bridge
-2. iterate child and skip those nodes other than panel or bridge. or
-iterate sub-child to find it has a panel or bridge-like aux-bus (which
-is indeed hard as this configuration seems not 'standard' i think )
 
-Any inputs?
-
-Thanks,
-Jagan.
+Best regards,
+Krzysztof

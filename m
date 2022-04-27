@@ -2,148 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC72510EE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C370F510EEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357218AbiD0Ckr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 22:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S1357220AbiD0Cpo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Apr 2022 22:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357196AbiD0Cko (ORCPT
+        with ESMTP id S233293AbiD0Cpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 22:40:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1633E5C1;
-        Tue, 26 Apr 2022 19:37:34 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Kp2q01xLHzCsQ2;
-        Wed, 27 Apr 2022 10:33:00 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Apr 2022 10:37:29 +0800
-Message-ID: <c48a42b1-a25c-cb69-4242-2a964ac4ad05@huawei.com>
-Date:   Wed, 27 Apr 2022 10:37:28 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: How to list keys used for kexec
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-CC:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        Tue, 26 Apr 2022 22:45:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643F146B27;
+        Tue, 26 Apr 2022 19:42:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DC7CB8248C;
+        Wed, 27 Apr 2022 02:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 139C0C385A4;
+        Wed, 27 Apr 2022 02:42:25 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 22:42:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-References: <20220414175930.GM163591@kunlun.suse.cz>
- <853635d6-9e74-c3dc-f6dc-d4166616c8e5@huawei.com>
- <20220426085220.GE163591@kunlun.suse.cz>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <20220426085220.GE163591@kunlun.suse.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v4 09/10] trace: platform/x86/intel/ifs: Add trace point
+ to track Intel IFS operations
+Message-ID: <20220426224224.597dd732@rorschach.local.home>
+In-Reply-To: <YmiF6Rsy04pUHVQo@agluck-desk3.sc.intel.com>
+References: <20220419163859.2228874-1-tony.luck@intel.com>
+        <20220422200219.2843823-1-tony.luck@intel.com>
+        <20220422200219.2843823-10-tony.luck@intel.com>
+        <20220425105251.3f5e8021@gandalf.local.home>
+        <1752057af33e4eb28bcea0fd75e44048@intel.com>
+        <20220425214928.2aac3391@gandalf.local.home>
+        <YmiF6Rsy04pUHVQo@agluck-desk3.sc.intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/26 16:52, Michal Suchánek wrote:
-> On Tue, Apr 26, 2022 at 12:10:13PM +0800, Guozihua (Scott) wrote:
->> On 2022/4/15 1:59, Michal Suchánek wrote:
->>> Hello,
->>>
->>> apparently modules are verified by keys from 'secondary' keyring on all
->>> platforms.
->>>
->>> If you happen to know that it's this particular keyring, and know how
->>> to list keyrings recursively you can find the keys that are used for
->>> verifying modules.
->>>
->>> However, for kexec we have
->>>
->>>    - primary keyring on aarch64
->>>    - platform keyring on s390
->>>    - secondary AND platform keyring on x86
->>>
->>> How is a user supposed to know which keys are used for kexec image
->>> verification?
->>>
->>> There is an implicit keyring that is ad-hoc constructed by the code that
->>> does the kexec verification but there is no key list observable from
->>> userspace that corresponds to this ad-hoc keyring only known to the kexec
->>> code.
->>>
->>> Can the kernel make the information which keys are used for what purpose
->>> available to the user?
->>>
->>> Thanks
->>>
->>> Michal
->>>
->>> .
->>
->> Hi Michal
->>
->> I'll try my best to understand and answer your question.
->>
->> First of all, the "key" you mentioned here is actually certificate. And
->> there are no way for the kernel to know "which certificate is used for what
->> purpose" but to get a hint from the certificate's extension, if they exist.
->> However, the extension only points out what this certificate should be used
->> for, but not exactly what it is actually used for.
+On Tue, 26 Apr 2022 16:53:13 -0700
+"Luck, Tony" <tony.luck@intel.com> wrote:
 > 
->> Secondly, the verification process requires the module (kernel image in this
->> question) to contain information on which certificate should be used to
->> verify itself. The signature provided by the module is in PKCS#7 format
->> which contains a list of certificates for the verifier to construct a "chain
->> of trust". Each certificates contains information pointing to the
->> certificate of it's issuer, and eventually to one of the certificate stored
->> in one of the keyrings you mentioned.
+> I looked at the examples in samples/trace_events/trace-events-sample.h
+> and tried to use this. But I'm doing something wrong because the
+> compiler barfs on something defined but not used.
 > 
-> Indeed, that's not really relevant to this problem.
-> Sure, if the certificates extension does exist and does not state that
-> the certificate can be used for code signing then the signature should
-> be rejected. The same if the signature is malformed and does not provide
-> enough information to determine which key was used to create it.
-> 
-> The question which key will be checked, though.
->>
->> All in all, certificates in these keyrings you mentioned can be used for
->> various purpose, and it's the responsibility for the modules being verified
->> to provide information stating which certificate should be used for
->> verification. Thus, the best way to find out which key is used for kexec is
->> to look at key used to sign the kernel image.
-> 
-> There aren't really good tools for working with the kernel signatures
-> but I can tell what certificate it was signed with jumping throught some
-> hoops.
-> 
-> What I can't tell without reading the kernel code (different for each
-> architecture) is what certificates the kernel considers valid for
-> signing kernels. The kernel surely knows but does not tell.
+> Maybe my problem is the TP_printk() in the DECLARE_EVENT_CLASS() that
+> is over-ridden by DEFINE_EVENT_PRINT(). I wasn't at all sure what to
+> put here ... or how to use the base tracepoint that doesn't have the
+> printk() over-ridden.
 
-It's quite true on this one, maybe some documentation would help.
-> 
-> That is, for example, if I have a known bad kernel I want to be able to
-> tell if it's loadable without actually loading it.
+Yeah, that could be confusing.
 
-For this you can try the -l option with kexec which loads the kernel but 
-will not execute it. And then you can use -u option to unload the kernel 
-again and see whether it resolves your requirement.
-> 
-> Thanks
-> 
-> Michal
-> .
+Basically, TRACE_EVENT() is simply defined as:
 
--- 
-Best
-GUO Zihua
+DECLARE_EVENT_CLASS()
+DEFINE_EVENT();
+
+So technically you could create the class and event with the same name,
+and then you could create a second event on top of that. But I usually
+suggest people explicitly specify the DECLARE_EVENT_CLASS() and
+DEFINE_EVENT().
+
+I would not do this until you have more than one event. The what you
+would do is create one event where the print matches the
+DECLARE_EVENT_CLASS() TP_printk(), and have that event defined with
+just DEFINE_EVENT(). Then create other events with the
+DEFINE_EVENT_PRINT().
+
+> 
+> I think I need my class to just save both the u64 values to the trace
+> buffer. Then the different trace points will extract the bits they want
+> and print in a user friendly way. While this increases space used in
+> the trace buffer, these events are not crazy high frequency. Usually 
+> one or two events per core with a gap 30 minutes or more between tests.
+> 
+> In my ".c" file the tracepoint looks like this using the name from
+> DEFINE_EVENT_PRINT(), and now passing the full u64 values:
+> 
+> 	trace_ifs_status_saf(activate.data, status.data);
+> 
+> and my #include file looks like this:
+> 
+> ----------------------------------------------
+> /* SPDX-License-Identifier: GPL-2.0 */
+> #undef TRACE_SYSTEM
+> #define TRACE_SYSTEM intel_ifs
+> 
+> #if !defined(_TRACE_IFS_H) || defined(TRACE_HEADER_MULTI_READ)
+> #define _TRACE_IFS_H
+> 
+> #include <linux/ktime.h>
+> #include <linux/tracepoint.h>
+> 
+> DECLARE_EVENT_CLASS(ifs_status,
+> 
+> 	TP_PROTO(u64 activate, u64 status),
+> 
+> 	TP_ARGS(activate, status),
+> 
+> 	TP_STRUCT__entry(
+> 		__field(	u64,	activate	)
+> 		__field(	u64,	status		)
+> 	),
+> 
+> 	TP_fast_assign(
+> 		__entry->activate = activate;
+> 		__entry->status	= status;
+> 	),
+> 
+> 	TP_printk("activate: %llx status: %llx",
+> 		__entry->activate,
+> 		__entry->status)
+> );
+> 
+> DEFINE_EVENT_PRINT(ifs_status, ifs_status_saf,
+> 	TP_PROTO(u64 activate, u64 status),
+> 	TP_ARGS(activate, status),
+> 	TP_printk("start: %.2x, stop: %.2x, status: %llx",
+> 		((union ifs_scan *)&(__entry->activate))->start,
+> 		((union ifs_scan *)&(__entry->activate))->stop,
+> 		__entry->status)
+> );
+> 
+> #endif /* _TRACE_IFS_H */
+> 
+> /* This part must be outside protection */
+> #include <trace/define_trace.h>
+> -----------------------------------------------------
+> 
+> GCC messages:
+> 
+> 
+>   CC [M]  drivers/platform/x86/intel/ifs/runtest.o
+> In file included from /home/agluck/GIT/mywork/include/trace/define_trace.h:102,
+>                  from /home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:44,
+>                  from /home/agluck/GIT/mywork/drivers/platform/x86/intel/ifs/runtest.c:27:
+> /home/agluck/GIT/mywork/include/trace/trace_events.h:426:13: warning: ‘print_fmt_ifs_status’ defined but not used [-Wunused-variable]
+>   426 | static char print_fmt_##call[] = print;                                 \
+>       |             ^~~~~~~~~~
+> /home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:11:1: note: in expansion of macro ‘DECLARE_EVENT_CLASS’
+>    11 | DECLARE_EVENT_CLASS(ifs_status,
+>       | ^~~~~~~~~~~~~~~~~~~
+> In file included from /home/agluck/GIT/mywork/include/trace/define_trace.h:102,
+>                  from /home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:44,
+>                  from /home/agluck/GIT/mywork/drivers/platform/x86/intel/ifs/runtest.c:27:
+> /home/agluck/GIT/mywork/include/trace/trace_events.h:207:37: warning: ‘trace_event_type_funcs_ifs_status’ defined but not used [-Wunused-variable]
+>   207 | static struct trace_event_functions trace_event_type_funcs_##call = {   \
+>       |                                     ^~~~~~~~~~~~~~~~~~~~~~~
+> /home/agluck/GIT/mywork/include/trace/events/intel_ifs.h:11:1: note: in expansion of macro ‘DECLARE_EVENT_CLASS’
+>    11 | DECLARE_EVENT_CLASS(ifs_status,
+>       | ^~~~~~~~~~~~~~~~~~~
+> make[1]: Leaving directory '/home/agluck/GIT/mywork/build/ifsv5-rc1'
+> 
+
+Yeah, because you don't have more than one event, so the
+DEFINE_EVENT_PRINT() does not make sense.  You still need one
+DEFINE_EVENT() otherwise, you will get that static function not used
+warning.
+
+-- Steve
+

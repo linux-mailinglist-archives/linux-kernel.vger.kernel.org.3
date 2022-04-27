@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6678F511A34
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD2A511A33
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237799AbiD0OcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S237904AbiD0OcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237711AbiD0Ob5 (ORCPT
+        with ESMTP id S237842AbiD0OcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:31:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969E513F57;
-        Wed, 27 Apr 2022 07:28:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3225FB82795;
-        Wed, 27 Apr 2022 14:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3364C385A7;
-        Wed, 27 Apr 2022 14:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651069723;
-        bh=HQEf+K93lpEwvVIi3pxJSI52K68XBRJIQrx55pS3WDw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b9Gig039K96xmSRBZXNII5d1S0VSphvA1sRCFUK7BeExVUH/0sGPhYy4cAsNaTWgW
-         oZhBjhy8S8rcUcG2IYO43Edn5IOEHOSLJ2VekPg9b7EnSj1KwTASOoIecCEutcVqxI
-         1a7NYi0tn7jIXDTq5uzqiIHi9vqmUopgCveum7Q/pnoVepzpBkUMbmSYzJC2GMjiiL
-         plmS63siOhF0dwqNTV6SeDfOK2e2HeamVSYtfcMrZV2WW6MlaX6zb9hvAMgHxEfL0a
-         Yv5cOIhCl3OpYtzugrnKnid9+j1ZUCHIfxC0zK1ZnWn68mGnV+5sxb7+bvazZ7VooF
-         no3OCCvsBUckQ==
-Date:   Wed, 27 Apr 2022 19:58:37 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
+        Wed, 27 Apr 2022 10:32:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F0113F96;
+        Wed, 27 Apr 2022 07:28:48 -0700 (PDT)
+X-UUID: a0b4b4f427ea4adf8e308448111f9d7a-20220427
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:1ed02a3e-1036-4350-803d-95e6d6f3ea74,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.4,REQID:1ed02a3e-1036-4350-803d-95e6d6f3ea74,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:faefae9,CLOUDID:4d5bea2e-6199-437e-8ab4-9920b4bc5b76,C
+        OID:1c38a6fb229a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: a0b4b4f427ea4adf8e308448111f9d7a-20220427
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 304434361; Wed, 27 Apr 2022 22:28:43 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 27 Apr 2022 22:28:43 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 27 Apr 2022 22:28:42 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Apr 2022 22:28:42 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings: mailbox: qcom-ipcc: add missing
- properties into example
-Message-ID: <20220427142837.GC4161@thinkpad>
-References: <20220426101837.16201-1-david@ixit.cz>
- <20220426101837.16201-2-david@ixit.cz>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>, <hsinyi@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v7 1/2] dt-bindings: arm: Add compatible for MediaTek MT8186
+Date:   Wed, 27 Apr 2022 22:28:38 +0800
+Message-ID: <20220427142839.12598-2-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220427142839.12598-1-allen-kh.cheng@mediatek.com>
+References: <20220427142839.12598-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426101837.16201-2-david@ixit.cz>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:18:37PM +0200, David Heidelberg wrote:
-> These missing required properties are needed for
-> smp2p binding reference checks.
-> 
-> Also includes cosmetic change to the example formatting.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+This commit adds dt-binding documentation for the MediaTek MT8186
+reference board.
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+ Documentation/devicetree/bindings/arm/mediatek.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Mani
+diff --git a/Documentation/devicetree/bindings/arm/mediatek.yaml b/Documentation/devicetree/bindings/arm/mediatek.yaml
+index 4a2bd9759c47..5a29b7b381ef 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek.yaml
+@@ -131,6 +131,10 @@ properties:
+           - enum:
+               - mediatek,mt8183-evb
+           - const: mediatek,mt8183
++      - items:
++          - enum:
++              - mediatek,mt8186-evb
++          - const: mediatek,mt8186
+       - items:
+           - enum:
+               - mediatek,mt8192-evb
+-- 
+2.18.0
 
-> ---
-> v3:
->  - add Krzysztof R-b
-> ---
->  .../devicetree/bindings/mailbox/qcom-ipcc.yaml        | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> index c57dd423e98c..50f9aa72c670 100644
-> --- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> @@ -76,9 +76,14 @@ examples:
->  
->          smp2p-modem {
->                  compatible = "qcom,smp2p";
-> -                interrupts-extended = <&ipcc_mproc IPCC_CLIENT_MPSS
-> -                                IPCC_MPROC_SIGNAL_SMP2P IRQ_TYPE_EDGE_RISING>;
-> -                mboxes = <&ipcc_mproc IPCC_CLIENT_MPSS IPCC_MPROC_SIGNAL_SMP2P>;
-> +                qcom,smem = <443>, <429>;
-> +                interrupts-extended = <&ipcc IPCC_CLIENT_LPASS
-> +                                             IPCC_MPROC_SIGNAL_SMP2P
-> +                                             IRQ_TYPE_EDGE_RISING>;
-> +                mboxes = <&ipcc IPCC_CLIENT_LPASS
-> +                                IPCC_MPROC_SIGNAL_SMP2P>;
->  
-> +                qcom,local-pid = <0>;
-> +                qcom,remote-pid = <2>;
->                  /* Other SMP2P fields */
->          };
-> -- 
-> 2.35.1
-> 

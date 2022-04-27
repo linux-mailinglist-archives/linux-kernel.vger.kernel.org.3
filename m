@@ -2,135 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069BD5110D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8335110D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357964AbiD0GGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S1357975AbiD0GHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241334AbiD0GGs (ORCPT
+        with ESMTP id S241556AbiD0GHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:06:48 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9174D260;
-        Tue, 26 Apr 2022 23:03:37 -0700 (PDT)
+        Wed, 27 Apr 2022 02:07:05 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE994EDFA
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:03:55 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id bo5so745258pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:03:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651039417; x=1682575417;
-  h=subject:from:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=TRmJ3gGVnOosqPIffEyCf+GxktF5ed1iCgomGlFfGV8=;
-  b=ef6c70B2RD9JYr0c0abUdFj8GkS3hrObHEHNH097Iu/nodrVXATOiml8
-   g4AgC8LkLcRwHHJ/KBgqOsWyghg3e7rJSJzIqDDAzdstrar1XoNk1IS3z
-   Qa2/bUHBpRgV31G/agh3TdnhWqPzOcnr8b0EdTxVATqWSz48tWCQ1GkkC
-   o=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Apr 2022 23:03:37 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:03:37 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 26 Apr 2022 23:03:37 -0700
-Received: from [10.216.55.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
- 2022 23:03:35 -0700
-Subject: Re: [PATCH V10 4/9] mfd: pm8008: Add reset-gpios
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com>
- <1649939418-19861-5-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n50HR6w-v3ub8HR_K2PsqqTTrVAaQa0pZ7QjY39WmkDyQQ@mail.gmail.com>
- <010bd223-94a0-fe8c-d1ab-39153bb68a7d@quicinc.com>
- <a4cbdb4c-dbba-75ee-202a-6b429c0eb390@quicinc.com>
-Message-ID: <104b529b-946d-f171-5a82-6052aef2dbbb@quicinc.com>
-Date:   Wed, 27 Apr 2022 11:33:08 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qgyVUtrm6J1JCS5KUrNI0AjgYZTOPKh8MoOAOqbUWno=;
+        b=dcKZiCo53AnBnpVn6Q50dm2dHX4ea4Sb47rLt8XQqk/cg/g+GyKkz2v9T3K0GBlg+b
+         HKLWAiC+oglTs4iX9dfOW7KtmvO+4XiRyBKwq8NPDzQStBtLsNq7W34w3vgp8tm5I2Mv
+         Wj9TdGzdsamLEHvp89dUgxqfyQpBTOauFNez1NtIbWVF1n9HFA9/npBy0n/AYsSRBRUK
+         obFn+wDBQo5X+3Vjh+AseOP6Imt6bn81H+mQ0/2nSSIjjOTEqF2sVDuuIq+G+gwuCwGh
+         IOwkQM50m/vd1CnQI3dP0w+ni1+xRqBlKcswXVnCQhA0lo+dNCH5z6KOo/jkxx8jjwaC
+         JQfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qgyVUtrm6J1JCS5KUrNI0AjgYZTOPKh8MoOAOqbUWno=;
+        b=ViFSosH0rZ36H1ezrBHs0wJIyIFvpkwo6xLGgha4lurJ4X3YYdi9DWXcqr7gkKweku
+         XU8YUSEZu5U2gXu3ybZIxVa2mcXO8v2Y03tb92Y/S0EL95f06ZzFpzkDOor1kg+DC5fc
+         MN81ELqluNtBCCVwDjgMNRtw/stj0IAl4Q4tXWKwoTse3NT3mapEEhVmjsnQ0w6DhgAC
+         091SJQEiNhUEsYK6fOrIVYurR0SqPXNHRRfYjRl6xQ1iVnF0vOKfCY/EFS0Wm5moZb0a
+         kFRr2Mq5B1xZAnC/6squbMChhnQnNa5CXA82W+WXRn/k9FWU2chbiTkaiTnSVgzVdXny
+         rZEw==
+X-Gm-Message-State: AOAM532qJ5C6scS3SsYNY5yapQbaEBLQnTLjeVZFEezF0Hzck+zfvbgy
+        cbFPYgkqKHZdbahjHhWh7JNJ4A8JYg==
+X-Google-Smtp-Source: ABdhPJyrP0MHL8zd1v1MukLIqJjeQEQ7SRiOeXEbShGzE4g/T3dX/0QWazCyEX3qETSaKhns1DVQkQ==
+X-Received: by 2002:a63:b58:0:b0:399:522b:d92f with SMTP id a24-20020a630b58000000b00399522bd92fmr22622368pgl.141.1651039434635;
+        Tue, 26 Apr 2022 23:03:54 -0700 (PDT)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id j16-20020a634a50000000b003a82190a495sm14798117pgl.62.2022.04.26.23.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 23:03:54 -0700 (PDT)
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Pingfan Liu <kernelfans@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCHv2] genirq/PM: Make for_each_irq_desc() safe of irq_desc release
+Date:   Wed, 27 Apr 2022 14:03:38 +0800
+Message-Id: <20220427060338.7276-1-kernelfans@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220420140521.45361-7-kernelfans@gmail.com>
+References: <20220420140521.45361-7-kernelfans@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <a4cbdb4c-dbba-75ee-202a-6b429c0eb390@quicinc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+First, this is a suspicion of the code, not a really encountered bug.
 
-On 4/27/2022 10:58 AM, Satya Priya Kakitapalli (Temp) wrote:
->
-> On 4/18/2022 10:34 AM, Satya Priya Kakitapalli (Temp) wrote:
->>
->> On 4/15/2022 5:40 AM, Stephen Boyd wrote:
->>> Quoting Satya Priya (2022-04-14 05:30:13)
->>>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
->>>> index c472d7f..97a72da 100644
->>>> --- a/drivers/mfd/qcom-pm8008.c
->>>> +++ b/drivers/mfd/qcom-pm8008.c
->>>> @@ -239,6 +241,13 @@ static int pm8008_probe(struct i2c_client 
->>>> *client)
->>>>                          dev_err(chip->dev, "Failed to probe irq 
->>>> periphs: %d\n", rc);
->>>>          }
->>>>
->>>> +       chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", 
->>>> GPIOD_OUT_HIGH);
->>>> +       if (IS_ERR(chip->reset_gpio)) {
->>>> +               dev_err(chip->dev, "failed to acquire reset gpio\n");
->>> The API looks to print debug messages. This print doesn't look 
->>> required.
->>
->>
->> Okay.
->>
->>
->>>> +               return PTR_ERR(chip->reset_gpio);
->>>> +       }
->>>> +       gpiod_set_value(chip->reset_gpio, 1);
->>> Does this do anything? Does this work just as well?
->>>
->>>     reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
->>>     if (IS_ERR(reset_gpio))
->>>         return PTR_ERR(reset_gpio);
->>>
->
-> This is not working as expected. We need to add 
-> "gpiod_set_value(chip->reset_gpio, 1);"  to actually toggle the line.
->
+*** The scenario ***
 
-I checked again and it is working after using GPIOD_OUT_HIGH instead of LOW.
+Two threads involved
+  threadA "hibernate" runs suspend_device_irqs()
+  threadB "rcu_cpu_kthread" runs rcu_core()->rcu_do_batch(), which releases
+  object, let's say irq_desc
 
-reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_HIGH);
-     if (IS_ERR(reset_gpio))
-         return PTR_ERR(reset_gpio);
+Zoom in:
+  threadA                                               threadB
+  for_each_irq_desc(irq, desc) {
+      get irq_descA which is under freeing
+                                                    --->preempted by rcu_core()->rcu_do_batch()  which releases irq_descA
+      raw_spin_lock_irqsave(&desc->lock, flags);
+      //Oops
 
+And since in the involved code piece, suspend_device_irqs() runs in a
+preemptible context, and there may be more than one thread at this
+point. So the preemption can happen.
 
->
->>> Note that there's no point to store the reset gpio in the structure if
->>> it won't be used outside of probe.
->>
->>
->> Okay, I'll use a local variable.
->>
->>
->>> This should work fine? I used
->>> GPIOD_OUT_LOW to indicate that the reset should be returned to this
->>> function deasserted, i.e. taking the PMIC out of reset.
->>
->>
->> I'll try this out.
->>
->>
+*** The fix ***
+
+Since there is a blockable synchronize_irq() inside the code piece,
+resorting to irq_lock_sparse() to protect the irq_desc from
+disappearing.
+
+Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+To: linux-kernel@vger.kernel.org
+---
+v1 -> v2: improve commit log
+ kernel/irq/pm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
+index ca71123a6130..4b67a4c7de3c 100644
+--- a/kernel/irq/pm.c
++++ b/kernel/irq/pm.c
+@@ -133,6 +133,7 @@ void suspend_device_irqs(void)
+ 	struct irq_desc *desc;
+ 	int irq;
+ 
++	irq_lock_sparse();
+ 	for_each_irq_desc(irq, desc) {
+ 		unsigned long flags;
+ 		bool sync;
+@@ -146,6 +147,7 @@ void suspend_device_irqs(void)
+ 		if (sync)
+ 			synchronize_irq(irq);
+ 	}
++	irq_unlock_sparse();
+ }
+ EXPORT_SYMBOL_GPL(suspend_device_irqs);
+ 
+@@ -186,6 +188,7 @@ static void resume_irqs(bool want_early)
+ 	struct irq_desc *desc;
+ 	int irq;
+ 
++	/* The early resume stage is free of irq_desc release */
+ 	for_each_irq_desc(irq, desc) {
+ 		unsigned long flags;
+ 		bool is_early = desc->action &&
+-- 
+2.31.1
+

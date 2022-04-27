@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA007511B89
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F157D511B8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239034AbiD0PAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S238763AbiD0PBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237306AbiD0PAN (ORCPT
+        with ESMTP id S235367AbiD0PBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:00:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 063AD56C15
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651071422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ntMBAFtwiC9qpWMmFF/p+IGii2jJjeJe+SyCWkAlVJI=;
-        b=fiYi4KU83rfqV1Mr2Q+0B3DiM8/apinD87XevsR/TPmPmJdzlVma0LZvCCYRGrruPeEicl
-        pg+KTe0oUA6mUisZPGZIf391J+gZJzV7Z4s1CdvMJLaM2UiegM9yExk21oYxuyGOAlG3Wc
-        /SANBO0oi9qIhM6f8vjEu1wWndV9sJg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-oLs-316kMymZlYXURsAZcw-1; Wed, 27 Apr 2022 10:56:55 -0400
-X-MC-Unique: oLs-316kMymZlYXURsAZcw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C53CF8039D7;
-        Wed, 27 Apr 2022 14:56:54 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with SMTP id D07F714A5061;
-        Wed, 27 Apr 2022 14:56:48 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 27 Apr 2022 16:56:54 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 16:56:47 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
- siglock held
-Message-ID: <20220427145646.GC17421@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-6-ebiederm@xmission.com>
+        Wed, 27 Apr 2022 11:01:32 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F24621B9A7;
+        Wed, 27 Apr 2022 07:58:21 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id jt15so1198319qvb.13;
+        Wed, 27 Apr 2022 07:58:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YYDURu5i0RHHZqthIe7OlCex9R1+VuC9goSLzQQhWio=;
+        b=plx7RuPGLPAFg9ej3yYeUFrYUZAoH7hXKen2nOP0jqTgR+m3GAElQx0l/OfYur/BaM
+         M6BreEH9KAx8lqW+bF21T2gJ4+yjIocI9NOde0N7fLQvPi9sMKzPc7U8zkGYucE0bXvi
+         a9YlnK3sfRhet4MXXKYqbxTZEUGxtwvRj0vish8WDURfzw+UIo8GxeRdRIV6MM5AAm4D
+         7nrEUHet6ksCexFyJNp3TFymiUg2OeDc4H5cWwy80gnvxj9eXsfyqHiHu2PMglzBaNrA
+         Ct72RTatEzc+zhnHCPqWbrIu1haEmxtiaC0E35MllOV5Gk+2bj4eL+P1qKyKmmR2x2Qn
+         E3fQ==
+X-Gm-Message-State: AOAM532D5cURkNNh++xTAe+2Se4jgEMlIrSsbGXppAUqJ8dJcboeUL/N
+        /Cke7I9cuOnH7+DDkn0XvRq6hnrRRdkg0A==
+X-Google-Smtp-Source: ABdhPJxUntm0ju7CaZ0xtnlpvPcKw2DiDb3xvoyjBtd+EHuURw1W3kbiLgwvjAVEui9dxI6Quy8ngA==
+X-Received: by 2002:a0c:80ec:0:b0:444:43ec:a918 with SMTP id 99-20020a0c80ec000000b0044443eca918mr20046658qvb.20.1651071499813;
+        Wed, 27 Apr 2022 07:58:19 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id o6-20020ac85a46000000b002f3873e7fb4sm128395qta.77.2022.04.27.07.58.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 07:58:19 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id v59so3819095ybi.12;
+        Wed, 27 Apr 2022 07:58:18 -0700 (PDT)
+X-Received: by 2002:a25:8087:0:b0:641:dd06:577d with SMTP id
+ n7-20020a258087000000b00641dd06577dmr25921976ybk.207.1651071498652; Wed, 27
+ Apr 2022 07:58:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426225211.308418-6-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220422120850.769480-1-herve.codina@bootlin.com> <20220422120850.769480-5-herve.codina@bootlin.com>
+In-Reply-To: <20220422120850.769480-5-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 27 Apr 2022 16:58:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWmcBXRxZ_SDLCnimh7GqzkR0_qz178s51EtXsMm39ddg@mail.gmail.com>
+Message-ID: <CAMuHMdWmcBXRxZ_SDLCnimh7GqzkR0_qz178s51EtXsMm39ddg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/8] soc: renesas: rzn1: Select PM and
+ PM_GENERIC_DOMAINS configs
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/26, Eric W. Biederman wrote:
+On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> PM and PM_GENERIC_DOMAINS configs are required for RZ/N1 SOCs.
+> Without these configs, the clocks used by the PCI bridge are not
+> enabled and so accessing the devices leads to a kernel crash:
+>   [    0.832958] Unhandled fault: external abort on non-linefetch (0x1008) at 0x90b5f848
 >
-> @@ -2209,6 +2213,34 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
->  		spin_lock_irq(&current->sighand->siglock);
->  	}
->  
-> +	/* Don't stop if current is not ptraced */
-> +	if (unlikely(!current->ptrace))
-> +		return (clear_code) ? 0 : exit_code;
-> +
-> +	/*
-> +	 * If @why is CLD_STOPPED, we're trapping to participate in a group
-> +	 * stop.  Do the bookkeeping.  Note that if SIGCONT was delievered
-> +	 * across siglock relocks since INTERRUPT was scheduled, PENDING
-> +	 * could be clear now.  We act as if SIGCONT is received after
-> +	 * TASK_TRACED is entered - ignore it.
-> +	 */
-> +	if (why == CLD_STOPPED && (current->jobctl & JOBCTL_STOP_PENDING))
-> +		gstop_done = task_participate_group_stop(current);
-> +
-> +	/*
-> +	 * Notify parents of the stop.
-> +	 *
-> +	 * While ptraced, there are two parents - the ptracer and
-> +	 * the real_parent of the group_leader.  The ptracer should
-> +	 * know about every stop while the real parent is only
-> +	 * interested in the completion of group stop.  The states
-> +	 * for the two don't interact with each other.  Notify
-> +	 * separately unless they're gonna be duplicates.
-> +	 */
-> +	do_notify_parent_cldstop(current, true, why);
-> +	if (gstop_done && ptrace_reparented(current))
-> +		do_notify_parent_cldstop(current, false, why);
+> Select PM and PM_GENERIC_DOMAINS for ARCH_RZN1
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-This doesn't look right too. The parent should be notified only after
-we set __state = TASK_TRACED and ->exit code.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.19.
 
-Suppose that debugger sleeps in do_wait(). do_notify_parent_cldstop()
-wakes it up, debugger calls wait_task_stopped() and then it will sleep
-again, task_stopped_code() returns 0.
+Gr{oetje,eeting}s,
 
-This can be probably fixed if you remove the lockless (fast path)
-task_stopped_code() check in wait_task_stopped(), but this is not
-nice performance-wise...
+                        Geert
 
-Oleg.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

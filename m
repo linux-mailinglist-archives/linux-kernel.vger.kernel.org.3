@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6155F51242F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4568E512432
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236979AbiD0VCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S230329AbiD0VFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236763AbiD0VCk (ORCPT
+        with ESMTP id S229965AbiD0VFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:02:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3376C1083;
-        Wed, 27 Apr 2022 13:59:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cQesnUHvsevqj8LCTS5dD+iCwEbXRZtgTgIlz/6PQHA=; b=dQ/6BATy3PF81w6PED0XHEp3gD
-        kftx4U8C6qeWcvUH3ZKLbETVaFKpz7FcHnukq3jsRdRmXaJ3r/HcJdMVHGCtDtet9lICy7bFrw2CH
-        7P1R4PbKuS2+j+Hu/UXuNt6L5qEW4K640a1xv6gaizmtryGaJn5dxYM6UZu+6WkxB1T79alvJLP17
-        ytqPbxhBOxof5c40hsU7nvWGc2MJ/RMqKLBegO27btlO9otBrgkzXRjr1oM4NocCYa00HKxMMXUOh
-        otBgFrlO6ytA+LZJDnD/9BidfUlhByUgAtaZ/npUnHuR6v7XK0bYK439224eqgIOHu6lLgiFau7Db
-        Za00Ud2g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1njokM-00Atky-89; Wed, 27 Apr 2022 20:58:50 +0000
-Date:   Wed, 27 Apr 2022 21:58:50 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Rik van Riel <riel@surriel.com>, Zi Yan <ziy@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more
- consistent
-Message-ID: <YmmuivdOWcr46oNC@casper.infradead.org>
-References: <20220404200250.321455-1-shy828301@gmail.com>
- <YkuKbMbSecBVsa1k@casper.infradead.org>
- <CAHbLzkoWPN+ahrvu2JrvoDpf8J_QGR6Ug6BbPnC11C82Lb-NaA@mail.gmail.com>
+        Wed, 27 Apr 2022 17:05:11 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7A2BF43;
+        Wed, 27 Apr 2022 14:01:58 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id d23-20020a17090a115700b001d2bde6c234so4491202pje.1;
+        Wed, 27 Apr 2022 14:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DqYFNy0Ye1hG0JvZqo/UaJOYPE63YVH9ZWtIRJQCusE=;
+        b=XQLshbFroY/oV5ijkx6Jh5DxQyHuOqj2ianmBSoFT+s6hC/g6qq91dNna3cR24DCdj
+         4jI2UzB0lDjDClKeu3wVpDkKT9CgW5SGiOeYulemQwJAL94tLwkZ9BqD7N/ayIY01W66
+         RHG7Z53plRevZQRErpmKz7AxHUUDNybKQYZzxEIC+G35RUrxDqjnWLKWQDowOmNrFqI4
+         nzbvYc0swtbUGueZbtgttFuKKin+3PoqpVsbDAofEcS+t9H8+YUUCi92N6EU0gjjhMms
+         x1xY6UABX9aBNVrq5dmv1pOrj38SuNUicZ6xgQo35x9hv42UjhdT+daYI+ANNFk1WukP
+         edWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DqYFNy0Ye1hG0JvZqo/UaJOYPE63YVH9ZWtIRJQCusE=;
+        b=N5OUJ0uruDRmCYAxttEEFcWWbuE0zJ1VHkIiY3J6COgP6I79T3Bbs8oW/bDB9N2Y8a
+         1LJks5GOdyO0v2XHXR4CYYkdORE/AMm6bh20QhFYhVvIJ6xIHPQ7/4ADSvS2cXRl0MnS
+         ZWtf3bdHxH0qjU2goDLBlCN/+ETgF4rfq7b2bB7/Kl/iCHewThHbd0Y065ev1T71/5D3
+         7oMvV8wPAen6rwdskSKGWyYgjmxFTpYuc0fB1kj4zlqZx7VPQPcdfFZp3HjwlwkdLOqS
+         hj7KfPFu9BQzeCsrrT2Rb2o9hw5y+l8ICFVaEO5/Bf/Sm47r0tEp9OJRXg60vV4IfBPL
+         wC8g==
+X-Gm-Message-State: AOAM533CoDlArrE5cAQESANZl/2FhtLVn2tode0h2jVZZag3FkkqsWLz
+        9hP2u9l+Q2Qs6kqKzT/D12oGIQABiEUHW95PSB4=
+X-Google-Smtp-Source: ABdhPJxpuB5tajITNAXKzFz4oroSs+BVtuP2/qtQEvVhRgsZMYpDDRUxPfKPCeC0hQ+aGsaNXz8nOdpgl9J6OPUDxg4=
+X-Received: by 2002:a17:90b:1d0e:b0:1d2:79e9:21aa with SMTP id
+ on14-20020a17090b1d0e00b001d279e921aamr45334321pjb.153.1651093318360; Wed, 27
+ Apr 2022 14:01:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkoWPN+ahrvu2JrvoDpf8J_QGR6Ug6BbPnC11C82Lb-NaA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420211105.14654-1-jagathjog1996@gmail.com>
+ <20220420211105.14654-6-jagathjog1996@gmail.com> <CAHp75Ve8mruPEyorSmydAHM27rnL9Wv+qNdWyQ9tVxz-+JJYiQ@mail.gmail.com>
+In-Reply-To: <CAHp75Ve8mruPEyorSmydAHM27rnL9Wv+qNdWyQ9tVxz-+JJYiQ@mail.gmail.com>
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+Date:   Thu, 28 Apr 2022 02:31:47 +0530
+Message-ID: <CAM+2EuJ3n4RVHVh9ZH-HkkjUm+zLLt=g34H5aOxPiDW673NOrw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] iio: accel: bma400: Add separate channel for step counter
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:48:49PM -0700, Yang Shi wrote:
-> When khugepaged collapses file THPs, its behavior is not consistent.
-> It is kind of "random luck" for khugepaged to see the file vmas (see
-> report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/)
-> since currently the vmas are registered to khugepaged when:
->   - Anon huge pmd page fault
->   - VMA merge
->   - MADV_HUGEPAGE
->   - Shmem mmap
-> 
-> If the above conditions are not met, even though khugepaged is enabled
-> it won't see any file vma at all.  MADV_HUGEPAGE could be specified
-> explicitly to tell khugepaged to collapse this area, but when
-> khugepaged mode is "always" it should scan suitable vmas as long as
-> VM_NOHUGEPAGE is not set.
+Hi Andy,
 
-I don't see that as being true at all.  The point of this hack was that
-applications which really knew what they were doing could enable it.
-It makes no sense to me that setting "always" by the sysadmin for shmem
-also force-enables ROTHP, even for applications which aren't aware of it.
+On Wed, Apr 27, 2022 at 6:04 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Apr 20, 2022 at 11:11 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+> >
+> > Added channel for step counter which can be enable or disable
+> > through the sysfs interface.
+>
+> ...
+>
+> > +static int bma400_enable_steps(struct bma400_data *data, int val)
+> > +{
+> > +       int ret;
+> > +
+> > +       if (data->steps_enabled == val)
+> > +               return 0;
+> > +
+> > +       ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG1_REG,
+> > +                                BMA400_STEP_INT_MSK,
+> > +                                FIELD_PREP(BMA400_STEP_INT_MSK, !!val));
+>
+> > +       data->steps_enabled = val;
+>
+> This will update the value even if we got an error and actual device
+> state is unknown here. Does this make sense?
 
-Most telling, I think, is that Song Liu hasn't weighed in on this at
-all.  It's clearly not important to the original author.
+I will correct this in the next series.
+
+>
+> > +       return ret;
+> > +}
+>
+> ...
+>
+> I perhaps missed why kmalloc() is needed now. Any pointers to the discussion?
+
+Here step is a 24-bit value and since this is a sysfs channel read (slow path),
+kmalloc() is used to make the buffer DMA safe to read the multibyte value
+using regmap_bulk_read().
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+
+Thank you,
+Jagath

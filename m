@@ -2,272 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA72512181
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4971351218A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiD0Stb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S230522AbiD0SvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbiD0StF (ORCPT
+        with ESMTP id S230240AbiD0Sua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:49:05 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1953CA0D9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:32:14 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id bu29so4728387lfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LE417ya6E7m+nXp6VV/VN8esAD2AhVJo0XqStc9jrKk=;
-        b=RkRpVLCj/djXRGkAnPrqrRcldz58N/lNU769t9fa5KcRaUz9rB5K4dE6u1yXQlsMfx
-         I8k1XxLo6SaOA6pzgCwIGoXlEXQp6Z49mUgLLqc1AFPoQbQABpvC25LOj0cySPWBi5xY
-         mlkA0T+/0sIcHgYnsbRjyF5k3OCP5ahpJ5jFk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LE417ya6E7m+nXp6VV/VN8esAD2AhVJo0XqStc9jrKk=;
-        b=dtzXGLCwH+2fr7vsEmiVTUQahqze8ba3x3W7ySQ6xjjcJ4guUXQyvW/bLNSComl6YP
-         JRQbhYncQtPZ+R8SPIXmvpVbhe7p9nONdvaP8packIi+nWo6o4cFtQkhTHbLtcPKNMtr
-         0Hu3GeUjcg1AnwXrGBUZoksHjz1SwRsWxxt4Drva2RCJqmM0hi8x+IWxXTMD+YP5NogE
-         kZoU79KgOU3tuPPtONMP5oNZz4henuhXCBhviLgKM0u3BQ32147fxlRreUzgPUBxxQs6
-         U15JBhjrkogh8MBEfwDnzSsub3cHnUPjc+yvIZe49BRmdEbJKZ1ZTD8tyHI+Np6jqXLx
-         hhBQ==
-X-Gm-Message-State: AOAM530cSRDEamsy2IvsW4Hbsi1ARHBloV5uD4bIItSV45rtodEbrk5X
-        gxMHVCK/Rqq3uqI7DNmrVldUsInwp2VNdufITAs=
-X-Google-Smtp-Source: ABdhPJzGn2Zy5alS/0GvyVjREl1T512u/z0lzcJDBnD8gBFCI289CcxnpF90SH7s2dEAujMG7s/hHg==
-X-Received: by 2002:a05:6512:3091:b0:471:ae9d:5136 with SMTP id z17-20020a056512309100b00471ae9d5136mr21251179lfd.535.1651084332758;
-        Wed, 27 Apr 2022 11:32:12 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id y21-20020a056512045500b00472053b2dcfsm1215475lfk.48.2022.04.27.11.32.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 11:32:11 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id y19so3803147ljd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:32:10 -0700 (PDT)
-X-Received: by 2002:a2e:8789:0:b0:24f:124c:864a with SMTP id
- n9-20020a2e8789000000b0024f124c864amr10454141lji.164.1651084330452; Wed, 27
- Apr 2022 11:32:10 -0700 (PDT)
+        Wed, 27 Apr 2022 14:50:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CCBD1F8DB7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651084457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BWvHRfleSmV0RP4sJ9swxCYFlUlfYvho/X292m8mYZk=;
+        b=V/gVaPUAlG/3xfGZXu5ekv5wxqqAuZkTy/p2OCxtaFmUOmAgNKzi76kWatLbH1ghZykg4e
+        ptzGxH1YHWzXh5DmUSU0pDgJHHrDL8qhXddAxJr1WR/JB4jxh+9/FOTf4YeYj64+JcbYYd
+        W+c0+TjF98V0QBuMDELqKI+t0uUcLF8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-56-vMEfxZPOOkiASFwCfwv5lg-1; Wed, 27 Apr 2022 14:34:13 -0400
+X-MC-Unique: vMEfxZPOOkiASFwCfwv5lg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BF53802809;
+        Wed, 27 Apr 2022 18:34:13 +0000 (UTC)
+Received: from gluttony.redhat.com (unknown [10.22.16.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BA31463E0B;
+        Wed, 27 Apr 2022 18:34:13 +0000 (UTC)
+From:   David Jeffery <djeffery@redhat.com>
+To:     target-devel@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jeffery <djeffery@redhat.com>,
+        Laurence Oberman <loberman@redhat.com>
+Subject: [PATCH] target: pscsi: set SCF_TREAT_READ_AS_NORMAL flag only if there is valid data
+Date:   Wed, 27 Apr 2022 14:32:50 -0400
+Message-Id: <20220427183250.291881-1-djeffery@redhat.com>
 MIME-Version: 1.0
-References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
- <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
-In-Reply-To: <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 27 Apr 2022 11:31:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
-Message-ID: <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
-Subject: Re: Linux 5.18-rc4
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, gwml@vger.gnuweeb.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This looks like it might be AppArmor-related.
+With tape devices, the SCF_TREAT_READ_AS_NORMAL flag is used by the target
+subsystem to mark commands which have both data to return as well as
+sense data. But with pscsi, SCF_TREAT_READ_AS_NORMAL can be set even if
+there is no data to return. The SCF_TREAT_READ_AS_NORMAL flag causes the
+target core to call iscsit datain callbacks even if there is no data, which
+iscsit does not support. This results in iscsit going into an error state
+requiring recovery and being unable to complete the command to the
+initiator.
 
-Adding AppArmor and security module people to the participants.
+This issue can be resolved by fixing pscsi to only set
+SCF_TREAT_READ_AS_NORMAL if there is valid data to return along side the
+sense data.
 
-Sorry for top-posting and quoting the whole thing, but this is really
-just bringing in more people to the discussion.
+Fixes: bd81372065fa ("scsi: target: transport should handle st FM/EOM/ILI reads")
+Signed-off-by: David Jeffery <djeffery@redhat.com>
+Tested-by: Laurence Oberman <loberman@redhat.com>
+---
+ drivers/target/target_core_pscsi.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-So on the exec path we have
+diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+index ff292b75e23f..60dafe4c581b 100644
+--- a/drivers/target/target_core_pscsi.c
++++ b/drivers/target/target_core_pscsi.c
+@@ -588,7 +588,7 @@ static void pscsi_destroy_device(struct se_device *dev)
+ }
+ 
+ static void pscsi_complete_cmd(struct se_cmd *cmd, u8 scsi_status,
+-			       unsigned char *req_sense)
++			       unsigned char *req_sense, int valid_data)
+ {
+ 	struct pscsi_dev_virt *pdv = PSCSI_DEV(cmd->se_dev);
+ 	struct scsi_device *sd = pdv->pdv_sd;
+@@ -681,7 +681,7 @@ static void pscsi_complete_cmd(struct se_cmd *cmd, u8 scsi_status,
+ 		 * back despite framework assumption that a
+ 		 * check condition means there is no data
+ 		 */
+-		if (sd->type == TYPE_TAPE &&
++		if (sd->type == TYPE_TAPE && valid_data &&
+ 		    cmd->data_direction == DMA_FROM_DEVICE) {
+ 			/*
+ 			 * is sense data valid, fixed format,
+@@ -1032,6 +1032,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+ 	struct se_cmd *cmd = req->end_io_data;
+ 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(req);
+ 	enum sam_status scsi_status = scmd->result & 0xff;
++	int valid_data = cmd->data_length - scmd->resid_len;
+ 	u8 *cdb = cmd->priv;
+ 
+ 	if (scsi_status != SAM_STAT_GOOD) {
+@@ -1039,12 +1040,11 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+ 			" 0x%02x Result: 0x%08x\n", cmd, cdb[0], scmd->result);
+ 	}
+ 
+-	pscsi_complete_cmd(cmd, scsi_status, scmd->sense_buffer);
++	pscsi_complete_cmd(cmd, scsi_status, scmd->sense_buffer, valid_data);
+ 
+ 	switch (host_byte(scmd->result)) {
+ 	case DID_OK:
+-		target_complete_cmd_with_length(cmd, scsi_status,
+-			cmd->data_length - scmd->resid_len);
++		target_complete_cmd_with_length(cmd, scsi_status, valid_data);
+ 		break;
+ 	default:
+ 		pr_debug("PSCSI Host Byte exception at cmd: %p CDB:"
+-- 
+2.35.1
 
-  apparmor_bprm_committing_creds() ->
-    aa_inherit_files() ->
-      iterate_fd (takes files->file_lock) ->
-        aa_file_perm ->
-          update_file_ctx (takes aa_file_ctx->lock)
-
-which gives us that file_lock -> ctx lock order. All within AppArmor.
-
-And then we apparently _also_ have the reverse ctx lock -> file_lock
-order by way of 'alloc_lock', which is the 'task_lock()' thing
-
-That one is a horror to decode and I didn't, but seems to go through
-ipcget -> newseg..
-
-Anybody?
-
-         Linus
-
-On Wed, Apr 27, 2022 at 11:00 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
->
-> On 4/25/22 5:22 AM, Linus Torvalds wrote:
-> > Fairly slow and calm week - which makes me just suspect that the other
-> > shoe will drop at some point.
-> >
-> > But maybe things are just going really well this release. It's bound
-> > to happen _occasionally_, after all.
->
-> + fs/exec.c maintainers.
->
-> Testing Linux 5.18-rc4 on my laptop, it has been running for 2 days. Got
-> the following lockdep splat this night. I don't have the reproducer. If
-> you need more information, feel free to let me know.
->
-> [78140.503644] ======================================================
-> [78140.503646] WARNING: possible circular locking dependency detected
-> [78140.503648] 5.18.0-rc4-superb-owl-00006-gd615b5416f8a #12 Tainted: G        W
-> [78140.503650] ------------------------------------------------------
-> [78140.503651] preconv/111629 is trying to acquire lock:
-> [78140.503653] ffff88834d633248 (&ctx->lock){+.+.}-{2:2}, at: update_file_ctx+0x19/0xe0
-> [78140.503663]
->                 but task is already holding lock:
-> [78140.503664] ffff888103d80458 (&newf->file_lock){+.+.}-{2:2}, at: iterate_fd+0x34/0x150
-> [78140.503669]
->                 which lock already depends on the new lock.
->
-> [78140.503671]
->                 the existing dependency chain (in reverse order) is:
-> [78140.503672]
->                 -> #4 (&newf->file_lock){+.+.}-{2:2}:
-> [78140.503675]        _raw_spin_lock+0x2f/0x40
-> [78140.503679]        seq_show+0x72/0x280
-> [78140.503681]        seq_read_iter+0x125/0x3c0
-> [78140.503684]        seq_read+0xd0/0xe0
-> [78140.503686]        vfs_read+0xf5/0x2f0
-> [78140.503688]        ksys_read+0x58/0xb0
-> [78140.503690]        do_syscall_64+0x3d/0x90
-> [78140.503693]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [78140.503695]
->                 -> #3 (&p->alloc_lock){+.+.}-{2:2}:
-> [78140.503699]        _raw_spin_lock+0x2f/0x40
-> [78140.503700]        newseg+0x25b/0x360
-> [78140.503703]        ipcget+0x3fb/0x480
-> [78140.503705]        __x64_sys_shmget+0x48/0x50
-> [78140.503708]        do_syscall_64+0x3d/0x90
-> [78140.503710]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [78140.503713]
->                 -> #2 (&new->lock){+.+.}-{2:2}:
-> [78140.503716]        _raw_spin_lock+0x2f/0x40
-> [78140.503718]        ipc_addid+0xb3/0x700
-> [78140.503720]        newseg+0x238/0x360
-> [78140.503722]        ipcget+0x3fb/0x480
-> [78140.503724]        __x64_sys_shmget+0x48/0x50
-> [78140.503727]        do_syscall_64+0x3d/0x90
-> [78140.503729]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [78140.503731]
->                 -> #1 (lock#3){+.+.}-{2:2}:
-> [78140.503735]        local_lock_acquire+0x1d/0x70
-> [78140.503738]        __radix_tree_preload+0x38/0x150
-> [78140.503740]        idr_preload+0xa/0x40
-> [78140.503743]        aa_alloc_secid+0x15/0xb0
-> [78140.503745]        aa_label_alloc+0x6c/0x1b0
-> [78140.503747]        aa_label_merge+0x52/0x430
-> [78140.503750]        update_file_ctx+0x3f/0xe0
-> [78140.503752]        aa_file_perm+0x56e/0x5c0
-> [78140.503754]        common_file_perm+0x70/0xd0
-> [78140.503756]        security_mmap_file+0x4b/0xd0
-> [78140.503759]        vm_mmap_pgoff+0x50/0x150
-> [78140.503761]        elf_map+0x9f/0x120
-> [78140.503763]        load_elf_binary+0x521/0xc80
-> [78140.503767]        bprm_execve+0x39f/0x660
-> [78140.503769]        do_execveat_common+0x1d0/0x220
-> [78140.503771]        __x64_sys_execveat+0x3d/0x50
-> [78140.503773]        do_syscall_64+0x3d/0x90
-> [78140.503775]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [78140.503777]
->                 -> #0 (&ctx->lock){+.+.}-{2:2}:
-> [78140.503780]        __lock_acquire+0x1573/0x2ce0
-> [78140.503783]        lock_acquire+0xbd/0x190
-> [78140.503785]        _raw_spin_lock+0x2f/0x40
-> [78140.503787]        update_file_ctx+0x19/0xe0
-> [78140.503788]        aa_file_perm+0x56e/0x5c0
-> [78140.503790]        match_file+0x78/0x90
-> [78140.503792]        iterate_fd+0xae/0x150
-> [78140.503794]        aa_inherit_files+0xbe/0x170
-> [78140.503796]        apparmor_bprm_committing_creds+0x50/0x80
-> [78140.503798]        security_bprm_committing_creds+0x1d/0x30
-> [78140.503800]        begin_new_exec+0x3c5/0x450
-> [78140.503802]        load_elf_binary+0x269/0xc80
-> [78140.503804]        bprm_execve+0x39f/0x660
-> [78140.503806]        do_execveat_common+0x1d0/0x220
-> [78140.503808]        __x64_sys_execve+0x36/0x40
-> [78140.503809]        do_syscall_64+0x3d/0x90
-> [78140.503812]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [78140.503815]
->                 other info that might help us debug this:
->
-> [78140.503816] Chain exists of:
->                   &ctx->lock --> &p->alloc_lock --> &newf->file_lock
->
-> [78140.503820]  Possible unsafe locking scenario:
->
-> [78140.503821]        CPU0                    CPU1
-> [78140.503823]        ----                    ----
-> [78140.503824]   lock(&newf->file_lock);
-> [78140.503826]                                lock(&p->alloc_lock);
-> [78140.503828]                                lock(&newf->file_lock);
-> [78140.503830]   lock(&ctx->lock);
-> [78140.503832]
->                  *** DEADLOCK ***
->
-> [78140.503833] 3 locks held by preconv/111629:
-> [78140.503835]  #0: ffff888111b62550 (&sig->cred_guard_mutex){+.+.}-{3:3}, at: bprm_execve+0x39/0x660
-> [78140.503840]  #1: ffff888111b625e8 (&sig->exec_update_lock){++++}-{3:3}, at: exec_mmap+0x4e/0x250
-> [78140.503844]  #2: ffff888103d80458 (&newf->file_lock){+.+.}-{2:2}, at: iterate_fd+0x34/0x150
-> [78140.503849]
->                 stack backtrace:
-> [78140.503851] CPU: 3 PID: 111629 Comm: preconv Tainted: G        W         5.18.0-rc4-superb-owl-00006-gd615b5416f8a #12 6fd282a37da6f0e0172ecfa29689f3d250476a2b
-> [78140.503855] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
-> [78140.503856] Call Trace:
-> [78140.503858]  <TASK>
-> [78140.503860]  dump_stack_lvl+0x5a/0x74
-> [78140.503863]  check_noncircular+0xd3/0xe0
-> [78140.503866]  ? register_lock_class+0x35/0x2a0
-> [78140.503870]  __lock_acquire+0x1573/0x2ce0
-> [78140.503872]  ? prepend_path+0x375/0x410
-> [78140.503876]  ? d_absolute_path+0x48/0x80
-> [78140.503879]  ? aa_path_name+0x132/0x470
-> [78140.503883]  ? lock_is_held_type+0xd0/0x130
-> [78140.503886]  lock_acquire+0xbd/0x190
-> [78140.503888]  ? update_file_ctx+0x19/0xe0
-> [78140.503892]  _raw_spin_lock+0x2f/0x40
-> [78140.503894]  ? update_file_ctx+0x19/0xe0
-> [78140.503896]  update_file_ctx+0x19/0xe0
-> [78140.503899]  aa_file_perm+0x56e/0x5c0
-> [78140.503904]  ? aa_inherit_files+0x170/0x170
-> [78140.503906]  match_file+0x78/0x90
-> [78140.503909]  iterate_fd+0xae/0x150
-> [78140.503912]  aa_inherit_files+0xbe/0x170
-> [78140.503915]  apparmor_bprm_committing_creds+0x50/0x80
-> [78140.503918]  security_bprm_committing_creds+0x1d/0x30
-> [78140.503921]  begin_new_exec+0x3c5/0x450
-> [78140.503924]  load_elf_binary+0x269/0xc80
-> [78140.503928]  ? lock_release+0x1ee/0x260
-> [78140.503930]  ? bprm_execve+0x399/0x660
-> [78140.503933]  bprm_execve+0x39f/0x660
-> [78140.503936]  do_execveat_common+0x1d0/0x220
-> [78140.503940]  __x64_sys_execve+0x36/0x40
-> [78140.503942]  do_syscall_64+0x3d/0x90
-> [78140.503946]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [78140.503948] RIP: 0033:0x7f700a8ea33b
-> [78140.503954] Code: Unable to access opcode bytes at RIP 0x7f700a8ea311.
-> [78140.503955] RSP: 002b:00007fff315e7db8 EFLAGS: 00000246 ORIG_RAX: 000000000000003b
-> [78140.503958] RAX: ffffffffffffffda RBX: 00007fff315e7dc0 RCX: 00007f700a8ea33b
-> [78140.503960] RDX: 000056419e9ea7e0 RSI: 000056419e9e9160 RDI: 00007fff315e7dc0
-> [78140.503962] RBP: 00007fff315e7f60 R08: 0000000000000008 R09: 0000000000000000
-> [78140.503964] R10: 0000000000000001 R11: 0000000000000246 R12: 000056419e9ea760
-> [78140.503965] R13: 000056419e9e9160 R14: 00007fff315e9eb4 R15: 00007fff315e9ebc
-> [78140.503971]  </TASK>
->
-> --
-> Ammar Faizi

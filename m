@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F33511104
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8B2511107
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358041AbiD0GUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S1358056AbiD0GVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358040AbiD0GUU (ORCPT
+        with ESMTP id S1358040AbiD0GVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:20:20 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B1B4754E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:17:10 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id e4so987681oif.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y/b/feWrZ/lTi9jqBScMUn9yWSLttJFz22wgdAWmkVo=;
-        b=T3ufhEUiI/VrSttcStmtXSUMMrkgEXKQruCbrDOukOZyTKP/VLNqOzcoWjZFAVBSGp
-         PgbFTviSCvl/G3rN28x8MaN0565EzHJZF698Oyal7seY/NdPtLpvn3wpBZtGxLDolqPr
-         7ET6DTHGQ5DppnIbZsi2Wd2fm2xUx0p+PDtmPDofzlD4tiN6QO0XyPVzHxSNY29QUGgF
-         cofQK8yabNXR+q5ranpwEaFv5rho/UkopSkgeRqIEeTQtIpzGUvyctU1OTFrQayb0Ynf
-         Qxl1HAo9d2dAvTH+nV3RXQEjb7OUX1F0wMBktTnjTiMXlwiFDhua9xwXqdJMNx/6xnjT
-         L3vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y/b/feWrZ/lTi9jqBScMUn9yWSLttJFz22wgdAWmkVo=;
-        b=gJ3gwcNl1ufhCxdL+NwRSFYHv+2vDvs/PGKAuV78qMPAwmN1JFDCmE3c2TI4q4Vqob
-         6SMaoiXIM+MzqKkDdtz3IjXTb0IC82go5PCaDmUu57I6P5E1aCv/ekqXQ6PmeffFFVtC
-         el7wMK8cXxJPAlROdcdsIU1ALatf0EN4D8/aVJT6Tn4R1RPknrBx8M33zJtNyxnTYDW/
-         LiFefTYfIQPyhVqBUPFEHjcURyOex9u8/8hl5o0YgaP/IMefzxd3dD0HnW2iqvGUjqH4
-         Xog/ReMwN5j2Kxm4xi6BcOz3TSyeEVmLEVJCHGOtd5K54vq7zvvrwsDqk6aBXkZnDgDx
-         EzfA==
-X-Gm-Message-State: AOAM532JM6eTP+e5TS7a2O2h6WibGdTSbXlZJxBVavO+lXe5Srhw15aq
-        cT37fF06/BpMBXYoCN2KHirwwcGYJJKkJIDFG9SoMgwPRVMmeQ==
-X-Google-Smtp-Source: ABdhPJyP/exY90ec9Cb2A0p8JqvAKbMZ7FdZHfRcrgFuaLU4lJKresEPLA4s/995M8bg3MguObtbyU05+Tak7YBWY08=
-X-Received: by 2002:a05:6808:1645:b0:325:5182:a9ca with SMTP id
- az5-20020a056808164500b003255182a9camr4810368oib.104.1651040229679; Tue, 26
- Apr 2022 23:17:09 -0700 (PDT)
+        Wed, 27 Apr 2022 02:21:18 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA1481487;
+        Tue, 26 Apr 2022 23:18:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VBR1fxf_1651040277;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VBR1fxf_1651040277)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 27 Apr 2022 14:18:05 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     tj@kernel.org
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org, shuah@kernel.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] selftests: cgroup: Fix unsigned expression compared with zero
+Date:   Wed, 27 Apr 2022 14:17:56 +0800
+Message-Id: <20220427061756.56893-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220425085127.2009-1-etienne.carriere@linaro.org> <YmgiQmeQSkglljEl@e120937-lin>
-In-Reply-To: <YmgiQmeQSkglljEl@e120937-lin>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Wed, 27 Apr 2022 08:16:58 +0200
-Message-ID: <CAN5uoS-djeP+79Gqsy7cO3RR6p55C=X8Net6jvL98X6P-S3q1g@mail.gmail.com>
-Subject: Re: [PATCH v3] firmware: arm_scmi: support optee shared memory in
- optee transport
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 18:48, Cristian Marussi <cristian.marussi@arm.com> wrote:
->
-> On Mon, Apr 25, 2022 at 10:51:27AM +0200, Etienne Carriere wrote:
-> > Adds support for tee shared memory in optee scmi transport. When using
-> > tee shared memory, scmi optee transport manages SCMI messages using
-> > msg protocol (from msg.c) in shared memory, whereas smt (from shmem.c)
-> > protocol is used with static IOMEM shared buffers.
-> >
-> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > ---
-> > Changes since v2:
-> > - Select configuration switch ARM_SCMI_HAVE_MSG when
-> >   ARM_SCMI_TRANSPORT_OPTEE is enabled.
-> > - Don't consider tee_shm in invoke_process_smt_channel() since
-> >   this function now assumes TEE shared memory is not used for SMT
-> >   based channel.
-> >
-> > Changes since v1:
-> > - Remove call to scmi_rx_callback() in scmi_optee_send_message().
-> > ---
->
-> LGTM
->
-> Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
->
-> Thanks,
+Fix the following coccicheck warnings:
 
-Thanks for the help.
+./tools/testing/selftests/cgroup/cgroup_util.c:566:8-12: WARNING:
+Unsigned expression compared with zero: size < 0.
 
-br,
-etienne
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 2 +-
+ tools/testing/selftests/cgroup/cgroup_util.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Cristian
->
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 4c52cc6f2f9c..661e06b94a43 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -552,7 +552,7 @@ int proc_mount_contains(const char *option)
+ 	return strstr(buf, option) != NULL;
+ }
+ 
+-ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size)
++ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, ssize_t size)
+ {
+ 	char path[PATH_MAX];
+ 
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index c92df4e5d395..7b3865805f50 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -53,7 +53,7 @@ extern int set_oom_adj_score(int pid, int score);
+ extern int cg_wait_for_proc_count(const char *cgroup, int count);
+ extern int cg_killall(const char *cgroup);
+ int proc_mount_contains(const char *option);
+-extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size);
++extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, ssize_t size);
+ extern int proc_read_strstr(int pid, bool thread, const char *item, const char *needle);
+ extern pid_t clone_into_cgroup(int cgroup_fd);
+ extern int clone_reap(pid_t pid, int options);
+-- 
+2.20.1.7.g153144c
+

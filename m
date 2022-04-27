@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9C3511380
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E72511383
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359414AbiD0Iet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S1359426AbiD0Ihu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiD0Ieq (ORCPT
+        with ESMTP id S229945AbiD0Iht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:34:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAC51FA48;
-        Wed, 27 Apr 2022 01:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651048296; x=1682584296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QB+C2awCS8SI/qOc2hpUsE98FZJLYWnZ8pdyLpOzv+4=;
-  b=b4IvlG7W3niYDFGFKVJyuSmramWG3QLNGwMEinku2tRpQ3+uq6l9boS3
-   G0uHt1eipZrxTErmSTjADiCxgkFlBz0rP7tI2QYBDfqRNCu2i90nZ/y5P
-   xQsXbgLTJ80R8r1eiFIlrheQnzaQa4EepTHL6uvYK/opIOG+vIpSGKzlR
-   QgNZMzsGOrFp9XpQOMCl41dbIgCgMhM1gfHfNmjCzZ3mLUgtwG4G1PrFs
-   m+8KJo6dN+gxMFwP9uEyX1JiuU3uVHua5MuQ0+tIPgDbf9UvgGlqxTZUc
-   ZG6er/jjNGNEGFVkyyCQ7VQjg3J2ZvzO24EdXKTBHE+JMlGayKAHSmSrM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="291011752"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="291011752"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 01:31:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="539716593"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 01:31:33 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njd5B-0004Vy-5e;
-        Wed, 27 Apr 2022 08:31:33 +0000
-Date:   Wed, 27 Apr 2022 16:31:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Min Li <min.li.xe@renesas.com>, richardcochran@gmail.com,
-        lee.jones@linaro.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Min Li <min.li.xe@renesas.com>
-Subject: Re: [PATCH net 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
- support
-Message-ID: <202204271653.N6Y5H0EO-lkp@intel.com>
-References: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
+        Wed, 27 Apr 2022 04:37:49 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132E6644E3;
+        Wed, 27 Apr 2022 01:34:38 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id ke5so605016qvb.5;
+        Wed, 27 Apr 2022 01:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mts8+CXZqKYubrygYyfb7XAxGiHuoGj/BQDg0sBg5ck=;
+        b=OEX1iqG5lS2jmxcFVAzAelcABrA0I4peMSmRW2z2OBvH+oCukYbw5WA7jWS1NODyxU
+         dKZGQiFy8LQSexpzD0Hgn42J1xF5DEW1ragAF+9UIGLgc7Xj9yAQVau55vfsLM/b/eX7
+         VeYrDKtzCH2mJrSWAeOcJaV4g5J8fG+3D5i30=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mts8+CXZqKYubrygYyfb7XAxGiHuoGj/BQDg0sBg5ck=;
+        b=QmaGJpJlAs0zqT37lpgKp8SLk87Ax9FDAGrxrtKCbWTnkAHEqPbp0Wx4yBcBc4BvuO
+         31j+XgCmKd3uN/jmICd1tNu8jSRZKE7dJW09urhl9/82H2/OKRgJPXe9kh+fCjsKr7fS
+         urDFo/VhKLDHQMPU0+8BUy7AOr0WO9w9kxk8yEbSc6PJs1AEV2r2MqsYGt2aIQXVx39Y
+         yxI/P26hprmL2kB162ZXEFQjLT6fD/ibSa7gCQHYuwf6XMfFj2g58Hk6hn8ag2bCtemU
+         BU8EZMxrYdUa/WIrS/4GXQfTA3cV+WU10NpKBZNiUUwcznvIP+JSb5LBQTuWV3mjd18n
+         iLAQ==
+X-Gm-Message-State: AOAM53028d28dDeNIad1YkEPZoV2O5gpYQMDz802rkjcZleC6ahYWGcE
+        M/gzb6JDADk7JiYAbyd/JwSzClP/PY7vPGULhxU=
+X-Google-Smtp-Source: ABdhPJyidkYZn3pks7qlaDMc3LwEDY1SYiqlg58dC9/l3UNI6GnmoBiDPuyd2UEkY/eAHDPGkC/Q10O6MS/Vv02VDYk=
+X-Received: by 2002:a05:6214:624:b0:441:84f3:24e3 with SMTP id
+ a4-20020a056214062400b0044184f324e3mr19162202qvx.27.1651048477102; Wed, 27
+ Apr 2022 01:34:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426154956.27205-1-eajames@linux.ibm.com> <20220426154956.27205-3-eajames@linux.ibm.com>
+In-Reply-To: <20220426154956.27205-3-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 27 Apr 2022 08:34:25 +0000
+Message-ID: <CACPK8XdzznuHFZ_sj3zt4CKcsi02Af4COqa0-JP7=w6Mw_EjVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] hwmon (occ): Retry for checksum failure
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        David Laight <David.Laight@aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Min,
+On Tue, 26 Apr 2022 at 15:50, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Due to the OCC communication design with a shared SRAM area,
+> checkum errors are expected due to corrupted buffer from OCC
+> communications with other system components. Therefore, retry
+> the command twice in the event of a checksum failure.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/occ/p9_sbe.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 49b13cc01073..e6ccef2af659 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -14,6 +14,8 @@
+>
+>  #include "common.h"
+>
+> +#define OCC_CHECKSUM_RETRIES   3
+> +
+>  struct p9_sbe_occ {
+>         struct occ occ;
+>         bool sbe_error;
+> @@ -83,17 +85,22 @@ static int p9_sbe_occ_send_cmd(struct occ *occ, u8 *cmd, size_t len)
+>         struct occ_response *resp = &occ->resp;
+>         struct p9_sbe_occ *ctx = to_p9_sbe_occ(occ);
+>         size_t resp_len = sizeof(*resp);
+> +       int i;
+>         int rc;
+>
+> -       rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> -       if (rc < 0) {
+> +       for (i = 0; i < OCC_CHECKSUM_RETRIES; ++i) {
+> +               rc = fsi_occ_submit(ctx->sbe, cmd, len, resp, &resp_len);
+> +               if (rc >= 0)
+> +                       break;
+>                 if (resp_len) {
+>                         if (p9_sbe_occ_save_ffdc(ctx, resp, resp_len))
+>                                 sysfs_notify(&occ->bus_dev->kobj, NULL,
+>                                              bin_attr_ffdc.attr.name);
+> -               }
+>
+> -               return rc;
+> +                       return rc;
+> +               }
+> +               if (rc != -EBADE)
+> +                       return rc;
 
-Thank you for the patch! Yet something to improve:
+Future you might appreciate a comment above the EBADE check clarifying
+why that error is being special cased.
 
-[auto build test ERROR on net/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/ptp-ptp_clockmatrix-Add-PTP_CLK_REQ_EXTTS-support/20220427-033506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git acb16b395c3f3d7502443e0c799c2b42df645642
-config: i386-randconfig-a013-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271653.N6Y5H0EO-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/afadc4edd1bf64b40cb61b38dedf67354baeb147
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Min-Li/ptp-ptp_clockmatrix-Add-PTP_CLK_REQ_EXTTS-support/20220427-033506
-        git checkout afadc4edd1bf64b40cb61b38dedf67354baeb147
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: drivers/ptp/ptp_clockmatrix.o: in function `idtcm_enable_channel':
->> ptp_clockmatrix.c:(.text+0x2394): undefined reference to `__udivdi3'
->> ld: ptp_clockmatrix.c:(.text+0x23b0): undefined reference to `__udivdi3'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>         }
+>
+>         switch (resp->return_status) {
+> --
+> 2.27.0
+>

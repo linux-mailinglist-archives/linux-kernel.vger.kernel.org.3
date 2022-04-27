@@ -2,112 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8638511297
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED4B51129D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358886AbiD0HhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S1358898AbiD0HiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358872AbiD0HhK (ORCPT
+        with ESMTP id S1358867AbiD0Hh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:37:10 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396748D6AC
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:34:00 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 07:33:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1651044838;
-        bh=piUpAc0wGe60Avq75CM5bLwVBo2lSgqrOZtXltVybnw=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=p5TANCxWDN0iWpN28SVEjXN5FOsv0HnWN0jkP8EzNU7VQ3k4FHpfhTDHYZbusqW1I
-         QSEKXWs3y3ROFkOIkVYN3/HBbZpgjUDRY8rwdWT0neQfuB+uPCIsuS1vNigmatzbIz
-         ve5aIKNnBb8W1o0+592wRjya+EPvbTrCkWZoBLpD8+iXoLuPGfwZ5SfuNhnJVL6slm
-         P9fQe+2kBAG61MPiQrIDCDJITmA55lmTjLOweohHWGmSU4zbeVPXcxnS4d+RQIFvvR
-         74hNiU2XMxGgM06UAkHGux0MF9PbIBw5Nvr5hiCzHg9OaB9kRYxUKWd9P+5FESAJV1
-         MQZJ6REW/w6JA==
-To:     Antoine Tenart <atenart@kernel.org>
-From:   Juerg Haefliger <juergh@protonmail.com>
-Cc:     Juerg Haefliger <juerg.haefliger@canonical.com>,
-        davem@davemloft.net, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Juerg Haefliger <juergh@protonmail.com>
-Subject: Re: [PATCH] crypto: inside-secure - Add MODULE_FIRMWARE macros
-Message-ID: <20220427093252.00d013c9@smeagol>
-In-Reply-To: <165104455443.3327.8052402101857118285@kwain>
-References: <20220427070349.388246-1-juergh@protonmail.com> <165104455443.3327.8052402101857118285@kwain>
-Feedback-ID: 10260306:user:proton
+        Wed, 27 Apr 2022 03:37:58 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46BA8D6BC
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:34:47 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 12AD3E0004;
+        Wed, 27 Apr 2022 07:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651044886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=glbYfZqUavVGHNnqJks+ijb5S8BE7L21xINkDb3m644=;
+        b=aARddhOA4gpGItvv8rgUmLqeIkG2mFWwOJyOrJdkHOjJKb9c3Kj8vbvDelNZ9LZktcz3Fb
+        zb6K2r/Ur4pfkbGijSwBx0MjIpxag+jyyPR41Z5qw2kdzwbkSuSLiDacx+GjFseF1WdGkA
+        QqWPTovEeeV8f9yVkvdrPzg/aJjZzxwK1hnAV5deo1mfS/wGtK/0zQNAZG8FtUtjb3Cy31
+        6rd3XWOhd5DEMGArYFnfUddX1U6Rh37BoFC49Rf+owVanBPXpFVBhkkccXSbMZgiR5Or4z
+        VVu4lTz1ywAiTsJFJQn1RKEDTFvkfviLgFFJV5hsBMTxtlhHzpgG4tApmblWbw==
+Date:   Wed, 27 Apr 2022 09:34:41 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
+ bridge"
+Message-ID: <YmjyEZs0ND2D9Yki@aptenodytes>
+References: <YmEdAVwZuA7Wo1Ch@aptenodytes>
+ <YmelPCcWCCjALtRU@aptenodytes>
+ <YmfYi5G7hMKLAH3T@pendragon.ideasonboard.com>
+ <YmfoiD0r8MD/kr1N@aptenodytes>
+ <20220426125401.yyrhg6aeafdjw4ad@houat>
+ <20220426125544.mroteu3hvyvlyb6g@houat>
+ <Ymft0SM5GNHXjkVb@aptenodytes>
+ <20220426131944.b26rqqmk7gpcplbg@houat>
+ <Ymf4nmQAkEciwyt/@aptenodytes>
+ <YmhfsGAJjSmSPs/l@ripper>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="b1_xJCHnbO4zpyNtxSqi4ebN97ZiN1dTAelSXPpKazELCM"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ijcDL19LA/Jv/8hr"
+Content-Disposition: inline
+In-Reply-To: <YmhfsGAJjSmSPs/l@ripper>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
 
---b1_xJCHnbO4zpyNtxSqi4ebN97ZiN1dTAelSXPpKazELCM
+--ijcDL19LA/Jv/8hr
 Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, 27 Apr 2022 09:29:14 +0200
-"Antoine Tenart" <atenart@kernel.org> wrote:
+Hi Bjorn,
 
-> Hello Juerg,
->
-> Quoting Juerg Haefliger (2022-04-27 09:03:49)
-> > +
-> > +MODULE_FIRMWARE("inside-secure/eip197b/ifpp.bin");
-> > +MODULE_FIRMWARE("inside-secure/eip197b/ipue.bin");
-> > +MODULE_FIRMWARE("inside-secure/eip197d/ifpp.bin");
-> > +MODULE_FIRMWARE("inside-secure/eip197d/ipue.bin");
-> > +MODULE_FIRMWARE("inside-secure/eip197_minifw/ifpp.bin");
-> > +MODULE_FIRMWARE("inside-secure/eip197_minifw/ipue.bin");
->
-> There's also the old location when the EIP197b firmwares were at the
-> root of the linux-firmware repo. The driver still supports it, so I
-> guess those two should have a MODULE_FIRMWARE entry too.
+On Tue 26 Apr 22, 14:10, Bjorn Andersson wrote:
+> On Tue 26 Apr 06:50 PDT 2022, Paul Kocialkowski wrote:
+>=20
+> > On Tue 26 Apr 22, 15:19, Maxime Ripard wrote:
+> > > On Tue, Apr 26, 2022 at 03:04:17PM +0200, Paul Kocialkowski wrote:
+> > > > On Tue 26 Apr 22, 14:55, Maxime Ripard wrote:
+> > > > > On Tue, Apr 26, 2022 at 02:54:01PM +0200, Maxime Ripard wrote:
+> > > > > > On Tue, Apr 26, 2022 at 02:41:44PM +0200, Paul Kocialkowski wro=
+te:
+> > > > > > > On Tue 26 Apr 22, 14:33, Laurent Pinchart wrote:
+> > > > > > > > On Tue, Apr 26, 2022 at 09:54:36AM +0200, Paul Kocialkowski=
+ wrote:
+> > > > > > > > > On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
+> > > > > > > > > > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
+> > > > > > > > > > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki =
+wrote:
+> > > > > > > > > > > > + Linus
+> > > > > > > > > > > > + Marek
+> > > > > > > > > > > > + Laurent
+> > > > > > > > > > > > + Robert
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson wro=
+te:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Commit '80253168dbfd ("drm: of: Lookup if child n=
+ode has panel or
+> > > > > > > > > > > > > bridge")' attempted to simplify the case of expre=
+ssing a simple panel
+> > > > > > > > > > > > > under a DSI controller, by assuming that the firs=
+t non-graph child node
+> > > > > > > > > > > > > was a panel or bridge.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Unfortunately for non-trivial cases the first chi=
+ld node might not be a
+> > > > > > > > > > > > > panel or bridge.  Examples of this can be a aux-b=
+us in the case of
+> > > > > > > > > > > > > DisplayPort, or an opp-table represented before t=
+he panel node.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > In these cases the reverted commit prevents the c=
+aller from ever finding
+> > > > > > > > > > > > > a reference to the panel.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > This reverts commit '80253168dbfd ("drm: of: Look=
+up if child node has
+> > > > > > > > > > > > > panel or bridge")', in favor of using an explicit=
+ graph reference to the
+> > > > > > > > > > > > > panel in the trivial case as well.
+> > > > > > > > > > > >=20
+> > > > > > > > > > > > This eventually breaks many child-based devm_drm_of=
+_get_bridge
+> > > > > > > > > > > > switched drivers.  Do you have any suggestions on h=
+ow to proceed to
+> > > > > > > > > > > > succeed in those use cases as well?
+> > > > > > > > > > >=20
+> > > > > > > > > > > I guess we could create a new helper for those, like
+> > > > > > > > > > > devm_drm_of_get_bridge_with_panel, or something.
+> > > > > > > > > >=20
+> > > > > > > > > > Oh wow I feel stupid for not thinking about that.
+> > > > > > > > > >=20
+> > > > > > > > > > Yeah I agree that it seems like the best option.
+> > > > > > > > >=20
+> > > > > > > > > Should I prepare a patch with such a new helper?
+> > > > > > > > >=20
+> > > > > > > > > The idea would be to keep drm_of_find_panel_or_bridge onl=
+y for the of graph
+> > > > > > > > > case and add one for the child node case, maybe:
+> > > > > > > > > drm_of_find_child_panel_or_bridge.
+> > > > > > > > >=20
+> > > > > > > > > I really don't have a clear idea of which driver would ne=
+ed to be switched
+> > > > > > > > > over though. Could someone (Jagan?) let me know where it =
+would be needed?
+> > > > > > > > >=20
+> > > > > > > > > Are there cases where we could both expect of graph and c=
+hild node?
+> > > > > > > > > (i.e. does the new helper also need to try via of graph?)
+> > > > > > > >=20
+> > > > > > > > I still think we should use OF graph uncondtionally, even i=
+n the DSI
+> > > > > > > > case. We need to ensure backward-compatibility, but I'd lik=
+e new
+> > > > > > > > bindings (and thus new drivers) to always use OF graph.
+> > > > > > >=20
+> > > > > > > I just went over the thread on "drm: of: Improve error handli=
+ng in bridge/panel
+> > > > > > > detection" again and I'm no longer sure there's actually stil=
+l an issue that
+> > > > > > > stands, with the fix that allows returning -ENODEV when possi=
+ble.
+> > > > > > >=20
+> > > > > > > The remaining issue that was brought up was with a connector =
+node, but it should
+> > > > > > > be up to the driver to detect that and avoid calling drm_of_f=
+ind_panel_or_bridge
+> > > > > > > in such situations.
+> > > > > > >=20
+> > > > > > > So with that in mind it feels like the child node approach ca=
+n be viable
+> > > > > > > (and integrated in the same helper).
+> > > > > > >=20
+> > > > > > > We might still want to favor an explicit OF graph approach, b=
+ut note that
+> > > > > > > dsi-controller.yaml also specifies extra properties that are =
+specific to
+> > > > > > > MIPI DSI and I'm not sure there are equivalent definitions fo=
+r the OF graph
+> > > > > > > approach.
+> > > > > > >=20
+> > > > > > > What do you think?
+> > > > > >=20
+> > > > > > I don't think Laurent's point was to move the child node away f=
+rom its
+> > > > > > DSI controller, that part doesn't make much sense. The panel or=
+ bridge
+> > > > > > is still accessed through the DSI bus, so it very much belongs =
+there.
+> > > > > >=20
+> > > > > > What he meant I think was that we mandate the OF graph for all =
+panels,
+> > > > > > so for panels/bridges controlled through DCS, you would still l=
+ist the
+> > > > > > output through the graph.
+> > > > >=20
+> > > > > Also, we're already in a bit of a mess right now. I don't think r=
+ushing
+> > > > > that kind of patches in a (late) rc is making much sense, but as =
+I said,
+> > > > > if you want to start working on this, then I'll take a revert for=
+ the
+> > > > > next rc, and then we can work calmly on this.
+> > > >=20
+> > > > As I understand it we either have some broken stuff because of the =
+revert of:
+> > > > - drm: of: Lookup if child node has panel or bridge
+> > > > - drm: of: Properly try all possible cases for bridge/panel detecti=
+on
+> > > >=20
+> > > > because the child node is already used in places, or we can have br=
+oken stuff
+> > > > because with the patches because with these two patches -ENODEV is =
+no longer
+> > > > returned.
+> > > >=20
+> > > > Now with the extra patch that I sent:
+> > > > - drm: of: Improve error handling in bridge/panel detection
+> > > >=20
+> > > > we get -ENODEV back, except for the connector case but this one sho=
+uld be
+> > > > handled in drivers directly and drm_of_find_panel_or_bridge should =
+not be
+> > > > called in that situation.
+> > > >=20
+> > > > So all in all it seems that all the pieces are there, unless I'm mi=
+ssing
+> > > > something.
+> > > >=20
+> > > > What do you think?
+> > >=20
+> > > If Bjorn and Thierry can confirm that it indeeds work in their case,
+> > > I'll be happy to apply those patches as well.
+> >=20
+> > I still think we'd need a fix for Bjorn's connector case though.
+> > Not sure I would be confident providing that one without the hardware
+> > to test with.
+> >=20
+> > Bjorn, what do you think?
+> >=20
+>=20
+> I'm okay with the idea that it's up the driver to check that the output
+> port references an usb-c-connector - either before the call or upon
+> drm_of_find_panel_or_bridge() returning an error.
 
-Hi Antoine,
+Actually I'm starting to think might be wrong on this one: there's a
+display-connector bridge driver that should register a bridge, so
+drm_of_find_panel_or_bridge should work. Did you have that driver enabled?
 
-Yeah, I was wondering about that myself but wasn't sure if it should be add=
-ed.
-Will add it then and send a v2.
+Cheers,
 
-...Juerg
+Paul
 
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
-> Thanks,
-> Antoine
+--ijcDL19LA/Jv/8hr
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
---b1_xJCHnbO4zpyNtxSqi4ebN97ZiN1dTAelSXPpKazELCM
-Content-Type: application/pgp-signature; name=attachment.sig
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=attachment.sig
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJo8hEACgkQ3cLmz3+f
+v9E86wf/SnM+F9tYjlethb+pRfx719VPchCudFwI84lublqHhwrWka/PI2cali7O
+CIelAwhDiBePaRO9OI41gXg0hzw23JTfcfUXABhAjNDmtKu7VdjQJ05RhDjajisy
+X0m96izR97WzXBR+to0sRKuCQaDBLHuJQ+I7udFqC0nCM84tAhxVpMotA1NypiCX
+AugjOQWuUFEaugxLu0wmnGSz8j/k5rrHx73tb7LcZBbk9c3d/NeXjUkDB9TCe8wh
+OXSgU9ijO10Wmms4OXuQRos4yUKI6H1KgV+BHJiOReSbG0ErFtfgpwu55DzkNS5s
+z1qORXdzgTBERDcUhxSI4insQB1xVA==
+=nuGp
+-----END PGP SIGNATURE-----
 
-LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0NCg0KaVFJekJBRUJDZ0FkRmlFRWhaZlU5Nkl1
-cHJ2aUxkZUxEOU9MQ1F1bVFyY0ZBbUpvOGFRQUNna1FEOU9MQ1F1bQ0KUXJlYm1BLzlHeDV5M2NG
-V1Uvd3dsUXQrM3dQcUlXNndJWEV4UWxLdEdueVJiMEhka1gwakxBWXJna29OYldaTw0KbC9GdXZz
-RVg5T0Qya3JWWUFEWElLSExFdVVVbnc1bHlGT3Vvd2UzalE0YWhYSGVJc3FPYmp2ZEpKQUh3OWd4
-Yw0KeGpXYmpIRC9kQ0dtcmpaNjZUWHBzY0hhRmN4YnQvVXBxVjRLd1BiRzRoY0U4cFduV2ZSYis3
-eG9Ib0NhaGg3ZA0KVVY2RVVBS0pZNWg0bFNsWG40T2ttWW9tRXlDT2RKbXM2bmluZDNTbXZWV1lw
-TlZxU1diRmtQWTRqOFpIenVrTQ0KMXVXNHpaYityL01CaGprUTV5Q3VGbmYwcys5NnR5OVRBVnoz
-VGdmdWwvUTl1bGlPTmJVenBoNHRrRm9MenRoeg0KOVpmT3RHODFHbnpjRGczL3E3b0pwRXYvUzNq
-K1NxQ2FUUWRIVzJZSFBKSmMrbzFoQ3J4OFNYdUVhbDNHdHlueA0Kc1MzQkh0eUtEdUhrYmt4b1Qw
-dXJtZkdDYW1HVDlEM21tOEptd0tXdy81aFlHSWwrdzFIZ3B5Qm92eno1Y0cveg0KL2gyN3l4bUli
-YkVEdHFnZFVQVS9XcjNaL2s1cWZCQjFDZGE5L0g5dWx1Zmw2bzRUZ3RUdzl5d3k4QkQ2L3BuYw0K
-V1VZSjdLRHJZU1pwZ3ZQRlR2Um40N3NhbHpBbmt2RHZ2a2krN0x5ZlV1dkJObVBLUEVhL2t4Ymlm
-UW9tNW9ScA0KNUE0eHJhRm5OY2FhTDVaMmU1YzlKSDlwRzVGQWJsK1VmVmI2MkJKeGovMlEzVVBE
-ZmVkSUtpa0J0WUNUc2VDTg0Kc1pySGZBMTN1QmRNaTM3R1VVRDZVNGE1dy94NFdXTHVBUENIZEhs
-WVk5YlNYb0VObEE0PQ0KPVczZ04NCi0tLS0tRU5EIFBHUCBTSUdOQVRVUkUtLS0tLQ0K
-
---b1_xJCHnbO4zpyNtxSqi4ebN97ZiN1dTAelSXPpKazELCM--
-
+--ijcDL19LA/Jv/8hr--

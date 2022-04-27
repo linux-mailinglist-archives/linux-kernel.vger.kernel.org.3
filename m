@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A57511905
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B547511B37
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234828AbiD0Mwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S234844AbiD0M4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiD0Mwv (ORCPT
+        with ESMTP id S234805AbiD0Mz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:52:51 -0400
+        Wed, 27 Apr 2022 08:55:59 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBB32BFC2E;
-        Wed, 27 Apr 2022 05:49:36 -0700 (PDT)
-X-UUID: f319f698508f4df18e5397f555705c36-20220427
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D2F186F3;
+        Wed, 27 Apr 2022 05:52:47 -0700 (PDT)
+X-UUID: 1d2e14fa2b7f4688a6cc58ce670cfe97-20220427
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b8a58ba0-fdd8-4603-ba32-bfb24066b7f4,OB:30,L
-        OB:10,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ha
-        m,ACTION:release,TS:80
-X-CID-INFO: VERSION:1.1.4,REQID:b8a58ba0-fdd8-4603-ba32-bfb24066b7f4,OB:30,LOB
-        :10,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3
-        D,ACTION:quarantine,TS:80
-X-CID-META: VersionHash:faefae9,CLOUDID:c1aee82e-6199-437e-8ab4-9920b4bc5b76,C
+X-CID-O-INFO: VERSION:1.1.4,REQID:cb063862-c86e-43c6-a514-bb431420886e,OB:40,L
+        OB:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,
+        ACTION:release,TS:100
+X-CID-INFO: VERSION:1.1.4,REQID:cb063862-c86e-43c6-a514-bb431420886e,OB:40,LOB
+        :20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,
+        ACTION:quarantine,TS:100
+X-CID-META: VersionHash:faefae9,CLOUDID:3bbee82e-6199-437e-8ab4-9920b4bc5b76,C
         OID:414e160774dc,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,File:nil
         ,QS:0,BEC:nil
-X-UUID: f319f698508f4df18e5397f555705c36-20220427
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: 1d2e14fa2b7f4688a6cc58ce670cfe97-20220427
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1677077419; Wed, 27 Apr 2022 20:49:30 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2096435990; Wed, 27 Apr 2022 20:52:44 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 27 Apr 2022 20:48:07 +0800
+ Wed, 27 Apr 2022 20:48:11 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 27 Apr 2022 20:48:07 +0800
+ Transport; Wed, 27 Apr 2022 20:48:11 +0800
 From:   Sam Shih <sam.shih@mediatek.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -47,11 +47,10 @@ To:     Rob Herring <robh+dt@kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 CC:     John Crispin <john@phrozen.org>, Ryder Lee <ryder.lee@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Jieyy Yang <jieyy.yang@mediatek.com>
-Subject: [PATCH 3/5] arm64: dts: mt7986: add pcie related device nodes
-Date:   Wed, 27 Apr 2022 20:47:39 +0800
-Message-ID: <20220427124741.18245-4-sam.shih@mediatek.com>
+        "Sam Shih" <sam.shih@mediatek.com>
+Subject: [PATCH 4/5] arm64: dts: mt7986: add usb related device nodes
+Date:   Wed, 27 Apr 2022 20:47:40 +0800
+Message-ID: <20220427124741.18245-5-sam.shih@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220427124741.18245-1-sam.shih@mediatek.com>
 References: <20220427124741.18245-1-sam.shih@mediatek.com>
@@ -67,96 +66,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds PCIe support for MT7986.
+This patch adds USB support for MT7986.
 
-Signed-off-by: Jieyy Yang <jieyy.yang@mediatek.com>
 Signed-off-by: Sam Shih <sam.shih@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 17 +++++++
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 52 ++++++++++++++++++++
- 2 files changed, 69 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 28 ++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 55 ++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 28 ++++++++++
+ 3 files changed, 111 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-index eb14e82d74b1..4a555df1eff4 100644
+index 4a555df1eff4..de6475078568 100644
 --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-@@ -25,7 +25,24 @@
+@@ -23,6 +23,24 @@
+ 		device_type = "memory";
+ 		reg = <0 0x40000000 0 0x40000000>;
  	};
- };
- 
-+&pcie {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie_pins>;
-+	status = "okay";
-+};
 +
-+&pcie_phy {
-+	status = "okay";
-+};
-+
- &pio {
-+	pcie_pins: pcie-pins {
-+		mux {
-+			function = "pcie";
-+			groups = "pcie_clk", "pcie_wake", "pcie_pereset";
-+		};
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-name = "fixed-3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++		regulator-always-on;
 +	};
 +
- 	spi_flash_pins: spi-flash-pins {
- 		mux {
- 			function = "spi";
++	reg_5v: regulator-5v {
++		compatible = "regulator-fixed";
++		regulator-name = "fixed-5V";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
+ };
+ 
+ &pcie {
+@@ -93,6 +111,12 @@
+ 	status = "okay";
+ };
+ 
++&ssusb {
++	vusb33-supply = <&reg_3p3v>;
++	vbus-supply = <&reg_5v>;
++	status = "okay";
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
+@@ -108,3 +132,7 @@
+ 	pinctrl-0 = <&uart2_pins>;
+ 	status = "okay";
+ };
++
++&usb_phy {
++	status = "okay";
++};
 diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index 069d3a9bdac9..7d77b5727528 100644
+index 7d77b5727528..ff685900baa4 100644
 --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/mt7986-clk.h>
-+#include <dt-bindings/phy/phy.h>
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -240,6 +241,57 @@
+@@ -241,6 +241,29 @@
  			status = "disabled";
  		};
  
-+		pcie: pcie@11280000 {
-+			compatible = "mediatek,mt7986-pcie",
-+				     "mediatek,mt8192-pcie";
-+			device_type = "pci";
-+			#address-cells = <3>;
-+			#size-cells = <2>;
-+			reg = <0x00 0x11280000 0x00 0x4000>;
-+			reg-names = "pcie-mac";
-+			interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>;
-+			bus-range = <0x00 0xff>;
-+			ranges = <0x82000000 0x00 0x20000000 0x00
-+				  0x20000000 0x00 0x10000000>;
-+			clocks = <&infracfg CLK_INFRA_PCIE_SEL>,
-+				 <&infracfg CLK_INFRA_IPCIE_CK>,
-+				 <&infracfg CLK_INFRA_IPCIE_PIPE_CK>,
-+				 <&infracfg CLK_INFRA_IPCIER_CK>,
-+				 <&infracfg CLK_INFRA_IPCIEB_CK>;
++		ssusb: usb@11200000 {
++			compatible = "mediatek,mt7986-xhci",
++				     "mediatek,mtk-xhci";
++			reg = <0 0x11200000 0 0x2e00>,
++			      <0 0x11203e00 0 0x0100>;
++			reg-names = "mac", "ippc";
++			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&infracfg CLK_INFRA_IUSB_SYS_CK>,
++				 <&topckgen CLK_TOP_U2U3_XHCI_SEL>,
++				 <&infracfg CLK_INFRA_IUSB_CK>,
++				 <&infracfg CLK_INFRA_IUSB_133_CK>,
++				 <&infracfg CLK_INFRA_IUSB_66M_CK>;
++			clock-names = "sys_ck",
++				      "xhci_ck",
++				      "ref_ck",
++				      "mcu_ck",
++				      "dma_ck";
++			phys = <&u2port0 PHY_TYPE_USB2>,
++			       <&u3port0 PHY_TYPE_USB3>,
++			       <&u2port1 PHY_TYPE_USB2>;
 +			status = "disabled";
-+
-+			phys = <&pcie_port PHY_TYPE_PCIE>;
-+			phy-names = "pcie-phy";
-+
-+			#interrupt-cells = <1>;
-+			interrupt-map-mask = <0 0 0 0x7>;
-+			interrupt-map = <0 0 0 1 &pcie_intc 0>,
-+					<0 0 0 2 &pcie_intc 1>,
-+					<0 0 0 3 &pcie_intc 2>,
-+					<0 0 0 4 &pcie_intc 3>;
-+			pcie_intc: interrupt-controller {
-+				#address-cells = <0>;
-+				#interrupt-cells = <1>;
-+				interrupt-controller;
-+			};
 +		};
 +
-+		pcie_phy: t-phy@11c00000 {
+ 		pcie: pcie@11280000 {
+ 			compatible = "mediatek,mt7986-pcie",
+ 				     "mediatek,mt8192-pcie";
+@@ -292,6 +315,38 @@
+ 			};
+ 		};
+ 
++		usb_phy: t-phy@11e10000 {
 +			compatible = "mediatek,mt7986-tphy",
 +				     "mediatek,generic-tphy-v2";
 +			#address-cells = <2>;
@@ -164,10 +171,26 @@ index 069d3a9bdac9..7d77b5727528 100644
 +			ranges;
 +			status = "disabled";
 +
-+			pcie_port: pcie-phy@11c00000 {
-+				reg = <0 0x11c00000 0 0x20000>;
-+				clocks = <&clk40m>;
++			u2port0: usb-phy@11e10000 {
++				reg = <0 0x11e10000 0 0x700>;
++				clocks = <&topckgen CLK_TOP_DA_U2_REFSEL>,
++					 <&topckgen CLK_TOP_DA_U2_CK_1P_SEL>;
++				clock-names = "ref", "da_ref";
++				#phy-cells = <1>;
++			};
++
++			u3port0: usb-phy@11e10700 {
++				reg = <0 0x11e10700 0 0x900>;
++				clocks = <&topckgen CLK_TOP_USB3_PHY_SEL>;
 +				clock-names = "ref";
++				#phy-cells = <1>;
++			};
++
++			u2port1: usb-phy@11e11000 {
++				reg = <0 0x11e11000 0 0x700>;
++				clocks = <&topckgen CLK_TOP_DA_U2_REFSEL>,
++					 <&topckgen CLK_TOP_DA_U2_CK_1P_SEL>;
++				clock-names = "ref", "da_ref";
 +				#phy-cells = <1>;
 +			};
 +		};
@@ -175,6 +198,52 @@ index 069d3a9bdac9..7d77b5727528 100644
  		ethsys: syscon@15000000 {
  			 #address-cells = <1>;
  			 #size-cells = <1>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+index f159f1ac618b..6bd477e1f484 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+@@ -23,6 +23,24 @@
+ 		device_type = "memory";
+ 		reg = <0 0x40000000 0 0x40000000>;
+ 	};
++
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-name = "fixed-3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
++
++	reg_5v: regulator-5v {
++		compatible = "regulator-fixed";
++		regulator-name = "fixed-5V";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
+ };
+ 
+ &pio {
+@@ -62,6 +80,16 @@
+ 	status = "okay";
+ };
+ 
++&ssusb {
++	vusb33-supply = <&reg_3p3v>;
++	vbus-supply = <&reg_5v>;
++	status = "okay";
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
++
++&usb_phy {
++	status = "okay";
++};
 -- 
 2.18.0
 

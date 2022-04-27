@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4568E512432
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BFD512438
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiD0VFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S232819AbiD0VHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiD0VFL (ORCPT
+        with ESMTP id S229965AbiD0VHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:05:11 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7A2BF43;
-        Wed, 27 Apr 2022 14:01:58 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id d23-20020a17090a115700b001d2bde6c234so4491202pje.1;
-        Wed, 27 Apr 2022 14:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DqYFNy0Ye1hG0JvZqo/UaJOYPE63YVH9ZWtIRJQCusE=;
-        b=XQLshbFroY/oV5ijkx6Jh5DxQyHuOqj2ianmBSoFT+s6hC/g6qq91dNna3cR24DCdj
-         4jI2UzB0lDjDClKeu3wVpDkKT9CgW5SGiOeYulemQwJAL94tLwkZ9BqD7N/ayIY01W66
-         RHG7Z53plRevZQRErpmKz7AxHUUDNybKQYZzxEIC+G35RUrxDqjnWLKWQDowOmNrFqI4
-         nzbvYc0swtbUGueZbtgttFuKKin+3PoqpVsbDAofEcS+t9H8+YUUCi92N6EU0gjjhMms
-         x1xY6UABX9aBNVrq5dmv1pOrj38SuNUicZ6xgQo35x9hv42UjhdT+daYI+ANNFk1WukP
-         edWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DqYFNy0Ye1hG0JvZqo/UaJOYPE63YVH9ZWtIRJQCusE=;
-        b=N5OUJ0uruDRmCYAxttEEFcWWbuE0zJ1VHkIiY3J6COgP6I79T3Bbs8oW/bDB9N2Y8a
-         1LJks5GOdyO0v2XHXR4CYYkdORE/AMm6bh20QhFYhVvIJ6xIHPQ7/4ADSvS2cXRl0MnS
-         ZWtf3bdHxH0qjU2goDLBlCN/+ETgF4rfq7b2bB7/Kl/iCHewThHbd0Y065ev1T71/5D3
-         7oMvV8wPAen6rwdskSKGWyYgjmxFTpYuc0fB1kj4zlqZx7VPQPcdfFZp3HjwlwkdLOqS
-         hj7KfPFu9BQzeCsrrT2Rb2o9hw5y+l8ICFVaEO5/Bf/Sm47r0tEp9OJRXg60vV4IfBPL
-         wC8g==
-X-Gm-Message-State: AOAM533CoDlArrE5cAQESANZl/2FhtLVn2tode0h2jVZZag3FkkqsWLz
-        9hP2u9l+Q2Qs6kqKzT/D12oGIQABiEUHW95PSB4=
-X-Google-Smtp-Source: ABdhPJxpuB5tajITNAXKzFz4oroSs+BVtuP2/qtQEvVhRgsZMYpDDRUxPfKPCeC0hQ+aGsaNXz8nOdpgl9J6OPUDxg4=
-X-Received: by 2002:a17:90b:1d0e:b0:1d2:79e9:21aa with SMTP id
- on14-20020a17090b1d0e00b001d279e921aamr45334321pjb.153.1651093318360; Wed, 27
- Apr 2022 14:01:58 -0700 (PDT)
+        Wed, 27 Apr 2022 17:07:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652DD38B9;
+        Wed, 27 Apr 2022 14:03:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7908E61D92;
+        Wed, 27 Apr 2022 21:03:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6353C385A7;
+        Wed, 27 Apr 2022 21:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651093430;
+        bh=EXkPPwFcpeWT8TP+jJ4voP6uahjnNmfSRZbq7nYktMs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rZYfMZANmHJjQ3LiJ8AucJyHp82yFWe6DOKSEf/M1URkUYhpSki5NKq3QvJuqk9/s
+         NlFFgZtwU6W736FaniaBF4XQeiS/ajAftKXBDeEPAIJYcQiszAaCZSzqFAHSlU7a8l
+         zGz1GLlgTqj8eOAqZbKQH3W0wwjqWnyTZtIqVCJwAkA8xm/rfyctInH2hIpbUpZ1bs
+         dInMcvfCVSGuuHFQRSVSX0AYgPLF5cu15nA9q23di+vBADhyUKcX9r9P+m5SDSgLNQ
+         505yK4Lr5VQhCWPMoCo6yjHev8M1/KPidTIgP/5d6vt5XSf8d+nCkRdC5p1teKskv6
+         E9yjKYMG15k2w==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCHv3 bpf-next 0/5] bpf: Speed up symbol resolving in kprobe multi link
+Date:   Wed, 27 Apr 2022 23:03:40 +0200
+Message-Id: <20220427210345.455611-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220420211105.14654-1-jagathjog1996@gmail.com>
- <20220420211105.14654-6-jagathjog1996@gmail.com> <CAHp75Ve8mruPEyorSmydAHM27rnL9Wv+qNdWyQ9tVxz-+JJYiQ@mail.gmail.com>
-In-Reply-To: <CAHp75Ve8mruPEyorSmydAHM27rnL9Wv+qNdWyQ9tVxz-+JJYiQ@mail.gmail.com>
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-Date:   Thu, 28 Apr 2022 02:31:47 +0530
-Message-ID: <CAM+2EuJ3n4RVHVh9ZH-HkkjUm+zLLt=g34H5aOxPiDW673NOrw@mail.gmail.com>
-Subject: Re: [PATCH v4 5/9] iio: accel: bma400: Add separate channel for step counter
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+hi,
+sending additional fix for symbol resolving in kprobe multi link
+requested by Alexei and Andrii [1].
 
-On Wed, Apr 27, 2022 at 6:04 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Apr 20, 2022 at 11:11 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >
-> > Added channel for step counter which can be enable or disable
-> > through the sysfs interface.
->
-> ...
->
-> > +static int bma400_enable_steps(struct bma400_data *data, int val)
-> > +{
-> > +       int ret;
-> > +
-> > +       if (data->steps_enabled == val)
-> > +               return 0;
-> > +
-> > +       ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG1_REG,
-> > +                                BMA400_STEP_INT_MSK,
-> > +                                FIELD_PREP(BMA400_STEP_INT_MSK, !!val));
->
-> > +       data->steps_enabled = val;
->
-> This will update the value even if we got an error and actual device
-> state is unknown here. Does this make sense?
+This speeds up bpftrace kprobe attachment, when using pure symbols
+(3344 symbols) to attach:
 
-I will correct this in the next series.
+Before:
 
->
-> > +       return ret;
-> > +}
->
-> ...
->
-> I perhaps missed why kmalloc() is needed now. Any pointers to the discussion?
+  # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+  ...
+  6.5681 +- 0.0225 seconds time elapsed  ( +-  0.34% )
 
-Here step is a 24-bit value and since this is a sysfs channel read (slow path),
-kmalloc() is used to make the buffer DMA safe to read the multibyte value
-using regmap_bulk_read().
+After:
 
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+  # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+  ...
+  0.5661 +- 0.0275 seconds time elapsed  ( +-  4.85% )
 
-Thank you,
-Jagath
+v3 changes:
+  - renamed kallsyms_lookup_names to ftrace_lookup_symbols
+    and moved it to ftrace.c [Masami]
+  - added ack [Andrii]
+  - couple small test fixes [Andrii]
+
+v2 changes (first version [2]):
+  - removed the 2 seconds check [Alexei]
+  - moving/forcing symbols sorting out of kallsyms_lookup_names function [Alexei]
+  - skipping one array allocation and copy_from_user [Andrii]
+  - several small fixes [Masami,Andrii]
+  - build fix [kernel test robot]
+
+thanks,
+jirka
+
+
+[1] https://lore.kernel.org/bpf/CAEf4BzZtQaiUxQ-sm_hH2qKPRaqGHyOfEsW96DxtBHRaKLoL3Q@mail.gmail.com/
+[2] https://lore.kernel.org/bpf/20220407125224.310255-1-jolsa@kernel.org/
+---
+Jiri Olsa (5):
+      kallsyms: Fully export kallsyms_on_each_symbol function
+      ftrace: Add ftrace_lookup_symbols function
+      fprobe: Resolve symbols with ftrace_lookup_symbols
+      bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
+      selftests/bpf: Add attach bench test
+
+ include/linux/ftrace.h                                     |   6 ++++++
+ include/linux/kallsyms.h                                   |   5 +++++
+ kernel/kallsyms.c                                          |   3 +--
+ kernel/trace/bpf_trace.c                                   | 112 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------
+ kernel/trace/fprobe.c                                      |  32 ++++++++++++--------------------
+ kernel/trace/ftrace.c                                      |  62 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 133 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kprobe_multi_empty.c     |  12 ++++++++++++
+ 8 files changed, 297 insertions(+), 68 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c

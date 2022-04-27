@@ -2,400 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E355117A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C33F5117AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiD0MjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S234498AbiD0Mkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbiD0Mir (ORCPT
+        with ESMTP id S234504AbiD0Mku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:38:47 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6043D48A;
-        Wed, 27 Apr 2022 05:35:34 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id kq17so3128724ejb.4;
-        Wed, 27 Apr 2022 05:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zEtwECq38nYRyfITY3UIJzQGx4SloOcHex4sI8pDGK8=;
-        b=D6dkGyAmnmDWsov+jU2cho0/U0CBDWFjzyv2TTUGtsGrSzSGl0MtIzBsGDagelRVdW
-         WbDCqe7Ox/YdDOzwosSL+87/NXaPlPkqx+W1qvTmLGxmgrm2oxXvZrYpolbEbpZCWyZG
-         6hDbJVlAS/jY2ymJYcYz8Ig8HkehOc4CxdNiH8bw1xKTSFB6atwXCm7EW3T0+cIeaSgf
-         sION0ljHf1RK1B4THC6eP/VFNHIF6cXILhNBfSbzfVNnhz+Iy4vKaZpiUFWWqNcpDzw1
-         BKCSXOyGx3EoSAHUj4Rwt2Q8+YnciX7/5TUQ/3ieLAvSLrBoa9BN3lsIUvdtkGzyPrbb
-         GL9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zEtwECq38nYRyfITY3UIJzQGx4SloOcHex4sI8pDGK8=;
-        b=H04FPQHOqc4PVjYClpO2uaNxHkbDkwb0LnWp2BirnkmugxgdXU4PZdJLVtE4kj1YgE
-         vGdQ4w4lpjQz/94VQexzt9yAAZebCzA1tVnvjT1wunzHgNhpvdR0YJ/hwagspB1k0QBJ
-         i3Sxv1ME6HTShvD3C+vxPaHvvrUuNX+wdwi00oBtMbreRKgKPunSj331GtQfLBS3Jaft
-         uljDOT9czRT59c+CD1D7/iSEPAfu9t2qk7Bant71TvsPk70vOXCOGjea3OWIfoEoht7U
-         qO6boB0i7jf9QKxMOF2Y204uek9rVqxdNse9iXIA0HCO5esIfwhuLxi72x9oHulP3sFt
-         rmLQ==
-X-Gm-Message-State: AOAM5321ZkKPeuV9ZolAZLI5pYOyiBJlSa/1q81MoIDt0frd7dWO1WgE
-        9wIrVKJQ4eyYAb6xbaKdAKUHmX1JBqkA8i4TZVXDgosf7kIavjin
-X-Google-Smtp-Source: ABdhPJwQUCCD6rszL/RzgM9jE6+191e1/Xrsg9Q/Eu0n9Y+x+ASwRpGp6wamtFhwUBL/15gnDGno2boQ2p3VpCpXJWs=
-X-Received: by 2002:a17:906:3799:b0:6ec:d25:3afe with SMTP id
- n25-20020a170906379900b006ec0d253afemr26457664ejc.44.1651062933392; Wed, 27
- Apr 2022 05:35:33 -0700 (PDT)
+        Wed, 27 Apr 2022 08:40:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549FC56231;
+        Wed, 27 Apr 2022 05:37:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B6DD5210EE;
+        Wed, 27 Apr 2022 12:37:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651063053; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d22YrOMPBSG2LqHBjxLzc0tJfU7q81NPH2zO5tSL0mM=;
+        b=q06ozFDFlaFSTobMQ3P/xZuon2vddB3c0eG1Eo0R4D4mYhCCCGMzY7stC9ykSNGY+myWq9
+        rteYXR3odqwpyzFZhoNlJ747E68r2Sbvc6Z3GtEAbfm9yJXDdNxeNzNqDf0geOtV2vXZUy
+        IL+n+/zq+cXUXm+HBmiQLhY+Yypu5Yk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EC00013A39;
+        Wed, 27 Apr 2022 12:37:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id puMuOAw5aWLKQAAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 27 Apr 2022 12:37:32 +0000
+Message-ID: <2a340424-29e6-8ad8-0181-f70450eecb80@suse.com>
+Date:   Wed, 27 Apr 2022 14:37:32 +0200
 MIME-Version: 1.0
-References: <20220420211105.14654-1-jagathjog1996@gmail.com> <20220420211105.14654-5-jagathjog1996@gmail.com>
-In-Reply-To: <20220420211105.14654-5-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 27 Apr 2022 14:34:57 +0200
-Message-ID: <CAHp75Vf5pS_TGm5ptN7TyNmhZe_Oz8pVmETT27VeC=BZk9+ezg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/9] iio: accel: bma400: Add triggered buffer support
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+References: <20220426134021.11210-1-jgross@suse.com>
+ <20220426134021.11210-3-jgross@suse.com> <Ymgtb2dSNYz7DBqx@zn.tnic>
+ <1c1a4a7d-a273-c3b0-3683-195f6e09a027@suse.com> <Ymk2/N/DdAyxQnV0@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH 2/2] virtio: replace
+ arch_has_restricted_virtio_memory_access()
+In-Reply-To: <Ymk2/N/DdAyxQnV0@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------4yxVWCWCnmvq93XMZ043V0iC"
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 11:11 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
->
-> Added trigger buffer support to read continuous acceleration
-> data from device with data ready interrupt which is mapped
-> to INT1 pin.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------4yxVWCWCnmvq93XMZ043V0iC
+Content-Type: multipart/mixed; boundary="------------Yxp0WC7XOxZjxaCFpkqA4mo2";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>, Tom Lendacky <thomas.lendacky@amd.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, Arnd Bergmann <arnd@arndb.de>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>,
+ Stephen Hemminger <sthemmin@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ Christoph Hellwig <hch@infradead.org>,
+ Oleksandr Tyshchenko <olekstysh@gmail.com>
+Message-ID: <2a340424-29e6-8ad8-0181-f70450eecb80@suse.com>
+Subject: Re: [PATCH 2/2] virtio: replace
+ arch_has_restricted_virtio_memory_access()
+References: <20220426134021.11210-1-jgross@suse.com>
+ <20220426134021.11210-3-jgross@suse.com> <Ymgtb2dSNYz7DBqx@zn.tnic>
+ <1c1a4a7d-a273-c3b0-3683-195f6e09a027@suse.com> <Ymk2/N/DdAyxQnV0@zn.tnic>
+In-Reply-To: <Ymk2/N/DdAyxQnV0@zn.tnic>
 
-LGTM,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+--------------Yxp0WC7XOxZjxaCFpkqA4mo2
+Content-Type: multipart/mixed; boundary="------------oWVjbTvpdC4UikamiFuIK0Ns"
 
-> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> ---
->  drivers/iio/accel/Kconfig       |   2 +
->  drivers/iio/accel/bma400.h      |  10 +-
->  drivers/iio/accel/bma400_core.c | 162 +++++++++++++++++++++++++++++++-
->  drivers/iio/accel/bma400_i2c.c  |   2 +-
->  drivers/iio/accel/bma400_spi.c  |   2 +-
->  5 files changed, 170 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
-> index eac3f02662ae..958097814232 100644
-> --- a/drivers/iio/accel/Kconfig
-> +++ b/drivers/iio/accel/Kconfig
-> @@ -204,6 +204,8 @@ config BMA220
->  config BMA400
->         tristate "Bosch BMA400 3-Axis Accelerometer Driver"
->         select REGMAP
-> +       select IIO_BUFFER
-> +       select IIO_TRIGGERED_BUFFER
->         select BMA400_I2C if I2C
->         select BMA400_SPI if SPI
->         help
-> diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> index 1c8c47a9a317..907e1a6c0a38 100644
-> --- a/drivers/iio/accel/bma400.h
-> +++ b/drivers/iio/accel/bma400.h
-> @@ -62,6 +62,13 @@
->  #define BMA400_ACC_CONFIG2_REG      0x1b
->  #define BMA400_CMD_REG              0x7e
->
-> +/* Interrupt registers */
-> +#define BMA400_INT_CONFIG0_REG     0x1f
-> +#define BMA400_INT_CONFIG1_REG     0x20
-> +#define BMA400_INT1_MAP_REG        0x21
-> +#define BMA400_INT_IO_CTRL_REG     0x24
-> +#define BMA400_INT_DRDY_MSK        BIT(7)
-> +
->  /* Chip ID of BMA 400 devices found in the chip ID register. */
->  #define BMA400_ID_REG_VAL           0x90
->
-> @@ -111,6 +118,7 @@
->
->  extern const struct regmap_config bma400_regmap_config;
->
-> -int bma400_probe(struct device *dev, struct regmap *regmap, const char *name);
-> +int bma400_probe(struct device *dev, struct regmap *regmap, int irq,
-> +                const char *name);
->
->  #endif
-> diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-> index 07674d89d978..57910ccf9180 100644
-> --- a/drivers/iio/accel/bma400_core.c
-> +++ b/drivers/iio/accel/bma400_core.c
-> @@ -11,6 +11,7 @@
->   *  - Create channel for sensor time
->   */
->
-> +#include <linux/bitfield.h>
->  #include <linux/bitops.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> @@ -20,6 +21,10 @@
->  #include <linux/regulator/consumer.h>
->
->  #include <linux/iio/iio.h>
-> +#include <linux/iio/buffer.h>
-> +#include <linux/iio/trigger.h>
-> +#include <linux/iio/trigger_consumer.h>
-> +#include <linux/iio/triggered_buffer.h>
->
->  #include "bma400.h"
->
-> @@ -61,6 +66,14 @@ struct bma400_data {
->         struct bma400_sample_freq sample_freq;
->         int oversampling_ratio;
->         int scale;
-> +       struct iio_trigger *trig;
-> +       /* Correct time stamp alignment */
-> +       struct {
-> +               __le16 buff[3];
-> +               u8 temperature;
-> +               s64 ts __aligned(8);
-> +       } buffer ____cacheline_aligned;
-> +       __le16 status;
->  };
->
->  static bool bma400_is_writable_reg(struct device *dev, unsigned int reg)
-> @@ -152,7 +165,7 @@ static const struct iio_chan_spec_ext_info bma400_ext_info[] = {
->         { }
->  };
->
-> -#define BMA400_ACC_CHANNEL(_axis) { \
-> +#define BMA400_ACC_CHANNEL(_index, _axis) { \
->         .type = IIO_ACCEL, \
->         .modified = 1, \
->         .channel2 = IIO_MOD_##_axis, \
-> @@ -164,17 +177,32 @@ static const struct iio_chan_spec_ext_info bma400_ext_info[] = {
->                 BIT(IIO_CHAN_INFO_SCALE) | \
->                 BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO), \
->         .ext_info = bma400_ext_info, \
-> +       .scan_index = _index,   \
-> +       .scan_type = {          \
-> +               .sign = 's',    \
-> +               .realbits = 12,         \
-> +               .storagebits = 16,      \
-> +               .endianness = IIO_LE,   \
-> +       },                              \
->  }
->
->  static const struct iio_chan_spec bma400_channels[] = {
-> -       BMA400_ACC_CHANNEL(X),
-> -       BMA400_ACC_CHANNEL(Y),
-> -       BMA400_ACC_CHANNEL(Z),
-> +       BMA400_ACC_CHANNEL(0, X),
-> +       BMA400_ACC_CHANNEL(1, Y),
-> +       BMA400_ACC_CHANNEL(2, Z),
->         {
->                 .type = IIO_TEMP,
->                 .info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
->                 .info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SAMP_FREQ),
-> +               .scan_index = 3,
-> +               .scan_type = {
-> +                       .sign = 's',
-> +                       .realbits = 8,
-> +                       .storagebits = 8,
-> +                       .endianness = IIO_LE,
-> +               },
->         },
-> +       IIO_CHAN_SOFT_TIMESTAMP(4),
->  };
->
->  static int bma400_get_temp_reg(struct bma400_data *data, int *val, int *val2)
-> @@ -659,6 +687,10 @@ static int bma400_init(struct bma400_data *data)
->         if (ret)
->                 return ret;
->
-> +       /* Configure INT1 pin to open drain */
-> +       ret = regmap_write(data->regmap, BMA400_INT_IO_CTRL_REG, 0x06);
-> +       if (ret)
-> +               return ret;
->         /*
->          * Once the interrupt engine is supported we might use the
->          * data_src_reg, but for now ensure this is set to the
-> @@ -807,6 +839,29 @@ static int bma400_write_raw_get_fmt(struct iio_dev *indio_dev,
->         }
->  }
->
-> +static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
-> +                                            bool state)
-> +{
-> +       struct iio_dev *indio_dev = iio_trigger_get_drvdata(trig);
-> +       struct bma400_data *data = iio_priv(indio_dev);
-> +       int ret;
-> +
-> +       ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG,
-> +                                BMA400_INT_DRDY_MSK,
-> +                                FIELD_PREP(BMA400_INT_DRDY_MSK, state));
-> +       if (ret)
-> +               return ret;
-> +
-> +       return regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG,
-> +                                 BMA400_INT_DRDY_MSK,
-> +                                 FIELD_PREP(BMA400_INT_DRDY_MSK, state));
-> +}
-> +
-> +static const unsigned long bma400_avail_scan_masks[] = {
-> +       GENMASK(3, 0),
-> +       0
-> +};
-> +
->  static const struct iio_info bma400_info = {
->         .read_raw          = bma400_read_raw,
->         .read_avail        = bma400_read_avail,
-> @@ -814,7 +869,72 @@ static const struct iio_info bma400_info = {
->         .write_raw_get_fmt = bma400_write_raw_get_fmt,
->  };
->
-> -int bma400_probe(struct device *dev, struct regmap *regmap, const char *name)
-> +static const struct iio_trigger_ops bma400_trigger_ops = {
-> +       .set_trigger_state = &bma400_data_rdy_trigger_set_state,
-> +       .validate_device = &iio_trigger_validate_own_device,
-> +};
-> +
-> +static irqreturn_t bma400_trigger_handler(int irq, void *p)
-> +{
-> +       struct iio_poll_func *pf = p;
-> +       struct iio_dev *indio_dev = pf->indio_dev;
-> +       struct bma400_data *data = iio_priv(indio_dev);
-> +       int ret, temp;
-> +
-> +       /* Lock to protect the data->buffer */
-> +       mutex_lock(&data->mutex);
-> +
-> +       /* bulk read six registers, with the base being the LSB register */
-> +       ret = regmap_bulk_read(data->regmap, BMA400_X_AXIS_LSB_REG,
-> +                              &data->buffer.buff, sizeof(data->buffer.buff));
-> +       if (ret)
-> +               goto unlock_err;
-> +
-> +       ret = regmap_read(data->regmap, BMA400_TEMP_DATA_REG, &temp);
-> +       if (ret)
-> +               goto unlock_err;
-> +
-> +       data->buffer.temperature = temp;
-> +
-> +       iio_push_to_buffers_with_timestamp(indio_dev, &data->buffer,
-> +                                          iio_get_time_ns(indio_dev));
-> +
-> +       mutex_unlock(&data->mutex);
-> +       iio_trigger_notify_done(indio_dev->trig);
-> +       return IRQ_HANDLED;
-> +
-> +unlock_err:
-> +       mutex_unlock(&data->mutex);
-> +       return IRQ_NONE;
-> +}
-> +
-> +static irqreturn_t bma400_interrupt(int irq, void *private)
-> +{
-> +       struct iio_dev *indio_dev = private;
-> +       struct bma400_data *data = iio_priv(indio_dev);
-> +       int ret;
-> +
-> +       /* Lock to protect the data->status */
-> +       mutex_lock(&data->mutex);
-> +       ret = regmap_bulk_read(data->regmap, BMA400_INT_STAT0_REG,
-> +                              &data->status,
-> +                              sizeof(data->status));
-> +       if (ret)
-> +               goto unlock_err;
-> +
-> +       if (FIELD_GET(BMA400_INT_DRDY_MSK, le16_to_cpu(data->status))) {
-> +               mutex_unlock(&data->mutex);
-> +               iio_trigger_poll_chained(data->trig);
-> +               return IRQ_HANDLED;
-> +       }
-> +
-> +unlock_err:
-> +       mutex_unlock(&data->mutex);
-> +       return IRQ_NONE;
-> +}
-> +
-> +int bma400_probe(struct device *dev, struct regmap *regmap, int irq,
-> +                const char *name)
->  {
->         struct iio_dev *indio_dev;
->         struct bma400_data *data;
-> @@ -841,8 +961,40 @@ int bma400_probe(struct device *dev, struct regmap *regmap, const char *name)
->         indio_dev->info = &bma400_info;
->         indio_dev->channels = bma400_channels;
->         indio_dev->num_channels = ARRAY_SIZE(bma400_channels);
-> +       indio_dev->available_scan_masks = bma400_avail_scan_masks;
->         indio_dev->modes = INDIO_DIRECT_MODE;
->
-> +       if (irq > 0) {
-> +               data->trig = devm_iio_trigger_alloc(dev, "%s-dev%d",
-> +                                                   indio_dev->name,
-> +                                                   iio_device_id(indio_dev));
-> +               if (!data->trig)
-> +                       return -ENOMEM;
-> +
-> +               data->trig->ops = &bma400_trigger_ops;
-> +               iio_trigger_set_drvdata(data->trig, indio_dev);
-> +
-> +               ret = devm_iio_trigger_register(data->dev, data->trig);
-> +               if (ret)
-> +                       return dev_err_probe(data->dev, ret,
-> +                                            "iio trigger register fail\n");
-> +
-> +               indio_dev->trig = iio_trigger_get(data->trig);
-> +               ret = devm_request_threaded_irq(dev, irq, NULL,
-> +                                               &bma400_interrupt,
-> +                                               IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> +                                               indio_dev->name, indio_dev);
-> +               if (ret)
-> +                       return dev_err_probe(data->dev, ret,
-> +                                            "request irq %d failed\n", irq);
-> +       }
-> +
-> +       ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
-> +                                             &bma400_trigger_handler, NULL);
-> +       if (ret)
-> +               return dev_err_probe(data->dev, ret,
-> +                                    "iio triggered buffer setup failed\n");
-> +
->         return devm_iio_device_register(dev, indio_dev);
->  }
->  EXPORT_SYMBOL_NS(bma400_probe, IIO_BMA400);
-> diff --git a/drivers/iio/accel/bma400_i2c.c b/drivers/iio/accel/bma400_i2c.c
-> index 4f6e01a3b3a1..1ba2a982ea73 100644
-> --- a/drivers/iio/accel/bma400_i2c.c
-> +++ b/drivers/iio/accel/bma400_i2c.c
-> @@ -24,7 +24,7 @@ static int bma400_i2c_probe(struct i2c_client *client,
->                 return PTR_ERR(regmap);
->         }
->
-> -       return bma400_probe(&client->dev, regmap, id->name);
-> +       return bma400_probe(&client->dev, regmap, client->irq, id->name);
->  }
->
->  static const struct i2c_device_id bma400_i2c_ids[] = {
-> diff --git a/drivers/iio/accel/bma400_spi.c b/drivers/iio/accel/bma400_spi.c
-> index 28e240400a3f..ec13c044b304 100644
-> --- a/drivers/iio/accel/bma400_spi.c
-> +++ b/drivers/iio/accel/bma400_spi.c
-> @@ -84,7 +84,7 @@ static int bma400_spi_probe(struct spi_device *spi)
->         if (ret)
->                 dev_err(&spi->dev, "Failed to read chip id register\n");
->
-> -       return bma400_probe(&spi->dev, regmap, id->name);
-> +       return bma400_probe(&spi->dev, regmap, spi->irq, id->name);
->  }
->
->  static const struct spi_device_id bma400_spi_ids[] = {
-> --
-> 2.17.1
->
+--------------oWVjbTvpdC4UikamiFuIK0Ns
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+T24gMjcuMDQuMjIgMTQ6MjgsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gV2VkLCBB
+cHIgMjcsIDIwMjIgYXQgMDg6Mzc6MzFBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IE9uIDI2LjA0LjIyIDE5OjM1LCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+Pj4gT24g
+VHVlLCBBcHIgMjYsIDIwMjIgYXQgMDM6NDA6MjFQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3
+cm90ZToNCj4+Pj4gICAgLyogcHJvdGVjdGVkIHZpcnR1YWxpemF0aW9uICovDQo+Pj4+ICAg
+IHN0YXRpYyB2b2lkIHB2X2luaXQodm9pZCkNCj4+Pj4gICAgew0KPj4+PiAgICAJaWYgKCFp
+c19wcm90X3ZpcnRfZ3Vlc3QoKSkNCj4+Pj4gICAgCQlyZXR1cm47DQo+Pj4+ICsJcGxhdGZv
+cm1fc2V0X2ZlYXR1cmUoUExBVEZPUk1fVklSVElPX1JFU1RSSUNURURfTUVNX0FDQ0VTUyk7
+DQo+Pj4NCj4+PiBLaW5kYSBsb25nLWlzaCBmb3IgbXkgdGFzdGUuIEknbGwgcHJvYmFibHkg
+Y2FsbCBpdDoNCj4+Pg0KPj4+IAlwbGF0Zm9ybV9zZXQoKQ0KPj4+DQo+Pj4gYXMgaXQgaXMg
+aW1wbGljaXQgdGhhdCBpdCBzZXRzIGEgZmVhdHVyZSBiaXQuDQo+Pg0KPj4gT2theSwgZmlu
+ZSB3aXRoIG1lLg0KPj4NCj4+Pg0KPj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvbW0vbWVt
+X2VuY3J5cHRfaWRlbnRpdHkuYyBiL2FyY2gveDg2L21tL21lbV9lbmNyeXB0X2lkZW50aXR5
+LmMNCj4+Pj4gaW5kZXggYjQzYmMyNGQyYmI2Li42MDQzYmE2Y2QxN2QgMTAwNjQ0DQo+Pj4+
+IC0tLSBhL2FyY2gveDg2L21tL21lbV9lbmNyeXB0X2lkZW50aXR5LmMNCj4+Pj4gKysrIGIv
+YXJjaC94ODYvbW0vbWVtX2VuY3J5cHRfaWRlbnRpdHkuYw0KPj4+PiBAQCAtNDAsNiArNDAs
+NyBAQA0KPj4+PiAgICAjaW5jbHVkZSA8bGludXgvbW0uaD4NCj4+Pj4gICAgI2luY2x1ZGUg
+PGxpbnV4L21lbV9lbmNyeXB0Lmg+DQo+Pj4+ICAgICNpbmNsdWRlIDxsaW51eC9jY19wbGF0
+Zm9ybS5oPg0KPj4+PiArI2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtLWZlYXR1cmUuaD4NCj4+
+Pj4gICAgI2luY2x1ZGUgPGFzbS9zZXR1cC5oPg0KPj4+PiAgICAjaW5jbHVkZSA8YXNtL3Nl
+Y3Rpb25zLmg+DQo+Pj4+IEBAIC01NjYsNiArNTY3LDEwIEBAIHZvaWQgX19pbml0IHNtZV9l
+bmFibGUoc3RydWN0IGJvb3RfcGFyYW1zICpicCkNCj4+Pj4gICAgCX0gZWxzZSB7DQo+Pj4+
+ICAgIAkJLyogU0VWIHN0YXRlIGNhbm5vdCBiZSBjb250cm9sbGVkIGJ5IGEgY29tbWFuZCBs
+aW5lIG9wdGlvbiAqLw0KPj4+PiAgICAJCXNtZV9tZV9tYXNrID0gbWVfbWFzazsNCj4+Pj4g
+Kw0KPj4+PiArCQkvKiBTZXQgcmVzdHJpY3RlZCBtZW1vcnkgYWNjZXNzIGZvciB2aXJ0aW8u
+ICovDQo+Pj4+ICsJCXBsYXRmb3JtX3NldF9mZWF0dXJlKFBMQVRGT1JNX1ZJUlRJT19SRVNU
+UklDVEVEX01FTV9BQ0NFU1MpOw0KPj4+DQo+Pj4gSHVoLCB3aGF0IGRvZXMgdGhhdCBoYXZl
+IHRvIGRvIHdpdGggU01FPw0KPj4NCj4+IEkgcGlja2VkIHRoZSBmdW5jdGlvbiB3aGVyZSBz
+ZXZfc3RhdHVzIGlzIGJlaW5nIHNldCwgYXMgdGhpcyBzZWVtZWQgdG8gYmUNCj4+IHRoZSBj
+b3JyZWN0IHBsYWNlIHRvIHNldCB0aGUgZmVhdHVyZSBiaXQuDQo+IA0KPiBXaGF0IEkgZG9u
+J3QgdW5kZXJzdGFuZCBpcyB3aGF0IGRvZXMgcmVzdHJpY3RlZCBtZW1vcnkgYWNjZXNzIGhh
+dmUgdG8gZG8NCj4gd2l0aCBBTUQgU0VWIGFuZCBob3cgZG9lcyBwbGF5IHRvZ2V0aGVyIHdp
+dGggd2hhdCB5b3UgZ3V5cyBhcmUgdHJ5aW5nIHRvDQo+IGRvPw0KPiANCj4gVGhlIGJpZyBw
+aWN0dXJlIHBscy4NCg0KQWgsIG9rYXkuDQoNCkZvciBzdXBwb3J0IG9mIHZpcnRpbyB3aXRo
+IFhlbiB3ZSB3YW50IHRvIG5vdCBvbmx5IHN1cHBvcnQgdGhlIHZpcnRpbw0KZGV2aWNlcyBs
+aWtlIEtWTSwgYnV0IHVzZSBncmFudHMgZm9yIGxldHRpbmcgdGhlIGd1ZXN0IGRlY2lkZSB3
+aGljaA0KcGFnZXMgYXJlIGFsbG93ZWQgdG8gYmUgbWFwcGVkIGJ5IHRoZSBiYWNrZW5kIChk
+b20wKS4NCg0KSW5zdGVhZCBvZiBwaHlzaWNhbCBndWVzdCBhZGRyZXNzZXMgdGhlIGd1ZXN0
+IHdpbGwgdXNlIGdyYW50LWlkcyAocGx1cw0Kb2Zmc2V0KS4gSW4gb3JkZXIgdG8gYmUgYWJs
+ZSB0byBoYW5kbGUgdGhpcyBhdCB0aGUgYmFzaWMgdmlydGlvIGxldmVsDQppbnN0ZWFkIG9m
+IHRoZSBzaW5nbGUgdmlydGlvIGRldmljZSBkcml2ZXJzLCB3ZSBuZWVkIHRvIHVzZSBkZWRp
+Y2F0ZWQNCmRtYS1vcHMuIEFuZCB0aG9zZSB3aWxsIGJlIHVzZWQgYnkgdmlydGlvIG9ubHks
+IGlmIHRoZSAicmVzdHJpY3RlZA0KdmlydGlvIG1lbW9yeSByZXF1ZXN0IiBmbGFnIGlzIHNl
+dCwgd2hpY2ggaXMgdXNlZCBieSBTRVYsIHRvby4gSW4gb3JkZXINCnRvIGxldCB2aXJ0aW8g
+c2V0IHRoaXMgZmxhZywgd2UgbmVlZCBhIHdheSB0byBjb21tdW5pY2F0ZSB0byB2aXJ0aW8N
+CnRoYXQgdGhlIHJ1bm5pbmcgc3lzdGVtIGlzIGVpdGhlciBhIFNFViBndWVzdCBvciBhIFhl
+biBndWVzdC4NCg0KSFRILA0KDQoNCkp1ZXJnZW4NCg==
+--------------oWVjbTvpdC4UikamiFuIK0Ns
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
--- 
-With Best Regards,
-Andy Shevchenko
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------oWVjbTvpdC4UikamiFuIK0Ns--
+
+--------------Yxp0WC7XOxZjxaCFpkqA4mo2--
+
+--------------4yxVWCWCnmvq93XMZ043V0iC
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJpOQwFAwAAAAAACgkQsN6d1ii/Ey/b
+Cgf+OFbFg23c2x3esEwpLFGK2DbchkAtehLhMC4hV+WOchRjx+cNrrBmB5wRJyksEWRaRa42I31A
+vA84qya9Pv4iTNIBKA2BC8IQzwrveSLvxnQRupbnf8Pp55rLd7Q6MJ4GwSOn3JSh9gotleHr1v4+
+W5Hr7/cycD30NMenQC39VauZmXbAimQjTtB+ziwCp/vBikBp9Nmw6Rb2JbK4n9vhdsSM6vzkO/Ee
+16up4ta/88swh/qYj7ECcjAZ5Z8QjEkGE9aIe9iSejlhMrkfNcHsRv3PpBQZt3S3xBx1eTgDOxbK
+py0az+PKVoqhazEOve+t2II48euW2CiDFjIcZaPYjA==
+=uG7B
+-----END PGP SIGNATURE-----
+
+--------------4yxVWCWCnmvq93XMZ043V0iC--

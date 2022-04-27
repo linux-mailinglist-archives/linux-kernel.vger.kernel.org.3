@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AAD511525
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 12:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BC251159A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiD0Kub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 06:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        id S230356AbiD0Kwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 06:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiD0KuH (ORCPT
+        with ESMTP id S230211AbiD0Kwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:50:07 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B8A43AE09;
-        Wed, 27 Apr 2022 03:20:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id s21so1793571wrb.8;
-        Wed, 27 Apr 2022 03:20:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YpngR4n4Vedu6z5a5k/BhmCiHm7z2H0f6uU18kyeCSk=;
-        b=Ydnwfs5ZFvzstOL4mZcUIcvZik2KN8U7L6ffdUGLBg6HeGTR3AnOj3P361A4EO8w+L
-         DWgIzYlRlM15DR98bPZNiTI/umszdYf8q+emO6IOw+t+yPwDg3vhokWlVucCexx56/yP
-         2ujV5MkybDr6Alz1WPjU96vs7/uCGww4c+UTuhJcxm5Lhqf+ETMyO5QV7PKMqsa7ImM7
-         M0f1uqtoSf7r90QXRCGkKlYuxynQNd8oS17Vsq9i7gpFh/wYKeqvfxLaS0rh/sK4nIAc
-         CuF373jNykgAgIefGdtoXN6PK4qEY9W0gzAUCGnFtbZeCcmw+4mnOD8mswUiY1xeFp5j
-         uRtA==
-X-Gm-Message-State: AOAM533UubrxR7R17k7QmBIsqRg6RqqmII2iZpD/jZrxKOhT58v26kwv
-        mQwep8EnHg/l4qHixZmaKvqAmuaRkiI=
-X-Google-Smtp-Source: ABdhPJydNWOBreqCBQqJ3hGd3bZH28njhPnqbvszt/1SR/tJ1Zv9LgKUiSxIUD7zogUjzT8tsOpkeg==
-X-Received: by 2002:a05:6402:128b:b0:425:d1d7:b321 with SMTP id w11-20020a056402128b00b00425d1d7b321mr22866633edv.179.1651053701125;
-        Wed, 27 Apr 2022 03:01:41 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id z21-20020a05640240d500b004261a2a0ec5sm526804edb.54.2022.04.27.03.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 03:01:39 -0700 (PDT)
-Message-ID: <8bd7804b-a38d-47b5-c9d3-1f5dca578260@kernel.org>
-Date:   Wed, 27 Apr 2022 12:01:37 +0200
+        Wed, 27 Apr 2022 06:52:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C681A49409D;
+        Wed, 27 Apr 2022 03:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651055048; x=1682591048;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oOBwk0JvX4Hq4ln24agEjKLp6VWg/8zMYq4wKqzU1aE=;
+  b=RmfaLN90jWuAtwy5HMxFVCEGzWohdVcZG/REmdHYLKzgLU6HeSNFfrxR
+   X/NcSrcVYPX61qEUBMPpCm9JxFWE5ESAZKRQNx/DLLNcT5om96znkFzdI
+   XLxCy0wc2IuR83aihkav2FyVE5qbQ/MOZToGzBQhJghDyu4qJ/jCqUp/e
+   rE6KVUY2gW5spY3A4xBPiRT8b4XmP1bChY9QfS+q2FtVXGWfsiFmmvJzM
+   mB6VsEUOOcyyJO/2Vhj7UsO1NUx9fSpg0V9rACEphrSDmj4FZEPse6KOb
+   Wpuq+ZTaxnt0xz4QxugDBNwO56+oGkV2kFUMijkqo1ZRiqe4OIozrilsk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265406485"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="265406485"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 03:04:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="596211348"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga001.jf.intel.com with ESMTP; 27 Apr 2022 03:04:25 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH v2] platform/x86: intel-uncore-freq: Prevent driver loading in guests
+Date:   Wed, 27 Apr 2022 03:03:04 -0700
+Message-Id: <20220427100304.2562990-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.17 000/146] 5.17.5-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220426081750.051179617@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 04. 22, 10:19, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.5 release.
-> There are 146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.5-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
+Loading this driver in guests results in unchecked MSR access error for
+MSR 0x620.
 
-openSUSE configs¹⁾ all green.
+There is no use of reading and modifying package/die scope uncore MSRs
+in guests. So check for CPU feature X86_FEATURE_HYPERVISOR to prevent
+loading of this driver in guests.
 
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
+Fixes: dbce412a7733 ("platform/x86/intel-uncore-freq: Split common and enumeration part")
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215870
+Suggested-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+v2
+	Add Fixes tag
 
-¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+ drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+index c61f804dd44e..8f9c571d7257 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+@@ -212,6 +212,9 @@ static int __init intel_uncore_init(void)
+ 	const struct x86_cpu_id *id;
+ 	int ret;
+ 
++	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
++		return -ENODEV;
++
+ 	id = x86_match_cpu(intel_uncore_cpu_ids);
+ 	if (!id)
+ 		return -ENODEV;
 -- 
-js
-suse labs
+2.31.1
+

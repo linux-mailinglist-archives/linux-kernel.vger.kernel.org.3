@@ -2,371 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF3B511A60
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E817C511A22
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbiD0OhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S238048AbiD0Ofw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238159AbiD0Ogk (ORCPT
+        with ESMTP id S238010AbiD0Ofs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:36:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 078822711
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:33:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6972ED1;
-        Wed, 27 Apr 2022 07:33:25 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.57.44.232])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 309A83F5A1;
-        Wed, 27 Apr 2022 07:33:24 -0700 (PDT)
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
-Subject: [PATCH v7 6/7] sched/fair: Remove task_util from effective utilization in feec()
+        Wed, 27 Apr 2022 10:35:48 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827C1B9;
+        Wed, 27 Apr 2022 07:32:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 829BF21122;
+        Wed, 27 Apr 2022 14:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651069955; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i/KJP+44iudIC+WcuC2nIb/z3EQuXQtWQd5UTDcPQTs=;
+        b=RyET7+oNDgi2ZXLUior/Ne6UXO3HdPEr07aDMFH4PtpAOpP33zyVDEVHUp3HW8avYVOozI
+        rN7+AWuDvBTed8b2tAe3vggF78CQ3Ie9N84F/fEa4pTI58mhVh78XlNp2EUcIWo64jHukY
+        xkBUnJMQxfVKEDTVQSNIExJCxjrvkXI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651069955;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i/KJP+44iudIC+WcuC2nIb/z3EQuXQtWQd5UTDcPQTs=;
+        b=jfY/6Nt5pZVzjT3TDrhJQmX8pEeTBvelR36nJbujlnPKjT1eyNCefX46jFb5D/rK4IE0kB
+        Z85PtwNW9yJaAFCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1525013A39;
+        Wed, 27 Apr 2022 14:32:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xUJlAgNUaWIKeQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Wed, 27 Apr 2022 14:32:35 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 8dfb1ff8;
+        Wed, 27 Apr 2022 14:33:05 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
+        Ryan Taylor <rptaylor@uvic.ca>
+Subject: [PATCH v2] ceph: fix statfs for subdir mounts
 Date:   Wed, 27 Apr 2022 15:33:03 +0100
-Message-Id: <20220427143304.3950488-7-vincent.donnefort@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220427143304.3950488-1-vincent.donnefort@arm.com>
-References: <20220427143304.3950488-1-vincent.donnefort@arm.com>
+Message-Id: <20220427143303.950-1-lhenriques@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The energy estimation in find_energy_efficient_cpu() (feec()) relies on
-the computation of the effective utilization for each CPU of a perf domain
-(PD). This effective utilization is then used as an estimation of the busy
-time for this pd. The function effective_cpu_util() which gives this value,
-scales the utilization relative to IRQ pressure on the CPU to take into
-account that the IRQ time is hidden from the task clock. The IRQ scaling is
-as follow:
+When doing a mount using as base a directory that has 'max_bytes' quotas
+statfs uses that value as the total; if a subdirectory is used instead,
+the same 'max_bytes' too in statfs, unless there is another quota set.
 
-   effective_cpu_util = irq + (cpu_cap - irq)/cpu_cap * util
+Unfortunately, if this subdirectory only has the 'max_files' quota set,
+then statfs uses the filesystem total.  Fix this by making sure we only
+lookup realms that contain the 'max_bytes' quota.
 
-Where util is the sum of CFS/RT/DL utilization, cpu_cap the capacity of
-the CPU and irq the IRQ avg time.
+Link: https://tracker.ceph.com/issues/55090
+Cc: Ryan Taylor <rptaylor@uvic.ca>
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+As I mentioned in v1, I do *not* think this really fixes the tracker
+above, as the bug reporter never mentioned setting quotas in the subdir.
 
-If now we take as an example a task placement which doesn't raise the OPP
-on the candidate CPU, we can write the energy delta as:
+Changes since v1:
+Moved some more logic into __ceph_has_any_quota() function.
 
-  delta = OPPcost/cpu_cap * (effective_cpu_util(cpu_util + task_util) -
-                             effective_cpu_util(cpu_util))
-        = OPPcost/cpu_cap * (cpu_cap - irq)/cpu_cap * task_util
+ fs/ceph/inode.c |  2 +-
+ fs/ceph/quota.c | 19 +++++++++++--------
+ fs/ceph/super.h | 28 ++++++++++++++++++++++++----
+ 3 files changed, 36 insertions(+), 13 deletions(-)
 
-We end-up with an energy delta depending on the IRQ avg time, which is a
-problem: first the time spent on IRQs by a CPU has no effect on the
-additional energy that would be consumed by a task. Second, we don't want
-to favour a CPU with a higher IRQ avg time value.
-
-Nonetheless, we need to take the IRQ avg time into account. If a task
-placement raises the PD's frequency, it will increase the energy cost for
-the entire time where the CPU is busy. A solution is to only use
-effective_cpu_util() with the CPU contribution part. The task contribution
-is added separately and scaled according to prev_cpu's IRQ time.
-
-No change for the FREQUENCY_UTIL component of the energy estimation. We
-still want to get the actual frequency that would be selected after the
-task placement.
-
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d705298aa310..3f382156b4ec 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6689,61 +6689,97 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- }
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index 5de7bb9048b7..4b7406d6fbe4 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -691,7 +691,7 @@ void ceph_evict_inode(struct inode *inode)
+ 
+ 	__ceph_remove_caps(ci);
+ 
+-	if (__ceph_has_any_quota(ci))
++	if (__ceph_has_any_quota(ci, QUOTA_GET_ANY))
+ 		ceph_adjust_quota_realms_count(inode, false);
+ 
+ 	/*
+diff --git a/fs/ceph/quota.c b/fs/ceph/quota.c
+index a338a3ec0dc4..e9f7ca18cdb7 100644
+--- a/fs/ceph/quota.c
++++ b/fs/ceph/quota.c
+@@ -195,9 +195,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
  
  /*
-- * compute_energy(): Estimates the energy that @pd would consume if @p was
-- * migrated to @dst_cpu. compute_energy() predicts what will be the utilization
-- * landscape of @pd's CPUs after the task migration, and uses the Energy Model
-- * to compute what would be the energy if we decided to actually migrate that
-- * task.
-+ * energy_env - Utilization landscape for energy estimation.
-+ * @task_busy_time: Utilization contribution by the task for which we test the
-+ *                  placement. Given by eenv_task_busy_time().
-+ * @pd_busy_time:   Utilization of the whole perf domain without the task
-+ *                  contribution. Given by eenv_pd_busy_time().
-+ * @cpu_cap:        Maximum CPU capacity for the perf domain.
-+ * @pd_cap:         Entire perf domain capacity. (pd->nr_cpus * cpu_cap).
-+ */
-+struct energy_env {
-+	unsigned long task_busy_time;
-+	unsigned long pd_busy_time;
-+	unsigned long cpu_cap;
-+	unsigned long pd_cap;
+  * This function walks through the snaprealm for an inode and returns the
+- * ceph_snap_realm for the first snaprealm that has quotas set (either max_files
+- * or max_bytes).  If the root is reached, return the root ceph_snap_realm
+- * instead.
++ * ceph_snap_realm for the first snaprealm that has quotas set (max_files,
++ * max_bytes, or any, depending on the 'which_quota' argument).  If the root is
++ * reached, return the root ceph_snap_realm instead.
+  *
+  * Note that the caller is responsible for calling ceph_put_snap_realm() on the
+  * returned realm.
+@@ -209,7 +209,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
+  * will be restarted.
+  */
+ static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
+-					       struct inode *inode, bool retry)
++					       struct inode *inode,
++					       enum quota_get_realm which_quota,
++					       bool retry)
+ {
+ 	struct ceph_inode_info *ci = NULL;
+ 	struct ceph_snap_realm *realm, *next;
+@@ -248,7 +250,7 @@ static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
+ 		}
+ 
+ 		ci = ceph_inode(in);
+-		has_quota = __ceph_has_any_quota(ci);
++		has_quota = __ceph_has_any_quota(ci, which_quota);
+ 		iput(in);
+ 
+ 		next = realm->parent;
+@@ -279,8 +281,8 @@ bool ceph_quota_is_same_realm(struct inode *old, struct inode *new)
+ 	 * dropped and we can then restart the whole operation.
+ 	 */
+ 	down_read(&mdsc->snap_rwsem);
+-	old_realm = get_quota_realm(mdsc, old, true);
+-	new_realm = get_quota_realm(mdsc, new, false);
++	old_realm = get_quota_realm(mdsc, old, QUOTA_GET_ANY, true);
++	new_realm = get_quota_realm(mdsc, new, QUOTA_GET_ANY, false);
+ 	if (PTR_ERR(new_realm) == -EAGAIN) {
+ 		up_read(&mdsc->snap_rwsem);
+ 		if (old_realm)
+@@ -483,7 +485,8 @@ bool ceph_quota_update_statfs(struct ceph_fs_client *fsc, struct kstatfs *buf)
+ 	bool is_updated = false;
+ 
+ 	down_read(&mdsc->snap_rwsem);
+-	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root), true);
++	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root),
++				QUOTA_GET_MAX_BYTES, true);
+ 	up_read(&mdsc->snap_rwsem);
+ 	if (!realm)
+ 		return false;
+diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+index a2e1c83ab29a..3cd96720f14a 100644
+--- a/fs/ceph/super.h
++++ b/fs/ceph/super.h
+@@ -1317,9 +1317,29 @@ extern void ceph_fs_debugfs_init(struct ceph_fs_client *client);
+ extern void ceph_fs_debugfs_cleanup(struct ceph_fs_client *client);
+ 
+ /* quota.c */
+-static inline bool __ceph_has_any_quota(struct ceph_inode_info *ci)
++
++enum quota_get_realm {
++	QUOTA_GET_MAX_FILES,
++	QUOTA_GET_MAX_BYTES,
++	QUOTA_GET_ANY
 +};
 +
-+/*
-+ * Compute the task busy time for compute_energy(). This time cannot be
-+ * injected directly into effective_cpu_util() because of the IRQ scaling.
-+ * The latter only makes sense with the most recent CPUs where the task has
-+ * run.
-  */
--static long
--compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
--	       struct perf_domain *pd)
-+static inline void eenv_task_busy_time(struct energy_env *eenv,
-+				       struct task_struct *p, int prev_cpu)
++static inline bool __ceph_has_any_quota(struct ceph_inode_info *ci,
++					enum quota_get_realm which)
  {
--	unsigned long max_util = 0, sum_util = 0, cpu_cap;
-+	unsigned long max_cap = arch_scale_cpu_capacity(prev_cpu);
-+	unsigned long irq = cpu_util_irq(cpu_rq(prev_cpu));
+-	return ci->i_max_files || ci->i_max_bytes;
++	bool has_quota = false;
 +
-+	if (unlikely(irq >= max_cap)) {
-+		eenv->task_busy_time = max_cap;
-+		return;
++	switch (which) {
++	case QUOTA_GET_MAX_BYTES:
++		has_quota = !!ci->i_max_bytes;
++		break;
++	case QUOTA_GET_MAX_FILES:
++		has_quota = !!ci->i_max_files;
++		break;
++	default:
++		has_quota = !!(ci->i_max_files || ci->i_max_bytes);
 +	}
-+
-+	eenv->task_busy_time =
-+		scale_irq_capacity(task_util_est(p), irq, max_cap);
-+}
-+
-+/*
-+ * Compute the perf_domain (PD) busy time for compute_energy(). Based on the
-+ * utilization for each @pd_cpus, it however doesn't take into account
-+ * clamping since the ratio (utilization / cpu_capacity) is already enough to
-+ * scale the EM reported power consumption at the (eventually clamped)
-+ * cpu_capacity.
-+ *
-+ * The contribution of the task @p for which we want to estimate the
-+ * energy cost is removed (by cpu_util_next()) and must be calculated
-+ * separately (see eenv_task_busy_time). This ensures:
-+ *
-+ *   - A stable PD utilization, no matter which CPU of that PD we want to place
-+ *     the task on.
-+ *
-+ *   - A fair comparison between CPUs as the task contribution (task_util())
-+ *     will always be the same no matter which CPU utilization we rely on
-+ *     (util_avg or util_est).
-+ *
-+ * Set @eenv busy time for the PD that spans @pd_cpus. This busy time can't
-+ * exceed @eenv->pd_cap.
-+ */
-+static inline void eenv_pd_busy_time(struct energy_env *eenv,
-+				     struct cpumask *pd_cpus,
-+				     struct task_struct *p)
-+{
-+	unsigned long busy_time = 0;
- 	int cpu;
- 
--	cpu_cap = arch_scale_cpu_capacity(cpumask_first(cpus));
--	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(cpus));
-+	for_each_cpu(cpu, pd_cpus) {
-+		unsigned long util = cpu_util_next(cpu, p, -1);
- 
--	/*
--	 * The capacity state of CPUs of the current rd can be driven by CPUs
--	 * of another rd if they belong to the same pd. So, account for the
--	 * utilization of these CPUs too by masking pd with cpu_online_mask
--	 * instead of the rd span.
--	 *
--	 * If an entire pd is outside of the current rd, it will not appear in
--	 * its pd list and will not be accounted by compute_energy().
--	 */
--	for_each_cpu(cpu, cpus) {
--		unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
--		unsigned long cpu_util, util_running = util_freq;
--		struct task_struct *tsk = NULL;
-+		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
-+	}
- 
--		/*
--		 * When @p is placed on @cpu:
--		 *
--		 * util_running = max(cpu_util, cpu_util_est) +
--		 *		  max(task_util, _task_util_est)
--		 *
--		 * while cpu_util_next is: max(cpu_util + task_util,
--		 *			       cpu_util_est + _task_util_est)
--		 */
--		if (cpu == dst_cpu) {
--			tsk = p;
--			util_running =
--				cpu_util_next(cpu, p, -1) + task_util_est(p);
--		}
-+	eenv->pd_busy_time = min(eenv->pd_cap, busy_time);
-+}
- 
--		/*
--		 * Busy time computation: utilization clamping is not
--		 * required since the ratio (sum_util / cpu_capacity)
--		 * is already enough to scale the EM reported power
--		 * consumption at the (eventually clamped) cpu_capacity.
--		 */
--		cpu_util = effective_cpu_util(cpu, util_running, ENERGY_UTIL,
--					      NULL);
-+/*
-+ * Compute the maximum utilization for compute_energy() when the task @p
-+ * is placed on the cpu @dst_cpu.
-+ *
-+ * Returns the maximum utilization among @eenv->cpus. This utilization can't
-+ * exceed @eenv->cpu_cap.
-+ */
-+static inline unsigned long
-+eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
-+		 struct task_struct *p, int dst_cpu)
-+{
-+	unsigned long max_util = 0;
-+	int cpu;
- 
--		sum_util += min(cpu_util, cpu_cap);
-+	for_each_cpu(cpu, pd_cpus) {
-+		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
-+		unsigned long util = cpu_util_next(cpu, p, dst_cpu);
-+		unsigned long cpu_util;
- 
- 		/*
- 		 * Performance domain frequency: utilization clamping
-@@ -6752,12 +6788,30 @@ compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
- 		 * NOTE: in case RT tasks are running, by default the
- 		 * FREQUENCY_UTIL's utilization can be max OPP.
- 		 */
--		cpu_util = effective_cpu_util(cpu, util_freq, FREQUENCY_UTIL,
--					      tsk);
--		max_util = max(max_util, min(cpu_util, cpu_cap));
-+		cpu_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
-+		max_util = max(max_util, cpu_util);
- 	}
- 
--	return em_cpu_energy(pd->em_pd, max_util, sum_util, cpu_cap);
-+	return min(max_util, eenv->cpu_cap);
-+}
-+
-+/*
-+ * compute_energy(): Use the Energy Model to estimate the energy that @pd would
-+ * consume for a given utilization landscape @eenv. If @dst_cpu < 0 the task
-+ * contribution is removed from the energy estimation.
-+ */
-+static inline unsigned long
-+compute_energy(struct energy_env *eenv, struct perf_domain *pd,
-+	       struct cpumask *pd_cpus, struct task_struct *p, int dst_cpu)
-+{
-+	unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
-+	unsigned long busy_time = eenv->pd_busy_time;
-+
-+	if (dst_cpu >= 0)
-+		busy_time = min(eenv->pd_cap,
-+				eenv->pd_busy_time + eenv->task_busy_time);
-+
-+	return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
++	return has_quota;
  }
  
- /*
-@@ -6803,11 +6857,12 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ extern void ceph_adjust_quota_realms_count(struct inode *inode, bool inc);
+@@ -1328,10 +1348,10 @@ static inline void __ceph_update_quota(struct ceph_inode_info *ci,
+ 				       u64 max_bytes, u64 max_files)
  {
- 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
- 	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
--	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
- 	int cpu, best_energy_cpu = prev_cpu, target = -1;
--	unsigned long cpu_cap, util, base_energy = 0;
-+	struct root_domain *rd = this_rq()->rd;
-+	unsigned long base_energy = 0;
- 	struct sched_domain *sd;
- 	struct perf_domain *pd;
-+	struct energy_env eenv;
+ 	bool had_quota, has_quota;
+-	had_quota = __ceph_has_any_quota(ci);
++	had_quota = __ceph_has_any_quota(ci, QUOTA_GET_ANY);
+ 	ci->i_max_bytes = max_bytes;
+ 	ci->i_max_files = max_files;
+-	has_quota = __ceph_has_any_quota(ci);
++	has_quota = __ceph_has_any_quota(ci, QUOTA_GET_ANY);
  
- 	rcu_read_lock();
- 	pd = rcu_dereference(rd->pd);
-@@ -6830,22 +6885,36 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 	if (!task_util_est(p))
- 		goto unlock;
- 
-+	eenv_task_busy_time(&eenv, p, prev_cpu);
-+
- 	for (; pd; pd = pd->next) {
--		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
-+		unsigned long cpu_cap, cpu_thermal_cap, util;
-+		unsigned long cur_delta, max_spare_cap = 0;
- 		bool compute_prev_delta = false;
- 		unsigned long base_energy_pd;
- 		int max_spare_cap_cpu = -1;
- 
- 		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
- 
--		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-+		/* Account thermal pressure for the energy estimation */
-+		cpu = cpumask_first(cpus);
-+		cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
-+		cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
-+
-+		eenv.cpu_cap = cpu_thermal_cap;
-+		eenv.pd_cap = 0;
-+
-+		for_each_cpu(cpu, cpus) {
-+			eenv.pd_cap += cpu_thermal_cap;
-+
-+			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
-+				continue;
-+
- 			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
- 				continue;
- 
- 			util = cpu_util_next(cpu, p, cpu);
- 			cpu_cap = capacity_of(cpu);
--			spare_cap = cpu_cap;
--			lsub_positive(&spare_cap, util);
- 
- 			/*
- 			 * Skip CPUs that cannot satisfy the capacity request.
-@@ -6858,15 +6927,17 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			if (!fits_capacity(util, cpu_cap))
- 				continue;
- 
-+			lsub_positive(&cpu_cap, util);
-+
- 			if (cpu == prev_cpu) {
- 				/* Always use prev_cpu as a candidate. */
- 				compute_prev_delta = true;
--			} else if (spare_cap > max_spare_cap) {
-+			} else if (cpu_cap > max_spare_cap) {
- 				/*
- 				 * Find the CPU with the maximum spare capacity
- 				 * in the performance domain.
- 				 */
--				max_spare_cap = spare_cap;
-+				max_spare_cap = cpu_cap;
- 				max_spare_cap_cpu = cpu;
- 			}
- 		}
-@@ -6875,12 +6946,14 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			continue;
- 
- 		/* Compute the 'base' energy of the pd, without @p */
--		base_energy_pd = compute_energy(p, -1, cpus, pd);
-+		eenv_pd_busy_time(&eenv, cpus, p);
-+		base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
- 		base_energy += base_energy_pd;
- 
- 		/* Evaluate the energy impact of using prev_cpu. */
- 		if (compute_prev_delta) {
--			prev_delta = compute_energy(p, prev_cpu, cpus, pd);
-+			prev_delta = compute_energy(&eenv, pd, cpus, p,
-+						    prev_cpu);
- 			if (prev_delta < base_energy_pd)
- 				goto unlock;
- 			prev_delta -= base_energy_pd;
-@@ -6889,8 +6962,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 
- 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
- 		if (max_spare_cap_cpu >= 0) {
--			cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
--						   pd);
-+			cur_delta = compute_energy(&eenv, pd, cpus, p,
-+						   max_spare_cap_cpu);
- 			if (cur_delta < base_energy_pd)
- 				goto unlock;
- 			cur_delta -= base_energy_pd;
--- 
-2.25.1
-
+ 	if (had_quota != has_quota)
+ 		ceph_adjust_quota_realms_count(&ci->vfs_inode, has_quota);

@@ -2,184 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E56510D19
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B17C510D1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356358AbiD0AW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S1356366AbiD0AYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343562AbiD0AWX (ORCPT
+        with ESMTP id S1343562AbiD0AYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:22:23 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2052.outbound.protection.outlook.com [40.107.236.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33044B36A9;
-        Tue, 26 Apr 2022 17:19:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HWqmu87NaRiGS0tXiTnRLJPHulP4BkqNaj8HcWiPlZfHnXLTBCVeWP1Gc5MHErq5zZ2FKoJ0LobIz8Yiv4SZL58iG4u+47a7u4gth6azs2lXMlJOqEh/+H+MbHgGbJN9Mnl2JfiisSxtqBW755kBpsN7F4Gudx0+3XwiWz4S6to4UkaUy2eWf5tAAtN8TDTIYAHPxyTcHHLLcr/IxQkpZgea105NYB4ZhV/eMo12d/f6iceEJ4JHu4FXY54drWVsKasKfKUYhnFdiLxc0ymgxv58j5Dd1rOaAiye+hZrncjJ34xLJ0WG0l1aV+Zc5HHpyktiytA3qPhbcfIkzPALLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GGvJkGEElOO+I7QSdBBYxqWBU7tSa2Gogm11ZKVVK8g=;
- b=LBVcuXLi0IeuFCCxBxpw/fp2k8ZYyVBW9YGnYjhYoPNejkkNgI51J6QGgLTyPwW8IHR+ngZJTymSHVeKCU9gqTXi8aCoJiNvb9ryY8Er/zzapm2pkUuwXIALTb4LeAw/RrxqIqjW97vzyNC1Bt5fFG/jvPUm1tQdbqiqzIssCXWaEXDcPGxIJ5ScWhCB5DP2h+STKGkORx59T4UrCIdE1EnOEB3lTzeFt2z0iFOi+9/vOSQazp76Ffbz56Ud8eY2gm1ziqbEXWccxvu7rLBQSY9SAGzZ4MGAzZsvX7TTjbGI4wLj423k3N4YLV8KR3gzwwA/egbxq5z4NiFmEfIDKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GGvJkGEElOO+I7QSdBBYxqWBU7tSa2Gogm11ZKVVK8g=;
- b=rGzGkMVraDPJaJlKDl6S/6VHjDKodcfuQ3wAFc3qfdXLYpm4MjwLrFAkUxx39/ecGH4FQKfBnrwphhki0Dy0BixI7aCyfPzSihbphrfid3dj/8zuFMHexlOlhryEDJeVP/zNRf9Jc7HXdiktOlnXOHsQmDYYO40OQm3yXtfloxE=
-Received: from BN9PR03CA0803.namprd03.prod.outlook.com (2603:10b6:408:13f::28)
- by CY4PR12MB1286.namprd12.prod.outlook.com (2603:10b6:903:44::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Wed, 27 Apr
- 2022 00:19:10 +0000
-Received: from BN8NAM11FT018.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13f:cafe::fd) by BN9PR03CA0803.outlook.office365.com
- (2603:10b6:408:13f::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15 via Frontend
- Transport; Wed, 27 Apr 2022 00:19:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT018.mail.protection.outlook.com (10.13.176.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Wed, 27 Apr 2022 00:19:10 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Apr
- 2022 19:18:57 -0500
-Date:   Tue, 26 Apr 2022 19:17:56 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-CC:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kuppuswamy Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        "Dario Faggioli" <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Brijesh Singh" <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "David Hildenbrand" <david@redhat.com>, <x86@kernel.org>,
-        <linux-mm@kvack.org>, <linux-coco@lists.linux.dev>,
-        <linux-efi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
-Message-ID: <20220427001756.xefhkwwc7uhxuusk@amd.com>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
+        Tue, 26 Apr 2022 20:24:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC9146652
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:21:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69AA661A7F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D11C385AC;
+        Wed, 27 Apr 2022 00:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651018888;
+        bh=IADjD7+IYqBt0znO8p+amernTj2qE8qAgW0n0GKQ040=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NgPO4K6YwuUgmRgno4lbspGz2Dun1CpMVEOwLWu4lq2FwUN7AD5/nT6Yr91baM3Gq
+         huofBHEzvyninwr1/WZVkXfeVaeCFeEywPcGRJeL8CiYzrt0Mm3uWzALoM8M1456ZQ
+         mUcivAAYUtCcoPEJgVjRykbYJ0IJKOjqgZe1z+LoOTUjCiaNSXJxQOmiXl9cozpD/3
+         CTwf3NTsqhKjnknzRk7eq4/hX20Y9yEoqSE1xsXDIsQwJ81hogq97pMeL1JoVv3DmJ
+         /U3TtEW6RY39WY+wOJQEJIrqSJM1mVSrktGWW5l0b/hkgDKwyOiC7fIKwWG2BxLHtP
+         qEcAeBJDwvhgg==
+From:   sj@kernel.org
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Matthew Wilcox" <willy@infradead.org>, shuah@kernel.org,
+        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
+        "Shakeel Butt" <shakeelb@google.com>, sjpark@amazon.de,
+        tuhailong@gmail.com, "Song Jiang" <sjiang88@gmail.com>,
+        =?UTF-8?q?=E5=BC=A0=E8=AF=97=E6=98=8E=28Simon=20Zhang=29?= 
+        <zhangshiming@oppo.com>,
+        =?UTF-8?q?=E6=9D=8E=E5=9F=B9=E9=94=8B=28wink=29?= 
+        <lipeifeng@oppo.com>, linux-damon@amazon.com
+Subject: Re: DAMON VA regions don't split on an large Android APP
+Date:   Wed, 27 Apr 2022 00:21:25 +0000
+Message-Id: <20220427002125.48937-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0154363a-a992-4b07-6188-08da27e38ceb
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1286:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB12867069932ACEAD37B6C0C395FA9@CY4PR12MB1286.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pJvZ0FLm04FTBpyFMOmpVBaxE1pdekoK5sfZ+rGSEmKRL9VkkREO/WHsBkcvyGmsHP7bbsEy5kcJ8F6AsAusYQkuaU2NwUDmylwICl4EH9rxPPx81D77s534TrNxwx83ui0wgmZhUt4AjB9W9EKPDFbdRUOi4T2JC0EJg9OOlRG1Mllsfs6dImdUeu1BMuWvdV7WG20vxi4O7oUIQdp2BXtRMc0G+qQ6KYFkb7QSIk5DbyTazRyii77TP+RoKv2AAlP6U486NFb698OTN+3PEogtKtse65llZnutH6W2nG3H5+kiDIF+JTHAvLY0IuJg2VGFwTtoOl1n/oYIzm1tMyTWtslF7SiGQB8mZy0uC2WNkIIq5vsmyeKVaVoxnn79QMl7lYJmZMyjWMbRSJT1PIfEm3m8805Er5QhHYil3XczcWqsTYh0i5rhfHcDz2ONOXUl3IeSXJXzy8JUbtEMdE+lJLsI3Bvu0uuYHXXCHW50Gh/m32Ot1jVUodtyEBn3E/Z9ZyHUNAM8Z8W2Rh3oUFI3RhhDqUM+BU1t+i5fuS1PlmtkuynjnclMY42VWo9nyDOm5i2pD3G2XbfjlLji2p/JGL5XoPj117M3J6NovgcAW8dEwLzb3ZoaDVF7zoseN2naUjoyRTXyTwZTD7CH1kS0VkrZY+fdAOSX8KFR2IYqc2CTCW3bGBrsL5UnCZKzdyGnkKqS6EcSFeX3vT7HWw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2906002)(83380400001)(1076003)(16526019)(44832011)(8936002)(7416002)(186003)(82310400005)(70206006)(70586007)(356005)(8676002)(4326008)(36860700001)(36756003)(47076005)(5660300002)(426003)(336012)(2616005)(316002)(81166007)(54906003)(26005)(6916009)(40460700003)(508600001)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 00:19:10.0860
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0154363a-a992-4b07-6188-08da27e38ceb
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT018.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1286
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 06:39:28AM +0300, Kirill A. Shutemov wrote:
-> The firmware will pre-accept the memory used to run the stub. But, the
-> stub is responsible for accepting the memory into which it decompresses
-> the main kernel. Accept memory just before decompression starts.
-> 
-> The stub is also responsible for choosing a physical address in which to
-> place the decompressed kernel image. The KASLR mechanism will randomize
-> this physical address. Since the unaccepted memory region is relatively
-> small, KASLR would be quite ineffective if it only used the pre-accepted
-> area (EFI_CONVENTIONAL_MEMORY). Ensure that KASLR randomizes among the
-> entire physical address space by also including EFI_UNACCEPTED_MEMOR
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  arch/x86/boot/compressed/Makefile        |  2 +-
->  arch/x86/boot/compressed/kaslr.c         | 14 ++++++++++++--
->  arch/x86/boot/compressed/mem.c           | 21 +++++++++++++++++++++
->  arch/x86/boot/compressed/misc.c          |  9 +++++++++
->  arch/x86/include/asm/unaccepted_memory.h |  2 ++
->  5 files changed, 45 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 7f672f7e2fea..b59007e57cbf 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -102,7 +102,7 @@ endif
->  
->  vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
->  vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-> -vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/mem.o
-> +vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/find.o $(obj)/mem.o
+Hello Barry,
 
-Since it's possible to have CONFIG_UNACCEPTED_MEMORY=y while
-CONFIG_INTEL_TDX_GUEST=n (e.g. for SNP-only guest kernels), this can
-result in mem.o reporting linker errors due to tdx_accept_memory() not
-being defined. I think it needs a stub for !CONFIG_INTEL_TDX_GUEST, or
-something along that line.
 
->  
->  vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
->  efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-> index 411b268bc0a2..59db90626042 100644
-> --- a/arch/x86/boot/compressed/kaslr.c
-> +++ b/arch/x86/boot/compressed/kaslr.c
-> @@ -725,10 +725,20 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
->  		 * but in practice there's firmware where using that memory leads
->  		 * to crashes.
->  		 *
-> -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
-> +		 * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if
-> +		 * supported) are guaranteed to be free.
->  		 */
-> -		if (md->type != EFI_CONVENTIONAL_MEMORY)
-> +
-> +		switch (md->type) {
-> +		case EFI_CONVENTIONAL_MEMORY:
-> +			break;
-> +		case EFI_UNACCEPTED_MEMORY:
+Thank you so much for sharing your great findings! :)
 
-Just FYI, but with latest tip boot/compressed now relies on a separate header
-in arch/x86/boot/compressed/efi.h where this need to be defined again.
+On Wed, 27 Apr 2022 11:19:23 +1200 Barry Song <21cnbao@gmail.com> wrote:
+
+> Hi SeongJae & Andrew,
+> (also Cc-ed main damon developers)
+> On an Android phone, I tried to use the DAMON vaddr monitor and found
+> that vaddr regions don't split well on large Android Apps though
+> everything works well on native Apps.
+> 
+> I have tried the below two cases on an Android phone with 12GB memory
+> and snapdragon 888 CPU.
+> 1. a native program with small memory working set  as below,
+> #define size (1024*1024*100)
+> main()
+> {
+>         volatile int *p = malloc(size);
+>         memset(p, 0x55, size);
+> 
+>         while(1) {
+>                 int i;
+>                 for (i = 0; i < size / 4; i++)
+>                         (void)*(p + i);
+>                 usleep(1000);
+> 
+>                 for (i = 0; i < size / 16; i++)
+>                         (void)*(p + i);
+>                 usleep(1000);
+> 
+>         }
+> }
+> For this application, the Damon vaddr monitor works very well.
+> I have modified monitor.py in the damo userspace tool a little bit to
+> show the raw data getting from the kernel.
+> Regions can split decently on this kind of applications, a typical raw
+> data is as below,
+> 
+> monitoring_start:             2.224 s
+> monitoring_end:               2.329 s
+> monitoring_duration:       104.336 ms
+> target_id: 0
+> nr_regions: 24
+> 005fb37b2000-005fb734a000(  59.594 MiB): 0
+> 005fb734a000-005fbaf95000(  60.293 MiB): 0
+> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
+> 005fbec0b000-005fc2910000(  61.020 MiB): 0
+> 005fc2910000-005fc6769000(  62.348 MiB): 0
+> 005fc6769000-005fca33f000(  59.836 MiB): 0
+> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
+> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
+> 005fd115a000-005fd45bd000(  52.387 MiB): 0
+> 007661c59000-007661ee4000(   2.543 MiB): 2
+> 007661ee4000-0076623e4000(   5.000 MiB): 3
+> 0076623e4000-007662837000(   4.324 MiB): 2
+> 007662837000-0076630f1000(   8.727 MiB): 3
+> 0076630f1000-007663494000(   3.637 MiB): 2
+> 007663494000-007663753000(   2.746 MiB): 1
+> 007663753000-007664251000(  10.992 MiB): 3
+> 007664251000-0076666fd000(  36.672 MiB): 2
+> 0076666fd000-007666e73000(   7.461 MiB): 1
+> 007666e73000-007667c89000(  14.086 MiB): 2
+> 007667c89000-007667f97000(   3.055 MiB): 0
+> 007667f97000-007668112000(   1.480 MiB): 1
+> 007668112000-00766820f000(1012.000 KiB): 0
+> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
+> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
+> 
+> 2. a large Android app like Asphalt 9
+> For this case, basically regions can't split very well, but monitor
+> works on small vma:
+> 
+> monitoring_start:             2.220 s
+> monitoring_end:               2.318 s
+> monitoring_duration:        98.576 ms
+> target_id: 0
+> nr_regions: 15
+> 000012c00000-0001c301e000(   6.754 GiB): 0
+> 0001c301e000-000371b6c000(   6.730 GiB): 0
+> 000371b6c000-000400000000(   2.223 GiB): 0
+> 005c6759d000-005c675a2000(  20.000 KiB): 0
+> 005c675a2000-005c675a3000(   4.000 KiB): 3
+> 005c675a3000-005c675a7000(  16.000 KiB): 0
+> 0072f1e14000-0074928d4000(   6.510 GiB): 0
+> 0074928d4000-00763c71f000(   6.655 GiB): 0
+> 00763c71f000-0077e863e000(   6.687 GiB): 0
+> 0077e863e000-00798e214000(   6.590 GiB): 0
+> 00798e214000-007b0e48a000(   6.002 GiB): 0
+> 007b0e48a000-007c62f00000(   5.323 GiB): 0
+> 007c62f00000-007defb19000(   6.199 GiB): 0
+> 007defb19000-007f794ef000(   6.150 GiB): 0
+> 007f794ef000-007fe8f53000(   1.745 GiB): 0
+> 
+> As you can see, we have some regions which are very very big and they
+> are losing the chance to be splitted. But
+> Damon can still monitor memory access for those small VMA areas very well like:
+> 005c675a2000-005c675a3000(   4.000 KiB): 3
+
+In short, DAMON doesn't set regions based on VMA but access pattern, and
+therefore this looks not a problem.
+
+DAMON allows users set min/max monitoring overhead limit and provides a best
+accuracy under the condition.  In detail, users are allowed to set the min/max
+monitoring regions as DAMON's monitoring overhead is proportional to the number
+of regions.  DAMON provides best effort accuracy under the condition by
+splitting and merging regions so that pages in each region has different access
+frequency.
+
+The default min number of regions is 10.  I believe that's why there are many 6
+GiB regions.
+
+If we don't see small regions having some non-zero access frequency, we would
+be better to be worried.  However, it is finding the small 4 KiB regions having
+higher access frequency successfully.  The 4 KiB region is not because the
+region is having 4 KiB VMA, but the address region shows high access frequency.
+
+> 
+> Typical characteristics of a large Android app is that it has
+> thousands of vma and very large virtual address spaces:
+> ~/damo # pmap 2550 | wc -l
+> 8522
+> 
+> ~/damo # pmap 2550
+> ...
+> 0000007992bbe000      4K r----   [ anon ]
+> 0000007992bbf000     24K rw---   [ anon ]
+> 0000007fe8753000      4K -----   [ anon ]
+> 0000007fe8754000   8188K rw---   [ stack ]
+>  total         36742112K
+> 
+> Because the whole vma list is too long, I have put the list here for
+> you to download:
+> wget http://www.linuxep.com/patches/android-app-vmas
+> 
+> I can reproduce this problem on other Apps like youtube as well.
+> I suppose we need to boost the algorithm of splitting regions for this
+> kind of application.
+> Any thoughts?
+
+As mentioned above, this looks not a problem, as DAMON's monitoring regions is
+not constructed based on VMAs but access patterns.
+
+Nevertheless, I believe there are many rooms for improvement of DAMON's access
+frequency.  I want to implement fixed-gran monitoring feature first, and
+develop some accuracy optimizations using the fixed-gran monitoring as
+comparison target.
+
+If I'm missing something or the explanation was not enough, please feel free to
+let me know.
+
+
+Thank,
+SJ
+
+> 
+> Thanks
+> Barry
+> 

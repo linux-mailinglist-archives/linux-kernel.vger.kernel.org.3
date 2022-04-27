@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F10E5111E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199FA5111E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358527AbiD0HHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S1358534AbiD0HHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352417AbiD0HHF (ORCPT
+        with ESMTP id S1352417AbiD0HHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:07:05 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19EE44740
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:03:54 -0700 (PDT)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9E9AA3F1CA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1651043033;
-        bh=9VqNpTprZO6r11osQd2lD5E9Y+5zRg3ZFWFU2usUlQo=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=suZR2OSfPgi4ZMMkjUG0zv3oDo6wxNzvJycS/N6GHgC/qWSWaWkTXXieEGmHtPHSs
-         mxnLOH85z6ChfHNfBBJAb1ImxGDC27qYSntigBKfBOHegu3P6hCl1UPUaGoEAjmYvE
-         RYVPAePo6TReW1/XIUeQQS4rYXPVm8lkOTEqDbip6DOh7Hp09LefYBpmIqnw7kg1f1
-         e1uH+AmSvUdwE1/D5u7x0qPfEwnu5ApOSgG1H8qJWcPZDcE+Amq6xHUR03i/5qx+gY
-         FchMHgzoL47RYYrRF/2akCZ9zjcPtkRftJGW+5sn0arWWBcMTSr5LB1uhLmy1tJsLv
-         arniFRW+AyN2Q==
-Received: by mail-ej1-f69.google.com with SMTP id nc20-20020a1709071c1400b006f3726da7d3so582629ejc.15
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:03:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9VqNpTprZO6r11osQd2lD5E9Y+5zRg3ZFWFU2usUlQo=;
-        b=f/9Wn/pFZ7IXGou+XNlMfNAjejVUIADDpQMXGGvQcEAPixEH/5rRhGH5eUpER9R5p/
-         tmm7yN3vvFpN0cDXebwWUtPcGkjb2Pmad+jwQuTVW04Z/6Q/+zov/gwnIelyK7CvQyiY
-         8ExWRmfr2kty+zWfvw5ug328LOKuP1sjxth0i6+FfVy8uIjx65Rao7qeiOm0kVWk+kG4
-         KGMgkoCVEXXNmoG+O6Ue3LREdjBwJUmNAvG61TuzdqMh/gk9tIXTvuQ/GhhO8Ksd9XBY
-         N5sTEkaOmWWYEfXKevq2qzOEAA4iSy2cyCD4B9yhAf8iXRc8TIiBJPZ674SD9/bg5dF3
-         Xy3g==
-X-Gm-Message-State: AOAM531HVyP+ewGn+iv8KigRlDROpGtU0K1h+ccSKN/bNJFnyAPZ06vK
-        pdgJwvIApIQFcYguGOS+4c1WnukCXqrURGx1k3ss+pHX859szA6scuevLazNUqBoVKq9B0G1Qqh
-        nUhKT81EDsIJ0Ni4bXokoA1AZiw/xWVQyNUsxtlEW+A==
-X-Received: by 2002:a17:906:7304:b0:6e0:6918:ef6f with SMTP id di4-20020a170906730400b006e06918ef6fmr24783978ejc.370.1651043032732;
-        Wed, 27 Apr 2022 00:03:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxrFUk8EGUe3fb3AcpBFIswj7AowMOHWjWHIYrcKjkN8ERPHWirhsR2qIYx9ugl53V2o0kbHA==
-X-Received: by 2002:a17:906:7304:b0:6e0:6918:ef6f with SMTP id di4-20020a170906730400b006e06918ef6fmr24783962ejc.370.1651043032579;
-        Wed, 27 Apr 2022 00:03:52 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id h25-20020a50cdd9000000b00425e4075fb0sm4897408edj.33.2022.04.27.00.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 00:03:52 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@protonmail.com>
-To:     atenart@kernel.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, linux-crypto@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@protonmail.com>
-Subject: [PATCH] crypto: inside-secure - Add MODULE_FIRMWARE macros
-Date:   Wed, 27 Apr 2022 09:03:49 +0200
-Message-Id: <20220427070349.388246-1-juergh@protonmail.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 27 Apr 2022 03:07:40 -0400
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EA144740
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:04:29 -0700 (PDT)
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 161808031D38
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:04:29 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 06FF710040C03
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:04:28 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id jbitnueNNkku4jbitnBbJZ; Wed, 27 Apr 2022 07:04:28 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=WPC64lgR c=1 sm=1 tr=0 ts=6268eafc
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=SVN_c6MdWGthp28QxcgA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gDEyzleOI/+605Y3LDwOFzUUvhEi9dBtYwvt0DVY7PE=; b=2fJUB24yUZG++u14VTGijhuXUc
+        MNqQu1jUtgudryLGWlvV6Nfo3TuXZoSGbZFesmNt6zn23bTd5CsjU2RsxbbQh49F7O87ZWB0vPj+Y
+        Kf8LbUyyz0vZoZlu/gp885ITm/9U17QXLDj111Q/+a27jBcuWDaNzKgobXji48l0jootvCzlwi79V
+        Y4DtDtl/ACqWvR2PwhFwti6Gdw1OKEJiL2eBCsJcMp0anEKUYxRB6j96dIux13GYwTjCZOBy13KfN
+        t0WXNDN+Vu7OTzr7udbHNeE30v3tVVldS8g+EuVy6YDNCkTDetspAa94fHSy4LUpxqIwmufjqQViY
+        VzV0R/QQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:48818 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1njbis-001Q5f-Lo; Wed, 27 Apr 2022 01:04:26 -0600
+Subject: Re: [PATCH 5.15 000/124] 5.15.36-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220426081747.286685339@linuxfoundation.org>
+In-Reply-To: <20220426081747.286685339@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <3b3b9c05-d38d-4b6d-16c9-8c39a9571e9d@w6rz.net>
+Date:   Wed, 27 Apr 2022 00:04:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1njbis-001Q5f-Lo
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:48818
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,29 +95,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The safexcel module loads firmware so add MODULE_FIRMWARE macros to
-provide that information via modinfo.
+On 4/26/22 1:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.36 release.
+> There are 124 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.36-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Juerg Haefliger <juergh@protonmail.com>
----
- drivers/crypto/inside-secure/safexcel.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-diff --git a/drivers/crypto/inside-secure/safexcel.c b/drivers/crypto/inside-secure/safexcel.c
-index 9ff885d50edf..8198e70169b8 100644
---- a/drivers/crypto/inside-secure/safexcel.c
-+++ b/drivers/crypto/inside-secure/safexcel.c
-@@ -1997,3 +1997,10 @@ MODULE_AUTHOR("Igal Liberman <igall@marvell.com>");
- MODULE_DESCRIPTION("Support for SafeXcel cryptographic engines: EIP97 & EIP197");
- MODULE_LICENSE("GPL v2");
- MODULE_IMPORT_NS(CRYPTO_INTERNAL);
-+
-+MODULE_FIRMWARE("inside-secure/eip197b/ifpp.bin");
-+MODULE_FIRMWARE("inside-secure/eip197b/ipue.bin");
-+MODULE_FIRMWARE("inside-secure/eip197d/ifpp.bin");
-+MODULE_FIRMWARE("inside-secure/eip197d/ipue.bin");
-+MODULE_FIRMWARE("inside-secure/eip197_minifw/ifpp.bin");
-+MODULE_FIRMWARE("inside-secure/eip197_minifw/ipue.bin");
--- 
-2.32.0
+Tested-by: Ron Economos <re@w6rz.net>
 

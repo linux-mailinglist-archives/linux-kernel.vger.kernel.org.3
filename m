@@ -2,213 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F4551111E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC599511121
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358101AbiD0G2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S1358110AbiD0G3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238125AbiD0G2k (ORCPT
+        with ESMTP id S1358104AbiD0G3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:28:40 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E49B91359;
-        Tue, 26 Apr 2022 23:25:29 -0700 (PDT)
-X-UUID: 2b52a96266724aff9836837a75e27ac7-20220427
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:385f4bc9-27d9-4079-add1-ba95771287cf,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:385f4bc9-27d9-4079-add1-ba95771287cf,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:6f8ddb2e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: 2b52a96266724aff9836837a75e27ac7-20220427
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 124921721; Wed, 27 Apr 2022 14:25:25 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 27 Apr 2022 14:25:24 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 27 Apr 2022 14:25:24 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 27 Apr 2022 14:25:24 +0800
-Message-ID: <c0cf89c05ee708ec3648b267c1c0a0baa1331836.camel@mediatek.com>
-Subject: Re: [PATCH 5/7] arm64: dts: mediatek: mt8195-demo: enable ethernet
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Wed, 27 Apr 2022 14:25:23 +0800
-In-Reply-To: <20220426134106.242353-6-fparent@baylibre.com>
-References: <20220426134106.242353-1-fparent@baylibre.com>
-         <20220426134106.242353-6-fparent@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 27 Apr 2022 02:29:40 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF1B42DD
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:26:28 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id j8so719583pll.11
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=1bS4Q9BDlM4oKoEfSPn3EHiefcBS79HtqoMdoht7vK0=;
+        b=QZuSSbCznjyNlIhqARAeg5mud9WOt9skLpAWVkm2UGhfmIC0Li7mfItET7ZriUPIZb
+         3c5By4jupRCP7P28/GarVVxiOwDAncJq/1G5mwk+Wke7T3Scd3uyZhOMqk0JYidzr5sQ
+         kx1k5yffxCtLdumT4bDi28Y5ofJfkz1ZlnzZ6JWbNTwci6Vc5aEzaAAKgUxNeRdjC2Nd
+         dK+JGPQ88DdMEvgbrRwJR3VfJyzMPbIFwxGnLJAzh8Pef7zmBQMo59EUuVTTg5KQAu6U
+         lB/PoCofMrWG9oVNQjwLH13SS1x5lJdX+zJdbxnNYoDbNS0heYJb8nRf+dVHWSvUpegp
+         PDLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=1bS4Q9BDlM4oKoEfSPn3EHiefcBS79HtqoMdoht7vK0=;
+        b=yuobsZSIeN2E8Vo+r2gOM4RqM1q9gs4E7Pc3nHd8U0GxJUJsosZHlUJ75qE1LUC97Z
+         b5g30fMvY+dOd3X4e6pDw43kElsqN+4j9Wvvxa5skxkMkRzLuFYIZvB2yR69Bthav1ZH
+         6iA9pkapOV4lM20on5jlpvopRGXRIjFCIwDxZQYFii7c4brJ9V/Ytb+BifXSbPchCSXe
+         cceRkuJOGA0pC/nYVRlkaaG+e/Tt/6q8vGCWjzKdbnDN7+f3wN7pwHecnkKgQadwHzow
+         5tP98JDs2DoOx8Oit0IPZElyIc450upX8yFC3vT4UAYnAJIdouvWrVL2+k+yPozXSy/x
+         kgXA==
+X-Gm-Message-State: AOAM533tXSJNoy1YZjh/wEYL6Ij6oePIpvLNbqpzp8OHLOfcAa7K4Y0A
+        MvlFkv2xT+IS79K4H4B9SgM=
+X-Google-Smtp-Source: ABdhPJwWUEiRdSfDzwKl4HWGWj9HdFQ4dMBWskekMIfPKAtY3AcvDCjrsae0Q889quYNnRqAXe9LSQ==
+X-Received: by 2002:a17:902:ea0d:b0:15c:eceb:de38 with SMTP id s13-20020a170902ea0d00b0015cecebde38mr19572260plg.37.1651040788382;
+        Tue, 26 Apr 2022 23:26:28 -0700 (PDT)
+Received: from localhost (subs28-116-206-12-32.three.co.id. [116.206.12.32])
+        by smtp.gmail.com with ESMTPSA id p2-20020a634202000000b003a0c6ec24d2sm15003667pga.89.2022.04.26.23.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 23:26:27 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 13:26:25 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: ppc64_defconfig Werror: no previous prototype on
+ arch/powerpc/kernel/ftrace.c
+Message-ID: <YmjiEUxHaQ6OQV30@debian.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 15:41 +0200, Fabien Parent wrote:
-> Enable ethernet on the MT8195 demo board.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 108
-> +++++++++++++++++++
->  1 file changed, 108 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> index 08cab3b3943b..0b7985486e2a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-> @@ -80,6 +80,30 @@ optee_reserved: optee@43200000 {
->  	};
->  };
->  
-> +&eth {
-> +	phy-mode = "rgmii-rxid";
-> +	phy-handle = <&eth_phy>;
-> +	snps,reset-gpio = <&pio 93 GPIO_ACTIVE_HIGH>;
-> +	snps,reset-delays-us = <0 10000 10000>;
-> +	mediatek,tx-delay-ps = <2030>;
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&eth_default_pins>;
-> +	pinctrl-1 = <&eth_sleep_pins>;
-> +	status = "okay";
-> +
-> +	mdio {
-> +		compatible = "snps,dwmac-mdio";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		eth_phy: phy@1 {
-> +			compatible = "ethernet-phy-id001c.c916";
-> +			#phy-cells = <0>;
-> +			reg = <0x1>;
-> +		};
-> +	};
-> +};
-> +
->  &i2c6 {
->  	clock-frequency = <400000>;
->  	pinctrl-0 = <&i2c6_pins>;
-> @@ -260,6 +284,90 @@ &mt6359_vsram_others_ldo_reg {
->  };
->  
->  &pio {
-> +	eth_default_pins: eth-default-pins {
-> +		pins-cc {
-> +			pinmux = <PINMUX_GPIO85__FUNC_GBE_TXC>,
-> +				 <PINMUX_GPIO88__FUNC_GBE_TXEN>,
-> +				 <PINMUX_GPIO87__FUNC_GBE_RXDV>,
-> +				 <PINMUX_GPIO86__FUNC_GBE_RXC>;
-> +			drive-strength = <MTK_DRIVE_8mA>;
-> +		};
-> +
-> +		pins-mdio {
-> +			pinmux = <PINMUX_GPIO89__FUNC_GBE_MDC>,
-> +				 <PINMUX_GPIO90__FUNC_GBE_MDIO>;
-> +			input-enable;
-> +		};
-> +
-> +		pins-phy-reset {
-> +			pinmux = <PINMUX_GPIO93__FUNC_GPIO93>;
-> +		};
-> +
-> +		pins-power {
-> +			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-> +				 <PINMUX_GPIO92__FUNC_GPIO92>;
-> +			output-high;
-> +		};
-> +
-> +		pins-rxd {
-> +			pinmux = <PINMUX_GPIO81__FUNC_GBE_RXD3>,
-> +				 <PINMUX_GPIO82__FUNC_GBE_RXD2>,
-> +				 <PINMUX_GPIO83__FUNC_GBE_RXD1>,
-> +				 <PINMUX_GPIO84__FUNC_GBE_RXD0>;
-> +		};
-> +
-> +		pins-txd {
-> +			pinmux = <PINMUX_GPIO77__FUNC_GBE_TXD3>,
-> +				 <PINMUX_GPIO78__FUNC_GBE_TXD2>,
-> +				 <PINMUX_GPIO79__FUNC_GBE_TXD1>,
-> +				 <PINMUX_GPIO80__FUNC_GBE_TXD0>;
-> +			drive-strength = <MTK_DRIVE_8mA>;
-> +		};
-> +	};
-> +
-> +	eth_sleep_pins: eth-sleep-pins {
-> +		pins-cc {
-> +			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>,
-> +				 <PINMUX_GPIO88__FUNC_GPIO88>,
-> +				 <PINMUX_GPIO87__FUNC_GPIO87>,
-> +				 <PINMUX_GPIO86__FUNC_GPIO86>;
-> +		};
-> +
-> +		pins-mdio {
-> +			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>,
-> +				 <PINMUX_GPIO90__FUNC_GPIO90>;
-> +			input-disable;
-> +			bias-disable;
-> +		};
-> +
-> +		pins-phy-reset {
-> +			pinmux = <PINMUX_GPIO93__FUNC_GPIO93>;
-> +			input-disable;
-> +			bias-disable;
-> +		};
-> +
-> +		pins-power {
-> +			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-> +				 <PINMUX_GPIO92__FUNC_GPIO92>;
-> +			input-disable;
-> +			bias-disable;
-> +		};
-> +
-> +		pins-rxd {
-> +			pinmux = <PINMUX_GPIO81__FUNC_GPIO81>,
-> +				 <PINMUX_GPIO82__FUNC_GPIO82>,
-> +				 <PINMUX_GPIO83__FUNC_GPIO83>,
-> +				 <PINMUX_GPIO84__FUNC_GPIO84>;
-> +		};
-> +
-> +		pins-txd {
-> +			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
-> +				 <PINMUX_GPIO78__FUNC_GPIO78>,
-> +				 <PINMUX_GPIO79__FUNC_GPIO79>,
-> +				 <PINMUX_GPIO80__FUNC_GPIO80>;
-> +		};
-> +	};
-> +
->  	gpio_keys_pins: gpio-keys-pins {
->  		pins {
->  			pinmux = <PINMUX_GPIO106__FUNC_GPIO106>;
+Greetings,
 
-Tested-by: Macpaul Lin <macpaul.lin@mediatek.com>
+I did ppc64_defconfig build (gcc 11.2.0) on current master at commit
+46cf2c613f4b10 ("Merge tag 'pinctrl-v5.18-2'
+of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl"),
+and it errored out early like this:
 
-Regards,
-Macpaul Lin
+  CC      arch/powerpc/kernel/trace/ftrace.o
+arch/powerpc/kernel/trace/ftrace.c:978:7: error: no previous prototype for ‘arch_ftrace_match_adjust’ [-Werror=missing-prototypes]
+  978 | char *arch_ftrace_match_adjust(char *str, const char *search)
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+  CC      init/init_task.o
+cc1: all warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:288: arch/powerpc/kernel/trace/ftrace.o] Error 1
+make[2]: *** [scripts/Makefile.build:550: arch/powerpc/kernel/trace] Error 2
+make[1]: *** [scripts/Makefile.build:550: arch/powerpc/kernel] Error 2
+make: *** [Makefile:1834: arch/powerpc] Error 2
 
+The code in question is introduced by commit 7132e2d669bd42 ("ftrace:
+Match dot symbols when searching functions on ppc64").
+
+Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara

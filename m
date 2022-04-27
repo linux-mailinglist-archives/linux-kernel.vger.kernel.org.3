@@ -2,69 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BDF510D32
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726E9510D34
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356409AbiD0Ae7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S1356415AbiD0Af1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244133AbiD0Ae5 (ORCPT
+        with ESMTP id S1356411AbiD0AfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:34:57 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1744344C6;
-        Tue, 26 Apr 2022 17:31:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VBPcZAD_1651019503;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VBPcZAD_1651019503)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 27 Apr 2022 08:31:44 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, pabeni@redhat.com, kvalo@kernel.org,
-        pkshih@realtek.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] rtw89: remove unneeded semicolon
-Date:   Wed, 27 Apr 2022 08:31:42 +0800
-Message-Id: <20220427003142.107916-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 26 Apr 2022 20:35:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB66535242
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651019535; x=1682555535;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ptfKrLnVuU2OSDNjTi2bjmU6itXz67ikz9DWuBPUtFM=;
+  b=oJpU5IeQMr+BpEm1g2A9MJ5gLeGOCQ6zGAQP9mkkUJyj4OoQIdnsmATO
+   pJ5xFkNMvlin6Lfx6kTWxD4VPzk2WW/oFavGCv7YU/lLLDY6tYMX/3XKx
+   6z63nMVj8xSiyx/4NlYWpK5YUDMQfoikYGpdagdJ1NgCrcCSHrZE/uguw
+   6u3p059gSTgU+4e9WixeGCsLH5iCc7gPHFLU5SRp2kM/htzKBH/tvRxwT
+   1pjFFxteG70CmzEL5DT/5Gz/c3RR+QH9mIneUmSeqUAPWL6nrLi6MbsGx
+   eiItbDSB7tIUPKEtxjmvi/K4/CpFrJjDXT+1A2GS6zzn+fxdfzPq/jCf4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265928517"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="265928517"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 17:32:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="532935265"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Apr 2022 17:32:14 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njVbJ-00047C-LI;
+        Wed, 27 Apr 2022 00:32:13 +0000
+Date:   Wed, 27 Apr 2022 08:31:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fixes 1/5] hid-picolcd_debugfs.c:(.text+0xa58):
+ multiple definition of `kallsyms_on_each_symbol';
+ drivers/hid/hid-picolcd_core.o:hid-picolcd_core.c:(.text+0x3b0): first
+ defined here
+Message-ID: <202204270811.rnkThsA1-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the following coccicheck warning:
-./drivers/net/wireless/realtek/rtw89/rtw8852c.c:2556:2-3: Unneeded
-semicolon
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
+head:   5630c6957e15ef4902c8635147b35092efd08a0a
+commit: 1776d7631a9bec5d7b3f08779be196875fb4eb62 [1/5] kallsyms: Fully export kallsyms_on_each_symbol function
+config: sparc-randconfig-r016-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270811.rnkThsA1-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=1776d7631a9bec5d7b3f08779be196875fb4eb62
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fixes
+        git checkout 1776d7631a9bec5d7b3f08779be196875fb4eb62
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/net/wireless/realtek/rtw89/rtw8852c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/net/wireless/realtek/rtw89/rtw8852c.c b/drivers/net/wireless/realtek/rtw89/rtw8852c.c
-index 858611c64e6b..275568468212 100644
---- a/drivers/net/wireless/realtek/rtw89/rtw8852c.c
-+++ b/drivers/net/wireless/realtek/rtw89/rtw8852c.c
-@@ -2553,7 +2553,7 @@ do {								\
- 	default:
- 		val = arg.gnt_bt.data;
- 		break;
--	};
-+	}
- 
- 	__write_ctrl(R_AX_PWR_COEXT_CTRL, B_AX_TXAGC_BT_MASK, val,
- 		     B_AX_TXAGC_BT_EN, arg.ctrl_gnt_bt != 0xffff);
+All errors (new ones prefixed by >>):
+
+   sparc-linux-ld: drivers/hid/hid-picolcd_debugfs.o: in function `kallsyms_on_each_symbol':
+>> hid-picolcd_debugfs.c:(.text+0xa58): multiple definition of `kallsyms_on_each_symbol'; drivers/hid/hid-picolcd_core.o:hid-picolcd_core.c:(.text+0x3b0): first defined here
+
 -- 
-2.20.1.7.g153144c
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

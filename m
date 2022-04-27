@@ -2,169 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67995117AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125C95117C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbiD0Lz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S233206AbiD0L4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbiD0Lz4 (ORCPT
+        with ESMTP id S233145AbiD0L4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:55:56 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2522ACB
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:52:44 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a1so1650875edt.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:52:44 -0700 (PDT)
+        Wed, 27 Apr 2022 07:56:49 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC212085;
+        Wed, 27 Apr 2022 04:53:38 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d39f741ba0so1616542fac.13;
+        Wed, 27 Apr 2022 04:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FrT1A6ut1uHKtiSP9a1wbP1BfO/8mxv8g9Z5KDxbsgg=;
-        b=D9kCHFcz6/5eS56jF4XO7+B8nsp/FXL//Gs7ZpwFJ3ITljvLViSfef0c1agsVezvvb
-         TAoBp12GBo4zOFJ3Z1XOQWKGN/j4dDEFGn6C+dMW7e3K+adHJVTG7+gZKXbxjXswHIpK
-         4zmg9dTBOqNWSubqRmBalWlXPzCfv1BVk54lc=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lDcZaNu3s46BCfyK8AGIWunVVLL0K103UCBfoUiQuSg=;
+        b=PICN4L/bpRW0Ywnxp6EKdRxBPCzwU7brnkiRpdkxe9lXWNaE4lTzPUkUshVAWLTe/N
+         oNxKJ15ESYMJ1IWAQj7eAPSMVvhEvW+ZsVAuaZmliL1pg9Jnx9eacqGVfOzvPrUSGWnZ
+         UWLb0os8sSiInNnyHiHdtt7bXjtVue/jhqp9gJqzj+wVDBNcExTnCjmpS2i1gW3+DoE5
+         nXM6WltKKK1Km8+3wWS1x0YzzPWfDV4y6WWt7BGN2jCv0tjPfkciRgRc1U8l4P3HbEKv
+         8auJ3vFVfpc2iLwnPF1l6lZ4znNqDqASmphwBOE9hCmVPRMTMb8uea5nYIYN9Yx0FBae
+         pDTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FrT1A6ut1uHKtiSP9a1wbP1BfO/8mxv8g9Z5KDxbsgg=;
-        b=YXls2kPy545pnIYZO19v7JmdNC88LvwV1X+wWJ6TzY7kO2/AQbJ5cIXPNCqklY4bI/
-         ssGZs5wqygd+tXVKoWRLvGEiRbXaY1Hsuk13E+jfJamVB22Nb1S0i0x/JIQTvVIeFfme
-         lczQuoXpufxSiJwkgUfMxy5ZOR9vQ50HU6OtCK2+SHrKwvoG69GUiNc6Bze0GAw/BSxN
-         NlTw+imfn6FfYUSLliPILXgUPGg72GvieDl/fzCoyS0PSnlgRIB7s7vUfcT26cNxEpUP
-         jPgOTJilKSSP8iCRYyVVA7jz0cRp50E1m+sfG1w6ADEH+vYOLWXSTqY7nz4Ev8t7a+yA
-         r8Wg==
-X-Gm-Message-State: AOAM533CGthHmznAFYG5mFY53mHwc/m6CFn9XKJwcvXOfe9E20I20EFs
-        /tHrXh6gqarVhVurNtxSMdB0SXdmnnNxbnqAwp9yNg==
-X-Google-Smtp-Source: ABdhPJzYWsmTaAC0VH47hY2rZx4yVkhqdbfMoHddMAJ4KislzzUG4O781iD+rcleMDYil+1uX244oGBdSJF69e/fHpg=
-X-Received: by 2002:a05:6402:c9c:b0:425:d5e0:b69 with SMTP id
- cm28-20020a0564020c9c00b00425d5e00b69mr21314156edb.271.1651060363213; Wed, 27
- Apr 2022 04:52:43 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=lDcZaNu3s46BCfyK8AGIWunVVLL0K103UCBfoUiQuSg=;
+        b=VqB/jkNci1VKAx3/t+5zy2hz0kn8J8qj8GKzLgze/BHu8UU98L1ZBQPA99T3cJLFvv
+         tBi05tbbClx1HgfRe86IadMt9rb9waj4H+FW7rFMy7IpkrCex6jFXq+ktbqmi0a5rRTI
+         cHg2CmFku2O97ajf3HLZkFRamQiy4Ek60HJmAczS0hkNMKN4jlpYpHz+6ctwhIXPawg6
+         2yOZSOWBf3LOIYE+QfvCF6cYW1DtRsZMr/Tbg+Rh/Tmt9bshxDtwsC0Gs4VXgMMkj8t5
+         XH+XHo2oh0cyDgUmc1KPd0qTHrCxae+j7T/asEa4IRp+hg6GlkFNLlVbzeGCKDw8kONQ
+         QWRQ==
+X-Gm-Message-State: AOAM531JXfgyliSJ0bssAj0zMlWeCsVyMGyjQYkiBFKu6sBTSRX8BYJ6
+        kkspg6hya6ejVQjvUAW73vE=
+X-Google-Smtp-Source: ABdhPJxqdW1u4b+HYMVRCPgoviFhCC1pBVd4W3nXiChpfznNK9sGQAYLA/Qj8VRLsCahCdXVQ3ARfw==
+X-Received: by 2002:a05:6870:6324:b0:e9:16de:4053 with SMTP id s36-20020a056870632400b000e916de4053mr8701723oao.164.1651060417408;
+        Wed, 27 Apr 2022 04:53:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m22-20020a9d73d6000000b006028f49a6fcsm5779329otk.4.2022.04.27.04.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 04:53:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 27 Apr 2022 04:53:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware
+ quirk
+Message-ID: <20220427115333.GA2686708@roeck-us.net>
+References: <20220427035109.3819-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org> <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat> <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
-In-Reply-To: <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Wed, 27 Apr 2022 17:22:32 +0530
-Message-ID: <CAMty3ZAkw0rssCzR_ka7U9JeoGxJr5JPM7GWDfd1dob9goL-BQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427035109.3819-1-zev@bewilderbeest.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:29 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> On Thu, Apr 21, 2022 at 1:54 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > + Linus
-> > > + Marek
-> > > + Laurent
-> > > + Robert
-> > >
-> > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
-> > > <bjorn.andersson@linaro.org> wrote:
-> > > >
-> > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > > bridge")' attempted to simplify the case of expressing a simple panel
-> > > > under a DSI controller, by assuming that the first non-graph child node
-> > > > was a panel or bridge.
-> > > >
-> > > > Unfortunately for non-trivial cases the first child node might not be a
-> > > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > > DisplayPort, or an opp-table represented before the panel node.
-> > > >
-> > > > In these cases the reverted commit prevents the caller from ever finding
-> > > > a reference to the panel.
-> > > >
-> > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > > > panel or bridge")', in favor of using an explicit graph reference to the
-> > > > panel in the trivial case as well.
-> > >
-> > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > switched drivers.  Do you have any suggestions on how to proceed to
-> > > succeed in those use cases as well?
-> >
-> > I guess we could create a new helper for those, like
-> > devm_drm_of_get_bridge_with_panel, or something.
->
-> I think using the same existing helper and updating child support is
-> make sense, as there is a possibility to use the same host for child
-> and OF-graph bindings.
->
-> I can see two possible solutions (as of now)
->
-> 1. adding "dcs-child-type" bindings for child-based panel or bridge
-> 2. iterate child and skip those nodes other than panel or bridge. or
-> iterate sub-child to find it has a panel or bridge-like aux-bus (which
-> is indeed hard as this configuration seems not 'standard' i think )
->
-> Any inputs?
+On Tue, Apr 26, 2022 at 08:51:09PM -0700, Zev Weiss wrote:
+> CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
+> power output glitches on the ahe-50dc, so block them from being sent
+> at all.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> Cc: stable@vger.kernel.org
 
-Checking aux-bus with the sub-node panel can be a possible check to
-look at it, any comments?
+Applied.
 
---- a/drivers/gpu/drm/drm_of.c
-+++ b/drivers/gpu/drm/drm_of.c
-@@ -244,6 +244,25 @@ int drm_of_find_panel_or_bridge(const struct
-device_node *np,
-        if (panel)
-                *panel = NULL;
+Thanks,
+Guenter
 
-+       /**
-+        * Devices can also be child nodes when we also control that device
-+        * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
-+        *
-+        * Lookup for a child node of the given parent that isn't either port
-+        * or ports.
-+        */
-+       for_each_available_child_of_node(np, remote) {
-+               if (of_node_name_eq(remote, "port") ||
-+                   of_node_name_eq(remote, "ports"))
-+                       continue;
-+
-+               if (!(of_node_name_eq(remote, "aux-bus") &&
-+                     of_get_child_by_name(remote, "panel")))
-+                       continue;
-+
-+               goto of_find_panel_or_bridge;
-+       }
-+
-        /*
-         * of_graph_get_remote_node() produces a noisy error message if port
-         * node isn't found and the absence of the port is a legit case here,
-@@ -254,6 +273,8 @@ int drm_of_find_panel_or_bridge(const struct
-device_node *np,
-                return -ENODEV;
-
-        remote = of_graph_get_remote_node(np, port, endpoint);
-+
-+of_find_panel_or_bridge:
-        if (!remote)
-                return -ENODEV;
-
-Jagan.
+> ---
+>  drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+> index 40dffd9c4cbf..f546f0c12497 100644
+> --- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+> +++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
+> @@ -14,6 +14,21 @@
+>  
+>  #define AHE50DC_PMBUS_READ_TEMP4 0xd0
+>  
+> +static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
+> +{
+> +	/*
+> +	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
+> +	 * 5% of the time or so) trigger a problematic phenomenon in which the
+> +	 * fan speeds surge momentarily and at least some (perhaps all?) of the
+> +	 * system's power outputs experience a glitch.
+> +	 *
+> +	 * However, according to Delta it should be OK to simply not send any
+> +	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
+> +	 * reporting any faults anyway), so just blackhole them unconditionally.
+> +	 */
+> +	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
+> +}
+> +
+>  static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
+>  {
+>  	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
+> @@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_fan_info = {
+>  		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
+>  		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
+>  	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
+> +	.write_byte = ahe50dc_fan_write_byte,
+>  	.read_word_data = ahe50dc_fan_read_word_data,
+>  };
+>  

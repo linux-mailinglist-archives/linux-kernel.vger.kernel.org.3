@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07A25112A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EF55112A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358923AbiD0Hjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S1358937AbiD0HkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358904AbiD0Hjd (ORCPT
+        with ESMTP id S1358917AbiD0HkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:39:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5537EA66E1;
-        Wed, 27 Apr 2022 00:36:19 -0700 (PDT)
-X-UUID: dcba21c0319d4221b04a69ce7f6291ab-20220427
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:029bc05d-2773-494e-be7a-08c748ab380e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:149fde2e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: dcba21c0319d4221b04a69ce7f6291ab-20220427
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1086870149; Wed, 27 Apr 2022 15:36:11 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 27 Apr 2022 15:36:10 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 27 Apr 2022 15:36:10 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 27 Apr 2022 15:36:10 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-modules@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>,
-        <lecopzer.chen@mediatek.com>, <atomlin@redhat.com>
-Subject: [RESEND PATCH] module: show disallowed symbol name for inherit_taint()
-Date:   Wed, 27 Apr 2022 15:36:06 +0800
-Message-ID: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 27 Apr 2022 03:40:14 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E484B42D7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:37:03 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id d5so1228725wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=mZfdSBS5y4Rd+9lmJZ8ioIg+rdXI0dbRJJuRv/YMkM8=;
+        b=narrBJyCAB3/b6WSQwSVZC73+9V9ChoJt43reBAga257AD0hWwVtC5ZbLKL9r6gX15
+         2WxOpQvPX1p3dxWfiHoiwddh7WSUO8FU/J+9ycGIFba2rIpXSTif4UBKbpBoqLrZuwfG
+         NzQqUPn0j0Pw8KB9+1Xecmam15sn/KyqaYYmlvC1KylXeCJxu0Mmg5H/IlEj3iW+ZdHG
+         KvtMVLrNUXa1A9igfviWjQg5ODbUFy00WpoL8h0s9dJaMbEMtmt2pDJ4X86zQ2kdFitB
+         c6dLgIQ57fC4P9IX+HabHNSnQ83+tF6WTukhnJ9TE8O5KNG2MdcNdEcNa/3WgWAkjJzH
+         1W5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=mZfdSBS5y4Rd+9lmJZ8ioIg+rdXI0dbRJJuRv/YMkM8=;
+        b=pjLrqzV+FcokUdliIdD4FQrn7EaT3fz9pnLddWHH1ERPWCDW7Iid3SbcK4DZDn39nZ
+         O06rm+RvRv0h2D7JCYoEUkZfSSE9xfntUfsApsRGSqLQbfrAZz8hMY+X4URz24LJrh4A
+         dFQN7RSGuFvdU91rwLKrHaiz9CjWmQq+IiAeKn9lSbLll12CYv+sLbm2CqAttIVjxLeJ
+         /dzMyA5/02/rgQRM7NNAnBhvlZkEV9RniUXOQLqjnMx34N7sUzgaU4cNXvKfCLrCP2Bo
+         Gfv+sy7RYIbAOSbJrzlbkm8vpNFUyhS7gLcb8Jpb/8U/ggwLVDomOKqQuhNBxWV4sHmI
+         97AQ==
+X-Gm-Message-State: AOAM531zpUmtAvuwE4sdCvjN0SQS/sBjm0wHOi0Rci7NMCdeYZe2BMa3
+        euQy3nOcVOw/M070SLvQDRbJyw==
+X-Google-Smtp-Source: ABdhPJwLCDIcuRhobkJvaKdehCnH4H4F8YxZLNWgH4HjTZb+2mKiLq7XOLkn6zKMEOvLwlDCBMhRRA==
+X-Received: by 2002:a5d:6545:0:b0:20a:d761:bf0a with SMTP id z5-20020a5d6545000000b0020ad761bf0amr13367149wrv.180.1651045021850;
+        Wed, 27 Apr 2022 00:37:01 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id d17-20020adfa351000000b0020adbfb586fsm7853296wrb.117.2022.04.27.00.37.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 00:37:01 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 08:36:59 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: sprd: Add SC2730 PMIC to SPI device ID table
+Message-ID: <YmjymxFi6Z1s6LLV@google.com>
+References: <20220425132410.2708304-1-gengcixi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220425132410.2708304-1-gengcixi@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error log for inherit_taint() doesn't really help to find the
-symbol which violates GPL rules.
+On Mon, 25 Apr 2022, Cixi Geng wrote:
 
-For example,
-if a module has 300 symbol and includes 50 disallowed symbols,
-the log only shows the content below and we have no idea what symbol is.
-    AAA: module using GPL-only symbols uses symbols from proprietary module BBB.
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+> 
+> Add the SC2730 PMIC support for module autoloading
+> through SPI modalises.
+> 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  drivers/mfd/sprd-sc27xx-spi.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-It's hard for user who doesn't really know how the symbol was parsing.
+Applied, thanks.
 
-This patch add symbol name to tell the offending symbols explicitly.
-    AAA: module using GPL-only symbols uses symbols SSS from proprietary module BBB.
-
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
----
- kernel/module/main.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 05a42d8fcd7a..a90084c44c55 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1049,20 +1049,20 @@ static int verify_namespace_is_imported(const struct load_info *info,
- 	return 0;
- }
- 
--static bool inherit_taint(struct module *mod, struct module *owner)
-+static bool inherit_taint(struct module *mod, struct module *owner, const char *name)
- {
- 	if (!owner || !test_bit(TAINT_PROPRIETARY_MODULE, &owner->taints))
- 		return true;
- 
- 	if (mod->using_gplonly_symbols) {
--		pr_err("%s: module using GPL-only symbols uses symbols from proprietary module %s.\n",
--			mod->name, owner->name);
-+		pr_err("%s: module using GPL-only symbols uses symbols %s from proprietary module %s.\n",
-+			mod->name, name, owner->name);
- 		return false;
- 	}
- 
- 	if (!test_bit(TAINT_PROPRIETARY_MODULE, &mod->taints)) {
--		pr_warn("%s: module uses symbols from proprietary module %s, inheriting taint.\n",
--			mod->name, owner->name);
-+		pr_warn("%s: module uses symbols %s from proprietary module %s, inheriting taint.\n",
-+			mod->name, name, owner->name);
- 		set_bit(TAINT_PROPRIETARY_MODULE, &mod->taints);
- 	}
- 	return true;
-@@ -1094,7 +1094,7 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
- 	if (fsa.license == GPL_ONLY)
- 		mod->using_gplonly_symbols = true;
- 
--	if (!inherit_taint(mod, fsa.owner)) {
-+	if (!inherit_taint(mod, fsa.owner, name)) {
- 		fsa.sym = NULL;
- 		goto getname;
- 	}
 -- 
-2.18.0
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

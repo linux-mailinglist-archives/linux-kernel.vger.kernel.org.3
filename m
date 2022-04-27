@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAB35117F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D832511706
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234795AbiD0Mo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S234584AbiD0MpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234760AbiD0Mo5 (ORCPT
+        with ESMTP id S234774AbiD0Mo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:44:57 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAB76FA1D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651063303; x=1682599303;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iyYEkoFhdQrL+do7Rmsjwg1bFcTgKI5YlBgHLkqTrKo=;
-  b=BvQs7GgIb7D8nf3vtmrtVJ3kKoHagiLmFKA0sEugFYYjl4YVMmwxBRwY
-   cWr8C3iddQrDlWJIkNG/YNyYg0oL6MjmzyyIeGWFNwNh1ZaBUowotlOCf
-   YpXvlVnHOnosJRYIZwBcVf77RFjRkAW2La8m6DVO2Yh8wn0vueAatKCho
-   A=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Apr 2022 05:41:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 05:41:42 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 27 Apr 2022 05:41:42 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
- 2022 05:41:40 -0700
-Date:   Wed, 27 Apr 2022 08:41:39 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Zi Yan <ziy@nvidia.com>
-CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
- alloc_contig_range alignment.
-Message-ID: <20220427124139.GA71@qian>
-References: <20220425143118.2850746-1-zi.yan@sent.com>
- <20220426201855.GA1014@qian>
- <B621B4DD-5D11-4F0E-AFF5-F8684AE37E57@nvidia.com>
- <20220426210801.GA1038@qian>
- <2B9844C8-6D35-41E2-ACB2-9854E7A9C29F@nvidia.com>
+        Wed, 27 Apr 2022 08:44:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BC27093C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:45 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpJGM1lSgzGpRr;
+        Wed, 27 Apr 2022 20:39:07 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 20:41:44 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 20:41:43 +0800
+Message-ID: <11e852cb-911b-7f02-9471-2e05b3801770@huawei.com>
+Date:   Wed, 27 Apr 2022 20:41:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2B9844C8-6D35-41E2-ACB2-9854E7A9C29F@nvidia.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 0/3] arm64: mm: Do not defer reserve_crashkernel()
+Content-Language: en-US
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <vijayb@linux.microsoft.com>, <f.fainelli@gmail.com>
+References: <20220411092455.1461-1-wangkefeng.wang@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20220411092455.1461-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 05:38:58PM -0400, Zi Yan wrote:
-> Thanks. Do you mind attaching your config file? I cannot reproduce
-> the deadlock locally using my own config. I also see kmemleak_scan
-> in the dumped stack, so it must be something else in addition to
-> memory online/offline causing the issue.
+Hi Catalin and Will, any comments, thanks.
 
-This is on an arm64 server.
-
-$ make defconfig debug.config
+On 2022/4/11 17:24, Kefeng Wang wrote:
+> Commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+> platforms with no DMA memory zones"), this lets the kernel benifit
+> due to BLOCK_MAPPINGS, we could do more if ZONE_DMA and ZONE_DMA32
+> enabled.
+>
+> 1) Don't defer reserve_crashkernel() if only ZONE_DMA32
+> 2) Don't defer reserve_crashkernel() if ZONE_DMA with dma_force_32bit
+>     kernel parameter(newly added)
+>
+> Here is another case to show the benefit of the block mapping.
+>
+> Unixbench benchmark result shows between the block mapping and page mapping.
+> ----------------+------------------+-------------------
+>          	| block mapping    |   page mapping
+> ----------------+------------------+-------------------
+> Process Creation|  5,030.7         |    4,711.8
+> (in unixbench)  |                  |
+> ----------------+------------------+-------------------
+>
+> note: RODATA_FULL_DEFAULT_ENABLED is not enabled
+>
+> v3:
+> - renaming crashkernel_could_early_reserve() to crashkernel_early_reserve()
+> - drop dma32_phys_limit, directly use max_zone_phys(32)
+> - fix no previous prototype issue
+> - add RB of Vijay to patch2/3
+> v2 resend:
+> - fix build error reported-by lkp
+> v2:
+> - update patch1 according to Vijay and Florian, and RB of Vijay
+> - add new patch2
+>
+> Kefeng Wang (3):
+>    arm64: mm: Do not defer reserve_crashkernel() if only ZONE_DMA32
+>    arm64: mm: Don't defer reserve_crashkernel() with dma_force_32bit
+>    arm64: mm: Cleanup useless parameters in zone_sizes_init()
+>
+>   arch/arm64/include/asm/kexec.h |  1 +
+>   arch/arm64/mm/init.c           | 60 ++++++++++++++++++++++++----------
+>   arch/arm64/mm/mmu.c            |  6 ++--
+>   3 files changed, 46 insertions(+), 21 deletions(-)
+>

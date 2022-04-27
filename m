@@ -2,49 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D974511089
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFAF511090
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357865AbiD0Ffy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S1357877AbiD0FhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 01:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357860AbiD0Ffw (ORCPT
+        with ESMTP id S242326AbiD0FhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:35:52 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4065C135B13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:32:42 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651037560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=w9/gipiV+lOauk65dWZpxFoxcEnAO0aDF5hQXPlzKGY=;
-        b=FJdl5eUzyYjAdPiN3OdaHdrxNOIs1LOM++uJYMRhh/+wAFvbnRExLSL5EW9Gz7n+59/nQl
-        nx6LbAIUh6mkG+QTl2bSe2LL5Rx9zutEljcXj5cJ8VWmkd2WMRrkWtzeKzEhB82UrjB/Ny
-        1z53XQ09Vd3RFCqdQiiX1/4dau0EOJ0=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mm/hwpoison: use pr_err() instead of dump_page() in get_any_page()
-Date:   Wed, 27 Apr 2022 14:32:20 +0900
-Message-Id: <20220427053220.719866-1-naoya.horiguchi@linux.dev>
+        Wed, 27 Apr 2022 01:37:13 -0400
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B152E14CC03;
+        Tue, 26 Apr 2022 22:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1651037642; x=1651642442;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=aL6K7UCDQUw3L8hv5GTbt8AmUudFkgYuZh3aKLei0wo=;
+  b=1OU6V/VjLh8lG3WLrp6ePRYjyDxBjghElCadfPItZL55dmyhW51PkYN6
+   1C5uYkB5C5M5pj642Bc5/1oAgQcqqkhv2Ejw56BOB/GeVCwlpjuxaG+id
+   k/s6wfWw3fVxoDlUxHowfd4h4ncEh3KOX2mEUDSE8DpDBHwXjXRsBl1j4
+   4=;
+Received: from mail-bn7nam10lp2100.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.100])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 05:33:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hjvRry73RiuFOVQEuhc32NV3n51zoUuaWuwZlxc/5v+9O420tDTqB0ApYgODOLTwa9PQxPQsGd+4xATGAFfnOI7Gpc0cDHzk7fO5dgq7w1l275cU2KvVNMXsHdJq1/KV9E/dLA1Nb1yryqHNimECzJu6O978kH3n6bl6VJ6wUsK93A8L7pvD0k75aPcqBp/GadXecg4lOvzt6VztU/YoVl3/V02/3ihNsrOEYGKI0K389qXQhgd3Ic/luKuRHvBMeIBZpuPbP+xIZWGt1Etwg9r96efDFPSl6S8csjHazs9bErNert/LdAEcH4xzi3TawwpneH+kEyHutMk7cWgx8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aL6K7UCDQUw3L8hv5GTbt8AmUudFkgYuZh3aKLei0wo=;
+ b=ZL2R+yfSvQ1LA7SluNhgqC1lAVuhyYAePt8XqrlUDCYIMR0u7Rs6vpnLEHAQqP+o9Vu58d+1yawEYOeSFytNHY00pDbYlmr5WMccr6Nj+d9yqwV/3fKbYA50srm8oRO1W7Fo2+d15F4+dW3yvx831kwKW6amD6jnGwrgJ+e0Dq+Xhfq/ShNz7o2NpPS0W4oMbH3UN1GnFxVAXXdgVXIgtmRHIt2qq4kgq/l0PHlNdNkQp8Kz9WvJDSzBp8x3DZT2NpO6PdRZFRB1Ood0UoYqxqYBbf0SfcmObX7HYJOrB3I23UvGpX5RDPT11R/tR59iC86m97dbfDawKGEEBKiD5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from SN4PR0201MB8725.namprd02.prod.outlook.com
+ (2603:10b6:806:1e8::6) by CY4PR02MB3191.namprd02.prod.outlook.com
+ (2603:10b6:910:7c::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 27 Apr
+ 2022 05:33:56 +0000
+Received: from SN4PR0201MB8725.namprd02.prod.outlook.com
+ ([fe80::e4a7:ff94:cf7b:1447]) by SN4PR0201MB8725.namprd02.prod.outlook.com
+ ([fe80::e4a7:ff94:cf7b:1447%7]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
+ 05:33:56 +0000
+From:   "Sai Teja Aluvala (Temp) (QUIC)" <quic_saluvala@quicinc.com>
+To:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "Sai Teja Aluvala (Temp) (QUIC)" <quic_saluvala@quicinc.com>
+CC:     "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>,
+        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
+        quic_rjliao <quic_rjliao@quicinc.com>,
+        "Harish Bandi (QUIC)" <quic_hbandi@quicinc.com>,
+        "abhishekpandit@chromium.org" <abhishekpandit@chromium.org>,
+        "mcchou@chromium.org" <mcchou@chromium.org>
+Subject: RE: [PATCH v4] Bluetooth: arm64: dts: qcom: sc7280: Add IO regulator
+ handler in SC7280 CRD platforms
+Thread-Topic: [PATCH v4] Bluetooth: arm64: dts: qcom: sc7280: Add IO regulator
+ handler in SC7280 CRD platforms
+Thread-Index: AQHYVLSpiaDjD2QRfUiyiBgfwN0pWaz9phWAgAWhRdA=
+Date:   Wed, 27 Apr 2022 05:33:56 +0000
+Message-ID: <SN4PR0201MB872525C890830DE9321AEE6AE3FA9@SN4PR0201MB8725.namprd02.prod.outlook.com>
+References: <1650458740-16957-1-git-send-email-quic_saluvala@quicinc.com>
+ <YmQcu2GVES4FuwFU@builder.lan>
+In-Reply-To: <YmQcu2GVES4FuwFU@builder.lan>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 01976d51-3557-4e31-bdcc-08da280f8646
+x-ms-traffictypediagnostic: CY4PR02MB3191:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <CY4PR02MB319169CD914CE5B9C23456229FFA9@CY4PR02MB3191.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qJ3mdzXZucuLJEVk6a6i54kcfmKDZ+UWGSwhdFDSl8l7C6rV1TyufVKgk/95LPjiYETTcoN155zp39Q+LNJrklCNXYkqf+vAlN1XBrJVFX5ws89q8rIzU3UJZv90I1fXjqGd08PbNKaN9WY14eFsp039TYy1bcPYAHK8rAjHd4zqfo/VQL4Un23YiFgZ7TVkFC3N8mU4svFDakJoHqvQHbZ9ULXRn61p8qt0fqKVvmmCNM1d4x+8dHFpJGIslPEGAvrwTShxlkBR3jJKaD2qSIGwICyR06IXTQiSop4+OQpp+P98YELD+GEOmv6t5/DiFJSrbvYzofUk4gWZoNQuPiwLRqWbxUm05Fh+ugmWZPeeooH+6F+T7qHY8Hlw+iatCO0D5j8SoO7FGSTyIbOVWN/5KWQCnEGxDoSls/3kAi02CNYUgmWwipOKmA6QdIt2pZV0f27FpqCvuCd81wEgcPYfJMTkPzuvyw6425z3u3/9gPiZgnZRoIPh0KJAZgFRI15YFdgOScjpGjJKv9rRadW5UGqHaSZjYZd0tu0MGTv/F9e75xIiLT4P2bdtTSF8iMlEkBQvRKCBn8tMxrKvHyBcWBn9DM8XxUXST1XzTD3roFkNEVI67NVPBSqy9R5HTdlLAEbam9z1vIrYRokGKFPYovtVEvAqn8RbBffxhqQ2dCkyBPStL/YbXElID13F/Jrp1HKjKuaJhNEIoZEAhQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0201MB8725.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(64756008)(53546011)(26005)(52536014)(9686003)(8936002)(66946007)(71200400001)(66556008)(76116006)(83380400001)(316002)(54906003)(6506007)(66446008)(110136005)(4326008)(122000001)(7696005)(38070700005)(38100700002)(508600001)(86362001)(8676002)(7416002)(5660300002)(186003)(55016003)(33656002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DnKRvYc13vrVljb6XUTRMKOGoZP41CS7U5ESBCYpBOUUZ4q2Ymwd6ZeCHUHY?=
+ =?us-ascii?Q?byZua8InOhebpaxFD8v4k5H7vM2O8RB2qGIQGtg8Gnh5A+6Gz7HbrP3NQQ1d?=
+ =?us-ascii?Q?Yq9qIliCEVBgabpd3hNutnbrnG6ISQj2ETzytyQjLHFW7K1ZCP2CFSyp2UAh?=
+ =?us-ascii?Q?8rxapDh5DvTJnAyt4751F2xuO8umKHSFLWKEch2f7K8sSJfABBI66tOcccdD?=
+ =?us-ascii?Q?EX6U9ZBDzVRiqk3RfQkP8waOGs0aZ2gVfEvU+XCKmxauT/QO6tBRv7uUt1sO?=
+ =?us-ascii?Q?iXnwn4nINQ8WhnqEwt5/qMUpLBQpDfGVtBzya6AMUSoP/NY5e+TWdTS5paYF?=
+ =?us-ascii?Q?SqBRi9oylw/gxbF5/YZkz/etkhKsdWfFR1KGn8IpKIRMOkBVYW3pZNxxVJ3G?=
+ =?us-ascii?Q?i364vErO3g/Wu2Lq0rDt8/eKsKhthjDvWof0G2DxXLYkMH2I5gxKb5nbu2UR?=
+ =?us-ascii?Q?LpqlAo5j7QK1U1qUGrGOW8dqQDou8XNdniL/lt+GsHQbtJunTU7mdS0D4Yfv?=
+ =?us-ascii?Q?sAvShZjaDZiPFXDqXHaB1XDZ6Z1lM2zebTL1adebW1kUjbsrfRFvG9O933+t?=
+ =?us-ascii?Q?lr8SeaqVf+q8O5GIQWUdEp67s2P6KzMLPJG4BtDwwOyNWH8FrPMc5y9mo+5R?=
+ =?us-ascii?Q?7Fo8tqobjYLo5EvRaTIO9m0P9gVLJ/t59JLL5i48lWW6eRWVdWBPhFueR5md?=
+ =?us-ascii?Q?0Ofu56uTj1DMw6N0bgPaMQJtkIKD7hKKnTEOSn954xKnQXOYjWZItdUvFmzA?=
+ =?us-ascii?Q?eIdLcMQqUxH/CQrK1aTqJzJek08GTSlaPPuvPvv3yle7nT8uC9LAdJGctmWW?=
+ =?us-ascii?Q?6g7dhP5PWjLc0hv4XeC6vDdZdlE3+qQTRMKrAMQNV6Cr1rE7oKdFPorVNkaR?=
+ =?us-ascii?Q?qHmcgfhRo4ekX3Lclk1sPqs7IQAI2JkCaNH7YMoo0W63cFjIMWv6xAmeH5Az?=
+ =?us-ascii?Q?gqYSZbAhzht63DB4pStsKduAmjgNfI5xzctk/ZslzOVgvH1v1K+P9eBshkhb?=
+ =?us-ascii?Q?Lp5rixqLBDYx6sHbr69EeX5ZDM6/KuGT6gy4Ou0XMi62CbY1aC0kIdb9dOB8?=
+ =?us-ascii?Q?P4WFXBupV53Bo1aKVzhSjM4UOpP0D1wDeiQtg96sYEo1Kt9uot++4Y2ZNrIV?=
+ =?us-ascii?Q?DvShkyUQ2zca2AvRIPoRrL9XcLwiqGutgjMwAXIgPGkrq2L8fY7g8WVjygPX?=
+ =?us-ascii?Q?4Ky01kahCy7HfJGNq5YSzK1ErgRm0G8opqqeH+cMAMD1u6MhT4g1dhnzm6gE?=
+ =?us-ascii?Q?nOjLIRLyjV6baSk3peqZvn7lpL+vs5T5qWnYV4cwMpS7fDPFJP1kJe435uBf?=
+ =?us-ascii?Q?YhS5COCywS3aSLKI4sTcNIdJjOkLNUALM8VIgX+7niSmorlxhvoOby3U+4KN?=
+ =?us-ascii?Q?xlKiiKbs6qJ/VzddI8qQgKenY/YhcGWWuuX37DPxC2+QKAprNpGW7eBNGK9i?=
+ =?us-ascii?Q?cBorsbY/K/nXnbKL6QklAu3N83zDp7m36eYMah9jgmEfoeXNjiCsaNKsgQYb?=
+ =?us-ascii?Q?eOo3NLjENdyB1tUh5s8Y3oH0QhDok13F5cXWNrOSB7AqcfqhE/xyglJnEiJB?=
+ =?us-ascii?Q?357V66bpcHcJEb9apQjCrR4vvmHtBle0Uo2JmwcKplwc/znZsLhCDiY/6+Ot?=
+ =?us-ascii?Q?Jesge4jctTu57jUeik655vhHkUq+/5Lp3rpEnatRyE92vxYhFfCwRWUlC9mL?=
+ =?us-ascii?Q?i3W5+3fM/R5P8PqLbjV3c8HBbjuI3mn3eNuE0kBAKs48WKVGgJDkEYn77Bua?=
+ =?us-ascii?Q?RoWAqCp07g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0201MB8725.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01976d51-3557-4e31-bdcc-08da280f8646
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2022 05:33:56.8281
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yUlb6QrofXuxMO2I3mHjafxHyPa2r7vygJButYEV0l+skUoYfkRiN1/IrdNu60whv9fS+Gvgl7u5P9myosQQDmIm26nsTRh0jp9leRcljFk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB3191
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,88 +147,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-The following VM_BUG_ON_FOLIO() is triggered when memory error event
-happens on the (thp/folio) pages which are about to be freed:
 
-  [ 1160.232771] page:00000000b36a8a0f refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
-  [ 1160.236916] page:00000000b36a8a0f refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
-  [ 1160.240684] flags: 0x57ffffc0800000(hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
-  [ 1160.243458] raw: 0057ffffc0800000 dead000000000100 dead000000000122 0000000000000000
-  [ 1160.246268] raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-  [ 1160.249197] page dumped because: VM_BUG_ON_FOLIO(!folio_test_large(folio))
-  [ 1160.251815] ------------[ cut here ]------------
-  [ 1160.253438] kernel BUG at include/linux/mm.h:788!
-  [ 1160.256162] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-  [ 1160.258172] CPU: 2 PID: 115368 Comm: mceinj.sh Tainted: G            E     5.18.0-rc1-v5.18-rc1-220404-2353-005-g83111+ #3
-  [ 1160.262049] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-  [ 1160.265103] RIP: 0010:dump_page.cold+0x27e/0x2bd
-  [ 1160.266757] Code: fe ff ff 48 c7 c6 81 f1 5a 98 e9 4c fe ff ff 48 c7 c6 a1 95 59 98 e9 40 fe ff ff 48 c7 c6 50 bf 5a 98 48 89 ef e8 9d 04 6d ff <0f> 0b 41 f7 c4 ff 0f 00 00 0f 85 9f fd ff ff 49 8b 04 24 a9 00 00
-  [ 1160.273180] RSP: 0018:ffffaa2c4d59fd18 EFLAGS: 00010292
-  [ 1160.274969] RAX: 000000000000003e RBX: 0000000000000001 RCX: 0000000000000000
-  [ 1160.277263] RDX: 0000000000000001 RSI: ffffffff985995a1 RDI: 00000000ffffffff
-  [ 1160.279571] RBP: ffffdc9c45a80000 R08: 0000000000000000 R09: 00000000ffffdfff
-  [ 1160.281794] R10: ffffaa2c4d59fb08 R11: ffffffff98940d08 R12: ffffdc9c45a80000
-  [ 1160.283920] R13: ffffffff985b6f94 R14: 0000000000000000 R15: ffffdc9c45a80000
-  [ 1160.286641] FS:  00007eff54ce1740(0000) GS:ffff99c67bd00000(0000) knlGS:0000000000000000
-  [ 1160.289498] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ 1160.291106] CR2: 00005628381a5f68 CR3: 0000000104712003 CR4: 0000000000170ee0
-  [ 1160.293031] Call Trace:
-  [ 1160.293724]  <TASK>
-  [ 1160.294334]  get_hwpoison_page+0x47d/0x570
-  [ 1160.295474]  memory_failure+0x106/0xaa0
-  [ 1160.296474]  ? security_capable+0x36/0x50
-  [ 1160.297524]  hard_offline_page_store+0x43/0x80
-  [ 1160.298684]  kernfs_fop_write_iter+0x11c/0x1b0
-  [ 1160.299829]  new_sync_write+0xf9/0x160
-  [ 1160.300810]  vfs_write+0x209/0x290
-  [ 1160.301835]  ksys_write+0x4f/0xc0
-  [ 1160.302718]  do_syscall_64+0x3b/0x90
-  [ 1160.303664]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-  [ 1160.304981] RIP: 0033:0x7eff54b018b7
+-----Original Message-----
+From: Bjorn Andersson <bjorn.andersson@linaro.org>=20
+Sent: Saturday, April 23, 2022 9:05 PM
+To: Sai Teja Aluvala (Temp) (QUIC) <quic_saluvala@quicinc.com>
+Cc: marcel@holtmann.org; johan.hedberg@gmail.com; agross@kernel.org; robh+d=
+t@kernel.org; krzysztof.kozlowski+dt@linaro.org; linux-arm-msm@vger.kernel.=
+org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-blueto=
+oth@vger.kernel.org; mka@chromium.org; Hemant Gupta (QUIC) <quic_hemantg@qu=
+icinc.com>; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; quic=
+_rjliao <quic_rjliao@quicinc.com>; Harish Bandi (QUIC) <quic_hbandi@quicinc=
+.com>; abhishekpandit@chromium.org; mcchou@chromium.org
+Subject: Re: [PATCH v4] Bluetooth: arm64: dts: qcom: sc7280: Add IO regulat=
+or handler in SC7280 CRD platforms
 
-As shown in the RIP address, this VM_BUG_ON in folio_entire_mapcount() is
-called from dump_page("hwpoison: unhandlable page") in get_any_page().
-The below explains the mechanism of the race:
+On Wed 20 Apr 07:45 CDT 2022, Sai Teja Aluvala wrote:
 
-  CPU 0                                       CPU 1
+Look here:
 
-    memory_failure
-      get_hwpoison_page
-        get_any_page
-          dump_page
-            compound = PageCompound
-                                                free_pages_prepare
-                                                  page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP
-            folio_entire_mapcount
-              VM_BUG_ON_FOLIO(!folio_test_large(folio))
+$ git log --oneline -- sc7280-crd.dts
+737f9ea6cee7 arm64: dts: qcom: sc7280: Rename crd to crd-r3 073a39a2a63a ar=
+m64: dts: qcom: sc7280: Add pmg1110 regulators for sc7280-crd
+3ebf11fa4a35 arm64: dts: qcom: sc7280-crd: Add Touchscreen and touchpad sup=
+port 248da168fbae arm64: dts: qcom: sc7280: Define EC and H1 nodes for IDP/=
+CRD 427b249504ea arm64: dts: qcom: sc7280-crd: Add device tree files for CR=
+D
 
-So replace dump_page() with safer one, pr_err().
+You have 2 commits specifically touching this file and you have 3 touching =
+the platform. Your change touches only the single board, so it should match=
+ the two.
+[Sai] : Noted. I will update in next patch
+As said before, your subject is too noisy, you can express this change with=
+ less words. Something like "...: Override Bluetooth vddio" completely cove=
+rs the "what" of this patch, in 54 characters.
+[Sai]: I will decrease to less words
+> As IO regulator varies in different SC7280 platforms updating this=20
+> handler in individual platform bluetooth node.
+>=20
 
-Fixes: 74e8ee4708a8 ("mm: Turn head_compound_mapcount() into folio_entire_mapcount()")
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
----
-ChangeLog v1 -> v2:
-- v1: https://lore.kernel.org/linux-mm/20220414235950.840409-1-naoya.horiguchi@linux.dev/T/#u
-- update caller side instead of changing dump_page().
----
- mm/memory-failure.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+"Bluetooth vddio in the CRD differs from that in the IDP, override it."
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 35e11d6bea4a..0e1453514a2b 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1270,7 +1270,7 @@ static int get_any_page(struct page *p, unsigned long flags)
- 	}
- out:
- 	if (ret == -EIO)
--		dump_page(p, "hwpoison: unhandlable page");
-+		pr_err("Memory failure: %#lx: unhandlable page.\n", page_to_pfn(p));
- 
- 	return ret;
- }
--- 
-2.25.1
+Makes it clear what area is touched, what value is overriden and why it's o=
+verriden.
+[sai]: will update in next patch.
+Regards,
+Bjorn
 
+> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+> ---
+> v4: updated commit text
+> v3: Updated commit text to reflect the change
+> v2: updated reviewer comments.
+> v1: intial patch
+> ---
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts=20
+> b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> index e2efbdd..6cbbddc 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> @@ -35,6 +35,10 @@
+>  	};
+>  };
+> =20
+> +&bluetooth {
+> +	vddio-supply =3D <&vreg_l18b_1p8>;
+> +};
+> +
+>  ap_tp_i2c: &i2c0 {
+>  	status =3D "okay";
+>  	clock-frequency =3D <400000>;
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+>=20

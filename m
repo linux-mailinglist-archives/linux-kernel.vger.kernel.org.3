@@ -2,251 +2,801 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C30512326
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB91512329
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbiD0T50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S235084AbiD0T6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234734AbiD0T5X (ORCPT
+        with ESMTP id S235328AbiD0T6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:57:23 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3934E6F9F8;
-        Wed, 27 Apr 2022 12:54:10 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id r13so5493650ejd.5;
-        Wed, 27 Apr 2022 12:54:10 -0700 (PDT)
+        Wed, 27 Apr 2022 15:58:07 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BE571D80
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:54:54 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id j8so2473309pll.11
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:54:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Wcy/yHzsTgQ28Wq5AenKD6lTaaPcG2J9+67ZI1nrh40=;
-        b=g5Ex7jHfsDmdL14aRE4w2MGOkO+9ZJ1v9eEPQxjTl/pylYazCi9sW+cRG94GWIALtv
-         XsyUfm/i3DYQAo5w+aiBFUF5DRp7Z9rEL087sWd4O8QKdhfmzpa+TG+dhqR5ze+MlWL2
-         KeJz0z9PhXut/sO1vcWGEVbY9SW58+3se/yIDT0TOI85VsUp4vBwzbrDZADoYjDwnzqU
-         NxjcAPO1F+cvrdqFnBu7yOPwqOKqbl0nJ6Nj0haW2lvyF2rMdYffnNinuwfgSf0KAHGZ
-         bFocbsAj8K14+i8QTu++XCkJmsbWF+M6b5/ygTOpzmZzuUG6Pug0r7CpcCNhK2UWUH5u
-         CXmg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8E62sc2N0xYk98Q3FOi3UWyDPdfpLBQtbjJKAv7vuPg=;
+        b=KkW+uE76IeHP84eZIRugWyuExRU18k3cRDcZWxMZbvOI4181aX++j6tkYUScdI1oYf
+         f4b1ahKKr8BeU12ohUyCvQyombavMRhtlZL0RXmolzCW+nKe+vNdXLSu6Ygm8PoNlxCH
+         q+hP4NyiVWecw4Eh5v2xgfd5LGxyPXKdwQS8s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Wcy/yHzsTgQ28Wq5AenKD6lTaaPcG2J9+67ZI1nrh40=;
-        b=OeKVCLZ4433WWhBqmjic3frRFYdwkvly2BWx0XPEZ2UbMkF/Pdgm3pXC9jSdCsVgl1
-         wUAk8pNeWGwbDyCP+J/cIN5WUqFFtUPzC3T+y3kOiU+3As+ZLRh7aLEQSbJumUPluBh3
-         lM0Va2oJMYCRbGd/09qwRL/A3M7tdlzwwee3wHg+3ca1EU/8oOScAXzW872vo5L2DLVR
-         KtbsJsHe2KiqiNiJqM88kq7JaNoPpNPvOT3iI8aUspXwdLP25ZGPQfN74MwVyzw1VWDc
-         7rnVj9dLXZ8U+e6QXSQruopPpA9easJQQmytJf1IGntcKHvzwn2UDrq5ANZQn06GorlG
-         Sq6g==
-X-Gm-Message-State: AOAM533ndzBKd5I4qfhPzz8Gg5RXi4gbw2H9Mo8atNUhXqVth1IyefUK
-        CC+v8KoRJ8lP9gB1gxl4AkgwFl2l7a0jYQ==
-X-Google-Smtp-Source: ABdhPJwwBqiertU6+0kXkNFEFcXH+3N/DokNjpIGwaiyxbu4o439QT/7JwN4XodQNQiW6Dvkxzuf1g==
-X-Received: by 2002:a17:906:478d:b0:6e8:8ee0:1f9f with SMTP id cw13-20020a170906478d00b006e88ee01f9fmr28106026ejc.296.1651089248702;
-        Wed, 27 Apr 2022 12:54:08 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id t12-20020a1709067c0c00b006e86db76851sm7214275ejo.193.2022.04.27.12.54.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8E62sc2N0xYk98Q3FOi3UWyDPdfpLBQtbjJKAv7vuPg=;
+        b=XpUfcSdBKtxxUUhN0ZjKho3VWDB0/spxl+DvI0q430kyHNPakLmQ65D5ZJXx3Xi7Ia
+         n9buMSWEw8WnNx/QrwvdRPyLSlU2bHYfKov6SY2JtgH7El9YpWQ6moUB8isK9GxMJJAz
+         RXC562HIoTuYREzHGe3AOLfrPuoS9JVCG3XlZ8M4/+784r36fe3yU5Unoe1YfTYVLzep
+         dtenylAjckmfjlDOkLCi9jJJ5u1UiIhVqjN7cNeBt17dv4WCV63vU59YF7+svQ1C7pjz
+         I6Psz1MPB0qy21ZroJfn9Mrt0WJDgTrZ5mnv84t2niZHEiA6IUqyCYHHZdJvo2vEIq00
+         F4lg==
+X-Gm-Message-State: AOAM530guDfMVG9okcQv4cm8Htbj20imHjMnK8lVd6zkqka+EbZpZ3lg
+        J7kvHvZfR/A9DZo8HB9sfD/i/2i7ac8aIw==
+X-Google-Smtp-Source: ABdhPJx+kY8RHjRJM6saR2cjJ2sz7lAcXVrAQr1P20zOkPHVaDPsLPeBR0eDi9hgZC7C1UJB8zbJTQ==
+X-Received: by 2002:a17:90b:4a8a:b0:1d2:bff4:b44f with SMTP id lp10-20020a17090b4a8a00b001d2bff4b44fmr45316356pjb.118.1651089293601;
+        Wed, 27 Apr 2022 12:54:53 -0700 (PDT)
+Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
+        by smtp.gmail.com with ESMTPSA id z13-20020a17090a468d00b001cd4989fedfsm8159683pjf.43.2022.04.27.12.54.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:54:08 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 39/45] media: sun6i-csi: Add support for MIPI CSI-2 to the bridge code
-Date:   Wed, 27 Apr 2022 21:54:07 +0200
-Message-ID: <8974124.rMLUfLXkoz@jernej-laptop>
-In-Reply-To: <20220415152811.636419-40-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-40-paul.kocialkowski@bootlin.com>
+        Wed, 27 Apr 2022 12:54:53 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sc7180: wormdingler: Add wormdingler dts files.
+Date:   Wed, 27 Apr 2022 12:54:49 -0700
+Message-Id: <20220427125423.1.Id2821de5fde55ebe928e8fc87a71c8d535edb383@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:28:05 CEST je Paul Kocialkowski napisal(a):
-> Introduce MIPI CSI-2 support to the bridge with a new port, source
-> and hardware configuration helper.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Wormdingler is a trogdor-based board, shipping to customers as the
+Lenovo IdeaPad Chromebook Duet 3. These dts files are copies from
+the downstream Chrome OS 5.4 kernel, but with the camera
+(sc7180-trogdor-mipi-camera.dtsi) #include removed.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+---
 
-Best regards,
-Jernej
+ arch/arm64/boot/dts/qcom/Makefile             |   6 +
+ .../sc7180-trogdor-wormdingler-rev0-boe.dts   |  22 +
+ .../sc7180-trogdor-wormdingler-rev0-inx.dts   |  22 +
+ .../qcom/sc7180-trogdor-wormdingler-rev0.dtsi |  53 +++
+ ...0-trogdor-wormdingler-rev1-boe-rt5682s.dts |  39 ++
+ .../sc7180-trogdor-wormdingler-rev1-boe.dts   |  28 ++
+ ...0-trogdor-wormdingler-rev1-inx-rt5682s.dts |  33 ++
+ .../sc7180-trogdor-wormdingler-rev1-inx.dts   |  22 +
+ .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  | 417 ++++++++++++++++++
+ 9 files changed, 642 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
 
-> ---
->  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  1 +
->  .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 46 +++++++++++++++++--
->  .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |  1 +
->  3 files changed, 44 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h index
-> 1aeaef84abba..6aa83dd11684 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> @@ -21,6 +21,7 @@
-> 
->  enum sun6i_csi_port {
->  	SUN6I_CSI_PORT_PARALLEL		= 0,
-> +	SUN6I_CSI_PORT_MIPI_CSI2	= 1,
->  };
-> 
->  struct sun6i_csi_buffer {
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c index
-> ec3e04353106..27289d904d5c 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
-> @@ -226,7 +226,7 @@ static void sun6i_csi_bridge_disable(struct
-> sun6i_csi_device *csi_dev) }
-> 
->  static void
-> -sun6i_csi_bridge_configure_interface(struct sun6i_csi_device *csi_dev)
-> +sun6i_csi_bridge_configure_parallel(struct sun6i_csi_device *csi_dev)
->  {
->  	struct device *dev = csi_dev->dev;
->  	struct regmap *regmap = csi_dev->regmap;
-> @@ -316,6 +316,25 @@ sun6i_csi_bridge_configure_interface(struct
-> sun6i_csi_device *csi_dev) regmap_write(regmap, SUN6I_CSI_IF_CFG_REG,
-> value);
->  }
-> 
-> +static void
-> +sun6i_csi_bridge_configure_mipi_csi2(struct sun6i_csi_device *csi_dev)
-> +{
-> +	struct regmap *regmap = csi_dev->regmap;
-> +	u32 value = SUN6I_CSI_IF_CFG_IF_MIPI;
-> +	u32 field;
-> +
-> +	sun6i_csi_bridge_format(csi_dev, NULL, &field);
-> +
-> +	if (field == V4L2_FIELD_INTERLACED ||
-> +	    field == V4L2_FIELD_INTERLACED_TB ||
-> +	    field == V4L2_FIELD_INTERLACED_BT)
-> +		value |= SUN6I_CSI_IF_CFG_SRC_TYPE_INTERLACED;
-> +	else
-> +		value |= SUN6I_CSI_IF_CFG_SRC_TYPE_PROGRESSIVE;
-> +
-> +	regmap_write(regmap, SUN6I_CSI_IF_CFG_REG, value);
-> +}
-> +
->  static void sun6i_csi_bridge_configure_format(struct sun6i_csi_device
-> *csi_dev) {
->  	struct regmap *regmap = csi_dev->regmap;
-> @@ -367,9 +386,16 @@ static void sun6i_csi_bridge_configure_format(struct
-> sun6i_csi_device *csi_dev) regmap_write(regmap, SUN6I_CSI_CH_CFG_REG,
-> value);
->  }
-> 
-> -static void sun6i_csi_bridge_configure(struct sun6i_csi_device *csi_dev)
-> +static void sun6i_csi_bridge_configure(struct sun6i_csi_device *csi_dev,
-> +				       struct 
-sun6i_csi_bridge_source *source)
->  {
-> -	sun6i_csi_bridge_configure_interface(csi_dev);
-> +	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
-> +
-> +	if (source == &bridge->source_parallel)
-> +		sun6i_csi_bridge_configure_parallel(csi_dev);
-> +	else
-> +		sun6i_csi_bridge_configure_mipi_csi2(csi_dev);
-> +
->  	sun6i_csi_bridge_configure_format(csi_dev);
->  }
-> 
-> @@ -381,6 +407,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev
-> *subdev, int on) struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
->  	struct media_entity *bridge_entity = &bridge->subdev.entity;
->  	struct device *dev = csi_dev->dev;
-> +	struct sun6i_csi_bridge_source *source;
->  	struct v4l2_subdev *source_subdev;
->  	struct media_link *link;
->  	/* Initialize to 0 to use both in disable label (ret != 0) and off. 
-*/
-> @@ -398,6 +425,11 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev
-> *subdev, int on)
-> 
->  	source_subdev = media_entity_to_v4l2_subdev(link->source->entity);
-> 
-> +	if (source_subdev == bridge->source_parallel.subdev)
-> +		source = &bridge->source_parallel;
-> +	else
-> +		source = &bridge->source_mipi_csi2;
-> +
->  	if (!on) {
->  		v4l2_subdev_call(source_subdev, video, s_stream, 0);
->  		goto disable;
-> @@ -415,7 +447,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev
-> *subdev, int on)
-> 
->  	/* Configure */
-> 
-> -	sun6i_csi_bridge_configure(csi_dev);
-> +	sun6i_csi_bridge_configure(csi_dev, source);
->  	sun6i_csi_capture_configure(csi_dev);
-> 
->  	/* State Update */
-> @@ -607,6 +639,7 @@ sun6i_csi_bridge_notifier_bound(struct
-> v4l2_async_notifier *notifier, struct sun6i_csi_bridge_async_subdev
-> *bridge_async_subdev =
->  		container_of(async_subdev, struct 
-sun6i_csi_bridge_async_subdev,
->  			     async_subdev);
-> +	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
->  	struct sun6i_csi_bridge_source *source = bridge_async_subdev-
->source;
->  	bool enabled;
-> 
-> @@ -614,6 +647,9 @@ sun6i_csi_bridge_notifier_bound(struct
-> v4l2_async_notifier *notifier, case SUN6I_CSI_PORT_PARALLEL:
->  		enabled = true;
->  		break;
-> +	case SUN6I_CSI_PORT_MIPI_CSI2:
-> +		enabled = !bridge->source_parallel.expected;
-> +		break;
->  	default:
->  		break;
->  	}
-> @@ -760,6 +796,8 @@ int sun6i_csi_bridge_setup(struct sun6i_csi_device
-> *csi_dev) sun6i_csi_bridge_source_setup(csi_dev, &bridge->source_parallel,
-> SUN6I_CSI_PORT_PARALLEL,
->  				      parallel_mbus_types);
-> +	sun6i_csi_bridge_source_setup(csi_dev, &bridge->source_mipi_csi2,
-> +				      SUN6I_CSI_PORT_MIPI_CSI2, 
-NULL);
-> 
->  	ret = v4l2_async_nf_register(v4l2_dev, notifier);
->  	if (ret) {
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h index
-> cb3b27af4607..ee592a14b9c5 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
-> @@ -46,6 +46,7 @@ struct sun6i_csi_bridge {
->  	struct mutex			lock; /* Mbus format lock. */
-> 
->  	struct sun6i_csi_bridge_source	source_parallel;
-> +	struct sun6i_csi_bridge_source	source_mipi_csi2;
->  };
-> 
->  /* Helpers */
-
-
-
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index f9e6343acd03..5f51452e3dc1 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -81,6 +81,12 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r3-lte.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-boe.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev0-inx.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r0.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+new file mode 100644
+index 000000000000..d6ed7d0afe4a
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x10 => 16
++ *  - bits 7..4: Panel ID: 0x1 (BOE)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler-rev0.dtsi"
++
++/ {
++	model = "Google Wormdingler rev0 BOE panel board";
++	compatible = "google,wormdingler-rev0-sku16", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "boe,tv110c9m-ll3";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+new file mode 100644
+index 000000000000..c03525ea64ca
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x0 => 0
++ *  - bits 7..4: Panel ID: 0x0 (INX)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler-rev0.dtsi"
++
++/ {
++	model = "Google Wormdingler rev0 INX panel board";
++	compatible = "google,wormdingler-rev0-sku0", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "innolux,hj110iz-01a";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi
+new file mode 100644
+index 000000000000..db29e0cba29d
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler.dtsi"
++
++&avdd_lcd {
++	gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
++};
++
++&panel {
++	enable-gpios = <&tlmm 76 GPIO_ACTIVE_HIGH>;
++};
++
++&v1p8_mipi {
++	gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
++};
++
++/* PINCTRL - modifications to sc7180-trogdor-wormdingler.dtsi */
++&avdd_lcd_en {
++	pinmux {
++		pins = "gpio80";
++	};
++
++	pinconf {
++		pins = "gpio80";
++	};
++};
++
++&mipi_1800_en {
++	pinmux {
++		pins = "gpio81";
++	};
++
++	pinconf {
++		pins = "gpio81";
++	};
++};
++&vdd_reset_1800 {
++	pinmux {
++		pins = "gpio76";
++	};
++
++	pinconf {
++		pins = "gpio76";
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts
+new file mode 100644
+index 000000000000..1a921a540075
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x401 => 1025
++ *  - bits 11..8: Panel ID: 0x4 (BOE)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler.dtsi"
++
++/ {
++	model = "Google Wormdingler rev1+ (BOE, rt5682s)";
++	compatible = "google,wormdingler-sku1025", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "boe,tv110c9m-ll3";
++};
++
++&alc5682 {
++	compatible = "realtek,rt5682s";
++	realtek,dmic1-clk-pin = <2>;
++	realtek,dmic-clk-rate-hz = <2048000>;
++};
++
++&dsi_phy {
++	qcom,phy-rescode-offset-top = /bits/ 8 <31 31 31 31 (-32)>;
++	qcom,phy-rescode-offset-bot = /bits/ 8 <31 31 31 31 (-32)>;
++	qcom,phy-drive-ldo-level = <450>;
++};
++
++&sound {
++	compatible = "google,sc7180-trogdor";
++	model = "sc7180-rt5682s-max98357a-1mic";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts
+new file mode 100644
+index 000000000000..c5b0658bd632
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x400 => 1024
++ *  - bits 11..8: Panel ID: 0x4 (BOE)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler.dtsi"
++
++/ {
++	model = "Google Wormdingler rev1+ BOE panel board";
++	compatible = "google,wormdingler-sku1024", "qcom,sc7180";
++};
++
++&dsi_phy {
++	qcom,phy-rescode-offset-top = /bits/ 8 <31 31 31 31 (-32)>;
++	qcom,phy-rescode-offset-bot = /bits/ 8 <31 31 31 31 (-32)>;
++	qcom,phy-drive-ldo-level = <450>;
++};
++
++&panel {
++	compatible = "boe,tv110c9m-ll3";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts
+new file mode 100644
+index 000000000000..1129e3fed165
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x0001 => 1
++ *  - bits 11..8: Panel ID: 0x0 (INX)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler.dtsi"
++
++/ {
++	model = "Google Wormdingler rev1+ (INX, rt5682s)";
++	compatible = "google,wormdingler-sku1", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "innolux,hj110iz-01a";
++};
++
++&alc5682 {
++	compatible = "realtek,rt5682s";
++	realtek,dmic1-clk-pin = <2>;
++	realtek,dmic-clk-rate-hz = <2048000>;
++};
++
++&sound {
++	compatible = "google,sc7180-trogdor";
++	model = "sc7180-rt5682s-max98357a-1mic";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts
+new file mode 100644
+index 000000000000..dd34a2297ea0
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x0000 => 0
++ *  - bits 11..8: Panel ID: 0x0 (INX)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-wormdingler.dtsi"
++
++/ {
++	model = "Google Wormdingler rev1+ INX panel board";
++	compatible = "google,wormdingler-sku0", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "innolux,hj110iz-01a";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
+new file mode 100644
+index 000000000000..e947e01d0b3b
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
+@@ -0,0 +1,417 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Wormdingler board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ */
++
++/dts-v1/;
++
++#include "sc7180.dtsi"
++
++ap_ec_spi: &spi6 {};
++ap_h1_spi: &spi0 {};
++
++#include "sc7180-trogdor.dtsi"
++
++/ {
++	avdd_lcd: avdd-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "avdd_lcd";
++
++		gpio = <&tlmm 88 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&avdd_lcd_en>;
++
++		vin-supply = <&pp5000_a>;
++	};
++
++	avee_lcd: avee-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "avee_lcd";
++
++		gpio = <&tlmm 21 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&avee_lcd_en>;
++
++		vin-supply = <&pp5000_a>;
++	};
++
++	pp1800_ts:
++	v1p8_mipi: v1p8-mipi {
++		compatible = "regulator-fixed";
++		regulator-name = "v1p8_mipi";
++
++		gpio = <&tlmm 86 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&mipi_1800_en>;
++
++		vin-supply = <&pp3300_a>;
++	};
++
++	thermal-zones {
++		skin_temp_thermal: skin-temp-thermal {
++			polling-delay-passive = <250>;
++			polling-delay = <0>;
++
++			thermal-sensors = <&pm6150_adc_tm 1>;
++			sustainable-power = <574>;
++
++			trips {
++				skin_temp_alert0: trip-point0 {
++					temperature = <58000>;
++					hysteresis = <1000>;
++					type = "passive";
++				};
++
++				skin_temp_alert1: trip-point1 {
++					temperature = <62500>;
++					hysteresis = <1000>;
++					type = "passive";
++				};
++
++				skin-temp-crit {
++					temperature = <68000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++
++			cooling-maps {
++				map0 {
++					trip = <&skin_temp_alert0>;
++					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++				};
++
++				map1 {
++					trip = <&skin_temp_alert1>;
++					cooling-device = <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
++							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++				};
++			};
++		};
++	};
++};
++
++&ap_tp_i2c {
++	status = "disabled";
++};
++
++&backlight {
++	pwms = <&cros_ec_pwm 0>;
++};
++
++&camcc {
++	status = "okay";
++};
++
++&cros_ec {
++	base_detection: cbas {
++		compatible = "google,cros-cbas";
++	};
++};
++
++&dsi0 {
++
++	panel: panel@0 {
++		reg = <0>;
++		enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vdd_reset_1800>;
++		avdd-supply = <&avdd_lcd>;
++		avee-supply = <&avee_lcd>;
++		pp1800-supply = <&v1p8_mipi>;
++		pp3300-supply = <&pp3300_dx_edp>;
++		backlight = <&backlight>;
++		rotation = <270>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			port@0 {
++				reg = <0>;
++				panel_in: endpoint {
++					remote-endpoint = <&dsi0_out>;
++				};
++			};
++		};
++	};
++
++	ports {
++		port@1 {
++			endpoint {
++				remote-endpoint = <&panel_in>;
++				data-lanes = <0 1 2 3>;
++			};
++		};
++	};
++};
++
++&i2c4 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	ap_ts: touchscreen@1 {
++		compatible = "hid-over-i2c";
++		reg = <0x01>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ts_int_l>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <9 IRQ_TYPE_EDGE_FALLING>;
++
++		post-power-on-delay-ms = <70>;
++		hid-descr-addr = <0x0001>;
++
++		vdd-supply = <&pp3300_ts>;
++		vddl-supply = <&pp1800_ts>;
++	};
++};
++
++&pm6150_adc {
++	skin-temp-thermistor@4d {
++		reg = <ADC5_AMUX_THM1_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time = <200>;
++	};
++};
++
++&pm6150_adc_tm {
++	status = "okay";
++
++	skin-temp-thermistor@1 {
++		reg = <1>;
++		io-channels = <&pm6150_adc ADC5_AMUX_THM1_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time-us = <200>;
++	};
++};
++
++&pp1800_uf_cam {
++	status = "okay";
++};
++
++&pp1800_wf_cam {
++	status = "okay";
++};
++
++&pp2800_uf_cam {
++	status = "okay";
++};
++
++&pp2800_wf_cam {
++	status = "okay";
++};
++
++&wifi {
++	qcom,ath10k-calibration-variant = "GO_WORMDINGLER";
++};
++
++/*
++ * No eDP on this board but it's logically the same signal so just give it
++ * a new name and assign the proper GPIO.
++ */
++pp3300_disp_on: &pp3300_dx_edp {
++	gpio = <&tlmm 85 GPIO_ACTIVE_HIGH>;
++};
++
++/* PINCTRL - modifications to sc7180-trogdor.dtsi */
++
++/*
++ * No eDP on this board but it's logically the same signal so just give it
++ * a new name and assign the proper GPIO.
++ */
++
++tp_en: &en_pp3300_dx_edp {
++	pinmux {
++		pins = "gpio85";
++	};
++
++	pinconf {
++		pins = "gpio85";
++	};
++};
++
++/* PINCTRL - board-specific pinctrl */
++
++&tlmm {
++	gpio-line-names = "HUB_RST_L",
++			  "AP_RAM_ID0",
++			  "AP_SKU_ID2",
++			  "AP_RAM_ID1",
++			  "",
++			  "AP_RAM_ID2",
++			  "UF_CAM_EN",
++			  "WF_CAM_EN",
++			  "TS_RESET_L",
++			  "TS_INT_L",
++			  "",
++			  "",
++			  "AP_EDP_BKLTEN",
++			  "UF_CAM_MCLK",
++			  "WF_CAM_CLK",
++			  "",
++			  "",
++			  "UF_CAM_SDA",
++			  "UF_CAM_SCL",
++			  "WF_CAM_SDA",
++			  "WF_CAM_SCL",
++			  "AVEE_LCD_EN",
++			  "",
++			  "AMP_EN",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "HP_IRQ",
++			  "WF_CAM_RST_L",
++			  "UF_CAM_RST_L",
++			  "AP_BRD_ID2",
++			  "",
++			  "AP_BRD_ID0",
++			  "AP_H1_SPI_MISO",
++			  "AP_H1_SPI_MOSI",
++			  "AP_H1_SPI_CLK",
++			  "AP_H1_SPI_CS_L",
++			  "BT_UART_CTS",
++			  "BT_UART_RTS",
++			  "BT_UART_TXD",
++			  "BT_UART_RXD",
++			  "H1_AP_INT_ODL",
++			  "",
++			  "UART_AP_TX_DBG_RX",
++			  "UART_DBG_TX_AP_RX",
++			  "HP_I2C_SDA",
++			  "HP_I2C_SCL",
++			  "FORCED_USB_BOOT",
++			  "AMP_BCLK",
++			  "AMP_LRCLK",
++			  "AMP_DIN",
++			  "",
++			  "HP_BCLK",
++			  "HP_LRCLK",
++			  "HP_DOUT",
++			  "HP_DIN",
++			  "HP_MCLK",
++			  "AP_SKU_ID0",
++			  "AP_EC_SPI_MISO",
++			  "AP_EC_SPI_MOSI",
++			  "AP_EC_SPI_CLK",
++			  "AP_EC_SPI_CS_L",
++			  "AP_SPI_CLK",
++			  "AP_SPI_MOSI",
++			  "AP_SPI_MISO",
++			  /*
++			   * AP_FLASH_WP_L is crossystem ABI. Schematics
++			   * call it BIOS_FLASH_WP_L.
++			   */
++			  "AP_FLASH_WP_L",
++			  "",
++			  "AP_SPI_CS0_L",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "WLAN_SW_CTRL",
++			  "",
++			  "REPORT_E",
++			  "",
++			  "ID0",
++			  "",
++			  "ID1",
++			  "",
++			  "",
++			  "",
++			  "CODEC_PWR_EN",
++			  "HUB_EN",
++			  "TP_EN",
++			  "MIPI_1.8V_EN",
++			  "VDD_RESET_1.8V",
++			  "AVDD_LCD_EN",
++			  "",
++			  "AP_SKU_ID1",
++			  "AP_RST_REQ",
++			  "",
++			  "AP_BRD_ID1",
++			  "AP_EC_INT_L",
++			  "SDM_GRFC_3",
++			  "",
++			  "",
++			  "BOOT_CONFIG_4",
++			  "BOOT_CONFIG_2",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "BOOT_CONFIG_3",
++			  "WCI2_LTE_COEX_TXD",
++			  "WCI2_LTE_COEX_RXD",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "FORCED_USB_BOOT_POL",
++			  "AP_TS_PEN_I2C_SDA",
++			  "AP_TS_PEN_I2C_SCL",
++			  "DP_HOT_PLUG_DET",
++			  "EC_IN_RW_ODL";
++
++	vdd_reset_1800: vdd-reset-1800 {
++		pinmux {
++			pins = "gpio87";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio87";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
++	avdd_lcd_en: avdd-lcd-en {
++		pinmux {
++			pins = "gpio88";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio88";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
++	avee_lcd_en: avee-lcd_en {
++		pinmux {
++			pins = "gpio21";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio21";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
++	mipi_1800_en: mipi-1800-en {
++		pinmux {
++			pins = "gpio86";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio86";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++};
+-- 
+2.31.0
 

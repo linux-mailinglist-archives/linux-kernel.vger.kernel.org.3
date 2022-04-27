@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC599511121
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74926511127
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358110AbiD0G3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
+        id S1358114AbiD0Gbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358104AbiD0G3k (ORCPT
+        with ESMTP id S235637AbiD0Gbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:29:40 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFF1B42DD
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:26:28 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j8so719583pll.11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=1bS4Q9BDlM4oKoEfSPn3EHiefcBS79HtqoMdoht7vK0=;
-        b=QZuSSbCznjyNlIhqARAeg5mud9WOt9skLpAWVkm2UGhfmIC0Li7mfItET7ZriUPIZb
-         3c5By4jupRCP7P28/GarVVxiOwDAncJq/1G5mwk+Wke7T3Scd3uyZhOMqk0JYidzr5sQ
-         kx1k5yffxCtLdumT4bDi28Y5ofJfkz1ZlnzZ6JWbNTwci6Vc5aEzaAAKgUxNeRdjC2Nd
-         dK+JGPQ88DdMEvgbrRwJR3VfJyzMPbIFwxGnLJAzh8Pef7zmBQMo59EUuVTTg5KQAu6U
-         lB/PoCofMrWG9oVNQjwLH13SS1x5lJdX+zJdbxnNYoDbNS0heYJb8nRf+dVHWSvUpegp
-         PDLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=1bS4Q9BDlM4oKoEfSPn3EHiefcBS79HtqoMdoht7vK0=;
-        b=yuobsZSIeN2E8Vo+r2gOM4RqM1q9gs4E7Pc3nHd8U0GxJUJsosZHlUJ75qE1LUC97Z
-         b5g30fMvY+dOd3X4e6pDw43kElsqN+4j9Wvvxa5skxkMkRzLuFYIZvB2yR69Bthav1ZH
-         6iA9pkapOV4lM20on5jlpvopRGXRIjFCIwDxZQYFii7c4brJ9V/Ytb+BifXSbPchCSXe
-         cceRkuJOGA0pC/nYVRlkaaG+e/Tt/6q8vGCWjzKdbnDN7+f3wN7pwHecnkKgQadwHzow
-         5tP98JDs2DoOx8Oit0IPZElyIc450upX8yFC3vT4UAYnAJIdouvWrVL2+k+yPozXSy/x
-         kgXA==
-X-Gm-Message-State: AOAM533tXSJNoy1YZjh/wEYL6Ij6oePIpvLNbqpzp8OHLOfcAa7K4Y0A
-        MvlFkv2xT+IS79K4H4B9SgM=
-X-Google-Smtp-Source: ABdhPJwWUEiRdSfDzwKl4HWGWj9HdFQ4dMBWskekMIfPKAtY3AcvDCjrsae0Q889quYNnRqAXe9LSQ==
-X-Received: by 2002:a17:902:ea0d:b0:15c:eceb:de38 with SMTP id s13-20020a170902ea0d00b0015cecebde38mr19572260plg.37.1651040788382;
-        Tue, 26 Apr 2022 23:26:28 -0700 (PDT)
-Received: from localhost (subs28-116-206-12-32.three.co.id. [116.206.12.32])
-        by smtp.gmail.com with ESMTPSA id p2-20020a634202000000b003a0c6ec24d2sm15003667pga.89.2022.04.26.23.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 23:26:27 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 13:26:25 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Thiago Jung Bauermann <bauerman@linux.vnet.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: ppc64_defconfig Werror: no previous prototype on
- arch/powerpc/kernel/ftrace.c
-Message-ID: <YmjiEUxHaQ6OQV30@debian.me>
+        Wed, 27 Apr 2022 02:31:43 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176DBD64DB
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651040911; x=1682576911;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JLp/BBxMmqRHZ2q0w/Uq5qUy8ba1NPv+DMKzusAEUE0=;
+  b=VWH51qZYIGt+5BSuo2q/pxROaYqcy3J/fMqdjrvOP52C+DHrb3JM8RH2
+   bRyeso9V+M4lh85b1JJ2TVaZzONN6PgGMOmk+5R11/DRyADQOGNUKQE0D
+   oghA7yG5ac107KzBrfnkEyJJVKOUzFg63bBsnuwOv/viEdMwZIxQf90On
+   pHVOmeYCKexKchAFV2yxrM93yeDAyXhds5uj8TDZNRq2FhsIltzey5Rx+
+   UKYMmnoBmj6lBHsn3m0ZJc2/YmD6ElS9BmC24gy79tC30vafGkjvLPo4L
+   sx6XhR4rAc3ngoy0q6OfgjK4QKbGvM3Ia6/vYR6vYXMJ1snHHTRP0K5/I
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326321068"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="326321068"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:28:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="596128832"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 23:28:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njbA3-0004P0-Qu;
+        Wed, 27 Apr 2022 06:28:27 +0000
+Date:   Wed, 27 Apr 2022 14:28:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 18/20]
+ arch/riscv/include/asm/signal32.h:10:5: warning: no previous prototype for
+ 'compat_setup_rt_frame'
+Message-ID: <202204271410.2nEyxccE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
+head:   8d05fa26dd28024fc3f915bf06be41ab7c3204ab
+commit: 299073d795e482ae6a762105fbc3953ec445badd [18/20] riscv: compat: signal: Add rt_frame implementation
+config: riscv-randconfig-r042-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271410.2nEyxccE-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/299073d795e482ae6a762105fbc3953ec445badd
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
+        git checkout 299073d795e482ae6a762105fbc3953ec445badd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-I did ppc64_defconfig build (gcc 11.2.0) on current master at commit
-46cf2c613f4b10 ("Merge tag 'pinctrl-v5.18-2'
-of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl"),
-and it errored out early like this:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  CC      arch/powerpc/kernel/trace/ftrace.o
-arch/powerpc/kernel/trace/ftrace.c:978:7: error: no previous prototype for ‘arch_ftrace_match_adjust’ [-Werror=missing-prototypes]
-  978 | char *arch_ftrace_match_adjust(char *str, const char *search)
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~
-  CC      init/init_task.o
-cc1: all warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:288: arch/powerpc/kernel/trace/ftrace.o] Error 1
-make[2]: *** [scripts/Makefile.build:550: arch/powerpc/kernel/trace] Error 2
-make[1]: *** [scripts/Makefile.build:550: arch/powerpc/kernel] Error 2
-make: *** [Makefile:1834: arch/powerpc] Error 2
+All warnings (new ones prefixed by >>):
 
-The code in question is introduced by commit 7132e2d669bd42 ("ftrace:
-Match dot symbols when searching functions on ppc64").
+   In file included from arch/riscv/kernel/signal.c:18:
+>> arch/riscv/include/asm/signal32.h:10:5: warning: no previous prototype for 'compat_setup_rt_frame' [-Wmissing-prototypes]
+      10 | int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/signal.c:316:27: warning: no previous prototype for 'do_notify_resume' [-Wmissing-prototypes]
+     316 | asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
+         |                           ^~~~~~~~~~~~~~~~
 
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+vim +/compat_setup_rt_frame +10 arch/riscv/include/asm/signal32.h
+
+     5	
+     6	#if IS_ENABLED(CONFIG_COMPAT)
+     7	int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+     8				  struct pt_regs *regs);
+     9	#else
+  > 10	int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+    11				  struct pt_regs *regs)
+    12	{
+    13		return -1;
+    14	}
+    15	#endif
+    16	
 
 -- 
-An old man doll... just what I always wanted! - Clara
+0-DAY CI Kernel Test Service
+https://01.org/lkp

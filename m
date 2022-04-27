@@ -2,109 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CC751137C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21FA51137E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359403AbiD0IdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
+        id S1359407AbiD0IeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiD0IdR (ORCPT
+        with ESMTP id S229945AbiD0IeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:33:17 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A771CFE6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:30:06 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id s21so1401792wrb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:30:06 -0700 (PDT)
+        Wed, 27 Apr 2022 04:34:11 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667E11BEBD
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:31:00 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id y76so2079699ybe.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:31:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=uuaqiUZLOsChqlXyKbpm6wvW7kQefLGVgCUO7BzQrzA=;
-        b=e5BYU67ug0RadbCRKN+ByG3Mx0c2NoLtQ27jnqQ3gxBbZh913frGGgHnKGk7v5oH6K
-         pGkmO+e9+W7xi6wl4R+z2t8uKEHXLkD+dNj9d7NmPdYbb/tFCPN6fbpMnqEtyQ3He1Sy
-         2gLFvQgpW+Em0GIytTYd8cEfDYpX/3YClCO4XJW1AE4xatip0UMmrxYSYhxrWEP+nxe4
-         YeUGf5dKDMN+FONVR0dWDI5xkfUPSjwgkvZiAxl3JSeuJ4/WGA4Vtzr6G4ahFWEZt+JG
-         jShnercZP0dGNOSe1sZw+EPlKbLB8a1wfbRSWNquhhO4fe6i1wv0NEV8Fsg8U8V9TYGR
-         i/fQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=M5VmPqHrZbz5RxJOMLq0v7WV4KFPghsC4N72JYyAcgc=;
+        b=m8dsEZ7i9DbfzsZTq/8hmxpARYz78hH4M9KHP5urmMPk/j0rRrwz/H7LFoUIhEudIy
+         cTwQgobqlpnAx3Xg+fYqz1nimO7LazxwBFdX4rGns2I+UP00UUg/DXq9YQmXnFp8NFjc
+         dB9OBtgNsyga72WET9bPVoF4D8gmG5frA9z/RlIuKTG+jJ+LP0o6AkIxpZlmzcdHJGlo
+         MBCKXeCBG3JD36x1sSHB+RVgNqg56L6vRcIGRhAAyYNGFUJYLguvT7oNvKmKYeGoxfUu
+         RD7Bd7CqbnIAe9cf0YG7iSpX+ZC6lPpi8cddkK1XT1V2OSv5sJ868OOse8MS9BN+LCy/
+         vIYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=uuaqiUZLOsChqlXyKbpm6wvW7kQefLGVgCUO7BzQrzA=;
-        b=1DD7D0uwXYXyvURLbr05oRIht2yGRFtTeY22kTfW8Y2LHEDts+2gcIY5cHlbE6uxvb
-         Vkob6oJPnuDgDQDGBNPC+yiFbGIWsug5UhTqqzjtEiriTa2MtHnUQVh0Txa5aU/hmgmi
-         WgP4ozpXoJHkA0tyc4W5mywU2E1ucWcH2EPPZi5VpF9kzfozQkpWSAC+s4rvXFJyj9YE
-         +VWAKOstpClw3PJhkQmSSaNJGeedjiW4QYlXk6EHvXSJbDnFpPqISm/+cN4UwF64GYX9
-         k9rjRrnmv5XhmZsZJ8PuE+58n7kjR0H+xZPQ22z35/Uj+sWr1zwkDTz0BMUoNcNBQJnE
-         fx8g==
-X-Gm-Message-State: AOAM5316aBUHPYYm2gnHBZnlQuf6Xb14t1XQStTx2fx8L29/k2oPxjZ3
-        SHoHEy1/XFgXWp96gubsgR6kqw==
-X-Google-Smtp-Source: ABdhPJwAOFzgKXb5o0/gt/GLKEE9cIElWAjB3owyDIaR+6bxgF6h8F0cDofxMRbqsSW6prkSSXgJww==
-X-Received: by 2002:a5d:48d0:0:b0:207:a861:dcc9 with SMTP id p16-20020a5d48d0000000b00207a861dcc9mr21855607wrs.490.1651048205092;
-        Wed, 27 Apr 2022 01:30:05 -0700 (PDT)
-Received: from localhost (laubervilliers-656-1-151-143.w92-154.abo.wanadoo.fr. [92.154.18.143])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b00393fbf75a56sm1044666wmm.29.2022.04.27.01.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 01:30:04 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8183-pumpkin: fix bad
- thermistor node name
-In-Reply-To: <20220426164755.435372-1-fparent@baylibre.com>
-References: <20220426164755.435372-1-fparent@baylibre.com>
-Date:   Wed, 27 Apr 2022 10:30:02 +0200
-Message-ID: <87a6c753p1.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=M5VmPqHrZbz5RxJOMLq0v7WV4KFPghsC4N72JYyAcgc=;
+        b=TwcJKa/rcZZ2eSLg7AW91pBzNomKes+yYlHoLysjDMjqRkUtleVy/dt0C4wF86YOZF
+         XVRLEowqAKCefLBGSIMDb8k3nP9ciH3MR6m+e+jY99ENLhkfItHKp+vipLTFsguA2TBg
+         lzuwaSdD8d4R8+nkkY7zf08JgSOioD8xymgfC4D47KmvJnQpZBlLCJ64ydiEF59NoekH
+         MFePlTZrI2Bg5vgi4RCM3Y8X0npP42/cCMIS9tVyzs+K+BFSGmW38YJJcpE+8YLIM901
+         WhaOptGMCA7Sk0lyBzP3fOAlgW83Q+2ruEmxt7KGo3wOy5QCsYiziKo/68CXps0sHs18
+         51og==
+X-Gm-Message-State: AOAM533SCEu45v6G1Y5opzUUQGvMgBgeATCAa7s4+MwQYC4TRUveHIpi
+        f1pR79VpugndLZt7xb7fMDYVLnY9EmEFV0gG3YUWFQ==
+X-Google-Smtp-Source: ABdhPJzL/CasNcwH2cgK6gj+aQ8DI2yhE9T9w2UyDiZ7/A07vlkRpLC3Z0ettblP3Qy5dCXjomPmVOnKFAz42Jeu0/s=
+X-Received: by 2002:a25:8f8d:0:b0:648:a703:defb with SMTP id
+ u13-20020a258f8d000000b00648a703defbmr6642306ybl.128.1651048259513; Wed, 27
+ Apr 2022 01:30:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220426081735.651926456@linuxfoundation.org>
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 27 Apr 2022 14:00:48 +0530
+Message-ID: <CA+G9fYuYGaQZ-SB9zRwghM+b9_EVVyYKj9cqdam7wMO5=3XZ8w@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/53] 4.19.240-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 18:47, Fabien Parent <fparent@baylibre.com> wrote:
+On Tue, 26 Apr 2022 at 13:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.240 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.240-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> Fix the following dtbs_check error by using the correct node name:
-> /home/fabo/build/linux/mt8183-pumpkin/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dtb: ntc: $nodename:0: 'ntc' does not match '^thermistor(.*)?$'
-> 	From schema: /home/fabo/devel/baylibre/linux-mainline/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
->
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> ---
->  arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-> index 10b2c0500219..3d6da7efe31b 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-> @@ -55,7 +55,7 @@ led-green {
->  		};
->  	};
->  
-> -	ntc {
-> +	thermistor {
->  		compatible = "murata,ncp03wf104";
->  		pullup-uv = <1800000>;
->  		pullup-ohm = <390000>;
-> -- 
-> 2.36.0
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+## Build
+* kernel: 4.19.240-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: 5e5c9d690926bf43bc1405d163e02768a56c56dc
+* git describe: v4.19.239-54-g5e5c9d690926
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.239-54-g5e5c9d690926
+
+## Test Regressions (compared to v4.19.239)
+No test regressions found.
+
+## Metric Regressions (compared to v4.19.239)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.239)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.239)
+No metric fixes found.
+
+## Test result summary
+total: 81844, pass: 65248, fail: 1145, skip: 13273, xfail: 2178
+
+## Build Summary
+* arm: 281 total, 275 passed, 6 failed
+* arm64: 39 total, 39 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 27 total, 27 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 38 total, 38 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

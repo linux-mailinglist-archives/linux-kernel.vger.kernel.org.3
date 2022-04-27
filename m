@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7832511085
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99E4511092
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357857AbiD0Fba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S1357884AbiD0Fhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 01:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242013AbiD0Fb2 (ORCPT
+        with ESMTP id S240277AbiD0Fhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:31:28 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6713012194A;
-        Tue, 26 Apr 2022 22:28:18 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g23so620227edy.13;
-        Tue, 26 Apr 2022 22:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OmFfBKBvjXjBUi32eJz6KqWWe+VBykXhnFIMt6kZrPA=;
-        b=VKF80W9fKkrHobaNWG6+jlexuZpjlYTkta79tRkZgiz1nVADhCqsm6FKiL6csRUdjz
-         JSkotuedZJyK80hxkRz9g63COsSodweG1uLO9NBvJlBVZZvkud49fD2IUtgBaESQRGF/
-         GW3u6yFsUXuvtNhpA5kIUtMvDEwu5eb4ZWHyqbdAms6KhRq4lfyCL5eFipL/NsHa+W0R
-         LWdEwrJwdWLNRRtTAhjzcgtLHa1dShCnCPIWZZUWg7gvzxHMcFALsVjUPFNfd8qoqq0W
-         ODeXIzrSIPU55JfZ19Mmx73lEKEs2ui+Fn9JwJ7ME0NrHJbkijJV+4ujLrVLj/HqUMyQ
-         MTIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OmFfBKBvjXjBUi32eJz6KqWWe+VBykXhnFIMt6kZrPA=;
-        b=FOvmlOcXP5AQljbpXRq6jgmO9pJ3ZSFkem4J+Hu1n4xcLoCsOBw0lXwoxOqNWfDXXX
-         lZNSBkddDpIJxdJXq4YYyM95DhnosZ61dpcBguBUCVGFRRMQBpznWsdMTwgRbe9+yi7d
-         ACEqrhs8tGlb4v8r53jFgKmk0PgtxqouzWYw+ckWPEcH0LkbG8XCqdOfoH9d2If5vQO0
-         GR2rGdoMWh0VmcsCb/BRi+93p4hNAKxukJpfRpNsMA6lwL8OidffFrBo98mdWX0AtzqW
-         tUYArQCoDRmNv6E4x8nkdjMDMxelhA+rFp1IPJ+O9LSV9OYO2252Pi327TTElwfEEfJd
-         Vcog==
-X-Gm-Message-State: AOAM532/MmQ+GBskAue8gij42tY2zxRurRY7NAVLFAV3p4qMii8pLumA
-        fOWyjEa6RWlMJzQ7NfKVEHE=
-X-Google-Smtp-Source: ABdhPJxlWhm6y16PcnsGfzyfaskCHjeUFOul0gTxv+QCvWXYqmPxQGE4L6lNMH+wgHmtutAMMai44g==
-X-Received: by 2002:aa7:de93:0:b0:418:d700:662a with SMTP id j19-20020aa7de93000000b00418d700662amr28175416edv.107.1651037296832;
-        Tue, 26 Apr 2022 22:28:16 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170906724d00b006cedd6d7e24sm6037171ejk.119.2022.04.26.22.28.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 22:28:15 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        "Acked-by : Mike Rapoport" <rppt@linux.ibm.com>
-Subject: Re: [PATCH v2 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
-Date:   Wed, 27 Apr 2022 07:28:13 +0200
-Message-ID: <2383038.jE0xQCEvom@leap>
-In-Reply-To: <YmfRynAhuSWz9H+e@linutronix.de>
-References: <20220425162400.11334-1-fmdefrancesco@gmail.com> <4396926.LvFx2qVVIh@leap> <YmfRynAhuSWz9H+e@linutronix.de>
+        Wed, 27 Apr 2022 01:37:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED1614D9E0;
+        Tue, 26 Apr 2022 22:34:43 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R1jrb4016461;
+        Wed, 27 Apr 2022 05:31:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=qvcqSETCnrSsVB/BY/2FeP2hnvOR7fL3OJ1Z/zo8n8Y=;
+ b=k1nI4OI10xALs2/hzr8UhYW9h9IrOmFoU2I5Q/J/BR8YqvpScp6XwQuC2BuMHkrHTl5u
+ IIh3PCTtMf4gF7x1RoVAZX4mOanbC7zafMrFoUViASCe6Vw/R2pXo6wWT7qKnGJ5kzTZ
+ 2/DWGBEQC3dWgsXqnVTnGjBDFeNNNiY91XGL7MOWGV8F9f4NYxHSutfdN96QmicQQcoa
+ CgjgmWI0Kq8z5KvHiYq1442XaiJ4nOL7TGswFnnz6YB+nogLJ7bJDI8VOAV9xoKC6dkq
+ OFafQVpbJ1BWUzBPEWkk5DUVlR0v+VCEv3kLn0T20ZLtcWdZcdlLUVIU5Do1lC7aT5EB vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpvf2ayjd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 05:31:24 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23R5Qnkr022931;
+        Wed, 27 Apr 2022 05:31:23 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpvf2ayhk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 05:31:23 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23R5STgZ009553;
+        Wed, 27 Apr 2022 05:31:20 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj5dqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 05:31:20 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23R5VV7a197362
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Apr 2022 05:31:31 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44AE0A405B;
+        Wed, 27 Apr 2022 05:31:18 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9325CA4054;
+        Wed, 27 Apr 2022 05:31:06 +0000 (GMT)
+Received: from [9.43.50.189] (unknown [9.43.50.189])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 27 Apr 2022 05:31:06 +0000 (GMT)
+Message-ID: <bab0d3f3-9f03-142c-7f53-86cb8cb178e4@linux.ibm.com>
+Date:   Wed, 27 Apr 2022 11:01:05 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v10 07/14] mm: multi-gen LRU: exploit locality in rmap
+Content-Language: en-US
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-8-yuzhao@google.com> <87zgk7xi13.fsf@linux.ibm.com>
+ <CAOUHufbRLUg8274At8ZkUMUz2ghuGs52AvJsMkjQR=6-pusEhw@mail.gmail.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <CAOUHufbRLUg8274At8ZkUMUz2ghuGs52AvJsMkjQR=6-pusEhw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wSnKa9i6LJ4CkALAKM198ug-RE1mkUcQ
+X-Proofpoint-ORIG-GUID: GLXECfseS7nZckMSqJ77FNySoyWBaJ6a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_01,2022-04-26_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ mlxscore=0 priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204270036
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 26 aprile 2022 13:04:42 CEST Sebastian Andrzej Siewior wrot=
-e:
-> On 2022-04-26 11:43:03 [+0200], Fabio M. De Francesco wrote:
->=20
-> Either way, according to the code kmap_atomic() does not always disable
-> preemption=20
+On 4/27/22 10:08 AM, Yu Zhao wrote:
+> On Tue, Apr 26, 2022 at 10:33 PM Aneesh Kumar K.V
+> <aneesh.kumar@linux.ibm.com> wrote:
+>>
+>> Yu Zhao <yuzhao@google.com> writes:
+>>
+>> ....
+>>
+>>   diff --git a/mm/rmap.c b/mm/rmap.c
+>>> index fedb82371efe..7cb7ef29088a 100644
+>>> --- a/mm/rmap.c
+>>> +++ b/mm/rmap.c
+>>> @@ -73,6 +73,7 @@
+>>>   #include <linux/page_idle.h>
+>>>   #include <linux/memremap.h>
+>>>   #include <linux/userfaultfd_k.h>
+>>> +#include <linux/mm_inline.h>
+>>>
+>>>   #include <asm/tlbflush.h>
+>>>
+>>> @@ -821,6 +822,12 @@ static bool folio_referenced_one(struct folio *folio,
+>>>                }
+>>>
+>>>                if (pvmw.pte) {
+>>> +                     if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
+>>> +                         !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
+>>> +                             lru_gen_look_around(&pvmw);
+>>> +                             referenced++;
+>>> +                     }
+>>
+>> Is it required to update referenced here? we do that below after
+>> clearing the young bit. Or is the goal to identify whether we found any
+>> young pte around?
+> 
+> referenced++ is needed because lru_gen_look_around() also clears the
+> young bit in pvmw.pte. And ptep_clear_flush_young_notify() will return
+> false unless mmu notifier returns true.
 
-Hi Sebastian,
+should we then use a mmu notifier variant of clear_young in 
+lru_gen_look_around() ?
 
-In my last email (for patch 4/4) I wrote that I would add a deprecation=20
-notice to kunmap_local() and would talk about thread locality in=20
-kmap_local_page(). I want to confirm that I'll do these changes in v3.
-
-Then I closed that email asking if I was still overlooking something.=20
-Consider that I'm relatively new to kernel development and that it's just=20
-something I do in my spare time. So I was pretty sure I was still missing=20
-something :)
-
-After reading again the code of kmap_atomic() (as you suggested - thanks!)=
-=20
-I noted that you correctly say that kmap_atomic() does not always disables=
-=20
-preemption (i.e., preemption is disabled only for !PREEMPT_RT kernel's =20
-configurations).
-
-Therefore I'll also change the first sentence of kunmap_local() to the=20
-following:
-
-"[It] Unmaps an address previously mapped by kmap_atomic() and re-enables=20
-pagefaults and preemption (the latter disabled only for !PREEMP_RT=20
-configurations).".
-
-I will also be making this change in v3.
-
-Can you please say if I'm still missing something?
-
-Thanks,
-
-=46abio
-
-
-
+-aneesh

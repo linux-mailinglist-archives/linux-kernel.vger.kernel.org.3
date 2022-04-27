@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6AA511584
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA98051163D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiD0LD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S231705AbiD0LDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbiD0LDA (ORCPT
+        with ESMTP id S231977AbiD0LC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:03:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC6B3FD24F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:44:01 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R9VF8F005799;
-        Wed, 27 Apr 2022 09:36:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=lQUmU302y0ZV4pqPfG/ZoKUT7BO6PhToVDMpojVcdFg=;
- b=PdD90UxRQlKrfEvELJlaiSO1dgLRUpdopSj+jpb/3j9vQ4+uHBIZ9fohqv5eGEMPuT0q
- 3ckpGO8YCDwpj1/+Di2g2aEZ4dZG7svSnKoRkexD8cfPQj78jKpDf9AU/72TB1gKp1tc
- bYq5Lx+8m713Xqsr3cX28oilH96374ZUJLBQV1WT/OxSL+GYPf0XKPAt4FrC1X/X0Btp
- BwdnkgrbVbfmwZo2uFNDRNSjDB5E6tTqVmmu/xPlcZWYCNHp7klSBVty2HwvuepXQdKD
- uxBWaPISfxec6Pc5g6mey97z3TbotO4iW8sb17ejKMrqTmkgfegHQMVm/0PTqybX7dGa Kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fprrpju7g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 09:36:34 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23R8cLJD003924;
-        Wed, 27 Apr 2022 09:36:34 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fprrpju64-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 09:36:33 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23R9T8io002453;
-        Wed, 27 Apr 2022 09:36:30 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhmg3c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 09:36:30 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23R9aS1T7864612
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Apr 2022 09:36:28 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 271F74C040;
-        Wed, 27 Apr 2022 09:36:28 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8070E4C044;
-        Wed, 27 Apr 2022 09:36:25 +0000 (GMT)
-Received: from li-NotSettable.ibm.com.com (unknown [9.43.116.196])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 27 Apr 2022 09:36:25 +0000 (GMT)
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        llvm@lists.linux.dev
-Subject: [PATCH 2/2] recordmcount: Handle sections with no non-weak symbols
-Date:   Wed, 27 Apr 2022 15:01:22 +0530
-Message-Id: <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KHAVq4zAWf7_bn3DJWOnC-5y1JfmZRR9
-X-Proofpoint-ORIG-GUID: qElIFTVJgarvhMuQW1C1y3As75N8hl1f
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 27 Apr 2022 07:02:59 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B863FBA95;
+        Wed, 27 Apr 2022 03:43:48 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id m14so1279412vsp.11;
+        Wed, 27 Apr 2022 03:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=mUxyvNhw8WOz4AnMY4MCjfkWROBHShr4sY5p+gR6VSc=;
+        b=oFYaMCXtHGQcZ9ME8vMm4BiCzb8QLkyFvbRnwGyry+kBqYwEb87C4VWsYTGUQFPqTU
+         Hib6iapsGkX49ee6mn/ocm0tE+q9VExuQtWZpPy9pKiD/R1jixkDYeXoAaDCBLVYIbD9
+         ChjezrvqowchRH1zTyf78eD1P2ttNYjFRpK0V0zQAR+6JrEgw7p0fDgxMV30tO391Pg9
+         CrAsL4L4SjtIAIXMIASiGvloafM7yfRFgvNqlISBB0i7mnuOutcfCBxha5jSgArNtz01
+         M6GXiU1SJ/PUmAlPAAJLx36YLgflckt7FaCxItNBM/dF0ji24lyYcMvgGwjWvwHNoB+F
+         kuQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=mUxyvNhw8WOz4AnMY4MCjfkWROBHShr4sY5p+gR6VSc=;
+        b=Q9H1Y6fx2tZR7JZG5aIQht/rv3EBVnNiXVV+4H4P2mIerPgVf+ju1Dbv+NTxe5j9fP
+         sl7if4s+wWxBo9nYCgFj09IMu/XHbttKwm87bLog1Nqf82CSO5CJDcFTAYYe52t/c3cE
+         RFG4eWiTQtvMQv0deiQzgqgdsK4ceQtIT4sZSAlYuIlJLO0XwWhddwTXjE07OD/2DQVe
+         Llb/Drmmtqvkzx8G6oVvQOUYniLzzLjcUUJOQ9fiiSP6O0cxE9pMyFS32s7gE4WTnhLJ
+         v8uOj0hZdWIuejc/qlDWq6o3MtMrtbZp/rTcTDkhck4XbRU+nssU3Cxyfx/ULNIDq2Bb
+         OApQ==
+X-Gm-Message-State: AOAM532b7LbRXHLyrPV6YxM/k6ZfAp6iPzzb0jTgfE1lZVllUzVp+Ivx
+        6KCBwucHXreVAV/2CK9IEI1LMKLEiQw=
+X-Google-Smtp-Source: ABdhPJyxYzwCq1uDHdjgt2isejxNcwWLbFn7lXEIErjaGYlcD6Ha5M5WNAXoBC6h4fwzjZgzojOUTw==
+X-Received: by 2002:a17:902:da81:b0:15d:37b9:70df with SMTP id j1-20020a170902da8100b0015d37b970dfmr7428157plx.34.1651051938953;
+        Wed, 27 Apr 2022 02:32:18 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.118])
+        by smtp.gmail.com with ESMTPSA id o34-20020a634e62000000b0039cc4376415sm15359587pgl.63.2022.04.27.02.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 02:32:18 -0700 (PDT)
+Message-ID: <da7e8eb6-e473-84ff-1c7b-4214a5233a9b@gmail.com>
+Date:   Wed, 27 Apr 2022 17:32:10 +0800
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-27_03,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=944
- impostorscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204270063
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH v3 7/7] kvm: x86/cpuid: Fix CPUID leaf 0xA
+Content-Language: en-US
+To:     Sandipan Das <sandipan.das@amd.com>,
+        Vasant Hegde <vasant.hegde@amd.com>
+Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
+        puwen@hygon.cn, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1650977962.git.sandipan.das@amd.com>
+ <476a0d6feef8016ed19e4911ac25abdd20aabeb3.1650977962.git.sandipan.das@amd.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <476a0d6feef8016ed19e4911ac25abdd20aabeb3.1650977962.git.sandipan.das@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,218 +85,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel builds on powerpc are failing with the below error [1]:
-      CC      kernel/kexec_file.o
-    Cannot find symbol for section 9: .text.unlikely.
-    kernel/kexec_file.o: failed
+On 26/4/2022 9:05 pm, Sandipan Das wrote:
+> On some x86 processors, CPUID leaf 0xA provides information
+> on Architectural Performance Monitoring features. It
+> advertises a PMU version which Qemu uses to determine the
+> availability of additional MSRs to manage the PMCs.
+> 
+> Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
+> the same, the kernel constructs return values based on the
+> x86_pmu_capability irrespective of the vendor.
+> 
+> This leaf and the additional MSRs are not supported on AMD
+> and Hygon processors. If AMD PerfMonV2 is detected, the PMU
 
-Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
-symbols") [2], binutils started dropping section symbols that it thought
-were unused.  This isn't an issue in general, but with kexec_file.c, gcc
-is placing kexec_arch_apply_relocations[_add] into a separate
-.text.unlikely section and the section symbol ".text.unlikely" is being
-dropped. Due to this, recordmcount is unable to find a non-weak symbol
-in .text.unlikely to generate a relocation record against.
+So, why not:
 
-Handle this by falling back to a weak symbol, similar to what objtool
-does in commit 44f6a7c0755d8d ("objtool: Fix seg fault with Clang
-non-section symbols"). Note that this approach can result in duplicate
-addresses in the final vmlinux mcount location table. A previous commit
-updated ftrace to skip such duplicate entries.
+		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON))
+			break;
+?
 
-After this commit, relocation records for __mcount_loc for kexec_file.o
-now include two entries with the weak functions
-arch_kexec_apply_relocations() and arch_kexec_apply_relocation_add() as
-the relocation bases:
-
-  ...
-  0000000000000080 R_PPC64_ADDR64    .text+0x0000000000001d34
-  0000000000000088 R_PPC64_ADDR64    .text+0x0000000000001fec
-  0000000000000090 R_PPC64_ADDR64    arch_kexec_apply_relocations_add+0x000000000000000c
-  0000000000000098 R_PPC64_ADDR64    arch_kexec_apply_relocations+0x000000000000000c
-
-Powerpc does not override these functions today, so these get converted
-to correct offsets in the mcount location table in vmlinux.
-
-If one or both of these weak functions are overridden in future, in the
-final vmlinux mcount table, references to these will change over to the
-non-weak variant which has its own mcount location entry. As such, there
-will now be two entries for these functions, both pointing to the same
-non-weak location. We don't need the non-weak locations since they will
-never be executed. Ftrace skips the duplicate entries due to a previous
-commit.
-
-[1] https://github.com/linuxppc/issues/issues/388
-[2] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
-
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
----
- scripts/recordmcount.h | 86 +++++++++++++++++++++++++++++++++++-------
- 1 file changed, 73 insertions(+), 13 deletions(-)
-
-diff --git a/scripts/recordmcount.h b/scripts/recordmcount.h
-index 1e9baa5c4fc6ef..0c79a2d2b47493 100644
---- a/scripts/recordmcount.h
-+++ b/scripts/recordmcount.h
-@@ -25,6 +25,7 @@
- #undef sift_rel_mcount
- #undef nop_mcount
- #undef find_secsym_ndx
-+#undef find_sym_ndx
- #undef __has_rel_mcount
- #undef has_rel_mcount
- #undef tot_relsize
-@@ -60,6 +61,7 @@
- # define sift_rel_mcount	sift64_rel_mcount
- # define nop_mcount		nop_mcount_64
- # define find_secsym_ndx	find64_secsym_ndx
-+# define find_sym_ndx		find64_sym_ndx
- # define __has_rel_mcount	__has64_rel_mcount
- # define has_rel_mcount		has64_rel_mcount
- # define tot_relsize		tot64_relsize
-@@ -98,6 +100,7 @@
- # define sift_rel_mcount	sift32_rel_mcount
- # define nop_mcount		nop_mcount_32
- # define find_secsym_ndx	find32_secsym_ndx
-+# define find_sym_ndx		find32_sym_ndx
- # define __has_rel_mcount	__has32_rel_mcount
- # define has_rel_mcount		has32_rel_mcount
- # define tot_relsize		tot32_relsize
-@@ -392,6 +395,51 @@ static void get_sym_str_and_relp(Elf_Shdr const *const relhdr,
- 	*relp = rel0;
- }
- 
-+/*
-+ * Find a symbol in the given section containing the instruction offset passed
-+ * in r_offset, to be used in generating the relocation record for the mcount
-+ * location. This is used if there were no local/global symbols in the given
-+ * section to be used as the base. Weak symbols are ok, and are expected to
-+ * result in duplicate mcount locations which get dropped by ftrace.
-+ */
-+static int find_sym_ndx(unsigned const txtndx,
-+			 char const *const txtname,
-+			 uint_t *const recvalp,
-+			 unsigned int *sym_index,
-+			 Elf_Shdr const *const symhdr,
-+			 Elf32_Word const *symtab,
-+			 Elf32_Word const *symtab_shndx,
-+			 unsigned const r_offset,
-+			 Elf_Ehdr const *const ehdr)
-+{
-+	Elf_Sym const *const sym0 = (Elf_Sym const *)(_w(symhdr->sh_offset)
-+		+ (void *)ehdr);
-+	unsigned const nsym = _w(symhdr->sh_size) / _w(symhdr->sh_entsize);
-+	Elf_Sym const *symp;
-+	unsigned t;
-+
-+	for (symp = sym0, t = nsym; t; --t, ++symp) {
-+		if (txtndx == get_symindex(symp, symtab, symtab_shndx)) {
-+			/* function symbols on ARM have quirks, avoid them */
-+			if (w2(ehdr->e_machine) == EM_ARM &&
-+			    ELF_ST_TYPE(symp->st_info) == STT_FUNC)
-+				continue;
-+
-+			if (r_offset >= _w(symp->st_value) &&
-+			    r_offset < _w(symp->st_value) + _w(symp->st_size)) {
-+				*recvalp = _w(symp->st_value);
-+				*sym_index = symp - sym0;
-+				return 0;
-+			}
-+		}
-+	}
-+
-+	fprintf(stderr, "Cannot find symbol containing offset %u for section %u: %s.\n",
-+		r_offset, txtndx, txtname);
-+
-+	return -1;
-+}
-+
- /*
-  * Look at the relocations in order to find the calls to mcount.
-  * Accumulate the section offsets that are found, and their relocation info,
-@@ -402,9 +450,14 @@ static uint_t *sift_rel_mcount(uint_t *mlocp,
- 			       Elf_Rel **const mrelpp,
- 			       Elf_Shdr const *const relhdr,
- 			       Elf_Ehdr const *const ehdr,
--			       unsigned const recsym,
--			       uint_t const recval,
--			       unsigned const reltype)
-+			       unsigned recsym,
-+			       uint_t recval,
-+			       unsigned const reltype,
-+			       unsigned int no_secsym,
-+			       char const *const txtname,
-+			       Elf_Shdr const *const shdr0,
-+			       Elf32_Word const *symtab,
-+			       Elf32_Word const *symtab_shndx)
- {
- 	uint_t *const mloc0 = mlocp;
- 	Elf_Rel *mrelp = *mrelpp;
-@@ -415,6 +468,7 @@ static uint_t *sift_rel_mcount(uint_t *mlocp,
- 	unsigned const nrel = _w(relhdr->sh_size) / rel_entsize;
- 	unsigned mcountsym = 0;
- 	unsigned t;
-+	uint_t addend;
- 
- 	get_sym_str_and_relp(relhdr, ehdr, &sym0, &str0, &relp);
- 
-@@ -424,8 +478,13 @@ static uint_t *sift_rel_mcount(uint_t *mlocp,
- 
- 		if (mcountsym && mcountsym == Elf_r_sym(relp) &&
- 				!is_fake_mcount(relp)) {
--			uint_t const addend =
--				_w(_w(relp->r_offset) - recval + mcount_adjust);
-+			if (no_secsym && find_sym_ndx(w(relhdr->sh_info),
-+						      txtname, &recval, &recsym,
-+						      &shdr0[w(relhdr->sh_link)],
-+						      symtab, symtab_shndx,
-+						      _w(relp->r_offset), ehdr))
-+				return 0;
-+			addend = _w(_w(relp->r_offset) - recval + mcount_adjust);
- 			mrelp->r_offset = _w(offbase
- 				+ ((void *)mlocp - (void *)mloc0));
- 			Elf_r_info(mrelp, recsym, reltype);
-@@ -544,8 +603,6 @@ static int find_secsym_ndx(unsigned const txtndx,
- 			return 0;
- 		}
- 	}
--	fprintf(stderr, "Cannot find symbol for section %u: %s.\n",
--		txtndx, txtname);
- 	return -1;
- }
- 
-@@ -660,22 +717,25 @@ static int do_func(Elf_Ehdr *const ehdr, char const *const fname,
- 			goto out; /* Nothing to be done; don't append! */
- 		}
- 		if (txtname && is_mcounted_section_name(txtname)) {
--			unsigned int recsym;
-+			unsigned int recsym = 0, no_secsym = 0;
- 			uint_t recval = 0;
- 
- 			symsec_sh_link = w(relhdr->sh_link);
--			result = find_secsym_ndx(w(relhdr->sh_info), txtname,
-+			if (find_secsym_ndx(w(relhdr->sh_info), txtname,
- 						&recval, &recsym,
- 						&shdr0[symsec_sh_link],
- 						symtab, symtab_shndx,
--						ehdr);
--			if (result)
--				goto out;
-+						ehdr))
-+				no_secsym = 1;
- 
- 			rel_entsize = _w(relhdr->sh_entsize);
- 			mlocp = sift_rel_mcount(mlocp,
- 				(void *)mlocp - (void *)mloc0, &mrelp,
--				relhdr, ehdr, recsym, recval, reltype);
-+				relhdr, ehdr, recsym, recval, reltype,
-+				no_secsym, txtname, shdr0, symtab,
-+				symtab_shndx);
-+			if (!mlocp)
-+				goto out;
- 		} else if (txtname && (warn_on_notrace_sect || make_nop)) {
- 			/*
- 			 * This section is ignored by ftrace, but still
--- 
-2.35.1
-
+> version is set to 2 and guest startup breaks because of an
+> attempt to access a non-existent MSR. Return zeros to avoid
+> this.
+> 
+> Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
+> Reported-by: Vasant Hegde <vasant.hegde@amd.com>
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> ---
+>   arch/x86/kvm/cpuid.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 4b62d80bb22f..d27d6a8f601a 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -872,6 +872,12 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>   		union cpuid10_eax eax;
+>   		union cpuid10_edx edx;
+>   
+> +		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+> +		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
+> +			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+> +			break;
+> +		}
+> +
+>   		perf_get_x86_pmu_capability(&cap);
+>   
+>   		/*

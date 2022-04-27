@@ -2,96 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAACD511600
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6214D511598
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiD0LB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S232288AbiD0LGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiD0LBm (ORCPT
+        with ESMTP id S232390AbiD0LFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:01:42 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DF12C8C2E;
-        Wed, 27 Apr 2022 03:46:49 -0700 (PDT)
-Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MOm9H-1nVh3d2eJr-00Q8kt; Wed, 27 Apr 2022 11:37:30 +0200
-Received: by mail-yb1-f174.google.com with SMTP id m128so2318775ybm.5;
-        Wed, 27 Apr 2022 02:37:30 -0700 (PDT)
-X-Gm-Message-State: AOAM5300N9y4NIA3ZxiFB/HOsO0zUvGEV3wrP8+da6a7nms/KtAHgCig
-        eswCwv7bdFeWygj5ZNOd704c5ck1zZROp7LNgwY=
-X-Google-Smtp-Source: ABdhPJwMD5Lw3Bh3sc+tRxCDiyxDUA/bVOD95lZnoBKjAv6b5qPuX9adwocawLYlqU46kbpYQGayPpUktNNEeSX9iGg=
-X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
- e185-20020a25d3c2000000b0064574dff43dmr24429740ybf.394.1651052249361; Wed, 27
- Apr 2022 02:37:29 -0700 (PDT)
+        Wed, 27 Apr 2022 07:05:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792CE57128
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:56:27 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpDDc70zXzhYqG;
+        Wed, 27 Apr 2022 17:37:20 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 17:37:34 +0800
+Subject: Re: [PATCH -next] reboot: Fix build warning without CONFIG_SYSFS
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <tangmeng@uniontech.com>, <linux-kernel@vger.kernel.org>
+References: <20220407074807.1580-1-yuehaibing@huawei.com>
+ <3d54a148-922d-3da4-b564-44996ca56241@huawei.com>
+ <YmipuA+t9YcRI5X7@bombadil.infradead.org>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <bf34afc7-d836-6e52-73b5-3b7a55ec8667@huawei.com>
+Date:   Wed, 27 Apr 2022 17:37:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <FA654A0D-29B7-4B6B-B613-73598A92ADA8@goldelico.com> <YmkBAsa+fKlp/GcV@atomide.com>
-In-Reply-To: <YmkBAsa+fKlp/GcV@atomide.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 27 Apr 2022 11:37:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3N9WBWC_ECB0pSRHUCT4iz=tdT+Dt9Cyd5Wh3qEaVqqA@mail.gmail.com>
-Message-ID: <CAK8P3a3N9WBWC_ECB0pSRHUCT4iz=tdT+Dt9Cyd5Wh3qEaVqqA@mail.gmail.com>
-Subject: Re: kernel panic with v5.18-rc1 on OpenPandora (only)
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3EX3mYX6KEXjhQgHkDZWS3QeX8xjxcCpdZo4zBbMrRE7iXkjm6H
- JTOhu01vRZPmjNAeyADH7vVynVZ4tq98tHTNlPIgZmvMdMI1mK1vZQToaK1kFybINhrUNA0
- wJyyiLZzm2DDDU2iZyFtb7X12UzqaH2U+yvLF116ouy2iU+E0M6eju9Y8YQBHL7kRMGkXEQ
- FxgV9rsIkBoxAuXlw8FPg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fjivupKgZ08=:3In3UonnUB55Oqi5Tc3nXz
- XcTywYTLQ2S8ISSHeggOzNFcNYVHW6RNG36hUP78VkiJhvXj+S1zvDyC+WIxWpj/c/wrm0Bhq
- X73qSZkaRDR0PpOIkeEE03t0SeZehUG83OeKZetTRCf00UM40ft+K6DggXwwuL9YSiAXmHL7g
- uAumSa5RF06J374r530FGWOPIqq9sJKLq76Pl+F2+1vGsRKAeiN89zgaQYW9l/ThX/vI3jLBe
- riDlpNc400kyiF/o/1//hr+TRHoQok4aUrQbTDChdGVWbb51CKsO356UlLYCYDdCtDnuwG+4a
- Ei5knPERLepkZBYYgmGMqtSIpo+9CKo7S1XZP2UltQUizbUdBPJE6JyaTYLnovZoKawcf8okI
- LLdQWaBWIlxwRdFQ27HvxKlvidAzSQKL7TRzdVnOSKRO6EPzG4VhGYZEjOUp7Q8k7OKUY+6f+
- xE1kfrBPVrBNtzzvLQj35w6DJNGJs+zMoqPDdkmVlPHS1ybWgpkq/bHqkVzMkPedZF3FhS4PH
- 3IJ19gEOBgud7kE0F1Pf+w3mmU88JllCytg++IIiE+Cb5jzNpFAtmuFDIA6b2fOKoh4dBkiFD
- 7/kE1PmvEw6oWcVmbXZ45cNgJHCnRzpshr0JvAqhAX2qS1YkGD2T9xJ6JamvN1mwXO+UJ6UGX
- pcpUhxhA+tyoD4XAAy66BLnXkYhQw/w3gXBlMdNRCmiiPS3tCENZsOvqBpYP3t3AwLWE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmipuA+t9YcRI5X7@bombadil.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 10:38 AM Tony Lindgren <tony@atomide.com> wrote:
-> * H. Nikolaus Schaller <hns@goldelico.com> [220426 20:16]:
-> > [   28.245727] [<c0100b60>] (__irq_svc) from [<c0905de0>] (_raw_spin_unlock_irq+0x20/0x4c)
-> > [   28.254150] [<c0905de0>] (_raw_spin_unlock_irq) from [<c0902e94>] (do_wait_for_common+0xa8/0x138)
-> > [   28.263488] [<c0902e94>] (do_wait_for_common) from [<c0902f54>] (wait_for_common+0x30/0x48)
-> > [   28.272277] [<c0902f54>] (wait_for_common) from [<c074edf8>] (mmc_wait_for_req_done+0x1c/0x90)
-> > [   28.281341] [<c074edf8>] (mmc_wait_for_req_done) from [<c075a72c>] (mmc_io_rw_extended+0x1c0/0x2f4)
-> > [   28.290893] [<c075a72c>] (mmc_io_rw_extended) from [<c075bd00>] (sdio_io_rw_ext_helper+0x118/0x140)
-> > [   28.300415] [<c075bd00>] (sdio_io_rw_ext_helper) from [<c075bdd0>] (sdio_memcpy_toio+0x18/0x20)
-> > [   28.309570] [<c075bdd0>] (sdio_memcpy_toio) from [<bf3de1ec>] (wl1251_sdio_write+0x34/0x54 [wl1251_sdio])
-> > [   28.319702] [<bf3de1ec>] (wl1251_sdio_write [wl1251_sdio]) from [<bf40fc8c>] (wl1251_set_partition+0x90/0x404 [wl1251])
-> > [   28.331207] [<bf40fc8c>] (wl1251_set_partition [wl1251]) from [<bf4074ec>] (wl1251_init_ieee80211+0x1c0/0x3dc [wl1251])
+On 2022/4/27 10:26, Luis Chamberlain wrote:
+> Your subject says CONFIG_SYSFS but this is for CONFIG_SYSCTL right?
+> Can you fix and resubmit  and based it on sysctl-next [0]?
 
-I think the problem is here: wl1251_set_partition() passes a local
-stack variable into
-an SDIO API function that is given to the hardware. This was never
-safe and could
-cause a corrupted stack because of the cache management, but with vmap stacks
-it turns into a reliable DMA error, which I guess is what the l3
-interrupt is about.
+Sorry, will fix and resend.
 
-Can you change wl1251_set_partition() to use kmalloc()/kfree() to allocate the
-partitions[] array? You said that it still crashes without the wl1251
-driver, so I assume
-there is at least one more related bug. If you get a different call
-chain without the
-driver, or with the kmalloc() call, can you post that as well?
-
-       Arnd
+> 
+> If I've missed any other patches please resubmit as well and use
+> the [PATCH sysctl-next] as prefix.
+> 
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-next
+> 
+>   Luis
+> 
+> On Wed, Apr 27, 2022 at 09:56:35AM +0800, YueHaibing wrote:
+>> ping...
+>>
+>> On 2022/4/7 15:48, YueHaibing wrote:
+>>> If CONFIG_SYSFS is n, build warn:
+>>>
+>>> kernel/reboot.c:443:20: error: ‘kernel_reboot_sysctls_init’ defined but not used [-Werror=unused-function]
+>>>  static void __init kernel_reboot_sysctls_init(void)
+>>>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>
+>>> Move kernel_reboot_sysctls_init() to #ifdef block to fix this.
+>>>
+>>> Fixes: 6e73c8344931 ("kernel/reboot: move reboot sysctls to its own file")
+>>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>>> ---
+>>>  kernel/reboot.c | 54 ++++++++++++++++++++++++-------------------------
+>>>  1 file changed, 27 insertions(+), 27 deletions(-)
+>>>
+>>> diff --git a/kernel/reboot.c b/kernel/reboot.c
+>>> index ed4e6dfb7d44..ecbf09ea03c5 100644
+>>> --- a/kernel/reboot.c
+>>> +++ b/kernel/reboot.c
+>>> @@ -421,33 +421,6 @@ void ctrl_alt_del(void)
+>>>  static char poweroff_cmd[POWEROFF_CMD_PATH_LEN] = "/sbin/poweroff";
+>>>  static const char reboot_cmd[] = "/sbin/reboot";
+>>>  
+>>> -#ifdef CONFIG_SYSCTL
+>>> -static struct ctl_table kern_reboot_table[] = {
+>>> -	{
+>>> -		.procname       = "poweroff_cmd",
+>>> -		.data           = &poweroff_cmd,
+>>> -		.maxlen         = POWEROFF_CMD_PATH_LEN,
+>>> -		.mode           = 0644,
+>>> -		.proc_handler   = proc_dostring,
+>>> -	},
+>>> -	{
+>>> -		.procname       = "ctrl-alt-del",
+>>> -		.data           = &C_A_D,
+>>> -		.maxlen         = sizeof(int),
+>>> -		.mode           = 0644,
+>>> -		.proc_handler   = proc_dointvec,
+>>> -	},
+>>> -	{ }
+>>> -};
+>>> -
+>>> -static void __init kernel_reboot_sysctls_init(void)
+>>> -{
+>>> -	register_sysctl_init("kernel", kern_reboot_table);
+>>> -}
+>>> -#else
+>>> -#define kernel_reboot_sysctls_init() do { } while (0)
+>>> -#endif /* CONFIG_SYSCTL */
+>>> -
+>>>  static int run_cmd(const char *cmd)
+>>>  {
+>>>  	char **argv;
+>>> @@ -895,6 +868,33 @@ static struct attribute *reboot_attrs[] = {
+>>>  	NULL,
+>>>  };
+>>>  
+>>> +#ifdef CONFIG_SYSCTL
+>>> +static struct ctl_table kern_reboot_table[] = {
+>>> +	{
+>>> +		.procname       = "poweroff_cmd",
+>>> +		.data           = &poweroff_cmd,
+>>> +		.maxlen         = POWEROFF_CMD_PATH_LEN,
+>>> +		.mode           = 0644,
+>>> +		.proc_handler   = proc_dostring,
+>>> +	},
+>>> +	{
+>>> +		.procname       = "ctrl-alt-del",
+>>> +		.data           = &C_A_D,
+>>> +		.maxlen         = sizeof(int),
+>>> +		.mode           = 0644,
+>>> +		.proc_handler   = proc_dointvec,
+>>> +	},
+>>> +	{ }
+>>> +};
+>>> +
+>>> +static void __init kernel_reboot_sysctls_init(void)
+>>> +{
+>>> +	register_sysctl_init("kernel", kern_reboot_table);
+>>> +}
+>>> +#else
+>>> +#define kernel_reboot_sysctls_init() do { } while (0)
+>>> +#endif /* CONFIG_SYSCTL */
+>>> +
+>>>  static const struct attribute_group reboot_attr_group = {
+>>>  	.attrs = reboot_attrs,
+>>>  };
+>>>
+> .
+> 

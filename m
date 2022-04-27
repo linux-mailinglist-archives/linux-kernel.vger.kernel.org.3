@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA19E51219F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18725121A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiD0Swq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S230422AbiD0SxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiD0SwZ (ORCPT
+        with ESMTP id S229927AbiD0Sw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:52:25 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364BE3C7601;
-        Wed, 27 Apr 2022 11:38:35 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bv19so5137132ejb.6;
-        Wed, 27 Apr 2022 11:38:35 -0700 (PDT)
+        Wed, 27 Apr 2022 14:52:28 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23F0B42CA;
+        Wed, 27 Apr 2022 11:38:37 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id y3so5094493ejo.12;
+        Wed, 27 Apr 2022 11:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Og01PFU5EZe5B0bBCu0F7erpiwis4vadvQ4RVspA5Fo=;
-        b=SntM5HDOwIGePMHzM/EfZTAhbrz7ckZ4p9NyGG4x3OSE/dbxyn70Q3EhHR3ygKzW5I
-         kcW88k/EYG4S4Y3mmysxcGIpqI71WboengmOm95wO05I0S2E4E/FEx1JP5+l0E9x9wUv
-         vcXil4U7biijyBk1Jm85LLyjEdhgroQlCphFFLda5167dYmB/EDh7ghlCmlnieJY8xg0
-         fvN2hmw458gg5trRdsn3dFe8ytLIWo3Tr+0LrQdoqgOleP/j5bO2/+P5kV3pG5BtBL/B
-         uEJXUEEUxJiE22KQNChwj7jyiGkWZqygQlDWDBeluT0PjfPSt04Ie3jfBhN7N1UHoehq
-         Byjg==
+        bh=jOs08eZRk6ExS199wzRva9ul3oRppHhYhG8H+SRVTNs=;
+        b=AMCnfbxGjjdKlTzyhbozRm+aS3brrBzQsgur9pRnfMnqBvu/SuIbid8Crrkl+UpJ2A
+         3vqPNbLrcej51RTvsy/6grOFJ2gpJvYXxUhJoioSGBxUpZVmn9LWKugWlsUoVUyLb9PN
+         SeI78ZtISIfEOKQbRTMJolDxr7IeTuYjWX7SOfMU4sTFchUkfO156gbilKnrvXtDOFZC
+         bKWawtwNT4XqEnuQc7pJBNQjP3ZO303Nv2Ox4a51AmYwU27kQzAF/oC8t4y5WtTm4F2t
+         Mlusn2zDvW1bCViW3PJGgln2upWw+xF0B1Y3j+uoV9viNLa0i/7zunE/6Yp0xtOcZI1P
+         Mvmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Og01PFU5EZe5B0bBCu0F7erpiwis4vadvQ4RVspA5Fo=;
-        b=CQzEm6ohserID1EkNohwMDiYkpgNffoi4AtMINlsnT3bwf70kYixreaGSCYQTxQdbu
-         8UiTEgn7EkpreaKQ+erUHxZuObixTXH+zS4Ja4+wbHfXWLr3hbIRtf96+wEULy2H/BaL
-         W83tuicHUKRJ1zWy6zibuGb6USpL07u1rXz2J3nbX0MyHektvSZ6MLunhsV+P2tuvR+Y
-         w58ib2m3MBseiGz87TkF10k4G920Cm3gzBntTmqlsnuJC1ncGHes50Rgtidc/QhXlx/d
-         cPp+bcScYCyBbEoiIrfk7c4996xOBIqgRiLIA+VD6DyvO5U9mrPV4uR3wWD0Q0BVLC/z
-         4m/Q==
-X-Gm-Message-State: AOAM530jFnfr3uOAkGTrgau7ZpMlIYYXtJGVxPGVhqOv24QH4uaXicOx
-        b7oQTMya38HSg0e4rQ7E190=
-X-Google-Smtp-Source: ABdhPJxSqgxF0sunXBvQPcd7EMxD0GNBqflpYY2ga2IkDu1yXDb35IfTimGHpeVMmtZs0AC1cq/pgA==
-X-Received: by 2002:a17:907:7745:b0:6f3:674a:339 with SMTP id kx5-20020a170907774500b006f3674a0339mr24302043ejc.207.1651084713819;
-        Wed, 27 Apr 2022 11:38:33 -0700 (PDT)
+        bh=jOs08eZRk6ExS199wzRva9ul3oRppHhYhG8H+SRVTNs=;
+        b=PERUKU09fT7TOgt3brI7PuzXfLo3w+4IqsT0hEg1unHrWCJ7YfFEIyaYLcRD14NIy9
+         GGv8WCybgvCnlI0V/s3CTxbNBpXLIg5pj9NXtLaMoTX3XfCI3SXF3PbZfbccxywv6q8G
+         +Q6zT9mMuUWJmgT67/BWFjvWnfVoOo4/nTAsxpZSUQYdUxGGYAdUeSHuFNL32xVlE5LF
+         u3uOP3M+8AAnuCTMfeRBu8WxDYlMtY6H9/gf6RcoBtemEyLV83H3wCKMg3s8Fr3u+itl
+         LytYIgnczJ9u1ygjrSKV6bx3gAO3IBbz9z8o6Fgz2j0qNm+PJPG57OnJFBAk44b6l0ys
+         CErQ==
+X-Gm-Message-State: AOAM532SpGzKesu/VRVGv9ziMb/PPnNWSIWCLW0rjDsviJyD71pozyeD
+        IDkU1wZKf+6S/pNZsCpwVCw=
+X-Google-Smtp-Source: ABdhPJwWDatxEfRatj8lLwPfJQ47Zd8rjxiQLgCmNfAWGsGt89ymZa2VnfWy1gE6hzBSiMls3Z9HOw==
+X-Received: by 2002:a17:907:3e2a:b0:6f3:aa0c:ab94 with SMTP id hp42-20020a1709073e2a00b006f3aa0cab94mr11398613ejc.23.1651084716314;
+        Wed, 27 Apr 2022 11:38:36 -0700 (PDT)
 Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id ig8-20020a1709072e0800b006f38f2e9ebesm4691667ejc.64.2022.04.27.11.38.31
+        by smtp.gmail.com with ESMTPSA id ig8-20020a1709072e0800b006f38f2e9ebesm4691667ejc.64.2022.04.27.11.38.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:38:32 -0700 (PDT)
+        Wed, 27 Apr 2022 11:38:34 -0700 (PDT)
 From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 To:     Ira Weiny <ira.weiny@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -63,9 +63,9 @@ Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v3 3/4] Documentation/vm: Move "Using kmap-atomic" to highmem.h
-Date:   Wed, 27 Apr 2022 20:38:20 +0200
-Message-Id: <20220427183821.1979-4-fmdefrancesco@gmail.com>
+Subject: [PATCH v3 4/4] Documentation/vm: Rework "Temporary Virtual Mappings" section
+Date:   Wed, 27 Apr 2022 20:38:21 +0200
+Message-Id: <20220427183821.1979-5-fmdefrancesco@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220427183821.1979-1-fmdefrancesco@gmail.com>
 References: <20220427183821.1979-1-fmdefrancesco@gmail.com>
@@ -81,113 +81,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap_atomic() is new code is being deprecated in favor of
-kmap_local_page(). For this reason the "Using kmap_atomic" section in
-highmem.rst is obsolete and unnecessary, but it can still help developers
-if it were moved to kdocs in highmem.h.
+Extend and rework the "Temporary Virtual Mappings" section of the highmem.rst
+documentation.
 
-Therefore, move the relevant parts of this section from highmem.rst and
-merge them with the kdocs in highmem.h.
+Despite the local kmaps were introduced by Thomas Gleixner in October 2020,
+documentation was still missing information about them. These additions rely
+largely on Gleixner's patches, Jonathan Corbet's LWN articles, comments by
+Ira Weiny and Matthew Wilcox, and in-code comments from highmem.h.
+
+1) Add a paragraph to document kmap_local_page().
+2) Reorder the list of functions by decreasing order of preference of
+use.
+3) Rework part of the kmap() entry in list.
 
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc: Matthew Wilcox <willy@infradead.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Suggested-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- Documentation/vm/highmem.rst | 35 -----------------------------------
- include/linux/highmem.h      | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+), 35 deletions(-)
+ Documentation/vm/highmem.rst | 74 ++++++++++++++++++++++++++++++------
+ 1 file changed, 63 insertions(+), 11 deletions(-)
 
 diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
-index ccff08a8211d..e05bf5524174 100644
+index e05bf5524174..c8aff448612b 100644
 --- a/Documentation/vm/highmem.rst
 +++ b/Documentation/vm/highmem.rst
-@@ -72,41 +72,6 @@ The kernel contains several ways of creating temporary mappings:
-   It may be assumed that k[un]map_atomic() won't fail.
- 
- 
--Using kmap_atomic
--=================
--
--When and where to use kmap_atomic() is straightforward.  It is used when code
--wants to access the contents of a page that might be allocated from high memory
--(see __GFP_HIGHMEM), for example a page in the pagecache.  The API has two
--functions, and they can be used in a manner similar to the following::
--
--	/* Find the page of interest. */
--	struct page *page = find_get_page(mapping, offset);
--
--	/* Gain access to the contents of that page. */
--	void *vaddr = kmap_atomic(page);
--
--	/* Do something to the contents of that page. */
--	memset(vaddr, 0, PAGE_SIZE);
--
--	/* Unmap that page. */
--	kunmap_atomic(vaddr);
--
--Note that the kunmap_atomic() call takes the result of the kmap_atomic() call
--not the argument.
--
--If you need to map two pages because you want to copy from one page to
--another you need to keep the kmap_atomic calls strictly nested, like::
--
--	vaddr1 = kmap_atomic(page1);
--	vaddr2 = kmap_atomic(page2);
--
--	memcpy(vaddr1, vaddr2, PAGE_SIZE);
--
--	kunmap_atomic(vaddr2);
--	kunmap_atomic(vaddr1);
--
--
- Cost of Temporary Mappings
+@@ -50,26 +50,78 @@ space when they use mm context tags.
+ Temporary Virtual Mappings
  ==========================
  
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 3623319a659d..d1f9b298415e 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -143,6 +143,37 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
-  * configurations).
-  *
-  * Do not use in new code. Use kmap_local_page() instead.
-+ *
-+ * It is used in atomic context when code wants to access the contents of a
-+ * page that might be allocated from high memory (see __GFP_HIGHMEM), for
-+ * example a page in the pagecache.  The API has two functions, and they
-+ * can be used in a manner similar to the following:
-+ *
-+ * -- Find the page of interest. --
-+ * struct page *page = find_get_page(mapping, offset);
-+ *
-+ * -- Gain access to the contents of that page. --
-+ * void *vaddr = kmap_atomic(page);
-+ *
-+ * -- Do something to the contents of that page. --
-+ * memset(vaddr, 0, PAGE_SIZE);
-+ *
-+ * -- Unmap that page. --
-+ * kunmap_atomic(vaddr);
-+ *
-+ * Note that the kunmap_atomic() call takes the result of the kmap_atomic()
-+ * call, not the argument.
-+ *
-+ * If you need to map two pages because you want to copy from one page to
-+ * another you need to keep the kmap_atomic calls strictly nested, like:
-+ *
-+ * vaddr1 = kmap_atomic(page1);
-+ * vaddr2 = kmap_atomic(page2);
-+ *
-+ * memcpy(vaddr1, vaddr2, PAGE_SIZE);
-+ *
-+ * kunmap_atomic(vaddr2);
-+ * kunmap_atomic(vaddr1);
-  */
- static inline void *kmap_atomic(struct page *page);
+-The kernel contains several ways of creating temporary mappings:
++The kernel contains several ways of creating temporary mappings. The following
++list shows them in order of preference of use.
  
+-* vmap().  This can be used to make a long duration mapping of multiple
+-  physical pages into a contiguous virtual space.  It needs global
+-  synchronization to unmap.
++* kmap_local_page().  This function is used to require short term mappings.
++  It can be invoked from any context (including interrupts) but the mappings
++  can only be used in the context which acquired them.
++
++  This function should be preferred, where feasible, over all the others.
+ 
+-* kmap().  This permits a short duration mapping of a single page.  It needs
+-  global synchronization, but is amortized somewhat.  It is also prone to
+-  deadlocks when using in a nested fashion, and so it is not recommended for
+-  new code.
++  These mappings are thread-local and CPU-local (i.e., migration from one CPU
++  to another is disabled - this is why they are called "local"), but they don't
++  disable preemption. It's valid to take pagefaults in a local kmap region,
++  unless the context in which the local mapping is acquired does not allow it
++  for other reasons.
++
++  kmap_local_page() always returns a valid virtual address and it is assumed
++  that kunmap_local() will never fail.
++
++  If a task holding local kmaps is preempted, the maps are removed on context
++  switch and restored when the task comes back on the CPU. The maps are
++  strictly thread-local and CPU-local, therefore it is guaranteed that the
++  task stays on the CPU and the CPU cannot be unplugged until the local kmaps
++  are released.
++
++  Nesting kmap_local_page() and kmap_atomic() mappings is allowed to a certain
++  extent (up to KMAP_TYPE_NR) but their invocations have to be strictly ordered
++  because the map implementation is stack based. See kmap_local_page () kdocs
++  (included in the "Functions" section) for details on how to manage nested
++  mappings.
+ 
+ * kmap_atomic().  This permits a very short duration mapping of a single
+   page.  Since the mapping is restricted to the CPU that issued it, it
+   performs well, but the issuing task is therefore required to stay on that
+   CPU until it has finished, lest some other task displace its mappings.
+ 
+-  kmap_atomic() may also be used by interrupt contexts, since it is does not
+-  sleep and the caller may not sleep until after kunmap_atomic() is called.
++  kmap_atomic() may also be used by interrupt contexts, since it does not
++  sleep and the callers too may not sleep until after kunmap_atomic() is
++  called.
++
++  Each call of kmap_atomic() in the kernel creates a non-preemptible section
++  and disable pagefaults. This could be a source of unwanted latency, so it
++  should be only used if it is absolutely required, otherwise kmap_local_page()
++  should be used where it is feasible.
+ 
+-  It may be assumed that k[un]map_atomic() won't fail.
++  It is assumed that k[un]map_atomic() won't fail.
++
++* kmap().  This should be used to make short duration mapping of a single
++  page with no restrictions on preemption or migration. It comes with an
++  overhead as mapping space is restricted and protected by a global lock
++  for synchronization. When mapping is no longer needed, the address that
++  the page was mapped to must be released with kunmap().
++
++  Mapping changes must be propagated across all the CPUs. kmap() also
++  requires global TLB invalidation when the kmap's pool wraps and it might
++  block when the mapping space is fully utilized until a slot becomes
++  available. Therefore, kmap() is only callable from preemptible context.
++
++  All the above work is necessary if a mapping must last for a relatively
++  long time but the bulk of high-memory mappings in the kernel are
++  short-lived and only used in one place. This means that the cost of
++  kmap() is mostly wasted in such cases. kmap() was not intended for long
++  term mappings but it has morphed in that direction and its use is
++  strongly discouraged in newer code and the set of the preceding functions
++  should be preferred.
++
++  On 64-bit systems, calls to kmap_local_page(), kmap_atomic() and kmap() have
++  no real work to do because a 64-bit address space is more than sufficient to
++  address all the physical memory whose pages are permanently mapped.
++
++* vmap().  This can be used to make a long duration mapping of multiple
++  physical pages into a contiguous virtual space.  It needs global
++  synchronization to unmap.
+ 
+ 
+ Cost of Temporary Mappings
 -- 
 2.34.1
 

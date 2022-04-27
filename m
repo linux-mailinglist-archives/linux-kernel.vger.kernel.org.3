@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1195851107D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7832511085
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357847AbiD0F0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S1357857AbiD0Fba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 01:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242013AbiD0F0x (ORCPT
+        with ESMTP id S242013AbiD0Fb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:26:53 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F591154F3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:23:44 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id j17so658338pfi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:23:43 -0700 (PDT)
+        Wed, 27 Apr 2022 01:31:28 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6713012194A;
+        Tue, 26 Apr 2022 22:28:18 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id g23so620227edy.13;
+        Tue, 26 Apr 2022 22:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pwauUeBlcHvBLcNyAimJGJIhIGSQVXs8oid0dWAxNRI=;
-        b=nxABqQf6lZRKa97gncv5efuRIZgUZAdO5gy+OF4jUXCOKpj9bbJWK3r1gjH4Xw8PuN
-         ktWmeG+np9gFm5AlHfhYGoEF6hgQvbXAvE8Quf/i9hC0H/nngx/EtDJDD9UyTTDYkAJT
-         uHEDpmH3K3X7h19iV2m7d+uEYToyhrRt5/3VUYkZg4SOCqK0j5Nwhb1AdhdzECIqPo0D
-         6fiUmxExbZNRQJj1AZPLh48eAj/VDbqfjf/2RVcThYoIBxWVFZI0Gnq9jo9vnf4orWCu
-         AcfxlihjntfM/JqbBBJDAEDbfYDCrNFcrzMLq9J5zMricu4rMtwS+dqCljWdIGdyWkVj
-         vUAA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OmFfBKBvjXjBUi32eJz6KqWWe+VBykXhnFIMt6kZrPA=;
+        b=VKF80W9fKkrHobaNWG6+jlexuZpjlYTkta79tRkZgiz1nVADhCqsm6FKiL6csRUdjz
+         JSkotuedZJyK80hxkRz9g63COsSodweG1uLO9NBvJlBVZZvkud49fD2IUtgBaESQRGF/
+         GW3u6yFsUXuvtNhpA5kIUtMvDEwu5eb4ZWHyqbdAms6KhRq4lfyCL5eFipL/NsHa+W0R
+         LWdEwrJwdWLNRRtTAhjzcgtLHa1dShCnCPIWZZUWg7gvzxHMcFALsVjUPFNfd8qoqq0W
+         ODeXIzrSIPU55JfZ19Mmx73lEKEs2ui+Fn9JwJ7ME0NrHJbkijJV+4ujLrVLj/HqUMyQ
+         MTIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pwauUeBlcHvBLcNyAimJGJIhIGSQVXs8oid0dWAxNRI=;
-        b=6rV35bqcqet0/QbTnTBR/kBFX1IP/5Io0j3a8HzAnb1xJ9hs1HH2Zm1+AMeYmMwjKq
-         NFm6slWNnkI01vGVm3jD3wTtHiAP1Gya3pL+hDuBeY/1h03zP5F8hJS6dCV7A0+QQqf+
-         KDp4NA1fQi15UIWtHu86VPVchBrCNGQluONzbUTlP97VVhtB3kC17WdFc6Ou9IW+pUrA
-         b2LlS8IReTk+/rSMHqtRN9VHICS9z34nDA60Z4Dlg5MTUt8FlopsNEwg6t0EqWst3sue
-         O46aScCIUDePkx6pPMr+1LE3KKbgj72dITC1tME6r1GVJl0E/iTcM4l3ZhYR+BzS1U1w
-         DpDA==
-X-Gm-Message-State: AOAM533srE/zZ/Wm1zPS1vFr4PxJMSnM88MCsIVgQfDza7ZQ35FOhGfq
-        pauUpnmfLLf1bpEVUIevTdOfjfkssOnO0xttitjcKQ==
-X-Google-Smtp-Source: ABdhPJwemIJMuNvur9xoVeyM2lh0O0LGlsT3yrBbDXhCa2tzdHR3c/Mp+1SptclF6mKluY9dz3wC3yrntS/Wa46igdg=
-X-Received: by 2002:a63:5b53:0:b0:39c:c6b8:d53b with SMTP id
- l19-20020a635b53000000b0039cc6b8d53bmr22140578pgm.166.1651037023216; Tue, 26
- Apr 2022 22:23:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OmFfBKBvjXjBUi32eJz6KqWWe+VBykXhnFIMt6kZrPA=;
+        b=FOvmlOcXP5AQljbpXRq6jgmO9pJ3ZSFkem4J+Hu1n4xcLoCsOBw0lXwoxOqNWfDXXX
+         lZNSBkddDpIJxdJXq4YYyM95DhnosZ61dpcBguBUCVGFRRMQBpznWsdMTwgRbe9+yi7d
+         ACEqrhs8tGlb4v8r53jFgKmk0PgtxqouzWYw+ckWPEcH0LkbG8XCqdOfoH9d2If5vQO0
+         GR2rGdoMWh0VmcsCb/BRi+93p4hNAKxukJpfRpNsMA6lwL8OidffFrBo98mdWX0AtzqW
+         tUYArQCoDRmNv6E4x8nkdjMDMxelhA+rFp1IPJ+O9LSV9OYO2252Pi327TTElwfEEfJd
+         Vcog==
+X-Gm-Message-State: AOAM532/MmQ+GBskAue8gij42tY2zxRurRY7NAVLFAV3p4qMii8pLumA
+        fOWyjEa6RWlMJzQ7NfKVEHE=
+X-Google-Smtp-Source: ABdhPJxlWhm6y16PcnsGfzyfaskCHjeUFOul0gTxv+QCvWXYqmPxQGE4L6lNMH+wgHmtutAMMai44g==
+X-Received: by 2002:aa7:de93:0:b0:418:d700:662a with SMTP id j19-20020aa7de93000000b00418d700662amr28175416edv.107.1651037296832;
+        Tue, 26 Apr 2022 22:28:16 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id n13-20020a170906724d00b006cedd6d7e24sm6037171ejk.119.2022.04.26.22.28.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 22:28:15 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        "Acked-by : Mike Rapoport" <rppt@linux.ibm.com>
+Subject: Re: [PATCH v2 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
+Date:   Wed, 27 Apr 2022 07:28:13 +0200
+Message-ID: <2383038.jE0xQCEvom@leap>
+In-Reply-To: <YmfRynAhuSWz9H+e@linutronix.de>
+References: <20220425162400.11334-1-fmdefrancesco@gmail.com> <4396926.LvFx2qVVIh@leap> <YmfRynAhuSWz9H+e@linutronix.de>
 MIME-Version: 1.0
-References: <YmdeCqi6wmgiSiWh@carbon> <33085523-a8b9-1bf6-2726-f456f59015ef@openvz.org>
-In-Reply-To: <33085523-a8b9-1bf6-2726-f456f59015ef@openvz.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 26 Apr 2022 22:23:32 -0700
-Message-ID: <CALvZod4oaj9MpBDVUp9KGmnqu4F3UxjXgOLkrkvmRfFjA7F1dw@mail.gmail.com>
-Subject: Re: [PATCH memcg v4] net: set proper memcg for net_init hooks allocations
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:43 PM Vasily Averin <vvs@openvz.org> wrote:
->
-> __register_pernet_operations() executes init hook of registered
-> pernet_operation structure in all existing net namespaces.
->
-> Typically, these hooks are called by a process associated with
-> the specified net namespace, and all __GFP_ACCOUNT marked
-> allocation are accounted for corresponding container/memcg.
->
-> However __register_pernet_operations() calls the hooks in the same
-> context, and as a result all marked allocations are accounted
-> to one memcg for all processed net namespaces.
->
-> This patch adjusts active memcg for each net namespace and helps
-> to account memory allocated inside ops_init() into the proper memcg.
->
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
+On marted=C3=AC 26 aprile 2022 13:04:42 CEST Sebastian Andrzej Siewior wrot=
+e:
+> On 2022-04-26 11:43:03 [+0200], Fabio M. De Francesco wrote:
+>=20
+> Either way, according to the code kmap_atomic() does not always disable
+> preemption=20
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+Hi Sebastian,
 
-[...]
->
-> +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
-> +{
-> +       struct mem_cgroup *memcg;
-> +
+In my last email (for patch 4/4) I wrote that I would add a deprecation=20
+notice to kunmap_local() and would talk about thread locality in=20
+kmap_local_page(). I want to confirm that I'll do these changes in v3.
 
-Do we need memcg_kmem_enabled() check here or maybe
-mem_cgroup_from_obj() should be doing memcg_kmem_enabled() instead of
-mem_cgroup_disabled() as we can have "cgroup.memory=nokmem" boot
-param.
+Then I closed that email asking if I was still overlooking something.=20
+Consider that I'm relatively new to kernel development and that it's just=20
+something I do in my spare time. So I was pretty sure I was still missing=20
+something :)
 
-> +       rcu_read_lock();
-> +       do {
-> +               memcg = mem_cgroup_from_obj(p);
-> +       } while (memcg && !css_tryget(&memcg->css));
-> +       rcu_read_unlock();
-> +       return memcg;
-> +}
+After reading again the code of kmap_atomic() (as you suggested - thanks!)=
+=20
+I noted that you correctly say that kmap_atomic() does not always disables=
+=20
+preemption (i.e., preemption is disabled only for !PREEMPT_RT kernel's =20
+configurations).
+
+Therefore I'll also change the first sentence of kunmap_local() to the=20
+following:
+
+"[It] Unmaps an address previously mapped by kmap_atomic() and re-enables=20
+pagefaults and preemption (the latter disabled only for !PREEMP_RT=20
+configurations).".
+
+I will also be making this change in v3.
+
+Can you please say if I'm still missing something?
+
+Thanks,
+
+=46abio
+
+
+

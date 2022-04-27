@@ -2,69 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3248B51248C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAE451248E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237526AbiD0Vck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S237392AbiD0VdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbiD0Vcf (ORCPT
+        with ESMTP id S234154AbiD0VdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:32:35 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CC1E88
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:29:22 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id m62so1845700wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EZHhhV6+pmb1UT1g76oOP71UxtrLj2KipdoqAHTDk7Q=;
-        b=Hd/l4vsy96c0wGx7hXoS15x91RIAemfs0fcqL3+m3VYf3uWEAWKyHYJptgmja3wZN6
-         G/b2WNBliCbvsv8gAkK+zbdr5jzW8bxzCJufUcJ7gWS6eMLq58gPdWPOgro+434aCRTr
-         XFuv8KvqmLOqhZK5zR8A6DwMGl8xKeZOZC4iAFBHAnlQJCbk+sqrlgWzALVmSEyamC66
-         7On7Yakr9cbad53INk/xo7Jr+2Lm6CDbkF+zYsmB2LQWQQh7CgsN5Q2337Ty/C5kuU4c
-         9VeXYd41hKKcEK7uVluapP5lYgsADhreNLtoCzHbyFBWTdz4kgL2K5ud4xjNUh1FXhK3
-         G+mA==
+        Wed, 27 Apr 2022 17:33:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C79FCE88
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651094994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qu+9cW5R00FScE94cg2fosnaTUjfEHdj2O3XEUpsTt0=;
+        b=Bp1l0OB45ujw81ruw9xJe8r7aocBkGh8GcIMsHVKobW14wMo3IuauMhZ4jz0dvjWh6oH5k
+        /sF93C42SXTTsp2uEU0oFo6v+Yg5xzGgxHtsCiWQ2AwGI+lQPMJjjrKTR6cRCfG438Emm4
+        KS73BqhstjFSJZGScOfh27zJVAGBDlA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-hso8EEciMt-BovbOtkkICw-1; Wed, 27 Apr 2022 17:29:52 -0400
+X-MC-Unique: hso8EEciMt-BovbOtkkICw-1
+Received: by mail-wm1-f70.google.com with SMTP id 26-20020a05600c021a00b003940660c053so947454wmi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:29:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=EZHhhV6+pmb1UT1g76oOP71UxtrLj2KipdoqAHTDk7Q=;
-        b=71lMlbVVoIw1niyufyTNZxpWQ9IRqi6MF9iX8WPbabS91k+b459NNTSSaz2llw6Sp8
-         gwPYM5lbsZCdU7ieY4SMsuvsc/5uT4nu4jtfL9AHxpdcHmtzxMZpR6Hkniy3WMLHTRRm
-         lndF6oCt02yBFCsRRkx3hww/SXygv+5b0L1P+jfQMygs59pFB0w0MxXw1gsSHH9+0SK6
-         sioOnZhUWZIiYtk7fCwBgxgaGwbowhyzH/PHIIWe+YaGh1C8xTw0pXAgVjtmD0d0r6GZ
-         aEFmpXraoTawbKDdnLz5/91ycP1z1X3uaiH62RBO2AgZEba4VEGeV8v+8LtISMtxKO61
-         2exQ==
-X-Gm-Message-State: AOAM531a0vtw4dtqm9TYSZ0prqOzQygzJPvosjTwfyYdpxaE+xdq7yQQ
-        Wf/bYA9GEuWUW/aeSA0c7mCsPSStoO4=
-X-Google-Smtp-Source: ABdhPJxLAwFJSbQVPJuobxF9Wtn91U1YeaAUvntI7e21Tsbdh55uAGKn9OfI3Gl7DQGwkqa7i7j0cg==
-X-Received: by 2002:a1c:f604:0:b0:38c:8ffd:dbb6 with SMTP id w4-20020a1cf604000000b0038c8ffddbb6mr37125539wmc.43.1651094960712;
-        Wed, 27 Apr 2022 14:29:20 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:8084:255a:b400:fcdb:a3fa:2e97:71c3])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05600c4f4800b00393ed334220sm2599664wmq.42.2022.04.27.14.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 14:29:20 -0700 (PDT)
-From:   Nicola Lunghi <nick83ola@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Nicola Lunghi <nick83ola@gmail.com>,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: wm8960: Add ACPI support
-Date:   Wed, 27 Apr 2022 22:29:16 +0100
-Message-Id: <20220427212916.40145-1-nick83ola@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=Qu+9cW5R00FScE94cg2fosnaTUjfEHdj2O3XEUpsTt0=;
+        b=ueUNuMGGVQS4mlby/4gLoUFD1LfLpuklCr5TsThxo2OfM0wTIQYQHNL1w81IeDf9i1
+         P7ymjWEQK2pvok3moBH5d4oLfODIXNrDIQ/hKGEHGcRd8BRSbK0m7Zdp+316usS+0K4F
+         hRGUHSUkVGnvwjW6wfdY2RzwBrlC+Q5yVvl7wa4tO9Rr7rjac3GUS/3cxUzv6mb6myDG
+         adwPQWkksrsssDmp0s8OX+Weku+a3X72PN/Sfpeta83Ar7OkGcoH4a7oAKIrVUHIOgto
+         /pPm4XYIGpoMXfgbhdx8Uu1/DHXtgfzh7AlHNOzS33H9oyHsoy5rxFwPD4J24sgod2jF
+         smHg==
+X-Gm-Message-State: AOAM531WBuF2I0hRmZZ4pChp/aMnJwK71VWxtBQoLMtnkVaC/3s3Z6us
+        ToWN8uuz5ULgb50BqWEXk8/tbSEle9VuLLJlqgw2/hRlRkDsovehWsvFYlZ1NgJEQPSywxq1aHm
+        SBsy9ZWbDG0MgMwhRNsK17lFWaiItVNHGWjDw7G/0TJW65SO06ASIWPK0miEm7VJSdQwDQypOsU
+        s=
+X-Received: by 2002:a05:600c:4e8a:b0:393:f169:b261 with SMTP id f10-20020a05600c4e8a00b00393f169b261mr11087062wmq.81.1651094991444;
+        Wed, 27 Apr 2022 14:29:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwp3oXACwpueXDePLHDIjsNfwNIfXXGKs7X4UsEVcT/C2ckmWjJ8qHBHGNa+RCk9TBcbbr/WA==
+X-Received: by 2002:a05:600c:4e8a:b0:393:f169:b261 with SMTP id f10-20020a05600c4e8a00b00393f169b261mr11087040wmq.81.1651094991105;
+        Wed, 27 Apr 2022 14:29:51 -0700 (PDT)
+Received: from [192.168.1.129] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id u4-20020a5d6da4000000b0020a8c8d3e00sm15291167wrs.73.2022.04.27.14.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 14:29:50 -0700 (PDT)
+Message-ID: <23074b44-27c9-ccab-dc72-c2231947bb30@redhat.com>
+Date:   Wed, 27 Apr 2022 23:29:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/display: Select DP helpers for DRM_DP_AUX_CHARDEV and
+ DRM_DP_CEC
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20220427202513.46996-1-javierm@redhat.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220427202513.46996-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,64 +86,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HID made of either Wolfson/CirrusLogic PCI ID + 8960 identifier
+On 4/27/22 22:25, Javier Martinez Canillas wrote:
+> The DRM_DP_AUX_CHARDEV and DRM_DP_CEC boolean Kconfig symbols enable code
+> that use DP helper functions, exported by the display-helper module.
+> 
 
-This helps enumerate the Waveshare WM8960 WM8960 Hi-Fi Sound
-Card HAT on the Up2 platform.
+[snip]
 
-The scripts at https://github.com/thesofproject/acpi-scripts
-can be used to add the ACPI initrd overlay.
+> @@ -32,6 +32,8 @@ config DRM_DISPLAY_HDMI_HELPER
+>  config DRM_DP_AUX_CHARDEV
+>  	bool "DRM DP AUX Interface"
+>  	depends on DRM
+> +	select DRM_DISPLAY_DP_HELPER
+> +	select DRM_DISPLAY_HELPER
 
-This commit is similar to the commit:
-960cdd50ca9f ("ASoC: wm8804: Add ACPI support")
+Actually, this is wrong since it will prevent DRM_DISPLAY_HELPER to be set
+as a module (it's tristate while this symbol is bool). I now have a better
+understanding of the problem and a patch that I believe is the correct one.
 
-Signed-off-by: Nicola Lunghi <nick83ola@gmail.com>
----
- sound/soc/codecs/wm8960.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+I'll post a v2 soon.
 
-diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
-index ca7660f4bb05..08c87ac16137 100644
---- a/sound/soc/codecs/wm8960.c
-+++ b/sound/soc/codecs/wm8960.c
-@@ -14,6 +14,7 @@
- #include <linux/pm.h>
- #include <linux/clk.h>
- #include <linux/i2c.h>
-+#include <linux/acpi.h>
- #include <linux/slab.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
-@@ -1498,16 +1499,28 @@ static const struct i2c_device_id wm8960_i2c_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, wm8960_i2c_id);
- 
-+#if defined(CONFIG_OF)
- static const struct of_device_id wm8960_of_match[] = {
-        { .compatible = "wlf,wm8960", },
-        { }
- };
- MODULE_DEVICE_TABLE(of, wm8960_of_match);
-+#endif
-+
-+#if defined(CONFIG_ACPI)
-+static const struct acpi_device_id wm8960_acpi_match[] = {
-+	{ "1AEC8960", 0 }, /* Wolfson PCI ID + part ID */
-+	{ "10138960", 0 }, /* Cirrus Logic PCI ID + part ID */
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, wm8960_acpi_match);
-+#endif
- 
- static struct i2c_driver wm8960_i2c_driver = {
- 	.driver = {
- 		.name = "wm8960",
--		.of_match_table = wm8960_of_match,
-+		.of_match_table = of_match_ptr(wm8960_of_match),
-+		.acpi_match_table = ACPI_PTR(wm8960_acpi_match),
- 	},
- 	.probe =    wm8960_i2c_probe,
- 	.remove =   wm8960_i2c_remove,
 -- 
-2.34.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

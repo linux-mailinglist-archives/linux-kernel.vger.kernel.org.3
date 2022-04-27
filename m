@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E48510EB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BBC510E9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357078AbiD0CLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 22:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S1357084AbiD0CNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 22:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245579AbiD0CL1 (ORCPT
+        with ESMTP id S1346335AbiD0CNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 22:11:27 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358953631A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:08:17 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id k27so350326edk.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HkaWNsEVaMQw479ofHFExjyxelKNB58BbBelahXQPlE=;
-        b=VEJGDPfQ6qwbUuqLPHSAnMAbq7R51wd+qb+J8rfuBv4zmp7XyCo6sNHc2v5nx3JU39
-         aH7GuNMyfUs3mDOHQUEZQBQWM3744MvnV6FqfEoppQDKIDFgIqcUvSZh5SGT1JHd+Mk+
-         atqOhys+ESvWfuS6B441nkMTVWmzjGCA/Q5cKgYGj+ha4/EfkO0N45vyeZOUF9ijmngr
-         NlzaKbOjvoFUx8qVYsgGM4U7EnI0wRCmJQIWOBktklQSnOqEZoxbZIC8TrrQpbzjWi0w
-         XAUGUBZM5JzBQ/B64zso2TN970xW0jgvLVedLKuaa3SY+R/5NGfNq51H71TK664sn3v/
-         Z4Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HkaWNsEVaMQw479ofHFExjyxelKNB58BbBelahXQPlE=;
-        b=kcf1EAKU+z9vm79u3KbL+mIll2H7miZQtxXrtnt4+KYIac/wUElKI1NKg3ti2GMcMH
-         0cyBqJBp3PQwfP/pPOOHuvSb08lGX/lOZxX06ma3UoL5iorWI9L3TOprAJSJOiOu4a9P
-         uvlEqTKUcG6cKU6i8pQ5IGh7c0cvUfx6YQ9hBGcYQKnbbA8RRngfBYPnEHMgOf9GmpXm
-         6I6x8JBSLozMUgYRyl4ChwkW79gpp6a6wbx+lXipCYlGhdYdpj7ylEglW9M4O3fVLLRV
-         +ZOHlNwS9rET4LOvJYjZS8vUKDAvGFcVaE/f0tZvRXZ1ih0cuFPcPpQi8BLcQmRDlNWM
-         Nq8Q==
-X-Gm-Message-State: AOAM533Hz4iOmR2VI/Hv2VHx+Pl7DK3efi2F7fS0a5Ssg7dolLg3Ywse
-        hJyJBlk6NCpKGyZAuLztsZGWiDzY1o0nBbL83uVjcbijHJI=
-X-Google-Smtp-Source: ABdhPJyVBhs7VHmrmlWr68/1smHstMNnHHSDukx63pzvuxvhyA0VKe6LaIBVf4BR8YFW8bvrjH+nd4F5bN6NMRCVrQw=
-X-Received: by 2002:a05:6402:2214:b0:425:d6ed:de5d with SMTP id
- cq20-20020a056402221400b00425d6edde5dmr18728793edb.383.1651025295582; Tue, 26
- Apr 2022 19:08:15 -0700 (PDT)
+        Tue, 26 Apr 2022 22:13:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DCBA5F8C
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651025399;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7bkyrH5c2hKUcaITiGmdDBOvO8zmEbp3dCpxTZkvZz4=;
+        b=NjW8KMDISlxPvi5clRbRh8+b/itEEVzp5Nt9X9MfFUInpJoBs0A9lKrXjT5f58wbnuUBXa
+        ioDw/cCRzQsQNV/HNh+lyBtgLgJqztnt7j5bvbRkxUCWtjhdNUv6RwdT4BHMmuA3GWUsmh
+        667/yydqaFetkxyM9xzN+i/eZVaESCw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-378-n4KVVouZOf-54OhBmwSxKA-1; Tue, 26 Apr 2022 22:09:53 -0400
+X-MC-Unique: n4KVVouZOf-54OhBmwSxKA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AD76833963;
+        Wed, 27 Apr 2022 02:09:52 +0000 (UTC)
+Received: from [10.72.13.230] (ovpn-13-230.pek2.redhat.com [10.72.13.230])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 424A05673BD;
+        Wed, 27 Apr 2022 02:09:44 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 8/9] selftests: KVM: aarch64: Introduce hypercall ABI
+ test
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+References: <20220423000328.2103733-1-rananta@google.com>
+ <20220423000328.2103733-9-rananta@google.com>
+ <896e95a1-6a3e-c524-4951-8fae9697b85e@redhat.com>
+ <CAJHc60z_+O09u0wB9=PnuEu3bZC0tQG93iWbjTP7-WvnN-FEnQ@mail.gmail.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <85a332a0-541e-648a-db98-eff894737338@redhat.com>
+Date:   Wed, 27 Apr 2022 10:09:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
- <20220427002125.48937-1-sj@kernel.org>
-In-Reply-To: <20220427002125.48937-1-sj@kernel.org>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Wed, 27 Apr 2022 14:08:04 +1200
-Message-ID: <CAGsJ_4wUa0i0nq61C01hb18Czpg-EuzHqH_NN=Xcfr+tKoqMCQ@mail.gmail.com>
-Subject: Re: DAMON VA regions don't split on an large Android APP
-To:     sj@kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
-        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
-        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
-        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        linux-damon@amazon.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CAJHc60z_+O09u0wB9=PnuEu3bZC0tQG93iWbjTP7-WvnN-FEnQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,499 +77,445 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:21 PM <sj@kernel.org> wrote:
->
-> Hello Barry,
->
->
-> Thank you so much for sharing your great findings! :)
+Hi Raghavendra,
 
-Thanks for your quick response.
+On 4/27/22 12:59 AM, Raghavendra Rao Ananta wrote:
+> On Tue, Apr 26, 2022 at 12:50 AM Gavin Shan <gshan@redhat.com> wrote:
+>> On 4/23/22 8:03 AM, Raghavendra Rao Ananta wrote:
+>>> Introduce a KVM selftest to check the hypercall interface
+>>> for arm64 platforms. The test validates the user-space'
+>>> [GET|SET]_ONE_REG interface to read/write the psuedo-firmware
+>>> registers as well as its effects on the guest upon certain
+>>> configurations.
+>>>
+>>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+>>> ---
+>>>    tools/testing/selftests/kvm/.gitignore        |   1 +
+>>>    tools/testing/selftests/kvm/Makefile          |   1 +
+>>>    .../selftests/kvm/aarch64/hypercalls.c        | 335 ++++++++++++++++++
+>>>    3 files changed, 337 insertions(+)
+>>>    create mode 100644 tools/testing/selftests/kvm/aarch64/hypercalls.c
+>>>
+>>
+>> There are comments about @false_hvc_info[] and some nits, as below.
+>> Please evaluate and improve if it makes sense to you. Otherwise, it
+>> looks good to me:
+>>
+>> Reviewed-by: Gavin Shan <gshan@redhat.com>
+>>
+>>> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+>>> index 1bb575dfc42e..b17e464ec661 100644
+>>> --- a/tools/testing/selftests/kvm/.gitignore
+>>> +++ b/tools/testing/selftests/kvm/.gitignore
+>>> @@ -2,6 +2,7 @@
+>>>    /aarch64/arch_timer
+>>>    /aarch64/debug-exceptions
+>>>    /aarch64/get-reg-list
+>>> +/aarch64/hypercalls
+>>>    /aarch64/psci_test
+>>>    /aarch64/vcpu_width_config
+>>>    /aarch64/vgic_init
+>>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+>>> index c2cf4d318296..97eef0c03d3b 100644
+>>> --- a/tools/testing/selftests/kvm/Makefile
+>>> +++ b/tools/testing/selftests/kvm/Makefile
+>>> @@ -105,6 +105,7 @@ TEST_GEN_PROGS_x86_64 += system_counter_offset_test
+>>>    TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
+>>>    TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
+>>>    TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
+>>> +TEST_GEN_PROGS_aarch64 += aarch64/hypercalls
+>>>    TEST_GEN_PROGS_aarch64 += aarch64/psci_test
+>>>    TEST_GEN_PROGS_aarch64 += aarch64/vcpu_width_config
+>>>    TEST_GEN_PROGS_aarch64 += aarch64/vgic_init
+>>> diff --git a/tools/testing/selftests/kvm/aarch64/hypercalls.c b/tools/testing/selftests/kvm/aarch64/hypercalls.c
+>>> new file mode 100644
+>>> index 000000000000..f404343a0ae3
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/kvm/aarch64/hypercalls.c
+>>> @@ -0,0 +1,335 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +
+>>> +/* hypercalls: Check the ARM64's psuedo-firmware bitmap register interface.
+>>> + *
+>>> + * The test validates the basic hypercall functionalities that are exposed
+>>> + * via the psuedo-firmware bitmap register. This includes the registers'
+>>> + * read/write behavior before and after the VM has started, and if the
+>>> + * hypercalls are properly masked or unmasked to the guest when disabled or
+>>> + * enabled from the KVM userspace, respectively.
+>>> + */
+>>> +
+>>> +#include <errno.h>
+>>> +#include <linux/arm-smccc.h>
+>>> +#include <asm/kvm.h>
+>>> +#include <kvm_util.h>
+>>> +
+>>> +#include "processor.h"
+>>> +
+>>> +#define FW_REG_ULIMIT_VAL(max_feat_bit) (GENMASK(max_feat_bit, 0))
+>>> +
+>>> +/* Last valid bits of the bitmapped firmware registers */
+>>> +#define KVM_REG_ARM_STD_BMAP_BIT_MAX         0
+>>> +#define KVM_REG_ARM_STD_HYP_BMAP_BIT_MAX     0
+>>> +#define KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_MAX  1
+>>> +
+>>> +struct kvm_fw_reg_info {
+>>> +     uint64_t reg;           /* Register definition */
+>>> +     uint64_t max_feat_bit;  /* Bit that represents the upper limit of the feature-map */
+>>> +};
+>>> +
+>>> +#define FW_REG_INFO(r)                       \
+>>> +     {                                       \
+>>> +             .reg = r,                       \
+>>> +             .max_feat_bit = r##_BIT_MAX,    \
+>>> +     }
+>>> +
+>>> +static const struct kvm_fw_reg_info fw_reg_info[] = {
+>>> +     FW_REG_INFO(KVM_REG_ARM_STD_BMAP),
+>>> +     FW_REG_INFO(KVM_REG_ARM_STD_HYP_BMAP),
+>>> +     FW_REG_INFO(KVM_REG_ARM_VENDOR_HYP_BMAP),
+>>> +};
+>>> +
+>>> +enum test_stage {
+>>> +     TEST_STAGE_REG_IFACE,
+>>> +     TEST_STAGE_HVC_IFACE_FEAT_DISABLED,
+>>> +     TEST_STAGE_HVC_IFACE_FEAT_ENABLED,
+>>> +     TEST_STAGE_HVC_IFACE_FALSE_INFO,
+>>> +     TEST_STAGE_END,
+>>> +};
+>>> +
+>>> +static int stage = TEST_STAGE_REG_IFACE;
+>>> +
+>>> +struct test_hvc_info {
+>>> +     uint32_t func_id;
+>>> +     uint64_t arg1;
+>>> +};
+>>> +
+>>> +#define TEST_HVC_INFO(f, a1) \
+>>> +     {                       \
+>>> +             .func_id = f,   \
+>>> +             .arg1 = a1,     \
+>>> +     }
+>>> +
+>>> +static const struct test_hvc_info hvc_info[] = {
+>>> +     /* KVM_REG_ARM_STD_BMAP */
+>>> +     TEST_HVC_INFO(ARM_SMCCC_TRNG_VERSION, 0),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_TRNG_FEATURES, ARM_SMCCC_TRNG_RND64),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_TRNG_GET_UUID, 0),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_TRNG_RND32, 0),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_TRNG_RND64, 0),
+>>> +
+>>> +     /* KVM_REG_ARM_STD_HYP_BMAP */
+>>> +     TEST_HVC_INFO(ARM_SMCCC_ARCH_FEATURES_FUNC_ID, ARM_SMCCC_HV_PV_TIME_FEATURES),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_HV_PV_TIME_FEATURES, ARM_SMCCC_HV_PV_TIME_ST),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_HV_PV_TIME_ST, 0),
+>>> +
+>>> +     /* KVM_REG_ARM_VENDOR_HYP_BMAP */
+>>> +     TEST_HVC_INFO(ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID,
+>>> +                     ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, 0),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID, KVM_PTP_VIRT_COUNTER),
+>>> +};
+>>> +
+>>> +/* Feed false hypercall info to test the KVM behavior */
+>>> +static const struct test_hvc_info false_hvc_info[] = {
+>>> +     /* Feature support check against a different family of hypercalls */
+>>> +     TEST_HVC_INFO(ARM_SMCCC_TRNG_FEATURES, ARM_SMCCC_VENDOR_HYP_KVM_PTP_FUNC_ID),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_ARCH_FEATURES_FUNC_ID, ARM_SMCCC_TRNG_RND64),
+>>> +     TEST_HVC_INFO(ARM_SMCCC_HV_PV_TIME_FEATURES, ARM_SMCCC_TRNG_RND64),
+>>> +};
+>>> +
+>>
+>> I don't see too much benefits of @false_hvc_info[] because
+>> NOT_SUPPORTED is always returned from its test case. I think
+>> it and its test case can be removed if you agree. I'm not
+>> sure if it was suggested by somebody else.
+>>
+> While this is not exactly testing the bitmap firmware registers, the
+> idea behind introducing false_hvc_info[] was to introduce some
+> negative tests and see if KVM handles it well. Especially with
+> *_FEATURES func_ids, we can accidentally introduce functional bugs in
+> KVM, and these would act as our safety net. I was planning to also
+> test with some reserved hypercall numbers, just to test if the kernel
+> doesn't panic for some reason.
+> 
 
->
-> On Wed, 27 Apr 2022 11:19:23 +1200 Barry Song <21cnbao@gmail.com> wrote:
->
-> > Hi SeongJae & Andrew,
-> > (also Cc-ed main damon developers)
-> > On an Android phone, I tried to use the DAMON vaddr monitor and found
-> > that vaddr regions don't split well on large Android Apps though
-> > everything works well on native Apps.
-> >
-> > I have tried the below two cases on an Android phone with 12GB memory
-> > and snapdragon 888 CPU.
-> > 1. a native program with small memory working set  as below,
-> > #define size (1024*1024*100)
-> > main()
-> > {
-> >         volatile int *p = malloc(size);
-> >         memset(p, 0x55, size);
-> >
-> >         while(1) {
-> >                 int i;
-> >                 for (i = 0; i < size / 4; i++)
-> >                         (void)*(p + i);
-> >                 usleep(1000);
-> >
-> >                 for (i = 0; i < size / 16; i++)
-> >                         (void)*(p + i);
-> >                 usleep(1000);
-> >
-> >         }
-> > }
-> > For this application, the Damon vaddr monitor works very well.
-> > I have modified monitor.py in the damo userspace tool a little bit to
-> > show the raw data getting from the kernel.
-> > Regions can split decently on this kind of applications, a typical raw
-> > data is as below,
-> >
-> > monitoring_start:             2.224 s
-> > monitoring_end:               2.329 s
-> > monitoring_duration:       104.336 ms
-> > target_id: 0
-> > nr_regions: 24
-> > 005fb37b2000-005fb734a000(  59.594 MiB): 0
-> > 005fb734a000-005fbaf95000(  60.293 MiB): 0
-> > 005fbaf95000-005fbec0b000(  60.461 MiB): 0
-> > 005fbec0b000-005fc2910000(  61.020 MiB): 0
-> > 005fc2910000-005fc6769000(  62.348 MiB): 0
-> > 005fc6769000-005fca33f000(  59.836 MiB): 0
-> > 005fca33f000-005fcdc8b000(  57.297 MiB): 0
-> > 005fcdc8b000-005fd115a000(  52.809 MiB): 0
-> > 005fd115a000-005fd45bd000(  52.387 MiB): 0
-> > 007661c59000-007661ee4000(   2.543 MiB): 2
-> > 007661ee4000-0076623e4000(   5.000 MiB): 3
-> > 0076623e4000-007662837000(   4.324 MiB): 2
-> > 007662837000-0076630f1000(   8.727 MiB): 3
-> > 0076630f1000-007663494000(   3.637 MiB): 2
-> > 007663494000-007663753000(   2.746 MiB): 1
-> > 007663753000-007664251000(  10.992 MiB): 3
-> > 007664251000-0076666fd000(  36.672 MiB): 2
-> > 0076666fd000-007666e73000(   7.461 MiB): 1
-> > 007666e73000-007667c89000(  14.086 MiB): 2
-> > 007667c89000-007667f97000(   3.055 MiB): 0
-> > 007667f97000-007668112000(   1.480 MiB): 1
-> > 007668112000-00766820f000(1012.000 KiB): 0
-> > 007ff27b7000-007ff27d6000( 124.000 KiB): 0
-> > 007ff27d6000-007ff27d8000(   8.000 KiB): 8
-> >
-> > 2. a large Android app like Asphalt 9
-> > For this case, basically regions can't split very well, but monitor
-> > works on small vma:
-> >
-> > monitoring_start:             2.220 s
-> > monitoring_end:               2.318 s
-> > monitoring_duration:        98.576 ms
-> > target_id: 0
-> > nr_regions: 15
-> > 000012c00000-0001c301e000(   6.754 GiB): 0
-> > 0001c301e000-000371b6c000(   6.730 GiB): 0
-> > 000371b6c000-000400000000(   2.223 GiB): 0
-> > 005c6759d000-005c675a2000(  20.000 KiB): 0
-> > 005c675a2000-005c675a3000(   4.000 KiB): 3
-> > 005c675a3000-005c675a7000(  16.000 KiB): 0
-> > 0072f1e14000-0074928d4000(   6.510 GiB): 0
-> > 0074928d4000-00763c71f000(   6.655 GiB): 0
-> > 00763c71f000-0077e863e000(   6.687 GiB): 0
-> > 0077e863e000-00798e214000(   6.590 GiB): 0
-> > 00798e214000-007b0e48a000(   6.002 GiB): 0
-> > 007b0e48a000-007c62f00000(   5.323 GiB): 0
-> > 007c62f00000-007defb19000(   6.199 GiB): 0
-> > 007defb19000-007f794ef000(   6.150 GiB): 0
-> > 007f794ef000-007fe8f53000(   1.745 GiB): 0
-> >
-> > As you can see, we have some regions which are very very big and they
-> > are losing the chance to be splitted. But
-> > Damon can still monitor memory access for those small VMA areas very well like:
-> > 005c675a2000-005c675a3000(   4.000 KiB): 3
->
-> In short, DAMON doesn't set regions based on VMA but access pattern, and
-> therefore this looks not a problem.
->
-> DAMON allows users set min/max monitoring overhead limit and provides a best
-> accuracy under the condition.  In detail, users are allowed to set the min/max
-> monitoring regions as DAMON's monitoring overhead is proportional to the number
-> of regions.  DAMON provides best effort accuracy under the condition by
-> splitting and merging regions so that pages in each region has different access
-> frequency.
->
-> The default min number of regions is 10.  I believe that's why there are many 6
-> GiB regions.
->
+Ok, thanks for the explanation. It makes sense to me.
 
-i had actually tried to set min regions to 100 as below:
-/sys/kernel/debug/damon # echo 5000 100000 60000000 100 1000 > attrs
-/sys/kernel/debug/damon # cat attrs
-5000 100000 60000000 100 1000
+>>> +static void guest_test_hvc(const struct test_hvc_info *hc_info)
+>>> +{
+>>> +     unsigned int i;
+>>> +     struct arm_smccc_res res;
+>>> +     unsigned int hvc_info_arr_sz;
+>>> +
+>>> +     hvc_info_arr_sz =
+>>> +     hc_info == hvc_info ? ARRAY_SIZE(hvc_info) : ARRAY_SIZE(false_hvc_info);
+>>> +
+>>> +     for (i = 0; i < hvc_info_arr_sz; i++, hc_info++) {
+>>> +             memset(&res, 0, sizeof(res));
+>>> +             smccc_hvc(hc_info->func_id, hc_info->arg1, 0, 0, 0, 0, 0, 0, &res);
+>>> +
+>>> +             switch (stage) {
+>>> +             case TEST_STAGE_HVC_IFACE_FEAT_DISABLED:
+>>> +             case TEST_STAGE_HVC_IFACE_FALSE_INFO:
+>>> +                     GUEST_ASSERT_3(res.a0 == SMCCC_RET_NOT_SUPPORTED,
+>>> +                                     res.a0, hc_info->func_id, hc_info->arg1);
+>>> +                     break;
+>>> +             case TEST_STAGE_HVC_IFACE_FEAT_ENABLED:
+>>> +                     GUEST_ASSERT_3(res.a0 != SMCCC_RET_NOT_SUPPORTED,
+>>> +                                     res.a0, hc_info->func_id, hc_info->arg1);
+>>> +                     break;
+>>> +             default:
+>>> +                     GUEST_ASSERT_1(0, stage);
+>>> +             }
+>>> +     }
+>>> +}
+>>> +
+>>> +static void guest_code(void)
+>>> +{
+>>> +     while (stage != TEST_STAGE_END) {
+>>> +             switch (stage) {
+>>> +             case TEST_STAGE_REG_IFACE:
+>>> +                     break;
+>>> +             case TEST_STAGE_HVC_IFACE_FEAT_DISABLED:
+>>> +             case TEST_STAGE_HVC_IFACE_FEAT_ENABLED:
+>>> +                     guest_test_hvc(hvc_info);
+>>> +                     break;
+>>> +             case TEST_STAGE_HVC_IFACE_FALSE_INFO:
+>>> +                     guest_test_hvc(false_hvc_info);
+>>> +                     break;
+>>> +             default:
+>>> +                     GUEST_ASSERT_1(0, stage);
+>>> +             }
+>>> +
+>>> +             GUEST_SYNC(stage);
+>>> +     }
+>>> +
+>>> +     GUEST_DONE();
+>>> +}
+>>> +
+>>> +static int set_fw_reg(struct kvm_vm *vm, uint64_t id, uint64_t val)
+>>> +{
+>>> +     struct kvm_one_reg reg = {
+>>> +             .id = id,
+>>> +             .addr = (uint64_t)&val,
+>>> +     };
+>>> +
+>>> +     return _vcpu_ioctl(vm, 0, KVM_SET_ONE_REG, &reg);
+>>> +}
+>>> +
+>>> +static void get_fw_reg(struct kvm_vm *vm, uint64_t id, uint64_t *addr)
+>>> +{
+>>> +     struct kvm_one_reg reg = {
+>>> +             .id = id,
+>>> +             .addr = (uint64_t)addr,
+>>> +     };
+>>> +
+>>> +     vcpu_ioctl(vm, 0, KVM_GET_ONE_REG, &reg);
+>>> +}
+>>> +
+>>> +struct st_time {
+>>> +     uint32_t rev;
+>>> +     uint32_t attr;
+>>> +     uint64_t st_time;
+>>> +};
+>>> +
+>>> +#define STEAL_TIME_SIZE              ((sizeof(struct st_time) + 63) & ~63)
+>>> +#define ST_GPA_BASE          (1 << 30)
+>>> +
+>>> +static void steal_time_init(struct kvm_vm *vm)
+>>> +{
+>>> +     uint64_t st_ipa = (ulong)ST_GPA_BASE;
+>>> +     unsigned int gpages;
+>>> +     struct kvm_device_attr dev = {
+>>> +             .group = KVM_ARM_VCPU_PVTIME_CTRL,
+>>> +             .attr = KVM_ARM_VCPU_PVTIME_IPA,
+>>> +             .addr = (uint64_t)&st_ipa,
+>>> +     };
+>>> +
+>>> +     gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE);
+>>> +     vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, gpages, 0);
+>>> +
+>>> +     vcpu_ioctl(vm, 0, KVM_SET_DEVICE_ATTR, &dev);
+>>> +}
+>>> +
+>>> +static void test_fw_regs_before_vm_start(struct kvm_vm *vm)
+>>> +{
+>>> +     uint64_t val;
+>>> +     unsigned int i;
+>>> +     int ret;
+>>> +
+>>> +     for (i = 0; i < ARRAY_SIZE(fw_reg_info); i++) {
+>>> +             const struct kvm_fw_reg_info *reg_info = &fw_reg_info[i];
+>>> +
+>>> +             /* First 'read' should be an upper limit of the features supported */
+>>> +             get_fw_reg(vm, reg_info->reg, &val);
+>>> +             TEST_ASSERT(val == FW_REG_ULIMIT_VAL(reg_info->max_feat_bit),
+>>> +                     "Expected all the features to be set for reg: 0x%lx; expected: 0x%lx; read: 0x%lx\n",
+>>> +                     reg_info->reg, FW_REG_ULIMIT_VAL(reg_info->max_feat_bit), val);
+>>> +
+>>> +             /* Test a 'write' by disabling all the features of the register map */
+>>> +             ret = set_fw_reg(vm, reg_info->reg, 0);
+>>> +             TEST_ASSERT(ret == 0,
+>>> +                     "Failed to clear all the features of reg: 0x%lx; ret: %d\n",
+>>> +                     reg_info->reg, errno);
+>>> +
+>>> +             get_fw_reg(vm, reg_info->reg, &val);
+>>> +             TEST_ASSERT(val == 0,
+>>> +                     "Expected all the features to be cleared for reg: 0x%lx\n", reg_info->reg);
+>>> +
+>>> +             /*
+>>> +              * Test enabling a feature that's not supported.
+>>> +              * Avoid this check if all the bits are occupied.
+>>> +              */
+>>> +             if (reg_info->max_feat_bit < 63) {
+>>> +                     ret = set_fw_reg(vm, reg_info->reg, BIT(reg_info->max_feat_bit + 1));
+>>> +                     TEST_ASSERT(ret != 0 && errno == EINVAL,
+>>> +                     "Unexpected behavior or return value (%d) while setting an unsupported feature for reg: 0x%lx\n",
+>>> +                     errno, reg_info->reg);
+>>> +             }
+>>> +     }
+>>> +}
+>>
+>> Just in case :)
+>>
+>>        ret = set_fw_reg(vm, reg_info->reg, GENMASK(63, reg_info->max_feat_bit + 1));
+>>
+> It may be better to cover the entire range, but to test only the
+> (max_feat_bit + 1) gives us the advantage of checking if there's any
+> discrepancy between the kernel and the test, now that *_BIT_MAX are
+> not a part of UAPI headers.
+> 
+> Probably also include your test along with the existing one?
 
-but it seems i am still only getting regions like 16:
+Thanks for your explanation again. Lets keep it as it is then.
 
-monitoring_start:          805.192 ms
-monitoring_end:            905.385 ms
-monitoring_duration:       100.193 ms
-target_id: 0
-nr_regions: 16
-000012c00000-0001fc021000(   7.645 GiB): 0
-0001fc021000-0003e6b9a000(   7.667 GiB): 0
-0003e6b9a000-000400000000( 404.398 MiB): 0
-005e95645000-005e9564a000(  20.000 KiB): 0
-005e9564a000-005e9564b000(   4.000 KiB): 8
-005e9564b000-005e9564c000(   4.000 KiB): 1
-005e9564c000-005e9564f000(  12.000 KiB): 0
-006ffffff000-0071fa4f8000(   7.911 GiB): 0
-0071fa4f8000-0073dacd1000(   7.508 GiB): 0
-0073dacd1000-00759533c000(   6.913 GiB): 0
-00759533c000-0076cc999000(   4.866 GiB): 0
-0076cc999000-00788bea1000(   6.989 GiB): 0
-00788bea1000-007a6fe14000(   7.562 GiB): 0
-007a6fe14000-007c5c4a3000(   7.694 GiB): 0
-007c5c4a3000-007df9bd8000(   6.460 GiB): 0
-007df9bd8000-007fe6d7b000(   7.705 GiB): 0
+>>
+>>> +
+>>> +static void test_fw_regs_after_vm_start(struct kvm_vm *vm)
+>>> +{
+>>> +     uint64_t val;
+>>> +     unsigned int i;
+>>> +     int ret;
+>>> +
+>>> +     for (i = 0; i < ARRAY_SIZE(fw_reg_info); i++) {
+>>> +             const struct kvm_fw_reg_info *reg_info = &fw_reg_info[i];
+>>> +
+>>> +             /*
+>>> +              * Before starting the VM, the test clears all the bits.
+>>> +              * Check if that's still the case.
+>>> +              */
+>>> +             get_fw_reg(vm, reg_info->reg, &val);
+>>> +             TEST_ASSERT(val == 0,
+>>> +                     "Expected all the features to be cleared for reg: 0x%lx\n",
+>>> +                     reg_info->reg);
+>>> +
+>>> +             /*
+>>> +              * Set all the features for this register again. KVM shouldn't
+>>> +              * allow this as the VM is running.
+>>> +              */
+>>> +             ret = set_fw_reg(vm, reg_info->reg, FW_REG_ULIMIT_VAL(reg_info->max_feat_bit));
+>>> +             TEST_ASSERT(ret != 0 && errno == EBUSY,
+>>> +             "Unexpected behavior or return value (%d) while setting a feature while VM is running for reg: 0x%lx\n",
+>>> +             errno, reg_info->reg);
+>>> +     }
+>>> +}
+>>> +
+>>
+>> I guess you want to check -EBUSY is returned. In that case,
+>> the comments here could be clearer, something like below
+>> to emphasize '-EBUSY'.
+>>
+>>           /*
+>>            * After VM runs for once, -EBUSY should be returned on attempt
+>>            * to set features. Check if the correct errno is returned.
+>>            */
+>>
+> Sounds good.
+> 
+>>> +static struct kvm_vm *test_vm_create(void)
+>>> +{
+>>> +     struct kvm_vm *vm;
+>>> +
+>>> +     vm = vm_create_default(0, 0, guest_code);
+>>> +
+>>> +     ucall_init(vm, NULL);
+>>> +     steal_time_init(vm);
+>>> +
+>>> +     return vm;
+>>> +}
+>>> +
+>>> +static struct kvm_vm *test_guest_stage(struct kvm_vm *vm)
+>>> +{
+>>> +     struct kvm_vm *ret_vm = vm;
+>>> +
+>>> +     pr_debug("Stage: %d\n", stage);
+>>> +
+>>> +     switch (stage) {
+>>> +     case TEST_STAGE_REG_IFACE:
+>>> +             test_fw_regs_after_vm_start(vm);
+>>> +             break;
+>>> +     case TEST_STAGE_HVC_IFACE_FEAT_DISABLED:
+>>> +             /* Start a new VM so that all the features are now enabled by default */
+>>> +             kvm_vm_free(vm);
+>>> +             ret_vm = test_vm_create();
+>>> +             break;
+>>> +     case TEST_STAGE_HVC_IFACE_FEAT_ENABLED:
+>>> +     case TEST_STAGE_HVC_IFACE_FALSE_INFO:
+>>> +             break;
+>>> +     default:
+>>> +             TEST_FAIL("Unknown test stage: %d\n", stage);
+>>> +     }
+>>> +
+>>> +     stage++;
+>>> +     sync_global_to_guest(vm, stage);
+>>> +
+>>> +     return ret_vm;
+>>> +}
+>>> +
+>>> +static void test_run(void)
+>>> +{
+>>> +     struct kvm_vm *vm;
+>>> +     struct ucall uc;
+>>> +     bool guest_done = false;
+>>> +
+>>> +     vm = test_vm_create();
+>>> +
+>>> +     test_fw_regs_before_vm_start(vm);
+>>> +
+>>> +     while (!guest_done) {
+>>> +             vcpu_run(vm, 0);
+>>> +
+>>> +             switch (get_ucall(vm, 0, &uc)) {
+>>> +             case UCALL_SYNC:
+>>> +                     vm = test_guest_stage(vm);
+>>> +                     break;
+>>> +             case UCALL_DONE:
+>>> +                     guest_done = true;
+>>> +                     break;
+>>> +             case UCALL_ABORT:
+>>> +                     TEST_FAIL("%s at %s:%ld\n\tvalues: 0x%lx, 0x%lx; 0x%lx, stage: %u",
+>>> +                     (const char *)uc.args[0], __FILE__, uc.args[1],
+>>> +                     uc.args[2], uc.args[3], uc.args[4], stage);
+>>> +                     break;
+>>> +             default:
+>>> +                     TEST_FAIL("Unexpected guest exit\n");
+>>> +             }
+>>> +     }
+>>> +
+>>> +     kvm_vm_free(vm);
+>>> +}
+>>> +
+>>> +int main(void)
+>>> +{
+>>> +     setbuf(stdout, NULL);
+>>> +
+>>> +     test_run();
+>>> +     return 0;
+>>> +}
+>>>
 
-so it seems the 100 set in min regions doesn't mean we will have at
-least 100 regions?
+[...]
 
-> If we don't see small regions having some non-zero access frequency, we would
-> be better to be worried.  However, it is finding the small 4 KiB regions having
-> higher access frequency successfully.  The 4 KiB region is not because the
-> region is having 4 KiB VMA, but the address region shows high access frequency.
->
-> >
-> > Typical characteristics of a large Android app is that it has
-> > thousands of vma and very large virtual address spaces:
-> > ~/damo # pmap 2550 | wc -l
-> > 8522
-> >
-> > ~/damo # pmap 2550
-> > ...
-> > 0000007992bbe000      4K r----   [ anon ]
-> > 0000007992bbf000     24K rw---   [ anon ]
-> > 0000007fe8753000      4K -----   [ anon ]
-> > 0000007fe8754000   8188K rw---   [ stack ]
-> >  total         36742112K
-> >
-> > Because the whole vma list is too long, I have put the list here for
-> > you to download:
-> > wget http://www.linuxep.com/patches/android-app-vmas
-> >
-> > I can reproduce this problem on other Apps like youtube as well.
-> > I suppose we need to boost the algorithm of splitting regions for this
-> > kind of application.
-> > Any thoughts?
->
-> As mentioned above, this looks not a problem, as DAMON's monitoring regions is
-> not constructed based on VMAs but access patterns.
+Thanks,
+Gavin
 
-What makes me believe it is a problem is that it seems we are getting
-an incorrect
-wss based on the data reported from kernel:
-~/damo # ./damo monitor --report_type wss --count 20 2561
-# <percentile> <wss>
-# target_id 0
-# avr: 443.854 MiB
-  0             0 B |
-         |
- 25       4.000 KiB |
-         |
- 50      12.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       5.851 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 666.112 MiB
-  0             0 B |
-         |
- 25       4.000 KiB |
-         |
- 50       8.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       6.159 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 566.706 MiB
-  0             0 B |
-         |
- 25       4.000 KiB |
-         |
- 50      20.000 KiB |
-         |
- 75      36.000 KiB |
-         |
-100       4.654 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 977.249 MiB
-  0       4.000 KiB |
-         |
- 25      12.000 KiB |
-         |
- 50      20.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       8.798 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 837.221 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50      20.000 KiB |
-         |
- 75     422.656 MiB |****
-         |
-100       5.113 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 456.690 MiB
-  0       4.000 KiB |
-         |
- 25       5.180 MiB |
-         |
- 50      10.023 MiB |
-         |
- 75      84.137 MiB |*
-         |
-100       4.503 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 179.652 MiB
-  0             0 B |
-         |
- 25       4.000 KiB |
-         |
- 50       4.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       3.166 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 878.505 MiB
-  0       4.000 KiB |
-         |
- 25       4.000 KiB |
-         |
- 50      12.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       6.741 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 1.000 GiB
-  0       4.000 KiB |
-         |
- 25       4.000 KiB |
-         |
- 50      12.000 KiB |
-         |
- 75    1004.711 MiB |*******
-         |
-100       7.706 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 1.187 GiB
-  0             0 B |
-         |
- 25       8.000 KiB |
-         |
- 50      16.000 KiB |
-         |
- 75     757.449 MiB |*******
-         |
-100       5.964 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 991.889 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50      36.000 KiB |
-         |
- 75       1.824 GiB |************************
-         |
-100       4.399 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 545.213 MiB
-  0             0 B |
-         |
- 25       4.000 KiB |
-         |
- 50       8.000 KiB |
-         |
- 75      24.000 KiB |
-         |
-100       6.270 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 523.257 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50       8.000 KiB |
-         |
- 75      28.000 KiB |
-         |
-100       3.789 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 1.395 GiB
-  0             0 B |
-         |
- 25       8.000 KiB |
-         |
- 50      40.000 KiB |
-         |
- 75       1.555 GiB |**************
-         |
-100       6.220 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 685.373 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50       8.000 KiB |
-         |
- 75      28.000 KiB |
-         |
-100       5.984 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 411.626 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50       8.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       3.958 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 402.370 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50             0 B |
-         |
- 75      12.000 KiB |
-         |
-100       6.263 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 656.361 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50             0 B |
-         |
- 75      28.000 KiB |
-         |
-100       5.275 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 189.350 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50       8.000 KiB |
-         |
- 75      20.000 KiB |
-         |
-100       3.698 GiB
-|***********************************************************|
-
-# <percentile> <wss>
-# target_id 0
-# avr: 489.517 MiB
-  0             0 B |
-         |
- 25             0 B |
-         |
- 50      12.000 KiB |
-         |
- 75      32.000 KiB |
-         |
-100       4.663 GiB
-|***********************************************************|
-
-And I have a question, what do percentile 0,25,50,75 mean here?
-Why are they so different with percentile 100?
-For example, 0,25,50,75 has only KiB but 100 has GiB.
-
-I guess Asphalt 9 should be normally accessing hundreds of megabytes of memory.
-
->
-> Nevertheless, I believe there are many rooms for improvement of DAMON's access
-> frequency.  I want to implement fixed-gran monitoring feature first, and
-> develop some accuracy optimizations using the fixed-gran monitoring as
-> comparison target.
-
-Does fixed-gran mean splitting VA to some regions equally with the same size?
-for example, if we have 1GB VA, we split it into 512 regions in 2MB
-size, something like that?
->
-> If I'm missing something or the explanation was not enough, please feel free to
-> let me know.
->
->
-> Thank,
-> SJ
->
-> >
-> > Thanks
-> > Barry
-> >
-
-Thanks
-Barry

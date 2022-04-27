@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510FB512133
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD58E511E6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240355AbiD0Pp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S239579AbiD0PVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240386AbiD0Ppw (ORCPT
+        with ESMTP id S239505AbiD0PVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:45:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5EF4BB8D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651074158; x=1682610158;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XUPw6zKcEmTgJvPIDxaK2dswQjcD22fWJPyux4y0Zso=;
-  b=gn3OACcpsPlkTmywBN/gDRanlG8+IEMUQSgW+Jr53cCdoFknss6i9UtM
-   82iDM7zqPwgedQOkUoeu1Dd7/eLFiWEn1qNQcGPn6IdcZNOSjSU+14kBu
-   Eae0qV8g1R0KnI0LBHmItM7ZGAdQy8k4uPJXDMkaKWysxZ78CeMEfzFJr
-   odWM2DjOvQ+TTn/tknbUgJZ/K2eksuBNHLmIUe6tgAEosEYUSwPtpzBWb
-   b82LzR+nShKvidbBw18Wtw1mOCZFL77oUMIY6pATdZcmCbL1ZSySUQgqH
-   BSgyczOEorrhZ+KMfwJBDVt8XoMC5qH9WAcWvo5emZ8wAroRe79Uj1/Z2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="247898790"
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="247898790"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 08:17:35 -0700
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="680829030"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 08:17:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1njjQ1-008sao-CJ;
-        Wed, 27 Apr 2022 18:17:29 +0300
-Date:   Wed, 27 Apr 2022 18:17:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Jonathan.Cameron@huawei.com, adobriyan@gmail.com,
-        akpm@linux-foundation.org, rf@opensource.cirrus.com,
-        pmladek@suse.com, ying.huang@intel.com, dave.hansen@intel.com
-Subject: Re: [PATCH v2 2/2] mm: Covert sysfs input to bool using kstrtobool()
-Message-ID: <YmleidxlL2/d859f@smile.fi.intel.com>
-References: <20220426170040.65487-1-jvgediya@linux.ibm.com>
- <20220426170040.65487-2-jvgediya@linux.ibm.com>
+        Wed, 27 Apr 2022 11:21:44 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD1D2DD7D6;
+        Wed, 27 Apr 2022 08:18:30 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23RFII5w050599;
+        Wed, 27 Apr 2022 10:18:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651072698;
+        bh=IJdKR+ET+Ghctje2gpM3NiDazIvVZBbZnXx3BfvSNwY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=Su1cb8PQnHJFJ+/apIqvEbVXfqG+vNB7xxk2OyL+3Bda6j2k04vehoCboWapL7cjY
+         ZQEWc9Nj7H6SFMkxZjkoCSLTtKiUwO3bsai/Uii+m/PPoScHyTuwPCub2FhM/blYe9
+         EWNWvNu1Wfp1yuursMHnE+yDMNqp/sndOQl0neHM=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23RFIIML106632
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 27 Apr 2022 10:18:18 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
+ Apr 2022 10:18:18 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 27 Apr 2022 10:18:18 -0500
+Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23RFIETl008620;
+        Wed, 27 Apr 2022 10:18:15 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-am64-mcu: remove incorrect UART base clock rates
+Date:   Wed, 27 Apr 2022 20:47:30 +0530
+Message-ID: <165107250533.1111532.8897601413701499471.b4-ty@ti.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220419075157.189347-1-matthias.schiffer@ew.tq-group.com>
+References: <20220419075157.189347-1-matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426170040.65487-2-jvgediya@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:30:40PM +0530, Jagdish Gediya wrote:
-> Sysfs input conversion to corrosponding bool value e.g. "false" or "0"
-> to false, "true" or "1" to true are currently handled through strncmp
-> at multiple places. Use kstrtobool() to convert sysfs input to bool
-> value.
-
-...
-
-> +	if (kstrtobool(buf, &numa_demotion_enabled))
->  		return -EINVAL;
-
-Hmm... The commit message doesn't explain what's wrong with the error codes
-returned by kstrtobool(). Can't it be
-
-	ret = kstrtobool();
-	if (ret)
-		return ret;
-
-?
-
-...
-
-> +	if (kstrtobool(buf, &enable_vma_readahead))
->  		return -EINVAL;
-
-Ditto.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Hi Matthias Schiffer,
+ 
+On Tue, 19 Apr 2022 09:51:57 +0200, Matthias Schiffer wrote:
+> We found that (at least some versions of) the sci-fw set the base clock
+> rate for UARTs in the MCU domain to 96 MHz instead of the expected 48 MHz,
+> leading to incorrect baud rates when used from Linux.
+> 
+> As the 8250_omap driver will query the actual clock rate from the clk
+> driver when clock-frequency is unset, removing the incorrect property is
+> sufficient to fix the baud rate.
+> 
+> [...]
+ 
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+ 
+[1/1] arm64: dts: ti: k3-am64-mcu: remove incorrect UART base clock rates
+      commit: 439677d416b17dd39964d5f7d64b742a2e51da5b
+ 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+ 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+ 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+ 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+ 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
 

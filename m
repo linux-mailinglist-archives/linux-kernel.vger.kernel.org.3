@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC4E5122C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0A55122CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiD0Te3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S233023AbiD0Te4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiD0TeG (ORCPT
+        with ESMTP id S232804AbiD0Tep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:34:06 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E901261C;
-        Wed, 27 Apr 2022 12:30:51 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id a1so3113116edt.3;
-        Wed, 27 Apr 2022 12:30:50 -0700 (PDT)
+        Wed, 27 Apr 2022 15:34:45 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6682618;
+        Wed, 27 Apr 2022 12:31:31 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z19so3088758edx.9;
+        Wed, 27 Apr 2022 12:31:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=piMSvjwkeZ0nhfn9L0hEiy466navA71gRsgoGJRVmX8=;
-        b=gvqMViz1jFk1SBFg27Ndd81xhaWDy6a5g4oiitZHCp+deLsjF/WBhs1c0jZW9tycJz
-         XMlRZKbyc5WxR0YNtgus02Xq6UJ6/Y1qcMIB1FOv+vFdDCNL/nq80Xbk+zjWSC804hRw
-         6Oishuu5CWRXU/ditXpeufNYF/n0n3Xy9a6BL/IfEMZNER6KYjzQFM+yg52pZE+4kOof
-         j3mWpe+4zKKfqwh+P6IAgjbQ4No+Gfva3KgYRGbxQHbR/mhnNey7fDHKns4QNRGJST8C
-         +kOnogvP7LKjGYJLZHLU65wz5myGluRntWljj9HW4yOpZAApfrKFmWKwRUVJ0yXTKsrN
-         c8lA==
+        bh=YwHyL6ksRYdO/2uEjrSuWuUYLvVDwQeQJw6R1edzvdY=;
+        b=Rtny20XLbY0YZ4pWTjV5LtXtgx3tz2WAej0C2YvQ3g2epmFzzuK8G2i1K077YcC6Xf
+         NbygAj2z+FKJ+/RfdcjlKIkB/aWTTbiPt9GnkmEvQ9VRG/Zyni5WRfPAaTlsn59GaAI6
+         Qgd6MqRNTOulcwrO7A9zGmpBTYQ2q/adNwV36hEmJelitOYspM1bfNZ/qtNp4k13Ssre
+         A1hkZo6oXVmMUL8T0/1UGJuET8L4Qq+LuamlXp7tLrVdgh5nBq3u4LdKl6DIs8uFQqA6
+         5MvU7x0WzKwa10v+yjzd0NPGiSWoMRrd/VjEBRoAY9ez4kNyCiE1vywrkjn4ydjjOwRh
+         yZSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=piMSvjwkeZ0nhfn9L0hEiy466navA71gRsgoGJRVmX8=;
-        b=0Ob6/hPhRsY+/EsdIEta1B+IbkH1QjonF+W1+vw5cHSfZnNVGZNbhOM5Rt64T40o35
-         sB0yUbI1EgK6DK1VSPTP007umEgwGHs/OvG187JMOR2He8AzL9ol2h5BO4JoM5M+DcNP
-         1PPgtMnrZ6aGecA2ZmGjZgOglTS2kLHp1j6FFMRvHpzbXlL/asY1AHaLusoUGDEj9nQK
-         t6XWVwAD+pbYUETtjQytXERP1MLYb4b2etQNOP/y06xVUMPEHzhkzFjS4TnqkWH2TrW3
-         WJ8oGr+DSohqnCZeFKDYNgPFPIzGfHqnyrwEQLXUNHShw4SIUP7aBpaN0jh9BFEE+uDm
-         irXA==
-X-Gm-Message-State: AOAM533MVgop/1u6UnXmJHVCL9KpYox5K3erGytbaG8Ot9zGG/ZhruPW
-        8FVikN0gt80pQB06Tt7f2pFGB4+k59EX4Q==
-X-Google-Smtp-Source: ABdhPJxuZ1R1o4WDg8MNMs2EldDJiORw1uR54FBa1ILTCASJzOzteyrRkwrVnKarThxPWeqwJPs26g==
-X-Received: by 2002:a05:6402:ca9:b0:425:ff4d:f6fd with SMTP id cn9-20020a0564020ca900b00425ff4df6fdmr9740737edb.405.1651087849664;
-        Wed, 27 Apr 2022 12:30:49 -0700 (PDT)
+        bh=YwHyL6ksRYdO/2uEjrSuWuUYLvVDwQeQJw6R1edzvdY=;
+        b=sANIJTaeyTmN3O3rMTMCoRWjfupHT3AKTWmEYfzkPY3PGpyiu+IFcXsFJPpra0l58c
+         z+ptN1bK2kLZtp7mzRPHOdLUfFqTgBveebvAVMk+hzFFx02stiAaGzFdQb6eYWoZP6zY
+         jfdVTXNfJaqO9iGxKfExQi7VmWQ6kcRy7Ofqjmhj9jEWBX3hiO7jofMFTC02tiAumUUY
+         CtmYOu+s6zvm/A3jGZwRXnhTIGO7yX50avl6Si12icmAix+uWtWn7MpA0p3RdvliUDpc
+         ZeiHQTS1Xb96Jk55dKbf9o5GtKlzu9OhzPnW+jlFv7LoZQf7JKhtj2nT15P7CnFCmd30
+         hJSg==
+X-Gm-Message-State: AOAM530weD9N3qEjvY2Vh0IJnvlA979eJpY/i7NADObde3X9pnb7ATYx
+        ZCIqM0rGSZ87zIuoelcisoVwguOfxO3Q9A==
+X-Google-Smtp-Source: ABdhPJzA8hxplPWZv1L31HMwQ0f6r/SfVhojQ17MEXK8bJmGhirYYDI7nFkLtNMDGBeGQ1XoIRUDmw==
+X-Received: by 2002:aa7:da43:0:b0:425:cd4c:e43f with SMTP id w3-20020aa7da43000000b00425cd4ce43fmr25259694eds.106.1651087890321;
+        Wed, 27 Apr 2022 12:31:30 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id g12-20020a170906c18c00b006f3b99d29e0sm2835262ejz.223.2022.04.27.12.30.48
+        by smtp.gmail.com with ESMTPSA id i19-20020a1709061cd300b006f38920dbeesm5175492ejh.134.2022.04.27.12.31.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:30:49 -0700 (PDT)
+        Wed, 27 Apr 2022 12:31:29 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -60,11 +60,11 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 26/45] media: sun6i-csi: Remove custom format helper and rework configure
-Date:   Wed, 27 Apr 2022 21:30:48 +0200
-Message-ID: <1817191.CQOukoFCf9@jernej-laptop>
-In-Reply-To: <20220415152811.636419-27-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-27-paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH v4 27/45] media: sun6i-csi: Add bridge dimensions and format helpers
+Date:   Wed, 27 Apr 2022 21:31:28 +0200
+Message-ID: <2506257.Lt9SDvczpP@jernej-laptop>
+In-Reply-To: <20220415152811.636419-28-paul.kocialkowski@bootlin.com>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-28-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -78,9 +78,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:27:52 CEST je Paul Kocialkowski napisal(a):
-> Remove the custom sun6i_csi_get_bpp helper in favor of common v4l2
-> infrastructure and rework the related window configuration code.
+Dne petek, 15. april 2022 ob 17:27:53 CEST je Paul Kocialkowski napisal(a):
+> Introduce new helpers to ease getting information about the bridge.
 > 
 > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
@@ -90,183 +89,63 @@ Best regards,
 Jernej
 
 > ---
->  .../platform/sunxi/sun6i-csi/sun6i_csi.h      | 49 -------------
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 70 +++++++++----------
->  2 files changed, 35 insertions(+), 84 deletions(-)
+>  .../sunxi/sun6i-csi/sun6i_csi_bridge.c        | 20 +++++++++++++++++++
+>  .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |  7 +++++++
+>  2 files changed, 27 insertions(+)
 > 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h index
-> f54ad2f438f8..dd90ffdae5d5 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> @@ -60,53 +60,4 @@ struct sun6i_csi_variant {
->  bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
->  				   u32 pixformat, u32 mbus_code);
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c index
+> bba825db8322..0c1e159537a7 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+> @@ -12,6 +12,26 @@
+>  #include "sun6i_csi.h"
+>  #include "sun6i_csi_bridge.h"
 > 
-> -/* get bpp form v4l2 pixformat */
-> -static inline int sun6i_csi_get_bpp(unsigned int pixformat)
-> -{
-> -	switch (pixformat) {
-> -	case V4L2_PIX_FMT_SBGGR8:
-> -	case V4L2_PIX_FMT_SGBRG8:
-> -	case V4L2_PIX_FMT_SGRBG8:
-> -	case V4L2_PIX_FMT_SRGGB8:
-> -	case V4L2_PIX_FMT_JPEG:
-> -		return 8;
-> -	case V4L2_PIX_FMT_SBGGR10:
-> -	case V4L2_PIX_FMT_SGBRG10:
-> -	case V4L2_PIX_FMT_SGRBG10:
-> -	case V4L2_PIX_FMT_SRGGB10:
-> -		return 10;
-> -	case V4L2_PIX_FMT_SBGGR12:
-> -	case V4L2_PIX_FMT_SGBRG12:
-> -	case V4L2_PIX_FMT_SGRBG12:
-> -	case V4L2_PIX_FMT_SRGGB12:
-> -	case V4L2_PIX_FMT_NV12_16L16:
-> -	case V4L2_PIX_FMT_NV12:
-> -	case V4L2_PIX_FMT_NV21:
-> -	case V4L2_PIX_FMT_YUV420:
-> -	case V4L2_PIX_FMT_YVU420:
-> -		return 12;
-> -	case V4L2_PIX_FMT_YUYV:
-> -	case V4L2_PIX_FMT_YVYU:
-> -	case V4L2_PIX_FMT_UYVY:
-> -	case V4L2_PIX_FMT_VYUY:
-> -	case V4L2_PIX_FMT_NV16:
-> -	case V4L2_PIX_FMT_NV61:
-> -	case V4L2_PIX_FMT_YUV422P:
-> -	case V4L2_PIX_FMT_RGB565:
-> -	case V4L2_PIX_FMT_RGB565X:
-> -		return 16;
-> -	case V4L2_PIX_FMT_RGB24:
-> -	case V4L2_PIX_FMT_BGR24:
-> -		return 24;
-> -	case V4L2_PIX_FMT_RGB32:
-> -	case V4L2_PIX_FMT_BGR32:
-> -		return 32;
-> -	default:
-> -		WARN(1, "Unsupported pixformat: 0x%x\n", pixformat);
-> -		break;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  #endif /* __SUN6I_CSI_H__ */
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c index
-> 2aa65a4ddb85..c4e803a38851 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -483,68 +483,68 @@ static void sun6i_csi_capture_configure_format(struct
-> sun6i_csi_device *csi_dev)
-> 
->  static void sun6i_csi_capture_configure_window(struct sun6i_csi_device
-> *csi_dev) {
-> +	struct regmap *regmap = csi_dev->regmap;
-> +	const struct v4l2_format_info *info;
-> +	u32 hsize_len, vsize_len;
-> +	u32 luma_line, chroma_line = 0;
->  	u32 pixelformat, field;
->  	u32 width, height;
-> -	u32 bytesperline_y;
-> -	u32 bytesperline_c;
-> -	u32 hor_len;
-> 
->  	sun6i_csi_capture_dimensions(csi_dev, &width, &height);
->  	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
-> 
-> -	hor_len = width;
-> +	hsize_len = width;
-> +	vsize_len = height;
-> 
->  	switch (pixelformat) {
->  	case V4L2_PIX_FMT_YUYV:
->  	case V4L2_PIX_FMT_YVYU:
->  	case V4L2_PIX_FMT_UYVY:
->  	case V4L2_PIX_FMT_VYUY:
-> -		dev_dbg(csi_dev->dev,
-> -			"Horizontal length should be 2 times of 
-width for packed YUV
-> formats!\n"); -		hor_len = width * 2;
-> +		/*
-> +		 * Horizontal length should be 2 times of width for 
-packed
-> +		 * YUV formats.
-> +		 */
-> +		hsize_len *= 2;
->  		break;
->  	default:
->  		break;
->  	}
-> 
-> -	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_HSIZE_REG,
-> -		     SUN6I_CSI_CH_HSIZE_LEN(hor_len) |
-> +	regmap_write(regmap, SUN6I_CSI_CH_HSIZE_REG,
-> +		     SUN6I_CSI_CH_HSIZE_LEN(hsize_len) |
->  		     SUN6I_CSI_CH_HSIZE_START(0));
-> -	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_VSIZE_REG,
-> -		     SUN6I_CSI_CH_VSIZE_LEN(height) |
+> +/* Helpers */
 > +
-> +	regmap_write(regmap, SUN6I_CSI_CH_VSIZE_REG,
-> +		     SUN6I_CSI_CH_VSIZE_LEN(vsize_len) |
->  		     SUN6I_CSI_CH_VSIZE_START(0));
-> 
->  	switch (pixelformat) {
-> -	case V4L2_PIX_FMT_NV12_16L16:
-> -	case V4L2_PIX_FMT_NV12:
-> -	case V4L2_PIX_FMT_NV21:
-> -	case V4L2_PIX_FMT_NV16:
-> -	case V4L2_PIX_FMT_NV61:
-> -		bytesperline_y = width;
-> -		bytesperline_c = width;
-> +	case V4L2_PIX_FMT_RGB565X:
-> +		luma_line = width * 2;
->  		break;
-> -	case V4L2_PIX_FMT_YUV420:
-> -	case V4L2_PIX_FMT_YVU420:
-> -		bytesperline_y = width;
-> -		bytesperline_c = width / 2;
-> +	case V4L2_PIX_FMT_NV12_16L16:
-> +		luma_line = width;
-> +		chroma_line = width;
->  		break;
-> -	case V4L2_PIX_FMT_YUV422P:
-> -		bytesperline_y = width;
-> -		bytesperline_c = width / 2;
-> +	case V4L2_PIX_FMT_JPEG:
-> +		luma_line = width;
->  		break;
-> -	default: /* raw */
-> -		dev_dbg(csi_dev->dev,
-> -			"Calculating pixelformat(0x%x)'s 
-bytesperline as a packed format\n",
-> -			pixelformat);
-> -		bytesperline_y = (sun6i_csi_get_bpp(pixelformat) *
-> -				  width) / 8;
-> -		bytesperline_c = 0;
-> +	default:
-> +		info = v4l2_format_info(pixelformat);
-> +		if (WARN_ON(!info))
-> +			return;
+> +void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
+> +				 unsigned int *width, unsigned int 
+*height)
+> +{
+> +	if (width)
+> +		*width = csi_dev->bridge.mbus_format.width;
+> +	if (height)
+> +		*height = csi_dev->bridge.mbus_format.height;
+> +}
 > +
-> +		luma_line = width * info->bpp[0];
+> +void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
+> +			     u32 *mbus_code, u32 *field)
+> +{
+> +	if (mbus_code)
+> +		*mbus_code = csi_dev->bridge.mbus_format.code;
+> +	if (field)
+> +		*field = csi_dev->bridge.mbus_format.field;
+> +}
 > +
-> +		if (info->comp_planes > 1)
-> +			chroma_line = width * info->bpp[1] / info-
->hdiv;
->  		break;
->  	}
+>  /* Format */
 > 
-> -	regmap_write(csi_dev->regmap, SUN6I_CSI_CH_BUF_LEN_REG,
-> -		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(bytesperline_c) |
-> -		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(bytesperline_y));
-> +	regmap_write(regmap, SUN6I_CSI_CH_BUF_LEN_REG,
-> +		     SUN6I_CSI_CH_BUF_LEN_CHROMA_LINE(chroma_line) |
-> +		     SUN6I_CSI_CH_BUF_LEN_LUMA_LINE(luma_line));
->  }
+>  static const u32 sun6i_csi_bridge_mbus_codes[] = {
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h index
+> f9bf87bf3667..5e6448aa522f 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
+> @@ -41,6 +41,13 @@ struct sun6i_csi_bridge {
+>  	struct sun6i_csi_bridge_source	source_parallel;
+>  };
 > 
->  static void sun6i_csi_capture_configure(struct sun6i_csi_device *csi_dev)
+> +/* Helpers */
+> +
+> +void sun6i_csi_bridge_dimensions(struct sun6i_csi_device *csi_dev,
+> +				 unsigned int *width, unsigned int 
+*height);
+> +void sun6i_csi_bridge_format(struct sun6i_csi_device *csi_dev,
+> +			     u32 *mbus_code, u32 *field);
+> +
+>  /* Bridge */
+> 
+>  int sun6i_csi_bridge_setup(struct sun6i_csi_device *csi_dev);
 
 
 

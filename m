@@ -2,192 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F517510DD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B58510DDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344391AbiD0BWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S1356668AbiD0B0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356601AbiD0BWI (ORCPT
+        with ESMTP id S242681AbiD0B0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:22:08 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25114174430
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:18:59 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id w21so92431uan.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dkaom6jGHiqXJJvzANNgQPiwnUpwsfzq/QVSUZefRFM=;
-        b=CNABcSddX5b6n+TQdqiZuhToeSYgN8qqRcrhLTf2cbtNpqOpITOw0HoUW1VxeheSqr
-         +kIHNlxEm7JA7PbBw9bvynk3vAS1zjmQEequdqIu7eonYeGOKX1RbYd4eXS4EL7Cnlm7
-         Wi8acyLCuqs+uqGQDo0rBN9uQkgZ45oK5xeF1xKHiAeYfZZu4409vPwkLv8mkEOmuhRN
-         gxvSR+Fa/kK898TJTUuGLY5PaLuM7wYYzf5ZxA16B0IMmvu8tPBoxRFky8sOUqW9+Xyz
-         04/FOMsq62xn0mP4AjRhUQRea/OIEEJpkItR6Q3DMQikK/BMkmfkfFRsGadzVE77x5+x
-         1sIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dkaom6jGHiqXJJvzANNgQPiwnUpwsfzq/QVSUZefRFM=;
-        b=k/FmqkevWdHvE8MkA0TGJF9vIpUv3U8V0aZFDtaH3BWhzGGc5bXKsNIbXetnQ32ega
-         bnusnzXdQ55+TtjWfNRm73FBTAQZVLERuafESWdJ4HM7vamrJaFHka5DlHIrHcmKxXV0
-         Qmc3wfRb36bSo8k77/+v8JTLTw1d6rv2SWuBMz2mxxSKIRi3ty3tPwLHAJD8jOecjHiy
-         44rsMcXgkteAm7QVaPo78ElscFEFbxbgQy4p4PDIdndUqBjxjrPl/Pe1lGZgrHscJ8rA
-         gYOxz8Fx4vdl+gC/qdUpl9MP0szuRFv+3kCIa1tvH6hocsd2GtV6t/Lwk8FForzV4qew
-         jI3w==
-X-Gm-Message-State: AOAM531IQ1SB2rPBlA/LgyGO8ybl4xtujyaHCBNGDqoH0+02p7hwxF8i
-        XheTW2f/5ddD2UYi+PgFB1lB+ibEfqvuFTfdm1MEMQ==
-X-Google-Smtp-Source: ABdhPJwdvDGouIH2ciLL1gxZrezu13HylZKO7y/rVDTnJd8+6pCaQT17EsqSX68jOcxM2tD03lALxOCQHXmVvOnDW5M=
-X-Received: by 2002:ab0:2695:0:b0:352:5fc9:4132 with SMTP id
- t21-20020ab02695000000b003525fc94132mr7877586uao.29.1651022338107; Tue, 26
- Apr 2022 18:18:58 -0700 (PDT)
+        Tue, 26 Apr 2022 21:26:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A9686E55E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651022587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DpEof+0I0YCbwzONPoRmg0L/6pzi31MyKL13TiqlQ/U=;
+        b=VdUNP2pvho5kJI6Kr93GIz2y+lKuE93aZk2Au141uDHJg9eprM0yTmK5yLkJiCHw8AZjXB
+        0AaloJPh94iJM/Vnu9aBZ7kHBuGryhs251yh3uuLcc9vDN8dGLRiuyZB3u2Afsvd907OIU
+        4c+ivHkt93oaM6q9z+cjHDccjH/daC8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-318-8Qyok9UXPvellTR8YIOXJA-1; Tue, 26 Apr 2022 21:23:01 -0400
+X-MC-Unique: 8Qyok9UXPvellTR8YIOXJA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40CFA3802AC4;
+        Wed, 27 Apr 2022 01:23:01 +0000 (UTC)
+Received: from rh (vpn2-54-103.bne.redhat.com [10.64.54.103])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C30BC28100;
+        Wed, 27 Apr 2022 01:23:00 +0000 (UTC)
+Received: from localhost ([::1] helo=rh)
+        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <dchinner@redhat.com>)
+        id 1njWOP-006YJ1-Jy; Wed, 27 Apr 2022 11:22:57 +1000
+Date:   Wed, 27 Apr 2022 11:22:55 +1000
+From:   Dave Chinner <dchinner@redhat.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v2 0/7] mm: introduce shrinker debugfs interface
+Message-ID: <Ymia75Bh/sn/FQdV@rh>
+References: <20220422202644.799732-1-roman.gushchin@linux.dev>
+ <YmeK6/eZYaMo2Ltm@rh>
+ <Ymggvr4Boc5JIf9j@carbon>
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-6-yuzhao@google.com>
- <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
- <CAOUHufaeNzDJnDqatHe0MwsN-D6M_tw6JX2UBJFc+JpZNP86hQ@mail.gmail.com> <20220426164241.99e6a283c371ed75fa5c12a0@linux-foundation.org>
-In-Reply-To: <20220426164241.99e6a283c371ed75fa5c12a0@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 26 Apr 2022 19:18:21 -0600
-Message-ID: <CAOUHufbMA7VutATpDYZ15JT_WuP9MGL_Vp6q5KFk72OjzRV+qQ@mail.gmail.com>
-Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ymggvr4Boc5JIf9j@carbon>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 5:42 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 26 Apr 2022 16:39:07 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Wed,  6 Apr 2022 21:15:17 -0600 Yu Zhao <yuzhao@google.com> wrote:
-> > >
-> > > > Evictable pages are divided into multiple generations for each lruvec.
-> > > > The youngest generation number is stored in lrugen->max_seq for both
-> > > > anon and file types as they are aged on an equal footing. The oldest
-> > > > generation numbers are stored in lrugen->min_seq[] separately for anon
-> > > > and file types as clean file pages can be evicted regardless of swap
-> > > > constraints. These three variables are monotonically increasing.
-> > > >
-> > > > ...
-> > > >
-> > > > +static inline bool lru_gen_del_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
-> > >
-> > > There's a lot of function inlining here.  Fortunately the compiler will
-> > > ignore it all, because some of it looks wrong.  Please review (and
-> > > remeasure!).  If inlining is reqlly justified, use __always_inline, and
-> > > document the reasons for doing so.
-> >
-> > I totally expect modern compilers to make better decisions than I do.
-> > And personally, I'd never use __always_inline; instead, I'd strongly
-> > recommend FDO/LTO.
->
-> My (badly expressed) point is that there's a lot of inlining of large
-> functions here.
->
-> For example, lru_gen_add_folio() is huge and has 4(?) call sites.  This
-> may well produce slower code due to the icache footprint.
->
-> Experiment: moving lru_gen_del_folio() into mm/vmscan.c shrinks that
-> file's .text from 80612 bytes to 78956.
->
-> I tend to think that out-of-line regular old C functions should be the
-> default and that the code should be inlined only when a clear benefit
-> is demonstrable, or has at least been seriously thought about.
+On Tue, Apr 26, 2022 at 09:41:34AM -0700, Roman Gushchin wrote:
+> Can you, please, summarize your position, because it's a bit unclear.
+> You made a lot of good points about some details (e.g. shrinkers naming,
+> and I totally agree there; machines with hundreds of nodes etc), then
+> you said the active scanning is useless and then said the whole thing
+> is useless and we're fine with what we have regarding shrinkers debugging.
 
-I can move those functions to vmscan.c if you think it would improve
-performance. I don't have a strong opinion here -- I was able to
-measure the bloat but not the performance impact.
+Better introspection the first thing we need. Work on improving
+that. I've been making suggestions to help improve introspection
+infrastructure.
 
-> > > > --- a/mm/Kconfig
-> > > > +++ b/mm/Kconfig
-> > > > @@ -909,6 +909,14 @@ config ANON_VMA_NAME
-> > > >         area from being merged with adjacent virtual memory areas due to the
-> > > >         difference in their name.
-> > > >
-> > > > +config LRU_GEN
-> > > > +     bool "Multi-Gen LRU"
-> > > > +     depends on MMU
-> > > > +     # the following options can use up the spare bits in page flags
-> > > > +     depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
-> > > > +     help
-> > > > +       A high performance LRU implementation to overcommit memory.
-> > > > +
-> > > >  source "mm/damon/Kconfig"
-> > >
-> > > This is a problem.  I had to jump through hoops just to be able to
-> > > compile-test this.  Turns out I had to figure out how to disable
-> > > MAXSMP.
-> > >
-> > > Can we please figure out a way to ensure that more testers are at least
-> > > compile testing this?  Allnoconfig, defconfig, allyesconfig, allmodconfig.
-> > >
-> > > Also, I suggest that we actually make MGLRU the default while in linux-next.
-> >
-> > The !MAXSMP is to work around [1], which I haven't had the time to
-> > fix. That BUILD_BUG_ON() shouldn't assert sizeof(struct page) == 64
-> > since the true size depends on WANT_PAGE_VIRTUAL as well as
-> > LAST_CPUPID_NOT_IN_PAGE_FLAGS. My plan is here [2].
-> >
-> > [1] https://lore.kernel.org/r/20190905154603.10349-4-aneesh.kumar@linux.ibm.com/
-> > [2] https://lore.kernel.org/r/Ygl1Gf+ATBuI%2Fm2q@google.com/
->
-> OK, thanks.  This is fairly urgent for -next and -rc inclusion.  If
-> practically nobody is compiling the feature then practically nobody is
-> testing it.  Let's come up with a way to improves the expected coverage
-> by a lot.
+Before anything else, we need to improve introspection so we can
+gain better insight into the problems we have. Once we understand
+the problems better and have evidence to back up where the problems
+lie and we have a plan to solve them, then we can talk about whether
+we need other user accessible shrinker APIs.
 
-Let me just remove !MAXSMP, since I wasn't able to reproduce this
-build error [1] anymore.
+For the moment, exposing shrinker control interfaces to userspace
+could potentially be very bad because it exposes internal
+architectural and implementation details to a user API.  Just
+because it is in /sys/kernel/debug it doesn't mean applications
+won't start to use it and build dependencies on it.
 
-[1] https://lore.kernel.org/r/1792f0b2e29.d72f70c9807100.8179330337708563324@xanmod.org/
+That doesn't mean I'm opposed to exposing a shrinker control
+mechanism to debugfs - I'm still on the fence on that one. However,
+I definitely think that an API that directly exposes the internal
+implementation to userspace is the wrong way to go about this.
+
+Fine grained shrinker control is not necessary to improve shrinker
+introspection and OOM debugging capability, so if you want/need
+control interfaces then I think you should separate those out into a
+separate line of development where it doesn't derail the discussion
+on how to improve shrinker/OOM introspection.
+
+-Dave.
+-- 
+Dave Chinner
+dchinner@redhat.com
+

@@ -2,195 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CD15110D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069BD5110D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357968AbiD0GFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S1357964AbiD0GGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357964AbiD0GFN (ORCPT
+        with ESMTP id S241334AbiD0GGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:05:13 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E51A4968F
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:02:03 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id a11so751899pff.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:02:03 -0700 (PDT)
+        Wed, 27 Apr 2022 02:06:48 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9174D260;
+        Tue, 26 Apr 2022 23:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aXW2xhYPAvf1o0MLOP8hSxUxRqA0uZfff+kPH1xQuyk=;
-        b=A9LnDAyKD6fVClrbsOpT+UhD6x0zNiOrPNfIyF+1WxKBC/+8bt3HtOdIM90ev/eL7H
-         W7HWZlLtJfOEC8v+rAOYi4DTzrJ1OWmyE7/E4BKxbjktdxEAoEaGGfkvBBGsWIqDCzXS
-         /HMKDxjfn7LKgwe+9xzwXPway6GD81+oaQuNwQDCCHZFTXrZGRaALTFmC1mX2F++YLBm
-         abFERD1OsvujKTIldw2jdKqXPnPeMUeEJL6PNA+IDqAzvMr5q53GPvwzcOoLOO72GNLz
-         vKp4jg4Djt9N9bDMLtv3cvoMeNfhwtRGKYIQwT9Cm2IWvz7quH+MzD9ygvMx00Ttgocz
-         esUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aXW2xhYPAvf1o0MLOP8hSxUxRqA0uZfff+kPH1xQuyk=;
-        b=S3po7uktub8IgNae3QHprBA2BB+Q8h1lKJ//cVmUQsb+fH3UJLlojej4AqWjNu/4tx
-         AapyxDgh1vvwPGaeLYcs+OXjFaSm3IvdbX5xbTD+xEGHl4UabQ3SULM1canOkahJmi88
-         iqm79v9E40fer3nLOjqP0z1bCURmymPoDByuQuHXdKWdhx3d6tfHNaVN4StQv1DmQ+er
-         5TcyUw9YATi8Ql4+Kzvm/F2YlK2eXoKJrIthkT6fa0pI9haAYcZqC0+wgm1b1hTBztu2
-         TmeqcmsE3kiiCfh93zDsCqnivOLcULCOb08JLV/tuIHQRtrJ3kBWtivRCjoScaS+oicc
-         xr8g==
-X-Gm-Message-State: AOAM532uFQzYPMlOgAGwzkdcMPLhKdCT+fH9CXIciLfPjR8TjV+TTn+K
-        skEiFHGYwp0H59Hb8wTUjA==
-X-Google-Smtp-Source: ABdhPJwRwqi+iqg0koL37oIguMoYA0cj6j+O8nZ7LpQfGexZ50vuGAFjX8HcRgIue0wo8jTsXtHvLQ==
-X-Received: by 2002:a63:e245:0:b0:3a7:dce1:64b1 with SMTP id y5-20020a63e245000000b003a7dce164b1mr22781817pgj.67.1651039322602;
-        Tue, 26 Apr 2022 23:02:02 -0700 (PDT)
-Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id p2-20020a634202000000b003a0c6ec24d2sm14915417pga.89.2022.04.26.23.01.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 23:02:02 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 14:01:55 +0800
-From:   Pingfan Liu <kernelfans@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Baokun Li <libaokun1@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yuan ZhaoXiong <yuanzhaoxiong@baidu.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 7/9] irq: remove needless lock in takedown_cpu()
-Message-ID: <YmjcUxvct7aw82DH@piliu.users.ipa.redhat.com>
-References: <20220420140521.45361-1-kernelfans@gmail.com>
- <20220420140521.45361-8-kernelfans@gmail.com>
- <87y1zys9f7.ffs@tglx>
- <YmYOAfz3Oh1bYiVi@piliu.users.ipa.redhat.com>
- <87czh533dk.ffs@tglx>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651039417; x=1682575417;
+  h=subject:from:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=TRmJ3gGVnOosqPIffEyCf+GxktF5ed1iCgomGlFfGV8=;
+  b=ef6c70B2RD9JYr0c0abUdFj8GkS3hrObHEHNH097Iu/nodrVXATOiml8
+   g4AgC8LkLcRwHHJ/KBgqOsWyghg3e7rJSJzIqDDAzdstrar1XoNk1IS3z
+   Qa2/bUHBpRgV31G/agh3TdnhWqPzOcnr8b0EdTxVATqWSz48tWCQ1GkkC
+   o=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Apr 2022 23:03:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:03:37 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Apr 2022 23:03:37 -0700
+Received: from [10.216.55.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Apr
+ 2022 23:03:35 -0700
+Subject: Re: [PATCH V10 4/9] mfd: pm8008: Add reset-gpios
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649939418-19861-5-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n50HR6w-v3ub8HR_K2PsqqTTrVAaQa0pZ7QjY39WmkDyQQ@mail.gmail.com>
+ <010bd223-94a0-fe8c-d1ab-39153bb68a7d@quicinc.com>
+ <a4cbdb4c-dbba-75ee-202a-6b429c0eb390@quicinc.com>
+Message-ID: <104b529b-946d-f171-5a82-6052aef2dbbb@quicinc.com>
+Date:   Wed, 27 Apr 2022 11:33:08 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czh533dk.ffs@tglx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a4cbdb4c-dbba-75ee-202a-6b429c0eb390@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:43:03AM +0200, Thomas Gleixner wrote:
-> On Mon, Apr 25 2022 at 10:57, Pingfan Liu wrote:
-> > On Thu, Apr 21, 2022 at 06:11:56PM +0200, Thomas Gleixner wrote:
-> >> > -	irq_lock_sparse();
-> >> 
-> >> Not everything is about RCU here. You really need to look at all moving
-> >> parts:
-> >> 
-> >> irq_migrate_all_off_this_cpu() relies on the allocated_irqs bitmap and
-> >> the sparse tree to be in consistent state, which is only guaranteed when
-> >> the sparse lock is held.
-> >> 
-> >
-> > For the irq which transfer from active to inactive(disappearing) after
-> > fetching, desc->lock can serve the sync purpose. In this case,
-> > irq_lock_sparse() is not needed. For a emergeing irq, I am not sure
-> > about it.
-> 
-> No, it's required for the free case. The alloc case is
-> uninteresting. Care to look into the code?
-> 
 
-Yes, it is a good exercise. Thanks for the enlightenment.
+On 4/27/2022 10:58 AM, Satya Priya Kakitapalli (Temp) wrote:
+>
+> On 4/18/2022 10:34 AM, Satya Priya Kakitapalli (Temp) wrote:
+>>
+>> On 4/15/2022 5:40 AM, Stephen Boyd wrote:
+>>> Quoting Satya Priya (2022-04-14 05:30:13)
+>>>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+>>>> index c472d7f..97a72da 100644
+>>>> --- a/drivers/mfd/qcom-pm8008.c
+>>>> +++ b/drivers/mfd/qcom-pm8008.c
+>>>> @@ -239,6 +241,13 @@ static int pm8008_probe(struct i2c_client 
+>>>> *client)
+>>>>                          dev_err(chip->dev, "Failed to probe irq 
+>>>> periphs: %d\n", rc);
+>>>>          }
+>>>>
+>>>> +       chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", 
+>>>> GPIOD_OUT_HIGH);
+>>>> +       if (IS_ERR(chip->reset_gpio)) {
+>>>> +               dev_err(chip->dev, "failed to acquire reset gpio\n");
+>>> The API looks to print debug messages. This print doesn't look 
+>>> required.
+>>
+>>
+>> Okay.
+>>
+>>
+>>>> +               return PTR_ERR(chip->reset_gpio);
+>>>> +       }
+>>>> +       gpiod_set_value(chip->reset_gpio, 1);
+>>> Does this do anything? Does this work just as well?
+>>>
+>>>     reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
+>>>     if (IS_ERR(reset_gpio))
+>>>         return PTR_ERR(reset_gpio);
+>>>
+>
+> This is not working as expected. We need to add 
+> "gpiod_set_value(chip->reset_gpio, 1);"  to actually toggle the line.
+>
 
-> irq_free_descs()
->    lock(sparse);
->    free_descs();
->    bitmap_clear(allocated_irqs, from, cnt);
->    unlock_sparse);
->  
-> As free_descs() sets the sparse tree entry to NULL, up to the point
-> where bitmap_clear() finishes the state is inconsistent.
-> 
-> Now look at irq_migrate_all_off_this_cpu() and figure out what happens
-> when stop_machine() hits into the inconsistent state.
-> 
+I checked again and it is working after using GPIOD_OUT_HIGH instead of LOW.
 
-So the following code should fix the inconsistence between bitmap and
-sparse tree.
-diff --git a/kernel/irq/cpuhotplug.c b/kernel/irq/cpuhotplug.c
-index 1ed2b1739363..cd0d180f082d 100644
---- a/kernel/irq/cpuhotplug.c
-+++ b/kernel/irq/cpuhotplug.c
-@@ -161,6 +161,8 @@ void irq_migrate_all_off_this_cpu(void)
-                bool affinity_broken;
-
-                desc = irq_to_desc(irq);
-+               if (!desc)
-+                       continue;
-                raw_spin_lock(&desc->lock);
-                affinity_broken = migrate_one_irq(desc);
-                raw_spin_unlock(&desc->lock);
-
-> This can be fixed, but not by making mysterious claims about RCU and
-> desc->lock.
-> 
-
-But I still think that desc->lock is critical to the consistence of the
-irq _affinity_ if removing sparse lock in takedown_cpu().
-
-For the free case, after applying the above patch, it should work.
-void irq_migrate_all_off_this_cpu(void)
-{
-	for_each_active_irq(irq) {
-
-		desc = irq_to_desc(irq);
-		if (!desc)
-			continue;
-			                               ---> if breaking
-						       in by free, then
-						       migrate_one_irq()
-						       will skip it
-						       since the irq is
-						       not activated any
-						       long
-		raw_spin_lock(&desc->lock);
-		affinity_broken = migrate_one_irq(desc);
-		raw_spin_unlock(&desc->lock);
-		...
-	}
-}
-
-But for the alloc case, it could be a problem.
-void irq_migrate_all_off_this_cpu(void)
-{
-	for_each_active_irq(irq) {
-
-		desc = irq_to_desc(irq);
-		if (!desc)
-			continue;
-		raw_spin_lock(&desc->lock);
-		affinity_broken = migrate_one_irq(desc);
-		raw_spin_unlock(&desc->lock);
-		...
-                                                   ---> any new irq will
-						   not be detected. But alloc_descs(start, cnt, node, affinity)
-						   still associate the
-						   irq with this cpu.
-						   There is _no_
-						   opportunity to clear
-						   out this cpu from
-						   desc->irq_common_data.affinity.
-
-						   This is the affinity
-						   inconsistent problem.
-}
+reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_HIGH);
+     if (IS_ERR(reset_gpio))
+         return PTR_ERR(reset_gpio);
 
 
-Thanks,
-
-	Pingfan
+>
+>>> Note that there's no point to store the reset gpio in the structure if
+>>> it won't be used outside of probe.
+>>
+>>
+>> Okay, I'll use a local variable.
+>>
+>>
+>>> This should work fine? I used
+>>> GPIOD_OUT_LOW to indicate that the reset should be returned to this
+>>> function deasserted, i.e. taking the PMIC out of reset.
+>>
+>>
+>> I'll try this out.
+>>
+>>

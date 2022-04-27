@@ -2,75 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD35511EEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D7C511E65
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243310AbiD0Qn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S243422AbiD0QpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243393AbiD0Qnw (ORCPT
+        with ESMTP id S243383AbiD0Qoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:43:52 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE1D67D05;
-        Wed, 27 Apr 2022 09:40:40 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y3so4505870ejo.12;
-        Wed, 27 Apr 2022 09:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eYY7a5mrkl2bM/PSDJSC0NT9uuZ4Dsfa0rMHieAI4Eo=;
-        b=UhOvn9DvCFVJJwJL7ZjXn67Xo+sMyPqMNao7HbyH8R3SVKkdEnj3h60SlkFPizLs3s
-         8ayxZTUyJGzvFXvYbyzsoUEnlgkVL0xydjlDCoeKnZ6BG2uNNX8x+SWQt8DpPX1rU2qp
-         PpLPoQphEBBsfRf6vgqWpSIx61xIObgGYuAR9rLoehMrdzaAsAvdMR1QHJdo10eU/xiM
-         l/oA6TCVkS/1oflMiQiWDs9LJu+uR21U+yVn2UEqAp+HL2Unio9V7Iflr5T5i1Bhcv+j
-         EcjQvEea0fTF/5CwSTo1dKBfRYZAgGmzICYnStPdqJ7Srk93YpbLsqbIr5Eap3AncLXt
-         wKaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eYY7a5mrkl2bM/PSDJSC0NT9uuZ4Dsfa0rMHieAI4Eo=;
-        b=vz5wfPJpcZBXx6RzTZW6QV3o/VBZos80colPOSIUpgZ/0wDr1CC4GnEZJuDs3E3rSz
-         FmIhNIZCKUkbyqxj6WY7UQ8qTty5Uab7k0FfqjjAfP9rUtrjR9AAvAR4CR9IIZKwTmqn
-         UtWsegLJD7++YfzhMTx9TpQCze2MJDXSojjMZGUR5rXT/J/hVYcjfWUPzbLjD/27fSxE
-         ulTs2gpKRpT8YGAH60c6zDvs3KPUTOBWiBdI0yfN4Lk6ij9rS4v66VOSdz4M8o7ByXBe
-         Vy/xsIXO6hxXCUnaaRQXM+F9nvh24YuePP1treonUde6m6u0mt/pnAIL+ZG/BBbllxWk
-         ULkw==
-X-Gm-Message-State: AOAM531AS5ib3YHv/syq1l5S9qCv5S/6kE56Tios8FkA/yru845P/gpo
-        fI0j1lEQkA9QAar8XAZu4tM=
-X-Google-Smtp-Source: ABdhPJztncgZwGz2Ow3QWOzOVsARAsEDQ5KST7yUKFQu8jtQrou4CrTMQf7avORNyY8ZDY3IRJP6Ew==
-X-Received: by 2002:a17:907:1c8f:b0:6e8:f898:63bb with SMTP id nb15-20020a1709071c8f00b006e8f89863bbmr28273177ejc.721.1651077639371;
-        Wed, 27 Apr 2022 09:40:39 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id q3-20020a5085c3000000b0042617226f87sm1552140edh.16.2022.04.27.09.40.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:40:38 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 19:40:37 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [RFC patch net-next 1/3] net: dsa: ksz9477: port mirror sniffing
- limited to one port
-Message-ID: <20220427164037.tpui4hm32hktasys@skbuf>
-References: <20220427162343.18092-1-arun.ramadoss@microchip.com>
- <20220427162343.18092-2-arun.ramadoss@microchip.com>
+        Wed, 27 Apr 2022 12:44:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14C168302;
+        Wed, 27 Apr 2022 09:41:41 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KpPYW5p9Nz67PH4;
+        Thu, 28 Apr 2022 00:37:35 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 18:41:39 +0200
+Received: from [10.47.81.43] (10.47.81.43) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.24; Wed, 27 Apr
+ 2022 17:41:38 +0100
+Message-ID: <ae30cf68-2cf2-4486-3a10-98756fe08226@huawei.com>
+Date:   Wed, 27 Apr 2022 17:41:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427162343.18092-2-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v1] scsi: libsas: Fix array-bounds warnings
+To:     Bean Huo <huobean@gmail.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <chenxiang66@hisilicon.com>,
+        <bvanassche@acm.org>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <beanhuo@micron.com>
+References: <20220427133657.55241-1-huobean@gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220427133657.55241-1-huobean@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.81.43]
+X-ClientProxiedBy: lhreml704-chm.china.huawei.com (10.201.108.53) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,108 +55,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:53:41PM +0530, Arun Ramadoss wrote:
-> This patch limits the sniffing to only one port during the mirror add.
-> And during the mirror_del it checks for all the ports using the sniff,
-> if and only if no other ports are referring, sniffing is disabled.
-> The code is updated based on the review comments of LAN937x port mirror
-> patch.
-> https://patchwork.kernel.org/project/netdevbpf/patch/20210422094257.1641396-8-prasanna.vengateshan@microchip.com/
+On 27/04/2022 14:36, Bean Huo wrote:
+> From: Bean Huo <beanhuo@micron.com>
 > 
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> Use the latest GCC will show below array-bounds warning:
+
+Which version exactly?
+
+> 
+> drivers/scsi/libsas/sas_expander.c:1697:39: warning: array subscript ‘struct
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/libsas/sas_expander.c?h=v5.18-rc4#n1679 
+is a '}'
+
+What baseline do you use?
+
+> smp_resp[0]’ is partly outside array bounds of ‘unsigned char[56]’ [-Warray-bounds]
+
+I guess that the compiler is getting upset that we're only allocating 32 
+bytes for a struct which is 56 bytes in size.
+
+> ...
+> drivers/scsi/libsas/sas_expander.c:1781:20: warning: array subscript ‘struct
+> smp_resp[0]’ is partly outside array bounds of ‘unsigned char[32]’ [-Warray-bounds]
+> ...
+> rivers/scsi/libsas/sas_expander.c:1786:39: warning: array subscript ‘struct
+> smp_resp[0]’ is partly outside array bounds of ‘unsigned char[32]’ [-Warray-bounds]
+> ...
+> drivers/scsi/libsas/sas_expander.c:476:35: warning: array subscript ‘struct
+> smp_resp[0]’ is partly outside array bounds of ‘unsigned char[32]’ [-Warray-bounds]
+> ...
+> drivers/scsi/libsas/sas_expander.c:479:38: warning: array subscript ‘struct
+> smp_resp[0]’ is partly outside array bounds of ‘unsigned char[32]’ [-Warray-bounds]
+> 
+> This patch aims to fix these warnings by directly using struct sizes instead of
+> macro definitions.
+> 
+> Signed-off-by: Bean Huo <beanhuo@micron.com>
 > ---
-
-This probably needs:
-
-Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-
-with the mention that it probably won't be backported too far due to the
-dependency on 0148bb50b8fd ("net: dsa: pass extack to dsa_switch_ops ::
-port_mirror_add()"). But this doesn't change what you should do.
-
-You should send it towards the "net" tree (probably right now), wait
-until the "net" pull request for this gets sent out, then "net" gets
-merged back into "net-next", then you can continue your work with the
-other patches.
-
->  drivers/net/dsa/microchip/ksz9477.c | 38 ++++++++++++++++++++++++++---
->  1 file changed, 34 insertions(+), 4 deletions(-)
+>   drivers/scsi/libsas/sas_expander.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> index 4f617fee9a4e..90ce789107eb 100644
-> --- a/drivers/net/dsa/microchip/ksz9477.c
-> +++ b/drivers/net/dsa/microchip/ksz9477.c
-> @@ -990,14 +990,32 @@ static int ksz9477_port_mirror_add(struct dsa_switch *ds, int port,
->  				   bool ingress, struct netlink_ext_ack *extack)
->  {
->  	struct ksz_device *dev = ds->priv;
-> +	u8 data;
-> +	int p;
-> +
-> +	/* Limit to one sniffer port
-> +	 * Check if any of the port is already set for sniffing
-> +	 * If yes, instruct the user to remove the previous entry & exit
-> +	 */
-> +	for (p = 0; p < dev->port_cnt; p++) {
-> +		/* Skip the current sniffing port */
-> +		if (p == mirror->to_local_port)
-> +			continue;
-> +
-> +		ksz_pread8(dev, p, P_MIRROR_CTRL, &data);
-> +
-> +		if (data & PORT_MIRROR_SNIFFER) {
-> +			NL_SET_ERR_MSG_MOD(extack,
-> +					   "Sniffer port is already configured, delete existing rules & retry");
-> +			return -EBUSY;
-> +		}
-> +	}
->  
->  	if (ingress)
->  		ksz_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_RX, true);
->  	else
->  		ksz_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_TX, true);
->  
-> -	ksz_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_SNIFFER, false);
-> -
->  	/* configure mirror port */
->  	ksz_port_cfg(dev, mirror->to_local_port, P_MIRROR_CTRL,
->  		     PORT_MIRROR_SNIFFER, true);
-> @@ -1011,16 +1029,28 @@ static void ksz9477_port_mirror_del(struct dsa_switch *ds, int port,
->  				    struct dsa_mall_mirror_tc_entry *mirror)
->  {
->  	struct ksz_device *dev = ds->priv;
-> +	bool in_use = false;
->  	u8 data;
-> +	int p;
->  
->  	if (mirror->ingress)
->  		ksz_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_RX, false);
->  	else
->  		ksz_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_TX, false);
->  
-> -	ksz_pread8(dev, port, P_MIRROR_CTRL, &data);
->  
-> -	if (!(data & (PORT_MIRROR_RX | PORT_MIRROR_TX)))
-> +	/* Check if any of the port is still referring to sniffer port */
-> +	for (p = 0; p < dev->port_cnt; p++) {
-> +		ksz_pread8(dev, p, P_MIRROR_CTRL, &data);
-> +
-> +		if ((data & (PORT_MIRROR_RX | PORT_MIRROR_TX))) {
-> +			in_use = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	/* delete sniffing if there are no other mirroring rule exist */
+> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+> index 260e735d06fa..ac6d9be358c5 100644
+> --- a/drivers/scsi/libsas/sas_expander.c
+> +++ b/drivers/scsi/libsas/sas_expander.c
+> @@ -457,7 +457,7 @@ static int sas_ex_general(struct domain_device *dev)
+>   	if (!rg_req)
+>   		return -ENOMEM;
+>   
+> -	rg_resp = alloc_smp_resp(RG_RESP_SIZE);
+> +	rg_resp = alloc_smp_resp(sizeof(struct smp_resp));
 
-Either "there are no other mirroring rules", or "no other mirroring rule
-exists".
+I'm thinking that it's better to have something like:
 
-> +	if (!in_use)
->  		ksz_port_cfg(dev, mirror->to_local_port, P_MIRROR_CTRL,
->  			     PORT_MIRROR_SNIFFER, false);
->  }
-> -- 
-> 2.33.0
-> 
+struct smp_resp_hdr {
+	u8    frame_type;
+	u8    function;
+	u8    result;
+	u8    reserved;
+};
+
+struct smp_resp {
+	union {
+		struct report_general_resp  rg;
+		struct discover_resp        disc;
+		struct report_phy_sata_resp rps;
+	};
+} __attribute__ ((packed));
+
+
+struct report_general_resp {
+	struct smp_resp_hdr hdr;
+	__be16  change_count;
+	__be16  route_indexes;
+	...
+};
+
+or even also get rid of struct smp_resp holder. Sorry if this is more 
+than you bargained for, but I don't mind helping.
+
+Thanks,
+John
+
+>   	if (!rg_resp) {
+>   		kfree(rg_req);
+>   		return -ENOMEM;
+> @@ -1688,7 +1688,7 @@ static int sas_get_phy_change_count(struct domain_device *dev,
+>   	int res;
+>   	struct smp_resp *disc_resp;
+>   
+> -	disc_resp = alloc_smp_resp(DISCOVER_RESP_SIZE);
+> +	disc_resp = alloc_smp_resp(sizeof(struct smp_resp));
+>   	if (!disc_resp)
+>   		return -ENOMEM;
+>   
+> @@ -1766,7 +1766,7 @@ static int sas_get_ex_change_count(struct domain_device *dev, int *ecc)
+>   	if (!rg_req)
+>   		return -ENOMEM;
+>   
+> -	rg_resp = alloc_smp_resp(RG_RESP_SIZE);
+> +	rg_resp = alloc_smp_resp(sizeof(struct smp_resp));
+>   	if (!rg_resp) {
+>   		kfree(rg_req);
+>   		return -ENOMEM;
+

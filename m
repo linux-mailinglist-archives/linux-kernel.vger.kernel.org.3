@@ -2,98 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C444C511E3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA9B511D2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244286AbiD0Rs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S231134AbiD0RuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiD0RsW (ORCPT
+        with ESMTP id S230395AbiD0RuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:48:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAA98D6BA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:45:09 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 894441EC0543;
-        Wed, 27 Apr 2022 19:45:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651081504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=G0Q3GrO1KjrQ8+uZ5Y50vi8ZqJ/8f5t/iAJXEhYcSLo=;
-        b=ZR6G3Zyz5WdU8O6IwNPa1GeNys7WPDOF55dgwvo3JSOX380Kkq4YxbBooI9SVcOzkOP0b+
-        jPB7/9ortP+rxXeMRVRkvtbtRCVwAP/BHXbcz8yN5jNpQlmMriw9Eo0Gbifl9V9VolntZc
-        M1zuYZg/yHUbPwdc9UtQcEzLSgLqGL4=
-Date:   Wed, 27 Apr 2022 19:45:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Wed, 27 Apr 2022 13:50:10 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D04443ECB;
+        Wed, 27 Apr 2022 10:46:58 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 17:46:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651081617;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=htCv97HWJBXwAKxNDO9I9Cj0Tvfm3S+nPV9KJDmcKOc=;
+        b=ygpt40bOBuPv+hVmP5XfTRu4QwtBigQYjep7+fj0ggnhq+VKAGoatMJXNmtCL+vX19PwQz
+        cchJnW+g33lL6dlcNrMvSL43D4r01So4d3ar9CXk1EmQ4iw5cAZELXIlO9lA+mTdjwD/RK
+        t3CnnCEf4uSkxMa2eILm1pt73QcswdE/j1DPkN09gMGYraUEOSx5BDe56fr1cvIM04hBan
+        auzFTuafO9fW5mqJwOBCf8H9GcoH1owEwUZC3VSdoHKG7qiCJGSiMo55z9iG3ceZdqbbNx
+        9C51CTi3Vv8fBVRjEtYk8ZJhECaAike6QIxh09jjg8QpXSG5PxysZwlOwKaUCA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651081617;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=htCv97HWJBXwAKxNDO9I9Cj0Tvfm3S+nPV9KJDmcKOc=;
+        b=J6rXUH80Hv6fnznLPYhb0GnKRjzqRFnLszHSc+/7JukNM4BeKovLmDrFKJfQ0x3upcdQqe
+        kJV8Vl/90DBJQoBA==
+From:   "tip-bot2 for Shin'ichiro Kawasaki" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/urgent] bus: fsl-mc-msi: Fix MSI descriptor mutex lock for
+ msi_first_desc()
+Cc:     "Shin'ichiro Kawasaki" <shinichiro.kawasaki@wdc.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Juergen Gross <jgross@suse.com>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH V6 3/8] x86/entry: Move PUSH_AND_CLEAR_REGS out of
- error_entry()
-Message-ID: <YmmBHABKMk7Ctx46@zn.tnic>
-References: <20220421141055.316239-1-jiangshanlai@gmail.com>
- <20220421141055.316239-4-jiangshanlai@gmail.com>
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20220412075636.755454-1-shinichiro.kawasaki@wdc.com>
+References: <20220412075636.755454-1-shinichiro.kawasaki@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220421141055.316239-4-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165108161560.4207.6285834000819152880.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 10:10:50PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> The macro idtentry calls error_entry() unconditionally even on XENPV.
-> But the code XENPV needs in error_entry() is PUSH_AND_CLEAR_REGS only.
-> And error_entry() also calls sync_regs() which has to deal with the
-> case of XENPV via an extra branch so that it doesn't copy the pt_regs.
+The following commit has been merged into the irq/urgent branch of tip:
 
-What extra branch?
+Commit-ID:     c7d2f89fea26c84d5accc55d9976dd7e5305e63a
+Gitweb:        https://git.kernel.org/tip/c7d2f89fea26c84d5accc55d9976dd7e5305e63a
+Author:        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+AuthorDate:    Tue, 12 Apr 2022 16:56:36 +09:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Wed, 27 Apr 2022 19:42:32 +02:00
 
-Do you mean the
+bus: fsl-mc-msi: Fix MSI descriptor mutex lock for msi_first_desc()
 
-	if (regs != eregs)
+Commit e8604b1447b4 introduced a call to the helper function
+msi_first_desc(), which needs MSI descriptor mutex lock before
+call. However, the required mutex lock was not added. This results in
+lockdep assertion:
 
-test in sync_regs()?
+ WARNING: CPU: 4 PID: 119 at kernel/irq/msi.c:274 msi_first_desc+0xd0/0x10c
+  msi_first_desc+0xd0/0x10c
+  fsl_mc_msi_domain_alloc_irqs+0x7c/0xc0
+  fsl_mc_populate_irq_pool+0x80/0x3cc
 
-I'm confused. Are you, per chance, aiming to optimize XENPV here or
-what's up?
+Fix this by adding the mutex lock and unlock around the function call.
 
-> And PUSH_AND_CLEAR_REGS in error_entry() makes the stack not return to
-> its original place when the function returns, which means it is not
-> possible to convert it to a C function.
-> 
-> Move PUSH_AND_CLEAR_REGS out of error_entry(), add a function to wrap
-> PUSH_AND_CLEAR_REGS and call it before error_entry().
-> 
-> The new function call adds two instructions (CALL and RET) for every
-> interrupt or exception.
+Fixes: e8604b1447b4 ("bus: fsl-mc-msi: Simplify MSI descriptor handling")
+Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220412075636.755454-1-shinichiro.kawasaki@wdc.com
 
-Not only - it pushes all the regs in PUSH_AND_CLEAR_REGS too. I don't
-understand why that matters here? It was done in error_entry anyway.
+---
+ drivers/bus/fsl-mc/fsl-mc-msi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+diff --git a/drivers/bus/fsl-mc/fsl-mc-msi.c b/drivers/bus/fsl-mc/fsl-mc-msi.c
+index 5e0e439..0cfe859 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-msi.c
++++ b/drivers/bus/fsl-mc/fsl-mc-msi.c
+@@ -224,8 +224,12 @@ int fsl_mc_msi_domain_alloc_irqs(struct device *dev,  unsigned int irq_count)
+ 	if (error)
+ 		return error;
+ 
++	msi_lock_descs(dev);
+ 	if (msi_first_desc(dev, MSI_DESC_ALL))
+-		return -EINVAL;
++		error = -EINVAL;
++	msi_unlock_descs(dev);
++	if (error)
++		return error;
+ 
+ 	/*
+ 	 * NOTE: Calling this function will trigger the invocation of the

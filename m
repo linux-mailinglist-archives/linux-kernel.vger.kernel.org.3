@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC0F511DC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B0C5120C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbiD0R2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S243987AbiD0R2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbiD0R2L (ORCPT
+        with ESMTP id S235917AbiD0R2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:28:11 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1762152E5F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:25:00 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id gh6so4862802ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:24:59 -0700 (PDT)
+        Wed, 27 Apr 2022 13:28:30 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC93580F1;
+        Wed, 27 Apr 2022 10:25:18 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id k23so4795349ejd.3;
+        Wed, 27 Apr 2022 10:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P52XUlnvWCDbdpSO0eow56ta8BYIoktLvffWsEefpbg=;
-        b=EYyIJudDhVOE7nkfQP1R77baA7wbkc6ve+j0cW06+oPnAeLrfHkIPvjhM8VSs9RP54
-         WUrZl2qV8Hp9WrdgrHudUuNOmQAsSwugxTKF0zdZhb98lU01+kJ0uTZZHDnfHo23KF8f
-         7vJtUWbeJBZ48O+Rcz70/expiyA/HgPVGjOqzUyb1HzVmRkKPtKel1pAC8TrwJeDHSMa
-         FR7WouWdsXS4BTgy5cayvj6E92lge1vx0YVkzM6lujQbbz75L2BvdPJnKRJVjEZyZTx5
-         j8y1AT6+O7co6I6cll+Za0mbqMSTkEYbhG2ewGuphRI4UjAVKzM2+G71/z2L2pwD7pCt
-         Lhrw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CjJJv/HW0W0z/VarlbGbcsPtyv0boVYsrKMhgc2MCQ4=;
+        b=EQktnjL3YTHOusdLaEOhhMGmLEkhCF8DJyOmmO0JmYYRe1iGewG9mNs4zyGi/QfEpB
+         cQ4xGWu5t7E4jBNieFbMpyYMIdTV7HvazVgeDLVaJBhG8EaLEHCAjwNoSgdZNQ+6sQbO
+         vkfHRJ/DLP4P+39eihnyFbl8CeqkmcyXkKpkdG/aQXwBz5uuBUSW8su+GkF3Ncs1FwLY
+         THIsbBseeSZ+3ocZMmGu6dYc+RekHkvcVl0zs0jD5ko84TzhMab2EVL33OIrdqifLVUd
+         +uXtqZpYGpixASjoSVfq2ZdoqT+qHbGDaIXG7Cvcy9tvrhMm2cpPWCRtx0le2ls6I1Ka
+         V4JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P52XUlnvWCDbdpSO0eow56ta8BYIoktLvffWsEefpbg=;
-        b=OEB9owtn/uQPU6RhQnO1QiGCnebYWPqKTuAniN+iOHJsu27pPJRuyKLydIbYLJu3FW
-         w0YpRoABbucO4GPm1MgbmGa3U5siTbiX2VyKS6YnAQcSldXOB0l/iqGI0V7jv/SLAS+s
-         CTGLa19fVAAqka9VZsn52qkfy0Y4SHx4F+UlONJUdlzxvr7OEnwrItZC7hiJR7jLuyBc
-         I7lakKkl/ND+2F8chAnpkaIQZDfk9tdyctsDkZI+XSshzg1a8ta2AoUvDQI2gtnKl/3E
-         TRnnL7zudesn0AW06IZ7CCISWP5hqnuojgQftYGl3JlWUfcnX2pFaCAoB3kLGEWB3ove
-         w7Dg==
-X-Gm-Message-State: AOAM530pGQG94Sf8NggMlVQx/zHsLLoNJCHubz1XRzhTRRVigqElrS07
-        yQVrp02eHAu/XZ0HAFT5eYg=
-X-Google-Smtp-Source: ABdhPJwtWnz45yI608lXspTGLXjHmcLI45v3raOCKlRDG2j3PHMzL3wk9KyjzWEraDNpDJY3BuR5sg==
-X-Received: by 2002:a17:907:97c9:b0:6db:ab53:1fdf with SMTP id js9-20020a17090797c900b006dbab531fdfmr27725391ejc.406.1651080298559;
-        Wed, 27 Apr 2022 10:24:58 -0700 (PDT)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id z2-20020a05640235c200b00425fff78dbbsm3328443edc.49.2022.04.27.10.24.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CjJJv/HW0W0z/VarlbGbcsPtyv0boVYsrKMhgc2MCQ4=;
+        b=q9SQ/pvuPDnmM22wyR9T3pX4kD/t6j2LcB/3kf6qgLaR7S3boBqUyMaIUK6vU2JCxv
+         PV4qe4YvAbWdcISA9kyevfFJKCAHex6J5GgQUt/CXs2A2BjVIAKoHV2WcAv0GYdOl/zu
+         M9Lwrp/gtJCVA1ouJ38PFk0wAIlNADc+zUZNiPxj3I23O5HbAkmG9GVoxsCYaxipJHsr
+         8DRZM95b5OYentCCuTzuKzn9VkZA8AMgfV0KPc7Xan6w99N3bxS+K+MpUoXwvyh4Icwu
+         mH3PtjjU+KcLKw1Y9BvASRsETcaRAi5pYqd+lKxJBVlwtmHPywrjEre5fsDQnuGWtxxL
+         bMkA==
+X-Gm-Message-State: AOAM533hELbfofGlq/3QbboUWbmYAY3CDYBzrLOzxvC6eDptnM9fyT+i
+        MsojRBY5uak2QIWCqiSSFkvnlyG72po=
+X-Google-Smtp-Source: ABdhPJyvqzIreW1w7c2WM0BP7M7meaKhOsxx0Nw79+KcMESI1+8narqGSZn0JGOKlHPrNBeMf4dQ9Q==
+X-Received: by 2002:a17:907:3f82:b0:6df:919c:97a with SMTP id hr2-20020a1709073f8200b006df919c097amr27280082ejc.19.1651080316670;
+        Wed, 27 Apr 2022 10:25:16 -0700 (PDT)
+Received: from skbuf ([188.25.160.86])
+        by smtp.gmail.com with ESMTPSA id g11-20020a1709061e0b00b006eff90d9c18sm7087716ejj.92.2022.04.27.10.25.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 10:24:57 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Katsuhiro Suzuki <katsuhiro@katsuster.net>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-rockchip@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: rk3328: fix disabling mclk on pclk probe failure
-Date:   Wed, 27 Apr 2022 19:23:11 +0200
-Message-Id: <20220427172310.138638-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Wed, 27 Apr 2022 10:25:15 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 20:25:14 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        upstream@semihalf.com
+Subject: Re: [net: PATCH] net: dsa: add missing refcount decrementation
+Message-ID: <20220427172514.n4musn42dhygzbu2@skbuf>
+References: <20220425094708.2769275-1-mw@semihalf.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425094708.2769275-1-mw@semihalf.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,29 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If preparing/enabling the pclk fails, the probe function should
-unprepare and disable the previously prepared and enabled mclk,
-which it doesn't do. This commit rectifies this.
+On Mon, Apr 25, 2022 at 11:47:08AM +0200, Marcin Wojtas wrote:
+> After obtaining the "phy-handle" node, decrementing
+> refcount is required. Fix that.
+> 
+> Fixes: a20f997010c4 ("net: dsa: Don't instantiate phylink for CPU/DSA ports unless needed")
+> Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+> ---
+>  net/dsa/port.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/net/dsa/port.c b/net/dsa/port.c
+> index 32d472a82241..cdc56ba11f52 100644
+> --- a/net/dsa/port.c
+> +++ b/net/dsa/port.c
+> @@ -1620,8 +1620,10 @@ int dsa_port_link_register_of(struct dsa_port *dp)
+>  			if (ds->ops->phylink_mac_link_down)
+>  				ds->ops->phylink_mac_link_down(ds, port,
+>  					MLO_AN_FIXED, PHY_INTERFACE_MODE_NA);
+> +			of_node_put(phy_np);
+>  			return dsa_port_phylink_register(dp);
+>  		}
+> +		of_node_put(phy_np);
+>  		return 0;
+>  	}
+>  
+> -- 
+> 2.29.0
+> 
 
-Fixes: c32759035ad2 ("ASoC: rockchip: support ACODEC for rk3328")
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
- sound/soc/codecs/rk3328_codec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the patch.
 
-diff --git a/sound/soc/codecs/rk3328_codec.c b/sound/soc/codecs/rk3328_codec.c
-index 758d439e8c7a..86b679cf7aef 100644
---- a/sound/soc/codecs/rk3328_codec.c
-+++ b/sound/soc/codecs/rk3328_codec.c
-@@ -481,7 +481,7 @@ static int rk3328_platform_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(rk3328->pclk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to enable acodec pclk\n");
--		return ret;
-+		goto err_unprepare_mclk;
- 	}
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
--- 
-2.36.0
+commit fc06b2867f4cea543505acfb194c2be4ebf0c7d3
+Author: Miaoqian Lin <linmq006@gmail.com>
+Date:   Wed Apr 20 19:04:08 2022 +0800
 
+    net: dsa: Add missing of_node_put() in dsa_port_link_register_of
+
+    The device_node pointer is returned by of_parse_phandle()  with refcount
+    incremented. We should use of_node_put() on it when done.
+    of_node_put() will check for NULL value.
+
+    Fixes: a20f997010c4 ("net: dsa: Don't instantiate phylink for CPU/DSA ports unless needed")
+    Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+    Signed-off-by: David S. Miller <davem@davemloft.net>

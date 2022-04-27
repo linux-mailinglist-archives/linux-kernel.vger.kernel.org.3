@@ -2,146 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF665122EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B0C5122F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiD0Tle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S234715AbiD0ToL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbiD0Tj5 (ORCPT
+        with ESMTP id S235306AbiD0Tn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:39:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0DE1016
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:36:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C54461B71
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79933C385A9;
-        Wed, 27 Apr 2022 19:36:44 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.95)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1njnSt-002Izw-Gd;
-        Wed, 27 Apr 2022 15:36:43 -0400
-Message-ID: <20220427193643.341238948@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 27 Apr 2022 15:36:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [for-next][PATCH 21/21] tracing: make tracer_init_tracefs initcall asynchronous
-References: <20220427193623.529296556@goodmis.org>
+        Wed, 27 Apr 2022 15:43:56 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6144ECEC;
+        Wed, 27 Apr 2022 12:38:19 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id e23so3115029eda.11;
+        Wed, 27 Apr 2022 12:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hCum5bNhYi9+IQxe4PY50XCxjy3o4DC0Fuh+dehJ7+Y=;
+        b=VBJik5g8AFV/dNWkrBZafQjns54j0x12F4VUdilD5H71dLF7idgPBxQJWUlIrgjanv
+         Y2+lRpmUVfupTGVSDjK0M/xb0OYBqOR2/pAvowIALbkckDOZtxDOvKxAZgswa774Wln2
+         BmneOU7/CaP42D22iEjWNGXNO3eCAgnNtLuwol6aPIx+V91QBG2pH3CCJ+w8fow6yvcE
+         XcdYoOAyywJdgKE/yzDswZE/8W5axQzTuxb9UQTDgoX542p1QePG/FmiqADEwkdyvHMz
+         C2RpKh4W7123+jZwN9gFwVrGGiY3GKwNTn8ZiRAM/ZjRgpTf5WV73xaN433HgDmbNbgG
+         mIbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hCum5bNhYi9+IQxe4PY50XCxjy3o4DC0Fuh+dehJ7+Y=;
+        b=ASpFnWkSA2WI1UiwMyn8y8IbbaeMwLXosiSn8TN+I5HIW0Kyoq5K0X21IlWnhLfnEe
+         UxvxalR248vbqeiH5gYw0aS3xgMpnGlCTsXa3VlT9Ezuck03Lj91C/zCrD9i+qJPgShT
+         6fGRwQNsy8A2VIlDUTu50xEyQ0cc64qWzrPzbKdejDKSSK3dQYJ7OQ4G53LOxMmbx+JU
+         XGLUF+SQILQqVoxg3U7DGPCHWXQq+fqjPOQLcxBrKQD6bCnPwM+m9loN8wTOR0bAhoVQ
+         uQVDcPNbWAdDcfk1vtto76UGnQ+shqSvi2lmYD5ulJO3MBPKHnmmDRO2WnFFk2GZ7ZDO
+         /kxw==
+X-Gm-Message-State: AOAM530FrJD+M6j/lNV+Ol9mnsGu5KT9VGVSPKMNqBZ/wV70YDxtFvvs
+        cOQqFL0m4jmhG03+NQSdicqoirTskiGsoQ==
+X-Google-Smtp-Source: ABdhPJyJXe0Qcf2siNZx1NPTseSHA6cbjBTLZ1B+Ru14MQx3/wAkrvCOCledm0fwE69ujzJ4h+F56Q==
+X-Received: by 2002:a50:a454:0:b0:425:e94b:2f1a with SMTP id v20-20020a50a454000000b00425e94b2f1amr17837938edb.330.1651088297951;
+        Wed, 27 Apr 2022 12:38:17 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056402019700b0042617ba637bsm83896edv.5.2022.04.27.12.38.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 12:38:17 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 31/45] media: sun6i-csi: Introduce capture format structure, list and helper
+Date:   Wed, 27 Apr 2022 21:38:16 +0200
+Message-ID: <2109482.Icojqenx9y@jernej-laptop>
+In-Reply-To: <20220415152811.636419-32-paul.kocialkowski@bootlin.com>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-32-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Dne petek, 15. april 2022 ob 17:27:57 CEST je Paul Kocialkowski napisal(a):
+> Add a table that describes each pixel format and associated output
+> register configuration with necessary tweaks. It will be used later on
+> to configure the hardware.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-Move trace_eval_init() to subsys_initcall to make it start
-earlier.
-And to avoid tracer_init_tracefs being blocked by
-trace_event_sem which trace_eval_init() hold [1],
-queue tracer_init_tracefs() to eval_map_wq to let
-the two works being executed sequentially.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-It can speed up the initialization of kernel as result
-of making tracer_init_tracefs asynchronous.
+Best regards,
+Jernej
 
-On my arm64 platform, it reduce ~20ms of 125ms which total
-time do_initcalls spend.
 
-Link: https://lkml.kernel.org/r/20220426122407.17042-3-mark-pk.tsai@mediatek.com
-
-[1]: https://lore.kernel.org/r/68d7b3327052757d0cd6359a6c9015a85b437232.camel@pengutronix.de
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 7275173c55d0..400d3e9fe9ff 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -9615,6 +9615,7 @@ extern struct trace_eval_map *__stop_ftrace_eval_maps[];
- 
- static struct workqueue_struct *eval_map_wq __initdata;
- static struct work_struct eval_map_work __initdata;
-+static struct work_struct tracerfs_init_work __initdata;
- 
- static void __init eval_map_work_func(struct work_struct *work)
- {
-@@ -9640,6 +9641,8 @@ static int __init trace_eval_init(void)
- 	return 0;
- }
- 
-+subsys_initcall(trace_eval_init);
-+
- static int __init trace_eval_sync(void)
- {
- 	/* Make sure the eval map updates are finished */
-@@ -9722,15 +9725,8 @@ static struct notifier_block trace_module_nb = {
- };
- #endif /* CONFIG_MODULES */
- 
--static __init int tracer_init_tracefs(void)
-+static __init void tracer_init_tracefs_work_func(struct work_struct *work)
- {
--	int ret;
--
--	trace_access_lock_init();
--
--	ret = tracing_init_dentry();
--	if (ret)
--		return 0;
- 
- 	event_trace_init();
- 
-@@ -9752,8 +9748,6 @@ static __init int tracer_init_tracefs(void)
- 	trace_create_file("saved_tgids", TRACE_MODE_READ, NULL,
- 			NULL, &tracing_saved_tgids_fops);
- 
--	trace_eval_init();
--
- 	trace_create_eval_file(NULL);
- 
- #ifdef CONFIG_MODULES
-@@ -9768,6 +9762,24 @@ static __init int tracer_init_tracefs(void)
- 	create_trace_instances(NULL);
- 
- 	update_tracer_options(&global_trace);
-+}
-+
-+static __init int tracer_init_tracefs(void)
-+{
-+	int ret;
-+
-+	trace_access_lock_init();
-+
-+	ret = tracing_init_dentry();
-+	if (ret)
-+		return 0;
-+
-+	if (eval_map_wq) {
-+		INIT_WORK(&tracerfs_init_work, tracer_init_tracefs_work_func);
-+		queue_work(eval_map_wq, &tracerfs_init_work);
-+	} else {
-+		tracer_init_tracefs_work_func(NULL);
-+	}
- 
- 	return 0;
- }
--- 
-2.35.1

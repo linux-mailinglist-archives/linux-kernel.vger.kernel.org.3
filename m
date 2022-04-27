@@ -2,101 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6055110E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F79D5110E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356532AbiD0GKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S233308AbiD0GMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbiD0GKJ (ORCPT
+        with ESMTP id S232750AbiD0GMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:10:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 861234FC42
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651039615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aWgF3IzWwc8DWyaMyWyQeWJPbHFs1Ob+K2sFzH1yItI=;
-        b=iPQf5/w11O/EvT9FV9SxaAf1l/T3etXdWJkAIDqrWedryILHpPHCb5ZpVpUGtBMTWjwyQq
-        6xN2253HDDPLpvQI6kCBO2sBz8Sw32PYFxL+vzkWNVy43lp8VJ0+6l9ALsbc7jFQtxRwG3
-        JlazsNW6/8lq+BcsDNEnD3G+yKxfZ5g=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-XnIJhB_dOTmU3luz_OM5-Q-1; Wed, 27 Apr 2022 02:06:54 -0400
-X-MC-Unique: XnIJhB_dOTmU3luz_OM5-Q-1
-Received: by mail-ej1-f72.google.com with SMTP id sh14-20020a1709076e8e00b006f3b7adb9ffso496195ejc.16
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:06:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aWgF3IzWwc8DWyaMyWyQeWJPbHFs1Ob+K2sFzH1yItI=;
-        b=u1crarFM0X+GKolNZhQlRfSF/fzxA2QzMxGwtHsCEwzHfwZviOSBqCZJktm8hpXdqU
-         w0oUiyN3Zgw1y8K5rQysJH4jARBFbbv9nLS1EaYZAj0XisiZCFto/KDZFdZRPjpZSD7B
-         2LLUimmfP4YSWZO+PUd6UkjbIb23uLVoZPOn1wRbP+z3jvJ5kiFQflht8xPoKesKhGm2
-         4kL4s6c7TatTXNdJ67e4+NFFSx/biUzjPysetKg5MqKpUCYaCgLP5nvTAZF+lACqPaw5
-         o7iPMFXmr098GljWbR0YlVvYHOu4Vh1RPw1V6Eb7hX7Wj3b31X2HZM9kdXyHzMAf7SJJ
-         RX/w==
-X-Gm-Message-State: AOAM533hxH4Xiv8e0qdMpMK/NArHoKTOrQq0L8/RGxn2Xq6mx4cfaQ8R
-        nMnAaSX5qtB7+OAooWeM5EXK8H636FMi3a8BHJEAoQSkOvlPrtp/lZQ1YPJfx5mFqd0xdq3YU6s
-        YLn00R3hxrs6ToOmSkGRKTPxI
-X-Received: by 2002:a17:906:9b85:b0:6db:ab80:7924 with SMTP id dd5-20020a1709069b8500b006dbab807924mr24971948ejc.160.1651039612808;
-        Tue, 26 Apr 2022 23:06:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw1fzon5VKfL8UuAC13xokgOYYm8jW/639n9tuhmfdvm9dqgjTr2RdDrxELXnom6MWbMljbzg==
-X-Received: by 2002:a17:906:9b85:b0:6db:ab80:7924 with SMTP id dd5-20020a1709069b8500b006dbab807924mr24971936ejc.160.1651039612638;
-        Tue, 26 Apr 2022 23:06:52 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id o5-20020a170906974500b006dfc781498dsm6176164ejy.37.2022.04.26.23.06.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 23:06:51 -0700 (PDT)
-Message-ID: <24265b0c-ce9f-58b7-1717-944e4cd313c9@redhat.com>
-Date:   Wed, 27 Apr 2022 08:06:51 +0200
+        Wed, 27 Apr 2022 02:12:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D501766F80;
+        Tue, 26 Apr 2022 23:08:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8938FB824AE;
+        Wed, 27 Apr 2022 06:08:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EABABC385A7;
+        Wed, 27 Apr 2022 06:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651039735;
+        bh=7ULIaADIULJlgwsFYyufxG72ioz1krpbL4jBoA5aDl4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=C9FK281PD+Q7OcQ+U86fQ9iKGyIpavHQfNeB29Cqb9z/cp1+jPFYff4H4W4RGJF2C
+         8ac6Va3dQTR3HtpLlpJ3bOBwscKCBqfYio4ebeHd+f6C3kwchpq3vnejczXeI2U6Rc
+         Vy8ohbevei5srWiLHhUxLft04KBCoHB3WzxmJplU8sPvkAm4zqDTx5V9y6aeiJ8RHq
+         T9B17yU8k6YenxwHdaYj2HbTVJ7MADlzVT+2R6NvpJE1k1vUYAveGV8ApaewnCQ/1c
+         OBcwO6AyOfhedkax9A2lCVkxOqrSQvMQdS3bJSkVhX36IMf7H+ahObR/5EjFD+DZs6
+         Lbnwgy4oSvQrA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Abhishek Kumar <kuabhs@chromium.org>
+Cc:     quic_wgong@quicinc.com, briannorris@chromium.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        ath10k@lists.infradead.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v2] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+References: <20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
+Date:   Wed, 27 Apr 2022 09:08:49 +0300
+In-Reply-To: <20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
+        (Abhishek Kumar's message of "Tue, 26 Apr 2022 22:19:55 +0000")
+Message-ID: <87wnfbf47i.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: linux-next: build failure after merge of the kvm tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     KVM <kvm@vger.kernel.org>, Peter Gonda <pgonda@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220419153423.644c0fa1@canb.auug.org.au>
- <20220427132327.731b35d8@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220427132327.731b35d8@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 05:23, Stephen Rothwell wrote:
->>   #define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
->>   			__u32 type;
->>   			__u32 ndata;
->> +			__u64 flags;
->>   			__u64 data[16];
->>   		} system_event;
->>   		/* KVM_EXIT_S390_STSI */
->> -- 
->> 2.35.1
-> I am still applying the above patch.
+Abhishek Kumar <kuabhs@chromium.org> writes:
 
-I am waiting for review of 
-https://lore.kernel.org/kvm/202204230312.8EOM8DHM-lkp@intel.com/T/.
+> Double free crash is observed when FW recovery(caused by wmi
+> timeout/crash) is followed by immediate suspend event. The FW recovery
+> is triggered by ath10k_core_restart() which calls driver clean up via
+> ath10k_halt(). When the suspend event occurs between the FW recovery,
+> the restart worker thread is put into frozen state until suspend completes.
+> The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
+> The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
+> called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
+> thread because of its frozen state), causing the crash.
+>
+> To fix this, during the suspend flow, skip call to ath10k_halt() in
+> ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
+> Also, for driver state ATH10K_STATE_RESTARTING, call
+> ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
+> ath10k_wait_for_suspend() is skipped later in
+> [ath10k_halt() > ath10k_core_stop()] for the driver state
+> ATH10K_STATE_RESTARTING.
+>
+> The frozen restart worker thread will be cancelled during resume when the
+> device comes out of suspend.
+>
+> Below is the crash stack for reference:
+>
+> [  428.469167] ------------[ cut here ]------------
+> [  428.469180] kernel BUG at mm/slub.c:4150!
+> [  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> [  428.469219] Workqueue: events_unbound async_run_entry_fn
+> [  428.469230] RIP: 0010:kfree+0x319/0x31b
+> [  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
+> [  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
+> [  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
+> [  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
+> [  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  428.469285] Call Trace:
+> [  428.469295]  ? dma_free_attrs+0x5f/0x7d
+> [  428.469320]  ath10k_core_stop+0x5b/0x6f
+> [  428.469336]  ath10k_halt+0x126/0x177
+> [  428.469352]  ath10k_stop+0x41/0x7e
+> [  428.469387]  drv_stop+0x88/0x10e
+> [  428.469410]  __ieee80211_suspend+0x297/0x411
+> [  428.469441]  rdev_suspend+0x6e/0xd0
+> [  428.469462]  wiphy_suspend+0xb1/0x105
+> [  428.469483]  ? name_show+0x2d/0x2d
+> [  428.469490]  dpm_run_callback+0x8c/0x126
+> [  428.469511]  ? name_show+0x2d/0x2d
+> [  428.469517]  __device_suspend+0x2e7/0x41b
+> [  428.469523]  async_suspend+0x1f/0x93
+> [  428.469529]  async_run_entry_fn+0x3d/0xd1
+> [  428.469535]  process_one_work+0x1b1/0x329
+> [  428.469541]  worker_thread+0x213/0x372
+> [  428.469547]  kthread+0x150/0x15f
+> [  428.469552]  ? pr_cont_work+0x58/0x58
+> [  428.469558]  ? kthread_blkcg+0x31/0x31
+>
+> Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
+> Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
+> Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
+> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+> ---
+>
+> Changes in v2:
+> - Fixed typo, replaced ath11k by ath10k in the comments.
+> - Adjusted the position of my S-O-B tag.
+> - Added the Tested-on tag.
+>
+>  drivers/net/wireless/ath/ath10k/mac.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
+> index d804e19a742a..e9c1f11fef0a 100644
+> --- a/drivers/net/wireless/ath/ath10k/mac.c
+> +++ b/drivers/net/wireless/ath/ath10k/mac.c
+> @@ -5345,8 +5345,22 @@ static void ath10k_stop(struct ieee80211_hw *hw)
+>  
+>  	mutex_lock(&ar->conf_mutex);
+>  	if (ar->state != ATH10K_STATE_OFF) {
+> -		if (!ar->hw_rfkill_on)
+> -			ath10k_halt(ar);
+> +		if (!ar->hw_rfkill_on) {
+> +			/* If the current driver state is RESTARTING but not yet
+> +			 * fully RESTARTED because of incoming suspend event,
+> +			 * then ath10k_halt is already called via
+> +			 * ath10k_core_restart and should not be called here.
+> +			 */
+> +			if (ar->state != ATH10K_STATE_RESTARTING)
+> +				ath10k_halt(ar);
+> +			else
+> +				/* Suspending here, because when in RESTARTING
+> +				 * state, ath10k_core_stop skips
+> +				 * ath10k_wait_for_suspend.
+> +				 */
+> +				ath10k_wait_for_suspend(ar,
+> +							WMI_PDEV_SUSPEND_AND_DISABLE_INTR);
+> +		}
 
-Paolo
+I'm nitpicking but I prefer to use parenthesis with function names, so I
+changed the comments. Also there was one ath10k-check warning:
 
+drivers/net/wireless/ath/ath10k/mac.c:5360: line length of 91 exceeds 90 columns
+
+In the pending branch I changed it to:
+
+			if (ar->state != ATH10K_STATE_RESTARTING) {
+				ath10k_halt(ar);
+			} else {
+				/* Suspending here, because when in RESTARTING
+				 * state, ath10k_core_stop() skips
+				 * ath10k_wait_for_suspend().
+				 */
+				opt = WMI_PDEV_SUSPEND_AND_DISABLE_INTR;
+				ath10k_wait_for_suspend(ar, opt);
+			}
+
+Not really pretty but I prefer to keep ath10k warning free.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

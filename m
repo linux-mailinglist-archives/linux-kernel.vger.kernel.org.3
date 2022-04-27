@@ -2,145 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA4351252E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9A051252F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbiD0WVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S236539AbiD0WXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiD0WVZ (ORCPT
+        with ESMTP id S236200AbiD0WXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:21:25 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEEEC496A8;
-        Wed, 27 Apr 2022 15:18:13 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id E8A0892009E; Thu, 28 Apr 2022 00:18:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id E401D92009D;
-        Wed, 27 Apr 2022 23:18:12 +0100 (BST)
-Date:   Wed, 27 Apr 2022 23:18:12 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: Avoid handing out address 0 to devices
-In-Reply-To: <20220419033752.GA1101844@bhelgaas>
-Message-ID: <alpine.DEB.2.21.2204192214310.9383@angie.orcam.me.uk>
-References: <20220419033752.GA1101844@bhelgaas>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 27 Apr 2022 18:23:36 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEEA17E3A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:20:24 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q185so4435761ljb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yCYL9g4VwJRI+kOW4bU4UPGTSqELiJ7re1kAOeB0fTc=;
+        b=KgH/l6N237SRBI92F2IRVx6f+6Hd2ZgAHQ4IuWldsWhmMGaJJbynZm31cQW3H1uxTW
+         0bPzdyMEMbXsR+SVDjs9Hrd+92T9sLnBkiOYld02Hi02N5GfWZB8mK26MESZ8SRH72/A
+         jloqi/91tVO55EmWGuu/ZTRiDk/1ONuWthJzU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yCYL9g4VwJRI+kOW4bU4UPGTSqELiJ7re1kAOeB0fTc=;
+        b=TYXjDqqq/siSl8KiCzbTcY+PJoDaJ4weRrLuFwaP0p6pXm597BQOZYr9yKMyCvFrNo
+         sPi+JtqeeRlRK5ohPVovMzehMkIV2e8yAkvyvohotRTYqEx/pEzxSIJTipgz8IxFxvuz
+         2fL5qjztLEscT+xIEVSEtqEYk4a4z2DnNu9I7r7pc/koT/ObkGvj008tTMiHrfJXaG76
+         e313oFoB2yLT+WhFwA9UFZS/mpJRSYwtrDsdzuA55kUDqOVcPvqEKdG8eiL6xdM7U6zY
+         TC/4R6pBClIcBQJkIJkrv7zcEVnHQnukCwZ0dVuuVXIzOsUVWeabadg+7k9TfdodET0J
+         s68g==
+X-Gm-Message-State: AOAM530Zey9FNiYjYkcOEAyhoUU/H0zn2VTjxyPtcV3vXXf4GJs+gvYo
+        gqeOyzUI4GxenYaRveaoquXve2HnPRDvMQbI1xM=
+X-Google-Smtp-Source: ABdhPJzNk4Xd5PEhXNyrJOCGp9EW82QRdHzMrWBUmmIU6HdE7RU28hoBIlTfcJsx9iSpBBygO8726w==
+X-Received: by 2002:a2e:a88b:0:b0:24b:5714:213d with SMTP id m11-20020a2ea88b000000b0024b5714213dmr19248431ljq.412.1651098021612;
+        Wed, 27 Apr 2022 15:20:21 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id a13-20020a19e30d000000b00471ea64d877sm2026082lfh.102.2022.04.27.15.20.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 15:20:20 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id g19so5520881lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:20:20 -0700 (PDT)
+X-Received: by 2002:a05:6512:6c6:b0:472:296e:6dfb with SMTP id
+ u6-20020a05651206c600b00472296e6dfbmr4066529lff.542.1651098018218; Wed, 27
+ Apr 2022 15:20:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
+ <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
+ <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
+ <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
+ <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
+ <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
+ <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com> <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
+In-Reply-To: <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 27 Apr 2022 15:20:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
+Message-ID: <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
+Subject: Re: [GIT PULL] gfs2 fix
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     cluster-devel <cluster-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022, Bjorn Helgaas wrote:
+On Wed, Apr 27, 2022 at 2:26 PM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+>
+> Well, POSIX explicitly mentions those atomicity expectations, e.g.,
+> for read [1]:
 
-> > Yes, just bumping up PCIBIOS_MIN_IO was my first thought and the
-> > path of least resistance.  However with the strictly hierarchical
-> > topology of PCIe systems the limit of 16 ranges feels so
-> > frighteningly low to me already as to make me rather unwilling to
-> > reduce it even further for a system that is free from PC legacy junk
-> > (no southbridge let alone ISA) and therefore does not require it.
-> > So I've reconsidered my initial approach and came up with this
-> > proposal instead.  I think it is a good compromise.
-> 
-> Sorry for being dense here, I think it's finally sinking in.
+Yes. I'm aware. And my point is that we've never done _that_ kind of atomicity.
 
- No worries, I'm glad we're on the same page now.
+It's also somewhat ambiguous what it actually means, since what it
+then talks about is "all bytes that started out together ends
+together" and "interleaving".
 
-> The problem is that making PCIBIOS_MIN_IO greater than zero would keep
-> us from assigning a [io 0x0000- ] window, so instead of 16 I/O bridge
-> windows, we could only have 15 (unless bridges support 32-bit I/O
-> windows).  Right?
+That all implies that it's about the *position* of the reads and
+writes being atomic, not the *data* of the reads and writes.
 
- Yes, that's been my concern.
+That, btw, was something we honored even before we had the locking
+around f_pos accesses - a read or write system call would get its own
+local *copy* the file position, the read or write would then do that
+IO based on that copied position - so that things that "started out
+together ends together" - and then after the operation is done it
+would *update* the file position atomically.
 
-> Are you running into that limit?  Most devices don't need I/O port
-> space, and almost all other arches define PCIBIOS_MIN_IO, so they live
-> without that window today.
+Note that that is exactly so that data would end up "together". But it
+would mean that two concurrent reads using the same file position
+might read the *same* area of the file.
 
- I haven't run into this limit, but then whoever runs into it is likely 
-not going to be someone who's able to come up with a solution like this 
-proposed here or possibly understanding it.  Granted, it's only one extra 
-range, but still IMHO an unnecessary extra limitation beyond one built 
-into hardware.
+Which still honors that "the read is atomic wrt the range", but
+obviously the actual values of "f_pos" is basically random after the
+read (ie is it the end of the first read, or the end of the second
+read?).
 
- Also there are devices out there that have alternative MMIO and port I/O 
-BARs available for mapping their CSRs, and while our drivers tend to use 
-MMIO in that case those devices still claim a port I/O address range.  If 
-you are unlucky they will get an allocation and a device that actually 
-needs port I/O to work won't.
+The same paragraph also explicitly mentions pipes and FIFOs, despite
+an earlier paragraph dismissing them, which is all just a sign of
+things being very confused.
 
- Such unexpected quirks can be very frustrating to IT folk.
+Anyway, I'm not objecting very sternously to making it very clear in
+some documentation that this "data atomicity" is not what Linux has
+ever done. If you do overlapping IO, you get what you deserve.
 
-> Sparc uses the MMIO I/O port address directly in the struct resource,
-> so it will never try to allocate [io 0x0000], and there's no problem
-> with using PCI I/O port 0:
-> 
->   pci_bus 0000:00: root bus resource [io  0x804000000000-0x80400fffffff] (bus address [0x0000-0xfffffff])
->   mpt2sas0: ioport(0x0000804000001000), size(256)
-> 
-> The sparc ioport interfaces are basically:
-> 
->   ioport_map(port)  { return port; }
->   ioread8(addr)     { return readb(addr); }
->   inb(addr)         { return readb(addr); }
-> 
-> RISC-V uses the generic ones, i.e.,
-> 
->   ioport_map(port)  { return PIO_OFFSET + port; }
->   ioread8(addr)     { if (addr) >= PIO_RESERVED)
->                         return readb(addr);
->                       else
->                         return inb(addr & PIO_MASK); }
->   inb(addr)         { return __raw_readb(PCI_IOBASE + addr); }
-> 
-> Obviously RISC-V gives you prettier I/O port addresses, but at the
-> cost of having PCI I/O port 0 be 0 in the struct resource as well,
-> which makes it basically unusable.  Is it worth it?
+But I do have objections.
 
- Well, the SPARC port may be able to get away with that, but overall I 
-think using PCI bus addresses for port I/O resources is the only sane 
-thing to do.  In fact I think for MMIO resources we probably ought to do 
-the same, though it may be actually more difficult to implement, because 
-it's more likely there are systems out there with multiple per-bus MMIO 
-address spaces.
+On one hand, it's not all that different from some of the other notes
+we have in the man-pages (ie documenting that whole "just under 2GB"
+limit on the read size, although that's actually using the wrong
+constant: it's not 0x7ffff000 bytes, it's MAX_RW_COUNT, which is
+"INT_MAX & PAGE_MASK" and that constant in the man-page is as such
+only true on a system with 4kB page sizes)
 
- The reason why I think using bus addresses here is the right thing to do 
-is that systems may have multiple decode windows exposed to the CPU(s) 
-mapping to the same I/O bus addresses, often for specific purposes.  E.g. 
-Alpha has the sparse and the dense address space and some systems (I have 
-one with a MIPS CPU) have spaces with different endianness swap policies 
-(for matching either bit or byte lanes) wired in the bus logic hardware.  
-So the same port I/O location can be mapped at different MMIO addresses 
-simultaneously in one system.
+BUT! I'm 100% convinced that NOBODY HAS EVER given the kind of
+atomicity guarantees that you would see from reading that document as
+a language-lawyer.
 
- I did some further experimentation with a parallel port option card now, 
-and it seems to operate just fine at address 0, likely because plain port 
-I/O accessors (`inb', `outb', and friends) have no special intepretation 
-for address 0, unlike the iomap handlers:
+For example, that section "2.9.7 Thread Interactions with Regular File
+Operations" says that "fstat()" is atomic wrt "write()", and that you
+should see "all or nothing".
 
-parport_pc 0000:07:00.0: enabling device (0000 -> 0001)
-PCI parallel port detected: 1415:c118, I/O at 0x0(0x8), IRQ 38
-parport0: PC-style at 0x0 (0x8), irq 38, using FIFO [PCSPP,TRISTATE,COMPAT,EPP,ECP]
-lp0: using parport0 (interrupt-driven).
+I *GUARANTEE* that no operating system ever has done that, and I
+further claim that reading it the way you read it is not only against
+reality, it's against sanity.
 
-So it seems we're quite inconsistent already.
+Example: if I do a big write to a file that I just created, do you
+really want "fstat()" in another thread or process to not even be able
+to see how the file grows as the write happens?
 
- Since we need a way to move forward and we have a real issue with PCI BAR 
-allocations that cause devices to break I have now posted a fix for RISC-V 
-systems only which solves the problem at hand, however wasting one whole 
-4KiB I/O address range.  If we ever have a better generic solution, either 
-one proposed here or an alternative one, then we can revert the RISC-V 
-change.  Cf. 
-<https://lore.kernel.org/r/alpine.DEB.2.21.2204271207590.9383@angie.orcam.me.uk>.
+It's not what anybody has *EVER* done, I'm pretty sure.
 
-  Maciej
+So I really think
+
+ (a) you are mis-reading the standard by attributing too strong logic
+to paperwork that is English prose and not so exact
+
+ (b) documenting Linux as not doing what you are mis-reading it for is
+only encouraging others to mis-read it too
+
+The whole "arbitrary writes have to be all-or-nothing wrt all other
+system calls" is simply not realistic, and has never been. Not just
+not in Linux, but in *ANY* operating system that POSIX was meant to
+describe.
+
+And equally importantly: if some crazy person were to actually try to
+implement such "true atomicity" things, the end result would be
+objectively worse. Because you literally *want* to see a big write()
+updating the file length as the write happens.
+
+The fact that the standard then doesn't take those kinds of details
+into account is simply because the standard isn't meant to be read as
+a language lawyer, but as a "realistically .."
+
+             Linus

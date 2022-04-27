@@ -2,154 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2E3511D2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E548151211C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243162AbiD0QWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S242947AbiD0Q2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243906AbiD0QUB (ORCPT
+        with ESMTP id S242991AbiD0Q2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:20:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60A7686E27
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651076185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4DJyESBBKfv4Cx6IqvqpIfsWyZ1HDqBgutDwdLC0W60=;
-        b=cqnJCd4hqA4jDDfPcCNdONKW92+STSJhSMnhTB9FdPasTv6azwFtgzY+kfNvh0lYeKKXHt
-        naryIG2+DM4z47Vhfd6AAUtGPsMeyrhJ7PaFJTJsQQNvuIARft3du9Q8BCTOiJBwaeqsr0
-        EYhPRP5gB2yMuMAJz/yemWhB+iwEFso=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-J2pTK5aKN42SOdxOUyJxjQ-1; Wed, 27 Apr 2022 12:16:24 -0400
-X-MC-Unique: J2pTK5aKN42SOdxOUyJxjQ-1
-Received: by mail-ed1-f71.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso1245536edt.20
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:16:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4DJyESBBKfv4Cx6IqvqpIfsWyZ1HDqBgutDwdLC0W60=;
-        b=JKCWuHqk5YhR5P0tRZpTsRnmwSC6t1Ja4vKhNwTv/fmaDKDnUpCxIozhV0Qz2E7qFM
-         8eRgEmT/+pyR6tk0EzL3OMkwnD83PkX8jpyezFy3bYwG3ahFlW+wc+KxStiOtksfiOh+
-         TtdLQk7PtxZO7AyY4l4SydkxwfZYd4BCfhwOE4t3Q6H00Qqbn88d92seq2Y48TqHc4jn
-         rO5933ASqXeuCwV1Vt2GCh/5FP7bAc55Vzjm8sSdJ3de0lBu0S22im6B9myu4Kr9lVj6
-         hEgyKRTq98a/kffl7Vqt/eklIHDROsmeTAXZFLAGZVQpCMFsgLoFWMhaWn1PtSEyFvrk
-         JKuw==
-X-Gm-Message-State: AOAM531eWESahU0NjlWKson7y1udyWivp437ENWoyaOseMMIkqhl0NnI
-        XyFm1nr2Ys3g2elq77ANNMbEOskWresV1qZ5DloNSWjbq7h66p5xHQaL9P6EkNUUI6VdCA6YHD/
-        3Ecdn9UMJrvPVmwhziRoQvvVV
-X-Received: by 2002:a17:907:3f25:b0:6b0:5e9a:83 with SMTP id hq37-20020a1709073f2500b006b05e9a0083mr28543242ejc.659.1651076183061;
-        Wed, 27 Apr 2022 09:16:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxbHnMwhrUavgLAEph26Pn2TGlnZOPdIVTeG1iNt5jyDcQ5EQHMMAe9gdm9OdyjsGwOTF1XZw==
-X-Received: by 2002:a17:907:3f25:b0:6b0:5e9a:83 with SMTP id hq37-20020a1709073f2500b006b05e9a0083mr28543217ejc.659.1651076182735;
-        Wed, 27 Apr 2022 09:16:22 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id t27-20020a1709063e5b00b006f3a94f5194sm3343922eji.77.2022.04.27.09.16.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 09:16:22 -0700 (PDT)
-Message-ID: <5847c4b7-aaae-e090-cdf3-2275a8f08685@redhat.com>
-Date:   Wed, 27 Apr 2022 18:16:21 +0200
+        Wed, 27 Apr 2022 12:28:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D8336B4C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651076552; x=1682612552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xbVkhqUprSffI6k9578RyOtKLKT5PDGpfnHI0RkdbJg=;
+  b=JVUdczBuYwTQhyiAmWr9YqIp/5bBFtV7HkGSuMKGPJxvtaM1l//LSmLJ
+   QOSeQxxrwyKUqF14p6nXU++SdkoJPFWgcPZB6+ab+sVyqbxls3xwtu88F
+   9EVX43CHW1HQVd3LQxecgZui6v+ybP42d2GqwojrzuDA30P2t6vOVtXzt
+   D6Bn+eRXJq84S7yvi+egR64dpsukeX4YvQ7Hl+IRqrc8ZaKHbeoOQBmyO
+   +57MdplUdF9FI8hvCw6Qr0/kwZbdV3c9rzWHiiLjN+vQZR7r+745NsHzl
+   MB1Wgkrw2if/dess860uBBjCWWzQE2gK9i2BTwmc7awLe/17Hsq2yTF54
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="247919498"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="247919498"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 09:15:06 -0700
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="533293590"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 09:15:06 -0700
+Date:   Wed, 27 Apr 2022 09:16:33 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bruno Moreira-Guedes <codeagain@codeagain.dev>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
+Message-ID: <20220427161633.GA1314857@alison-desk>
+References: <cover.1650321310.git.codeagain@codeagain.dev>
+ <YmA4QIRfx2QPhEJi@kroah.com>
+ <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
+ <YmJNqMjXEc4KGrJ8@kroah.com>
+ <20220427121851.4e2rjbbabw5sh3lk@AN5Bruno>
+ <Ymk3qimGl1tTjpSL@kroah.com>
+ <20220427124114.woiiuxr6pnxvadwg@AN5Bruno>
+ <YmlA1w124Ws2z/RV@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH MANUALSEL 5.17 3/7] x86/kvm: Preserve BSP
- MSR_KVM_POLL_CONTROL across suspend/resume
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, kvm@vger.kernel.org
-References: <20220427155408.19352-1-sashal@kernel.org>
- <20220427155408.19352-3-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220427155408.19352-3-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmlA1w124Ws2z/RV@kroah.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 17:53, Sasha Levin wrote:
-> From: Wanpeng Li <wanpengli@tencent.com>
-> 
-> [ Upstream commit 0361bdfddca20c8855ea3bdbbbc9c999912b10ff ]
-> 
-> MSR_KVM_POLL_CONTROL is cleared on reset, thus reverting guests to
-> host-side polling after suspend/resume.  Non-bootstrap CPUs are
-> restored correctly by the haltpoll driver because they are hot-unplugged
-> during suspend and hot-plugged during resume; however, the BSP
-> is not hotpluggable and remains in host-sde polling mode after
-> the guest resume.  The makes the guest pay for the cost of vmexits
-> every time the guest enters idle.
-> 
-> Fix it by recording BSP's haltpoll state and resuming it during guest
-> resume.
-> 
-> Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> Message-Id: <1650267752-46796-1-git-send-email-wanpengli@tencent.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/x86/kernel/kvm.c | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-> index ed8a13ac4ab2..4c2a158bb6c4 100644
-> --- a/arch/x86/kernel/kvm.c
-> +++ b/arch/x86/kernel/kvm.c
-> @@ -69,6 +69,7 @@ static DEFINE_PER_CPU_DECRYPTED(struct kvm_vcpu_pv_apf_data, apf_reason) __align
->   DEFINE_PER_CPU_DECRYPTED(struct kvm_steal_time, steal_time) __aligned(64) __visible;
->   static int has_steal_clock = 0;
->   
-> +static int has_guest_poll = 0;
->   /*
->    * No need for any "IO delay" on KVM
->    */
-> @@ -706,14 +707,26 @@ static int kvm_cpu_down_prepare(unsigned int cpu)
->   
->   static int kvm_suspend(void)
->   {
-> +	u64 val = 0;
-> +
->   	kvm_guest_cpu_offline(false);
->   
-> +#ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
-> +	if (kvm_para_has_feature(KVM_FEATURE_POLL_CONTROL))
-> +		rdmsrl(MSR_KVM_POLL_CONTROL, val);
-> +	has_guest_poll = !(val & 1);
-> +#endif
->   	return 0;
->   }
->   
->   static void kvm_resume(void)
->   {
->   	kvm_cpu_online(raw_smp_processor_id());
-> +
-> +#ifdef CONFIG_ARCH_CPUIDLE_HALTPOLL
-> +	if (kvm_para_has_feature(KVM_FEATURE_POLL_CONTROL) && has_guest_poll)
-> +		wrmsrl(MSR_KVM_POLL_CONTROL, 0);
-> +#endif
->   }
->   
->   static struct syscore_ops kvm_syscore_ops = {
+On Wed, Apr 27, 2022 at 03:10:47PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Apr 27, 2022 at 09:41:14AM -0300, Bruno Moreira-Guedes wrote:
+> > On Wed, Apr 27, 2022 at 02:31:38PM +0200, Greg Kroah-Hartman wrote:
+> > > On Wed, Apr 27, 2022 at 09:18:51AM -0300, Bruno Moreira-Guedes wrote:
+> > > > Hello,
+> > > > 
+> > > > On Fri, Apr 22, 2022 at 08:39:36AM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Thu, Apr 21, 2022 at 08:16:05PM +0100, Martyn Welch wrote:
+> > > > > > On Wed, 2022-04-20 at 18:43 +0200, Greg Kroah-Hartman wrote:
+> > > > > > > On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wrote:
+> > > > > > > > This patch series modify the vme_user driver's place in
+> > > > > > > > menuconfig (1/3), fixes a missing `depends on` line in a Kconfig
+> > > > > > > > file
+> > > > > > > > (2/3), and rearrages the directory tree for the driver allowing a
+> > > > > > > > more
+> > > > > > > > straightforward comprehension of its contents (3/3).
+> > > > > > > > 
+> > > > > > > > The 'vme_user/' driver is the only remaining vme-family driver in
+> > > > > > > > the
+> > > > > > > > 'staging/' tree, but its structure, entry in menuconfig and
+> > > > > > > > building
+> > > > > > > > routines are still attached to the 'vme/' subtree now outside
+> > > > > > > > 'staging/'. The present patchset fixes it.
+> > > > > > > > 
+> > > > > > > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+> > > > > > > 
+> > > > > > > What about deleting the vme drivers entirely?
+> > > > > > 
+> > > > > > I assume you're suggesting deleting the "vme_user" driver from the
+> > > > > > staging directory?
+> > > > > 
+> > > > > Yes, at the very least given that no one has tried to fix it up and get
+> > > > > it out of staging in many years.
+> > > > 
+> > > > While I cannot comment anything on that regard, I imagine the v4 I sent
+> > > > a couple of days ago will wait for that decision, right?
+> > > 
+> > > I do not know what you are referring to, sorry.  My staging patch queue
+> > > is empty right now.
+> > Ohhh, okay, no problem, I have sent a v4 around 6 days ago and thought
+> > you were waiting on this definition.
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+Bruno - I see your patches was applied to staging-testing
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/log/?h=staging-testing
 
+
+> 
+> If I did not take it, please resend.
+> 
+> thanks,
+> 
+> greg k-h
+> 

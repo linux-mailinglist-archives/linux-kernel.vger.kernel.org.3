@@ -2,241 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21FA51137E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9C3511380
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359407AbiD0IeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        id S1359414AbiD0Iet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiD0IeL (ORCPT
+        with ESMTP id S229945AbiD0Ieq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:34:11 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667E11BEBD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:31:00 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id y76so2079699ybe.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M5VmPqHrZbz5RxJOMLq0v7WV4KFPghsC4N72JYyAcgc=;
-        b=m8dsEZ7i9DbfzsZTq/8hmxpARYz78hH4M9KHP5urmMPk/j0rRrwz/H7LFoUIhEudIy
-         cTwQgobqlpnAx3Xg+fYqz1nimO7LazxwBFdX4rGns2I+UP00UUg/DXq9YQmXnFp8NFjc
-         dB9OBtgNsyga72WET9bPVoF4D8gmG5frA9z/RlIuKTG+jJ+LP0o6AkIxpZlmzcdHJGlo
-         MBCKXeCBG3JD36x1sSHB+RVgNqg56L6vRcIGRhAAyYNGFUJYLguvT7oNvKmKYeGoxfUu
-         RD7Bd7CqbnIAe9cf0YG7iSpX+ZC6lPpi8cddkK1XT1V2OSv5sJ868OOse8MS9BN+LCy/
-         vIYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M5VmPqHrZbz5RxJOMLq0v7WV4KFPghsC4N72JYyAcgc=;
-        b=TwcJKa/rcZZ2eSLg7AW91pBzNomKes+yYlHoLysjDMjqRkUtleVy/dt0C4wF86YOZF
-         XVRLEowqAKCefLBGSIMDb8k3nP9ciH3MR6m+e+jY99ENLhkfItHKp+vipLTFsguA2TBg
-         lzuwaSdD8d4R8+nkkY7zf08JgSOioD8xymgfC4D47KmvJnQpZBlLCJ64ydiEF59NoekH
-         MFePlTZrI2Bg5vgi4RCM3Y8X0npP42/cCMIS9tVyzs+K+BFSGmW38YJJcpE+8YLIM901
-         WhaOptGMCA7Sk0lyBzP3fOAlgW83Q+2ruEmxt7KGo3wOy5QCsYiziKo/68CXps0sHs18
-         51og==
-X-Gm-Message-State: AOAM533SCEu45v6G1Y5opzUUQGvMgBgeATCAa7s4+MwQYC4TRUveHIpi
-        f1pR79VpugndLZt7xb7fMDYVLnY9EmEFV0gG3YUWFQ==
-X-Google-Smtp-Source: ABdhPJzL/CasNcwH2cgK6gj+aQ8DI2yhE9T9w2UyDiZ7/A07vlkRpLC3Z0ettblP3Qy5dCXjomPmVOnKFAz42Jeu0/s=
-X-Received: by 2002:a25:8f8d:0:b0:648:a703:defb with SMTP id
- u13-20020a258f8d000000b00648a703defbmr6642306ybl.128.1651048259513; Wed, 27
- Apr 2022 01:30:59 -0700 (PDT)
+        Wed, 27 Apr 2022 04:34:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAC51FA48;
+        Wed, 27 Apr 2022 01:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651048296; x=1682584296;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QB+C2awCS8SI/qOc2hpUsE98FZJLYWnZ8pdyLpOzv+4=;
+  b=b4IvlG7W3niYDFGFKVJyuSmramWG3QLNGwMEinku2tRpQ3+uq6l9boS3
+   G0uHt1eipZrxTErmSTjADiCxgkFlBz0rP7tI2QYBDfqRNCu2i90nZ/y5P
+   xQsXbgLTJ80R8r1eiFIlrheQnzaQa4EepTHL6uvYK/opIOG+vIpSGKzlR
+   QgNZMzsGOrFp9XpQOMCl41dbIgCgMhM1gfHfNmjCzZ3mLUgtwG4G1PrFs
+   m+8KJo6dN+gxMFwP9uEyX1JiuU3uVHua5MuQ0+tIPgDbf9UvgGlqxTZUc
+   ZG6er/jjNGNEGFVkyyCQ7VQjg3J2ZvzO24EdXKTBHE+JMlGayKAHSmSrM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="291011752"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="291011752"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 01:31:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="539716593"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 01:31:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njd5B-0004Vy-5e;
+        Wed, 27 Apr 2022 08:31:33 +0000
+Date:   Wed, 27 Apr 2022 16:31:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Min Li <min.li.xe@renesas.com>, richardcochran@gmail.com,
+        lee.jones@linaro.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Min Li <min.li.xe@renesas.com>
+Subject: Re: [PATCH net 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
+ support
+Message-ID: <202204271653.N6Y5H0EO-lkp@intel.com>
+References: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
 MIME-Version: 1.0
-References: <20220426081735.651926456@linuxfoundation.org>
-In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 27 Apr 2022 14:00:48 +0530
-Message-ID: <CA+G9fYuYGaQZ-SB9zRwghM+b9_EVVyYKj9cqdam7wMO5=3XZ8w@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/53] 4.19.240-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 13:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.240 release.
-> There are 53 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.240-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Min,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Thank you for the patch! Yet something to improve:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+[auto build test ERROR on net/master]
 
-## Build
-* kernel: 4.19.240-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.19.y
-* git commit: 5e5c9d690926bf43bc1405d163e02768a56c56dc
-* git describe: v4.19.239-54-g5e5c9d690926
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.239-54-g5e5c9d690926
+url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/ptp-ptp_clockmatrix-Add-PTP_CLK_REQ_EXTTS-support/20220427-033506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git acb16b395c3f3d7502443e0c799c2b42df645642
+config: i386-randconfig-a013-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271653.N6Y5H0EO-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/afadc4edd1bf64b40cb61b38dedf67354baeb147
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Min-Li/ptp-ptp_clockmatrix-Add-PTP_CLK_REQ_EXTTS-support/20220427-033506
+        git checkout afadc4edd1bf64b40cb61b38dedf67354baeb147
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-## Test Regressions (compared to v4.19.239)
-No test regressions found.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-## Metric Regressions (compared to v4.19.239)
-No metric regressions found.
+All errors (new ones prefixed by >>):
 
-## Test Fixes (compared to v4.19.239)
-No test fixes found.
+   ld: drivers/ptp/ptp_clockmatrix.o: in function `idtcm_enable_channel':
+>> ptp_clockmatrix.c:(.text+0x2394): undefined reference to `__udivdi3'
+>> ld: ptp_clockmatrix.c:(.text+0x23b0): undefined reference to `__udivdi3'
 
-## Metric Fixes (compared to v4.19.239)
-No metric fixes found.
-
-## Test result summary
-total: 81844, pass: 65248, fail: 1145, skip: 13273, xfail: 2178
-
-## Build Summary
-* arm: 281 total, 275 passed, 6 failed
-* arm64: 39 total, 39 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 27 total, 27 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 38 total, 38 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

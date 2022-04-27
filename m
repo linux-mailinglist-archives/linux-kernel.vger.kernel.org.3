@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892CC511FA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD815120FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiD0SbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S229773AbiD0SgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240155AbiD0SaL (ORCPT
+        with ESMTP id S229765AbiD0SfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:30:11 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248708148E;
-        Wed, 27 Apr 2022 11:21:45 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso1622660otk.10;
-        Wed, 27 Apr 2022 11:21:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qNkqFtfWIpgg7q9nQFPkAJIRdW96mm2Dj66zabaF1FI=;
-        b=yYP1VJgT7NbDUdGL0+pfrE9bOX5p6XvOFxbM9i3+JX8PoCjhaW2DDGKMsBLY82aPsn
-         fHlBoDNpgJhfMavgzSEnjjHhiwmqp7wBDwC8IvYM92St6umU4Ggc1dGJFlngqfPY7HWC
-         a/e6t8VOkKZOkX26oTa5ehVnjMCg9UX/ZKmZ3xTrqV3Amd2mY+Q5m4jHKVtxqaS7JFv0
-         L/iMM2z7Lun7QvYuDjqz7rKR3UpIkVNr8/RFKP0LvD48KVv7S/0dOCZV2oNKWIa5yR3T
-         fMdNEVCN2sm8TngHEAAHnzf9mghRmDu3tdHB9Lq01pcXV61j5z0d7gCj4I5EaeRfX700
-         MluA==
-X-Gm-Message-State: AOAM530f2VliQyHb30YMtB1RYuQlUF3w89Dq9xnZBdUVfVeJXyQN35Yb
-        IIPfUGRAJTTweHVSAG+cGc4CbgiPTQ==
-X-Google-Smtp-Source: ABdhPJyux0Hlm+XzojBSEe9lEgsQs7GAExFCj6tUC8uAd6UyLMkitUemslG49L02pGfQQa/jnCa2BQ==
-X-Received: by 2002:a05:6830:2414:b0:605:4d82:8d93 with SMTP id j20-20020a056830241400b006054d828d93mr10162244ots.130.1651083704278;
-        Wed, 27 Apr 2022 11:21:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e18-20020a9d7312000000b006054dfa7eb6sm6089856otk.78.2022.04.27.11.21.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:21:43 -0700 (PDT)
-Received: (nullmailer pid 402242 invoked by uid 1000);
-        Wed, 27 Apr 2022 18:21:43 -0000
-Date:   Wed, 27 Apr 2022 13:21:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] dt-bindings: dma: pl330: Add power-domains
-Message-ID: <YmmJt29rGZ38w+ie@robh.at.kernel.org>
-References: <20220427064048.86635-1-krzysztof.kozlowski@linaro.org>
+        Wed, 27 Apr 2022 14:35:09 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F52111155;
+        Wed, 27 Apr 2022 11:22:21 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1njmIg-0001kz-B8; Wed, 27 Apr 2022 20:22:06 +0200
+Message-ID: <97fdc9bf-2a33-3ca9-cee8-6e88fd0c5d2c@maciej.szmigiero.name>
+Date:   Wed, 27 Apr 2022 20:21:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427064048.86635-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20220423021411.784383-1-seanjc@google.com>
+ <6991d5b3-0e42-207b-2da3-63dda27e0784@maciej.szmigiero.name>
+Subject: Re: [PATCH v2 00/11] KVM: SVM: Fix soft int/ex re-injection
+In-Reply-To: <6991d5b3-0e42-207b-2da3-63dda27e0784@maciej.szmigiero.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 08:40:48 +0200, Krzysztof Kozlowski wrote:
-> The pl330 DMA controller on Exynos SoC (e.g. dma-controller@3880000 in
-> Exynos5420) belongs to power domain, so allow such property.
+On 26.04.2022 01:01, Maciej S. Szmigiero wrote:
+> On 23.04.2022 04:14, Sean Christopherson wrote:
+>> Fix soft interrupt/exception reinjection on SVM.
+>>
 > 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> Thanks for the patch set Sean, I can't see anything being obviously wrong
+> during a static code review - just small nits.
 > 
+> Will test it practically tomorrow and report the results.
 
-Acked-by: Rob Herring <robh@kernel.org>
+I've tested this patch set and it seems to work fine with respect
+to soft {exception,interrupt} re-injection and next_rip field consistency.
+
+I have prepared a draft of an updated version at [1] with the following
+further changes:
+* "Downgraded" the commit affecting !nrips CPUs to just drop nested SVM
+support for such parts instead of SVM support in general,
+
+* Added a fix for L1/L2 NMI state confusion during L1 -> L2 NMI re-injection,
+
+* Updated the new KVM self-test to also check for the NMI injection
+scenario being fixed (that was found causing issues with a real guest),
+
+* Changed "kvm_inj_virq" trace event "reinjected" field type to bool.
+
+Will post a v3 patch set (with proper SoBs, etc.) if there are no further
+comments or objections.
+
+Thanks,
+Maciej
+
+[1]: https://github.com/maciejsszmigiero/linux/commits/svm_next_rip-sc

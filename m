@@ -2,124 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14860511D9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DBA512079
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239223AbiD0PNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S239307AbiD0PP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239101AbiD0PN2 (ORCPT
+        with ESMTP id S239216AbiD0PP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:13:28 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687FB2D359F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:10:16 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b24so2289033edu.10
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8bcBCHuka1c7eUCHaJJ1Tf0YnngjHSBeBCkk7aucJRc=;
-        b=Bha64TEobiweIEID7s+302mbO83FZsNFeG4G9pC1hn4DLldhg2boTtAWRnZIW4hMUF
-         tEcxiUcYoQYdX1hA3zzB/izxzVa9EYpvkdFybz8Yc5m2SSrZZfsI3qdXkKCDux6UJORd
-         nTkuWxGNRe424v5bdabJpziKRa/X0pZvUGGqY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8bcBCHuka1c7eUCHaJJ1Tf0YnngjHSBeBCkk7aucJRc=;
-        b=gBOqVkiXmTCwL7Zf2rRw6qvn5SgxM6e1xGcwAs09V1myeUdKoonfRhLixyWS8EjJGi
-         Aw4dryytDdmyq611zywWiFFOxey+YVzRU8uD6zi0atDcwZjf8T62Yza5woVKWGPZ1y+k
-         Rl5yRGmnzk0GUcHUd3A+35O+NTLBkYm+EO/ViC5VxpcMx2rbKkt1XUw/ckZkQp2/9BmA
-         mlxUaBRV500z94N7NRWltnMCr0XxPzLtcUQRKeNhsAS/SF1FGS5+c24QykJRqjuhG8vl
-         79c04uPHEJQ6iPbkhIu1iv6tYePi1UkfAG/yU4UWkoUczqSsYlc+Nm3viQYt2Ifi7aHS
-         zb7g==
-X-Gm-Message-State: AOAM531a0YugzbkYz3S8IuZHDQ8OiTOIbnCnBuZLTTECb0T84P5Iq1c1
-        snSvtiUuqLQaD09EsSPypr/Ru2KoAcYqwI8wFB0=
-X-Google-Smtp-Source: ABdhPJxThqzexaXgyUnkYVLks3wan41G2Rko6YdWkI4361+v2rc4joBD8vzM0Tx8o3OQf9u6ENZveA==
-X-Received: by 2002:a05:6402:5c9:b0:420:aac6:257b with SMTP id n9-20020a05640205c900b00420aac6257bmr30714371edx.128.1651072214615;
-        Wed, 27 Apr 2022 08:10:14 -0700 (PDT)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id e19-20020a056402105300b004162d0b4cbbsm8451108edu.93.2022.04.27.08.10.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 08:10:12 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so3625911wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:10:12 -0700 (PDT)
-X-Received: by 2002:a05:600c:502b:b0:38f:f7c6:3609 with SMTP id
- n43-20020a05600c502b00b0038ff7c63609mr26785973wmr.15.1651072211589; Wed, 27
- Apr 2022 08:10:11 -0700 (PDT)
+        Wed, 27 Apr 2022 11:15:57 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E430AEB3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:12:45 -0700 (PDT)
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 23RFCGxH029250
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:12:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 23RFCGxH029250
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651072337;
+        bh=sprTPFBkb1nYd+tUQxE6AKqqHG1iIpxB+xGl18i2D7U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RvlRrV3Y3VSrBcSgLqZhOIGXUkhKx8/dWtaaCfTvEEjGCXdEge0kdep53FPJ548nh
+         q9GI1w5xvTTd+va2wLyb8S/DG8NVgGaYis2/uxQnuvALd4bHg2iY4KNtwNDKGMOGKg
+         Lw2cVSAZJ70kgVmEG4ElkeRxtEgds0v3SKmu1hX7j0VE/nHeql2AB4XbCsD4lZW9nk
+         KPKI9+Eob1gfpgIwkuJdaWfTro3gQ1M8V6XMrbelUSs9iyGZan9Qm6KwJH8aKPXOWD
+         JGCzRN9kH3HtZGl32KgNt9i+Khw3c3LD9+s/2TRvdSTPJX+jyk1mf6Q6AqwgUWhBGW
+         0YDDyM8JGnyMw==
+X-Nifty-SrcIP: [209.85.214.169]
+Received: by mail-pl1-f169.google.com with SMTP id k4so1795591plk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:12:17 -0700 (PDT)
+X-Gm-Message-State: AOAM5318rASTKq4ez5fiC8uXsL05pUGWwV+hp0I8oE6/8KgcN2SMdSlB
+        UxgCTeiXv3ypwP4kGEPRieicxV3YVFDO3gPsfTs=
+X-Google-Smtp-Source: ABdhPJynIT/kz5FbCTzQpfqOdAN87jJfw885KNlMjS5rs5EFVchRgh/7eqAGFG5OYq8+ZpRchnds51zuFvgIu/MGGWg=
+X-Received: by 2002:a17:90a:e517:b0:1d7:5bbd:f9f0 with SMTP id
+ t23-20020a17090ae51700b001d75bbdf9f0mr33040934pjy.77.1651072336140; Wed, 27
+ Apr 2022 08:12:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426225748.324759-1-swboyd@chromium.org> <CAD=FV=WMf0Jc9oD7CGoLthguzt2aV31sZmFoenbjn72MfwFYEA@mail.gmail.com>
-In-Reply-To: <CAD=FV=WMf0Jc9oD7CGoLthguzt2aV31sZmFoenbjn72MfwFYEA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 27 Apr 2022 08:09:59 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wey2P_=3Lp6M8GEaoyCn1XcYFhfJwfx43a5f_8H0obwg@mail.gmail.com>
-Message-ID: <CAD=FV=Wey2P_=3Lp6M8GEaoyCn1XcYFhfJwfx43a5f_8H0obwg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180-trogdor: Remove cros-ec keyboard
- from detachables
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
+References: <20220427090442.2105905-1-gregkh@linuxfoundation.org>
+ <CAK7LNASFK3z8Y=L1Q6uG3YZ2GBffBAASkc4tWfnPF__qeYh3SA@mail.gmail.com> <YmlYRMEzonSnwZ7q@kroah.com>
+In-Reply-To: <YmlYRMEzonSnwZ7q@kroah.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 28 Apr 2022 00:11:13 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT_YdE_nHL=KzXDydrzJ3gxEgTc14RFQfgxm9pjdC0pug@mail.gmail.com>
+Message-ID: <CAK7LNAT_YdE_nHL=KzXDydrzJ3gxEgTc14RFQfgxm9pjdC0pug@mail.gmail.com>
+Subject: Re: [PATCH v2] export: fix string handling of namespace in EXPORT_SYMBOL_NS
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Matthias Maennich <maennich@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 26, 2022 at 5:17 PM Doug Anderson <dianders@chromium.org> wrote:
+On Wed, Apr 27, 2022 at 11:50 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Hi,
->
-> On Tue, Apr 26, 2022 at 3:57 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> On Wed, Apr 27, 2022 at 11:29:19PM +0900, Masahiro Yamada wrote:
+> > On Wed, Apr 27, 2022 at 6:06 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > Commit c3a6cf19e695 ("export: avoid code duplication in
+> > > include/linux/export.h") broke the ability for a defined string to be
+> > > used as a namespace value.
 > >
-> > Trogdor devices that have a detachable keyboard still have a
-> > non-detachable keyboard input device present because we include the
-> > cros-ec-keyboard.dtsi snippet in the top-level sc7180-trogdor.dtsi file
-> > that every variant board includes. We do this because the
-> > keyboard-controller node also provides some buttons like the power
-> > button and volume buttons. Unfortunately, this means we register a
-> > keyboard input device that doesn't do anything on boards with a
-> > detachable keyboard. Let's delete the rows/columns properties of the
-> > device node to indicate that there isn't a matrix keyboard on these
-> > boards.
+> > In hindsight, this was a bad idea.
 > >
-> > Cc: Benson Leung <bleung@chromium.org>
-> > Cc: Guenter Roeck <groeck@chromium.org>
-> > Cc: Douglas Anderson <dianders@chromium.org>
-> > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 5 +++++
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 5 +++++
-> >  2 files changed, 10 insertions(+)
+> >
+> > EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, "SPI_DW_CORE")
+> >
+> >    is much much better than:
+> >
+> > EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, SPI_DW_CORE)
 >
-> Presumably we need to do this same thing for wormdingler [1]
+> I agree, but it's really not that big of a deal.  We could change it if
+> you want.
 >
-> [1] https://lore.kernel.org/r/20220426151204.1.Id2821de5fde55ebe928e8fc87a71c8d535edb383@changeid
+> > ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=USB_STORAGE
+> >
+> > is also a bad idea.
 >
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> That's not such a bad idea as it lets you set a namespace for a
+> directory and below easily.  What would you want to use instead?
 
-Do we need to delay landing this patch for a release? I haven't tested
-myself, but from re-reading through the code it looks as if
-cros_ec_keyb_register_matrix() will return an error code if we have
-the device tree patch _without_ commit 4352e23a7ff2 ("Input:
-cros-ec-keyb - only register keyboard if rows/columns exist"). That
-will cause it to skip registering the buttons/switches, right?
+I like "explicit" better than "implicit".
 
--Doug
+
+With  EXPORT_SYMBOL_GPL(usb_stor_resume);
+you need to check Makefile to know whether it is global
+or is in a specific namespace.
+
+
+
+
+EXPORT_SYMBOL_NS_GPL(usb_stor_resume, "USB_STORAGE");
+will clarify the namespace at a glance.
+
+
+
+
+
+
+> > When you look at EXPORT_SYMBOL_GPL() in C files, you will not be
+> > aware of the presence of the namespace.
+>
+> It's easy to tell when things do not link properly :)
+
+Right, modpost will tell you that once you compile it.
+
+
+>
+> > Anyway, it is presumably too late to fix it.
+>
+> Not really, the number of in-kernel users are still small and can be
+> changed if you like.  External users can update when they hit the change
+> as well, not a big deal.
+>
+> Other than using a string for the namespace definition, what would you
+> like to see done differently?
+
+Nothing else.
+
+(but I am not a big fan of the module namespace itself.)
+
+
+
+>
+> > >  Fix this up by using stringify to properly
+> > > encode the namespace name.
+> > >
+> > > Fixes: c3a6cf19e695 ("export: avoid code duplication in include/linux/export.h")
+> > > Cc: Miroslav Benes <mbenes@suse.cz>
+> > > Cc: Emil Velikov <emil.l.velikov@gmail.com>
+> > > Cc: Jessica Yu <jeyu@kernel.org>
+> > > Cc: Quentin Perret <qperret@google.com>
+> > > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> >
+> > This email is no longer valid.
+>
+> Ah, sorry about that.
+>
+> > Feel free to replace it with
+> >
+> > Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Will do, thanks!
+>
+> greg k-h
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED091511B30
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B746D511B13
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238653AbiD0Ous (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S238563AbiD0Otr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238536AbiD0Oup (ORCPT
+        with ESMTP id S238514AbiD0Oto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:50:45 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8C63BA59;
-        Wed, 27 Apr 2022 07:47:34 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23R8jpda029645;
-        Wed, 27 Apr 2022 07:47:31 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=gsxpG4RiXnCTCF6V9lo/7D//jaoYpWLGlyTjAD+8/qk=;
- b=koGcsTh8SpOBk2r6NfOSKOAo4RsmzmAnH5jn03a2QcYMlA9fxXDUpspTfDNk8qjBIS1T
- MnUSAw/JBmQWKSt9j/0gBs09AIQxjWb96zVW+YqZczWukuwwLY7EmJA8J4uvHBrlbKU1
- yiYozr/5xmBdZP2JIrSTF1oxhDNcv3omS+fTrBctxjZpn0GoaH0Bt8gS5ECuBxeIalwm
- UUkvtKWoBi3gpI0AZYaYTJTvodESnxQcwDJ+sselMYF24CPxQALfX+96SSGP2MNikLJj
- yuxML5Wep0pyJ5Ls4TpBxbUBWJbJBteqUYorrdM8rmKFx3yCg3cqCS3WNL2Ny4fqSZG2 XQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3fprsqu7ca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 07:47:31 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 27 Apr
- 2022 07:47:30 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Wed, 27 Apr 2022 07:47:30 -0700
-Received: from localhost.localdomain (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id ADFAF3F7063;
-        Wed, 27 Apr 2022 07:47:29 -0700 (PDT)
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <rric@kernel.org>,
-        <cchavva@marvell.com>, <wsadowski@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH 5/5] gpio: thunderx: change handler for level interrupt
-Date:   Wed, 27 Apr 2022 07:46:20 -0700
-Message-ID: <20220427144620.9105-6-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220427144620.9105-1-pmalgujar@marvell.com>
-References: <20220427144620.9105-1-pmalgujar@marvell.com>
+        Wed, 27 Apr 2022 10:49:44 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FBE38DA1;
+        Wed, 27 Apr 2022 07:46:30 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a02:3030:0:1e3e:2277:ba57:a2c0:4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 58FD21F40898;
+        Wed, 27 Apr 2022 15:46:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651070788;
+        bh=uPnBJqA7/3gJZoazRFRY0NtvrjeKFWjy3algIjYxiJ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kb/UkQ70CysqS726R9AKoHGmM2vrUsQj4301/n25YMFbnt8gVDogsJWgBYF0P4N+S
+         CtMFfmQJExEjX/w3NGl0Hk+PGJkIsit+NgRt5rKj5/GK19XRjMNpdnuI5UkuNml3m5
+         4CC33j4iQ/ONoUKoQL5rkSz+BaYb2B4p5DCqaDD35NAl3lEaL/LfD5FLmLEIluG5q+
+         vmpzVa6sfhojxQ55yQ6SpRnYAQNH40HC/oJspHik+EFWgywbsiSE+B4JTcUGoLlVTz
+         n5HOzibcc3Rtg/ceBDKRV8PX1Xc/RaW4hDJ88TrzK+nIoPqHCm6IcWM7Arsnk2d1Z5
+         kS4ILsXt1lGTw==
+Date:   Wed, 27 Apr 2022 16:46:24 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jon@nanocrew.net, aford173@gmail.com, kernel@collabora.com
+Subject: Re: [PATCH] media: hantro: HEVC: Fix tile info buffer value
+ computation
+Message-ID: <20220427144624.vtbdlczmykflccut@basti-XPS-13-9310>
+References: <20220427135517.381959-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0uaggkiGNeQvQqwE58ua4JEIRGRBqzNm
-X-Proofpoint-GUID: 0uaggkiGNeQvQqwE58ua4JEIRGRBqzNm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220427135517.381959-1-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current level interrupt handler is masking the GPIO interrupt
-and not unmasking it, to resolve that, handle_level_irq is used.
+Hey Benjamin,
 
-Signed-off-by: Witold Sadowski <wsadowski@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
----
- drivers/gpio/gpio-thunderx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 27.04.2022 15:55, Benjamin Gaignard wrote:
+>Use pps->column_width_minus1[j] + 1 as value for the tile info buffer
+>instead of pps->column_width_minus1[j + 1].
+>The patch fix DBLK_E_VIXS_2, DBLK_F_VIXS_2, DBLK_G_VIXS_2,
 
-diff --git a/drivers/gpio/gpio-thunderx.c b/drivers/gpio/gpio-thunderx.c
-index 87ab1ad7e652347a67b7747ea497b944498a8b41..b1063e53ceb8edf26ca1a6ecab8035aad62128a1 100644
---- a/drivers/gpio/gpio-thunderx.c
-+++ b/drivers/gpio/gpio-thunderx.c
-@@ -343,7 +343,7 @@ static int thunderx_gpio_irq_set_type(struct irq_data *d,
- 		irq_set_handler_locked(d, handle_fasteoi_ack_irq);
- 		bit_cfg |= GPIO_BIT_CFG_INT_TYPE;
- 	} else {
--		irq_set_handler_locked(d, handle_fasteoi_mask_irq);
-+		irq_set_handler_locked(d, handle_level_irq);
- 	}
- 
- 	raw_spin_lock_irqsave(&txgpio->lock, flags);
--- 
-2.17.1
+s/fix/fixes/
 
+Greetings,
+Sebastian
+
+>SAO_B_MediaTek_5, TILES_A_Cisco_2 and TILES_B_Cisco_1 tests in fluster.
+>
+>Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>---
+> drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>index bb512389c1a5..ffeb2fbeefd2 100644
+>--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>@@ -74,7 +74,7 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+> 					no_chroma = 1;
+> 				for (j = 0, tmp_w = 0; j < num_tile_cols - 1; j++) {
+> 					tmp_w += pps->column_width_minus1[j] + 1;
+>-					*p++ = pps->column_width_minus1[j + 1];
+>+					*p++ = pps->column_width_minus1[j] + 1;
+> 					*p++ = h;
+> 					if (i == 0 && h == 1 && ctb_size == 16)
+> 						no_chroma = 1;
+>-- 
+>2.32.0
+>

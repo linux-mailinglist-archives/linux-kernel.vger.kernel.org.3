@@ -2,153 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CC2511797
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03F2511790
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiD0Mfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S234167AbiD0Mf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbiD0Mfl (ORCPT
+        with ESMTP id S234069AbiD0Mfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:35:41 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296C04C42C;
-        Wed, 27 Apr 2022 05:32:29 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id hf18so1000591qtb.0;
-        Wed, 27 Apr 2022 05:32:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wctzDfDylFmLP2RkMiHxbhLA3WY20vXxkJqi8oigFwE=;
-        b=DIa18UYBpi7afZ9y32eMycTmAj7LpAs0ADmQV4lIt6i+8F+XcWYBriZhTxxkNJm9bx
-         pUt6q06/5z8PciFHjdD/ujhbGct4L4is+yDeZh74btgliUJ0qeLX3LZuN/d6zQbXGzVT
-         y91KVGp9MGLhR4voViM4hK74qnvrr5qhL5a40N3LJB3VQ+c4o+lNv6/3a1YpBYN0gF74
-         SoZ/xp8/dnVxS9NJzQmWP2y+tK1kdYVWAUVPQrmbcfBZtEP6l6lhHKE+iuqmxLwUh5FZ
-         y5zDo6BrLJ4tnCMWpoNKkMFVLS3DFyRi35iV1E6WT/QdZUMcUg62Y+zlL7obElQ/Gz2a
-         6vbQ==
-X-Gm-Message-State: AOAM533Chzzz/scVLGY6b38T2WKpIr7q0IYVLdKkrYim3zLiBGcx+Uxs
-        shGvW9opo0IZxagXLebZDA6nQKqwA7aGJg==
-X-Google-Smtp-Source: ABdhPJxkn6pOj+SI3AIPM2hdprWq5NY/NU8IpVTLl2apJuPjeGdQNoTpaAf8CdJtY7nWfJ+gY6R1vg==
-X-Received: by 2002:a05:622a:589:b0:2f3:5971:80c with SMTP id c9-20020a05622a058900b002f35971080cmr17410085qtb.270.1651062748186;
-        Wed, 27 Apr 2022 05:32:28 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id bq37-20020a05620a46a500b0069f67110f37sm3997353qkb.117.2022.04.27.05.32.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 05:32:28 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id j2so3162567ybu.0;
-        Wed, 27 Apr 2022 05:32:27 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
- c4-20020a5b0984000000b0063f8c38676cmr26233812ybq.393.1651062747550; Wed, 27
- Apr 2022 05:32:27 -0700 (PDT)
+        Wed, 27 Apr 2022 08:35:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCD04C7A2;
+        Wed, 27 Apr 2022 05:32:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7B3EB82666;
+        Wed, 27 Apr 2022 12:32:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19409C385A9;
+        Wed, 27 Apr 2022 12:32:35 +0000 (UTC)
+Date:   Wed, 27 Apr 2022 13:32:32 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <Ymk34NsIFqUgfk3b@arm.com>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-6-thunder.leizhen@huawei.com>
+ <YmgzxsrrMlCDYsWp@arm.com>
+ <ee8daaa9-3258-e7e8-e5c4-c51dc9841580@huawei.com>
 MIME-Version: 1.0
-References: <20220413082527.155740-1-jjhiblot@traphandler.com> <20220413082527.155740-3-jjhiblot@traphandler.com>
-In-Reply-To: <20220413082527.155740-3-jjhiblot@traphandler.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Apr 2022 14:32:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXLpuoTiOn7yDwTTnjkqWJ4PXuhdCLiLcOP2uyzyV6==A@mail.gmail.com>
-Message-ID: <CAMuHMdXLpuoTiOn7yDwTTnjkqWJ4PXuhdCLiLcOP2uyzyV6==A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        tzungbi@kernel.org,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee8daaa9-3258-e7e8-e5c4-c51dc9841580@huawei.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Jacques,
+On Wed, Apr 27, 2022 at 02:54:52PM +0800, Leizhen (ThunderTown) wrote:
+> On 2022/4/27 2:02, Catalin Marinas wrote:
+> > On Thu, Apr 14, 2022 at 07:57:16PM +0800, Zhen Lei wrote:
+> >>  /*
+> >>   * reserve_crashkernel() - reserves memory for crash kernel
+> >>   *
+> >>   * This function reserves memory area given in "crashkernel=" kernel command
+> >>   * line parameter. The memory reserved is used by dump capture kernel when
+> >>   * primary kernel is crashing.
+> >> + *
+> >> + * NOTE: Reservation of crashkernel,low is special since its existence
+> >> + * is not independent, need rely on the existence of crashkernel,high.
+> >> + * Here, four cases of crashkernel low memory reservation are summarized:
+> >> + * 1) crashkernel=Y,low is specified explicitly, the size of crashkernel low
+> >> + *    memory takes Y;
+> >> + * 2) crashkernel=,low is not given, while crashkernel=,high is specified,
+> >> + *    take the default crashkernel low memory size;
+> >> + * 3) crashkernel=X is specified, while fallback to get a memory region
+> >> + *    in high memory, take the default crashkernel low memory size;
+> >> + * 4) crashkernel='invalid value',low is specified, failed the whole
+> >> + *    crashkernel reservation and bail out.
+> > 
+> > Following the x86 behaviour made sense when we were tried to get that
+> > code generic. Now that we moved the logic under arch/arm64, we can
+> > diverge a bit. I lost track of the original (v1/v2) proposal but I
+> > wonder whether we still need the fallback to high for crashkernel=Y.
+> 
+> I don't think anyone has raised this demand yet! If it weren't for the
+> fact that crashkernel=X appeared earlier, it would probably have been
+> enough for a combination of crashkernel=X,high and crashkernel=Y,low.
+> 
+> In fact, I also tend not to support "fallback to high for crashkernel=Y".
+> I took over this from Chen Zhou. In the absence of any objection, I had
+> to inherit. Now that you've brought it up, I'm happy to delete it.
+> Supporting this feature complicates the code logic a lot. The point is,
+> it's not fully backwards compatible yet. For example, someone may want
+> crashkernel=3G to report failure, but the the new support make it work.
 
-On Wed, Apr 13, 2022 at 10:25 AM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
-> From: Phil Edworthy <phil.edworthy@renesas.com>
->
-> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
-> very limited timeout capabilities. However, it can reset the device.
-> To do so, the corresponding bits in the SysCtrl RSTEN register need to
-> be enabled. This is not done by this driver.
->
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+BTW, prior to v20, this patch had this line:
 
-Thanks for your patch!
+	crashk_low_res.name = "Crash kernel (low)";
 
-> --- /dev/null
-> +++ b/drivers/watchdog/rzn1_wdt.c
+I can't find it anymore. Do the kexec tools need to distinguish between
+low and high or they can cope with multiple "Crash kernel" entries?
 
-> +static int rzn1_wdt_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct rzn1_watchdog *wdt;
-> +       struct device_node *np = dev->of_node;
-> +       struct clk *clk;
-> +       int ret;
-> +       int irq;
-> +
-> +       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> +       if (!wdt)
-> +               return -ENOMEM;
-> +
-> +       wdt->base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(wdt->base))
-> +               return PTR_ERR(wdt->base);
-> +
-> +       irq = platform_get_irq(pdev, 0);
-> +       if (irq < 0)
-> +               return irq;
-> +
-> +       ret = devm_request_irq(dev, irq, rzn1_wdt_irq, 0,
-> +                              np->name, wdt);
-> +       if (ret) {
-> +               dev_err(dev, "failed to request irq %d\n", irq);
-> +               return ret;
-> +       }
-> +
-> +       clk = devm_clk_get(dev, NULL);
-> +       if (IS_ERR(clk)) {
-> +               dev_err(dev, "failed to get the clock\n");
-> +               return PTR_ERR(clk);
-> +       }
-> +
-> +       ret = clk_prepare_enable(clk);
-> +       if (ret) {
-> +               dev_err(dev, "failed to prepare/enable the clock\n");
-> +               return ret;
-> +       }
-> +
-> +       ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
-> +                                      clk);
-> +       if (ret) {
-> +               dev_err(dev, "failed to register clock unprepare callback\n");
+> > Maybe simpler, no fallbacks:
+> > 
+> > 	crashkernel=Y - keep the current behaviour, ignore high,low
+> > 	crashkernel=Y,high - allocate above ZONE_DMA
+> > 	crashkernel=Y,low - allocate within ZONE_DMA
+> > 
+> > From your proposal, the difference is that the Y,high option won't
+> > have any default ZONE_DMA fallback, one would have to explicitly pass
+> > the Y,low option if needed.
+> 
+> I agree with you. Now we don't need code generic, so there is no need to
+> carry the historical burden of other ARCHs. arm64 does not need to delve
+> into that empirical value(the default size of crash low memory).
+> 
+> > Just a thought, maybe it makes the code simpler. But I'm open to
+> > discussion if there are good arguments for the proposed (x86-like)
+> > behaviour. One argument could be for crashkernel=Y to fall back to high
+> > if distros don't want to bother with high/low settings.
+> 
+> I think distros should take precedence over "crashkernel=Y,high". After all,
+> ZONE_DMA memory is more valuable than high memory.
 
-Please remove this error message.
-devm_add_action_or_reset() only fails when running out of memory,
-in which case the memory allocation core has already printed an
-error message.
+My point is whether an admin configuring the kernel command line needs
+to know the layout of ZONE_DMA etc. to figure out how much to pass in
+high and low. The fallbacks in this case have some value but they also
+complicate the code logic. The 4GB limit does not always make sense
+either for some platforms (RPi4 has a ZONE_DMA limit of 1GB).
 
-> +               return ret;
-> +       }
+I think one could always pass a default command line like:
 
-Gr{oetje,eeting}s,
+	crashkernel=1G,high crashkernel=128M,low
 
-                        Geert
+without much knowledge of the SoC memory layout.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Another option is to only introduce crashkernel=Y,low and, when that is
+passed, crashkernel=Y can go above arm64_dma_phys_limit. We won't need a
+'high' option at all:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+	crashkernel=1G				- all within ZONE_DMA
+	crashkernel=1G crashkernel=128M,low	- 128M in ZONE_DMA
+						  1G above ZONE_DMA
+
+If ZONE_DMA is not present or it extends to the whole RAM, we can ignore
+the 'low' option.
+
+-- 
+Catalin

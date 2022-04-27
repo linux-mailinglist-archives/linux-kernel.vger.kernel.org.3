@@ -2,134 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B90511070
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED76A511074
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357769AbiD0FTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        id S1357807AbiD0FXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 01:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355829AbiD0FS5 (ORCPT
+        with ESMTP id S231946AbiD0FXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:18:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52717369DA
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651036547; x=1682572547;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4k2lqCBsdLB6FDMhkJVMQ/3jFI1YfOs57EnX9zrWiMM=;
-  b=cPrE845ZvSAq70i6lL8SMPLjEYzjnwCGNJD30USdE8sR1MhdzCPvQerr
-   fCles/vLuP4KjU+1xfw+RbZJEg4XYKwP0fJKasmyfMtNzPZkW83C6qail
-   hVUb9zEfyB6IAxF7AVpEwU5Jxdum/VzaRq1pg2QK8cfHtFt/Cou7QN2un
-   olVDFDOOhOqZGIKh+SoYUmM0WFZLjB6NZ0G0b1Q3fb3Kz/eOaCSSu4I/u
-   H/VuzzgdYgO5WtdeLDIDJaS2CBIqBvTFpt51KKaJE3Z0tssDNJcQG3Ez0
-   5o5UjPtlmJTa67u+I2v2ANDWd10OXzzk3DRdm26JSPsannytVH+4aMmkl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265341618"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="265341618"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 22:15:46 -0700
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="730614700"
-Received: from aliang-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.1.170])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 22:15:43 -0700
-Message-ID: <a597c1fffab01e1048421887d5ef7aa2ac01c46e.camel@intel.com>
-Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Date:   Wed, 27 Apr 2022 17:15:41 +1200
-In-Reply-To: <1168a7cc-9e41-ee2d-8b3d-8dbd1ab85609@linux.intel.com>
-References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
-         <1168a7cc-9e41-ee2d-8b3d-8dbd1ab85609@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 27 Apr 2022 01:23:36 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF2118B2E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:20:25 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23R5K1t2034919;
+        Wed, 27 Apr 2022 00:20:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651036801;
+        bh=0AmkD8zt2rETd63AIgsc7SZozKwzmYyr6rHa69mBUwo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=WDW1LPuemF4RxOvKfA71QVBokXZaSt6nhgVC2U/sj4HOtYLS5anc5V2aRarW9GJYN
+         NAHcR2lVVyqI9YuBSSkrGlyYIpW0++dAx+9DaKyFwLIucWhl841Srz/oN3f0ob/U8d
+         pxaTfHjA+ikPYVepyAJDZw7t6rtxIB16LhIYk/i4=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23R5K1DP126433
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 27 Apr 2022 00:20:01 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
+ Apr 2022 00:20:01 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 27 Apr 2022 00:20:01 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23R5K0LO055716;
+        Wed, 27 Apr 2022 00:20:00 -0500
+Date:   Wed, 27 Apr 2022 10:50:00 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Takahiro.Kuwano@infineon.com>
+Subject: Re: [PATCH v4 03/11] mtd: spi-nor: core: Use auto-detection only once
+Message-ID: <20220427052000.xmctvowj4kuc727d@ti.com>
+References: <20220420103427.47867-1-tudor.ambarus@microchip.com>
+ <20220420103427.47867-4-tudor.ambarus@microchip.com>
+ <7f570c32-d0be-97ba-0a1b-9aca93cfbbf1@microchip.com>
+ <20220421131657.d6hm7rltyxcb24wo@ti.com>
+ <6f81d38b-5e4b-eaf7-0466-3c6fe5e84996@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6f81d38b-5e4b-eaf7-0466-3c6fe5e84996@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 12:07 -0700, Sathyanarayanan Kuppuswamy wrote:
-> > Is there any particular reason to use platform driver and support it as a
-> > module?
+On 21/04/22 01:41PM, Tudor.Ambarus@microchip.com wrote:
+> On 4/21/22 16:16, Pratyush Yadav wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > > 
-> > SGX driver uses misc_register() to register /dev/sgx_enclave during boot. 
-> > Looks
-> > it would be simpler.
+> > On 21/04/22 07:18AM, Tudor.Ambarus@microchip.com wrote:
+> >> Hi, Pratyush,
+> >>
+> >> I forgot to remove few checks, would you please remove them when applying?
+> >> See below.
+> >>
+> >> On 4/20/22 13:34, Tudor Ambarus wrote:
+> >>> In case spi_nor_match_name() returned NULL, the auto detection was
+> >>> issued twice. There's no reason to try to detect the same chip twice,
+> >>> do the auto detection only once.
+> >>>
+> >>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> >>> Reviewed-by: Michael Walle <michael@walle.cc>
+> >>> ---
+> >>>  drivers/mtd/spi-nor/core.c | 13 ++++++++-----
+> >>>  1 file changed, 8 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> >>> index b9cc8bbf1f62..b55d922d46dd 100644
+> >>> --- a/drivers/mtd/spi-nor/core.c
+> >>> +++ b/drivers/mtd/spi-nor/core.c
+> >>> @@ -2896,13 +2896,14 @@ static const struct flash_info *spi_nor_get_flash_info(struct spi_nor *nor,
+> >>>  {
+> >>>     const struct flash_info *info = NULL;
+> >>>
+> >>> -   if (name)
+> >>> +   if (name) {
+> >>>             info = spi_nor_match_name(nor, name);
+> >>> +           if (IS_ERR(info))
+> >>> +                   return info;
+> >>
+> >> As Michael suggested spi_nor_match_name() returns NULL or valid entry, so this
+> >> check is not necessary, let's remove them.
+> >>
+> >>> +   }
+> >>>     /* Try to auto-detect if chip name wasn't specified or not found */
+> >>>     if (!info)
+> >>> -           info = spi_nor_read_id(nor);
+> >>> -   if (IS_ERR_OR_NULL(info))
+> >>> -           return ERR_PTR(-ENOENT);
+> >>> +           return spi_nor_read_id(nor);
+> >>>
+> >>>     /*
+> >>>      * If caller has specified name of flash model that can normally be
+> >>> @@ -2994,7 +2995,9 @@ int spi_nor_scan(struct spi_nor *nor, const char *name,
+> >>>             return -ENOMEM;
+> >>>
+> >>>     info = spi_nor_get_flash_info(nor, name);
+> >>> -   if (IS_ERR(info))
+> >>> +   if (!info)
+> >>> +           return -ENOENT;
+> >>
+> >> also according to Michael, this change is not needed as spi_nor_get_flash_info() can't
+> >> return NULL. Here we can keep the code as it was. Let me know if you want me to respin.
+> > 
+> > TBH I don't think a NULL check here hurts much since the behaviour might
+> > change later, and error paths don't get exercised as often. But I have
 > 
-> Main reason is to use a proper device in dma_alloc* APIs.
+> I agree, but at the same time we're introducing checks gratuitously. Since
+> Michael cared about it, it's fine that we removed it. I don't care too much
+> about it.
 > 
-> My initial version only used misc device as you have mentioned. But
-> Hans raised a concern about using proper struct device in dma_alloc*
-> APIs and suggested modifying the driver to use platform device
-> model. You can find relevant discussion here.
+> > made both changes when applying. You can double-check at [0] if you
+> > want.> 
+> > [0] https://github.com/prati0100/linux-0day/commit/67d913746833ee54bf4c661040f3ef13657dffd8
 > 
-> https://lore.kernel.org/all/47d06f45-c1b5-2c8f-d937-3abacbf10321@redhat.com/
+> looks good.
+> 
+> btw: I think this patch
+> https://github.com/prati0100/linux-0day/commit/b45bbff85d49529f8daff83c341a292f6c6492ca
+> may introduce a regression on some atmel chips. Let me try it please.
 
-Thanks for the info.  Sorry I didn't dig review comments for previous version.
+Did you get a chance to try this out? If it works fine, I would like to 
+apply it.
 
-However, after digging more, I am wondering why do you need to use DMA API at
-the first place.
-
-Firstly, for this basic driver to report TDREPORT to userspace, there's no need
-to use any DMA API, nor we need to use shared memory, as we just get the report
-into some buffer (doesn't need to be shared) and copy the report back to
-userspace.  So it doesn't make a lot sense to use platform device here.
-
-Secondly, in terms of GetQuote support, it seems Dave/Andi suggested you can use
-vmalloc()/vmap() and just use set_memory_decrypted() to convert it to shared:
-
-https://lore.kernel.org/all/ce0feeec-a949-35f8-3010-b0d69acbbc2e@linux.intel.com/
-
-I don't see why it cannot work?  Then wouldn't this approach be simpler than
-using DMA API?  Any reason to choose platform device?
-
-Btw, a side topic:
-
-Andy suggested we don't do memory allocation and private-shared conversion at
-IOCTL time as the conversion is expensive:
-
-https://lore.kernel.org/all/06c85c19-e16c-3121-ed47-075cfa779b67@kernel.org/
-
-This is reasonable (and sorry I didn't see this when I commented in v3).
-
-To avoid IOCTL time private-shared conversion, and yet support dynamic Quote
-length, can we do following:
-
-- Allocate a *default* size buffer at driver loading time (i.e. 4 pages), and
-convert to shared.  This default size should cover 99% cases as Intel QGS
-currently generates Quote smaller than 8K, and Intel attestation agent hard-code
-a 4 pages buffer for Quote.
-
-- In GetQuote IOCTL, when the len is larger than default size, we discard the
-original one and allocate a larger buffer.
-
-How does this sound?
-
+> > 
+> >>
+> >>> +   else if (IS_ERR(info))
+> >>>             return PTR_ERR(info);
+> >>>
+> >>>     nor->info = info;
+> >>
+> > 
+> > --
+> > Regards,
+> > Pratyush Yadav
+> > Texas Instruments Inc.
+> 
 
 -- 
-Thanks,
--Kai
-
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

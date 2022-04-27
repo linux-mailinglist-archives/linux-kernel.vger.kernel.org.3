@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69821511D3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29362512033
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242474AbiD0QN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
+        id S241836AbiD0QQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242256AbiD0QMD (ORCPT
+        with ESMTP id S241771AbiD0QNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:12:03 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18953ECC92
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:08:23 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id p18so2497830edr.7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=EH19v7uRS5y35PzgKTDX53x9j+gtyqhUDRdsKb/IaUM=;
-        b=ybse66WgmNsBI29z+NNV6x8EFLgtMxe6qFw8I8vTnLFgoYkWXlVyNDekvdljpmae8Q
-         dWx62rAf7xRwXPxV2X1FxO0/4/DGvPc3zYbb7OBAkhzjuut4c1v1tt7ty/2dghm+TWlj
-         YvTykt8HW80i/plhDgwxbKz2P3lgZwGSamHjUBUgkqlc8X/LxHQQf0tzR7dKt8P8/VNs
-         YSLddjait6XwavUyJTWWmCHCZKqdJQ9hl3Lc5bizgtcR9SM/6pV82NuKUZurRSj2xVa+
-         rUNNtTz4LyQdK8OVzomJzlLjGro0iItms1bu/vXzchVgW0jMPG/NVM0TqpQKodPoJCZM
-         yeAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EH19v7uRS5y35PzgKTDX53x9j+gtyqhUDRdsKb/IaUM=;
-        b=jy5gMYIafcghDfFTqCBQP2THgZdTlOUflYttWc3nfTDkYKDmVN/SrDxqToTA+LfQ+8
-         etPu6Wtj99HQMAWuAfHOAjvwl74OK3c0/5kzbv8/zn0yMoXWkU+/N/gI3MXxw1+44IwW
-         jblQqFz5wF1eUkotJ2KRsqHFD7+4ju04yObFVmK0bzAgBNUUZf3k3lxyEFkjMF3S67Ej
-         4K7Vc5/uJLHi6l3fbWp8cxqVYgoTei/JB5BO4Cir6MbqUXkMRaXP/f8X6YM6vuEhE8cE
-         xDxhjhIrCRiAYxThmYekbEo91StPL/jDgmiuDIWqs1w84uY5Wu+FWuVnr3wgl74dCRnX
-         V/rw==
-X-Gm-Message-State: AOAM533s/bAc750Aqj72s7dGwV8Tg5oFSISTuSfXs4+931t+J+zYqA+c
-        nOA76vZ0eDljIfjbS7mJKQKbXg/H3Kstxw==
-X-Google-Smtp-Source: ABdhPJx/S8bwtVp+agXtCpxr/09KbDVlmln3NcFIhrjgot+hU0xUEJktlvNVH4ZgcBbXYGegOatVTQ==
-X-Received: by 2002:a05:6402:400b:b0:425:f59a:c221 with SMTP id d11-20020a056402400b00b00425f59ac221mr13269412eda.307.1651075652996;
-        Wed, 27 Apr 2022 09:07:32 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e17-20020a170906505100b006f3beab8af8sm2074452ejk.204.2022.04.27.09.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 09:07:32 -0700 (PDT)
-Message-ID: <a8472edd-388c-7bcf-de6a-9924dee6f959@linaro.org>
-Date:   Wed, 27 Apr 2022 18:07:31 +0200
+        Wed, 27 Apr 2022 12:13:15 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483D448387C;
+        Wed, 27 Apr 2022 09:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=hQoXPJPquqTb2kGaaKxCiuhimB4ekAN7xqBn0QNyaIQ=; b=UVxvYoMfT1vstULD4aRMpZehu9
+        RUBZ7/wz2W723JIdfjGXwMMJAI9xgxn7ytl+ozmyWnrvUO6BfKQOT0N6FrUqfmHBROUoWp0VjK3ws
+        aB5ztde2c7VPF4WvEp/UhnVdawFz9KyJ0u54Z0YjnlQOObmCN293Ez7rYgfLvqC5EIr4QcOpIc48p
+        CqA3tFX6S0dg0+AlpjB90XZvdB/UrvEN/FRQBp97GfOoG2kkzTI/ZBjWeDjbDMOU00Mwkaz/UATmh
+        jAdwCqoRiE/6gpFdRRvlqi+2LLpcmu6kuP/+UgzddB3Yl9U2+4j3cKi0wEvIpxkUtJYopy03PJXsU
+        CdQHwv0A==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1njkCl-000K8X-FT; Wed, 27 Apr 2022 10:07:52 -0600
+Message-ID: <fe7f6d8a-8c66-3e90-1c52-140fe9d4cf1a@deltatee.com>
+Date:   Wed, 27 Apr 2022 10:07:48 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 00/0x] dmaengine/ARM: use proper 'dma-channels/requests'
- properties
+ Thunderbird/91.8.0
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220427160538.646044-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220427160538.646044-1-krzysztof.kozlowski@linaro.org>
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20220420195425.34911-1-logang@deltatee.com>
+ <20220420195425.34911-2-logang@deltatee.com>
+ <2a6d5554-4f71-6476-6d14-031da52005f5@linux.dev>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <2a6d5554-4f71-6476-6d14-031da52005f5@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, hch@lst.de
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 01/12] md/raid5: Factor out ahead_of_reshape() function
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 18:05, Krzysztof Kozlowski wrote:
-> Hi,
+
+
+On 2022-04-26 19:28, Guoqing Jiang wrote:
+>>   +static bool ahead_of_reshape(struct mddev *mddev, sector_t sector,
+>> +                 sector_t reshape_sector)
+>> +{
+>> +    if (mddev->reshape_backwards)
+>> +        return sector < reshape_sector;
+>> +    else
+>> +        return sector >= reshape_sector;
+>> +}
 > 
-> The core DT schema defines generic 'dma-channels' and 'dma-requests'
-> properties, so in preparation to moving bindings to DT schema, convert
-> existing users of '#dma-channels' and '#dma-requests' to the generic
-> variant.
-> 
-> Not tested on hardware.
+> I think it can be an inline function.
 
-Sorry for the mess, but I missed here one patch.
+Marking static functions in C files as inline is not recommended. GCC
+will inline it, if it is appropriate.
 
-I will resend.
+https://yarchive.net/comp/linux/inline.html
+https://www.kernel.org/doc/local/inline.html
 
-Best regards,
-Krzysztof
+Logan

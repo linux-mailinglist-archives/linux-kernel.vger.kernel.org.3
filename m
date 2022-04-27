@@ -2,90 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B5B511234
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C83511238
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358717AbiD0HSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S1358683AbiD0HSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358692AbiD0HSi (ORCPT
+        with ESMTP id S242672AbiD0HSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:18:38 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CABB18361;
-        Wed, 27 Apr 2022 00:15:17 -0700 (PDT)
-Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MJVU0-1nPjat3wIS-00JqT6; Wed, 27 Apr 2022 09:15:16 +0200
-Received: by mail-yb1-f180.google.com with SMTP id w17so1715863ybh.9;
-        Wed, 27 Apr 2022 00:15:15 -0700 (PDT)
-X-Gm-Message-State: AOAM533E2K1UKjQFKhxNn/wdImyAEmBaafMaXYWOvCMulOdDVFdC9ijE
-        Zm/D+8CvgAwimat2r9gkZmpVLphVqGAuYeO5QqQ=
-X-Google-Smtp-Source: ABdhPJwaD1kOWmwPG8YXCJoPZvqoD54e+nnssat4O6xYNRUCaG64TDt/4SOl6wpW8DE+BePexx2QnPchQt4gdqTD0N8=
-X-Received: by 2002:a25:c604:0:b0:645:d969:97a7 with SMTP id
- k4-20020a25c604000000b00645d96997a7mr20381066ybf.134.1651043704287; Wed, 27
- Apr 2022 00:15:04 -0700 (PDT)
+        Wed, 27 Apr 2022 03:18:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834B5140D4;
+        Wed, 27 Apr 2022 00:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651043707; x=1682579707;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fXJkbxDf0qd9gW+A5tjOWCA9l6X90L85cXDE1FuuhiU=;
+  b=gjAaRAarpDtX5g4WR3l822MezjoClULZb4FAhfqYXJCGxiOHcXh5T6fQ
+   SYXgCt3lbgbVPJm+BfHDQ/rF3qZxMpeom1pACpx1cp6uEiuWBCO7KRdzT
+   mR0JQIdiwlE+oV9YwRsxIRXCybZGWaF+9HoKaY2tfYH2xdepoWvEbDBdd
+   001RczP97SRiIr1JeVC+P4z7fX5qBXbcAbUs41d7PEI4M4+4/8+luawFN
+   hMBCycXPSJq9K35UjLP+2ZI/c8TCery+ZARftFnW/Aax58XVRu6RifDPO
+   s0jl3h3vteKVIcmYOpRCy4YjFIj3RX2kwBbxkg4NJeivyGDE2wFtOr1LW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328786668"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="328786668"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:15:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="580431679"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:15:05 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcutorture: Fix kmemleak in rcu_test_debug_objects()
+Date:   Wed, 27 Apr 2022 15:15:20 +0800
+Message-Id: <20220427071520.2239030-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-6-glider@google.com>
-In-Reply-To: <20220426164315.625149-6-glider@google.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 27 Apr 2022 09:14:48 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
-Message-ID: <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
-Subject: Re: [PATCH v3 05/46] x86: asm: instrument usercopy in get_user() and __put_user_size()
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:X825Nodsp/CILpTFtsaUc0WqmlMiOdJWzevNH4xFQGBXKufG+O9
- DShGp8pTm7eRlyTooBJO8zwF/De5Wf7IvyAFn0Gog4gPQ0f+3onWS2ZWVKVgf1sP3OD7cjc
- aaGMv0hF/PZbLWkRZ+lSqMbnh+dJqCqfF2O0Zlas+maOkYQrJJO0FBS8VcUi3fAQEkvtJFo
- jetBEutOri6z3WtTCzMPA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:12eyt6cQDXI=:8QIbwNy4LP8WPQWFVHlWHU
- e/YPQYO3s12X/fDA6oxZ3hCKFlp8qR04u+RkK57XAvRjtYAEq517/fuEjA4PCWy1Hwwvl1F6c
- ++XWcZLbnjCh7SXkZ1SJ3iUME/7yBmjptkHCKmJQ+5pepHcGs2eDvI+Cqqaegt2fxRw4XZCHt
- D2vyr62TtToYwOeSUI02/gf859OzVFMs4Az960I4nFiYQrP1DdlePOVR5XFy1QRdRTSU1M7cT
- 0db8mDjL1z8ZStXuQOrYp3JXkTDwzXHC6TnyEQR7krnmLXHANvfvncE3TGk8DocG+3dtovCEZ
- cfIj+mcbeDgsqmS3LeW9VX19CBY5QYrZxbEJWIeL+UyizIEGAPjAOcexTrgVP2Z8NBen2JaDs
- A120nq7iJmfagKAeaATAF414EqqkCHiUlIPFaEdyXPN+F4HL13k+iRfkyw4zf0HGYUI0oQuCR
- 6nuVEiKFHVgXMH41Gq8711UNohSjWfVr853Csiz6D9HW30zTrqMD4p5cCCGAX2/LnpdJE+rT6
- 1ZsVA46LEeQo4k2wIcpvjnkpUqGcxwJLj+Fk+GxkTFrORaFqQJcYes/QsTFO+AcOo3wQBoxEC
- wYGAdehiyGui/UMvXkU5MB55PlzlytpjDsH0XxsRs5me29OsZKqPqxWXOSO7/okvPpiiQtpD+
- b514fgcGooNVehZcW1LGBXB4I+Gz9e4Q8HiunEueeWS72w/ZmmGPLjbiebCsmmDzx+X8Mdz7U
- 0DY8Kb1oboqDlOAtOCtqF8b/fELc0/AgA/QjMacS0u8Lp/ZrFQIyhfcE95l0AwVs7octblUmf
- XjfsqZIGo0NeODzJASPK3SVFrhg6R4kjIloqCIVOOzAHHAvGD0=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,30 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 6:42 PM Alexander Potapenko <glider@google.com> wrote:
-> @@ -99,11 +100,13 @@ extern int __get_user_bad(void);
->         int __ret_gu;                                                   \
->         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
->         __chk_user_ptr(ptr);                                            \
-> +       instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(ptr))); \
->         asm volatile("call __" #fn "_%P4"                               \
->                      : "=a" (__ret_gu), "=r" (__val_gu),                \
->                         ASM_CALL_CONSTRAINT                             \
->                      : "0" (ptr), "i" (sizeof(*(ptr))));                \
->         (x) = (__force __typeof__(*(ptr))) __val_gu;                    \
-> +       instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr)), 0); \
+The kmemleak kthread scan to the following:
 
-Isn't "ptr" the original pointer here? I think what happened with the
-reported warning is that you get one output line for every instance this
-is used in. There should probably be a
+unreferenced object 0xffff95d941135b50 (size 16):
+  comm "swapper/0", pid 1, jiffies 4294667610 (age 1367.451s)
+  hex dump (first 16 bytes):
+    f0 c6 c2 bd d9 95 ff ff 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000bc81d9b1>] kmem_cache_alloc_trace+0x2f6/0x500
+    [<00000000d28be229>] rcu_torture_init+0x1235/0x1354
+    [<0000000032c3acd9>] do_one_initcall+0x51/0x210
+    [<000000003c117727>] kernel_init_freeable+0x205/0x259
+    [<000000003961f965>] kernel_init+0x1a/0x120
+    [<000000001998f890>] ret_from_fork+0x22/0x30
 
-      __auto_type __ptr = (ptr);
+the rhp object is not released after use, so call kfree() to
+release it.
 
-at the beginning of the macro to ensure that 'ptr' is only evaluated once.
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/rcutorture.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->>> arch/x86/kernel/signal.c:360:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned long long [usertype] * @@
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 0885a66f9d76..f3f9f97c3c1f 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -3183,6 +3183,7 @@ static void rcu_test_debug_objects(void)
+ 	pr_alert("%s: WARN: Duplicate call_rcu() test complete.\n", KBUILD_MODNAME);
+ 	destroy_rcu_head_on_stack(&rh1);
+ 	destroy_rcu_head_on_stack(&rh2);
++	kfree(rhp);
+ #else /* #ifdef CONFIG_DEBUG_OBJECTS_RCU_HEAD */
+ 	pr_alert("%s: !CONFIG_DEBUG_OBJECTS_RCU_HEAD, not testing duplicate call_rcu()\n", KBUILD_MODNAME);
+ #endif /* #else #ifdef CONFIG_DEBUG_OBJECTS_RCU_HEAD */
+-- 
+2.25.1
 
-It would also make sense to add the missing __user annotation in this line, but
-I suspect there are others like it in drivers.
-
-      Arnd

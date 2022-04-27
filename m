@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E573E510DF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D551510DFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356729AbiD0BeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S1356735AbiD0Bfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347268AbiD0BeF (ORCPT
+        with ESMTP id S1354729AbiD0Bfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:34:05 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CF02BB35
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id u7so294225plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sCWqajasA7ISIMDWcDl8o7kKYsl9k0UXiOkTS2c8CkA=;
-        b=CgjAmV3+4L5oDF5/Ww+PKMhWwfZTnIeyhNvyibGENxZ1fU+LuOuGhRPMqS23/A+UnL
-         8yD4EvpKtSup8J3Oa3anE+tiHnsreDKDnCmN175zFehTg98rJrfRoQFhcM6VmEidE6Lr
-         TsyHBPX5mG0QFRCUZoXGTn6jtjdtjMJl0+7Mujd7v8wDqRGHKbOH4kgZw9xv2EvoSACx
-         6VjKo6JFKEAM5nNiyO9Yl9wK1dEGP546Hq0YOv+Zxse9y7VUreXfshGcy6lWuDcFo8mF
-         mCEZWgRGWBPpM3pYSZQ+GQ5DwDJodZA7C+pakJx8z/Dp+ID4qO0gMLy/kpLR9i0xy75E
-         8IOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sCWqajasA7ISIMDWcDl8o7kKYsl9k0UXiOkTS2c8CkA=;
-        b=S3dn0ssFVgJ9eJsTPHSB3gID3fYn1gPEag7GvFg+WoN56+qbasWNf5bobKlWYmeoIV
-         zrqDwp1GZg2dKOMlA4o9yAn95S76dRxq6k40EeSlRKk4mjn4sO6UVeXDeyI5x2TBI707
-         HskQOGvTHX7Pn6dYuMfH8qwOLWHkY6MMyiwwyXbriWDK3YQlsVq2kWrlNo1BdE7fKk6D
-         /kXgDzOvxb6t3fKp8XuZmsqyGF3rxLCYbs8UnsujpPNHSP1GgiTz1RzwJYRYh8VAZ+26
-         Zf1U6MVqe8H2o7K4il2HLbysxCo/yW7HKtJqlAmcC4VPy0053vuW+lITy15+7Hb5AB2B
-         04Sg==
-X-Gm-Message-State: AOAM530mMGaKlYSdbVDgEYXmeaZFOONTzpyfrQzZhvYGsYQlnEfI43hR
-        Orq1yjaYRXfRR0KY320nghtLDg==
-X-Google-Smtp-Source: ABdhPJw1q0Fag74CGwko5HHS4Hk4zlk2TrCAQ78XHacUPoQtem1CluOKqzNTZkS5BQBYQuJ8PiRMqw==
-X-Received: by 2002:a17:902:e84a:b0:15c:e28c:5f7c with SMTP id t10-20020a170902e84a00b0015ce28c5f7cmr20698565plg.94.1651023056330;
-        Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y2-20020a056a00190200b004fa865d1fd3sm17211203pfi.86.2022.04.26.18.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 01:30:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before
- lookup_address_in_mm()
-Message-ID: <YmiczBawg5s1z2DN@google.com>
-References: <20220327205803.739336-1-mizhang@google.com>
- <YkHRYY6x1Ewez/g4@google.com>
- <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
- <YkH7KZbamhKpCidK@google.com>
- <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
- <Ymg1lzsYAd6v/vGw@google.com>
- <CAL715WK8-cOJWK+iai=ygdOTzPb-QUvEwa607tVEkmGOu3gyQA@mail.gmail.com>
- <YmiZcZf9YXxMVcfx@google.com>
- <CAL715W+nMyF_f762Qif8ZsiOT8vgxXJ3Rm8EjgG8A=b7iM-cbg@mail.gmail.com>
+        Tue, 26 Apr 2022 21:35:33 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586C946B27;
+        Tue, 26 Apr 2022 18:32:24 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1651023142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DNundTitWrjHN9Al1s781albF2X/onqhV3Sz2DqMeZ8=;
+        b=YRuf7WFtBwyQD9Ur4tUSqUSlzlK+bNkQoYqtV/wA8/auIQOmAgv4i+q8dni/impRbC/NPq
+        Rggz+YEbEShz745x3N5mFgfrEd54UBrXZ+2Df+S551AXmMXVnVWcBk0mSo6HRurKz3EMHO
+        kO2J1mik2kU9GoL2u5QFJC+U3kKpYJQ=
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Subject: Re: [PATCH v2 02/12] md/raid5: Refactor raid5_make_request loop
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+References: <20220420195425.34911-1-logang@deltatee.com>
+ <20220420195425.34911-3-logang@deltatee.com>
+Message-ID: <eb1d70f6-0cfc-20e9-8fb3-84e3076025f7@linux.dev>
+Date:   Wed, 27 Apr 2022 09:32:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL715W+nMyF_f762Qif8ZsiOT8vgxXJ3Rm8EjgG8A=b7iM-cbg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220420195425.34911-3-logang@deltatee.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022, Mingwei Zhang wrote:
-> On Tue, Apr 26, 2022 at 6:16 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Tue, Apr 26, 2022, Mingwei Zhang wrote:
-> > > > I completely agree that lookup_address() and friends are unnecessarily fragile,
-> > > > but I think that attempting to harden them to fix this KVM bug will open a can
-> > > > of worms and end up delaying getting KVM fixed.
-> > >
-> > > So basically, we need to:
-> > >  - choose perf_get_page_size() instead of using any of the
-> > > lookup_address*() in mm.
-> > >  - add a wrapper layer to adapt: 1) irq disabling/enabling and 2) size
-> > > -> level translation.
-> > >
-> > > Agree?
-> >
-> > Drat, I didn't see that it returns the page size, not the level.  That's a bit
-> > unfortunate.  It definitely makes me less averse to fixing lookup_address_in_pgd()
-> >
-> > Hrm.  I guess since we know there's at least one broken user, and in theory
-> > fixing lookup_address_in_pgd() should do no harm to users that don't need protection,
-> > it makes sense to just fix lookup_address_in_pgd() and see if the x86 maintainers
-> > push back.
-> 
-> Yeah, fixing lookup_address_in_pgd() should be cleaner(), since the
-> page fault usage case does not need irq save/restore. But the other
-> one needs it. So, we can easily fix the function with READ_ONCE and
-> lockless staff. But wrapping the function with irq save/restore from
-> the KVM side.
 
-I think it makes sense to do the save/restore in lookup_address_in_pgd().  The
-Those helpers are exported, so odds are good there are broken users that will
-benefit from fixing all paths.
+
+On 4/21/22 3:54 AM, Logan Gunthorpe wrote:
+> Break immediately if raid5_get_active_stripe() returns NULL and deindent
+> the rest of the loop. Annotate this check with an unlikely().
+>
+> This makes the code easier to read and reduces the indentation level.
+>
+> No functional changes intended.
+>
+> Signed-off-by: Logan Gunthorpe<logang@deltatee.com>
+> ---
+>   drivers/md/raid5.c | 109 +++++++++++++++++++++++----------------------
+>   1 file changed, 55 insertions(+), 54 deletions(-)
+>
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 97b23c18402b..cda6857e6207 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -5906,68 +5906,69 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+
+...
+
+> +		if (unlikely(!sh)) {
+> +			/* cannot get stripe, just give-up */
+> +			bi->bi_status = BLK_STS_IOERR;
+> +			break;
+> +		}
+
+
+Nit, I would suggest to keep below original comment.
+
+> -			/* cannot get stripe for read-ahead, just give-up */
+> -			bi->bi_status = BLK_STS_IOERR;
+> -			break;
+
+Anyway. Reviewed-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+
+Thanks,
+Guoqing

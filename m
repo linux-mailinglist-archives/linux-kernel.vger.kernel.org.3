@@ -2,123 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528F0510DF5
+	by mail.lfdr.de (Postfix) with ESMTP id E573E510DF7
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356722AbiD0BdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S1356729AbiD0BeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356720AbiD0BdP (ORCPT
+        with ESMTP id S1347268AbiD0BeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:33:15 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18362DF0;
-        Tue, 26 Apr 2022 18:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=RVBHFqV9TmrZIE98jV3fTbZU85zYa+qeuHeH76mXrhs=; b=bJ4MGg1L1rsKB/Io5rXbq3Sw81
-        6u3PwI405n5V8QKHK7+BDAQ7tPhXjU6qiMaQjZVYJWkqyPQKrIp3vzLG8UOoRVgZAIctDiI0LiXaD
-        06x/nWSJ7zEDd4dUYXhu/6DJS1nABDL2r4art1FNmO2myiMHhcl/epMTB6XWN/PdEpDI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1njWVF-0001z5-3f; Wed, 27 Apr 2022 03:30:01 +0200
-Date:   Wed, 27 Apr 2022 03:30:01 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH] net: dsa: mv88e6xxx: Single chip mode detection for
- MV88E6*41
-Message-ID: <YmicmQEGbAvITaNm@lunn.ch>
-References: <20220424125451.295435-1-nathan@nathanrossi.com>
+        Tue, 26 Apr 2022 21:34:05 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CF02BB35
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id u7so294225plg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sCWqajasA7ISIMDWcDl8o7kKYsl9k0UXiOkTS2c8CkA=;
+        b=CgjAmV3+4L5oDF5/Ww+PKMhWwfZTnIeyhNvyibGENxZ1fU+LuOuGhRPMqS23/A+UnL
+         8yD4EvpKtSup8J3Oa3anE+tiHnsreDKDnCmN175zFehTg98rJrfRoQFhcM6VmEidE6Lr
+         TsyHBPX5mG0QFRCUZoXGTn6jtjdtjMJl0+7Mujd7v8wDqRGHKbOH4kgZw9xv2EvoSACx
+         6VjKo6JFKEAM5nNiyO9Yl9wK1dEGP546Hq0YOv+Zxse9y7VUreXfshGcy6lWuDcFo8mF
+         mCEZWgRGWBPpM3pYSZQ+GQ5DwDJodZA7C+pakJx8z/Dp+ID4qO0gMLy/kpLR9i0xy75E
+         8IOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sCWqajasA7ISIMDWcDl8o7kKYsl9k0UXiOkTS2c8CkA=;
+        b=S3dn0ssFVgJ9eJsTPHSB3gID3fYn1gPEag7GvFg+WoN56+qbasWNf5bobKlWYmeoIV
+         zrqDwp1GZg2dKOMlA4o9yAn95S76dRxq6k40EeSlRKk4mjn4sO6UVeXDeyI5x2TBI707
+         HskQOGvTHX7Pn6dYuMfH8qwOLWHkY6MMyiwwyXbriWDK3YQlsVq2kWrlNo1BdE7fKk6D
+         /kXgDzOvxb6t3fKp8XuZmsqyGF3rxLCYbs8UnsujpPNHSP1GgiTz1RzwJYRYh8VAZ+26
+         Zf1U6MVqe8H2o7K4il2HLbysxCo/yW7HKtJqlAmcC4VPy0053vuW+lITy15+7Hb5AB2B
+         04Sg==
+X-Gm-Message-State: AOAM530mMGaKlYSdbVDgEYXmeaZFOONTzpyfrQzZhvYGsYQlnEfI43hR
+        Orq1yjaYRXfRR0KY320nghtLDg==
+X-Google-Smtp-Source: ABdhPJw1q0Fag74CGwko5HHS4Hk4zlk2TrCAQ78XHacUPoQtem1CluOKqzNTZkS5BQBYQuJ8PiRMqw==
+X-Received: by 2002:a17:902:e84a:b0:15c:e28c:5f7c with SMTP id t10-20020a170902e84a00b0015ce28c5f7cmr20698565plg.94.1651023056330;
+        Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y2-20020a056a00190200b004fa865d1fd3sm17211203pfi.86.2022.04.26.18.30.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 18:30:56 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 01:30:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before
+ lookup_address_in_mm()
+Message-ID: <YmiczBawg5s1z2DN@google.com>
+References: <20220327205803.739336-1-mizhang@google.com>
+ <YkHRYY6x1Ewez/g4@google.com>
+ <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
+ <YkH7KZbamhKpCidK@google.com>
+ <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
+ <Ymg1lzsYAd6v/vGw@google.com>
+ <CAL715WK8-cOJWK+iai=ygdOTzPb-QUvEwa607tVEkmGOu3gyQA@mail.gmail.com>
+ <YmiZcZf9YXxMVcfx@google.com>
+ <CAL715W+nMyF_f762Qif8ZsiOT8vgxXJ3Rm8EjgG8A=b7iM-cbg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220424125451.295435-1-nathan@nathanrossi.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAL715W+nMyF_f762Qif8ZsiOT8vgxXJ3Rm8EjgG8A=b7iM-cbg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:54:51PM +0000, Nathan Rossi wrote:
-> The mv88e6xxx driver expects switches that are configured in single chip
-> addressing mode to have the MDIO address configured as 0. This is due to
-> the switch ADDR pins representing the single chip addressing mode as 0.
-> However depending on the device (e.g. MV88E6*41) the switch does not
-> respond on address 0 or any other address below 16 (the first port
-> address) in single chip addressing mode. This allows for other devices
-> to be on the same shared MDIO bus despite the switch being in single
-> chip addressing mode.
+On Tue, Apr 26, 2022, Mingwei Zhang wrote:
+> On Tue, Apr 26, 2022 at 6:16 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Tue, Apr 26, 2022, Mingwei Zhang wrote:
+> > > > I completely agree that lookup_address() and friends are unnecessarily fragile,
+> > > > but I think that attempting to harden them to fix this KVM bug will open a can
+> > > > of worms and end up delaying getting KVM fixed.
+> > >
+> > > So basically, we need to:
+> > >  - choose perf_get_page_size() instead of using any of the
+> > > lookup_address*() in mm.
+> > >  - add a wrapper layer to adapt: 1) irq disabling/enabling and 2) size
+> > > -> level translation.
+> > >
+> > > Agree?
+> >
+> > Drat, I didn't see that it returns the page size, not the level.  That's a bit
+> > unfortunate.  It definitely makes me less averse to fixing lookup_address_in_pgd()
+> >
+> > Hrm.  I guess since we know there's at least one broken user, and in theory
+> > fixing lookup_address_in_pgd() should do no harm to users that don't need protection,
+> > it makes sense to just fix lookup_address_in_pgd() and see if the x86 maintainers
+> > push back.
 > 
-> When using a switch that works this way it is not possible to configure
-> switch driver as single chip addressing via device tree, along with
-> another MDIO device on the same bus with address 0, as both devices
-> would have the same address of 0 resulting in mdiobus_register_device
-> -EBUSY errors for one of the devices with address 0.
-> 
-> In order to support this configuration the switch node can have its MDIO
-> address configured as 16 (the first address that the device responds
-> to). During initialization the driver will treat this address similar to
-> how address 0 is, however because this address is also a valid
-> multi-chip address (in certain switch models, but not all) the driver
-> will configure the SMI in single chip addressing mode and attempt to
-> detect the switch model. If the device is configured in single chip
-> addressing mode this will succeed and the initialization process can
-> continue. If it fails to detect a valid model this is because the switch
-> model register is not a valid register when in multi-chip mode, it will
-> then fall back to the existing SMI initialization process using the MDIO
-> address as the multi-chip mode address.
-> 
-> This detection method is safe if the device is in either mode because
-> the single chip addressing mode read is a direct SMI/MDIO read operation
-> and has no side effects compared to the SMI writes required for the
-> multi-chip addressing mode.
+> Yeah, fixing lookup_address_in_pgd() should be cleaner(), since the
+> page fault usage case does not need irq save/restore. But the other
+> one needs it. So, we can easily fix the function with READ_ONCE and
+> lockless staff. But wrapping the function with irq save/restore from
+> the KVM side.
 
-Thanks for rewording the commit message. This makes it a lot clearer
-what is going on and how it is fixed.
-
-> @@ -6971,9 +6993,18 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
->  	if (chip->reset)
->  		usleep_range(1000, 2000);
->  
-> -	err = mv88e6xxx_detect(chip);
-> -	if (err)
-> -		goto out;
-> +	/* Detect if the device is configured in single chip addressing mode,
-> +	 * otherwise continue with address specific smi init/detection.
-> +	 */
-> +	if (mv88e6xxx_single_chip_detect(chip, mdiodev)) {
-> +		err = mv88e6xxx_smi_init(chip, mdiodev->bus, mdiodev->addr);
-> +		if (err)
-> +			goto out;
-> +
-
-This is confusing. Then name mv88e6xxx_single_chip_detect() suggests
-it will return true if it detects a single chip device. When it fact
-is return 0 == False if it does find such a device.
-
-So i think this would be better coded as
-
-	err = mv88e6xxx_single_chip_detect(chip, mdiodev);
-	if (err) {
-		err = mv88e6xxx_smi_init(chip, mdiodev->bus, mdiodev->addr);
-		if (err)
-			goto out;
-
-I did however test this code on my 370rd, and it does work. So once we
-get this sorted out, it is good to go.
-
-	Andrew			
+I think it makes sense to do the save/restore in lookup_address_in_pgd().  The
+Those helpers are exported, so odds are good there are broken users that will
+benefit from fixing all paths.

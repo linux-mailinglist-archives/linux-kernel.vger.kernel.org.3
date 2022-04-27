@@ -2,174 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E14511214
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C990E511212
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358615AbiD0HO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S1358623AbiD0HO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242219AbiD0HOY (ORCPT
+        with ESMTP id S1344735AbiD0HO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:14:24 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412D938BC5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:11:14 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id f14so559563qtq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qwksdRpUlSuuWw1pxLBKhXiKlPkBnGHl88zbVVW36PY=;
-        b=bsJROiROPQI0CsqMnAU6Zn7PpVxK7aTUo+iIBZoUNDEIFoqqMoAIb+ro5u2z39wvn+
-         ZpnnaPrlsPavmtXobVUPXO7DinfDMHRXTYhe1D7GPwqq1Iiue7gYtYrfmgyBNzqlFYcQ
-         52iWjNSjM9V9cjATe8QeqZs9VyFE1KaXI7ItMzVouBWAdWHU3FEtLFzMveTBPP2tlmFY
-         VGd+s0jj+Os3pyDguKVysA/u8eytIqIFuM+3iBIKmCfAFAnHRaZ7UtcJmyWRI5ZjofjS
-         /Ge00AoCsaES6hu+sPktSVptY3wMwIRjcZu7WtwtPOvcY7AlqzsOySbXPALHoLlfkjXG
-         VoeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qwksdRpUlSuuWw1pxLBKhXiKlPkBnGHl88zbVVW36PY=;
-        b=2N92Ojwxrkbedzb6LjdOsfneBSz9nMeYUJzbNhXQ91TgOSclAtefYBfsMJhwH2YccP
-         1Z55MCKzV5umzLj3FpduA+sVvvyGGhbqFqeCHthaOMcTpIcdi1La/+fRSn9MooYMqINR
-         lJRDfT1SAy9A3ICSNZ64BfMJ2N3aK5YP2suUi42b0EKGTs6emc7yMf4VzRB9lvSU5SLC
-         Cm8zZ6zC/otRgsxchaqWfQVnVgaszlA1fxVyIAELui/4PqjyxJGZD2dut/yW/g2qrVe8
-         WA7haVkDgc+7iLgJPgqz7308Qz6LT2tUTV6vSIe72HgF6H1WMCYIIqQPkWHAckAeu44F
-         +MJQ==
-X-Gm-Message-State: AOAM532H6sJQ5qog5BahTOUCCoGPBjIti76OYljPx+kNm6hysDc0qZoX
-        mT5o4knVvmYNAj9wkDZuPCs=
-X-Google-Smtp-Source: ABdhPJxMpMlJ7xIUpezGsO2arZ+rxxRuzF/61noOP3FbtioWh6NWIyWd83VIO3CWtZOF3/zVxLlemw==
-X-Received: by 2002:a05:622a:58e:b0:2f3:81c7:cc59 with SMTP id c14-20020a05622a058e00b002f381c7cc59mr2565899qtb.614.1651043473412;
-        Wed, 27 Apr 2022 00:11:13 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y13-20020a05622a164d00b002f1ff52c518sm9238002qtj.28.2022.04.27.00.11.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 00:11:12 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     glider@google.com, elver@google.com, akpm@linux-foundation.org
-Cc:     dvyukov@google.com, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        xu xin <xu.xin16@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] mm/kfence: fix a potential NULL pointer dereference
-Date:   Wed, 27 Apr 2022 07:11:00 +0000
-Message-Id: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 27 Apr 2022 03:14:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380EF38DB2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651043476; x=1682579476;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8duyb/+ssT9ps9wnLY94ZdGxDfZW/9By36wLbrcDEcg=;
+  b=BLykOcU+5lq8qAqx6IP/RiJybVTuogtboFBbhYHpnyEpm7TgoOkvYAlv
+   l2Xg1JEhgR5ufJovRFHqoN5wGStvGeNT8i5f58seRhLjSKrPnbGAeaxUm
+   ie9H6AkSrzivTIno+AKtDrnFyO/H5DeWdqFHI+/iUtEr9y0f9cHJ/WA8h
+   jUvkccu/N1YrDKmogy9XJ5b6MmxmtiXi0u/+AXcsDVA+c0gN3nRs9dnwb
+   YqQBcBAWcBPcG6Wi+HWISR07Nj5RR94Afjie2EP8SqqGlTDseoK6BAtJt
+   C+IrRhyv29CAznv6ZrI6ayMh+wwbmY8xxhN9CwHYOBE1uFv6223hoQbLf
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="266003848"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="266003848"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:11:15 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="730662992"
+Received: from kang1-mobl1.ccr.corp.intel.com ([10.254.212.35])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:11:11 -0700
+Message-ID: <a1b875913df743355e1ff3752c0eb7ddf74bae91.camel@intel.com>
+Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
+ N_DEMOTION_TARGETS
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Greg Thelen <gthelen@google.com>,
+        MichalHocko <mhocko@kernel.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Tim C Chen <tim.c.chen@intel.com>
+Date:   Wed, 27 Apr 2022 15:11:08 +0800
+In-Reply-To: <CAAPL-u94H9FLjVtYLhi_A2AqLTOCTMRh6=Sx9cX8A3WGNM-OdA@mail.gmail.com>
+References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
+         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
+         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
+         <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
+         <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
+         <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
+         <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
+         <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
+         <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
+         <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
+         <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+         <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
+         <CAAPL-u94H9FLjVtYLhi_A2AqLTOCTMRh6=Sx9cX8A3WGNM-OdA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On Mon, 2022-04-25 at 09:56 -0700, Wei Xu wrote:
+> On Sat, Apr 23, 2022 at 8:02 PM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > Hi, All,
+> > 
+> > On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
+> > 
+> > [snip]
+> > 
+> > > I think it is necessary to either have per node demotion targets
+> > > configuration or the user space interface supported by this patch
+> > > series. As we don't have clear consensus on how the user interface
+> > > should look like, we can defer the per node demotion target set
+> > > interface to future until the real need arises.
+> > > 
+> > > Current patch series sets N_DEMOTION_TARGET from dax device kmem
+> > > driver, it may be possible that some memory node desired as demotion
+> > > target is not detected in the system from dax-device kmem probe path.
+> > > 
+> > > It is also possible that some of the dax-devices are not preferred as
+> > > demotion target e.g. HBM, for such devices, node shouldn't be set to
+> > > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
+> > > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
+> > > kernel, but for now this user space interface will be useful to avoid
+> > > such devices as demotion targets.
+> > > 
+> > > We can add read only interface to view per node demotion targets
+> > > from /sys/devices/system/node/nodeX/demotion_targets, remove
+> > > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
+> > > make /sys/devices/system/node/demotion_targets writable.
+> > > 
+> > > Huang, Wei, Yang,
+> > > What do you suggest?
+> > 
+> > We cannot remove a kernel ABI in practice.  So we need to make it right
+> > at the first time.  Let's try to collect some information for the kernel
+> > ABI definitation.
+> > 
+> > The below is just a starting point, please add your requirements.
+> > 
+> > 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
+> > want to use that as the demotion targets.  But I don't think this is a
+> > issue in practice for now, because demote-in-reclaim is disabled by
+> > default.
+> > 
+> > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
+> > 
+> > Node 0 & 2 are cpu + dram nodes and node 1 are slow
+> > memory node near node 0,
+> > 
+> > available: 3 nodes (0-2)
+> > node 0 cpus: 0 1
+> > node 0 size: n MB
+> > node 0 free: n MB
+> > node 1 cpus:
+> > node 1 size: n MB
+> > node 1 free: n MB
+> > node 2 cpus: 2 3
+> > node 2 size: n MB
+> > node 2 free: n MB
+> > node distances:
+> > node   0   1   2
+> >   0:  10  40  20
+> >   1:  40  10  80
+> >   2:  20  80  10
+> > 
+> > We have 2 choices,
+> > 
+> > a)
+> > node    demotion targets
+> > 0       1
+> > 2       1
+> > 
+> > b)
+> > node    demotion targets
+> > 0       1
+> > 2       X
+> > 
+> > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
+> > traffic.  Both are OK as defualt configuration.  But some users may
+> > prefer the other one.  So we need a user space ABI to override the
+> > default configuration.
+> 
+> I think 2(a) should be the system-wide configuration and 2(b) can be
+> achieved with NUMA mempolicy (which needs to be added to demotion).
 
-In __kfence_free(), the returned 'meta' from addr_to_metadata()
-might be NULL just as the implementation of addr_to_metadata()
-shows.
+Unfortunately, some NUMA mempolicy information isn't available at
+demotion time, for example, mempolicy enforced via set_mempolicy() is
+for thread. But I think that cpusets can work for demotion.
 
-Let's add a check of the pointer 'meta' to avoid NULL pointer
-dereference. The patch brings three changes:
+> In general, we can view the demotion order in a way similar to
+> allocation fallback order (after all, if we don't demote or demotion
+> lags behind, the allocations will go to these demotion target nodes
+> according to the allocation fallback order anyway).  If we initialize
+> the demotion order in that way (i.e. every node can demote to any node
+> in the next tier, and the priority of the target nodes is sorted for
+> each source node), we don't need per-node demotion order override from
+> the userspace.  What we need is to specify what nodes should be in
+> each tier and support NUMA mempolicy in demotion.
 
-1. Add checks in both kfence_free() and __kfence_free();
-2. kfence_free is not inline function any longer and new inline
-   function '__try_free_kfence_meta' is introduced.
-3. The check of is_kfence_address() is not required for
-__kfence_free() now because __kfence_free has done the check in
-addr_to_metadata();
+This sounds interesting. Tier sounds like a natural and general concept
+for these memory types. It's attracting to use it for user space
+interface too. For example, we may use that for mem_cgroup limits of a
+specific memory type (tier).
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- include/linux/kfence.h | 10 ++--------
- mm/kfence/core.c       | 30 +++++++++++++++++++++++++++---
- 2 files changed, 29 insertions(+), 11 deletions(-)
+And if we take a look at the N_DEMOTION_TARGETS again from the "tier"
+point of view. The nodes are divided to 2 classes via
+N_DEMOTION_TARGETS.
 
-diff --git a/include/linux/kfence.h b/include/linux/kfence.h
-index 726857a4b680..fbf6391ab53c 100644
---- a/include/linux/kfence.h
-+++ b/include/linux/kfence.h
-@@ -160,7 +160,7 @@ void *kfence_object_start(const void *addr);
-  * __kfence_free() - release a KFENCE heap object to KFENCE pool
-  * @addr: object to be freed
-  *
-- * Requires: is_kfence_address(addr)
-+ * Requires: is_kfence_address(addr), but now it's unnecessary
-  *
-  * Release a KFENCE object and mark it as freed.
-  */
-@@ -179,13 +179,7 @@ void __kfence_free(void *addr);
-  * allocator's free codepath. The allocator must check the return value to
-  * determine if it was a KFENCE object or not.
-  */
--static __always_inline __must_check bool kfence_free(void *addr)
--{
--	if (!is_kfence_address(addr))
--		return false;
--	__kfence_free(addr);
--	return true;
--}
-+bool __must_check kfence_free(void *addr);
- 
- /**
-  * kfence_handle_page_fault() - perform page fault handling for KFENCE pages
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 6e69986c3f0d..1405585369b3 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -1048,10 +1048,10 @@ void *kfence_object_start(const void *addr)
- 	return meta ? (void *)meta->addr : NULL;
- }
- 
--void __kfence_free(void *addr)
--{
--	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
- 
-+/* Require: meta is not NULL*/
-+static __always_inline void __try_free_kfence_meta(struct kfence_metadata *meta)
-+{
- #ifdef CONFIG_MEMCG
- 	KFENCE_WARN_ON(meta->objcg);
- #endif
-@@ -1067,6 +1067,30 @@ void __kfence_free(void *addr)
- 		kfence_guarded_free(addr, meta, false);
- }
- 
-+void __kfence_free(void *addr)
-+{
-+	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
-+
-+	if (!meta) {
-+		kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
-+		return;
-+	}
-+
-+	__try_free_kfence_meta(meta);
-+}
-+
-+bool __must_check kfence_free(void *addr)
-+{
-+	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
-+
-+	if (!meta)
-+		return false;
-+
-+	__try_free_kfence_meta(meta);
-+
-+	return true;
-+}
-+
- bool kfence_handle_page_fault(unsigned long addr, bool is_write, struct pt_regs *regs)
- {
- 	const int page_index = (addr - (unsigned long)__kfence_pool) / PAGE_SIZE;
--- 
-2.25.1
+- The nodes without N_DEMOTION_TARGETS are top tier (or tier 0).
+
+- The nodes with N_DEMOTION_TARGETS are non-top tier (or tier 1, 2, 3,
+...)
+
+So, another possibility is to fit N_DEMOTION_TARGETS and its overriding
+into "tier" concept too.  !N_DEMOTION_TARGETS == TIER0.
+
+- All nodes start with TIER0
+
+- TIER0 can be cleared for some nodes via e.g. kmem driver
+
+TIER0 node list can be read or overriden by the user space via the
+following interface,
+
+  /sys/devices/system/node/tier0
+
+In the future, if we want to customize more tiers, we can add tier1,
+tier2, tier3, .....  For now, we can add just tier0.  That is, the
+interface is extensible in the future compared with
+.../node/demote_targets.
+
+This isn't as flexible as the writable per-node demotion targets.  But
+it may be enough for most requirements?
+
+Best Regards,
+Huang, Ying
+
+> Cross-socket demotion should not be too big a problem in practice
+> because we can optimize the code to do the demotion from the local CPU
+> node (i.e. local writes to the target node and remote read from the
+> source node).  The bigger issue is cross-socket memory access onto the
+> demoted pages from the applications, which is why NUMA mempolicy is
+> important here.
+> 
+> > 3. For machines with HBM (High Bandwidth Memory), as in
+> > 
+> > https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
+> > 
+> > > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
+> > 
+> > Although HBM has better performance than DDR, in ACPI SLIT, their
+> > distance to CPU is longer.  We need to provide a way to fix this.  The
+> > user space ABI is one way.  The desired result will be to use local DDR
+> > as demotion targets of local HBM.
+> > 
+> > Best Regards,
+> > Huang, Ying
+> > 
+
 

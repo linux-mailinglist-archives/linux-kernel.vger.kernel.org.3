@@ -2,97 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E423512156
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E70551215C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiD0Spd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S229575AbiD0SqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiD0SpO (ORCPT
+        with ESMTP id S229655AbiD0SqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:45:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D88F8E66
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:25:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E81E061EE0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D7CBC385A7;
-        Wed, 27 Apr 2022 18:25:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651083946;
-        bh=J1tEIozWZnbnL5BsEMprNg/cVkWZ2TvAXMo0cddyvWM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gvBSPqJTVy+MfmT0rjfw2FSyXvfzYoHc4C+O+9aFHpslDpJU0gE8cHRkoJ2axig2D
-         /gLQvrjxshIF3YkdN68KWX4zSo7BCAoU3qAYbYa1h+S7bDh7q/cBl/KwCaBdMG6HJm
-         CCzq9RPL0keGAhgX4L/Ys0JHmMBiThWiipcGARgE=
-Date:   Wed, 27 Apr 2022 11:25:45 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 2/4] mm: ioremap: Add arch_ioremap/iounmap_check()
-Message-Id: <20220427112545.3b8b9c46e5e5731b02394ace@linux-foundation.org>
-In-Reply-To: <CAK8P3a1E1vP-vS=-aH-XP=5taSTy8EUTfNSpQk9x47WLRMCOzQ@mail.gmail.com>
-References: <20220427121413.168468-1-wangkefeng.wang@huawei.com>
-        <20220427121413.168468-3-wangkefeng.wang@huawei.com>
-        <CAK8P3a1E1vP-vS=-aH-XP=5taSTy8EUTfNSpQk9x47WLRMCOzQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 14:46:03 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A013B7B57E;
+        Wed, 27 Apr 2022 11:26:59 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-e67799d278so2828222fac.11;
+        Wed, 27 Apr 2022 11:26:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pC1H3gQSVhE1zYfEMXMiP8EV077iw37StdCg5LtTNPQ=;
+        b=asjecNBysgBbyXrvRuZuN0eh6bLxpfNP8k4qOZTdAmYCK1zIVPx77Qur7arRXvNpvr
+         5Cy1P48QzfSpLw1/Yq3yZtGpAmJd4gxYx77lLJx7hn+37k8y8JwKEKHWOi0JxTkB6Bhp
+         Bb4TRkjEvo1Xc4Hk/hndK3tKXuk87lGSnf/vbj/Vjbgi0lnU/B1LT4Zuu7ODYboZPuqH
+         HnRxNcRzK4LbkhrXXEzrGGh+XKZpQcZSNbJnkbaURMBik1339QoAiTLGmp3dhNaHy2c8
+         vL75BtWUuOLCGRzpedXA1wCphkpv4u+h8JmalaMImBttAaR4deI1AOhYcME5GLqZUa3C
+         ZQTA==
+X-Gm-Message-State: AOAM530wJF5MFDyA00A7ubY1yhABeO6upnHeCNO5/8qkKWHqj0jHAARs
+        u4r5u0mzr8RIBf+ROAV3rQ==
+X-Google-Smtp-Source: ABdhPJwe9vcxst1opjE36JoQI7jrSaQ3NCspkzUQRETmCJRLZa/X7qNkafHyk3LSObIvXrACyBOKNw==
+X-Received: by 2002:a05:6870:478f:b0:e9:8c5c:3c37 with SMTP id c15-20020a056870478f00b000e98c5c3c37mr1395124oaq.217.1651084018882;
+        Wed, 27 Apr 2022 11:26:58 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm6051090otu.30.2022.04.27.11.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 11:26:58 -0700 (PDT)
+Received: (nullmailer pid 410278 invoked by uid 1000);
+        Wed, 27 Apr 2022 18:26:57 -0000
+Date:   Wed, 27 Apr 2022 13:26:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: dmaengine: sprd: deprecate
+ '#dma-channels'
+Message-ID: <YmmK8WMGI6J1IRQ/@robh.at.kernel.org>
+References: <20220427161423.647534-1-krzysztof.kozlowski@linaro.org>
+ <20220427161423.647534-2-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427161423.647534-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 20:20:30 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
-
-> On Wed, Apr 27, 2022 at 2:14 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> > @@ -964,6 +964,9 @@ static inline void iounmap(volatile void __iomem *addr)
-> >  #elif defined(CONFIG_GENERIC_IOREMAP)
-> >  #include <linux/pgtable.h>
-> >
-> > +bool arch_ioremap_check(phys_addr_t addr, size_t size, unsigned long prot);
-> > +bool arch_iounmap_check(void __iomem *addr);
-> > +
-> >  void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
-> >  void iounmap(volatile void __iomem *addr);
-> >
-> > diff --git a/mm/ioremap.c b/mm/ioremap.c
-> > index 522ef899c35f..d1117005dcc7 100644
-> > --- a/mm/ioremap.c
-> > +++ b/mm/ioremap.c
-> > @@ -11,6 +11,16 @@
-> >  #include <linux/io.h>
-> >  #include <linux/export.h>
-> >
-> > +bool __weak arch_ioremap_check(phys_addr_t addr, size_t size, unsigned long prot)
-> > +{
-> > +       return true;
-> > +}
-> > +
-> > +bool __weak arch_iounmap_check(void __iomem *addr)
-> > +{
-> > +       return true;
-> > +}
-> > +
+On Wed, 27 Apr 2022 18:14:21 +0200, Krzysztof Kozlowski wrote:
+> The generic property, used in most of the drivers and defined in generic
+> dma-common DT bindings, is 'dma-channels'.
 > 
-> I don't really like the weak functions.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/dma/sprd-dma.txt | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
 
-How come?  They work quite nicely here?
-
-> The normal way to do this
-
-Is a lot more fuss.
+Reviewed-by: Rob Herring <robh@kernel.org>

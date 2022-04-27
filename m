@@ -2,173 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF905124D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790015124E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237599AbiD0V72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S237821AbiD0WBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234882AbiD0V70 (ORCPT
+        with ESMTP id S237763AbiD0WBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:59:26 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2511138
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651096572; x=1682632572;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ndxlCJcsWNsxefRwlgceKJ0VvE3NnTsnasUGPtb8I/A=;
-  b=ZJTOTDv+2TX7VHW6xB+oftVcXxiLh/pMny0mZR+lj+hIQuMMVcunp/CZ
-   Kq85W/DBPIdWKmEeT0lou8NhP5jlUHtsMFOMzaKSf8LUAsQlsbJ2M1swF
-   n9HBUPRkpz0BQmE0idBPsGVmzw6p/3jtz/6pumML6AR0mLuKparpQC+Zw
-   WvNm/uajUslsCheTlLja/+g0Yt8BrS3t3ztS4IL/lGrP2f/beX7y6EBfI
-   PRr+7mhuiSbSgeEl5WwK3XCjWx3j2yCwzjkIeoDsuLB5bhfaF7SAWH5NL
-   MwzLv5HU+ufjluF+SvcAlAnC/RfdUKzvkOa7tS7CEhR6cm0soXOznwSzj
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,294,1643644800"; 
-   d="scan'208";a="197838683"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Apr 2022 05:56:11 +0800
-IronPort-SDR: e2MCKyc0Bfsi34lJ5+nAodCxusbv+ecOG7fJVmzZcWrDIukAWY//TNUaRyjESMIGxSdeKhm/b7
- rVBw+haZu2Vk2aFdrDcDFkvjBtzmPWFx5NrUQidnPkDJV2nE+XJx6qzNMgUr2hrWgqCrOe/QK6
- OE1q6jhZVMYIHuQPjHuEigaJo0/Gt02+AMigTqpvRdbHsQ2w6Md+mNYxZcxuBKkVSsDl6fsBHH
- h+pTyD2CHzKxnpgfxpiSThlYut6JLiYLHN6GqLjqeQSK0v41mJYWlPGUz0zye75wRk5ClmEgw7
- VQ4QMOuFhE0zQM81rZcsqiWL
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 14:27:03 -0700
-IronPort-SDR: 4xt9UeOVjW8bGrei9l8YUFBLuypmeNiP63iZI1xRmBdNyBdp20dagHFHtCXZWwgzE42xVKNqR8
- LldHsQxMWlsqiFkWgsqlcEz+vTEaSZNoSKou9Bzr/j1vaG+lnk2KedXTlwJsx0XYhC34YhCyA/
- H1YgqIIUeYXUTVMgLNI0/Fcfgp4o/S/WjJ1cPI94enWwgMwI4ciJLUN2MS4GA0HRwuR4MLA5W0
- n07CRYCgqdTxCbKvcmlVLUeASsKIuiDb2loEuhnnX7AADrshlgb5kuu1yfJqlA8kigNOt5rLu7
- SrU=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 14:56:12 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KpXd65BZsz1Rwrw
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:56:10 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651096569; x=1653688570; bh=ndxlCJcsWNsxefRwlgceKJ0VvE3NnTsnasU
-        GPtb8I/A=; b=e3SQWIC7isONhMVABcQXbRoKsYP01AGBbkTTjAVX/tATNA9akqV
-        o0SzlNWttcnvWNegaIDqsgtVaRN7EVxQ3KYkcm+l9jYgyZmBuBYBE4JaxLs2gHlp
-        W1W8Mvuy7yp4sC9d1mSOqpu2vkVNAa4MzcfMRY1QziIs9+dyJcsECcIpZDlx7FnA
-        sLmbmraKN3ndEuoI8banOkqH+BI0AIeOKJ0Jrr31eP4b5BaP469/vPWfa5e+E+C4
-        3D/ZgYZzzLxhG1LuI1msi7Jn0cK1sHIIimzpgNd8UB6ilKxM3M2xEHUkmkK7FsyN
-        iTtpZ7+j79y0W+8DaWFHsJGQlJCaD693HFw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vMIHHrdYSV4R for <linux-kernel@vger.kernel.org>;
-        Wed, 27 Apr 2022 14:56:09 -0700 (PDT)
-Received: from [10.225.163.27] (unknown [10.225.163.27])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KpXd44RlGz1Rvlc;
-        Wed, 27 Apr 2022 14:56:08 -0700 (PDT)
-Message-ID: <3f80a126-e52a-955b-aca4-14218d26faf5@opensource.wdc.com>
-Date:   Thu, 28 Apr 2022 06:56:07 +0900
+        Wed, 27 Apr 2022 18:01:05 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762ED21A1;
+        Wed, 27 Apr 2022 14:57:51 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:57788)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njpfP-0010l2-WF; Wed, 27 Apr 2022 15:57:48 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35986 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njpfO-00BQOO-4X; Wed, 27 Apr 2022 15:57:47 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <20220427155335.GH17421@redhat.com>
+Date:   Wed, 27 Apr 2022 16:57:39 -0500
+In-Reply-To: <20220427155335.GH17421@redhat.com> (Oleg Nesterov's message of
+        "Wed, 27 Apr 2022 17:53:37 +0200")
+Message-ID: <87sfpy42b0.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 00/10] Add Copy offload support
-Content-Language: en-US
-To:     Nitesh Shetty <nj.shetty@samsung.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
- <20220426101241.30100-1-nj.shetty@samsung.com>
- <c02f67e1-2f76-7e52-8478-78e28b96b6a1@opensource.wdc.com>
- <20220427153826.GE9558@test-zns>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220427153826.GE9558@test-zns>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1njpfO-00BQOO-4X;;;mid=<87sfpy42b0.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX181KTp4kKYFA1nut2sJgRrZ1wCAbW/YUAA=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1330 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 12 (0.9%), b_tie_ro: 10 (0.8%), parse: 1.05
+        (0.1%), extract_message_metadata: 3.3 (0.2%), get_uri_detail_list:
+        1.00 (0.1%), tests_pri_-1000: 4.1 (0.3%), tests_pri_-950: 1.35 (0.1%),
+        tests_pri_-900: 1.09 (0.1%), tests_pri_-90: 87 (6.6%), check_bayes: 86
+        (6.4%), b_tokenize: 6 (0.4%), b_tok_get_all: 5 (0.4%), b_comp_prob:
+        2.0 (0.2%), b_tok_touch_all: 69 (5.2%), b_finish: 1.04 (0.1%),
+        tests_pri_0: 1195 (89.9%), check_dkim_signature: 0.56 (0.0%),
+        check_dkim_adsp: 2.9 (0.2%), poll_dns_idle: 1.07 (0.1%), tests_pri_10:
+        3.1 (0.2%), tests_pri_500: 12 (0.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 00:38, Nitesh Shetty wrote:
-> On Wed, Apr 27, 2022 at 10:46:32AM +0900, Damien Le Moal wrote:
->> On 4/26/22 19:12, Nitesh Shetty wrote:
->>> The patch series covers the points discussed in November 2021 virtual=
- call
->>> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
->>> We have covered the Initial agreed requirements in this patchset.
->>> Patchset borrows Mikulas's token based approach for 2 bdev
->>> implementation.
->>>
->>> Overall series supports =E2=80=93
->>>
->>> 1. Driver
->>> - NVMe Copy command (single NS), including support in nvme-target (fo=
-r
->>>     block and file backend)
->>>
->>> 2. Block layer
->>> - Block-generic copy (REQ_COPY flag), with interface accommodating
->>>     two block-devs, and multi-source/destination interface
->>> - Emulation, when offload is natively absent
->>> - dm-linear support (for cases not requiring split)
->>>
->>> 3. User-interface
->>> - new ioctl
->>> - copy_file_range for zonefs
->>>
->>> 4. In-kernel user
->>> - dm-kcopyd
->>> - copy_file_range in zonefs
->>>
->>> For zonefs copy_file_range - Seems we cannot levearge fstest here. Li=
-mited
->>> testing is done at this point using a custom application for unit tes=
-ting.
->>
->> https://protect2.fireeye.com/v1/url?k=3Db14bf8e1-d0361099-b14a73ae-74f=
-e485fffb1-9bd9bbb269af18f9&q=3D1&e=3Db9714c29-ea22-4fa5-8a2a-eeb42ca4bdc1=
-&u=3Dhttps%3A%2F%2Fgithub.com%2Fwesterndigitalcorporation%2Fzonefs-tools
->>
->> ./configure --with-tests
->> make
->> sudo make install
->>
->> Then run tests/zonefs-tests.sh
->>
->> Adding test case is simple. Just add script files under tests/scripts
->>
->> I just realized that the README file of this project is not documentin=
-g
->> this. I will update it.
->>
->=20
-> Thank you. We will try to use this.
-> Any plans to integrate this testsuite with fstests(xfstest) ?
+Oleg Nesterov <oleg@redhat.com> writes:
 
-No. It is not a good fit since zonefs cannot pass most of the generic tes=
-t
-cases.
+> On 04/21, Peter Zijlstra wrote:
+>>
+>> @@ -1329,8 +1337,7 @@ SYSCALL_DEFINE4(ptrace, long, request, l
+>>  		goto out_put_task_struct;
+>>  
+>>  	ret = arch_ptrace(child, request, addr, data);
+>> -	if (ret || request != PTRACE_DETACH)
+>> -		ptrace_unfreeze_traced(child);
+>> +	ptrace_unfreeze_traced(child);
+>
+> Forgot to mention... whatever we do this doesn't look right.
+>
+> ptrace_unfreeze_traced() must not be called if the tracee was untraced,
+> anothet debugger can come after that. I agree, the current code looks
+> a bit confusing, perhaps it makes sense to re-write it:
+>
+> 	if (request == PTRACE_DETACH && ret == 0)
+> 		; /* nothing to do, no longer traced by us */
+> 	else
+> 		ptrace_unfreeze_traced(child);
 
->=20
-> --
-> Nitesh Shetty
->=20
->=20
+This was a bug in my original JOBCTL_DELAY_WAITKILL patch and it was
+just cut and pasted here.  I thought it made sense when I was throwing
+things together but when I looked more closely I realized that it is
+not safe.
 
+Eric
 
---=20
-Damien Le Moal
-Western Digital Research

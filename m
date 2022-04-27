@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D87512178
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C735A51219C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiD0SsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S229744AbiD0Swh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiD0Srt (ORCPT
+        with ESMTP id S231206AbiD0SwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:47:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AFE98F4E;
-        Wed, 27 Apr 2022 11:29:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 355F861EE0;
-        Wed, 27 Apr 2022 18:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3E0C385A7;
-        Wed, 27 Apr 2022 18:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651084181;
-        bh=fRl5QBRUFoyxdbbm3vGEjIHcST0fn5HSwLbzywIOR88=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S8NLpJlqQOJyElbKUJJOnr+U4ja2LlNcd+OC4joCmAKAScIa70Ye091wNYNzN5DRe
-         KjP7YG8mqFdNbFUr/EJs2+oPXu2WJo1Y9Re09xyPlQmvdtq7fB6Fa7VyUY2DEp62t7
-         aA7xm2Aad+zOw7UkxhDEJVPkgDNkOaBsxMpQ2XpW4lKkpediuXDLIGMfHzWsSJFog2
-         TpM06F+bNcPxOTlgDSUK1eCEKBM/LXpbEKFGtegRgnEXydGd8mrUA4hs85HecPwJHd
-         7RBrXPqFiatb3CZJF8pdREpRd6LFaxiPItMnyeybMvPP7gr4vKevqnRykBvGN92Bfe
-         d3bYarlrLQ+4A==
-Date:   Wed, 27 Apr 2022 19:37:50 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>
-Subject: Re: [PATCH v2 3/3] iio: imu: adis16480: Improve getting the
- optional clocks
-Message-ID: <20220427193750.33d271be@jic23-huawei>
-In-Reply-To: <20220414131559.24694-3-andriy.shevchenko@linux.intel.com>
-References: <20220414131559.24694-1-andriy.shevchenko@linux.intel.com>
-        <20220414131559.24694-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 27 Apr 2022 14:52:23 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B606DD0AAB;
+        Wed, 27 Apr 2022 11:38:27 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id r13so5141222ejd.5;
+        Wed, 27 Apr 2022 11:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jf9i3ztTNjfWPutrOO+p/55EBe7ejBl7ElvzXmHGQEg=;
+        b=X2Wrw6aGSdtD6osErIZoyheLcvMUX8NAYUDuh9B4v8dSyZZoDLP601yJkl5p94uFnU
+         5Ubb9b8EMYHGAcI5U44jJCxVgx+RD1VwFmHUdyD5P7xlBN87TredFXCsIbeLg9ULH4hy
+         QaRH63Crb0DyI1GApXZDihx/uU0BG4rIdnvz+EYoc3+UAW7d4LpS44swBX6qmC8y7h/S
+         O1YnCBF0RnDKYI1OBIf9L4RBD6zeOcjMUXcxjnR4ZS4pSimK43YIIDodIy9zWc/TXV7z
+         UHdigbdNTV0YYN6+rESapEtYvmFruijwAMEkgjY+m0NzxqMfETrmSaftKX0A4EUVE3wu
+         WWxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jf9i3ztTNjfWPutrOO+p/55EBe7ejBl7ElvzXmHGQEg=;
+        b=T3GOw5AHrGQIAJ6GfhOejbApJwkoUDYTTNV28Qgj1yquv/cOVMNRDddFDRdvbYE3hL
+         ano9RfC2Kam3f9ZL9AoOZWYi+RuLl7bCmQ9EBkIo06angnj5eKaJWeeLeyW4clx/Ygwv
+         TkCo3VdE/V3bqOY5dZNRp0LeMW05MiJWIeaMxVFlG8Way+ncs1h/qlawrOMtEPjGaLfo
+         PtKdAvbKuslEYg58vlVVJ1YT+Jb3LZU9WtvGtaYmDDQbJkSjQX8g3Qu6ACJE5bkE80fq
+         vOVUKk6HEJMGTyRe51nnanYU/q4wsNS8H0YXGsYddacSX540ZuzHl4V+CGq5VSHK8Yvz
+         VHWw==
+X-Gm-Message-State: AOAM531OqPNDgCYA3vIonRro22Ol5r7uQUmmEsYSvU86Tn7ESBlB51bx
+        uJhn5W7kjNBMiNEbPvN1NNAYjSJQbaI=
+X-Google-Smtp-Source: ABdhPJxYmulAe68OxOgM9m3Ff9OqMHejTV4BuNDsrsdH/lnJG7g4ZBSf8iATJgr6HWV37aVYAGJZZA==
+X-Received: by 2002:a17:906:3104:b0:6ce:6b85:ecc9 with SMTP id 4-20020a170906310400b006ce6b85ecc9mr27247261ejx.339.1651084705994;
+        Wed, 27 Apr 2022 11:38:25 -0700 (PDT)
+Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id ig8-20020a1709072e0800b006f38f2e9ebesm4691667ejc.64.2022.04.27.11.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 11:38:24 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v3 0/4] Extend and reorganize Highmem's documentation 
+Date:   Wed, 27 Apr 2022 20:38:17 +0200
+Message-Id: <20220427183821.1979-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 16:15:59 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+This series has the purpose to extend and reorganize Highmem's
+documentation.
 
-> The extended clocks are optional and may not be present for some
-> configurations supported by this driver. Nevertheless, in case
-> the clock is provided but some error happens during its getting,
-> that error handling should be done properly.
->=20
-> Use devm_clk_get_optional() API and report possible errors using
-> dev_err_probe() to handle properly -EPROBE_DEFER error.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-Series applied with Nuno's Tested-by as sent to v1.
+This is still a work in progress, because some information should still be
+moved from highmem.rst to highmem.h and highmem-internal.h. Specifically
+I'm talking about moving the "how to" information to the relevant headers,
+as it as been suggested by Ira Weiny (Intel).
 
-Thanks,
+This series is composed by four patches gathered from a previous series
+made of two, plus two more single patches. The subject of this cover has
+changed and the layout of the changes across the four patches has
+changed too. For this reason it is very hard to show a valid versions'
+log. Therefore, I decided to start over and drop versions (Maintainers
+of the previous patch have been told to drop them).
 
-Jonathan
+Changes from v1 to v2:
 
-> ---
-> v2: added tag (Nuno), massaged commit message (Nuno)
->  drivers/iio/imu/adis16480.c | 26 ++++++++++----------------
->  1 file changed, 10 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/iio/imu/adis16480.c b/drivers/iio/imu/adis16480.c
-> index 287914016f28..fe520194a837 100644
-> --- a/drivers/iio/imu/adis16480.c
-> +++ b/drivers/iio/imu/adis16480.c
-> @@ -1362,31 +1362,25 @@ static int adis16480_get_ext_clocks(struct adis16=
-480 *st)
->  {
->  	struct device *dev =3D &st->adis.spi->dev;
-> =20
-> -	st->clk_mode =3D ADIS16480_CLK_INT;
-> -	st->ext_clk =3D devm_clk_get(dev, "sync");
-> -	if (!IS_ERR_OR_NULL(st->ext_clk)) {
-> +	st->ext_clk =3D devm_clk_get_optional(dev, "sync");
-> +	if (IS_ERR(st->ext_clk))
-> +		return dev_err_probe(dev, PTR_ERR(st->ext_clk), "failed to get ext clk=
-\n");
-> +	if (st->ext_clk) {
->  		st->clk_mode =3D ADIS16480_CLK_SYNC;
->  		return 0;
->  	}
-> =20
-> -	if (PTR_ERR(st->ext_clk) !=3D -ENOENT) {
-> -		dev_err(dev, "failed to get ext clk\n");
-> -		return PTR_ERR(st->ext_clk);
-> -	}
-> -
->  	if (st->chip_info->has_pps_clk_mode) {
-> -		st->ext_clk =3D devm_clk_get(dev, "pps");
-> -		if (!IS_ERR_OR_NULL(st->ext_clk)) {
-> +		st->ext_clk =3D devm_clk_get_optional(dev, "pps");
-> +		if (IS_ERR(st->ext_clk))
-> +			return dev_err_probe(dev, PTR_ERR(st->ext_clk), "failed to get ext cl=
-k\n");
-> +		if (st->ext_clk) {
->  			st->clk_mode =3D ADIS16480_CLK_PPS;
->  			return 0;
->  		}
-> -
-> -		if (PTR_ERR(st->ext_clk) !=3D -ENOENT) {
-> -			dev_err(dev, "failed to get ext clk\n");
-> -			return PTR_ERR(st->ext_clk);
-> -		}
->  	}
-> =20
-> +	st->clk_mode =3D ADIS16480_CLK_INT;
->  	return 0;
->  }
-> =20
-> @@ -1447,7 +1441,7 @@ static int adis16480_probe(struct spi_device *spi)
->  	if (ret)
->  		return ret;
-> =20
-> -	if (!IS_ERR_OR_NULL(st->ext_clk)) {
-> +	if (st->ext_clk) {
->  		ret =3D adis16480_ext_clk_config(st, true);
->  		if (ret)
->  			return ret;
+        1/4 - Fix typos (Mike Rapoport); re-write the description of @page
+              because the original was wrong (Ira Weiny); add Ira's and
+              Mike's tags in the commit message.
+        2/4 - Add Ira's and Mike's tags in the commit message.
+        3/4 - Rework the subject to better summarize what this patch
+              changes; merge the section which was removed from highmem.rst
+              with the kdocs of highmem.h (suggested by Ira Weiny); add
+              Ira's tag in the commit message.
+        4/4 - Reformulate a sentence that was incomprehensible due to my
+              own mistakes in copying and pasting the text of another
+              paragraph (problem noted by Ira Weiny); refer to the kdocs
+              of kmap_local_page () to show how nested mappings should be
+              handled; fix grammar error; add Ira's tag in the commit
+              message.
+
+Changes from v2 to v3:
+
+	1/4 - Add a deprecation notice to kunmap_atomic() for consistency
+	      with the same notice in kmap_atomic() (Sebastian Andrzej
+	      Siewior); shorten subject and extend commit message.
+	2/4 - No changes.
+	3/4 - No changes.
+	4/4 - Correct a technical inaccuracy about preemption disabling / 
+	      re-enabling in kmap_atomic() / kunmap_atomic() (Sebastian
+	      Andrzej Siewior).
+
+Fabio M. De Francesco (4):
+  mm/highmem: Fix kernel-doc warnings in highmem*.h
+  Documentation/vm: Include kdocs from highmem*.h into highmem.rst
+  Documentation/vm: Move "Using kmap-atomic" to highmem.h
+  Documentation/vm: Rework "Temporary Virtual Mappings" section
+
+ Documentation/vm/highmem.rst     | 104 +++++++++++++++++++------------
+ include/linux/highmem-internal.h |  15 ++++-
+ include/linux/highmem.h          |  49 +++++++++++----
+ 3 files changed, 112 insertions(+), 56 deletions(-)
+
+-- 
+2.34.1
 

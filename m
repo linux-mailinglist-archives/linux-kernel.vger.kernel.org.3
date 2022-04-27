@@ -2,126 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C32511D95
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F635120D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239416AbiD0PM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S239314AbiD0PLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239255AbiD0PLf (ORCPT
+        with ESMTP id S238982AbiD0PK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:11:35 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD817B395
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:08:22 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R6M8vt014103;
-        Wed, 27 Apr 2022 10:07:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=xLsU6Iv+ZJvxrpEJk5Y3A5YTrieVMpJFBJwo2HpKEV0=;
- b=QHdiXIA5IjZaFJOWrtmP7jRI4pc7KQ3H5r+lY2NwwQq9P2bbGItaHTBpjfqMxm0GxpA+
- gyEVvEfWu5Q3AM10PrXOOQudOpwfkouqqLf2ukdo7NMJcTXyWbuwe5kjFoJoUojC4ivl
- khWzzpGXg6z7sm6/cqb4tynBiRINgLzyN3fBwwuiwnGwRGphJ0wpOdvMAiEjDRc2npNM
- YbP7+lJDvgMRkze5z27rkXni+Qbv847vJK9oRISYOKqSgGugvNy3uZJyUGxvijCcc+xS
- Rel6IB+bw8EZxbtR6MU0jn4SZuVejo2XG9A7rxds/YOgc4CMrCb1VY6xX9X08jzgIdL0 dw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fprt60xth-13
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 27 Apr 2022 10:07:41 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
- 2022 16:07:34 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Wed, 27 Apr 2022 16:07:34 +0100
-Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.170])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D146F478;
-        Wed, 27 Apr 2022 15:07:33 +0000 (UTC)
-From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH 26/26] ALSA: hda: cs35l41: Add kernel config to disable firmware autoload
-Date:   Wed, 27 Apr 2022 16:07:20 +0100
-Message-ID: <20220427150720.9194-27-vitalyr@opensource.cirrus.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220427150720.9194-1-vitalyr@opensource.cirrus.com>
-References: <20220427150720.9194-1-vitalyr@opensource.cirrus.com>
+        Wed, 27 Apr 2022 11:10:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B1853B5E;
+        Wed, 27 Apr 2022 08:07:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86DF6B827F8;
+        Wed, 27 Apr 2022 15:07:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93703C385AF;
+        Wed, 27 Apr 2022 15:07:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651072062;
+        bh=d9DFE77Zqv/ohPrixgPGqV4DVHAWzktLocb8mZeYLRk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=BAbJ8Yp4LS53fdmTiHI3VhQvxjVbA3if54n/L2bOLGC4nRWJlXWMJhlxSZMYqEFIe
+         yBFrkmmYL/dLKcsN2fiR+d4ZpiPcRg+0fWolnYfmBYVfXKmaahngRzrxe4K0UQlYyG
+         WODCx8mD821dsoj1x2i9HlwXQwaMEFRw/RenoFo4A671I5O+w4qGxBsu3rbrJl5Oa3
+         nzL/mewcycYhMcMIk1jDG3XiUnU4KJaeglHKLeasiq4HP6qKrcADRvvUtPk95C/a68
+         3XqKGYy+sVHqTFsjtcWW8QmhbkZlQlBbmfK9ZCoCyXEBRSsZwsURQZL5lDh197Wbnp
+         MS53wD24XxsIw==
+Message-ID: <9beddcc315595751d5fbcb83f73cd94533b62cbd.camel@kernel.org>
+Subject: Re: [PATCH v2] ceph: fix statfs for subdir mounts
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ryan Taylor <rptaylor@uvic.ca>
+Date:   Wed, 27 Apr 2022 11:07:40 -0400
+In-Reply-To: <20220427143303.950-1-lhenriques@suse.de>
+References: <20220427143303.950-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: dalm5jSeg-rUqnYu-p0YcBP0M-gg_LeU
-X-Proofpoint-ORIG-GUID: dalm5jSeg-rUqnYu-p0YcBP0M-gg_LeU
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Binding <sbinding@opensource.cirrus.com>
+On Wed, 2022-04-27 at 15:33 +0100, Luís Henriques wrote:
+> When doing a mount using as base a directory that has 'max_bytes' quotas
+> statfs uses that value as the total; if a subdirectory is used instead,
+> the same 'max_bytes' too in statfs, unless there is another quota set.
+> 
+> Unfortunately, if this subdirectory only has the 'max_files' quota set,
+> then statfs uses the filesystem total.  Fix this by making sure we only
+> lookup realms that contain the 'max_bytes' quota.
+> 
+> Link: https://tracker.ceph.com/issues/55090
+> Cc: Ryan Taylor <rptaylor@uvic.ca>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+> As I mentioned in v1, I do *not* think this really fixes the tracker
+> above, as the bug reporter never mentioned setting quotas in the subdir.
+> 
+> Changes since v1:
+> Moved some more logic into __ceph_has_any_quota() function.
+> 
+>  fs/ceph/inode.c |  2 +-
+>  fs/ceph/quota.c | 19 +++++++++++--------
+>  fs/ceph/super.h | 28 ++++++++++++++++++++++++----
+>  3 files changed, 36 insertions(+), 13 deletions(-)
+> 
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 5de7bb9048b7..4b7406d6fbe4 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -691,7 +691,7 @@ void ceph_evict_inode(struct inode *inode)
+>  
+>  	__ceph_remove_caps(ci);
+>  
+> -	if (__ceph_has_any_quota(ci))
+> +	if (__ceph_has_any_quota(ci, QUOTA_GET_ANY))
+>  		ceph_adjust_quota_realms_count(inode, false);
+>  
+>  	/*
+> diff --git a/fs/ceph/quota.c b/fs/ceph/quota.c
+> index a338a3ec0dc4..e9f7ca18cdb7 100644
+> --- a/fs/ceph/quota.c
+> +++ b/fs/ceph/quota.c
+> @@ -195,9 +195,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
+>  
+>  /*
+>   * This function walks through the snaprealm for an inode and returns the
+> - * ceph_snap_realm for the first snaprealm that has quotas set (either max_files
+> - * or max_bytes).  If the root is reached, return the root ceph_snap_realm
+> - * instead.
+> + * ceph_snap_realm for the first snaprealm that has quotas set (max_files,
+> + * max_bytes, or any, depending on the 'which_quota' argument).  If the root is
+> + * reached, return the root ceph_snap_realm instead.
+>   *
+>   * Note that the caller is responsible for calling ceph_put_snap_realm() on the
+>   * returned realm.
+> @@ -209,7 +209,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
+>   * will be restarted.
+>   */
+>  static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
+> -					       struct inode *inode, bool retry)
+> +					       struct inode *inode,
+> +					       enum quota_get_realm which_quota,
+> +					       bool retry)
+>  {
+>  	struct ceph_inode_info *ci = NULL;
+>  	struct ceph_snap_realm *realm, *next;
+> @@ -248,7 +250,7 @@ static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
+>  		}
+>  
+>  		ci = ceph_inode(in);
+> -		has_quota = __ceph_has_any_quota(ci);
+> +		has_quota = __ceph_has_any_quota(ci, which_quota);
+>  		iput(in);
+>  
+>  		next = realm->parent;
+> @@ -279,8 +281,8 @@ bool ceph_quota_is_same_realm(struct inode *old, struct inode *new)
+>  	 * dropped and we can then restart the whole operation.
+>  	 */
+>  	down_read(&mdsc->snap_rwsem);
+> -	old_realm = get_quota_realm(mdsc, old, true);
+> -	new_realm = get_quota_realm(mdsc, new, false);
+> +	old_realm = get_quota_realm(mdsc, old, QUOTA_GET_ANY, true);
+> +	new_realm = get_quota_realm(mdsc, new, QUOTA_GET_ANY, false);
+>  	if (PTR_ERR(new_realm) == -EAGAIN) {
+>  		up_read(&mdsc->snap_rwsem);
+>  		if (old_realm)
+> @@ -483,7 +485,8 @@ bool ceph_quota_update_statfs(struct ceph_fs_client *fsc, struct kstatfs *buf)
+>  	bool is_updated = false;
+>  
+>  	down_read(&mdsc->snap_rwsem);
+> -	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root), true);
+> +	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root),
+> +				QUOTA_GET_MAX_BYTES, true);
+>  	up_read(&mdsc->snap_rwsem);
+>  	if (!realm)
+>  		return false;
+> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+> index a2e1c83ab29a..3cd96720f14a 100644
+> --- a/fs/ceph/super.h
+> +++ b/fs/ceph/super.h
+> @@ -1317,9 +1317,29 @@ extern void ceph_fs_debugfs_init(struct ceph_fs_client *client);
+>  extern void ceph_fs_debugfs_cleanup(struct ceph_fs_client *client);
+>  
+>  /* quota.c */
+> -static inline bool __ceph_has_any_quota(struct ceph_inode_info *ci)
+> +
+> +enum quota_get_realm {
+> +	QUOTA_GET_MAX_FILES,
+> +	QUOTA_GET_MAX_BYTES,
+> +	QUOTA_GET_ANY
+> +};
+> +
+> +static inline bool __ceph_has_any_quota(struct ceph_inode_info *ci,
+> +					enum quota_get_realm which)
+>  {
+> -	return ci->i_max_files || ci->i_max_bytes;
+> +	bool has_quota = false;
+> +
+> +	switch (which) {
+> +	case QUOTA_GET_MAX_BYTES:
+> +		has_quota = !!ci->i_max_bytes;
+> +		break;
+> +	case QUOTA_GET_MAX_FILES:
+> +		has_quota = !!ci->i_max_files;
+> +		break;
+> +	default:
+> +		has_quota = !!(ci->i_max_files || ci->i_max_bytes);
+> +	}
+> +	return has_quota;
+>  }
+>  
+>  extern void ceph_adjust_quota_realms_count(struct inode *inode, bool inc);
+> @@ -1328,10 +1348,10 @@ static inline void __ceph_update_quota(struct ceph_inode_info *ci,
+>  				       u64 max_bytes, u64 max_files)
+>  {
+>  	bool had_quota, has_quota;
+> -	had_quota = __ceph_has_any_quota(ci);
+> +	had_quota = __ceph_has_any_quota(ci, QUOTA_GET_ANY);
+>  	ci->i_max_bytes = max_bytes;
+>  	ci->i_max_files = max_files;
+> -	has_quota = __ceph_has_any_quota(ci);
+> +	has_quota = __ceph_has_any_quota(ci, QUOTA_GET_ANY);
+>  
+>  	if (had_quota != has_quota)
+>  		ceph_adjust_quota_realms_count(&ci->vfs_inode, has_quota);
 
-By default, the driver will automatically load DSP firmware
-for the amps, if available. Adding this option allows the
-autoload to be optional, which allows for different configurations.
+Code looks fine. I think Xiubo had suggested renaming the funtion to
+__ceph_has_quota(), but other than that this looks good.
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
----
- sound/pci/hda/Kconfig       |  7 +++++++
- sound/pci/hda/cs35l41_hda.c | 12 +++++++-----
- 2 files changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/sound/pci/hda/Kconfig b/sound/pci/hda/Kconfig
-index 1c378cca5dac..c4282dec4dd4 100644
---- a/sound/pci/hda/Kconfig
-+++ b/sound/pci/hda/Kconfig
-@@ -94,6 +94,13 @@ config SND_HDA_PATCH_LOADER
- config SND_HDA_SCODEC_CS35L41
- 	tristate
- 
-+config SND_HDA_SCODEC_CS35L41_DISABLE_FIRMWARE_AUTOSTART
-+	bool "Prevent CS35L41 from starting firmware on boot"
-+	depends on SND_HDA_SCODEC_CS35L41
-+	help
-+	  Say Y here to prevent the CS35L41 HDA driver from loading DSP
-+	  Firmware at boot
-+
- config SND_HDA_CS_DSP_CONTROLS
- 	tristate
- 	depends on CS_DSP
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index 70e5354e3950..8b9e966145b5 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -773,11 +773,13 @@ static int cs35l41_hda_bind(struct device *dev, struct device *master, void *mas
- 
- 	cs35l41->firmware_type = HDA_CS_DSP_FW_SPK_PROT;
- 
--	cs35l41->request_fw_load = true;
--	mutex_lock(&cs35l41->fw_mutex);
--	if (cs35l41_smart_amp(cs35l41) < 0)
--		dev_warn(cs35l41->dev, "Cannot Run Firmware, reverting to dsp bypass...\n");
--	mutex_unlock(&cs35l41->fw_mutex);
-+	if (!IS_ENABLED(CONFIG_SND_HDA_SCODEC_CS35L41_DISABLE_FIRMWARE_AUTOSTART)) {
-+		cs35l41->request_fw_load = true;
-+		mutex_lock(&cs35l41->fw_mutex);
-+		if (cs35l41_smart_amp(cs35l41) < 0)
-+			dev_warn(cs35l41->dev, "Cannot Run Firmware, reverting to dsp bypass...\n");
-+		mutex_unlock(&cs35l41->fw_mutex);
-+	}
- 
- 	cs35l41_create_controls(cs35l41);
- 
--- 
-2.32.0
-
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

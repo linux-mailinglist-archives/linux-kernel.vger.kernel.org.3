@@ -2,141 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD8451251C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A28512524
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiD0WPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S234383AbiD0WSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbiD0WPd (ORCPT
+        with ESMTP id S231854AbiD0WSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:15:33 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802D886E32;
-        Wed, 27 Apr 2022 15:12:20 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id z21so2476560pgj.1;
-        Wed, 27 Apr 2022 15:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XXb42XiH+ukC9z7j3bBup8sRRl4KaGc4g7+LlMYSHsA=;
-        b=Ws495q2rl2PRGj/zVnW5ZArxK3DYt6X/R641/Rg4daUGK5XREH0QoEi3vo4dOrnylv
-         nP3eMrTlYZWHRUyOoBu/xrKPZ2+lmrhsSlg9egRevjW/NgcxcSBcwPi27LwUCBj6owub
-         kcJkjnYF1BYOUc2SQz1i21KiLaGf3zKZxIK9Ff5IoHm/vhFuwWVc1xa15T7n334wy8Xf
-         fMRPixKczaNFkniv3DoL5k3q+7DL86Pig/zQIONH8YyaTzxbDMqHdPA16yAu/5RKeusa
-         dOse573kLTyhajewwEJzfifVdlrEfSxKvsC87iTJ29vMlS+9nttNB572LQsHcf9BbcKF
-         zD+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=XXb42XiH+ukC9z7j3bBup8sRRl4KaGc4g7+LlMYSHsA=;
-        b=4D4k41OTZVCGm3XJQ9Sewmvsg7jjVRvDrHZUJS7Ym6vW7V0/+k6hEnOIBHgmfRgR2+
-         M6CtBVvJGWkQgrAFEFvm68gMwsDr2mkHbdPpla5Wu7u5MGA3BEDkdbg3ThHG1iyJ5l/a
-         2eiX4XCkyXcKMc1NpNh+vIw2CeE0KodiqfW1Qtx9QsEjmHKdleTAzjfi1a7hh95vHH/A
-         0NQxEwElYTksV/aGED/r4uIXaMWyoJgOTNWsG4RUBGHEVP9wJZ5yLQXFvan9sCJw99X6
-         LsPy3M2gBH4Cq4xr1He0owDWNDByKTMQaAIFge6IP7ZaNJHT7wU10UbYPvCzc/don4yv
-         WRgw==
-X-Gm-Message-State: AOAM530iZzgwLfd/58eWFCNRbwGNxM5++MG/3Tl7B2Lm63yluh619ez2
-        0AlO8hoTZh6FoIS0OeTmXmI=
-X-Google-Smtp-Source: ABdhPJzwmVF1HrfAv/PhFstcfrhOoUkpUM8r6eZpLrOQwgydnwT6oOkkV1+/wj3E5aYvB2gTl78USw==
-X-Received: by 2002:a63:2266:0:b0:39c:f643:ee69 with SMTP id t38-20020a632266000000b0039cf643ee69mr25066170pgm.288.1651097539917;
-        Wed, 27 Apr 2022 15:12:19 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:546a:2875:2a75:1b94])
-        by smtp.gmail.com with ESMTPSA id 18-20020a17090a1a1200b001da160621d1sm3693495pjk.45.2022.04.27.15.12.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 15:12:19 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 27 Apr 2022 15:12:17 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
-Message-ID: <Ymm/wayEB3MH6ZRY@google.com>
-References: <20220427160016.144237-1-hannes@cmpxchg.org>
- <20220427160016.144237-5-hannes@cmpxchg.org>
- <Ymmnrkn0mSWcuvmH@google.com>
- <YmmznQ8AO5RLxicA@cmpxchg.org>
- <Ymm3WpvJWby4gaD/@cmpxchg.org>
+        Wed, 27 Apr 2022 18:18:22 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9786F4E;
+        Wed, 27 Apr 2022 15:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651097708; x=1682633708;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jpZdoeK9eUzaFjNG4QfNjD/n0e3XLLZ4Yvx414M0eCc=;
+  b=c0AkGDUVTnpoEtdRpeNJI/9b0Kn7Y1PgHeyaIPnB0zOftC6zj4v/Jve2
+   b1qUHRUfIa9VXr3jclkjPs+kUV8UYIf6AbBWWVewFaqtMF+nF5HS0/Jsx
+   KVFKq51dvH1bWe0/I83Ood4LXW4eCbJEUlN4L2L/X92AelOeWN+TEQ4K7
+   po/keeQ0rj5YBi4/UW9gFNonkvNHEDZZ6HFqpYYYUihkbPDghnnkDUseu
+   dSnLuGoZ2VT7AJnVG68mt+HLDMfAcQ3+5XqjDiEzBlL8mh8AIQb8fvW/j
+   WOn4P3fm0UO/f7nl6w1mQiim7lpMf38FH5vMeR0YaRhZT4xX1PUSIBuPx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="263672396"
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="263672396"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 15:14:54 -0700
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="513911851"
+Received: from lcdaughe-mobl1.amr.corp.intel.com (HELO [10.212.72.252]) ([10.212.72.252])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 15:14:53 -0700
+Message-ID: <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
+Date:   Wed, 27 Apr 2022 15:15:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ymm3WpvJWby4gaD/@cmpxchg.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
+ and convertible memory
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 05:36:26PM -0400, Johannes Weiner wrote:
-> On Wed, Apr 27, 2022 at 05:20:31PM -0400, Johannes Weiner wrote:
-> > On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
-> > > Hi Johannes,
-> > > 
-> > > On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
-> > > > Currently it requires poking at debugfs to figure out the size and
-> > > > population of the zswap cache on a host. There are no counters for
-> > > > reads and writes against the cache. As a result, it's difficult to
-> > > > understand zswap behavior on production systems.
-> > > > 
-> > > > Print zswap memory consumption and how many pages are zswapped out in
-> > > > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
-> > > > 
-> > > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > > > ---
-> > > >  fs/proc/meminfo.c             |  7 +++++++
-> > > >  include/linux/swap.h          |  5 +++++
-> > > >  include/linux/vm_event_item.h |  4 ++++
-> > > >  mm/vmstat.c                   |  4 ++++
-> > > >  mm/zswap.c                    | 13 ++++++-------
-> > > >  5 files changed, 26 insertions(+), 7 deletions(-)
-> > > > 
-> > > > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-> > > > index 6fa761c9cc78..6e89f0e2fd20 100644
-> > > > --- a/fs/proc/meminfo.c
-> > > > +++ b/fs/proc/meminfo.c
-> > > > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
-> > > >  
-> > > >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
-> > > >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
-> > > > +#ifdef CONFIG_ZSWAP
-> > > > +	seq_printf(m,  "Zswap:          %8lu kB\n",
-> > > > +		   (unsigned long)(zswap_pool_total_size >> 10));
-> > > > +	seq_printf(m,  "Zswapped:       %8lu kB\n",
-> > > > +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
-> > > > +		   (PAGE_SHIFT - 10));
-> > > > +#endif
-> > > 
-> > > I agree it would be very handy to have the memory consumption in meminfo
-> > > 
-> > > https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
-> > > 
-> > > If we really go this Zswap only metric instead of general term
-> > > "Compressed", I'd like to post maybe "Zram:" with same reason
-> > > in this patchset. Do you think that's better idea instead of
-> > > introducing general term like "Compressed:" or something else?
-> > 
-> > I'm fine with changing it to Compressed. If somebody cares about a
-> > more detailed breakdown, we can add Zswap, Zram subsets as needed.
+On 4/5/22 21:49, Kai Huang wrote:
+> TDX provides increased levels of memory confidentiality and integrity.
+> This requires special hardware support for features like memory
+> encryption and storage of memory integrity checksums.  Not all memory
+> satisfies these requirements.
 > 
-> It does raise the question what to do about cgroup, though. Should the
-> control files (memory.zswap.current & memory.zswap.max) apply to zram
-> in the future? If so, we should rename them, too.
+> As a result, TDX introduced the concept of a "Convertible Memory Region"
+> (CMR).  During boot, the firmware builds a list of all of the memory
+> ranges which can provide the TDX security guarantees.  The list of these
+> ranges, along with TDX module information, is available to the kernel by
+> querying the TDX module via TDH.SYS.INFO SEAMCALL.
 > 
-> I'm not too familiar with zram, maybe you can provide some
-> background. AFAIU, Google uses zram quite widely; all the more
-> confusing why there is no container support for it yet.
+> Host kernel can choose whether or not to use all convertible memory
+> regions as TDX memory.  Before TDX module is ready to create any TD
+> guests, all TDX memory regions that host kernel intends to use must be
+> configured to the TDX module, using specific data structures defined by
+> TDX architecture.  Constructing those structures requires information of
+> both TDX module and the Convertible Memory Regions.  Call TDH.SYS.INFO
+> to get this information as preparation to construct those structures.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+>  arch/x86/virt/vmx/tdx/tdx.c | 131 ++++++++++++++++++++++++++++++++++++
+>  arch/x86/virt/vmx/tdx/tdx.h |  61 +++++++++++++++++
+>  2 files changed, 192 insertions(+)
+> 
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index ef2718423f0f..482e6d858181 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -80,6 +80,11 @@ static DEFINE_MUTEX(tdx_module_lock);
+>  
+>  static struct p_seamldr_info p_seamldr_info;
+>  
+> +/* Base address of CMR array needs to be 512 bytes aligned. */
+> +static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
+> +static int tdx_cmr_num;
+> +static struct tdsysinfo_struct tdx_sysinfo;
 
-My usecase with zram is Android which doesn't use memcg.
+I really dislike mixing hardware and software structures.  Please make
+it clear which of these are fully software-defined and which are part of
+the hardware ABI.
+
+>  static bool __seamrr_enabled(void)
+>  {
+>  	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
+> @@ -468,6 +473,127 @@ static int tdx_module_init_cpus(void)
+>  	return seamcall_on_each_cpu(&sc);
+>  }
+>  
+> +static inline bool cmr_valid(struct cmr_info *cmr)
+> +{
+> +	return !!cmr->size;
+> +}
+> +
+> +static void print_cmrs(struct cmr_info *cmr_array, int cmr_num,
+> +		       const char *name)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < cmr_num; i++) {
+> +		struct cmr_info *cmr = &cmr_array[i];
+> +
+> +		pr_info("%s : [0x%llx, 0x%llx)\n", name,
+> +				cmr->base, cmr->base + cmr->size);
+> +	}
+> +}
+> +
+> +static int sanitize_cmrs(struct cmr_info *cmr_array, int cmr_num)
+> +{
+> +	int i, j;
+> +
+> +	/*
+> +	 * Intel TDX module spec, 20.7.3 CMR_INFO:
+> +	 *
+> +	 *   TDH.SYS.INFO leaf function returns a MAX_CMRS (32) entry
+> +	 *   array of CMR_INFO entries. The CMRs are sorted from the
+> +	 *   lowest base address to the highest base address, and they
+> +	 *   are non-overlapping.
+> +	 *
+> +	 * This implies that BIOS may generate invalid empty entries
+> +	 * if total CMRs are less than 32.  Skip them manually.
+> +	 */
+> +	for (i = 0; i < cmr_num; i++) {
+> +		struct cmr_info *cmr = &cmr_array[i];
+> +		struct cmr_info *prev_cmr = NULL;
+> +
+> +		/* Skip further invalid CMRs */
+> +		if (!cmr_valid(cmr))
+> +			break;
+> +
+> +		if (i > 0)
+> +			prev_cmr = &cmr_array[i - 1];
+> +
+> +		/*
+> +		 * It is a TDX firmware bug if CMRs are not
+> +		 * in address ascending order.
+> +		 */
+> +		if (prev_cmr && ((prev_cmr->base + prev_cmr->size) >
+> +					cmr->base)) {
+> +			pr_err("Firmware bug: CMRs not in address ascending order.\n");
+> +			return -EFAULT;
+
+-EFAULT is a really weird return code to use for this.  I'd use -EINVAL.
+
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * Also a sane BIOS should never generate invalid CMR(s) between
+> +	 * two valid CMRs.  Sanity check this and simply return error in
+> +	 * this case.
+> +	 *
+> +	 * By reaching here @i is the index of the first invalid CMR (or
+> +	 * cmr_num).  Starting with next entry of @i since it has already
+> +	 * been checked.
+> +	 */
+> +	for (j = i + 1; j < cmr_num; j++)
+> +		if (cmr_valid(&cmr_array[j])) {
+> +			pr_err("Firmware bug: invalid CMR(s) among valid CMRs.\n");
+> +			return -EFAULT;
+> +		}
+
+Please add brackets for the for().
+
+> +	/*
+> +	 * Trim all tail invalid empty CMRs.  BIOS should generate at
+> +	 * least one valid CMR, otherwise it's a TDX firmware bug.
+> +	 */
+> +	tdx_cmr_num = i;
+> +	if (!tdx_cmr_num) {
+> +		pr_err("Firmware bug: No valid CMR.\n");
+> +		return -EFAULT;
+> +	}
+> +
+> +	/* Print kernel sanitized CMRs */
+> +	print_cmrs(tdx_cmr_array, tdx_cmr_num, "Kernel-sanitized-CMR");
+> +
+> +	return 0;
+> +}
+> +
+> +static int tdx_get_sysinfo(void)
+> +{
+> +	struct tdx_module_output out;
+> +	u64 tdsysinfo_sz, cmr_num;
+> +	int ret;
+> +
+> +	BUILD_BUG_ON(sizeof(struct tdsysinfo_struct) != TDSYSINFO_STRUCT_SIZE);
+> +
+> +	ret = seamcall(TDH_SYS_INFO, __pa(&tdx_sysinfo), TDSYSINFO_STRUCT_SIZE,
+> +			__pa(tdx_cmr_array), MAX_CMRS, NULL, &out);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * If TDH.SYS.CONFIG succeeds, RDX contains the actual bytes
+> +	 * written to @tdx_sysinfo and R9 contains the actual entries
+> +	 * written to @tdx_cmr_array.  Sanity check them.
+> +	 */
+> +	tdsysinfo_sz = out.rdx;
+> +	cmr_num = out.r9;
+
+Please vertically align things like this:
+
+	tdsysinfo_sz = out.rdx;
+	cmr_num	     = out.r9;
+
+> +	if (WARN_ON_ONCE((tdsysinfo_sz > sizeof(tdx_sysinfo)) || !tdsysinfo_sz ||
+> +				(cmr_num > MAX_CMRS) || !cmr_num))
+> +		return -EFAULT;
+
+Sanity checking is good, but this makes me wonder how much is too much.
+ I don't see a lot of code for instance checking if sys_write() writes
+more than how much it was supposed to.
+
+Why are these sanity checks necessary here?  Is the TDX module expected
+to be *THAT* buggy?  The thing that's providing, oh, basically all of
+the security guarantees of this architecture.  It's overflowing the
+buffers you hand it?
+
+> +	pr_info("TDX module: vendor_id 0x%x, major_version %u, minor_version %u, build_date %u, build_num %u",
+> +		tdx_sysinfo.vendor_id, tdx_sysinfo.major_version,
+> +		tdx_sysinfo.minor_version, tdx_sysinfo.build_date,
+> +		tdx_sysinfo.build_num);
+> +
+> +	/* Print BIOS provided CMRs */
+> +	print_cmrs(tdx_cmr_array, cmr_num, "BIOS-CMR");
+> +
+> +	return sanitize_cmrs(tdx_cmr_array, cmr_num);
+> +}
+
+Does sanitize_cmrs() sanitize anything?  It looks to me like it *checks*
+the CMRs.  But, sanitizing is an active operation that writes to the
+data being sanitized.  This looks read-only to me.  check_cmrs() would
+be a better name for a passive check.
+
+>  static int init_tdx_module(void)
+>  {
+>  	int ret;
+> @@ -482,6 +608,11 @@ static int init_tdx_module(void)
+>  	if (ret)
+>  		goto out;
+>  
+> +	/* Get TDX module information and CMRs */
+> +	ret = tdx_get_sysinfo();
+> +	if (ret)
+> +		goto out;
+
+Couldn't we get rid of that comment if you did something like:
+
+	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
+
+and preferably make the variables function-local.
+
+>  	/*
+>  	 * Return -EFAULT until all steps of TDX module
+>  	 * initialization are done.
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index b8cfdd6e12f3..2f21c45df6ac 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -29,6 +29,66 @@ struct p_seamldr_info {
+>  	u8	reserved2[88];
+>  } __packed __aligned(P_SEAMLDR_INFO_ALIGNMENT);
+>  
+> +struct cmr_info {
+> +	u64	base;
+> +	u64	size;
+> +} __packed;
+> +
+> +#define MAX_CMRS			32
+> +#define CMR_INFO_ARRAY_ALIGNMENT	512
+> +
+> +struct cpuid_config {
+> +	u32	leaf;
+> +	u32	sub_leaf;
+> +	u32	eax;
+> +	u32	ebx;
+> +	u32	ecx;
+> +	u32	edx;
+> +} __packed;
+> +
+> +#define TDSYSINFO_STRUCT_SIZE		1024
+> +#define TDSYSINFO_STRUCT_ALIGNMENT	1024
+> +
+> +struct tdsysinfo_struct {
+> +	/* TDX-SEAM Module Info */
+> +	u32	attributes;
+> +	u32	vendor_id;
+> +	u32	build_date;
+> +	u16	build_num;
+> +	u16	minor_version;
+> +	u16	major_version;
+> +	u8	reserved0[14];
+> +	/* Memory Info */
+> +	u16	max_tdmrs;
+> +	u16	max_reserved_per_tdmr;
+> +	u16	pamt_entry_size;
+> +	u8	reserved1[10];
+> +	/* Control Struct Info */
+> +	u16	tdcs_base_size;
+> +	u8	reserved2[2];
+> +	u16	tdvps_base_size;
+> +	u8	tdvps_xfam_dependent_size;
+> +	u8	reserved3[9];
+> +	/* TD Capabilities */
+> +	u64	attributes_fixed0;
+> +	u64	attributes_fixed1;
+> +	u64	xfam_fixed0;
+> +	u64	xfam_fixed1;
+> +	u8	reserved4[32];
+> +	u32	num_cpuid_config;
+> +	/*
+> +	 * The actual number of CPUID_CONFIG depends on above
+> +	 * 'num_cpuid_config'.  The size of 'struct tdsysinfo_struct'
+> +	 * is 1024B defined by TDX architecture.  Use a union with
+> +	 * specific padding to make 'sizeof(struct tdsysinfo_struct)'
+> +	 * equal to 1024.
+> +	 */
+> +	union {
+> +		struct cpuid_config	cpuid_configs[0];
+> +		u8			reserved5[892];
+> +	};
+> +} __packed __aligned(TDSYSINFO_STRUCT_ALIGNMENT);
+> +
+>  /*
+>   * P-SEAMLDR SEAMCALL leaf function
+>   */
+> @@ -38,6 +98,7 @@ struct p_seamldr_info {
+>  /*
+>   * TDX module SEAMCALL leaf functions
+>   */
+> +#define TDH_SYS_INFO		32
+>  #define TDH_SYS_INIT		33
+>  #define TDH_SYS_LP_INIT		35
+>  #define TDH_SYS_LP_SHUTDOWN	44
+

@@ -2,191 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF6A510F10
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E54510F12
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357330AbiD0DAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S1357328AbiD0DCW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Apr 2022 23:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353915AbiD0DAv (ORCPT
+        with ESMTP id S239060AbiD0DCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:00:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5489E16E6AC
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:57:42 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R227gL005739;
-        Wed, 27 Apr 2022 02:57:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YOdJEHbkmZXpZt3YX1SzZyrIG2RcBbTDlw0VLZ/qrOs=;
- b=axhV2S1PAlg4ma9IMo9muO0ISi8tbUI6DJplSEewUD7ss5zrMv3MmofY7UxVbkHgWn15
- +NiQ7GWikkLLOh30cJGLtd4MdOGnxqYOoAPFQ+8PnunO65Zo8knVz4sT3mj9WnJXSLzS
- uCf4WNAMBtTsa5LaFz4Dm6b6Eb0KD4gsJZ9XLlfidJTzP5r0aHuSoHxo91ujQQxFX3zB
- EaehcPvnfEtSlgGyoMEFOPFp3btdBDu+BWuL6SNaj53IvsIJ0JUJQRGXcYQiX8lS2nUi
- oY0MtHMuP1h4yagIi3baPUU565Mzuu3kXeiiJRyXrMfqvcVqscgDU1WWtVlpKe4xZH96 fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fprrpchg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 02:57:30 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23R2Uhp4023886;
-        Wed, 27 Apr 2022 02:57:29 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fprrpchfp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 02:57:29 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23R2vRdL000332;
-        Wed, 27 Apr 2022 02:57:27 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3fpuyg82e6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 02:57:26 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23R2vOGx42598662
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Apr 2022 02:57:24 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 557CFA405B;
-        Wed, 27 Apr 2022 02:57:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9747CA4054;
-        Wed, 27 Apr 2022 02:57:20 +0000 (GMT)
-Received: from [9.43.50.189] (unknown [9.43.50.189])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 27 Apr 2022 02:57:20 +0000 (GMT)
-Message-ID: <4a9eaf06-294c-032d-9b85-14c1d91fb732@linux.ibm.com>
-Date:   Wed, 27 Apr 2022 08:27:19 +0530
+        Tue, 26 Apr 2022 23:02:19 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFEB16E6B4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:59:10 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f7d19cac0bso4248537b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:59:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0vL0sN0rEAukjQ21K/pOOPY/pAChiTkKbeSfIxoIjIg=;
+        b=JxMIgbBPFLXbgIcRh0hoIBrRrgQBzJTgIGNmHMnpQCFQY/iTUK4MxD5cBdqO+uTJY6
+         2oN0kRal/tndIrgJqsaFhVuLB40+diV3BB/ZWCkrDY3zrF7I0pZNkU9LI46RSM/knKg3
+         P7yJbVcecbrLrh3l2aOSJq7A6TcGn3un/84R2d8xGhWXKHckSjG9Ef31EqiGKeF47c3U
+         J8ZaSjf1l1PqQZ+hlM/3qoBsdfuTCdnvJthln2qfJ7iqJSXaa24/4qKFKrcfgZFCs7xV
+         HXiySRCu2hprnM8VqNz6h+T/udSDa8jmVB7qmJ/ZgaIUQmUQFVUac/UhgxR+GnqWqLKA
+         Kriw==
+X-Gm-Message-State: AOAM5324/DobxvDV/RIJ2tKOyeVirHHnT6niIkl8BGLLATFRx3GLYTE/
+        kZxA8oBJ8kZQUav2vbdLtVtV6Dp9l2gEQB0Hn+A=
+X-Google-Smtp-Source: ABdhPJxuOKbSbtSYEK2PscBj01MMpuiLKLLk1ppADQSGSStMpoHVCu1Ypg4NI92XNWkLQ6BXRDTo3BHFyJMSn2N0xFg=
+X-Received: by 2002:a81:8cf:0:b0:2f4:da59:9eef with SMTP id
+ 198-20020a8108cf000000b002f4da599eefmr25834657ywi.78.1651028349276; Tue, 26
+ Apr 2022 19:59:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 0/7] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-Content-Language: en-US
-To:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
-        dave.hansen@linux.intel.com, shy828301@gmail.com,
-        weixugc@google.com, gthelen@google.com, dan.j.williams@intel.com
-References: <20220422195516.10769-1-jvgediya@linux.ibm.com>
- <4b986b46afb2fe888c127d8758221d0f0d3ec55f.camel@intel.com>
- <YmaC2jw6WaQ4X+8W@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <20220425145735.000007ca@Huawei.com>
- <8a8d14ca-0976-41cc-02cb-dd1680fa37ef@linux.ibm.com>
- <0b2fd48049e8f59fb132f260df9e2a84b58e4577.camel@intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <0b2fd48049e8f59fb132f260df9e2a84b58e4577.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: CDPp5zFvR7mBHxwarSRRUEba97-hzXDb
-X-Proofpoint-ORIG-GUID: PtsqmxcuByTZjb7-_q2-YeJHBN6LWfX3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_06,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=725
- impostorscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204270013
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426161658.437466-1-mailhol.vincent@wanadoo.fr> <YmhZSZWg9YZZLRHA@yury-laptop>
+In-Reply-To: <YmhZSZWg9YZZLRHA@yury-laptop>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 27 Apr 2022 11:58:58 +0900
+Message-ID: <CAMZ6RqJuUPuEJQvyHZr0Gxzh9ZZ2iACTHe3XE70jZ38hmePfuA@mail.gmail.com>
+Subject: Re: [PATCH] linux/find: ignore -Wtype-limits to reduce W=2 warnings
+ by 34% tree-wide
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, gcc@gcc.gnu.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 6:59 AM, ying.huang@intel.com wrote:
-> On Mon, 2022-04-25 at 20:14 +0530, Aneesh Kumar K V wrote:
->> On 4/25/22 7:27 PM, Jonathan Cameron wrote:
->>> On Mon, 25 Apr 2022 16:45:38 +0530
->>> Jagdish Gediya <jvgediya@linux.ibm.com> wrote:
->>>
->>>> On Sun, Apr 24, 2022 at 11:19:53AM +0800, ying.huang@intel.com wrote:
->>>>> On Sat, 2022-04-23 at 01:25 +0530, Jagdish Gediya wrote:
->>>>>> Some systems(e.g. PowerVM) can have both DRAM(fast memory) only
->>>>>> NUMA node which are N_MEMORY and slow memory(persistent memory)
->>>>>> only NUMA node which are also N_MEMORY. As the current demotion
->>>>>> target finding algorithm works based on N_MEMORY and best distance,
->>>>>> it will choose DRAM only NUMA node as demotion target instead of
->>>>>> persistent memory node on such systems. If DRAM only NUMA node is
->>>>>> filled with demoted pages then at some point new allocations can
->>>>>> start falling to persistent memory, so basically cold pages are in
->>>>>> fast memor (due to demotion) and new pages are in slow memory, this
->>>>>> is why persistent memory nodes should be utilized for demotion and
->>>>>> dram node should be avoided for demotion so that they can be used
->>>>>> for new allocations.
->>>>>>
->>>>>> Current implementation can work fine on the system where the memory
->>>>>> only numa nodes are possible only for persistent/slow memory but it
->>>>>> is not suitable for the like of systems mentioned above.
->>>>>
->>>>> Can you share the NUMA topology information of your machine?  And the
->>>>> demotion order before and after your change?
->>>>>
->>>>> Whether it's good to use the PMEM nodes as the demotion targets of the
->>>>> DRAM-only node too?
->>>>
->>>> $ numactl -H
->>>> available: 2 nodes (0-1)
->>>> node 0 cpus: 0 1 2 3 4 5 6 7
->>>> node 0 size: 14272 MB
->>>> node 0 free: 13392 MB
->>>> node 1 cpus:
->>>> node 1 size: 2028 MB
->>>> node 1 free: 1971 MB
->>>> node distances:
->>>> node   0   1
->>>>     0:  10  40
->>>>     1:  40  10
->>>>
->>>> 1) without N_DEMOTION_TARGETS patch series, 1 is demotion target
->>>>      for 0 even when 1 is DRAM node and there is no demotion targets for 1.
->>>
->>> I'm not convinced the distinction between DRAM and persistent memory is
->>> valid. There will definitely be systems with a large pool
->>> of remote DRAM (and potentially no NV memory) where the right choice
->>> is to demote to that DRAM pool.
->>>
->>> Basing the decision on whether the memory is from kmem or
->>> normal DRAM doesn't provide sufficient information to make the decision.
->>>
->>
->> Hence the suggestion for the ability to override this from userspace.
->> Now, for example, we could build a system with memory from the remote
->> machine (memory inception in case of power which will mostly be plugged
->> in as regular hotpluggable memory ) and a slow CXL memory or OpenCAPI
->> memory.
->>
->> In the former case, we won't consider that for demotion with this series
->> because that is not instantiated via dax kmem. So yes definitely we
->> would need the ability to override this from userspace so that we could
->> put these remote memory NUMA nodes as demotion targets if we want.
->>>>
-> 
-> Is there a driver for the device (memory from the remote machine)?  If
-> so, we can adjust demotion order for it in the driver.
-> 
++ Alexander Lobakin <alexandr.lobakin@intel.com>
 
-At this point, it is managed by hypervisor, is hotplugged into the the 
-LPAR with more additional properties specified via device tree. So there 
-is no inception specific device driver.
+On Wed. 27 Apr 2022 at 05:42, Yury Norov <yury.norov@gmail.com> wrote:
+> + gcc@gcc.gnu.org
+> + Rikard Falkeborn <rikard.falkeborn@gmail.com>
+>
+> On Wed, Apr 27, 2022 at 01:16:58AM +0900, Vincent Mailhol wrote:
+> > find_first_bit(), find_first_and_bit(), find_first_and_bit() and
+> > find_first_and_bit() all invokes GENMASK(size - 1, 0).
+> >
+> > This triggers below warning when compiled with W=2.
+> >
+> > | ./include/linux/find.h: In function 'find_first_bit':
+> > | ./include/linux/bits.h:25:36: warning: comparison of unsigned
+> > | expression in '< 0' is always false [-Wtype-limits]
+> > |    25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+> > |       |                                    ^
+> > | ./include/linux/build_bug.h:16:62: note: in definition of macro
+> > | 'BUILD_BUG_ON_ZERO'
+> > |    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+> > |       |                                                              ^
+> > | ./include/linux/bits.h:25:17: note: in expansion of macro '__is_constexpr'
+> > |    25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+> > |       |                 ^~~~~~~~~~~~~~
+> > | ./include/linux/bits.h:38:10: note: in expansion of macro 'GENMASK_INPUT_CHECK'
+> > |    38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+> > |       |          ^~~~~~~~~~~~~~~~~~~
+> > | ./include/linux/find.h:119:45: note: in expansion of macro 'GENMASK'
+> > |   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+> > |       |                                             ^~~~~~~
+> >
+> > linux/find.h being a widely used header file, above warning show up in
+> > thousand of files which include this header (either directly on
+> > indirectly).
+> >
+> > Because it is a false positive, we just silence -Wtype-limits flag
+> > locally to remove the spam. clang does not warn about it, so we just
+> > apply the diag_ignore() directive to gcc.
+> >
+> > By doing so, the warnings for a W=2 build are reduced by
+> > 34%. Benchmark was done with gcc 11.2.1 on Linux v5.17 x86_64
+> > allyesconfig (except CONFIG_WERROR). Beforethe patch: 515496 warnings
+> > and after: 340097.
+> >
+> > For reference, past proposal to modify GENMASK_INPUT_CHECK() was
+> > rejected in:
+> > https://lore.kernel.org/all/20220304124416.1181029-1-mailhol.vincent@wanadoo.fr/
+>
+> So, here is nothing wrong with the kernel code and we have an alternative
+> compiler (clang) that doesn't throw Wtype-limits. It sounds to me like an
+> internal GCC problem, and I don't understand how hiding broken Wtype-limits
+> on kernel side would help people to improve GCC.
+>
+> On the thread you mentioned above:
+>
+> > > > > Have you fixed W=1 warnings?
+> > > > > Without fixing W=1 (which makes much more sense, when used with
+> > > > > WERROR=y && COMPILE_TEST=y) this has no value.
+> > > >
+> > > > How is this connected?
+> > >
+> > > By priorities.
+> > > I don't see much value in fixing W=2 per se if the code doesn't compile for W=1.
+> >
+> > *My code* compiles for W=1. For me, fixing this W=2 in the next in line
+> > if speaking of priorities.
+> >
+> > I do not understand why I should be forbidden to fix a W=2 in the
+> > file which I am maintaining on the grounds that some code to which
+> > I do not care still has some W=1.
+>
+> If you are concerned about a particular driver - why don't you silence
+> the warning in there? Or alternatively build it with clang?
 
-> In general, I think that we can adjust demotion order inside kernel from
-> various information sources.  In addition to ACPI SLIT, we also have
-> HMAT, kmem driver, other drivers, etc.
-> 
+Sorry if my previous comments looked selfish. I used the first
+person to illustrate my point but because this W=2 appears in
+thousands of files my real intent is to fix it for everybody, not
+only for myself.
 
-Managing inception memory will any way requires a userspace component to 
-track the owner machine for the remote memory. So we should be ok to 
-have userspace manage demotion order.
+> With all that, I think that the right way to go is to fix the root
+> cause of this churn - broken Wtype-limits in GCC, and after that move
+> Wtype-limits to W=1. Anything else looks hacky to me.
 
--aneesh
+Why is this use of __diag_ignore() hacky compared when compared
+to the other use of __diag_ignore() or the use of -Wno-something
+in local Makefiles?
 
+I did my due diligence and researched GCC’s buzilla before
+sending this patch. There is an opened ticket here:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86647
+
+In a perfect word, yes, all false positives should be fixed in
+the compiler, but the reality is that this bug was reported in
+July 2018, nearly four years ago. GCC developers have their own
+priorities and fixing this bug does not appear to be part of
+those. And I do not have the knowledge of GCC's internals to fix
+this myself.  So what do we do next, blame GCC and do nothing or
+silence it on our side in order to have a mininfull W=2 output?
+
+
+Yours sincerely,
+Vincent Mailhol

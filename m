@@ -2,225 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C367510DD2
+	by mail.lfdr.de (Postfix) with ESMTP id 73B40510DD3
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356642AbiD0BSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S1356538AbiD0BSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356638AbiD0BSr (ORCPT
+        with ESMTP id S233379AbiD0BST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:18:47 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D34342CE2F;
-        Tue, 26 Apr 2022 18:15:33 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app3 (Coremail) with SMTP id cC_KCgDXKMkCmWhiN_ARAw--.54568S2;
-        Wed, 27 Apr 2022 09:14:49 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     krzysztof.kozlowski@linaro.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, akpm@linux-foundation.org,
-        broonie@kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
-        linma@zju.edu.cn, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net v4] nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
-Date:   Wed, 27 Apr 2022 09:14:38 +0800
-Message-Id: <20220427011438.110582-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgDXKMkCmWhiN_ARAw--.54568S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKw1UGF47Jw15WF4kAF4fXwb_yoW7CF1xpF
-        4FgFyakF1DKr4rWr45tF4DGFyruFZ7GFWrCryxKryfCrs0yFWktF1qyay5ZFnrWrWUAFWY
-        ka43A348WFsYvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMMAVZdtZasRQAZsU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 26 Apr 2022 21:18:19 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5291149;
+        Tue, 26 Apr 2022 18:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651022108; x=1682558108;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0xF4u6bKIDATfFpiOZZrcYPm39KiEoiEAhQO1VPQtS0=;
+  b=mARk5qKHTOw4n0X4nroRVcRPjoN/PnZTSHEKBon9Fd9cR/sXHgqA7xVr
+   TkMjjobXAxzLPxqPBS+bNvrLFtwkjBfU2Gfs2sgv6mnpkgEtNGONoOO+j
+   hb9p0mLjMr+YaPoBZb55rx40eonFcI42CV/m40IKWlAINpAlCquzbHIGt
+   f6f13q1ahsVCmkWCYDwxYzh6xtJ1/dq5Xs+OcJWODNzSyOGX/ZlF4k1Q7
+   nl7sI1fc6FgHJtZ+KJiZd3D5MO6Ij9vGwDSTFdELLbM+NusPAlH2vpfLE
+   tUpfc9dZxcp6YgaBUAyojefK+rPw1TdLm2gW3Dpjg9LVgcQPW9NqMhldj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328715771"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="328715771"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 18:15:08 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="564846008"
+Received: from ssaride-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.0.221])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 18:15:04 -0700
+Message-ID: <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Wed, 27 Apr 2022 13:15:02 +1200
+In-Reply-To: <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are destructive operations such as nfcmrvl_fw_dnld_abort and
-gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
-gpio and so on could be destructed while the upper layer functions such as
-nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
-to double-free, use-after-free and null-ptr-deref bugs.
+On Tue, 2022-04-26 at 13:13 -0700, Dave Hansen wrote:
+> On 4/5/22 21:49, Kai Huang wrote:
+> > SEAM VMX root operation is designed to host a CPU-attested, software
+> > module called the 'TDX module' which implements functions to manage
+> > crypto protected VMs called Trust Domains (TD).  SEAM VMX root is also
+> 
+> "crypto protected"?  What the heck is that?
 
-There are three situations that could lead to double-free bugs.
+How about "crypto-protected"?  I googled and it seems it is used by someone
+else.
 
-The first situation is shown below:
+> 
+> > designed to host a CPU-attested, software module called the 'Intel
+> > Persistent SEAMLDR (Intel P-SEAMLDR)' to load and update the TDX module.
+> > 
+> > Host kernel transits to either the P-SEAMLDR or the TDX module via a new
+> 
+>  ^ The
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |  nfcmrvl_nci_unregister_dev
- release_firmware()           |   nfcmrvl_fw_dnld_abort
-  kfree(fw) //(1)             |    fw_dnld_over
-                              |     release_firmware
-  ...                         |      kfree(fw) //(2)
-                              |     ...
+Thanks.
 
-The second situation is shown below:
+> 
+> > SEAMCALL instruction.  SEAMCALLs are host-side interface functions
+> > defined by the P-SEAMLDR and the TDX module around the new SEAMCALL
+> > instruction.  They are similar to a hypercall, except they are made by
+> > host kernel to the SEAM software modules.
+> 
+> This is still missing some important high-level things, like that the
+> TDX module is protected from the untrusted VMM.  Heck, it forgets to
+> mention that the VMM itself is untrusted and the TDX module replaces
+> things that the VMM usually does.
+> 
+> It would also be nice to mention here how this compares with SEV-SNP.
+> Where is the TDX module in that design?  Why doesn't SEV need all this code?
+> 
+> > TDX leverages Intel Multi-Key Total Memory Encryption (MKTME) to crypto
+> > protect TD guests.  TDX reserves part of MKTME KeyID space as TDX private
+> > KeyIDs, which can only be used by software runs in SEAM.  The physical
+> 
+> 					    ^ which
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |
- mod_timer                    |
- (wait a time)                |
- fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
-   fw_dnld_over               |   nfcmrvl_fw_dnld_abort
-    release_firmware          |    fw_dnld_over
-     kfree(fw) //(1)          |     release_firmware
-     ...                      |      kfree(fw) //(2)
+Thanks.
 
-The third situation is shown below:
+> 
+> > address bits for encoding TDX private KeyID are treated as reserved bits
+> > when not in SEAM operation.  The partitioning of MKTME KeyIDs and TDX
+> > private KeyIDs is configured by BIOS.
+> > 
+> > Before being able to manage TD guests, the TDX module must be loaded
+> > and properly initialized using SEAMCALLs defined by TDX architecture.
+> > This series assumes both the P-SEAMLDR and the TDX module are loaded by
+> > BIOS before the kernel boots.
+> > 
+> > There's no CPUID or MSR to detect either the P-SEAMLDR or the TDX module.
+> > Instead, detecting them can be done by using P-SEAMLDR's SEAMLDR.INFO
+> > SEAMCALL to detect P-SEAMLDR.  The success of this SEAMCALL means the
+> > P-SEAMLDR is loaded.  The P-SEAMLDR information returned by this
+> > SEAMCALL further tells whether TDX module is loaded.
+> 
+> There's a bit of information missing here.  The kernel might not know
+> the state of things being loaded.  A previous kernel might have loaded
+> it and left it in an unknown state.
+> 
+> > The TDX module is initialized in multiple steps:
+> > 
+> >         1) Global initialization;
+> >         2) Logical-CPU scope initialization;
+> >         3) Enumerate the TDX module capabilities;
+> >         4) Configure the TDX module about usable memory ranges and
+> >            global KeyID information;
+> >         5) Package-scope configuration for the global KeyID;
+> >         6) Initialize TDX metadata for usable memory ranges based on 4).
+> > 
+> > Step 2) requires calling some SEAMCALL on all "BIOS-enabled" (in MADT
+> > table) logical cpus, otherwise step 4) will fail.  Step 5) requires
+> > calling SEAMCALL on at least one cpu on all packages.
+> > 
+> > TDX module can also be shut down at any time during module's lifetime, by
+> > calling SEAMCALL on all "BIOS-enabled" logical cpus.
+> > 
+> > == Design Considerations ==
+> > 
+> > 1. Lazy TDX module initialization on-demand by caller
+> 
+> This doesn't really tell us what "lazy" is or what the alternatives are.
+> 
+> There are basically two ways the TDX module could be loaded.  Either:
+>   * In early boot
+> or
+>   * At runtime just before the first TDX guest is run
+> 
+> This series implements the runtime loading.
 
-       (Thread 1)               |       (Thread 2)
-nfcmrvl_nci_recv_frame          |
- if(..->fw_download_in_progress)|
-  nfcmrvl_fw_dnld_recv_frame    |
-   queue_work                   |
-                                |
-fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
- fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
-  release_firmware              |   fw_dnld_over
-   kfree(fw) //(1)              |    release_firmware
-                                |     kfree(fw) //(2)
+OK will do.
 
-The firmware struct is deallocated in position (1) and deallocated
-in position (2) again.
+> 
+> > None of the steps in the TDX module initialization process must be done
+> > during kernel boot.  This series doesn't initialize TDX at boot time, but
+> > instead, provides two functions to allow caller to detect and initialize
+> > TDX on demand:
+> > 
+> >         if (tdx_detect())
+> >                 goto no_tdx;
+> >         if (tdx_init())
+> >                 goto no_tdx;
+> > 
+> > This approach has below pros:
+> > 
+> > 1) Initializing the TDX module requires to reserve ~1/256th system RAM as
+> > metadata.  Enabling TDX on demand allows only to consume this memory when
+> > TDX is truly needed (i.e. when KVM wants to create TD guests).
+> > 
+> > 2) Both detecting and initializing the TDX module require calling
+> > SEAMCALL.  However, SEAMCALL requires CPU being already in VMX operation
+> > (VMXON has been done).  So far, KVM is the only user of TDX, and it
+> > already handles VMXON/VMXOFF.  Therefore, letting KVM to initialize TDX
+> > on-demand avoids handling VMXON/VMXOFF (which is not that trivial) in
+> > core-kernel.  Also, in long term, likely a reference based VMXON/VMXOFF
+> > approach is needed since more kernel components will need to handle
+> > VMXON/VMXONFF.
+> > 
+> > 3) It is more flexible to support "TDX module runtime update" (not in
+> > this series).  After updating to the new module at runtime, kernel needs
+> > to go through the initialization process again.  For the new module,
+> > it's possible the metadata allocated for the old module cannot be reused
+> > for the new module, and needs to be re-allocated again.
+> > 
+> > 2. Kernel policy on TDX memory
+> > 
+> > Host kernel is responsible for choosing which memory regions can be used
+> > as TDX memory, and configuring those memory regions to the TDX module by
+> > using an array of "TD Memory Regions" (TDMR), which is a data structure
+> > defined by TDX architecture.
+> 
+> 
+> This is putting the cart before the horse.  Don't define the details up
+> front.
+> 
+> 	The TDX architecture allows the VMM to designate specific memory
+> 	as usable for TDX private memory.  This series chooses to
+> 	designate _all_ system RAM as TDX to avoid having to modify the
+> 	page allocator to distinguish TDX and non-TDX-capable memory
+> 
+> ... then go on to explain the details.
 
-The crash trace triggered by POC is like below:
+Thanks.  Will update.
 
-[  122.640457] BUG: KASAN: double-free or invalid-free in fw_dnld_over+0x28/0xf0
-[  122.640457] Call Trace:
-[  122.640457]  <TASK>
-[  122.640457]  kfree+0xb0/0x330
-[  122.640457]  fw_dnld_over+0x28/0xf0
-[  122.640457]  nfcmrvl_nci_unregister_dev+0x61/0x70
-[  122.640457]  nci_uart_tty_close+0x87/0xd0
-[  122.640457]  tty_ldisc_kill+0x3e/0x80
-[  122.640457]  tty_ldisc_hangup+0x1b2/0x2c0
-[  122.640457]  __tty_hangup.part.0+0x316/0x520
-[  122.640457]  tty_release+0x200/0x670
-[  122.640457]  __fput+0x110/0x410
-[  122.640457]  task_work_run+0x86/0xd0
-[  122.640457]  exit_to_user_mode_prepare+0x1aa/0x1b0
-[  122.640457]  syscall_exit_to_user_mode+0x19/0x50
-[  122.640457]  do_syscall_64+0x48/0x90
-[  122.640457]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  122.640457] RIP: 0033:0x7f68433f6beb
+> 
+> > The first generation of TDX essentially guarantees that all system RAM
+> > memory regions (excluding the memory below 1MB) can be used as TDX
+> > memory.  To avoid having to modify the page allocator to distinguish TDX
+> > and non-TDX allocation, this series chooses to use all system RAM as TDX
+> > memory.
+> > 
+> > E820 table is used to find all system RAM entries.  Following
+> > e820__memblock_setup(), both E820_TYPE_RAM and E820_TYPE_RESERVED_KERN
+> > types are treated as TDX memory, and contiguous ranges in the same NUMA
+> > node are merged together (similar to memblock_add()) before trimming the
+> > non-page-aligned part.
+> 
+> This e820 cruft is too much detail for a cover letter.  In general, once
+> you start talking about individual functions, you've gone too far in the
+> cover letter.
 
-What's more, there are also use-after-free and null-ptr-deref bugs
-in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
-set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
-then, we dereference firmware, gpio or the members of priv->fw_dnld in
-nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
+Will remove.
 
-This patch reorders destructive operations after nci_unregister_device
-and adds bool variable protected by device_lock to synchronize between
-cleanup routine and firmware download routine. The process is shown below.
+> 
+> > 3. Memory hotplug
+> > 
+> > The first generation of TDX architecturally doesn't support memory
+> > hotplug.  And the first generation of TDX-capable platforms don't support
+> > physical memory hotplug.  Since it physically cannot happen, this series
+> > doesn't add any check in ACPI memory hotplug code path to disable it.
+> > 
+> > A special case of memory hotplug is adding NVDIMM as system RAM using
+> > kmem driver.  However the first generation of TDX-capable platforms
+> > cannot enable TDX and NVDIMM simultaneously, so in practice this cannot
+> > happen either.
+> 
+> What prevents this code from today's code being run on tomorrow's
+> platforms and breaking these assumptions?
 
-       (Thread 1)               |       (Thread 2)
-nfcmrvl_nci_unregister_dev      |
-  nci_unregister_device         |
-    nfc_unregister_device       | nfc_fw_download
-      device_lock()             |
-      ...                       |
-      nfc_download = false;     |   ...
-      device_unlock()           |
-  ...                           |   device_lock()
-  (destructive operations)      |   if(.. || !nfc_download)
-                                |     goto error;
-                                | error:
-                                |   device_unlock()
+I forgot to add below (which is in the documentation patch):
 
-If the device is detaching, the download function will goto error.
-If the download function is executing, nci_unregister_device will
-wait until download function is finished.
+"This can be enhanced when future generation of TDX starts to support ACPI
+memory hotplug, or NVDIMM and TDX can be enabled simultaneously on the
+same platform."
 
-Fixes: 3194c6870158 ("NFC: nfcmrvl: add firmware download support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in v4:
-  - Change bool variable nfc_download to static.
+Is this acceptable?
 
- drivers/nfc/nfcmrvl/main.c | 2 +-
- net/nfc/core.c             | 6 +++++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> > Another case is admin can use 'memmap' kernel command line to create
+> > legacy PMEMs and use them as TD guest memory, or theoretically, can use
+> > kmem driver to add them as system RAM.  To avoid having to change memory
+> > hotplug code to prevent this from happening, this series always include
+> > legacy PMEMs when constructing TDMRs so they are also TDX memory.
+> > 
+> > 4. CPU hotplug
+> > 
+> > The first generation of TDX architecturally doesn't support ACPI CPU
+> > hotplug.  All logical cpus are enabled by BIOS in MADT table.  Also, the
+> > first generation of TDX-capable platforms don't support ACPI CPU hotplug
+> > either.  Since this physically cannot happen, this series doesn't add any
+> > check in ACPI CPU hotplug code path to disable it.
+> > 
+> > Also, only TDX module initialization requires all BIOS-enabled cpus are
+> > online.  After the initialization, any logical cpu can be brought down
+> > and brought up to online again later.  Therefore this series doesn't
+> > change logical CPU hotplug either.
+> > 
+> > 5. TDX interaction with kexec()
+> > 
+> > If TDX is ever enabled and/or used to run any TD guests, the cachelines
+> > of TDX private memory, including PAMTs, used by TDX module need to be
+> > flushed before transiting to the new kernel otherwise they may silently
+> > corrupt the new kernel.  Similar to SME, this series flushes cache in
+> > stop_this_cpu().
+> 
+> What does this have to do with kexec()?  What's a PAMT?
 
-diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
-index 2fcf545012b..1a5284de434 100644
---- a/drivers/nfc/nfcmrvl/main.c
-+++ b/drivers/nfc/nfcmrvl/main.c
-@@ -183,6 +183,7 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
- {
- 	struct nci_dev *ndev = priv->ndev;
- 
-+	nci_unregister_device(ndev);
- 	if (priv->ndev->nfc_dev->fw_download_in_progress)
- 		nfcmrvl_fw_dnld_abort(priv);
- 
-@@ -191,7 +192,6 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
- 	if (gpio_is_valid(priv->config.reset_n_io))
- 		gpio_free(priv->config.reset_n_io);
- 
--	nci_unregister_device(ndev);
- 	nci_free_device(ndev);
- 	kfree(priv);
- }
-diff --git a/net/nfc/core.c b/net/nfc/core.c
-index dc7a2404efd..1d91334ee86 100644
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -25,6 +25,8 @@
- #define NFC_CHECK_PRES_FREQ_MS	2000
- 
- int nfc_devlist_generation;
-+/* nfc_download: used to judge whether nfc firmware download could start */
-+static bool nfc_download;
- DEFINE_MUTEX(nfc_devlist_mutex);
- 
- /* NFC device ID bitmap */
-@@ -38,7 +40,7 @@ int nfc_fw_download(struct nfc_dev *dev, const char *firmware_name)
- 
- 	device_lock(&dev->dev);
- 
--	if (!device_is_registered(&dev->dev)) {
-+	if (!device_is_registered(&dev->dev) || !nfc_download) {
- 		rc = -ENODEV;
- 		goto error;
- 	}
-@@ -1134,6 +1136,7 @@ int nfc_register_device(struct nfc_dev *dev)
- 			dev->rfkill = NULL;
- 		}
- 	}
-+	nfc_download = true;
- 	device_unlock(&dev->dev);
- 
- 	rc = nfc_genl_device_added(dev);
-@@ -1166,6 +1169,7 @@ void nfc_unregister_device(struct nfc_dev *dev)
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
- 	}
-+	nfc_download = false;
- 	device_unlock(&dev->dev);
- 
- 	if (dev->ops->check_presence) {
+The point is the dirty cachelines of TDX private memory must be flushed
+otherwise they may slightly corrupt the new kexec()-ed kernel.
+
+Will use "TDX metadata" instead of "PAMT".  The former has already been
+mentioned above.
+
+> 
+> > The TDX module can be initialized only once during its lifetime.  The
+> > first generation of TDX doesn't have interface to reset TDX module to
+> 
+> 				      ^ an
+
+Thanks.
+
+> 
+> > uninitialized state so it can be initialized again.
+> > 
+> > This implies:
+> > 
+> >   - If the old kernel fails to initialize TDX, the new kernel cannot
+> >     use TDX too unless the new kernel fixes the bug which leads to
+> >     initialization failure in the old kernel and can resume from where
+> >     the old kernel stops. This requires certain coordination between
+> >     the two kernels.
+> 
+> OK, but what does this *MEAN*?
+
+This means we need to extend the information which the old kernel passes to the
+new kernel.  But I don't think it's feasible.  I'll refine this kexec() section
+to make it more concise next version.
+
+> 
+> >   - If the old kernel has initialized TDX successfully, the new kernel
+> >     may be able to use TDX if the two kernels have the exactly same
+> >     configurations on the TDX module. It further requires the new kernel
+> >     to reserve the TDX metadata pages (allocated by the old kernel) in
+> >     its page allocator. It also requires coordination between the two
+> >     kernels.  Furthermore, if kexec() is done when there are active TD
+> >     guests running, the new kernel cannot use TDX because it's extremely
+> >     hard for the old kernel to pass all TDX private pages to the new
+> >     kernel.
+> > 
+> > Given that, this series doesn't support TDX after kexec() (except the
+> > old kernel doesn't attempt to initialize TDX at all).
+> > 
+> > And this series doesn't shut down TDX module but leaves it open during
+> > kexec().  It is because shutting down TDX module requires CPU being in
+> > VMX operation but there's no guarantee of this during kexec().  Leaving
+> > the TDX module open is not the best case, but it is OK since the new
+> > kernel won't be able to use TDX anyway (therefore TDX module won't run
+> > at all).
+> 
+> tl;dr: kexec() doesn't work with this code.
+> 
+> Right?
+> 
+> That doesn't seem good.
+
+It can work in my understanding.  We just need to flush cache before booting to
+the new kernel.
+
+
 -- 
-2.17.1
+Thanks,
+-Kai
+
 

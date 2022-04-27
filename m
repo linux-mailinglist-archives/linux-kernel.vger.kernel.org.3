@@ -2,109 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39532512491
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 086A65124A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbiD0VeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S232319AbiD0VpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbiD0Vd4 (ORCPT
+        with ESMTP id S229959AbiD0Voz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:33:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A372827152;
-        Wed, 27 Apr 2022 14:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651095044; x=1682631044;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9AnR0+i4WyZuMptJB4sGh0+ILBAmTrqUC5l0VYBK5DQ=;
-  b=OLVFTDseiEs8H9fUvj40yBhty5zkBeBjcMUOSNhl1W0gPhmb9MTZbD1f
-   OMdcrmwDD5XnR7YgrJ0AqK0c9SmSY5cIg/0Q+tTaWOdloNoXekPimZZi/
-   3by0OvjfJdfZUhrA1KfOb+7/v0YKYihas94uEd/erZiWGqepC+59pR4tt
-   gWCLDpFYRp6cMI0ngTm0rzmQdnl2LB1BiC6nOhbULKyC3sZyigiy3H+vC
-   Iy4flTapKyFfpn38d0kjYdxTzbrbpYxg+6dGB7BLbcOlByPxdeBjBC6V7
-   wRWNo6/VQT8qX7+sD45PN86w1aIJyKdT7Ulb5fp/d+5ZEv/d29nTzbif9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="246634544"
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="246634544"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 14:30:44 -0700
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="705733567"
-Received: from rrnambia-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.78])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 14:30:41 -0700
-Message-ID: <68484e168226037c3a25b6fb983b052b26ab3ec1.camel@intel.com>
-Subject: Re: [PATCH v3 05/21] x86/virt/tdx: Detect P-SEAMLDR and TDX module
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Thu, 28 Apr 2022 09:30:39 +1200
-In-Reply-To: <49cc6848-47ae-9c25-f479-c5aed8c892df@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <b9f4d4afd244d685182ce9ab5ffdd0bf245be6e2.1649219184.git.kai.huang@intel.com>
-         <104a6959-3bd4-1e75-5e3d-5dc3ef025ed0@intel.com>
-         <98af78402861b1982607c5fd14b0c89403c042a6.camel@intel.com>
-         <49cc6848-47ae-9c25-f479-c5aed8c892df@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 27 Apr 2022 17:44:55 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B1890CF0;
+        Wed, 27 Apr 2022 14:41:42 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id c17-20020a056830349100b00605ca7d1deeso1964163otu.3;
+        Wed, 27 Apr 2022 14:41:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8TsqhMlD8DfHQiAjIFiLwWUPyhOj7fzWY9COQimF+14=;
+        b=6jZ6XbI+6nwmx6SspDdu/bYHCBWF1Wtb+s8+h7fCXFICSZVNdRqMKQ3RtD2Xxe0fVV
+         iL6gxeZ+/bCJ2ZeMibxdxCcdiYgC7QasL9mLBEs/zVkbauzpikJ5wN5LKo+RrCQs5Ln9
+         ld12BSgyk3n4ELdQAzKDJy1PgTZsxwdvwl7/30q3I6eg2iHZ3lKRDpEWcZLif92cmo5i
+         i51LIRbK1iuPcp7fjtvG6F/RoMh7CLceE4bSAMF1SEVJtfTbHzTZfOkIu25r14u3WxlU
+         QCRKOtC2oCbUI2b6+64S4uvS9efs9lkWn5mHnAG0hTPH6TR3OZkRJNe5BQ/HkLkKEENy
+         m6dg==
+X-Gm-Message-State: AOAM533Z5DnoxzCEc/A+2O6STBz6uXwQHfolhIqm6ykLvQU20WwA+6cv
+        Mem8xy3OKPXJ9acEzFWa2A==
+X-Google-Smtp-Source: ABdhPJyVaHjPlZa/IDYPuEiUrxwWWb/m5vuMEGbEknV79DmMykxEBvRbLgnIRLda89Vu+m0aXDUg7Q==
+X-Received: by 2002:a9d:5f15:0:b0:5af:5928:d5a1 with SMTP id f21-20020a9d5f15000000b005af5928d5a1mr10750692oti.343.1651095701638;
+        Wed, 27 Apr 2022 14:41:41 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c9-20020a4a8ec9000000b0032438ba79b0sm7137555ool.0.2022.04.27.14.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 14:41:41 -0700 (PDT)
+Received: (nullmailer pid 712339 invoked by uid 1000);
+        Wed, 27 Apr 2022 21:41:40 -0000
+Date:   Wed, 27 Apr 2022 16:41:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: add AD4130
+Message-ID: <Ymm4lJxumCPQKIhB@robh.at.kernel.org>
+References: <20220419150828.191933-1-cosmin.tanislav@analog.com>
+ <20220419150828.191933-2-cosmin.tanislav@analog.com>
+ <Ymc+urR3N8eLLKxl@robh.at.kernel.org>
+ <a4ba3f7e-6d03-36c7-e98a-3bed7db69fc6@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4ba3f7e-6d03-36c7-e98a-3bed7db69fc6@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-27 at 07:24 -0700, Dave Hansen wrote:
-> On 4/26/22 17:01, Kai Huang wrote:
-> > On Tue, 2022-04-26 at 13:56 -0700, Dave Hansen wrote:
-> > > On 4/5/22 21:49, Kai Huang wrote:
-> > > > The P-SEAMLDR (persistent SEAM loader) is the first software module that
-> > > > runs in SEAM VMX root, responsible for loading and updating the TDX
-> > > > module.  Both the P-SEAMLDR and the TDX module are expected to be loaded
-> > > > before host kernel boots.
+On Wed, Apr 27, 2022 at 03:47:13PM +0300, Cosmin Tanislav wrote:
+> 
+> 
+> On 4/26/22 03:37, Rob Herring wrote:
+> > On Tue, Apr 19, 2022 at 06:08:27PM +0300, Cosmin Tanislav wrote:
+> > > AD4130-8 is an ultra-low power, high precision, measurement solution for
+> > > low bandwidth battery operated applications.
 > > > 
-> > > Why bother with the P-SEAMLDR here at all?  The kernel isn't loading the
-> > > TDX module in this series.  Why not just call into the TDX module directly?
+> > > The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+> > > to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+> > > Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+> > > selectable filter options, smart sequencer, sensor biasing and excitation
+> > > options, diagnostics, and a FIFO buffer.
+> > > 
+> > > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > > ---
+> > >   .../bindings/iio/adc/adi,ad4130.yaml          | 264 ++++++++++++++++++
+> > >   1 file changed, 264 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+> > > new file mode 100644
+> > > index 000000000000..32996b62cd20
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+> > > @@ -0,0 +1,264 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +# Copyright 2022 Analog Devices Inc.
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/iio/adc/adi,ad4130.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Analog Devices AD4130 ADC device driver
+> > > +
+> > > +maintainers:
+> > > +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
+> > > +
+> > > +description: |
+> > > +  Bindings for the Analog Devices AD4130 ADC. Datasheet can be found here:
+> > > +    https://www.analog.com/media/en/technical-documentation/data-sheets/AD4130-8.pdf
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - adi,ad4130-8-16-lfcsp
+> > > +      - adi,ad4130-8-16-wlcsp
+> > > +      - adi,ad4130-8-24-lfcsp
+> > > +      - adi,ad4130-8-24-wlcsp
 > > 
-> > It's not absolutely needed in this series.  I choose to detect P-SEAMLDR because
-> > detecting it can also detect the TDX module, and eventually we will need to
-> > support P-SEAMLDR because the TDX module runtime update uses P-SEAMLDR's
-> > SEAMCALL to do that.
-> > 
-> > Also, even for this series, detecting the P-SEAMLDR allows us to provide the P-
-> > SEAMLDR information to user at a basic level in dmesg:
-> > 
-> > [..] tdx: P-SEAMLDR: version 0x0, vendor_id: 0x8086, build_date: 20211209,
-> > build_num 160, major 1, minor 0
-> > 
-> > This may be useful to users, but it's not a hard requirement for this series.
+> > What is lfcsp? wlcsp seems to be the package type which generally
+> > shouldn't be part of the compatible.
 > 
-> We've had a lot of problems in general with this code trying to do too
-> much at once.  I thought we agreed that this was going to only contain
-> the minimum code to make TDX functional.  It seems to be creeping to
-> grow bigger and bigger.
+> lfcsp is a different package type. Sadly, lfcsp provides less interrupt
+> options. On lfcsp, dout-int inside interrupt-names actually only means
+> DOUT, while on wlcsp, it means INT. This is why we need to distinguish
+> between the different package types. I can't think of any way around it,
+> see my reply to Nathan for V1.
 > 
-> Am I remembering this wrong?
+> dout support is not implemented in the driver right now because when the
+> interrupt pin is configured as dout, FIFO interrupts are unsupported, so
+> the entire buffered part of the driver is useless, and extra logic is
+> needed for IRQ detection then.
 
-OK. I'll remove the P-SEAMLDR related code.
+Please capture all this in the binding. At least enough I don't ask the 
+same question again when I've forgotten about this.
 
--- 
-Thanks,
--Kai
-
-
+Rob

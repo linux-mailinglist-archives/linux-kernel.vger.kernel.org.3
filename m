@@ -2,173 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738EA511B65
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153845119CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235272AbiD0NN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S235316AbiD0NNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiD0NN1 (ORCPT
+        with ESMTP id S229655AbiD0NNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:13:27 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C5537EDD0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:10:15 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpJxC1Kcjzfb9c;
-        Wed, 27 Apr 2022 21:09:19 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
- 2022 21:10:13 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <nizhen@uniontech.com>, <mcgrof@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH sysctl-next] sched: Fix build warning without CONFIG_SYSCTL
-Date:   Wed, 27 Apr 2022 21:10:02 +0800
-Message-ID: <20220427131002.16192-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Wed, 27 Apr 2022 09:13:32 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B313808C0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:10:17 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 538EC30B;
+        Wed, 27 Apr 2022 15:10:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1651065014;
+        bh=JAZobPiVE1XENl+KRj+bL9U8OuARgC0UTHGiOLvnliY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rkk+zeHE00lUOzymjDjdK2IOD821KYy+66vwHkrktQxffDOOOmkHWhVCSTVOie9Lt
+         15T/IOFgSTWuxRfZgv533D1ISRlP2l/aVoPAmoZa6G+bFU45bAlH5F9nQOkObumo1V
+         WFDG5fhV5/9V7Q72CtheDPei+LXoemy97EVem60A=
+Date:   Wed, 27 Apr 2022 16:10:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
+ bridge"
+Message-ID: <YmlAtUTJiBrsFBN3@pendragon.ideasonboard.com>
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+ <20220420231230.58499-2-bjorn.andersson@linaro.org>
+ <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+ <20220421082358.ivpmtak3ednvddrc@houat>
+ <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
+ <CAMty3ZAkw0rssCzR_ka7U9JeoGxJr5JPM7GWDfd1dob9goL-BQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMty3ZAkw0rssCzR_ka7U9JeoGxJr5JPM7GWDfd1dob9goL-BQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IF CONFIG_SYSCTL is n, build warn:
+On Wed, Apr 27, 2022 at 05:22:32PM +0530, Jagan Teki wrote:
+> On Wed, Apr 27, 2022 at 12:29 PM Jagan Teki wrote:
+> > On Thu, Apr 21, 2022 at 1:54 PM Maxime Ripard wrote:
+> > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
+> > > > + Linus
+> > > > + Marek
+> > > > + Laurent
+> > > > + Robert
+> > > >
+> > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
+> > > > <bjorn.andersson@linaro.org> wrote:
+> > > > >
+> > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+> > > > > bridge")' attempted to simplify the case of expressing a simple panel
+> > > > > under a DSI controller, by assuming that the first non-graph child node
+> > > > > was a panel or bridge.
+> > > > >
+> > > > > Unfortunately for non-trivial cases the first child node might not be a
+> > > > > panel or bridge.  Examples of this can be a aux-bus in the case of
+> > > > > DisplayPort, or an opp-table represented before the panel node.
+> > > > >
+> > > > > In these cases the reverted commit prevents the caller from ever finding
+> > > > > a reference to the panel.
+> > > > >
+> > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
+> > > > > panel or bridge")', in favor of using an explicit graph reference to the
+> > > > > panel in the trivial case as well.
+> > > >
+> > > > This eventually breaks many child-based devm_drm_of_get_bridge
+> > > > switched drivers.  Do you have any suggestions on how to proceed to
+> > > > succeed in those use cases as well?
+> > >
+> > > I guess we could create a new helper for those, like
+> > > devm_drm_of_get_bridge_with_panel, or something.
+> >
+> > I think using the same existing helper and updating child support is
+> > make sense, as there is a possibility to use the same host for child
+> > and OF-graph bindings.
+> >
+> > I can see two possible solutions (as of now)
+> >
+> > 1. adding "dcs-child-type" bindings for child-based panel or bridge
+> > 2. iterate child and skip those nodes other than panel or bridge. or
+> > iterate sub-child to find it has a panel or bridge-like aux-bus (which
+> > is indeed hard as this configuration seems not 'standard' i think )
+> >
+> > Any inputs?
+> 
+> Checking aux-bus with the sub-node panel can be a possible check to
+> look at it, any comments?
 
-kernel/sched/core.c:1782:12: warning: ‘sysctl_sched_uclamp_handler’ defined but not used [-Wunused-function]
- static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+Can we stop piling hacks and move towards OF graph everywhere, please ?
 
-sysctl_sched_uclamp_handler() is used while CONFIG_SYSCTL enabled,
-wrap all related code with CONFIG_SYSCTL to fix this.
+> --- a/drivers/gpu/drm/drm_of.c
+> +++ b/drivers/gpu/drm/drm_of.c
+> @@ -244,6 +244,25 @@ int drm_of_find_panel_or_bridge(const struct
+> device_node *np,
+>         if (panel)
+>                 *panel = NULL;
+> 
+> +       /**
+> +        * Devices can also be child nodes when we also control that device
+> +        * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
+> +        *
+> +        * Lookup for a child node of the given parent that isn't either port
+> +        * or ports.
+> +        */
+> +       for_each_available_child_of_node(np, remote) {
+> +               if (of_node_name_eq(remote, "port") ||
+> +                   of_node_name_eq(remote, "ports"))
+> +                       continue;
+> +
+> +               if (!(of_node_name_eq(remote, "aux-bus") &&
+> +                     of_get_child_by_name(remote, "panel")))
+> +                       continue;
+> +
+> +               goto of_find_panel_or_bridge;
+> +       }
+> +
+>         /*
+>          * of_graph_get_remote_node() produces a noisy error message if port
+>          * node isn't found and the absence of the port is a legit case here,
+> @@ -254,6 +273,8 @@ int drm_of_find_panel_or_bridge(const struct
+> device_node *np,
+>                 return -ENODEV;
+> 
+>         remote = of_graph_get_remote_node(np, port, endpoint);
+> +
+> +of_find_panel_or_bridge:
+>         if (!remote)
+>                 return -ENODEV;
 
-Fixes: 3267e0156c33 ("sched: Move uclamp_util sysctls to core.c")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- kernel/sched/core.c | 65 +++++++++++++++++++++++++--------------------
- 1 file changed, 36 insertions(+), 29 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ef31751c5799..b8d2ff09b853 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1306,10 +1306,10 @@ static void set_load_weight(struct task_struct *p, bool update_load)
- static DEFINE_MUTEX(uclamp_mutex);
- 
- /* Max allowed minimum utilization */
--static unsigned int sysctl_sched_uclamp_util_min = SCHED_CAPACITY_SCALE;
-+static unsigned int __maybe_unused sysctl_sched_uclamp_util_min = SCHED_CAPACITY_SCALE;
- 
- /* Max allowed maximum utilization */
--static unsigned int sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
-+static unsigned int __maybe_unused sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
- 
- /*
-  * By default RT tasks run at the maximum performance point/capacity of the
-@@ -1456,33 +1456,6 @@ static void uclamp_update_util_min_rt_default(struct task_struct *p)
- 	task_rq_unlock(rq, p, &rf);
- }
- 
--static void uclamp_sync_util_min_rt_default(void)
--{
--	struct task_struct *g, *p;
--
--	/*
--	 * copy_process()			sysctl_uclamp
--	 *					  uclamp_min_rt = X;
--	 *   write_lock(&tasklist_lock)		  read_lock(&tasklist_lock)
--	 *   // link thread			  smp_mb__after_spinlock()
--	 *   write_unlock(&tasklist_lock)	  read_unlock(&tasklist_lock);
--	 *   sched_post_fork()			  for_each_process_thread()
--	 *     __uclamp_sync_rt()		    __uclamp_sync_rt()
--	 *
--	 * Ensures that either sched_post_fork() will observe the new
--	 * uclamp_min_rt or for_each_process_thread() will observe the new
--	 * task.
--	 */
--	read_lock(&tasklist_lock);
--	smp_mb__after_spinlock();
--	read_unlock(&tasklist_lock);
--
--	rcu_read_lock();
--	for_each_process_thread(g, p)
--		uclamp_update_util_min_rt_default(p);
--	rcu_read_unlock();
--}
--
- static inline struct uclamp_se
- uclamp_tg_restrict(struct task_struct *p, enum uclamp_id clamp_id)
- {
-@@ -1762,6 +1735,11 @@ uclamp_update_active_tasks(struct cgroup_subsys_state *css)
- }
- 
- static void cpu_util_update_eff(struct cgroup_subsys_state *css);
-+#endif
-+
-+#ifdef CONFIG_SYSCTL
-+#ifdef CONFIG_UCLAMP_TASK
-+#ifdef CONFIG_UCLAMP_TASK_GROUP
- static void uclamp_update_root_tg(void)
- {
- 	struct task_group *tg = &root_task_group;
-@@ -1779,6 +1757,33 @@ static void uclamp_update_root_tg(void)
- static void uclamp_update_root_tg(void) { }
- #endif
- 
-+static void uclamp_sync_util_min_rt_default(void)
-+{
-+	struct task_struct *g, *p;
-+
-+	/*
-+	 * copy_process()			sysctl_uclamp
-+	 *					  uclamp_min_rt = X;
-+	 *   write_lock(&tasklist_lock)		  read_lock(&tasklist_lock)
-+	 *   // link thread			  smp_mb__after_spinlock()
-+	 *   write_unlock(&tasklist_lock)	  read_unlock(&tasklist_lock);
-+	 *   sched_post_fork()			  for_each_process_thread()
-+	 *     __uclamp_sync_rt()		    __uclamp_sync_rt()
-+	 *
-+	 * Ensures that either sched_post_fork() will observe the new
-+	 * uclamp_min_rt or for_each_process_thread() will observe the new
-+	 * task.
-+	 */
-+	read_lock(&tasklist_lock);
-+	smp_mb__after_spinlock();
-+	read_unlock(&tasklist_lock);
-+
-+	rcu_read_lock();
-+	for_each_process_thread(g, p)
-+		uclamp_update_util_min_rt_default(p);
-+	rcu_read_unlock();
-+}
-+
- static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
- 				void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -1843,6 +1848,8 @@ static int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
- 
- 	return result;
- }
-+#endif
-+#endif
- 
- static int uclamp_validate(struct task_struct *p,
- 			   const struct sched_attr *attr)
 -- 
-2.17.1
+Regards,
 
+Laurent Pinchart

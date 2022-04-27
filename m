@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9AB5116FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE9E511739
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233760AbiD0MO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S233495AbiD0MFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233609AbiD0MOX (ORCPT
+        with ESMTP id S233419AbiD0MFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:14:23 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36681811B1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:11:12 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g6so3026827ejw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=BcI6cm92uAoy93seyH4hLm4lTU3K0LAkkGc9A5aDw2wXnvmZSL1zUQ7pv38TFurDc8
-         cNLeupUJTOMNB/UAKezYACSr0LRRZfIA2rwRmMyUxkA2nS56WZgjS6tQ8qkFaLjp2odE
-         OHx0oBwm1dolPAjoAiZG0PzIzcucj9hsYH3iezE5ygohChN5yIoNzlOrZjnNRiuPbTKp
-         sQu6GW/9Ne8U3YS3fjga4dFPDIvL7Mlme4ZL0u8XPG8mwOQw63A3Z79UPi/XHjTeUels
-         adGgITu+cMwjOcfBBEkV0AgZWaYFJK9ikC3C7PggzHab5Yp5YMQvGmYin5ahZsaRqnPY
-         piug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=hErj9XjfGeL0ItBezZJ9DHvZzx9OGet3woZ3RdZ/+5mbZZQ+azEoDecjhxThto49EB
-         RYlBHTvTgg8+1uKdVf7z4rlQ4jPWP/uEye0+g7uwCXZNEnMK/AyX5acbsTRn62EqPMfR
-         xuopmp/40nTip/0DeREF0KiHPZkYuY/09MYT7ea604e+w5Mhx8GyWzytH4NKJ1xSen9a
-         gAC62rF+fXpgLe7AalzR+qxPzopeBjPew3jAweyyTihIKzVSwSx2tK4NpE4tb8srgtmL
-         pCNsxhTows9OmLfE6xpu3mpqjsvDAKUp1dv9jjfP94dIIVuaxykSy16KJHXKyzJB1Q/4
-         8X1g==
-X-Gm-Message-State: AOAM533LqtDETU/CxxXSSKlylZcT04BrrcYv4GgUBl9yIFko0uw8fzfn
-        1rJQFRRfzg2No3kdWQXQcTI7gMpahl0vFoJ35nE=
-X-Google-Smtp-Source: ABdhPJyXc6w5Ey5Rnh9dQyPAGXRjokm/lj4Z0ScD3ftTVAUyQSnj4ZTJcI4Mzl+pN9ok8dBwHlOl8ZLfrAl87SDbJ6M=
-X-Received: by 2002:a17:907:8b05:b0:6f3:cb71:6746 with SMTP id
- sz5-20020a1709078b0500b006f3cb716746mr2146555ejc.274.1651061470447; Wed, 27
- Apr 2022 05:11:10 -0700 (PDT)
+        Wed, 27 Apr 2022 08:05:32 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6BE3B295
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:02:20 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpHNr6hSFzGpNK;
+        Wed, 27 Apr 2022 19:59:40 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 20:02:17 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 20:02:17 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH 0/4] arm64: Cleanup ioremap() and support ioremap_prot()
+Date:   Wed, 27 Apr 2022 20:14:09 +0800
+Message-ID: <20220427121413.168468-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Sender: krakauerrandall@gmail.com
-Received: by 2002:a05:6408:2406:b0:16c:4005:1ca2 with HTTP; Wed, 27 Apr 2022
- 05:11:09 -0700 (PDT)
-From:   Mathew Bowles <mathewbowles2021@gmail.com>
-Date:   Wed, 27 Apr 2022 12:11:09 +0000
-X-Google-Sender-Auth: fiwArKCrMpJTHxMfWLsBKffvVZc
-Message-ID: <CAMT0Ay7caZo32MxfdwA5NiehvaY9MCbfSGZvHnn5YfT1S3DchQ@mail.gmail.com>
-Subject: Hello, I need your assistance in this very matter
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Let's arm64 use GENERIC_IOREMAP to cleanup code, and
+support ioremap_prot()/HAVE_IOREMAP_PROT, which could
+enable generic_access_phys().
+
+Kefeng Wang (4):
+  mm: ioremap: Setup phys_addr of struct vm_struct
+  mm: ioremap: Add arch_ioremap/iounmap_check()
+  arm64: mm: Convert to GENERIC_IOREMAP
+  arm64: Add HAVE_IOREMAP_PROT support
+
+ .../features/vm/ioremap_prot/arch-support.txt |  2 +-
+ arch/arm64/Kconfig                            |  2 +
+ arch/arm64/include/asm/io.h                   | 14 +--
+ arch/arm64/include/asm/pgtable.h              | 10 +++
+ arch/arm64/kernel/acpi.c                      |  2 +-
+ arch/arm64/mm/hugetlbpage.c                   | 10 ---
+ arch/arm64/mm/ioremap.c                       | 86 +++----------------
+ include/asm-generic/io.h                      |  3 +
+ mm/ioremap.c                                  | 21 ++++-
+ 9 files changed, 56 insertions(+), 94 deletions(-)
+
+-- 
+2.26.2
 

@@ -2,138 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0448A511169
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84ED511180
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358227AbiD0Gpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1358288AbiD0GsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242894AbiD0Gpi (ORCPT
+        with ESMTP id S1358230AbiD0Grv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:45:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF2D12FEF4;
-        Tue, 26 Apr 2022 23:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651041748; x=1682577748;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M0Yim+wzgXBIfpDKLfu6Nj6r7PJaxMbByiW4szopul4=;
-  b=i4igcz0NYHy0hwhxIfrJgTimlFEve1b9tZUqr02Q/EB8twoBfh1amCPT
-   eimuG/X8PAmxsIn4yibSc0jmT11VvoDcctHIj4PeaLHdeVBJTaZIBMTOC
-   PX7YO9eq/Po58t+WBFGfeFOBCFt0Bpiw0f5eoUyUcIPw0gVD7jxRxuO9i
-   JlbbMDvETY68qo+kXcAiFRlybRaNc+5yTj/SbVqF4U1qLPS7Ovw+Izg9s
-   CS4e9HnZdnBguhOKg7CBeLNpT1MTkEoy7mzPRnhc+HA7UFXFjrl8DWm0F
-   p6Y1lHqsE4r8Brw81Gt8NoYbiwN1rwMEuwD9nJ6+CVzGZMTGjZX3Vo/gF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265644130"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="265644130"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:42:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="705407344"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 26 Apr 2022 23:42:20 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 09:42:19 +0300
-Date:   Wed, 27 Apr 2022 09:42:19 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb: typec: Separate USB Power Delivery from USB
- Type-C
-Message-ID: <YmjlyxLk8wfziq9l@kuha.fi.intel.com>
-References: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
- <20220425124946.13064-2-heikki.krogerus@linux.intel.com>
- <YmfgfRA1ecJwf12i@kroah.com>
+        Wed, 27 Apr 2022 02:47:51 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A7214AF45;
+        Tue, 26 Apr 2022 23:44:40 -0700 (PDT)
+X-UUID: 1ec1d605330a436cbe742b736efea618-20220427
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:6259bcda-133a-4606-aa7d-8801099abe87,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:6259bcda-133a-4606-aa7d-8801099abe87,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:1c56a4c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:4ed893b03470,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 1ec1d605330a436cbe742b736efea618-20220427
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2017991267; Wed, 27 Apr 2022 14:44:33 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 27 Apr 2022 14:44:32 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 27 Apr
+ 2022 14:44:30 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Apr 2022 14:44:30 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
+        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
+        <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v17 0/6] Add mutex support for MDP
+Date:   Wed, 27 Apr 2022 14:44:19 +0800
+Message-ID: <20220427064425.30383-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmfgfRA1ecJwf12i@kroah.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Change since V16:
+- Rebase on v5.18-rc4
+- Fix misplacement of definition "CONFIG_MTK_CMDQ" which
+  caused compilation error when CMD is not supported.
+
+Change since V15:
+- Rebase on linux-next.
+- As suggested by Angelo, split common parts into independent functions to
+  make functions more concise.
+- Based on safety considerations, increase the returned error number and
+  message to facilitate error handling.
+
+Change since V14:
+- Rebase on linux-next.
+- Add new SOF and MOD table for general interface to integrate the requirement
+  of different modules.
+- Remove unnecessary MOD structure.
+- By Rob Herring's suggestion, revise the description of
+  "mediatek,gce-client-reg" in MUTEX dt-bindings.
+- Delete the redundant definition of MTK_MUTEX_ENABLE and modify corresponding
+  function.
+
+Change since V13:
+- Rebase on linux-next tag:next-20220316
+- Adjust the MUTEX MOD table structure and corresponding functions.
+- Adjust the definition style about 8183 MDP MOD.
+- Remove redundant definitions and enumerations.
+- Adjust the CMDQ operation in MUTEX to be backward compatible
+
+Change since V12:
+- Rebase on linux-next
+- Remove ISP related settings in MMSYS
+- Removed CMDQ operations previously used by MDP in MMSYS
+- Move mediatek MUTEX dt-binding path
+- Add additional property in MUTEX for CMDQ operations
+
+Change since V11:
+- Rebase on v5.17-rc6.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=5f9b5b757e44de47ebdc116c14b90e3cc8bc7acb
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=831785f0e5b919c29e1bc5f9a74e9ebd38289e24
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=15f1768365aed810826a61fef4a744437aa5b426
+
+Change since v10:
+- For some ISP application scenarios, such as preview and recording
+  at the same time.
+  The routing table needs to be discarded, and the calculation result
+  on the SCP side is used to write a suitable mux setting for
+  1 input and 2 output.
+- Adjust the GCE client register parsing method to avoid redundant warning logs.
+
+Change since v9:
+- Add API for MDP getting mutex mod.
+
 Hi,
 
-On Tue, Apr 26, 2022 at 02:07:25PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 25, 2022 at 03:49:44PM +0300, Heikki Krogerus wrote:
-> > --- /dev/null
-> > +++ b/drivers/usb/typec/pd.h
-> > @@ -0,0 +1,30 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#ifndef __USB_POWER_DELIVERY__
-> > +#define __USB_POWER_DELIVERY__
-> > +
-> > +#include <linux/kobject.h>
-> 
-> Why kobject.h when:
+This patch splits mmsys and mutex settings from Media Data Path 3 (MDP3),
+and original mailling list list below:
+https://patchwork.kernel.org/project/linux-mediatek/cover/20211201095031.31606-1-moudy.ho@mediatek.com/
+Corresponding settings and interfaces are added for MDP operation in the
+mmsys and mutex drivers, which increases the independence of the modules
 
-Oops, that should now be "#include <linux/device.h>".
+Moudy Ho (6):
+  soc: mediatek: mutex: add common interface for modules setting
+  soc: mediatek: mutex: add 8183 MUTEX MOD settings for MDP
+  dt-bindings: soc: mediatek: move out common module from display folder
+  dt-bindings: soc: mediatek: add gce-client-reg for MUTEX
+  dts: arm64: mt8183: add GCE client property for Mediatek MUTEX
+  soc: mediatek: mutex: add functions that operate registers by CMDQ
 
-> > +
-> > +struct pd_capabilities {
-> > +	struct device dev;
-> 
-> This is a device?
-> 
-> > +	struct pd *pd;
-> > +	enum typec_role role;
-> > +};
-> > +
-> > +struct pd {
-> > +	struct device		dev;
-> > +	int			id;
-> > +
-> > +	u16			revision; /* 0300H = "3.0" */
-> 
-> So BCD?
-
-Yes.
-
-> > +	u16			version;
-> > +};
-> 
-> > +
-> > +#define to_pd_capabilities(o) container_of(o, struct pd_capabilities, dev)
-> > +#define to_pd(o) container_of(o, struct pd, dev)
-> > +
-> > +struct pd *pd_find(const char *name);
-> 
-> "struct pd" is just about the shortest structure name I've seen in the
-> kernel so far.  How about using some more letters?  :)
-
-Okay, I'll make it usbpd.
-
-> > +
-> > +int pd_init(void);
-> > +void pd_exit(void);
-> 
-> The kobject question above goes to the code as well.  You are creating a
-> bunch of raw kobjects still, why?  This should all fit into the driver
-> model and kobjects shouldn't be needed.  Are you trying to nest too deep
-> in the attributes?  If so, kobjects will not work as userspace tools
-> will not realize they are there and are attributes at all.
-
-They are not raw kobjects, they are all devices now. That header just
-needs to be fixed.
-
-Br,
+ .../mediatek/mediatek,mutex.yaml              |  14 +-
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   1 +
+ drivers/soc/mediatek/mtk-mutex.c              | 165 +++++++++++++++++-
+ include/linux/soc/mediatek/mtk-mutex.h        |  24 +++
+ 4 files changed, 202 insertions(+), 2 deletions(-)
+ rename Documentation/devicetree/bindings/{display => soc}/mediatek/mediatek,mutex.yaml (82%)
 
 -- 
-heikki
+2.18.0
+

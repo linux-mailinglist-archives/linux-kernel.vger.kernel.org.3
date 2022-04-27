@@ -2,96 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD59511F5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66033511EF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244152AbiD0Rgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S244204AbiD0RjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244245AbiD0Rgr (ORCPT
+        with ESMTP id S231435AbiD0RjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:36:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35DD633A9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:33:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28275B828A2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 17:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40F3C385A7;
-        Wed, 27 Apr 2022 17:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651080811;
-        bh=O7AppN2/GeSeVztx+YVjK3Wc9TzGWKgcYLWspYyO5xk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=C7m9PX5lzopGA6xPav9eZkeUHRA4Di6MOlOidDzWtG347twpfec2w/FTNKix1t5fh
-         tmMH+JSus+PJ0OrO4g+8RmHyFcYXQd/uih3ORIp+3E6hSx+SxtMMhakkUTphOQKJAi
-         p1+bdXIBPJrLvWPXx2Y3mRKbqxRSRYJXQdc0X1cs=
-Date:   Wed, 27 Apr 2022 10:33:31 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v8 00/70] Introducing the Maple Tree
-Message-Id: <20220427103331.9876ad87626af0f50e9ced0d@linux-foundation.org>
-In-Reply-To: <20220427140832.mpvnnkkhrbupk46i@revolver>
-References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
-        <20220426130857.09f40743b42b5f0bf4f19a59@linux-foundation.org>
-        <20220427140832.mpvnnkkhrbupk46i@revolver>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 13:39:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6801DA;
+        Wed, 27 Apr 2022 10:35:57 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651080956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2qjO8s/OIZlRIxFj/dKZMzlBxBdMPyHEWF3GHS0EwOs=;
+        b=S4J5Jl/unOv5uNbzxkVeP6Egeq+fobdyzB3toH/ywdoE6jq+4/YTl9XHuCC3BWrilA8AxQ
+        Ck+cPM/RyhvnYKCCRC5FkxpawDlZ92bbYGEyeFciy50dQZMqKCsBO47OyUauDDenXyHtiF
+        NNfpbQe8OJsU49Yv3AE4gBclE7TNjvSVAL0jZKd7EIe6Hi8wQJYRb5hAClfkQwOb2tITlN
+        vx4bUZgsruLHBtYRJRYccbiIgCkors5OLaOGrYYyLDSBeHVGGx2B6CA7yaFjvGkYGZslLF
+        cxD3dVUYkTFkxBU6k+TirDMnXEO7FJdrdAjctGxqkJkRzSieLvCwuaQiMgZTEg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651080956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2qjO8s/OIZlRIxFj/dKZMzlBxBdMPyHEWF3GHS0EwOs=;
+        b=sQLqi6CUFoNA5lfVUvWcpcYSzF819myOCs4l3uDBObAeCkL1/3/LS+fxlwsj+Jx9DuN8/V
+        PsqBLCloII5DjpAg==
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     Dusty Mabe <dustymabe@redhat.com>, Stefan Roese <sr@denx.de>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Marek Vasut <marex@denx.de>, x86@kernel.org, maz@kernel.org,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: Re: [tip: irq/urgent] PCI/MSI: Mask MSI-X vectors only on success
+In-Reply-To: <Ymj3zzjQ9PwYaX/p@eldamar.lan>
+References: <20211210161025.3287927-1-sr@denx.de>
+ <163948488617.23020.3934435568065766936.tip-bot2@tip-bot2>
+ <Yi9vH2F2OBDprwd8@jpiotrowski-Surface-Book-3>
+ <43418c23-5efd-4d14-706f-f536c504b75a@denx.de>
+ <c4a65b9a-d1e2-bf0d-2519-aac7185931d5@redhat.com>
+ <Yi+lwVRTu8xxi9Gy@jpiotrowski-Surface-Book-3>
+ <Ymj3zzjQ9PwYaX/p@eldamar.lan>
+Date:   Wed, 27 Apr 2022 19:35:55 +0200
+Message-ID: <87v8uuwhs4.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 14:08:39 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+On Wed, Apr 27 2022 at 09:59, Salvatore Bonaccorso wrote:
+> On Mon, Mar 14, 2022 at 09:29:53PM +0100, Jeremi Piotrowski wrote:
+>
+> Does someone knows here on current state of the AWS instances using
+> the older Xen version which causes the issues?
+>
+> AFAIU upstream is not planning to revert 83dbf898a2d4 ("PCI/MSI: Mask
+> MSI-X vectors only on success") as it fixed a bug. Now several
+> downstream distros do carry a revert of this commit, which I believe
+> is an unfortunate situation and wonder if this can be addressed
+> upstream to deal with the AWS m4.large instance issues.
 
-> > > 
-> > > The tree has a branching factor of 10 for non-leaf nodes and 16 for leaf
-> > > nodes.  With the increased branching factor, it is significantly shorter than
-> > > the rbtree so it has fewer cache misses.  The removal of the linked list
-> > > between subsequent entries also reduces the cache misses and the need to pull
-> > > in the previous and next VMA during many tree alterations.
-> > 
-> > Do we have any quantitative testing results?
-> 
-> I was waiting for the mmtests sweep to complete before sending them but
-> I didn't want to hold up Yu Zhao's testing of the combined tree as it
-> has proved useful already. Please don't include the results in the first
-> commit as it wouldn't make much sense.  If you intend to put them in a
-> commit message, please put them in the patch introducing the maple tree.
+The problem is that except for a bisect result we've not seen much
+information which might help to debug and analyze the problem.
 
-I did that.
+The guest uses MSI-X on that NIC:
 
-> The benchmarks are around the same as they have always been.
+ Capabilities: [70] MSI-X: Enable+ Count=3 Masked-
 
-So it's presently a wash.
+So looking at the commit in question:
 
-That makes "the plan" (below) really critical, otherwise there seems
-little point in merging this code at this time?
+diff --git a/drivers/pci/msi.c b/drivers/pci/msi.c
+index 48e3f4e47b29..6748cf9d7d90 100644
+--- a/drivers/pci/msi.c
++++ b/drivers/pci/msi.c
+@@ -722,9 +722,6 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 		goto out_disable;
+ 	}
+ 
+-	/* Ensure that all table entries are masked. */
+-	msix_mask_all(base, tsize);
+-
+ 	ret = msix_setup_entries(dev, base, entries, nvec, affd);
+ 	if (ret)
+ 		goto out_disable;
+@@ -751,6 +748,16 @@ static int msix_capability_init(struct pci_dev *dev, struct msix_entry *entries,
+ 	/* Set MSI-X enabled bits and unmask the function */
+ 	pci_intx_for_msi(dev, 0);
+ 	dev->msix_enabled = 1;
++
++	/*
++	 * Ensure that all table entries are masked to prevent
++	 * stale entries from firing in a crash kernel.
++	 *
++	 * Done late to deal with a broken Marvell NVME device
++	 * which takes the MSI-X mask bits into account even
++	 * when MSI-X is disabled, which prevents MSI delivery.
++	 */
++	msix_mask_all(base, tsize);
+ 	pci_msix_clear_and_set_ctrl(dev, PCI_MSIX_FLAGS_MASKALL, 0);
 
-Please send me many very soothing words about how confident we should
-be that the plan will be implemented and that it shall be good?
+IOW, it moves the invocation of msix_mask_all() into the success
+path.
 
-> > 
-> > What's the plan on utilizing this to further reduce mmap_lock contention?
-> 
-> The plan is to get to the point where we use the maple tree in RCU mode.
-> Readers will not block for writers.  A single write operation will be
-> allowed at a time.  A reader re-walks if stale data is encountered. VMAs
-> would be RCU enabled and this mode would be entered once multiple tasks
-> are using the mm_struct.  I can go into more details if you want.
+As the device uses MSI-X this change does not make any difference from a
+hardware perspective simply because _all_ MSI-X interrupts are masked
+via the CTRL register already. And it does not matter whether the kernel
+masks them individually _before_ or _after_ the allocation. At least not
+on real hardware and on a sane emulation.
 
-Uh, that's very important information.  It's really the whole point
-of the patchset!   I added this to the [0/n] changelog.
+Now this is XEN and neither real hardware nor sane emulation.
+
+It must be a XEN_HVM guest because XEN_PV guests disable PCI/MSI[-X]
+completely which makes the invocation of msix_mask_all() a NOP.
+
+If it's not a XEN_HVM guest, then you can stop reading further as I'm
+unable to decode why moving a NOP makes a difference. That belongs in to
+the realm of voodoo, but then XEN is voodoo at least for me. :)
+
+XEN guests do not use the common PCI mask/unmask machinery which would
+unmask the interrupt on request_irq().
+
+So I assume that the following happens:
+
+Guest                     Hypervisor
+
+msix_capabilities_init()
+        ....
+        alloc_irq()
+           xen_magic()  -> alloc_msix_interrupt()
+                           request_irq()
+
+        msix_mask_all() -> trap
+                             do_magic()
+request_irq()
+   unmask()
+     xen_magic()
+       unmask_evtchn()  -> do_more_magic()
+
+So I assume further that msix_mask_all() actually is able to mask the
+interrupts in the hardware (ctrl word of the vector table) despite the
+hypervisor having allocated and requested the interrupt already.
+
+Nothing in XEN_HVM handles PCI/MSI[-X] mask/unmask in the guest, so I
+really have to ask why XEN_HVM does not disable PCI/MSI[-X] masking like
+XEN_PV does. I can only assume the answer is voodoo...
+
+Maybe the XEN people have some more enlightened answers to that.
+
+Thanks,
+
+        tglx

@@ -2,144 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13411512508
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BDD51250B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiD0WJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S230525AbiD0WKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiD0WJe (ORCPT
+        with ESMTP id S231290AbiD0WJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:09:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B27F2ED75
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:06:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651097176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fs8gFf3ZL711StLZ9jERccLggUnW1SGq3CEhUrINzV0=;
-        b=lNm2fzkOfKjGt1uFdPTtzYGBhEwjslUt4TR8A2eyU52xH7RNnZWoO2U0epSKTtiDGLzEr9
-        WWUEDeNksHlgwlxuatHDDaGfIYO2FXPy4zw6QO87O4jAooMw6jugsI3S4sTVteaOP4h9Y2
-        mLzOU1XjMoD8lapMBHl2aW+0ZxaejoKR8KX8DFK4YaWm0SUWXrWV9uiZRc2aKrl454YfhN
-        gDSFHAY3cYvKD8Q4e7p7LThXXxz3c5I//Qlf+gWUFQ02US/bJEQTc7sCtEZQEhdFqYzrCg
-        5KMwIEp1e0HSy3UT9ygBO5eM2SeQb+nAPAeE5/f4ySLbw1x10F+LkBw0Og7sWg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651097176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fs8gFf3ZL711StLZ9jERccLggUnW1SGq3CEhUrINzV0=;
-        b=GbZzHJd4aicLpdaUPaZIDklx21NZ41WOZeoc+3Lk47mVSt/uHp7/w3/aWDVl1BJ+HfZZ9c
-        N6MOg7kEndzMiCCg==
-To:     Prakash Sangappa <prakash.sangappa@oracle.com>,
-        linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, peterz@infradead.org,
-        prakash.sangappa@oracle.com
-Subject: Re: [PATCH] ipc: Update semtimedop() to use hrtimer
-In-Reply-To: <1650333099-27214-1-git-send-email-prakash.sangappa@oracle.com>
-References: <1650333099-27214-1-git-send-email-prakash.sangappa@oracle.com>
-Date:   Thu, 28 Apr 2022 00:06:16 +0200
-Message-ID: <87k0baw59j.ffs@tglx>
+        Wed, 27 Apr 2022 18:09:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BA786E08;
+        Wed, 27 Apr 2022 15:06:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36570B82B10;
+        Wed, 27 Apr 2022 22:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C59B1C385A7;
+        Wed, 27 Apr 2022 22:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651097196;
+        bh=489hiLJcs6Ide99fGbIyUUwfO7HB+IkkCGXSwNjrVls=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=G/2cUhuQR3ud2rXBziL0oth7g3hoX2Prqkr1UbESIsL88ApimAswbBe4zAQlK9Wz3
+         2n7m/Sij2UzhwGpvx/x/Kvv5dDbKMihZSAXPu2i9pjF5+IDOG/MkNgFDQGrF7gVZk1
+         cz5l6d4DdoX1AwJFeI3f48y0gyYwzVktJyeA9r1SkR3d9dHgAlgndCdsMcynqgfoNN
+         OG3jhzKpU0TJrOskD+z3GrxODGhLsYDa8jLDolSI+R5FptNvMYRbO/fxhYjAi1U8e4
+         ss5/qUdaXYIWtAa3eHZ4xilsuuKDV3h3/ms0xIaWu5kKFvE5n6eiNqSL4IBlpUccQd
+         VjkMqDrLL/smA==
+From:   Mark Brown <broonie@kernel.org>
+To:     gch981213@gmail.com, linux-spi@vger.kernel.org
+Cc:     cai.huoqing@linux.dev, paul@crapouillou.net, richard@nod.at,
+        krzk+dt@kernel.org, yukuai3@huawei.com, colin.king@intel.com,
+        linux-kernel@vger.kernel.org, matthias.bgg@gmail.com,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        f.fainelli@gmail.com, p.yadav@ti.com, tsbogend@alpha.franken.de,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, rogerq@kernel.org,
+        linux-arm-kernel@lists.infradead.org, miquel.raynal@bootlin.com,
+        wsa+renesas@sang-engineering.com
+In-Reply-To: <20220424032527.673605-1-gch981213@gmail.com>
+References: <20220424032527.673605-1-gch981213@gmail.com>
+Subject: Re: (subset) [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
+Message-Id: <165109719250.501011.1358501844817783587.b4-ty@kernel.org>
+Date:   Wed, 27 Apr 2022 23:06:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prakash,
+On Sun, 24 Apr 2022 11:25:22 +0800, Chuanhong Guo wrote:
+> Mediatek has an extended version of their NAND Flash Interface which
+> has a SPI-NAND mode. In this mode, the controller can perform 1-bit
+> spi-mem ops for up-to 0xa0 bytes and typical SPI-NAND single, dual
+> and quad IO page cache ops with 2-byte address. Additionally, the
+> page cache ops can be performed with ECC and auto data formatting
+> using the ECC engine of the controller.
+> 
+> [...]
 
-On Mon, Apr 18 2022 at 18:51, Prakash Sangappa wrote:
-> @@ -1995,7 +1995,10 @@ long __do_semtimedop(int semid, struct sembuf *sops,
->  	int max, locknum;
->  	bool undos = false, alter = false, dupsop = false;
->  	struct sem_queue queue;
-> -	unsigned long dup = 0, jiffies_left = 0;
-> +	unsigned long dup = 0;
-> +	ktime_t expires;
-> +	int timed_out = 0;
+Applied to
 
-bool perhaps?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +	struct timespec64 end_time;
->  
->  	if (nsops < 1 || semid < 0)
->  		return -EINVAL;
-> @@ -2008,7 +2011,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+Thanks!
 
-While at it, can you please replace the open coded validation of timeout
-with timespec64_valid()?
+[2/5] spi: add driver for MTK SPI NAND Flash Interface
+      commit: 764f1b7481645b2b4488eda26c4da7f331697e6b
+[4/5] spi: dt-bindings: add binding doc for spi-mtk-snfi
+      commit: 69bb9b29bf67e850beece45e9c99ca707eac7e41
 
->  			error = -EINVAL;
->  			goto out;
->  		}
-> -		jiffies_left = timespec64_to_jiffies(timeout);
-> +		ktime_get_ts64(&end_time);
-> +		end_time = timespec64_add_safe(end_time, *timeout);
-> +		expires = timespec64_to_ktime(end_time);
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Converting to ktime first makes this cheaper:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-                expires = ktime_get() + timespec64_to_ns(timeout);
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Less code lines and shorter execution time because adding scalars is
-obviously cheaper than adding timespecs.
-
-Now if you add:
-
-       ktime_t expires, *exp = NULL;
-
-then you can do here:
-
-                exp = &expires;
->  	}
->  
->  
-> @@ -2167,7 +2172,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
->  		rcu_read_unlock();
->  
->  		if (timeout)
-> -			jiffies_left = schedule_timeout(jiffies_left);
-> +			timed_out = !schedule_hrtimeout_range(&expires,
-> +						current->timer_slack_ns,
-> +						HRTIMER_MODE_ABS);
->  		else
->  			schedule();
-
-and this can be simplified to:
-
-                timed_out = !schedule_hrtimeout_range(exp, current->timer_slack_ns,
-						      HRTIMER_MODE_ABS)
-
-schedule_hrtimeout_range() directly invokes schedule() when @exp == NULL
-and returns != 0 when woken up in that case.
-
-> @@ -2210,7 +2217,7 @@ long __do_semtimedop(int semid, struct sembuf *sops,
->  		/*
->  		 * If an interrupt occurred we have to clean up the queue.
->  		 */
-> -		if (timeout && jiffies_left == 0)
-> +		if (timeout && timed_out)
-
-and this becomes
-
-                if (timed_out)
-
->  			error = -EAGAIN;
->  	} while (error == -EINTR && !signal_pending(current)); /* spurious */
-
-Hmm?
-
-Done right, you should end up with a negative diffstat :)
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-
-        tglx
+Mark

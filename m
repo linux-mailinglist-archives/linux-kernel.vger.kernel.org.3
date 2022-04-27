@@ -2,144 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53136511E85
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14860511D9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239485AbiD0PMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S239223AbiD0PNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239216AbiD0PLo (ORCPT
+        with ESMTP id S239101AbiD0PN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:11:44 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D0A2010D4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:08:29 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id f186so1474625qke.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:08:29 -0700 (PDT)
+        Wed, 27 Apr 2022 11:13:28 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687FB2D359F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:10:16 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b24so2289033edu.10
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=BGXgRkm7KfAuxs/lpObycbS7QSUjU1DegZpjJv5xMRo=;
-        b=zQCZg/1gEuydchdqj6KgGuunQzzEztTpMwRrPhBiadpx9coH4AxqBO1HpODzdIHeVh
-         ZO7Svx7GUbRvl93GxQFyUkRwfSjo3I7TZ0RKbbUhR2DlLz5iEm9FkTkeOxnyG7+czP9x
-         vfrl9y0VK8vlKPZZi3FNtbDlGkwqinateCU8uXhRG0XNkl8wd6IH+vk4ZnehGkOWCctK
-         gpnG2qvACm3Tz5lSWnpg7gmhlIxxMQ1Ebc4FS/xxc0kRi/vVUGugtDxGL7eGZVkznZJI
-         WElUfnl3w5FOkimxquM6ZIQj8xIKQKcxxlSCJu0QL5CDLDxt+xZvfqGivWjfS/5v9rNJ
-         gYXg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8bcBCHuka1c7eUCHaJJ1Tf0YnngjHSBeBCkk7aucJRc=;
+        b=Bha64TEobiweIEID7s+302mbO83FZsNFeG4G9pC1hn4DLldhg2boTtAWRnZIW4hMUF
+         tEcxiUcYoQYdX1hA3zzB/izxzVa9EYpvkdFybz8Yc5m2SSrZZfsI3qdXkKCDux6UJORd
+         nTkuWxGNRe424v5bdabJpziKRa/X0pZvUGGqY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=BGXgRkm7KfAuxs/lpObycbS7QSUjU1DegZpjJv5xMRo=;
-        b=11IhNNceNFimQDp2pNQpSgg8h6G5LDSCC0hQRhjHB3ttuSQVNQwC56wyOUYt4BP34P
-         n6oVY898KGVZihvgAb5IiWhDS2HJ6fuVxXgBtPPd5sLemO0aUlrutKbmNvF1mWNeFJ8h
-         n5AlUPVxEP5GvKqKbaSKS0R5fpOZRbpYcbn1oAOfg1sXDj4l27YDl1tOnKqqHs9T536J
-         p0MDkVYP1v5F2rJg73K0TrgosNcjjnsZwdu2pAPMf8laJDg/mKPnb6+THeKKg3+LVj7P
-         9QqCUjZajZ3ky7n7KcKh+1QizF2Be8FmSnF1dxIpsv6rL3NGz6C87+GbBSceBuP8qsQU
-         ZkGQ==
-X-Gm-Message-State: AOAM530l+thCueFYFTRQGydkHN1qOXJZZVxVmgjV0aTRUmDfVKvntxDz
-        3oio8Ig74lpwnGl+7IObxQ7coq7xCD0xxA==
-X-Google-Smtp-Source: ABdhPJyz8xzV4hhv6gSPTzvzMZAdA3dvuWPN46Ns7zosNhqLq064CpZ10rj++94CM0mckZX+Q3aAOQ==
-X-Received: by 2002:a05:620a:4450:b0:69e:a2ca:e7d7 with SMTP id w16-20020a05620a445000b0069ea2cae7d7mr16860296qkp.178.1651072107898;
-        Wed, 27 Apr 2022 08:08:27 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id k20-20020a05622a03d400b002ec16d2694fsm10227421qtx.39.2022.04.27.08.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 08:08:27 -0700 (PDT)
-Message-ID: <a78920881b2ffaf1fba04bc9ebeda591ec0dfd87.camel@ndufresne.ca>
-Subject: Re: [PATCH v4 03/24] media: videobuf2-v4l2: Warn on holding buffers
- without support
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 27 Apr 2022 11:08:24 -0400
-In-Reply-To: <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
-References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
-         <20220426125751.108293-4-nicolas.dufresne@collabora.com>
-         <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8bcBCHuka1c7eUCHaJJ1Tf0YnngjHSBeBCkk7aucJRc=;
+        b=gBOqVkiXmTCwL7Zf2rRw6qvn5SgxM6e1xGcwAs09V1myeUdKoonfRhLixyWS8EjJGi
+         Aw4dryytDdmyq611zywWiFFOxey+YVzRU8uD6zi0atDcwZjf8T62Yza5woVKWGPZ1y+k
+         Rl5yRGmnzk0GUcHUd3A+35O+NTLBkYm+EO/ViC5VxpcMx2rbKkt1XUw/ckZkQp2/9BmA
+         mlxUaBRV500z94N7NRWltnMCr0XxPzLtcUQRKeNhsAS/SF1FGS5+c24QykJRqjuhG8vl
+         79c04uPHEJQ6iPbkhIu1iv6tYePi1UkfAG/yU4UWkoUczqSsYlc+Nm3viQYt2Ifi7aHS
+         zb7g==
+X-Gm-Message-State: AOAM531a0YugzbkYz3S8IuZHDQ8OiTOIbnCnBuZLTTECb0T84P5Iq1c1
+        snSvtiUuqLQaD09EsSPypr/Ru2KoAcYqwI8wFB0=
+X-Google-Smtp-Source: ABdhPJxThqzexaXgyUnkYVLks3wan41G2Rko6YdWkI4361+v2rc4joBD8vzM0Tx8o3OQf9u6ENZveA==
+X-Received: by 2002:a05:6402:5c9:b0:420:aac6:257b with SMTP id n9-20020a05640205c900b00420aac6257bmr30714371edx.128.1651072214615;
+        Wed, 27 Apr 2022 08:10:14 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id e19-20020a056402105300b004162d0b4cbbsm8451108edu.93.2022.04.27.08.10.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 08:10:12 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so3625911wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:10:12 -0700 (PDT)
+X-Received: by 2002:a05:600c:502b:b0:38f:f7c6:3609 with SMTP id
+ n43-20020a05600c502b00b0038ff7c63609mr26785973wmr.15.1651072211589; Wed, 27
+ Apr 2022 08:10:11 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220426225748.324759-1-swboyd@chromium.org> <CAD=FV=WMf0Jc9oD7CGoLthguzt2aV31sZmFoenbjn72MfwFYEA@mail.gmail.com>
+In-Reply-To: <CAD=FV=WMf0Jc9oD7CGoLthguzt2aV31sZmFoenbjn72MfwFYEA@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 27 Apr 2022 08:09:59 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wey2P_=3Lp6M8GEaoyCn1XcYFhfJwfx43a5f_8H0obwg@mail.gmail.com>
+Message-ID: <CAD=FV=Wey2P_=3Lp6M8GEaoyCn1XcYFhfJwfx43a5f_8H0obwg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180-trogdor: Remove cros-ec keyboard
+ from detachables
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 27 avril 2022 =C3=A0 13:31 +0900, Tomasz Figa a =C3=A9crit=C2=
-=A0:
-> Hi Nicolas, Sebastian,
->=20
-> On Tue, Apr 26, 2022 at 9:58 PM Nicolas Dufresne
-> <nicolas.dufresne@collabora.com> wrote:
-> >=20
-> > From: Sebastian Fricke <sebastian.fricke@collabora.com>
-> >=20
-> > Using V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF flag without specifying the
-> > subsystem flag VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF, results in
-> > silently ignoring it.
-> > Warn the user via a debug print when the flag is requested but ignored
-> > by the videobuf2 framework.
-> >=20
-> > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Hi,
+
+On Tue, Apr 26, 2022 at 5:17 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Tue, Apr 26, 2022 at 3:57 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Trogdor devices that have a detachable keyboard still have a
+> > non-detachable keyboard input device present because we include the
+> > cros-ec-keyboard.dtsi snippet in the top-level sc7180-trogdor.dtsi file
+> > that every variant board includes. We do this because the
+> > keyboard-controller node also provides some buttons like the power
+> > button and volume buttons. Unfortunately, this means we register a
+> > keyboard input device that doesn't do anything on boards with a
+> > detachable keyboard. Let's delete the rows/columns properties of the
+> > device node to indicate that there isn't a matrix keyboard on these
+> > boards.
+> >
+> > Cc: Benson Leung <bleung@chromium.org>
+> > Cc: Guenter Roeck <groeck@chromium.org>
+> > Cc: Douglas Anderson <dianders@chromium.org>
+> > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > > ---
-> >  drivers/media/common/videobuf2/videobuf2-v4l2.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >=20
->=20
-> Thanks for the patch. Please see my comments inline.
->=20
-> > diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/=
-media/common/videobuf2/videobuf2-v4l2.c
-> > index 6edf4508c636..812c8d1962e0 100644
-> > --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> > +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> > @@ -329,8 +329,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buf=
-fer *vb, struct v4l2_buffer *b
-> >                  */
-> >                 vbuf->flags &=3D ~V4L2_BUF_FLAG_TIMECODE;
-> >                 vbuf->field =3D b->field;
-> > -               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOL=
-D_CAPTURE_BUF))
-> > +               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOL=
-D_CAPTURE_BUF)) {
-> > +                       if (vbuf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTUR=
-E_BUF)
-> > +                               dprintk(q, 1,
-> > +                                       "Request holding buffer (%d), u=
-nsupported on output queue\n",
-> > +                                       b->index);
->=20
-> I wonder if we shouldn't just fail such a QBUF operation. Otherwise
-> the application would get unexpected behavior from the kernel.
-> Although it might be too late to do it now if there are applications
-> that rely on this implicit ignore...
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 5 +++++
+> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 5 +++++
+> >  2 files changed, 10 insertions(+)
+>
+> Presumably we need to do this same thing for wormdingler [1]
+>
+> [1] https://lore.kernel.org/r/20220426151204.1.Id2821de5fde55ebe928e8fc87a71c8d535edb383@changeid
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-In the context of this patchset, the statu quo seems to be the logical thin=
-g to
-do. We can raise this up in a separate thread. The side effect is of course
-confusing for developers, but it is hard for me to tell if a hard failure m=
-ay
-break an existing software.
+Do we need to delay landing this patch for a release? I haven't tested
+myself, but from re-reading through the code it looks as if
+cros_ec_keyb_register_matrix() will return an error code if we have
+the device tree patch _without_ commit 4352e23a7ff2 ("Input:
+cros-ec-keyb - only register keyboard if rows/columns exist"). That
+will cause it to skip registering the buttons/switches, right?
 
-regards,
-Nicolas
-
->=20
-> Best regards,
-> Tomasz
-
+-Doug

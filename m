@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C00E511B23
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BB851197B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiD0Nwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S236680AbiD0Nwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236555AbiD0Nwh (ORCPT
+        with ESMTP id S236558AbiD0Nwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 09:52:37 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214FA2D1FC;
-        Wed, 27 Apr 2022 06:49:25 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 13:49:23 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E7C2DABB;
+        Wed, 27 Apr 2022 06:49:26 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 13:49:24 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651067364;
+        s=2020; t=1651067365;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=o09dgPtOiVRK9GaVotA4uOKUz1x/rmltdj8kFoTFHd8=;
-        b=OlF1KPcZdnL+a1kOLPOxFEYtgyUx6zu/FXlAnEIUAVPlMwwQdhFs3lnEIYQWndJpaYWAGA
-        8kVG5yEy+VMVilhFsOMpCw+ze38OjmcKmy+gBlrJncJYp/B4LzS7kfvJXbW6/gCTyJzCd1
-        gIbR6Z8jk/zmQUMntFocSwrg9EwZW5ROi8RuVz/9FTaJ1SQ9pjnOMZliT0PgsUPOaOa5Es
-        FAZH3gZ9QNuuGWIye8KxPhh5l7R8pA9hgWWrSfQd3xmJxu6ECXvpgpJh4Q9X5fzxUVPQJO
-        43E9hHmERptnVdMn1Sv0Gn+igHkEHZKqOk/mkuxmBHVPUiNvbsr6IrlK7hzaAw==
+        bh=6WNipq/rNre4I0v09xw0R0I5DPKRx6iqSu8lBxcyam4=;
+        b=tghio2v/KxNHs3tNdKz0gu3L2IS70cYBf59zQ1g0BeFNXRvDCxyWli/+HvZ2+4SIBeKo6I
+        rjv2PfW6I+i5nmWuxc7j4XLf9HCLvCXsQKs1SO6tCx8HqnzhuCt/UUVYo+bEBpbKU48Ren
+        HzM59m2C11oF9+zrW9tZgQ4UCeKBeSOHo7yOtms/41A0bSXoMdxgfB9Hpyew7bLPk5E7kQ
+        OUurod8Ck+/l1C/IKOXRc7/5TXe2l+QHlOO5XjhzHnprwH1N6djV/hMAwn6q6GPeTlLQd3
+        U6ZZES1hDcV6amN82foj88OnROZMcpXBLsaFyD53MOfrfIBDN5ITxinb3zdwbw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651067364;
+        s=2020e; t=1651067365;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=o09dgPtOiVRK9GaVotA4uOKUz1x/rmltdj8kFoTFHd8=;
-        b=+qK/qTiWiW4er13TxRhEhdZFVEQ0SkHgq0CAArvz1H2+RqLp6XDzULVZVP9m2eSfS4/cVj
-        6AO/l/qsi5BgWjBQ==
+        bh=6WNipq/rNre4I0v09xw0R0I5DPKRx6iqSu8lBxcyam4=;
+        b=xZ9Z8CiO0HAL3Oe/hzM5Kr7+a19mGVAixnp3rybQ/XPJcizMkvLXWt+tSbaJ0/d5baT4kt
+        UkyJ1soj5xiaYKAw==
 From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/splitlock] x86/split-lock: Remove unused TIF_SLD bit
+Subject: [tip: x86/splitlock] x86/split_lock: Make life miserable for split lockers
 Cc:     Tony Luck <tony.luck@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220310204854.31752-3-tony.luck@intel.com>
-References: <20220310204854.31752-3-tony.luck@intel.com>
+In-Reply-To: <20220310204854.31752-2-tony.luck@intel.com>
+References: <20220310204854.31752-2-tony.luck@intel.com>
 MIME-Version: 1.0
-Message-ID: <165106736325.4207.3606646429905878612.tip-bot2@tip-bot2>
+Message-ID: <165106736419.4207.14598895272506250551.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,113 +66,211 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/splitlock branch of tip:
 
-Commit-ID:     ef79970d7ccdc4e8855aa6079fc2f4797a6807fb
-Gitweb:        https://git.kernel.org/tip/ef79970d7ccdc4e8855aa6079fc2f4797a6807fb
+Commit-ID:     b041b525dab95352fbd666b14dc73ab898df465f
+Gitweb:        https://git.kernel.org/tip/b041b525dab95352fbd666b14dc73ab898df465f
 Author:        Tony Luck <tony.luck@intel.com>
-AuthorDate:    Thu, 10 Mar 2022 12:48:54 -08:00
+AuthorDate:    Thu, 10 Mar 2022 12:48:53 -08:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 27 Apr 2022 15:43:39 +02:00
+CommitterDate: Wed, 27 Apr 2022 15:43:38 +02:00
 
-x86/split-lock: Remove unused TIF_SLD bit
+x86/split_lock: Make life miserable for split lockers
 
-Changes to the "warn" mode of split lock handling mean that TIF_SLD is
-never set.
+In https://lore.kernel.org/all/87y22uujkm.ffs@tglx/ Thomas
+said:
 
-Remove the bit, and the functions that use it.
+  Its's simply wishful thinking that stuff gets fixed because of a
+  WARN_ONCE(). This has never worked. The only thing which works is to
+  make stuff fail hard or slow it down in a way which makes it annoying
+  enough to users to complain.
+
+He was talking about WBINVD. But it made me think about how we use the
+split lock detection feature in Linux.
+
+Existing code has three options for applications:
+
+ 1) Don't enable split lock detection (allow arbitrary split locks)
+ 2) Warn once when a process uses split lock, but let the process
+    keep running with split lock detection disabled
+ 3) Kill process that use split locks
+
+Option 2 falls into the "wishful thinking" territory that Thomas warns does
+nothing. But option 3 might not be viable in a situation with legacy
+applications that need to run.
+
+Hence make option 2 much stricter to "slow it down in a way which makes
+it annoying".
+
+Primary reason for this change is to provide better quality of service to
+the rest of the applications running on the system. Internal testing shows
+that even with many processes splitting locks, performance for the rest of
+the system is much more responsive.
+
+The new "warn" mode operates like this.  When an application tries to
+execute a bus lock the #AC handler.
+
+ 1) Delays (interruptibly) 10 ms before moving to next step.
+
+ 2) Blocks (interruptibly) until it can get the semaphore
+	If interrupted, just return. Assume the signal will either
+	kill the task, or direct execution away from the instruction
+	that is trying to get the bus lock.
+ 3) Disables split lock detection for the current core
+ 4) Schedules a work queue to re-enable split lock detect in 2 jiffies
+ 5) Returns
+
+The work queue that re-enables split lock detection also releases the
+semaphore.
+
+There is a corner case where a CPU may be taken offline while split lock
+detection is disabled. A CPU hotplug handler handles this case.
+
+Old behaviour was to only print the split lock warning on the first
+occurrence of a split lock from a task. Preserve that by adding a flag to
+the task structure that suppresses subsequent split lock messages from that
+task.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220310204854.31752-3-tony.luck@intel.com
+Link: https://lore.kernel.org/r/20220310204854.31752-2-tony.luck@intel.com
 
 ---
- arch/x86/include/asm/cpu.h         |  2 --
- arch/x86/include/asm/thread_info.h |  4 +---
- arch/x86/kernel/cpu/intel.c        | 12 ------------
- arch/x86/kernel/process.c          |  3 ---
- 4 files changed, 1 insertion(+), 20 deletions(-)
+ arch/x86/kernel/cpu/intel.c | 63 ++++++++++++++++++++++++++++++------
+ include/linux/sched.h       |  3 ++-
+ kernel/fork.c               |  5 +++-
+ 3 files changed, 61 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index 86e5e4e..d1c86b2 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -43,14 +43,12 @@ unsigned int x86_model(unsigned int sig);
- unsigned int x86_stepping(unsigned int sig);
- #ifdef CONFIG_CPU_SUP_INTEL
- extern void __init sld_setup(struct cpuinfo_x86 *c);
--extern void switch_to_sld(unsigned long tifn);
- extern bool handle_user_split_lock(struct pt_regs *regs, long error_code);
- extern bool handle_guest_split_lock(unsigned long ip);
- extern void handle_bus_lock(struct pt_regs *regs);
- u8 get_this_hybrid_cpu_type(void);
- #else
- static inline void __init sld_setup(struct cpuinfo_x86 *c) {}
--static inline void switch_to_sld(unsigned long tifn) {}
- static inline bool handle_user_split_lock(struct pt_regs *regs, long error_code)
- {
- 	return false;
-diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
-index ebec69c..f0cb881 100644
---- a/arch/x86/include/asm/thread_info.h
-+++ b/arch/x86/include/asm/thread_info.h
-@@ -92,7 +92,6 @@ struct thread_info {
- #define TIF_NOCPUID		15	/* CPUID is not accessible in userland */
- #define TIF_NOTSC		16	/* TSC is not accessible in userland */
- #define TIF_NOTIFY_SIGNAL	17	/* signal notifications exist */
--#define TIF_SLD			18	/* Restore split lock detection on context switch */
- #define TIF_MEMDIE		20	/* is terminating due to OOM killer */
- #define TIF_POLLING_NRFLAG	21	/* idle is polling for TIF_NEED_RESCHED */
- #define TIF_IO_BITMAP		22	/* uses I/O bitmap */
-@@ -116,7 +115,6 @@ struct thread_info {
- #define _TIF_NOCPUID		(1 << TIF_NOCPUID)
- #define _TIF_NOTSC		(1 << TIF_NOTSC)
- #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
--#define _TIF_SLD		(1 << TIF_SLD)
- #define _TIF_POLLING_NRFLAG	(1 << TIF_POLLING_NRFLAG)
- #define _TIF_IO_BITMAP		(1 << TIF_IO_BITMAP)
- #define _TIF_SPEC_FORCE_UPDATE	(1 << TIF_SPEC_FORCE_UPDATE)
-@@ -128,7 +126,7 @@ struct thread_info {
- /* flags to check in __switch_to() */
- #define _TIF_WORK_CTXSW_BASE					\
- 	(_TIF_NOCPUID | _TIF_NOTSC | _TIF_BLOCKSTEP |		\
--	 _TIF_SSBD | _TIF_SPEC_FORCE_UPDATE | _TIF_SLD)
-+	 _TIF_SSBD | _TIF_SPEC_FORCE_UPDATE)
- 
- /*
-  * Avoid calls to __switch_to_xtra() on UP as STIBP is not evaluated.
 diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index be2a0bd..672e253 100644
+index f7a5370..be2a0bd 100644
 --- a/arch/x86/kernel/cpu/intel.c
 +++ b/arch/x86/kernel/cpu/intel.c
-@@ -1233,18 +1233,6 @@ void handle_bus_lock(struct pt_regs *regs)
+@@ -7,10 +7,13 @@
+ #include <linux/smp.h>
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
++#include <linux/semaphore.h>
+ #include <linux/thread_info.h>
+ #include <linux/init.h>
+ #include <linux/uaccess.h>
++#include <linux/workqueue.h>
+ #include <linux/delay.h>
++#include <linux/cpuhotplug.h>
+ 
+ #include <asm/cpufeature.h>
+ #include <asm/msr.h>
+@@ -999,6 +1002,8 @@ static const struct {
+ 
+ static struct ratelimit_state bld_ratelimit;
+ 
++static DEFINE_SEMAPHORE(buslock_sem);
++
+ static inline bool match_option(const char *arg, int arglen, const char *opt)
+ {
+ 	int len = strlen(opt), ratelimit;
+@@ -1109,18 +1114,52 @@ static void split_lock_init(void)
+ 		split_lock_verify_msr(sld_state != sld_off);
  }
  
- /*
-- * This function is called only when switching between tasks with
-- * different split-lock detection modes. It sets the MSR for the
-- * mode of the new task. This is right most of the time, but since
-- * the MSR is shared by hyperthreads on a physical core there can
-- * be glitches when the two threads need different modes.
-- */
--void switch_to_sld(unsigned long tifn)
--{
--	sld_update_msr(!(tifn & _TIF_SLD));
--}
--
--/*
-  * Bits in the IA32_CORE_CAPABILITIES are not architectural, so they should
-  * only be trusted if it is confirmed that a CPU model implements a
-  * specific feature at a particular bit position.
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index b370767..bcc76c1 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -686,9 +686,6 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
- 		/* Enforce MSR update to ensure consistent state */
- 		__speculation_ctrl_update(~tifn, tifn);
- 	}
--
--	if ((tifp ^ tifn) & _TIF_SLD)
--		switch_to_sld(tifn);
++static void __split_lock_reenable(struct work_struct *work)
++{
++	sld_update_msr(true);
++	up(&buslock_sem);
++}
++
++/*
++ * If a CPU goes offline with pending delayed work to re-enable split lock
++ * detection then the delayed work will be executed on some other CPU. That
++ * handles releasing the buslock_sem, but because it executes on a
++ * different CPU probably won't re-enable split lock detection. This is a
++ * problem on HT systems since the sibling CPU on the same core may then be
++ * left running with split lock detection disabled.
++ *
++ * Unconditionally re-enable detection here.
++ */
++static int splitlock_cpu_offline(unsigned int cpu)
++{
++	sld_update_msr(true);
++
++	return 0;
++}
++
++static DECLARE_DELAYED_WORK(split_lock_reenable, __split_lock_reenable);
++
+ static void split_lock_warn(unsigned long ip)
+ {
+-	pr_warn_ratelimited("#AC: %s/%d took a split_lock trap at address: 0x%lx\n",
+-			    current->comm, current->pid, ip);
++	int cpu;
+ 
+-	/*
+-	 * Disable the split lock detection for this task so it can make
+-	 * progress and set TIF_SLD so the detection is re-enabled via
+-	 * switch_to_sld() when the task is scheduled out.
+-	 */
++	if (!current->reported_split_lock)
++		pr_warn_ratelimited("#AC: %s/%d took a split_lock trap at address: 0x%lx\n",
++				    current->comm, current->pid, ip);
++	current->reported_split_lock = 1;
++
++	/* misery factor #1, sleep 10ms before trying to execute split lock */
++	if (msleep_interruptible(10) > 0)
++		return;
++	/* Misery factor #2, only allow one buslocked disabled core at a time */
++	if (down_interruptible(&buslock_sem) == -EINTR)
++		return;
++	cpu = get_cpu();
++	schedule_delayed_work_on(cpu, &split_lock_reenable, 2);
++
++	/* Disable split lock detection on this CPU to make progress */
+ 	sld_update_msr(false);
+-	set_tsk_thread_flag(current, TIF_SLD);
++	put_cpu();
  }
  
- /*
+ bool handle_guest_split_lock(unsigned long ip)
+@@ -1274,10 +1313,14 @@ static void sld_state_show(void)
+ 		pr_info("disabled\n");
+ 		break;
+ 	case sld_warn:
+-		if (boot_cpu_has(X86_FEATURE_SPLIT_LOCK_DETECT))
++		if (boot_cpu_has(X86_FEATURE_SPLIT_LOCK_DETECT)) {
+ 			pr_info("#AC: crashing the kernel on kernel split_locks and warning on user-space split_locks\n");
+-		else if (boot_cpu_has(X86_FEATURE_BUS_LOCK_DETECT))
++			if (cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
++					      "x86/splitlock", NULL, splitlock_cpu_offline) < 0)
++				pr_warn("No splitlock CPU offline handler\n");
++		} else if (boot_cpu_has(X86_FEATURE_BUS_LOCK_DETECT)) {
+ 			pr_info("#DB: warning on user-space bus_locks\n");
++		}
+ 		break;
+ 	case sld_fatal:
+ 		if (boot_cpu_has(X86_FEATURE_SPLIT_LOCK_DETECT)) {
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index a8911b1..23e03c7 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -941,6 +941,9 @@ struct task_struct {
+ #ifdef CONFIG_IOMMU_SVA
+ 	unsigned			pasid_activated:1;
+ #endif
++#ifdef	CONFIG_CPU_SUP_INTEL
++	unsigned			reported_split_lock:1;
++#endif
+ 
+ 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 9796897..f39795f 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1045,6 +1045,11 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ #ifdef CONFIG_MEMCG
+ 	tsk->active_memcg = NULL;
+ #endif
++
++#ifdef CONFIG_CPU_SUP_INTEL
++	tsk->reported_split_lock = 0;
++#endif
++
+ 	return tsk;
+ 
+ free_stack:

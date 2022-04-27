@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD9B51255F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A1451255E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiD0Wla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S232743AbiD0Wlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbiD0Wl0 (ORCPT
+        with ESMTP id S232858AbiD0Wl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:41:26 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A26D3B4;
-        Wed, 27 Apr 2022 15:38:13 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id bo5so2727014pfb.4;
-        Wed, 27 Apr 2022 15:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=drm1OQdyw43I3bW2ueb7Nz1xPsW07ECbYZ6BCyW/SWg=;
-        b=g6C7JMcnrZ5ojJ8YLJNvmY7lTaxV4r0eAyKMoPajLiumweS31BhCzTuThLIrUiRBGc
-         eRXEE8IQN7ojqtn7KQXhZzxHW3UtKQE6oXVeGGE/7u8c0+AKrAbRC9ttkrd+I6YHw0Vj
-         Zj3iNJJBGhASQA/IKrYgpcgqfPs03eeGcULbEi/OVrmv2sYZefNNGnPQ8ETr6z7SF64Q
-         FPPcYllE5FMCrqIDzoM6t3OkB6Otua3142EyPLSj76zSVSdg1uD5kFFlTpAqrgHq+wvR
-         8Ibq5glylHByEctpFQp8LKT/Fd5S/qFS+IN83Z3A9MNSxusFkYGbL/aYTcGfKwd0IMqv
-         vxYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=drm1OQdyw43I3bW2ueb7Nz1xPsW07ECbYZ6BCyW/SWg=;
-        b=CPA3aEdUVnCAEfYwIVbu5ecsUVGb3LWmNshVqRGolO4srjqHXaFiNGpJJWSfv4XoAe
-         9jTCUqQtF+TOEVIxorxaGzrSDwLq/eM95+f9uEFkg1uBzH0ZbTLwxHkoulLitrZpKvsk
-         /UiGMPYeDbFYBm6B0AHn61uYd44lyC+ugzuoKXTSg+vRQE9AuOn4It16T7hs9fQxgmAQ
-         K7OZuNNHvgUO/xrV5YpY+4UoO2ebzgxeUw+kH3ZQWICsNtyFjz0tm5xh83vFqEjI1Rs7
-         gcsJkPRSYt9FiC3mcRzQ3HnksO0WNnwE9oslI4cYN/PHX+xtmfK9nPhEk1C798iK+2Jy
-         489Q==
-X-Gm-Message-State: AOAM531d2A16qTKntAK3sLXHQIkCPYPYrcZuP2Jq7O6oaZnPbio3dfZv
-        TB5LfI5JbsV6J2KhXrf0o0i8vDU14tFLzbsxCK0=
-X-Google-Smtp-Source: ABdhPJz5hgyo4J17oiLJQvgmGBUrY5Szb7LLTDZQuKW+KQqtiG1uSOJB7kXebmgJ2zuSLtC0gH0cpsi+p7k4QYGE8nk=
-X-Received: by 2002:a63:90ca:0:b0:3aa:fff3:6f76 with SMTP id
- a193-20020a6390ca000000b003aafff36f76mr19460147pge.206.1651099093287; Wed, 27
- Apr 2022 15:38:13 -0700 (PDT)
+        Wed, 27 Apr 2022 18:41:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6265D6D4D6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:38:15 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651099093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0JjrDY5ZRqnFRcUlqMMWqxBQcbO4A/xkDxTwlnqWFk=;
+        b=jszYZzKU9Rvaj4vO0mmsqXhjqNc3Kmos0bvnYLYr6I7iPz7aPlPApzuUorjIW6x9Qa6Fhv
+        7eEzpPQJXNOgkJDEnf6hHcR2/mKwP1te6TBEpd2EcgVFsoM4icSOSKh6sqnxbyUgxc25MP
+        72WvwH7+rV4Usb/6q6IYHcPvunTHhTjA5GyhMKUcERoS111LzApS9xNqBKbq6dadp+v5To
+        om9izSodKsy5lpx39yETJ4Nnm04vMarlcgfJLbIFNfB4N763+ea3MosaTe7/4fn6f8Eu5C
+        36yAOsG0CHLJqLk41Xz/f7lG0wh4BfZtXQZjVhZ2bx8GDuStReSKBkKxON5qag==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651099093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0JjrDY5ZRqnFRcUlqMMWqxBQcbO4A/xkDxTwlnqWFk=;
+        b=9QL4MT7cR7VrfiWOSQecv39bRXF/RRERSU7EgX/+pd70Xr6NKGiSWYYBYCJZ8lz0vnY93a
+        DnOyykn5zxBLWrAg==
+To:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Feng Tang <feng.tang@intel.com>,
+        Bill Gray <bgray@redhat.com>, Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH 2/2] x86/tsc_sync: Add synchronization overhead to tsc
+ adjustment
+In-Reply-To: <68837b1a-f85b-e842-f8c0-1cad162856f4@redhat.com>
+References: <20220314194630.1726542-1-longman@redhat.com>
+ <20220314194630.1726542-3-longman@redhat.com> <87czhymql2.ffs@tglx>
+ <d1a04785-4822-3a3f-5c37-81329a562364@redhat.com> <87levx8kou.ffs@tglx>
+ <4f02fe46-b253-2809-0af7-f2e9da091fe9@redhat.com> <87czh50xwf.ffs@tglx>
+ <68837b1a-f85b-e842-f8c0-1cad162856f4@redhat.com>
+Date:   Thu, 28 Apr 2022 00:38:12 +0200
+Message-ID: <87h76ew3sb.ffs@tglx>
 MIME-Version: 1.0
-References: <20220404200250.321455-1-shy828301@gmail.com> <YkuKbMbSecBVsa1k@casper.infradead.org>
- <CAHbLzkoWPN+ahrvu2JrvoDpf8J_QGR6Ug6BbPnC11C82Lb-NaA@mail.gmail.com> <YmmuivdOWcr46oNC@casper.infradead.org>
-In-Reply-To: <YmmuivdOWcr46oNC@casper.infradead.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 27 Apr 2022 15:38:00 -0700
-Message-ID: <CAHbLzkoOvewQ6DfXH1Pac50xDS+PHRh3BbYVwGnptov55N6msQ@mail.gmail.com>
-Subject: Re: [v3 PATCH 0/8] Make khugepaged collapse readonly FS THP more consistent
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Song Liu <songliubraving@fb.com>,
-        Rik van Riel <riel@surriel.com>, Zi Yan <ziy@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 1:59 PM Matthew Wilcox <willy@infradead.org> wrote:
+On Tue, Apr 26 2022 at 11:36, Waiman Long wrote:
+> On 4/25/22 15:24, Thomas Gleixner wrote:
+>> Yes. It's clear that the initial sync overhead is due to the cache line
+>> being remote, but I rather underestimate the compensation. Aside of that
+>> it's not guaranteed that the cache line is actually remote on the first
+>> access. It's by chance, but not by design.
 >
-> On Mon, Apr 04, 2022 at 05:48:49PM -0700, Yang Shi wrote:
-> > When khugepaged collapses file THPs, its behavior is not consistent.
-> > It is kind of "random luck" for khugepaged to see the file vmas (see
-> > report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/)
-> > since currently the vmas are registered to khugepaged when:
-> >   - Anon huge pmd page fault
-> >   - VMA merge
-> >   - MADV_HUGEPAGE
-> >   - Shmem mmap
-> >
-> > If the above conditions are not met, even though khugepaged is enabled
-> > it won't see any file vma at all.  MADV_HUGEPAGE could be specified
-> > explicitly to tell khugepaged to collapse this area, but when
-> > khugepaged mode is "always" it should scan suitable vmas as long as
-> > VM_NOHUGEPAGE is not set.
->
-> I don't see that as being true at all.  The point of this hack was that
-> applications which really knew what they were doing could enable it.
-> It makes no sense to me that setting "always" by the sysadmin for shmem
-> also force-enables ROTHP, even for applications which aren't aware of it.
->
-> Most telling, I think, is that Song Liu hasn't weighed in on this at
-> all.  It's clearly not important to the original author.
+> In check_tsc_warp(), the (unlikely(prev > now) check may only be 
+> triggered to record the possible wrap if last_tsc was previously written 
+> to by another cpu. That requires the transfer of lock cacheline from the 
+> remote cpu to local cpu as well. So sync overhead with remote cacheline 
+> is what really matters here. I had actually thought about just measuring 
+> local cacheline sync overhead so as to underestimate it and I am fine 
+> about doing it.
 
-I tend to agree that MADV_MADVISE should be preferred when this
-feature (or hack) was designed in the original author's mind in the
-first place. And "madvise" is definitely the recommended way to use
-THP, but I don't think it means we should not care "always" and assume
-nobody uses it otherwise the issue would have not been reported.
+Fair enough, but what I meant is that when estimating the actual sync
+overhead then there is no guarantee that the cache line is remote.
+
+The CPU which does that estimation might have been the last to lock,
+there is no guarantee that the reference CPU locked last or wrote to the
+cache line last.
+
+>> IOW, TSC runs with a constant frequency independent of the actual CPU
+>> frequency, ergo the CPU frequency dependent execution time has an
+>> influence on the resulting compensation value, no?
+>>
+>> On the machine I tested on, it's a factor of 3 between the minimal and
+>> the maximal CPU frequency, which makes quite a difference, right?
+>
+> Yes, I understand that. The measurement of sync_overhead is for 
+> estimating the delay (in TSC cycles) that the locking overhead 
+> introduces. With 1000MHz frequency, the delay in TSC cycle will be 
+> double that of a cpu running at 2000MHz. So you need more compensation 
+> in this case. That is why I said that as long as clock frequency doesn't 
+> change in the check_tsc_wrap() loop and the sync_overhead measurement 
+> part of the code, the actual cpu frequency does not matter here.
+
+I grant you that it does not matter for the loop under the assumption
+that the loop runs at constant frequency, but is that a guarantee that
+it does not matter later on?
+
+If you overcompensate by a factor of 3 because the upcoming CPU ran at
+the lowest frequency, then it might become visible later when everything
+runs at full speed.
+
+> However about we half the measure sync_overhead as compensation to avoid 
+> over-estimation, but probably increase the chance that we need a second 
+> adjustment of TSC wrap.
+
+Half of what?
+
+> With this patch applied, the measured overhead on the same CooperLake
+> system on different reboot runs varies from 104 to 326.
+
+Half of something which jumps around? Not convinced. :)
+
+Btw:
+>> Yes, I will try that experiment and report back the results.
+
+Could you please do that? I really like to see the data points.
+
+It's so sad that we have still to deal with this nonsense just because
+HW people don't give a damn.
+
+Thanks,
+
+        tglx

@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E7E510F48
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53349510F50
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357385AbiD0DPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S1357406AbiD0DPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 23:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357301AbiD0DPb (ORCPT
+        with ESMTP id S1357360AbiD0DPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:15:31 -0400
+        Tue, 26 Apr 2022 23:15:32 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5058F1208E;
-        Tue, 26 Apr 2022 20:12:21 -0700 (PDT)
-X-UUID: 78fd13edaf394cd5b454027b6ec5460b-20220427
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D46120B3;
+        Tue, 26 Apr 2022 20:12:22 -0700 (PDT)
+X-UUID: 4b329bb942694bb4a85006210925b7d3-20220427
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:6a2e8c5e-37c9-4796-8700-12f31713791a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:75
-X-CID-INFO: VERSION:1.1.4,REQID:6a2e8c5e-37c9-4796-8700-12f31713791a,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:75
-X-CID-META: VersionHash:faefae9,CLOUDID:f501d42e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:1263bd427694,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+X-CID-O-INFO: VERSION:1.1.4,REQID:960a3377-c399-4da6-a16d-7da2a1723dfb,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,
+        ACTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:960a3377-c399-4da6-a16d-7da2a1723dfb,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,
+        ACTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:9bf49bc6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:7e443a6914d3,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
         ,QS:0,BEC:nil
-X-UUID: 78fd13edaf394cd5b454027b6ec5460b-20220427
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+X-UUID: 4b329bb942694bb4a85006210925b7d3-20220427
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 907694312; Wed, 27 Apr 2022 11:12:15 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 27 Apr 2022 11:12:14 +0800
+        with ESMTP id 1348265681; Wed, 27 Apr 2022 11:12:16 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 27 Apr 2022 11:12:16 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 27 Apr
+ 2022 11:12:14 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Wed, 27 Apr 2022 11:12:14 +0800
@@ -51,9 +54,9 @@ CC:     <p.zabel@pengutronix.de>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH V4 03/15] clk: mediatek: reset: Refine and reorder functions in reset.c
-Date:   Wed, 27 Apr 2022 11:09:38 +0800
-Message-ID: <20220427030950.23395-4-rex-bc.chen@mediatek.com>
+Subject: [PATCH V4 04/15] clk: mediatek: reset: Extract common drivers to update function
+Date:   Wed, 27 Apr 2022 11:09:39 +0800
+Message-ID: <20220427030950.23395-5-rex-bc.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220427030950.23395-1-rex-bc.chen@mediatek.com>
 References: <20220427030950.23395-1-rex-bc.chen@mediatek.com>
@@ -69,139 +72,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make drivers more readable, we modify the indentation of the drivers
-and reorder the location of functions.
+To make drivers more clear and readable, we extract common code
+within assert and deassert to mtk_reset_update_set_clr() and
+mtk_reset_update().
 
 Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/clk/mediatek/reset.c | 68 +++++++++++++++++++-----------------
- 1 file changed, 36 insertions(+), 32 deletions(-)
+ drivers/clk/mediatek/reset.c | 38 +++++++++++++++++++++---------------
+ 1 file changed, 22 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
-index 5191becb45dd..5cbbcc22a4fc 100644
+index 5cbbcc22a4fc..22fa9f09752c 100644
 --- a/drivers/clk/mediatek/reset.c
 +++ b/drivers/clk/mediatek/reset.c
-@@ -12,56 +12,59 @@
+@@ -12,24 +12,27 @@
  
  #include "reset.h"
  
--static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
--	unsigned long id)
+-static int mtk_reset_assert(struct reset_controller_dev *rcdev,
+-			    unsigned long id)
++static int mtk_reset_update(struct reset_controller_dev *rcdev,
++			    unsigned long id, bool deassert)
+ {
+ 	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
++	unsigned int val = deassert ? 0 : ~0;
+ 
+ 	return regmap_update_bits(data->regmap,
+ 				  data->regofs + ((id / 32) << 2),
+-				  BIT(id % 32), ~0);
++				  BIT(id % 32), val);
++}
++
 +static int mtk_reset_assert(struct reset_controller_dev *rcdev,
 +			    unsigned long id)
- {
- 	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
--	unsigned int reg = data->regofs + ((id / 32) << 4);
- 
--	return regmap_write(data->regmap, reg, BIT(id % 32));
-+	return regmap_update_bits(data->regmap,
-+				  data->regofs + ((id / 32) << 2),
-+				  BIT(id % 32), ~0);
++{
++	return mtk_reset_update(rcdev, id, false);
  }
  
--static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
--	unsigned long id)
-+static int mtk_reset_deassert(struct reset_controller_dev *rcdev,
-+			      unsigned long id)
- {
- 	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
--	unsigned int reg = data->regofs + ((id / 32) << 4) + 0x4;
- 
--	return regmap_write(data->regmap, reg, BIT(id % 32));
-+	return regmap_update_bits(data->regmap,
-+				  data->regofs + ((id / 32) << 2),
-+				  BIT(id % 32), 0);
- }
- 
--static int mtk_reset_assert(struct reset_controller_dev *rcdev,
--			      unsigned long id)
-+static int mtk_reset(struct reset_controller_dev *rcdev, unsigned long id)
+ static int mtk_reset_deassert(struct reset_controller_dev *rcdev,
+ 			      unsigned long id)
  {
 -	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
-+	int ret;
-+
-+	ret = mtk_reset_assert(rcdev, id);
-+	if (ret)
-+		return ret;
- 
--	return regmap_update_bits(data->regmap, data->regofs + ((id / 32) << 2),
--			BIT(id % 32), ~0);
-+	return mtk_reset_deassert(rcdev, id);
+-
+-	return regmap_update_bits(data->regmap,
+-				  data->regofs + ((id / 32) << 2),
+-				  BIT(id % 32), 0);
++	return mtk_reset_update(rcdev, id, true);
  }
  
--static int mtk_reset_deassert(struct reset_controller_dev *rcdev,
--				unsigned long id)
-+static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
-+				    unsigned long id)
+ static int mtk_reset(struct reset_controller_dev *rcdev, unsigned long id)
+@@ -43,24 +46,27 @@ static int mtk_reset(struct reset_controller_dev *rcdev, unsigned long id)
+ 	return mtk_reset_deassert(rcdev, id);
+ }
+ 
+-static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
+-				    unsigned long id)
++static int mtk_reset_update_set_clr(struct reset_controller_dev *rcdev,
++				    unsigned long id, bool deassert)
  {
  	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
++	unsigned int deassert_ofs = deassert ? 0x4 : 0;
  
--	return regmap_update_bits(data->regmap, data->regofs + ((id / 32) << 2),
--			BIT(id % 32), 0);
-+	return regmap_write(data->regmap,
-+			    data->regofs + ((id / 32) << 4),
-+			    BIT(id % 32));
+ 	return regmap_write(data->regmap,
+-			    data->regofs + ((id / 32) << 4),
++			    data->regofs + ((id / 32) << 4) + deassert_ofs,
+ 			    BIT(id % 32));
  }
  
--static int mtk_reset(struct reset_controller_dev *rcdev,
--			      unsigned long id)
-+static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
-+				      unsigned long id)
++static int mtk_reset_assert_set_clr(struct reset_controller_dev *rcdev,
++				    unsigned long id)
++{
++	return mtk_reset_update_set_clr(rcdev, id, false);
++}
++
+ static int mtk_reset_deassert_set_clr(struct reset_controller_dev *rcdev,
+ 				      unsigned long id)
  {
--	int ret;
+-	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
 -
--	ret = mtk_reset_assert(rcdev, id);
--	if (ret)
--		return ret;
-+	struct mtk_reset *data = container_of(rcdev, struct mtk_reset, rcdev);
- 
--	return mtk_reset_deassert(rcdev, id);
-+	return regmap_write(data->regmap,
-+			    data->regofs + ((id / 32) << 4) + 0x4,
-+			    BIT(id % 32));
+-	return regmap_write(data->regmap,
+-			    data->regofs + ((id / 32) << 4) + 0x4,
+-			    BIT(id % 32));
++	return mtk_reset_update_set_clr(rcdev, id, true);
  }
  
  static int mtk_reset_set_clr(struct reset_controller_dev *rcdev,
--	unsigned long id)
-+			     unsigned long id)
- {
- 	int ret;
- 
-@@ -84,8 +87,9 @@ static const struct reset_control_ops mtk_reset_ops_set_clr = {
- };
- 
- static void mtk_register_reset_controller_common(struct device_node *np,
--			unsigned int num_regs, int regofs,
--			const struct reset_control_ops *reset_ops)
-+						 unsigned int num_regs,
-+						 int regofs,
-+						 const struct reset_control_ops *reset_ops)
- {
- 	struct mtk_reset *data;
- 	int ret;
-@@ -117,17 +121,17 @@ static void mtk_register_reset_controller_common(struct device_node *np,
- }
- 
- void mtk_register_reset_controller(struct device_node *np,
--	unsigned int num_regs, int regofs)
-+				   unsigned int num_regs, int regofs)
- {
- 	mtk_register_reset_controller_common(np, num_regs, regofs,
--		&mtk_reset_ops);
-+					     &mtk_reset_ops);
- }
- 
- void mtk_register_reset_controller_set_clr(struct device_node *np,
--	unsigned int num_regs, int regofs)
-+					   unsigned int num_regs, int regofs)
- {
- 	mtk_register_reset_controller_common(np, num_regs, regofs,
--		&mtk_reset_ops_set_clr);
-+					     &mtk_reset_ops_set_clr);
- }
- 
- MODULE_LICENSE("GPL");
 -- 
 2.18.0
 

@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8708A511AA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85E051198A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbiD0NvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S236586AbiD0Nv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236554AbiD0NvJ (ORCPT
+        with ESMTP id S236383AbiD0NvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:51:09 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 731C3766A;
-        Wed, 27 Apr 2022 06:47:58 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1C85520E97B0;
-        Wed, 27 Apr 2022 06:47:58 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1C85520E97B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1651067278;
-        bh=s71BKG69g523heKe1yEo9VKmSL/5EGLlD50AE/SchRU=;
-        h=From:To:Subject:Date:From;
-        b=ifbwO0m7s/jATQqceeCrnmVeEIvhHzX2cXKpEfhAwiCd74/M8VzUv42AlybCLlOns
-         rXoAQoxBIm3S8+db/8ujimleKpMTVlNzlj3vui3OcfDgu45PD4JteeDG+oO42hHoVq
-         pFFnzL2EG/CJS60yxHsd3dFozwBleudDIoiEp79k=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        deller@gmx.de, linux-hyperv@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] video: hyperv_fb: Allow resolutions with size > 64 MB for Gen1
-Date:   Wed, 27 Apr 2022 06:47:53 -0700
-Message-Id: <1651067273-6635-1-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 09:51:25 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627C652B1A;
+        Wed, 27 Apr 2022 06:48:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651067294; x=1682603294;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=3VKraWGq9JKDghUpz/S876MR6EjNBCyS7OXTjzs1g+o=;
+  b=Lhbs97ijHiYYJZXdsp1lKAlVe5VZ6BFM4RUT0D7fhuXUsPOhgJPaf1sX
+   XvAR3nJY02uq+mhSLgZh2zULehXe5C3raRjyZsRm3s7hnttGcdEmo5+VV
+   IFZ9Jj9G6JSd4qbdtjLr0IoJxIIM4Rx8irHhcEfZFhQeLVy6kMMNd5Z6e
+   U=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Apr 2022 06:48:14 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 06:48:14 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 06:48:13 -0700
+Received: from [10.216.55.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
+ 2022 06:48:11 -0700
+Subject: Re: [PATCH V10 4/9] mfd: pm8008: Add reset-gpios
+To:     Stephen Boyd <swboyd@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649939418-19861-5-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n50HR6w-v3ub8HR_K2PsqqTTrVAaQa0pZ7QjY39WmkDyQQ@mail.gmail.com>
+ <010bd223-94a0-fe8c-d1ab-39153bb68a7d@quicinc.com>
+ <a4cbdb4c-dbba-75ee-202a-6b429c0eb390@quicinc.com>
+ <104b529b-946d-f171-5a82-6052aef2dbbb@quicinc.com>
+ <CAE-0n532pgMKBFmK2etwCjMydKqD276X-veqqsne=WgE-sUegA@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <42655ad8-7eae-b629-69f8-e8e401bb7170@quicinc.com>
+Date:   Wed, 27 Apr 2022 19:18:07 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAE-0n532pgMKBFmK2etwCjMydKqD276X-veqqsne=WgE-sUegA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes a bug where GEN1 VMs doesn't allow resolutions greater
-than 64 MB size (eg 7680x4320). Unnecessary PCI check limits Gen1 VRAM
-to legacy PCI BAR size only (ie 64MB). Thus any, resolution requesting
-greater then 64MB (eg 7680x4320) would fail. MMIO region assigning this
-memory shouldn't be limited by PCI bar size.
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
- drivers/video/fbdev/hyperv_fb.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+On 4/27/2022 12:00 PM, Stephen Boyd wrote:
+> Quoting Satya Priya Kakitapalli (Temp) (2022-04-26 23:03:08)
+>> On 4/27/2022 10:58 AM, Satya Priya Kakitapalli (Temp) wrote:
+>>> On 4/18/2022 10:34 AM, Satya Priya Kakitapalli (Temp) wrote:
+>>>> On 4/15/2022 5:40 AM, Stephen Boyd wrote:
+>>>>> Quoting Satya Priya (2022-04-14 05:30:13)
+>>>>>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+>>>>>> index c472d7f..97a72da 100644
+>>>>>> --- a/drivers/mfd/qcom-pm8008.c
+>>>>>> +++ b/drivers/mfd/qcom-pm8008.c
+>>>>>> +               return PTR_ERR(chip->reset_gpio);
+>>>>>> +       }
+>>>>>> +       gpiod_set_value(chip->reset_gpio, 1);
+>>>>> Does this do anything? Does this work just as well?
+>>>>>
+>>>>>      reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
+>>>>>      if (IS_ERR(reset_gpio))
+>>>>>          return PTR_ERR(reset_gpio);
+>>>>>
+>>> This is not working as expected. We need to add
+>>> "gpiod_set_value(chip->reset_gpio, 1);"  to actually toggle the line.
+>>>
+>> I checked again and it is working after using GPIOD_OUT_HIGH instead of LOW.
+>>
+>> reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_HIGH);
+>>       if (IS_ERR(reset_gpio))
+>>           return PTR_ERR(reset_gpio);
+>>
+> What do you have in DT for the 'reset-gpios' property? GPIOD_OUT_HIGH
+> means the reset line is asserted, which presumably you don't want to be
+> the case because you typically deassert a reset to "take it out of
+> reset". Using GPIOD_OUT_HIGH probably works because DT has the wrong
+> GPIO flag, i.e.  GPIO_ACTIVE_HIGH, for an active low reset, or vice
+> versa.
 
-diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
-index c8e0ea2..58c304a 100644
---- a/drivers/video/fbdev/hyperv_fb.c
-+++ b/drivers/video/fbdev/hyperv_fb.c
-@@ -1009,7 +1009,6 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
- 	struct pci_dev *pdev  = NULL;
- 	void __iomem *fb_virt;
- 	int gen2vm = efi_enabled(EFI_BOOT);
--	resource_size_t pot_start, pot_end;
- 	phys_addr_t paddr;
- 	int ret;
- 
-@@ -1060,23 +1059,7 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
- 	dio_fb_size =
- 		screen_width * screen_height * screen_depth / 8;
- 
--	if (gen2vm) {
--		pot_start = 0;
--		pot_end = -1;
--	} else {
--		if (!(pci_resource_flags(pdev, 0) & IORESOURCE_MEM) ||
--		    pci_resource_len(pdev, 0) < screen_fb_size) {
--			pr_err("Resource not available or (0x%lx < 0x%lx)\n",
--			       (unsigned long) pci_resource_len(pdev, 0),
--			       (unsigned long) screen_fb_size);
--			goto err1;
--		}
--
--		pot_end = pci_resource_end(pdev, 0);
--		pot_start = pot_end - screen_fb_size + 1;
--	}
--
--	ret = vmbus_allocate_mmio(&par->mem, hdev, pot_start, pot_end,
-+	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
- 				  screen_fb_size, 0x100000, true);
- 	if (ret != 0) {
- 		pr_err("Unable to allocate framebuffer memory\n");
--- 
-1.8.3.1
+
+Yeah, I had GPIOD_OUT_HIGH in DT, now I changed and it is working fine 
+with GPIOD_OUT_LOW.
 

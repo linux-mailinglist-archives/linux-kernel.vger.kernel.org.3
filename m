@@ -2,94 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF08512129
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147E151202C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbiD0PSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S239568AbiD0PTY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 27 Apr 2022 11:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239505AbiD0PSU (ORCPT
+        with ESMTP id S239531AbiD0PSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:18:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43DA4393CA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651072508;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GWGAlXr9U9I9b8PILStOY8my0whIfEaiTQGIvHoKm5A=;
-        b=cBZ3EaP7yUi+X11YKCIpS8rJAiMXM9IHFCDO9kkRwzOTPlFP1G5TaL5BOOuLMxYakGLaiN
-        7Ynp4OP0WUw1Wp328Gnc+Y5YpVkHGVi2BuZRpZ33QsVg2Qt6edv1h//EkIqWldqZOy6Ryu
-        UJgAEUXKQ6pu+yFPrJ1mSKWJOagmn/s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-tTNuTEbENbOC2yYU8Sfwqw-1; Wed, 27 Apr 2022 11:15:05 -0400
-X-MC-Unique: tTNuTEbENbOC2yYU8Sfwqw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E04B018E0042;
-        Wed, 27 Apr 2022 15:15:02 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 247EB580464;
-        Wed, 27 Apr 2022 15:14:57 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 27 Apr 2022 17:15:02 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 17:14:57 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
- ptrace_check_attach
-Message-ID: <20220427151455.GE17421@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-7-ebiederm@xmission.com>
+        Wed, 27 Apr 2022 11:18:45 -0400
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B30E5839E;
+        Wed, 27 Apr 2022 08:15:29 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id kc16so352647qvb.7;
+        Wed, 27 Apr 2022 08:15:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7+G8Cf9crq/FmkHAa1hmIN8g6GY3mjT1aMgwO4UslU4=;
+        b=b0OW7JAkegRE3wuNJmjgUNjmYa2T/JOjrT9Es9/UJaOFRkSjzVJVy3FIl8zNDWwTpm
+         rUDcvQohwfebUgaj4QXQCZQS+ttDU5ppMLed/h+2mAj8bm03/daj4rgnvL99S5J2oumT
+         vfmzhOP7Rr8L5LXJEgizeatZwQatn9qUwZ/fmKaQX86/7/LTuLoebJuYv9GdWQAETiC2
+         i3jaZxgsUQWxDgdOtAV5JaMqZAVsX8sjjL07nfg1gnt8ij/5vn+C/GDDzhiLnCZBcRAS
+         U3evsAP+JHTM7+WVRAQaOurFcT4jf6QMSXChZ0Jbsw5JuLkWyJgh4gi2xilqvihnFvaB
+         7r7Q==
+X-Gm-Message-State: AOAM530CRuJzMO1K+YNbs0SuCV0sCb9NZarAfdk6TbdWZf0I0WehIyb3
+        H+x7iv94FR4vCQ9GCUWIRWbaA3cywhB9pQ==
+X-Google-Smtp-Source: ABdhPJwejfgEkKFhJu6j1wrVsqZANMB8i6Kt9hkHG9474jg0usCHPWjYuZWKGELEiSA3LcqVssHKMQ==
+X-Received: by 2002:a05:6214:252b:b0:456:3c2b:c910 with SMTP id gg11-20020a056214252b00b004563c2bc910mr9361804qvb.85.1651072528222;
+        Wed, 27 Apr 2022 08:15:28 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id m190-20020a378ac7000000b0069f8d810f16sm890605qkd.85.2022.04.27.08.15.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 08:15:27 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id e12so3920309ybc.11;
+        Wed, 27 Apr 2022 08:15:27 -0700 (PDT)
+X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
+ p9-20020a259e89000000b0063cad37a5demr26199241ybq.342.1651072527257; Wed, 27
+ Apr 2022 08:15:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426225211.308418-7-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220422120850.769480-1-herve.codina@bootlin.com> <20220422120850.769480-3-herve.codina@bootlin.com>
+In-Reply-To: <20220422120850.769480-3-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 27 Apr 2022 17:15:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVB2-Sv1AWFr43erOioui0me5A4TfvazKHp9hTF3gJCwg@mail.gmail.com>
+Message-ID: <CAMuHMdVB2-Sv1AWFr43erOioui0me5A4TfvazKHp9hTF3gJCwg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/8] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
+ device tree support for r9a06g032
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/26, Eric W. Biederman wrote:
+Hi Hervé,
+
+On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> Add internal PCI bridge support for the r9a06g032 SOC. The Renesas
+> RZ/N1D (R9A06G032) internal PCI bridge is compatible with the one
+> present in the R-Car Gen2 family.
+> Compared to the R-Car Gen2 family, it needs three clocks instead of
+> one.
 >
-> Asking wait_task_inactive to verify that tsk->__state == __TASK_TRACED
-> was needed to detect the when ptrace_stop would decide not to stop
-> after calling "set_special_state(TASK_TRACED)".  With the recent
-> cleanups ptrace_stop will always stop after calling set_special_state.
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml
+> +++ b/Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml
+> @@ -113,6 +113,37 @@ required:
+>    - "#size-cells"
+>    - "#interrupt-cells"
 >
-> Take advatnage of this by no longer asking wait_task_inactive to
-> verify the state.  If a bug is hit and wait_task_inactive does not
-> succeed warn and return -ESRCH.
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - renesas,pci-rzn1
+> +
+> +then:
+> +  properties:
+> +    clocks:
+> +      items:
+> +        - description: Internal bus clock (AHB) for HOST
+> +        - description: Internal bus clock (AHB) Power Management
+> +        - description: PCI clock for USB subsystem
+> +    clock-names:
+> +      items:
+> +        - const: hclk_usbh
+> +        - const: hclk_usbpm
+> +        - const: clk_pci_usb
 
-ACK, but I think that the changelog is wrong.
+These are the provider names.
+I think they should use the consumer names: usb_hclkh, usb_hclkpm,
+and usb_pciclk.
 
-We could do this right after may_ptrace_stop() has gone. This doesn't
-depend on the previous changes in this series.
+The rest looks good to me.
 
-Oleg.
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

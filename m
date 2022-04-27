@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4432512490
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39532512491
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237564AbiD0Vd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+        id S237600AbiD0VeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237501AbiD0Vdz (ORCPT
+        with ESMTP id S237509AbiD0Vd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:33:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0501327152
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651095042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ynrdYfrlOMf+XrSFv4MehKt+yj27yIpUWGbpxiPvDXQ=;
-        b=W1vbmznoW+pxPcxH9702/BkOKu+WIgNj3WijqPEou/H/2VKdSzhd4x3+m3f5euRuHrDpVu
-        0bW9uJ+oxR0D97VRHzYZmXLotLbEkYv3sc4cW7kG2DbT9XWfs5xNB+jKeG+gxUOdr93tOS
-        jqGA+WZSMUExNfFRYuDqTw7AsR8D4lE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-271-Qj0SZqLlOSu5i6kHs-f7DA-1; Wed, 27 Apr 2022 17:30:38 -0400
-X-MC-Unique: Qj0SZqLlOSu5i6kHs-f7DA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D61885A5A8;
-        Wed, 27 Apr 2022 21:30:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.213])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 69CBA40CFD0C;
-        Wed, 27 Apr 2022 21:30:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] rxrpc: Enable IPv6 checksums on transport socket
-From:   David Howells <dhowells@redhat.com>
-To:     marc.dionne@auristor.com
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 27 Apr 2022 22:30:36 +0100
-Message-ID: <165109503652.611257.12851860419631266883.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Wed, 27 Apr 2022 17:33:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A372827152;
+        Wed, 27 Apr 2022 14:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651095044; x=1682631044;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9AnR0+i4WyZuMptJB4sGh0+ILBAmTrqUC5l0VYBK5DQ=;
+  b=OLVFTDseiEs8H9fUvj40yBhty5zkBeBjcMUOSNhl1W0gPhmb9MTZbD1f
+   OMdcrmwDD5XnR7YgrJ0AqK0c9SmSY5cIg/0Q+tTaWOdloNoXekPimZZi/
+   3by0OvjfJdfZUhrA1KfOb+7/v0YKYihas94uEd/erZiWGqepC+59pR4tt
+   gWCLDpFYRp6cMI0ngTm0rzmQdnl2LB1BiC6nOhbULKyC3sZyigiy3H+vC
+   Iy4flTapKyFfpn38d0kjYdxTzbrbpYxg+6dGB7BLbcOlByPxdeBjBC6V7
+   wRWNo6/VQT8qX7+sD45PN86w1aIJyKdT7Ulb5fp/d+5ZEv/d29nTzbif9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="246634544"
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="246634544"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 14:30:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="705733567"
+Received: from rrnambia-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.78])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 14:30:41 -0700
+Message-ID: <68484e168226037c3a25b6fb983b052b26ab3ec1.camel@intel.com>
+Subject: Re: [PATCH v3 05/21] x86/virt/tdx: Detect P-SEAMLDR and TDX module
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Thu, 28 Apr 2022 09:30:39 +1200
+In-Reply-To: <49cc6848-47ae-9c25-f479-c5aed8c892df@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <b9f4d4afd244d685182ce9ab5ffdd0bf245be6e2.1649219184.git.kai.huang@intel.com>
+         <104a6959-3bd4-1e75-5e3d-5dc3ef025ed0@intel.com>
+         <98af78402861b1982607c5fd14b0c89403c042a6.camel@intel.com>
+         <49cc6848-47ae-9c25-f479-c5aed8c892df@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,52 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
-socket it opens and the checksums in the packets it generates end up 0.
+On Wed, 2022-04-27 at 07:24 -0700, Dave Hansen wrote:
+> On 4/26/22 17:01, Kai Huang wrote:
+> > On Tue, 2022-04-26 at 13:56 -0700, Dave Hansen wrote:
+> > > On 4/5/22 21:49, Kai Huang wrote:
+> > > > The P-SEAMLDR (persistent SEAM loader) is the first software module that
+> > > > runs in SEAM VMX root, responsible for loading and updating the TDX
+> > > > module.  Both the P-SEAMLDR and the TDX module are expected to be loaded
+> > > > before host kernel boots.
+> > > 
+> > > Why bother with the P-SEAMLDR here at all?  The kernel isn't loading the
+> > > TDX module in this series.  Why not just call into the TDX module directly?
+> > 
+> > It's not absolutely needed in this series.  I choose to detect P-SEAMLDR because
+> > detecting it can also detect the TDX module, and eventually we will need to
+> > support P-SEAMLDR because the TDX module runtime update uses P-SEAMLDR's
+> > SEAMCALL to do that.
+> > 
+> > Also, even for this series, detecting the P-SEAMLDR allows us to provide the P-
+> > SEAMLDR information to user at a basic level in dmesg:
+> > 
+> > [..] tdx: P-SEAMLDR: version 0x0, vendor_id: 0x8086, build_date: 20211209,
+> > build_num 160, major 1, minor 0
+> > 
+> > This may be useful to users, but it's not a hard requirement for this series.
+> 
+> We've had a lot of problems in general with this code trying to do too
+> much at once.  I thought we agreed that this was going to only contain
+> the minimum code to make TDX functional.  It seems to be creeping to
+> grow bigger and bigger.
+> 
+> Am I remembering this wrong?
 
-It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
-checksums.  The latter only seem to be applied if the socket family is
-AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
-IPv6 socket seem to have checksums anyway.
+OK. I'll remove the P-SEAMLDR related code.
 
-What seems to have happened is that the inet_inv_convert_csum() call didn't
-get converted to the appropriate udp_port_cfg parameters - and
-udp_sock_create() disables checksums unless explicitly told not too.
-
-Fix this by enabling the three udp_port_cfg checksum options.
-
-Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Xin Long <lucien.xin@gmail.com>
-cc: Vadim Fedorenko <vfedorenko@novek.ru>
-cc: David S. Miller <davem@davemloft.net>
-cc: linux-afs@lists.infradead.org
----
-
- net/rxrpc/local_object.c |    3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-index a4111408ffd0..6a1611b0e303 100644
---- a/net/rxrpc/local_object.c
-+++ b/net/rxrpc/local_object.c
-@@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
- 	       local, srx->transport_type, srx->transport.family);
- 
- 	udp_conf.family = srx->transport.family;
-+	udp_conf.use_udp_checksums = true;
- 	if (udp_conf.family == AF_INET) {
- 		udp_conf.local_ip = srx->transport.sin.sin_addr;
- 		udp_conf.local_udp_port = srx->transport.sin.sin_port;
-@@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
- 	} else {
- 		udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
- 		udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
-+		udp_conf.use_udp6_tx_checksums = true;
-+		udp_conf.use_udp6_rx_checksums = true;
- #endif
- 	}
- 	ret = udp_sock_create(net, &udp_conf, &local->socket);
+-- 
+Thanks,
+-Kai
 
 

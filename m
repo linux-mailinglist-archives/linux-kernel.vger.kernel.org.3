@@ -2,149 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BEF51176F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F0F51177C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiD0Lhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S232905AbiD0Llk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232855AbiD0Lhe (ORCPT
+        with ESMTP id S232808AbiD0Lli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:37:34 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2068.outbound.protection.outlook.com [40.107.95.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDE13CFFE;
-        Wed, 27 Apr 2022 04:34:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EnipiRBmb8e0V3xTNHsR8ZKrCzSNdc1OEHlD/6lPcHbIAUTZOSR8nrV0NoKZlO2Rj7JZhMkvQ8LWZfVbQ29pP2pP9ngv7RM+lrNi52sFBPrRqQVjkvNGs7DaqoAT8iQlmEmQGHsUFcJV3vfczI1fjwbLTE7pW6LtmMQa9OXDkqwfCT7RuAxCBwlRkp8/twg5hksehXoT5/8HLOpWNRackRfX/IsGeOYX7GOhp2N2FsoZxv+0kyNbpXmZ/5FgRatEN+bhcoKoynw+h2juaPY6bWONEMHCq4D2ksDPdEHS8eAQ3GPcIJ7avG6sEhX9u3cz/6R88DPlgjwy+C9bWgxrdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Qip2NrDTkpI14TY2w/bAHCeae3vYLrldpaHlsKEDMY=;
- b=XuvMB5AVcb0HpjAoLpTeqQReYryHFIwXC6PRgUFG0ozkI9uNskWjPjEt73A9X86eXlFdinAg4u30UU2ApD1iSKR+hiQcdcb4PuvWKCNMpgNgOUsUjDQg2EWmvuPo/1TK3szCwBdrkTRaqbN7G5z1czo4i9O4QVCXulvMid3+/iHnXEuYdjsVhGbMVGGcXYq5OgtRqbZ9dGqOgT/Rh70NLAG6LqovXKVternZqFKM4ZVqWIBTCyYGPO6tTqynuu+EMQ+BvmMaUozsU8PfbbH397AgVg8rOTgbt8oBKmwNd1M9bpjHXUUq944NZFjIjmIsWlTvOT+Xr41OzTNvPNLxNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Qip2NrDTkpI14TY2w/bAHCeae3vYLrldpaHlsKEDMY=;
- b=HDCIDhENHMB2/q4yBtRT+RuSkIov1v9ZzCVHEo4aeYMsLQJSiK8pAYlV/JCFV9HV1zwmGf6Emi9/ojp7IBPwg2gcc4SThBCEckUfHo2lh7AJO2XyqMIc9KOaKkUymXdeF1yK3FWHSXiV2aE1exQ6Kb02fi7bHnqol79lRVwmXsU=
-Received: from MW4PR04CA0275.namprd04.prod.outlook.com (2603:10b6:303:89::10)
- by BYAPR12MB2709.namprd12.prod.outlook.com (2603:10b6:a03:6d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.19; Wed, 27 Apr
- 2022 11:34:21 +0000
-Received: from CO1NAM11FT021.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:89:cafe::ad) by MW4PR04CA0275.outlook.office365.com
- (2603:10b6:303:89::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
- Transport; Wed, 27 Apr 2022 11:34:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT021.mail.protection.outlook.com (10.13.175.51) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Wed, 27 Apr 2022 11:34:21 +0000
-Received: from sindhu.amdval.net (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
- 2022 06:34:14 -0500
-From:   Sandipan Das <sandipan.das@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <x86@kernel.org>
-CC:     <peterz@infradead.org>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <namhyung@kernel.org>, <jolsa@kernel.org>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <pbonzini@redhat.com>, <jmattson@google.com>,
-        <like.xu.linux@gmail.com>, <eranian@google.com>, <puwen@hygon.cn>,
-        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
-        <santosh.shukla@amd.com>, <sandipan.das@amd.com>
-Subject: [PATCH v4 7/7] kvm: x86/cpuid: Fix CPUID leaf 0xA
-Date:   Wed, 27 Apr 2022 17:01:49 +0530
-Message-ID: <3fef83d9c2b2f7516e8ff50d60851f29a4bcb716.1651058600.git.sandipan.das@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1651058600.git.sandipan.das@amd.com>
-References: <cover.1651058600.git.sandipan.das@amd.com>
+        Wed, 27 Apr 2022 07:41:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CA641F9F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651059507; x=1682595507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5TCsS4H2FgSYiKzRFMy/PRIxIgDmsoFmuDlmsLxXLrU=;
+  b=QjwhB/In2GbNzGyjUk/EqsRYs5cwMJ/30/xHeVDRdkJ6QyalSaUME0ki
+   mJNGCUSJOJ9Trz5BR43EeDiA3Z0bPXmg3gT7oTNJXBj3tokQG157ERTA0
+   uyi0RitjR6qFMJU73KbGXqWRa0tzAxzq93fO8MoRjEpWqKZFexax4+rEh
+   1Opg9w6nh51MtoYdXUtWije4+icpYfBEZhwPwgmCpRk5ZHHPtHfD5W+T3
+   /rMuZIBepSYEu+ilpWc93FtAgkw6Je7eXho22XEsmMO8TecDWLogaV1KV
+   crB2IUjOLgN041m2uuMCW2i+R/IM5MPcyY5RRI4ejfjzVDOHzllfh5eGR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="266059587"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="266059587"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:38:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="617465323"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Apr 2022 04:38:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njfzz-0004dC-Ch;
+        Wed, 27 Apr 2022 11:38:23 +0000
+Date:   Wed, 27 Apr 2022 19:37:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, glider@google.com, elver@google.com,
+        akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, dvyukov@google.com,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] mm/kfence: fix a potential NULL pointer dereference
+Message-ID: <202204271916.aTcNyVdc-lkp@intel.com>
+References: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e7294ec6-acbd-4068-bfa4-08da2841dfaa
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2709:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB27090866C56FCD13EB0B441D8BFA9@BYAPR12MB2709.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mYK5IpRQkaTOYLBhD7zhHnYeuMrzel3DkY7WxVyOqUfVPXjy3Mto20BTePcxSCJ6x4q2JaV0DyJJkqud333ucaaX5p2DRAqFwBv1yyMHTFE1z8d14eWeVXM3rMt/ekq4/ojaXkgGMcdcnXhP7+SdmL1yip4XmgjLM5OJlmJlSL7zvynVLutfARLi6koor+QGrcaBrmHQZTT9PUJ03JcRgnK3Saiw52m3H8dtp1LCCag6dPFUGEEs6tJ+7VuuKXAoDo+zf3mn7YIx086iC6jYTXMsr6e+SWUm9+7+yDBz8BRJOb1kWWvaH2ECEBHbkZiI/U3Dg0j01r9wzXny+y42X20epNegdide9ympFmgyce4Y+Ee1BanoS7DcORJJjxntxYOdubBNT7WyzyRw+05QlHndYpsM1AvutUoUI94R5bUaxVKaqS1OeD7usbUsMawMcC7zBll9/t61f/JjrWm/2RXl3dfcHfXI3wCwjrk3rwiGLQXR+aqmIpjQgtQK+cbk3lFG8zejqy6ACi1hPaJDdwW5+JVUItLv6K/Xj44SlM9foDvdQ+q0EfC/qe9Fxqs10Tu6IJ/Ws8pZTTMb4HMHSZOtsugGlDvVmYPcfn6pZyUkgHeZTA23/pO3P5lscTuxLJ7acNXLofvvdN27SoU1m9yRAh45hs7QIToKxheiOEQgTkKJ3eY/zQB/vrvr7UjTSRPBi6qlmXjQWeGY2Qji5w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(186003)(5660300002)(508600001)(47076005)(8936002)(40460700003)(44832011)(82310400005)(36756003)(83380400001)(316002)(426003)(336012)(2616005)(54906003)(7416002)(356005)(70586007)(6666004)(2906002)(81166007)(70206006)(86362001)(26005)(110136005)(16526019)(36860700001)(4326008)(8676002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 11:34:21.4966
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7294ec6-acbd-4068-bfa4-08da2841dfaa
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT021.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2709
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some x86 processors, CPUID leaf 0xA provides information
-on Architectural Performance Monitoring features. It
-advertises a PMU version which Qemu uses to determine the
-availability of additional MSRs to manage the PMCs.
+Hi,
 
-Upon receiving a KVM_GET_SUPPORTED_CPUID ioctl request for
-the same, the kernel constructs return values based on the
-x86_pmu_capability irrespective of the vendor.
+Thank you for the patch! Perhaps something to improve:
 
-This leaf and the additional MSRs are not supported on AMD
-and Hygon processors. If AMD PerfMonV2 is detected, the PMU
-version is set to 2 and guest startup breaks because of an
-attempt to access a non-existent MSR. Return zeros to avoid
-this.
+[auto build test WARNING on hnaz-mm/master]
 
-Fixes: a6c06ed1a60a ("KVM: Expose the architectural performance monitoring CPUID leaf")
-Reported-by: Vasant Hegde <vasant.hegde@amd.com>
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
----
- arch/x86/kvm/cpuid.c | 5 +++++
- 1 file changed, 5 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
+base:   https://github.com/hnaz/linux-mm master
+config: arm-buildonly-randconfig-r004-20220427 (https://download.01.org/0day-ci/archive/20220427/202204271916.aTcNyVdc-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/920e9e639493bc72bee803c763f09760e3acd063
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
+        git checkout 920e9e639493bc72bee803c763f09760e3acd063
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash mm/kfence/
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 4b62d80bb22f..e66ebb747084 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -872,6 +872,11 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		union cpuid10_eax eax;
- 		union cpuid10_edx edx;
- 
-+		if (!static_cpu_has(X86_FEATURE_ARCH_PERFMON)) {
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+			break;
-+		}
-+
- 		perf_get_x86_pmu_capability(&cap);
- 
- 		/*
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   mm/kfence/core.c:1067:23: error: use of undeclared identifier 'addr'
+                   kfence_guarded_free(addr, meta, false);
+                                       ^
+>> mm/kfence/core.c:1075:23: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
+                   kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
+                                       ^~~~
+   mm/kfence/kfence.h:129:40: note: passing argument to parameter 'address' here
+   void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *regs,
+                                          ^
+   1 warning and 1 error generated.
+
+
+vim +1075 mm/kfence/core.c
+
+  1069	
+  1070	void __kfence_free(void *addr)
+  1071	{
+  1072		struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+  1073	
+  1074		if (!meta) {
+> 1075			kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
+  1076			return;
+  1077		}
+  1078	
+  1079		__try_free_kfence_meta(meta);
+  1080	}
+  1081	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

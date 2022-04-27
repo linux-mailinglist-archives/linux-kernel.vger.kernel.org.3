@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F9351227D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7F4512281
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234654AbiD0TYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S234263AbiD0TZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiD0TYT (ORCPT
+        with ESMTP id S234417AbiD0TZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:24:19 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D9573076;
-        Wed, 27 Apr 2022 12:19:27 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id gh6so5411839ejb.0;
-        Wed, 27 Apr 2022 12:19:27 -0700 (PDT)
+        Wed, 27 Apr 2022 15:25:43 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D3112AC5;
+        Wed, 27 Apr 2022 12:21:37 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bv19so5338183ejb.6;
+        Wed, 27 Apr 2022 12:21:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6yTsPEOBY3cCKcYeHXwiu4LFE1vQQyqmVGUuUkNQfOY=;
-        b=dr9rA1RXW7poH5DEv8lJxBydGsU3OVxR+olF87xFBBnZf7pSOJMmYRctilCAomiLIS
-         3GipMSau/cDT7rbjeq6e/S6AfzQtZ3OeJ9Dijw06JP/EeSw/I2L0ePnXCDeJOCN1D6T9
-         VetoMOtufApjI/F9qQYgGf2j/2mKepfTpmJEBUwf8Bu7vH/ept42+UC/8ehTbwBlJbII
-         EtKoKaCdh2B4OvkQE9D/DNyXgP+Ts+x+VXg8OGIv6zW0rXuRB2TI2we3W94rClh+j9HF
-         mENDuk40LW5+Ma/Ic0f2ijThwQmrG/Sqjb4toLJ1eh3/ERQxRkktmjZzxk69E3VQRbLW
-         54Pw==
+        bh=1pzX66OsBnNRuIBQz0pI37xgHgmuvAdxapWLaoZpVz4=;
+        b=mgI9NDd1ieXNF7QNWidr4aWzwJOOgDmiS6oC+dq25mEOwPWmmZfMbfbUaVEgrqDNJN
+         BhUOGjj82d4P4XgLSxaj6zUuNnCsUMsyySl2TcsSPp7CL3MPoPDzS8zgeMhLjwL4H5r9
+         xXrwoZVGE0EehHDynM903T+NnNhhly8qvlFtU5HPC2Le8F3v0sr424xNeqYldFuv/lx+
+         Wr/DHZnIQlYPDY5eHbnBSaaadyF0D/k2z3Z3erWbvfroUXuHwVlvL5HR/QFDovcBaudN
+         CoR7QUSt+xwG/BMK3Hr4kXTGJofkMkQa2UsifqaXddCuUBkLxnSi8oE8zPuQ32aTxhSi
+         mJog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6yTsPEOBY3cCKcYeHXwiu4LFE1vQQyqmVGUuUkNQfOY=;
-        b=RYaqKYAd5RBLpQ4nL6impqbbj8uwOKLUxT7wb1TymewPG+hw7GC527ZEp2Bkn2lXo4
-         cb6w5Zs3h0YPguEN8oEf+p1/Fgm9R/XTsaXhQiQEJUuCD8TF3ClLize9Ssv3JxcnewlR
-         /kbDz5MIehGwoTRN2lIvOexLlySO4di0fHfQi6YP7pRbfARRMwZbtcOKCNy98Pl0kPIc
-         cn9aUXadr+gxEoOASpWQkqjQxLFOshAcEA7V5cZPeoQf4EFJy5PVN9I+xDejPKH8mXNE
-         XzJBhpUfUS1Ulw6pl++T6ZGhFdj84fMVIt6gSXg+PiZ0gdafQ1cN6KsQNPTpAtXufzFu
-         Qnkg==
-X-Gm-Message-State: AOAM5332GNgDGGMSZ/Cl7Yru/cyB0rQbqprmKlGRgRRKJWGDgFcQ1l15
-        n6Wis1iy//bB7NWhgz/Xwwy6/gEJ6kuoHw==
-X-Google-Smtp-Source: ABdhPJyD6XH3nmRWwunfAap5tqWfZ7cDoEOrmA1D/uSHOLb1KHXH0zoeq4hrfV+Tjr8+gbTBSpX1pg==
-X-Received: by 2002:a17:906:3f83:b0:6f3:c1ca:9c72 with SMTP id b3-20020a1709063f8300b006f3c1ca9c72mr5475697ejj.539.1651087156562;
-        Wed, 27 Apr 2022 12:19:16 -0700 (PDT)
+        bh=1pzX66OsBnNRuIBQz0pI37xgHgmuvAdxapWLaoZpVz4=;
+        b=UBnqfDiw1Mc4NBt8ejmxMP+0jK0ynnHjCRJ4MP7xG1KlzAJLcA1mYbpj5QU3UfULBU
+         v19T4Wx74ejX/aITLIPF8pX+VuxSyjAebphGxStU0SZwF2O0u3MEHdDDb2adlg/+cxgw
+         aERncuqExKfwnCAUBIPnPXuqd+0ngGeklGvf7XZtbblh7LGxr8pa0r+qtQLaBQyF/ykJ
+         r8Ea2Idirl4pPveeHfUpFyr7FEOYY3Wiclhus72QEFenqegykbv0co17dvfCypmxOJJF
+         70kyz7nOc3aUsBv50KN2vCcAEInUsi60/xsROt9z3TqeIla1TDCy/V4yYPCuTtRY0iVF
+         pixw==
+X-Gm-Message-State: AOAM533cTLyslulw/PZUEgI99GKAkXSvThjYSgTuPulV1ef0+krtV95k
+        CH8ariNgjnV68Fa33zTceB/OvE0z9auxUA==
+X-Google-Smtp-Source: ABdhPJzXuvdaKSn1F0VRSzYT8LkBKGAMTiCWNvGj1LRVVyZfUiXEcy605iJSgEc+AlBZ5+UGN7zxuQ==
+X-Received: by 2002:a17:906:d20c:b0:6f3:9901:bc08 with SMTP id w12-20020a170906d20c00b006f39901bc08mr15875211ejz.351.1651087296332;
+        Wed, 27 Apr 2022 12:21:36 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id q17-20020a1709064cd100b006e78206fe2bsm7339272ejt.111.2022.04.27.12.19.15
+        by smtp.gmail.com with ESMTPSA id y5-20020a056402170500b0042617ba63d3sm65241edu.93.2022.04.27.12.21.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:19:16 -0700 (PDT)
+        Wed, 27 Apr 2022 12:21:35 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
@@ -60,11 +60,11 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 22/45] media: sun6i-csi: Split stream sequences and irq code in capture
-Date:   Wed, 27 Apr 2022 21:19:15 +0200
-Message-ID: <3661760.kQq0lBPeGt@jernej-laptop>
-In-Reply-To: <20220415152811.636419-23-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-23-paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH v4 23/45] media: sun6i-csi: Move power management to runtime pm in capture
+Date:   Wed, 27 Apr 2022 21:21:34 +0200
+Message-ID: <8925609.CDJkKcVGEf@jernej-laptop>
+In-Reply-To: <20220415152811.636419-24-paul.kocialkowski@bootlin.com>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-24-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -78,12 +78,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:27:48 CEST je Paul Kocialkowski napisal(a):
-> Create minimal helpers that split the enable/disable flow, which will
-> make it easier to move control over to the bridge later on.
+Dne petek, 15. april 2022 ob 17:27:49 CEST je Paul Kocialkowski napisal(a):
+> Let's just enable the module when we start using it (at stream on)
+> and benefit from runtime pm instead of enabling it at first open.
 > 
-> Generally speaking the goal is to move register configuration to
-> the capture code and later split it with the bridge code.
+> Also reorder the call to v4l2_pipeline_pm_get.
 > 
 > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
@@ -93,170 +92,200 @@ Best regards,
 Jernej
 
 > ---
->  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 26 ---------
->  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  7 ---
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 58 ++++++++++++++++++-
->  3 files changed, 55 insertions(+), 36 deletions(-)
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 24 -----------
+>  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  7 ----
+>  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 41 ++++++++++---------
+>  3 files changed, 22 insertions(+), 50 deletions(-)
 > 
 > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
 > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
-> 98133c1dbf68..29892e8c2b9d 100644
+> 29892e8c2b9d..7801f5abe47e 100644
 > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
 > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> @@ -535,32 +535,6 @@ int sun6i_csi_update_config(struct sun6i_csi_device
-> *csi_dev, return 0;
+> @@ -148,30 +148,6 @@ bool sun6i_csi_is_format_supported(struct
+> sun6i_csi_device *csi_dev, return false;
 >  }
 > 
-> -void sun6i_csi_set_stream(struct sun6i_csi_device *csi_dev, bool enable)
+> -int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
 > -{
+> -	struct device *dev = csi_dev->dev;
 > -	struct regmap *regmap = csi_dev->regmap;
+> -	int ret;
 > -
 > -	if (!enable) {
-> -		regmap_update_bits(regmap, SUN6I_CSI_CAP_REG,
-> -				   SUN6I_CSI_CAP_VCAP_ON, 0);
-> -		regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG, 0);
-> -		return;
+> -		regmap_update_bits(regmap, SUN6I_CSI_EN_REG,
+> -				   SUN6I_CSI_EN_CSI_EN, 0);
+> -		pm_runtime_put(dev);
+> -
+> -		return 0;
 > -	}
 > -
-> -	regmap_write(regmap, SUN6I_CSI_CH_INT_STA_REG,
-> -		     SUN6I_CSI_CH_INT_STA_CLEAR);
-> -	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG,
-> -		     SUN6I_CSI_CH_INT_EN_VS |
-> -		     SUN6I_CSI_CH_INT_EN_HB_OF |
-> -		     SUN6I_CSI_CH_INT_EN_FIFO2_OF |
-> -		     SUN6I_CSI_CH_INT_EN_FIFO1_OF |
-> -		     SUN6I_CSI_CH_INT_EN_FIFO0_OF |
-> -		     SUN6I_CSI_CH_INT_EN_FD |
-> -		     SUN6I_CSI_CH_INT_EN_CD);
+> -	ret = pm_runtime_resume_and_get(dev);
+> -	if (ret < 0)
+> -		return ret;
 > -
-> -	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
-SUN6I_CSI_CAP_VCAP_ON,
-> -			   SUN6I_CSI_CAP_VCAP_ON);
+> -	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
+> -			   SUN6I_CSI_EN_CSI_EN);
+> -
+> -	return 0;
 > -}
 > -
->  /* Media */
-> 
->  static const struct media_device_ops sun6i_csi_media_ops = {
+>  static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device
+> *csi_dev, u32 mbus_code, u32 pixformat)
+>  {
 > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
 > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h index
-> 44fc4d486877..155527961280 100644
+> 155527961280..3a4f2b45d267 100644
 > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
 > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> @@ -92,13 +92,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev,
-> bool enable); int sun6i_csi_update_config(struct sun6i_csi_device *csi_dev,
->  			    struct sun6i_csi_config *config);
+> @@ -77,13 +77,6 @@ struct sun6i_csi_variant {
+>  bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
+>  				   u32 pixformat, u32 mbus_code);
 > 
 > -/**
-> - * sun6i_csi_set_stream() - start/stop csi streaming
+> - * sun6i_csi_set_power() - power on/off the csi
 > - * @csi:	pointer to the csi
-> - * @enable:	start/stop
+> - * @enable:	on/off
 > - */
-> -void sun6i_csi_set_stream(struct sun6i_csi_device *csi_dev, bool enable);
+> -int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable);
 > -
->  /* get bpp form v4l2 pixformat */
->  static inline int sun6i_csi_get_bpp(unsigned int pixformat)
->  {
+>  /**
+>   * sun6i_csi_update_config() - update the csi register settings
+>   * @csi:	pointer to the csi
 > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c index
-> 7788cbab7810..72fcc60d2695 100644
+> 72fcc60d2695..3e5c4f7df48d 100644
 > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
 > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -107,6 +107,51 @@ static bool sun6i_csi_capture_format_check(u32 format)
+> @@ -6,6 +6,7 @@
+>   */
 > 
->  /* Capture */
+>  #include <linux/of.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/regmap.h>
 > 
-> +static void sun6i_csi_capture_irq_enable(struct sun6i_csi_device *csi_dev)
-> +{
-> +	struct regmap *regmap = csi_dev->regmap;
+>  #include <media/v4l2-device.h>
+> @@ -141,6 +142,9 @@ static void sun6i_csi_capture_enable(struct
+> sun6i_csi_device *csi_dev) {
+>  	struct regmap *regmap = csi_dev->regmap;
+> 
+> +	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
+> +			   SUN6I_CSI_EN_CSI_EN);
 > +
-> +	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG,
-> +		     SUN6I_CSI_CH_INT_EN_VS |
-> +		     SUN6I_CSI_CH_INT_EN_HB_OF |
-> +		     SUN6I_CSI_CH_INT_EN_FIFO2_OF |
-> +		     SUN6I_CSI_CH_INT_EN_FIFO1_OF |
-> +		     SUN6I_CSI_CH_INT_EN_FIFO0_OF |
-> +		     SUN6I_CSI_CH_INT_EN_FD |
-> +		     SUN6I_CSI_CH_INT_EN_CD);
-> +}
-> +
-> +static void sun6i_csi_capture_irq_disable(struct sun6i_csi_device *csi_dev)
-> +{
-> +	struct regmap *regmap = csi_dev->regmap;
-> +
-> +	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG, 0);
-> +}
-> +
-> +static void sun6i_csi_capture_irq_clear(struct sun6i_csi_device *csi_dev)
-> +{
-> +	struct regmap *regmap = csi_dev->regmap;
-> +
-> +	regmap_write(regmap, SUN6I_CSI_CH_INT_EN_REG, 0);
-> +	regmap_write(regmap, SUN6I_CSI_CH_INT_STA_REG,
-> +		     SUN6I_CSI_CH_INT_STA_CLEAR);
-> +}
-> +
-> +static void sun6i_csi_capture_enable(struct sun6i_csi_device *csi_dev)
-> +{
-> +	struct regmap *regmap = csi_dev->regmap;
-> +
-> +	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
+>  	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
 SUN6I_CSI_CAP_VCAP_ON,
-> +			   SUN6I_CSI_CAP_VCAP_ON);
-> +}
-> +
-> +static void sun6i_csi_capture_disable(struct sun6i_csi_device *csi_dev)
-> +{
-> +	struct regmap *regmap = csi_dev->regmap;
-> +
-> +	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
+>  			   SUN6I_CSI_CAP_VCAP_ON);
+>  }
+> @@ -150,6 +154,7 @@ static void sun6i_csi_capture_disable(struct
+> sun6i_csi_device *csi_dev) struct regmap *regmap = csi_dev->regmap;
+> 
+>  	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
 SUN6I_CSI_CAP_VCAP_ON, 0);
-> +}
-> +
+> +	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN, 
+0);
+>  }
+> 
 >  static void
->  sun6i_csi_capture_buffer_configure(struct sun6i_csi_device *csi_dev,
->  				   struct sun6i_csi_buffer 
-*csi_buffer)
-> @@ -357,6 +402,10 @@ static int sun6i_csi_capture_start_streaming(struct
+> @@ -382,6 +387,7 @@ static int sun6i_csi_capture_start_streaming(struct
+> vb2_queue *queue, struct sun6i_csi_capture *capture = &csi_dev->capture;
+>  	struct sun6i_csi_capture_state *state = &capture->state;
+>  	struct video_device *video_dev = &capture->video_dev;
+> +	struct device *dev = csi_dev->dev;
+>  	struct v4l2_subdev *subdev;
+>  	int ret;
+> 
+> @@ -402,6 +408,12 @@ static int sun6i_csi_capture_start_streaming(struct
 > vb2_queue *queue, goto error_media_pipeline;
 >  	}
 > 
-> +	/* Clear */
+> +	/* PM */
 > +
-> +	sun6i_csi_capture_irq_clear(csi_dev);
+> +	ret = pm_runtime_resume_and_get(dev);
+> +	if (ret < 0)
+> +		goto error_media_pipeline;
 > +
->  	/* Configure */
+>  	/* Clear */
 > 
->  	sun6i_csi_capture_configure(csi_dev);
-> @@ -367,7 +416,8 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue,
+>  	sun6i_csi_capture_irq_clear(csi_dev);
+> @@ -429,6 +441,8 @@ static int sun6i_csi_capture_start_streaming(struct
+> vb2_queue *queue, sun6i_csi_capture_disable(csi_dev);
+>  	sun6i_csi_capture_irq_disable(csi_dev);
 > 
->  	/* Enable */
-> 
-> -	sun6i_csi_set_stream(csi_dev, true);
-> +	sun6i_csi_capture_irq_enable(csi_dev);
-> +	sun6i_csi_capture_enable(csi_dev);
-> 
->  	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
->  	if (ret && ret != -ENOIOCTLCMD)
-> @@ -376,7 +426,8 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, return 0;
-> 
->  error_stream:
-> -	sun6i_csi_set_stream(csi_dev, false);
-> +	sun6i_csi_capture_disable(csi_dev);
-> +	sun6i_csi_capture_irq_disable(csi_dev);
-> 
+> +	pm_runtime_put(dev);
+> +
 >  error_media_pipeline:
 >  	media_pipeline_stop(&video_dev->entity);
-> @@ -397,7 +448,8 @@ static void sun6i_csi_capture_stop_streaming(struct
-> vb2_queue *queue) if (subdev)
->  		v4l2_subdev_call(subdev, video, s_stream, 0);
 > 
-> -	sun6i_csi_set_stream(csi_dev, false);
-> +	sun6i_csi_capture_disable(csi_dev);
-> +	sun6i_csi_capture_irq_disable(csi_dev);
+> @@ -442,6 +456,7 @@ static void sun6i_csi_capture_stop_streaming(struct
+> vb2_queue *queue) {
+>  	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
+>  	struct sun6i_csi_capture *capture = &csi_dev->capture;
+> +	struct device *dev = csi_dev->dev;
+>  	struct v4l2_subdev *subdev;
 > 
+>  	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
+> @@ -451,6 +466,8 @@ static void sun6i_csi_capture_stop_streaming(struct
+> vb2_queue *queue) sun6i_csi_capture_disable(csi_dev);
+>  	sun6i_csi_capture_irq_disable(csi_dev);
+> 
+> +	pm_runtime_put(dev);
+> +
 >  	media_pipeline_stop(&capture->video_dev.entity);
+> 
+>  	sun6i_csi_capture_state_cleanup(csi_dev, true);
+> @@ -639,27 +656,20 @@ static int sun6i_csi_capture_open(struct file *file)
+>  	if (mutex_lock_interruptible(&capture->lock))
+>  		return -ERESTARTSYS;
+> 
+> -	ret = v4l2_fh_open(file);
+> +	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
+>  	if (ret < 0)
+>  		goto error_lock;
+> 
+> -	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
+> +	ret = v4l2_fh_open(file);
+>  	if (ret < 0)
+> -		goto error_v4l2_fh;
+> -
+> -	/* Power on at first open. */
+> -	if (v4l2_fh_is_singular_file(file)) {
+> -		ret = sun6i_csi_set_power(csi_dev, true);
+> -		if (ret < 0)
+> -			goto error_v4l2_fh;
+> -	}
+> +		goto error_pipeline;
+> 
+>  	mutex_unlock(&capture->lock);
+> 
+>  	return 0;
+> 
+> -error_v4l2_fh:
+> -	v4l2_fh_release(file);
+> +error_pipeline:
+> +	v4l2_pipeline_pm_put(&capture->video_dev.entity);
+> 
+>  error_lock:
+>  	mutex_unlock(&capture->lock);
+> @@ -671,19 +681,12 @@ static int sun6i_csi_capture_close(struct file *file)
+>  {
+>  	struct sun6i_csi_device *csi_dev = video_drvdata(file);
+>  	struct sun6i_csi_capture *capture = &csi_dev->capture;
+> -	bool last_close;
+> 
+>  	mutex_lock(&capture->lock);
+> 
+> -	last_close = v4l2_fh_is_singular_file(file);
+> -
+>  	_vb2_fop_release(file, NULL);
+>  	v4l2_pipeline_pm_put(&capture->video_dev.entity);
+> 
+> -	/* Power off at last close. */
+> -	if (last_close)
+> -		sun6i_csi_set_power(csi_dev, false);
+> -
+>  	mutex_unlock(&capture->lock);
+> 
+>  	return 0;
 
 
 

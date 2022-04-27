@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E9A511032
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEE2511037
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236382AbiD0Eeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S1357705AbiD0EkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbiD0Eeg (ORCPT
+        with ESMTP id S1345860AbiD0EkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:34:36 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202FC17047
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:31:26 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id 79so527321qkk.10
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eDJ/TKi8MJj4cRz3lASeVWI34QxPexXoDljXobkQyGg=;
-        b=ZYSazkTWKQgXrTiBOPxNdhzCsnwoyOqM4V2N9vOQDG6HRKnC+gKK7I+aN0EPVfp3pH
-         j7jBmnk/fvOdyR4xI9ms8Ab++PWx5/p71SrZahPgOOdOaGA9EI7HhKnJxv5GkR/CpuZu
-         PX59oxiLlPIqvkE7FjDXFM6Z8ipB/iweREssM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eDJ/TKi8MJj4cRz3lASeVWI34QxPexXoDljXobkQyGg=;
-        b=HcCQE8QoNoj87ZtipjImx57qUgwfKsQr+S+GeotzmH1StHY0bMX67ql4uA20bHwnsE
-         igDVFSfStR8D+0Pon3LptIVsm+p5IV7G5GtptJchzpBPCzBrm0c7Kg1hlKNrsni2PIfH
-         UcvZihhhUrkBLXPfNOI5d7MQkD1/pzmzMSC526WzZeK5EKqclbLIiCaVsGX4A6jvyueK
-         xUrvSIQiaQ/4yVrRXKodxjJEljYukSDA3HO7yc04eAVhk8gErCk7KnnU0niss29XHU3v
-         eKczPWDt0BmRcM2W27DlW2s8Yq74jk9Kb1KzpmtDHuCOFmcN9GLGM0eoSaSxS4JCqhge
-         lOIA==
-X-Gm-Message-State: AOAM532bCP6EE0G+l2erv68d1FbiH/gjywbSeM7EeAhZ+8WqZoltoi4i
-        ou6x2PbZb2TJ7v7wKnWrLyQRdW8WDfgzDg==
-X-Google-Smtp-Source: ABdhPJxuAE2BtQBf4ewHiSv7XRNhL9wsn3+C9ClAM4/uoUwz5FV3h1mKjKU0hGr8Hut/2eXcj+uncA==
-X-Received: by 2002:a05:620a:2087:b0:69f:8a92:bdf3 with SMTP id e7-20020a05620a208700b0069f8a92bdf3mr1081446qka.443.1651033885130;
-        Tue, 26 Apr 2022 21:31:25 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id v67-20020a379346000000b0069bdb3bb132sm7681292qkd.37.2022.04.26.21.31.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 21:31:24 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2f7c57ee6feso5923327b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:31:23 -0700 (PDT)
-X-Received: by 2002:a0d:cb41:0:b0:2f7:d205:9c99 with SMTP id
- n62-20020a0dcb41000000b002f7d2059c99mr17141871ywd.417.1651033882822; Tue, 26
- Apr 2022 21:31:22 -0700 (PDT)
+        Wed, 27 Apr 2022 00:40:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269D21DA50;
+        Tue, 26 Apr 2022 21:37:09 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R2VObw015241;
+        Wed, 27 Apr 2022 04:33:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=P/3XNVpL7lXvtlLB0wtJ1D8fNHMX45H+WNBY47qEjTU=;
+ b=GsnU9himGDTT56UiekzH13DpKpbzyxewZCX9GAjiBcDo2LKHJ0kD3TIkIj5YL4j1gxQN
+ VaGjE6ovtzzuot4pbLprYu9/tOtMPJvqngJTnt/wH3GUU8krFwK7LGIf1eLjYWw0ntJX
+ zuR2TEKmEnfsiL+GzascnA8bi1Nl67hqEC0lNkBLCMZzDZZDiiEVSaiuHsPMXVFa0RFE
+ nd+xB1uP70yVn8uqAvGVD6bQE3/FmplixT7jOKJ9RCz9I1wBBLnTRU5P3e1yQgLnY0DU
+ gCfmoB/6VpL/cV/fWRStACN0pPMCKuqg1tWBFtCgF+UdmQ4UHJOzfyc3/JhWAIWTIG3R 9Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpsspvpt8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 04:33:23 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23R4LGEc013778;
+        Wed, 27 Apr 2022 04:33:22 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpsspvpss-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 04:33:22 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23R4SXFS015709;
+        Wed, 27 Apr 2022 04:33:20 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma02wdc.us.ibm.com with ESMTP id 3fm939srwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 04:33:20 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23R4XJTq25035114
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Apr 2022 04:33:19 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 50390C6057;
+        Wed, 27 Apr 2022 04:33:19 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7916C6059;
+        Wed, 27 Apr 2022 04:33:02 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.50.189])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 27 Apr 2022 04:33:02 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Yu Zhao <yuzhao@google.com>, Stephen Rothwell <sfr@rothwell.id.au>,
+        linux-mm@kvack.org
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, page-reclaim@google.com,
+        x86@kernel.org, Yu Zhao <yuzhao@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v10 07/14] mm: multi-gen LRU: exploit locality in rmap
+In-Reply-To: <20220407031525.2368067-8-yuzhao@google.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-8-yuzhao@google.com>
+Date:   Wed, 27 Apr 2022 10:02:56 +0530
+Message-ID: <87zgk7xi13.fsf@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220426125751.108293-1-nicolas.dufresne@collabora.com> <20220426125751.108293-4-nicolas.dufresne@collabora.com>
-In-Reply-To: <20220426125751.108293-4-nicolas.dufresne@collabora.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Wed, 27 Apr 2022 13:31:11 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
-Message-ID: <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
-Subject: Re: [PATCH v4 03/24] media: videobuf2-v4l2: Warn on holding buffers
- without support
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     nicolas@ndufresne.ca,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gtJPmcWjuPxlyxYBKW51oqDKp_XYDYZP
+X-Proofpoint-ORIG-GUID: 42FW6whtngg3Q_8U1dckC2WbPYt7lfYG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_01,2022-04-26_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 mlxscore=0 phishscore=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 mlxlogscore=774
+ malwarescore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204270028
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas, Sebastian,
+Yu Zhao <yuzhao@google.com> writes:
 
-On Tue, Apr 26, 2022 at 9:58 PM Nicolas Dufresne
-<nicolas.dufresne@collabora.com> wrote:
->
-> From: Sebastian Fricke <sebastian.fricke@collabora.com>
->
-> Using V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF flag without specifying the
-> subsystem flag VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF, results in
-> silently ignoring it.
-> Warn the user via a debug print when the flag is requested but ignored
-> by the videobuf2 framework.
->
-> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
->  drivers/media/common/videobuf2/videobuf2-v4l2.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
+....
 
-Thanks for the patch. Please see my comments inline.
+ diff --git a/mm/rmap.c b/mm/rmap.c
+> index fedb82371efe..7cb7ef29088a 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -73,6 +73,7 @@
+>  #include <linux/page_idle.h>
+>  #include <linux/memremap.h>
+>  #include <linux/userfaultfd_k.h>
+> +#include <linux/mm_inline.h>
+>  
+>  #include <asm/tlbflush.h>
+>  
+> @@ -821,6 +822,12 @@ static bool folio_referenced_one(struct folio *folio,
+>  		}
+>  
+>  		if (pvmw.pte) {
+> +			if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
+> +			    !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
+> +				lru_gen_look_around(&pvmw);
+> +				referenced++;
+> +			}
 
-> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> index 6edf4508c636..812c8d1962e0 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-> @@ -329,8 +329,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
->                  */
->                 vbuf->flags &= ~V4L2_BUF_FLAG_TIMECODE;
->                 vbuf->field = b->field;
-> -               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF))
-> +               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF)) {
-> +                       if (vbuf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF)
-> +                               dprintk(q, 1,
-> +                                       "Request holding buffer (%d), unsupported on output queue\n",
-> +                                       b->index);
+Is it required to update referenced here? we do that below after
+clearing the young bit. Or is the goal to identify whether we found any
+young pte around? 
 
-I wonder if we shouldn't just fail such a QBUF operation. Otherwise
-the application would get unexpected behavior from the kernel.
-Although it might be too late to do it now if there are applications
-that rely on this implicit ignore...
+> +
+>  			if (ptep_clear_flush_young_notify(vma, address,
+>  						pvmw.pte)) {
+>  				/*
 
-Best regards,
-Tomasz

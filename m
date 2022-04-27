@@ -2,117 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B095117B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C8C511705
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbiD0MJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S233567AbiD0MKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiD0MJV (ORCPT
+        with ESMTP id S233534AbiD0MJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:09:21 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2115.outbound.protection.outlook.com [40.107.20.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C5554A1;
-        Wed, 27 Apr 2022 05:06:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MVmPsIYR5OSYqHnusPT+0Jqme1BRw1HZElKUDOdwc+gcoV1ez1akG8WAecT9Vsw+0t2mq0JpuDR0vrRGJmBGfSXh5yOr754XHbNiG7wV3GZa1ghEbtne4ZsUsXSuA0QQI/QTqcGyS60sZXMmiGU9IpjuiHw+S5SLi04XxIToAB/5A0LRb/4wOJhigyM8ibecBZCWCVi1aQSNcLY7hoXOQ4GxJv6WBjscXdFBSqmUCebE1hZYO0ZRvhk/VD6HQIBTlK3tZJpMPv/AVK6r7S7cO8LKwg0Ivd7+/ugsioeGUNQN9+wuCrzWlnzRP5cvmL6/n4Av0QfMqvAF++vOyYDjmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JLA6yXwkPvczoUuDNMRK20ZGnPRcJNnx+c/KNsh52Os=;
- b=g/KmAjsJ/OCUVnVenkBzn7WXfGRmMWr6FVEPVxbAFoUYCsyvcDzKVzZc8fBAiSZ5/J6BUIzM9zTYiFjZbwzrrNLu/edRT6U122CbTwY6z1uSrGoC92tYGf5rtzpCujWD/ASNziwNkukBRdOiv2uagTAQHlLGW+YUArRuiAthyDPSjuPdTTpKC4CKZ1iQfqwMLtBj2b1SN2vAf2/a9MhSisllQGkITx9YGm7n5dLJaFX2RE3zG+3VqWSs93kHpBnuuB4IkZ5RHh9vCqrl0kMXVGMhkQuLt3X+z9IkvzGUrkJFRRN6rU30Mzsh335gWrihDNCoUJwccQ2n4KqSLTYssQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JLA6yXwkPvczoUuDNMRK20ZGnPRcJNnx+c/KNsh52Os=;
- b=VvmWB3aO3yqbD8BY0GxPCcWaj3sGQPjgA8GupgsuGVVwM7SMEkHr2CShgacMjBDCJjrOdnEshPBFJKlDvE1aQaB0yC9ykZvemRXw0S6m5SN0PeofbzyapM1sHMuab3dfd51bKXyrXZGQ5I10zaQYDc+G+xQiTrr7/zEXRs4XI3E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from DB9P190MB1963.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:397::18)
- by DB9P190MB1306.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:22d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Wed, 27 Apr
- 2022 12:06:04 +0000
-Received: from DB9P190MB1963.EURP190.PROD.OUTLOOK.COM
- ([fe80::2186:244e:8f91:a5ea]) by DB9P190MB1963.EURP190.PROD.OUTLOOK.COM
- ([fe80::2186:244e:8f91:a5ea%8]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
- 12:06:04 +0000
-From:   Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
-To:     netdev@vger.kernel.org
-Cc:     Taras Chornyi <taras.chornyi@plvision.eu>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: prestera: add police action support
-Date:   Wed, 27 Apr 2022 15:05:48 +0300
-Message-Id: <1651061148-21321-1-git-send-email-volodymyr.mytnyk@plvision.eu>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0030.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::16) To DB9P190MB1963.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:10:397::18)
+        Wed, 27 Apr 2022 08:09:57 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96736C943
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:06:42 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VBTdM9p_1651061196;
+Received: from 30.240.99.9(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VBTdM9p_1651061196)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 27 Apr 2022 20:06:38 +0800
+Message-ID: <0042ba8f-d432-008c-4a2d-0d3ea03fb38c@linux.alibaba.com>
+Date:   Wed, 27 Apr 2022 20:06:36 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dcfc51ce-9d70-4314-497d-08da28464de1
-X-MS-TrafficTypeDiagnostic: DB9P190MB1306:EE_
-X-Microsoft-Antispam-PRVS: <DB9P190MB1306C4D812E6E8DE3B46E3D08FFA9@DB9P190MB1306.EURP190.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YI+1RW9Noem1GQ5HHhWzZo5eV1V6i4EECrlSJ92U1zoeXx9nXICjFbIpAgvB2J6bjgSj2b4QtnjiJHiDQToX31a1f75zqzIre+1LODifwQyrr81CreMZX6hpVaM+2/bzX17KAVgDBHfBokxtJZjKpB1BjPXrfwuUpXgZzU75wWKta35sLysBlYQK2cuE/TOvIsChWiZQZjXTLVWZZBY367Y196UvMH1pAi0MjsRLUCIR3jSK7rFjdZ283Lr6/Hf7ikh/Sbnlt5e8b9aTRKRtp6JaM4ctYLZvSz5A7Zb7EdRBzc1ddO3oH20/qhuJc9ppFQEKGXIwXiNXSUJKAfTTduF+Ef1nRGVRrXJwBPYA24JIwuyylOEmwMk3T+Af1ldk2JHuCY+gXtsa7ymdzrH4HSMRClkayXN4kJsXhkYxkofdQjLLG+sNV8mp1fsVIU2ZdCx81Bh88R/509zfETtsyu4twpYXOBfGnNFnvdfTE6lYx8isOxMzUFMhE0b6pG1VQZNKcklrSxREll1qR7Uzd3apAjLJ9xYblJok2FLKPYk9PToxMXFKKeTXgu3uzd6ztp5zjpCQlZXLhHtxv/1pQPNgyFb6811zJIl+E6lufMyMirjjcfegrphRBZlyxxs18hlpE31gZCTJb49imOjyCG0GYlKqeBou0crbqTKPcyXx7aRcfHOfRDny+o9qJh44JfLeF82xrMuZgAWB+s+lkw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P190MB1963.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(376002)(39830400003)(366004)(346002)(396003)(136003)(5660300002)(316002)(44832011)(6512007)(26005)(83380400001)(54906003)(86362001)(8936002)(52116002)(6666004)(6916009)(6506007)(186003)(2616005)(36756003)(508600001)(38100700002)(2906002)(38350700002)(6486002)(4326008)(8676002)(66946007)(66476007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W9Qq0l+4UpSKPqqekB/ThlO5hGA8ywGJdABkbC5RGzg7wW3D0NXmY3JWBNSD?=
- =?us-ascii?Q?kPusdGivensLI/kC5Ncfud6KLsI9crS4shISSwPr5XvepHWp3rs2LZm+geNT?=
- =?us-ascii?Q?pFSVrzGax714uFHhOcr3pDhCQdO4Ruv+6HfasJAYZQss3Slryhxodj5Z4kg7?=
- =?us-ascii?Q?fCpvfanjs9XrRToU1EfAwtmlCbgHSwoN8hbAM5cWYXSc0zKWiLfTCjTV9X8/?=
- =?us-ascii?Q?hXZxwU3+FKdXu4zotDHgZ5YmSYFKuAklbsrlhR4lD3m5CFjk0sE1CrI+dYA7?=
- =?us-ascii?Q?6oISEX8m54eDSz8Mx9lEp0FwN5bq/r+MlVXwS+FWBh3qrMHJZTa9BwLtzMCd?=
- =?us-ascii?Q?J6CiFLUGTjgRBf2fda6epyvQJimUUOmvHNlZeHIWiIuzHuHAmae/4EPssO3r?=
- =?us-ascii?Q?3zb06fHQVLI7tAJv+AGalyfq+UnUBnczl3SF3pbpyvpqh36a+OTfr4Bmt2Z/?=
- =?us-ascii?Q?jJNtFXGIKL4kY2qgXEk3hq0o87IAdxsv787nf6qH/zW/PUcmxn7o8MNwqzhW?=
- =?us-ascii?Q?Y2UaCeBGEHAeM/yfvX4D40KjUKMKmUwJGLxMIjmJzD/G3FMFKAhquXO/Ne0x?=
- =?us-ascii?Q?/2ffWt712wnhrVPZCYRr3P5hxClP8dofD1ONCQUMGtu6ba+vT3ajpUa3zy1S?=
- =?us-ascii?Q?u7AWdLagVwwzixNRgWRtvES/AW7CgGdqhUr6oa/RHKYeqa6lahgRNYHI5qII?=
- =?us-ascii?Q?8a7uwuysJ5ghqwnQY13F66W1x4jPV7G5Q26cUI6PBnBql+j6Vq3mfJZ7iVub?=
- =?us-ascii?Q?ms/sQdROY6Nsi1kkJaFBkUUSFUxtPgX1uWl0qKrXsg3cmpzt5sa9ZXM3PiRX?=
- =?us-ascii?Q?q2YSVWEwT7cuvWCdsfVdsrRkM/Xcad7uWDMQI55sJbFM4xrj07D8ZueSewM6?=
- =?us-ascii?Q?YWlIg83E/wL4Hfw+F4VSmXI1cpMqjY4xsIL0nWC3QCH6mXl0MelQYiQfOOKL?=
- =?us-ascii?Q?Q9K3mRls1mFIqR5+xrEqhYNUiKSMiFjLzhxrgQACKke7N9zj65p9fqJm9LmH?=
- =?us-ascii?Q?aT43D4A1TR4nP4KflqDdNKY36lfj4SAQbSaLvxoAJi/7+bj2D5Z4tM9ncI2E?=
- =?us-ascii?Q?0yhuNqmmhbwwrzYbZG8wG8LTVcT3TFL1CUZHtZSHAeC1yZb/VJkxKXTucxSd?=
- =?us-ascii?Q?AERbBrLfb4OrUliPISxIrnzVNAlZFrDEPCVl3QhU0aRQb+8kx6sYL8sgkWYy?=
- =?us-ascii?Q?Fo/BSKE6CaZdEPhUlKKD1tA5ddDQfqCEbAJreoATSjSPRnW5inM5V+f48XpO?=
- =?us-ascii?Q?8eO5vYg6nI7URP1sA1vF97DIbRtCTuiUlHhJK1BmxVWoZ19lhy0+Y39DEkYD?=
- =?us-ascii?Q?q9Mbm/5/ovWuosFsl7DGHW/vsHhtaGM4jSVCnxg2ev36/cYo+l97Ad9/0u4T?=
- =?us-ascii?Q?bYUfMsJ07+DwDlYb+nbH0gDlRYYF8N8YCxapBFIjOPgVndSXmS2f2fKj5IP4?=
- =?us-ascii?Q?SkQADq7hWHhmzPMGJBxc1u9fvdzCK5Bamvlgd8k4yrUDfI5zBzvSzfOjF9yd?=
- =?us-ascii?Q?Bc8YKWCV/rMLI8WgRyiDBBRsWSU3wKKNeqJ0DlpOamviR95JFf4eERCak0l9?=
- =?us-ascii?Q?p0bYsBed8PLsjT31vpi+gh1sAvIbCh+yxqNwLOjxdIkf1kABZTmX2OVrzqK+?=
- =?us-ascii?Q?6kAHjljHQhMkrzn04ghPRbAGJ6HIVSFasBA27X6P6kAOxyGta5nupdimEo3m?=
- =?us-ascii?Q?0dKWjzblk8I2jnQ1n9LHcEOWMDWglFT1/80mntVCINdwTBAe91YB5xAsbBTC?=
- =?us-ascii?Q?9713EjRkyTYkSOT3mYz3/qT4ROkQIdmZpb1Q2pze4b5rHJ9Xwcaw?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcfc51ce-9d70-4314-497d-08da28464de1
-X-MS-Exchange-CrossTenant-AuthSource: DB9P190MB1963.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 12:06:04.7496
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bus+GocOuoEE+Gz87G0h/Rj86fLx/5/v8UbVrGY2YCC2Ih4ypF90B2pZP3qWkJ4lV84pG7UF2I2WgAjyXnqhdIvIWIw0dXfkeIVhj4uTIE4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P190MB1306
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0)
+ Gecko/20100101 Thunderbird/100.0
+Subject: Re: DAMON VA regions don't split on an large Android APP
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
+        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
+        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
+        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        xhao@linux.alibaba.com
+References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
+ <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
+ <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,328 +55,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Add HW api to configure policer:
-  - SR TCM policer mode is only supported for now.
-  - Policer ingress/egress direction support.
-- Add police action support into flower
 
-Signed-off-by: Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>
----
- .../net/ethernet/marvell/prestera/prestera_acl.c   | 35 +++++++++-
- .../net/ethernet/marvell/prestera/prestera_acl.h   | 12 ++++
- .../ethernet/marvell/prestera/prestera_flower.c    | 10 +++
- .../net/ethernet/marvell/prestera/prestera_hw.c    | 81 ++++++++++++++++++++++
- .../net/ethernet/marvell/prestera/prestera_hw.h    | 13 ++++
- 5 files changed, 149 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_acl.c b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
-index e5627782fac6..3a141f2db812 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_acl.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
-@@ -35,6 +35,10 @@ struct prestera_acl_rule_entry {
- 			u8 valid:1;
- 		} accept, drop, trap;
- 		struct {
-+			u8 valid:1;
-+			struct prestera_acl_action_police i;
-+		} police;
-+		struct {
- 			struct prestera_acl_action_jump i;
- 			u8 valid:1;
- 		} jump;
-@@ -533,6 +537,12 @@ static int __prestera_acl_rule_entry2hw_add(struct prestera_switch *sw,
- 		act_hw[act_num].id = PRESTERA_ACL_RULE_ACTION_TRAP;
- 		act_num++;
- 	}
-+	/* police */
-+	if (e->police.valid) {
-+		act_hw[act_num].id = PRESTERA_ACL_RULE_ACTION_POLICE;
-+		act_hw[act_num].police = e->police.i;
-+		act_num++;
-+	}
- 	/* jump */
- 	if (e->jump.valid) {
- 		act_hw[act_num].id = PRESTERA_ACL_RULE_ACTION_JUMP;
-@@ -557,6 +567,9 @@ __prestera_acl_rule_entry_act_destruct(struct prestera_switch *sw,
- {
- 	/* counter */
- 	prestera_counter_put(sw->counter, e->counter.block, e->counter.id);
-+	/* police */
-+	if (e->police.valid)
-+		prestera_hw_policer_release(sw, e->police.i.id);
- }
- 
- void prestera_acl_rule_entry_destroy(struct prestera_acl *acl,
-@@ -579,6 +592,8 @@ __prestera_acl_rule_entry_act_construct(struct prestera_switch *sw,
- 					struct prestera_acl_rule_entry *e,
- 					struct prestera_acl_rule_entry_arg *arg)
- {
-+	int err;
-+
- 	/* accept */
- 	e->accept.valid = arg->accept.valid;
- 	/* drop */
-@@ -588,10 +603,26 @@ __prestera_acl_rule_entry_act_construct(struct prestera_switch *sw,
- 	/* jump */
- 	e->jump.valid = arg->jump.valid;
- 	e->jump.i = arg->jump.i;
-+	/* police */
-+	if (arg->police.valid) {
-+		u8 type = arg->police.ingress ? PRESTERA_POLICER_TYPE_INGRESS :
-+						PRESTERA_POLICER_TYPE_EGRESS;
-+
-+		err = prestera_hw_policer_create(sw, type, &e->police.i.id);
-+		if (err)
-+			goto err_out;
-+
-+		err = prestera_hw_policer_sr_tcm_set(sw, e->police.i.id,
-+						     arg->police.rate,
-+						     arg->police.burst);
-+		if (err) {
-+			prestera_hw_policer_release(sw, e->police.i.id);
-+			goto err_out;
-+		}
-+		e->police.valid = arg->police.valid;
-+	}
- 	/* counter */
- 	if (arg->count.valid) {
--		int err;
--
- 		err = prestera_counter_get(sw->counter, arg->count.client,
- 					   &e->counter.block,
- 					   &e->counter.id);
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_acl.h b/drivers/net/ethernet/marvell/prestera/prestera_acl.h
-index 6d2ad27682d1..f963e1e0c0f0 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_acl.h
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_acl.h
-@@ -56,6 +56,7 @@ enum prestera_acl_rule_action {
- 	PRESTERA_ACL_RULE_ACTION_TRAP = 2,
- 	PRESTERA_ACL_RULE_ACTION_JUMP = 5,
- 	PRESTERA_ACL_RULE_ACTION_COUNT = 7,
-+	PRESTERA_ACL_RULE_ACTION_POLICE = 8,
- 
- 	PRESTERA_ACL_RULE_ACTION_MAX
- };
-@@ -74,6 +75,10 @@ struct prestera_acl_action_jump {
- 	u32 index;
- };
- 
-+struct prestera_acl_action_police {
-+	u32 id;
-+};
-+
- struct prestera_acl_action_count {
- 	u32 id;
- };
-@@ -86,6 +91,7 @@ struct prestera_acl_rule_entry_key {
- struct prestera_acl_hw_action_info {
- 	enum prestera_acl_rule_action id;
- 	union {
-+		struct prestera_acl_action_police police;
- 		struct prestera_acl_action_count count;
- 		struct prestera_acl_action_jump jump;
- 	};
-@@ -107,6 +113,12 @@ struct prestera_acl_rule_entry_arg {
- 		} jump;
- 		struct {
- 			u8 valid:1;
-+			u64 rate;
-+			u64 burst;
-+			bool ingress;
-+		} police;
-+		struct {
-+			u8 valid:1;
- 			u32 client;
- 		} count;
- 	};
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_flower.c b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-index c12b09ac6559..d43e503c644f 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_flower.c
-@@ -108,6 +108,16 @@ static int prestera_flower_parse_actions(struct prestera_flow_block *block,
- 
- 			rule->re_arg.trap.valid = 1;
- 			break;
-+		case FLOW_ACTION_POLICE:
-+			if (rule->re_arg.police.valid)
-+				return -EEXIST;
-+
-+			rule->re_arg.police.valid = 1;
-+			rule->re_arg.police.rate =
-+				act->police.rate_bytes_ps;
-+			rule->re_arg.police.burst = act->police.burst;
-+			rule->re_arg.police.ingress = true;
-+			break;
- 		case FLOW_ACTION_GOTO:
- 			err = prestera_flower_parse_goto_action(block, rule,
- 								chain_index,
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_hw.c b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-index c66cc929c820..79fd3cac539d 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-@@ -74,6 +74,10 @@ enum prestera_cmd_type_t {
- 	PRESTERA_CMD_TYPE_SPAN_UNBIND = 0x1102,
- 	PRESTERA_CMD_TYPE_SPAN_RELEASE = 0x1103,
- 
-+	PRESTERA_CMD_TYPE_POLICER_CREATE = 0x1500,
-+	PRESTERA_CMD_TYPE_POLICER_RELEASE = 0x1501,
-+	PRESTERA_CMD_TYPE_POLICER_SET = 0x1502,
-+
- 	PRESTERA_CMD_TYPE_CPU_CODE_COUNTERS_GET = 0x2000,
- 
- 	PRESTERA_CMD_TYPE_ACK = 0x10000,
-@@ -164,6 +168,10 @@ enum {
- };
- 
- enum {
-+	PRESTERA_POLICER_MODE_SR_TCM
-+};
-+
-+enum {
- 	PRESTERA_HW_FDB_ENTRY_TYPE_REG_PORT = 0,
- 	PRESTERA_HW_FDB_ENTRY_TYPE_LAG = 1,
- 	PRESTERA_HW_FDB_ENTRY_TYPE_MAX = 2,
-@@ -430,6 +438,9 @@ struct prestera_msg_acl_action {
- 		} jump;
- 		struct {
- 			__le32 id;
-+		} police;
-+		struct {
-+			__le32 id;
- 		} count;
- 		__le32 reserved[6];
- 	};
-@@ -570,6 +581,26 @@ struct mvsw_msg_cpu_code_counter_ret {
- 	__le64 packet_count;
- };
- 
-+struct prestera_msg_policer_req {
-+	struct prestera_msg_cmd cmd;
-+	__le32 id;
-+	union {
-+		struct {
-+			__le64 cir;
-+			__le32 cbs;
-+		} __packed sr_tcm; /* make sure always 12 bytes size */
-+		__le32 reserved[6];
-+	};
-+	u8 mode;
-+	u8 type;
-+	u8 pad[2];
-+};
-+
-+struct prestera_msg_policer_resp {
-+	struct prestera_msg_ret ret;
-+	__le32 id;
-+};
-+
- struct prestera_msg_event {
- 	__le16 type;
- 	__le16 id;
-@@ -622,6 +653,7 @@ static void prestera_hw_build_tests(void)
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_rif_req) != 36);
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_vr_req) != 8);
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_lpm_req) != 36);
-+	BUILD_BUG_ON(sizeof(struct prestera_msg_policer_req) != 36);
- 
- 	/*  structure that are part of req/resp fw messages */
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_iface) != 16);
-@@ -640,6 +672,7 @@ static void prestera_hw_build_tests(void)
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_counter_resp) != 24);
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_rif_resp) != 12);
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_vr_resp) != 12);
-+	BUILD_BUG_ON(sizeof(struct prestera_msg_policer_resp) != 12);
- 
- 	/* check events */
- 	BUILD_BUG_ON(sizeof(struct prestera_msg_event_port) != 20);
-@@ -1192,6 +1225,9 @@ prestera_acl_rule_add_put_action(struct prestera_msg_acl_action *action,
- 	case PRESTERA_ACL_RULE_ACTION_JUMP:
- 		action->jump.index = __cpu_to_le32(info->jump.index);
- 		break;
-+	case PRESTERA_ACL_RULE_ACTION_POLICE:
-+		action->police.id = __cpu_to_le32(info->police.id);
-+		break;
- 	case PRESTERA_ACL_RULE_ACTION_COUNT:
- 		action->count.id = __cpu_to_le32(info->count.id);
- 		break;
-@@ -2163,3 +2199,48 @@ int prestera_hw_counter_clear(struct prestera_switch *sw, u32 block_id,
- 	return prestera_cmd(sw, PRESTERA_CMD_TYPE_COUNTER_CLEAR,
- 			    &req.cmd, sizeof(req));
- }
-+
-+int prestera_hw_policer_create(struct prestera_switch *sw, u8 type,
-+			       u32 *policer_id)
-+{
-+	struct prestera_msg_policer_resp resp;
-+	struct prestera_msg_policer_req req = {
-+		.type = type
-+	};
-+	int err;
-+
-+	err = prestera_cmd_ret(sw, PRESTERA_CMD_TYPE_POLICER_CREATE,
-+			       &req.cmd, sizeof(req), &resp.ret, sizeof(resp));
-+	if (err)
-+		return err;
-+
-+	*policer_id = __le32_to_cpu(resp.id);
-+	return 0;
-+}
-+
-+int prestera_hw_policer_release(struct prestera_switch *sw,
-+				u32 policer_id)
-+{
-+	struct prestera_msg_policer_req req = {
-+		.id = __cpu_to_le32(policer_id)
-+	};
-+
-+	return prestera_cmd(sw, PRESTERA_CMD_TYPE_POLICER_RELEASE,
-+			    &req.cmd, sizeof(req));
-+}
-+
-+int prestera_hw_policer_sr_tcm_set(struct prestera_switch *sw,
-+				   u32 policer_id, u64 cir, u32 cbs)
-+{
-+	struct prestera_msg_policer_req req = {
-+		.mode = PRESTERA_POLICER_MODE_SR_TCM,
-+		.id = __cpu_to_le32(policer_id),
-+		.sr_tcm = {
-+			.cir = __cpu_to_le64(cir),
-+			.cbs = __cpu_to_le32(cbs)
-+		}
-+	};
-+
-+	return prestera_cmd(sw, PRESTERA_CMD_TYPE_POLICER_SET,
-+			    &req.cmd, sizeof(req));
-+}
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_hw.h b/drivers/net/ethernet/marvell/prestera/prestera_hw.h
-index fd896a8838bb..579d9ba23ffc 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_hw.h
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_hw.h
-@@ -107,6 +107,11 @@ enum {
- 	PRESTERA_STP_FORWARD,
- };
- 
-+enum {
-+	PRESTERA_POLICER_TYPE_INGRESS,
-+	PRESTERA_POLICER_TYPE_EGRESS
-+};
-+
- enum prestera_hw_cpu_code_cnt_t {
- 	PRESTERA_HW_CPU_CODE_CNT_TYPE_DROP = 0,
- 	PRESTERA_HW_CPU_CODE_CNT_TYPE_TRAP = 1,
-@@ -288,4 +293,12 @@ prestera_hw_cpu_code_counters_get(struct prestera_switch *sw, u8 code,
- 				  enum prestera_hw_cpu_code_cnt_t counter_type,
- 				  u64 *packet_count);
- 
-+/* Policer API */
-+int prestera_hw_policer_create(struct prestera_switch *sw, u8 type,
-+			       u32 *policer_id);
-+int prestera_hw_policer_release(struct prestera_switch *sw,
-+				u32 policer_id);
-+int prestera_hw_policer_sr_tcm_set(struct prestera_switch *sw,
-+				   u32 policer_id, u64 cir, u32 cbs);
-+
- #endif /* _PRESTERA_HW_H_ */
--- 
-2.7.4
+On 4/27/22 3:44 PM, Barry Song wrote:
+> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
+> <rongwei.wang@linux.alibaba.com> wrote:
+>>
+>>
+>>
+>> On 4/27/22 7:19 AM, Barry Song wrote:
+>>> Hi SeongJae & Andrew,
+>>> (also Cc-ed main damon developers)
+>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
+>>> that vaddr regions don't split well on large Android Apps though
+>>> everything works well on native Apps.
+>>>
+>>> I have tried the below two cases on an Android phone with 12GB memory
+>>> and snapdragon 888 CPU.
+>>> 1. a native program with small memory working set  as below,
+>>> #define size (1024*1024*100)
+>>> main()
+>>> {
+>>>           volatile int *p = malloc(size);
+>>>           memset(p, 0x55, size);
+>>>
+>>>           while(1) {
+>>>                   int i;
+>>>                   for (i = 0; i < size / 4; i++)
+>>>                           (void)*(p + i);
+>>>                   usleep(1000);
+>>>
+>>>                   for (i = 0; i < size / 16; i++)
+>>>                           (void)*(p + i);
+>>>                   usleep(1000);
+>>>
+>>>           }
+>>> }
+>>> For this application, the Damon vaddr monitor works very well.
+>>> I have modified monitor.py in the damo userspace tool a little bit to
+>>> show the raw data getting from the kernel.
+>>> Regions can split decently on this kind of applications, a typical raw
+>>> data is as below,
+>>>
+>>> monitoring_start:             2.224 s
+>>> monitoring_end:               2.329 s
+>>> monitoring_duration:       104.336 ms
+>>> target_id: 0
+>>> nr_regions: 24
+>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
+>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
+>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
+>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
+>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
+>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
+>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
+>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
+>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
+>>> 007661c59000-007661ee4000(   2.543 MiB): 2
+>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
+>>> 0076623e4000-007662837000(   4.324 MiB): 2
+>>> 007662837000-0076630f1000(   8.727 MiB): 3
+>>> 0076630f1000-007663494000(   3.637 MiB): 2
+>>> 007663494000-007663753000(   2.746 MiB): 1
+>>> 007663753000-007664251000(  10.992 MiB): 3
+>>> 007664251000-0076666fd000(  36.672 MiB): 2
+>>> 0076666fd000-007666e73000(   7.461 MiB): 1
+>>> 007666e73000-007667c89000(  14.086 MiB): 2
+>>> 007667c89000-007667f97000(   3.055 MiB): 0
+>>> 007667f97000-007668112000(   1.480 MiB): 1
+>>> 007668112000-00766820f000(1012.000 KiB): 0
+>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
+>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
+>>>
+>>> 2. a large Android app like Asphalt 9
+>>> For this case, basically regions can't split very well, but monitor
+>>> works on small vma:
+>>>
+>>> monitoring_start:             2.220 s
+>>> monitoring_end:               2.318 s
+>>> monitoring_duration:        98.576 ms
+>>> target_id: 0
+>>> nr_regions: 15
+>>> 000012c00000-0001c301e000(   6.754 GiB): 0
+>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
+>>> 000371b6c000-000400000000(   2.223 GiB): 0
+>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
+>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
+>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
+>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
+>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
+>>> 0077e863e000-00798e214000(   6.590 GiB): 0
+>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
+>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
+>>> 007c62f00000-007defb19000(   6.199 GiB): 0
+>>> 007defb19000-007f794ef000(   6.150 GiB): 0
+>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
+>>>
+>>> As you can see, we have some regions which are very very big and they
+>>> are losing the chance to be splitted. But
+>>> Damon can still monitor memory access for those small VMA areas very well like:
+>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+>> Hi, Barry
+>>
+>> Actually, we also had found the same problem in redis by ourselves
+>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
+>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
+>> hot areas to been monitored or found by DAMON, likes one or more address
+>> choose by DAMON not been accessed during sample period.
+> 
+> Hi Rongwei,
+> Thanks  for your comments and thanks for sharing your tools.
+> 
+> I guess the cause might be:
+> in case a region is very big like 10GiB, we have only 1MiB hot pages
+> in this large region.
+> damon will randomly pick one page to sample, but the page has only
+> 1MiB/10GiB, thus
+> less than 1/10000 chance to hit the hot 1MiB. so probably we need
+> 10000 sample periods
+> to hit the hot 1MiB in order to split this large region?
+> 
+> @SeongJae, please correct me if I am wrong.
+> 
+>>
+>> I'm not sure whether sets init_regions can deal with the above problem,
+>> or dynamic choose one or limited number VMA to monitor.
+>>
+> 
+> I won't set a limited number of VMA as this will make the damon too hard to use
+> as nobody wants to make such complex operations, especially an Android
+> app might have more than 8000 VMAs.
+> 
+> I agree init_regions might be the right place to enhance the situation.
+> 
+>> I'm not sure, just share my idea.
+>>
+>> [1] https://github.com/aliyun/data-profile-tools.git
+> 
+> I suppose this tool is based on damon? How do you finally resolve the problem
+Yes, and we plan to design it to be a user agent.
+> that large anon VMAs can't be splitted?
+I see your have different environment with mine. Finally, I just monitor 
+the anon VMA and set a large regions number.
+There is one or two large anon VMAs in my environment. It seems 
+different with your.
 
+> Anyway, I will give your tool a try.
+> 
+>>>
+>>> Typical characteristics of a large Android app is that it has
+>>> thousands of vma and very large virtual address spaces:
+>>> ~/damo # pmap 2550 | wc -l
+>>> 8522
+>>>
+>>> ~/damo # pmap 2550
+>>> ...
+>>> 0000007992bbe000      4K r----   [ anon ]
+>>> 0000007992bbf000     24K rw---   [ anon ]
+>>> 0000007fe8753000      4K -----   [ anon ]
+>>> 0000007fe8754000   8188K rw---   [ stack ]
+>>>    total         36742112K
+>>>
+>>> Because the whole vma list is too long, I have put the list here for
+>>> you to download:
+>>> wget http://www.linuxep.com/patches/android-app-vmas
+>>>
+>>> I can reproduce this problem on other Apps like youtube as well.
+>>> I suppose we need to boost the algorithm of splitting regions for this
+>>> kind of application.
+>>> Any thoughts?
+>>>
+> 
+> Thanks
+> Barry

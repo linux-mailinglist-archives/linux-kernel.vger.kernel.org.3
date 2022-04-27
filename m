@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BDE5120A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F625511D8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239730AbiD0Pey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S239743AbiD0PfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239694AbiD0Peu (ORCPT
+        with ESMTP id S239700AbiD0PfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:34:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7B7171C36;
-        Wed, 27 Apr 2022 08:31:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 361206165E;
-        Wed, 27 Apr 2022 15:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA94C385A7;
-        Wed, 27 Apr 2022 15:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651073497;
-        bh=aJfZ+9yvCFPE8xiq6retolbqjQ4Eg2L17bY7gOXE74g=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=ki1ozcB0ESMwvpYya8NCHAJU3wvB53xx5SaFASY2lNNf6DM2I1xOWC+oP9aMm3c4P
-         l1M+MP6t9ws2yfdCNJt3f1rdRoiUjFuBcN5xXXwr9mcDmaXUCQGpSG1AFPbMIWbYQl
-         huGSCrxSvhqmhxJdwPFvSL+qCwPwo57BcXUpMGN0OGYQUn3e3VA5viIJ7gzmnZNyh7
-         YV9yCjenKfxx8DraC2LW3lGT9pMesU/pD92HdrbPtRLVCXpNY+o5siZA3HoFjc8akN
-         EBPeMBMtB1cSS6d6uzK/CShGCf1pDwiGfsquWaYpi7Vl5QNKPThr7wzic6cU9+XiqO
-         49K+VuREX7QxA==
-Message-ID: <99491be0-a438-cac7-1441-396aade91ea4@kernel.org>
-Date:   Wed, 27 Apr 2022 18:31:32 +0300
+        Wed, 27 Apr 2022 11:35:21 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C0F35248
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:32:08 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id z126so1556195qkb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=cyrolNltUUpbs4yZr4ZZ4cVcFuuThjMYIy0lsDeAp/M=;
+        b=ga7PA3xJYU6LHhoM5kPggCpCEGKJ5eM6EcSGUEXJtH4FpksmzO2XBrq+/HeMYvYFj8
+         X3BoK8dWB5ySh81Nftik79G1npYH1rdTU87BqwpYU6iRheaSm46R4tt+Tyd+S7WusV5m
+         2280iBykRrNhWzK5CQQqzsqBE/sjQVg88IMabVMIz8rGHyKZjNplv8KS0P/oNK9cshYI
+         niTk4ChR7fCfNGXiD6KVwZYcQSyWReXYe/PRoRKVM0L9GU1dw/z72QxGlS4nLHJKFs+N
+         hKrAM2Rbj+1XmZpHMKsXQ1w0NaOZP7eMRS118X7QN0OoxCIKzTkWLU260dQfAn0CI70o
+         7PoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=cyrolNltUUpbs4yZr4ZZ4cVcFuuThjMYIy0lsDeAp/M=;
+        b=lsUXTnybmZ8QXoLgdr5MJ/yJ9l16k7nBWTyEvkaOt6Znmb7DPuqVXwo9TR47xzPZhW
+         sPIL1X3C+4Y8CImA/9WkgigNRvH0tnNxQG7pM/vERNkIbP0Mq3rm+09qJYz+WX6wQTkD
+         wDIP1y2W/RLtX9Kbs51QAFe9MFxj96UomohWDDH+bs2tJHGhTKA+9NTI4TaltS3kmmfz
+         7s06pCujIn6Wcf8jCHkzsGLZROji21BlscTkiFtI9kRhgfvmHO3/fCbvVPfqlUqbM+u7
+         6kolqmtKVbkTjs4ayzrRaIXMVj6uZcKLwbCAsU/H8E4ovHc/83z5xFpqOBM/q0ROl0g4
+         5GKA==
+X-Gm-Message-State: AOAM530JXD6xbiZxxt1fdk+nXiZlTkuCg45QAQjUjVes9ZIP0l7FJUcm
+        fiBxMhjFW6KbSDwfGKiprdo=
+X-Google-Smtp-Source: ABdhPJzKwLjFN7Ly4bvVQUi+eZxIcuebllqbHq6gOW3POQq235Srnx5TCcRCVB9tKQ65UO6DO/3ZwQ==
+X-Received: by 2002:a37:a853:0:b0:69f:7f28:d90f with SMTP id r80-20020a37a853000000b0069f7f28d90fmr4672410qke.385.1651073527688;
+        Wed, 27 Apr 2022 08:32:07 -0700 (PDT)
+Received: from jaehee-ThinkPad-X1-Extreme ([4.34.18.218])
+        by smtp.gmail.com with ESMTPSA id x9-20020a05622a000900b002f37b3537eesm3085759qtw.1.2022.04.27.08.32.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 08:32:07 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 11:32:03 -0400
+From:   Jaehee Park <jhpark1013@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jhpark1013@gmail.com
+Subject: [PATCH v2] staging: r8188eu: remove unused else condition
+Message-ID: <20220427153203.GA503502@jaehee-ThinkPad-X1-Extreme>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/3] interconnect: qcom: constify qcom_icc_desc
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
- <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
- <12570c36-d005-f51c-654b-01d52c50205c@kernel.org>
- <6d9ded33-f5fc-6346-51ca-2de8e7a644ec@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <6d9ded33-f5fc-6346-51ca-2de8e7a644ec@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+rtw_select_and_join_from_scanned_queue() cannot return '2' so this
+else condition is unused. Remove this unnecessary else statement.
 
-On 27.04.22 15:59, Krzysztof Kozlowski wrote:
-> On 27/04/2022 14:17, Georgi Djakov wrote:
->> On 22.04.22 18:25, Krzysztof Kozlowski wrote:
->>> On 12/04/2022 12:26, Krzysztof Kozlowski wrote:
->>>> struct qcom_icc_desc is not modified so it can be made const for safety.
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    drivers/interconnect/qcom/msm8916.c |  6 +++---
->>>>    drivers/interconnect/qcom/msm8939.c |  8 ++++----
->>>>    drivers/interconnect/qcom/msm8974.c | 12 ++++++------
->>>>    drivers/interconnect/qcom/qcm2290.c | 12 ++++++------
->>>>    drivers/interconnect/qcom/qcs404.c  |  6 +++---
->>>>    drivers/interconnect/qcom/sc7180.c  | 26 +++++++++++++-------------
->>>>    drivers/interconnect/qcom/sc7280.c  | 24 ++++++++++++------------
->>>>    drivers/interconnect/qcom/sdm660.c  | 12 ++++++------
->>>>    drivers/interconnect/qcom/sm8150.c  | 22 +++++++++++-----------
->>>>    drivers/interconnect/qcom/sm8250.c  | 22 +++++++++++-----------
->>>>    drivers/interconnect/qcom/sm8350.c  | 20 ++++++++++----------
->>>>    drivers/interconnect/qcom/sm8450.c  | 22 +++++++++++-----------
->>>
->>> Hi folks,
->>>
->>> Any comments here?
->>
->> Thanks for the patches! I had actually some of these changes in my local tree
->> for a long time.
-> 
-> Indeed I see them now in linux-next. Sorry for pinging, I just did not
-> get any notification they got applied.
+Suggested-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+---
+patch v2:
+- fixed the patch message 
 
-I meant that i did similar changes, that i never sent upstream, so thanks
-for doing this. Pings are welcome.
+ drivers/staging/r8188eu/core/rtw_mlme.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-BR,
-Georgi
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index d422ce87ba7c..29b8b101180b 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -723,9 +723,6 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
+ 			s_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
+ 			if (s_ret == _SUCCESS) {
+ 				_set_timer(&pmlmepriv->assoc_timer, MAX_JOIN_TIMEOUT);
+-			} else if (s_ret == 2) { /* there is no need to wait for join */
+-				_clr_fwstate_(pmlmepriv, _FW_UNDER_LINKING);
+-				rtw_indicate_connect(adapter);
+ 			} else {
+ 				if (rtw_to_roaming(adapter) != 0) {
+ 					if (--pmlmepriv->to_roaming == 0 ||
+-- 
+2.25.1
+

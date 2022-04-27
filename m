@@ -2,214 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C0F512482
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3248B51248C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237536AbiD0VaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S237526AbiD0Vck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbiD0V3z (ORCPT
+        with ESMTP id S232382AbiD0Vcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:29:55 -0400
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1901F33
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:26:42 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id k12so5329839lfr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:26:42 -0700 (PDT)
+        Wed, 27 Apr 2022 17:32:35 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CC1E88
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:29:22 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id m62so1845700wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EZHhhV6+pmb1UT1g76oOP71UxtrLj2KipdoqAHTDk7Q=;
+        b=Hd/l4vsy96c0wGx7hXoS15x91RIAemfs0fcqL3+m3VYf3uWEAWKyHYJptgmja3wZN6
+         G/b2WNBliCbvsv8gAkK+zbdr5jzW8bxzCJufUcJ7gWS6eMLq58gPdWPOgro+434aCRTr
+         XFuv8KvqmLOqhZK5zR8A6DwMGl8xKeZOZC4iAFBHAnlQJCbk+sqrlgWzALVmSEyamC66
+         7On7Yakr9cbad53INk/xo7Jr+2Lm6CDbkF+zYsmB2LQWQQh7CgsN5Q2337Ty/C5kuU4c
+         9VeXYd41hKKcEK7uVluapP5lYgsADhreNLtoCzHbyFBWTdz4kgL2K5ud4xjNUh1FXhK3
+         G+mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C+9BgCLXHbeWpmBOpdfCxNpyEHK2KyPfJRn/+PbO09g=;
-        b=0/9eFLMTnzPeh07nzfzeQ4Ny8tJHi1SQnWexNoZyyad8CMIFjDtEPu0CcOGYWM2/no
-         ynhTLRwZ2sccEVBNfn5MlO+9huMmQM81KoyfIxMme4ejWxtK8NL3RpxyYNxF+NZOt2D+
-         DazuCHGqbQAfn9xVQgd6OBEudJesuT+oRN8jqW2u3XyRHJmsOhDBDcwy/XTnUSeUVsrT
-         Rss0m4stzFn3DMkGCw9lHYXcsGFQqFvPynVr0BS09aEQOPbgfWaTYKsDzuhms8vdpqQC
-         WbTz5KeYaxvqgjXlXm8C9xI4MK3qIB/rB1qTWGJbdqDos5/UO3UdEKmfj/1og92vqapU
-         FpGg==
-X-Gm-Message-State: AOAM531cSOYggq3KGZfFA8TllkQadojLDubJexZ020N6JXlzOUTdoKOV
-        QYffs7RhPROLZIwTImWH3TYUiWsz+EeqqmQHGms=
-X-Google-Smtp-Source: ABdhPJz9BxsWaar/c7rbtNapHExukLF22U20zxQE+Ob9Bd20W+1SU4zTghfDeuoTXOTrw+UhZOsMwZrk3EDTi0C6z10=
-X-Received: by 2002:a19:c511:0:b0:471:fc54:8a5 with SMTP id
- w17-20020a19c511000000b00471fc5408a5mr16224229lfe.454.1651094800875; Wed, 27
- Apr 2022 14:26:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EZHhhV6+pmb1UT1g76oOP71UxtrLj2KipdoqAHTDk7Q=;
+        b=71lMlbVVoIw1niyufyTNZxpWQ9IRqi6MF9iX8WPbabS91k+b459NNTSSaz2llw6Sp8
+         gwPYM5lbsZCdU7ieY4SMsuvsc/5uT4nu4jtfL9AHxpdcHmtzxMZpR6Hkniy3WMLHTRRm
+         lndF6oCt02yBFCsRRkx3hww/SXygv+5b0L1P+jfQMygs59pFB0w0MxXw1gsSHH9+0SK6
+         sioOnZhUWZIiYtk7fCwBgxgaGwbowhyzH/PHIIWe+YaGh1C8xTw0pXAgVjtmD0d0r6GZ
+         aEFmpXraoTawbKDdnLz5/91ycP1z1X3uaiH62RBO2AgZEba4VEGeV8v+8LtISMtxKO61
+         2exQ==
+X-Gm-Message-State: AOAM531a0vtw4dtqm9TYSZ0prqOzQygzJPvosjTwfyYdpxaE+xdq7yQQ
+        Wf/bYA9GEuWUW/aeSA0c7mCsPSStoO4=
+X-Google-Smtp-Source: ABdhPJxLAwFJSbQVPJuobxF9Wtn91U1YeaAUvntI7e21Tsbdh55uAGKn9OfI3Gl7DQGwkqa7i7j0cg==
+X-Received: by 2002:a1c:f604:0:b0:38c:8ffd:dbb6 with SMTP id w4-20020a1cf604000000b0038c8ffddbb6mr37125539wmc.43.1651094960712;
+        Wed, 27 Apr 2022 14:29:20 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8084:255a:b400:fcdb:a3fa:2e97:71c3])
+        by smtp.gmail.com with ESMTPSA id m8-20020a05600c4f4800b00393ed334220sm2599664wmq.42.2022.04.27.14.29.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 14:29:20 -0700 (PDT)
+From:   Nicola Lunghi <nick83ola@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Nicola Lunghi <nick83ola@gmail.com>,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: wm8960: Add ACPI support
+Date:   Wed, 27 Apr 2022 22:29:16 +0100
+Message-Id: <20220427212916.40145-1-nick83ola@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220427155241.26410-1-dave@stgolabs.net>
-In-Reply-To: <20220427155241.26410-1-dave@stgolabs.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 27 Apr 2022 14:26:29 -0700
-Message-ID: <CAM9d7ciQnUcefR-hLBHSDhu6zZovxXvGYW-CdSBiub_GAOfAiA@mail.gmail.com>
-Subject: Re: [PATCH] locking/rwsem: Teach contention tracing about optimistic spinning
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Davidlohr,
+HID made of either Wolfson/CirrusLogic PCI ID + 8960 identifier
 
-On Wed, Apr 27, 2022 at 9:04 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
->
-> Similar to the mutex counterpart, we can further distinguish the
-> types of contention. Similarly this patch also introduces potentially
-> various _begin() tracepoints with a single respective _end().
+This helps enumerate the Waveshare WM8960 WM8960 Hi-Fi Sound
+Card HAT on the Up2 platform.
 
-Thanks for doing this.  I was thinking about it as well.
+The scripts at https://github.com/thesofproject/acpi-scripts
+can be used to add the ACPI initrd overlay.
 
->
-> - The original _begin() for down_write() is moved further up,
-> right after we know optimistic spinning is bust.
->
-> - For the scenario that spins after setting the hand-off bit and
-> failing to grab the lock the code is change to duplicate the
-> rwsem_try_write_lock() upon a OWNER_NULL, which minimizes the
-> amounts of _begin() in the wait-loop - but also gets rid of a
-> goto label and the logic is pretty encapsulated in the branch.
-> In such cases the common case will be to acquire the lock,
-> but if it is stolen in that window, this path won't see the
-> signal_pending() now in the iteration and block. This should
-> be benign as the check will come in after waking if the lock
-> can still not be taken.
->
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> ---
-> rtmutexes' top waiter will also do optimitic spinning, but
-> I don't think it is worth adding tracepoints here as it
-> is quite minimal, unlike the osq stuff.
->
->  include/trace/events/lock.h |  4 +++-
->  kernel/locking/rwsem.c      | 29 +++++++++++++++++++++--------
->  2 files changed, 24 insertions(+), 9 deletions(-)
->
-> diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
-> index 9ebd081e057e..0f68a3e69a9f 100644
-> --- a/include/trace/events/lock.h
-> +++ b/include/trace/events/lock.h
-> @@ -15,6 +15,7 @@
->  #define LCB_F_RT       (1U << 3)
->  #define LCB_F_PERCPU   (1U << 4)
->  #define LCB_F_MUTEX    (1U << 5)
-> +#define LCB_F_RWSEM    (1U << 6)
->
->
->  #ifdef CONFIG_LOCKDEP
-> @@ -115,7 +116,8 @@ TRACE_EVENT(contention_begin,
->                                 { LCB_F_WRITE,          "WRITE" },
->                                 { LCB_F_RT,             "RT" },
->                                 { LCB_F_PERCPU,         "PERCPU" },
-> -                               { LCB_F_MUTEX,          "MUTEX" }
-> +                               { LCB_F_MUTEX,          "MUTEX" },
-> +                               { LCB_F_RWSEM,          "RWSEM" }
->                           ))
->  );
+This commit is similar to the commit:
+960cdd50ca9f ("ASoC: wm8804: Add ACPI support")
 
-Well I'm ok with this but it'd be better if we can do this
-without adding a new flag.  Originally a mutex can be
-identified with 0, and a rwsem with either of READ or WRITE.
+Signed-off-by: Nicola Lunghi <nick83ola@gmail.com>
+---
+ sound/soc/codecs/wm8960.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-The MUTEX flag was added to note optimistic spins
-on mutex and now we need something similar for
-rwsem.  Then can we change the MUTEX to OPTIMISTIC
-if it's not too late?
+diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
+index ca7660f4bb05..08c87ac16137 100644
+--- a/sound/soc/codecs/wm8960.c
++++ b/sound/soc/codecs/wm8960.c
+@@ -14,6 +14,7 @@
+ #include <linux/pm.h>
+ #include <linux/clk.h>
+ #include <linux/i2c.h>
++#include <linux/acpi.h>
+ #include <linux/slab.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+@@ -1498,16 +1499,28 @@ static const struct i2c_device_id wm8960_i2c_id[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, wm8960_i2c_id);
+ 
++#if defined(CONFIG_OF)
+ static const struct of_device_id wm8960_of_match[] = {
+        { .compatible = "wlf,wm8960", },
+        { }
+ };
+ MODULE_DEVICE_TABLE(of, wm8960_of_match);
++#endif
++
++#if defined(CONFIG_ACPI)
++static const struct acpi_device_id wm8960_acpi_match[] = {
++	{ "1AEC8960", 0 }, /* Wolfson PCI ID + part ID */
++	{ "10138960", 0 }, /* Cirrus Logic PCI ID + part ID */
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, wm8960_acpi_match);
++#endif
+ 
+ static struct i2c_driver wm8960_i2c_driver = {
+ 	.driver = {
+ 		.name = "wm8960",
+-		.of_match_table = wm8960_of_match,
++		.of_match_table = of_match_ptr(wm8960_of_match),
++		.acpi_match_table = ACPI_PTR(wm8960_acpi_match),
+ 	},
+ 	.probe =    wm8960_i2c_probe,
+ 	.remove =   wm8960_i2c_remove,
+-- 
+2.34.1
 
->
-> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-> index 9d1db4a54d34..c38f990cacea 100644
-> --- a/kernel/locking/rwsem.c
-> +++ b/kernel/locking/rwsem.c
-> @@ -1057,7 +1057,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
->         if (!wake_q_empty(&wake_q))
->                 wake_up_q(&wake_q);
->
-> -       trace_contention_begin(sem, LCB_F_READ);
-> +       trace_contention_begin(sem, LCB_F_RWSEM | LCB_F_READ);
->
->         /* wait to be given the lock */
->         for (;;) {
-> @@ -1101,9 +1101,14 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->         DEFINE_WAKE_Q(wake_q);
->
->         /* do optimistic spinning and steal lock if possible */
-> -       if (rwsem_can_spin_on_owner(sem) && rwsem_optimistic_spin(sem)) {
-> -               /* rwsem_optimistic_spin() implies ACQUIRE on success */
-> -               return sem;
-> +       if (rwsem_can_spin_on_owner(sem)) {
-> +               trace_contention_begin(sem,
-> +                                      LCB_F_RWSEM | LCB_F_WRITE | LCB_F_SPIN);
-> +               if (rwsem_optimistic_spin(sem)) {
-> +                       /* rwsem_optimistic_spin() implies ACQUIRE on success */
-> +                       trace_contention_end(sem, 0);
-> +                       return sem;
-> +               }
->         }
->
->         /*
-> @@ -1115,6 +1120,8 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->         waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
->         waiter.handoff_set = false;
->
-> +       trace_contention_begin(sem, LCB_F_RWSEM | LCB_F_WRITE);
-> +
->         raw_spin_lock_irq(&sem->wait_lock);
->         rwsem_add_waiter(sem, &waiter);
->
-> @@ -1137,7 +1144,6 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->
->         /* wait until we successfully acquire the lock */
->         set_current_state(state);
-> -       trace_contention_begin(sem, LCB_F_WRITE);
->
->         for (;;) {
->                 if (rwsem_try_write_lock(sem, &waiter)) {
-> @@ -1161,18 +1167,25 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->                 if (waiter.handoff_set) {
->                         enum owner_state owner_state;
->
-> +                       trace_contention_begin(sem, LCB_F_RWSEM |
-> +                                              LCB_F_WRITE | LCB_F_SPIN);
->                         preempt_disable();
->                         owner_state = rwsem_spin_on_owner(sem);
->                         preempt_enable();
->
-> -                       if (owner_state == OWNER_NULL)
-> -                               goto trylock_again;
-> +                       if (owner_state == OWNER_NULL) {
-> +                               raw_spin_lock_irq(&sem->wait_lock);
-> +                               if (rwsem_try_write_lock(sem, &waiter))
-> +                                       break;
-> +                               raw_spin_unlock_irq(&sem->wait_lock);
-> +                       }
-> +
-> +                       trace_contention_begin(sem, LCB_F_RWSEM | LCB_F_WRITE);
-
-I'm afraid that it'd generate many contention_begin
-trace events for a single lock acquisition.
-
-Thanks,
-Namhyung
-
->                 }
->
->                 schedule();
->                 lockevent_inc(rwsem_sleep_writer);
->                 set_current_state(state);
-> -trylock_again:
->                 raw_spin_lock_irq(&sem->wait_lock);
->         }
->         __set_current_state(TASK_RUNNING);
-> --
-> 2.36.0
->

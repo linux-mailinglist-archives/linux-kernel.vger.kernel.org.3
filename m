@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AD65122E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09015122E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbiD0Tkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S234269AbiD0Tkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbiD0Tjz (ORCPT
+        with ESMTP id S230312AbiD0Tjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 15:39:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC31016
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EF2716
         for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:36:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D43361B79
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 639D061B74
         for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:36:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8AB5C385C0;
-        Wed, 27 Apr 2022 19:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F833C385AA;
+        Wed, 27 Apr 2022 19:36:42 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1njnSr-002IsZ-1h;
+        id 1njnSr-002It8-7m;
         Wed, 27 Apr 2022 15:36:41 -0400
-Message-ID: <20220427193640.887318514@goodmis.org>
+Message-ID: <20220427193641.075910863@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 27 Apr 2022 15:36:31 -0400
+Date:   Wed, 27 Apr 2022 15:36:32 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [for-next][PATCH 08/21] MAINTAINERS: Enlarge coverage of TRACING inside architectures
+        Abaci Robot <abaci@linux.alibaba.com>,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [for-next][PATCH 09/21] tracing: Fix tracing_map_sort_entries() kernel-doc comment
 References: <20220427193623.529296556@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,86 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Yang Li <yang.lee@linux.alibaba.com>
 
-Most architectures have ftrace related stuff in arch/*/kernel/ftrace.c
-but powerpc has it spread in multiple files located in
-arch/powerpc/kernel/trace/
-In several architectures, there are also additional files containing
-'ftrace' as part of the name but with some prefix or suffix.
+Add the description of @n_sort_keys and make @sort_key ->
+@sort_keys in tracing_map_sort_entries() kernel-doc comment
+to remove warnings found by running scripts/kernel-doc, which
+is caused by using 'make W=1'.
 
-Use wildcards to enlarge coverage.
+kernel/trace/tracing_map.c:1073: warning: Function parameter or member
+'sort_keys' not described in 'tracing_map_sort_entries'
+kernel/trace/tracing_map.c:1073: warning: Function parameter or member
+'n_sort_keys' not described in 'tracing_map_sort_entries'
+kernel/trace/tracing_map.c:1073: warning: Excess function parameter
+'sort_key' description in 'tracing_map_sort_entries'
 
-With arch/*/*/*/*ftrace*:
-	arch/alpha/include/asm/ftrace.h
-	arch/arm64/include/asm/ftrace.h
-	arch/arm/include/asm/ftrace.h
-	arch/csky/include/asm/ftrace.h
-	arch/csky/kernel/probes/ftrace.c
-	arch/ia64/include/asm/ftrace.h
-	arch/m68k/include/asm/ftrace.h
-	arch/microblaze/include/asm/ftrace.h
-	arch/mips/include/asm/ftrace.h
-	arch/nds32/include/asm/ftrace.h
-	arch/parisc/include/asm/ftrace.h
-	arch/powerpc/include/asm/ftrace.h
-	arch/powerpc/kernel/trace/ftrace_64_pg.S
-	arch/powerpc/kernel/trace/ftrace.c
-	arch/powerpc/kernel/trace/ftrace_low.S
-	arch/powerpc/kernel/trace/ftrace_mprofile.S
-	arch/riscv/include/asm/ftrace.h
-	arch/riscv/kernel/probes/ftrace.c
-	arch/s390/include/asm/ftrace.h
-	arch/s390/include/asm/ftrace.lds.h
-	arch/sh/include/asm/ftrace.h
-	arch/sparc/include/asm/ftrace.h
-	arch/x86/include/asm/ftrace.h
-	arch/x86/kernel/kprobes/ftrace.c
-	arch/xtensa/include/asm/ftrace.h
+Link: https://lkml.kernel.org/r/20220402072015.45864-1-yang.lee@linux.alibaba.com
 
-With arch/*/*/*ftrace*:
-	arch/arm64/kernel/entry-ftrace.S
-	arch/arm64/kernel/ftrace.c
-	arch/arm/kernel/entry-ftrace.S
-	arch/arm/kernel/ftrace.c
-	arch/csky/kernel/ftrace.c
-	arch/ia64/kernel/ftrace.c
-	arch/microblaze/kernel/ftrace.c
-	arch/mips/kernel/ftrace.c
-	arch/nds32/kernel/ftrace.c
-	arch/parisc/kernel/ftrace.c
-	arch/powerpc/kernel/kprobes-ftrace.c
-	arch/riscv/kernel/ftrace.c
-	arch/s390/kernel/ftrace.c
-	arch/s390/kernel/ftrace.h
-	arch/sh/kernel/ftrace.c
-	arch/sparc/kernel/ftrace.c
-	arch/x86/kernel/ftrace_32.S
-	arch/x86/kernel/ftrace_64.S
-	arch/x86/kernel/ftrace.c
-
-Link: https://lkml.kernel.org/r/e8338c0ad0e73991cbd8f31c215b16ea4efe212d.1648189904.git.christophe.leroy@csgroup.eu
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/trace/tracing_map.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 61d9f114c37f..b90535d923a0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19951,8 +19951,8 @@ M:	Ingo Molnar <mingo@redhat.com>
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
- F:	Documentation/trace/ftrace.rst
--F:	arch/*/*/*/ftrace.h
--F:	arch/*/kernel/ftrace.c
-+F:	arch/*/*/*/*ftrace*
-+F:	arch/*/*/*ftrace*
- F:	fs/tracefs/
- F:	include/*/ftrace.h
- F:	include/linux/trace*.h
+diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
+index 9628b5571846..9901708ce6b8 100644
+--- a/kernel/trace/tracing_map.c
++++ b/kernel/trace/tracing_map.c
+@@ -1045,7 +1045,8 @@ static void sort_secondary(struct tracing_map *map,
+ /**
+  * tracing_map_sort_entries - Sort the current set of tracing_map_elts in a map
+  * @map: The tracing_map
+- * @sort_key: The sort key to use for sorting
++ * @sort_keys: The sort key to use for sorting
++ * @n_sort_keys: hitcount, always have at least one
+  * @sort_entries: outval: pointer to allocated and sorted array of entries
+  *
+  * tracing_map_sort_entries() sorts the current set of entries in the
 -- 
 2.35.1

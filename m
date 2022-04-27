@@ -2,161 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E992E511A52
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B9F5119E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237278AbiD0OM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S237310AbiD0OMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237151AbiD0OMY (ORCPT
+        with ESMTP id S237259AbiD0OMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:12:24 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0039E4EDF1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651068553; x=1682604553;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KWtSzk6XLIEmgrFCdr2CVRtw4pCvRrQiE+rGfmmtx2M=;
-  b=EQNwsmU5M5hP1SY3UDt7P2OOimYfS7NwqP5A2+HSp8rqxoA3cd2I0L5I
-   b2ffhwVfK3YV3cYFdHl3WI+xsXsUCW/asQ58ILghrEZyG0xVdS5vY8SBL
-   BJCVjd1It1+ptXbtGNIkXIe2RAMxpe79HrgQkY2Le7W/Q7/J/ZCxTvh+m
-   3G2tNrzk2KXuEMDJzGYNjMFsSvJVOKRrJOe6jxcV4i9V3/SzphjUBeFCd
-   undCKDgx8cuQ0RnXoUoChQPVhkj3XWuTHWJT/5EpwLpKyHaKXZXJLQvbv
-   2iq+Z5oZ41LHzoFYI11/fZR1lAoSHL242Weam1uKtb5skz5/wwdq9Jzsj
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265748382"
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="265748382"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:09:12 -0700
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="730815345"
-Received: from jsaetton-mobl1.amr.corp.intel.com (HELO [10.209.41.167]) ([10.209.41.167])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:09:11 -0700
-Message-ID: <505b210f-1a4e-4cda-e1ba-920969326461@linux.intel.com>
-Date:   Wed, 27 Apr 2022 07:09:11 -0700
+        Wed, 27 Apr 2022 10:12:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD534EF58;
+        Wed, 27 Apr 2022 07:09:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DA6CE1F37B;
+        Wed, 27 Apr 2022 14:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651068569; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qG8YIn3JE35g9Ne+urDhvDL4HbkCFi0xkUxB0TL6o3I=;
+        b=FagGEF9266faGYZUHMQ7LBbOYJ6Buy1ny6xrAtyvD5345V/OyTl5AOYA8+hHWKvYXPZLMK
+        rm8B6wrD7trua5Vddbu7bWthowMxia9peAgV7nb6c44uDpqNIvs26PjxF7HLsaI5dPeQW6
+        fItKqnIsFzukl0ZnrGQUDIED8UGpC6c=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D37C13A39;
+        Wed, 27 Apr 2022 14:09:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sNVVJZlOaWLLbQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 27 Apr 2022 14:09:29 +0000
+Date:   Wed, 27 Apr 2022 16:09:28 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     akpm@linux-foundation.org, tj@kernel.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com,
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: Re: [PATCH v2 2/5] cgroup: Account for memory_recursiveprot in
+ test_memcg_low()
+Message-ID: <20220427140928.GD9823@blackbody.suse.cz>
+References: <20220423155619.3669555-1-void@manifault.com>
+ <20220423155619.3669555-3-void@manifault.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
- <405a4f3c-3d49-f3c2-441b-8d8b9d5eec23@linux.intel.com>
- <c31059e479307b347decd1eff1d3a9568b19b613.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <c31059e479307b347decd1eff1d3a9568b19b613.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220423155619.3669555-3-void@manifault.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello David.
 
+On Sat, Apr 23, 2022 at 08:56:19AM -0700, David Vernet <void@manifault.com> wrote:
+> This unfortunately broke the memcg tests, which asserts that a sibling
+> that experienced reclaim but had a memory.low value of 0, would not
+> observe any memory.low events. This patch updates test_memcg_low() to
+> account for the new behavior introduced by memory_recursiveprot.
 
-On 4/26/22 9:28 PM, Kai Huang wrote:
-> 
->>
->> How about the following summary? It includes important notes mentioned
->> by you and some more driver info.
-> 
-> Yes fine to me, except minor comments below:
-> 
->>
->> x86/tdx: Add TDX Guest attestation interface driver
->>
->> In TDX guest, attestation is used to verify the trustworthiness of a TD
->> to other entities before provisioning secrets to the TD.
->>
->> One usage example is, when a TD guest uses encrypted drive and if the
->> decryption keys required to access the drive are stored in a secure 3rd
->> party key server, the key server can use attestation to verify TD's
->> trustworthiness and release the decryption keys to the TD.
->>
->> The attestation process consists of two steps: TDREPORT generation and
->> Quote generation.
->>
->> TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
->> the TDX module which contains TD-specific information (such as TD
->> measurements), platform security version, and the MAC to protect the
->> integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
->> get the TDREPORT from the TDX module. A user-provided 64-Byte
->> REPORTDATA is used as input and included in the TDREPORT. Typically it
->> can be some nonce provided by attestation service so the TDREPORT can
->> be verified uniquely. More details about TDREPORT can be found in
->> Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
->>
->> After getting the TDREPORT, the second step of the attestation process
->> is to send the TDREPORT to Quoting Enclave (QE) or Quote Generation
->> Service (QGS) to generate the Quote. However, the method of sending the
->> TDREPORT to QE/QGS, communication channel used and data format used is
->> specific to the implementation of QE/QGS.
->>
->> A typical implementation is, TD userspace attestation software gets the
->> TDREPORT from TD kernel, sends it to QE/QGS, and QE/QGS returns the
->> Quote. TD attestation software can use any available communication
->> channel to talk to QE/QGS, such as using vsock and tcp/ip.
->>
->> To support the case that those communication channels are not directly
->> available to the TD, TDX also defines TDVMCALL
->> (TDG.VP.VMCALL<GetQuote>) to allow TD to ask VMM to help with sending
->> the TDREPORT and receiving the Quote. This support is documented in the
->> GHCI spec section titled "5.4 TD attestation".
-> 
-> I intentionally omitted to mention TDG.VP.VMCALL<GetQuote> as I personally
-> believe there are still couple issues around GetQuote that we haven't discussed
-> thoroughly (timeout, etc).  I am still considering whether we should change GHCI
-> to use TDG.VP.VMCALL<Service> defined in GHCI 1.5 for attestation.  And the name
-> of TDVMCALL doesn't actually matter here, so I think we don't need to mention
-> GetQuote here but just say we have TDVMCALLs for that.
+I think the test is correct, there should be no (not even recursive)
+protection in this particular case (when the remaining siblings consume
+all of parental protection).
 
-Ok.
+This should be fixed in the kernel (see also [1], no updates from me yet
+:-/)
 
-> 
->>
->> Implement a basic attestation driver to allow TD userspace to get the
->> TDREPORT, which is sent to QE by the attestation software to generate
->> a Quote for remote verification. Add a wrapper function
->> (tdx_mcall_tdreport()) to get the TDREPORT from the TDX Module. This
->> API will be used by the interface driver to request for TDREPORT.
-> 
-> I don't think you need to mention tdx_mcall_tdreport().
+Michal
 
-Ok. Will remove it.
-
-> 
->>
->> Also note that explicit access permissions are not enforced in this
->> driver because the quote and measurements are not a secret. However
->> the access permissions of the device node can be used to set any
->> desired access policy. The udev default is usually root access
->> only.
->>
->>
->>
->>
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+[1] https://lore.kernel.org/lkml/20220322182248.29121-1-mkoutny@suse.com/

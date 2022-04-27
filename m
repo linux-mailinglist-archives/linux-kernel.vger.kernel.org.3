@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A9351124C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2A151124F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358741AbiD0HXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S1347148AbiD0H0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239885AbiD0HXR (ORCPT
+        with ESMTP id S236000AbiD0H0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:23:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1731CFF8;
-        Wed, 27 Apr 2022 00:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651044006; x=1682580006;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HwM8nfr+sAMSwiE6LUzMo0EfJPHJ3P1NXafGW7GSrxQ=;
-  b=DmrU8RuuiubvlFFbd0Ht/w2YoM8lApLU41fHjTztvCiaSrHaR3GLpOAd
-   AeAC8sqO2RdsAARMwUd+0TmRCClADA91tALmfXXGGATF9mQ6pfMVaq1ct
-   tD9rmYlhsRwsFcWxfjeO4z4hyq95ooq9ZuX/o+TD7DB/1X90Nr57idwV+
-   cjK+Y+2JQdqWBsL4JUoSYxvpZV1KXOTo0MNBt7YxPScQO08872wSebt63
-   VIYWwbQSAtgZav/cQyjupOJs8RmLOM96Vx9zrbwGyakOwN8Ai4vHO+hp9
-   gpEBl8F6RJRCrb8pbV/mFubnyA6kukbPiiRDd/+jr+qqaaL63B31598u1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="246409277"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="246409277"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 00:20:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="705422204"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2022 00:20:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 10:20:01 +0300
-Date:   Wed, 27 Apr 2022 10:20:01 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] usb: core: acpi: Use the sysdev pointer instead
- of controller device
-Message-ID: <YmjuofeN89UvqDMf@kuha.fi.intel.com>
-References: <20220425121340.1362-1-heikki.krogerus@linux.intel.com>
- <20220425121340.1362-2-heikki.krogerus@linux.intel.com>
- <CAHp75Vdch3shuX6D6YU8=JrFLKq4h_WNYAQPd_bj-hmV6QoQkg@mail.gmail.com>
+        Wed, 27 Apr 2022 03:26:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B931C3389C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:23:08 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651044187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dWtbS5lg1a9gM/YQcx7iEZL/3leG2VJ+qMbbrkRFwgE=;
+        b=aAUQMbdksTR0gvdDY+Qt2OIL4QBVYOdTBvBWDhAZhxGAOZMQRL6f4JJconDCX4PFYkt+a0
+        qBdR8hWwf/HR39Chqy7J3OnutXKJEXnAyhrU0jLSCgX/ir/yREAp0r3SG9LK8d349DkWlH
+        gZbmxOf4wAmRYgzczv6A6gqOyPqCvUZQ+ZGyNXCoFXI0tlANvUaQJCYU06O7PDZLLKGe8l
+        7OwsYOvu9XLtEYyJECmWMF/BDs2+ffKQQJacZ0tBy6p7Fyew2m+sNHpuD0BAvSf5uo2i1I
+        zOPbxZ6rxt3vJW9G29c2f+PFnvkgQPpEcbD44tFuw+O7BUZe3W2zY0hbQF13BA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651044187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dWtbS5lg1a9gM/YQcx7iEZL/3leG2VJ+qMbbrkRFwgE=;
+        b=Et3zD8l3ok5Xr2j3fnO+TSQb0Cuvg4zWjtLZPZ7Rz+tNLnYjrInS/Oc4Qo156HoNF8gjID
+        95FKkkl5VMqYzyDQ==
+To:     Marcelo Tosatti <mtosatti@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Oscar Shiang <oscar0225@livemail.tw>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [patch v12 12/13] mm: vmstat_refresh: avoid queueing work item
+ if cpu stats are clean
+In-Reply-To: <20220315153314.287031403@fedora.localdomain>
+References: <20220315153132.717153751@fedora.localdomain>
+ <20220315153314.287031403@fedora.localdomain>
+Date:   Wed, 27 Apr 2022 09:23:06 +0200
+Message-ID: <874k2fyopx.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vdch3shuX6D6YU8=JrFLKq4h_WNYAQPd_bj-hmV6QoQkg@mail.gmail.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:18:24PM +0200, Andy Shevchenko wrote:
-> On Mon, Apr 25, 2022 at 3:41 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > The controller device (hcd) does not always have the ACPI
-> > companion assigned to it at all. We can not rely on it when
-> > finding the ACPI companion for the root hub. Instead we need
-> > to use the sysdev pointer here.
-> 
-> ...
-> 
-> >         if (!udev->parent) {
-> >                 /* root hub is only child (_ADR=0) under its parent, the HC */
-> 
-> I believe the comment can be amended now to point out that we use the
-> physical device representing the parent of this child, and not
-> (always) a direct parent of the device in terms of Linux device model.
+On Tue, Mar 15 2022 at 12:31, Marcelo Tosatti wrote:
+>  	/*
+>  	 * The regular update, every sysctl_stat_interval, may come later
+> @@ -1948,9 +1977,19 @@ int vmstat_refresh(struct ctl_table *tab
+>  	 * transiently negative values, report an error here if any of
+>  	 * the stats is negative, so we know to go looking for imbalance.
+>  	 */
+> -	err = schedule_on_each_cpu(refresh_vm_stats);
+> -	if (err)
+> -		return err;
+> +	cpus_read_lock();
+> +	for_each_online_cpu(cpu) {
+> +		struct work_struct *work = per_cpu_ptr(works, cpu);
+> +
+> +		INIT_WORK(work, refresh_vm_stats);
+> +		if (need_update(cpu) || need_drain_remote_zones(cpu))
 
-Okay, I'll try to improve the comment.
+Of course that makes sense in general, but now you have two ways of
+deciding whether updating this is required.
 
-> > -               adev = ACPI_COMPANION(udev->dev.parent);
-> > +               adev = ACPI_COMPANION(udev->bus->sysdev);
-> >                 return acpi_find_child_device(adev, 0, false);
-> >         }
+   1) The above
 
-thanks,
+   2) The per CPU boolean which tells whether vmstats are dirty or not.
 
--- 
-heikki
+Can we have a third method perhaps?
+
+Thanks,
+
+        tglx

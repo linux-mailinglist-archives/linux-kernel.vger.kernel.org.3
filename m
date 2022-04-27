@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392FF511F39
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BA2511FCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244134AbiD0RfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S244143AbiD0Rey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244186AbiD0Rew (ORCPT
+        with ESMTP id S244135AbiD0Rex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:34:52 -0400
+        Wed, 27 Apr 2022 13:34:53 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8E601F3534
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:31:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4791C1F3E24
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:31:37 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9119ED1;
-        Wed, 27 Apr 2022 10:31:34 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1FA2143D;
+        Wed, 27 Apr 2022 10:31:36 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A3B203F73B;
-        Wed, 27 Apr 2022 10:31:33 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ADEFA3F73B;
+        Wed, 27 Apr 2022 10:31:35 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alex.popov@linux.com, keescook@chromium.org
-Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
-        luto@kernel.org, mark.rutland@arm.com, will@kernel.org
-Subject: [PATCH v2 00/13] stackleak: fixes and rework
-Date:   Wed, 27 Apr 2022 18:31:15 +0100
-Message-Id: <20220427173128.2603085-1-mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     akpm@linux-foundation.org, alex.popov@linux.com,
+        catalin.marinas@arm.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        mark.rutland@arm.com, will@kernel.org
+Subject: [PATCH v2 01/13] arm64: stackleak: fix current_top_of_stack()
+Date:   Wed, 27 Apr 2022 18:31:16 +0100
+Message-Id: <20220427173128.2603085-2-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220427173128.2603085-1-mark.rutland@arm.com>
+References: <20220427173128.2603085-1-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -40,125 +43,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander, Kees,
+Due to some historical confusion, arm64's current_top_of_stack() isn't
+what the stackleak code expects. This could in theory result in a number
+of problems, and practically results in an unnecessary performance hit.
+We can avoid this by aligning the arm64 implementation with the x86
+implementation.
 
-This is the vs I promised. Since Alexander wanted to look at this in
-more detail (and since this is subtle and needs review), I'm assuming
-that Kees will pick this up some time next week after that's happened,
-if all goes well. :)
+The arm64 implementation of current_top_of_stack() was added
+specifically for stackleak in commit:
 
-This series reworks the stackleak code and the associated LKDTM test.
-The first patch fixes some latent issues on arm64, and the subsequent
-patches improve the code to improve clarity and permit better code
-generation. Patches 8-10 address some latent issues in the LKDTM test
-and add more diagnostic output.
+  0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
 
-Since v1 [1]:
-* Fix and rework the LKDTM test
-* Rework the poison scan
+This was intended to be equivalent to the x86 implementation, but the
+implementation, semantics, and performance characteristics differ
+wildly:
 
-[1] https://lore.kernel.org/lkml/20220425115603.781311-1-mark.rutland@arm.com/
+* On x86, current_top_of_stack() returns the top of the current task's
+  task stack, regardless of which stack is in active use.
 
-Benchmarking arm64 with a QEMU HVF VM on an M1 Macbook Pro shows a
-reasonable improvement when stackleak is enabled. I've included figures
-for when stackleak is dynamically disabled with v2:
+  The implementation accesses a percpu variable which the x86 entry code
+  maintains, and returns the location immediately above the pt_regs on
+  the task stack (above which x86 has some padding).
 
-* Calling getpid 1^22 times in a loop (avg 50 runs)
-  
-  5.18-rc1/on: 0.652099387s ( +-  0.13% )
-  v1/on:       0.641005661s ( +-  0.13% ) ; 1.7% improvement
-  v2/on:       0.611699824s ( +-  0.08% ) ; 6.2% improvement
-  v2/off:      0.507505632s ( +-  0.15% )
+* On arm64 current_top_of_stack() returns the top of the stack in active
+  use (i.e. the one which is currently being used).
 
-* perf bench sched pipe (single run)
+  The implementation checks the SP against a number of
+  potentially-accessible stacks, and will BUG() if no stack is found.
 
-  5.18-rc1/on: 2.138s total
-  v1/on:       2.118s total ; 0.93% improvement
-  v2/on:       2.116s total ; 1.03% improvement
-  v2/off:      1.708s total
+The core stackleak_erase() code determines the upper bound of stack to
+erase with:
 
-The large jump between v1 and v2 is largely due to the changes to poison
-scanning avoiding redundantly overwriting poison. For the getpid syscall
-the poison which gets overwritten is a substantial fraction of the stack
-usage, and for more involved syscalls this may be a trivial fraction, so
-the average benefit is fairly small.
+| if (on_thread_stack())
+|         boundary = current_stack_pointer;
+| else
+|         boundary = current_top_of_stack();
 
-With the whole series applied, the LKDTM test reliably passes on both
-arm64 and x86_64, e.g.
+On arm64 stackleak_erase() is always called on a task stack, and
+on_thread_stack() should always be true. On x86, stackleak_erase() is
+mostly called on a trampoline stack, and is sometimes called on a task
+stack.
 
-| # uname -a
-| Linux buildroot 5.18.0-rc1-00013-g26f638ab0d7c #3 SMP PREEMPT Wed Apr 27 16:21:37 BST 2022 aarch64 GNU/Linux
-| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT 
-| lkdtm: Performing direct entry STACKLEAK_ERASING
-| lkdtm: stackleak stack usage:
-|   high offset: 336 bytes
-|   current:     688 bytes
-|   lowest:      1232 bytes
-|   tracked:     1232 bytes
-|   untracked:   672 bytes
-|   poisoned:    14136 bytes
-|   low offset:  8 bytes
-| lkdtm: OK: the rest of the thread stack is properly erased
+Currently, this results in a lot of unnecessary code being generated for
+arm64 for the impossible !on_thread_stack() case. Some of this is
+inlined, bloating stackleak_erase(), while portions of this are left
+out-of-line and permitted to be instrumented (which would be a
+functional problem if that code were reachable).
 
-The first patch fixes the major issues on arm64, and is Cc'd to stable
-for backporting.
+As a first step towards improving this, this patch aligns arm64's
+implementation of current_top_of_stack() with x86's, always returning
+the top of the current task's stack. With GCC 11.1.0 this results in the
+bulk of the unnecessary code being removed, including all of the
+out-of-line instrumentable code.
 
-The second patch is a trivial optimization for when stackleak is
-dynamically disabled.
+While I don't believe there's a functional problem in practice I've
+marked this as a fix since the semantic was clearly wrong, the fix
+itself is simple, and other code might rely upon this in future.
 
-The subsequent patches rework the way stackleak manipulates the stack
-boundary values. This is partially for clarity (e.g. with separate 'low'
-and 'high' boundary variables), and also permits the compiler to
-generate more optimal assembly by generating the high and low bounds
-from the same base.
+Fixes: 0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Popov <alex.popov@linux.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Will Deacon <will@kernel.org>
+---
+ arch/arm64/include/asm/processor.h | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Patch 6 changes the way that `current->lowest_stack` is reset prior to
-return to userspace. The existing code uses an undocumented offset
-relative to the top of the stack which doesn't make much sense (as thie
-sometimes falls within the task's pt_regs, or sometimes adds 600+ bytes
-to erase upon the next exit to userspace). For now I've removed the
-offset entirely.
-
-Patch 7 changes the way we scan for poison. This fixes what I believe
-are fencepost errors, and also avoids the need to redundantly overwrite
-poison.
-
-Patches 8-11 rework the LKDTM test, fixing cases where the test could
-spuriously fail and improving the diagnostic output.
-
-Patches 12 and 13 add stackleak_erase_on_task_stack() and
-stackleak_erase_off_task_stack() that can be used when a caller knows
-they're always on or off the task stack respectively, avoiding redundant
-logic to check this and generate the high boundary value. The former is
-used on arm64 where we always perform the erase on the task stack, and
-I've included the latter for completeness (as e.g. it could be used on
-x86) given it is trivial.
-
-Thanks,
-Mark.
-
-Mark Rutland (13):
-  arm64: stackleak: fix current_top_of_stack()
-  stackleak: move skip_erasing() check earlier
-  stackleak: remove redundant check
-  stackleak: rework stack low bound handling
-  stackleak: clarify variable names
-  stackleak: rework stack high bound handling
-  stackleak: rework poison scanning
-  lkdtm/stackleak: avoid spurious failure
-  lkdtm/stackleak: rework boundary management
-  lkdtm/stackleak: prevent unexpected stack usage
-  lkdtm/stackleak: check stack boundaries
-  stackleak: add on/off stack variants
-  arm64: entry: use stackleak_erase_on_task_stack()
-
- arch/arm64/include/asm/processor.h |  10 +--
- arch/arm64/kernel/entry.S          |   2 +-
- drivers/misc/lkdtm/stackleak.c     | 133 +++++++++++++++++++----------
- include/linux/stackleak.h          |  55 +++++++++++-
- kernel/stackleak.c                 | 105 ++++++++++++++---------
- 5 files changed, 210 insertions(+), 95 deletions(-)
-
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index 73e38d9a540ce..6b1a12c23fe77 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -381,12 +381,10 @@ long get_tagged_addr_ctrl(struct task_struct *task);
+  * of header definitions for the use of task_stack_page.
+  */
+ 
+-#define current_top_of_stack()								\
+-({											\
+-	struct stack_info _info;							\
+-	BUG_ON(!on_accessible_stack(current, current_stack_pointer, 1, &_info));	\
+-	_info.high;									\
+-})
++/*
++ * The top of the current task's task stack
++ */
++#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
+ #define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1, NULL))
+ 
+ #endif /* __ASSEMBLY__ */
 -- 
 2.30.2
 

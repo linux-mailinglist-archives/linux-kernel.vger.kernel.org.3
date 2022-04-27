@@ -2,100 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE1B511980
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095F5511AA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbiD0Nkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S236512AbiD0Nlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236507AbiD0Nk0 (ORCPT
+        with ESMTP id S236391AbiD0Nl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:40:26 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BE54D626;
-        Wed, 27 Apr 2022 06:37:14 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id v65so1949567oig.10;
-        Wed, 27 Apr 2022 06:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yhF0G6yyXaul33YQtZP9cS7G8SlHQ9Le2XaQbFcTYvo=;
-        b=SUsmhZGs20++DaCxL7upzoXkA2Dm33XtRqXivIfkZODlAT7QE/Jk/BvTcWT5lLt3/k
-         3TTrDFXoFkdEXyJeApS3tp7MxGMnTq0fL1DWsA+oNzXuQ1jQsD4IHzLGxh9NXRe1pxmN
-         p9NjQJ6LMjrVwVYPxHC6dKs+bb92+jw9o07tNRh97ma9VtjU5yky3hEpOC5+wGlFNPTT
-         g+rI/d+gPXCE+omJagi+o499emwmzpA2273FxrTp91JnXnXIc+dvAhRwurudHiZY3eeY
-         dZ+L6FeAUT0b0B/MfTQ4IIRbTcuCYyxtiDlTlnlNgDcN4HjEIE6en8Ij7V0wEBTKJSM2
-         GYcg==
+        Wed, 27 Apr 2022 09:41:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E372517F4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651066694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PSHs414nLmIXHY0MNvy/DxlhGuFhzSSXxRrlOw3+ock=;
+        b=P7UMyqTHZqHn+C6d8cdjWUvXJUvnKX5H7RoESpCXE7cW/HAamHYpVIh5iNVs9+cBEsW+5S
+        j+/8CQKqxzUNlecJoHvTxxD5GpaFnjCUA7ZfLbiWWP5SeQ1xbRBcNqpIfthIGLd4TxDbZZ
+        OSYD4nbqVBPglj68mAmTUntjq2InB5c=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-465-_3d3e2YLMa2ljb_Kg_sQPQ-1; Wed, 27 Apr 2022 09:38:13 -0400
+X-MC-Unique: _3d3e2YLMa2ljb_Kg_sQPQ-1
+Received: by mail-wr1-f69.google.com with SMTP id s8-20020adf9788000000b0020adb01dc25so756834wrb.20
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:38:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yhF0G6yyXaul33YQtZP9cS7G8SlHQ9Le2XaQbFcTYvo=;
-        b=vnMlEQ67y2/ECSIU0V9omFi2M/zBsW6I4j/hvEWiyouab71WkU2q4wmqzKQTF65PkO
-         ugT0yw6o8/7aUGJMZ32xj4ebgCGgFhATXhJ+w93Jxw1kx6zzhs7oxbjnG2bLcLj3zZAr
-         07JRuKVXpAjGTGa6fOOJjbo7U/gZM2xKGjY4l1bf+e3AdyOCuiPRJA6GrU+xVV3wUGBR
-         COk8fBUB+4FFcI2tSgFQ6i6CLcuICmEp+wErqfyqf3mrKOK7xpbvrPGrlTK0mTsbFHWc
-         urVHTcTRo8oPPNI7xC4LthHcnuj3RtC20fHLZRaVYacldWa9aqilU9AIqLx3e3hoW4+c
-         13dg==
-X-Gm-Message-State: AOAM530rH9k+TZycf6iXafgEFIh6z8WJse0yOJ7OZG1sFRfFicFILhhi
-        Ccc7ITe65z7OsXmCCZnzjAa0Ws8BwIg=
-X-Google-Smtp-Source: ABdhPJz2pYe9wnusQC+BCwMLIw1YI1xV8X7qaYNnP2DtrkYyQC4A+AQu40ZHbQRlz8+Z77qeysc4Gw==
-X-Received: by 2002:a05:6808:2209:b0:322:bbb4:4572 with SMTP id bd9-20020a056808220900b00322bbb44572mr17131157oib.182.1651066633500;
-        Wed, 27 Apr 2022 06:37:13 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q13-20020a4ab3cd000000b0032830efe365sm6661469ooo.43.2022.04.27.06.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 06:37:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bc46d60e-7c89-ad05-780c-9e9fd19f788e@roeck-us.net>
-Date:   Wed, 27 Apr 2022 06:37:07 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PSHs414nLmIXHY0MNvy/DxlhGuFhzSSXxRrlOw3+ock=;
+        b=ZRDltwgRe3W/szx0oQ3ExxvK+96TRLeVfyMhnFja+G2RrRtUhYcKsM4ORyjgb5AQZX
+         PHONR5KhgFshLra6gfonaiDk19XoZ6Ev+lepDuZkEde/X7sfKXGWiZrKhEozfeStXgS9
+         RFW0Vf4gDn9QRei+BuCV81kS0zzygSc8Fq2cfRv+I4v+4I257Igve4Xo6fc1wZKrUbpw
+         EW4W7d1v6U/h18goqupFa2bhyLYN6q/0G7sZgyVQRwU4DBqrV1qb9TjQwvmwcLW47I3g
+         paizmG815nfSJW8bDXnMa108f+rcvTmsWvk76kBA0wRCeYaGdTh1EAeoobi5vxzPL4Nh
+         CkZA==
+X-Gm-Message-State: AOAM530ZaeV/Cpz7/nAUBa9/DweKJLTZbAc9boFESIkm53ecPXr/qP+W
+        nShIZC3pcB1TZc0KHdd27mQLZUxbXGK7GHlWve5Lb65Ma4DZ8nhV36chPxSD9WkthrQVimRt1fR
+        FiSIIznS2ihPbRkrL8xkcFKfs
+X-Received: by 2002:a5d:40ca:0:b0:20a:cf97:f1b4 with SMTP id b10-20020a5d40ca000000b0020acf97f1b4mr18244190wrq.121.1651066692509;
+        Wed, 27 Apr 2022 06:38:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzosLJXqvRwF4U/eGOveNg83nSH/OQqj2msqvMJzBqQTXR97GmklzXkcLwfNLij7D2eSiit9g==
+X-Received: by 2002:a5d:40ca:0:b0:20a:cf97:f1b4 with SMTP id b10-20020a5d40ca000000b0020acf97f1b4mr18244166wrq.121.1651066692307;
+        Wed, 27 Apr 2022 06:38:12 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-234.retail.telecomitalia.it. [87.11.6.234])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c2c4700b0038eb7d8df69sm1565757wmg.11.2022.04.27.06.38.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 06:38:11 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 15:38:08 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] hv_sock: Copy packets sent by Hyper-V out of the
+ ring buffer
+Message-ID: <20220427133808.elbrvtvl6xplx62n@sgarzare-redhat>
+References: <20220427131225.3785-1-parri.andrea@gmail.com>
+ <20220427131225.3785-3-parri.andrea@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 0/7] hwmon: (nct6775) Convert to regmap, add i2c
- support
-Content-Language: en-US
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org
-References: <20220427010154.29749-1-zev@bewilderbeest.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220427010154.29749-1-zev@bewilderbeest.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220427131225.3785-3-parri.andrea@gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zev,
+On Wed, Apr 27, 2022 at 03:12:22PM +0200, Andrea Parri (Microsoft) wrote:
+>Pointers to VMbus packets sent by Hyper-V are used by the hv_sock driver
+>within the guest VM.  Hyper-V can send packets with erroneous values or
+>modify packet fields after they are processed by the guest.  To defend
+>against these scenarios, copy the incoming packet after validating its
+>length and offset fields using hv_pkt_iter_{first,next}().  Use
+>HVS_PKT_LEN(HVS_MTU_SIZE) to initialize the buffer which holds the
+>copies of the incoming packets.  In this way, the packet can no longer
+>be modified by the host.
+>
+>Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+>Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+>---
+> net/vmw_vsock/hyperv_transport.c | 9 +++++++--
+> 1 file changed, 7 insertions(+), 2 deletions(-)
+>
+>diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+>index 943352530936e..8c37d07017fc4 100644
+>--- a/net/vmw_vsock/hyperv_transport.c
+>+++ b/net/vmw_vsock/hyperv_transport.c
+>@@ -78,6 +78,9 @@ struct hvs_send_buf {
+> 					 ALIGN((payload_len), 8) + \
+> 					 VMBUS_PKT_TRAILER_SIZE)
+>
+>+/* Upper bound on the size of a VMbus packet for hv_sock */
+>+#define HVS_MAX_PKT_SIZE	HVS_PKT_LEN(HVS_MTU_SIZE)
+>+
+> union hvs_service_id {
+> 	guid_t	srv_id;
+>
+>@@ -378,6 +381,8 @@ static void hvs_open_connection(struct vmbus_channel *chan)
+> 		rcvbuf = ALIGN(rcvbuf, HV_HYP_PAGE_SIZE);
+> 	}
+>
+>+	chan->max_pkt_size = HVS_MAX_PKT_SIZE;
+>+
+> 	ret = vmbus_open(chan, sndbuf, rcvbuf, NULL, 0, hvs_channel_cb,
+> 			 conn_from_host ? new : sk);
+> 	if (ret != 0) {
+>@@ -602,7 +607,7 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
+> 		return -EOPNOTSUPP;
+>
+> 	if (need_refill) {
+>-		hvs->recv_desc = hv_pkt_iter_first_raw(hvs->chan);
+>+		hvs->recv_desc = hv_pkt_iter_first(hvs->chan);
+> 		if (!hvs->recv_desc)
+> 			return -ENOBUFS;
+> 		ret = hvs_update_recv_data(hvs);
+>@@ -618,7 +623,7 @@ static ssize_t hvs_stream_dequeue(struct vsock_sock *vsk, struct msghdr *msg,
+>
+> 	hvs->recv_data_len -= to_read;
+> 	if (hvs->recv_data_len == 0) {
+>-		hvs->recv_desc = hv_pkt_iter_next_raw(hvs->chan, hvs->recv_desc);
+>+		hvs->recv_desc = hv_pkt_iter_next(hvs->chan, hvs->recv_desc);
+> 		if (hvs->recv_desc) {
+> 			ret = hvs_update_recv_data(hvs);
+> 			if (ret)
+>-- 
+>2.25.1
+>
 
-On 4/26/22 18:01, Zev Weiss wrote:
-> Hello,
-> 
-> This is v4 of my effort to add i2c support to the nct6775 hwmon
-> driver.
-> 
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Thanks a lot for your effort.
-
-I applied patches 2..6 to hwmon-next. The first and the last
-patch of the series will have to wait for DT maintainer approval.
-
-Thanks,
-Guenter

@@ -2,115 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48572510D58
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0332F510D5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356442AbiD0Aog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S1356448AbiD0Ap2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244560AbiD0Aoc (ORCPT
+        with ESMTP id S1356425AbiD0Ap0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:44:32 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3753983B;
-        Tue, 26 Apr 2022 17:41:24 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id z16so264082pfh.3;
-        Tue, 26 Apr 2022 17:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cHuB79ILJjenVIZkylgDtsChvSa1mafCrWbCMZD3kAE=;
-        b=MHXSGD5YQ3T+tkCFxPGTee84+gjDFzOLq/3s7K00T1Yk3F2LBRwT6mFC5RSrJkDf40
-         jiMq5HzWIQT82dfnegmng5CKufVYqb3ehZaylkwHJPTi4eFUW0qiwl5avCiZt+g39SW/
-         Jd+UbCR1USDo3sNmI4yrFpdAtP72rKpFuo4TVcBRRTjM7mJzPZWdJlT1Lc/WKoWtmtb0
-         MLvfJBzGtvaDz3AgNLcTa/XlleGRYnBDX2YHDLEsnGUY/rIdSmFET8I+2rzD/AdZLg5m
-         TePgucauul6IWvyIEukPLdM6tIxA0ey/88gXvDQYxNIQv7Whkt+9+B5BT5Wli42G6q/V
-         8pYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cHuB79ILJjenVIZkylgDtsChvSa1mafCrWbCMZD3kAE=;
-        b=Qo/dYCJ16Kx9gF03tZOiY/SlIFPUqCpbIDeRZ3bSPVYVLKZoaphGRZwT9eqfl9hGOI
-         n/in9wuiXl0/8PatT4i9+vybieXH6KdG3uHzJnFVvyRpeiHDwdpIFZ/Soj1oVu3EB7s4
-         3Ps1N0TZGkqi1znCKaKw8NNbo+JoaNWyXHxOphxzyXBES9+7yK0YOS0h2FbKA0TQje9Q
-         j07XOlbjSEA1FKSYobMVtE8MbxYXy16EOk17n/zdiwmrru5c3l706l+2bD3fYmNmgulz
-         4dkTelp1wj8ptwZxl+0KKCPDW8GCYLp9OLe8ZUItBNuAKrIhny/+OhnaBah5pSrMluDc
-         KJGg==
-X-Gm-Message-State: AOAM5330l3qI/EhNPSp3LvDKea89fqJvHbOMntZUtlGWpUEUv0GMXV9K
-        XPQdSw5XNtTnYSMrdI28o4WpJmAQj+2WaBp0Wqc=
-X-Google-Smtp-Source: ABdhPJzUnPBN9l/Y2AdbUDIDPvneXyP48DwCYsX+xUU1j44Q6NNL1ZFE5aT3mE3lVvIRb6Rl1XXrTt9dUtcLvo8ueAs=
-X-Received: by 2002:a05:6a00:8c8:b0:4fe:ecb:9b8f with SMTP id
- s8-20020a056a0008c800b004fe0ecb9b8fmr27136771pfu.55.1651020083481; Tue, 26
- Apr 2022 17:41:23 -0700 (PDT)
+        Tue, 26 Apr 2022 20:45:26 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF463983B
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651020136; x=1682556136;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jNsMWjM4vs7Vtp5MZVaIFqJd5qUnOZiY1Aa2iWmJdaU=;
+  b=Ej1oxgrNl/o8YO34Ohl1OCG+wLkVv5jAYVfh783Kk0OirYSFDNsvQZcR
+   nMj+AyDXSfdXyd5CXwynbEH9U77Zn1gjQ1ClFVpvU2h774tgiSUPxvVEy
+   nIkPVXioto6Sb9+f27fGAQNTO2Ix/CO1mAvuYE09TC3MGonOZPNQPTL22
+   YQAyS/3xlxcB4h8+TwqCzKBC0nbitibHz+uN9btyUoJBoZiY7KCEV5gr+
+   QUSWxVUFSsE3qKs/ZNJuuSuj9BAFF9jADK3UJ4PEJ1efaAAqHsMVRCzEE
+   r4r5fODXoB2n4XLladgpGtiW5/q9nEEwdwofrCZQigB5nnFllI9SHkpqG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326257819"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="326257819"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 17:42:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="532939259"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Apr 2022 17:42:14 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njVkz-00047S-QB;
+        Wed, 27 Apr 2022 00:42:13 +0000
+Date:   Wed, 27 Apr 2022 08:42:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fixes 1/5] (.text+0xcc): multiple definition of
+ `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+Message-ID: <202204270859.8vot8qLz-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220426081750.051179617@linuxfoundation.org>
-In-Reply-To: <20220426081750.051179617@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Tue, 26 Apr 2022 18:41:12 -0600
-Message-ID: <CAFU3qoZEOuhr=2vkn=edio76Z7taXX2hy7P0gYzfskD0rjPGng@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/146] 5.17.5-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 8:20 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.5 release.
-> There are 146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.5-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-Hi Greg,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
+head:   5630c6957e15ef4902c8635147b35092efd08a0a
+commit: 1776d7631a9bec5d7b3f08779be196875fb4eb62 [1/5] kallsyms: Fully export kallsyms_on_each_symbol function
+config: parisc-randconfig-r015-20220425 (https://download.01.org/0day-ci/archive/20220427/202204270859.8vot8qLz-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=1776d7631a9bec5d7b3f08779be196875fb4eb62
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fixes
+        git checkout 1776d7631a9bec5d7b3f08779be196875fb4eb62
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+All errors (new ones prefixed by >>):
 
-     Total time: 0.450 [sec]
+   hppa-linux-ld: init/do_mounts.o: in function `kallsyms_on_each_symbol':
+>> (.text+0xcc): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: init/noinitramfs.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: init/init_task.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/mm/fault.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/mm/fixmap.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/traps.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/time.o: in function `kallsyms_on_each_symbol':
+   (.text+0x10c): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/sys_parisc.o: in function `kallsyms_on_each_symbol':
+   (.text+0x5e0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/parisc_ksyms.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/process.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/patch.o: in function `kallsyms_on_each_symbol':
+   (.text+0xd4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/toc.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: arch/parisc/kernel/smp.o: in function `kallsyms_on_each_symbol':
+   (.text+0x34): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/fork.o: in function `kallsyms_on_each_symbol':
+   (.text+0xc90): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/exec_domain.o: in function `kallsyms_on_each_symbol':
+   (.text+0x30): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/panic.o: in function `kallsyms_on_each_symbol':
+   (.text+0x1f4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/cpu.o: in function `kallsyms_on_each_symbol':
+   (.text+0x15cc): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/exit.o: in function `kallsyms_on_each_symbol':
+   (.text+0xce0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/softirq.o: in function `kallsyms_on_each_symbol':
+   (.text+0x3dc): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/sysctl.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/capability.o: in function `kallsyms_on_each_symbol':
+   (.text+0x314): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/ptrace.o: in function `kallsyms_on_each_symbol':
+   (.text+0x8c4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/signal.o: in function `kallsyms_on_each_symbol':
+   (.text+0xb5c): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/sys.o: in function `kallsyms_on_each_symbol':
+   (.text+0x1530): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/umh.o: in function `kallsyms_on_each_symbol':
+   (.text+0x4c0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/pid.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/extable.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/nsproxy.o: in function `kallsyms_on_each_symbol':
+   (.text+0x2d4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/notifier.o: in function `kallsyms_on_each_symbol':
+   (.text+0x7c): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/cred.o: in function `kallsyms_on_each_symbol':
+   (.text+0x128): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/reboot.o: in function `kallsyms_on_each_symbol':
+   (.text+0x2e4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/groups.o: in function `kallsyms_on_each_symbol':
+   (.text+0x2c): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/sched/core.o: in function `kallsyms_on_each_symbol':
+   (.text+0x1678): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/sched/fair.o: in function `kallsyms_on_each_symbol':
+   (.text+0x698c): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/sched/build_policy.o: in function `kallsyms_on_each_symbol':
+   (.text+0x5250): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/sched/build_utility.o: in function `kallsyms_on_each_symbol':
+   (.text+0x35e4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/locking/semaphore.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/power/qos.o: in function `kallsyms_on_each_symbol':
+   (.text+0x78): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/power/process.o: in function `kallsyms_on_each_symbol':
+   (.text+0x5c): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/printk/printk.o: in function `kallsyms_on_each_symbol':
+   (.text+0x1ac0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/printk/printk_safe.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/rcu/update.o: in function `kallsyms_on_each_symbol':
+   (.text+0x2750): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/rcu/tree.o: in function `kallsyms_on_each_symbol':
+   (.text+0x4f98): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/kcmp.o: in function `kallsyms_on_each_symbol':
+   (.text+0x564): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/freezer.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/stacktrace.o: in function `kallsyms_on_each_symbol':
+   (.text+0xfc): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/time/time.o: in function `kallsyms_on_each_symbol':
+   (.text+0x0): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/time/timer.o: in function `kallsyms_on_each_symbol':
+   (.text+0xdb4): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/time/hrtimer.o: in function `kallsyms_on_each_symbol':
+   (.text+0xe90): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/time/timer_list.o: in function `kallsyms_on_each_symbol':
+   (.text+0x524): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
+   hppa-linux-ld: kernel/time/posix-timers.o: in function `kallsyms_on_each_symbol':
+   (.text+0x1790): multiple definition of `kallsyms_on_each_symbol'; init/main.o:(.text+0x0): first defined here
 
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 11.670 [sec]
-
-      11.670850 usecs/op
-          85683 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

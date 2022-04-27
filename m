@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F16511DB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5F6511E09
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbiD0QWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S243072AbiD0QWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243400AbiD0QTY (ORCPT
+        with ESMTP id S243385AbiD0QTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:19:24 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046C35D679
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:16:04 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l7so4442740ejn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:16:03 -0700 (PDT)
+        Wed, 27 Apr 2022 12:19:23 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890C3A0BCB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:16:05 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id g23so2505650edy.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4VzhkWiZCxUXRF8iX+xp5MfZBCcHCDwpOVdBeFnavlE=;
-        b=U1HBEC4cHR49LZJPnRWWK5GyEYH+FgfciW/s3I7EUYGqhlzXQGJz2Vrb/dTjPF2/o9
-         jzHB/vXO+QChU30hQu22ZfQlvP7Uf4l2oFJ/U7OSH+GoyiByPQZRhNfISFypO2EoPR0K
-         TXoHkihZBoKu2URuvf34R8k6hMFaYJPuxHoKQS1W+NybncDhdLAGwxAwLDQTq8zNfB6m
-         xS7sC2Rl4c4wlzaw/9RnGh1eKcZuVnu/hYx/Xvqpj6d810Ktp2BOQy7EVTTt0+Upl59A
-         LI3OxacDVkOZmCeqFbb8GJsI8ZoAIKtRqEzhlnXjIBgLSFkR59BUD0L0RA3NtUgX9VwL
-         gVgQ==
+        bh=ikx9HZ+yBGChQJqSXuq9OtG7Yyq5sAT2KIDRyjVy2Ew=;
+        b=k9lz0sQhbRTwPHt2muLKlXs9a5W5z2xtvBDrZ3E0nj9D2eC1AjA7FEpUxl0/v40NHT
+         wm61gDgL4blRe9F+iSoMzVnqzdbIbduB4aI0LEyo+Cd6386bJ6NtFjgQWzRStKWFHizZ
+         M/8hdEaSHjpYqmwiwUOk0MEUVfudG88JutG26cgXUkc9r1j2R1u69/v5MHBg79m3+fLK
+         ORpZA1HL8fN8khg05nIi/b8JMiojUAYb5RnOjkIFOdaJBxaIPdEOrCO73Juve/oS0mqH
+         OrJasXHsPa3r1gY4ABG/y+sa0S8F47v1dWxjYAM6HqDwk4DwU72+EDo0NxSwcvcIN0Va
+         Btkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4VzhkWiZCxUXRF8iX+xp5MfZBCcHCDwpOVdBeFnavlE=;
-        b=v/8bCpBqZx1MdozQ0/hdsHQgb4v5M39WhrlnjWzINSB0Ub+mQrb8b9XLW5kRuZEYV0
-         8FJQuVZ0XVCfSQeNnXxvkQlidCxOgQcmXOt+uUxFX2WL8EGXUNMNu/ymgNKhbazxXmfl
-         FN7eNV0nFF8uUgFVfYyo7ZfZOrMWjiJEyNA25iPEr+WzdtrhSpGfvJ+DflI4u4UfeRoi
-         7n9hF/ZgvNZ6KTqtZKOqjAs4BvgC1SdNG8sGIhSDGrBP2Fmu6vtILdC98DZZetiyeiNh
-         epadF0xM04tBwN+MpqJ9S3Y8/FNCcgA/Mpvni6PcY8lbs2cUe0weM4WzDks/+5FWqcCo
-         VvTQ==
-X-Gm-Message-State: AOAM532JXJDDy7RDyaAOh8wxDOmCuvOnQjEhGkOVctZ6x4s7vC6seJAj
-        1HoSr8dmWD5f4P6Rs7HnWSYM4w==
-X-Google-Smtp-Source: ABdhPJx+J4Fwg1jZEwuFrg1VMUFB/mcoAonFGOK4HecHtr8mYLo0eQf0a8XbCgNBKyZUSf0780iYqg==
-X-Received: by 2002:a17:906:3f83:b0:6f3:c1ca:9c72 with SMTP id b3-20020a1709063f8300b006f3c1ca9c72mr4736318ejj.539.1651076140638;
-        Wed, 27 Apr 2022 09:15:40 -0700 (PDT)
+        bh=ikx9HZ+yBGChQJqSXuq9OtG7Yyq5sAT2KIDRyjVy2Ew=;
+        b=AaD+TiYsl+mTXyyvfgPv+S39s2zHryIhB/4cggK5NodD4hg0X6otZfP07cYyIHGrrd
+         vhAy1w/lS/9zmEdMP6FQerX/vrYTy6CX4KOdgftU66VCN3jABATmgrJHiQvBQruVG7o1
+         jcRkOiM9MloBuATXAs41sOVt+bbA/4tjHcEzbVC4bwdUiqrnhj7g+b0Dgufa6G/DECLH
+         KIJL9KQ0FjNSVJL0gbHCTwW4xeEei0xp9+We/Ut8Cz9YGTXPFnEZ4k16O8/5ne+Up2Q3
+         0zY4G3ErBCFdO9dk/UWgEAImX1XzBWVsGiZ8nmb0SsaNxwRO86/9xw3f8PS1R08Exxo9
+         2Pvw==
+X-Gm-Message-State: AOAM533nre4f9hjsA2dMolAbsogbZSiUvUdYLnMEAYkyx3ERYROgVAzD
+        zEo61Hxy/QOU3/ss+p/jBt0nf31nyud4rw==
+X-Google-Smtp-Source: ABdhPJxBkczXJ03bluk/rb8a+lRgpdHRXkDsGrW8J/qjPIBcWncX4iSCWz3kGJJfzbZhBzuwpCm6sQ==
+X-Received: by 2002:a50:d707:0:b0:425:e37d:4ef3 with SMTP id t7-20020a50d707000000b00425e37d4ef3mr18981209edi.167.1651076141717;
+        Wed, 27 Apr 2022 09:15:41 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q17-20020a1709064cd100b006e78206fe2bsm7131192ejt.111.2022.04.27.09.15.39
+        by smtp.gmail.com with ESMTPSA id q17-20020a1709064cd100b006e78206fe2bsm7131192ejt.111.2022.04.27.09.15.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:15:40 -0700 (PDT)
+        Wed, 27 Apr 2022 09:15:41 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,9 +59,9 @@ To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] dt-bindings: dmaengine: fsl-imx: deprecate '#dma-channels' and '#dma-requests'
-Date:   Wed, 27 Apr 2022 18:15:32 +0200
-Message-Id: <20220427161533.647837-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] ARM: dts: imx27: use new 'dma-channels' property
+Date:   Wed, 27 Apr 2022 18:15:33 +0200
+Message-Id: <20220427161533.647837-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220427161533.647837-1-krzysztof.kozlowski@linaro.org>
 References: <20220427161533.647837-1-krzysztof.kozlowski@linaro.org>
@@ -76,40 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The generic properties, used in most of the drivers and defined in
-generic dma-common DT bindings, are 'dma-channels' and 'dma-requests'.
+The '#dma-channels' property was deprecated in favor of one defined by
+generic dma-common DT bindings.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/dma/fsl-imx-dma.txt | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/imx27.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/dma/fsl-imx-dma.txt b/Documentation/devicetree/bindings/dma/fsl-imx-dma.txt
-index 7bd8847d6394..1c9929d53727 100644
---- a/Documentation/devicetree/bindings/dma/fsl-imx-dma.txt
-+++ b/Documentation/devicetree/bindings/dma/fsl-imx-dma.txt
-@@ -13,8 +13,10 @@ Required properties:
- - #dma-cells : Has to be 1. imx-dma does not support anything else.
+diff --git a/arch/arm/boot/dts/imx27.dtsi b/arch/arm/boot/dts/imx27.dtsi
+index fd525c3b16fa..b660c7d05584 100644
+--- a/arch/arm/boot/dts/imx27.dtsi
++++ b/arch/arm/boot/dts/imx27.dtsi
+@@ -96,7 +96,7 @@ dma: dma@10001000 {
+ 					 <&clks IMX27_CLK_DMA_AHB_GATE>;
+ 				clock-names = "ipg", "ahb";
+ 				#dma-cells = <1>;
+-				#dma-channels = <16>;
++				dma-channels = <16>;
+ 			};
  
- Optional properties:
--- #dma-channels : Number of DMA channels supported. Should be 16.
--- #dma-requests : Number of DMA requests supported.
-+- dma-channels : Number of DMA channels supported. Should be 16.
-+- #dma-channels : deprecated
-+- dma-requests : Number of DMA requests supported.
-+- #dma-requests : deprecated
- 
- Example:
- 
-@@ -23,7 +25,7 @@ Example:
- 		reg = <0x10001000 0x1000>;
- 		interrupts = <32 33>;
- 		#dma-cells = <1>;
--		#dma-channels = <16>;
-+		dma-channels = <16>;
- 	};
- 
- 
+ 			wdog: watchdog@10002000 {
 -- 
 2.32.0
 

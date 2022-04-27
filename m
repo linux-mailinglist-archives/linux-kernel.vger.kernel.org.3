@@ -2,131 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A874D51170A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B55511770
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiD0MVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S233825AbiD0MWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiD0MVj (ORCPT
+        with ESMTP id S233707AbiD0MWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:21:39 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE291209B
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651061908; x=1682597908;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U1KrAkavk/Tr6dLOtxSQIS3x9A2FmpeLGm4giGjTM2o=;
-  b=KImogeBbkLowRxNGCRpO25N1A/QVVEAvVTUuCsO9R+lWdEjPv5bupzjx
-   l9Ua8XtUOICctcTYJ/km2o8PBFbwhuyZiVdW6HDex0SXF9cVS2Qf83hNO
-   Tel1PAaGeOnHAcmHg3x0FfN+L1BWnEUZA0Tg1elZ0ImO+PxlV6IKnRa/B
-   QT5IcmG9fBbSKfaUGhCv1g7FqrEmELM/y3km5W9MjrTXPraJbgJ/XdPWz
-   jsNVB2BN5jmzy6YhQ7wIkowVY8zMx0kPXwfVRG2wV/0LHFUsD+JNwQ2+9
-   SMoCQKbteNDSuh6qWs8vMu6IHCaXyaNSruD26FHgZzCl6wNzjpprk1fuS
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="246471823"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="246471823"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 05:18:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="876392050"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Apr 2022 05:18:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njgci-0004eE-9P;
-        Wed, 27 Apr 2022 12:18:24 +0000
-Date:   Wed, 27 Apr 2022 20:18:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, glider@google.com, elver@google.com,
-        akpm@linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, dvyukov@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] mm/kfence: fix a potential NULL pointer dereference
-Message-ID: <202204272015.3JRd9BKR-lkp@intel.com>
-References: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
+        Wed, 27 Apr 2022 08:22:12 -0400
+Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 621EE1C100
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:19:00 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
+ s=smtp; t=1651061940; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
+ Sender: Sender; bh=lDHZNe0nT4irW3eTAgNGDWgdYeKIe/kVZL3tOBWwFRU=; b=i+SX0qnVpz9a+sxTllPXgem9lldxfb7q8yb4Yf92XPXPLGER3B7C9x2DC+KRaRpntSYpPLJm
+ 5DrSYYzQUimsQaGU9eloyby/vycRjyZ/TFpHubicS/WYyuaFZZDdfRv+5oc770NfaCzWC6/e
+ 5aYbOQNvzWjED0EbYYpgN/NzFWsFFfX7p8fc+CgzZmeyNM7gTQTAQUR0XP40hpot1pONSpqq
+ bLjHUfqvhiJoIhj1b3xdK06qbQdAcK0b9KAe/erHv9vMQDwLV0qYiSNhGaxsweJad8w7NVhU
+ HvvEvtxhzDUmdXiaHPpsMgTi3UcUK9vXhRm/54mjv9+62x5f2uLXDQ==
+X-Mailgun-Sending-Ip: 159.135.228.13
+X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
+Received: from AN5Bruno (dynamic-user.170.84.57.140.mhnet.com.br
+ [170.84.57.140]) by smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 626934b2e2ec060808280996 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Wed, 27 Apr 2022 12:18:58 GMT
+Sender: codeagain@codeagain.dev
+Date:   Wed, 27 Apr 2022 09:18:51 -0300
+From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
+Message-ID: <20220427121851.4e2rjbbabw5sh3lk@AN5Bruno>
+References: <cover.1650321310.git.codeagain@codeagain.dev>
+ <YmA4QIRfx2QPhEJi@kroah.com>
+ <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
+ <YmJNqMjXEc4KGrJ8@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ozx2ugy2xoiesmr2"
 Content-Disposition: inline
-In-Reply-To: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmJNqMjXEc4KGrJ8@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Thank you for the patch! Yet something to improve:
+--ozx2ugy2xoiesmr2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on hnaz-mm/master]
+Hello,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
-base:   https://github.com/hnaz/linux-mm master
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220427/202204272015.3JRd9BKR-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/920e9e639493bc72bee803c763f09760e3acd063
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
-        git checkout 920e9e639493bc72bee803c763f09760e3acd063
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri, Apr 22, 2022 at 08:39:36AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Apr 21, 2022 at 08:16:05PM +0100, Martyn Welch wrote:
+> > On Wed, 2022-04-20 at 18:43 +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wrote:
+> > > > This patch series modify the vme_user driver's place in
+> > > > menuconfig (1/3), fixes a missing `depends on` line in a Kconfig
+> > > > file
+> > > > (2/3), and rearrages the directory tree for the driver allowing a
+> > > > more
+> > > > straightforward comprehension of its contents (3/3).
+> > > >=20
+> > > > The 'vme_user/' driver is the only remaining vme-family driver in
+> > > > the
+> > > > 'staging/' tree, but its structure, entry in menuconfig and
+> > > > building
+> > > > routines are still attached to the 'vme/' subtree now outside
+> > > > 'staging/'. The present patchset fixes it.
+> > > >=20
+> > > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+> > >=20
+> > > What about deleting the vme drivers entirely?
+> >=20
+> > I assume you're suggesting deleting the "vme_user" driver from the
+> > staging directory?
+>=20
+> Yes, at the very least given that no one has tried to fix it up and get
+> it out of staging in many years.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+While I cannot comment anything on that regard, I imagine the v4 I sent
+a couple of days ago will wait for that decision, right?
 
-All errors (new ones prefixed by >>):
+Should I prepare a patch removing them and also submit so when it's
+decided you can just pick one patch or the other?
 
->> mm/kfence/core.c:1067:23: error: use of undeclared identifier 'addr'
-                   kfence_guarded_free(addr, meta, false);
-                                       ^
-   mm/kfence/core.c:1075:23: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
-                   kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
-                                       ^~~~
-   mm/kfence/kfence.h:129:40: note: passing argument to parameter 'address' here
-   void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *regs,
-                                          ^
-   1 warning and 1 error generated.
+>=20
+> > > Martyn, anyone still using these?
+> > >=20
+> >=20
+> > I'm fairly sure that the actual VME drivers for the hardware bridges
+> > (the bits not in staging) are still being used based on the
+> > conversations I've had today. I'm just trying to find out whether the
+> > vme_user bit is actively being used.
+>=20
+> If the non-staging vme drivers are still being used, that's great.  But
+> if not, those too should be dropped.
+>=20
+> thanks,
+>=20
+> greg k-h
 
+--ozx2ugy2xoiesmr2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +/addr +1067 mm/kfence/core.c
+-----BEGIN PGP SIGNATURE-----
 
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1050  
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1051  
-920e9e639493bc7 xu xin              2022-04-27  1052  /* Require: meta is not NULL*/
-920e9e639493bc7 xu xin              2022-04-27  1053  static __always_inline void __try_free_kfence_meta(struct kfence_metadata *meta)
-920e9e639493bc7 xu xin              2022-04-27  1054  {
-8f0b36497303487 Muchun Song         2022-04-01  1055  #ifdef CONFIG_MEMCG
-8f0b36497303487 Muchun Song         2022-04-01  1056  	KFENCE_WARN_ON(meta->objcg);
-8f0b36497303487 Muchun Song         2022-04-01  1057  #endif
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1058  	/*
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1059  	 * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1060  	 * the object, as the object page may be recycled for other-typed
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1061  	 * objects once it has been freed. meta->cache may be NULL if the cache
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1062  	 * was destroyed.
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1063  	 */
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1064  	if (unlikely(meta->cache && (meta->cache->flags & SLAB_TYPESAFE_BY_RCU)))
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1065  		call_rcu(&meta->rcu_head, rcu_guarded_free);
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1066  	else
-0ce20dd840897b1 Alexander Potapenko 2021-02-25 @1067  		kfence_guarded_free(addr, meta, false);
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1068  }
-0ce20dd840897b1 Alexander Potapenko 2021-02-25  1069  
+iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYmk0qwAKCRAZtd3tyEY2
+kpwYAQCrlryNZKRr4pjYMNYiw16wCWeN/FdxcwJ91tpjk1knhQD/USmN0/PzLk72
+ZMTB2vAScMsQQzm7elD4Ag3eBLrmqQU=
+=RKaF
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--ozx2ugy2xoiesmr2--

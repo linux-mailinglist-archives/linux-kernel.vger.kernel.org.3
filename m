@@ -2,179 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799CE511A97
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E992E511A52
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237265AbiD0OMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S237278AbiD0OM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237151AbiD0OMf (ORCPT
+        with ESMTP id S237151AbiD0OMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:12:35 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE1E4EDFF
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:09:23 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v12so2656463wrv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w6MIU62TYksZWfBnvqlAQQAOrtOE9xpl7EDu9WVwdGc=;
-        b=DYYHPev7usMe37yDVn5rCV6Kxws3GlY7tSGUDtnzkUrf5nsvozh9CqCWA6fWWX2zM9
-         pcLAZSxt5+XSccxZx4IjnUX9MbluDu5oA6HwMzvWm+P9IC1fbSuRrWF7I+HgV9WEkM4r
-         mOjnzk+j5ymUmOcaKxCXMnM+uCCCK5AQgE1fEoomXLaklNIYvbQWFS1JW8Fy4oaeb2RD
-         odZRk8INXz+Cd1vwGhba3F2tnNErpLnM7ERbGIX/NZiHCvOWQCXy7P9Z0E1WgC0vf4fJ
-         M9xtHXq5r9N4orwL1WnCdSwZEbgxerg9sLRxHOP6m0yJ3RAxTvjDR3ylRZLSI/gOFmgp
-         pkfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w6MIU62TYksZWfBnvqlAQQAOrtOE9xpl7EDu9WVwdGc=;
-        b=aOxw+VN5jmN3KG9oku93QxYSQcJ+Yxp39QErgylsugVzD1G7J3x72soTpBr4SsW+IA
-         He8L0kKn8YUw+/HDWMh6F23n2l5MP+2e8O+eS8mp57dfjzS934N92MG3thGRUJL00jeo
-         /svZK3uDDOXJZ+d1ym4f6V66j2Dzhn/MomXrabv9+StgpsfVwmLWNpEF/ckgZFJo7pIC
-         3fReiJ2tmj7VRuyd3mAY0nezWfR5NlfQtPhCda/9lae1iUQVegAg9JIU9XLosHdYpvG2
-         pUiwls0jHa7Q9XvGTxQPi9A7drYb0el3Guv1AyuV4pfX4SV9+Q0HtlgLo7D8U/IrkTNx
-         u1/Q==
-X-Gm-Message-State: AOAM533cLtne7NI/u/shbenW9JEcj10ndmGaxM+QprMdiQOSzwpt6gK3
-        XZ6Q6Rd2w2gV1XjPe1lOWP5UHw==
-X-Google-Smtp-Source: ABdhPJx/N+hPRow/KIghfV1v359Zgeg0Nq19B5KVFxgMbSb7LhSDyBq95ktk1O7bDXKfdtLnWqMSUA==
-X-Received: by 2002:a5d:54c4:0:b0:20a:d2ea:1f7f with SMTP id x4-20020a5d54c4000000b0020ad2ea1f7fmr17036040wrv.306.1651068561724;
-        Wed, 27 Apr 2022 07:09:21 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id e30-20020adf9bde000000b0020ad8ffb0f9sm8723818wrc.69.2022.04.27.07.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:09:21 -0700 (PDT)
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v3] drm/cma-helper: Describe what a "contiguous chunk" actually means
-Date:   Wed, 27 Apr 2022 15:09:10 +0100
-Message-Id: <20220427140910.1735188-1-daniel.thompson@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 27 Apr 2022 10:12:24 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0039E4EDF1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651068553; x=1682604553;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KWtSzk6XLIEmgrFCdr2CVRtw4pCvRrQiE+rGfmmtx2M=;
+  b=EQNwsmU5M5hP1SY3UDt7P2OOimYfS7NwqP5A2+HSp8rqxoA3cd2I0L5I
+   b2ffhwVfK3YV3cYFdHl3WI+xsXsUCW/asQ58ILghrEZyG0xVdS5vY8SBL
+   BJCVjd1It1+ptXbtGNIkXIe2RAMxpe79HrgQkY2Le7W/Q7/J/ZCxTvh+m
+   3G2tNrzk2KXuEMDJzGYNjMFsSvJVOKRrJOe6jxcV4i9V3/SzphjUBeFCd
+   undCKDgx8cuQ0RnXoUoChQPVhkj3XWuTHWJT/5EpwLpKyHaKXZXJLQvbv
+   2iq+Z5oZ41LHzoFYI11/fZR1lAoSHL242Weam1uKtb5skz5/wwdq9Jzsj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265748382"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="265748382"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:09:12 -0700
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="730815345"
+Received: from jsaetton-mobl1.amr.corp.intel.com (HELO [10.209.41.167]) ([10.209.41.167])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:09:11 -0700
+Message-ID: <505b210f-1a4e-4cda-e1ba-920969326461@linux.intel.com>
+Date:   Wed, 27 Apr 2022 07:09:11 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
+ <405a4f3c-3d49-f3c2-441b-8d8b9d5eec23@linux.intel.com>
+ <c31059e479307b347decd1eff1d3a9568b19b613.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <c31059e479307b347decd1eff1d3a9568b19b613.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since it's inception in 2012 it has been understood that the DRM GEM CMA
-helpers do not depend on CMA as the backend allocator. In fact the first
-bug fix to ensure the cma-helpers work correctly with an IOMMU backend
-appeared in 2014. However currently the documentation for
-drm_gem_cma_create() talks about "a contiguous chunk of memory" without
-making clear which address space it will be a contiguous part of.
-Additionally the CMA introduction is actively misleading because it only
-contemplates the CMA backend.
 
-This matters because when the device accesses the bus through an IOMMU
-(and don't use the CMA backend) then the allocated memory is contiguous
-only in the IOVA space. This is a significant difference compared to the
-CMA backend and the behaviour can be a surprise even to someone who does
-a reasonable level of code browsing (but doesn't find all the relevant
-function pointers ;-) ).
 
-Improve the kernel doc comments accordingly.
+On 4/26/22 9:28 PM, Kai Huang wrote:
+> 
+>>
+>> How about the following summary? It includes important notes mentioned
+>> by you and some more driver info.
+> 
+> Yes fine to me, except minor comments below:
+> 
+>>
+>> x86/tdx: Add TDX Guest attestation interface driver
+>>
+>> In TDX guest, attestation is used to verify the trustworthiness of a TD
+>> to other entities before provisioning secrets to the TD.
+>>
+>> One usage example is, when a TD guest uses encrypted drive and if the
+>> decryption keys required to access the drive are stored in a secure 3rd
+>> party key server, the key server can use attestation to verify TD's
+>> trustworthiness and release the decryption keys to the TD.
+>>
+>> The attestation process consists of two steps: TDREPORT generation and
+>> Quote generation.
+>>
+>> TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+>> the TDX module which contains TD-specific information (such as TD
+>> measurements), platform security version, and the MAC to protect the
+>> integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+>> get the TDREPORT from the TDX module. A user-provided 64-Byte
+>> REPORTDATA is used as input and included in the TDREPORT. Typically it
+>> can be some nonce provided by attestation service so the TDREPORT can
+>> be verified uniquely. More details about TDREPORT can be found in
+>> Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+>>
+>> After getting the TDREPORT, the second step of the attestation process
+>> is to send the TDREPORT to Quoting Enclave (QE) or Quote Generation
+>> Service (QGS) to generate the Quote. However, the method of sending the
+>> TDREPORT to QE/QGS, communication channel used and data format used is
+>> specific to the implementation of QE/QGS.
+>>
+>> A typical implementation is, TD userspace attestation software gets the
+>> TDREPORT from TD kernel, sends it to QE/QGS, and QE/QGS returns the
+>> Quote. TD attestation software can use any available communication
+>> channel to talk to QE/QGS, such as using vsock and tcp/ip.
+>>
+>> To support the case that those communication channels are not directly
+>> available to the TD, TDX also defines TDVMCALL
+>> (TDG.VP.VMCALL<GetQuote>) to allow TD to ask VMM to help with sending
+>> the TDREPORT and receiving the Quote. This support is documented in the
+>> GHCI spec section titled "5.4 TD attestation".
+> 
+> I intentionally omitted to mention TDG.VP.VMCALL<GetQuote> as I personally
+> believe there are still couple issues around GetQuote that we haven't discussed
+> thoroughly (timeout, etc).  I am still considering whether we should change GHCI
+> to use TDG.VP.VMCALL<Service> defined in GHCI 1.5 for attestation.  And the name
+> of TDVMCALL doesn't actually matter here, so I think we don't need to mention
+> GetQuote here but just say we have TDVMCALLs for that.
 
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
----
+Ok.
 
-Notes:
-    RESEND is unaltered but rebased on v5.18-rc3.
-    
-    Changes in v3:
-    - Rebased on v5.17-rc2
-    - Minor improvements to wording.
-    
-    Changes in v2:
-    - Oops. I did a final proof read and accidentally committed these
-      changes as a seperate patch. This means that v1 contains only
-      one tenth of the actual patch. This is fixed in v2. Many apologies
-      for the noise!
+> 
+>>
+>> Implement a basic attestation driver to allow TD userspace to get the
+>> TDREPORT, which is sent to QE by the attestation software to generate
+>> a Quote for remote verification. Add a wrapper function
+>> (tdx_mcall_tdreport()) to get the TDREPORT from the TDX Module. This
+>> API will be used by the interface driver to request for TDREPORT.
+> 
+> I don't think you need to mention tdx_mcall_tdreport().
 
- drivers/gpu/drm/drm_gem_cma_helper.c | 39 +++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 10 deletions(-)
+Ok. Will remove it.
 
-diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
-index f36734c2c9e1..42abee9a0f4f 100644
---- a/drivers/gpu/drm/drm_gem_cma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-@@ -26,12 +26,22 @@
- /**
-  * DOC: cma helpers
-  *
-- * The Contiguous Memory Allocator reserves a pool of memory at early boot
-- * that is used to service requests for large blocks of contiguous memory.
-+ * The DRM GEM/CMA helpers are a means to provide buffer objects that are
-+ * presented to the device as a contiguous chunk of memory. This is useful
-+ * for devices that do not support scatter-gather DMA (either directly or
-+ * by using an intimately attached IOMMU).
-  *
-- * The DRM GEM/CMA helpers use this allocator as a means to provide buffer
-- * objects that are physically contiguous in memory. This is useful for
-- * display drivers that are unable to map scattered buffers via an IOMMU.
-+ * Despite the name, the DRM GEM/CMA helpers are not hardwired to use the
-+ * Contiguous Memory Allocator (CMA).
-+ *
-+ * For devices that access the memory bus through an (external) IOMMU then
-+ * the buffer objects are allocated using a traditional page-based
-+ * allocator and may be scattered through physical memory. However they
-+ * are contiguous in the IOVA space so appear contiguous to devices using
-+ * them.
-+ *
-+ * For other devices then the helpers rely on CMA to provide buffer
-+ * objects that are physically contiguous in memory.
-  *
-  * For GEM callback helpers in struct &drm_gem_object functions, see likewise
-  * named functions with an _object_ infix (e.g., drm_gem_cma_object_vmap() wraps
-@@ -111,8 +121,14 @@ __drm_gem_cma_create(struct drm_device *drm, size_t size, bool private)
-  * @drm: DRM device
-  * @size: size of the object to allocate
-  *
-- * This function creates a CMA GEM object and allocates a contiguous chunk of
-- * memory as backing store.
-+ * This function creates a CMA GEM object and allocates memory as backing store.
-+ * The allocated memory will occupy a contiguous chunk of bus address space.
-+ *
-+ * For devices that are directly connected to the memory bus then the allocated
-+ * memory will be physically contiguous. For devices that access through an
-+ * IOMMU, then the allocated memory is not expected to be physically contiguous
-+ * because having contiguous IOVAs is sufficient to meet a devices DMA
-+ * requirements.
-  *
-  * Returns:
-  * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
-@@ -162,9 +178,12 @@ EXPORT_SYMBOL_GPL(drm_gem_cma_create);
-  * @size: size of the object to allocate
-  * @handle: return location for the GEM handle
-  *
-- * This function creates a CMA GEM object, allocating a physically contiguous
-- * chunk of memory as backing store. The GEM object is then added to the list
-- * of object associated with the given file and a handle to it is returned.
-+ * This function creates a CMA GEM object, allocating a chunk of memory as
-+ * backing store. The GEM object is then added to the list of object associated
-+ * with the given file and a handle to it is returned.
-+ *
-+ * The allocated memory will occupy a contiguous chunk of bus address space.
-+ * See drm_gem_cma_create() for more details.
-  *
-  * Returns:
-  * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
+> 
+>>
+>> Also note that explicit access permissions are not enforced in this
+>> driver because the quote and measurements are not a secret. However
+>> the access permissions of the device node can be used to set any
+>> desired access policy. The udev default is usually root access
+>> only.
+>>
+>>
+>>
+>>
+> 
 
-base-commit: b2d229d4ddb17db541098b83524d901257e93845
---
-2.35.1
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

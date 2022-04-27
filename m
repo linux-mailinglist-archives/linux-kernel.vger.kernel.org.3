@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EC2510E32
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C48A510E10
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356890AbiD0Bne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S1356916AbiD0Bnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356851AbiD0BnZ (ORCPT
+        with ESMTP id S1356860AbiD0Bn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:43:25 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E32B85B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:15 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id g5-20020a62e305000000b0050d2dba0c5dso244451pfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:15 -0700 (PDT)
+        Tue, 26 Apr 2022 21:43:27 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D277EDF56
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:16 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id m6-20020a17090a730600b001d9041534e4so138377pjk.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=Opu+r9cOj6vT5KVW7KE10AooN5kbCr3+qYloyBaXyY0=;
-        b=pCoA5OZvIkGwUDXcUDFUnJWZ4yNderLkQHzBEEJnoDg4MLvr+dbdQPnq9p+ywSaqsh
-         LMWwqpDiuV9k7JKmTpIdQD5k7cwQEr7hvvsgh6aiN8TiSwC9QO6kk1xYncpE7raOsBne
-         owTGoiSMe+lPp6h/S3/pfPUvftLqjxzLkgkkNEn8UJBG/BKLCjGYFyUDRjjVX6A/eTPe
-         gY/oLZJXNOJTmJ5MN9NsnzaycIEMHMM41BGNvrhOmn0OfPWwTcBPj4urwHa+UVAuI59k
-         p1ykzFr5pi2UUhJNIWf1l7dsMPQcPRj4uPWjqv4SoFDPWlCuMLLnExc9A5Euke3FFD4a
-         XIWw==
+        bh=rawRdx79XoHw8u43omV3BLmCVZwqFd6EN+RncnsvFlQ=;
+        b=Wy77UfIaH1Mz9LQ3+COp24Uf6HTFpZN3jikhvs5fDCb3iOPjgt5BDq5JW28/5uZEgW
+         EfhDviZS9N2Rj9bFTfA2iNGMgNU0M9nHiAUnW16ps6fAaocJBj1JFneqZOYBNnH0/D2o
+         v0RwN8ACclFIH5cHcM4vRBa3fTFlm1cgcGo6O+BP0xyTbp0LHTVecQhWa/mX7GfSj9s9
+         WL8GrinfpesY+cgz5KFFUpm76wbH4242+dMvlTM5l9y/Flz4ffOG+o7khGfNHZDpAKFH
+         Y8F4dIVBmZOPCGCR1dxkxSNv93kBBXZZSnt1urN6U1Mk0+7lpfW1wI0RETVqjnc5Ut8i
+         M2jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=Opu+r9cOj6vT5KVW7KE10AooN5kbCr3+qYloyBaXyY0=;
-        b=yFCrB/PSaAP8z9GqWtsV9PkHcBLBoHB/s84/QJsGgCLfDGxdSVmQhfKpHDrdSwn/X1
-         6ot8U8h5aCKVrmp22EuO82mAonZ8r0oun3WQMURreAer5/aiKkH9sqjhzQRuRbsWxmgr
-         l6Npyta1+Iz57ID0e8tze9vXjgrFBtubncM6bDeiu/5whwJcesL6ANRsPS+sm7ExMN/J
-         sIK0K5QKTsbKJ9HaIAaxMz9zS77r7iXRCt3sQl69ho0aqGJyzkNIWzFA9Y5Ba7tnX1Rk
-         Rqs7HKKK4al3J/ts2cr4dGyCzuKXk7+WPAqxeqAQRgu9zHx202M0K6t83ZxWXOowyV7A
-         u/Bw==
-X-Gm-Message-State: AOAM5318+NxZxLtMEe2r8qckOD9ddY+TxupHV+vpwVUtL/xOO0QhIXbc
-        /29dmFi0fueIStmu5wx5CjI9UcACJ+A=
-X-Google-Smtp-Source: ABdhPJyJqSr1Vq440G+8O1KTekBdnigW1j3j4RPrpD5Zi5tno8mWT29k/0lTWCZWBPDEcV0Avyu7dUCzW/M=
+        bh=rawRdx79XoHw8u43omV3BLmCVZwqFd6EN+RncnsvFlQ=;
+        b=iPFuvoOjejKZlp3JYF46RJSchyGfGTTDEMcbxAK22o8U5zPGp8VfiVE6OAqJavMRh0
+         xjtfKHdty0t3D9HOAoQ1xd8c5a45O2iS4aG8LuX5Dk+xPu0Q1y9d73qXhiwUuYyYOOfd
+         8GASWmCHXOFzV7j+7ro0Yi9Vp01Hmzv1Hzekrk4+bUfy86ie3/Bur/ne6I3t4OSVQ1TQ
+         tHRKka3QJUPIF7imBVJJkX0p+6I1fz6qfSVL3MTBjlDqF71Q7FR9TsZJ7LUk0qJRO2FB
+         oJUwovdLi2aCBEYKbCvkc60bIe/+OhZhrLYWBElQgdVM74Hj/rEbc4Z1xcZ9Z2sCwk/R
+         3qAg==
+X-Gm-Message-State: AOAM5305SniRd29rEnR1Z/JScFd6E/WMTqESP5dPEwlQD5+qECfGMsrT
+        YDqN0z9xByn8PnE0L6tQ3RJbL73Ic7s=
+X-Google-Smtp-Source: ABdhPJxHu98OqKrbCDEoXrAFUU0bOj8alASiiDJ2JP3PBWJVsUZI7J3kcLtf88ASn3gUX5Vp4RckwrphTes=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:ad0:b0:4f7:a357:6899 with SMTP id
- c16-20020a056a000ad000b004f7a3576899mr27437539pfl.80.1651023614625; Tue, 26
- Apr 2022 18:40:14 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:cf:b0:1d9:44ad:2607 with SMTP id
+ v15-20020a17090a00cf00b001d944ad2607mr20399981pjd.25.1651023616264; Tue, 26
+ Apr 2022 18:40:16 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 27 Apr 2022 01:39:59 +0000
+Date:   Wed, 27 Apr 2022 01:40:00 +0000
 In-Reply-To: <20220427014004.1992589-1-seanjc@google.com>
-Message-Id: <20220427014004.1992589-4-seanjc@google.com>
+Message-Id: <20220427014004.1992589-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220427014004.1992589-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 3/8] KVM: Drop unused @gpa param from gfn=>pfn cache's
- __release_gpc() helper
+Subject: [PATCH v2 4/8] KVM: Put the extra pfn reference when reusing a pfn in
+ the gpc cache
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -76,81 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the @pga param from __release_gpc() and rename the helper to make it
-more obvious that the cache itself is not being released.  The helper
-will be reused by a future commit to release a pfn+khva combination that
-is _never_ associated with the cache, at which point the current name
-would go from slightly misleading to blatantly wrong.
+Put the struct page reference to pfn acquired by hva_to_pfn() when the
+old and new pfns for a gfn=>pfn cache match.  The cache already has a
+reference via the old/current pfn, and will only put one reference when
+the cache is done with the pfn.
 
-No functional change intended.
-
+Fixes: 982ed0de4753 ("KVM: Reinstate gfn_to_pfn_cache with invalidation support")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/pfncache.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ virt/kvm/pfncache.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index dd84676615f1..e05a6a1b8eff 100644
+index e05a6a1b8eff..40cbe90d52e0 100644
 --- a/virt/kvm/pfncache.c
 +++ b/virt/kvm/pfncache.c
-@@ -95,7 +95,7 @@ bool kvm_gfn_to_pfn_cache_check(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- }
- EXPORT_SYMBOL_GPL(kvm_gfn_to_pfn_cache_check);
+@@ -206,6 +206,14 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
  
--static void __release_gpc(struct kvm *kvm, kvm_pfn_t pfn, void *khva, gpa_t gpa)
-+static void gpc_release_pfn_and_khva(struct kvm *kvm, kvm_pfn_t pfn, void *khva)
- {
- 	/* Unmap the old page if it was mapped before, and release it */
- 	if (!is_error_noslot_pfn(pfn)) {
-@@ -146,7 +146,6 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- 	unsigned long page_offset = gpa & ~PAGE_MASK;
- 	kvm_pfn_t old_pfn, new_pfn;
- 	unsigned long old_uhva;
--	gpa_t old_gpa;
- 	void *old_khva;
- 	bool old_valid;
- 	int ret = 0;
-@@ -160,7 +159,6 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- 
- 	write_lock_irq(&gpc->lock);
- 
--	old_gpa = gpc->gpa;
- 	old_pfn = gpc->pfn;
- 	old_khva = gpc->khva - offset_in_page(gpc->khva);
- 	old_uhva = gpc->uhva;
-@@ -244,7 +242,7 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
-  out:
- 	write_unlock_irq(&gpc->lock);
- 
--	__release_gpc(kvm, old_pfn, old_khva, old_gpa);
-+	gpc_release_pfn_and_khva(kvm, old_pfn, old_khva);
- 
- 	return ret;
- }
-@@ -254,14 +252,12 @@ void kvm_gfn_to_pfn_cache_unmap(struct kvm *kvm, struct gfn_to_pfn_cache *gpc)
- {
- 	void *old_khva;
- 	kvm_pfn_t old_pfn;
--	gpa_t old_gpa;
- 
- 	write_lock_irq(&gpc->lock);
- 
- 	gpc->valid = false;
- 
- 	old_khva = gpc->khva - offset_in_page(gpc->khva);
--	old_gpa = gpc->gpa;
- 	old_pfn = gpc->pfn;
- 
- 	/*
-@@ -273,7 +269,7 @@ void kvm_gfn_to_pfn_cache_unmap(struct kvm *kvm, struct gfn_to_pfn_cache *gpc)
- 
- 	write_unlock_irq(&gpc->lock);
- 
--	__release_gpc(kvm, old_pfn, old_khva, old_gpa);
-+	gpc_release_pfn_and_khva(kvm, old_pfn, old_khva);
- }
- EXPORT_SYMBOL_GPL(kvm_gfn_to_pfn_cache_unmap);
- 
+ 		if (gpc->usage & KVM_HOST_USES_PFN) {
+ 			if (new_pfn == old_pfn) {
++				/*
++				 * Reuse the existing pfn and khva, but put the
++				 * reference acquired hva_to_pfn_retry(); the
++				 * cache still holds a reference to the pfn
++				 * from the previous refresh.
++				 */
++				gpc_release_pfn_and_khva(kvm, new_pfn, NULL);
++
+ 				new_khva = old_khva;
+ 				old_pfn = KVM_PFN_ERR_FAULT;
+ 				old_khva = NULL;
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 

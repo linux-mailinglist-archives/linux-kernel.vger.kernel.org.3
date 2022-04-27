@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DB951204E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0523D511E62
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241727AbiD0QG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S240612AbiD0P4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241543AbiD0QGw (ORCPT
+        with ESMTP id S240756AbiD0P4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:06:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA183C9D7D;
-        Wed, 27 Apr 2022 09:03:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651075380; x=1682611380;
-  h=from:to:cc:subject:date:message-id;
-  bh=VYULZm1ptnSTDWX7g9iwC8F1X12CH5Sh9VvlyVesL2U=;
-  b=kLvGfw2WrVFj7l2PBxJzqfWpxLmd2WRHbQujR/vCH+7Yu4ozN5zepqO+
-   PSdS/4pa8r7dfE1YQ/VnrbEzJfz5c8fb8mt/vl1NopxMRjyC0LHWdBO5c
-   Y+NG2QfZBgVjjk7/029Hj4L6tziSGyhmHuhEpBqvl7wRdrWM4ZXriGeMT
-   LqXJsznOzTF3PUQF72tVsEgs/zLxOKITVHxg/wUNY264/+CrcwSqShsur
-   /lv1rw/hqUQxUrWJQn80G/ljk88TdTwO5xFz0GuTNU4knecF1qztJylQL
-   u0YrAkPxjXdl33iA36V8agoG4VaZc5hN2knQyQZ2HNbfWaR4xeWb5btPt
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="291131603"
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="291131603"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 08:53:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="808096549"
-Received: from srpawnik.iind.intel.com ([10.99.123.68])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Apr 2022 08:53:37 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rafael@kernel.org, lenb@kernel.org,
-        srinivas.pandruvada@linux.intel.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sumeet.r.pawnikar@intel.com
-Subject: [PATCH] ACPI: DPTF: Add support for high frequency impedance notification
-Date:   Wed, 27 Apr 2022 21:21:30 +0530
-Message-Id: <20220427155130.8023-1-sumeet.r.pawnikar@intel.com>
+        Wed, 27 Apr 2022 11:56:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E052E5C856;
+        Wed, 27 Apr 2022 08:52:46 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23RFqa9i105503;
+        Wed, 27 Apr 2022 10:52:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651074756;
+        bh=AGwHr63dkHByuCbiAEYx8LTa4so2luoxXPgXEdZuoxI=;
+        h=From:To:CC:Subject:Date;
+        b=VyoJxTYa9QtwVR738EMH851+JUT2xkx3RAcnZb6VXlu3X3ORwdxtgBrkZ8HetlTdn
+         bNVpLYglJRvuNf8M1+RppTmvant5qfGVbGNbK3CKsqOy01N2qJqPUe/PVxFSokO66I
+         9Om0g3LEj10f3ILbJ2FOnIhBYp435g3JRQxHqi40=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23RFqaXB030263
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 27 Apr 2022 10:52:36 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
+ Apr 2022 10:52:35 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 27 Apr 2022 10:52:35 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23RFqYP9044524;
+        Wed, 27 Apr 2022 10:52:35 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>,
+        <r-ravikumar@ti.com>
+Subject: [PATCH 0/2] Add support for DP and HDMI on j721e-sk
+Date:   Wed, 27 Apr 2022 21:22:30 +0530
+Message-ID: <20220427155232.10659-1-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add high frequency impedance notification support under DPTF.
-This returns high frequency impedance value that can be obtained
-from battery fuel gauge whenever there is change over a threshold.
+The following series of patches enables DisplayPort and
+HDMI on j721e-sk
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
----
- drivers/acpi/dptf/dptf_power.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+This series depends on
+https://lore.kernel.org/all/20220426153553.18474-1-r-ravikumar@ti.com/
+which adds required nodes in the SoC dtsi file
 
-diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_power.c
-index dc1f52a5b3f4..2ef53ca88714 100644
---- a/drivers/acpi/dptf/dptf_power.c
-+++ b/drivers/acpi/dptf/dptf_power.c
-@@ -117,7 +117,7 @@ static const struct attribute_group dptf_battery_attribute_group = {
- #define POWER_STATE_CHANGED		0x81
- #define STEADY_STATE_POWER_CHANGED	0x83
- #define POWER_PROP_CHANGE_EVENT	0x84
--#define IMPEDANCED_CHNGED		0x85
-+#define IMPEDANCE_CHANGED		0x85
- #define VOLTAGE_CURRENT_CHANGED	0x86
- 
- static long long dptf_participant_type(acpi_handle handle)
-@@ -150,6 +150,9 @@ static void dptf_power_notify(acpi_handle handle, u32 event, void *data)
- 	case STEADY_STATE_POWER_CHANGED:
- 		attr = "max_steady_state_power_mw";
- 		break;
-+	case IMPEDANCE_CHANGED:
-+		attr = "high_freq_impedance_mohm";
-+		break;
- 	case VOLTAGE_CURRENT_CHANGED:
- 		attr = "no_load_voltage_mv";
- 		break;
+boot logs:
+   https://gist.githubusercontent.com/ravi-rahul/d2e139d8ff9446ede003291a6a3e8be5/raw/ed51498efe7f7bc4848dffb27e2b37e0beb7a94d/j7_sk_DP_HDMI_boot.log
+
+kernel patch verify report:
+   https://gist.githubusercontent.com/ravi-rahul/1e2350b53ac7d6ba7694373c0b3bbb44/raw/f09f75821610b42ad1f8b4bf3e5ef7843de0c76e/report-kernel-patch-verify-sk-dp-hdmi.txt
+
+Rahul T R (2):
+  arm64: dts: ti: k3-j721e-sk: Enable DisplayPort
+  arm64: dts: ti: k3-j721e-sk: Enable HDMI
+
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 123 ++++++++++++++++++++++++-
+ 1 file changed, 119 insertions(+), 4 deletions(-)
+
 -- 
 2.17.1
 

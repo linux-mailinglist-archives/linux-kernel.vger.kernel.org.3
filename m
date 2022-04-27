@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4071511ABB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31CC511B0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237585AbiD0OVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S237557AbiD0OVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237534AbiD0OVn (ORCPT
+        with ESMTP id S237483AbiD0OVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:21:43 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594966A01C;
-        Wed, 27 Apr 2022 07:18:31 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e922e68b0fso2094529fac.1;
-        Wed, 27 Apr 2022 07:18:31 -0700 (PDT)
+        Wed, 27 Apr 2022 10:21:41 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194C76A002;
+        Wed, 27 Apr 2022 07:18:30 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e5e433d66dso2073800fac.5;
+        Wed, 27 Apr 2022 07:18:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=PMYFToIIw9gCyKckeLz6QNSj28pYwPtqHEMymIKkXRA=;
-        b=oT7wLDmeGNjUm9hVucJWKuIN53Af8Rj7+Gl67IkO8oyR9y15Dpsv98niuvtzA+nFeu
-         Ip3d3QJYcYsEA0nL1NKv/vmv+xHpgsZhI+c0S6vXIJkvK/8pFVNJX2TMjc1j/nOhAlXr
-         k7BhG29R/ahv8R/qwR3OYbUR8aES5A5QitGa4uCRDXPL5UizxZo64cHhth7pqyItfFnN
-         s9KGwznKIF41y/waT3XsOf0khF8oL9/TkFDtz2AK2rKrKhayo5uB7tmgeIR2/0/KQtN9
-         G/at2kstoJ+ZtXbwZS/g2A1ZHmWQHiXilxQxbGk1TAxfcZS2Ofo0FMeIPALObgsizy+Q
-         DSKg==
-X-Gm-Message-State: AOAM533ejB1M6N4kuxEj9EaU4q7JCv+sGa/jtC4ux3UzAn0wYDS1Y5JK
-        SNx//BAgXohunCIQ+TCgRSRP1+uJug==
-X-Google-Smtp-Source: ABdhPJyS08rrT9jgCgkOe3uGHzv/NwWEfTH0q/IX+PLWPJjo6NzGWHPEYfF02mq/cITg/8Jmteod+w==
-X-Received: by 2002:a05:6870:6307:b0:e9:6ed6:cb2f with SMTP id s7-20020a056870630700b000e96ed6cb2fmr2954367oao.26.1651069110640;
-        Wed, 27 Apr 2022 07:18:30 -0700 (PDT)
+        bh=PhXcDgK09TfJ0k4/TcfwOYlktcKSTjsxAO+dgwid8sU=;
+        b=2xOQh1XR7ym3OsES4idwVUbm/DSVPrsxVdgT0UpOOAb1dEfdsZZU2d3l3yTqksSKPy
+         Y4pESMLMBKnrNC/GGg7inPIsbtNdfr6E1LvMlF2g1J21IZdSIP4pavCyYwEyXMVCfvv2
+         ez+n4FXX1bKijJ9Q4nunRP3EcTTuHpYV8A5R/WrAp9D+vFuHk+ufsciWeg1Rz7Wuir6Q
+         zoFjbhF5rSTaXfgyO+38mLa8ww4KpHDDolMmvmJ/YAYXMxRpTIpX5agxrVdAWxYWzbB8
+         4Z/6ottxix+1Z/XryFLYy9z/SU6JY1V0b7xEQm6AkOImg9aZvchM6R49UIpfPVcByOAC
+         SLEg==
+X-Gm-Message-State: AOAM531lx7ZVuA/YFWgzxEHS/PhBhKB6W33hzGKD0bsXvaFJguF12p7F
+        SaEfjNcJaeiUhIeRjsXtO87Rk0Im8w==
+X-Google-Smtp-Source: ABdhPJzEazdYi+wBumpNxD6+bRTRjB1cnfTbRe3mJ/iYA6rFI8tXYvlUpz6mMwksoa3oLiTqbPubyQ==
+X-Received: by 2002:a05:6870:ea8d:b0:e6:135c:1a2e with SMTP id s13-20020a056870ea8d00b000e6135c1a2emr15718470oap.9.1651069109351;
+        Wed, 27 Apr 2022 07:18:29 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h21-20020a9d6015000000b006025edf7cafsm6020169otj.22.2022.04.27.07.18.29
+        by smtp.gmail.com with ESMTPSA id b14-20020a056870160e00b000e915a9121csm672499oae.52.2022.04.27.07.18.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:18:30 -0700 (PDT)
-Received: (nullmailer pid 4142587 invoked by uid 1000);
+        Wed, 27 Apr 2022 07:18:28 -0700 (PDT)
+Received: (nullmailer pid 4142584 invoked by uid 1000);
         Wed, 27 Apr 2022 14:18:28 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, Li Yang <leoyang.li@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220427075338.1156449-5-michael@walle.cc>
-References: <20220427075338.1156449-1-michael@walle.cc> <20220427075338.1156449-5-michael@walle.cc>
-Subject: Re: [PATCH v3 4/4] dt-bindings: fsl: convert fsl,layerscape-scfg to YAML
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220427010154.29749-2-zev@bewilderbeest.net>
+References: <20220427010154.29749-1-zev@bewilderbeest.net> <20220427010154.29749-2-zev@bewilderbeest.net>
+Subject: Re: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
 Date:   Wed, 27 Apr 2022 09:18:28 -0500
-Message-Id: <1651069108.159837.4142586.nullmailer@robh.at.kernel.org>
+Message-Id: <1651069108.145838.4142583.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -66,55 +64,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 09:53:38 +0200, Michael Walle wrote:
-> Convert the fsl,layerscape-scfg binding to the new YAML format.
+On Tue, 26 Apr 2022 18:01:48 -0700, Zev Weiss wrote:
+> These Super I/O chips have an i2c interface that some systems expose
+> to a BMC; the BMC's device tree can now describe that via this
+> binding.
 > 
-> In the device trees, the device node always have a "syscon"
-> compatible, which wasn't mentioned in the previous binding.
-> 
-> Also added, compared to the original binding, is the
-> interrupt-controller subnode as used in arch/arm/boot/dts/ls1021a.dtsi
-> as well as the litte-endian and big-endian properties.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 > ---
-> changes since v2:
->  - none
-> 
-> changes since v1:
->  - moved to soc/fsl/fsl,layerscape-scfg.yaml
->  - generic name for node in example
->  - mention added "syscon" compatible in commit message
->  - reference specific interrupt controller
-> 
->  .../arm/freescale/fsl,layerscape-scfg.txt     | 19 ------
->  .../bindings/soc/fsl/fsl,layerscape-scfg.yaml | 58 +++++++++++++++++++
->  2 files changed, 58 insertions(+), 19 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,layerscape-scfg.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
+>  .../bindings/hwmon/nuvoton,nct6775.yaml       | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: properties:nuvoton,tsi-channel-mask: 'oneOf' conditional failed, one must be fixed:
+	'type' is a required property
+		hint: A vendor boolean property can use "type: boolean"
+	Additional properties are not allowed ('default', 'maximum' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: properties:nuvoton,tsi-channel-mask: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: properties:nuvoton,tsi-channel-mask: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: ignoring, error in schema: properties: nuvoton,tsi-channel-mask
+Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.example.dtb:0:0: /example-0/i2c/superio@4d: failed to match any schema with compatible: ['nuvoton,nct6779']
 
+doc reference errors (make refcheckdocs):
 
-scfg@1570000: interrupt-controller@1ac:interrupt-map-mask:0:0: 15 was expected
-	arch/arm64/boot/dts/freescale/fsl-ls1043a-qds.dtb
-	arch/arm64/boot/dts/freescale/fsl-ls1043a-rdb.dtb
-	arch/arm64/boot/dts/freescale/fsl-ls1046a-frwy.dtb
-	arch/arm64/boot/dts/freescale/fsl-ls1046a-qds.dtb
-	arch/arm64/boot/dts/freescale/fsl-ls1046a-rdb.dtb
+See https://patchwork.ozlabs.org/patch/
 
-scfg@1570000: interrupt-controller@1ac:interrupt-map-mask:0:0: 7 was expected
-	arch/arm/boot/dts/ls1021a-moxa-uc-8410a.dtb
-	arch/arm/boot/dts/ls1021a-qds.dtb
-	arch/arm/boot/dts/ls1021a-tsn.dtb
-	arch/arm/boot/dts/ls1021a-twr.dtb
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

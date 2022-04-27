@@ -2,117 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B0C5120C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB1E511CDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243987AbiD0R2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S243994AbiD0Ra4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235917AbiD0R2a (ORCPT
+        with ESMTP id S229534AbiD0Ray (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:28:30 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC93580F1;
-        Wed, 27 Apr 2022 10:25:18 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id k23so4795349ejd.3;
-        Wed, 27 Apr 2022 10:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CjJJv/HW0W0z/VarlbGbcsPtyv0boVYsrKMhgc2MCQ4=;
-        b=EQktnjL3YTHOusdLaEOhhMGmLEkhCF8DJyOmmO0JmYYRe1iGewG9mNs4zyGi/QfEpB
-         cQ4xGWu5t7E4jBNieFbMpyYMIdTV7HvazVgeDLVaJBhG8EaLEHCAjwNoSgdZNQ+6sQbO
-         vkfHRJ/DLP4P+39eihnyFbl8CeqkmcyXkKpkdG/aQXwBz5uuBUSW8su+GkF3Ncs1FwLY
-         THIsbBseeSZ+3ocZMmGu6dYc+RekHkvcVl0zs0jD5ko84TzhMab2EVL33OIrdqifLVUd
-         +uXtqZpYGpixASjoSVfq2ZdoqT+qHbGDaIXG7Cvcy9tvrhMm2cpPWCRtx0le2ls6I1Ka
-         V4JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CjJJv/HW0W0z/VarlbGbcsPtyv0boVYsrKMhgc2MCQ4=;
-        b=q9SQ/pvuPDnmM22wyR9T3pX4kD/t6j2LcB/3kf6qgLaR7S3boBqUyMaIUK6vU2JCxv
-         PV4qe4YvAbWdcISA9kyevfFJKCAHex6J5GgQUt/CXs2A2BjVIAKoHV2WcAv0GYdOl/zu
-         M9Lwrp/gtJCVA1ouJ38PFk0wAIlNADc+zUZNiPxj3I23O5HbAkmG9GVoxsCYaxipJHsr
-         8DRZM95b5OYentCCuTzuKzn9VkZA8AMgfV0KPc7Xan6w99N3bxS+K+MpUoXwvyh4Icwu
-         mH3PtjjU+KcLKw1Y9BvASRsETcaRAi5pYqd+lKxJBVlwtmHPywrjEre5fsDQnuGWtxxL
-         bMkA==
-X-Gm-Message-State: AOAM533hELbfofGlq/3QbboUWbmYAY3CDYBzrLOzxvC6eDptnM9fyT+i
-        MsojRBY5uak2QIWCqiSSFkvnlyG72po=
-X-Google-Smtp-Source: ABdhPJyvqzIreW1w7c2WM0BP7M7meaKhOsxx0Nw79+KcMESI1+8narqGSZn0JGOKlHPrNBeMf4dQ9Q==
-X-Received: by 2002:a17:907:3f82:b0:6df:919c:97a with SMTP id hr2-20020a1709073f8200b006df919c097amr27280082ejc.19.1651080316670;
-        Wed, 27 Apr 2022 10:25:16 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id g11-20020a1709061e0b00b006eff90d9c18sm7087716ejj.92.2022.04.27.10.25.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 10:25:15 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 20:25:14 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        upstream@semihalf.com
-Subject: Re: [net: PATCH] net: dsa: add missing refcount decrementation
-Message-ID: <20220427172514.n4musn42dhygzbu2@skbuf>
-References: <20220425094708.2769275-1-mw@semihalf.com>
+        Wed, 27 Apr 2022 13:30:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD5D73789
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651080462; x=1682616462;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZCqRL2nULn+c4atR1gdffjMJlGxdVmYqnHfTcJl0rik=;
+  b=Bij0y43y8qL80Ss1vnFy4WWbG9pNfIPkzUFADIshmcRuyT6d7ALxPQ6T
+   aWaUTJn5zXtIrMtEPXkNVwipZXJonQjbyWnprqMQEXvgHdplzQbSBRag4
+   e408uv6+/0z0WFSIRZYIv6aeVXnY60pfXnY+PNrTyc6EtlBLPZY+vSuYp
+   1ZDdYJC2sY1HsQq4MXEhbbttT2LfpA73QjQf0EM3h1Al+mVBjVus0kxNf
+   YKsYvEXfKgCtHFjK2nvr/NaqDEUQG87lEq1bgB1s1zD78NcbPMf381Umi
+   Wp8+g3XtzTu4hH8X1Vi8bQFsRAsySoa3ZLF2CQKuIidfMjGxrhe/lfkZU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266171895"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="266171895"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 10:27:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="876757424"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Apr 2022 10:27:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njlRz-0004oo-Dk;
+        Wed, 27 Apr 2022 17:27:39 +0000
+Date:   Thu, 28 Apr 2022 01:27:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Subject: drivers/clk/mediatek/clk-pll.c:418:23: warning: variable 'base' set
+ but not used
+Message-ID: <202204280114.eJS2jGX1-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220425094708.2769275-1-mw@semihalf.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:47:08AM +0200, Marcin Wojtas wrote:
-> After obtaining the "phy-handle" node, decrementing
-> refcount is required. Fix that.
-> 
-> Fixes: a20f997010c4 ("net: dsa: Don't instantiate phylink for CPU/DSA ports unless needed")
-> Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> ---
->  net/dsa/port.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/dsa/port.c b/net/dsa/port.c
-> index 32d472a82241..cdc56ba11f52 100644
-> --- a/net/dsa/port.c
-> +++ b/net/dsa/port.c
-> @@ -1620,8 +1620,10 @@ int dsa_port_link_register_of(struct dsa_port *dp)
->  			if (ds->ops->phylink_mac_link_down)
->  				ds->ops->phylink_mac_link_down(ds, port,
->  					MLO_AN_FIXED, PHY_INTERFACE_MODE_NA);
-> +			of_node_put(phy_np);
->  			return dsa_port_phylink_register(dp);
->  		}
-> +		of_node_put(phy_np);
->  		return 0;
->  	}
->  
-> -- 
-> 2.29.0
-> 
+Hi Chen-Yu,
 
-Thanks for the patch.
+FYI, the error/warning still remains.
 
-commit fc06b2867f4cea543505acfb194c2be4ebf0c7d3
-Author: Miaoqian Lin <linmq006@gmail.com>
-Date:   Wed Apr 20 19:04:08 2022 +0800
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   46cf2c613f4b10eb12f749207b0fd2c1bfae3088
+commit: 6dd199064dd86127030b5bc59d4058370b6c8310 clk: mediatek: pll: Implement unregister API
+date:   10 weeks ago
+config: sh-randconfig-r016-20220427 (https://download.01.org/0day-ci/archive/20220428/202204280114.eJS2jGX1-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6dd199064dd86127030b5bc59d4058370b6c8310
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6dd199064dd86127030b5bc59d4058370b6c8310
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/clk/mediatek/
 
-    net: dsa: Add missing of_node_put() in dsa_port_link_register_of
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-    The device_node pointer is returned by of_parse_phandle()  with refcount
-    incremented. We should use of_node_put() on it when done.
-    of_node_put() will check for NULL value.
+All warnings (new ones prefixed by >>):
 
-    Fixes: a20f997010c4 ("net: dsa: Don't instantiate phylink for CPU/DSA ports unless needed")
-    Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
+   drivers/clk/mediatek/clk-pll.c: In function 'mtk_clk_unregister_plls':
+>> drivers/clk/mediatek/clk-pll.c:418:23: warning: variable 'base' set but not used [-Wunused-but-set-variable]
+     418 |         __iomem void *base = NULL;
+         |                       ^~~~
+
+
+vim +/base +418 drivers/clk/mediatek/clk-pll.c
+
+   414	
+   415	void mtk_clk_unregister_plls(const struct mtk_pll_data *plls, int num_plls,
+   416				     struct clk_onecell_data *clk_data)
+   417	{
+ > 418		__iomem void *base = NULL;
+   419		int i;
+   420	
+   421		if (!clk_data)
+   422			return;
+   423	
+   424		for (i = num_plls; i > 0; i--) {
+   425			const struct mtk_pll_data *pll = &plls[i - 1];
+   426	
+   427			if (IS_ERR_OR_NULL(clk_data->clks[pll->id]))
+   428				continue;
+   429	
+   430			/*
+   431			 * This is quite ugly but unfortunately the clks don't have
+   432			 * any device tied to them, so there's no place to store the
+   433			 * pointer to the I/O region base address. We have to fetch
+   434			 * it from one of the registered clks.
+   435			 */
+   436			base = mtk_clk_pll_get_base(clk_data->clks[pll->id], pll);
+   437	
+   438			mtk_clk_unregister_pll(clk_data->clks[pll->id]);
+   439			clk_data->clks[pll->id] = ERR_PTR(-ENOENT);
+   440		}
+   441	
+   442		iounmap(base);
+   443	}
+   444	EXPORT_SYMBOL_GPL(mtk_clk_unregister_plls);
+   445	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

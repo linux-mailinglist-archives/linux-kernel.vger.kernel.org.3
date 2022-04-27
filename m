@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9725110F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B0B5110F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358001AbiD0GOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S1358005AbiD0GOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357993AbiD0GOE (ORCPT
+        with ESMTP id S1358019AbiD0GOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:14:04 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FB8275D4;
-        Tue, 26 Apr 2022 23:10:52 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23R6Aiuo031644;
-        Wed, 27 Apr 2022 01:10:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651039844;
-        bh=kXpnKZPSd6Bc0SfVzhPyIFl8QKwcMhZDEyWtuIqi54E=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=KwtrjDd/13hHI7TIVMv0mLGdXGutEAbvgJt+w4Fae/1cd12Vzb7/Id8395na24KAG
-         bQn/40MjWXUtsIC9oKUsFffF0TX3y2HT1Ys6MPrFYTHr9MWUuYkrggmZzxNZ9oCuxx
-         w2rUtxKsP2ch7075WEbT7Rq287vp21KSjkFBRpXA=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23R6Ai5b116236
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 Apr 2022 01:10:44 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
- Apr 2022 01:10:43 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 27 Apr 2022 01:10:43 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23R6Ahi4130008;
-        Wed, 27 Apr 2022 01:10:43 -0500
-Date:   Wed, 27 Apr 2022 11:40:42 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] spi: cadence-quadspi: drop cqspi_set_protocol()
-Message-ID: <20220427061042.6xmzg7i6ozhlbhzi@ti.com>
-References: <20220420155616.281730-1-matthias.schiffer@ew.tq-group.com>
+        Wed, 27 Apr 2022 02:14:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1193A2E6BB
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:10:55 -0700 (PDT)
+X-UUID: 233ba42842b64f70bb20352f1b65878d-20220427
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:e41a1cf1-3834-4923-8d9a-9a7e3f6107f0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:e41a1cf1-3834-4923-8d9a-9a7e3f6107f0,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:daf4da2e-6199-437e-8ab4-9920b4bc5b76,C
+        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
+        ,BEC:nil
+X-UUID: 233ba42842b64f70bb20352f1b65878d-20220427
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2071929021; Wed, 27 Apr 2022 14:10:50 +0800
+Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 27 Apr 2022 14:10:49 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 27 Apr 2022 14:10:49 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Apr 2022 14:10:49 +0800
+Message-ID: <ec484303c7ffd2a851c7095d9468e10582666422.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/8] mfd: add missing defines necessary for
+ mtk-pmic-keys support
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Fabien Parent <fparent@baylibre.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Wed, 27 Apr 2022 14:10:49 +0800
+In-Reply-To: <20220426135313.245466-3-fparent@baylibre.com>
+References: <20220426135313.245466-1-fparent@baylibre.com>
+         <20220426135313.245466-3-fparent@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220420155616.281730-1-matthias.schiffer@ew.tq-group.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/04/22 05:56PM, Matthias Schiffer wrote:
-> As suggested, this removes the whole cqspi_set_protocol() function, as it
-> is not actually needed:
+On Tue, 2022-04-26 at 15:53 +0200, Fabien Parent wrote:
+> Add 2 missing MT6359 registers that are needed to implement
+> the keyboard driver.
 > 
-> - Checks for unsupported operations are already handled by supports_op(),
->   removing the need to distinguish DTR and non-DTR modes in the buswidth
->   setup
-> - supports_op() ensures that the DTR flags match for all relevant parts of
->   an operation, so op->cmd.dtr can be used instead of copying the flag to
->   the cqspi_flash_pdata
-> - The logic in cqspi_set_protocol() is moved to cqspi_calc_rdreg() and
->   cqspi_write_setup() (with a helper macro CQSPI_OP_WIDTH())
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+> v2: no changes
 > 
-> The helper macro checks nbytes instead of buswidth for 0, for consistency
-> with supports_op() etc.
+>  include/linux/mfd/mt6359/registers.h | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Suggested-by: Pratyush Yadav <p.yadav@ti.com>
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> diff --git a/include/linux/mfd/mt6359/registers.h
+> b/include/linux/mfd/mt6359/registers.h
+> index 2135c9695918..2a4394a27b1c 100644
+> --- a/include/linux/mfd/mt6359/registers.h
+> +++ b/include/linux/mfd/mt6359/registers.h
+> @@ -8,6 +8,8 @@
+>  
+>  /* PMIC Registers */
+>  #define MT6359_SWCID                         0xa
+> +#define MT6359_TOPSTATUS                     0x2a
+> +#define MT6359_TOP_RST_MISC                  0x14c
+>  #define MT6359_MISC_TOP_INT_CON0             0x188
+>  #define MT6359_MISC_TOP_INT_STATUS0          0x194
+>  #define MT6359_TOP_INT_STATUS0               0x19e
 
-I know the patch has already been applied, but FWIW,
+Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
-Also did some basic testing on the latest linux-next, which has your 
-patches. Things seem to work fine.
-
--- 
 Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Macpaul Lin
+

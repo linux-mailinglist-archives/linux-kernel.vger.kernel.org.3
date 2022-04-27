@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA195120B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2270511D40
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240534AbiD0P4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S240419AbiD0P5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240434AbiD0P4p (ORCPT
+        with ESMTP id S240474AbiD0P5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:56:45 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99A4064713;
-        Wed, 27 Apr 2022 08:53:28 -0700 (PDT)
-Received: from smtpclient.apple (d66-183-91-182.bchsia.telus.net [66.183.91.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7149C20E97B3;
-        Wed, 27 Apr 2022 08:53:27 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7149C20E97B3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1651074808;
-        bh=TX9/CTz2WBo5vbbwED+TNm+pe6iYOqpcRxy113F+nEs=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=ZKOzz9l2xv5aNTdWwZ4q+vZhDBP5yr52RLVoFAv88x9lQU9pCcPiUElU3QDN+lQOa
-         RMu2HIPSGrrjv0rWaJOFGE1+w/vNAfqNI2CXXJDVQNTX1+Z7TW5jgaM7eRWJBVD2AW
-         iucNZ1g853BVeBOYcJtm7owZqSHtapaLpQKQiArg=
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-From:   Allen Pais <apais@linux.microsoft.com>
-In-Reply-To: <YmiuUy+PAjKEq6uE@matsya>
-Date:   Wed, 27 Apr 2022 08:53:26 -0700
-Cc:     olivier.dautricourt@orolia.com, sr@denx.de,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, ludovic.desroches@microchip.com,
-        tudor.ambarus@microchip.com, f.fainelli@gmail.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
-        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
-        andriy.shevchenko@linux.intel.com, leoyang.li@nxp.com,
-        zw@zh-kernel.org, wangzhou1@hisilicon.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, sean.wang@mediatek.com,
-        matthias.bgg@gmail.com, afaerber@suse.de, mani@kernel.org,
-        logang@deltatee.com, sanju.mehta@amd.com, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski@linaro.org, green.wan@sifive.com,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        patrice.chotard@foss.st.com, linus.walleij@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2B3258A9-47BA-4AA3-A4E8-BE255D5F4506@linux.microsoft.com>
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com> <YmiuUy+PAjKEq6uE@matsya>
-To:     Vinod Koul <vkoul@kernel.org>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 11:57:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF68573781
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651074840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fdXdyruG2mNABegzus1OI0l/dvVuZJQv9Fw0QN0j5EU=;
+        b=Hbk2oEHgsB/TK5kopilW1Egn140i+fCEKwgWLQi/ZvQO3De5rA8CeoUyTzmBR0k0JgIwrX
+        eoD8qpwt3PEx+5lpDTrPPdP4L80nVg4af6ylTteibODEiymYGOpq6RffeaVB3IGis9e/g7
+        2F7B6tJsflt35VDybKCnM/t8TjEx4Sg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-7t3OQgjoNreZbo7V5a8a2w-1; Wed, 27 Apr 2022 11:53:57 -0400
+X-MC-Unique: 7t3OQgjoNreZbo7V5a8a2w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 274971C04B7E;
+        Wed, 27 Apr 2022 15:53:41 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 139915E2C06;
+        Wed, 27 Apr 2022 15:53:37 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 27 Apr 2022 17:53:40 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 17:53:37 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+Message-ID: <20220427155335.GH17421@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421150654.817117821@infradead.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/21, Peter Zijlstra wrote:
+>
+> @@ -1329,8 +1337,7 @@ SYSCALL_DEFINE4(ptrace, long, request, l
+>  		goto out_put_task_struct;
+>  
+>  	ret = arch_ptrace(child, request, addr, data);
+> -	if (ret || request != PTRACE_DETACH)
+> -		ptrace_unfreeze_traced(child);
+> +	ptrace_unfreeze_traced(child);
 
->> The tasklet is an old API which will be deprecated, workqueue API
->> cab be used instead of them.
->=20
-> What is the reason for tasklet removal, I am not sure old is a reason =
-to
-> remove an API...
+Forgot to mention... whatever we do this doesn't look right.
 
- While we moved to modernised version of tasklet API, there was
-A request to entirely remove tasklets. The following patch is an attempt
-Towards it.=20
+ptrace_unfreeze_traced() must not be called if the tracee was untraced,
+anothet debugger can come after that. I agree, the current code looks
+a bit confusing, perhaps it makes sense to re-write it:
 
->=20
->>=20
->> This patch replaces the tasklet usage in drivers/dma/* with a
->> simple work.
->=20
-> Dmaengines need very high throughput, one of the reasons in dmaengine
-> API design to use tasklet was higher priority given to them. Will the
-> workqueue allow that...?
+	if (request == PTRACE_DETACH && ret == 0)
+		; /* nothing to do, no longer traced by us */
+	else
+		ptrace_unfreeze_traced(child);
 
-  It is interesting that you brought up this point. I haven=E2=80=99t =
-had the opportunity
-To test the changes by stressing the kernel, what tests/benchmarks would
-You prefer to see run on with these changes.
-
-Thanks.
-
->=20
-> --=20
-> ~Vinod
+Oleg.
 

@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1651251137A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CC751137C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359397AbiD0IcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        id S1359403AbiD0IdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiD0IcG (ORCPT
+        with ESMTP id S229945AbiD0IdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:32:06 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D851E50;
-        Wed, 27 Apr 2022 01:28:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpBjf0xHZz4xXS;
-        Wed, 27 Apr 2022 18:28:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651048134;
-        bh=RAXZOHFRDgEP1BvbBgYMQYJ9ZlZ566zDRR1qgQcx1Zc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lBpQVFK142jpqt1vbSf08sN2zT3HN7pDXI58cDx5S7r21lDJnt9v9C8019NK0V9pk
-         4PxBRu7PEbfDX/nOEoTFM2AGi6aeofBXgxenuTzdZb7bvgWtqj4iEG7l8AgcDRMiQb
-         jwcILrlb3NCi8wk30P4BGZeEl/CHus99QXOZBRT9bzgWX8lBmpB/4fZAnq3sP58SJS
-         5VXnIWMLiAA1EMQjZC5EJvvTKJ1CUzGhyKNZRQtBnxe20eIj5/lGi+i7WxSke4tdpg
-         H67VKNQ8c0/ZSxeqxeXhhFJU9nOx4UDX26vPfcCCVR0PQzSs003/e4Eax5UVfhNF/A
-         TL/mXo0IIgTJw==
-Date:   Wed, 27 Apr 2022 18:28:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sumit Saxena <sumit.saxena@broadcom.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20220427182853.2587e788@canb.auug.org.au>
-In-Reply-To: <CAL2rwxpdHGuFKCEJmOVOx-p3ri8_PLFqCDJm_5Ar6D66iQ-W9Q@mail.gmail.com>
-References: <20220427133851.6ff8b0cf@canb.auug.org.au>
-        <CAL2rwxpdHGuFKCEJmOVOx-p3ri8_PLFqCDJm_5Ar6D66iQ-W9Q@mail.gmail.com>
+        Wed, 27 Apr 2022 04:33:17 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A771CFE6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:30:06 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id s21so1401792wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=uuaqiUZLOsChqlXyKbpm6wvW7kQefLGVgCUO7BzQrzA=;
+        b=e5BYU67ug0RadbCRKN+ByG3Mx0c2NoLtQ27jnqQ3gxBbZh913frGGgHnKGk7v5oH6K
+         pGkmO+e9+W7xi6wl4R+z2t8uKEHXLkD+dNj9d7NmPdYbb/tFCPN6fbpMnqEtyQ3He1Sy
+         2gLFvQgpW+Em0GIytTYd8cEfDYpX/3YClCO4XJW1AE4xatip0UMmrxYSYhxrWEP+nxe4
+         YeUGf5dKDMN+FONVR0dWDI5xkfUPSjwgkvZiAxl3JSeuJ4/WGA4Vtzr6G4ahFWEZt+JG
+         jShnercZP0dGNOSe1sZw+EPlKbLB8a1wfbRSWNquhhO4fe6i1wv0NEV8Fsg8U8V9TYGR
+         i/fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uuaqiUZLOsChqlXyKbpm6wvW7kQefLGVgCUO7BzQrzA=;
+        b=1DD7D0uwXYXyvURLbr05oRIht2yGRFtTeY22kTfW8Y2LHEDts+2gcIY5cHlbE6uxvb
+         Vkob6oJPnuDgDQDGBNPC+yiFbGIWsug5UhTqqzjtEiriTa2MtHnUQVh0Txa5aU/hmgmi
+         WgP4ozpXoJHkA0tyc4W5mywU2E1ucWcH2EPPZi5VpF9kzfozQkpWSAC+s4rvXFJyj9YE
+         +VWAKOstpClw3PJhkQmSSaNJGeedjiW4QYlXk6EHvXSJbDnFpPqISm/+cN4UwF64GYX9
+         k9rjRrnmv5XhmZsZJ8PuE+58n7kjR0H+xZPQ22z35/Uj+sWr1zwkDTz0BMUoNcNBQJnE
+         fx8g==
+X-Gm-Message-State: AOAM5316aBUHPYYm2gnHBZnlQuf6Xb14t1XQStTx2fx8L29/k2oPxjZ3
+        SHoHEy1/XFgXWp96gubsgR6kqw==
+X-Google-Smtp-Source: ABdhPJwAOFzgKXb5o0/gt/GLKEE9cIElWAjB3owyDIaR+6bxgF6h8F0cDofxMRbqsSW6prkSSXgJww==
+X-Received: by 2002:a5d:48d0:0:b0:207:a861:dcc9 with SMTP id p16-20020a5d48d0000000b00207a861dcc9mr21855607wrs.490.1651048205092;
+        Wed, 27 Apr 2022 01:30:05 -0700 (PDT)
+Received: from localhost (laubervilliers-656-1-151-143.w92-154.abo.wanadoo.fr. [92.154.18.143])
+        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b00393fbf75a56sm1044666wmm.29.2022.04.27.01.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 01:30:04 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183-pumpkin: fix bad
+ thermistor node name
+In-Reply-To: <20220426164755.435372-1-fparent@baylibre.com>
+References: <20220426164755.435372-1-fparent@baylibre.com>
+Date:   Wed, 27 Apr 2022 10:30:02 +0200
+Message-ID: <87a6c753p1.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wjaYet4DyFkf4GqQdux_jgt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,178 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wjaYet4DyFkf4GqQdux_jgt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 26, 2022 at 18:47, Fabien Parent <fparent@baylibre.com> wrote:
 
-Hi Sumit,
-
-On Wed, 27 Apr 2022 13:10:57 +0530 Sumit Saxena <sumit.saxena@broadcom.com>=
- wrote:
+> Fix the following dtbs_check error by using the correct node name:
+> /home/fabo/build/linux/mt8183-pumpkin/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dtb: ntc: $nodename:0: 'ntc' does not match '^thermistor(.*)?$'
+> 	From schema: /home/fabo/devel/baylibre/linux-mainline/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
 >
-> Could you please try if the below patch fixes this build failure:
->=20
-> From: Sumit Saxena <sumit.saxena@broadcom.com>
-> Date: Wed, 27 Apr 2022 03:35:34 -0400
-> Subject: [PATCH] uapi: include <linux/types.h> header in scsi_bsg_mpi3mr.h
->=20
-> Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+
 > ---
->  include/uapi/scsi/scsi_bsg_mpi3mr.h | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/include/uapi/scsi/scsi_bsg_mpi3mr.h
-> b/include/uapi/scsi/scsi_bsg_mpi3mr.h
-> index 46c33efcff19..a0ddad7d84f7 100644
-> --- a/include/uapi/scsi/scsi_bsg_mpi3mr.h
-> +++ b/include/uapi/scsi/scsi_bsg_mpi3mr.h
-> @@ -10,6 +10,8 @@
->  #ifndef SCSI_BSG_MPI3MR_H_INCLUDED
->  #define SCSI_BSG_MPI3MR_H_INCLUDED
->=20
-> +#include <linux/types.h>
-> +
->  /* Definitions for BSG commands */
->  #define MPI3MR_IOCTL_VERSION                   0x06
-
-It does not, because the uapi headers should only use the __ prefixed
-versions of the kernel data types (u8 etc) and need to include
-stdint.h in the not __KERNEL__ case for unint8_t etc.
-
-So ... (this needs white space cleanups - you should probably use TAB
-characters before the field names.)
-
-diff --git a/include/uapi/scsi/scsi_bsg_mpi3mr.h b/include/uapi/scsi/scsi_b=
-sg_mpi3mr.h
-index 6d866256f924..5167d4da478a 100644
---- a/include/uapi/scsi/scsi_bsg_mpi3mr.h
-+++ b/include/uapi/scsi/scsi_bsg_mpi3mr.h
-@@ -10,6 +10,11 @@
- #ifndef SCSI_BSG_MPI3MR_H_INCLUDED
- #define SCSI_BSG_MPI3MR_H_INCLUDED
-=20
-+#ifndef __KERNEL__
-+#include <stdint.h>
-+#endif
-+#include <linux/types.h>
-+
- /* Definitions for BSG commands */
- #define MPI3MR_IOCTL_VERSION			0x06
-=20
-@@ -94,12 +99,12 @@ enum command {
-  */
- struct mpi3_driver_info_layout {
- 	__le32             information_length;
--	u8                 driver_signature[12];
--	u8                 os_name[16];
--	u8                 os_version[12];
--	u8                 driver_name[20];
--	u8                 driver_version[32];
--	u8                 driver_release_date[20];
-+	__u8                 driver_signature[12];
-+	__u8                 os_name[16];
-+	__u8                 os_version[12];
-+	__u8                 driver_name[20];
-+	__u8                 driver_version[32];
-+	__u8                 driver_release_date[20];
- 	__le32             driver_capabilities;
- };
-=20
-@@ -461,11 +466,11 @@ struct mpi3mr_bsg_packet {
-=20
- struct mpi3_nvme_encapsulated_request {
- 	__le16                     host_tag;
--	u8                         ioc_use_only02;
--	u8                         function;
-+	__u8                         ioc_use_only02;
-+	__u8                         function;
- 	__le16                     ioc_use_only04;
--	u8                         ioc_use_only06;
--	u8                         msg_flags;
-+	__u8                         ioc_use_only06;
-+	__u8                         msg_flags;
- 	__le16                     change_count;
- 	__le16                     dev_handle;
- 	__le16                     encapsulated_command_length;
-@@ -477,11 +482,11 @@ struct mpi3_nvme_encapsulated_request {
-=20
- struct mpi3_nvme_encapsulated_error_reply {
- 	__le16                     host_tag;
--	u8                         ioc_use_only02;
--	u8                         function;
-+	__u8                         ioc_use_only02;
-+	__u8                         function;
- 	__le16                     ioc_use_only04;
--	u8                         ioc_use_only06;
--	u8                         msg_flags;
-+	__u8                         ioc_use_only06;
-+	__u8                         msg_flags;
- 	__le16                     ioc_use_only08;
- 	__le16                     ioc_status;
- 	__le32                     ioc_log_info;
-@@ -499,20 +504,20 @@ struct mpi3_nvme_encapsulated_error_reply {
- /* MPI3: task management related definitions */
- struct mpi3_scsi_task_mgmt_request {
- 	__le16                     host_tag;
--	u8                         ioc_use_only02;
--	u8                         function;
-+	__u8                         ioc_use_only02;
-+	__u8                         function;
- 	__le16                     ioc_use_only04;
--	u8                         ioc_use_only06;
--	u8                         msg_flags;
-+	__u8                         ioc_use_only06;
-+	__u8                         msg_flags;
- 	__le16                     change_count;
- 	__le16                     dev_handle;
- 	__le16                     task_host_tag;
--	u8                         task_type;
--	u8                         reserved0f;
-+	__u8                         task_type;
-+	__u8                         reserved0f;
- 	__le16                     task_request_queue_id;
- 	__le16                     reserved12;
- 	__le32                     reserved14;
--	u8                         lun[8];
-+	__u8                         lun[8];
- };
-=20
- #define MPI3_SCSITASKMGMT_MSGFLAGS_DO_NOT_SEND_TASK_IU      (0x08)
-@@ -528,11 +533,11 @@ struct mpi3_scsi_task_mgmt_request {
- #define MPI3_SCSITASKMGMT_TASKTYPE_I_T_NEXUS_RESET          (0x0b)
- struct mpi3_scsi_task_mgmt_reply {
- 	__le16                     host_tag;
--	u8                         ioc_use_only02;
--	u8                         function;
-+	__u8                         ioc_use_only02;
-+	__u8                         function;
- 	__le16                     ioc_use_only04;
--	u8                         ioc_use_only06;
--	u8                         msg_flags;
-+	__u8                         ioc_use_only06;
-+	__u8                         msg_flags;
- 	__le16                     ioc_use_only08;
- 	__le16                     ioc_status;
- 	__le32                     ioc_log_info;
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/wjaYet4DyFkf4GqQdux_jgt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJo/sUACgkQAVBC80lX
-0GxDSgf/YAhf8gHa8zk610soLZw8Ci0FCCLB/nVVDOK71SIDwEeyUuXenO05Jo2I
-x1KkNDdFeCCLSEfsK/yBCPE0b6r8y3V1lTEpHPkj1gJbujI0HAgrNMQUVel0ZoX5
-UM2NeXbdqtuD0P4aqwXQ1IaLUStu2xPnKwMaWpBXrM+0kJr/RtiIHDqLYWB3EOvB
-oa5gWNZE1SzDKBPBrVD9mxFGTsPp4hrk0qYK2+cwChcuEj4FIDia4IzRxlQmwT3s
-8C4oPWv4Qih87HDJ+Z12e2hg06fJN9jsyYE+OC9fAR5zGX4RsHHDnVuilXZlQu7p
-GBrVplEIBGuF0AzzYKAKjv1yxY05Ag==
-=NjnP
------END PGP SIGNATURE-----
-
---Sig_/wjaYet4DyFkf4GqQdux_jgt--
+>  arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+> index 10b2c0500219..3d6da7efe31b 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+> @@ -55,7 +55,7 @@ led-green {
+>  		};
+>  	};
+>  
+> -	ntc {
+> +	thermistor {
+>  		compatible = "murata,ncp03wf104";
+>  		pullup-uv = <1800000>;
+>  		pullup-ohm = <390000>;
+> -- 
+> 2.36.0
+>
+>
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek

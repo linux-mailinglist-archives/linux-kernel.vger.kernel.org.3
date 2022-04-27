@@ -2,183 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225A25119BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3A4511A87
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238120AbiD0Oev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
+        id S235289AbiD0NGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238142AbiD0Oee (ORCPT
+        with ESMTP id S235214AbiD0NGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:34:34 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AC1A82F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:31:12 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220427143111epoutp043c9012495135f974378f85fc0e48f548~px0zJ5S1W1817418174epoutp04U
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:31:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220427143111epoutp043c9012495135f974378f85fc0e48f548~px0zJ5S1W1817418174epoutp04U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651069871;
-        bh=crH6lA8CKSr3raD35a8WNJj9gNhvnxzuqz4w8DLYYGk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fBEiAL09DVN+6O96oSHfHYfLa/Y0rXC6OWr8HMjDqmKMbmsTHamZ3k97hKG7YmF2/
-         U2vK9ejkjv+6eatRrTbT5IhEm0Ymzg9tCefEY7cdhkQDb+GNpT7eoaHbK5wQ3IVfid
-         FrF7T1W5R4YAg2LFLwPW7VJslUT919RYSUn/PsoI=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220427143110epcas5p40c88d0aed948bf707494648074071e87~px0yta3Zx2356823568epcas5p4v;
-        Wed, 27 Apr 2022 14:31:10 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4KpLlZ5wJ5z4x9Pt; Wed, 27 Apr
-        2022 14:31:06 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        05.DD.10063.9A359626; Wed, 27 Apr 2022 23:31:05 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220427130824epcas5p38594effe1d648be050ff00284e115014~pwshxFhMl2087820878epcas5p35;
-        Wed, 27 Apr 2022 13:08:24 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220427130824epsmtrp14e26381493d2df92a583d1f425e97e0c~pwshwRhe_3201832018epsmtrp1G;
-        Wed, 27 Apr 2022 13:08:24 +0000 (GMT)
-X-AuditID: b6c32a49-4b5ff7000000274f-c5-626953a9862a
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D8.A4.08853.84049626; Wed, 27 Apr 2022 22:08:24 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220427130823epsmtip2faace445336901ad6bad32c4c8c06a3d~pwsghFvIJ1516015160epsmtip2s;
-        Wed, 27 Apr 2022 13:08:23 +0000 (GMT)
-Date:   Wed, 27 Apr 2022 18:33:15 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 03/10] block: Introduce a new ioctl for copy
-Message-ID: <20220427130315.GB9558@test-zns>
+        Wed, 27 Apr 2022 09:06:35 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492B7DCB;
+        Wed, 27 Apr 2022 06:03:24 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso1013679otk.10;
+        Wed, 27 Apr 2022 06:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=41yunm+lS0x9OKFTJJaFvpJWxmfNu7cbQFvxht2PQ0Y=;
+        b=Djs7ebC36uO25LOxqBbY11JXMOwr462SGowSqkea/WVq2ncQmC+Y88YodCIDDpFAk5
+         y4wbbdSPYwgpfbPDS/uRTUMa0KsU5ok6ZEmTPhT/DN9/HQFsNUn7fTZZqaPfrV4zxeZr
+         tLzfdtQPtJNTUEC/kD6eOqWaaSTEGUfgH0XC1818mgFKPjlhGA3tzxlT+0vVBs1+IMzY
+         lVER6qxEdpXCRh9bPRlvtm2YdiMAAXvudlefNzBZdCd2cxqhDxeojLwFLtcTJD9j6yTX
+         AOTfo1uwOtQT2v+nTD4KDZbcZvzNWAJuL4bf23Pj6rjXOi8gmA/+Wp8hQH6NEkSszi8/
+         WtCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=41yunm+lS0x9OKFTJJaFvpJWxmfNu7cbQFvxht2PQ0Y=;
+        b=DfMo2tLlKC9+azDYnVBcoCTF2i84j2KTShAX9d+WN02JJe20fZlGeQ8HhVSrNsmf4M
+         ffbVCukk+XGs1YoNQm3f5C1q4bg24ABk9U0idE4vo8uTLlP9ane7PKRmLIXkoyj8+PGA
+         FodJ2JNanR8SmxN8b8JOARTKAQ4esw0ZTGY3KrBSyMMRegpDNamEFaHOhAaquwZhFvt5
+         s+fSMQEzhTz8YvOeUXEj9RIH4jUxPxxy6ojoX+EenUW7nzEMiD+/TTNMsx12ItSvykKq
+         2gIJ6diepqDo5uBlgnfJZ7p5sDzBDsQosPmnwf4XGDyOld99mcy2tX1XAOJ+kqgE59Jn
+         YOrw==
+X-Gm-Message-State: AOAM530ulemjMg7w+keEYWca9hbx/dtlQMLOh8Akjea+hIs2jidQiVxS
+        bGGZu6xGrBnYTrAKtzSaCIg=
+X-Google-Smtp-Source: ABdhPJzZ0A0wIhQcTXEyYsVLqDGs+FuofT63neIX1W17xL9xJt5oqD/OgzGqWOyz9LH0d3V7yezjTA==
+X-Received: by 2002:a9d:57c9:0:b0:605:4ba7:d01f with SMTP id q9-20020a9d57c9000000b006054ba7d01fmr9814358oti.106.1651064603580;
+        Wed, 27 Apr 2022 06:03:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a4-20020a4a80c4000000b0035e62548577sm3974341oog.7.2022.04.27.06.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 06:03:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <79a5ec82-da71-57c3-d7bb-11607cb71bb4@roeck-us.net>
+Date:   Wed, 27 Apr 2022 06:03:19 -0700
 MIME-Version: 1.0
-In-Reply-To: <513edc25-1c73-6c85-9a50-0e267a106ec0@opensource.wdc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmlu7K4Mwkg83dbBa/z55nttj7bjar
-        xd5b2hZ79p5ksbi8aw6bxfxlT9ktuq/vYLPY8aSR0YHDY+esu+wem5fUe+xsvc/q8X7fVTaP
-        z5vkAlijsm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJz
-        gC5RUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgY
-        mQIVJmRnbOndwFrwUrBiw71fjA2MLXxdjJwcEgImEkv3zWDtYuTiEBLYzSjRvXYulPOJUeLs
-        wd9sEM43RomWxYcYYVpWX5sKVbWXUaK1+zhU1TNGieM7vrGDVLEIqEr0LF8AlODgYBPQljj9
-        nwMkLCJgKvG2p5UFpJ5Z4AyjRPv7XWD1wgLOEv0XbzOD2LwCOhJ7D2xlg7AFJU7OfMICYnMK
-        uElMPbaRCcQWFVCWOLDtOBPIIAmBVg6J91P2sUOc5yKx/Np3NghbWOLV8S1QcSmJl/1tUHa5
-        xPa2BVDNLYwSXadOsUAk7CUu7vkLtoFZIEPiZP8TqEGyElNPrYOK80n0/n7CBBHnldgxD8ZW
-        llizfgFUvaTEte+NULaHxJ9fkLATEvjNKHFuecQERvlZSJ6bhWQdhK0jsWD3JyCbA8iWllj+
-        jwPC1JRYv0t/ASPrKkbJ1ILi3PTUYtMCw7zUcniUJ+fnbmIEJ1Utzx2Mdx980DvEyMTBeIhR
-        goNZSYT3y+6MJCHelMTKqtSi/Pii0pzU4kOMpsDImsgsJZqcD0zreSXxhiaWBiZmZmYmlsZm
-        hkrivKfTNyQKCaQnlqRmp6YWpBbB9DFxcEo1MDHuZMtnCveS5dyplbLtQ6yT1cyrqp+jNV78
-        td50UtihS2znQbNss6ct9y5WSj7h4r/YvvP4l4mq586arxDgNPK0nbt2++XpMSyzTzCcP7bl
-        5Ga9AMnSCYdmflilkdHO6ZLZYi2mdeBXw/qNYccOMUeXMonf3vhNMHH187VXs/esU5gVdm+R
-        QH7+vZSl3Et/rs9sdvogqivX0XT8L7/GDZcT0a5aIZtfbT5d3nVm9QtZWSuWxw7PjrLxsXB6
-        ZAepV1oo5Jr3P3lwnr2ghq1ZxsBld7Y03/5b/IwP31969ER6+s043U+n6j5ylorx68Wd7luj
-        tu5F4JUE58n38kyZ060niWXO15t/W6h4z12VDCWW4oxEQy3mouJEAIGbFNYzBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrALMWRmVeSWpSXmKPExsWy7bCSvK6HQ2aSwaIl0ha/z55nttj7bjar
-        xd5b2hZ79p5ksbi8aw6bxfxlT9ktuq/vYLPY8aSR0YHDY+esu+wem5fUe+xsvc/q8X7fVTaP
-        z5vkAlijuGxSUnMyy1KL9O0SuDKaL3IXrOSv2LThL2MD413uLkZODgkBE4nV16aydjFycQgJ
-        7GaUeHP7DSNEQlJi2d8jzBC2sMTKf8/ZIYqeMEo03poDlmARUJXoWb6ArYuRg4NNQFvi9H8O
-        kLCIgKnE255WFpB6ZoEzjBLt73exgySEBZwl+i/eBuvlFdCR2HtgKxvE0N+MEkveTmaFSAhK
-        nJz5hAXEZhbQkrjx7yUTyAJmAWmJ5f/AFnAKuElMPbaRCcQWFVCWOLDtONMERsFZSLpnIeme
-        hdC9gJF5FaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcCRoae5g3L7qg94hRiYOxkOM
-        EhzMSiK8X3ZnJAnxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TB
-        KdXAdHDXNQfr76ea8g6xxHUXtj65+s76sFXCrNy02EbZflWt4s8m8WmWhQxPPdznWvr0qJo5
-        Zdl8rf1zY1c1R/y1JZ82m/OuXpJrPi9hS23woU4/0/Lo1nXzLrLdWXPw+pSD+Rk7bu3XYXDP
-        P6ZzU9qc1UTn5oMFWsuZp9vy5K7NW5w8V/286MKagv+9svKreO4v+lszVWWhb+8WvuP+G3Ym
-        nG8q/h5b8l38wV/NvALj/cZTT3quXejR71hYe6g79UiOzdrSezVVklPsvNUmu2qEVNfYPZ/y
-        ovWVfEzu76ojTfskD5v4KDZznLvU9rdpsWa19anSOSXHvrBI9QcbR2+MCWdc7zc5J/o8m5/l
-        pjQlluKMREMt5qLiRACj4ob+8wIAAA==
-X-CMS-MailID: 20220427130824epcas5p38594effe1d648be050ff00284e115014
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220426101938epcas5p291690dd1f0e931cd9f8139daaf3f9296
-References: <20220426101241.30100-1-nj.shetty@samsung.com>
-        <CGME20220426101938epcas5p291690dd1f0e931cd9f8139daaf3f9296@epcas5p2.samsung.com>
-        <20220426101241.30100-4-nj.shetty@samsung.com>
-        <513edc25-1c73-6c85-9a50-0e267a106ec0@opensource.wdc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 2/2] watchdog: Add Renesas RZ/N1 Watchdog driver
+Content-Language: en-US
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        wim@linux-watchdog.org, geert+renesas@glider.be,
+        tzungbi@kernel.org, linux-watchdog@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Phil Edworthy <phil.edworthy@renesas.com>
+References: <20220413082527.155740-1-jjhiblot@traphandler.com>
+ <20220413082527.155740-3-jjhiblot@traphandler.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220413082527.155740-3-jjhiblot@traphandler.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-
-O Wed, Apr 27, 2022 at 11:48:57AM +0900, Damien Le Moal wrote:
-> On 4/26/22 19:12, Nitesh Shetty wrote:
-> > Add new BLKCOPY ioctl that offloads copying of one or more sources ranges
-> > to one or more destination in a device. COPY ioctl accepts a 'copy_range'
-> > structure that contains no of range, a reserved field , followed by an
-> > array of ranges. Each source range is represented by 'range_entry' that
-> > contains source start offset, destination start offset and length of
-> > source ranges (in bytes)
-> > 
-> > MAX_COPY_NR_RANGE, limits the number of entries for the IOCTL and
-> > MAX_COPY_TOTAL_LENGTH limits the total copy length, IOCTL can handle.
-> > 
-> > Example code, to issue BLKCOPY:
-> > /* Sample example to copy three entries with [dest,src,len],
-> > * [32768, 0, 4096] [36864, 4096, 4096] [40960,8192,4096] on same device */
-> > 
-> > int main(void)
-> > {
-> > 	int i, ret, fd;
-> > 	unsigned long src = 0, dst = 32768, len = 4096;
-> > 	struct copy_range *cr;
-> > 	cr = (struct copy_range *)malloc(sizeof(*cr)+
-> > 					(sizeof(struct range_entry)*3));
-> > 	cr->nr_range = 3;
-> > 	cr->reserved = 0;
-> > 	for (i = 0; i< cr->nr_range; i++, src += len, dst += len) {
-> > 		cr->range_list[i].dst = dst;
-> > 		cr->range_list[i].src = src;
-> > 		cr->range_list[i].len = len;
-> > 		cr->range_list[i].comp_len = 0;
-> > 	}
-> > 	fd = open("/dev/nvme0n1", O_RDWR);
-> > 	if (fd < 0) return 1;
-> > 	ret = ioctl(fd, BLKCOPY, cr);
-> > 	if (ret != 0)
-> > 	       printf("copy failed, ret= %d\n", ret);
-> > 	for (i=0; i< cr->nr_range; i++)
-> > 		if (cr->range_list[i].len != cr->range_list[i].comp_len)
-> > 			printf("Partial copy for entry %d: requested %llu, completed %llu\n",
-> > 								i, cr->range_list[i].len,
-> > 								cr->range_list[i].comp_len);
-> > 	close(fd);
-> > 	free(cr);
-> > 	return ret;
-> > }
+On 4/13/22 01:25, Jean-Jacques Hiblot wrote:
+> From: Phil Edworthy <phil.edworthy@renesas.com>
 > 
-> Nice to have a code example. But please format it correctly.
->
+> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
+> very limited timeout capabilities. However, it can reset the device.
+> To do so, the corresponding bits in the SysCtrl RSTEN register need to
+> be enabled. This is not done by this driver.
+> 
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+>   drivers/watchdog/Kconfig    |   8 ++
+>   drivers/watchdog/Makefile   |   1 +
+>   drivers/watchdog/rzn1_wdt.c | 203 ++++++++++++++++++++++++++++++++++++
+>   3 files changed, 212 insertions(+)
+>   create mode 100644 drivers/watchdog/rzn1_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index c4e82a8d863f..4d5e503c8950 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -883,6 +883,14 @@ config RENESAS_RZAWDT
+>   	  This driver adds watchdog support for the integrated watchdogs in the
+>   	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
+>   
+> +config RENESAS_RZN1WDT
+> +	tristate "Renesas RZ/N1 watchdog"
+> +	depends on ARCH_RENESAS || COMPILE_TEST
+> +	select WATCHDOG_CORE
+> +	help
+> +	  This driver adds watchdog support for the integrated watchdogs in the
+> +	  Renesas RZ/N1 SoCs. These watchdogs can be used to reset a system.
+> +
+>   config RENESAS_RZG2LWDT
+>   	tristate "Renesas RZ/G2L WDT Watchdog"
+>   	depends on ARCH_RENESAS || COMPILE_TEST
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index f7da867e8782..38d38564f47b 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
+>   obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
+>   obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
+>   obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
+> +obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
+>   obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
+>   obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
+>   obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
+> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
+> new file mode 100644
+> index 000000000000..fa32716727b7
+> --- /dev/null
+> +++ b/drivers/watchdog/rzn1_wdt.c
+> @@ -0,0 +1,203 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Renesas RZ/N1 Watchdog timer.
+> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
+> + * cope with 2 seconds.
+> + *
+> + * Copyright 2018 Renesas Electronics Europe Ltd.
+> + *
+> + * Derived from Ralink RT288x watchdog timer.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define DEFAULT_TIMEOUT		60
+> +
+> +#define RZN1_WDT_RETRIGGER			0x0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
+> +#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
+> +#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
+> +#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
+> +
+> +#define RZN1_WDT_PRESCALER			16384
+> +#define RZN1_WDT_MAX				4095
+> +
+> +struct rzn1_watchdog {
+> +	struct watchdog_device		wdtdev;
+> +	void __iomem			*base;
+> +	unsigned long			clk_rate;
 
-acked
+Nit: Whenever clk_rate is used, it is divided by 1000.
+It might be better to store and use clk_rate_khz instead.
 
---
-Nitesh Shetty
-
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_
-Content-Type: text/plain; charset="utf-8"
-
-
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_--
+Guenter

@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087E45121DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06BE5121DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbiD0TAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S230317AbiD0TA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiD0TAi (ORCPT
+        with ESMTP id S232452AbiD0TAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:00:38 -0400
-Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F122D081C;
-        Wed, 27 Apr 2022 11:46:13 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru C5C71209A0EB
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v3] sh: avoid using IRQ0 on SH3/4
-To:     Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Organization: Open Mobile Platform
-Message-ID: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
-Date:   Wed, 27 Apr 2022 21:46:09 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 27 Apr 2022 15:00:43 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F5F113CA3;
+        Wed, 27 Apr 2022 11:46:23 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id j2so5109837ybu.0;
+        Wed, 27 Apr 2022 11:46:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0cdA+JI48kZS+AxlzBx4Qt8iIGll7kLbRjF8CRRc1mE=;
+        b=OaGyrRoSv87NfVAv27V/6TqlLXkvlnh9pdHNpxbZEfuw6UzLqHMGOs+Aa93jRSka42
+         tbVHc8FgVwcE72i2vK8DpC3+PQD6tkL9r98PE/oFOFQQvbSjtKes/TuUxb/RmRv6Uq8B
+         F6w2fyeV4QbFRbkUDz+tJOfQ2MrzseKQjBkQi+si732f8FNn7DQUKhMZJvFur+VfzGiM
+         QpTSy8ZWIIQxU+CG8aTqgfOTJmM3ZWZF/FvOl1Y/IHi0YuTTafXgPfh2I3mVgNHCpxpD
+         Q/6jcXhbLDWvVJ/doGOZP+ygHMQKRJwZ++t2UpWU3FFB7trTbXf9poGlS/8QUvPrRtaR
+         hLsA==
+X-Gm-Message-State: AOAM530xjjY9c8bxla3SMqW03parMTAdfLHzH6fL7KdLTbNBvVuxjbce
+        av6lypbhPRsIGB+T4Ja5xWQzndGcH77X5VFpMe1g7w75
+X-Google-Smtp-Source: ABdhPJwT3huBGS2K+bNnsZ8eZSYIdoXsCaigBa/fDfOditHuurhLrxP5JNE15oQnd6/c0CSljL/aM4n6to8/57goMo0=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr19076088ybf.137.1651085182297; Wed, 27
+ Apr 2022 11:46:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220425114544.37595-1-heikki.krogerus@linux.intel.com> <Ymfa3F83zxgqD2pk@kroah.com>
+In-Reply-To: <Ymfa3F83zxgqD2pk@kroah.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Apr 2022 20:46:11 +0200
+Message-ID: <CAJZ5v0hBjWomOxTw8Nfa83FEyDqGm+5B8W9WPEHfZR3uwUUdOw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] acpi: Remove acpi_release_memory()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
-and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
-see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
-at 0 -- modify that code to start the IRQ #s from 16 instead.
+On Tue, Apr 26, 2022 at 1:43 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Apr 25, 2022 at 02:45:42PM +0300, Heikki Krogerus wrote:
+> > Hi,
+> >
+> > It seems there never were and there never will be actual devices that
+> > expose the UCSI ACPI mailbox interface. There are now PD controllers
+> > that support the UCSI interface, but they do not use the ACPI mailbox.
+> >
+> > So there is no point in mapping the mailbox with ioremap(), we can
+> > just use memremap(). That should make it possible to also remove the
+> > function acpi_release_memory(). That function was only there to make
+> > it possible to use ioremap() in the UCSI ACPI driver.
+> >
+> > thanks,
+> >
+> > Heikki Krogerus (2):
+> >   usb: typec: ucsi: acpi: Map the mailbox with memremap()
+> >   acpi: Remove the helper for deactivating memory region
+> >
+> >  drivers/acpi/osl.c                 | 86 ------------------------------
+> >  drivers/usb/typec/ucsi/ucsi_acpi.c | 19 ++-----
+> >  include/linux/acpi.h               |  3 --
+> >  3 files changed, 4 insertions(+), 104 deletions(-)
+> >
+> > --
+> > 2.35.1
+> >
+>
+> Look good to me, Rafael, want me to take this through the USB tree?  Or
+> if you want to take it through the USB tree, here's my reviewed-by:
+> either is fine with me.
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
-
-[1] https://lore.kernel.org/all/025679e1-1f0a-ae4b-4369-01164f691511@omp.ru/
-
-Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
----
-The patch is against Linus Torvalds' 'linux.git' repo.
-
-Changes in version 3:
-- added an appropriate Fixes: tag and added a passage about it to the patch
-  description;
-- added actual cases of the boards using IRQ0 to the patch description;
-- added Geert Uytterhoeven's and John Paul Adrian Glaubitz's tags;
-- updated the link to point to the version 2 of the patch.
-
-Changes in version 2:
-- changed cmp/ge to cmp/hs in the assembly code.
-
- arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
- include/linux/sh_intc.h        |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-Index: linux/arch/sh/kernel/cpu/sh3/entry.S
-===================================================================
---- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
-+++ linux/arch/sh/kernel/cpu/sh3/entry.S
-@@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
- 	mov	r4, r0		! save vector->jmp table offset for later
- 
- 	shlr2	r4		! vector to IRQ# conversion
--	add	#-0x10, r4
- 
--	cmp/pz	r4		! is it a valid IRQ?
-+	mov	#0x10, r5
-+	cmp/hs	r5, r4		! is it a valid IRQ?
- 	bt	10f
- 
- 	/*
-Index: linux/include/linux/sh_intc.h
-===================================================================
---- linux.orig/include/linux/sh_intc.h
-+++ linux/include/linux/sh_intc.h
-@@ -13,9 +13,9 @@
- /*
-  * Convert back and forth between INTEVT and IRQ values.
-  */
--#ifdef CONFIG_CPU_HAS_INTEVT
--#define evt2irq(evt)		(((evt) >> 5) - 16)
--#define irq2evt(irq)		(((irq) + 16) << 5)
-+#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
-+#define evt2irq(evt)		((evt) >> 5)
-+#define irq2evt(irq)		((irq) << 5)
- #else
- #define evt2irq(evt)		(evt)
- #define irq2evt(irq)		(irq)
+I've taken this into the ACPI tree (for 5.19) with your R-by, thanks!

@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A1451255E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8B1512561
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiD0Wlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S232339AbiD0Wme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbiD0Wl2 (ORCPT
+        with ESMTP id S229695AbiD0Wmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:41:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6265D6D4D6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:38:15 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651099093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e0JjrDY5ZRqnFRcUlqMMWqxBQcbO4A/xkDxTwlnqWFk=;
-        b=jszYZzKU9Rvaj4vO0mmsqXhjqNc3Kmos0bvnYLYr6I7iPz7aPlPApzuUorjIW6x9Qa6Fhv
-        7eEzpPQJXNOgkJDEnf6hHcR2/mKwP1te6TBEpd2EcgVFsoM4icSOSKh6sqnxbyUgxc25MP
-        72WvwH7+rV4Usb/6q6IYHcPvunTHhTjA5GyhMKUcERoS111LzApS9xNqBKbq6dadp+v5To
-        om9izSodKsy5lpx39yETJ4Nnm04vMarlcgfJLbIFNfB4N763+ea3MosaTe7/4fn6f8Eu5C
-        36yAOsG0CHLJqLk41Xz/f7lG0wh4BfZtXQZjVhZ2bx8GDuStReSKBkKxON5qag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651099093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e0JjrDY5ZRqnFRcUlqMMWqxBQcbO4A/xkDxTwlnqWFk=;
-        b=9QL4MT7cR7VrfiWOSQecv39bRXF/RRERSU7EgX/+pd70Xr6NKGiSWYYBYCJZ8lz0vnY93a
-        DnOyykn5zxBLWrAg==
-To:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Feng Tang <feng.tang@intel.com>,
-        Bill Gray <bgray@redhat.com>, Jirka Hladky <jhladky@redhat.com>
-Subject: Re: [PATCH 2/2] x86/tsc_sync: Add synchronization overhead to tsc
- adjustment
-In-Reply-To: <68837b1a-f85b-e842-f8c0-1cad162856f4@redhat.com>
-References: <20220314194630.1726542-1-longman@redhat.com>
- <20220314194630.1726542-3-longman@redhat.com> <87czhymql2.ffs@tglx>
- <d1a04785-4822-3a3f-5c37-81329a562364@redhat.com> <87levx8kou.ffs@tglx>
- <4f02fe46-b253-2809-0af7-f2e9da091fe9@redhat.com> <87czh50xwf.ffs@tglx>
- <68837b1a-f85b-e842-f8c0-1cad162856f4@redhat.com>
-Date:   Thu, 28 Apr 2022 00:38:12 +0200
-Message-ID: <87h76ew3sb.ffs@tglx>
+        Wed, 27 Apr 2022 18:42:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABA1290;
+        Wed, 27 Apr 2022 15:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=s6XKX8og5KIUAHRB93AiGU36ErCzIx+ZrYZ7ApHfXVY=; b=PzOWfZAdgPjJPl9GnpKb5EH5TQ
+        RfRROgx/z6q+6pL25n+U2OA6d/EZ1YgBP7ykxsbEWMgLrLOKQAPiO01FJDnCAxUcYFHubLunAbC9U
+        rOoMMoAiaqaP4obscEKwBHy+dDMiSwDn5PSaYCdCf6WbBbFFQXWZgJAhCfq67JgiksvaWrcWamIrh
+        +P8jh8FD2Ok1rJpu8GahsN0Kcz/JewPTJP2TMyAHAMinPK5GVNyZoLIhfgmNindrZ5zr9XkZ7fL7m
+        v99XVpJvp+dfzjvLINVLkG20L7jF/6nVIAkj6KG8pXib83nTVRTRP0E7ePnFLg27+tcc7xgr0YGLb
+        lIPX9HVA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1njqJR-00Ay1a-3H; Wed, 27 Apr 2022 22:39:09 +0000
+Message-ID: <c0bf9c05-9345-b203-611d-411f0237cf26@infradead.org>
+Date:   Wed, 27 Apr 2022 15:39:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] lkdtm: cfi: Fix type width for masking PAC bits
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220427001226.1224704-1-keescook@chromium.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220427001226.1224704-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26 2022 at 11:36, Waiman Long wrote:
-> On 4/25/22 15:24, Thomas Gleixner wrote:
->> Yes. It's clear that the initial sync overhead is due to the cache line
->> being remote, but I rather underestimate the compensation. Aside of that
->> it's not guaranteed that the cache line is actually remote on the first
->> access. It's by chance, but not by design.
->
-> In check_tsc_warp(), the (unlikely(prev > now) check may only be 
-> triggered to record the possible wrap if last_tsc was previously written 
-> to by another cpu. That requires the transfer of lock cacheline from the 
-> remote cpu to local cpu as well. So sync overhead with remote cacheline 
-> is what really matters here. I had actually thought about just measuring 
-> local cacheline sync overhead so as to underestimate it and I am fine 
-> about doing it.
 
-Fair enough, but what I meant is that when estimating the actual sync
-overhead then there is no guarantee that the cache line is remote.
 
-The CPU which does that estimation might have been the last to lock,
-there is no guarantee that the reference CPU locked last or wrote to the
-cache line last.
+On 4/26/22 17:12, Kees Cook wrote:
+> The masking for PAC bits wasn't handling 32-bit architectures correctly.
+> Replace the u64 cast with uintptr_t.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Link: https://lore.kernel.org/lkml/CAMuHMdVz-J-1ZQ08u0bsQihDkcRmEPrtX5B_oRJ+Ns5jrasnUw@mail.gmail.com
+> Fixes: 2e53b877dc12 ("lkdtm: Add CFI_BACKWARD to test ROP mitigations")
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
->> IOW, TSC runs with a constant frequency independent of the actual CPU
->> frequency, ergo the CPU frequency dependent execution time has an
->> influence on the resulting compensation value, no?
->>
->> On the machine I tested on, it's a factor of 3 between the minimal and
->> the maximal CPU frequency, which makes quite a difference, right?
->
-> Yes, I understand that. The measurement of sync_overhead is for 
-> estimating the delay (in TSC cycles) that the locking overhead 
-> introduces. With 1000MHz frequency, the delay in TSC cycle will be 
-> double that of a cpu running at 2000MHz. So you need more compensation 
-> in this case. That is why I said that as long as clock frequency doesn't 
-> change in the check_tsc_wrap() loop and the sync_overhead measurement 
-> part of the code, the actual cpu frequency does not matter here.
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+fwiw
+Thanks.
 
-I grant you that it does not matter for the loop under the assumption
-that the loop runs at constant frequency, but is that a guarantee that
-it does not matter later on?
+> ---
+>  drivers/misc/lkdtm/cfi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+> index 804965a480b7..666a7f4bc137 100644
+> --- a/drivers/misc/lkdtm/cfi.c
+> +++ b/drivers/misc/lkdtm/cfi.c
+> @@ -59,7 +59,7 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+>  #endif
+>  
+>  #define no_pac_addr(addr)      \
+> -	((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
+> +	((__force __typeof__(addr))((uintptr_t)(addr) | PAGE_OFFSET))
+>  
+>  /* The ultimate ROP gadget. */
+>  static noinline __no_ret_protection
 
-If you overcompensate by a factor of 3 because the upcoming CPU ran at
-the lowest frequency, then it might become visible later when everything
-runs at full speed.
-
-> However about we half the measure sync_overhead as compensation to avoid 
-> over-estimation, but probably increase the chance that we need a second 
-> adjustment of TSC wrap.
-
-Half of what?
-
-> With this patch applied, the measured overhead on the same CooperLake
-> system on different reboot runs varies from 104 to 326.
-
-Half of something which jumps around? Not convinced. :)
-
-Btw:
->> Yes, I will try that experiment and report back the results.
-
-Could you please do that? I really like to see the data points.
-
-It's so sad that we have still to deal with this nonsense just because
-HW people don't give a damn.
-
-Thanks,
-
-        tglx
+-- 
+~Randy

@@ -2,112 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6B2512584
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C5D512589
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237247AbiD0Wu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S234208AbiD0WwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiD0Wu4 (ORCPT
+        with ESMTP id S231531AbiD0WwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:50:56 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD56C7890D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:47:44 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id g3so2539717pgg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:47:44 -0700 (PDT)
+        Wed, 27 Apr 2022 18:52:00 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F9089CED
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:48:46 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p10so5554797lfa.12
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pYR/QzQe67f9fqV64alfpJ4QrpkISe5OlFL0d1s9oQI=;
-        b=Eil46hDjPhuXKtSzUvDnVy1gRIyazn7depZN4dKRbZk3YG/snmXo+NQtocH4TQgRcd
-         3TyfzmhJTku3NDJ3F2RHtW96hNyaho9bIZTIbsRwNl3zOp9uwIMIQ22fj087XpU3YSMw
-         +b96tr2pL8TvEGaHl3XYTiWXBfNXQrdluMzrGrLzUUpiMXO7F2Gg2Gl403bMWy4muIj9
-         t4I8cLWeVdx1rjKEg1w/ae+y06VgA7wEvXWyFAgLtY0GbWtOe1NrDU8G1v57YCYEwAh3
-         mKzODEOxygNOtFrB3E5PYOiPCV6XvIlbZo/Ay2crmyCvbppuQQjtZ8CdFdNZzwtxuL4+
-         stLw==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SQk+uPdXjus9l+tZCRcT7jspmYgklYtunIPDK1R0FPo=;
+        b=4be664J+OKOeBO0o8b8/lSmk7jn8HmLIxoeRFfTKVZp/qfcuXsj0nn0H7AsnMzYhl1
+         ES/5EofZCQG+lU25D5qAXkc8AWQpCGUfz9nDBy6CFgdN3kWmzPKWPX3ouImm0xjv8Hot
+         Q1nLzcRXHoGKjZZq2Ugu0RFU8yN4C0APkgUeDUB6KrZ1trEszX9xLoTyIm2bJLDwMNdk
+         N7W3FgisFjh7vg/mDxMWbdPH84tzDYTOBZqlPWxH+fPixhU1X26YGN658TZN77CaspzE
+         6acX8xvHwftaEXxYqp5UMxc8oAGQBmwZm+vxqUqGmkQKqvGDa+d8noiqD3E455dFClQ1
+         3Wlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pYR/QzQe67f9fqV64alfpJ4QrpkISe5OlFL0d1s9oQI=;
-        b=gNfeu1qUuDshgNNKSxTYx0tig9p6i4aaZ/1utUUsha1IKByyzSpOT8FUF70gPGUJsu
-         V9FYTVxbWOw4Avy6jBBGT5sFQH0ajFxjrzekM29vXufEtbRjVWvDpUSuuCBvCHRwQxiL
-         1e6y4r2L0wk9sNbTZkmIj5PGcehmzPq1Sno+RPurwoOeeMtxoJt3fe3JBGLkGSIqOiM2
-         v26fWO92Tui6qCCIn0RYyI2YfFQkpr+8m2Hole7tQrOZaZBdlPUTv/ZEv3xFEfxXs8CP
-         lOsAKQCc9peS2IR0hdlCXIE9qIM/uyUkmzwWhyJkHQ0qy0xh6Bz9ftm2ajhHygqnILih
-         2qXg==
-X-Gm-Message-State: AOAM532swe0E/h62OubW4GJ5fAmHbTMpti7SsJ97swalVLT38SoS2W03
-        BLoTVQHwJls9kbrBz/KC/fzk4XNWTaX27Q1a+WqwkA==
-X-Google-Smtp-Source: ABdhPJxcEqAoNu93UUmfONihsYizulWO+mPk6w8S5KyIapwPeSKgl62h3bt60dBQL2hIEVbTmlOABdZwHEZevt2VH38=
-X-Received: by 2002:a63:9502:0:b0:386:3916:ca8e with SMTP id
- p2-20020a639502000000b003863916ca8emr25316498pgd.357.1651099664019; Wed, 27
- Apr 2022 15:47:44 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SQk+uPdXjus9l+tZCRcT7jspmYgklYtunIPDK1R0FPo=;
+        b=bQwoHWV6Sg1nCCmz3Om9Dg2Hvjj7DBE2oPaDH26XKAE5JguJDMe7C+1/3Hobbrba9C
+         k6DgEIHo8hU4Yet2geShWH90TsCpnJgtOGYsZ5V9/Uz2xQ8LK5npiJYyCx2wJvgOBXc8
+         u4PkBlj315SN3R3jhUfue7ClD+GI5p4/Tfo/BPM00e2ZM4mixFct5s6Tf6IvmScILVTR
+         YtlJr8gW9tj08jwORi/4vHU0eTp1eaCGgRthwNLRt0LeoM6aPod2U4Txp7UT2gmQFIS+
+         90HUgqyo6dt6x1d0qhVfEC9fzES3ZMSqOJbsyVuXjC/cPIdZn6YPhl2YLE/v943GEdsn
+         NZNw==
+X-Gm-Message-State: AOAM531ueMVdhrPoiYdbix27LG7I6WS7Q9YWk2Z83CpCjvFsaVH8fVjt
+        bkgT+2215PPQxLtlSfPXIf7Fiw==
+X-Google-Smtp-Source: ABdhPJz73JY3yLDUY6xr/jjV4y8SsKN6H0NWeoiwZQ6xAk04KGa1rAljireM7SzoraFwJvt6CG+IFw==
+X-Received: by 2002:a19:4f10:0:b0:471:fb4e:bf28 with SMTP id d16-20020a194f10000000b00471fb4ebf28mr16129205lfb.274.1651099725237;
+        Wed, 27 Apr 2022 15:48:45 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id h10-20020ac24daa000000b00471f8c681fdsm1740502lfe.233.2022.04.27.15.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 15:48:44 -0700 (PDT)
+Message-ID: <9600b84a-8590-4e7b-c74d-3f52fe905e7f@openvz.org>
+Date:   Thu, 28 Apr 2022 01:48:43 +0300
 MIME-Version: 1.0
-References: <YmdeCqi6wmgiSiWh@carbon> <33085523-a8b9-1bf6-2726-f456f59015ef@openvz.org>
- <CALvZod4oaj9MpBDVUp9KGmnqu4F3UxjXgOLkrkvmRfFjA7F1dw@mail.gmail.com>
- <20220427122232.GA9823@blackbody.suse.cz> <CALvZod7v0taU51TNRu=OM5iJ-bnm1ryu9shjs80PuE-SWobqFg@mail.gmail.com>
- <6b18f82d-1950-b38e-f3f5-94f6c23f0edb@openvz.org>
-In-Reply-To: <6b18f82d-1950-b38e-f3f5-94f6c23f0edb@openvz.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 27 Apr 2022 15:47:32 -0700
-Message-ID: <CALvZod5HugCO2G3+Av3pXC6s2sy0zKW_HRaRyhOO9GOOWV1SsQ@mail.gmail.com>
-Subject: Re: [PATCH memcg v4] net: set proper memcg for net_init hooks allocations
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] memcg: enable accounting for veth queues
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <1c338b99-8133-6126-2ff2-94a4d3f26451@openvz.org>
+ <20220427095854.79554fab@kernel.org>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220427095854.79554fab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 3:43 PM Vasily Averin <vvs@openvz.org> wrote:
->
-> On 4/27/22 18:06, Shakeel Butt wrote:
-> > On Wed, Apr 27, 2022 at 5:22 AM Michal Koutn=C3=BD <mkoutny@suse.com> w=
-rote:
-> >>
-> >> On Tue, Apr 26, 2022 at 10:23:32PM -0700, Shakeel Butt <shakeelb@googl=
-e.com> wrote:
-> >>> [...]
-> >>>>
-> >>>> +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
-> >>>> +{
-> >>>> +       struct mem_cgroup *memcg;
-> >>>> +
-> >>>
-> >>> Do we need memcg_kmem_enabled() check here or maybe
-> >>> mem_cgroup_from_obj() should be doing memcg_kmem_enabled() instead of
-> >>> mem_cgroup_disabled() as we can have "cgroup.memory=3Dnokmem" boot
-> >>> param.
->
-> Shakeel, unfortunately I'm not ready to answer this question right now.
-> I even did not noticed that memcg_kmem_enabled() and mem_cgroup_disabled(=
-)
-> have a different nature.
-> If you have no objections I'm going to keep this place as is and investig=
-ate
-> this question later.
->
+On 4/27/22 19:58, Jakub Kicinski wrote:
+> On Wed, 27 Apr 2022 13:34:29 +0300 Vasily Averin wrote:
+>> Subject: [PATCH] memcg: enable accounting for veth queues
+> 
+> This is a pure networking patch, right? The prefix should be "net: ",
+> I think.
+Thank you for the remark, I'll fix it.
 
-Patch is good as is. Just add the documentation to the functions in
-the next version and you can keep the ACKs.
+Initially it was a part of the patch accounted resources accounted 
+when creating a new netdevice, but then I moved this piece to
+a separate patch, because unlike other cases, it is specific to veth.
+ 
+Thank you,
+	Vasily Averin

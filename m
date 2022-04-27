@@ -2,104 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F0B511743
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB757511701
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiD0MUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S233748AbiD0MUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233725AbiD0MT7 (ORCPT
+        with ESMTP id S233653AbiD0MUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:19:59 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE0B66CB0;
-        Wed, 27 Apr 2022 05:16:48 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id i20so1199051ion.0;
-        Wed, 27 Apr 2022 05:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vR9/a6S/9L9qoG5vKxM2YzI02WzXzNNLg/n2mKuTMEA=;
-        b=Rwo92AOR89AowvwIZRFDJCISlJTT8dV2nKf1oTeQ8FJ1Gh4x8Xi1az8uAxYxxjmiRe
-         EQJcGldpvQbOuC0f4Iu3HpefxfdRNbnV7fWOhVvdOdqbQyOwkkli21vRCfs8BwqHHeNb
-         VVIYUcf0RhIuvTDL2N49xyewWCmzmFIMJZ8bH1mi8jVzfli9YqHPqmbG7UtlzRHUHa0g
-         fcJpNbINaxjCaYMoM73NTt5ZM89fiG2wA3pT7yBKg4wseFXCizFWK7z60EUVp9bZadFZ
-         1h0qSpzRfbXw9rfEV54VaVmhQlgqYhPkNQ0m6H6qsWX3yNs9RrYzlkg9b7Od6CnBaeml
-         WRIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vR9/a6S/9L9qoG5vKxM2YzI02WzXzNNLg/n2mKuTMEA=;
-        b=7xCkMkuJWdZth2h0/0vxSCv2VOeCjfrJkbkz1kOuXCnd0Xo7Eze/p6y26cwxrrlAHg
-         e4UAYLZAKbY1AGPzt03srJcCL/rYEiyAzq0gO06HY7idBHgUJBUz5YAt2Bwc59+xdzfm
-         w4uLsz+FzqqCp56ExAVZq2gbv90l5Iqy42DSzsZpOuv1qmUEwFU14eFULYGo1PHpa+e/
-         CpwUGgWJXHWjhTI90q0Vi3XR66pFMBdte6um0lQFxYhjgtH6bsSqKSCxgyQ4e9s3ioNL
-         jRA3LtrvIdwua9p8wvc4OnF9GoHmUjwXsY1Ap3xZhYcF6rFZ15SA07Wt8COKAmLjqe3F
-         R4rA==
-X-Gm-Message-State: AOAM5323GqBjlRjzXCKFu9Yii6V/npoQLgGOg5Kf6+0Qkv0ctJrbA6Mo
-        Nw5y+gLLicpx39hvRVwI3aCcn8L73wgE9vfLE//AlAxCBQzNVubY
-X-Google-Smtp-Source: ABdhPJxP3tB/CnUTqnVFqvh6WaO0e5G8sr5EQaqsF3/VuRhQCnK57XGvNoHzUdPgI8BaGHO8ZUaNfFqtKR7ePQHcAWU=
-X-Received: by 2002:a05:6638:16cc:b0:32a:7375:8472 with SMTP id
- g12-20020a05663816cc00b0032a73758472mr11946126jat.256.1651061807775; Wed, 27
- Apr 2022 05:16:47 -0700 (PDT)
+        Wed, 27 Apr 2022 08:20:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5333D489;
+        Wed, 27 Apr 2022 05:17:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8BFA619F1;
+        Wed, 27 Apr 2022 12:17:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01DE1C385A9;
+        Wed, 27 Apr 2022 12:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651061847;
+        bh=cfgh7Wb560mKp9MUdbD9T6uPA3TRHqxPZgTmSnaDhEk=;
+        h=Date:From:Subject:To:References:In-Reply-To:From;
+        b=n1J94SppjAv5wHSxxe39PLSHfvYctqiNRGF4TRVlc4S1gu+cGjcQENrDquMxTpRvJ
+         zkRGafADlPfeVAFA2ENv/F26I+kSnGi2YikFRDtCKhiR2Vx+EeErqx+WTQsj83m1m1
+         1VM6l6thbHG1LZUshPaI+mPI80SX5iciAbh3vU+HaRNZ41IRH4FyFD50djj1qxe79a
+         4mOwG97O0o7NXZj62XYof44noq0VJ6iYSIJOA31RFXLuRhMCgq+O3l5cTR0qiuFLpA
+         Y/epgo/X6y/hDq1f22Be15DrUPGC4E0hXYreJjJJ9rJ0NNsUOEF6oKsUmss2myyod6
+         NU5kSA7FsdR1g==
+Message-ID: <12570c36-d005-f51c-654b-01d52c50205c@kernel.org>
+Date:   Wed, 27 Apr 2022 15:17:21 +0300
 MIME-Version: 1.0
-References: <20220426092340.495704-1-eugene.shalygin@gmail.com>
- <20220426092340.495704-2-eugene.shalygin@gmail.com> <20220426151656.GA3119637@roeck-us.net>
- <CAB95QASxuS=RDN6MRJ89O0pSpqQSaWFQVeyedGyda01FGtR7GQ@mail.gmail.com> <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
-In-Reply-To: <6d69fb63-a84f-31e5-0a88-4a154e290573@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 27 Apr 2022 14:16:36 +0200
-Message-ID: <CAB95QARDq1Tr64dvPVemXHRNyu=T5P7LJ_DUn7sdHauUB6daaw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] hwmon: (asus-ec-sensors) introduce ec_board_info
- struct for board data
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH 1/3] interconnect: qcom: constify qcom_icc_desc
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+ <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
+Content-Language: en-US
+In-Reply-To: <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Sorry, I don't follow that part. One can add "__init" or "__initdata",
-> as in
->
-> static struct platform_driver asus_ec_sensors_platform_driver __initdata = {
->
-> to mark a function or data structure as __init. I don't think adding
-> "_probe" to the struct platform_driver variable name does that.
->
+On 22.04.22 18:25, Krzysztof Kozlowski wrote:
+> On 12/04/2022 12:26, Krzysztof Kozlowski wrote:
+>> struct qcom_icc_desc is not modified so it can be made const for safety.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/msm8916.c |  6 +++---
+>>   drivers/interconnect/qcom/msm8939.c |  8 ++++----
+>>   drivers/interconnect/qcom/msm8974.c | 12 ++++++------
+>>   drivers/interconnect/qcom/qcm2290.c | 12 ++++++------
+>>   drivers/interconnect/qcom/qcs404.c  |  6 +++---
+>>   drivers/interconnect/qcom/sc7180.c  | 26 +++++++++++++-------------
+>>   drivers/interconnect/qcom/sc7280.c  | 24 ++++++++++++------------
+>>   drivers/interconnect/qcom/sdm660.c  | 12 ++++++------
+>>   drivers/interconnect/qcom/sm8150.c  | 22 +++++++++++-----------
+>>   drivers/interconnect/qcom/sm8250.c  | 22 +++++++++++-----------
+>>   drivers/interconnect/qcom/sm8350.c  | 20 ++++++++++----------
+>>   drivers/interconnect/qcom/sm8450.c  | 22 +++++++++++-----------
+> 
+> Hi folks,
+> 
+> Any comments here?
 
-__initdata leads to modpost warning:
-WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.exit.text+0x3):
-Section mismatch in reference from the function cleanup_module() to
-the variable .init.data:asus_ec_sensors_platform_driver
-The function __exit cleanup_module() references
-a variable __initdata asus_ec_sensors_platform_driver.
-This is often seen when error handling in the exit function
-uses functionality in the init path.
-The fix is often to remove the __initdata annotation of
-asus_ec_sensors_platform_driver so it may be used outside an init section.
+Thanks for the patches! I had actually some of these changes in my local tree
+for a long time. Do you want to send a follow-up patch also for sc8280xp?
 
-Compiling without attributes resulted in another message:
-WARNING: modpost: drivers/hwmon/asus-ec-sensors.o(.data+0x0): Section
-mismatch in reference from the variable
-asus_ec_sensors_platform_driver to the function
-.init.text:asus_ec_probe()
-The variable asus_ec_sensors_platform_driver references
-the function __init asus_ec_probe()
-If the reference is valid then annotate the
-variable with __init* or __refdata (see linux/init.h) or name the variable:
-*_template, *_timer, *_sht, *_ops, *_probe, *_probe_one, *_console
-
-Here is why I added the "_probe" suffix.
-
-Eugene
+BR,
+Georgi

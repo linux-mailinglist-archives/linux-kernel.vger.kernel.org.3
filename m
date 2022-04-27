@@ -2,163 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861FA5122B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB495122BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbiD0TbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S233766AbiD0Tbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbiD0Ta6 (ORCPT
+        with ESMTP id S234241AbiD0TbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:30:58 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5EF1A39A;
-        Wed, 27 Apr 2022 12:26:48 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id t4so619092ilo.12;
-        Wed, 27 Apr 2022 12:26:48 -0700 (PDT)
+        Wed, 27 Apr 2022 15:31:01 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741849F9C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:26:55 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o69so918338pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xPwl3B36r2cAnhKOklI7W5r9ku8U6ZGRu8H06ecsDmA=;
-        b=BjuIo11TFSHGVHxVxumbfBtSf8/SrNJ5SC/Xtue/hPWKa4HvDpapKHpH2L6yrPENpH
-         2OEaN0xGJdlqoxfc0DVjsqxTiZ8R5bPkyB+qiNr3huDg39Lsetol46LCwuW940laIqwf
-         LbzlCHbPy22J2HKPJ39VYopALdVPToXxpMj5gVW+fjtziRpo1gCbCVVZpWWfWygF+PCG
-         u9tyApFiaaMIlpEsxb6c3637itcFm+maFkB4K24+ToVSepQMG4t8SybAruTA07s54LCI
-         I6sdzHWpmJMyz40EX+iwKNtvW//cG/hteQwpeSn/y5CNx4XJoeB+aq7Hrjf+CcT+d5lN
-         ENWQ==
+        bh=lh6OruqftWVABxdIhH7SnyaHoA0qU1W0oHzil2WC0bg=;
+        b=H0ewu+vW4sL/wxXv5X+gxum+hcUKmJMcww5kKUqczHc+mt9UWe4iAcmFIOaIegviYl
+         1KtltKngsgPch0KyCv8oHKs0gCtlctGXfAeFsjCNYBte1GWRnnULtzmsiTAVLFGRV7TN
+         TCG9LVKiDkogUp2z6Xx88Zrypj0MifR0YbOKF/Xvuml+2xWKYAGs/WFzo34zSRW9fj2h
+         7yxP6QN5uFqUYISM++GywuuzpNybpaomxtqAic/1nJ2Aj/oYHMMNvMJq7pKrZkXYpkHj
+         Xey2h2t9/BHaCB2X02MMnLHqwaU4z4QeI9neMwW4alJVjhzlfgL9+bi8IVPwa0iE50EM
+         sRmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xPwl3B36r2cAnhKOklI7W5r9ku8U6ZGRu8H06ecsDmA=;
-        b=Cu8VPT2JAFjtCiZiKVboR5MYTqAHrz5WnrpWEEJBPIQUGsbsVYllbc9gGZeRrJCBsa
-         cPENfqMvhi3te2Ulk2x+Emz0LkoB8g3+qvEQSnvb8Tzqpqing4ybbOiCmy9TNPQrqPMr
-         9LsDMt2YcN/fyBDBGN2KnUHFUuxClzFhL42ZlPsO7rwOytkVheQpsLv0F1PrU7T7q05R
-         76Br4kdn8TOcinU2OJ9Y/+ATrkk8aorGUoMkF/0uK/rB7Gsg1k7Zfj2JQDuAXAHypafn
-         H7T03ZLHNUWrOLWLV4vAnqA74JrwwdtOSE8de5fnsar9TtribFY3pmfrWuikb1QCCWCq
-         bwHw==
-X-Gm-Message-State: AOAM533/M00R5d3u7V7EmEftaB+h8R/E/peEF4TVYQVDH1tW/nFkAwxl
-        I4fa8g5caivHU/AiKMKI2byFPmV3yKLE4lQ1wX1/6lib620=
-X-Google-Smtp-Source: ABdhPJzA/MkwsJsuKT3AKg8Kx603QI4N2VDrpmZSAU9hfxKMztHgFoA7OVcNigYiHbBOLyuzfVf/oBw7/LFCsDUaGGg=
-X-Received: by 2002:a05:6e02:1ba3:b0:2cc:4158:d3ff with SMTP id
- n3-20020a056e021ba300b002cc4158d3ffmr11614731ili.98.1651087607619; Wed, 27
- Apr 2022 12:26:47 -0700 (PDT)
+        bh=lh6OruqftWVABxdIhH7SnyaHoA0qU1W0oHzil2WC0bg=;
+        b=X5eQs2ar3A5f37YZj+v3GFJGSYm8jXe51duly7zpQp28uQQa2Y8IZW83iuwNB3HT2/
+         kQb3Pg35AxPLd8m4PJf8Ub+s60kHIj6JoDZ31HMJt/bNgBNueCFZdHyRhzixUOhsMJKP
+         K1rEnsBv3EsEuStVfxi7MMU9MLWb8AcRIQW2BOLn46fQG36Izqdw9k1lTb/NiZJd30c0
+         r9pRqB0iha2i+tpEuymEukBN5jHCHLjIokKsP6lCA45SAV///KMwwI6BL7oZbGtU6znZ
+         Bnz4j16MIEn1AxTKER8KguuE4KZ08Y2y+9aSeY0TZp6lF3YDm/x7D5ZPh5a9y8lhY2lI
+         TocA==
+X-Gm-Message-State: AOAM532RUp4v07bOv8gCO37DS3ceTLk+F+783Qw/dW2Vh28CazNtL+6L
+        MsT9alrhzNMLzSB0IspqveqvW/ZyXlDx5E0Yh6HNxQ==
+X-Google-Smtp-Source: ABdhPJy/L2J+5OoIpxaGiRpuV3AwRbWlKTOcnXs7FNJGXIHoh6wHrVu8SWrx9z06Lb4N/QlJ6EwayAMjLnq71CnqN+8=
+X-Received: by 2002:a17:90a:af98:b0:1d4:67d4:d122 with SMTP id
+ w24-20020a17090aaf9800b001d467d4d122mr34597645pjq.166.1651087614892; Wed, 27
+ Apr 2022 12:26:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220422150507.222488-1-namhyung@kernel.org> <20220422150507.222488-5-namhyung@kernel.org>
- <CAEf4Bzbdh-wbQQLzoXGGKkqqE=+qz19C4tCq4Ynb-_PXzRYM1w@mail.gmail.com> <CAM9d7chos3xgxPMOMwgSh6nCNfqk8k2tXO=0JsdL4KgN_yngCA@mail.gmail.com>
-In-Reply-To: <CAM9d7chos3xgxPMOMwgSh6nCNfqk8k2tXO=0JsdL4KgN_yngCA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Apr 2022 12:26:36 -0700
-Message-ID: <CAEf4BzZ-RwXV8NoWk4rLyLWyxJhQ6b96ieVCy0kkjLCq8cVxqw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] perf record: Handle argument change in sched_switch
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
+References: <20220427161126.647073-1-krzysztof.kozlowski@linaro.org>
+ <20220427161126.647073-5-krzysztof.kozlowski@linaro.org> <YmmJfInA0hNQOhDN@robh.at.kernel.org>
+In-Reply-To: <YmmJfInA0hNQOhDN@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Wed, 27 Apr 2022 21:26:41 +0200
+Message-ID: <CAGE=qrp1GAVxDF4b1iBigdvbONwsF0jhfcLG-Xt3pjm8VAEdiQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] ARM: dts: am33xx: use new 'dma-channels/requests' properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmaengine@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 11:15 AM Namhyung Kim <namhyung@kernel.org> wrote:
+On Wed, 27 Apr 2022 at 20:20, Rob Herring <robh@kernel.org> wrote:
+> > diff --git a/arch/arm/boot/dts/am33xx.dtsi b/arch/arm/boot/dts/am33xx.dtsi
+> > index f6ec85d58dd1..55ffb0813ded 100644
+> > --- a/arch/arm/boot/dts/am33xx.dtsi
+> > +++ b/arch/arm/boot/dts/am33xx.dtsi
+> > @@ -461,8 +461,8 @@ cppi41dma: dma-controller@2000 {
+> >                               interrupts = <17>;
+> >                               interrupt-names = "glue";
+> >                               #dma-cells = <2>;
+> > -                             #dma-channels = <30>;
+> > -                             #dma-requests = <256>;
+> > +                             dma-channels = <30>;
+> > +                             dma-requests = <256>;
 >
-> Hello,
->
-> On Tue, Apr 26, 2022 at 4:55 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Apr 22, 2022 at 3:49 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > >
-> > > Recently sched_switch tracepoint added a new argument for prev_state,
-> > > but it's hard to handle the change in a BPF program.  Instead, we can
-> > > check the function prototype in BTF before loading the program.
-> > >
-> > > Thus I make two copies of the tracepoint handler and select one based
-> > > on the BTF info.
-> > >
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > ---
-> > >  tools/perf/util/bpf_off_cpu.c          | 32 +++++++++++++++
-> > >  tools/perf/util/bpf_skel/off_cpu.bpf.c | 55 ++++++++++++++++++++------
-> > >  2 files changed, 76 insertions(+), 11 deletions(-)
-> > >
-> >
-> > [...]
-> >
-> > >
-> > > +SEC("tp_btf/sched_switch")
-> > > +int on_switch3(u64 *ctx)
-> > > +{
-> > > +       struct task_struct *prev, *next;
-> > > +       int state;
-> > > +
-> > > +       if (!enabled)
-> > > +               return 0;
-> > > +
-> > > +       /*
-> > > +        * TP_PROTO(bool preempt, struct task_struct *prev,
-> > > +        *          struct task_struct *next)
-> > > +        */
-> > > +       prev = (struct task_struct *)ctx[1];
-> > > +       next = (struct task_struct *)ctx[2];
-> >
-> >
-> > you don't have to have two BPF programs for this, you can use
-> > read-only variable to make this choice.
-> >
-> > On BPF side
-> >
-> > const volatile bool has_prev_state = false;
-> >
-> > ...
-> >
-> > if (has_prev_state) {
-> >     prev = (struct task_struct *)ctx[2];
-> >     next = (struct task_struct *)ctx[3];
-> > } else {
-> >     prev = (struct task_struct *)ctx[1];
-> >     next = (struct task_struct *)ctx[2];
-> > }
-> >
-> >
-> > And from user-space side you do your detection and before skeleton is loaded:
-> >
-> > skel->rodata->has_prev_state = <whatever you detected>
->
-> Nice, thanks for the tip!
->
-> Actually I tried something similar but it was with a variable (in bss)
-> so the verifier in an old kernel rejected it due to invalid arg access.
->
-> I guess now the const makes the verifier ignore the branch as if
-> it's dead but the compiler still generates the code, right?
+> You could keep the old properties for compatibility and to apply
+> immediately.
 
+Indeed, that's a nice solution. Any preference from TI SoC maintainers?
 
-yes, exactly
-
->
-> >
-> > But I'm still hoping that this prev_state argument can be moved to the
-> > end ([0]) to make all this unnecessary.
-> >
-> >   [0] https://lore.kernel.org/lkml/93a20759600c05b6d9e4359a1517c88e06b44834.camel@fb.com/
->
-> Yeah, that would make life easier. :)
->
-> Thanks,
-> Namhyung
+Best regards,
+Krzysztof

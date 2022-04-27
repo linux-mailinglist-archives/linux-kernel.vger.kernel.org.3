@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088E75111B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451A25111B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358405AbiD0Gy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
+        id S1358360AbiD0GvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358561AbiD0GyX (ORCPT
+        with ESMTP id S244328AbiD0GvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:54:23 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F246A4F47D
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:51:12 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z19so796698edx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9tXY7FD2xlJXeOyqnkyBzs+L6RjZzs4jMiP6VRkCYU8=;
-        b=NrUAonw/vsFOjLJ+1Y+dvE4aXHpnoVxDX1cG3C4Uyk5LZln3yXe4wR/a22SVSzWlT0
-         V370AvYav97L3XVdDvYtA8O70DCcEj4pCrdmvOplKW9YM1y/RB4hsPHh/Zo4GPaQLn8U
-         wLCIJ2+GsPLh8o3YgcWtXN/OrmnVUJL+d2QEAHcZKVsdHTEZm2ADI6sN/3iehbYv76eN
-         yp/O6YZH5WbP31GgaELb2ZGGbg4fZP6//WGnyzejqr5GJWy7N3EHzGlchyEqVOdfq2Xp
-         VzPsEnY9gN/TEd4zC/qPyhfGGi92/cHwQxF+aiG+tctl6AdSmkTTZ70DgFaBcwiguCxm
-         Gdug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9tXY7FD2xlJXeOyqnkyBzs+L6RjZzs4jMiP6VRkCYU8=;
-        b=Hlp/v9HXhybx/dkyd5HezVPl7z64VcvJTmhKMdpigi8iyh8nibgb5vsfvPw39pPuUm
-         ZQjppxG3eRu+sGxSUjnmosoqhgR62Wz3tiQv0MwKeruGeaOMPFcdw1BqDzKxWW/s4Jyr
-         M9vNSdb02vTVed/GiG5/frtTglAVbQAAVQ1nD69e+hoLHw0TwQz+E2cAR5rgcuXaIpNr
-         9pQyHKWN/ggYDwrAb0rm/KLHmGD86oz7ox8/IpECmP0qbIQyerY/eeCFGLTtSF2L5506
-         8CzgT5N1zogLnydpkaL3FCldu2z5Zyp/Bo+pDdrPGDmwXJ/+t8QYtph8lBZMqKEb8J8F
-         F3dg==
-X-Gm-Message-State: AOAM531yRAulEm9/Qh1doU1l9MSqs74n1KabGrTCHx/NpaKgm0cjNaiN
-        jX1fEZbTI2QRJZ8+DKO/w+YzP11t53inmA==
-X-Google-Smtp-Source: ABdhPJyGCnUiduZivOC1w+7W4FQfSyalfBDvYgNvHlMISTw50/MAjuqBwBinEq3sd88Xhclhi67tnw==
-X-Received: by 2002:a05:6402:2214:b0:425:d6ed:de5d with SMTP id cq20-20020a056402221400b00425d6edde5dmr19544230edb.383.1651042271590;
-        Tue, 26 Apr 2022 23:51:11 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l26-20020a1709062a9a00b006e7ee7ad20bsm6303094eje.149.2022.04.26.23.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 23:51:10 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <patches@opensource.cirrus.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] dt-bindings: mfd: wlf,arizona: Add spi-max-frequency
-Date:   Wed, 27 Apr 2022 08:51:02 +0200
-Message-Id: <20220427065102.109046-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Wed, 27 Apr 2022 02:51:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C5D14CC1F;
+        Tue, 26 Apr 2022 23:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651042091; x=1682578091;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Wrr2acTes9Dn1J1j0LC1OLNlWlSW00Omrf7FPInY+0E=;
+  b=YWzVY4L/R/BPgol7as31JIvecyXz4aUWTkAPUxZcQ8cEhzpHzSg6rEtu
+   iIpkjzf+Ql/qmBx9pG8qc+pCqhuPI5WDF8Zff7gOg0SlbUrKsIgVWH78A
+   UPfG3nPMMejpaLMM8QAi0G5vVsIgiGr232aNrYJbloq2WgYKbzFcQAuf7
+   wEIIOd8s5FHPdfXqdL/XsoAg93xb94tjN41JejfSkO8BuuNLk4RpejPUt
+   vwsCrcl75VWsSbMIuFaC9A0WMcqx7Npi0TPLLLuQqk6lvouAam1rJ8i41
+   JKD3/mxjxJ9XwzbIhRa256vtM3em2935SqXy8zmauJjaPZNQMZi36zgiJ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,292,1643698800"; 
+   d="scan'208";a="153965848"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Apr 2022 23:48:09 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 26 Apr 2022 23:48:08 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 26 Apr 2022 23:48:06 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <UNGLinuxDriver@microchip.com>, <richardcochran@gmail.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v2 0/5] net: lan966x: Add support for PTP programmable pins
+Date:   Wed, 27 Apr 2022 08:51:22 +0200
+Message-ID: <20220427065127.3765659-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Wolfson Microelectronics Arizona audio can be connected via SPI bus
-(e.g. WM5110 on Exynos5433 TM2 board), so allow spi-max-frequency
-property.
+Lan966x has 8 PTP programmable pins. The last pin is hardcoded to be used
+by PHC0 and all the rest are shareable between the PHCs. The PTP pins can
+implement both extts and perout functions.
 
-Reported-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/mfd/wlf,arizona.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+v1->v2:
+- use ptp_find_pin_unlocked instead of ptp_find_pin inside the irq handler.
 
-diff --git a/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml b/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
-index 9e762d474218..0d1835c657a2 100644
---- a/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
-+++ b/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
-@@ -193,6 +193,8 @@ properties:
-   reset-gpios:
-     maxItems: 1
- 
-+  spi-max-frequency: true
-+
-   wlf,reset:
-     description:
-       GPIO specifier for the GPIO controlling RESET
+Horatiu Vultur (5):
+  dt-bindings: net: lan966x: Extend with the ptp external interrupt.
+  net: lan966x: Change the PTP pin used to read/write the PHC.
+  net: lan966x: Add registers used to configure the PTP pin
+  net: lan966x: Add support for PTP_PF_PEROUT
+  net: lan966x: Add support for PTP_PF_EXTTS
+
+ .../net/microchip,lan966x-switch.yaml         |   2 +
+ .../ethernet/microchip/lan966x/lan966x_main.c |  17 ++
+ .../ethernet/microchip/lan966x/lan966x_main.h |   4 +
+ .../ethernet/microchip/lan966x/lan966x_ptp.c  | 276 +++++++++++++++++-
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  40 +++
+ 5 files changed, 338 insertions(+), 1 deletion(-)
+
 -- 
-2.32.0
+2.33.0
 

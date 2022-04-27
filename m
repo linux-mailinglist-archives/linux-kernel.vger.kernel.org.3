@@ -2,137 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31373510F8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23801510F90
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348370AbiD0D3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S1357481AbiD0Dey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 23:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350721AbiD0D2k (ORCPT
+        with ESMTP id S241363AbiD0Dev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:28:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D8B7C1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651029927; x=1682565927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I/D36ogdcL9qPxkkh7uSsit5MMJEkaxqwKjEaM3XMoA=;
-  b=OO2K4r9dc/bugEMuXEQ7Oxun28aXnAwkA4ILQtwRidPW8amgR/l8TTkv
-   9vrtGOogX8TS6Vik2RRy8gdvnArK5BQBOw9MZI23tfgR6JraUjKDAGzt+
-   gOBBLcQzMC9P2q2kG2bvfoV3xJ9gcvvvwpXiBH7G/XH3LPOFczaLouI9n
-   Hk6hvuhujss/UFZYFSMUwC+cvmv5XXeoFeuFZ30vtqPz89O/mHjqRPmNE
-   4qcFlwx6N5mlQqGnDomH7Hem1ZRoygvWmtKt5WBtMu4Mq2s7kjxmgC3fX
-   /lMYcGoDFPPBVfY53mHGssz2MqZLaN9TJVVLrtPqbmw0gu1y3l3SOPvGB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="328741194"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="328741194"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 20:25:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="661015977"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Apr 2022 20:25:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njYIr-0004Gi-5Y;
-        Wed, 27 Apr 2022 03:25:21 +0000
-Date:   Wed, 27 Apr 2022 11:25:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Collingbourne <pcc@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
-        iamjoonsoo.kim@lge.com, rientjes@google.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v4 1/2] printk: stop including cache.h from printk.h
-Message-ID: <202204271135.P05x34Pe-lkp@intel.com>
-References: <20220426203231.2107365-1-pcc@google.com>
+        Tue, 26 Apr 2022 23:34:51 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044183E5FD;
+        Tue, 26 Apr 2022 20:31:39 -0700 (PDT)
+X-UUID: 61da1a5d0516438bb599e74421a5e0f2-20220427
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:00822b95-e747-4fa7-a0a4-34dcb58f2ebe,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-12
+X-CID-META: VersionHash:faefae9,CLOUDID:50cd9cc6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 61da1a5d0516438bb599e74421a5e0f2-20220427
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1514958782; Wed, 27 Apr 2022 11:31:34 +0800
+Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 27 Apr 2022 11:31:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 27 Apr 2022 11:31:33 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Apr 2022 11:31:32 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>
+CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2] dt-bindings: media: mtk-vcodec: Adds encoder power domain property
+Date:   Wed, 27 Apr 2022 11:31:30 +0800
+Message-ID: <20220427033130.18497-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426203231.2107365-1-pcc@google.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Adds encoder power domain property.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Irui Wang <irui.wang@mediatek.com>
+---
+changes compared with v1:
+- set "power-domains" as a non-required property
 
-[auto build test ERROR on vbabka-slab/for-next]
-[also build test ERROR on arm64/for-next/core linus/master v5.18-rc4 next-20220426]
-[cannot apply to dennis-percpu/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+The 'make dtbs_check' warnings('mediatek,larb') can be fixed by patch:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=633993
+---
+ .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Collingbourne/printk-stop-including-cache-h-from-printk-h/20220427-043357
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
-config: arm-randconfig-r025-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271135.P05x34Pe-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/edcb0f592304f7849a39586f9e3fe0d8f6e6c6b9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peter-Collingbourne/printk-stop-including-cache-h-from-printk-h/20220427-043357
-        git checkout edcb0f592304f7849a39586f9e3fe0d8f6e6c6b9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/bpf/bpf_lru_list.c:8:
->> kernel/bpf/bpf_lru_list.h:36:21: error: expected ';' at end of declaration list
-           raw_spinlock_t lock ____cacheline_aligned_in_smp;
-                              ^
-                              ;
-   1 error generated.
-
-
-vim +36 kernel/bpf/bpf_lru_list.h
-
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  29  
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  30  struct bpf_lru_list {
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  31  	struct list_head lists[NR_BPF_LRU_LIST_T];
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  32  	unsigned int counts[NR_BPF_LRU_LIST_COUNT];
-0ac16296ffc638f Qiujun Huang     2020-04-03  33  	/* The next inactive list rotation starts from here */
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  34  	struct list_head *next_inactive_rotation;
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  35  
-3a08c2fd763450a Martin KaFai Lau 2016-11-11 @36  	raw_spinlock_t lock ____cacheline_aligned_in_smp;
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  37  };
-3a08c2fd763450a Martin KaFai Lau 2016-11-11  38  
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+index deb5b657a2d5..2d1e0c9bd6ee 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+@@ -41,6 +41,9 @@ properties:
+ 
+   assigned-clock-parents: true
+ 
++  power-domains:
++    maxItems: 1
++
+   iommus:
+     minItems: 1
+     maxItems: 32
+@@ -132,6 +135,7 @@ examples:
+     #include <dt-bindings/clock/mt8173-clk.h>
+     #include <dt-bindings/memory/mt8173-larb-port.h>
+     #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/power/mt8173-power.h>
+ 
+     vcodec_enc_avc: vcodec@18002000 {
+       compatible = "mediatek,mt8173-vcodec-enc";
+@@ -153,6 +157,7 @@ examples:
+       clock-names = "venc_sel";
+       assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
+       assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
++      power-domains = <&scpsys MT8173_POWER_DOMAIN_VENC>;
+     };
+ 
+     vcodec_enc_vp8: vcodec@19002000 {
+@@ -173,4 +178,5 @@ examples:
+       clock-names = "venc_lt_sel";
+       assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
+       assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL_370P5>;
++      power-domains = <&scpsys MT8173_POWER_DOMAIN_VENC_LT>;
+     };
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.18.0
+

@@ -2,57 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20EF511B77
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAB2511A5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237747AbiD0ObP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S237762AbiD0ObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237710AbiD0ObO (ORCPT
+        with ESMTP id S237738AbiD0ObR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:31:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E8555B0;
-        Wed, 27 Apr 2022 07:28:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEBDE61DD4;
-        Wed, 27 Apr 2022 14:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A78FC385A9;
-        Wed, 27 Apr 2022 14:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651069680;
-        bh=jg7isHeqWXUe3zjwvEzCpYqI8jozk7FW2/8Y/IJfTPk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B2apnaAN8F00Nb0/0lcis7BIXCkSWoWIE73bihLjuaOBevH1jREETlouT5o7hIjBx
-         8ezccvuK1pn2aGyZbT0MZuePPqvBZbuMolbXOwLswPJtljZ63LLzws1yYM8RyoYrTK
-         EVyyEBU+i3Avy4u2H2344lfF3L/8/dmjH0Cjg9HCB/lpUDjzYASj0bdWelFL2C6q3q
-         9WC5Yue0KY29fGGF97qCaowKp6Ce8ogYeay+7ZCsyW2tGZMisoKI5tSWnwUeb7OwtJ
-         6au8W3SAJ4dN1wPzDLEEDZwDYTgwhE9NgH5+eeEw7zSUAq7I9D3kd6OPaA2UnmW1F6
-         4aF5BoWU5t1DQ==
-Date:   Wed, 27 Apr 2022 19:57:53 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: mailbox: qcom-ipcc: add missing
- compatible for SM8450
-Message-ID: <20220427142753.GB4161@thinkpad>
-References: <20220426101837.16201-1-david@ixit.cz>
+        Wed, 27 Apr 2022 10:31:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94BDB260A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:28:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52234ED1;
+        Wed, 27 Apr 2022 07:28:04 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E20E3F5A1;
+        Wed, 27 Apr 2022 07:28:03 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH] clocksource/drivers/sp804: avoid error on multiple instances
+Date:   Wed, 27 Apr 2022 15:27:59 +0100
+Message-Id: <20220427142759.4138694-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426101837.16201-1-david@ixit.cz>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,32 +42,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:18:36PM +0200, David Heidelberg wrote:
-> Fill missing compatible already used in SM8450 DTS.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+When a machine sports more than one SP804 timer instance, we only bring
+up the first one, since multiple timers of the same kind are not useful
+to Linux. As this is intentional behaviour, we should not return an
+error message, as we do today:
+===============
+[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
+===============
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Replace the -EINVAL return with an informative message and return 0
+instead.
 
-Thanks,
-Mani
+Also we do not reach the init function anymore if the DT node is
+disabled (as this is now handled by OF_DECLARE), so remove the explicit
+check for that case.
 
-> ---
->  Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> index 866efb278813..c57dd423e98c 100644
-> --- a/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
-> @@ -27,6 +27,7 @@ properties:
->            - qcom,sm6350-ipcc
->            - qcom,sm8250-ipcc
->            - qcom,sm8350-ipcc
-> +          - qcom,sm8450-ipcc
->            - qcom,sc7280-ipcc
->        - const: qcom,ipcc
->  
-> -- 
-> 2.35.1
-> 
+This fixes a long standing bogus error when booting ARM's fastmodels.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ drivers/clocksource/timer-sp804.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
+index 401d592e85f5a..30cbc580e0448 100644
+--- a/drivers/clocksource/timer-sp804.c
++++ b/drivers/clocksource/timer-sp804.c
+@@ -259,6 +259,12 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
+ 	struct clk *clk1, *clk2;
+ 	const char *name = of_get_property(np, "compatible", NULL);
+ 
++	if (initialized) {
++		pr_info("%s: only instantiating one timer\n",
++			of_node_full_name(np));
++		return 0;
++	}
++
+ 	base = of_iomap(np, 0);
+ 	if (!base)
+ 		return -ENXIO;
+@@ -270,11 +276,6 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
+ 	writel(0, timer1_base + timer->ctrl);
+ 	writel(0, timer2_base + timer->ctrl);
+ 
+-	if (initialized || !of_device_is_available(np)) {
+-		ret = -EINVAL;
+-		goto err;
+-	}
+-
+ 	clk1 = of_clk_get(np, 0);
+ 	if (IS_ERR(clk1))
+ 		clk1 = NULL;
+-- 
+2.25.1
+

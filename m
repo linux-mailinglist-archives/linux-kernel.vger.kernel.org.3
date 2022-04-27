@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320C6511290
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE56951128F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358871AbiD0Hfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S1358862AbiD0Hf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358872AbiD0Hfa (ORCPT
+        with ESMTP id S242894AbiD0HfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:35:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9B9888C6;
-        Wed, 27 Apr 2022 00:32:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A60B861AE1;
-        Wed, 27 Apr 2022 07:32:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09083C385AA;
-        Wed, 27 Apr 2022 07:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651044738;
-        bh=Re0RgXJGnca1jXG71eZZH/Isy2xvfbR7ESV6L/VsEoo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=konfTTjIek83M/SNfWhqBvJPMcgWRw0Ikpd/4gNseDywbPJ7aFFI3nmppWXQNoD+Y
-         Sj8jckpuyhXkAH/DBDUyvjSecumjX/zA4Uf2f9bl1RFm0r3PvSAWyJV4f9/1vIPXHe
-         kn0hLlZsLS0TuoJVaxEcyvu0b0hOJxEPsEZQCSsDt4cXYKG2r47BRaSRvJ/vYj3gRw
-         +5Mrjhji/KshE8GF6v2ABexREhoZUmjrE7pQZrnmNY0OW4c++r1orBZz4e0g2hfq/O
-         9ceyc0LGxDWJyefXN+E8WhPDgqCFlo7A9NRi2NwIn2qvwCyeoVnEFcxQeIOrlwMFut
-         1uB5fzSY4qkdQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1njc9r-0004Li-M2; Wed, 27 Apr 2022 09:32:19 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] Documentation: devres: fix typo in interface list
-Date:   Wed, 27 Apr 2022 09:31:42 +0200
-Message-Id: <20220427073142.16700-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 27 Apr 2022 03:35:24 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918F884ED3;
+        Wed, 27 Apr 2022 00:32:13 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1njc9f-0005I9-AK; Wed, 27 Apr 2022 09:32:07 +0200
+Message-ID: <60d2a5b8-7e25-3020-6092-64afe7abc186@leemhuis.info>
+Date:   Wed, 27 Apr 2022 09:32:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Philippe Schenker <dev@pschenker.ch>,
+        linux-wireless@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        "David S. Miller" <davem@davemloft.net>,
+        Deren Wu <deren.wu@mediatek.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220412090415.17541-1-dev@pschenker.ch>
+ <87y20aod5d.fsf@kernel.org>
+ <7aa0bbd0-5498-ba74-ad6d-6dacbade8a3d@leemhuis.info>
+ <87o816oaez.fsf@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <87o816oaez.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651044733;3de9c336;
+X-HE-SMSGID: 1njc9f-0005I9-AK
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,27 +59,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the misspelled devm_get_clk_from_child() helper name in the devres
-interface list.
+On 12.04.22 12:36, Kalle Valo wrote:
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>> [...]
+>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+>> reports on my table. I can only look briefly into most of them and lack
+>> knowledge about most of the areas they concern. I thus unfortunately
+>> will sometimes get things wrong or miss something important. I hope
+>> that's not the case here; if you think it is, don't hesitate to tell me
+>> in a public reply, it's in everyone's interest to set the public record
+>> straight.
+> BTW, maybe you could add that boilerplace text after P.S. into the
+> signature (ie. under "-- " line)? That way your mails would more
+> readable and make it more clear that you didn't write the boilerplate
+> text specifically for this mail.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- Documentation/driver-api/driver-model/devres.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Late reply:
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index 5018403fe82f..2d39967bafcc 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -249,7 +249,7 @@ CLOCK
-   devm_clk_bulk_get()
-   devm_clk_bulk_get_all()
-   devm_clk_bulk_get_optional()
--  devm_get_clk_from_childl()
-+  devm_get_clk_from_child()
-   devm_clk_hw_register()
-   devm_of_clk_add_hw_provider()
-   devm_clk_hw_register_clkdev()
--- 
-2.35.1
+FYI, I thought back and forth about the boilerplace text and how to
+handle that when I started using it. I deliberately decided against
+putting it under a "-- " line, as that wouldn't work well for some of
+the mails I write -- for example those where I deliberately use
+top-posting (which I hate and kinda feels wrong, but nevertheless right
+at the same time) to make this as easy to grasp as possible.
+
+After your comment I have thought about it again for a while but in the
+end for now decided to mostly stick to the approach I used, but your
+comment made me shorten the text a bit.
+
+Ciao, Thorsten
 

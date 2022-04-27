@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125C95117C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6369351171D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbiD0L4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S233238AbiD0L6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbiD0L4t (ORCPT
+        with ESMTP id S233060AbiD0L6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:56:49 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC212085;
-        Wed, 27 Apr 2022 04:53:38 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d39f741ba0so1616542fac.13;
-        Wed, 27 Apr 2022 04:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lDcZaNu3s46BCfyK8AGIWunVVLL0K103UCBfoUiQuSg=;
-        b=PICN4L/bpRW0Ywnxp6EKdRxBPCzwU7brnkiRpdkxe9lXWNaE4lTzPUkUshVAWLTe/N
-         oNxKJ15ESYMJ1IWAQj7eAPSMVvhEvW+ZsVAuaZmliL1pg9Jnx9eacqGVfOzvPrUSGWnZ
-         UWLb0os8sSiInNnyHiHdtt7bXjtVue/jhqp9gJqzj+wVDBNcExTnCjmpS2i1gW3+DoE5
-         nXM6WltKKK1Km8+3wWS1x0YzzPWfDV4y6WWt7BGN2jCv0tjPfkciRgRc1U8l4P3HbEKv
-         8auJ3vFVfpc2iLwnPF1l6lZ4znNqDqASmphwBOE9hCmVPRMTMb8uea5nYIYN9Yx0FBae
-         pDTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=lDcZaNu3s46BCfyK8AGIWunVVLL0K103UCBfoUiQuSg=;
-        b=VqB/jkNci1VKAx3/t+5zy2hz0kn8J8qj8GKzLgze/BHu8UU98L1ZBQPA99T3cJLFvv
-         tBi05tbbClx1HgfRe86IadMt9rb9waj4H+FW7rFMy7IpkrCex6jFXq+ktbqmi0a5rRTI
-         cHg2CmFku2O97ajf3HLZkFRamQiy4Ek60HJmAczS0hkNMKN4jlpYpHz+6ctwhIXPawg6
-         2yOZSOWBf3LOIYE+QfvCF6cYW1DtRsZMr/Tbg+Rh/Tmt9bshxDtwsC0Gs4VXgMMkj8t5
-         XH+XHo2oh0cyDgUmc1KPd0qTHrCxae+j7T/asEa4IRp+hg6GlkFNLlVbzeGCKDw8kONQ
-         QWRQ==
-X-Gm-Message-State: AOAM531JXfgyliSJ0bssAj0zMlWeCsVyMGyjQYkiBFKu6sBTSRX8BYJ6
-        kkspg6hya6ejVQjvUAW73vE=
-X-Google-Smtp-Source: ABdhPJxqdW1u4b+HYMVRCPgoviFhCC1pBVd4W3nXiChpfznNK9sGQAYLA/Qj8VRLsCahCdXVQ3ARfw==
-X-Received: by 2002:a05:6870:6324:b0:e9:16de:4053 with SMTP id s36-20020a056870632400b000e916de4053mr8701723oao.164.1651060417408;
-        Wed, 27 Apr 2022 04:53:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m22-20020a9d73d6000000b006028f49a6fcsm5779329otk.4.2022.04.27.04.53.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 04:53:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 27 Apr 2022 04:53:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH] hwmon: (pmbus) delta-ahe50dc-fan: work around hardware
- quirk
-Message-ID: <20220427115333.GA2686708@roeck-us.net>
-References: <20220427035109.3819-1-zev@bewilderbeest.net>
+        Wed, 27 Apr 2022 07:58:41 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2134.outbound.protection.outlook.com [40.107.215.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4332E9FF
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:55:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PtMJezANPcfcnMcTHUDiGcqF24dDP+VzCIuTwcXjOHThDcDEwPZMuTbPBOXxgegd0e1qOYOBKUuIL+97vWBJNd32PdLSe00c/3vnY3YtKnmki3Km23/serMBOSc1o7zX/rB7HIARCRTKDT8b09NQ8wT0iAjmsQf0yGbx6uTv91fL44+9Qihxf8D+D27vZY2QF1gUo0v9tap3/UJDwnNZTtOAgfUjfEjLZClhEaDgA2vxb0DKAoCp+YPfRi/Go4Rn+Ju7uPdJrtVZz3v3VHc9gzaMDX5RUMoW73RXWtNIUDOmC9hcOIp5bEPnfeRKSUJThF97O6jWMkO0ltKqJaDvnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hQtFNueahf9C1mL7BMnGGQiZUBUPxSj88/NO3oy1340=;
+ b=oJHyeL0E2P6GJ7QJqmYjwVLLRFrDYeD76zbjH/tkPBbZF3Vxn5gzNrn+TIFDGoc2Vg7wgQQZ0nR3KQDZOgpbnZdw2BAT5EirKIJQ88e4IxSxrfG8CSsCeE6oSTwKGUcz009vMWU91wgGzIpfJUGtp5AJjb3Z1Pz3nkxK9k/HvTapQzXWo8Kp8ETXBVn5hlS8ClACuynNqHIgPy1+vz/FBH1k40mo2lh434S0NweUgLdv3R/hd54BzwrGdRhW8GwVeev43ndYdupuXI2V+rF/xtNRBYH+kkFuvALn44ZpV5CYIZfv8U/glaaYwKow1SlxC8ETWBuJxx/MfDGqYVtT4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hQtFNueahf9C1mL7BMnGGQiZUBUPxSj88/NO3oy1340=;
+ b=KaEDor7iAUB1z8hDLx47/e0WdXzSyeYkonnXlDkvYQuuINKEdrc4zwxsjuCj7TRyPjUMwSj9Bq5EjdNc3qiFBq/Z6ogqQFsf9oYuV0EzdD9X6QBas1q9JfV6gsGs6e+8+F/ygGOYU5apQtlEzNvjbWkVWhnIwmxgVOIEYGQNPVY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ PSAPR06MB3992.apcprd06.prod.outlook.com (2603:1096:301:37::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.14; Wed, 27 Apr 2022 11:55:26 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
+ 11:55:25 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] i915/gvt: Fix NULL pointer dereference in init_mmio_block_handlers
+Date:   Wed, 27 Apr 2022 19:54:56 +0800
+Message-Id: <20220427115457.836729-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0057.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::21) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427035109.3819-1-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6d925f00-9904-4202-5482-08da2844d086
+X-MS-TrafficTypeDiagnostic: PSAPR06MB3992:EE_
+X-Microsoft-Antispam-PRVS: <PSAPR06MB3992238D71AC04840117B002ABFA9@PSAPR06MB3992.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0HJt0DbFgy+Hua5HYH1gPSh6qlkCQ7LxUHIx8h+CVHLCZaIkqiOmTQ0hbIVLdxYt0pa8rdcCPGyNeIb2TJdkRMeGVcx7tf9bC3T98WPcDFTwrYamWlM7Gnt7OmzRuclTis/fgL73bay6+YXUjVdaSBedL02tDuWxxhy1EwbrV1xC6Z3YynimRPHnWI7zP+80ze4Fghnzu/a6VRkJJlNJwXbu+DU3n5y+NVtz2q0ki6L/itjZzSPK7wwYmzZ5ElPntsm6Dz15/2c4/RSBv5IOPJrmhoxcM1iVn/i8GsNOG415cHV9slrloyyzpZCpypc28d/Ymcm6dh2SNzOesTgteUOmYoFnCaaGyApVeSWvl2jlIqn3ngYDryjr7eVTHmqvI/YtwW5B5tal/kl5Gdq/VeWDljtQUUWlAf+W7wK3cpZyt9WGdBKnlPv4/7oNjDUulYFy7ZcBpsrnBeMGgyhZOoURsn6DOz1pwbuCZAY/yrLW+SHLJKB6/nwH10v/+klZh3VoWwLiR0c8XtoIo7hBWlzoJoXpFKH8J9g96K7PPTKpmULmM68NhFtfIWImbNjsIA7/fyGUv0k1cqmdymYBcxDbxkg9AfdktHkOB+zqL5RyMwZXj5WqOSiPLRnojji6Y0JMgdX5OeoNtbGlxBRMEMHFqemI4inCYX20I0iwuQyi7liqNG+SVjjLB0zSB2y4yulTDAUSDkNSCpmS0DhNKw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(38100700002)(83380400001)(38350700002)(6506007)(186003)(1076003)(86362001)(508600001)(7416002)(921005)(5660300002)(8936002)(4744005)(2906002)(6486002)(26005)(52116002)(2616005)(66476007)(4326008)(36756003)(6512007)(8676002)(66946007)(66556008)(316002)(107886003)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mVswxLF4DPyKZyol2LOCj0ocz1yY5POlspM0EF+uPVxlp+QJe1mkTcMyCbJe?=
+ =?us-ascii?Q?ItuqdFNHzz4772yH0SIiZsGvD304VTzVqxLxiW2NXggE1NJT/UwXDeQrez2F?=
+ =?us-ascii?Q?yDO8HB1Rvz1kATl/YikqxDmJUdnFZQ3UBqIzeLysLiOBMesXFCwlMq7xf8Uk?=
+ =?us-ascii?Q?Yu9FzfJpRbGNxI0OaOeSywQ3JcV2JG+8lel761XCQq7pP4/5r8lTn2tDLE3k?=
+ =?us-ascii?Q?gPFOGbMec1/bswH5w30H/KMKMVbr1GBqPamGcpiB2h0h5hY1mMdtoc3dXpaj?=
+ =?us-ascii?Q?E3+ZwArqjJZQ9OEMHD5owiQ8ElKXYUcTXS8eLehCKBmzlQ733oAOxckv8Cpu?=
+ =?us-ascii?Q?27dXB12iHHBIu54qWGGfBLcWoXoi10zsR8gUmuzaP/t8ID2/z7fxqs6FhmGp?=
+ =?us-ascii?Q?hXhitJVQPwm9rvNq+1EKY8stcbKps+gIWe8ddJAoLaYpV/invjNabf9gdmZm?=
+ =?us-ascii?Q?xsHPGbrzsEmm1jBw2Qscp+06hrSkzEJSa5DinBcm5MJc7t+M77gXs9lSRUU6?=
+ =?us-ascii?Q?+kSl5xG3r4Tz/ukPtE6+g7DHohCSWK/Ve3sPOQf2yZP1h9dv4rKXjfScKq4Y?=
+ =?us-ascii?Q?XQaVUTa8Guto5xxyoM2r72i7VtlEDQ0haBBTJNp7gnr9+D0x5T7AP1SfKP06?=
+ =?us-ascii?Q?D5tUppBTpI3Lfns2hsiO6rF23BfdVU429xo2y4gPzwcPcghHq9dSFbwOkohT?=
+ =?us-ascii?Q?Q0fiSvy4jAOTIiKxfl0xp9gZ/IlQoPssY4ovXgCTz7F8poAENYpESGvqcCQP?=
+ =?us-ascii?Q?rAYUESq3vXpmG36q/9IYfytEg1WVKsUE2XmwGF5i1tFVp+mDFVQf01ul+YsA?=
+ =?us-ascii?Q?UBZz0u8pm3bUnD691wN4nOAR+RPM5dG1oDtDRFWWUethHjywZ+2RxZfQzXo4?=
+ =?us-ascii?Q?A1CRBbh4W1IOnY2G1nhB9SxGqqvLwXB9LOTCw+qQP27MySKD+HDMc7XWuyZf?=
+ =?us-ascii?Q?jqFqaRPC0wxXEUUPpzi/m9MvDleC080Ir+/84E+gdTRcite2UmyNrTDQIxUE?=
+ =?us-ascii?Q?G9z7C3Vw6Q9zKf2jLcmuUf+6CCJP5gzs6ensogWIaYSPrqKuFuKWLqUVh42V?=
+ =?us-ascii?Q?AFgqchNHLckFOlFkAmQBodqFovLlJnvcVgnXGZSpVIih7ZE4cXlw+cAWojJI?=
+ =?us-ascii?Q?bbwK/e2NE4duP0jY6d2SsoTEw+o876czsbjOFvA1OL2HYiUAuRdSfnciSIVS?=
+ =?us-ascii?Q?BO/NEnx3WlBP9mqtkEsDZkDO4Z36ifljx0TjWnbqQDv15YBj7x5OKp6aV09E?=
+ =?us-ascii?Q?uAdLz0ZbwRyiE0usOtXU//AaTDUObBonUjxSjDHyNQR5yqX4zpWIt4hySxzt?=
+ =?us-ascii?Q?S6ilYSyoTBhOYGoL6Euxcr8UNbf3G6cI2K3675yZeg5K8hiVZARq8YJNVXUi?=
+ =?us-ascii?Q?4eLr2fhruBmE+FNh2TULNNMxgPgtShzKzRvc+yinlMmjMiXVt7a3ZWYxCcAv?=
+ =?us-ascii?Q?5l4/xV7aqUzl7/1jiJrudNJe3L3yGWpv7ASliF5yW53q95nJflIeJBLk8bXj?=
+ =?us-ascii?Q?aEPpOMJEkdGER64Drfpm4StIajiDLwuWmRcgfeg9cX7cLJ/2WghZKbQO3kK0?=
+ =?us-ascii?Q?8Oo8Pqz8ArjfPjYYHHMuQ5PvbWNbhAIP5rAHJpQsmMwN+I9/eIUR3nvB57C4?=
+ =?us-ascii?Q?f6ZzQYMP25mYh6/aZBu1digJMoFqfRDQcuu8DJwYuDN4VU2OF6xDRGdMH3RH?=
+ =?us-ascii?Q?29zkoNyP/ljKkr61var84BggyJcYbs685I+Zy6l6ZHiWP36mYGgWQG38iP14?=
+ =?us-ascii?Q?e4KYAFCi4g=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d925f00-9904-4202-5482-08da2844d086
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 11:55:25.0510
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7sJBd54IljHaomMkdlcCNBN+1vOvz19Sltf32TuY6O3hJIS3leWpt2UEoJYhoNyfhSm2f2oYIyVtmSFfG5Ox3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB3992
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 08:51:09PM -0700, Zev Weiss wrote:
-> CLEAR_FAULTS commands can apparently sometimes trigger catastrophic
-> power output glitches on the ahe-50dc, so block them from being sent
-> at all.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> Cc: stable@vger.kernel.org
+Fix following coccicheck error:
+./drivers/gpu/drm/i915/gvt/handlers.c:2925:35-41: ERROR: block is NULL but dereferenced.
 
-Applied.
+Use gvt->mmio.mmio_block instead of block to avoid NULL pointer
+dereference when find_mmio_block returns NULL.
 
-Thanks,
-Guenter
+Fixes: e0f74ed4634d ("i915/gvt: Separate the MMIO tracking table from GVT-g")
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/gpu/drm/i915/gvt/handlers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  drivers/hwmon/pmbus/delta-ahe50dc-fan.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-> index 40dffd9c4cbf..f546f0c12497 100644
-> --- a/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-> +++ b/drivers/hwmon/pmbus/delta-ahe50dc-fan.c
-> @@ -14,6 +14,21 @@
->  
->  #define AHE50DC_PMBUS_READ_TEMP4 0xd0
->  
-> +static int ahe50dc_fan_write_byte(struct i2c_client *client, int page, u8 value)
-> +{
-> +	/*
-> +	 * The CLEAR_FAULTS operation seems to sometimes (unpredictably, perhaps
-> +	 * 5% of the time or so) trigger a problematic phenomenon in which the
-> +	 * fan speeds surge momentarily and at least some (perhaps all?) of the
-> +	 * system's power outputs experience a glitch.
-> +	 *
-> +	 * However, according to Delta it should be OK to simply not send any
-> +	 * CLEAR_FAULTS commands (the device doesn't seem to be capable of
-> +	 * reporting any faults anyway), so just blackhole them unconditionally.
-> +	 */
-> +	return value == PMBUS_CLEAR_FAULTS ? -EOPNOTSUPP : -ENODATA;
-> +}
-> +
->  static int ahe50dc_fan_read_word_data(struct i2c_client *client, int page, int phase, int reg)
->  {
->  	/* temp1 in (virtual) page 1 is remapped to mfr-specific temp4 */
-> @@ -68,6 +83,7 @@ static struct pmbus_driver_info ahe50dc_fan_info = {
->  		PMBUS_HAVE_VIN | PMBUS_HAVE_FAN12 | PMBUS_HAVE_FAN34 |
->  		PMBUS_HAVE_STATUS_FAN12 | PMBUS_HAVE_STATUS_FAN34 | PMBUS_PAGE_VIRTUAL,
->  	.func[1] = PMBUS_HAVE_TEMP | PMBUS_PAGE_VIRTUAL,
-> +	.write_byte = ahe50dc_fan_write_byte,
->  	.read_word_data = ahe50dc_fan_read_word_data,
->  };
->  
+diff --git a/drivers/gpu/drm/i915/gvt/handlers.c b/drivers/gpu/drm/i915/gvt/handlers.c
+index cf00398c2870..7ffe0fb512a9 100644
+--- a/drivers/gpu/drm/i915/gvt/handlers.c
++++ b/drivers/gpu/drm/i915/gvt/handlers.c
+@@ -2922,7 +2922,7 @@ static int init_mmio_block_handlers(struct intel_gvt *gvt)
+ 	block = find_mmio_block(gvt, VGT_PVINFO_PAGE);
+ 	if (!block) {
+ 		WARN(1, "fail to assign handlers to mmio block %x\n",
+-		     i915_mmio_reg_offset(block->offset));
++		     i915_mmio_reg_offset(gvt->mmio.mmio_block->offset));
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.35.3
+

@@ -2,82 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F94511A18
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258F8511B81
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238727AbiD0Oyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        id S238780AbiD0O6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238641AbiD0Oyx (ORCPT
+        with ESMTP id S238746AbiD0O6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:54:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E734341986
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:51:41 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651071100;
+        Wed, 27 Apr 2022 10:58:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86E6B5B8BC
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651071292;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvn9LwNNtiMBYYNla0pQisgNERbncoLZFjzZf3wEaBg=;
-        b=uBgMpcZ3fiuFPxwc0FsdNKmhiEiq3aFTofHmvwGqcRfnuY744xoV7HNmCihFVP64SarZss
-        Nkp6h5l3E8n7Xm3EpxaoC5AZM1s6Iv6RIqIXt3Hrkp13OCTaNk8yW81DuLPhhoEtDVgFMA
-        Erab+9/PXMMTPWZ7hGlh13bRxV3lQhcc1N8i3zvKSrq6Nt148SMd3qHuR4NjUyTPNmzBrp
-        zAhO2k2FAmOHmrXIaOplWg9DU529uwzm0q8E1BEZ/V2xuyndu4tbbrFnmIDiM4WY5QLZHx
-        uatpQCGH70d+vA3C1nIU6X8VYN7cu6EfXZLfvyasuc8NQWM9He2tXplmHmyNbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651071100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wvn9LwNNtiMBYYNla0pQisgNERbncoLZFjzZf3wEaBg=;
-        b=Xx0sWzCld9Q14vN2ZEsatuJCh5KYVNHy+z+N8WaglwEJPI5iT+B1LVMJbGEcyXAyMwXo7x
-        wvVx1DXCcgCcXYAw==
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, lkp@lists.01.org,
-        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [x86/aperfmperf]  adabc53c25:
- WARNING:at_arch/x86/kernel/cpu/aperfmperf.c:#freq_invariance_enable
-In-Reply-To: <20220426072238.GA613@xsang-OptiPlex-9020>
-References: <20220426072238.GA613@xsang-OptiPlex-9020>
-Date:   Wed, 27 Apr 2022 16:51:39 +0200
-Message-ID: <8735hyy3yc.ffs@tglx>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0IQvTcMEBnE+yly3Jqj1m7ej/vPl078aXENmc+H4j+E=;
+        b=GkVibiWNS5WRFKg0wXWXhekxEi3tzxg80foLhAQvhFjFBYrQc9uCogeR/3QrlpWg9XT1Yz
+        GFdfOIY4QiR62TyUXsOowPbChsKj+4haArB5MPAcHJt6riJPLpq1Epv0IV1KgdyMEA1DzP
+        t0lJTnCLo8apdoflq2sTeeEJu6+wW2Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-Ady9gyINNF6aO5JBgqcudA-1; Wed, 27 Apr 2022 10:54:51 -0400
+X-MC-Unique: Ady9gyINNF6aO5JBgqcudA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6E42185A5BE;
+        Wed, 27 Apr 2022 14:54:50 +0000 (UTC)
+Received: from llong.com (unknown [10.22.11.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A33FD20296A5;
+        Wed, 27 Apr 2022 14:54:41 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>, ying.huang@intel.com,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Waiman Long <longman@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH v3] cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in cpuset_init_smp()
+Date:   Wed, 27 Apr 2022 10:54:28 -0400
+Message-Id: <20220427145428.1411867-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26 2022 at 15:22, kernel test robot wrote:
-> [ 11.086251][ T1] WARNING: CPU: 4 PID: 1 at arch/x86/kernel/cpu/aperfmperf.c:431 freq_invariance_enable (arch/x86/kernel/cpu/aperfmperf.c:431) 
-> [ 11.227178][ T1] init_freq_invariance_cppc (arch/x86/kernel/acpi/cppc.c:82 arch/x86/kernel/acpi/cppc.c:96) 
-> [ 11.232574][ T1] acpi_cppc_processor_probe (drivers/acpi/cppc_acpi.c:832) 
+There are 3 places where the cpu and node masks of the top cpuset can
+be initialized in the order they are executed:
+ 1) start_kernel -> cpuset_init()
+ 2) start_kernel -> cgroup_init() -> cpuset_bind()
+ 3) kernel_init_freeable() -> do_basic_setup() -> cpuset_init_smp()
 
-Bah, the commit in question assumed that the CPPC muck is AMD only....
+The first cpuset_init() call just sets all the bits in the masks.
+The second cpuset_bind() call sets cpus_allowed and mems_allowed to the
+default v2 values. The third cpuset_init_smp() call sets them back to
+v1 values.
 
-Fix below.
+For systems with cgroup v2 setup, cpuset_bind() is called once.  As a
+result, cpu and memory node hot add may fail to update the cpu and node
+masks of the top cpuset to include the newly added cpu or node in a
+cgroup v2 environment.
 
-Thanks,
+For systems with cgroup v1 setup, cpuset_bind() is called again by
+rebind_subsystem() when the v1 cpuset filesystem is mounted as shown
+in the dmesg log below with an instrumented kernel.
 
-        tglx
+  [    2.609781] cpuset_bind() called - v2 = 1
+  [    3.079473] cpuset_init_smp() called
+  [    7.103710] cpuset_bind() called - v2 = 0
+
+smp_init() is called after the first two init functions.  So we don't
+have a complete list of active cpus and memory nodes until later in
+cpuset_init_smp() which is the right time to set up effective_cpus
+and effective_mems.
+
+To fix this cgroup v2 mask setup problem, the potentially incorrect
+cpus_allowed & mems_allowed setting in cpuset_init_smp() are removed.
+For cgroup v2 systems, the initial cpuset_bind() call will set the masks
+correctly.  For cgroup v1 systems, the second call to cpuset_bind()
+will do the right setup.
+
+cc: stable@vger.kernel.org
+Signed-off-by: Waiman Long <longman@redhat.com>
+Tested-by: Feng Tang <feng.tang@intel.com>
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
 ---
---- a/arch/x86/kernel/acpi/cppc.c
-+++ b/arch/x86/kernel/acpi/cppc.c
-@@ -91,6 +91,9 @@ void init_freq_invariance_cppc(void)
- 	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
- 		return;
+ kernel/cgroup/cpuset.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 9390bfd9f1cd..71a418858a5e 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3390,8 +3390,11 @@ static struct notifier_block cpuset_track_online_nodes_nb = {
+  */
+ void __init cpuset_init_smp(void)
+ {
+-	cpumask_copy(top_cpuset.cpus_allowed, cpu_active_mask);
+-	top_cpuset.mems_allowed = node_states[N_MEMORY];
++	/*
++	 * cpus_allowd/mems_allowed set to v2 values in the initial
++	 * cpuset_bind() call will be reset to v1 values in another
++	 * cpuset_bind() call when v1 cpuset is mounted.
++	 */
+ 	top_cpuset.old_mems_allowed = top_cpuset.mems_allowed;
  
-+	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-+		return;
-+
- 	mutex_lock(&freq_invariance_lock);
- 	if (!init_done)
- 		amd_set_max_freq_ratio();
+ 	cpumask_copy(top_cpuset.effective_cpus, cpu_active_mask);
+-- 
+2.27.0
+

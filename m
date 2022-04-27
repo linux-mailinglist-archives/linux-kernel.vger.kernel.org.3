@@ -2,363 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC4C511020
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9501451102B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357654AbiD0Ea0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S1357697AbiD0Ecc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357635AbiD0EaY (ORCPT
+        with ESMTP id S1357703AbiD0Ec0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:30:24 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8C113DE0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:27:14 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id bc42so365302vkb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZP5hHWgOyitdI74hmT/MtqQOkUerntDv5R3vS847K7c=;
-        b=msHG7B/GXY/y31IUcUaVHCWDF7Hw61PO55rLvlbKp1on35EG8XwTxDQMO6DyFAGTrY
-         ni8A+Qnp9vNN2P9fros/klc7Ws0ffGCc6zOIOuiZe6Ca/tWGyfy5llUgfrilNXwaKpOV
-         toFnsSxxk438vmHEsrURVtNNtv4Bwq8qT01y+M+fTwxj53JV+oKOc3N/GRV1Ren99YHl
-         DtyVD8V2jno/3EcFX9BAKmSX6mPlwM4OA1OXiE/eSm3aUxZL2Y3gY7VOBfIPV4BukeqS
-         jrjJTZw0gX3wSqN65P30/rS0/IpxPAYeKwN0eXVZ1uFtquaArK8+RvuWjaUA7MnvaEeI
-         T1XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZP5hHWgOyitdI74hmT/MtqQOkUerntDv5R3vS847K7c=;
-        b=ieSXoEHl3fT33WeTKV39ENeImh95X+kdoTgLD69qXTAgEB5fGsb1/m7jATFMqma+0q
-         fab4qnI5Ack9qMT+Av7YFa0C0k0Wt1urFLQE3gpnb+Ivi4am3NwE9qRNW/+/ZoTUXUxh
-         tdVBpyahHJafEk6Ldcs70728fwN3mv4/NDuyhDME+uFLNVAGm8q2dJOkqk4sUMV9DEuI
-         4TEV+jdjZ7NU5icBW00ZvPn9ogyM12Xuz3fCXSj/6FM+3IU01xCdrlZue9sM6/cn8wBK
-         duQJY3Gmp96KnucOy9cyWIgIppdHvoa8jKRl9VHqWCIQ99uuBh/OaHDPMK+d8ZVh/g+9
-         /X3w==
-X-Gm-Message-State: AOAM533JOLGbt1c2m3m2RrTS4Oh590b7eK7ATw/wSaG1My8uftlG9aI+
-        8bvI5ua+JjwwobMOOVYYyJXBsYeVFOlIX6H0GRPCSQ==
-X-Google-Smtp-Source: ABdhPJwvryGFVUfJKXOoOIJLt5p0ocVqbSvHREAnjaOFYYjecqgwQZBPWFSqo1OPWWplBFIbDy7MnB1JhoCooK+S9tg=
-X-Received: by 2002:a1f:38c2:0:b0:349:9667:9232 with SMTP id
- f185-20020a1f38c2000000b0034996679232mr8140821vka.16.1651033632966; Tue, 26
- Apr 2022 21:27:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
- <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
- <8735i1zurt.fsf@linux.ibm.com> <ea9d01e16de655af85c0041c96964d83f59fb6d2.camel@intel.com>
- <c576a992-5a50-5dd3-644c-a45d4338fc85@linux.ibm.com> <9a0fe756ae3af78f2612dcf2df9673053a7ebab2.camel@intel.com>
-In-Reply-To: <9a0fe756ae3af78f2612dcf2df9673053a7ebab2.camel@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Tue, 26 Apr 2022 21:27:01 -0700
-Message-ID: <CAAPL-u_17CveHuWa1JN1NTTUxLCUnXEAdnQwPvigc5BMGa=D1w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state N_DEMOTION_TARGETS
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>
+        Wed, 27 Apr 2022 00:32:26 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579BC15A42A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651033752; x=1682569752;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yW17vhjAX+KHvuIhettnF8RnqJyy8HRkyKBPxatDtgo=;
+  b=L2b7ei4xByGXe3rUbS3RjtBPkbviWSP2EL+CrwUDM8D9+D2ibKSQM3l7
+   HzCVRAzwrDM4xF+uWY9ZssL+d5iYpPXwm90i0voiv91/FJKx/AzdqxEp5
+   OFctkT6zOAe5CeLmmGeRAvPg/J1G1eCvJlz827VDzeqXwLv46nabpVCav
+   UunDdAx2wD2bL/ySbT31ghyiADuqyUISEt/pq3vDXqrsUarHlY6IU0fvz
+   709UEpg7PDC8Kj/3zVUguwB999+DvgNb4BXIGPfZLEwS0doc15ZPGoDTw
+   mNqBXp5pilEWnno0m3oSo7DIlOM5Q5zUGa5xtCMxMQNsfivbeoYpWVcHw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="263399596"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="263399596"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:28:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="730601853"
+Received: from aliang-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.1.170])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:28:02 -0700
+Message-ID: <c31059e479307b347decd1eff1d3a9568b19b613.camel@intel.com>
+Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+Date:   Wed, 27 Apr 2022 16:28:00 +1200
+In-Reply-To: <405a4f3c-3d49-f3c2-441b-8d8b9d5eec23@linux.intel.com>
+References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <0457ce8e78ddd1d6c7832176368e095adae1bc18.camel@intel.com>
+         <405a4f3c-3d49-f3c2-441b-8d8b9d5eec23@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 1:43 AM ying.huang@intel.com
-<ying.huang@intel.com> wrote:
->
-> On Mon, 2022-04-25 at 13:39 +0530, Aneesh Kumar K V wrote:
-> > On 4/25/22 11:40 AM, ying.huang@intel.com wrote:
-> > > On Mon, 2022-04-25 at 09:20 +0530, Aneesh Kumar K.V wrote:
-> > > > "ying.huang@intel.com" <ying.huang@intel.com> writes:
-> > > >
-> > > > > Hi, All,
-> > > > >
-> > > > > On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
-> > > > >
-> > > > > [snip]
-> > > > >
-> > > > > > I think it is necessary to either have per node demotion targets
-> > > > > > configuration or the user space interface supported by this patch
-> > > > > > series. As we don't have clear consensus on how the user interface
-> > > > > > should look like, we can defer the per node demotion target set
-> > > > > > interface to future until the real need arises.
-> > > > > >
-> > > > > > Current patch series sets N_DEMOTION_TARGET from dax device kmem
-> > > > > > driver, it may be possible that some memory node desired as demotion
-> > > > > > target is not detected in the system from dax-device kmem probe path.
-> > > > > >
-> > > > > > It is also possible that some of the dax-devices are not preferred as
-> > > > > > demotion target e.g. HBM, for such devices, node shouldn't be set to
-> > > > > > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
-> > > > > > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
-> > > > > > kernel, but for now this user space interface will be useful to avoid
-> > > > > > such devices as demotion targets.
-> > > > > >
-> > > > > > We can add read only interface to view per node demotion targets
-> > > > > > from /sys/devices/system/node/nodeX/demotion_targets, remove
-> > > > > > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
-> > > > > > make /sys/devices/system/node/demotion_targets writable.
-> > > > > >
-> > > > > > Huang, Wei, Yang,
-> > > > > > What do you suggest?
-> > > > >
-> > > > > We cannot remove a kernel ABI in practice.  So we need to make it right
-> > > > > at the first time.  Let's try to collect some information for the kernel
-> > > > > ABI definitation.
-> > > > >
-> > > > > The below is just a starting point, please add your requirements.
-> > > > >
-> > > > > 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
-> > > > > want to use that as the demotion targets.  But I don't think this is a
-> > > > > issue in practice for now, because demote-in-reclaim is disabled by
-> > > > > default.
-> > > >
-> > > > It is not just that the demotion can be disabled. We should be able to
-> > > > use demotion on a system where we can find DRAM only NUMA nodes. That
-> > > > cannot be achieved by /sys/kernel/mm/numa/demotion_enabled. It needs
-> > > > something similar to to N_DEMOTION_TARGETS
-> > > >
-> > >
-> > > Can you show NUMA information of your machines with DRAM-only nodes and
-> > > PMEM nodes?  We can try to find the proper demotion order for the
-> > > system.  If you can not show it, we can defer N_DEMOTION_TARGETS until
-> > > the machine is available.
-> >
-> >
-> > Sure will find one such config. As you might have noticed this is very
-> > easy to have in a virtualization setup because the hypervisor can assign
-> > memory to a guest VM from a numa node that doesn't have CPU assigned to
-> > the same guest. This depends on the other guest VM instance config
-> > running on the system. So on any virtualization config that has got
-> > persistent memory attached, this can become an easy config to end up with.
-> >
->
-> Why they want to do that?  I am looking forward to a real issue, not
-> theoritical possibility.
->
-> >
-> > > > > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
-> > > > >
-> > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> > > > > memory node near node 0,
-> > > > >
-> > > > > available: 3 nodes (0-2)
-> > > > > node 0 cpus: 0 1
-> > > > > node 0 size: n MB
-> > > > > node 0 free: n MB
-> > > > > node 1 cpus:
-> > > > > node 1 size: n MB
-> > > > > node 1 free: n MB
-> > > > > node 2 cpus: 2 3
-> > > > > node 2 size: n MB
-> > > > > node 2 free: n MB
-> > > > > node distances:
-> > > > > node   0   1   2
-> > > > >    0:  10  40  20
-> > > > >    1:  40  10  80
-> > > > >    2:  20  80  10
-> > > > >
-> > > > > We have 2 choices,
-> > > > >
-> > > > > a)
-> > > > > node    demotion targets
-> > > > > 0       1
-> > > > > 2       1
-> > > >
-> > > > This is achieved by
-> > > >
-> > > > [PATCH v2 1/5] mm: demotion: Set demotion list differently
-> > > >
-> > > > >
-> > > > > b)
-> > > > > node    demotion targets
-> > > > > 0       1
-> > > > > 2       X
-> > > >
-> > > >
-> > > > >
-> > > > > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> > > > > traffic.  Both are OK as defualt configuration.  But some users may
-> > > > > prefer the other one.  So we need a user space ABI to override the
-> > > > > default configuration.
-> > > > >
-> > > > > 3. For machines with HBM (High Bandwidth Memory), as in
-> > > > >
-> > > > > https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
-> > > > >
-> > > > > > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
-> > > > >
-> > > > > Although HBM has better performance than DDR, in ACPI SLIT, their
-> > > > > distance to CPU is longer.  We need to provide a way to fix this.  The
-> > > > > user space ABI is one way.  The desired result will be to use local DDR
-> > > > > as demotion targets of local HBM.
-> > > >
-> > > >
-> > > > IMHO the above (2b and 3) can be done using per node demotion targets. Below is
-> > > > what I think we could do with a single slow memory NUMA node 4.
-> > >
-> > > If we can use writable per-node demotion targets as ABI, then we don't
-> > > need N_DEMOTION_TARGETS.
-> >
-> >
-> > Not sure I understand that. Yes, once you have a writeable per node
-> > demotion target it is easy to build any demotion order.
->
-> Yes.
->
-> > But that doesn't
-> > mean we should not improve the default unless you have reason to say
-> > that using N_DEMOTTION_TARGETS breaks any existing config.
-> >
->
-> Becuase N_DEMOTTION_TARGETS is a new kernel ABI to override the default,
-> not the default itself.  [1/5] of this patchset improve the default
-> behavior itself, and I think that's good.
->
-> Because we must maintain the kernel ABI almost for ever, we need to be
-> careful about adding new ABI and add less if possible.  If writable per-
-> node demotion targets can address your issue.  Then it's unnecessary to
-> add another redundant kernel ABI for that.
 
-I still think the kernel should initialize the per-node demotion order
-in a way similar to allocation fallback order and there is no need for
-a userspace interface to override per-node demotion order. But I don't
-object to such a per-node demotion order override interface proposed
-here.
+> 
+> How about the following summary? It includes important notes mentioned
+> by you and some more driver info.
 
-On the other hand, I think it is better to preserve the system-wide
-/sys/devices/system/node/demotion_targets as writable.  If the
-userspace only wants to specify a specific set of nodes as the
-demotion tier and is perfectly fine with the per-node demotion order
-generated by the kernel, why should we enforce the userspace to have
-to manually define the per-node demotion order as well?
+Yes fine to me, except minor comments below:
 
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 4
-> > > > 4
-> > > > 4
-> > > >
-> > > > /sys/devices/system/node# echo 1 > node1/demotion_targets
-> > > > bash: echo: write error: Invalid argument
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 4
-> > > > 4
-> > > > 4
-> > > >
-> > > > /sys/devices/system/node# echo 0 > node1/demotion_targets
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 0
-> > > > 4
-> > > > 4
-> > > >
-> > > > /sys/devices/system/node# echo 1 > node0/demotion_targets
-> > > > bash: echo: write error: Invalid argument
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 0
-> > > > 4
-> > > > 4
-> > > >
-> > > > Disable demotion for a specific node.
-> > > > /sys/devices/system/node# echo > node1/demotion_targets
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > >
-> > > > 4
-> > > > 4
-> > > >
-> > > > Reset demotion to default
-> > > > /sys/devices/system/node# echo -1 > node1/demotion_targets
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 4
-> > > > 4
-> > > > 4
-> > > >
-> > > > When a specific device/NUMA node is used for demotion target via the user interface, it is taken
-> > > > out of other NUMA node targets.
-> > >
-> > > IMHO, we should be careful about interaction between auto-generated and
-> > > overridden demotion order.
-> > >
-> >
-> > yes, we should avoid loop between that.
->
-> In addition to that, we need to get same result after hot-remove then
-> hot-add the same node.  That is, the result should be stable after NOOP.
-> I guess we can just always,
->
-> - Generate the default demotion order automatically without any
-> overriding.
->
-> - Apply the overriding, after removing the invalid targets, etc.
->
-> > But if you agree for the above
-> > ABI we could go ahead and share the implementation code.
->
-> I think we need to add a way to distinguish auto-generated and overriden
-> demotion targets in the output of nodeX/demotion_targets.  Otherwise it
-> looks good to me.
->
-> Best Regards,
-> Huang, Ying
->
-> > > > root@ubuntu-guest:/sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 4
-> > > > 4
-> > > > 4
-> > > >
-> > > > /sys/devices/system/node# echo 4 > node1/demotion_targets
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > >
-> > > > 4
-> > > >
-> > > >
-> > > >
-> > > > If more than one node requies the same demotion target
-> > > > /sys/devices/system/node# echo 4 > node0/demotion_targets
-> > > > /sys/devices/system/node# cat node[0-4]/demotion_targets
-> > > > 4
-> > > > 4
-> > > >
-> > > >
-> > > >
-> > > > -aneesh
-> > >
-> > >
-> >
-> > -aneesh
->
->
+> 
+> x86/tdx: Add TDX Guest attestation interface driver
+> 
+> In TDX guest, attestation is used to verify the trustworthiness of a TD
+> to other entities before provisioning secrets to the TD.
+> 
+> One usage example is, when a TD guest uses encrypted drive and if the
+> decryption keys required to access the drive are stored in a secure 3rd
+> party key server, the key server can use attestation to verify TD's
+> trustworthiness and release the decryption keys to the TD.
+> 
+> The attestation process consists of two steps: TDREPORT generation and
+> Quote generation.
+> 
+> TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+> the TDX module which contains TD-specific information (such as TD
+> measurements), platform security version, and the MAC to protect the
+> integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+> get the TDREPORT from the TDX module. A user-provided 64-Byte
+> REPORTDATA is used as input and included in the TDREPORT. Typically it
+> can be some nonce provided by attestation service so the TDREPORT can
+> be verified uniquely. More details about TDREPORT can be found in
+> Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+> 
+> After getting the TDREPORT, the second step of the attestation process
+> is to send the TDREPORT to Quoting Enclave (QE) or Quote Generation
+> Service (QGS) to generate the Quote. However, the method of sending the
+> TDREPORT to QE/QGS, communication channel used and data format used is
+> specific to the implementation of QE/QGS.
+> 
+> A typical implementation is, TD userspace attestation software gets the
+> TDREPORT from TD kernel, sends it to QE/QGS, and QE/QGS returns the
+> Quote. TD attestation software can use any available communication
+> channel to talk to QE/QGS, such as using vsock and tcp/ip.
+> 
+> To support the case that those communication channels are not directly
+> available to the TD, TDX also defines TDVMCALL
+> (TDG.VP.VMCALL<GetQuote>) to allow TD to ask VMM to help with sending
+> the TDREPORT and receiving the Quote. This support is documented in the
+> GHCI spec section titled "5.4 TD attestation".
+
+I intentionally omitted to mention TDG.VP.VMCALL<GetQuote> as I personally
+believe there are still couple issues around GetQuote that we haven't discussed
+thoroughly (timeout, etc).  I am still considering whether we should change GHCI
+to use TDG.VP.VMCALL<Service> defined in GHCI 1.5 for attestation.  And the name
+of TDVMCALL doesn't actually matter here, so I think we don't need to mention
+GetQuote here but just say we have TDVMCALLs for that.
+
+> 
+> Implement a basic attestation driver to allow TD userspace to get the
+> TDREPORT, which is sent to QE by the attestation software to generate
+> a Quote for remote verification. Add a wrapper function
+> (tdx_mcall_tdreport()) to get the TDREPORT from the TDX Module. This
+> API will be used by the interface driver to request for TDREPORT.
+
+I don't think you need to mention tdx_mcall_tdreport().
+
+> 
+> Also note that explicit access permissions are not enforced in this
+> driver because the quote and measurements are not a secret. However
+> the access permissions of the device node can be used to set any
+> desired access policy. The udev default is usually root access
+> only.
+> 
+> 
+> 
+> 
+

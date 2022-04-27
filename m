@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB47511643
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803C65115F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiD0LKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
+        id S232411AbiD0LLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiD0LKb (ORCPT
+        with ESMTP id S231847AbiD0LLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:10:31 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6B43D1F4;
-        Wed, 27 Apr 2022 04:06:48 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23RB6fXU110776;
-        Wed, 27 Apr 2022 06:06:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651057601;
-        bh=J3BSiLTEkISmMAngFf+J6ctLyGDu9f3n26evJysgDxA=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=f+F2BdVyzGucCbj5uZr5P+poDizuqvHdUNclxGlT1T/dVwubuhXpuMnfFdinXUoVR
-         D1HbSlgTBdYN2msCnK4JGRtVLkk53xuDnhhTXNDQU6W9935UjJ3FNHXXSCwM0mopGW
-         Ju2q+xCudLZ3RRia2f+uDIWtlFxlalFIqm4bg0NE=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23RB6f4o095407
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 Apr 2022 06:06:41 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
- Apr 2022 06:06:41 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 27 Apr 2022 06:06:41 -0500
-Received: from [172.24.145.198] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23RB6bTx019427;
-        Wed, 27 Apr 2022 06:06:38 -0500
-Message-ID: <96894353-2b4e-52a7-bd48-c65eb674d6f5@ti.com>
-Date:   Wed, 27 Apr 2022 16:36:37 +0530
+        Wed, 27 Apr 2022 07:11:01 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1744B44740;
+        Wed, 27 Apr 2022 04:07:29 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id u9-20020a05600c00c900b00393e729e655so1006481wmm.0;
+        Wed, 27 Apr 2022 04:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aWeabFjSPFJCE1ex6sBRRNmsXi3iYIbVczYC13dwVaU=;
+        b=AHWW5jnG4vjqFgGw7AhoXQt9fNxt7I3wC4L4pAbPDzkc3gjiZNx11inPOBZ+64Np5g
+         hjFox2jk7kil2+TJC4+YjBbrmFJlOROGBiV2jOuGwrhT+7xeP8EwE0ceamU3oDV1dpTa
+         BCQ2bOWeshfk9vBaHzZZqafbUcBzrU/fUu8CnfSKMTz7O9s5WWGAXb7uZ4QL1dlIM5cw
+         wBJdAWI5sNwIrUiFxxjVUadZ9EGbEghH2ofsYHpzdj0+m6TUeNTjcjsmnF2/TYg15moF
+         7eVm8/GkjU6RQgPFb1C0aQmKmiZkqL9gFp5rDIfvwaPczAb3Upi8ZdEpV24htVotcZ8v
+         iYeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aWeabFjSPFJCE1ex6sBRRNmsXi3iYIbVczYC13dwVaU=;
+        b=YLkqpmDgF58D1rDM8gU9V02vvRQznyTk9IxzUD2rUZ4R+MQf6KWWLibkfHKYVS39Jv
+         KIsMmIYnIYFkymbnSj8HaYp5w0dEluH0dLmjjt67Hu/ZaKt33Tuyc1gPuIQGzsHhC2s8
+         z7hTyJBMqkxAqx/wKDYHGzBZr7cvCnUF6Ijl4NLjYBi+/gRoAIQW1xOmAnhZEoS5Uws/
+         RUZCSiZ2tdjmNXFEhuHBil+GX0SDBzEAcUZOFms0xGmDHJG13f8E80rceby1RLxnqqeX
+         YLP+ItKCDaR2RiFNIzwzke6SAABRPu/rA8wAY3Xvkcz0VRlpRN9Wq8hGbvVR/K/4p5VP
+         LDpw==
+X-Gm-Message-State: AOAM531MgmkK7Af/VE65AQZzqMtmk9bATxpfRfzIW0pRND8jS0N1MFvP
+        V551wiTttY5IdRNiTtiqfJg=
+X-Google-Smtp-Source: ABdhPJxyo7dxW+DyHCFdV6AZPrChtE7SZwP69fmZbc8kq8lpleDIG/V5KBAOdpyA3tzhKUAGX8vHqA==
+X-Received: by 2002:a05:600c:4808:b0:393:fbd3:f1fa with SMTP id i8-20020a05600c480800b00393fbd3f1famr5789248wmo.100.1651057646451;
+        Wed, 27 Apr 2022 04:07:26 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id p26-20020adf959a000000b0020aca418f14sm15659728wrp.54.2022.04.27.04.07.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 04:07:26 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 12:07:23 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/53] 4.19.240-rc1 review
+Message-ID: <Ymkj66PE3OwXqYeB@debian>
+References: <20220426081735.651926456@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62-mcu: Enable MCU GPIO module
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-References: <20220421061938.122317-1-vigneshr@ti.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-In-Reply-To: <20220421061938.122317-1-vigneshr@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426081735.651926456@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,61 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/22 11:49, Vignesh Raghavendra wrote:
-> AM62 has x1 GPIO module and associated interrupt router in MCU Domain.
-> Add DT nodes for the same.
+Hi Greg,
+
+On Tue, Apr 26, 2022 at 10:20:40AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.240 release.
+> There are 53 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi | 28 +++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-> index d103824c963f..45343381ad0b 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-> @@ -53,4 +53,32 @@ mcu_spi1: spi@4b10000 {
->  		power-domains = <&k3_pds 148 TI_SCI_PD_EXCLUSIVE>;
->  		clocks = <&k3_clks 148 0>;
->  	};
-> +
-> +	mcu_gpio_intr: interrupt-controller@4210000 {
-> +		compatible = "ti,sci-intr";
-> +		reg = <0x00 0x04210000 0x00 0x200>;
-> +		ti,intr-trigger-type = <1>;
-> +		interrupt-controller;
-> +		interrupt-parent = <&gic500>;
-> +		#interrupt-cells = <1>;
-> +		ti,sci = <&dmsc>;
-> +		ti,sci-dev-id = <5>;
-> +		ti,interrupt-ranges = <0 104 4>;
-> +	};
-> +
-> +	mcu_gpio0: gpio@4201000 {
-> +		compatible = "ti,am64-gpio", "ti,keystone-gpio";
-> +		reg = <0x0 0x4201000 0x0 0x100>;
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
 
-nitpick: reg = <0x00 0x04201000 0x00 0x100>;
+Build test:
+mips (gcc version 11.2.1 20220408): 63 configs -> no  failure
+arm (gcc version 11.2.1 20220408): 116 configs -> no new failure
+arm64 (gcc version 11.2.1 20220408): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
 
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		interrupt-parent = <&mcu_gpio_intr>;
-> +		interrupts = <30>, <31>;
-> +		interrupt-controller;
-> +		#interrupt-cells = <2>;
-> +		ti,ngpio = <24>;
-> +		ti,davinci-gpio-unbanked = <0>;
-> +		power-domains = <&k3_pds 79 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 79 0>;
-> +		clock-names = "gpio";
-> +	};
->  };
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1065
 
 
-Aside from the above minor change,
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-Reviewed-by: Aswath Govindraju <a-govindraju@ti.com>
+--
+Regards
+Sudip
 
--- 
-Thanks,
-Aswath

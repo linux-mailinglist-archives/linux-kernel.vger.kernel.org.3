@@ -2,189 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8A75117F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E470F511799
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiD0MmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
+        id S234790AbiD0Moj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbiD0Mlz (ORCPT
+        with ESMTP id S234773AbiD0Moc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:41:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C6BE59949
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651063120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K5T2mzcnLGwMqpeR6jrzAYwjw0tWje8edHf2UQdVa4A=;
-        b=Co1fUC3eP2z3cPzZqRomEKsHLwo7ufTz9gmlWjLK0E1b/zXXhIBxdYFeJYOJcZaEx+cm5u
-        Q09vqVahsz6+fw3B17gOEaHRipBY7n1oKyr4kE+y+7fFTCG1Gkh0hM5LTHA+ByijyRt0hG
-        ahQgf5hYE0JFjlyQjEU0FQQD7NUj18c=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-205-gNE4EU4GO22Y9MhOwi-UAw-1; Wed, 27 Apr 2022 08:38:39 -0400
-X-MC-Unique: gNE4EU4GO22Y9MhOwi-UAw-1
-Received: by mail-qt1-f198.google.com with SMTP id bb32-20020a05622a1b2000b002f1f41e6caeso977508qtb.19
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:38:38 -0700 (PDT)
+        Wed, 27 Apr 2022 08:44:32 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D42B26F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:21 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso3386544wma.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cbbrke0Y/62FpKxLP1THZreWJJ7JOW3ZusoLqpF2UmQ=;
+        b=ElTn2Yk9K1k2G6x565G88Wc8cknGDMkZGWGwEx0MgI1tUAt3pxFiwaRQiGJO5PQa8r
+         WrY1z7OKffnEmtIoMpN5jpA0Y1efS3cm5HNYvMxpqFOkQ4mOScWtqVrTrWANuyOt+MVC
+         sgurh5DJC694jmHjsf+lqbw3oMP0sIu5hgOb1qwTKxR0W7S1IUe2C4tfV15A84jDsg/y
+         cruH9+Y/PEuTXjfwydxBVa4Cc4+o8eO4Ml+CBKALdT68a6barcY6VPfkuZ6zTr/npjOg
+         qduMpQ6iBNsCRzySowGDHCX8WnJhNcnb5teLrNc/73s3uOOPt5dkulKJwN+VIis3tGbD
+         J/eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K5T2mzcnLGwMqpeR6jrzAYwjw0tWje8edHf2UQdVa4A=;
-        b=qnqhj3d2waPkGID5t0x35gN1mgOCB/5jiFrNWCb3CbWgIMfo7a6Mpmggj0KGG9MHDk
-         QOzR7dM1e2zunZ2YwMSctFPPSX5Bz/eLQqN07+nGw8DLqqYRH+A4p9RI65KThzpKBLS3
-         fwMTDxdDr5tSbgwA+vwtrpCSeFHpw66Y5PVnsQ8doyN0/J+bsarDS5RU9dOa7SlU1F00
-         55mOhG5ufeOIVg/s6nbiJ7QN8YcVvH7GVZb1YhD86Md4eGZg9o4fkvF/RPDOa+rQpJ+j
-         3nw2wzbcuvKFvWVp27bR8c/yFwu07HiFgF2yO0V83DuL5F9vcSvdOkritg/LCzvgQ+uy
-         Flrg==
-X-Gm-Message-State: AOAM533QWBr3t4x25waNlP2y+C/ClhvD3+tk66hb7iG4W4g5iSpVcFgz
-        iWy+fEMP+JhWuWnmMPqO3nxDfQlwO0T2a72FRwtCEa5/rZCh3YWuJPqh8zrrtZodWhIMOB3jyw7
-        sp9UmY8j03vMN/+sC1BiLUPqc
-X-Received: by 2002:a37:9c2:0:b0:69e:c2b3:7120 with SMTP id 185-20020a3709c2000000b0069ec2b37120mr16241123qkj.150.1651063118418;
-        Wed, 27 Apr 2022 05:38:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwGDRMFfPx3BNBiON+Vbt8m+O9ygcWAUz2DFQIfNuuFEMKm5cj6DQH71r3jcUKRi5p2wmmBJA==
-X-Received: by 2002:a37:9c2:0:b0:69e:c2b3:7120 with SMTP id 185-20020a3709c2000000b0069ec2b37120mr16241113qkj.150.1651063118186;
-        Wed, 27 Apr 2022 05:38:38 -0700 (PDT)
-Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id 186-20020a3707c3000000b0069f9a8cbec2sm149714qkh.131.2022.04.27.05.38.36
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cbbrke0Y/62FpKxLP1THZreWJJ7JOW3ZusoLqpF2UmQ=;
+        b=Gwj7iC0rWUv0Hllt2OuI/zndPBcosljK4yucg6HVw9J+7GXXEM8ajV7FWzOv24E00h
+         cwxUWBv1yKkWlO68FLKVAWbmsZCWoWKClvcoc2K4Ue+uaxnwC8g5Bev+kKEJzR0zN/Zv
+         myBOveH/kPZ5IBEcVHtWtYXfKw/P+RGcDuA2mqqNM75l7OXCNTUv/sxYfXsx0VO9q4dc
+         y3aNlfl7n9vONO7TfkLZChAP15XDArdKEbZfhc67bCTOarDmYybL2cKgfaoGYKQ/BybT
+         W2g+JsaT5HxkQ6rgarkJ8j2+1yUWa8prK1FyAnD4xXvhy2pS+RI7VmuwDnemwjIvGTyt
+         Lmrw==
+X-Gm-Message-State: AOAM533AyRGPbKXY7wqHSMLX7kvAWwSBr6rCxhDEwYdkK85Tc+44KD+8
+        akBlxWuGt/5sjAcZMzj/KuQ6UQ==
+X-Google-Smtp-Source: ABdhPJx0wKS4OaLbYG7ps6he+395x2uxWDsg+VUCTEXspjydLhgvNgKNrwUEhSmg8kC98FSRSh8R4Q==
+X-Received: by 2002:a05:600c:3d0e:b0:38f:f83b:e7dc with SMTP id bh14-20020a05600c3d0e00b0038ff83be7dcmr34426400wmb.29.1651063279745;
+        Wed, 27 Apr 2022 05:41:19 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:493f:cd0f:324a:323c])
+        by smtp.gmail.com with ESMTPSA id p1-20020a1c7401000000b0038ed3bb00c9sm1471152wmc.6.2022.04.27.05.41.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 05:38:37 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 07:38:35 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] soc: qcom: rpmhpd: add sc8280xp & sa8540p rpmh
- power-domains
-Message-ID: <20220427123835.hmfdu66ut3uvvtjp@halaneylaptop>
-References: <20220426233508.1762345-1-bjorn.andersson@linaro.org>
- <20220426233508.1762345-4-bjorn.andersson@linaro.org>
+        Wed, 27 Apr 2022 05:41:18 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 14:41:13 +0200
+From:   Marco Elver <elver@google.com>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        kasan-dev@googlegroups.com, glider@google.com
+Subject: Re: [PATCH 3/3] kfence: test: use new suite_{init/exit} support, add
+ .kunitconfig
+Message-ID: <Ymk56YygGUU52CHG@elver.google.com>
+References: <20220426181925.3940286-1-dlatypov@google.com>
+ <20220426181925.3940286-3-dlatypov@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426233508.1762345-4-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426181925.3940286-3-dlatypov@google.com>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 04:35:08PM -0700, Bjorn Andersson wrote:
-> The Qualcomm sc8280xp platform has 13 and the sa8540p platform has 11
-> power-domains. Add compatibles, the typically used ones power-domains
-> and their relevant active-only variants, to the RPMh power-domain
-> driver.
+On Tue, Apr 26, 2022 at 11:19AM -0700, 'Daniel Latypov' via kasan-dev wrote:
+> Currently, the kfence test suite could not run via "normal" means since
+> KUnit didn't support per-suite setup/teardown. So it manually called
+> internal kunit functions to run itself.
+> This has some downsides, like missing TAP headers => can't use kunit.py
+> to run or even parse the test results (w/o tweaks).
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Use the newly added support and convert it over, adding a .kunitconfig
+> so it's even easier to run from kunit.py.
+> 
+> People can now run the test via
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=mm/kfence --arch=x86_64
+> ...
+> [11:02:32] Testing complete. Passed: 23, Failed: 0, Crashed: 0, Skipped: 2, Errors: 0
+> [11:02:32] Elapsed time: 43.562s total, 0.003s configuring, 9.268s building, 34.281s running
+> 
+> Cc: kasan-dev@googlegroups.com
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+
+Reviewed-by: Marco Elver <elver@google.com>
+
 > ---
+>  mm/kfence/.kunitconfig  |  6 ++++++
+>  mm/kfence/kfence_test.c | 31 +++++++++++++------------------
+>  2 files changed, 19 insertions(+), 18 deletions(-)
+>  create mode 100644 mm/kfence/.kunitconfig
 > 
-> Changes since v1:
-> - Added QPHY
-> - Split out sa8540
-> - Sorted the entries alphabetically
-> 
->  drivers/soc/qcom/rpmhpd.c | 53 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> index f8d28e902942..05fff8691ee3 100644
-> --- a/drivers/soc/qcom/rpmhpd.c
-> +++ b/drivers/soc/qcom/rpmhpd.c
-> @@ -180,6 +180,36 @@ static struct rpmhpd mxc_ao = {
->  	.res_name = "mxc.lvl",
->  };
+> diff --git a/mm/kfence/.kunitconfig b/mm/kfence/.kunitconfig
+> new file mode 100644
+> index 000000000000..f3d65e939bfa
+> --- /dev/null
+> +++ b/mm/kfence/.kunitconfig
+> @@ -0,0 +1,6 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_KFENCE=y
+> +CONFIG_KFENCE_KUNIT_TEST=y
+> +
+> +# Additional dependencies.
+> +CONFIG_FTRACE=y
+> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+> index 1b50f70a4c0f..96206a4ee9ab 100644
+> --- a/mm/kfence/kfence_test.c
+> +++ b/mm/kfence/kfence_test.c
+> @@ -826,14 +826,6 @@ static void test_exit(struct kunit *test)
+>  	test_cache_destroy();
+>  }
 >  
-> +static struct rpmhpd nsp = {
-> +	.pd = { .name = "nsp", },
-> +	.res_name = "nsp.lvl",
-> +};
-> +
-> +static struct rpmhpd qphy = {
-> +	.pd = { .name = "qphy", },
-> +	.res_name = "qphy.lvl",
-> +};
-> +
-> +/* SA8540P RPMH powerdomains */
-> +static struct rpmhpd *sa8540p_rpmhpds[] = {
-> +	[SC8280XP_CX] = &cx,
-> +	[SC8280XP_CX_AO] = &cx_ao,
-> +	[SC8280XP_EBI] = &ebi,
-> +	[SC8280XP_GFX] = &gfx,
-> +	[SC8280XP_LCX] = &lcx,
-> +	[SC8280XP_LMX] = &lmx,
-> +	[SC8280XP_MMCX] = &mmcx,
-> +	[SC8280XP_MMCX_AO] = &mmcx_ao,
-> +	[SC8280XP_MX] = &mx,
-> +	[SC8280XP_MX_AO] = &mx_ao,
-> +	[SC8280XP_NSP] = &nsp,
-> +};
-> +
-> +static const struct rpmhpd_desc sa8540p_desc = {
-> +	.rpmhpds = sa8540p_rpmhpds,
-> +	.num_pds = ARRAY_SIZE(sa8540p_rpmhpds),
-> +};
-> +
->  /* SDM845 RPMH powerdomains */
->  static struct rpmhpd *sdm845_rpmhpds[] = {
->  	[SDM845_CX] = &cx_w_mx_parent,
-> @@ -378,10 +408,33 @@ static const struct rpmhpd_desc sc8180x_desc = {
->  	.num_pds = ARRAY_SIZE(sc8180x_rpmhpds),
->  };
+> -static struct kunit_suite kfence_test_suite = {
+> -	.name = "kfence",
+> -	.test_cases = kfence_test_cases,
+> -	.init = test_init,
+> -	.exit = test_exit,
+> -};
+> -static struct kunit_suite *kfence_test_suites[] = { &kfence_test_suite, NULL };
+> -
+>  static void register_tracepoints(struct tracepoint *tp, void *ignore)
+>  {
+>  	check_trace_callback_type_console(probe_console);
+> @@ -847,11 +839,7 @@ static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
+>  		tracepoint_probe_unregister(tp, probe_console, NULL);
+>  }
 >  
-> +/* SC8280xp RPMH powerdomains */
-> +static struct rpmhpd *sc8280xp_rpmhpds[] = {
-> +	[SC8280XP_CX] = &cx,
-> +	[SC8280XP_CX_AO] = &cx_ao,
-> +	[SC8280XP_EBI] = &ebi,
-> +	[SC8280XP_GFX] = &gfx,
-> +	[SC8280XP_LCX] = &lcx,
-> +	[SC8280XP_LMX] = &lmx,
-> +	[SC8280XP_MMCX] = &mmcx,
-> +	[SC8280XP_MMCX_AO] = &mmcx_ao,
-> +	[SC8280XP_MX] = &mx,
-> +	[SC8280XP_MX_AO] = &mx_ao,
-> +	[SC8280XP_NSP] = &nsp,
-> +	[SC8280XP_QPHY] = &qphy,
+> -/*
+> - * We only want to do tracepoints setup and teardown once, therefore we have to
+> - * customize the init and exit functions and cannot rely on kunit_test_suite().
+> - */
+> -static int __init kfence_test_init(void)
+> +static int kfence_suite_init(struct kunit_suite *suite)
+>  {
+>  	/*
+>  	 * Because we want to be able to build the test as a module, we need to
+> @@ -859,18 +847,25 @@ static int __init kfence_test_init(void)
+>  	 * won't work here.
+>  	 */
+>  	for_each_kernel_tracepoint(register_tracepoints, NULL);
+> -	return __kunit_test_suites_init(kfence_test_suites);
+> +	return 0;
+>  }
+>  
+> -static void kfence_test_exit(void)
+> +static void kfence_suite_exit(struct kunit_suite *suite)
+>  {
+> -	__kunit_test_suites_exit(kfence_test_suites);
+>  	for_each_kernel_tracepoint(unregister_tracepoints, NULL);
+>  	tracepoint_synchronize_unregister();
+>  }
+>  
+> -late_initcall_sync(kfence_test_init);
+> -module_exit(kfence_test_exit);
+> +static struct kunit_suite kfence_test_suite = {
+> +	.name = "kfence",
+> +	.test_cases = kfence_test_cases,
+> +	.init = test_init,
+> +	.exit = test_exit,
+> +	.suite_init = kfence_suite_init,
+> +	.suite_exit = kfence_suite_exit,
 > +};
+> +
+> +kunit_test_suites(&kfence_test_suite);
 
-The commit messages mention sc8280xp having 13 power domains, but here I
-only count 12. Good chance I'm just missing something obvious (not
-familiar with using power domains or rpmh) but I thought I should
-highlight it in case that was an error.
-
-I attempted to find where this sort of thing is defined downstream, but
-failed :(
+Much nicer!
 
 Thanks,
-Andrew
-
-> +
-> +static const struct rpmhpd_desc sc8280xp_desc = {
-> +	.rpmhpds = sc8280xp_rpmhpds,
-> +	.num_pds = ARRAY_SIZE(sc8280xp_rpmhpds),
-> +};
-> +
->  static const struct of_device_id rpmhpd_match_table[] = {
-> +	{ .compatible = "qcom,sa8540p-rpmhpd", .data = &sa8540p_desc },
->  	{ .compatible = "qcom,sc7180-rpmhpd", .data = &sc7180_desc },
->  	{ .compatible = "qcom,sc7280-rpmhpd", .data = &sc7280_desc },
->  	{ .compatible = "qcom,sc8180x-rpmhpd", .data = &sc8180x_desc },
-> +	{ .compatible = "qcom,sc8280xp-rpmhpd", .data = &sc8280xp_desc },
->  	{ .compatible = "qcom,sdm845-rpmhpd", .data = &sdm845_desc },
->  	{ .compatible = "qcom,sdx55-rpmhpd", .data = &sdx55_desc},
->  	{ .compatible = "qcom,sdx65-rpmhpd", .data = &sdx65_desc},
-> -- 
-> 2.35.1
-> 
-
+-- Marco

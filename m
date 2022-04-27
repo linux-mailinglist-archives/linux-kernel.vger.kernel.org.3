@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572D6511971
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178A551190F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238288AbiD0Oko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S238427AbiD0OlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238299AbiD0Oki (ORCPT
+        with ESMTP id S238430AbiD0OlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:40:38 -0400
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E53832981;
-        Wed, 27 Apr 2022 07:37:08 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 16:36:49 +0200
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Kevin Mitchell <kevmitch@arista.com>
-Cc:     gal@nvidia.com, Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH nf-next v2 1/1] netfilter: conntrack: skip verification
- of zero UDP checksum
-Message-ID: <YmlVAXceuasAJjnN@salvia>
-References: <20220405234739.269371-2-kevmitch@arista.com>
- <20220408043341.416219-1-kevmitch@arista.com>
+        Wed, 27 Apr 2022 10:41:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C733E1B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:37:58 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i27so3808105ejd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Bp4nvCVNUoCNEAKvKfnnGKwiKlXJzQznkSn+Xrwkfm0=;
+        b=MhMHiFv6IziSDkdNlh2UkxZ6wRadtQURhNooR20okqyWTqd2+czoeWuBhz0z4JWzm8
+         D14A391nTFsO7zVvvx68QGBFV/NOikeIxpN3XqZJczoNMYIaJUUeSeasMMd31dP0x4yz
+         HAHkEH/ctSv3WhVSG4cQx1OEqpCyiyr1jKS9XAn8ktOm8kgEyzvseAsBYBpB9+LMuoZl
+         Oc7jIsPs+Ji4y7A79TbeEByv2p4W2COBmGrtXw7KkVbhO3Q5qvacwutoKX53YUG81m/B
+         cLitJrR/sKOPueb/Er8XqOnIr3YzTOYxjeLUWGAzANVG7pwKUvFsaq7ewf82X0ralNxK
+         uZzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bp4nvCVNUoCNEAKvKfnnGKwiKlXJzQznkSn+Xrwkfm0=;
+        b=QIL+To8jrwN1bbxB+gnQ0gOuHl5hJxC/ohnS1nPT+nSyCeJDUgw0rqbKVwNZu6rlha
+         gYRWxeEne5UbmtceTj5Ak4hMpBJsjk8zulemC2tF/1YFhySQU+cpbKWU/L/Ac/8x2Fn3
+         VQZtlLNBwgnyYylpQZD8P6Z3T3MnoXLbJErtHZKquesPyDeeUphEjdub4zfR8+WLQTN4
+         TcE98m6Leh9yBe+ojLcW1dOY2xs+dayVlfUOgAbfpZD9odH6URIF9Ox5VKX8V16Rea3z
+         zwzB3pe/yIbRrH0DuwGP0qtIR//fiAs9blDSj2x+gLEVUJFmufD2/mbGfsYZ2ssdMl+f
+         rt9w==
+X-Gm-Message-State: AOAM532CYJUgIrweXfFmsKV67JUmfEN5malFCdWY/Tw2tcjlvSTlQ46C
+        FepwU0pyeqHaN2L6HNBKlJU4HEAPZeTnAMHWEiEjug==
+X-Google-Smtp-Source: ABdhPJx/b1z9pzoC8wsJhdzRIvOPilfrnLEqVf6eXmNt9pExpQjAD0KJZeU/Mw5BgndZemcvxbOMWpKWQSi9IhO4Dcc=
+X-Received: by 2002:a17:907:9506:b0:6da:b4cd:515b with SMTP id
+ ew6-20020a170907950600b006dab4cd515bmr26917366ejc.602.1651070274544; Wed, 27
+ Apr 2022 07:37:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220408043341.416219-1-kevmitch@arista.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426060536.15594-1-hbh25y@gmail.com> <20220426060536.15594-4-hbh25y@gmail.com>
+ <20220426165613.GA2007637@p14s> <55c946ad-5d19-1d38-3484-1ab059a27642@gmail.com>
+In-Reply-To: <55c946ad-5d19-1d38-3484-1ab059a27642@gmail.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Wed, 27 Apr 2022 08:37:42 -0600
+Message-ID: <CANLsYkx7fB1O001cPLZbidDLmWyobb2zmhEX23naef7kb-RcAw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] rpmsg: virtio: Fix the unregistration of the
+ device rpmsg_ctrl
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 09:33:40PM -0700, Kevin Mitchell wrote:
-> The checksum is optional for UDP packets in IPv4. However nf_reject
-> would previously require a valid checksum to elicit a response such as
-> ICMP_DEST_UNREACH.
-> 
-> Add some logic to nf_reject_verify_csum to determine if a UDP packet has
-> a zero checksum and should therefore not be verified. Explicitly require
-> a valid checksum for IPv6 consistent RFC 2460 and with the non-netfilter
-> stack (see udp6_csum_zero_error).
+On Tue, 26 Apr 2022 at 20:50, Hangyu Hua <hbh25y@gmail.com> wrote:
 >
-> Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
-> ---
->  include/net/netfilter/nf_reject.h   | 27 +++++++++++++++++++++++----
->  net/ipv4/netfilter/nf_reject_ipv4.c | 10 +++++++---
->  net/ipv6/netfilter/nf_reject_ipv6.c |  4 ++--
->  3 files changed, 32 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/net/netfilter/nf_reject.h b/include/net/netfilter/nf_reject.h
-> index 9051c3a0c8e7..f248c1ff8b22 100644
-> --- a/include/net/netfilter/nf_reject.h
-> +++ b/include/net/netfilter/nf_reject.h
-> @@ -5,12 +5,34 @@
->  #include <linux/types.h>
->  #include <uapi/linux/in.h>
->  
-> -static inline bool nf_reject_verify_csum(__u8 proto)
-> +static inline bool nf_reject_verify_csum(struct sk_buff *skb, int dataoff,
-> +					  __u8 proto)
->  {
->  	/* Skip protocols that don't use 16-bit one's complement checksum
->  	 * of the entire payload.
->  	 */
->  	switch (proto) {
-> +		/* Protocols with optional checksums. */
-> +		case IPPROTO_UDP: {
-> +			const struct udphdr *udp_hdr;
-> +			struct udphdr _udp_hdr;
-> +
-> +			/* Checksum is required in IPv6
-> +			 * see RFC 2460 section 8.1
-> +			 */
+> On 2022/4/27 00:56, Mathieu Poirier wrote:
+> > On Tue, Apr 26, 2022 at 02:05:36PM +0800, Hangyu Hua wrote:
+> >> Unregister the rpmsg_ctrl device instead of just freeing the
+> >> the virtio_rpmsg_channel structure.
+> >> This will properly unregister the device and call
+> >> virtio_rpmsg_release_device() that frees the structure.
+> >>
+> >> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
+> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> >> Cc: Hangyu Hua <hbh25y@gmail.com>
+> >> Reviewed-by: Hangyu Hua <hbh25y@gmail.com>
+> >> ---
+> >>   drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> >> index 291fc1cfab7f..485e95f506df 100644
+> >> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> >> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> >> @@ -862,7 +862,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct rpmsg_device *rpdev_ctrl)
+> >>   {
+> >>      if (!rpdev_ctrl)
+> >>              return;
+> >> -    kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
+> >> +    device_unregister(&rpdev_ctrl->dev);
+> >
+> > The author of this patch should have been Arnaud, something I have fixed before
+> > applying this set.
+> >
+> > Thanks,
+> > Mathieu
+> >
+>
+> I get it. I'm sorry i thought Signed-off-by and a description in cover
+> letter are enough to express. Do i need to do anything else?
 
-Right, but follow up work say otherwise?
+I don't.
 
-https://www.rfc-editor.org/rfc/rfc6935
-https://www.rfc-editor.org/rfc/rfc6936
-
-Moreover, conntrack and NAT already allow for UDP zero checksum in IPv6.
-
-I'm inclined to stick to the existing behaviour for consistency, ie.
-allow for zero checksum in IPv6 UDP.
+>
+> Thanks,
+> Hangyu
+> >>   }
+> >>
+> >>   static int rpmsg_probe(struct virtio_device *vdev)
+> >> --
+> >> 2.25.1
+> >>

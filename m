@@ -2,141 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D8D5113BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EB65113BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359553AbiD0Iss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S1359557AbiD0Iv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359545AbiD0Iso (ORCPT
+        with ESMTP id S240362AbiD0IvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:48:44 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F88D8D6A1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:45:33 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id y3so647940qtn.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RB8+FqJ1IEgAxvX3bqMX+LwZyBF33/dYNV+lewufcOs=;
-        b=YiudLaujLbqxUmAQ5oA0hXxrRSlSYMybJoHK7kRC6iIpCYEK7XdRtfbGQ2uq5GYXi3
-         ac4JZpTKvvpYLB8W+8iWO5quKkZhSu3u/4OkQIN8PxrjhtZJXbfg3oT0Vp5x+Cz64xzi
-         lZFmazS4izkXhcG29TTT12ka2ErmX2c3ZOKog38Gn6UXcQnAhDyVeoRpl5C1ojTkH42/
-         mFbNO2RuksUCNwQALhwtf/kag7KxMMajgT9frnMz/4MwhPVRXoB33ndBNGVT8bv9Gu3y
-         zjINfNt7FemtkmYJdXysv82NTRN/XF/WT/6QOlv7kJ8KjuV8uvf42RlImhQ/gGyR1XS7
-         JkJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RB8+FqJ1IEgAxvX3bqMX+LwZyBF33/dYNV+lewufcOs=;
-        b=BWX7uXPY7EbK+n6IKAkWboamGG0afbeZOLDGQgj4Cmg4OBUlMSMZ4IkEftE3Ak50VE
-         9GrOjoYXtu5spa9c3dk5VgOnB8g9umV/TJffLVwR6Kv+C6ugJ/o69nvvq1D6z/cRQS/U
-         WCq1IKJM+oLBY9rD1ghxemSmKIuGzXxa4F83cKNNv0smWPGxCe184ESYWQBYFmVVRO9Y
-         2mzr+Z+l9bUDMGSpjaQLgPC1owHpGlzTWpMR8ShHuj/M7T2NciBwSTedexu1nW3B6XRf
-         sUZ+0tf8qO0c22PBAqvkQSUGbxBcseN5hPlYs4j1OtKmGdMt5Z+TQ/dE86QAKCiw9jtv
-         ocaQ==
-X-Gm-Message-State: AOAM5308zcmytuaJyQvpPug0tah76VMp39aAq0uR4rMs104ZCDyOT/7M
-        s/iBhfBqA4rycMJBU2B5cCtAT/tO0VM=
-X-Google-Smtp-Source: ABdhPJyocxPC0ZydQKbFq36fs4NYuBw9VXrJ5Oi4ajVGkBxamLejWLMn3aRuq6VJly/vNpkqn2nsgw==
-X-Received: by 2002:a05:622a:284:b0:2f2:bf5f:4bd9 with SMTP id z4-20020a05622a028400b002f2bf5f4bd9mr18174425qtw.503.1651049132446;
-        Wed, 27 Apr 2022 01:45:32 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05622a00cc00b002ebdd6ef303sm10061443qtw.43.2022.04.27.01.45.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 01:45:31 -0700 (PDT)
-Message-ID: <626902ab.1c69fb81.44f01.9c06@mx.google.com>
-X-Google-Original-Message-ID: <20220427084529.GA3844528@cgel.zte@gmail.com>
-Date:   Wed, 27 Apr 2022 08:45:29 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     glider@google.com, akpm@linux-foundation.org, dvyukov@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] mm/kfence: fix a potential NULL pointer dereference
-References: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
- <CANpmjNM8hKG+HH+pBR4cDLcU-sUWFO6t4CF89bt5uess0Zm3dg@mail.gmail.com>
+        Wed, 27 Apr 2022 04:51:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4BC1738E5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:48:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37099B820BF
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:48:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6922FC385AA;
+        Wed, 27 Apr 2022 08:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651049290;
+        bh=GCSsrSfqFe47j3Z7zE0OfdO0l5Qo38nLWrsgnGBCesw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D+0ZdgUEdGvBfDP8hWRlPPUtgDuOj5dc3AEfBF1/5LtdnpNKRAi/G9Pkg5uOhDKDh
+         9J86mzUpH+iXsN5coWH+oYh7zNlxfBQovPvtZzij6h4VbGGIQ/cCTt74rlTLUWj0tx
+         WjBltC/l6+NaRuAHdNhe7+EldhgzcX9pTurcH70M=
+Date:   Wed, 27 Apr 2022 10:48:07 +0200
+From:   'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/3] staging: vt6655: Replace VNSvInPortD with ioread32
+Message-ID: <YmkDRxgW06qYsnep@kroah.com>
+References: <cover.1651036713.git.philipp.g.hortmann@gmail.com>
+ <7a5f7f98379fb2af2741f613f5ddda53e5d4813e.1651036713.git.philipp.g.hortmann@gmail.com>
+ <Ymjaxby2vDJYz6KA@kroah.com>
+ <b8853bc9a9d041009103b76bd02ce08d@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANpmjNM8hKG+HH+pBR4cDLcU-sUWFO6t4CF89bt5uess0Zm3dg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b8853bc9a9d041009103b76bd02ce08d@AcuMS.aculab.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:33:52AM +0200, Marco Elver wrote:
-> On Wed, 27 Apr 2022 at 09:11, <cgel.zte@gmail.com> wrote:
-> >
-> > From: xu xin <xu.xin16@zte.com.cn>
-> >
-> > In __kfence_free(), the returned 'meta' from addr_to_metadata()
-> > might be NULL just as the implementation of addr_to_metadata()
-> > shows.
-> >
-> > Let's add a check of the pointer 'meta' to avoid NULL pointer
-> > dereference. The patch brings three changes:
-> >
-> > 1. Add checks in both kfence_free() and __kfence_free();
-> > 2. kfence_free is not inline function any longer and new inline
-> >    function '__try_free_kfence_meta' is introduced.
+On Wed, Apr 27, 2022 at 08:01:46AM +0000, David Laight wrote:
+> From: Greg Kroah-Hartman
+> > Sent: 27 April 2022 06:55
+> > 
+> > On Wed, Apr 27, 2022 at 07:42:23AM +0200, Philipp Hortmann wrote:
+> > > Replace macro VNSvInPortD with ioread32 and as it was
+> > > the only user, it can now be removed.
+> > > The name of macro and the arguments use CamelCase which
+> > > is not accepted by checkpatch.pl
+> > >
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> > > ---
+> > > V1 -> V2: This patch was 5/7 and is now 4/6
+> > > V2 -> V3: Inserted patch that was before in a different way in
+> > >           "Rename macros VNSvInPortB,W,D with CamelCase ..."
+> > >           This patch was part of 4/6 and is now 3/7
+> > > V3 -> V4: Removed casting of the output variable
+> > > V4 -> V5: Joint patch "Replace two VNSvInPortD with ioread64_lo_hi"
+> > >           with this patch. Changed ioread64 to two ioread32 as
+> > >           ioread64 does not work with 32 Bit computers.
+> > >           Shorted and simplified patch description.
+> > > V5 -> V6: Added missing version in subject
+> > > ---
+> > >  drivers/staging/vt6655/card.c        |  6 ++++--
+> > >  drivers/staging/vt6655/device_main.c |  6 +++---
+> > >  drivers/staging/vt6655/mac.h         | 18 +++++++++---------
+> > >  drivers/staging/vt6655/rf.c          |  2 +-
+> > >  drivers/staging/vt6655/upc.h         |  3 ---
+> > >  5 files changed, 17 insertions(+), 18 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
+> > > index 022310af5485..0dd13e475d6b 100644
+> > > --- a/drivers/staging/vt6655/card.c
+> > > +++ b/drivers/staging/vt6655/card.c
+> > > @@ -744,6 +744,7 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
+> > >  	void __iomem *iobase = priv->port_offset;
+> > >  	unsigned short ww;
+> > >  	unsigned char data;
+> > > +	u32 low, high;
+> > >
+> > >  	MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
+> > >  	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
+> > > @@ -753,8 +754,9 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
+> > >  	}
+> > >  	if (ww == W_MAX_TIMEOUT)
+> > >  		return false;
+> > > -	VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
+> > > -	VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
+> > > +	low = ioread32(iobase + MAC_REG_TSFCNTR);
+> > > +	high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+> > > +	*pqwCurrTSF = low + ((u64)high << 32);
+> > 
+> > Are you _sure_ this is doing the same thing?
+> > 
+> > Adding 1 to a u64 pointer increments it by a full u64.  So I guess the
+> > cast to u32 * moves it only by a u32?  Hopefully?  That's messy.
 > 
-> This is very bad for performance (see below).
+> The new code is mostly better.
+> But is different on BE systems - who knows what is actually needed.
+
+Yeah, the endian issues here are totally ignored, my proposal would
+ensure it stays the same.  The change here breaks this on big endian
+systems.  So I'll drop this patch for now and just apply the first 2.
+
+> Depends what is being copied.
 > 
-> > 3. The check of is_kfence_address() is not required for
-> > __kfence_free() now because __kfence_free has done the check in
-> > addr_to_metadata();
-> >
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Actually I suspect that 'iobase' should be an __iomem structure
+> pointer, pqwCurrTSF a point of the same type and MAC_REG_xxxx
+> structure members.
 > 
-> Is this a static analysis robot? Please show a real stack trace with
-> an actual NULL-deref.
-> 
-> Nack - please see:
-> https://lore.kernel.org/all/CANpmjNO5-o1B9r2eYS_482RBVJSyPoHSnV2t+M8fJdFzBf6d2A@mail.gmail.com/
-> 
-Thanks for your reply. It's from static analysis indeed and no actual
-NULL-deref event happened yet.
+> Then the code should be using readl() not ioread32().
+> I very much doubt that 'iobase' is in PCI IO space.
 
-I'm just worried that what if address at the edge of __kfence_pool and
-thus addr_to_metadata() returns NULL. Is is just a guess, I'm not sure.
+Who knows, but that should be unwound eventually...
 
-But if __kfence_free make sure that the given address never is at the
-edge of __kfence_pool, then the calculation and check in
-addr_to_metadata()  is extra performance consumption:
+thanks,
 
-	"index = (addr - (unsigned long)__kfence_pool) / (PAGE_SIZE * 2) - 1;
-	 if (index < 0 || index >= CONFIG_KFENCE_NUM_OBJECTS)  240
-	 	return NULL;"
-
-
-> >Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> > ---
-> >  include/linux/kfence.h | 10 ++--------
-> >  mm/kfence/core.c       | 30 +++++++++++++++++++++++++++---
-> >  2 files changed, 29 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/include/linux/kfence.h b/include/linux/kfence.h
-> > index 726857a4b680..fbf6391ab53c 100644
-> > --- a/include/linux/kfence.h
-> > +++ b/include/linux/kfence.h
-> > @@ -160,7 +160,7 @@ void *kfence_object_start(const void *addr);
-> >   * __kfence_free() - release a KFENCE heap object to KFENCE pool
-> >   * @addr: object to be freed
-> >   *
-> > - * Requires: is_kfence_address(addr)
-> > + * Requires: is_kfence_address(addr), but now it's unnecessary
-> 
-> (As an aside, something can't be required and be unnecessary at the same time.)
-
-Oh, I'm sorry for this. In my opinion, inner addr_to_metadata(),
-is_kfence_address is executed for the second time, so not necessary here. 
+greg k-h

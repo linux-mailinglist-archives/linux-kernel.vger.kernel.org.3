@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A0E5119C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19EA5119A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236797AbiD0N5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
+        id S236715AbiD0N52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236768AbiD0N5H (ORCPT
+        with ESMTP id S236645AbiD0N50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:57:07 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0133B54E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:53:56 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id l18so3543587ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/VHZPsVMAFIMi2pBbLfD5fKKNKqKbuM/A2SGKvxDgK4=;
-        b=AwyCfjozdBWESOd/ALQolQKJzimk9604uiUm6wDtCOrm5sOppI0nnP7ziMhAz/f51o
-         yUoGs5n7teJKcGbtpp4NaCK1/YbXG4P0YRKx0GchwQ9vgRF3UzfbEWkpW6xKyra3pN1l
-         PnkWJfEI6GymVqL/stEHO/IxUCTYRc23BDHctj09QFj9iz4132J3vnRtPknCK5c+jcpX
-         LqdBOHmvHmX3UBdujsR9oaGfVGw6exZ+FyeGxLo3un9Y9FzaEGgaGIPtXu3p+HBW1Ko4
-         xhja6WXow4QKqlI9wX3Qd7Z0kLokBkl8Z0hIyMTDjmsUsMc8TcluX6xUkaT8/fgTZJOm
-         AGTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/VHZPsVMAFIMi2pBbLfD5fKKNKqKbuM/A2SGKvxDgK4=;
-        b=mC7+w3UST9WoXABo/rk818jStXbDZqhdBdp2qajwgF90dP+lae5/6QppG9hy1Ej3CA
-         8ESUfNzhnhertmSKMp/E7uB/xVKeq12nU9Q6e+S5o3oXkcnuXcA2TWHekxaH4K9WHG/w
-         ptkxVqmSHD8hPrG4qMpYIbGwVSrYLPvMJ9uoK0m2ndNK1aWjuKKMSf3XXykfGWhSP6WM
-         sZ4/sfYjnhVLEI9YlsN24UolZ42dld790VZXFS5RR9F7q8FqBgZD4Av6fBhEFu/Jh8fw
-         pKzjEBkNDjZItwHYSP2uqAcCsSgiE5byCRPc/XbvBVp2nTzpA7dytLD6htGNzUTXh65q
-         fLbg==
-X-Gm-Message-State: AOAM533Rt+06QM/WZ14C3B8t6I0xRzKYJxVurNKlfhGOjnpmGzfJyrAv
-        h8WNPzTemxEfIzxpIsa0r34LYiFkRdAR2g==
-X-Google-Smtp-Source: ABdhPJylNBSCvH5CoQ2choSP7+rTzl3z8DvUVHYaOOrw5yxaVm205jVSxTlZqO9OF2mULcAztWn0nw==
-X-Received: by 2002:a17:907:7f0a:b0:6f3:9712:dfed with SMTP id qf10-20020a1709077f0a00b006f39712dfedmr14448010ejc.557.1651067634774;
-        Wed, 27 Apr 2022 06:53:54 -0700 (PDT)
-Received: from [192.168.0.154] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jt24-20020a170906ca1800b006ef606fe5f2sm6762723ejb.61.2022.04.27.06.53.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 06:53:53 -0700 (PDT)
-Message-ID: <51be638b-e12d-b9ae-c14b-f51e33d2503e@linaro.org>
-Date:   Wed, 27 Apr 2022 15:53:52 +0200
+        Wed, 27 Apr 2022 09:57:26 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE6B3C487;
+        Wed, 27 Apr 2022 06:54:15 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 6F40D1F44800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651067650;
+        bh=bti1EdzC6WGQOpy3EhTaJntgvmOLWjzLid7YZh3R18U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZPMe9lhK77QoJalyS6cqCntKPDuSJtht+9pXHYF8jNb+Fm/jrQxt11+7ECe+kAVws
+         7Q1djtafBwzDzuCu3Eby+gbF483OhYDVojG/lc5WwI8MRcXnN7HdXR8zQ6M9pDlypN
+         na7Eu20Wwjpv/4P0GKb1tr58G4QTnzp4fbBjbq+d5IqmNp6RglbdzEEfcpmOFV5GiE
+         trbvQnIiu8X82hAn6rayZwhczfMCPtaQxtfroSeu64fYXfKSySrR8Xp0icofv/Ago7
+         8czX7fmeFd8iisdowAVFzbbMimCf3OeOJ5rWf1KoyqbK4c/yyGwv432ulrEMgp6J2b
+         hOeWo0e123UZQ==
+Date:   Wed, 27 Apr 2022 09:54:04 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v1 01/10] arm64: dts: mediatek: Introduce MT8192-based
+ Asurada board family
+Message-ID: <20220427135404.a4xxp3rvvzrgqfqs@notapiano>
+References: <20220316151327.564214-1-nfraprado@collabora.com>
+ <20220316151327.564214-2-nfraprado@collabora.com>
+ <CAGXv+5Gv2pjPXynz6HCdgux+giPDC5qRk+KW1aFduVz82rM=+g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/1] dt-bindings: nvmem: mediatek: Convert mtk-efuse
- binding to YAML
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lala Lin <lala.lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-References: <20220425084800.2021-1-allen-kh.cheng@mediatek.com>
- <20220425084800.2021-2-allen-kh.cheng@mediatek.com>
- <e64bdca8-7b18-b450-830c-ca07946a73fb@linaro.org>
- <9d65b713e3ffdd34dcca532c4c97fa98b124bde4.camel@mediatek.com>
- <0169c4ac-fdce-29b7-553a-14dc7df532d1@linaro.org>
- <a8e212a0e0449e015a33e76b320266376d4b9be6.camel@mediatek.com>
- <89609af9-5feb-0553-5e39-c97c4750b5a1@linaro.org>
- <33c754a7b6e4cd631bb2aeef002d34a6c25d6689.camel@mediatek.com>
- <0c63c24a-8014-2491-095c-77893d2141d9@linaro.org>
- <daca88d63fa844179a3d44affee124584353bec9.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <daca88d63fa844179a3d44affee124584353bec9.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGXv+5Gv2pjPXynz6HCdgux+giPDC5qRk+KW1aFduVz82rM=+g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 12:00, allen-kh.cheng wrote:
-> I think there are two cases in mediatek efuse dirver now.
-> 
-> Case 1, 
-> const: mediatek,efuse is deprecated.
-> const: mediatek,mt8173-efuse is remained. All mediatek chipsets will
-> use mediatek,mt8173-efuse as fallback.
-> 
-> Case 2,
-> const: mediatek,efuse is deprecated.
-> const: mediatek,mt8173-efuse is deprecated.
-> 
-> All mediatek chipsets(include ediatek,mt8173-efuse) will use
-> mediatek,efuse as fallback.
-> 
-> Which one do you think is better?
+Hi Chen-Yu,
 
-Indeed, I forgot that mt8173 would also fallback to generic efuse.
-Indeed let's go with case 2, so your proposal before was correct.
+thank you for the review.
 
+On Wed, Apr 27, 2022 at 04:43:50PM +0800, Chen-Yu Tsai wrote:
+> Hi,
+> 
+> On Wed, Mar 16, 2022 at 11:17 PM Nícolas F. R. A. Prado
+> <nfraprado@collabora.com> wrote:
+> >
+> > Introduce the MT8192 Asurada Chromebook platform, including the Asurada
+> > Spherion and Asurada Hayato boards.
+> >
+> > This is enough configuration to get serial output working on Spherion
+> > and Hayato.
+> >
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >
+> > ---
+> >
+> >  arch/arm64/boot/dts/mediatek/Makefile         |  2 ++
+> >  .../dts/mediatek/mt8192-asurada-hayato-r1.dts | 11 ++++++++
+> >  .../mediatek/mt8192-asurada-spherion-r0.dts   | 13 ++++++++++
+> >  .../boot/dts/mediatek/mt8192-asurada.dtsi     | 26 +++++++++++++++++++
+> >  4 files changed, 52 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dts
+> >  create mode 100644 arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> > index 8c1e18032f9f..034cba17276b 100644
+> > --- a/arch/arm64/boot/dts/mediatek/Makefile
+> > +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> > @@ -37,5 +37,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-kodama-sku32.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+> > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-asurada-hayato-r1.dtb
+> > +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-asurada-spherion-r0.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
+> >  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+> > new file mode 100644
+> > index 000000000000..e18e14b13d61
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
+> > @@ -0,0 +1,11 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > +/*
+> > + * Copyright 2020 Google LLC
+> > + */
+> > +/dts-v1/;
+> > +#include "mt8192-asurada.dtsi"
+> > +
+> > +/ {
+> > +       model = "MediaTek Hayato rev1";
+> 
+> I think this should be "Google Hayato ...", and the one in spherion should
+> read "Google Spherion" as well?
+> 
+> These are project code names used in Google. Both devices use the common
+> "Asurada" hardware design, also done by Google.
 
-Best regards,
-Krzysztof
+These were the names downstream so I didn't want to change them. But I agree
+with you, and will take this as authorization do change them so for the next
+version.
+
+> 
+> > +       compatible = "google,hayato-rev1", "google,hayato", "mediatek,mt8192";
+> 
+> You should add a patch adding this to the DT binding doc
+> Documentation/devicetree/bindings/arm/mediatek.yaml
+> 
+> Same for Spherion.
+
+Okay.
+
+Thanks,
+Nícolas

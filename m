@@ -2,183 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8295122CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D32E5122D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiD0Tf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S233581AbiD0Tg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbiD0Tf0 (ORCPT
+        with ESMTP id S233209AbiD0Tgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:35:26 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B60CE;
-        Wed, 27 Apr 2022 12:32:13 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id p4so3158454edx.0;
-        Wed, 27 Apr 2022 12:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JhnYrw0AR5Z7jkNOIRMJJDs+xZns0y5ZouI6A7Yq2m4=;
-        b=it+qMq+p7Ih5sV2oP8h90O+A66YmhvIlQ5DX8ZHmeUw3CUBBx//p0vDiJGey9z0uIh
-         bx6H014af/WfMFeUW/y49vhZWL+bAMkkDwbttSQAa5L4W+jZ2Ye5Yph9Nw+bvdm04F3M
-         LCuKkt5dXpk1/oEug5xk5qAVCXw18q4iCnv6UBp3Pe8OWXV35Q6TzSd+FFyGmcZgVDsy
-         vA6guExkKI5BaVDgivRgeO+tiyrCSgn0D5Cplnj/9TUeuqFaGzANrhiasI0H9NrOI/Fu
-         TPDoBoEQqAwkonqOkv8Nm2ndoIzYcxK43vaXzk0aQDttrNI1yFrNdHAuK4zAs/0E+mV2
-         HvCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JhnYrw0AR5Z7jkNOIRMJJDs+xZns0y5ZouI6A7Yq2m4=;
-        b=OK1pieXOjYF09ohDGldxkEUw3V3SVBR2I0ZacvkkoSVjP/I2RW8MTcq2FsRITbsncA
-         TzPf/M8OanMccyJk5/mnk8aXHBDzqS2GTnDoxrX2C8vLAsf75/6e5OLWYzAj4VdG8YwO
-         +7YKVMjP9oPvyFBKE54ifwOU3lSbjOM0gc52D8sJBQry6ACPzqS/DKnXEi+lNCEHzy8Q
-         0QaVroJRypxmWBXegTiMObpdkU3t+F26RR+suKFVJwZglzqQgdh6A/jyc0CKXsLr9yvj
-         vqEPX4yhk8gxDu4j+hEBWlfXUUD+0/Ni8P5Y+5Q/SoI9KQVZYwkerr+SXlii2d+WyLW8
-         qU5g==
-X-Gm-Message-State: AOAM5328SchULwftg7HIzDX/iwizd47xlF48UQ8XhYAtilQkVH2FC2tp
-        jaXqPutB0RypPSv5FP6dAOwkNdLlNNkzHA==
-X-Google-Smtp-Source: ABdhPJxMYyDg9X/787fWvrzZZ7v36nyynk8yGgYPu7j2miTQJHngFnPm9HXf6WWh9F3WgCeAdKpCzg==
-X-Received: by 2002:a05:6402:51d2:b0:424:536:94dd with SMTP id r18-20020a05640251d200b00424053694ddmr32374846edd.191.1651087932349;
-        Wed, 27 Apr 2022 12:32:12 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id s12-20020a1709062ecc00b006e8558c9a5csm7212048eji.94.2022.04.27.12.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:32:12 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 28/45] media: sun6i-csi: Get mbus code from bridge instead of storing it
-Date:   Wed, 27 Apr 2022 21:32:10 +0200
-Message-ID: <2106792.Mh6RI2rZIc@jernej-laptop>
-In-Reply-To: <20220415152811.636419-29-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-29-paul.kocialkowski@bootlin.com>
+        Wed, 27 Apr 2022 15:36:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C8A13D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:33:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6243261A51
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 281B4C385A7;
+        Wed, 27 Apr 2022 19:33:41 +0000 (UTC)
+Date:   Wed, 27 Apr 2022 15:33:39 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH] ring-buffer: Have absolute time stamps handle large numbers
+Message-ID: <20220427153339.16c33f75@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:27:54 CEST je Paul Kocialkowski napisal(a):
-> Another instance of removing a duplicated variable and using common
-> helpers instead.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+There's an absolute timestamp event in the ring buffer, but this only
+saves 59 bits of the timestamp, as the 5 MSB is used for meta data
+(stating it is an absolute time stamp). This was never an issue as all the
+clocks currently in use never used those 5 MSB. But now there's a new
+clock (TAI) that does.
 
-Best regards,
-Jernej
+To handle this case, when reading an absolute timestamp, a previous full
+timestamp is passed in, and the 5 MSB of that timestamp is OR'd to the
+absolute timestamp (if any of the 5 MSB are set), and then to test for
+overflow, if the new result is smaller than the passed in previous
+timestamp, then 1 << 59 is added to it.
 
-> ---
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c        | 18 +++++-------------
->  .../sunxi/sun6i-csi/sun6i_csi_capture.h        |  1 -
->  2 files changed, 5 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c index
-> c4e803a38851..e2070353f93f 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -17,6 +17,7 @@
->  #include <media/videobuf2-v4l2.h>
-> 
->  #include "sun6i_csi.h"
-> +#include "sun6i_csi_bridge.h"
->  #include "sun6i_csi_capture.h"
->  #include "sun6i_csi_reg.h"
-> 
-> @@ -455,20 +456,20 @@ sun6i_csi_capture_configure_interface(struct
-> sun6i_csi_device *csi_dev)
-> 
->  static void sun6i_csi_capture_configure_format(struct sun6i_csi_device
-> *csi_dev) {
-> -	struct sun6i_csi_capture *capture = &csi_dev->capture;
-> -	u32 pixelformat, field;
-> +	u32 mbus_code, pixelformat, field;
->  	u32 cfg = 0;
->  	u32 val;
-> 
->  	sun6i_csi_capture_format(csi_dev, &pixelformat, &field);
-> +	sun6i_csi_bridge_format(csi_dev, &mbus_code, NULL);
-> 
-> -	val = get_csi_input_format(csi_dev, capture->mbus_code, 
-pixelformat);
-> +	val = get_csi_input_format(csi_dev, mbus_code, pixelformat);
->  	cfg |= SUN6I_CSI_CH_CFG_INPUT_FMT(val);
-> 
->  	val = get_csi_output_format(csi_dev, pixelformat, field);
->  	cfg |= SUN6I_CSI_CH_CFG_OUTPUT_FMT(val);
-> 
-> -	val = get_csi_input_seq(csi_dev, capture->mbus_code, pixelformat);
-> +	val = get_csi_input_seq(csi_dev, mbus_code, pixelformat);
->  	cfg |= SUN6I_CSI_CH_CFG_INPUT_YUV_SEQ(val);
-> 
->  	if (field == V4L2_FIELD_TOP)
-> @@ -739,11 +740,6 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, if (ret < 0)
->  		goto error_state;
-> 
-> -	if (capture->mbus_code == 0) {
-> -		ret = -EINVAL;
-> -		goto error_media_pipeline;
-> -	}
-> -
->  	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
->  	if (!subdev) {
->  		ret = -EINVAL;
-> @@ -1076,8 +1072,6 @@ static int sun6i_csi_capture_link_validate(struct
-> media_link *link) struct v4l2_subdev_format source_fmt;
->  	int ret;
-> 
-> -	capture->mbus_code = 0;
-> -
->  	if (!media_entity_remote_pad(link->sink->entity->pads)) {
->  		dev_info(csi_dev->dev, "capture node %s pad not 
-connected\n",
->  			 vdev->name);
-> @@ -1109,8 +1103,6 @@ static int sun6i_csi_capture_link_validate(struct
-> media_link *link) return -EPIPE;
->  	}
-> 
-> -	capture->mbus_code = source_fmt.format.code;
-> -
->  	return 0;
->  }
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h index
-> 02bdf45f7ca5..3b9759e1563d 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
-> @@ -39,7 +39,6 @@ struct sun6i_csi_capture {
->  	struct media_pad		pad;
-> 
->  	struct v4l2_format		format;
-> -	u32				mbus_code;
->  };
-> 
->  void sun6i_csi_capture_dimensions(struct sun6i_csi_device *csi_dev,
+All the extra processing is done on the reader "slow" path, with the
+exception of the "too big delta" check, and the reading of timestamps
+for histograms.
 
+Note, libtraceevent will need to be updated to handle this case as well.
+But this is not a user space regression, as user space was never able to
+handle any timestamps that used more than 59 bits.
 
+Link: https://lore.kernel.org/all/20220426175338.3807ca4f@gandalf.local.home/
 
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/ring_buffer.c | 49 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 44 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 655d6db3e3c3..3a0c7ed0e93f 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -29,6 +29,14 @@
+ 
+ #include <asm/local.h>
+ 
++/*
++ * The "absolute" timestamp in the buffer is only 59 bits.
++ * If a clock has the 5 MSBs set, it needs to be saved and
++ * reinserted.
++ */
++#define TS_MSB		(0xf8ULL << 56)
++#define ABS_TS_MASK	(~TS_MSB)
++
+ static void update_pages_handler(struct work_struct *work);
+ 
+ /*
+@@ -783,6 +791,24 @@ static inline void verify_event(struct ring_buffer_per_cpu *cpu_buffer,
+ }
+ #endif
+ 
++/*
++ * The absolute time stamp drops the 5 MSBs and some clocks may
++ * require them. The rb_fix_abs_ts() will take a previous full
++ * time stamp, and add the 5 MSB of that time stamp on to the
++ * saved absolute time stamp. Then they are compared in case of
++ * the unlikely event that the latest time stamp incremented
++ * the 5 MSB.
++ */
++static inline u64 rb_fix_abs_ts(u64 abs, u64 save_ts)
++{
++	if (save_ts & TS_MSB) {
++		abs |= save_ts & TS_MSB;
++		/* Check for overflow */
++		if (unlikely(abs < save_ts))
++			abs += 1ULL << 59;
++	}
++	return abs;
++}
+ 
+ static inline u64 rb_time_stamp(struct trace_buffer *buffer);
+ 
+@@ -811,8 +837,10 @@ u64 ring_buffer_event_time_stamp(struct trace_buffer *buffer,
+ 	u64 ts;
+ 
+ 	/* If the event includes an absolute time, then just use that */
+-	if (event->type_len == RINGBUF_TYPE_TIME_STAMP)
+-		return rb_event_time_stamp(event);
++	if (event->type_len == RINGBUF_TYPE_TIME_STAMP) {
++		ts = rb_event_time_stamp(event);
++		return rb_fix_abs_ts(ts, cpu_buffer->tail_page->page->time_stamp);
++	}
+ 
+ 	nest = local_read(&cpu_buffer->committing);
+ 	verify_event(cpu_buffer, event);
+@@ -2754,8 +2782,15 @@ static void rb_add_timestamp(struct ring_buffer_per_cpu *cpu_buffer,
+ 		(RB_ADD_STAMP_FORCE | RB_ADD_STAMP_ABSOLUTE);
+ 
+ 	if (unlikely(info->delta > (1ULL << 59))) {
++		/*
++		 * Some timers can use more than 59 bits, and when a timestamp
++		 * is added to the buffer, it will lose those bits.
++		 */
++		if (abs && (info->ts & TS_MSB)) {
++			info->delta &= ABS_TS_MASK;
++
+ 		/* did the clock go backwards */
+-		if (info->before == info->after && info->before > info->ts) {
++		} else if (info->before == info->after && info->before > info->ts) {
+ 			/* not interrupted */
+ 			static int once;
+ 
+@@ -3304,7 +3339,7 @@ static void dump_buffer_page(struct buffer_data_page *bpage,
+ 
+ 		case RINGBUF_TYPE_TIME_STAMP:
+ 			delta = rb_event_time_stamp(event);
+-			ts = delta;
++			ts = rb_fix_abs_ts(delta, ts);
+ 			pr_warn("  [%lld] absolute:%lld TIME STAMP\n", ts, delta);
+ 			break;
+ 
+@@ -3380,7 +3415,7 @@ static void check_buffer(struct ring_buffer_per_cpu *cpu_buffer,
+ 
+ 		case RINGBUF_TYPE_TIME_STAMP:
+ 			delta = rb_event_time_stamp(event);
+-			ts = delta;
++			ts = rb_fix_abs_ts(delta, ts);
+ 			break;
+ 
+ 		case RINGBUF_TYPE_PADDING:
+@@ -4367,6 +4402,7 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
+ 
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		delta = rb_event_time_stamp(event);
++		delta = rb_fix_abs_ts(delta, cpu_buffer->read_stamp);
+ 		cpu_buffer->read_stamp = delta;
+ 		return;
+ 
+@@ -4397,6 +4433,7 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
+ 
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		delta = rb_event_time_stamp(event);
++		delta = rb_fix_abs_ts(delta, iter->read_stamp);
+ 		iter->read_stamp = delta;
+ 		return;
+ 
+@@ -4650,6 +4687,7 @@ rb_buffer_peek(struct ring_buffer_per_cpu *cpu_buffer, u64 *ts,
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		if (ts) {
+ 			*ts = rb_event_time_stamp(event);
++			*ts = rb_fix_abs_ts(*ts, reader->page->time_stamp);
+ 			ring_buffer_normalize_time_stamp(cpu_buffer->buffer,
+ 							 cpu_buffer->cpu, ts);
+ 		}
+@@ -4741,6 +4779,7 @@ rb_iter_peek(struct ring_buffer_iter *iter, u64 *ts)
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		if (ts) {
+ 			*ts = rb_event_time_stamp(event);
++			*ts = rb_fix_abs_ts(*ts, iter->head_page->page->time_stamp);
+ 			ring_buffer_normalize_time_stamp(cpu_buffer->buffer,
+ 							 cpu_buffer->cpu, ts);
+ 		}
+-- 
+2.35.1
 

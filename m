@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9220E510E43
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64473510E27
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356813AbiD0BmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S1356834AbiD0Bmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356748AbiD0BmQ (ORCPT
+        with ESMTP id S1356817AbiD0Bmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:42:16 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ACBFFECE
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:39:06 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id l203so600164oif.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=JXmTulGYUsyP176e76/nF1iCXcOh0XmzJ8/VWjdkiR0=;
-        b=RuwVqdMzYiU9T6M3Du19x1/Dyr8DeVrhQUJyEcz6mwyeuj359MkgcJMCgyGATRbzq5
-         QWtjA5RdrWf2PoFmX9Jr3ZVFCPMoqQUHkQ5j1ep8FA4UJGBIrPK8WPFKeDgRJNsdyPCn
-         WkPNzYizGEdxBnubUDPLk1oUy7bm6cDFr0Dy8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=JXmTulGYUsyP176e76/nF1iCXcOh0XmzJ8/VWjdkiR0=;
-        b=t8p0NBQJHaokxUDV5XrAWX6Z9u8wqnweDVxTZGb2XtzxluvrXEzK7cKUKR/Y4Q1f5n
-         68YZBHDPvCbjDiyobvds42zwcUTf/r5HchouIfHDn2t5w/n+hZ2q3ZgmmrQoBKMpDN+5
-         mev+UOWsLNI+iHEJAC1qVfKqP+TuSBX+PXgFf5X28Sme5lw3QNO0WbeKQtqX2Q4tsW6e
-         QTrzN3gokRqK/E1xeV0XpW+gl5oekR+xWiUp/HY/Hmoi5tn4dD2W3bPFw+LPMoqDODde
-         eKxDdCCOIySoMWLmbnp3+UuBLwOfOlS7kajD778Luj0cgwos/b6SD6KMGPsv17Z9ogbu
-         NPEg==
-X-Gm-Message-State: AOAM53351nMn/3I9iJobj4Hgcbxib9CG8HiRmr8Gm/58as8kLMap2w5y
-        DoeDGmXHKBG2Gtt7fIKuqzG9hl+VvtafVS4Kn1Coow==
-X-Google-Smtp-Source: ABdhPJzsX79g6i+L7fGZ72ubSgkdyIwDZPUr0CTxtVjUYVv1Guf+xHbfosvF2v2Y/M85BpP6wlbTw1rgGLo5LxiWKi8=
-X-Received: by 2002:a05:6808:1296:b0:325:8fb:68f3 with SMTP id
- a22-20020a056808129600b0032508fb68f3mr8167795oiw.193.1651023546195; Tue, 26
- Apr 2022 18:39:06 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 26 Apr 2022 18:39:05 -0700
+        Tue, 26 Apr 2022 21:42:39 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A851301A4
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:39:30 -0700 (PDT)
+Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kp1ZC3vGGzGpVS;
+        Wed, 27 Apr 2022 09:36:51 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ kwepemi500023.china.huawei.com (7.221.188.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 09:39:27 +0800
+Received: from [10.67.110.237] (10.67.110.237) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 09:39:27 +0800
+Subject: Re: [PATCH] tracing: Reset the function filter after completing
+ trampoline/graph selftest
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     <jolsa@redhat.com>, <mingo@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220418073958.104029-1-lihuafei1@huawei.com>
+ <20220425185859.29e8f9d8@gandalf.local.home>
+ <ee4bc477-0131-367b-9a1f-c2cb5af5c316@huawei.com>
+ <20220426113114.2005b94f@gandalf.local.home>
+From:   Li Huafei <lihuafei1@huawei.com>
+Message-ID: <407b6387-c4a1-830d-00d1-21cbac133843@huawei.com>
+Date:   Wed, 27 Apr 2022 09:39:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-In-Reply-To: <20220426151204.1.Id2821de5fde55ebe928e8fc87a71c8d535edb383@changeid>
-References: <20220426151204.1.Id2821de5fde55ebe928e8fc87a71c8d535edb383@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 26 Apr 2022 18:39:05 -0700
-Message-ID: <CAE-0n53juQ8--Sai=wKypj8URw+V1giOOhzd-p13fVbe_vxZ0Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180: wormdingler: Add wormdingler
- dts files.
-To:     "Joseph S. Barrera III" <joebar@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220426113114.2005b94f@gandalf.local.home>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.67.110.237]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Joseph S. Barrera III (2022-04-26 15:12:06)
-> Wormdingler is a trogdor-based board, shipping to customers as the Lenovo IdeaPad Chromebook Duet 3. These dts files are copies from the downstream Chrome OS 5.4 kernel, but with the camera (sc7180-trogdor-mipi-camera.dtsi) #include removed.
+
+On 2022/4/26 23:31, Steven Rostedt wrote:
+> On Tue, 26 Apr 2022 16:00:35 +0800
+> Li Huafei <lihuafei1@huawei.com> wrote:
 >
-
-Please wrap lines at 75 columns or so.
-
-> Author: Joseph S. Barrera III <joebar@chromium.org>
-
-This shouldn't be necessary as it matches the From: line of the email.
-
-> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
-> ---
+>>> No need for all the 'goto reset_filter', if this function fails, then the
+>>> tracer is disabled, and there's no reason to clear the filter. In fact, it
+>> Thank you for the review. I see that we will disable function_graph tracer:
+>>
+>>        /* Stop it if we failed */
+>>        if (ret)
+>>              ftrace_graph_stop();
+>>
+>> But there is no function tracer disabled. Am I missing something that
+>> would disable the function tracer?
+> No, but if we are triggering these, then something really bad has happened,
+> and function tracer is possibly corrupted too, or should not be trusted.
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-> new file mode 100644
-> index 000000000000..945caa21962f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-> @@ -0,0 +1,416 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Wormdingler board device tree source
-> + *
-> + * Copyright 2021 Google LLC.
-> + */
-> +
-> +/dts-v1/;
-> +
-[...]
-> +
-> +/* PINCTRL - modifications to sc7180-trogdor.dtsi */
-> +
-> +/*
-> + * No eDP on this board but it's logically the same signal so just give it
-> + * a new name and assign the proper GPIO.
-> + */
-> +
-> +tp_en: &en_pp3300_dx_edp {
-> +       pinmux {
-> +               pins = "gpio85";
-> +               };
+>>
+>>> may cause a crash (because something bad happened).
+>> Yes, so should we kill ftrace when the function_graph test fails?
+> No, but the system should be fixed. These should never trigger on any
+> production system, because it means something really bad is happening and
+> we do not know what.
+>
+> Not resetting the filters may even be useful in debugging it. So that's
+> another reason to not do so.
 
-Please add a newline here and deindent the "};" to match pinconf below.
 
-> +       pinconf {
-> +               pins = "gpio85";
-> +       };
-> +};
-> +
+That makes sense.  I will remove all "goto reset_filter" from the error 
+path and only reset the filter when the test passes.
+
+
+Thanks,
+
+Huafei
+
+
+>
+> -- Steve
+> .

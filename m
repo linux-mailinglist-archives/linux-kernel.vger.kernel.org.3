@@ -2,80 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA66A5112BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A43D5112C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358980AbiD0Hpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
+        id S1358993AbiD0HrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358998AbiD0Hpu (ORCPT
+        with ESMTP id S1356434AbiD0HrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:45:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A337C790;
-        Wed, 27 Apr 2022 00:42:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Apr 2022 03:47:11 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC31F2FFCE
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:43:57 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1E4AB82524;
-        Wed, 27 Apr 2022 07:42:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B07C385A7;
-        Wed, 27 Apr 2022 07:42:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651045358;
-        bh=cavqywrPF0KyQusxmwRZcnnrnFetZ2Ev826pxFogUGI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Seusk21xJnYrzwhKK17gD7lnd8Segt158qh1BtGQVxkqhB7K/jZ9/aeNLYZ+nnX0s
-         A5Qz7Zb8rUupKOBRskUgjp18pgBRVZ21PphE5TRQBvNgxD89Zne3m1fYJfLCqy/Jdb
-         Ocb8I2BVAe31wAK3UE/CQMos+JpI1uDiFJ7YMWSShNfE4G5PvaaPPd0YXcslfDe/eD
-         j8NvXOmIHWfV4WSRQJ0O9XM5a7udhg9PRE5AavfdFkbt2J7dFQCYEJ43AinqR6dgmD
-         uHvYwSmdQlUrAh/1XYtCmBeThAZFEk9WHdkNOCKp1v6Px5pYyxY1y3ypxCyW4jFgyB
-         iGFFH8p8PDE8Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1njcJr-0004T2-8O; Wed, 27 Apr 2022 09:42:40 +0200
-Date:   Wed, 27 Apr 2022 09:42:39 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] PCI: qcom: Fix probe error paths
-Message-ID: <Ymjz76YFLU28CUzn@hovoldconsulting.com>
-References: <20220401133854.10421-1-johan+linaro@kernel.org>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D970E3F6FE
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1651045435;
+        bh=8jXf4hJvUNA7Zgo2Xy9fULH0xSDw50tBXLQ5NxaCPwc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=tz7EM3y9eXOS59Ku6qCdubLxcdytS+ZWbicKdZj9tB25+63bP6qscCEyoiSU1LLPe
+         jDl2oEPW4WzE0wH3Y8gPToez6f/h056WNAZaeufHG3dJwcVUlhlIqY5Xnm7tftW3SN
+         11lZKGO1q01/a0/Fp4LShyzfd3T0U4BB4yMHrk8G4dq0GYoR9tBm0c8OXy1cOVRZrn
+         nekSck/hy/Tw4rNO7QQDbZn+LgfyeXp/9xQuYF0uj546kyiHchSUt0zPib0Sj5iR9z
+         HKqJLV8BGVJxnDEuAdvfMSqySMR3Bt9eGC/EpJtkfWFVImS8cz3vu9Up5SJGgh01rT
+         l05+ZSk3qIa5Q==
+Received: by mail-ed1-f69.google.com with SMTP id h7-20020a056402094700b00425a52983dfso544875edz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:43:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8jXf4hJvUNA7Zgo2Xy9fULH0xSDw50tBXLQ5NxaCPwc=;
+        b=X3obTwaFNVRzoUAd4rf426OaVxexM7nZ3YApn6wGoxUbgBZ74oaBwrOTbzIcxqPieW
+         /pTIIEmQlWvnSTP2w1SUBqhXcHM7GFN/02zpt9yCQsqQyn4YpYcKP3QP/dRdi5mwZjsA
+         T/1g65cTWkXmbyB3PGUbZu5euUAKPYUBzMC73k9PxuvI0hYA7ociiZs0/DVRmHhmzms3
+         z5xWA0SQz+09PmTuSwHhqfMDsgnXksBXaM99XXyUXCFHrpaMYGxWAWTOslgf+L27M0BY
+         QVXKFY3hZ/g17AROOLYECVZSbQvWCw53L9pdLhI8OLcN5s8rRl6Bag+s5aZXyIe8k8q1
+         bxRg==
+X-Gm-Message-State: AOAM533OC8bKf08rdEJzlzVJ6H68YuHK+EEFR7vRaRYPxIxZl2tz0ZzM
+        b7sOlS0igC2NdH0c69bIi3VSyWIYmgxDumc69KU7mDtcAysn7sA9FtHxCs52015ikE523jPtJYP
+        JDCZ+KHCrS0FttS7F2Pl2lGML+DQ6xcIR7uKSVw0IcQ==
+X-Received: by 2002:a05:6402:4305:b0:423:f73b:4dd8 with SMTP id m5-20020a056402430500b00423f73b4dd8mr28872564edc.218.1651045435587;
+        Wed, 27 Apr 2022 00:43:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw9qGwbmj4RQdcIrM402uZX33x1RmjKuotIbf3u96QABOyiSqGny7stvH42Ubp0YmHhK/i+ZQ==
+X-Received: by 2002:a05:6402:4305:b0:423:f73b:4dd8 with SMTP id m5-20020a056402430500b00423f73b4dd8mr28872550edc.218.1651045435434;
+        Wed, 27 Apr 2022 00:43:55 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056402040800b004227b347ee3sm7902998edv.56.2022.04.27.00.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 00:43:55 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@protonmail.com>
+To:     atenart@kernel.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, linux-crypto@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@protonmail.com>
+Subject: [PATCH v2] crypto: inside-secure - Add MODULE_FIRMWARE macros
+Date:   Wed, 27 Apr 2022 09:43:51 +0200
+Message-Id: <20220427074351.391580-1-juergh@protonmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401133854.10421-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 03:38:52PM +0200, Johan Hovold wrote:
-> This series fixes a few problems in the probe error handling which could
-> cause trouble, for example, on probe deferral.
+The safexcel module loads firmware so add MODULE_FIRMWARE macros to
+provide that information via modinfo.
 
-> Johan Hovold (2):
->   PCI: qcom: Fix runtime PM imbalance on probe errors
->   PCI: qcom: Fix unbalanced PHY init on probe errors
-> 
->  drivers/pci/controller/dwc/pcie-qcom.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+Signed-off-by: Juerg Haefliger <juergh@protonmail.com>
+---
+v2:
+ Add legacy fallback firmware locations.
+---
+ drivers/crypto/inside-secure/safexcel.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Any comments to this series? Does it need a Qualcomm maintainer ack to
-be merged? Bjorn?
+diff --git a/drivers/crypto/inside-secure/safexcel.c b/drivers/crypto/inside-secure/safexcel.c
+index 9ff885d50edf..9b1a158aec29 100644
+--- a/drivers/crypto/inside-secure/safexcel.c
++++ b/drivers/crypto/inside-secure/safexcel.c
+@@ -1997,3 +1997,12 @@ MODULE_AUTHOR("Igal Liberman <igall@marvell.com>");
+ MODULE_DESCRIPTION("Support for SafeXcel cryptographic engines: EIP97 & EIP197");
+ MODULE_LICENSE("GPL v2");
+ MODULE_IMPORT_NS(CRYPTO_INTERNAL);
++
++MODULE_FIRMWARE("ifpp.bin");
++MODULE_FIRMWARE("ipue.bin");
++MODULE_FIRMWARE("inside-secure/eip197b/ifpp.bin");
++MODULE_FIRMWARE("inside-secure/eip197b/ipue.bin");
++MODULE_FIRMWARE("inside-secure/eip197d/ifpp.bin");
++MODULE_FIRMWARE("inside-secure/eip197d/ipue.bin");
++MODULE_FIRMWARE("inside-secure/eip197_minifw/ifpp.bin");
++MODULE_FIRMWARE("inside-secure/eip197_minifw/ipue.bin");
+-- 
+2.32.0
 
-Johan

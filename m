@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D502512210
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0468512215
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbiD0TH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S231862AbiD0THo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbiD0THA (ORCPT
+        with ESMTP id S232493AbiD0THT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:07:00 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D00EBF71;
-        Wed, 27 Apr 2022 11:53:52 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id f2so3981801ioh.7;
-        Wed, 27 Apr 2022 11:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VJ91s6H07ClEByjQbgZruheBlPpsvHRlP6vfpPqzZKY=;
-        b=EKwxHil5G0kU+wbkmov0G1EaEobARTaBhSglDRm/pqjMlzyw2xWvkwLpGcmiuCwiWJ
-         At36hRwRARLjFsB0PsstrYFE9MGEZmMhqVj6IkdW1Qe3i77MufwhagvCIO3pyldfedH+
-         1L5FME3HrT5gXe+YfTuK1vScwvVdBBAvF3r85wZ4RSEairsG6Sl93FEnp+wFW9Lub42h
-         JoeSUxM+XtEzDhZiGXt0UT79mhVEXx13upi3pSqqFpUs393Ub5H4TEiurTeKxrq4SzOx
-         bx8DqZf4u4eSuipwPj4ZXSXZxkJ0PDwLmP82YCvAND/nMeSjVzccZu1gkgmHm97aBOf9
-         qsLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VJ91s6H07ClEByjQbgZruheBlPpsvHRlP6vfpPqzZKY=;
-        b=7DgfYkHZAWMo6vQgfeQRIq5cEzoy5ln7IM4WnC5QDK5RNvL4sWJhf8HfrdWkhFIOLV
-         hZwD88uaM1y7aZa5X4MtHbpN5H7ivchG2GjCDVFQTsjzbAoYSUehfkSZkAuaLDzYL56w
-         JYvz+MOw2q7H1gWClR1iaI273B5yOzpAZoRvmO87ppgdJHmi1VMNb/gTM48LlIBpGsJ1
-         f1IczIgT4Pmid1K7r44pCn0Pe6ahYFS9Gcl7BMy6PTzC5HKopCyfYL8vV1j5yTsBY1D+
-         vvrwmmCHmPwZF4vA2y8nGmx430i6yWvsbAA2wLJGFQdVflkg0Xb741PxTv7Q+CM3q14Y
-         CgCw==
-X-Gm-Message-State: AOAM532Bq7F0sbmi/E6zbD8SAY5HUkSBJ3uSyn/AWDmJS4Bj5awY7QNB
-        D8gF+4EQofjMuQ93QyuDwEl9BHTLQEPPi0DJ0N4=
-X-Google-Smtp-Source: ABdhPJzl9VUnx3Oh6fY4dpfEp3sorFTDo26fFd33NZFaIoxLMKHh9xEeNMXVp8dcrjOJt836MeA+18nprDrk4z78Bj8=
-X-Received: by 2002:a5d:9f4e:0:b0:652:2323:2eb8 with SMTP id
- u14-20020a5d9f4e000000b0065223232eb8mr12051724iot.79.1651085631636; Wed, 27
- Apr 2022 11:53:51 -0700 (PDT)
+        Wed, 27 Apr 2022 15:07:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924EE3668B;
+        Wed, 27 Apr 2022 11:55:06 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23RHfsnP010702;
+        Wed, 27 Apr 2022 18:55:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=ofnRWMmuQU5mf1v6F7IRYq6pxl7W7gPF8MARld7FRW8=;
+ b=osuuw5QPljuD3KXURSUSCVNKrqX97Ox9vWTjVSQQkb8SFZfUaUgP6prlRnf0VHxcYnN5
+ EKl25nwVua4E6OfDr57Ex5PEMwkJpvCEJlExjasy6VRNt/6Fb0tB5tnMm9ChyAfV+uN3
+ n4ykenfD8F+EmLkr8uX//HWoUYlrOo3XEaCgVximOe7ud2AQA6NZbI20NTawZ96PcyxD
+ Ab86U6rRS8vAY5t/OGXYcX8nRY8JUC2stAJxEObh5UyjhXZWeiDviIoXwCoG/uTLwl44
+ M/BKvlvoUjeHllJQacA81GOQ5Yrz7o8pSe3eJHWGC2WWsn/qU4gelpn/81bH+mVzSi92 lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqaf1sb4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 18:55:00 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23RIEDnT009015;
+        Wed, 27 Apr 2022 18:55:00 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqaf1sb4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 18:55:00 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23RIqPFX007460;
+        Wed, 27 Apr 2022 18:54:59 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04dal.us.ibm.com with ESMTP id 3fm93adhb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Apr 2022 18:54:59 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23RIswUL26083696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Apr 2022 18:54:58 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1D04124055;
+        Wed, 27 Apr 2022 18:54:58 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A51C124053;
+        Wed, 27 Apr 2022 18:54:58 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.88.172])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 27 Apr 2022 18:54:57 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     pavel@ucw.cz
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andy.shevchenko@gmail.com, eajames@linux.ibm.com,
+        dan.carpenter@oracle.com
+Subject: [PATCH v5 0/4] leds: pca955x: Add HW blink support
+Date:   Wed, 27 Apr 2022 13:54:53 -0500
+Message-Id: <20220427185457.27839-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-9-alobakin@pm.me>
- <CAEf4BzZVohaHdCTz_KFVdEus2pndLTZvg=BHfujpgt29qbio3Q@mail.gmail.com> <05d21d85-7b59-a8f9-73dc-89189986db11@fb.com>
-In-Reply-To: <05d21d85-7b59-a8f9-73dc-89189986db11@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Apr 2022 11:53:40 -0700
-Message-ID: <CAEf4BzYrEfkdvP+k+np0S9-Rtf=xnpgVhL25wFgPQ81bm-_h_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 08/11] samples: bpf: fix shifting unsigned long
- by 32 positions
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UFZAJ9IRVuIcUVz-nLlVwxqK5BOwMNux
+X-Proofpoint-GUID: Pa8PYVxXVGhO1wCk-kDmLgHay3mV-4HP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=752
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204270116
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,59 +88,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 8:55 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 4/20/22 10:18 AM, Andrii Nakryiko wrote:
-> > On Thu, Apr 14, 2022 at 3:46 PM Alexander Lobakin <alobakin@pm.me> wrote:
-> >>
-> >> On 32 bit systems, shifting an unsigned long by 32 positions
-> >> yields the following warning:
-> >>
-> >> samples/bpf/tracex2_kern.c:60:23: warning: shift count >= width of type [-Wshift-count-overflow]
-> >>          unsigned int hi = v >> 32;
-> >>                              ^  ~~
-> >>
-> >
-> > long is always 64-bit in BPF, but I suspect this is due to
-> > samples/bpf/Makefile still using this clang + llc combo, where clang
-> > is called with native target and llc for -target bpf. Not sure if we
-> > are ready to ditch that complicated combination. Yonghong, do we still
-> > need that or can we just use -target bpf in samples/bpf?
->
-> Current most bpf programs in samples/bpf do not use vmlinux.h and CO-RE.
-> They direct use kernel header files. That is why clang C -> IR
-> compilation still needs to be native.
->
-> We could just use -target bpf for the whole compilation but that needs
-> to change the code to use vmlinux.h and CO-RE. There are already a
-> couple of sample bpf programs did this.
+This series adds support for blinking using the PCA955x chip, falling
+back to software blinking if another LED on the chip is already blinking
+at a different rate, or if the requested rate isn't representable with
+the PCA955x.
+Also included are some minor clean up and optimization changes that make
+the HW blinking a bit easier.
 
-Right, I guess I'm proposing to switch samples/bpf to vmlinux.h. Only
-purely networking BPF apps can get away with not using vmlinux.h
-because they might avoid dependency on kernel types. But even then a
-lot of modern networking apps seem to be gaining elements of more
-generic tracing and would rely on CO-RE for staying "portable" between
-kernels. So it might be totally fine to just use CO-RE universally in
-samples/bpf?
+Changes since v4:
+ - Set duty cycle to fifty percent for blinked LEDs in order to maintain
+   the specified blink rate.
 
->
-> >
-> >
-> >> The usual way to avoid this is to shift by 16 two times (see
-> >> upper_32_bits() macro in the kernel). Use it across the BPF sample
-> >> code as well.
-> >>
-> >> Fixes: d822a1926849 ("samples/bpf: Add counting example for kfree_skb() function calls and the write() syscall")
-> >> Fixes: 0fb1170ee68a ("bpf: BPF based latency tracing")
-> >> Fixes: f74599f7c530 ("bpf: Add tests and samples for LWT-BPF")
-> >> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> >> ---
-> >>   samples/bpf/lathist_kern.c      | 2 +-
-> >>   samples/bpf/lwt_len_hist_kern.c | 2 +-
-> >>   samples/bpf/tracex2_kern.c      | 2 +-
-> >>   3 files changed, 3 insertions(+), 3 deletions(-)
-> >>
-> >
-> > [...]
+Changes since v3:
+ - Initialize return value in the blink function
+   Thanks Dan Carpenter and kernel test robot
+
+Changes since v2:
+ - Split the cleanup patch
+ - Prettier dev_err calls
+ - Include units for blink period and use defined unit translations
+   rather than just a number.
+ - Use positive conditionals.
+
+Changes since v1:
+ - Rework the blink function to fallback to software blinking if the
+   period is out of range of the chip's capabilities or if another LED
+   on the chip is already blinking at a different rate.
+ - Add the cleanup patch
+
+Eddie James (4):
+  leds: pca955x: Refactor with helper functions and renaming
+  leds: pca955x: Use pointers to driver data rather than I2C client
+  leds: pca955x: Optimize probe led selection
+  leds: pca955x: Add HW blink support
+
+ drivers/leds/leds-pca955x.c | 348 ++++++++++++++++++++++++------------
+ 1 file changed, 237 insertions(+), 111 deletions(-)
+
+-- 
+2.27.0
+

@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE9E511739
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A125117C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbiD0MFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
+        id S233328AbiD0MFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbiD0MFc (ORCPT
+        with ESMTP id S233424AbiD0MFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 08:05:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6BE3B295
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB8D3B2B3
         for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:02:20 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpHNr6hSFzGpNK;
-        Wed, 27 Apr 2022 19:59:40 +0800 (CST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KpHLd2cYQzCsSQ;
+        Wed, 27 Apr 2022 19:57:45 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Apr 2022 20:02:17 +0800
+ 15.1.2375.24; Wed, 27 Apr 2022 20:02:18 +0800
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -33,10 +33,12 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <linux-mm@kvack.org>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH 0/4] arm64: Cleanup ioremap() and support ioremap_prot()
-Date:   Wed, 27 Apr 2022 20:14:09 +0800
-Message-ID: <20220427121413.168468-1-wangkefeng.wang@huawei.com>
+Subject: [PATCH 1/4] mm: ioremap: Setup phys_addr of struct vm_struct
+Date:   Wed, 27 Apr 2022 20:14:10 +0800
+Message-ID: <20220427121413.168468-2-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220427121413.168468-1-wangkefeng.wang@huawei.com>
+References: <20220427121413.168468-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -52,27 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's arm64 use GENERIC_IOREMAP to cleanup code, and
-support ioremap_prot()/HAVE_IOREMAP_PROT, which could
-enable generic_access_phys().
+Show physical address in /proc/vmallocinfo.
 
-Kefeng Wang (4):
-  mm: ioremap: Setup phys_addr of struct vm_struct
-  mm: ioremap: Add arch_ioremap/iounmap_check()
-  arm64: mm: Convert to GENERIC_IOREMAP
-  arm64: Add HAVE_IOREMAP_PROT support
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/ioremap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../features/vm/ioremap_prot/arch-support.txt |  2 +-
- arch/arm64/Kconfig                            |  2 +
- arch/arm64/include/asm/io.h                   | 14 +--
- arch/arm64/include/asm/pgtable.h              | 10 +++
- arch/arm64/kernel/acpi.c                      |  2 +-
- arch/arm64/mm/hugetlbpage.c                   | 10 ---
- arch/arm64/mm/ioremap.c                       | 86 +++----------------
- include/asm-generic/io.h                      |  3 +
- mm/ioremap.c                                  | 21 ++++-
- 9 files changed, 56 insertions(+), 94 deletions(-)
-
+diff --git a/mm/ioremap.c b/mm/ioremap.c
+index 5fe598ecd9b7..522ef899c35f 100644
+--- a/mm/ioremap.c
++++ b/mm/ioremap.c
+@@ -32,6 +32,7 @@ void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
+ 	if (!area)
+ 		return NULL;
+ 	vaddr = (unsigned long)area->addr;
++	area->phys_addr = addr;
+ 
+ 	if (ioremap_page_range(vaddr, vaddr + size, addr, __pgprot(prot))) {
+ 		free_vm_area(area);
 -- 
 2.26.2
 

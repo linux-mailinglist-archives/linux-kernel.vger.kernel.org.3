@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FDA511AF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578FF51192C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237193AbiD0N7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S237142AbiD0OAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237243AbiD0N70 (ORCPT
+        with ESMTP id S237338AbiD0N70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 09:59:26 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218F23B3DC;
-        Wed, 27 Apr 2022 06:56:07 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 13:56:04 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B11E3464B;
+        Wed, 27 Apr 2022 06:56:08 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 13:56:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651067766;
+        s=2020; t=1651067767;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=25HNO8Oxf0ggINk6FO02R9bvwdB5ZFJv7orgno++y5I=;
-        b=y38fRutcN0wc2VtzjKROt97OZ3ct/68HypBN6k51mSRSDdpyRuO959tpnz/lKWmjdgioKB
-        0gFpEPO1HcYinwbQWnCRcP8cZhX/rwvIkD4qu10Pc0dOkUd/ZfJsGW1OmXBgTAJEFVZQM+
-        dIzTAzGGCy8z5fpxUFSH0XUuGUJMjRWaOjgg0zi53QnuVefRtocKDxnpGW3ex3uj9RJ9Hb
-        aYmVrXZ3MbSNN7R8EGD2ANaum8eZgQKxAH6wI7DiZX3Id3R+3a9SRwwJdMgqWeV0PzZMnl
-        8w/P+1QAuezcL1z7d2F7M/2HJM7WRa183apg7/RXdEfXer6KmE8XwwliQqiZtQ==
+        bh=C5smDIbG45jhVWZCKV0dHaEoPAtm3onBdnDDrbZ1Da8=;
+        b=1kTLFMDnTLnFkoLYoorJ1PbeoT2ALfDMt3bsyJMkuLclboCSv8zUkEv2NRPhNdnoDdrlLC
+        35M0JaOZRfUXdoud6QWHA4yi9JpwGmnvZw6AwTLt/yH4Rh4ba/O4rTsRcrqZQYClKSa7Yt
+        eWmljpUEiJvRZ0aWdKjBGwHbhkU0v34brd8ajy3TZNfdl2m/lKzOl7wtfJTWQQNJYqp3Ej
+        fMWH/Awd+QnDq+E4fLeYxziH+VBUDejahOzlOE3bJpI5VtaH793iYWgoA5bbgB1gllztQ3
+        4BJiJQZFsGJW6O9BO6VHNMQyZ/kUWFMzpZ1t4Jh4vPsivMsHrOp6DdSACHwdhw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651067766;
+        s=2020e; t=1651067767;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=25HNO8Oxf0ggINk6FO02R9bvwdB5ZFJv7orgno++y5I=;
-        b=IlGR5Jlq6OfkgZv1jrIE9mARdcgxj7feLRx7mFvzHJ6W04JtL9ewM87LEDiDeHKQZa70gA
-        CnW3hurLU+R7eqDw==
+        bh=C5smDIbG45jhVWZCKV0dHaEoPAtm3onBdnDDrbZ1Da8=;
+        b=dpWpkxRL6b5tvK2360FcyitklYLU3riCiRFOLjrL7w56mA80Ljej6wIKTyNscyz/EvA2tN
+        pjN+fWxGPhpXjkCg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/aperfmperf: Integrate the fallback code from
- show_cpuinfo()
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Doug Smythies <dsmythies@telus.net>, x86@kernel.org,
+Subject: [tip: x86/cleanups] x86/aperfmperf: Replace arch_freq_get_on_cpu()
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <87pml5180p.ffs@tglx>
-References: <87pml5180p.ffs@tglx>
+In-Reply-To: <20220415161206.934040006@linutronix.de>
+References: <20220415161206.934040006@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <165106776486.4207.10542512805446730601.tip-bot2@tip-bot2>
+Message-ID: <165106776589.4207.4086346739108492456.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,84 +69,164 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     e696cabf5da2b4ed104508674de6125b860f3c9f
-Gitweb:        https://git.kernel.org/tip/e696cabf5da2b4ed104508674de6125b860f3c9f
+Commit-ID:     a86a1356ee79da6bc4abfb9e0499f963ff6da9ae
+Gitweb:        https://git.kernel.org/tip/a86a1356ee79da6bc4abfb9e0499f963ff6da9ae
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 25 Apr 2022 17:45:42 +02:00
+AuthorDate:    Fri, 15 Apr 2022 21:20:04 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Wed, 27 Apr 2022 15:51:09 +02:00
 
-x86/aperfmperf: Integrate the fallback code from show_cpuinfo()
+x86/aperfmperf: Replace arch_freq_get_on_cpu()
 
-Due to the avoidance of IPIs to idle CPUs arch_freq_get_on_cpu() can return
-0 when the last sample was too long ago.
+Reading the current CPU frequency from /sys/..../scaling_cur_freq involves
+in the worst case two IPIs due to the ad hoc sampling.
 
-show_cpuinfo() has a fallback to cpufreq_quick_get() and if that fails to
-return cpu_khz, but the readout code for the per CPU scaling frequency in
-sysfs does not.
+The frequency invariance infrastructure provides the APERF/MPERF samples
+already. Utilize them and consolidate this with the /proc/cpuinfo readout.
 
-Move that fallback into arch_freq_get_on_cpu() so the behaviour is the same
-when reading /proc/cpuinfo and /sys/..../cur_scaling_freq.
+The sample is considered valid for 20ms. So for idle or isolated NOHZ full
+CPUs the function returns 0, which is matching the previous behaviour.
 
-Suggested-by: "Rafael J. Wysocki" <rafael@kernel.org>
+The resulting text size vs. the original APERF/MPERF plus the separate
+frequency invariance code:
+
+  text:		2411	->   723
+  init.text:	   0	->   767
+
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Doug Smythies <dsmythies@telus.net>
-Link: https://lore.kernel.org/r/87pml5180p.ffs@tglx
+Tested-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Link: https://lore.kernel.org/r/20220415161206.934040006@linutronix.de
 
 ---
- arch/x86/kernel/cpu/aperfmperf.c | 10 +++++++---
- arch/x86/kernel/cpu/proc.c       |  7 +------
- 2 files changed, 8 insertions(+), 9 deletions(-)
+ arch/x86/kernel/cpu/aperfmperf.c | 94 +-------------------------------
+ arch/x86/kernel/cpu/proc.c       |  2 +-
+ 2 files changed, 2 insertions(+), 94 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-index b15c884..1f60a2b 100644
+index e9d2da7..b15c884 100644
 --- a/arch/x86/kernel/cpu/aperfmperf.c
 +++ b/arch/x86/kernel/cpu/aperfmperf.c
-@@ -405,12 +405,12 @@ void arch_scale_freq_tick(void)
- unsigned int arch_freq_get_on_cpu(int cpu)
+@@ -36,98 +36,6 @@ static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples) = {
+ 	.seq = SEQCNT_ZERO(cpu_samples.seq)
+ };
+ 
+-struct aperfmperf_sample {
+-	unsigned int	khz;
+-	atomic_t	scfpending;
+-	ktime_t	time;
+-	u64	aperf;
+-	u64	mperf;
+-};
+-
+-static DEFINE_PER_CPU(struct aperfmperf_sample, samples);
+-
+-#define APERFMPERF_CACHE_THRESHOLD_MS	10
+-#define APERFMPERF_REFRESH_DELAY_MS	10
+-#define APERFMPERF_STALE_THRESHOLD_MS	1000
+-
+-/*
+- * aperfmperf_snapshot_khz()
+- * On the current CPU, snapshot APERF, MPERF, and jiffies
+- * unless we already did it within 10ms
+- * calculate kHz, save snapshot
+- */
+-static void aperfmperf_snapshot_khz(void *dummy)
+-{
+-	u64 aperf, aperf_delta;
+-	u64 mperf, mperf_delta;
+-	struct aperfmperf_sample *s = this_cpu_ptr(&samples);
+-	unsigned long flags;
+-
+-	local_irq_save(flags);
+-	rdmsrl(MSR_IA32_APERF, aperf);
+-	rdmsrl(MSR_IA32_MPERF, mperf);
+-	local_irq_restore(flags);
+-
+-	aperf_delta = aperf - s->aperf;
+-	mperf_delta = mperf - s->mperf;
+-
+-	/*
+-	 * There is no architectural guarantee that MPERF
+-	 * increments faster than we can read it.
+-	 */
+-	if (mperf_delta == 0)
+-		return;
+-
+-	s->time = ktime_get();
+-	s->aperf = aperf;
+-	s->mperf = mperf;
+-	s->khz = div64_u64((cpu_khz * aperf_delta), mperf_delta);
+-	atomic_set_release(&s->scfpending, 0);
+-}
+-
+-static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
+-{
+-	s64 time_delta = ktime_ms_delta(now, per_cpu(samples.time, cpu));
+-	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
+-
+-	/* Don't bother re-computing within the cache threshold time. */
+-	if (time_delta < APERFMPERF_CACHE_THRESHOLD_MS)
+-		return true;
+-
+-	if (!atomic_xchg(&s->scfpending, 1) || wait)
+-		smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, wait);
+-
+-	/* Return false if the previous iteration was too long ago. */
+-	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
+-}
+-
+-unsigned int arch_freq_get_on_cpu(int cpu)
+-{
+-	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
+-
+-	if (!cpu_khz)
+-		return 0;
+-
+-	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+-		return 0;
+-
+-	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
+-		return 0;
+-
+-	if (rcu_is_idle_cpu(cpu))
+-		return 0;
+-
+-	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
+-		return per_cpu(samples.khz, cpu);
+-
+-	msleep(APERFMPERF_REFRESH_DELAY_MS);
+-	atomic_set(&s->scfpending, 1);
+-	smp_mb(); /* ->scfpending before smp_call_function_single(). */
+-	smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, 1);
+-
+-	return per_cpu(samples.khz, cpu);
+-}
+-
+ static void init_counter_refs(void)
+ {
+ 	u64 aperf, mperf;
+@@ -494,7 +402,7 @@ void arch_scale_freq_tick(void)
+  */
+ #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
+ 
+-unsigned int aperfmperf_get_khz(int cpu)
++unsigned int arch_freq_get_on_cpu(int cpu)
  {
  	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
-+	unsigned int seq, freq;
  	unsigned long last;
--	unsigned int seq;
- 	u64 acnt, mcnt;
- 
- 	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
--		return 0;
-+		goto fallback;
- 
- 	do {
- 		seq = raw_read_seqcount_begin(&s->seq);
-@@ -424,9 +424,13 @@ unsigned int arch_freq_get_on_cpu(int cpu)
- 	 * which covers idle and NOHZ full CPUs.
- 	 */
- 	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
--		return 0;
-+		goto fallback;
- 
- 	return div64_u64((cpu_khz * acnt), mcnt);
-+
-+fallback:
-+	freq = cpufreq_quick_get(cpu);
-+	return freq ? freq : cpu_khz;
- }
- 
- static int __init bp_init_aperfmperf(void)
 diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index 0a0ee55..099b6f0 100644
+index 4eec888..0a0ee55 100644
 --- a/arch/x86/kernel/cpu/proc.c
 +++ b/arch/x86/kernel/cpu/proc.c
-@@ -86,12 +86,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+@@ -84,7 +84,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
+ 
  	if (cpu_has(c, X86_FEATURE_TSC)) {
- 		unsigned int freq = arch_freq_get_on_cpu(cpu);
+-		unsigned int freq = aperfmperf_get_khz(cpu);
++		unsigned int freq = arch_freq_get_on_cpu(cpu);
  
--		if (!freq)
--			freq = cpufreq_quick_get(cpu);
--		if (!freq)
--			freq = cpu_khz;
--		seq_printf(m, "cpu MHz\t\t: %u.%03u\n",
--			   freq / 1000, (freq % 1000));
-+		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
- 	}
- 
- 	/* Cache size */
+ 		if (!freq)
+ 			freq = cpufreq_quick_get(cpu);

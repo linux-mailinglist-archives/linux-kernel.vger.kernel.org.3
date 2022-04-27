@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C2F5122EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D0E5122F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiD0Tl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S232116AbiD0TmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiD0Tj5 (ORCPT
+        with ESMTP id S234018AbiD0TkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:39:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81B8B65
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:36:44 -0700 (PDT)
+        Wed, 27 Apr 2022 15:40:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CA01096
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 12:36:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DC2561B44
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2BDC385A9;
-        Wed, 27 Apr 2022 19:36:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5468DB8294F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F12C385A7;
+        Wed, 27 Apr 2022 19:36:44 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1njnSs-002IyF-V1;
-        Wed, 27 Apr 2022 15:36:42 -0400
-Message-ID: <20220427193642.789373510@goodmis.org>
+        id 1njnSt-002Iyo-4T;
+        Wed, 27 Apr 2022 15:36:43 -0400
+Message-ID: <20220427193642.976993500@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 27 Apr 2022 15:36:41 -0400
+Date:   Wed, 27 Apr 2022 15:36:42 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Guo Zhengkui <guozhengkui@vivo.com>
-Subject: [for-next][PATCH 18/21] tracing: Use WARN instead of printk and WARN_ON
+        Wan Jiabing <wanjiabing@vivo.com>
+Subject: [for-next][PATCH 19/21] ring-buffer: Simplify if-if to if-else
 References: <20220427193623.529296556@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,50 +47,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Zhengkui <guozhengkui@vivo.com>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-Use `WARN(cond, ...)` instead of `if (cond)` + `printk(...)` +
-`WARN_ON(1)`.
+Use if and else instead of if(A) and if (!A).
 
-Link: https://lkml.kernel.org/r/20220424131932.3606-1-guozhengkui@vivo.com
+Link: https://lkml.kernel.org/r/20220426070628.167565-1-wanjiabing@vivo.com
 
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_output.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ kernel/trace/ring_buffer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 8aa493d25c73..d89e3f7e26eb 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -778,9 +778,8 @@ int register_trace_event(struct trace_event *event)
- 
- 		list_add_tail(&event->list, list);
- 
--	} else if (event->type > __TRACE_LAST_TYPE) {
--		printk(KERN_WARNING "Need to add type to trace.h\n");
--		WARN_ON(1);
-+	} else if (WARN(event->type > __TRACE_LAST_TYPE,
-+			"Need to add type to trace.h")) {
- 		goto out;
- 	} else {
- 		/* Is this event already used */
-@@ -1571,13 +1570,8 @@ __init static int init_events(void)
- 
- 	for (i = 0; events[i]; i++) {
- 		event = events[i];
--
- 		ret = register_trace_event(event);
--		if (!ret) {
--			printk(KERN_WARNING "event %d failed to register\n",
--			       event->type);
--			WARN_ON_ONCE(1);
--		}
-+		WARN_ONCE(!ret, "event %d failed to register", event->type);
- 	}
- 
- 	return 0;
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 05dfc7a12d3d..655d6db3e3c3 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -6011,10 +6011,10 @@ static __init int test_ringbuffer(void)
+ 		pr_info("        total events:   %ld\n", total_lost + total_read);
+ 		pr_info("  recorded len bytes:   %ld\n", total_len);
+ 		pr_info(" recorded size bytes:   %ld\n", total_size);
+-		if (total_lost)
++		if (total_lost) {
+ 			pr_info(" With dropped events, record len and size may not match\n"
+ 				" alloced and written from above\n");
+-		if (!total_lost) {
++		} else {
+ 			if (RB_WARN_ON(buffer, total_len != total_alloc ||
+ 				       total_size != total_written))
+ 				break;
 -- 
 2.35.1

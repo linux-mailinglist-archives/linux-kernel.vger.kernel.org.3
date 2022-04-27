@@ -2,98 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C264D511A32
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26327511B34
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbiD0OOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S237357AbiD0OQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237601AbiD0ON7 (ORCPT
+        with ESMTP id S237393AbiD0OQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:13:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4ABBD50065
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651068642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NKhDa4ztHhyXVoYawVPKdjEeIt2vB/BQ7DGgaiHHY0s=;
-        b=aA+d2rZsJFvCooAzmkK10cX6vcsK1A1nkqfxohVMlI0fSjZyDeR2Kwn0k9gMrXIVr8/PTw
-        YDxv9aS1z1JMoJgYx79oePPyaPiOim/7J+GsEQsA8qBaTacWmyTJTIYVEf5d4KPPZcmHzi
-        hMMmuHUm886uHROCR2suHBjcnid5dnA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-312-f6f79C7nO12uafBPvmz1SA-1; Wed, 27 Apr 2022 10:10:34 -0400
-X-MC-Unique: f6f79C7nO12uafBPvmz1SA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3211B1014A61;
-        Wed, 27 Apr 2022 14:10:33 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 0C5E257C911;
-        Wed, 27 Apr 2022 14:10:27 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 27 Apr 2022 16:10:31 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 16:10:25 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
- siglock held
-Message-ID: <20220427141018.GA17421@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-6-ebiederm@xmission.com>
+        Wed, 27 Apr 2022 10:16:27 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E392E532CD
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:13:14 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q12so1537031pgj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DhokFBZ8F+taIE1k9mg2zZtCYLVYVOeEuTezkpT79r0=;
+        b=P3+JotLgiip8RxPVXYAXVXxK/wRp63a4Wo/GDeeUArGs0ys+6YbeQav72knUKSjSgG
+         XMAWMCV+T7fbSun5DsZP6df1JmVvkUJAPmZNsMs1M7c5fBo06US16QTLJ7iqgKnfgTZe
+         9G8GJJzxHyGGpNJi+WihEAk01SV57ERNAWrWJ5fEcVw2gzCLu5bNBz6ThMUDpck3b/hv
+         JHmwNeUg+H6/4bBEt5l++B5tjifB3FMsjZDhG4aHNH9KFGJOAWVcXhsBVUBMgP1OSQcC
+         2CQbs3h/RzvPILD7JMzwc9ggQ4jxbFRshk6tACwUSAKJuAIM+sHLdXce0zHTfY0E4XLT
+         aI9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DhokFBZ8F+taIE1k9mg2zZtCYLVYVOeEuTezkpT79r0=;
+        b=d6ulsq4Ihabj+jLOYNdErZ+a2n8R3vfleM7iR567Kha1BUZfIEQ5UqYhf7mjQO+aDT
+         ujplvfsNyBTU65d4zAGp345Y6vP760H8eYcGcUY5XnCPs9h+llqBkcGtVdJ/rOLNHEDK
+         pO/kJTbJ+5AjXtKyZMpxM3ISNLO3EO/9Qh0q66JNBTi0VkMW/dIp0yJNh7jfJdykaRu6
+         JhO31g3/GllVp3i9bZGKlnhC3aDye5ttcq/UqpqsL213+sw3DYXfi59TKT05YuPejQUd
+         2U36uA/u4VnInqlm8Apzaybl+icdOoPip+gFnatSJvHASV8skmbsc7VINOLBTRzUA5FO
+         7SeQ==
+X-Gm-Message-State: AOAM530SxOOVx20ezJNGvz3p9cBcRdO7oMwPgs1mPDAax/0CmoHUhHIy
+        E3IYTeWNKaVY3mKQMkhUA3KrFg==
+X-Google-Smtp-Source: ABdhPJzwqnRqzlvetnWaWNh50u652unG7bmUQL7VOe8oZll9/mfsDqCxv7Fg9ArlskIvhhOuWvfmqA==
+X-Received: by 2002:a63:18c:0:b0:3aa:d794:7c44 with SMTP id 134-20020a63018c000000b003aad7947c44mr21425027pgb.126.1651068794150;
+        Wed, 27 Apr 2022 07:13:14 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id x129-20020a623187000000b0050835f6d6a1sm19002767pfx.9.2022.04.27.07.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:13:13 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 22:13:05 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/5] interconnect: qcom: Move
+ qcom_icc_xlate_extended() to a common file
+Message-ID: <20220427141305.GB560849@leoy-ThinkPad-X240s>
+References: <20220416154013.1357444-1-leo.yan@linaro.org>
+ <20220416154013.1357444-3-leo.yan@linaro.org>
+ <e7a8ce84-3029-ea90-628b-1072bd49baf4@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426225211.308418-6-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <e7a8ce84-3029-ea90-628b-1072bd49baf4@linaro.org>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/26, Eric W. Biederman wrote:
->
-> @@ -2164,7 +2166,9 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
->   	}
->
->  	sighand = parent->sighand;
-> -	spin_lock_irqsave(&sighand->siglock, flags);
-> +	lock = tsk->sighand != sighand;
-> +	if (lock)
-> +		spin_lock_nested(&sighand->siglock, SINGLE_DEPTH_NESTING);
+On Wed, Apr 27, 2022 at 12:00:24AM +0300, Dmitry Baryshkov wrote:
+> On 16/04/2022 18:40, Leo Yan wrote:
+> > since there have conflict between two headers icc-rpmh.h and icc-rpm.h,
+> > the function qcom_icc_xlate_extended() is declared in icc-rpmh.h thus
+> > it cannot be used by icc-rpm driver.
+> > 
+> > Move the function to a new common file icc-common.c so that allow it to
+> > be called by multiple drivers.
+> > 
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> > ---
+> >   drivers/interconnect/qcom/Makefile     |  3 +++
+> >   drivers/interconnect/qcom/icc-common.c | 34 ++++++++++++++++++++++++++
+> >   drivers/interconnect/qcom/icc-common.h | 13 ++++++++++
+> >   drivers/interconnect/qcom/icc-rpmh.c   | 26 +-------------------
+> >   drivers/interconnect/qcom/icc-rpmh.h   |  1 -
+> >   drivers/interconnect/qcom/sm8450.c     |  1 +
+> >   6 files changed, 52 insertions(+), 26 deletions(-)
+> >   create mode 100644 drivers/interconnect/qcom/icc-common.c
+> >   create mode 100644 drivers/interconnect/qcom/icc-common.h
+> > 
+> > diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+> > index ceae9bb566c6..bbb3d6daaad1 100644
+> > --- a/drivers/interconnect/qcom/Makefile
+> > +++ b/drivers/interconnect/qcom/Makefile
+> > @@ -1,5 +1,8 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > +obj-$(CONFIG_INTERCONNECT_QCOM) += interconnect_qcom.o
+> > +
+> > +interconnect_qcom-y			:= icc-common.o
+> >   icc-bcm-voter-objs			:= bcm-voter.o
+> >   qnoc-msm8916-objs			:= msm8916.o
+> >   qnoc-msm8939-objs			:= msm8939.o
+> > diff --git a/drivers/interconnect/qcom/icc-common.c b/drivers/interconnect/qcom/icc-common.c
+> > new file mode 100644
+> > index 000000000000..0822ce207b5d
+> > --- /dev/null
+> > +++ b/drivers/interconnect/qcom/icc-common.c
+> > @@ -0,0 +1,34 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2022 Linaro Ltd.
+> > + */
+> > +
+> > +#include <linux/of.h>
+> > +#include <linux/slab.h>
+> > +
+> > +#include "icc-common.h"
+> > +
+> > +struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
+> > +{
+> > +	struct icc_node_data *ndata;
+> > +	struct icc_node *node;
+> > +
+> > +	node = of_icc_xlate_onecell(spec, data);
+> > +	if (IS_ERR(node))
+> > +		return ERR_CAST(node);
+> > +
+> > +	ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
+> > +	if (!ndata)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	ndata->node = node;
+> > +
+> > +	if (spec->args_count == 2)
+> > +		ndata->tag = spec->args[1];
+> > +
+> > +	if (spec->args_count > 2)
+> > +		pr_warn("%pOF: Too many arguments, path tag is not parsed\n", spec->np);
+> > +
+> > +	return ndata;
+> > +}
+> > +EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
+> > diff --git a/drivers/interconnect/qcom/icc-common.h b/drivers/interconnect/qcom/icc-common.h
+> > new file mode 100644
+> > index 000000000000..33bb2c38dff3
+> > --- /dev/null
+> > +++ b/drivers/interconnect/qcom/icc-common.h
+> > @@ -0,0 +1,13 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2022 Linaro Ltd.
+> > + */
+> > +
+> > +#ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_COMMON_H__
+> > +#define __DRIVERS_INTERCONNECT_QCOM_ICC_COMMON_H__
+> > +
+> > +#include <linux/interconnect-provider.h>
+> 
+> If it's just for the sake of the function prototype, you can replace
+> #include with forward declarations of two used structures:
+> 
+> struct icc_node_data;
+> struct of_phandle_args;
 
-But why is it safe?
+Will fix in next spin.
 
-Suppose we have two tasks, they both trace each other, both call
-ptrace_stop() at the same time. Of course this is ugly, they both
-will block.
+Thanks,
+Leo
 
-But with this patch in this case we have the trivial ABBA deadlock,
-no?
-
-Oleg.
-
+> > +
+> > +struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
+> > +
+> > +#endif
+> > diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> > index 2c8e12549804..9a0ac85d2a84 100644
+> > --- a/drivers/interconnect/qcom/icc-rpmh.c
+> > +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> > @@ -11,6 +11,7 @@
+> >   #include <linux/slab.h>
+> >   #include "bcm-voter.h"
+> > +#include "icc-common.h"
+> >   #include "icc-rpmh.h"
+> >   /**
+> > @@ -100,31 +101,6 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+> >   }
+> >   EXPORT_SYMBOL_GPL(qcom_icc_set);
+> > -struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
+> > -{
+> > -	struct icc_node_data *ndata;
+> > -	struct icc_node *node;
+> > -
+> > -	node = of_icc_xlate_onecell(spec, data);
+> > -	if (IS_ERR(node))
+> > -		return ERR_CAST(node);
+> > -
+> > -	ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
+> > -	if (!ndata)
+> > -		return ERR_PTR(-ENOMEM);
+> > -
+> > -	ndata->node = node;
+> > -
+> > -	if (spec->args_count == 2)
+> > -		ndata->tag = spec->args[1];
+> > -
+> > -	if (spec->args_count > 2)
+> > -		pr_warn("%pOF: Too many arguments, path tag is not parsed\n", spec->np);
+> > -
+> > -	return ndata;
+> > -}
+> > -EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
+> > -
+> >   /**
+> >    * qcom_icc_bcm_init - populates bcm aux data and connect qnodes
+> >    * @bcm: bcm to be initialized
+> > diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+> > index 4bfc060529ba..84acc540a5f7 100644
+> > --- a/drivers/interconnect/qcom/icc-rpmh.h
+> > +++ b/drivers/interconnect/qcom/icc-rpmh.h
+> > @@ -131,7 +131,6 @@ struct qcom_icc_desc {
+> >   int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+> >   		       u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
+> >   int qcom_icc_set(struct icc_node *src, struct icc_node *dst);
+> > -struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
+> >   int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev);
+> >   void qcom_icc_pre_aggregate(struct icc_node *node);
+> >   int qcom_icc_rpmh_probe(struct platform_device *pdev);
+> > diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+> > index 8d99ee6421df..23045cf17e37 100644
+> > --- a/drivers/interconnect/qcom/sm8450.c
+> > +++ b/drivers/interconnect/qcom/sm8450.c
+> > @@ -12,6 +12,7 @@
+> >   #include <dt-bindings/interconnect/qcom,sm8450.h>
+> >   #include "bcm-voter.h"
+> > +#include "icc-common.h"
+> >   #include "icc-rpmh.h"
+> >   #include "sm8450.h"
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry

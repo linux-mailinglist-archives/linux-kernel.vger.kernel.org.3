@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609CC511610
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9D65114F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 12:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiD0KvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 06:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S229651AbiD0Kml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 06:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiD0KvL (ORCPT
+        with ESMTP id S229581AbiD0Kmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:51:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5F137306E;
-        Wed, 27 Apr 2022 03:22:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA0C261CDF;
-        Wed, 27 Apr 2022 10:22:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65856C385A7;
-        Wed, 27 Apr 2022 10:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651054934;
-        bh=/l0+X+uY0RGD3XCFihbZoXk+GiTAu5F7H5VVNMO1SFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YPRpKWw7RkFCv3TNq6CrOTPWcmgczFFuWKF5CbARd8K3PteP1PdJA0od0eqcxe5pk
-         WilNsgLzRyd3Q+4bdGK6xXhl218reLuUimckCK6QtU1QuQQK3/E1fGRcHzlFzXJ9TZ
-         m4S/+2B4jKWMcZlj8I8iE1nR/2xe3ok2LtGF+lueyucO4sQCu/lDiuM4FL+3t/aZAE
-         isjG7urMZuoAvrdOOg8mEDKzQqvQSa53V7G+xV+/QbLFwUDMFCC4z1qZwR9ETPFyta
-         3GGHyJwQjXTKsHrm7dZHFXhbcjUgDdc+DnYk6Zrz8ydzZNtGJwC4cIAHDnWlhBt6ID
-         6Sylq0yZhFFQA==
-Date:   Wed, 27 Apr 2022 15:52:06 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Hemant Kumar <quic_hemantk@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        Paul Davey <paul.davey@alliedtelesis.co.nz>,
-        Kees Cook <keescook@chromium.org>, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bus: mhi: replace snprintf with sysfs_emit
-Message-ID: <20220427102206.GD2536@thinkpad>
-References: <20220426125902.681258-1-wanjiabing@vivo.com>
+        Wed, 27 Apr 2022 06:42:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98FA548E863
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:22:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AD2E143D;
+        Wed, 27 Apr 2022 03:22:41 -0700 (PDT)
+Received: from [10.0.0.20] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F9AA3F774;
+        Wed, 27 Apr 2022 03:22:39 -0700 (PDT)
+Message-ID: <2c389633-9b9c-3db9-6c07-a124596e3799@arm.com>
+Date:   Wed, 27 Apr 2022 11:22:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426125902.681258-1-wanjiabing@vivo.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v6 2/7] sched/fair: Decay task PELT values during wakeup
+ migration
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
+References: <20220426093506.3415588-1-vincent.donnefort@arm.com>
+ <20220426093506.3415588-3-vincent.donnefort@arm.com>
+ <YmkL7CevuugEHsol@geo.homenetwork>
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+In-Reply-To: <YmkL7CevuugEHsol@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 08:58:59PM +0800, Wan Jiabing wrote:
-> Fix following coccicheck warning:
-> ./drivers/bus/mhi/host/init.c:89:8-16: WARNING: use scnprintf or sprintf
-> 
-> Use sysfs_emit and sysfs_emit_at instead of snprintf.
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+On 27/04/2022 10:25, Tao Zhou wrote:
+> On Tue, Apr 26, 2022 at 10:35:01AM +0100, Vincent Donnefort wrote:
+> 
+>> Before being migrated to a new CPU, a task sees its PELT values
+>> synchronized with rq last_update_time. Once done, that same task will also
+>> have its sched_avg last_update_time reset. This means the time between
+>> the migration and the last clock update (B) will not be accounted for in
+>> util_avg and a discontinuity will appear. This issue is amplified by the
+>> PELT clock scaling. If the clock hasn't been updated while the CPU is
+>> idle, clock_pelt will not be aligned with clock_task and that time (A)
+>> will be also lost.
+>>
+>>     ---------|----- A -----|-----------|------- B -----|>
+>>          clock_pelt   clock_task     clock            now
+>>
+>> This is especially problematic for asymmetric CPU capacity systems which
+>> need stable util_avg signals for task placement and energy estimation.
+>>
+>> Ideally, this problem would be solved by updating the runqueue clocks
+>> before the migration. But that would require taking the runqueue lock
+>> which is quite expensive [1]. Instead estimate the missing time and update
+>> the task util_avg with that value:
+>>
+>>    A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
+>>
+>> sched_clock_cpu() is a costly functinon. Limit the usage to the case where
+>> the source CPU is idle as we know this is when the clock is having the
+>> biggest risk of being outdated.
+>>
+>> Neither clock_task, clock_pelt nor clock can be accessed without the
+>> runqueue lock. We then need to store those values in a timestamp variable
+>> which can be accessed during the migration. rq's enter_idle will give the
+>> wall-clock time when the rq went idle. We have then:
+>>
+>>    B = sched_clock_cpu() - rq->enter_idle.
+>>
+>> Then, to catch-up the PELT clock scaling (A), two cases:
+>>
+>>    * !CFS_BANDWIDTH: We can simply use clock_task(). This value is stored
+>>      in rq's clock_pelt_idle, before the rq enters idle. The estimated time
+>>      is then:
+>>
+>>        rq->clock_pelt_idle + sched_clock_cpu() - rq->enter_idle.
+>>
+>>    * CFS_BANDWIDTH: We can't catch-up with clock_task because of the
+>>      throttled_clock_task_time offset. cfs_rq's clock_pelt_idle is then
+>>      giving the PELT clock when the cfs_rq becomes idle. This gives:
+>>
+>>        A = rq->clock_pelt_idle - cfs_rq->clock_pelt_idle
+> 
+> The code calulating A below is not consistent with this. The order is reversed.
+> 
+
+Good catch, but this comment is actually correct, the code is not. 
+rq->clock_pelt_idle is updated _after_ cfs_rq->clock_pelt_idle. (see
+previous email to Vincent)
 
 Thanks,
-Mani
 
-> ---
->  drivers/bus/mhi/host/init.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> index cbb86b21063e..c137d55ccfa0 100644
-> --- a/drivers/bus/mhi/host/init.c
-> +++ b/drivers/bus/mhi/host/init.c
-> @@ -86,7 +86,7 @@ static ssize_t serial_number_show(struct device *dev,
->  	struct mhi_device *mhi_dev = to_mhi_device(dev);
->  	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
->  
-> -	return snprintf(buf, PAGE_SIZE, "Serial Number: %u\n",
-> +	return sysfs_emit(buf, "Serial Number: %u\n",
->  			mhi_cntrl->serial_number);
->  }
->  static DEVICE_ATTR_RO(serial_number);
-> @@ -100,9 +100,8 @@ static ssize_t oem_pk_hash_show(struct device *dev,
->  	int i, cnt = 0;
->  
->  	for (i = 0; i < ARRAY_SIZE(mhi_cntrl->oem_pk_hash); i++)
-> -		cnt += snprintf(buf + cnt, PAGE_SIZE - cnt,
-> -				"OEMPKHASH[%d]: 0x%x\n", i,
-> -				mhi_cntrl->oem_pk_hash[i]);
-> +		cnt += sysfs_emit_at(buf, cnt, "OEMPKHASH[%d]: 0x%x\n",
-> +				i, mhi_cntrl->oem_pk_hash[i]);
->  
->  	return cnt;
->  }
-> -- 
-> 2.35.3
-> 
-> 
+[...]

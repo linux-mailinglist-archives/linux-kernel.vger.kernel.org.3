@@ -2,173 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99E4511092
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D974511089
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357884AbiD0Fhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S1357865AbiD0Ffy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 01:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbiD0Fhx (ORCPT
+        with ESMTP id S1357860AbiD0Ffw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:37:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED1614D9E0;
-        Tue, 26 Apr 2022 22:34:43 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23R1jrb4016461;
-        Wed, 27 Apr 2022 05:31:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qvcqSETCnrSsVB/BY/2FeP2hnvOR7fL3OJ1Z/zo8n8Y=;
- b=k1nI4OI10xALs2/hzr8UhYW9h9IrOmFoU2I5Q/J/BR8YqvpScp6XwQuC2BuMHkrHTl5u
- IIh3PCTtMf4gF7x1RoVAZX4mOanbC7zafMrFoUViASCe6Vw/R2pXo6wWT7qKnGJ5kzTZ
- 2/DWGBEQC3dWgsXqnVTnGjBDFeNNNiY91XGL7MOWGV8F9f4NYxHSutfdN96QmicQQcoa
- CgjgmWI0Kq8z5KvHiYq1442XaiJ4nOL7TGswFnnz6YB+nogLJ7bJDI8VOAV9xoKC6dkq
- OFafQVpbJ1BWUzBPEWkk5DUVlR0v+VCEv3kLn0T20ZLtcWdZcdlLUVIU5Do1lC7aT5EB vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpvf2ayjd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 05:31:24 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23R5Qnkr022931;
-        Wed, 27 Apr 2022 05:31:23 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fpvf2ayhk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 05:31:23 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23R5STgZ009553;
-        Wed, 27 Apr 2022 05:31:20 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj5dqe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 05:31:20 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23R5VV7a197362
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 Apr 2022 05:31:31 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44AE0A405B;
-        Wed, 27 Apr 2022 05:31:18 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9325CA4054;
-        Wed, 27 Apr 2022 05:31:06 +0000 (GMT)
-Received: from [9.43.50.189] (unknown [9.43.50.189])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 27 Apr 2022 05:31:06 +0000 (GMT)
-Message-ID: <bab0d3f3-9f03-142c-7f53-86cb8cb178e4@linux.ibm.com>
-Date:   Wed, 27 Apr 2022 11:01:05 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v10 07/14] mm: multi-gen LRU: exploit locality in rmap
-Content-Language: en-US
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Wed, 27 Apr 2022 01:35:52 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4065C135B13
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:32:42 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1651037560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=w9/gipiV+lOauk65dWZpxFoxcEnAO0aDF5hQXPlzKGY=;
+        b=FJdl5eUzyYjAdPiN3OdaHdrxNOIs1LOM++uJYMRhh/+wAFvbnRExLSL5EW9Gz7n+59/nQl
+        nx6LbAIUh6mkG+QTl2bSe2LL5Rx9zutEljcXj5cJ8VWmkd2WMRrkWtzeKzEhB82UrjB/Ny
+        1z53XQ09Vd3RFCqdQiiX1/4dau0EOJ0=
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     linux-mm@kvack.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
- <20220407031525.2368067-8-yuzhao@google.com> <87zgk7xi13.fsf@linux.ibm.com>
- <CAOUHufbRLUg8274At8ZkUMUz2ghuGs52AvJsMkjQR=6-pusEhw@mail.gmail.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <CAOUHufbRLUg8274At8ZkUMUz2ghuGs52AvJsMkjQR=6-pusEhw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: wSnKa9i6LJ4CkALAKM198ug-RE1mkUcQ
-X-Proofpoint-ORIG-GUID: GLXECfseS7nZckMSqJ77FNySoyWBaJ6a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-27_01,2022-04-26_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0 phishscore=0
- mlxscore=0 priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204270036
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] mm/hwpoison: use pr_err() instead of dump_page() in get_any_page()
+Date:   Wed, 27 Apr 2022 14:32:20 +0900
+Message-Id: <20220427053220.719866-1-naoya.horiguchi@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 10:08 AM, Yu Zhao wrote:
-> On Tue, Apr 26, 2022 at 10:33 PM Aneesh Kumar K.V
-> <aneesh.kumar@linux.ibm.com> wrote:
->>
->> Yu Zhao <yuzhao@google.com> writes:
->>
->> ....
->>
->>   diff --git a/mm/rmap.c b/mm/rmap.c
->>> index fedb82371efe..7cb7ef29088a 100644
->>> --- a/mm/rmap.c
->>> +++ b/mm/rmap.c
->>> @@ -73,6 +73,7 @@
->>>   #include <linux/page_idle.h>
->>>   #include <linux/memremap.h>
->>>   #include <linux/userfaultfd_k.h>
->>> +#include <linux/mm_inline.h>
->>>
->>>   #include <asm/tlbflush.h>
->>>
->>> @@ -821,6 +822,12 @@ static bool folio_referenced_one(struct folio *folio,
->>>                }
->>>
->>>                if (pvmw.pte) {
->>> +                     if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
->>> +                         !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
->>> +                             lru_gen_look_around(&pvmw);
->>> +                             referenced++;
->>> +                     }
->>
->> Is it required to update referenced here? we do that below after
->> clearing the young bit. Or is the goal to identify whether we found any
->> young pte around?
-> 
-> referenced++ is needed because lru_gen_look_around() also clears the
-> young bit in pvmw.pte. And ptep_clear_flush_young_notify() will return
-> false unless mmu notifier returns true.
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-should we then use a mmu notifier variant of clear_young in 
-lru_gen_look_around() ?
+The following VM_BUG_ON_FOLIO() is triggered when memory error event
+happens on the (thp/folio) pages which are about to be freed:
 
--aneesh
+  [ 1160.232771] page:00000000b36a8a0f refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
+  [ 1160.236916] page:00000000b36a8a0f refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
+  [ 1160.240684] flags: 0x57ffffc0800000(hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
+  [ 1160.243458] raw: 0057ffffc0800000 dead000000000100 dead000000000122 0000000000000000
+  [ 1160.246268] raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+  [ 1160.249197] page dumped because: VM_BUG_ON_FOLIO(!folio_test_large(folio))
+  [ 1160.251815] ------------[ cut here ]------------
+  [ 1160.253438] kernel BUG at include/linux/mm.h:788!
+  [ 1160.256162] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+  [ 1160.258172] CPU: 2 PID: 115368 Comm: mceinj.sh Tainted: G            E     5.18.0-rc1-v5.18-rc1-220404-2353-005-g83111+ #3
+  [ 1160.262049] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
+  [ 1160.265103] RIP: 0010:dump_page.cold+0x27e/0x2bd
+  [ 1160.266757] Code: fe ff ff 48 c7 c6 81 f1 5a 98 e9 4c fe ff ff 48 c7 c6 a1 95 59 98 e9 40 fe ff ff 48 c7 c6 50 bf 5a 98 48 89 ef e8 9d 04 6d ff <0f> 0b 41 f7 c4 ff 0f 00 00 0f 85 9f fd ff ff 49 8b 04 24 a9 00 00
+  [ 1160.273180] RSP: 0018:ffffaa2c4d59fd18 EFLAGS: 00010292
+  [ 1160.274969] RAX: 000000000000003e RBX: 0000000000000001 RCX: 0000000000000000
+  [ 1160.277263] RDX: 0000000000000001 RSI: ffffffff985995a1 RDI: 00000000ffffffff
+  [ 1160.279571] RBP: ffffdc9c45a80000 R08: 0000000000000000 R09: 00000000ffffdfff
+  [ 1160.281794] R10: ffffaa2c4d59fb08 R11: ffffffff98940d08 R12: ffffdc9c45a80000
+  [ 1160.283920] R13: ffffffff985b6f94 R14: 0000000000000000 R15: ffffdc9c45a80000
+  [ 1160.286641] FS:  00007eff54ce1740(0000) GS:ffff99c67bd00000(0000) knlGS:0000000000000000
+  [ 1160.289498] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  [ 1160.291106] CR2: 00005628381a5f68 CR3: 0000000104712003 CR4: 0000000000170ee0
+  [ 1160.293031] Call Trace:
+  [ 1160.293724]  <TASK>
+  [ 1160.294334]  get_hwpoison_page+0x47d/0x570
+  [ 1160.295474]  memory_failure+0x106/0xaa0
+  [ 1160.296474]  ? security_capable+0x36/0x50
+  [ 1160.297524]  hard_offline_page_store+0x43/0x80
+  [ 1160.298684]  kernfs_fop_write_iter+0x11c/0x1b0
+  [ 1160.299829]  new_sync_write+0xf9/0x160
+  [ 1160.300810]  vfs_write+0x209/0x290
+  [ 1160.301835]  ksys_write+0x4f/0xc0
+  [ 1160.302718]  do_syscall_64+0x3b/0x90
+  [ 1160.303664]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+  [ 1160.304981] RIP: 0033:0x7eff54b018b7
+
+As shown in the RIP address, this VM_BUG_ON in folio_entire_mapcount() is
+called from dump_page("hwpoison: unhandlable page") in get_any_page().
+The below explains the mechanism of the race:
+
+  CPU 0                                       CPU 1
+
+    memory_failure
+      get_hwpoison_page
+        get_any_page
+          dump_page
+            compound = PageCompound
+                                                free_pages_prepare
+                                                  page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP
+            folio_entire_mapcount
+              VM_BUG_ON_FOLIO(!folio_test_large(folio))
+
+So replace dump_page() with safer one, pr_err().
+
+Fixes: 74e8ee4708a8 ("mm: Turn head_compound_mapcount() into folio_entire_mapcount()")
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+---
+ChangeLog v1 -> v2:
+- v1: https://lore.kernel.org/linux-mm/20220414235950.840409-1-naoya.horiguchi@linux.dev/T/#u
+- update caller side instead of changing dump_page().
+---
+ mm/memory-failure.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 35e11d6bea4a..0e1453514a2b 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1270,7 +1270,7 @@ static int get_any_page(struct page *p, unsigned long flags)
+ 	}
+ out:
+ 	if (ret == -EIO)
+-		dump_page(p, "hwpoison: unhandlable page");
++		pr_err("Memory failure: %#lx: unhandlable page.\n", page_to_pfn(p));
+ 
+ 	return ret;
+ }
+-- 
+2.25.1
+

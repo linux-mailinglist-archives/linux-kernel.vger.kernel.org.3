@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B58510DDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F09510DDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356668AbiD0B0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S1356659AbiD0B0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242681AbiD0B0R (ORCPT
+        with ESMTP id S1353781AbiD0B0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:26:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A9686E55E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651022587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpEof+0I0YCbwzONPoRmg0L/6pzi31MyKL13TiqlQ/U=;
-        b=VdUNP2pvho5kJI6Kr93GIz2y+lKuE93aZk2Au141uDHJg9eprM0yTmK5yLkJiCHw8AZjXB
-        0AaloJPh94iJM/Vnu9aBZ7kHBuGryhs251yh3uuLcc9vDN8dGLRiuyZB3u2Afsvd907OIU
-        4c+ivHkt93oaM6q9z+cjHDccjH/daC8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-318-8Qyok9UXPvellTR8YIOXJA-1; Tue, 26 Apr 2022 21:23:01 -0400
-X-MC-Unique: 8Qyok9UXPvellTR8YIOXJA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40CFA3802AC4;
-        Wed, 27 Apr 2022 01:23:01 +0000 (UTC)
-Received: from rh (vpn2-54-103.bne.redhat.com [10.64.54.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C30BC28100;
-        Wed, 27 Apr 2022 01:23:00 +0000 (UTC)
-Received: from localhost ([::1] helo=rh)
-        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <dchinner@redhat.com>)
-        id 1njWOP-006YJ1-Jy; Wed, 27 Apr 2022 11:22:57 +1000
-Date:   Wed, 27 Apr 2022 11:22:55 +1000
-From:   Dave Chinner <dchinner@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH v2 0/7] mm: introduce shrinker debugfs interface
-Message-ID: <Ymia75Bh/sn/FQdV@rh>
-References: <20220422202644.799732-1-roman.gushchin@linux.dev>
- <YmeK6/eZYaMo2Ltm@rh>
- <Ymggvr4Boc5JIf9j@carbon>
+        Tue, 26 Apr 2022 21:26:53 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F9B18A6
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:23:44 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso2567084wma.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WADNevU3iLfLj8HeWS3JmYTBG3yWNRcchiXs+/9xM08=;
+        b=brb5i0oYVN7sckD6LzumI32hk5pONpJFe6n/S9d3lJc9ybOaK9j4xNUNyjzMAXA+s3
+         J7eaf1d8l7n7T67QylhnSFCkV/E9pDR84Y+aHyqzYNNmJIVhbCyKyFfziP+gqJOXH6lm
+         us3FixNsQ2MH1j+PsDtW7AggtMOcvpKWKF3ofAvdYyN1pHKkj3RIIoiRUvffpTK4W0lX
+         9DmR4GlxGwiwFLcdHJvkpiW6EmNgi09GVGau1iGzl1xXfQGKgyw17M/vTcUwwBrk0Scr
+         jnHygpLfymE2coV+jRSGAViHHGQ2wRaZ6VAWD6VKWkovBAywqCCCzpxlydFlw8eHcZNh
+         lIiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WADNevU3iLfLj8HeWS3JmYTBG3yWNRcchiXs+/9xM08=;
+        b=l5YvENX+qbedx4Bgte0+s+tme5m4W5uOK6o8VeFqkJPLEA2tlQeW+fkPUNjEj9L4Oq
+         gnlw3j9ZB7RATaZHkCk3naJWPDdnsiyKT/5BAhqiDGTboFD0mjlaEezXRDYW99zkRCH5
+         3TXa2bXAdSHub4AD2i0ph271RlzJ0oi2nJ0mJeOPzNTCxOq9yxi/U/umNO8PXPom6Wek
+         QZKjszCAjA/fUKYZKQDtQVprTKowL+9mUU2HY6dS4Ct/ppDXHiSWv9iqDRBrCsVy9h0d
+         gLHOfdLzFclz2MVOLkKjr70qJk5FWli8fpp2jfYm5tFXySJuWIkGHDzW32LAnGRsQJvk
+         LTgg==
+X-Gm-Message-State: AOAM532WzuZJ1WdTqoAbJ63MiqoG+KHObe74Y+pGs7/WiGPWVIrjniAy
+        nCna7QMswZxtTMF224lMqGx9KLgfJy5M/E1jmuyufbOefSokaA==
+X-Google-Smtp-Source: ABdhPJxWYTasjBuqehyjR7KsqFbTWfzDzSv7onjnkNmWrPBH1QRD6xTuiaKvn7yVJNWspNQiJ/T3Mi7mF5YPQnu2Lpk=
+X-Received: by 2002:a05:600c:a03:b0:38c:f953:ae13 with SMTP id
+ z3-20020a05600c0a0300b0038cf953ae13mr23367925wmp.99.1651022622631; Tue, 26
+ Apr 2022 18:23:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ymggvr4Boc5JIf9j@carbon>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425132410.2708304-1-gengcixi@gmail.com> <YmgFXLAGDlQe4LZ4@google.com>
+In-Reply-To: <YmgFXLAGDlQe4LZ4@google.com>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Wed, 27 Apr 2022 09:23:06 +0800
+Message-ID: <CAF12kFtjMEohkv27cWQYqTaFdASt05P1B02pAHEYugMYUJArJQ@mail.gmail.com>
+Subject: Re: [PATCH] mfd: sprd: Add SC2730 PMIC to SPI device ID table
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 09:41:34AM -0700, Roman Gushchin wrote:
-> Can you, please, summarize your position, because it's a bit unclear.
-> You made a lot of good points about some details (e.g. shrinkers naming,
-> and I totally agree there; machines with hundreds of nodes etc), then
-> you said the active scanning is useless and then said the whole thing
-> is useless and we're fine with what we have regarding shrinkers debugging.
-
-Better introspection the first thing we need. Work on improving
-that. I've been making suggestions to help improve introspection
-infrastructure.
-
-Before anything else, we need to improve introspection so we can
-gain better insight into the problems we have. Once we understand
-the problems better and have evidence to back up where the problems
-lie and we have a plan to solve them, then we can talk about whether
-we need other user accessible shrinker APIs.
-
-For the moment, exposing shrinker control interfaces to userspace
-could potentially be very bad because it exposes internal
-architectural and implementation details to a user API.  Just
-because it is in /sys/kernel/debug it doesn't mean applications
-won't start to use it and build dependencies on it.
-
-That doesn't mean I'm opposed to exposing a shrinker control
-mechanism to debugfs - I'm still on the fence on that one. However,
-I definitely think that an API that directly exposes the internal
-implementation to userspace is the wrong way to go about this.
-
-Fine grained shrinker control is not necessary to improve shrinker
-introspection and OOM debugging capability, so if you want/need
-control interfaces then I think you should separate those out into a
-separate line of development where it doesn't derail the discussion
-on how to improve shrinker/OOM introspection.
-
--Dave.
--- 
-Dave Chinner
-dchinner@redhat.com
-
+Lee Jones <lee.jones@linaro.org> =E4=BA=8E2022=E5=B9=B44=E6=9C=8826=E6=97=
+=A5=E5=91=A8=E4=BA=8C 22:44=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, 25 Apr 2022, Cixi Geng wrote:
+>
+> > From: Cixi Geng <cixi.geng1@unisoc.com>
+> >
+> > Add the SC2730 PMIC support for module autoloading
+> > through SPI modalises.
+> >
+> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> > ---
+> >  drivers/mfd/sprd-sc27xx-spi.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-sp=
+i.c
+> > index 55d2c31bdfb2..cf4f89114ae4 100644
+> > --- a/drivers/mfd/sprd-sc27xx-spi.c
+> > +++ b/drivers/mfd/sprd-sc27xx-spi.c
+> > @@ -248,6 +248,7 @@ MODULE_DEVICE_TABLE(of, sprd_pmic_match);
+> >
+> >  static const struct spi_device_id sprd_pmic_spi_ids[] =3D {
+> >       { .name =3D "sc2731", .driver_data =3D (unsigned long)&sc2731_dat=
+a },
+> > +     { .name =3D "sc2730", .driver_data =3D (unsigned long)&sc2730_dat=
+a },
+>
+> Nicer if these were ordered with the smallest number at the top.
+I followed the order of struct of_device_id sprd_pmic_match[1],Do I need
+adjust it as well?
+[1].https://elixir.bootlin.com/linux/v5.18-rc4/source/drivers/mfd/sprd-sc27=
+xx-spi.c#L242
+>
+> >       {},
+> >  };
+> >  MODULE_DEVICE_TABLE(spi, sprd_pmic_spi_ids);
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Principal Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog

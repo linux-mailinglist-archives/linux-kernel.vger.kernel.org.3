@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E51E5123EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7437C5123F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236868AbiD0UdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S236505AbiD0Udp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236905AbiD0Ucv (ORCPT
+        with ESMTP id S235608AbiD0Udl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:32:51 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B99B3C64;
-        Wed, 27 Apr 2022 13:29:37 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso2625438pjj.2;
-        Wed, 27 Apr 2022 13:29:37 -0700 (PDT)
+        Wed, 27 Apr 2022 16:33:41 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122E8BF69
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:30:29 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id p6so2552283plf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KjZdJc+2UDuaCV9hUSLVuNI4CiOYxCjI+J/98h/W9G4=;
-        b=Tac3djEA5bXqIgvvbxyz8RUsVLAM/lkHxNcYv/gitY3QhUpuLEKTucRMeN/6RsXCGY
-         o+ND4wPwR7gIoVajI8XzV34aqcMZYBllRJa5CVXDwBN9THDIzgLL7016DHdilf1gzjMz
-         JBJSBtSylrg2tT/vIHuAsyDgpuPlKRq43zYsflK5fOqXp1BiJE+1A1+Mu1h/oSLoWtio
-         2hWay8lfn1y8G5t3h/vJ5ZSoxP6MHkL/FCYcr4gUwQao3/hJOqIu6jF52DW8/vVqxW3u
-         bDaHlEKJ801uxbQhxfssVyszMyKhnTbbk9wfJf/4+AJLMyhhD4fHNXagJ1XlR7rrf97D
-         RTNw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0An4PsvfV0601Q48LoUPqvVr8Bqsk0vm3xIqSwfj0Xo=;
+        b=C1jLISe/eHjTAY7Yp96I7k+1AB2QekHwbYrjOoF6fNLDKBX394wxFdxk7wumcpQIo0
+         zDRxwZnw9o9TOxnsypU1mn4zAd1Bni+SjNoxpVt2QxvYm56wioHwufVYBrnlt3aGc6tN
+         mdVln6h2XLZ3Fjf4UMvmUnzxgWVXhzRHDpYu4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KjZdJc+2UDuaCV9hUSLVuNI4CiOYxCjI+J/98h/W9G4=;
-        b=cjlEFzImAA2EokWTsrZrAem+a7CHdifIXfkR/D6xu4KlK/LJBkaQU11ky4cOWN6vi3
-         zrG72BeD/bRSjqThc2Jkc1IogATS9b03PnDwhdXd2S0IQQkdtVVhRgzPkoboYx7W/fJr
-         81VKj1M2GnwVS+Zly8pppoEsZiJ8b17830m/UjsPcglcesn9mgCiz0+J9++loZEfomc7
-         4nsrtH1XYTb2RhThQ6JU/iS/Ql21WQNPMPBu7+NcdhhJ3cYp4PmUB9CZnH0FFBeQdywW
-         QyP26Ptjeq8moDg5yYv4W4EgqDy6/07nPcSKUsoPEX50LW4nwAslfqEmbftU8AD1lGfi
-         TQ6w==
-X-Gm-Message-State: AOAM530Jb3Nh8z0EDMuubt1FyNxHKGRE/btE52wkP0Ynp1Egw7LXpzSr
-        4Z9qVKtVs6/BiMkNtJ04H0w=
-X-Google-Smtp-Source: ABdhPJznOXxFH5HHWoubJvtIMRhCBLHqEyqk7PM/z3PtAH8Xc0e4aUUlIjaIlnJushp4AkaYzDUCIA==
-X-Received: by 2002:a17:903:2285:b0:15b:cd9e:f018 with SMTP id b5-20020a170903228500b0015bcd9ef018mr29018515plh.106.1651091376925;
-        Wed, 27 Apr 2022 13:29:36 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:546a:2875:2a75:1b94])
-        by smtp.gmail.com with ESMTPSA id p27-20020a056a000a1b00b004f3f63e3cf2sm22917044pfh.58.2022.04.27.13.29.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0An4PsvfV0601Q48LoUPqvVr8Bqsk0vm3xIqSwfj0Xo=;
+        b=OzDd9ogha4zwsjiMV7uo9P2aoseBqixcQWTSSieM/f/NQVnQcp1VckMRyv/biK8FPj
+         74sxDZ5HfZ1JZaD80n6QXQkHgj3N4PMdZtpXh/A5r4HfQC3adLzSTkuZx1t1pwuBgshU
+         pu/Rq/iCL1HQIebjOZsJQ/tSAvWZlICKYECOHPKpbNdFlK+FWpLS+eJ67HkXLGZEsI3r
+         te/2YSy3R1+0Si3rkRTRtFpHnyI4uMCr8V1ak+7T7Q9dHym09dQozWW3KSvRmlZbeNOi
+         dXz2R5DZANTTtamhSsUDDSEzIXnZnji2USJ/jrSwRejivnCOzzULvDSrxwk+ZDF9ZhQa
+         h5zQ==
+X-Gm-Message-State: AOAM533ye9XtblExhcBE7HOjN2aw98U0uWsDiCV+/3CXkPtfgjOG1htQ
+        7fP/HQ/4w0E6ogY6Jz7E3E1Z8g==
+X-Google-Smtp-Source: ABdhPJzZNWd2rOVEB4rsikOmKbzoJwM/16jcMtIJTw1nlAHLR+EFFNGpmmgtG99tnrf4SY15QyBCZQ==
+X-Received: by 2002:a17:902:edc5:b0:158:4065:a5ce with SMTP id q5-20020a170902edc500b001584065a5cemr30951557plk.55.1651091428570;
+        Wed, 27 Apr 2022 13:30:28 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:482e:60bc:84d1:bf5c])
+        by smtp.gmail.com with ESMTPSA id 7-20020a17090a000700b001da3920d985sm3858552pja.12.2022.04.27.13.30.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 13:29:36 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 27 Apr 2022 13:29:34 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
-Message-ID: <Ymmnrkn0mSWcuvmH@google.com>
-References: <20220427160016.144237-1-hannes@cmpxchg.org>
- <20220427160016.144237-5-hannes@cmpxchg.org>
+        Wed, 27 Apr 2022 13:30:28 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Subject: [PATCH 0/2] Input: cros-ec-keyb: Better matrixless support
+Date:   Wed, 27 Apr 2022 13:30:24 -0700
+Message-Id: <20220427203026.828183-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427160016.144237-5-hannes@cmpxchg.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johannes,
+This is a followup to my previous patch[1] that skips keyboard registration
+when the matrix properties aren't present. This adds a compatible string
+for this scenario so we can ease existing DTBs over to the new design.
 
-On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
-> Currently it requires poking at debugfs to figure out the size and
-> population of the zswap cache on a host. There are no counters for
-> reads and writes against the cache. As a result, it's difficult to
-> understand zswap behavior on production systems.
-> 
-> Print zswap memory consumption and how many pages are zswapped out in
-> /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
->  fs/proc/meminfo.c             |  7 +++++++
->  include/linux/swap.h          |  5 +++++
->  include/linux/vm_event_item.h |  4 ++++
->  mm/vmstat.c                   |  4 ++++
->  mm/zswap.c                    | 13 ++++++-------
->  5 files changed, 26 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-> index 6fa761c9cc78..6e89f0e2fd20 100644
-> --- a/fs/proc/meminfo.c
-> +++ b/fs/proc/meminfo.c
-> @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
->  
->  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
->  	show_val_kb(m, "SwapFree:       ", i.freeswap);
-> +#ifdef CONFIG_ZSWAP
-> +	seq_printf(m,  "Zswap:          %8lu kB\n",
-> +		   (unsigned long)(zswap_pool_total_size >> 10));
-> +	seq_printf(m,  "Zswapped:       %8lu kB\n",
-> +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
-> +		   (PAGE_SHIFT - 10));
-> +#endif
+Stephen Boyd (2):
+  dt-bindings: google,cros-ec-keyb: Introduce switches only compatible
+  Input: cros-ec-keyb - skip keyboard registration for switches
+    compatible
 
-I agree it would be very handy to have the memory consumption in meminfo
+ .../bindings/input/google,cros-ec-keyb.yaml          | 12 +++++++++---
+ drivers/input/keyboard/cros_ec_keyb.c                |  8 ++++++++
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: <devicetree@vger.kernel.org>
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+Cc: "Joseph S. Barrera III" <joebar@chromium.org>
 
-If we really go this Zswap only metric instead of general term
-"Compressed", I'd like to post maybe "Zram:" with same reason
-in this patchset. Do you think that's better idea instead of
-introducing general term like "Compressed:" or something else?
+[1] https://lore.kernel.org/all/20220425210726.3813477-1-swboyd@chromium.org/
+
+base-commit: 4352e23a7ff2f8a4ff229dd1283ed2f2b708ec51
+-- 
+https://chromeos.dev
+

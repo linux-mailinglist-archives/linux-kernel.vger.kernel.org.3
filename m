@@ -2,46 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9CD511A06
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA636511984
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiD0Mvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
+        id S234897AbiD0Muy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234714AbiD0Mvk (ORCPT
+        with ESMTP id S234874AbiD0Mux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:51:40 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Apr 2022 05:48:28 PDT
-Received: from bin-mail-out-05.binero.net (bin-mail-out-05.binero.net [195.74.38.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4C62CC8A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:48:28 -0700 (PDT)
-X-Halon-ID: 28f2a90e-c628-11ec-9da0-005056917f90
-Authorized-sender: andreas@gaisler.com
-Received: from [192.168.0.25] (h-98-128-223-123.na.cust.bahnhof.se [98.128.223.123])
-        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id 28f2a90e-c628-11ec-9da0-005056917f90;
-        Wed, 27 Apr 2022 14:47:14 +0200 (CEST)
-Message-ID: <2f5295c1-d787-84a5-1b3e-813f96dd4ae2@gaisler.com>
-Date:   Wed, 27 Apr 2022 14:47:12 +0200
+        Wed, 27 Apr 2022 08:50:53 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD541C123
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:47:42 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id y21so1090850wmi.2
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4ZU7ssA0uBUIH6XIuoYvcPvJ99ZnRQPUGmPQtpNi76c=;
+        b=IW2c9joHq/hwifhAacbBVc1qzogNoXNAxtBDcYWCPJ6fPOM9y6yKnxL7LpTymyi1Mw
+         hjMcixIyPI70Pi2PTqQlosHfCg1E8SnZ5l0ArWRvMWodQsPK5LhTsudvfWJN9kI4hau8
+         q0lDTsSvPRBac4hfb3TQ0orhvL6MUxOyjUvtvP5Yq/D4+mHZPSQn08XLD3G61YIjeSEa
+         M4MO+l2LtH2/6N7jEwuGc9ZS+61BVh/gEjsKIastxGEQjzGbgP8+YNOkNsjzSS3tgsLX
+         VM7ssK8zNESBLZCy1G0Aser5Eb5kq6GNeP6Wm6p+hwwD3361fyDBWfdauodf69g0q6sq
+         eP3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4ZU7ssA0uBUIH6XIuoYvcPvJ99ZnRQPUGmPQtpNi76c=;
+        b=uXKqet+W9I12zXcLf3GJQGSyfyipBMnQph1KQJWU0vev/zEoRKwL0PwYj/YVDnFBCW
+         6PHbC5J34wedtvX+6d9NoeTuE+DUTRgMA6EHKz/OLg31htt1L4qNTDBpnOMwUM8qSyep
+         tYU349/VqiPtQklY5uMcodgMrIGcXLCv06/U6XpsRt92GZOSWNnhOyUm8Dzp/WA3cvwH
+         jZZ9d2eBF5Z8J11OInniYbObn4ypz2MXTzKOrGWkwZPqc3J4dZmq9H1yXpmgBGhTV0ON
+         mbMW0T+i1xUfOkYNnh70bvlZuP3IfhPKH+XuJlU+cqX01XLeUYpQ28hrpLlg6HikrcbU
+         ryIQ==
+X-Gm-Message-State: AOAM5321CTz887oNnYaq65ZAwr/nNILJ9SMVz3VRRoQ74mbOjNx/2Yhc
+        A2mLCh3hRRKHepl1D+IwjTmzgQ==
+X-Google-Smtp-Source: ABdhPJz5NK+Ha567qr3bpxGvIn7U9ze3IwWfwIo5TY6HK+pg7ceZbULrFiJZ/aDUS4aMuFui3oFWlQ==
+X-Received: by 2002:a05:600c:1584:b0:38e:c80e:b8b5 with SMTP id r4-20020a05600c158400b0038ec80eb8b5mr34457739wmf.99.1651063660964;
+        Wed, 27 Apr 2022 05:47:40 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:493f:cd0f:324a:323c])
+        by smtp.gmail.com with ESMTPSA id w12-20020adf8bcc000000b002060e3da33fsm13564171wra.66.2022.04.27.05.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 05:47:40 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 14:47:34 +0200
+From:   Marco Elver <elver@google.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 03/46] kasan: common: adapt to the new prototype of
+ __stack_depot_save()
+Message-ID: <Ymk7ZkkIq6rF+BmI@elver.google.com>
+References: <20220426164315.625149-1-glider@google.com>
+ <20220426164315.625149-4-glider@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net] drivers: net: can: Fix deadlock in grcan_close()
-Content-Language: en-US
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220425042400.66517-1-duoming@zju.edu.cn>
- <caaa6059-6172-e562-e48e-5987884052b9@hartkopp.net>
-From:   Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <caaa6059-6172-e562-e48e-5987884052b9@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426164315.625149-4-glider@google.com>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,64 +101,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-26 21:12, Oliver Hartkopp wrote:
-> On 25.04.22 06:24, Duoming Zhou wrote:
->> There are deadlocks caused by del_timer_sync(&priv->hang_timer)
->> and del_timer_sync(&priv->rr_timer) in grcan_close(), one of
->> the deadlocks are shown below:
->>
->>     (Thread 1)              |      (Thread 2)
->>                             | grcan_reset_timer()
->> grcan_close()              |  mod_timer()
->>   spin_lock_irqsave() //(1) |  (wait a time)
->>   ...                       | grcan_initiate_running_reset()
->>   del_timer_sync()          |  spin_lock_irqsave() //(2)
->>   (wait timer to stop)      |  ...
->>
->> We hold priv->lock in position (1) of thread 1 and use
->> del_timer_sync() to wait timer to stop, but timer handler
->> also need priv->lock in position (2) of thread 2.
->> As a result, grcan_close() will block forever.
->>
->> This patch extracts del_timer_sync() from the protection of
->> spin_lock_irqsave(), which could let timer handler to obtain
->> the needed lock.
->>
->> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
->> ---
->>   drivers/net/can/grcan.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
->> index d0c5a7a60da..1189057b5d6 100644
->> --- a/drivers/net/can/grcan.c
->> +++ b/drivers/net/can/grcan.c
->> @@ -1102,8 +1102,10 @@ static int grcan_close(struct net_device *dev)
->>       priv->closing = true;
->>       if (priv->need_txbug_workaround) {
->> +        spin_unlock_irqrestore(&priv->lock, flags);
->>           del_timer_sync(&priv->hang_timer);
->>           del_timer_sync(&priv->rr_timer);
->> +        spin_lock_irqsave(&priv->lock, flags);
+On Tue, Apr 26, 2022 at 06:42PM +0200, Alexander Potapenko wrote:
+> Pass extra_bits=0, as KASAN does not intend to store additional
+> information in the stack handle. No functional change.
 > 
-> It looks weird to unlock and re-lock the operations like this. This 
-> breaks the intended locking for the closing process.
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+
+I think this patch needs to be folded into the previous one, otherwise
+bisection will be broken.
+
+> ---
+> Link: https://linux-review.googlesource.com/id/I932d8f4f11a41b7483e0d57078744cc94697607a
+> ---
+>  mm/kasan/common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Isn't there any possibility to e.g. move that entire if-section before 
-> the lock?
-
-All functions wishing to start the timers both check priv->closing and
-then, if false, start the timer within the priv->lock spinlock. Given
-that, it should be ok that del_timer_sync is not done within the
-spinlock as therefore no one can restart any timers after priv->closing
-has been set to true.
-
-It looks a bit weird, but setting priv->closing to true needs to happen
-within the priv->lock spinlock protection and needs to happen before
-del_timer_sync to avoid a race between grcan_close and someone starting
-the timer.
-
-Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-
--- 
-Andreas Larsson
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index d9079ec11f313..5d244746ac4fe 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -36,7 +36,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+>  	unsigned int nr_entries;
+>  
+>  	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> -	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+> +	return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
+>  }
+>  
+>  void kasan_set_track(struct kasan_track *track, gfp_t flags)
+> -- 
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+> 

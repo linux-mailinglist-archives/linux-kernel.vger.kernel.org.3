@@ -2,41 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40E45121BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E47F5121BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiD0SzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S231549AbiD0Szd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbiD0Sxr (ORCPT
+        with ESMTP id S232125AbiD0Sx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:53:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DA03D7075;
-        Wed, 27 Apr 2022 11:40:10 -0700 (PDT)
+        Wed, 27 Apr 2022 14:53:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035303DAD08
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:40:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28985B828C7;
-        Wed, 27 Apr 2022 18:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52662C385A7;
-        Wed, 27 Apr 2022 18:40:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F71F61EC6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF93AC385A9;
+        Wed, 27 Apr 2022 18:40:17 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Will Deacon <will@kernel.org>,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        "moderated list:ARM64 PORT AARCH64 ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     zhengkui_guo@outlook.com
-Subject: Re: [PATCH] kselftest/arm64: fix array_size.cocci warning
-Date:   Wed, 27 Apr 2022 19:40:03 +0100
-Message-Id: <165108479997.3292602.14830911961076617578.b4-ty@arm.com>
+To:     Will Deacon <will@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     James Morse <james.morse@arm.com>
+Subject: Re: [PATCH v2] arm64: add the printing of tpidr_elx in __show_regs()
+Date:   Wed, 27 Apr 2022 19:40:15 +0100
+Message-Id: <165108481148.3292741.14737552201298089977.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419032501.22790-1-guozhengkui@vivo.com>
-References: <20220419032501.22790-1-guozhengkui@vivo.com>
+In-Reply-To: <20220316062408.1113-1-thunder.leizhen@huawei.com>
+References: <20220316062408.1113-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -49,23 +45,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Apr 2022 11:24:51 +0800, Guo Zhengkui wrote:
-> Fix the following coccicheck warnings:
-> tools/testing/selftests/arm64/mte/check_child_memory.c:110:25-26:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_child_memory.c:88:24-25:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_child_memory.c:90:20-21:
-> WARNING: Use ARRAY_SIZE
-> tools/testing/selftests/arm64/mte/check_child_memory.c:147:24-25:
-> WARNING: Use ARRAY_SIZE
+On Wed, 16 Mar 2022 14:24:08 +0800, Zhen Lei wrote:
+> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
+> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
+> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
+> pcpu access. However, when performing reverse execution based on the
+> registers and the memory contents in kdump, this information is sometimes
+> required if there is a pcpu access.
 > 
 > [...]
 
-Applied to arm64 (for-next/kselftest), thanks!
+Applied to arm64 (for-next/misc), thanks!
 
-[1/1] kselftest/arm64: fix array_size.cocci warning
-      https://git.kernel.org/arm64/c/55a5c18e5dab
+[1/1] arm64: add the printing of tpidr_elx in __show_regs()
+      https://git.kernel.org/arm64/c/9ec393c812f2
 
 -- 
 Catalin

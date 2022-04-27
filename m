@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402B1511646
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A606D511588
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiD0LHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S233926AbiD0LJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiD0LGp (ORCPT
+        with ESMTP id S233441AbiD0LJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:06:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CDAE36CE0A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:58:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB0E5ED1;
-        Wed, 27 Apr 2022 03:58:47 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.77.199])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 208FF3F5A1;
-        Wed, 27 Apr 2022 03:58:46 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 11:58:44 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
-        lukasz.luba@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
-        di.shen@unisoc.com
-Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
- rt fits capacity
-Message-ID: <20220427105844.otru4yohja4s23ye@wubuntu>
-References: <20220407051932.4071-1-xuewen.yan@unisoc.com>
- <20220420135127.o7ttm5tddwvwrp2a@airbuntu>
- <CAB8ipk-tWjkeAbV=BDhNy04Yq6rdLf80x_7twuLV=HqT4nc1+w@mail.gmail.com>
- <20220421161509.asz25zmh25eurgrk@airbuntu>
- <CAB8ipk_rZnwDrMaY-zJxR3pByYWD1XOP2waCgU9DZzQNpCN2zA@mail.gmail.com>
- <20220425161209.ydugtrs3b7gyy3kk@airbuntu>
- <CAB8ipk9hZXDcTV3hakRV+dE5dwKtg-Ka93WZ60ds0=4ErN1-0w@mail.gmail.com>
- <20220426092142.lppfj5eqgt3d24nb@airbuntu>
- <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
+        Wed, 27 Apr 2022 07:09:22 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EAE403FD;
+        Wed, 27 Apr 2022 04:06:04 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l16-20020a05600c1d1000b00394011013e8so752707wms.1;
+        Wed, 27 Apr 2022 04:06:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9RwDixBgSb/XMoXlUTpq9dYnl7i1MQjOiSQxUvjUqGg=;
+        b=XyRV+m0Lv/FmF/IbshnFURENCtvD11keeqsHX5JYBzjWWFx0zevZKvWFm797AF8t3o
+         NF1z9b2M8F/TK1pEncITIdhv+5gEAMkCLFLTFVj73kw4gazV0hfpJ6y8GI6hAiV4gSeS
+         zbWC+Nu9HGsJ90tDg1HBn/hQPiTvm3nqaREP3SD+Xztpb395syDtvark+8pQ6IdmTfoh
+         zeejTNNlQc0NrMqFG812gmBG0JShR5RuKCikbRmU9hHgUZAYUnJ5eUovgUWGcnivipE6
+         3lU9a5plvd8c2d2io1B5+cwaW2Y8iLSK5mfnCmOZ8kJ4WR1w4ShFh2ekyc4hGEAw2X68
+         y6NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9RwDixBgSb/XMoXlUTpq9dYnl7i1MQjOiSQxUvjUqGg=;
+        b=BRyqtma2BcRgjmH42sXaipbU++flkhiJOxBD4fjBNbKcBA96tMFfonjMH05cT/yrbe
+         aXq5XqSevgLreBdxaoI4fmOFBn1sWULeFfn3JC46cXeuuIBOBOH0rAFKnf4Ns/2+Ib0S
+         EZlLjsT77/QcTdYWUQVFRw4qrgzYigpou+xKCBYJ9pGQsARw2yL7oW88/p6qBYt8FNP8
+         92BGR0mhMPza7wiJrz5biyw5gbgL27nV9q1QbsH+2qkkdQWypV08I2XRh4U5nQo5w6BQ
+         tgm0tc6Gpt6USRORVD/jJOTvJnbqhdGf9mvlp0ERowycCqe8EmeLwtjnDpwpxgO02wcY
+         HP8g==
+X-Gm-Message-State: AOAM530kJq7MQNkvIGbpHNrhrD9JlEOdB5rOuT1N9qF2nEmNDGbards9
+        MXGNOAmvItto11mlhBtb9J0=
+X-Google-Smtp-Source: ABdhPJxQjv6ox2AVdSZkiONW/c9Wd7u1Cw0+G6teeUO9dWxu/UPDD7B6qW8Y3oU/OtIJxo5dzIKSEA==
+X-Received: by 2002:a05:600c:a08:b0:392:a561:9542 with SMTP id z8-20020a05600c0a0800b00392a5619542mr25017257wmp.62.1651057562803;
+        Wed, 27 Apr 2022 04:06:02 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id k11-20020a5d6d4b000000b0020599079f68sm13557633wri.106.2022.04.27.04.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 04:06:02 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 12:06:00 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.4 00/62] 5.4.191-rc1 review
+Message-ID: <YmkjmDF4KPLvkqWK@debian>
+References: <20220426081737.209637816@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB8ipk_tM8WhZOLwURkqyi5XDSNJ=twOg1Zub=dsTB_b9N9BRg@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220426081737.209637816@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/27/22 09:38, Xuewen Yan wrote:
-> > > > The best (simplest) way forward IMHO is to introduce a new function
-> > > >
-> > > >         bool cpu_in_capacity_inversion(int cpu);
-> > > >
-> > > > (feel free to pick another name) which will detect the scenario you're in. You
-> > > > can use this function then in rt_task_fits_capacity()
-> > > >
-> > > >         diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> > > >         index a32c46889af8..d48811a7e956 100644
-> > > >         --- a/kernel/sched/rt.c
-> > > >         +++ b/kernel/sched/rt.c
-> > > >         @@ -462,6 +462,9 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
-> > > >                 if (!static_branch_unlikely(&sched_asym_cpucapacity))
-> > > >                         return true;
-> > > >
-> > > >         +       if (cpu_in_capacity_inversion(cpu))
-> > > >         +               return false;
-> > > >         +
-> > > >                 min_cap = uclamp_eff_value(p, UCLAMP_MIN);
-> > > >                 max_cap = uclamp_eff_value(p, UCLAMP_MAX);
-> > > >
-> > > > You'll probably need to do something similar in dl_task_fits_capacity().
-> > > >
-> > > > This might be a bit aggressive though as we'll steer away all RT tasks from
-> > > > this CPU (as long as there's another CPU that can fit it). I need to think more
-> > > > about it. But we could do something like this too
-> > > >
-> > > >         diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> > > >         index a32c46889af8..f2a34946a7ab 100644
-> > > >         --- a/kernel/sched/rt.c
-> > > >         +++ b/kernel/sched/rt.c
-> > > >         @@ -462,11 +462,14 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
-> > > >                 if (!static_branch_unlikely(&sched_asym_cpucapacity))
-> > > >                         return true;
-> > > >
-> > > >         +       cpu_cap = capacity_orig_of(cpu);
-> > > >         +
-> > > >         +       if (cpu_in_capacity_inversion(cpu))
-> > >
-> > > It's  a good idea, but as you said, in mainline, the
-> > > sysctl_sched_uclamp_util_min_rt_default is always 1024,
-> > > Maybe it's better to add it to the judgment?
-> >
-> > I don't think so. If we want to handle finding the next best thing, we need to
-> > make the search more complex than that. This is no worse than having 2 RT tasks
-> > waking up at the same time while there's only a single big CPU. One of them
-> > will end up on a medium or a little and we don't provide better guarantees
-> > here.
+Hi Greg,
+
+On Tue, Apr 26, 2022 at 10:20:40AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.191 release.
+> There are 62 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I may have misunderstood your patch before, do you mean this:
-> 1. the cpu has to be inversion, if not, the cpu's capacity is still
-> the biggest, although the sysctl_sched_uclamp_util_min_rt_default
-> =1024, it still can put on the cpu.
-> 2. If the cpu is inversion, the thermal pressure should be considered,
-> at this time, if the sysctl_sched_uclamp_util_min_rt_default is not
-> 1024, make the rt still have chance to select the cpu.
->     If the sysctl_sched_uclamp_util_min_rt_default is 1024, all of the
-> cpu actually can not fit the rt, at this time, select cpu without
-> considering the cap_orig_of(cpu). The worst thing may be that  rt
-> would put on the small core.
-> 
-> I understand right? If so, Perhaps this approach has the least impact
-> on the current code complexity.
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
 
-I believe you understood correctly. Tasks that need to run at 1024 when the
-biggest cpu is in capacity inversion will get screwed - the system can't
-satisfy their requirements. If they're happy to run on a medium (the next best
-thing), then their uclamp_min should change to reflect that. If they are not
-happy to run at the medium, then I'm not sure if it'll make much of
-a difference if they end up on little. Their deadline will be missed anyway..
+Build test:
+mips (gcc version 11.2.1 20220408): 65 configs -> no failure
+arm (gcc version 11.2.1 20220408): 107 configs -> no new failure
+arm64 (gcc version 11.2.1 20220408): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
 
-Again this is no worse than having two RT tasks with uclamp_min = 1024 waking
-up at the same time on a system with 1 big cpu. Only one of them will be able
-to run there.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-I think tasks wanting 1024 is rare and no one seemed to bother with doing
-better here so far. But we can certainly do better if need to :-)
+[1]. https://openqa.qa.codethink.co.uk/tests/1066
 
 
-Thanks
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
 --
-Qais Yousef
+Regards
+Sudip
+

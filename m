@@ -2,186 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971E25112B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0010A5112B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358979AbiD0Hog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S1358978AbiD0Hoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243541AbiD0Hoe (ORCPT
+        with ESMTP id S1358983AbiD0Hov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:44:34 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEAB2BB0A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:41:23 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id u9so244494plf.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:41:23 -0700 (PDT)
+        Wed, 27 Apr 2022 03:44:51 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DED835DE8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:41:40 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d5so1244123wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H/bw9d6b2AKoeheuTGgPjpeSLBZTlEOJMVWTDNM/wr8=;
-        b=BX/dVdSjZ7DFJxPaZT6K292JzMA1h0dI8DRzFcEpM2bSidhERKu6zr71tFvrtMtu8x
-         OcvnIq8nVd2Q4aTChPc3ah25aUuLjeEFdutwnNA1e6yqeHebyQKGHXBorTh1uTihswiw
-         /Zw2hAkRndMC6yP0zYJoRSvLse+3vkDsV/iyo=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hAOpr2vHMZPq9vV3wUU+p6Jg7ePhuVYETqOSxcMAmAA=;
+        b=LM0soHQoqCDa7r3YJDU5GHVRQbVh07SoCmNnrwgzwguZV4KyYUSS9DuEYua2ihyxU1
+         y0dM76Uuh2MOM53XrHvL3Vu6mqhTs4J8KKxvjHbBgxV2IseN34PbuXjiAQndjpSNk+UV
+         NBwXwMaoA3D4Gih1/W/nqg/BX+0yjt3sEjWHSpW4uTTS/ageQDy6qR5KSTurdbBifbFH
+         uMI8nDPgkwE1UizI6QNmP8ebLvALK/mXUM35IHQFaaI7GL28QyFU0qWmKBNHtFsusAaU
+         D3mwEWaX29MzttuJXhCGU93/bsZNsFpm+nxgg8zcuGkPcEcEQKgM9cP80O03334f1yvX
+         2oug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H/bw9d6b2AKoeheuTGgPjpeSLBZTlEOJMVWTDNM/wr8=;
-        b=lelPuXRUPpHmikeJTspsjPr1yIWHunteV/CkNiNKD/GE4sfU0EpxofqnO6WCoMLG1Q
-         CyN14qhPIr30TmjAE4diIT7V1k/vLLewJj0murd6ZJtVy5ErHyDMP7UxOwcR5R3mtReP
-         kgZvBsdq6vlilzb4081IhuRVwJFgr4ZWW4Mmhbk4WaIhIFkwGYi18bqjQXbxT51RW7Po
-         jxtSF69prqy5FL6zxOAm4d1SFdFB34KQi9d1yE+kcUT/A73QSLi9a2AK0FLVvU1pCBSj
-         lex8TBgNy6+62hR3iFvKqA6DMd+8qZ7xGBezMHgywm2Ig2CQszfxzP6O4ldvwfAs8JwT
-         iNXw==
-X-Gm-Message-State: AOAM530wypHAjJoivEdjq0N+RZJKPjefrBLiK57XcMflQfqwfhgMLO5g
-        6Vk+cQcmKPaUbLwDBc9/DyMkdepobGICTe9jWHuFTA==
-X-Google-Smtp-Source: ABdhPJwsS84UDqhJjBnMdh7wbkEZl+fadfU2naxsKstjtnGVKmbv8nRKohdmf/TcwXwYNn/M4wIG/bmGk3BuYaFMu9M=
-X-Received: by 2002:a17:90b:1c07:b0:1d9:6360:307 with SMTP id
- oc7-20020a17090b1c0700b001d963600307mr17778671pjb.182.1651045283361; Wed, 27
- Apr 2022 00:41:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220427133851.6ff8b0cf@canb.auug.org.au>
-In-Reply-To: <20220427133851.6ff8b0cf@canb.auug.org.au>
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-Date:   Wed, 27 Apr 2022 13:10:57 +0530
-Message-ID: <CAL2rwxpdHGuFKCEJmOVOx-p3ri8_PLFqCDJm_5Ar6D66iQ-W9Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hAOpr2vHMZPq9vV3wUU+p6Jg7ePhuVYETqOSxcMAmAA=;
+        b=TAJSxSCsKDwbug7TOaXXWHMOmwaX8RRiWN9R8IsTio2aDYnSJwKS9yc4MwZh3ZmHKX
+         mVjegB0BQilmYwylAHnvRyYeYLCI0K7OWlE38BsMBFgji8BQSQuLb9Mf5CRG/rYiMRaw
+         SNn5/OAWbFRrxdLYdX3ttU/WmvucoJnld0+UHmkLzrxdsGszS5dEgpLIKne+yXq/0aq3
+         d2qPOKYqiPT5x8A6WWLr1UySImUzo4ozV0PublVslG+BlZmuJnv6dXlU5i9iuR5x9gEc
+         zOoQ9dO2T7/45zk0aaT6Z37P30eibXVvSpOH31BBWkzMpTHKhyh3aEwrA2fwPD7rOi7F
+         BHfg==
+X-Gm-Message-State: AOAM532rX3Alnyh6QN0ZBixqdsH4IAGjfiwIaGWwi/O2CHIV3JaeDvs+
+        DV/oP6BwRWLpgmaEaxvbV/D5+OH6XGBKZg==
+X-Google-Smtp-Source: ABdhPJxdmIhUwVEY2Ro4loeFhr/NbIzs2cqywXhS/00OewUBUOxRT057Y9ha/5rL9X66NQdkPfAE0w==
+X-Received: by 2002:adf:9581:0:b0:1ed:c341:4ed1 with SMTP id p1-20020adf9581000000b001edc3414ed1mr20504460wrp.299.1651045298731;
+        Wed, 27 Apr 2022 00:41:38 -0700 (PDT)
+Received: from radium ([88.160.162.107])
+        by smtp.gmail.com with ESMTPSA id v18-20020adfc5d2000000b0020589b76704sm14755284wrg.70.2022.04.27.00.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 00:41:38 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 09:41:34 +0200
+From:   Fabien Parent <fparent@baylibre.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a5086b05dd9defe9"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: linux-next: build failure after merge of the input tree
+Message-ID: <20220427074134.loyovm6xpbfw6y7d@radium>
+References: <20220427104825.15a04680@canb.auug.org.au>
+ <20220427065318.bdn5h6rdcvdpxdd2@radium>
+ <YmjyPSliv+WncweU@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="taso3s65nxq7k6nn"
+Content-Disposition: inline
+In-Reply-To: <YmjyPSliv+WncweU@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a5086b05dd9defe9
-Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Apr 27, 2022 at 9:08 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the scsi-mkp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-Hi Stephen,
+--taso3s65nxq7k6nn
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Could you please try if the below patch fixes this build failure:
+On Wed, Apr 27, 2022 at 08:35:25AM +0100, Lee Jones wrote:
+> On Wed, 27 Apr 2022, Fabien Parent wrote:
+>=20
+> > Hi,
+> >=20
+> > On Wed, Apr 27, 2022 at 10:48:25AM +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > >=20
+> > > After merging the input tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >=20
+> > > drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATU=
+S' undeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
+> > >    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
+> > >       |                                    ^~~~~~~~~~~~~~~~
+> > > drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of =
+macro 'MTK_PMIC_KEYS_REGS'
+> > >    48 |         .deb_reg                =3D _deb_reg,             \
+> > >       |                                   ^~~~~~~~
+> > > drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_=
+MISC' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MIS=
+C'?
+> > >    98 |         .pmic_rst_reg =3D MT6359_TOP_RST_MISC,
+> > >       |                         ^~~~~~~~~~~~~~~~~~~
+> > >       |                         MT6358_TOP_RST_MISC
+> > >=20
+> > > Caused by commit
+> > >=20
+> > >   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
+> > >=20
+> > > I have used the input tree from next-20220426 for today.
+> >=20
+> > The commit is depending on another commit from the same patch serie: [0=
+]. That
+> > patch has been merged in the tree of the MFD maintainer: [1].
+> >=20
+> > [0] https://lore.kernel.org/all/20220426135313.245466-3-fparent@baylibr=
+e.com/
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=
+=3Dfor-mfd-next
+>=20
+> Looks like you only sent me 2 of the 8 patches in the set.
+>=20
+> In future, if there are dependencies between patches, you must send
+> all of the patches to everyone.  That way, we can organise a merge
+> strategy that does not break -next, or worse Mainline during the
+> merge-window.
 
-From a78f9deaab456948b123c39950dff6f85b13875a Mon Sep 17 00:00:00 2001
-From: Sumit Saxena <sumit.saxena@broadcom.com>
-Date: Wed, 27 Apr 2022 03:35:34 -0400
-Subject: [PATCH] uapi: include <linux/types.h> header in scsi_bsg_mpi3mr.h
+Understood. Thanks for the info, I will make sure next time to include
+everyone in such situation.
 
-Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
----
- include/uapi/scsi/scsi_bsg_mpi3mr.h | 2 ++
- 1 file changed, 2 insertions(+)
+>=20
+> --=20
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Principal Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog
 
-diff --git a/include/uapi/scsi/scsi_bsg_mpi3mr.h
-b/include/uapi/scsi/scsi_bsg_mpi3mr.h
-index 46c33efcff19..a0ddad7d84f7 100644
---- a/include/uapi/scsi/scsi_bsg_mpi3mr.h
-+++ b/include/uapi/scsi/scsi_bsg_mpi3mr.h
-@@ -10,6 +10,8 @@
- #ifndef SCSI_BSG_MPI3MR_H_INCLUDED
- #define SCSI_BSG_MPI3MR_H_INCLUDED
+--taso3s65nxq7k6nn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-+#include <linux/types.h>
-+
- /* Definitions for BSG commands */
- #define MPI3MR_IOCTL_VERSION                   0x06
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Sumit
+iQIzBAABCgAdFiEEQyJHfU3UNW7IG61XVJKc6g3CeAAFAmJo860ACgkQVJKc6g3C
+eACAahAAiytdrpAVLp7N5W1hRRK9/ZextQvSNvq1HM8qXXnM8LMP4+zD4/3MjYxX
+v+zIcWz6uRewcjgoWkQN0AOQbgEUuE47HXUQUvqjAcD5CulW/Kg080acZ2eawe2Q
+EvWHZJJjRW9Pklw9fYSraqJBBXmK8PcbMPE2QN7vy/roIwfzgW8A5rLUpsfAE4+d
+crjoL5t8YJAOdP5oQxyUknzgASlLDF6YSny4k1QYyBoiiUeWWH+aEaf3nNGXdYK+
+4zwHa12l3BEm7/u2nYaExXi71XLRp1CeWAw71JtpXKRHL7s9TtnLDbsJfHJn/FLp
+UK8s5W4i1c19vehsMGoYooC7gdgi2mQ8hdl/65h/Mv71TJzFlhMaYAvPrjuKzq6x
+F73oZ3QxVe8zXD7vB5VvNExbKuSSZsh8L+cNrVmhEQIJEeHOf3QY555Wz5RQXPRH
+yiuLNO5MA6G3m52un2mlxBdQlYp1tyguB+b4uQtOP7U+mvhTuFwIEs+45jP+oK9Y
+aAvf/O4y5TBsmu3UKVEZLre4bILBsiEjLRzy62qmAjvttfdKPx+jwqwKhVhRxeIZ
+4RpmcwaiEORLwwmVeb6LZXsQly1hOP9cR8qMTy2GCLUj7W+5VuNZY+ghqQxoso2v
+0K02vXMCZF3afU+S+Mc+riwEFXetry3Vt/j+r0ZsOKfw3EKtwU0=
+=qeMZ
+-----END PGP SIGNATURE-----
 
---000000000000a5086b05dd9defe9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-GmgWG68YahkDuVSTTt2beZdyMeDwq/KifJFo18EkhcL3e7rmDAh8SniUI/0o3HX6hrgdmUI1wSdz
-uIVL/m6Ok9mIl2U5kvguitOSC0bVaQPfNzlj+7PCKBECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUNz+JSIXEXl2uQ4Utcnx7FnFi
-hhowDQYJKoZIhvcNAQELBQADggEBAL0HLbxgPSW4BFbbIMN3A/ifBg4Lzaph8ARJOnZpGQivo9jG
-kQOd95knQi9Lm95JlBAJZCqXXj7QS+dnE71tsFeHWcHNNxHrTSwn4Xi5EqaRjLC6g4IEPyZHWDrD
-zzJidgfwQvfZONkf4IXnnrIEFle+26/gPs2kOjCeLMo6XGkNC4HNla1ol1htToQaNN8974pCqwIC
-rTXcWqD03VkqSOo+oPP/NAgFAZVfpeuBoK2Xv8zYlrF49Q4hxgFpWhaiDsZUSdWIS7vg1ak1n+6L
-3aHRY/lheSkOn/uJWXsqsTDp613hVtOTEDsHSQK32yTGr8jN/oRQgJASuUqQFdD4VzAxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwoQTpBmhDxj9JoN1ow
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILnh/EGGdSLR9QAxLF4scYeOzVfv3m0Y
-ln3uQe9yqSKiMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDQy
-NzA3NDEyM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAbN9UchKVGnQqVyptIp3fr/7dGtCK9gvYN50TDjnPVLJl2OkS/
-WZ6hzt9sM74ObMZkc7B2V32NllJHcDz0dEjjPMQgemkwWI99ljKu8JaoXwFHplLHBWotC6BtyHCY
-UNA+473Y2QBCWMlvM4nLu2bO9tYFQbmNRXEUXUtnzyU5vVUegIaN1zGfqsQSLvqBPaZYEAM1HC/8
-AY6l6DHPVYQjJCFTo8YBkZoUDFhIQGG8Ty5r+HF7HZTxxQrDWd1tsVKA3qdcG2n+xqS/+cbrzSgX
-KwMxUEWE9aJKsn1UwXjNczUdUyi5ktOuPY5NXOmLbtsjTt4lddzLNh30bfVsAaix
---000000000000a5086b05dd9defe9--
+--taso3s65nxq7k6nn--

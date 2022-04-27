@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7FD5117C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5EE51177B
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbiD0MZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S233902AbiD0M2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbiD0MZr (ORCPT
+        with ESMTP id S233896AbiD0M2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:25:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9146C4132E;
-        Wed, 27 Apr 2022 05:22:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1B9681F74B;
-        Wed, 27 Apr 2022 12:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651062154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bPJVJ/mvoFlMUFOZPBJ+knXZSOjq1aUlwWwkq9LhQTo=;
-        b=n6Zsmd3ZvSPkPhiIdXXfFL6ehZn8AL7BshvVE3p+w5JDx9muTQd5wKkGExHgczFgQH8G4e
-        d8rlT0rW81Ve1qiYTkNlC1dukAx4Q4DIDccyG20zh1OfPZXR6eF7ygx84SM0nBfFl5krNz
-        Ihf/Jng1e1v9VeCT1AdFdSHRSN77vjg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD64F13A39;
-        Wed, 27 Apr 2022 12:22:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id AT8+MYk1aWLfOAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 27 Apr 2022 12:22:33 +0000
-Date:   Wed, 27 Apr 2022 14:22:32 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Vasily Averin <vvs@openvz.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH memcg v4] net: set proper memcg for net_init hooks
- allocations
-Message-ID: <20220427122232.GA9823@blackbody.suse.cz>
-References: <YmdeCqi6wmgiSiWh@carbon>
- <33085523-a8b9-1bf6-2726-f456f59015ef@openvz.org>
- <CALvZod4oaj9MpBDVUp9KGmnqu4F3UxjXgOLkrkvmRfFjA7F1dw@mail.gmail.com>
+        Wed, 27 Apr 2022 08:28:38 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFD23A1AD
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:25:27 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g6so3100438ejw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=umXYVD04U8kB6up3Hq3d8f7zqDE6PdNJnaxLabPQIXk=;
+        b=R3hej2D/HjTHESciZlHNJ5mp9jmZQBWIzwepOAqZuCbnyJAGJ69vXomweJnzUiBFGe
+         ffM9HRlZmxYgt3n4/oVxU65CL0GizyEwGRjzRje8OzGTtlWi2N8eoTGea7gwqkue/oTr
+         t0/GMH4aOhkRnYPnuZvs8YPUfceDCUUm+/bcqxRyRUWNf7MdvjsWRahPbA0S4xWqDVxs
+         oZe4BCJVdXOvOlBXMRR+lcYM+yoWWUxWvjdtNF3Omfi5SFCA8LiSf2udhZgk7E6lYpqB
+         sduY6Q5gAxe5DC/TeqKk6nB6xvGdX8JWFowPrV7FdTg4ZcRM3e7pQIucb75wr91GbG3W
+         bX1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=umXYVD04U8kB6up3Hq3d8f7zqDE6PdNJnaxLabPQIXk=;
+        b=gioRyMZ3K4J62HI6k9YC9H6FlVuRIBu/hhb++M1Liy+eQmTIbWrbLjnvOxfYv6LIy9
+         bJS/iL/XqMZXSFe+1ZQ3X8/TfL9R+pia1zPaEoMUvG0pkW22B3YBDz+4ipz4KljiXPTL
+         CRe+k+zaamQYyviqAde3t+wJwRhPM7GZNZ+joO5IuxPwvS2eidGy69zsekgoyh4HjVBB
+         a7+oVwHBboJrn+LBSYPcJR8cZhUukzqAvMu+NlX1soA/nXCus0ehLXBuQz8zrzucMXEf
+         +vHWbQfHJDBpSvugLWf/UFDDlPfJcupfN2n4JNq8TMdTWv81DhqLaPPaC5JOihM87MNs
+         O52w==
+X-Gm-Message-State: AOAM5329Z1YYKrpmA7O9CkTvPT7K26ywEPwytuqDmoNaWBN5/CWEXAFy
+        Yal/vKmx935J31Nj+jkd5R2ZNkpQqbf8nB8xnqQ=
+X-Google-Smtp-Source: ABdhPJyGULnAQQCy4CkeSzY2AuWpgjImq9ua1w6pHhwayjgNZgiOZVA8967ZCRMYAJ2ie/iIcarByTRaXkPWb2GRcCg=
+X-Received: by 2002:a17:906:3799:b0:6ec:d25:3afe with SMTP id
+ n25-20020a170906379900b006ec0d253afemr26414725ejc.44.1651062326257; Wed, 27
+ Apr 2022 05:25:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod4oaj9MpBDVUp9KGmnqu4F3UxjXgOLkrkvmRfFjA7F1dw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.LRH.2.02.2204241643030.17244@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHp75VdHnvv6FH1BKcs8WgGF3nJpj77TsrmsQGBSpsAQU_S-bw@mail.gmail.com>
+ <alpine.LRH.2.02.2204260759540.2737@file01.intranet.prod.int.rdu2.redhat.com>
+ <YmfxaB1j65p8dOyj@smile.fi.intel.com> <alpine.LRH.2.02.2204261128220.5129@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2204261128220.5129@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 27 Apr 2022 14:24:50 +0200
+Message-ID: <CAHp75Vc8kb+dpT_i93No+0_==tLuYKxu9t1Nnv1KRomRc+Ke1w@mail.gmail.com>
+Subject: Re: [PATCH v2] hex2bin: fix access beyond string end
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Snitzer <msnitzer@redhat.com>,
+        Milan Broz <gmazyland@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 10:23:32PM -0700, Shakeel Butt <shakeelb@google.com> wrote:
-> [...]
+On Tue, Apr 26, 2022 at 5:29 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
+> On Tue, 26 Apr 2022, Andy Shevchenko wrote:
+> > On Tue, Apr 26, 2022 at 08:07:44AM -0400, Mikulas Patocka wrote:
+> > > On Tue, 26 Apr 2022, Andy Shevchenko wrote:
+> > > > On Sun, Apr 24, 2022 at 10:48 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
+
+...
+
+> > Still shadows error codes.
 > >
-> > +static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
-> > +{
-> > +       struct mem_cgroup *memcg;
-> > +
-> 
-> Do we need memcg_kmem_enabled() check here or maybe
-> mem_cgroup_from_obj() should be doing memcg_kmem_enabled() instead of
-> mem_cgroup_disabled() as we can have "cgroup.memory=nokmem" boot
-> param.
+> > > +                   return -EINVAL;
+> >
+> > >                     return -EINVAL;
+>
+> What do you mean? What's wrong with "return -EINVAL"?
 
-I reckon such a guard is on the charge side and readers should treat
-NULL and root_mem_group equally. Or is there a case when these two are
-different? 
+The actual error code is returned by hex_to_bin(). What is the point
+of shadowing it with the explicit value?
 
-(I can see it's different semantics when stored in current->active_memcg
-(and active_memcg() getter) but for such "outer" callers like here it
-seems equal.)
-
-Regards,
-Michal
-
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B9D511976
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17095511AD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbiD0Na4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S235959AbiD0Nbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbiD0Nay (ORCPT
+        with ESMTP id S235860AbiD0Nbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:30:54 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA8246B16
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651066047; x=1682602047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GDlo0zx18oPDT6Mee9XIwUn/E/qqvC07AxXS5H31/FU=;
-  b=gXV2ptpBk/pC37bSC2l//EP22DoMWnT9S0qpRdC7LYJp+NZJprzOmjZk
-   6viTZQrzRiajDVmJx3qWKUWFLM3WJVV03yLLEVq7zU1boOOpKq/JjgGuq
-   G1CLnRW41CXULhQvXZTegDrjEuw//VP3kr4FwcS+lPX2If9cfxrkXmRFe
-   U=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Apr 2022 06:27:24 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 06:27:24 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 27 Apr 2022 06:27:23 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
- 2022 06:27:22 -0700
-Date:   Wed, 27 Apr 2022 09:27:20 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Zi Yan <ziy@nvidia.com>
-CC:     David Hildenbrand <david@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v11 0/6] Use pageblock_order for cma and
- alloc_contig_range alignment.
-Message-ID: <20220427132720.GC71@qian>
-References: <20220425143118.2850746-1-zi.yan@sent.com>
- <20220426201855.GA1014@qian>
- <B621B4DD-5D11-4F0E-AFF5-F8684AE37E57@nvidia.com>
- <20220426210801.GA1038@qian>
- <2B9844C8-6D35-41E2-ACB2-9854E7A9C29F@nvidia.com>
+        Wed, 27 Apr 2022 09:31:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574C633E23;
+        Wed, 27 Apr 2022 06:28:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651066104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XeLkj9226T84S9BXMt19LKkxjN+pWXBCLzkSQX80Wy0=;
+        b=CnD8+0uDIKN5dkS4D3kOiZHg/aTrcuU3CSgu/18pNHX4Bq8eAM1hY3aI4Xu+WNh8Jmn/j7
+        R+SzJ5YdJvI5nC5LZnNvdrrvEC1pm6pUjngAw2WcmmOvWeilo9o88BsPnZiOq5IP7iVI/U
+        Ld+1XVU5417idG7bq4A6e0TRt8nItIYLaV0EYBB8dfsEPPtRua6GcUSKSQk5VEUw7RDcyu
+        sGfWU16My8O6Qii/arx971F7FyOPp6CQNVj3UlU8KnyEdjlbltkVPpGGF181Oy1zG3PJcb
+        dlAkAuEeKrWfS/iDZAZL6H5bcANyx5Px2Bs4sti+fqx2XT88qk8IB+qGc5NGQA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651066104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XeLkj9226T84S9BXMt19LKkxjN+pWXBCLzkSQX80Wy0=;
+        b=mqNvTWF9p2Pn5UfW0rssM+TDypdzsffTK7XDNT84SfjwuIlFAdc4suevqEXX1MmYnM9rdo
+        Ccy/wwrc6gkF4WCA==
+To:     Alexander Potapenko <glider@google.com>, glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 27/46] kmsan: instrumentation.h: add
+ instrumentation_begin_with_regs()
+In-Reply-To: <20220426164315.625149-28-glider@google.com>
+References: <20220426164315.625149-1-glider@google.com>
+ <20220426164315.625149-28-glider@google.com>
+Date:   Wed, 27 Apr 2022 15:28:23 +0200
+Message-ID: <87bkwmy7t4.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2B9844C8-6D35-41E2-ACB2-9854E7A9C29F@nvidia.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,14 +83,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 05:38:58PM -0400, Zi Yan wrote:
-> Thanks. Do you mind attaching your config file? I cannot reproduce
-> the deadlock locally using my own config. I also see kmemleak_scan
-> in the dumped stack, so it must be something else in addition to
-> memory online/offline causing the issue.
+On Tue, Apr 26 2022 at 18:42, Alexander Potapenko wrote:
+> +void kmsan_instrumentation_begin(struct pt_regs *regs)
+> +{
+> +	struct kmsan_context_state *state = &kmsan_get_context()->cstate;
+> +
+> +	if (state)
+> +		__memset(state, 0, sizeof(struct kmsan_context_state));
 
-Actually, it is one of those *offline* operations, i.e.,
+  sizeof(*state) please
 
-echo 0 > /sys/devices/system/memory/memoryNNN/online
+> +	if (!kmsan_enabled || !regs)
+> +		return;
 
-looping forever which never finish after more than 2-hour.
+Why has state to be cleared when kmsan is not enabled and how do you end up
+with regs == NULL here?
+
+Thanks,
+
+        tglx

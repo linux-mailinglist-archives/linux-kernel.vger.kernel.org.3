@@ -2,102 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6433E5124D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF905124D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235198AbiD0V5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S237599AbiD0V72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234882AbiD0V5w (ORCPT
+        with ESMTP id S234882AbiD0V70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:57:52 -0400
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0620EB18A5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:54:39 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id y32so5428045lfa.6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:54:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n4KrYzBmL4NujzwJacpNt1nuydCLNk2t1jsYHKT9n8E=;
-        b=qoPOttdE4PBu5ieUBLZwJIaFWl7yEVdjED/rWZAU61MDdGDnfadaoUUIRauc5LfJM1
-         91H5/Xf4OXivEWDWR3Pqkl23NKgU7ue4j695BHpym12RTrGs7LIF68iwl6qA8QYQ8eDa
-         +xbam1gEArIjrYu4vrj7r512hOdxg/csGiQXi31ctK3hm70dsxdNkEldNrhKHNeB4Xeu
-         48ZbpL6FGQJLKxhNdOOgekgBpBzVlY5vtp+HmRYdj6rz2PPtc3W5Bvch730x5djwNVzZ
-         LBryC7pTVtuAdn9Zjo0AtSJwoVogWTywH2E80QNIQwa/y29PdwbA971lBKbJ9/JuK6rl
-         12vA==
-X-Gm-Message-State: AOAM532D+vkXwMbYvCdkgXixfe/ooCHkhk1d8E2lPAX4QqUsdheCkbCq
-        J2fMuQIbKhJPIT2ijbVUELfqCX04mxNEpQ64Q/U=
-X-Google-Smtp-Source: ABdhPJz4WgxQXssJ7gV4+q5NQY+Rux7m8NBtjKRpvLCdQOI8CSVjciVAs9v3cF/07aPMcWb9Htau4mfnZpHte6GmZKo=
-X-Received: by 2002:a05:6512:321c:b0:46b:b7fd:1eca with SMTP id
- d28-20020a056512321c00b0046bb7fd1ecamr8586729lfe.481.1651096477389; Wed, 27
- Apr 2022 14:54:37 -0700 (PDT)
+        Wed, 27 Apr 2022 17:59:26 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2511138
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1651096572; x=1682632572;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ndxlCJcsWNsxefRwlgceKJ0VvE3NnTsnasUGPtb8I/A=;
+  b=ZJTOTDv+2TX7VHW6xB+oftVcXxiLh/pMny0mZR+lj+hIQuMMVcunp/CZ
+   Kq85W/DBPIdWKmEeT0lou8NhP5jlUHtsMFOMzaKSf8LUAsQlsbJ2M1swF
+   n9HBUPRkpz0BQmE0idBPsGVmzw6p/3jtz/6pumML6AR0mLuKparpQC+Zw
+   WvNm/uajUslsCheTlLja/+g0Yt8BrS3t3ztS4IL/lGrP2f/beX7y6EBfI
+   PRr+7mhuiSbSgeEl5WwK3XCjWx3j2yCwzjkIeoDsuLB5bhfaF7SAWH5NL
+   MwzLv5HU+ufjluF+SvcAlAnC/RfdUKzvkOa7tS7CEhR6cm0soXOznwSzj
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,294,1643644800"; 
+   d="scan'208";a="197838683"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Apr 2022 05:56:11 +0800
+IronPort-SDR: e2MCKyc0Bfsi34lJ5+nAodCxusbv+ecOG7fJVmzZcWrDIukAWY//TNUaRyjESMIGxSdeKhm/b7
+ rVBw+haZu2Vk2aFdrDcDFkvjBtzmPWFx5NrUQidnPkDJV2nE+XJx6qzNMgUr2hrWgqCrOe/QK6
+ OE1q6jhZVMYIHuQPjHuEigaJo0/Gt02+AMigTqpvRdbHsQ2w6Md+mNYxZcxuBKkVSsDl6fsBHH
+ h+pTyD2CHzKxnpgfxpiSThlYut6JLiYLHN6GqLjqeQSK0v41mJYWlPGUz0zye75wRk5ClmEgw7
+ VQ4QMOuFhE0zQM81rZcsqiWL
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 14:27:03 -0700
+IronPort-SDR: 4xt9UeOVjW8bGrei9l8YUFBLuypmeNiP63iZI1xRmBdNyBdp20dagHFHtCXZWwgzE42xVKNqR8
+ LldHsQxMWlsqiFkWgsqlcEz+vTEaSZNoSKou9Bzr/j1vaG+lnk2KedXTlwJsx0XYhC34YhCyA/
+ H1YgqIIUeYXUTVMgLNI0/Fcfgp4o/S/WjJ1cPI94enWwgMwI4ciJLUN2MS4GA0HRwuR4MLA5W0
+ n07CRYCgqdTxCbKvcmlVLUeASsKIuiDb2loEuhnnX7AADrshlgb5kuu1yfJqlA8kigNOt5rLu7
+ SrU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 14:56:12 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KpXd65BZsz1Rwrw
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:56:10 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1651096569; x=1653688570; bh=ndxlCJcsWNsxefRwlgceKJ0VvE3NnTsnasU
+        GPtb8I/A=; b=e3SQWIC7isONhMVABcQXbRoKsYP01AGBbkTTjAVX/tATNA9akqV
+        o0SzlNWttcnvWNegaIDqsgtVaRN7EVxQ3KYkcm+l9jYgyZmBuBYBE4JaxLs2gHlp
+        W1W8Mvuy7yp4sC9d1mSOqpu2vkVNAa4MzcfMRY1QziIs9+dyJcsECcIpZDlx7FnA
+        sLmbmraKN3ndEuoI8banOkqH+BI0AIeOKJ0Jrr31eP4b5BaP469/vPWfa5e+E+C4
+        3D/ZgYZzzLxhG1LuI1msi7Jn0cK1sHIIimzpgNd8UB6ilKxM3M2xEHUkmkK7FsyN
+        iTtpZ7+j79y0W+8DaWFHsJGQlJCaD693HFw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vMIHHrdYSV4R for <linux-kernel@vger.kernel.org>;
+        Wed, 27 Apr 2022 14:56:09 -0700 (PDT)
+Received: from [10.225.163.27] (unknown [10.225.163.27])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KpXd44RlGz1Rvlc;
+        Wed, 27 Apr 2022 14:56:08 -0700 (PDT)
+Message-ID: <3f80a126-e52a-955b-aca4-14218d26faf5@opensource.wdc.com>
+Date:   Thu, 28 Apr 2022 06:56:07 +0900
 MIME-Version: 1.0
-References: <20220422162402.147958-1-adrian.hunter@intel.com> <20220422162402.147958-6-adrian.hunter@intel.com>
-In-Reply-To: <20220422162402.147958-6-adrian.hunter@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 27 Apr 2022 14:54:26 -0700
-Message-ID: <CAM9d7cg8Awh9oXdCL4-GQT_R5FpgTz6DYFCfd=9g1YFQ463xSQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 05/21] perf auxtrace: Do not mix up mmap idx
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 00/10] Add Copy offload support
+Content-Language: en-US
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
+        linux-kernel@vger.kernel.org
+References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
+ <20220426101241.30100-1-nj.shetty@samsung.com>
+ <c02f67e1-2f76-7e52-8478-78e28b96b6a1@opensource.wdc.com>
+ <20220427153826.GE9558@test-zns>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220427153826.GE9558@test-zns>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 9:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> The idx is with respect to evlist not evsel. That hasn't mattered because
-> they are the same at present. Prepare for that not being the case, which it
-> won't be when sideband tracking events are allowed on all CPUs even when
-> auxtrace is limited to selected CPUs.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/perf/util/auxtrace.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-> index 10936a38031f..2d015b0be549 100644
-> --- a/tools/perf/util/auxtrace.c
-> +++ b/tools/perf/util/auxtrace.c
-> @@ -640,8 +640,14 @@ static int evlist__enable_event_idx(struct evlist *evlist, struct evsel *evsel,
->  {
->         bool per_cpu_mmaps = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
->
-> -       if (per_cpu_mmaps)
-> -               return perf_evsel__enable_cpu(&evsel->core, idx);
-> +       if (per_cpu_mmaps) {
-> +               struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->core.all_cpus, idx);
-> +               int cpu = perf_cpu_map__idx(evsel->core.cpus, evlist_cpu);
+On 4/28/22 00:38, Nitesh Shetty wrote:
+> On Wed, Apr 27, 2022 at 10:46:32AM +0900, Damien Le Moal wrote:
+>> On 4/26/22 19:12, Nitesh Shetty wrote:
+>>> The patch series covers the points discussed in November 2021 virtual=
+ call
+>>> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
+>>> We have covered the Initial agreed requirements in this patchset.
+>>> Patchset borrows Mikulas's token based approach for 2 bdev
+>>> implementation.
+>>>
+>>> Overall series supports =E2=80=93
+>>>
+>>> 1. Driver
+>>> - NVMe Copy command (single NS), including support in nvme-target (fo=
+r
+>>>     block and file backend)
+>>>
+>>> 2. Block layer
+>>> - Block-generic copy (REQ_COPY flag), with interface accommodating
+>>>     two block-devs, and multi-source/destination interface
+>>> - Emulation, when offload is natively absent
+>>> - dm-linear support (for cases not requiring split)
+>>>
+>>> 3. User-interface
+>>> - new ioctl
+>>> - copy_file_range for zonefs
+>>>
+>>> 4. In-kernel user
+>>> - dm-kcopyd
+>>> - copy_file_range in zonefs
+>>>
+>>> For zonefs copy_file_range - Seems we cannot levearge fstest here. Li=
+mited
+>>> testing is done at this point using a custom application for unit tes=
+ting.
+>>
+>> https://protect2.fireeye.com/v1/url?k=3Db14bf8e1-d0361099-b14a73ae-74f=
+e485fffb1-9bd9bbb269af18f9&q=3D1&e=3Db9714c29-ea22-4fa5-8a2a-eeb42ca4bdc1=
+&u=3Dhttps%3A%2F%2Fgithub.com%2Fwesterndigitalcorporation%2Fzonefs-tools
+>>
+>> ./configure --with-tests
+>> make
+>> sudo make install
+>>
+>> Then run tests/zonefs-tests.sh
+>>
+>> Adding test case is simple. Just add script files under tests/scripts
+>>
+>> I just realized that the README file of this project is not documentin=
+g
+>> this. I will update it.
+>>
+>=20
+> Thank you. We will try to use this.
+> Any plans to integrate this testsuite with fstests(xfstest) ?
 
-While it can be thought of as an index from the function name,
-it'd be nice if we could be explicit like cpu_map_idx.
+No. It is not a good fit since zonefs cannot pass most of the generic tes=
+t
+cases.
 
-Thanks,
-Namhyung
-
-> +
-> +               if (cpu == -1)
-> +                       return -EINVAL;
-> +               return perf_evsel__enable_cpu(&evsel->core, cpu);
-> +       }
->
->         return perf_evsel__enable_thread(&evsel->core, idx);
->  }
+>=20
 > --
-> 2.25.1
->
+> Nitesh Shetty
+>=20
+>=20
+
+
+--=20
+Damien Le Moal
+Western Digital Research

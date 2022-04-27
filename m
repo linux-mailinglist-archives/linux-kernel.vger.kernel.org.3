@@ -2,226 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C05512550
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4F2512552
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiD0Wgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S236362AbiD0Wig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiD0Wgo (ORCPT
+        with ESMTP id S229647AbiD0Wia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:36:44 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927F1266F;
-        Wed, 27 Apr 2022 15:33:32 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id r11so887093ila.1;
-        Wed, 27 Apr 2022 15:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ze1S9fJCbP+SQ+dCw4Iqsjhp3PBB+vQnP1mqNNiw9Yk=;
-        b=jpne0KILeFpCLLGk/X4BHuWQlCaBxKpQ8nUBd3cSKrhCRauHUfDXp9NWtLmRg6HYCB
-         PYZM0VIXHka2E0z4BLs/y5NUOol4SLgKQcwsygjSmmcEiwS2YdctRp7wT6YgkiqvpfRf
-         eIvQooZ1PjdEXAHfL2EdxXfFz6qKNFCW3yLTaKJ+5nLVco6rgEk5z0qvXM0Yq7LH4MXs
-         1dsi0ypR6StgahAXlewYA8dBFoSnsyF8zm34NIlOPewwuvzCowoMkqntubAiE9qfvoeN
-         EmKh4s/ml7CbXrweaLfiXtFb7LpADS8LI3E9Ik2wDWVqQxzHs//nuohFmSnKKFdVlyEc
-         DHEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ze1S9fJCbP+SQ+dCw4Iqsjhp3PBB+vQnP1mqNNiw9Yk=;
-        b=T09A7uKV/C/VaozzmqvwkHPXwKQqNFknWERpPI2umqEbCcy6sefW8n4O5kxVhFzdBE
-         qkXqFTo0o6OQVCBmn5E6Ev4jHkhiKL5tY5O7pKDO+NmMpciAYkX7N3ndSJCw7qUGzpmj
-         eVhJNXcjOa9bNxTTEHY4xpgiLIzCaruptu/Li+mGl4Vl0fKKZ1IsNTbf+UWATDJ+K7WH
-         UxXiYB3EaIolUoQJHwW4X8PEXxDe9U02fjfRzUwcUJIBpgYMZ4zQSLMOHRymjo2qv5Qh
-         mf1BLxbCq/neCWRw05BdTEXCiID7RWtqKSUcNeIVQbZIdMt0VCuSTAFyK5t6gB+MI6J6
-         vsfw==
-X-Gm-Message-State: AOAM530FcKcrImCpAUD4hFP0HpshYXwVVqOjA/xazSkwmyiGXyMQ+iaS
-        1mPByBotwOZo5kfcHfxrb+Y71t7H2EaVDBs6B+0=
-X-Google-Smtp-Source: ABdhPJwNjCiR1cOhJEbvgqBq1X2aGYcmfd1x1i8bvBKs2ZFHXF+g1U0Lf2gMZVMtgJM/Ibu4U4z2NasT4fTCmF5jq8E=
-X-Received: by 2002:a05:6e02:1ba3:b0:2cc:4158:d3ff with SMTP id
- n3-20020a056e021ba300b002cc4158d3ffmr11902890ili.98.1651098811875; Wed, 27
- Apr 2022 15:33:31 -0700 (PDT)
+        Wed, 27 Apr 2022 18:38:30 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4479DA7;
+        Wed, 27 Apr 2022 15:35:16 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:39804)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njqFe-004CCe-1P; Wed, 27 Apr 2022 16:35:14 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35990 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njqFc-00Bd4H-Ux; Wed, 27 Apr 2022 16:35:13 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <20220426225211.308418-9-ebiederm@xmission.com>
+        <20220427154158.GG17421@redhat.com>
+Date:   Wed, 27 Apr 2022 17:35:05 -0500
+In-Reply-To: <20220427154158.GG17421@redhat.com> (Oleg Nesterov's message of
+        "Wed, 27 Apr 2022 17:41:59 +0200")
+Message-ID: <87mtg62m06.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220426140924.3308472-1-pulehui@huawei.com> <20220426140924.3308472-2-pulehui@huawei.com>
-In-Reply-To: <20220426140924.3308472-2-pulehui@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Apr 2022 15:33:21 -0700
-Message-ID: <CAEf4BzYvGaskrquK1hsKv6h7iz0NXWCNYn_zJEHvYUBYC=2UoA@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] bpf: Unify data extension operation of
- jited_ksyms and jited_linfo
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>, linux-riscv@lists.infradead.org,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1njqFc-00Bd4H-Ux;;;mid=<87mtg62m06.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18S5RmCcBMZtZ5La6DbmgpHNqUhFhXjeT0=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 470 ms - load_scoreonly_sql: 0.10 (0.0%),
+        signal_user_changed: 12 (2.6%), b_tie_ro: 10 (2.2%), parse: 1.31
+        (0.3%), extract_message_metadata: 4.2 (0.9%), get_uri_detail_list:
+        1.65 (0.4%), tests_pri_-1000: 5 (1.1%), tests_pri_-950: 2.1 (0.4%),
+        tests_pri_-900: 1.74 (0.4%), tests_pri_-90: 79 (16.8%), check_bayes:
+        77 (16.3%), b_tokenize: 17 (3.5%), b_tok_get_all: 10 (2.0%),
+        b_comp_prob: 4.2 (0.9%), b_tok_touch_all: 42 (8.8%), b_finish: 1.13
+        (0.2%), tests_pri_0: 342 (72.8%), check_dkim_signature: 0.71 (0.2%),
+        check_dkim_adsp: 3.0 (0.6%), poll_dns_idle: 0.94 (0.2%), tests_pri_10:
+        2.3 (0.5%), tests_pri_500: 11 (2.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 9/9] ptrace: Don't change __state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 6:40 AM Pu Lehui <pulehui@huawei.com> wrote:
->
-> We found that 32-bit environment can not print bpf line info due
-> to data inconsistency between jited_ksyms[0] and jited_linfo[0].
->
-> For example:
-> jited_kyms[0] = 0xb800067c, jited_linfo[0] = 0xffffffffb800067c
->
-> We know that both of them store bpf func address, but due to the
-> different data extension operations when extended to u64, they may
-> not be the same. We need to unify the data extension operations of
-> them.
->
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
->  kernel/bpf/syscall.c                         |  5 ++++-
->  tools/lib/bpf/bpf_prog_linfo.c               |  8 ++++----
->  tools/testing/selftests/bpf/prog_tests/btf.c | 18 +++++++++---------
+Oleg Nesterov <oleg@redhat.com> writes:
 
-please split kernel changes, libbpf changes, and selftests/bpf changes
-into separate patches
+2> On 04/26, Eric W. Biederman wrote:
+>>
+>>  static void ptrace_unfreeze_traced(struct task_struct *task)
+>>  {
+>> -	if (READ_ONCE(task->__state) != __TASK_TRACED)
+>> +	if (!(READ_ONCE(task->jobctl) & JOBCTL_DELAY_WAKEKILL))
+>>  		return;
+>>
+>>  	WARN_ON(!task->ptrace || task->parent != current);
+>> @@ -213,11 +213,10 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
+>>  	 * Recheck state under the lock to close this race.
+>>  	 */
+>>  	spin_lock_irq(&task->sighand->siglock);
+>
+> Now that we do not check __state = __TASK_TRACED, we need lock_task_sighand().
+> The tracee can be already woken up by ptrace_resume(), but it is possible that
+> it didn't clear DELAY_WAKEKILL yet.
 
->  3 files changed, 17 insertions(+), 14 deletions(-)
->
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index e9621cfa09f2..4c417c806d92 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -3868,13 +3868,16 @@ static int bpf_prog_get_info_by_fd(struct file *file,
->                 info.nr_jited_line_info = 0;
->         if (info.nr_jited_line_info && ulen) {
->                 if (bpf_dump_raw_ok(file->f_cred)) {
-> +                       unsigned long jited_linfo_addr;
->                         __u64 __user *user_linfo;
->                         u32 i;
->
->                         user_linfo = u64_to_user_ptr(info.jited_line_info);
->                         ulen = min_t(u32, info.nr_jited_line_info, ulen);
->                         for (i = 0; i < ulen; i++) {
-> -                               if (put_user((__u64)(long)prog->aux->jited_linfo[i],
-> +                               jited_linfo_addr = (unsigned long)
-> +                                       prog->aux->jited_linfo[i];
-> +                               if (put_user((__u64) jited_linfo_addr,
->                                              &user_linfo[i]))
->                                         return -EFAULT;
->                         }
-> diff --git a/tools/lib/bpf/bpf_prog_linfo.c b/tools/lib/bpf/bpf_prog_linfo.c
-> index 5c503096ef43..5cf41a563ef5 100644
-> --- a/tools/lib/bpf/bpf_prog_linfo.c
-> +++ b/tools/lib/bpf/bpf_prog_linfo.c
-> @@ -127,7 +127,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
->         prog_linfo->raw_linfo = malloc(data_sz);
->         if (!prog_linfo->raw_linfo)
->                 goto err_free;
-> -       memcpy(prog_linfo->raw_linfo, (void *)(long)info->line_info, data_sz);
-> +       memcpy(prog_linfo->raw_linfo, (void *)(unsigned long)info->line_info, data_sz);
->
->         nr_jited_func = info->nr_jited_ksyms;
->         if (!nr_jited_func ||
-> @@ -148,7 +148,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
->         if (!prog_linfo->raw_jited_linfo)
->                 goto err_free;
->         memcpy(prog_linfo->raw_jited_linfo,
-> -              (void *)(long)info->jited_line_info, data_sz);
-> +              (void *)(unsigned long)info->jited_line_info, data_sz);
->
->         /* Number of jited_line_info per jited func */
->         prog_linfo->nr_jited_linfo_per_func = malloc(nr_jited_func *
-> @@ -166,8 +166,8 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
->                 goto err_free;
->
->         if (dissect_jited_func(prog_linfo,
-> -                              (__u64 *)(long)info->jited_ksyms,
-> -                              (__u32 *)(long)info->jited_func_lens))
-> +                              (__u64 *)(unsigned long)info->jited_ksyms,
-> +                              (__u32 *)(unsigned long)info->jited_func_lens))
+Yes.  The subtle differences in when __TASK_TRACED and
+JOBCTL_DELAY_WAKEKILL are cleared are causing me some minor issues.
 
-so I'm trying to understand how this is changing anything for 32-bit
-architecture and I must be missing something, sorry if I'm being
-dense. The example you used below
+This "WARN_ON(!task->ptrace || task->parent != current);" also now
+needs to be inside siglock, because the __TASK_TRACED is insufficient.
 
-jited_kyms[0] = 0xb800067c, jited_linfo[0] = 0xffffffffb800067c
 
-Wouldn't (unsigned long)0xffffffffb800067c == (long)0xffffffffb800067c
-== 0xb800067c ?
+> Now, before we take ->siglock, the tracee can exit and another thread can do
+> wait() and reap this task.
+>
+> Also, I think the comment above should be updated. I agree, it makes sense to
+> re-check JOBCTL_DELAY_WAKEKILL under siglock just for clarity, but we no longer
+> need to do this to close the race; jobctl &= ~JOBCTL_DELAY_WAKEKILL and
+> wake_up_state() are safe even if JOBCTL_DELAY_WAKEKILL was already
+> cleared.
 
-isn't sizeof(long) == sizeof(void*) == 4?
+I think you are right about it being safe, but I am having a hard time
+convincing myself that is true.  I want to be very careful sending
+__TASK_TRACED wake_ups as ptrace_stop fundamentally can't handle
+spurious wake_ups.
 
-It would be nice if you could elaborate a bit more on what problems
-did you see in practice?
+So I think adding task_is_traced to the test to verify the task
+is still frozen.
 
->                 goto err_free;
+static void ptrace_unfreeze_traced(struct task_struct *task)
+{
+	unsigned long flags;
+
+	/*
+	 * Verify the task is still frozen before unfreezing it,
+	 * ptrace_resume could have unfrozen us.
+	 */
+	if (lock_task_sighand(task, &flags)) {
+		if ((task->jobctl & JOBCTL_DELAY_WAKEKILL) &&
+		    task_is_traced(task)) {
+			task->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
+			if (__fatal_signal_pending(task))
+				wake_up_state(task, __TASK_TRACED);
+		}
+		unlock_task_sighand(task, &flags);
+	}
+}
+
+>> @@ -2307,6 +2307,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
+>>
+>>  	/* LISTENING can be set only during STOP traps, clear it */
+>>  	current->jobctl &= ~JOBCTL_LISTENING;
+>> +	current->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
 >
->         return prog_linfo;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-> index 84aae639ddb5..d9ba1ec1d5b3 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> @@ -6451,8 +6451,8 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
->                   info.nr_jited_line_info, jited_cnt,
->                   info.line_info_rec_size, rec_size,
->                   info.jited_line_info_rec_size, jited_rec_size,
-> -                 (void *)(long)info.line_info,
-> -                 (void *)(long)info.jited_line_info)) {
-> +                 (void *)(unsigned long)info.line_info,
-> +                 (void *)(unsigned long)info.jited_line_info)) {
->                 err = -1;
->                 goto done;
->         }
-> @@ -6500,8 +6500,8 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
->         }
+> minor, but
 >
->         if (CHECK(jited_linfo[0] != jited_ksyms[0],
-> -                 "jited_linfo[0]:%lx != jited_ksyms[0]:%lx",
-> -                 (long)(jited_linfo[0]), (long)(jited_ksyms[0]))) {
-> +                 "jited_linfo[0]:%llx != jited_ksyms[0]:%llx",
-> +                 jited_linfo[0], jited_ksyms[0])) {
->                 err = -1;
->                 goto done;
->         }
-> @@ -6519,16 +6519,16 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
->                 }
+> 	current->jobctl &= ~(JOBCTL_LISTENING | JOBCTL_DELAY_WAKEKILL);
 >
->                 if (CHECK(jited_linfo[i] <= jited_linfo[i - 1],
-> -                         "jited_linfo[%u]:%lx <= jited_linfo[%u]:%lx",
-> -                         i, (long)jited_linfo[i],
-> -                         i - 1, (long)(jited_linfo[i - 1]))) {
-> +                         "jited_linfo[%u]:%llx <= jited_linfo[%u]:%llx",
-> +                         i, jited_linfo[i],
-> +                         i - 1, (jited_linfo[i - 1]))) {
->                         err = -1;
->                         goto done;
->                 }
->
->                 if (CHECK(jited_linfo[i] - cur_func_ksyms > cur_func_len,
-> -                         "jited_linfo[%u]:%lx - %lx > %u",
-> -                         i, (long)jited_linfo[i], (long)cur_func_ksyms,
-> +                         "jited_linfo[%u]:%llx - %llx > %u",
-> +                         i, jited_linfo[i], cur_func_ksyms,
->                           cur_func_len)) {
->                         err = -1;
->                         goto done;
-> --
-> 2.25.1
->
+> looks better.
+
+Yes.
+
+
+Eric

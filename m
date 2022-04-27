@@ -2,142 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8D1511801
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52884511702
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234879AbiD0Mub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S234284AbiD0Mgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbiD0Mu2 (ORCPT
+        with ESMTP id S233982AbiD0MgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:50:28 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A88323BDD2;
-        Wed, 27 Apr 2022 05:47:16 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id p18so1798057edr.7;
-        Wed, 27 Apr 2022 05:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pxItn8uzU19tEpsefwPd2jxTqRmvUDlDREf7wYHJfdg=;
-        b=CXkNbYYgYNHxgTxdNOzgFTCOU2NMsqO/TKr936VUpRbby2VubmlgXWqCtlEMWtwK1e
-         wloJnjxv+1cwH8DmY3Y9UlkdiKP7n6aOqq5YfgMQUQC+wb2GjXkyl+DD1nihTzCYQoVM
-         iCd5ExfhiNAnbOQORAKYGQoFkPosH7bKwFIytrcVXirUZiz8oQyHVFqQSvgIdgueEBI0
-         9ud4u15wIlilt5XejQ33QThUrt4OSQaredPiM05UhWuVRxAJex6qMhqVYjWxXwoDA11C
-         FNpmOzU0BzNw09jrkBWsFXeoffARsMIxUfsQ7J8H9cRX1J4MwlTd523BybkGjqSuAOA2
-         ZuIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pxItn8uzU19tEpsefwPd2jxTqRmvUDlDREf7wYHJfdg=;
-        b=bkbIj5Vxtgaj6LTbmnjY3yavHY+cR8oQ0i/BOeWhHP90kbAwGqQQ25TRQ1aRl0NY1K
-         R4cpfbXHy7qhGTTZGK2/QtatNvRNfH8J0ndv042b0HxZkoEkn7CcYCeBNO7d4hAT2Icc
-         +fwSgEuykTtGKZBm8VQ5+S2CKWsZuPCqQwstc8ewA2wOECMkR9rKJgUFeF5pucbMR08S
-         hOXLItCCGZrhf7XBLVBiRdHtumLWcWGpFqMz3NwWFa18VKz/tn0AjyjzZDahG+o3pe9c
-         N3JDnW+Nzq7JIG773xceKTJhFu7jEs7DGhqtu14/vkB31OFecghq5ExW0xODr7YqLVMK
-         zrrg==
-X-Gm-Message-State: AOAM530RIglVrkxBdXwFtlm8XYIyrrrvjMXJbQAaVJTtG5asxOZoionU
-        FWlDSLoI0Yp6olWgpF0tbqA=
-X-Google-Smtp-Source: ABdhPJxQMSY+w304Fi5oIOF8QBwBTgSsoPU4u45kfsGscIhsbsuehDlNaU3LSglXfqNZ62/JJIQqaA==
-X-Received: by 2002:a05:6402:2309:b0:41f:a5a9:fe13 with SMTP id l9-20020a056402230900b0041fa5a9fe13mr30286679eda.123.1651063634731;
-        Wed, 27 Apr 2022 05:47:14 -0700 (PDT)
-Received: from [192.168.0.182] ([188.24.22.234])
-        by smtp.gmail.com with ESMTPSA id u8-20020a170906654800b006f38daa8447sm4683138ejn.145.2022.04.27.05.47.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 05:47:14 -0700 (PDT)
-Message-ID: <a4ba3f7e-6d03-36c7-e98a-3bed7db69fc6@gmail.com>
-Date:   Wed, 27 Apr 2022 15:47:13 +0300
+        Wed, 27 Apr 2022 08:36:23 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46A0108C;
+        Wed, 27 Apr 2022 05:33:11 -0700 (PDT)
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KpJ2F0h6lzCs4T;
+        Wed, 27 Apr 2022 20:28:37 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 20:33:09 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
+ 2022 20:33:09 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <tj@kernel.org>, <axboe@kernel.dk>,
+        <paolo.valente@linaro.org>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v3 0/3] support concurrent sync io for bfq on a specail occasion
+Date:   Wed, 27 Apr 2022 20:47:19 +0800
+Message-ID: <20220427124722.48465-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: adc: add AD4130
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-References: <20220419150828.191933-1-cosmin.tanislav@analog.com>
- <20220419150828.191933-2-cosmin.tanislav@analog.com>
- <Ymc+urR3N8eLLKxl@robh.at.kernel.org>
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-In-Reply-To: <Ymc+urR3N8eLLKxl@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in v3:
+ - remove the cleanup patch that is irrelevant now(I'll post it
+   separately).
+ - instead of hacking wr queues and using weights tree insertion/removal,
+   using bfq_add/del_bfqq_busy() to count the number of groups
+   (suggested by Jan Kara).
 
+Changes in v2:
+ - Use a different approch to count root group, which is much simple.
 
-On 4/26/22 03:37, Rob Herring wrote:
-> On Tue, Apr 19, 2022 at 06:08:27PM +0300, Cosmin Tanislav wrote:
->> AD4130-8 is an ultra-low power, high precision, measurement solution for
->> low bandwidth battery operated applications.
->>
->> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
->> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
->> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
->> selectable filter options, smart sequencer, sensor biasing and excitation
->> options, diagnostics, and a FIFO buffer.
->>
->> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
->> ---
->>   .../bindings/iio/adc/adi,ad4130.yaml          | 264 ++++++++++++++++++
->>   1 file changed, 264 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
->> new file mode 100644
->> index 000000000000..32996b62cd20
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
->> @@ -0,0 +1,264 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +# Copyright 2022 Analog Devices Inc.
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/iio/adc/adi,ad4130.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Analog Devices AD4130 ADC device driver
->> +
->> +maintainers:
->> +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
->> +
->> +description: |
->> +  Bindings for the Analog Devices AD4130 ADC. Datasheet can be found here:
->> +    https://www.analog.com/media/en/technical-documentation/data-sheets/AD4130-8.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - adi,ad4130-8-16-lfcsp
->> +      - adi,ad4130-8-16-wlcsp
->> +      - adi,ad4130-8-24-lfcsp
->> +      - adi,ad4130-8-24-wlcsp
-> 
-> What is lfcsp? wlcsp seems to be the package type which generally
-> shouldn't be part of the compatible.
+Currently, bfq can't handle sync io concurrently as long as they
+are not issued from root group. This is because
+'bfqd->num_groups_with_pending_reqs > 0' is always true in
+bfq_asymmetric_scenario().
 
-lfcsp is a different package type. Sadly, lfcsp provides less interrupt
-options. On lfcsp, dout-int inside interrupt-names actually only means
-DOUT, while on wlcsp, it means INT. This is why we need to distinguish
-between the different package types. I can't think of any way around it,
-see my reply to Nathan for V1.
+The way that bfqg is counted into 'num_groups_with_pending_reqs':
 
-dout support is not implemented in the driver right now because when the 
-interrupt pin is configured as dout, FIFO interrupts are unsupported, so
-the entire buffered part of the driver is useless, and extra logic is
-needed for IRQ detection then.
+Before this patchset:
+ 1) root group will never be counted.
+ 2) Count if bfqg or it's child bfqgs have pending requests.
+ 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+
+After this patchset:
+ 1) root group is counted.
+ 2) Count if bfqg have at least one bfqq that is marked busy.
+ 3) Don't count if bfqg doesn't have any busy bfqqs.
+
+The main reason to use busy state of bfqq instead of 'pending requests'
+is that bfqq can stay busy after dispatching the last request if idling
+is needed for service guarantees.
+
+With the above changes, concurrent sync io can be supported if only
+one group is activated.
+
+fio test script(startdelay is used to avoid queue merging):
+[global]
+filename=/dev/nvme0n1
+allow_mounted_write=0
+ioengine=psync
+direct=1
+ioscheduler=bfq
+offset_increment=10g
+group_reporting
+rw=randwrite
+bs=4k
+
+[test1]
+numjobs=1
+
+[test2]
+startdelay=1
+numjobs=1
+
+[test3]
+startdelay=2
+numjobs=1
+
+[test4]
+startdelay=3
+numjobs=1
+
+[test5]
+startdelay=4
+numjobs=1
+
+[test6]
+startdelay=5
+numjobs=1
+
+[test7]
+startdelay=6
+numjobs=1
+
+[test8]
+startdelay=7
+numjobs=1
+
+test result:
+running fio on root cgroup
+v5.18-rc1:	   550 Mib/s
+v5.18-rc1-patched: 550 Mib/s
+
+running fio on non-root cgroup
+v5.18-rc1:	   349 Mib/s
+v5.18-rc1-patched: 550 Mib/s
+
+Note that I also test null_blk with "irqmode=2
+completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+that service guarantees are still preserved.
+
+Previous versions:
+RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+
+Yu Kuai (3):
+  block, bfq: record how many queues are busy in bfq_group
+  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+  block, bfq: do not idle if only one group is activated
+
+ block/bfq-cgroup.c  |  1 +
+ block/bfq-iosched.c | 46 ++------------------------------------
+ block/bfq-iosched.h | 54 ++++++++-------------------------------------
+ block/bfq-wf2q.c    | 29 +++++++++++++-----------
+ 4 files changed, 28 insertions(+), 102 deletions(-)
+
+-- 
+2.31.1
+

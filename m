@@ -2,221 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887D151158B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946935115DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiD0LB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S232131AbiD0LKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiD0LAm (ORCPT
+        with ESMTP id S232179AbiD0LHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:00:42 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A2040B0EC
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:47:37 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z19so1434964edx.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+uQXRxF8+iECYsyuX3FAGjlPg6lPCQesnoPfKb3uAD0=;
-        b=kXbjCRl/9jCP6u+NnPcF+Y+vLZZ93vjJjPpewfEem9AN45JCCBgFIYmupbdh+RCrDn
-         DfFERC8GbtZ7/LuJ3cwY+2TQ3N/16e3duX+/vbSsSZZfSEKEsClf93+aAu13KB5ccIVo
-         K0Nk1jsbzBUv8hgDNnQGwDyIVtNqazsdhYBhfXcpsrZThCGdxtNa6My9UJie4OOCr85T
-         7h/tLCHC3svkj6kedl/5rD8vmKNyBVKrhg+TOFtKiaU2G0j5J5SH7BvGpjNCjntKaMdN
-         9T8DoOGrmKRBiBISkgr/2kahjg8prXsa5Mmh/UDQWyncfeXG4lRvGE7YABwkArrdn3ql
-         0UWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+uQXRxF8+iECYsyuX3FAGjlPg6lPCQesnoPfKb3uAD0=;
-        b=416Q0I2/VewZXmgfzUQJ9K+w5Vv2kvMlnXtNdjLBDub2QO8PkWkerD8Fh+WcNeCcaj
-         pSpoNt2aZ1bnr0ULmNHYCVEROnrPI7lNZaAiU5C5jyO8kPLTjlwu0dagcb9Jp5ECcVtE
-         uxCoea+kWvykzbo4TDUseOJMDIbvQO7KAnTHjlHaBBlmsdD6byn9RWtCf7ebkKDytjP9
-         MzTCrDEmL7yZRFkm+Z6yHaYTy9oQZHVd+TN28I87lc4TPP1BS6+gEzXYjyBIYCajjRCh
-         w+3YWD5i4qOlD4BrlHFoUWJdmYgRmbP9nP2aNUmYz+44dLnSKhnnFwS2rdSsTKcB2kI1
-         3eVw==
-X-Gm-Message-State: AOAM533XwfT8iANrU+VOvtx20/Ig+Jf6U4hCOO9+0AtnaUuuORZeYb5N
-        VsewisnfjsUtLoVrwHT5++DrfXqyV2TA1g==
-X-Google-Smtp-Source: ABdhPJwH2qoOAKjvHzPASguxWPUSxx7wD6r6JTmOguOcxLLGBTjoSo5P0ASVcbtW8KFZbarsO1KlnQ==
-X-Received: by 2002:aa7:d916:0:b0:425:d75f:ae68 with SMTP id a22-20020aa7d916000000b00425d75fae68mr20198174edr.270.1651052384008;
-        Wed, 27 Apr 2022 02:39:44 -0700 (PDT)
-Received: from [192.168.0.253] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p27-20020a50cd9b000000b00425d5219372sm6378024edi.50.2022.04.27.02.39.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 02:39:43 -0700 (PDT)
-Message-ID: <0c63c24a-8014-2491-095c-77893d2141d9@linaro.org>
-Date:   Wed, 27 Apr 2022 11:39:42 +0200
+        Wed, 27 Apr 2022 07:07:44 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C61E222A6;
+        Wed, 27 Apr 2022 03:59:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3B736210E8;
+        Wed, 27 Apr 2022 09:41:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651052467; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TuraDcwXXKi2cRnXfRzWlMeYV5vNom2TtBxlGkwTBtM=;
+        b=OhaACAbnzlQzYj3kadKxn23D86fCwFIVEw4Ilz4OvUjPxnWYYZoRpMM19uCnkAo75xHO9t
+        RmjHWD+I/rlxXWuBzEJ8jM9Q2jqGaFgKx4CtngGJ0k1evb/AYzMRmvfVNj9IotZYxhpUJ0
+        rfxU/ckvRGf7BXSWiaN/nHxbU8TTtpM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651052467;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TuraDcwXXKi2cRnXfRzWlMeYV5vNom2TtBxlGkwTBtM=;
+        b=Q08CHfZpCFR6XTWhfxUoKV+sZm6RsUm2xPblimsRIua3OuMo5hPBSE80QRvW4lvAJW6+ve
+        uQNYjh4+jK650LAw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E998D2C141;
+        Wed, 27 Apr 2022 09:41:06 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 79407A0620; Wed, 27 Apr 2022 11:41:06 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 11:41:06 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     yebin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next v2] jbd2: Fix null-ptr-deref when process reserved
+ list in jbd2_journal_commit_transaction
+Message-ID: <20220427094106.5lmyockklpckkbs3@quack3.lan>
+References: <20220317142137.1821590-1-yebin10@huawei.com>
+ <6268B72A.6080506@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/1] dt-bindings: nvmem: mediatek: Convert mtk-efuse
- binding to YAML
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lala Lin <lala.lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-References: <20220425084800.2021-1-allen-kh.cheng@mediatek.com>
- <20220425084800.2021-2-allen-kh.cheng@mediatek.com>
- <e64bdca8-7b18-b450-830c-ca07946a73fb@linaro.org>
- <9d65b713e3ffdd34dcca532c4c97fa98b124bde4.camel@mediatek.com>
- <0169c4ac-fdce-29b7-553a-14dc7df532d1@linaro.org>
- <a8e212a0e0449e015a33e76b320266376d4b9be6.camel@mediatek.com>
- <89609af9-5feb-0553-5e39-c97c4750b5a1@linaro.org>
- <33c754a7b6e4cd631bb2aeef002d34a6c25d6689.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <33c754a7b6e4cd631bb2aeef002d34a6c25d6689.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6268B72A.6080506@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 11:28, allen-kh.cheng wrote:
-> Hi Krzysztof,
-> 
-> On Tue, 2022-04-26 at 12:14 +0200, Krzysztof Kozlowski wrote:
->> On 26/04/2022 12:02, allen-kh.cheng wrote:
->>> Hi Krzysztof,
->>>
->>> On Tue, 2022-04-26 at 08:31 +0200, Krzysztof Kozlowski wrote:
->>>> On 26/04/2022 08:23, allen-kh.cheng wrote:
->>>>>>> +properties:
->>>>>>> +  compatible:
->>>>>>> +    oneOf:
->>>>>>> +      - enum:
->>>>>>> +          - mediatek,mt8173-efuse
->>>>>>> +          - mediatek,efuse
->>>>>>
->>>>>> Still no changes...
->>>>>>
->>>>>
->>>>> I just want to confirm again.
->>>>>
->>>>> "Generic compatibles should not be used standalone"
->>>>>
->>>>> It seems we should remove mediatek,efuse and keep
->>>>> "mediatek,mt8173-
->>>>> efuse"in binding. have I got that right?
->>>>
->>>> You should comment for which chipsets this compatible is and add
->>>> a
->>>> deprecated:true. In such case it cannot be part of enum but
->>>> separate
->>>> item in this oneOf.
->>>>
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>
->>> Thanks for your suggestions, I would plan to send PATCHs as below,
->>>
->>> We have a PATCH 01 for current accepted dts
->>>
->>> properties:
->>>   compatible:
->>>     oneOf:
->>>       - enum:
->>>         - mediatek,efuse
->>>
->>>         - mediatek,mt8173-efuse
->>>         description: Only mt8173-efuse
->>> with generic fallback should be used
->>>       - items:
->>>           - enum:
->>>     
->>> - mediatek,mt7622-efuse
->>> 			  ...
->>>           - const: mediatek,efuse
->>>
->>> Then add PATCH 02 to deprecate it
->>>
->>> properties:
->>>   compatible:
->>>     oneOf:
->>>       - enum:
->>>         - mediatek,efuse
->>>         - mediatek,mt8173-efuse
->>>         deprecated: true
->>>         description: The mediatek,efuse is a generic fallback for
->>> other
->>> Chipset. Do not use the single compatible such as mediatek,efuse
->>> or mediatek,mt8173-efuse. It is deprecated.
->>>       - items:
->>>           - enum:
->>>               - mediatek,mt7622-efuse
->>>               ...
->>>           - const: mediatek,efuse
->>>
->>>
->>> PATCH 03 for 8173
->>>
->>> update mt8173.dtsi 
->>>
->>> change compatible from "mediatek,mt8173-efuse" to "mediatek,mt8173-
->>> efuse", "mediatek,efuse";
->>>
->>>
->>> Do you think it'd be okay ?
->>
->> The idea is correct, but as I said it cannot be part of enum, but
->> separate item in oneOf. You should see an error when testing your
->> patch.
->>
->>
->> Best regards,
->> Krzysztof
-> 
-> I have tested 
-> make DT_CHECKER_FLAGS=-m dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml
-> 
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml
-> 
-> Is the following correct as final version ?
+On Wed 27-04-22 11:23:22, yebin wrote:
+> Friendly ping...
 
-Almost :)
+Ted probably forgot to send his standard email but your patch is already in
+with a slightly edited message: 23e3d7f7061f86 ("jbd2: fix a potential race
+while discarding reserved buffers after an abort")
+
+								Honza
 
 > 
-> properties:
->   compatible:
->     oneOf:
->       - const: mediatek,mt8173-efuse
-> #Don't use this in new dts files
-
-This compatible above is correct for mt8173, isn't it?
-
->         deprecated: true
->       - const:
-> mediatek,efuse
->         deprecated: true
->         description:
->          
-> Please use mediatek,efuse as fallback.
-
-Description does not match. This should be something like:
-"MediaTek efuse for MT8173. Deprecated, use mediatek,mt8173-efuse instead"
-
-
-
-Best regards,
-Krzysztof
+> On 2022/3/17 22:21, Ye Bin wrote:
+> > we got issue as follows:
+> > [   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
+> > [   72.826847] EXT4-fs (sda): Remounting filesystem read-only
+> > fallocate: fallocate failed: Read-only file system
+> > [   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
+> > [   74.793597] ------------[ cut here ]------------
+> > [   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
+> > [   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> > [   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
+> > [   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
+> > [   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
+> > [   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> > [   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
+> > [   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
+> > [   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
+> > [   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
+> > [   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
+> > [   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
+> > [   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > [   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > [   74.811897] Call Trace:
+> > [   74.812241]  <TASK>
+> > [   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
+> > [   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
+> > [   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
+> > [   74.817550]  kjournald2+0xf8/0x3e0
+> > [   74.819056]  kthread+0x153/0x1c0
+> > [   74.819963]  ret_from_fork+0x22/0x30
+> > 
+> > Above issue may happen as follows:
+> >          write                   truncate                   kjournald2
+> > generic_perform_write
+> >   ext4_write_begin
+> >    ext4_walk_page_buffers
+> >     do_journal_get_write_access ->add BJ_Reserved list
+> >   ext4_journalled_write_end
+> >    ext4_walk_page_buffers
+> >     write_end_fn
+> >      ext4_handle_dirty_metadata
+> >                  ***************JBD2 ABORT**************
+> >       jbd2_journal_dirty_metadata
+> >   -> return -EROFS, jh in reserved_list
+> >                                                     jbd2_journal_commit_transaction
+> >                                                      while (commit_transaction->t_reserved_list)
+> >                                                        jh = commit_transaction->t_reserved_list;
+> >                          truncate_pagecache_range
+> >                           do_invalidatepage
+> > 			  ext4_journalled_invalidatepage
+> > 			   jbd2_journal_invalidatepage
+> > 			    journal_unmap_buffer
+> > 			     __dispose_buffer
+> > 			      __jbd2_journal_unfile_buffer
+> > 			       jbd2_journal_put_journal_head ->put last ref_count
+> > 			        __journal_remove_journal_head
+> > 				 bh->b_private = NULL;
+> > 				 jh->b_bh = NULL;
+> > 				                      jbd2_journal_refile_buffer(journal, jh);
+> > 							bh = jh2bh(jh);
+> > 							->bh is NULL, later will trigger null-ptr-deref
+> > 				 journal_free_journal_head(jh);
+> > 
+> > As after 96f1e0974575 commit, handle reserved list will not hold "journal->j_state_lock"
+> > when kjournald2 commit transaction. So journal_unmap_buffer maybe free
+> > journal_head when handle reserved list. And lead to null-ptr-deref or some
+> > strange errors.
+> > As reserved list almost time is empty. Use "journal->j_state_lock" to protect
+> > handle reserved list can simply solve above issue.
+> > 
+> > Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
+> > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > ---
+> >   fs/jbd2/commit.c | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
+> > index 5b9408e3b370..ac7f067b7bdd 100644
+> > --- a/fs/jbd2/commit.c
+> > +++ b/fs/jbd2/commit.c
+> > @@ -488,7 +488,6 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+> >   	jbd2_journal_wait_updates(journal);
+> >   	commit_transaction->t_state = T_SWITCH;
+> > -	write_unlock(&journal->j_state_lock);
+> >   	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
+> >   			journal->j_max_transaction_buffers);
+> > @@ -508,6 +507,8 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+> >   	 * has reserved.  This is consistent with the existing behaviour
+> >   	 * that multiple jbd2_journal_get_write_access() calls to the same
+> >   	 * buffer are perfectly permissible.
+> > +	 * We use journal->j_state_lock here to serialize processing of
+> > +	 * t_reserved_list with eviction of buffers from journal_unmap_buffer().
+> >   	 */
+> >   	while (commit_transaction->t_reserved_list) {
+> >   		jh = commit_transaction->t_reserved_list;
+> > @@ -527,6 +528,7 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+> >   		jbd2_journal_refile_buffer(journal, jh);
+> >   	}
+> > +	write_unlock(&journal->j_state_lock);
+> >   	/*
+> >   	 * Now try to drop any written-back buffers from the journal's
+> >   	 * checkpoint lists.  We do this *before* commit because it potentially
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

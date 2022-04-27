@@ -2,356 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D90A510E7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D448A510E74
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357077AbiD0CHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 22:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S1357040AbiD0CKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 22:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357059AbiD0CG4 (ORCPT
+        with ESMTP id S1355825AbiD0CKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 22:06:56 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7CD4BB86
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:03:46 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p8so370042pfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D4jnht1c5Kgw5e3GXlYF8fsD8xe9LBqpiwIiKCgR7SQ=;
-        b=IUgrYQrhOP0dako0NPfxiJu5zzUHUwRrwNfWXw5uqrRgi71KlHL981Ak+LSyfpwjc8
-         Ta/4SSH/QEHSlur9Z8VxrSVXWPE78Ik84bvNX4616IU1q+BiFCJTCS3lykbYA+MqRUw2
-         IZVm8kQwyj6bztTqCpI2JEMl/c97yj0mJl0Ig=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D4jnht1c5Kgw5e3GXlYF8fsD8xe9LBqpiwIiKCgR7SQ=;
-        b=IcMk/A/HRs0U0j4SBp5ReKIAYpyuEq0/XmsJ5MjwHebS0r63KYYKygjhGN+Kd7gejW
-         5YCtf1pb9iuBOQsaEekyMZGEWNocVdAZxFT7LqA+Eihyl+3JJU6f+fHxVx0N4mKsMxS6
-         ZcOZPfjosQHLn1Pl0vfCFffrwwizyEkXesaAfP3uEv63F0o/MmqLmDn8V55+TzPJUIyb
-         ynwzCB99P1mQJ1pNYTv2DfIdODILVKSbENGMXhYRMBomIDZTwKDhOpg6G83TcODgRhxW
-         DxHLmExTHD9qYnkID7L/Wdh2kn0o5Iammvf51rjTE2zWaxtgNYPBedqD7swIOtf2bO5p
-         x8Yw==
-X-Gm-Message-State: AOAM533TBxBAC2YqmZjCvhR46K7vHmTPS3KoK/tetqG2l48kAphQHMqy
-        iJg1ylLHXNa5VpEaE2cSLj8iUw==
-X-Google-Smtp-Source: ABdhPJytHxFAohQo92hRvg2LG2Wl7JyrqpSqlwvhAu43tYRp6CaqKZl0+iJhldAycfZ4JjEu7yGhVg==
-X-Received: by 2002:a05:6a00:1494:b0:50d:4b12:8dfa with SMTP id v20-20020a056a00149400b0050d4b128dfamr9953075pfu.43.1651025026172;
-        Tue, 26 Apr 2022 19:03:46 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:482e:60bc:84d1:bf5c])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056a0023cf00b004e17e11cb17sm18324197pfc.111.2022.04.26.19.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 19:03:45 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        "Joseph S. Barrera III" <joebar@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi
-Date:   Tue, 26 Apr 2022 19:03:39 -0700
-Message-Id: <20220427020339.360855-4-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-In-Reply-To: <20220427020339.360855-1-swboyd@chromium.org>
-References: <20220427020339.360855-1-swboyd@chromium.org>
+        Tue, 26 Apr 2022 22:10:15 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F4925C76;
+        Tue, 26 Apr 2022 19:07:04 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1651025222;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vjPBVknVIOgZRzCgOW+0lSaIne05O2GDh1jZyFHKB7A=;
+        b=o6QuC1mOm03nSgHhC7b1sFcbm5JRosDT8t8+0zfC8CwEFs+d31n6mYp9Y2hM9/T7HcnxbR
+        9PyEmijkQe0RiE9VHPx5P2k3rcBiMyqKnGNSe7KZ/LBJOCtRdhBzDtnBHlBrh1FxNS7kOi
+        LIwNLME4+Q96BQ0Z4zi3pwagjK2iiTw=
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Subject: Re: [PATCH v2 12/12] md/raid5: Pivot raid5_make_request()
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+References: <20220420195425.34911-1-logang@deltatee.com>
+ <20220420195425.34911-13-logang@deltatee.com>
+Message-ID: <61411981-6401-aaa7-9d3d-6a9ac1fec4f2@linux.dev>
+Date:   Wed, 27 Apr 2022 10:06:58 +0800
 MIME-Version: 1.0
+In-Reply-To: <20220420195425.34911-13-logang@deltatee.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SoC is always present on sc7180-trogdor.dtsi and thus we should
-include it in the "generic" dtsi file for trogdor. Previously we had
-removed it from there because we had to do the spi6/spi0 swizzle, so
-each trogdor variant board had to include sc7180.dtsi and then
-sc7180-trogdor.dtsi so that the latter dtsi file could modify the right
-spi bus for EC and H1 properties that are common to all trogdor boards.
 
-Now that we're done with that we can replace sc7180.dtsi includes with
-sc7180-trogdor.dtsi and include sc7180.dtsi in sc7180-trogdor.dtsi as
-was originally intended. We still need to include sc7180-trogdor.dtsi
-before the bridge dtsi files though because those rely on the panel
-label.
 
-Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi            | 1 -
- arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dts        | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dts        | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dts        | 2 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts    | 2 +-
- .../boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts    | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts  | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts  | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts           | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts           | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts        | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts       | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts           | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts        | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts       | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts           | 2 +-
- arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi            | 1 -
- arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts                 | 1 -
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi                   | 3 ++-
- 19 files changed, 17 insertions(+), 19 deletions(-)
+On 4/21/22 3:54 AM, Logan Gunthorpe wrote:
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-index ac2279142a95..8ac1f1e61006 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-@@ -5,7 +5,6 @@
-  * Copyright 2020 Google LLC.
-  */
- 
--#include "sc7180.dtsi"
- #include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dts
-index 70032983fb65..d9e905ed4e62 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-homestar.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dts
-index e92e2e9e48ed..242c178fdc52 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-homestar.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dts
-index 0de0c97f5728..66dd87016201 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-parade-ps8640.dtsi"
- #include "sc7180-trogdor-homestar.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts
-index f360ff27226e..235cda2bba5e 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-trogdor-lte-sku.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts
-index c44ed54af690..913b5fc3ba76 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-parade-ps8640.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-trogdor-lte-sku.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts
-index 42b4bbcc76f4..d42dcd421146 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-trogdor-lte-sku.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts
-index dc47842bc662..15d77dc5f956 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-parade-ps8640.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-trogdor-lte-sku.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index b142006478ea..bfbf26fd2cd4 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index 59740799fa3a..d45a59afd7fc 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts
-index 18ef9da71998..6ff81c1f7c44 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-lite.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
-index 8913592b2d82..e58e36e35950 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-trogdor-lte-sku.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts
-index 7adcedbf080d..76c83f88cb41 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-lite.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts
-index 7f5c015e1ecb..960f7b7ce094 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-parade-ps8640.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-lite.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts
-index 8107f3d932eb..38027f13b9d0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-parade-ps8640.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-trogdor-lte-sku.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts
-index 83f6a4eb5ae5..56dd222650d3 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts
-@@ -7,7 +7,7 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
-+#include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-parade-ps8640.dtsi"
- #include "sc7180-trogdor-lazor.dtsi"
- #include "sc7180-lite.dtsi"
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-index 3bca7545ffe5..4841d42c8c62 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-@@ -5,7 +5,6 @@
-  * Copyright 2020 Google LLC.
-  */
- 
--#include "sc7180.dtsi"
- #include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 6c822c84112a..352827e5740a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -7,7 +7,6 @@
- 
- /dts-v1/;
- 
--#include "sc7180.dtsi"
- #include "sc7180-trogdor.dtsi"
- #include "sc7180-trogdor-ti-sn65dsi86.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index ea5bedc3d1cb..e55dbaa6dc12 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -11,7 +11,8 @@
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include <dt-bindings/sound/sc7180-lpass.h>
- 
--/* PMICs depend on spmi_bus label and so must come after SoC */
-+#include "sc7180.dtsi"
-+/* PMICs depend on spmi_bus label and so must come after sc7180.dtsi */
- #include "pm6150.dtsi"
- #include "pm6150l.dtsi"
- 
--- 
-https://chromeos.dev
+> The number of times the lock is taken can be reduced by pivoting
+> raid5_make_request() so that it loops through every stripe and then
+> loops through every disk in that stripe to see if the bio must be
+> added. This reduces the number of times the lock must be taken by
+> a factor equal to the number of data disks.
+>
+> To accomplish this, store the minimum and maxmimum disk sector that
+> has already been finished and continue to the next logical sector if
+> it is found that the disk sector has already been done. Then add a
+> add_all_stripe_bios() to check all the bios for overlap and add them
+> all if none of them overlap.
+>
+> Signed-off-by: Logan Gunthorpe<logang@deltatee.com>
+> ---
+>   drivers/md/raid5.c | 92 +++++++++++++++++++++++++++++++++++++++++++---
+>   drivers/md/raid5.h |  1 +
+>   2 files changed, 88 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 40a25c4b80bd..f86866cb15be 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -3571,6 +3571,48 @@ static bool add_stripe_bio(struct stripe_head *sh, struct bio *bi,
+>   	return true;
+>   }
+>   
+> +static int add_all_stripe_bios(struct stripe_head *sh, struct bio *bi,
+> +		sector_t first_logical_sector, sector_t last_sector,
+> +		int forwrite, int previous)
+> +{
+> +	int dd_idx;
+> +	int ret = 1;
+> +
+> +	spin_lock_irq(&sh->stripe_lock);
+> +
+> +	for (dd_idx = 0; dd_idx < sh->disks; dd_idx++) {
+> +		struct r5dev *dev = &sh->dev[dd_idx];
+> +
+> +		clear_bit(R5_BioReady, &dev->flags);
+> +
+> +		if (dd_idx == sh->pd_idx)
+> +			continue;
+> +
+> +		if (dev->sector < first_logical_sector ||
+> +		    dev->sector >= last_sector)
+> +			continue;
+> +
+> +		if (stripe_bio_overlaps(sh, bi, dd_idx, forwrite)) {
+> +			set_bit(R5_Overlap, &dev->flags);
+> +			ret = 0;
+> +			continue;
+> +		}
+> +
+> +		set_bit(R5_BioReady, &dev->flags);
 
+Is  it possible to just call __add_stripe_bio here? And change above 
+"continue"
+to "return",
+
+> +	}
+> +
+> +	if (!ret)
+> +		goto out;
+> +
+> +	for (dd_idx = 0; dd_idx < sh->disks; dd_idx++)
+> +		if (test_bit(R5_BioReady, &sh->dev[dd_idx].flags))
+> +			__add_stripe_bio(sh, bi, dd_idx, forwrite, previous);
+
+then we don't need another loop here, also no need to introduce another 
+flag.
+But I am not sure it is feasible, so just FYI.
+
+> +
+> +out:
+> +	spin_unlock_irq(&sh->stripe_lock);
+> +	return ret;
+> +}
+> +
+>   static void end_reshape(struct r5conf *conf);
+>   
+>   static void stripe_set_idx(sector_t stripe, struct r5conf *conf, int previous,
+> @@ -5869,6 +5911,10 @@ enum stripe_result {
+>   struct stripe_request_ctx {
+>   	bool do_flush;
+>   	struct stripe_head *batch_last;
+> +	sector_t disk_sector_done;
+> +	sector_t start_disk_sector;
+> +	bool first_wrap;
+> +	sector_t last_sector;
+>   };
+
+Could you add some comments to above members if possible?
+
+>   static enum stripe_result make_stripe_request(struct mddev *mddev,
+> @@ -5908,6 +5954,36 @@ static enum stripe_result make_stripe_request(struct mddev *mddev,
+>   
+>   	new_sector = raid5_compute_sector(conf, logical_sector, previous,
+>   					  &dd_idx, NULL);
+> +
+> +	/*
+> +	 * This is a tricky algorithm to figure out which stripe_heads that
+> +	 * have already been visited and exit early if the stripe_head has
+> +	 * already been done. (Seeing all disks are added to a stripe_head
+> +	 * once in add_all_stripe_bios().
+> +	 *
+> +	 * To start with, the disk sector of the last stripe that has been
+> +	 * completed is stored in ctx->disk_sector_done. If the new_sector is
+> +	 * less than this value, the stripe_head has already been done.
+> +	 *
+> +	 * There's one issue with this: if the request starts in the middle of
+> +	 * a chunk, all the stripe heads before the starting offset will be
+> +	 * missed. To account for this, set the first_wrap boolean to true
+> +	 * if new_sector is less than the starting sector. Clear the
+> +	 * boolean once the start sector is hit for the second time.
+> +	 * When first_wrap is set, ignore the disk_sector_done.
+> +	 */
+> +	if (ctx->start_disk_sector == MaxSector) {
+> +		ctx->start_disk_sector = new_sector;
+> +	} else if (new_sector < ctx->start_disk_sector) {
+> +		ctx->first_wrap = true;
+> +	} else if (new_sector == ctx->start_disk_sector) {
+> +		ctx->first_wrap = false;
+> +		ctx->start_disk_sector = 0;
+> +		return STRIPE_SUCCESS;
+> +	} else if (!ctx->first_wrap && new_sector <= ctx->disk_sector_done) {
+> +		return STRIPE_SUCCESS;
+> +	}
+> +
+
+Hmm, with above tricky algorithm, I guess the point is that we can avoid 
+to call below
+stripe_add_to_batch_list where has hash_lock contention. If so, maybe we 
+can change
+stripe_can_batch for the purpose.
+
+>   	if (stripe_can_batch(sh)) {
+>   		stripe_add_to_batch_list(conf, sh, ctx->batch_last);
+>   		if (ctx->batch_last)
+> @@ -5977,8 +6057,10 @@ static enum stripe_result make_stripe_request(struct mddev *mddev,
+>   static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+>   {
+>   	struct r5conf *conf = mddev->private;
+> -	sector_t logical_sector, last_sector;
+> -	struct stripe_request_ctx ctx = {};
+> +	sector_t logical_sector;
+> +	struct stripe_request_ctx ctx = {
+> +		.start_disk_sector = MaxSector,
+> +	};
+>   	const int rw = bio_data_dir(bi);
+>   	enum stripe_result res;
+>   	DEFINE_WAIT(w);
+> @@ -6021,7 +6103,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+>   	}
+>   
+>   	logical_sector = bi->bi_iter.bi_sector & ~((sector_t)RAID5_STRIPE_SECTORS(conf)-1);
+> -	last_sector = bio_end_sector(bi);
+> +	ctx.last_sector = bio_end_sector(bi);
+>   	bi->bi_next = NULL;
+>   
+>   	/* Bail out if conflicts with reshape and REQ_NOWAIT is set */
+> @@ -6036,7 +6118,7 @@ static bool raid5_make_request(struct mddev *mddev, struct bio * bi)
+>   	}
+>   	md_account_bio(mddev, &bi);
+>   	prepare_to_wait(&conf->wait_for_overlap, &w, TASK_UNINTERRUPTIBLE);
+> -	while (logical_sector < last_sector) {
+> +	while (logical_sector < ctx.last_sector) {
+>   		res = make_stripe_request(mddev, conf, &ctx, logical_sector,
+>   					  bi);
+>   		if (res == STRIPE_FAIL) {
+> diff --git a/drivers/md/raid5.h b/drivers/md/raid5.h
+> index 638d29863503..e73b58844f83 100644
+> --- a/drivers/md/raid5.h
+> +++ b/drivers/md/raid5.h
+> @@ -308,6 +308,7 @@ enum r5dev_flags {
+>   	R5_Wantwrite,
+>   	R5_Overlap,	/* There is a pending overlapping request
+>   			 * on this block */
+> +	R5_BioReady,    /* The current bio can be added to this disk */
+
+This doesn't seem right to me, since the comment describes bio status 
+while others
+are probably for r5dev.
+
+Thanks,
+Guoqing

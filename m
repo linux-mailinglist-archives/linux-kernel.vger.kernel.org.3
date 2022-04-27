@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DBD511A12
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D71511A82
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbiD0OX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S237861AbiD0O3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237618AbiD0OX4 (ORCPT
+        with ESMTP id S237809AbiD0O3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:23:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F15E22DF90;
-        Wed, 27 Apr 2022 07:20:44 -0700 (PDT)
+        Wed, 27 Apr 2022 10:29:10 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF38D29F;
+        Wed, 27 Apr 2022 07:25:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651069244; x=1682605244;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FF9dZMsdhcirHLT0yX4WRrKdmuQYa58gNDfW0zo81+Q=;
-  b=eUOPG2lZk3Lu1Kt0pX3CbEA6EB1X9P3JPzw0R7bDNcYNx6Zw1sxCgmfG
-   Dq1Z8Q4/mnLTrJP9Ve1qpGw9NyMNHmDx3uxYC+JfV4gsrBz9LiZtf2CMd
-   ASURZUGu69iZnaDzU4J9mY3zBX84KTaubYCqxCl9rDlZQs3lFX3kVvvRE
-   o0rIo9+akUYgyj3x3QNDmWWBn1Ypn3Q8IfT0BqI0BJzaKH0T/ZBjrr9Zz
-   LlpC7ebd+lWsNWQ6J3zYwu47kwNYQxWw1q5VYbm4q03VyGxLSvYiBXyJL
-   p+qGgxlCoatJAiwdqygsY86OAt/bKvKt2fXTWTGsdTS583mLk6egYpUbR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265752153"
+  t=1651069559; x=1682605559;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gFU2R6wlf2Alrac6+LofoISZC2O4Ez0lIBWYeC9XB9g=;
+  b=WVcSJKpfLInMzj+J2mpYZp1GKmQd64GUvUiegaUHOvDGVQhTlU4sB922
+   EulcWciIRTOfCVNI8urtp+UOjILGdJ9turE5zuGYwDvxTQGLmoYPboULm
+   w0TKhtV3NpWVJyxXIwJYatTqD22cIGPcmGo6cGKLxz3jjNgUC2QhTjsHs
+   S0qkYiIt9hys0QLfnotFjQ9II5Yzl/oMbSOWfNPK/GgoWbjmK2t/Uju3z
+   kxNqSZpqF/JHUsGpwua5R7/FPpqMXQuxzx1/VRUY/sGGGBbGLCIiY9QgV
+   yGRY/teIR9DjMf+DUvvINdHkRDkEiDgifeIOkTUZ17osego3QtuHLBWo1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="326435323"
 X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="265752153"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:20:44 -0700
+   d="scan'208";a="326435323"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:25:33 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="533227804"
-Received: from pcurcohe-mobl.amr.corp.intel.com (HELO [10.212.68.237]) ([10.212.68.237])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:20:42 -0700
-Message-ID: <49cc6848-47ae-9c25-f479-c5aed8c892df@intel.com>
-Date:   Wed, 27 Apr 2022 07:24:03 -0700
+   d="scan'208";a="650724525"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Apr 2022 07:25:29 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njibh-0004i6-7n;
+        Wed, 27 Apr 2022 14:25:29 +0000
+Date:   Wed, 27 Apr 2022 22:24:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrea Merello <andrea.merello@gmail.com>, jic23@kernel.org,
+        mchehab+huawei@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, lars@metafoo.de, robh+dt@kernel.org,
+        andy.shevchenko@gmail.com, matt.ranostay@konsulko.com,
+        ardeleanalex@gmail.com, jacopo@jmondi.org,
+        Andrea Merello <andrea.merello@iit.it>
+Subject: Re: [v5 12/14] iio: imu: add BNO055 serdev driver
+Message-ID: <202204272204.zqCIf1KV-lkp@intel.com>
+References: <20220426131102.23966-13-andrea.merello@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 05/21] x86/virt/tdx: Detect P-SEAMLDR and TDX module
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <b9f4d4afd244d685182ce9ab5ffdd0bf245be6e2.1649219184.git.kai.huang@intel.com>
- <104a6959-3bd4-1e75-5e3d-5dc3ef025ed0@intel.com>
- <98af78402861b1982607c5fd14b0c89403c042a6.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <98af78402861b1982607c5fd14b0c89403c042a6.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426131102.23966-13-andrea.merello@gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 17:01, Kai Huang wrote:
-> On Tue, 2022-04-26 at 13:56 -0700, Dave Hansen wrote:
->> On 4/5/22 21:49, Kai Huang wrote:
->>> The P-SEAMLDR (persistent SEAM loader) is the first software module that
->>> runs in SEAM VMX root, responsible for loading and updating the TDX
->>> module.  Both the P-SEAMLDR and the TDX module are expected to be loaded
->>> before host kernel boots.
->>
->> Why bother with the P-SEAMLDR here at all?  The kernel isn't loading the
->> TDX module in this series.  Why not just call into the TDX module directly?
-> 
-> It's not absolutely needed in this series.  I choose to detect P-SEAMLDR because
-> detecting it can also detect the TDX module, and eventually we will need to
-> support P-SEAMLDR because the TDX module runtime update uses P-SEAMLDR's
-> SEAMCALL to do that.
-> 
-> Also, even for this series, detecting the P-SEAMLDR allows us to provide the P-
-> SEAMLDR information to user at a basic level in dmesg:
-> 
-> [..] tdx: P-SEAMLDR: version 0x0, vendor_id: 0x8086, build_date: 20211209,
-> build_num 160, major 1, minor 0
-> 
-> This may be useful to users, but it's not a hard requirement for this series.
+Hi Andrea,
 
-We've had a lot of problems in general with this code trying to do too
-much at once.  I thought we agreed that this was going to only contain
-the minimum code to make TDX functional.  It seems to be creeping to
-grow bigger and bigger.
+Thank you for the patch! Perhaps something to improve:
 
-Am I remembering this wrong?
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master linux/master v5.18-rc4 next-20220427]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrea-Merello/Add-support-for-Bosch-BNO055-IMU/20220426-212132
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: alpha-randconfig-r036-20220427 (https://download.01.org/0day-ci/archive/20220427/202204272204.zqCIf1KV-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/675ca9cd13af45cc5943dd15caad5e866fd7c971
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andrea-Merello/Add-support-for-Bosch-BNO055-IMU/20220426-212132
+        git checkout 675ca9cd13af45cc5943dd15caad5e866fd7c971
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/iio/imu/bno055/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/imu/bno055/bno055.c:1317:5: warning: no previous prototype for 'bno055_debugfs_reg_access' [-Wmissing-prototypes]
+    1317 | int bno055_debugfs_reg_access(struct iio_dev *iio_dev, unsigned int reg,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/bno055_debugfs_reg_access +1317 drivers/iio/imu/bno055/bno055.c
+
+2f40e22369ed70 Andrea Merello 2022-04-26  1316  
+2f40e22369ed70 Andrea Merello 2022-04-26 @1317  int bno055_debugfs_reg_access(struct iio_dev *iio_dev, unsigned int reg,
+2f40e22369ed70 Andrea Merello 2022-04-26  1318  			      unsigned int writeval, unsigned int *readval)
+2f40e22369ed70 Andrea Merello 2022-04-26  1319  {
+2f40e22369ed70 Andrea Merello 2022-04-26  1320  	return 0;
+2f40e22369ed70 Andrea Merello 2022-04-26  1321  }
+2f40e22369ed70 Andrea Merello 2022-04-26  1322  #endif
+2f40e22369ed70 Andrea Merello 2022-04-26  1323  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,161 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153845119CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D3B511A4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235316AbiD0NNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S235350AbiD0NOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiD0NNc (ORCPT
+        with ESMTP id S235481AbiD0NOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:13:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B313808C0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:10:17 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 538EC30B;
-        Wed, 27 Apr 2022 15:10:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1651065014;
-        bh=JAZobPiVE1XENl+KRj+bL9U8OuARgC0UTHGiOLvnliY=;
+        Wed, 27 Apr 2022 09:14:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3E325B421
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:10:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 628CCB826F0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6848C385AC;
+        Wed, 27 Apr 2022 13:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651065051;
+        bh=+XL1/pmjJfKpo6NH3R6GZKWySie+sXzNve8evJAXkxU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rkk+zeHE00lUOzymjDjdK2IOD821KYy+66vwHkrktQxffDOOOmkHWhVCSTVOie9Lt
-         15T/IOFgSTWuxRfZgv533D1ISRlP2l/aVoPAmoZa6G+bFU45bAlH5F9nQOkObumo1V
-         WFDG5fhV5/9V7Q72CtheDPei+LXoemy97EVem60A=
-Date:   Wed, 27 Apr 2022 16:10:13 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
- bridge"
-Message-ID: <YmlAtUTJiBrsFBN3@pendragon.ideasonboard.com>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org>
- <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat>
- <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
- <CAMty3ZAkw0rssCzR_ka7U9JeoGxJr5JPM7GWDfd1dob9goL-BQ@mail.gmail.com>
+        b=NQ3p4YhmGkdA9T4JUgl6tUfv5uZfcF8eWjkqjLRu84AAtOkd1ChGYmvaFI8YZWWWg
+         kJi1m+oxgElN9Kx32RefgzDdhbafu6n4x19KHa441+i74cRCCZtNFQG2xgLkVwgoDQ
+         44rxGyQlHUjO9NDaqAU8eGDypZDOwNoJoF0cs+No=
+Date:   Wed, 27 Apr 2022 15:10:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
+Cc:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
+Message-ID: <YmlA1w124Ws2z/RV@kroah.com>
+References: <cover.1650321310.git.codeagain@codeagain.dev>
+ <YmA4QIRfx2QPhEJi@kroah.com>
+ <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
+ <YmJNqMjXEc4KGrJ8@kroah.com>
+ <20220427121851.4e2rjbbabw5sh3lk@AN5Bruno>
+ <Ymk3qimGl1tTjpSL@kroah.com>
+ <20220427124114.woiiuxr6pnxvadwg@AN5Bruno>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMty3ZAkw0rssCzR_ka7U9JeoGxJr5JPM7GWDfd1dob9goL-BQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427124114.woiiuxr6pnxvadwg@AN5Bruno>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 05:22:32PM +0530, Jagan Teki wrote:
-> On Wed, Apr 27, 2022 at 12:29 PM Jagan Teki wrote:
-> > On Thu, Apr 21, 2022 at 1:54 PM Maxime Ripard wrote:
-> > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > > + Linus
-> > > > + Marek
-> > > > + Laurent
-> > > > + Robert
-> > > >
-> > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
-> > > > <bjorn.andersson@linaro.org> wrote:
-> > > > >
-> > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > > > bridge")' attempted to simplify the case of expressing a simple panel
-> > > > > under a DSI controller, by assuming that the first non-graph child node
-> > > > > was a panel or bridge.
-> > > > >
-> > > > > Unfortunately for non-trivial cases the first child node might not be a
-> > > > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > > > DisplayPort, or an opp-table represented before the panel node.
-> > > > >
-> > > > > In these cases the reverted commit prevents the caller from ever finding
-> > > > > a reference to the panel.
-> > > > >
-> > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > > > > panel or bridge")', in favor of using an explicit graph reference to the
-> > > > > panel in the trivial case as well.
-> > > >
-> > > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > > switched drivers.  Do you have any suggestions on how to proceed to
-> > > > succeed in those use cases as well?
-> > >
-> > > I guess we could create a new helper for those, like
-> > > devm_drm_of_get_bridge_with_panel, or something.
-> >
-> > I think using the same existing helper and updating child support is
-> > make sense, as there is a possibility to use the same host for child
-> > and OF-graph bindings.
-> >
-> > I can see two possible solutions (as of now)
-> >
-> > 1. adding "dcs-child-type" bindings for child-based panel or bridge
-> > 2. iterate child and skip those nodes other than panel or bridge. or
-> > iterate sub-child to find it has a panel or bridge-like aux-bus (which
-> > is indeed hard as this configuration seems not 'standard' i think )
-> >
-> > Any inputs?
-> 
-> Checking aux-bus with the sub-node panel can be a possible check to
-> look at it, any comments?
+On Wed, Apr 27, 2022 at 09:41:14AM -0300, Bruno Moreira-Guedes wrote:
+> On Wed, Apr 27, 2022 at 02:31:38PM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Apr 27, 2022 at 09:18:51AM -0300, Bruno Moreira-Guedes wrote:
+> > > Hello,
+> > > 
+> > > On Fri, Apr 22, 2022 at 08:39:36AM +0200, Greg Kroah-Hartman wrote:
+> > > > On Thu, Apr 21, 2022 at 08:16:05PM +0100, Martyn Welch wrote:
+> > > > > On Wed, 2022-04-20 at 18:43 +0200, Greg Kroah-Hartman wrote:
+> > > > > > On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wrote:
+> > > > > > > This patch series modify the vme_user driver's place in
+> > > > > > > menuconfig (1/3), fixes a missing `depends on` line in a Kconfig
+> > > > > > > file
+> > > > > > > (2/3), and rearrages the directory tree for the driver allowing a
+> > > > > > > more
+> > > > > > > straightforward comprehension of its contents (3/3).
+> > > > > > > 
+> > > > > > > The 'vme_user/' driver is the only remaining vme-family driver in
+> > > > > > > the
+> > > > > > > 'staging/' tree, but its structure, entry in menuconfig and
+> > > > > > > building
+> > > > > > > routines are still attached to the 'vme/' subtree now outside
+> > > > > > > 'staging/'. The present patchset fixes it.
+> > > > > > > 
+> > > > > > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+> > > > > > 
+> > > > > > What about deleting the vme drivers entirely?
+> > > > > 
+> > > > > I assume you're suggesting deleting the "vme_user" driver from the
+> > > > > staging directory?
+> > > > 
+> > > > Yes, at the very least given that no one has tried to fix it up and get
+> > > > it out of staging in many years.
+> > > 
+> > > While I cannot comment anything on that regard, I imagine the v4 I sent
+> > > a couple of days ago will wait for that decision, right?
+> > 
+> > I do not know what you are referring to, sorry.  My staging patch queue
+> > is empty right now.
+> Ohhh, okay, no problem, I have sent a v4 around 6 days ago and thought
+> you were waiting on this definition.
 
-Can we stop piling hacks and move towards OF graph everywhere, please ?
+If I did not take it, please resend.
 
-> --- a/drivers/gpu/drm/drm_of.c
-> +++ b/drivers/gpu/drm/drm_of.c
-> @@ -244,6 +244,25 @@ int drm_of_find_panel_or_bridge(const struct
-> device_node *np,
->         if (panel)
->                 *panel = NULL;
-> 
-> +       /**
-> +        * Devices can also be child nodes when we also control that device
-> +        * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
-> +        *
-> +        * Lookup for a child node of the given parent that isn't either port
-> +        * or ports.
-> +        */
-> +       for_each_available_child_of_node(np, remote) {
-> +               if (of_node_name_eq(remote, "port") ||
-> +                   of_node_name_eq(remote, "ports"))
-> +                       continue;
-> +
-> +               if (!(of_node_name_eq(remote, "aux-bus") &&
-> +                     of_get_child_by_name(remote, "panel")))
-> +                       continue;
-> +
-> +               goto of_find_panel_or_bridge;
-> +       }
-> +
->         /*
->          * of_graph_get_remote_node() produces a noisy error message if port
->          * node isn't found and the absence of the port is a legit case here,
-> @@ -254,6 +273,8 @@ int drm_of_find_panel_or_bridge(const struct
-> device_node *np,
->                 return -ENODEV;
-> 
->         remote = of_graph_get_remote_node(np, port, endpoint);
-> +
-> +of_find_panel_or_bridge:
->         if (!remote)
->                 return -ENODEV;
+thanks,
 
--- 
-Regards,
-
-Laurent Pinchart
+greg k-h

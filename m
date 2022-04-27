@@ -2,249 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AB2511341
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABE6511347
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359332AbiD0IL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S1359335AbiD0INN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354468AbiD0ILr (ORCPT
+        with ESMTP id S244734AbiD0INK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:11:47 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D81B14D299
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:08:34 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id w17so1925427ybh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ocOESGw7XVASTSwvCDpOuAgEDVf5NNf8AWJY82qKm8o=;
-        b=v8WwPOOemO641H3Y7HLAacEFdl940XbrIoASvS4InWwLy9z+Sa+PFmpEzChvN2s7BX
-         BdbatpcQ3CxNerO8rJE3AbIgcg7XMxQeJDCnBfH5SyojxGZCziVi/YmU7feF6tPF/Kkg
-         4rImV+LTbm1Yk6wwS1cqMtv+8bviLyd5VM+fufpDJq4WKQSAyZkcOcs7HR4ubmzilvK3
-         QpYZQjo+uCaNLTVsMWLTyuFXjncUPfXGMlDBwcITKCyaYsvJtHgL4jJfqa4xsz5S85gq
-         K4L/VVU2dBSZSU5Q5sJXyig1Bdmj0LRR1mJ8CfHm/3IWNBa8OGRVBVmEBC2qmn2QL+tc
-         gCCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ocOESGw7XVASTSwvCDpOuAgEDVf5NNf8AWJY82qKm8o=;
-        b=WEPXg0yXWYW8dFoJb9oysO/erhYwfH0LhpAI8LZKFgS2TKGDsEC1msFG0TWcp5r4wA
-         qOQn9C78T179uvyexyb2ATerQAFP+Vgu1tc36tefM2h4nRAJbIYkOf0EnRxhfsDAirWn
-         Sutjoio2Y1aYqzJZVqPDn4Xm6/0qgCjhNfbCtIrVhSPQk8wmyS1X8sO9Lt32MVJKRfb/
-         +rtKdLJAA1larFO41YxQJ6iN/uq0x0HR8ug129XYiCBtMayoYn6Jv/SxAu9eZDRa/uru
-         tvKo80zr7fWM6TZJQAV6zbKINDrYaszCsQ24UntFVTHQlfTn9XWnUIQjuFrhc64Xshqw
-         kr3w==
-X-Gm-Message-State: AOAM532yTZ7jRbGXpk/PXgTKz/sn6pl2Cs3TOV9bF5FhlHDhN01YJLA3
-        Df/fvGYUHNduKjzHqyZtZpcP02/kYKzjvByaLXQOpw==
-X-Google-Smtp-Source: ABdhPJxISh9cGWWhc1zMyKGqPyx3MjqK5qah/U6lO55iKVFy4GWRVkb+Zjqixq31S/zQ8f6I89fJCcNvPqF8wtxymHg=
-X-Received: by 2002:a25:c012:0:b0:648:4912:7b9a with SMTP id
- c18-20020a25c012000000b0064849127b9amr16152605ybf.474.1651046913582; Wed, 27
- Apr 2022 01:08:33 -0700 (PDT)
+        Wed, 27 Apr 2022 04:13:10 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEC2237C7;
+        Wed, 27 Apr 2022 01:09:58 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1651046996; bh=8IZuHw4VAQpc/c5fMYUJkTAtA9Skb0wCA70zXBoZJbw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BS81t7rBba7fCg16X7a51opdR1lsHAkf7hUUhYyD3R/Jlc1R+j6Foq3r9IXkSSoMd
+         omMpa7b2/HEraedpY7QHRmIfyiMfBh6DfT/U85mj2PzqdYXYACBNKyC9kM6y6hIcqb
+         sch64TPDLRgoWPJGI9BBDQoM2DzY5er1IZtlEvbp3IoKOO9FDirPJbQGLFZNWtmQxF
+         aAF4zV0d2UpBNpzznyip3DBopjIjXtKCjmzcio3rG9t0rYRhy5Qy00CBZSA+TGgE+C
+         a1toMfCakwBblzLBXtr9LWQA/Qzf/1B1dvba+tesey/Vx+ONnXm815pg8RjB3GdSiT
+         jP4wlWD+qIkKw==
+To:     Wan Jiabing <wanjiabing@vivo.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Subject: Re: [PATCH] ath9k: hif_usb: simplify if-if to if-else
+In-Reply-To: <20220424094441.104937-1-wanjiabing@vivo.com>
+References: <20220424094441.104937-1-wanjiabing@vivo.com>
+Date:   Wed, 27 Apr 2022 10:09:56 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <871qxjhrqj.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20220426081741.202366502@linuxfoundation.org>
-In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 27 Apr 2022 13:38:21 +0530
-Message-ID: <CA+G9fYsodOu4GKm8jFr=vbWECJ6a2iLKifsMCUjLg1i1027=wA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/86] 5.10.113-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 14:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Wan Jiabing <wanjiabing@vivo.com> writes:
+
+> Use if and else instead of if(A) and if (!A).
 >
-> This is the start of the stable review cycle for the 5.10.113 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.113-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.113-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 889ce55360e75088d2b85d71e5119d5e3d45c90c
-* git describe: v5.10.112-87-g889ce55360e7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.112-87-g889ce55360e7
-
-## Test Regressions (compared to v5.10.111-106-gd5c581fe77b5)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.111-106-gd5c581fe77b5)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.111-106-gd5c581fe77b5)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.111-106-gd5c581fe77b5)
-No metric fixes found.
-
-## Test result summary
-total: 99479, pass: 83784, fail: 947, skip: 13672, xfail: 1076
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 51 passed, 9 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>

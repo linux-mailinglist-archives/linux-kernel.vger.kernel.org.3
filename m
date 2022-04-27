@@ -2,161 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BD65119DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C2C511B51
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237952AbiD0OeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S237953AbiD0Odd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237948AbiD0OeB (ORCPT
+        with ESMTP id S237800AbiD0OdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:34:01 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71935617C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:30:47 -0700 (PDT)
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 23REUMKv013589
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:30:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 23REUMKv013589
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651069823;
-        bh=PaAe2OFK506VVqXplQDNPZOKX+44YVahRECy+APqLjM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=w5tapwFWKkhIK37xg0+ASjYfOkAOkNUoTuSC4NhqJ7MyEtYf6Fa0zwpF/TI6L1d2R
-         rb0UZMgfW6jxY8lqZco/flmD3tX8/C1tBvAZxK5IzWstlzHRnXyxO11Q6RYw9KbP0o
-         4u0I5LpbDHKJQq15lDh9d6nfymy0hfapbpTxekG7DyvhqqQJav5+h2LhhKiw73HSjF
-         UgN2EeV6g2RzVWsowgiCZt9chU2pE/wE6czC+kxQ7D1ss+pjMiniQA21PMbhbUBK6L
-         ngW8lJypz2s/0TrYIRbJRZH8ilBBsg1nZRsT1/pHICTxTBZyAg7X3IXHqiEWBtwpF4
-         8o+2QMjCvocMg==
-X-Nifty-SrcIP: [209.85.216.50]
-Received: by mail-pj1-f50.google.com with SMTP id fv2so1637665pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:30:22 -0700 (PDT)
-X-Gm-Message-State: AOAM531Csb05+RhN4nCk81gDEyE5ViIJGm0/i2U5jRQWlvENWiWsaA4U
-        Z0553cTL3QdrmuvzKDzN/GGBRfMz6K1vTYY5PSc=
-X-Google-Smtp-Source: ABdhPJzsqO5dqPiCgEbDywVSsGVMqRfZVIbn+bDPITwKt7U1kozX58TTKo8CXXJNGCMuJrcaEa3uaRpPqcrxDMUVLPY=
-X-Received: by 2002:a17:90a:e7d1:b0:1da:30d0:9327 with SMTP id
- kb17-20020a17090ae7d100b001da30d09327mr4886230pjb.144.1651069821974; Wed, 27
- Apr 2022 07:30:21 -0700 (PDT)
+        Wed, 27 Apr 2022 10:33:25 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502AD18382;
+        Wed, 27 Apr 2022 07:30:12 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id q23so2790986wra.1;
+        Wed, 27 Apr 2022 07:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=61rDep7IpGIu+stwVlsWVOdIyeXLNS0Q3CFSi62k+PQ=;
+        b=Gqm0fuYX6bqhl3AfoFdRL3YHFxuycncTyBYKJw/QKrYgYtRJfsavkppYLx8GJrvV6L
+         PfF5Csf2Y1zQj32WrbEEkHQr3YCPExFZOGT4nT1mT1wUxymFRBbKW+G4mta2iC1k6tNF
+         zcb0AcSVO+gel538s2wnZLl3dP8q8cPJz3ucLgY7HdNDRhmQVhz/kO/yP1a0Y1j4kOwn
+         oyfqB9y5NFG0nQ0jtS8CDdQ3HUFi9BT5kncfN7OUsCTtHP3pGKitjwKEV9zEcek9dItm
+         0PPHhlREA8M/0erHORtrRoRaSh1TMVBj2cYlnCLOGUzi/m+qBNY+sxZSwepCKwzNMz0H
+         GSSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=61rDep7IpGIu+stwVlsWVOdIyeXLNS0Q3CFSi62k+PQ=;
+        b=kLAwumsTUgPINA6koKeFEoOh5ox1M9bINepsp86iLCy6NuaI7ueOYeULj8rPwINKtD
+         DbRRpdS25/Zuw7jBxdHfEkdUarsirzxKMTwu/JUAK/FzDpiJmh+UKqrN64fbDNNm6Hzx
+         XuKkMYAOF9E1aCrT5n79mdmJDssQJO6i9ho0MJjsWXFtgIjECHJi9p7pywN6NsTfzQ5I
+         2OhMMctlbuX5H4u4DP7vs4GR2P6WXWLSrSjYYi/BP4xpqLckwamwNw20IfjaBhpxcJ1X
+         Q17pc4V9H0xv9h/5U8MpB2zTUPsLYE06W3TE7XWhfPxvcbd4sL2shno5LCQug6blFGBx
+         qhdg==
+X-Gm-Message-State: AOAM530OElqhN2fD90tTHyabe53zeI9ftv0IXS0pqXHo7he50AI3LbIf
+        D2wYKF5+/P9W6z5ojAOIsE2UdSV0uI71AQ==
+X-Google-Smtp-Source: ABdhPJwYpz3+6ERX85kOLgh1eEx5JgKJ9leQ9kpwklUYA9jx06Zg+A3FPgO3QmClaqVeBWoLsH4j+Q==
+X-Received: by 2002:adf:ea4a:0:b0:20a:ddfe:5b34 with SMTP id j10-20020adfea4a000000b0020addfe5b34mr11071704wrn.394.1651069810604;
+        Wed, 27 Apr 2022 07:30:10 -0700 (PDT)
+Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
+        by smtp.googlemail.com with ESMTPSA id i14-20020a1c540e000000b00393dc91e9c9sm1721625wmb.17.2022.04.27.07.30.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:30:10 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] asus-ec-sensors: add support for board families
+Date:   Wed, 27 Apr 2022 16:29:57 +0200
+Message-Id: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220427090442.2105905-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220427090442.2105905-1-gregkh@linuxfoundation.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 27 Apr 2022 23:29:19 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASFK3z8Y=L1Q6uG3YZ2GBffBAASkc4tWfnPF__qeYh3SA@mail.gmail.com>
-Message-ID: <CAK7LNASFK3z8Y=L1Q6uG3YZ2GBffBAASkc4tWfnPF__qeYh3SA@mail.gmail.com>
-Subject: Re: [PATCH v2] export: fix string handling of namespace in EXPORT_SYMBOL_NS
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Matthias Maennich <maennich@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 6:06 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Commit c3a6cf19e695 ("export: avoid code duplication in
-> include/linux/export.h") broke the ability for a defined string to be
-> used as a namespace value.
+Users provided information for boards from AMD-400 and sTRX40 families
+and demonstrated that sensor addresses differ from those for the AMD-500
+family. Also the AMD-400 family board uses the global ACPI lock instead
+of a dedicated mutex to guard access to the hardware.
 
-In hindsight, this was a bad idea.
+This patchset implements required changes to support other board
+families:
+ - per-family sensor definitions
+ - options to choose hardware/state guard mutex: an AML mutex or the
+   global ACPI lock.
 
-
-EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, "SPI_DW_CORE")
-
-   is much much better than:
-
-EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, SPI_DW_CORE)
+These changes are used to add support for the PRIME X470-PRO board.
 
 
+Changes in 
+v3:
+ - Added family_unknown member to the board_family enum to ensure the
+	 default value of 0 is not a valid family value.
+ - Added a note explaining why module_platform_driver_probe() is chosen
+	 over module_platform_driver().
 
+v2:
+ - Removed the case without ACPI mutex where the state was guarded using
+         the normal mutex. After receiving an update from user that case
+         turned out to be non-existent.
+ - Removed the __initconst attribute from the board data array.
+ - Updated documentation to include the special string for the mutex
+         path module parameters which make the driver use the global ACPI
+         lock.
 
-ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=USB_STORAGE
+Eugene Shalygin (4):
+  hwmon: (asus-ec-sensors) introduce ec_board_info struct for board data
+  hwmon: (asus-ec-sensors) implement locking via the ACPI global lock
+  hwmon: (asus-ec-sensors) add support for board families
+  hwmon: (asus-ec-sensors) add PRIME X470-PRO board
 
-is also a bad idea.
-
-When you look at EXPORT_SYMBOL_GPL() in C files, you will not be
-aware of the presence of the namespace.
-
-
-
-Anyway, it is presumably too late to fix it.
-
-
->  Fix this up by using stringify to properly
-> encode the namespace name.
->
-> Fixes: c3a6cf19e695 ("export: avoid code duplication in include/linux/export.h")
-> Cc: Miroslav Benes <mbenes@suse.cz>
-> Cc: Emil Velikov <emil.l.velikov@gmail.com>
-> Cc: Jessica Yu <jeyu@kernel.org>
-> Cc: Quentin Perret <qperret@google.com>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-
-This email is no longer valid.
-
-Feel free to replace it with
-
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
-
-
-
-> Cc: Matthias Maennich <maennich@google.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> v2: use stringify() instead of 2 step redirection as pointed out by Masahiro
->
->  include/linux/export.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/export.h b/include/linux/export.h
-> index 27d848712b90..5910ccb66ca2 100644
-> --- a/include/linux/export.h
-> +++ b/include/linux/export.h
-> @@ -2,6 +2,8 @@
->  #ifndef _LINUX_EXPORT_H
->  #define _LINUX_EXPORT_H
->
-> +#include <linux/stringify.h>
-> +
->  /*
->   * Export symbols from the kernel to modules.  Forked from module.h
->   * to reduce the amount of pointless cruft we feed to gcc when only
-> @@ -154,7 +156,6 @@ struct kernel_symbol {
->  #endif /* CONFIG_MODULES */
->
->  #ifdef DEFAULT_SYMBOL_NAMESPACE
-> -#include <linux/stringify.h>
->  #define _EXPORT_SYMBOL(sym, sec)       __EXPORT_SYMBOL(sym, sec, __stringify(DEFAULT_SYMBOL_NAMESPACE))
->  #else
->  #define _EXPORT_SYMBOL(sym, sec)       __EXPORT_SYMBOL(sym, sec, "")
-> @@ -162,8 +163,8 @@ struct kernel_symbol {
->
->  #define EXPORT_SYMBOL(sym)             _EXPORT_SYMBOL(sym, "")
->  #define EXPORT_SYMBOL_GPL(sym)         _EXPORT_SYMBOL(sym, "_gpl")
-> -#define EXPORT_SYMBOL_NS(sym, ns)      __EXPORT_SYMBOL(sym, "", #ns)
-> -#define EXPORT_SYMBOL_NS_GPL(sym, ns)  __EXPORT_SYMBOL(sym, "_gpl", #ns)
-> +#define EXPORT_SYMBOL_NS(sym, ns)      __EXPORT_SYMBOL(sym, "", __stringify(ns))
-> +#define EXPORT_SYMBOL_NS_GPL(sym, ns)  __EXPORT_SYMBOL(sym, "_gpl", __stringify(ns))
->
->  #endif /* !__ASSEMBLY__ */
->
-> --
-> 2.36.0
->
-
+ Documentation/hwmon/asus_ec_sensors.rst |   2 +
+ drivers/hwmon/asus-ec-sensors.c         | 420 +++++++++++++++++-------
+ 2 files changed, 302 insertions(+), 120 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.35.1
+

@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0143512058
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57857511D7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbiD0QDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S241290AbiD0QGV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 27 Apr 2022 12:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241571AbiD0QDX (ORCPT
+        with ESMTP id S241430AbiD0QDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:03:23 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44635170E33;
-        Wed, 27 Apr 2022 08:59:35 -0700 (PDT)
-Received: from smtpclient.apple (d66-183-91-182.bchsia.telus.net [66.183.91.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6DA7720E97CA;
-        Wed, 27 Apr 2022 08:58:53 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6DA7720E97CA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1651075134;
-        bh=LOLk8KFWAb5rXU/Jm0ZFnROrkWq5xdzno1Ze707Mg8Q=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=lCin7lh3eOWoC8NOgWTsOU0C03Zh/WxRxATeRAsLc9arDLmXdbC8Xz3cFZXKGqkcf
-         DfBeM6nu6FeQm0CloG/1lp+Jr4MIPORFywV2OmiQ61fJFZoc5aJpPjVsFbvFPSlF4R
-         uU8SBBkMZMrfVfX7uVGZLvABbGZFb3L5JMNn+Qfs=
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-From:   Allen Pais <apais@linux.microsoft.com>
-In-Reply-To: <e8cb3d63-f5b9-d067-af66-86f7a7c7f76c@intel.com>
-Date:   Wed, 27 Apr 2022 08:58:52 -0700
-Cc:     Vinod Koul <vkoul@kernel.org>, olivier.dautricourt@orolia.com,
-        sr@denx.de, Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, ludovic.desroches@microchip.com,
-        tudor.ambarus@microchip.com, f.fainelli@gmail.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
-        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
-        andriy.shevchenko@linux.intel.com, leoyang.li@nxp.com,
-        zw@zh-kernel.org, wangzhou1@hisilicon.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, sean.wang@mediatek.com,
-        matthias.bgg@gmail.com, afaerber@suse.de, mani@kernel.org,
-        logang@deltatee.com, sanju.mehta@amd.com, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski@linaro.org, green.wan@sifive.com,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        patrice.chotard@foss.st.com, linus.walleij@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <27B51CB8-FCC0-49FB-AA28-93594943423E@linux.microsoft.com>
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com> <YmiuUy+PAjKEq6uE@matsya>
- <e8cb3d63-f5b9-d067-af66-86f7a7c7f76c@intel.com>
-To:     Dave Jiang <dave.jiang@intel.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 12:03:51 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28955291FD4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:00:13 -0700 (PDT)
+Received: from mail-yw1-f176.google.com ([209.85.128.176]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MhDEq-1oO2yc3jve-00eJTj for <linux-kernel@vger.kernel.org>; Wed, 27 Apr
+ 2022 17:59:33 +0200
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f16645872fso24044307b3.4;
+        Wed, 27 Apr 2022 08:59:32 -0700 (PDT)
+X-Gm-Message-State: AOAM530zVO8LeX1h8HIQRV0fp2If6i2g9LCpsw1LUT37jPLz/QRiZKmM
+        AuedKsdJodkcVh4ia6OwQHbTl0pmgiJ6Yca8DlI=
+X-Google-Smtp-Source: ABdhPJzLjeye9A9OWhShH76hys3ishcYLuK3veH+wxcTEvEyq9x/yk6faCk7GM7cQVbAcpTgBWV2wb3Zfj0ajrT/jKo=
+X-Received: by 2002:a81:9213:0:b0:2f6:eaae:d22f with SMTP id
+ j19-20020a819213000000b002f6eaaed22fmr25858625ywg.249.1651075171676; Wed, 27
+ Apr 2022 08:59:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1644824638.git.quic_saipraka@quicinc.com> <9c7ff199d826b60e019c0eeeb6aa280abfdb9a82.1644824638.git.quic_saipraka@quicinc.com>
+In-Reply-To: <9c7ff199d826b60e019c0eeeb6aa280abfdb9a82.1644824638.git.quic_saipraka@quicinc.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 27 Apr 2022 17:59:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3_Ea2Szn61D-t--52V-zk+B-sq2mi5YbfMbTim7M9ZAQ@mail.gmail.com>
+Message-ID: <CAK8P3a3_Ea2Szn61D-t--52V-zk+B-sq2mi5YbfMbTim7M9ZAQ@mail.gmail.com>
+Subject: Re: [PATCHv10 4/6] drm/meson: Fix overflow implicit truncation warnings
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        quic_psodagud@quicinc.com, gregkh <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:JNeg52fHtEqelo16dAcn1Vtflrzc43MU8QX9pr//JGOAsEvcUUZ
+ wEOvlxRgd5OA5vg06KRyALn/TtZeFIvL1i53rkiIx4hAz//EkI3/Bx+hMxtzJ1xIiXUgk8a
+ 6PSkw3k5V1Lfoa6EmMZ8XnvKisARJGTUhxGX+YnhyPWSLJPvYE12jgHqm9pG2SfX6oYbCdr
+ OvvuqwxfB3OdW24P+XK6w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:y9KGMoLJJWg=:5eJvyXeWYLg2M7ABpj+EsB
+ Or+r+qHNg1RziXROIe5ZMdQX4Cktt4iSl1+AJTnsMxgwJkukznW2gN1CQGQfZYKm0Ua382Rv6
+ Tmx+kdmgCMngab8VYcjbyH9B7O1E7SPPNBFJNjl0QNthHH7IxM0S1J8/LlPEqvneVfPBeGsDl
+ J6rfRGtVigftiJQ7lxw0EO2za6192Xu2zIYiyTGJCHWAbwaLcVZgnbgLQFwEt7n+0baQBcD1e
+ 5t0swPZAssJSJ9WE5ecN+nnuFLdvfDjdkd9gJHujWOg0eZEI4orMq7JAg1LVg/cFDOR5KxG4d
+ jZvjhae46nq2ExkduMwOxhtDoY11LlF21kO9aRsTZ1JnZcXiRw9UZe2kzg3Ub40S9y2yyXOY/
+ IHmAMXu0GgN7Y6uoVGhpbQQT6Y3nXUQwjztHhLWXNILf1MclmyHGCPvfUV7vqe5KOMrxSteE7
+ /wvIKj312yWgBI0MmP6mkgBIxiF4cUbdYyNB6Rtgnh+WS3+VPrGDwyrmUnBAjfX6vnfJvoHtt
+ tGOvyt5yKFc27uDIGyOsnGnp2rDyW24e1fuwag/x5zkk+ZptQQavr4QE2bwHmrJ7yjnbEgPML
+ 14OT2vxFJ5sZapxnNfelgca6wn/JZ9DhLsjkYWq0nWwe8GHU8Wv7TsOGiY728zaEAW6bq4rBq
+ 2TaU1IlMPjX5BCYKU68OBQYoWH8K/9Gs3UMJe5dWdLGh13QbB14AKkJxdYF3xJWi8ubbB0uNR
+ 8u7iv3KQtTgmklOlpvkmZlf84fLi8kMUKbDnhj/u3JVhGKGks6vga+18JEaJKsREUyVVsscYD
+ y4BHbwNOl+2M3ZBiIlheasF+VHa4mcfX6tBGIS1S+a77umYXiE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 24, 2022 at 7:07 AM Sai Prakash Ranjan
+<quic_saipraka@quicinc.com> wrote:
+>
+> Fix -Woverflow warnings for drm/meson driver which is a result
+> of moving arm64 custom MMIO accessor macros to asm-generic function
+> implementations giving a bonus type-checking now and uncovering these
+> overflow warnings.
+>
+> drivers/gpu/drm/meson/meson_viu.c: In function ‘meson_viu_init’:
+> drivers/gpu/drm/meson/meson_registers.h:1826:48: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
+>  #define  VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
+>                                                 ^
+> drivers/gpu/drm/meson/meson_viu.c:472:18: note: in expansion of macro ‘VIU_OSD_BLEND_REORDER’
+>    writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+>                   ^~~~~~~~~~~~~~~~~~~~~
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 
->> On 19-04-22, 21:16, Allen Pais wrote:
->>> The tasklet is an old API which will be deprecated, workqueue API
->>> cab be used instead of them.
->> What is the reason for tasklet removal, I am not sure old is a reason =
-to
->> remove an API...
->>=20
->>> This patch replaces the tasklet usage in drivers/dma/* with a
->>> simple work.
->> Dmaengines need very high throughput, one of the reasons in dmaengine
->> API design to use tasklet was higher priority given to them. Will the
->> workqueue allow that...?
->=20
-> Wouldn't the logical move be to convert threaded irq IF tasklets are =
-being deprecated rather than using workqueue as replacement?
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-  Logically yes. Would all tasklets need to be moved to threaded irq, =
-that I am not sure. I think
-Workqueues does the job.
-
->=20
-> Also, wouldn't all the spin_lock_bh() calls need to be changed to =
-spin_lock_irqsave() now? Probably not as simple as just replace tasklet =
-with workqueue.
->=20
-
-Yes, this was carefully looked at as we have moved from the =
-interrupt/softirq context to process context.
-
-Thanks.
-
+It took me a bit to understand why we got the warning in the first place, but I
+should have just read the patch description, it's all there....

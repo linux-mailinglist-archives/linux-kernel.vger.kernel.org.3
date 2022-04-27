@@ -2,104 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EA3510DC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F17510DC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356611AbiD0BO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S1356596AbiD0BPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354034AbiD0BOY (ORCPT
+        with ESMTP id S232354AbiD0BPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:14:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5F43ED16
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=oooHtMKG0ojECIMf2P2rwZLWBZPFRzAeQMMgbbb9SdE=; b=R4QAPnUR4EKBjNZwAib8kuam2M
-        5NZELWDnuYk9hPLQwDWHH+7b8vWbavum0/Hxp622daNqVUSp6FWOnLi8DOKopA3uPT8lUB4HJx22U
-        AVw0EVPRV4axSMztkR3RM+cpWfkURDTEDk0/VHecjxOlchPGiw0JZ1oN0WQS7piQ4COYbniKB2jQO
-        VuUJQU3ioO93KHxEtGe1Faay9hfz//rkOHN6ttGaFOWoRUej2AO40tX5wwSyB/hRnQ+enRlw507BI
-        C/zMCNW0ckwvYrmpDlTmL/Svn1UbMnYrUnNuLu7HJFG8Pther+cG0LnhghtzdYqU0fBy8/ewkjxkZ
-        oljuCF9g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1njWD0-00AAT6-Bh; Wed, 27 Apr 2022 01:11:10 +0000
-Message-ID: <06b10511-5c6d-686d-fc77-b4b2343fd9bc@infradead.org>
-Date:   Tue, 26 Apr 2022 18:11:07 -0700
+        Tue, 26 Apr 2022 21:15:42 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF503E5D5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:12:32 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id a127so417951vsa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0OB4iCXtxiKbS3NMWNYxYIAROlGFdL0Wkd5J0MHv91A=;
+        b=Bp9dT2NsWeXsrortAGIE6Vx0R7SGr+A/O59m+DJngXiWhnvAv4m8qbxVl4TUtOJQY5
+         bAmLUMBUoJocnLAu4lLnTOo5zkNupj3UnX7QkNy45lihtzmQbwIdNBHV08x4R0xmEECs
+         RHOOGe9FvdObHDrXgCsZGk886CHiL8Mvv/8I/3JeNmEJBjskYzLheGO/bCFQfgdYE8wx
+         4/n80TAzYbqYYRM294NyAu8H8roXt4mF8a1JXWwVzzD+bSmgY1wQCgAeAWiStF7eoYXW
+         /Ec0TvS1b2RbTQiLUA1gTqUxmZh8oiMj/QKw1CLegC52kGpb8aLHwXgU/6srNFGYZd2B
+         J0oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0OB4iCXtxiKbS3NMWNYxYIAROlGFdL0Wkd5J0MHv91A=;
+        b=GmCBolUg6a1Omq52xeTEt+PZFRAaF80p0aAZM2kRF8wEHVXceoIxK+CJWg6XkrVes3
+         QmooM8iByZM8B3jazlGZKXgEvUPxBWEinr7yNJQj7Kb6Yo+/23cVpFgPG7xmLS67oHKb
+         RPslntQZgksaSr2shTeGOcqJk2ctorZQi1XhnLgrIi+qboMvAzg9Vqel2KrqCTsmwwrD
+         fUfrDQ0lzmJai/vXH6gpaCtuPfHHKXq4gEyiCr+dFkhJfB/wvuDo8nU3MVhi7sRyc90b
+         8Gc9Y6cT/n906LC+g1DlLDL4AkZpgjS9eC+nPE/APsbjfvZvma95S7EmgtvwRybKysHu
+         sj7Q==
+X-Gm-Message-State: AOAM532rQc4zpBhxnYk7csToyslurnON5O595luEpnJoxahbr885V7v6
+        ci+HxO2ElZiDHsT8YKbEBGIiq8BgrVrDczmZyh1F8g==
+X-Google-Smtp-Source: ABdhPJwy/MRAp4oC6Hi1ll9gS9jBkgqQtmNi88ADT/C3NJcTx+Bes6COrB45hWc8WPeVFid4VYYYZG1IRGGt4+/7Wgg=
+X-Received: by 2002:a05:6102:158a:b0:32a:56ea:3fba with SMTP id
+ g10-20020a056102158a00b0032a56ea3fbamr7630158vsv.84.1651021951811; Tue, 26
+ Apr 2022 18:12:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: ERROR: start_text address is c000000000000500, should be
- c000000000000100
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <202204241730.Ly1j4bUG-lkp@intel.com>
-Content-Language: en-US
-In-Reply-To: <202204241730.Ly1j4bUG-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-11-yuzhao@google.com>
+ <20220411191627.629f21de83cd0a520ef4a142@linux-foundation.org>
+ <CAOUHufbtFj0Hez7wkw3DHGDwo6wudCzCvACt2GfgrFcubW_DYg@mail.gmail.com> <20220426152237.21d3f173eded69c0f63911f0@linux-foundation.org>
+In-Reply-To: <20220426152237.21d3f173eded69c0f63911f0@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 26 Apr 2022 19:11:54 -0600
+Message-ID: <CAOUHufZ3fRcDqyFPSL9buqcE_sZsZQE+fUW7XkiwubNSD0Zb5g@mail.gmail.com>
+Subject: Re: [PATCH v10 10/14] mm: multi-gen LRU: kill switch
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Tejun Heo <tj@kernel.org>, Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi bot--
+On Tue, Apr 26, 2022 at 4:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue, 26 Apr 2022 14:57:15 -0600 Yu Zhao <yuzhao@google.com> wrote:
+>
+> > On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Wed,  6 Apr 2022 21:15:22 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > > Add /sys/kernel/mm/lru_gen/enabled as a kill switch. Components that
+> > > > can be disabled include:
+> > > >   0x0001: the multi-gen LRU core
+> > > >   0x0002: walking page table, when arch_has_hw_pte_young() returns
+> > > >           true
+> > > >   0x0004: clearing the accessed bit in non-leaf PMD entries, when
+> > > >           CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG=y
+> > > >   [yYnN]: apply to all the components above
+> > > > E.g.,
+> > > >   echo y >/sys/kernel/mm/lru_gen/enabled
+> > > >   cat /sys/kernel/mm/lru_gen/enabled
+> > > >   0x0007
+> > > >   echo 5 >/sys/kernel/mm/lru_gen/enabled
+> > > >   cat /sys/kernel/mm/lru_gen/enabled
+> > > >   0x0005
+> > >
+> > > I'm shocked that this actually works.  How does it work?  Existing
+> > > pages & folios are drained over time or synchrnously?
+> >
+> > Basically we have a double-throw way, and once flipped, new (isolated)
+> > pages can only be added to the lists of the current implementation.
+> > Existing pages on the lists of the previous implementation are
+> > synchronously drained (isolated and then re-added), with
+> > cond_resched() of course.
+> >
+> > > Supporting
+> > > structures remain allocated, available for reenablement?
+> >
+> > Correct.
+> >
+> > > Why is it thought necessary to have this?  Is it expected to be
+> > > permanent?
+> >
+> > This is almost a must for large scale deployments/experiments.
+> >
+> > For deployments, we need to keep fix rollout (high priority) and
+> > feature enabling (low priority) separate. Rolling out multiple
+> > binaries works but will make the process slower and more painful. So
+> > generally for each release, there is only one binary to roll out, and
+> > unless it's impossible, new features are disabled by default. Once a
+> > rollout completes, i.e., reaches enough population and remains stable,
+> > new features are turned on gradually. If something goes wrong with a
+> > new feature, we turn off that feature rather than roll back the
+> > kernel.
+> >
+> > Similarly, for A/B experiments, we don't want to use two binaries.
+>
+> Please let's spell out this sort of high-level thinking in the
+> changelogging.
 
-On 4/24/22 02:36, kernel test robot wrote:
-> Hi Randy,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   22da5264abf497a10a4ed629f07f4ba28a7ed5eb
-> commit: 47c258d71ebfc832a760a1dc6540cf3c33968023 powerpc/head_check: use stdout for error messages
-> date:   8 months ago
-> config: powerpc64-randconfig-m031-20220424 (https://download.01.org/0day-ci/archive/20220424/202204241730.Ly1j4bUG-lkp@intel.com/config)
-> compiler: powerpc64-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47c258d71ebfc832a760a1dc6540cf3c33968023
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 47c258d71ebfc832a760a1dc6540cf3c33968023
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ERROR: start_text address is c000000000000500, should be c000000000000100
->>> ERROR: try to enable LD_HEAD_STUB_CATCH config option
->>> ERROR: see comments in arch/powerpc/tools/head_check.sh
+Will do.
 
-# CONFIG_MODULES is not set
+> From what you're saying, this is a transient thing.  It sounds that
+> this enablement is only needed when mglru is at an early stage.  Once
+> it has matured more then successive rollouts will have essentially the
+> same mglru implementation and being able to disable mglru at runtime
+> will no longer be required?
 
-For this one, I didn't enable CONFIG_EXPERT and LD_HEAD_STUB_CATCH.
-I just converted everything possible to be loadable modules
-and that resolved the problem.
+I certainly hope so. But realistically this switch is here to stay,
+just like anything else added after careful planning or on a whim.
 
-Michael- do you want any addition(s) to the head_check.sh error
-messages, such as:
+> I guess the capability is reasonable simple/small and is livable with,
+> but does it have a long-term future?
 
-(a) enable CONFIG_EXPERT and LD_HEAD_STUB_CATCH
-(the latter requires the former)
-or (b) if CONFIG_MODULES is not enabled, enable it
-and change drivers to loadable modules until the ERROR
-is resolved.
+I see it as a necessary evil.
 
--- 
-~Randy
+> I mean, when organizations such as google start adopting the mglru
+> implementation which is present in Linus's tree we're, what, a year or
+> more into the future?  Will they still need a kill switch then?
+
+There are two distinct possibilities:
+1. Naturally the number of caps would grow. Old caps that have been
+proven remain the same values. New caps need to be flipped on/off for
+deployments/experiments.
+2. The worst case scenario: this file becomes something like
+/sys/kernel/mm/transparent_hugepage/enabled. For different workloads,
+it's set to different values. Otherwise we'd have to build multiple
+kernel binaries.

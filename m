@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578FF51192C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DD9511960
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237142AbiD0OAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S237063AbiD0N7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237338AbiD0N70 (ORCPT
+        with ESMTP id S237262AbiD0N70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 09:59:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B11E3464B;
-        Wed, 27 Apr 2022 06:56:08 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 13:56:05 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827AA63A2;
+        Wed, 27 Apr 2022 06:56:09 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 13:56:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651067767;
+        s=2020; t=1651067768;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=C5smDIbG45jhVWZCKV0dHaEoPAtm3onBdnDDrbZ1Da8=;
-        b=1kTLFMDnTLnFkoLYoorJ1PbeoT2ALfDMt3bsyJMkuLclboCSv8zUkEv2NRPhNdnoDdrlLC
-        35M0JaOZRfUXdoud6QWHA4yi9JpwGmnvZw6AwTLt/yH4Rh4ba/O4rTsRcrqZQYClKSa7Yt
-        eWmljpUEiJvRZ0aWdKjBGwHbhkU0v34brd8ajy3TZNfdl2m/lKzOl7wtfJTWQQNJYqp3Ej
-        fMWH/Awd+QnDq+E4fLeYxziH+VBUDejahOzlOE3bJpI5VtaH793iYWgoA5bbgB1gllztQ3
-        4BJiJQZFsGJW6O9BO6VHNMQyZ/kUWFMzpZ1t4Jh4vPsivMsHrOp6DdSACHwdhw==
+        bh=N+7h99kKlMUh7JJHN1Dn+s8h8ohgzthst2O6eL4ZICc=;
+        b=2dhv0yAgkThgpo3hqBSiO5MOCkzNZ9agIlY80McZDmPfShlxgndTDr47ZXhwrxLAYZ6d5q
+        pg8VPEGPe0YDUa5y+aCKOpCl9uRD+jAZNIh1Xn8jxDEzfPgTlUEUoevdFylnQyLfn4/o+p
+        nbiiaeSLDQD5rUbOzP/KlNkkGMcpZY1brSgkYjfHWOD9/jn5IuDSrn6u35uSwuiwlBdiaP
+        oHsEbpp7qJn8rGCTnwzs+JPoVC1/M69CyTBarE1+ugZ6I6uZ1DXgPqWlHsCkyaB7hCAwFW
+        O/E5YlgPWDbLpDsmBC365AH/+GmzjZ1ShvG8TiMxk2pqJYKXVxp+9aamAR8q0w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651067767;
+        s=2020e; t=1651067768;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=C5smDIbG45jhVWZCKV0dHaEoPAtm3onBdnDDrbZ1Da8=;
-        b=dpWpkxRL6b5tvK2360FcyitklYLU3riCiRFOLjrL7w56mA80Ljej6wIKTyNscyz/EvA2tN
-        pjN+fWxGPhpXjkCg==
+        bh=N+7h99kKlMUh7JJHN1Dn+s8h8ohgzthst2O6eL4ZICc=;
+        b=08NK86gHGDpi+LXN/iwpEN2TUTDfNTE7KPgWuzhlbmsZ6gvaqC+HPan52pzbunMF+LGec7
+        jRAA2AuWV3SxsYDA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/aperfmperf: Replace arch_freq_get_on_cpu()
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: x86/cleanups] x86/aperfmperf: Replace aperfmperf_get_khz()
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Eric Dumazet <edumazet@google.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         "Paul E. McKenney" <paulmck@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220415161206.934040006@linutronix.de>
-References: <20220415161206.934040006@linutronix.de>
+In-Reply-To: <20220415161206.875029458@linutronix.de>
+References: <20220415161206.875029458@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <165106776589.4207.4086346739108492456.tip-bot2@tip-bot2>
+Message-ID: <165106776682.4207.10283880979080175202.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,119 +70,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     a86a1356ee79da6bc4abfb9e0499f963ff6da9ae
-Gitweb:        https://git.kernel.org/tip/a86a1356ee79da6bc4abfb9e0499f963ff6da9ae
+Commit-ID:     61551f094837f77952eba2fdf8b913bb5b191ced
+Gitweb:        https://git.kernel.org/tip/61551f094837f77952eba2fdf8b913bb5b191ced
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 15 Apr 2022 21:20:04 +02:00
+AuthorDate:    Fri, 15 Apr 2022 21:20:02 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 27 Apr 2022 15:51:09 +02:00
+CommitterDate: Wed, 27 Apr 2022 15:51:08 +02:00
 
-x86/aperfmperf: Replace arch_freq_get_on_cpu()
-
-Reading the current CPU frequency from /sys/..../scaling_cur_freq involves
-in the worst case two IPIs due to the ad hoc sampling.
+x86/aperfmperf: Replace aperfmperf_get_khz()
 
 The frequency invariance infrastructure provides the APERF/MPERF samples
-already. Utilize them and consolidate this with the /proc/cpuinfo readout.
+already. Utilize them for the cpu frequency display in /proc/cpuinfo.
 
 The sample is considered valid for 20ms. So for idle or isolated NOHZ full
 CPUs the function returns 0, which is matching the previous behaviour.
 
-The resulting text size vs. the original APERF/MPERF plus the separate
-frequency invariance code:
+This gets rid of the mass IPIs and a delay of 20ms for stabilizing observed
+by Eric when reading /proc/cpuinfo.
 
-  text:		2411	->   723
-  init.text:	   0	->   767
-
+Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Eric Dumazet <edumazet@google.com>
 Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Paul E. McKenney <paulmck@kernel.org>
-Link: https://lore.kernel.org/r/20220415161206.934040006@linutronix.de
+Link: https://lore.kernel.org/r/20220415161206.875029458@linutronix.de
 
 ---
- arch/x86/kernel/cpu/aperfmperf.c | 94 +-------------------------------
- arch/x86/kernel/cpu/proc.c       |  2 +-
- 2 files changed, 2 insertions(+), 94 deletions(-)
+ arch/x86/kernel/cpu/aperfmperf.c | 77 +++++++++++++------------------
+ fs/proc/cpuinfo.c                |  6 +--
+ include/linux/cpufreq.h          |  1 +-
+ 3 files changed, 35 insertions(+), 49 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-index e9d2da7..b15c884 100644
+index 963c069..e9d2da7 100644
 --- a/arch/x86/kernel/cpu/aperfmperf.c
 +++ b/arch/x86/kernel/cpu/aperfmperf.c
-@@ -36,98 +36,6 @@ static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples) = {
- 	.seq = SEQCNT_ZERO(cpu_samples.seq)
- };
+@@ -101,49 +101,6 @@ static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
+ 	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
+ }
  
--struct aperfmperf_sample {
--	unsigned int	khz;
--	atomic_t	scfpending;
--	ktime_t	time;
--	u64	aperf;
--	u64	mperf;
--};
--
--static DEFINE_PER_CPU(struct aperfmperf_sample, samples);
--
--#define APERFMPERF_CACHE_THRESHOLD_MS	10
--#define APERFMPERF_REFRESH_DELAY_MS	10
--#define APERFMPERF_STALE_THRESHOLD_MS	1000
--
--/*
-- * aperfmperf_snapshot_khz()
-- * On the current CPU, snapshot APERF, MPERF, and jiffies
-- * unless we already did it within 10ms
-- * calculate kHz, save snapshot
-- */
--static void aperfmperf_snapshot_khz(void *dummy)
+-unsigned int aperfmperf_get_khz(int cpu)
 -{
--	u64 aperf, aperf_delta;
--	u64 mperf, mperf_delta;
--	struct aperfmperf_sample *s = this_cpu_ptr(&samples);
--	unsigned long flags;
--
--	local_irq_save(flags);
--	rdmsrl(MSR_IA32_APERF, aperf);
--	rdmsrl(MSR_IA32_MPERF, mperf);
--	local_irq_restore(flags);
--
--	aperf_delta = aperf - s->aperf;
--	mperf_delta = mperf - s->mperf;
--
--	/*
--	 * There is no architectural guarantee that MPERF
--	 * increments faster than we can read it.
--	 */
--	if (mperf_delta == 0)
--		return;
--
--	s->time = ktime_get();
--	s->aperf = aperf;
--	s->mperf = mperf;
--	s->khz = div64_u64((cpu_khz * aperf_delta), mperf_delta);
--	atomic_set_release(&s->scfpending, 0);
--}
--
--static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
--{
--	s64 time_delta = ktime_ms_delta(now, per_cpu(samples.time, cpu));
--	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
--
--	/* Don't bother re-computing within the cache threshold time. */
--	if (time_delta < APERFMPERF_CACHE_THRESHOLD_MS)
--		return true;
--
--	if (!atomic_xchg(&s->scfpending, 1) || wait)
--		smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, wait);
--
--	/* Return false if the previous iteration was too long ago. */
--	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
--}
--
--unsigned int arch_freq_get_on_cpu(int cpu)
--{
--	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
--
 -	if (!cpu_khz)
 -		return 0;
 -
@@ -192,41 +122,110 @@ index e9d2da7..b15c884 100644
 -		return 0;
 -
 -	if (rcu_is_idle_cpu(cpu))
--		return 0;
+-		return 0; /* Idle CPUs are completely uninteresting. */
 -
--	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
--		return per_cpu(samples.khz, cpu);
--
--	msleep(APERFMPERF_REFRESH_DELAY_MS);
--	atomic_set(&s->scfpending, 1);
--	smp_mb(); /* ->scfpending before smp_call_function_single(). */
--	smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, 1);
--
+-	aperfmperf_snapshot_cpu(cpu, ktime_get(), true);
 -	return per_cpu(samples.khz, cpu);
 -}
 -
- static void init_counter_refs(void)
+-void arch_freq_prepare_all(void)
+-{
+-	ktime_t now = ktime_get();
+-	bool wait = false;
+-	int cpu;
+-
+-	if (!cpu_khz)
+-		return;
+-
+-	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+-		return;
+-
+-	for_each_online_cpu(cpu) {
+-		if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
+-			continue;
+-		if (rcu_is_idle_cpu(cpu))
+-			continue; /* Idle CPUs are completely uninteresting. */
+-		if (!aperfmperf_snapshot_cpu(cpu, now, false))
+-			wait = true;
+-	}
+-
+-	if (wait)
+-		msleep(APERFMPERF_REFRESH_DELAY_MS);
+-}
+-
+ unsigned int arch_freq_get_on_cpu(int cpu)
  {
- 	u64 aperf, mperf;
-@@ -494,7 +402,7 @@ void arch_scale_freq_tick(void)
-  */
- #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
+ 	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
+@@ -530,6 +487,40 @@ void arch_scale_freq_tick(void)
+ 	scale_freq_tick(acnt, mcnt);
+ }
  
--unsigned int aperfmperf_get_khz(int cpu)
-+unsigned int arch_freq_get_on_cpu(int cpu)
++/*
++ * Discard samples older than the define maximum sample age of 20ms. There
++ * is no point in sending IPIs in such a case. If the scheduler tick was
++ * not running then the CPU is either idle or isolated.
++ */
++#define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
++
++unsigned int aperfmperf_get_khz(int cpu)
++{
++	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
++	unsigned long last;
++	unsigned int seq;
++	u64 acnt, mcnt;
++
++	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
++		return 0;
++
++	do {
++		seq = raw_read_seqcount_begin(&s->seq);
++		last = s->last_update;
++		acnt = s->acnt;
++		mcnt = s->mcnt;
++	} while (read_seqcount_retry(&s->seq, seq));
++
++	/*
++	 * Bail on invalid count and when the last update was too long ago,
++	 * which covers idle and NOHZ full CPUs.
++	 */
++	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
++		return 0;
++
++	return div64_u64((cpu_khz * acnt), mcnt);
++}
++
+ static int __init bp_init_aperfmperf(void)
  {
- 	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
- 	unsigned long last;
-diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index 4eec888..0a0ee55 100644
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -84,7 +84,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
+ 	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+diff --git a/fs/proc/cpuinfo.c b/fs/proc/cpuinfo.c
+index 419760f..f38bda5 100644
+--- a/fs/proc/cpuinfo.c
++++ b/fs/proc/cpuinfo.c
+@@ -5,14 +5,10 @@
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
  
- 	if (cpu_has(c, X86_FEATURE_TSC)) {
--		unsigned int freq = aperfmperf_get_khz(cpu);
-+		unsigned int freq = arch_freq_get_on_cpu(cpu);
+-__weak void arch_freq_prepare_all(void)
+-{
+-}
+-
+ extern const struct seq_operations cpuinfo_op;
++
+ static int cpuinfo_open(struct inode *inode, struct file *file)
+ {
+-	arch_freq_prepare_all();
+ 	return seq_open(file, &cpuinfo_op);
+ }
  
- 		if (!freq)
- 			freq = cpufreq_quick_get(cpu);
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 35c7d6d..d5595d5 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1199,7 +1199,6 @@ static inline void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
+ 			struct cpufreq_governor *old_gov) { }
+ #endif
+ 
+-extern void arch_freq_prepare_all(void);
+ extern unsigned int arch_freq_get_on_cpu(int cpu);
+ 
+ #ifndef arch_set_freq_scale

@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418FC51246A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3045512472
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiD0VUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 17:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S231338AbiD0VYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 17:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237338AbiD0VUE (ORCPT
+        with ESMTP id S229492AbiD0VYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 17:20:04 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC405B88F;
-        Wed, 27 Apr 2022 14:16:47 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-d39f741ba0so3310336fac.13;
-        Wed, 27 Apr 2022 14:16:47 -0700 (PDT)
+        Wed, 27 Apr 2022 17:24:20 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F0E6E8F9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:21:06 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id s4so2335112qkh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 14:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HO69GAZWB5ZNDpZdF5+7qBeyAdQ2ziZHjagMLd+xkN0=;
+        b=5W7SEFXUw6PNxrAXqi0ncsTH0FzFFYHStI+dwhrp0hF7U6GJFbv/sx3XO72IuBcV+F
+         W9J+YYs/DLYjU6qP0rVKlFL4mk/jrQ4jfITtCJEm5HndT6slVEo64n64mX40Lr0F5jfc
+         1QMKRxmC5RfbskkX2EgJaswtYkp8m/E3HG0Tv9N5rz0ytd5+9bDtotoj07hPPJAs80Me
+         TtoOmnsAXwD34zxpMJu1gHKmF4bheYT5h3p5Qddrdk0UiE/7qaZ7hNRgP1AIVvH24qqF
+         UCf3j8vqEpCFAmVeKl3Iw4i/5q9pJjAtRIprUh6/1rsxucu80pPFFznY6rCMiY64gOJE
+         NndA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=73JGhEXZo6MxFJIDiASpIWUlZPATUSnH2fFqMLm47Ns=;
-        b=2rGz2At02TyvZKeeMYcSGzxPRXbWp+ezuSFKzxaynAkw65AjGtX2AFy+MM9b7h2euE
-         gqsTjDhnP4hpnOmXkXkIQ8cQaslSqsR2+JJ5OR2YHgfPiQTz1AhMJIh0us6711b58da8
-         rbUbRlXfSjxiEB92LsL4Wp/Kl9qh0ol0OcvjvtJvFVqD237zhRcZFP4inwDCxM61rTIe
-         MVN+W+jPt/169zmG0JTs/fqb9hMmTdoINVuGI1sCEkgwIc4dNoPbQHUR1jnjsFgs/Zht
-         oBkOoIhUoFeWrViqGVnMKfXpenAgOMMQCePW6w5htiW03lphQuhcXIxnBCE4XsVk1d8t
-         iV8w==
-X-Gm-Message-State: AOAM5331/G3IaDhksV9ceoIXI9umve4igDCxwCLuqHhfVHpfFDJrUxKs
-        XuA6ZdhaTzVIfiTLXl9AGg==
-X-Google-Smtp-Source: ABdhPJwoTdpbc+CLAukbZvpqPK58+Q7eoKrm5QnkG4szJnkyn91d3LlYRYc8KMCkcvXkysXP26Z1XQ==
-X-Received: by 2002:a05:6870:41c6:b0:da:b3f:2b8a with SMTP id z6-20020a05687041c600b000da0b3f2b8amr16673594oac.297.1651094207164;
-        Wed, 27 Apr 2022 14:16:47 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s14-20020a056870e6ce00b000e686d1389fsm1112464oak.57.2022.04.27.14.16.46
+        bh=HO69GAZWB5ZNDpZdF5+7qBeyAdQ2ziZHjagMLd+xkN0=;
+        b=5L15WIuJEtis9bIst3R7XexI96npUobeF4SAbT2SG1m54R8n7vIncF2Kms6cAxADYw
+         QjWnwwxghqImFyKFWiShTtgx2/dO8gBnikeRtDJdn/+Y0AKdPXpJao5/xwgQVr6Ef4bq
+         Ulgty9MHs9QJtlh64Gi6YIkYp3hNesaedI579jcQkez4EYpsCnuy317EaZX/Ns38dclA
+         q66DGo5XiLBRCKEprRZ+taRtD5y6uql0iOHg3zpkFHc77KsMrn9enWICgE8o1XLMZJ2c
+         i4263VRs5jPuhOEr+gM5bSgclhLyFQ/v+8Bu9wyTlqLFg2KDtoaLQTOfMbbJD6wrdEV7
+         N5sw==
+X-Gm-Message-State: AOAM533fkb50pMqsczOJRhW2UnfGs4A2wR5hczIN1k4HtKQcLvNzATeN
+        dmz8KXCdPzQPyZq4E2bdTPutUdEof8a2Nw==
+X-Google-Smtp-Source: ABdhPJzevvqFTCD5Jevk1/UP1ZG0Oy84NOUFU4sf4OZmyEtUbtFDT3W/k1LXxyGdV2+eTrx+h/Vdnw==
+X-Received: by 2002:a05:620a:40d4:b0:69f:60ac:b958 with SMTP id g20-20020a05620a40d400b0069f60acb958mr9579444qko.609.1651094465863;
+        Wed, 27 Apr 2022 14:21:05 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:d588])
+        by smtp.gmail.com with ESMTPSA id s12-20020ac85ecc000000b002f3874bfecbsm574562qtx.5.2022.04.27.14.21.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 14:16:46 -0700 (PDT)
-Received: (nullmailer pid 677597 invoked by uid 1000);
-        Wed, 27 Apr 2022 21:16:45 -0000
-Date:   Wed, 27 Apr 2022 16:16:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Detlev Casanova <detlev.casanova@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        f.fainelli@gmail.com, frowand.list@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com,
-        nsaenz@kernel.org, olof@lixom.net, rjui@broadcom.com,
-        sbranden@broadcom.com, soc@kernel.org, stefan.wahren@i2se.com
-Subject: Re: [RFC PATCH v2 3/3] ARM: dto: Add bcm2711-rpi-7-inches-ts.dts
- overlay
-Message-ID: <YmmyvdjiG7s/Qil4@robh.at.kernel.org>
-References: <20220427185243.173594-1-detlev.casanova@collabora.com>
- <20220427185243.173594-4-detlev.casanova@collabora.com>
+        Wed, 27 Apr 2022 14:21:05 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 17:20:29 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
+Message-ID: <YmmznQ8AO5RLxicA@cmpxchg.org>
+References: <20220427160016.144237-1-hannes@cmpxchg.org>
+ <20220427160016.144237-5-hannes@cmpxchg.org>
+ <Ymmnrkn0mSWcuvmH@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427185243.173594-4-detlev.casanova@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <Ymmnrkn0mSWcuvmH@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,229 +76,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 02:52:43PM -0400, Detlev Casanova wrote:
-> Add a device tree overlay to support the official Raspberrypi 7" touchscreen for
-> the bcm2711 devices.
+On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
+> Hi Johannes,
 > 
-> The panel is connected on the DSI 1 port and uses the simple-panel
-> driver.
+> On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
+> > Currently it requires poking at debugfs to figure out the size and
+> > population of the zswap cache on a host. There are no counters for
+> > reads and writes against the cache. As a result, it's difficult to
+> > understand zswap behavior on production systems.
+> > 
+> > Print zswap memory consumption and how many pages are zswapped out in
+> > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > ---
+> >  fs/proc/meminfo.c             |  7 +++++++
+> >  include/linux/swap.h          |  5 +++++
+> >  include/linux/vm_event_item.h |  4 ++++
+> >  mm/vmstat.c                   |  4 ++++
+> >  mm/zswap.c                    | 13 ++++++-------
+> >  5 files changed, 26 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+> > index 6fa761c9cc78..6e89f0e2fd20 100644
+> > --- a/fs/proc/meminfo.c
+> > +++ b/fs/proc/meminfo.c
+> > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+> >  
+> >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
+> >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
+> > +#ifdef CONFIG_ZSWAP
+> > +	seq_printf(m,  "Zswap:          %8lu kB\n",
+> > +		   (unsigned long)(zswap_pool_total_size >> 10));
+> > +	seq_printf(m,  "Zswapped:       %8lu kB\n",
+> > +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
+> > +		   (PAGE_SHIFT - 10));
+> > +#endif
 > 
-> The device tree also makes sure to activate the pixelvalve[0-4] CRTC modules
+> I agree it would be very handy to have the memory consumption in meminfo
 > 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   4 +
->  arch/arm/boot/dts/overlays/Makefile           |   3 +
->  .../dts/overlays/bcm2711-rpi-7-inches-ts.dts  | 125 ++++++++++++++++++
-
-.dtso is preferred. I think... It was discussed, but I never got an 
-updated patch to switch.
-
->  arch/arm64/boot/dts/broadcom/Makefile         |   4 +
->  .../arm64/boot/dts/broadcom/overlays/Makefile |   3 +
->  .../overlays/bcm2711-rpi-7-inches-ts.dts      |   2 +
->  6 files changed, 141 insertions(+)
->  create mode 100644 arch/arm/boot/dts/overlays/Makefile
->  create mode 100644 arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
-
-A global (to arm) 'overlays' directory will create the same mess that we 
-have in arch/arm/boot/dts/. IMO, first you should move all the Broadcom 
-dts files to a 'broadcom' subdirectory like we have for arm64.
-
->  create mode 100644 arch/arm64/boot/dts/broadcom/overlays/Makefile
->  create mode 100644 arch/arm64/boot/dts/broadcom/overlays/bcm2711-rpi-7-inches-ts.dts
+> https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
 > 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 235ad559acb2..eb0b0b121947 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1549,3 +1549,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-bmc-vegman-n110.dtb \
->  	aspeed-bmc-vegman-rx20.dtb \
->  	aspeed-bmc-vegman-sx20.dtb
-> +
-> +ifeq ($(CONFIG_OF_OVERLAY),y)
-> +subdir-y	+= overlays
+> If we really go this Zswap only metric instead of general term
+> "Compressed", I'd like to post maybe "Zram:" with same reason
+> in this patchset. Do you think that's better idea instead of
+> introducing general term like "Compressed:" or something else?
 
-I don't think this should depend on the config. If it does, you can do 
-this in scripts/Makefile.lib by removing .dtbo targets. Or this could 
-have been just:
+I'm fine with changing it to Compressed. If somebody cares about a
+more detailed breakdown, we can add Zswap, Zram subsets as needed.
 
-subdir-$(CONFIG_OF_OVERLAY) += overlays
+From 8e9e2d6490b7082c41743fbdb9ffd2db4e3ce962 Mon Sep 17 00:00:00 2001
+From: Johannes Weiner <hannes@cmpxchg.org>
+Date: Wed, 27 Apr 2022 17:15:15 -0400
+Subject: [PATCH] mm: zswap: add basic meminfo and vmstat coverage fix fix
 
-But I prefer the former so each platform is not picking their own way.
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ Documentation/filesystems/proc.rst | 7 ++++---
+ fs/proc/meminfo.c                  | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> +endif
-> diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
-> new file mode 100644
-> index 000000000000..c90883dfaf91
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/overlays/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-7-inches-ts.dtbo
-
-The overlays should be applied to the base dtb(s) to ensure they 
-actually apply and so we can validate them with schema. kbuild supports 
-this already.
-
-
-> diff --git a/arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts 
-> b/arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
-> new file mode 100644
-> index 000000000000..de98a6c1079a
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0
-
-No one uses RPi with *BSD? Dual licensing is preferred. Of course, what 
-this applies to should have similar licensing.
-
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +&{/} {
-> +	#address-cells = <2>;
-> +	#size-cells = <1>;
-> +
-> +	panel_disp1: panel@0 {
-
-What is '0' representing?
-
-> +		reg = <0 0 0>;
-> +		compatible = "raspberrypi,7inch-dsi", "simple-panel";
-> +		backlight = <&reg_display>;
-> +		power-supply = <&reg_display>;
-> +		status = "okay";
-
-That's the default. Same thing in a few other spots.
-
-> +
-> +		port {
-> +			panel_in: endpoint {
-> +				remote-endpoint = <&bridge_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	reg_bridge: regulator@0 {
-
-Oops! 2 different things at the same address!
-
-> +		reg = <0 0 0>;
-
-'regulator-fixed' doesn't have an address.
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "bridge_reg";
-> +		gpio = <&reg_display 0 0>;
-> +		vin-supply = <&reg_display>;
-> +		enable-active-high;
-> +		status = "okay";
-> +	};
-> +};
-> +
-> +&i2c_csi_dsi {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	ft5406: touchscreen@38 {
-> +		compatible = "edt,edt-ft5506";
-> +		reg = <0x38>;
-> +		status = "okay";
-> +
-> +		vcc-supply = <&reg_display>;
-> +		reset-gpio = <&reg_display 1 1>;
-> +
-> +		touchscreen-size-x = < 800 >;
-> +		touchscreen-size-y = < 480 >;
-> +
-> +		touchscreen-inverted-x;
-> +		touchscreen-inverted-y;
-> +	};
-> +
-> +	reg_display: regulator@45 {
-> +		compatible = "raspberrypi,7inch-touchscreen-panel-regulator";
-> +		reg = <0x45>;
-> +		status = "okay";
-> +
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-
-The regulator is a gpio-controller?
-
-> +	};
-> +
-> +};
-> +
-> +&dsi1 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	status = "okay";
-> +
-> +	port {
-> +		dsi_out: endpoint {
-> +			remote-endpoint = <&bridge_in>;
-> +		};
-> +	};
-> +
-> +	bridge@0 {
-
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-
-Not valid here. But I shouldn't have to tell you this as the schema 
-checks will. Please run them. Applied to a base should work for sure. As 
-just a .dtbo, there's probably some issues, but complete nodes like this 
-should validate fine.
-
-> +
-> +		reg = <0>;
-> +		compatible = "toshiba,tc358762";
-> +
-> +		vddc-supply = <&reg_bridge>;
-> +
-> +		ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +				bridge_in: endpoint {
-> +					remote-endpoint = <&dsi_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +				bridge_out: endpoint {
-> +					remote-endpoint = <&panel_in>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&pixelvalve0 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve1 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve2 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve3 {
-> +	status = "okay";
-> +};
-> +
-> +&pixelvalve4 {
-> +	status = "okay";
-> +};
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 8b5a94cfa722..93edcf233464 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -964,7 +964,7 @@ Example output. You may not have all of these fields.
+     Mlocked:               0 kB
+     SwapTotal:             0 kB
+     SwapFree:              0 kB
+-    Zswap:              1904 kB
++    Compressed:         1904 kB
+     Zswapped:           7792 kB
+     Dirty:                12 kB
+     Writeback:             0 kB
+@@ -1057,8 +1057,9 @@ SwapTotal
+ SwapFree
+               Memory which has been evicted from RAM, and is temporarily
+               on the disk
+-Zswap
+-              Memory consumed by the zswap backend (compressed size)
++Compressed
++              Memory consumed by compression backends, such as zswap
++              (compressed size)
+ Zswapped
+               Amount of anonymous memory stored in zswap (original size)
+ Dirty
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 6e89f0e2fd20..554d6f230e67 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -87,7 +87,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 	show_val_kb(m, "SwapTotal:      ", i.totalswap);
+ 	show_val_kb(m, "SwapFree:       ", i.freeswap);
+ #ifdef CONFIG_ZSWAP
+-	seq_printf(m,  "Zswap:          %8lu kB\n",
++	seq_printf(m,  "Compressed:     %8lu kB\n",
+ 		   (unsigned long)(zswap_pool_total_size >> 10));
+ 	seq_printf(m,  "Zswapped:       %8lu kB\n",
+ 		   (unsigned long)atomic_read(&zswap_stored_pages) <<
+-- 
+2.35.3

@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1D7512781
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63458512786
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbiD0XbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 19:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S237459AbiD0XbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 19:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiD0XbB (ORCPT
+        with ESMTP id S235668AbiD0XbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 19:31:01 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5331902;
-        Wed, 27 Apr 2022 16:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=qYpF45g7IqwmF2QX2YAhs+Nml0O9Dsi63w2rdyKZioc=; b=aosjYX/2C0rIYc1fnJA+YIlFho
-        EVLuyRTIeWj8NlZcff7jik81iFW0Nsf8bSd+oAtQbHMEFZ7s72OAuPjGJAv+51U3RYhHFFTLP1bJ/
-        U6XDDCKRhcXBpWqopPZx0njJ7vhXYTgBhem0yZRFus2U+Gu56mMZkcwJ5dChu/Vr+Thevmw6BO3mP
-        bpw19zXhGQBBQqp0jhECaqejjcj5Hv55ZZd7e5/LUp3XH4HhfBsTRfyIGaYCv7P4dOsExAT4pwL/w
-        JFlX36oGRTJyFw2RoyHjz+F80A7tTO3WIyVnVwcEtdtUhdAvVNa/M6YspiMeA/uiBum0dMlAjaM4s
-        1aw37QPw==;
-Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1njr4T-000PMf-SE; Wed, 27 Apr 2022 17:27:46 -0600
-Message-ID: <2dd3e7b3-ac85-6de2-3130-4fdd7b366739@deltatee.com>
-Date:   Wed, 27 Apr 2022 17:27:43 -0600
+        Wed, 27 Apr 2022 19:31:23 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C5186E6;
+        Wed, 27 Apr 2022 16:28:10 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id 125so4838002iov.10;
+        Wed, 27 Apr 2022 16:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J+PADB9F5WqUqK6GNU+Fxyjymg7zexYWmAXBuu5DB9g=;
+        b=U7azQ2bUah5mgLR/JEX/N2A3mspp3zwA+qStLEeStwS/w5mOfeanqxTJ1Z7BpA7t77
+         sZ0ei5lKcGnDWrRQDT3q33zjz86xpbg5Rmq1Qq8gw4iA/FaZE9vx6qGrhS4mtTlrk6T9
+         B+XVrTVRwAryBUF+e1GO9yoNSwkP2HEhwXth1LBTj0wvToNjx9VyRqtyQm0Md/nR//vN
+         rkmpHlaE2fKHvCMdXR9OMwX6CcD+KVKBdR1mIq77GAGa3hYM2xzCqMmznRpl5j4X68wY
+         rMuThzJzcNs75oXtKDvpHctRzmFNKb14YbU5Gr3w+N7O+N8ZuUTgZqgmTqUdfN5d1pDG
+         sUJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J+PADB9F5WqUqK6GNU+Fxyjymg7zexYWmAXBuu5DB9g=;
+        b=zm1lG4HUgLS+WHpKIJsR9rxFLhjv23BYl8d5+v76BeHsGU+8lkl0MwvLm7uPLf5XrX
+         W4JG3MwbihToR7P+L3GcO+fpyD0be6RfEql0j1ipEI/HkY1MMHtl6Njle6I91+ALSeKU
+         IXBgMPyrjnF+d5CtM8YaNHGY4/QTrlwneOwg4orMWYhAkfqe4NkzxvY55ytGXRt7T+2w
+         HEc/nLFnFW/IaJzUCsRB7InEXE6UgI0t+VPQSEFoxIl0XEMv1vGRu/y1u7rcWyzcTfVF
+         2FJSmeI6DGFktT3jE0xl1Em4JJ6SxabAAc3DZlEmxxpadRGf61X4GED0WfVKqEXWhc3M
+         qEng==
+X-Gm-Message-State: AOAM533reNHTqa8rYaSo/ewOTBL4XV4ffQ81FYxkVq2PfIuwIAD9/Uq1
+        ZUQaF1oUy8Gpulfqxbu+cn2UvwztJsrVulx0CmI=
+X-Google-Smtp-Source: ABdhPJwalUssHr/J/IX56j230ASTn2a0DzhQdRKHS90estxGTH5SmnfwW1oCy4oBOZPZNCVeFyK+3AZUfPLC5S3vyxw=
+X-Received: by 2002:a05:6638:533:b0:32a:d418:b77b with SMTP id
+ j19-20020a056638053300b0032ad418b77bmr9771567jar.237.1651102090204; Wed, 27
+ Apr 2022 16:28:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-References: <20220420195425.34911-1-logang@deltatee.com>
- <20220420195425.34911-10-logang@deltatee.com>
- <56208e2a-5035-eb8e-c468-70b4dae66d5c@linux.dev>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <56208e2a-5035-eb8e-c468-70b4dae66d5c@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.73.163.230
-X-SA-Exim-Rcpt-To: guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+References: <20220427210345.455611-1-jolsa@kernel.org> <20220427210345.455611-6-jolsa@kernel.org>
+In-Reply-To: <20220427210345.455611-6-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 27 Apr 2022 16:27:59 -0700
+Message-ID: <CAEf4BzaT45OszajSQJbxES1RveBh0ingzAzkK0BOchBGZuavTw@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 5/5] selftests/bpf: Add attach bench test
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 09/12] md/raid5: Keep a reference to last stripe_head
- for batch
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 27, 2022 at 2:04 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Adding test that reads all functions from ftrace available_filter_functions
+> file and attach them all through kprobe_multi API.
+>
+> It also prints stats info with -v option, like on my setup:
+>
+>   test_bench_attach: found 48712 functions
+>   test_bench_attach: attached in   1.069s
+>   test_bench_attach: detached in   0.373s
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
 
+LGTM.
 
-On 2022-04-26 19:36, Guoqing Jiang wrote:
-> On 4/21/22 3:54 AM, Logan Gunthorpe wrote:
->>     /* we only do back search */
->> -static void stripe_add_to_batch_list(struct r5conf *conf, struct
->> stripe_head *sh)
->> +static void stripe_add_to_batch_list(struct r5conf *conf,
->> +        struct stripe_head *sh, struct stripe_head *last_sh)
-> 
-> Nit, from stripe_add_to_batch_list's view, I think "head_sh" makes more
-> sense than
-> "last_sh".
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-That made sense to me, but upon a closer look while making the change, I
-think it's not a good idea:
+>  .../bpf/prog_tests/kprobe_multi_test.c        | 133 ++++++++++++++++++
+>  .../selftests/bpf/progs/kprobe_multi_empty.c  |  12 ++
+>  2 files changed, 145 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+>
 
-stripe_add_to_batch_list() already has a stripe_head variable called
-"head". If it now has an argument called "head_sh", it becomes very
-confusing. This statement wouldn't make any sense:
-+    if (last_sh && head_sector == last_sh->sector) {
-+        head = last_sh;
-+        atomic_inc(&head->count);
-+    } else {
-
-If it was changed to "head = head_sh" what would that even mean?
-
-From stripe_add_to_batch_list's perspective, it is the "last" stripe
-head. And it then decides whether the it is the correct stripe to use as
-the head of the list to add to.
-
-So I decline to make this change.
-
-Thanks,
-
-Logan
-
-
-
+[...]

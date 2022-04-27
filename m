@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94303512226
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1491D512228
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiD0TLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S233034AbiD0TLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiD0TLC (ORCPT
+        with ESMTP id S232405AbiD0TLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:11:02 -0400
-Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8F880227
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:59:43 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru E307C20B0E77
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH v2] platform: finally disallow IRQ0 in platform_get_irq()
- and its ilk
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, Marc Zyngier <maz@kernel.org>
-References: <025679e1-1f0a-ae4b-4369-01164f691511@omp.ru>
- <YmfNi3j/sL9PdByv@kroah.com>
-Organization: Open Mobile Platform
-Message-ID: <d0a51ca4-e535-01cc-fb08-2a59ad2e50dd@omp.ru>
-Date:   Wed, 27 Apr 2022 21:59:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <YmfNi3j/sL9PdByv@kroah.com>
+        Wed, 27 Apr 2022 15:11:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0996384EC2;
+        Wed, 27 Apr 2022 12:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8152B6151F;
+        Wed, 27 Apr 2022 19:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DAEE3C385AF;
+        Wed, 27 Apr 2022 19:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651086011;
+        bh=BR8Nx5V0ctF4VhQqy59tGJCpM99Usfg6y5bXRmiMcUE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=APZkRWMJTnxGEVNnIEjEvi5wwO1L7qm5TyI6nzt+XU16+Aw7GgQT/QLtiFlH/Nv2s
+         RjGxhZserePOc/zKKHOy84W+8RNvzIAc2knWKXi4Mz1yvRxVAng+t7Q3as4rhB7vBS
+         drqSEtJnHAV7hiaci/EjLSLccGZ8QqM2/VLnlBj7q4rnOoTrKKJPt0ozZCBzGnBppx
+         Q9zheUXwtzFVE3KJis8O6MQ3L+rm8yJ4dD76sOJOAkGI7qVImHQ8cZLSKY4YjvBN2y
+         d3FuRw8GDKlZrpdoRvSz8WITMbjokXEdrfHqR1b0z3Ual4Ox7rqd95HQNqJB2J+df3
+         N4SsZQ6C8njJw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BB4FAEAC09C;
+        Wed, 27 Apr 2022 19:00:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Bluetooth: btusb: Add a new PID/VID 0489/e0c8 for MT7921
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165108601175.12854.4715052613865968017.git-patchwork-notify@kernel.org>
+Date:   Wed, 27 Apr 2022 19:00:11 +0000
+References: <1b7d9428ba0c6d572d7da1da166240833350786e.1651082524.git.objelf@gmail.com>
+In-Reply-To: <1b7d9428ba0c6d572d7da1da166240833350786e.1651082524.git.objelf@gmail.com>
+To:     Sean Wang <sean.wang@mediatek.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
+        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hello:
 
-On 4/26/22 1:46 PM, Greg Kroah-Hartman wrote:
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Marcel Holtmann <marcel@holtmann.org>:
 
->> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
->> invalid") only calls WARN() when IRQ0 is about to be returned, however
->> using IRQ0 is considered invalid (according to Linus) outside the arch/
->> code where it's used by the i8253 drivers. Many driver subsystems treat
->> 0 specially (e.g. as an indication of the polling mode by libata), so
->> the users of platform_get_irq[_byname]() in them would have to filter
->> out IRQ0 explicitly and this (quite obviously) doesn't scale...
->> Let's finally get this straight and return -EINVAL instead of IRQ0!
->>
->> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->> Acked-by: Marc Zyngier <maz@kernel.org>
-
-[...]
-
-> Ok, let's try this now.
-
-   Well, better late than never! :-)
-
-> Worst case, we revert it later :)
-
-   Please just don't revert it outright on the 1st issue report -- give me time
-to look at the issue(s) reported...
-   BTW, I've CC'ed you on the SH patch that avoids using IRQ0. Please help to
-merge it (v1/v2 were posted on February 11th and there was no motion since then)!
-
-> thanks,
+On Thu, 28 Apr 2022 02:38:39 +0800 you wrote:
+> From: Sean Wang <sean.wang@mediatek.com>
 > 
-> greg k-h
+> Add VID 0489 & PID e0c8 for MediaTek MT7921 USB Bluetooth chip.
+> 
+> The information in /sys/kernel/debug/usb/devices about the Bluetooth
+> device is listed as the below.
+> 
+> [...]
 
-MBR, Sergey
+Here is the summary with links:
+  - Bluetooth: btusb: Add a new PID/VID 0489/e0c8 for MT7921
+    https://git.kernel.org/bluetooth/bluetooth-next/c/48b57999e387
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

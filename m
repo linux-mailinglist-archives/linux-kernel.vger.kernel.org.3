@@ -2,134 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98AF5113AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084685113AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359509AbiD0IpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S1359517AbiD0Ipm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359487AbiD0Iox (ORCPT
+        with ESMTP id S244977AbiD0Iph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:44:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A707892A;
-        Wed, 27 Apr 2022 01:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651048902; x=1682584902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Or6mGoiigOsmCY44ez//qcXP16P68GeRxhWNaqieJzE=;
-  b=UHKOMuUmMvURfb7S86kysshehWml+4KUBggzZDpTgYfc1yDnqUicLQcQ
-   JvCudTTcJC4YMw13XjXJlX3xdqdJG3DKn6nzeHNOqQq/scMJUZwZheMB2
-   R8K/pyafYziYFa+xSaTR6M7iYpfXUBIQJzWOLZ1Sg9UvgFPSQtB7JjXGE
-   totOwD+rUaS0eHG9xFB9xHwWwzZE+r70RfNWz87rfPcyegqET3GQ1J9KM
-   0ECYf7gSOXn6jUG4T/ogAP2nEIog5ILhXo2v0ktRShdiLjvONWol69b2B
-   BemzfcVl702oTGsnzCom3FztrSVRcZ1l7BzIZsSmrRpfNSJi7CrOkRZEy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="253244556"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="253244556"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 01:41:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="628919321"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Apr 2022 01:41:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njdEr-0004W9-Av;
-        Wed, 27 Apr 2022 08:41:33 +0000
-Date:   Wed, 27 Apr 2022 16:41:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 10/21] KVM: s390: pci: add basic kvm_zdev structure
-Message-ID: <202204271653.1ZoYsV9W-lkp@intel.com>
-References: <20220426200842.98655-11-mjrosato@linux.ibm.com>
+        Wed, 27 Apr 2022 04:45:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4595984ED5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:42:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0F7EB82539
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:42:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05125C385A7;
+        Wed, 27 Apr 2022 08:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651048943;
+        bh=fKFAg7yyRNNSgvuezxx6sbeGgfw2ClQ/UPWWRA3anwA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u5hCz4A6L3BxKUDH6/UROdADwrk0z5m42iU59prw/wC1NtIpgsjTEyurZp3wA7kSF
+         bfAzj1Yh4MqYIIeJau2o7THzXLdEp/TLvKqx4fLVtXzm1Q7DbgJJcte+BdzmfUg4om
+         eZMaRqGnYj5zHK7BJyvWDImPv76ybNgdaPVo2kv4=
+Date:   Wed, 27 Apr 2022 10:42:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Matthias Maennich <maennich@google.com>
+Subject: Re: [PATCH] export: fix string handling of namespace in
+ EXPORT_SYMBOL_NS
+Message-ID: <YmkB7JdGPFQD+5Nt@kroah.com>
+References: <20220108140415.3360088-1-gregkh@linuxfoundation.org>
+ <CAK7LNASC+PBFqbsAFWbePoEjL5d21z95Nb84AHTkPjiMcWG_Gg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426200842.98655-11-mjrosato@linux.ibm.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK7LNASC+PBFqbsAFWbePoEjL5d21z95Nb84AHTkPjiMcWG_Gg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
+On Wed, Jan 12, 2022 at 04:14:00AM +0900, Masahiro Yamada wrote:
+> On Sat, Jan 8, 2022 at 11:04 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > Commit c3a6cf19e695 ("export: avoid code duplication in
+> > include/linux/export.h") broke the ability for a defined string to be
+> > used as a namespace value.  Fix this up by adding another layer of
+> > indirection to preserve the previous functionality.
+> >
+> > Fixes: c3a6cf19e695 ("export: avoid code duplication in include/linux/export.h")
+> > Cc: Miroslav Benes <mbenes@suse.cz>
+> > Cc: Emil Velikov <emil.l.velikov@gmail.com>
+> > Cc: Jessica Yu <jeyu@kernel.org>
+> > Cc: Quentin Perret <qperret@google.com>
+> > Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> > Cc: Matthias Maennich <maennich@google.com>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > Note, I found this while forward porting an out-of-tree Android kernel
+> > patch from 5.4 to 5.10 that used module namespaces to help wall-off vfs
+> > symbols from being used by non-filesystem modules.  This issue does not
+> > affect any in-kernel code, so I am not so sure if it really is needed
+> > here, but it does restore the previous functionality that was being used
+> > in older kernels so it might be good to put back in case others want to
+> > do much the same thing.
+> >
+> >  include/linux/export.h | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/export.h b/include/linux/export.h
+> > index 27d848712b90..9a992809f57d 100644
+> > --- a/include/linux/export.h
+> > +++ b/include/linux/export.h
+> > @@ -162,8 +162,10 @@ struct kernel_symbol {
+> >
+> >  #define EXPORT_SYMBOL(sym)             _EXPORT_SYMBOL(sym, "")
+> >  #define EXPORT_SYMBOL_GPL(sym)         _EXPORT_SYMBOL(sym, "_gpl")
+> > -#define EXPORT_SYMBOL_NS(sym, ns)      __EXPORT_SYMBOL(sym, "", #ns)
+> > -#define EXPORT_SYMBOL_NS_GPL(sym, ns)  __EXPORT_SYMBOL(sym, "_gpl", #ns)
+> > +#define _EXPORT_SYMBOL_NS(sym, ns)     __EXPORT_SYMBOL(sym, "", #ns)
+> > +#define _EXPORT_SYMBOL_NS_GPL(sym, ns) __EXPORT_SYMBOL(sym, "_gpl", #ns)
+> > +#define EXPORT_SYMBOL_NS(sym, ns)      _EXPORT_SYMBOL_NS(sym, ns)
+> > +#define EXPORT_SYMBOL_NS_GPL(sym, ns)  _EXPORT_SYMBOL_NS_GPL(sym, ns)
+> >
+> >  #endif /* !__ASSEMBLY__ */
+> >
+> > --
+> > 2.34.1
+> >
+> 
+> I see __stringify() a few files above.
+> So, you can use it here as well.
+> 
+> 
+> Does the following code work?   (untested)
+> 
+> 
+> 
+> 
+> 
+> diff --git a/include/linux/export.h b/include/linux/export.h
+> index 27d848712b90..5910ccb66ca2 100644
+> --- a/include/linux/export.h
+> +++ b/include/linux/export.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _LINUX_EXPORT_H
+>  #define _LINUX_EXPORT_H
+> 
+> +#include <linux/stringify.h>
+> +
+>  /*
+>   * Export symbols from the kernel to modules.  Forked from module.h
+>   * to reduce the amount of pointless cruft we feed to gcc when only
+> @@ -154,7 +156,6 @@ struct kernel_symbol {
+>  #endif /* CONFIG_MODULES */
+> 
+>  #ifdef DEFAULT_SYMBOL_NAMESPACE
+> -#include <linux/stringify.h>
+>  #define _EXPORT_SYMBOL(sym, sec)       __EXPORT_SYMBOL(sym, sec,
+> __stringify(DEFAULT_SYMBOL_NAMESPACE))
+>  #else
+>  #define _EXPORT_SYMBOL(sym, sec)       __EXPORT_SYMBOL(sym, sec, "")
+> @@ -162,8 +163,8 @@ struct kernel_symbol {
+> 
+>  #define EXPORT_SYMBOL(sym)             _EXPORT_SYMBOL(sym, "")
+>  #define EXPORT_SYMBOL_GPL(sym)         _EXPORT_SYMBOL(sym, "_gpl")
+> -#define EXPORT_SYMBOL_NS(sym, ns)      __EXPORT_SYMBOL(sym, "", #ns)
+> -#define EXPORT_SYMBOL_NS_GPL(sym, ns)  __EXPORT_SYMBOL(sym, "_gpl", #ns)
+> +#define EXPORT_SYMBOL_NS(sym, ns)      __EXPORT_SYMBOL(sym, "",
+> __stringify(ns))
+> +#define EXPORT_SYMBOL_NS_GPL(sym, ns)  __EXPORT_SYMBOL(sym, "_gpl",
+> __stringify(ns))
+> 
+>  #endif /* !__ASSEMBLY__ */
 
-I love your patch! Perhaps something to improve:
+Sorry for the long delay, but yes, this does seem to resolve the issue
+for me.  I'll respin this and resend, thanks!
 
-[auto build test WARNING on v5.18-rc4]
-[cannot apply to s390/features kvms390/next awilliam-vfio/next next-20220427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Rosato/KVM-s390-enable-zPCI-for-interpretive-execution/20220427-041853
-base:    af2d861d4cd2a4da5137f795ee3509e6f944a25b
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20220427/202204271653.1ZoYsV9W-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e6d8c620090a7b184afdf5b5123d10ac45776eaf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Rosato/KVM-s390-enable-zPCI-for-interpretive-execution/20220427-041853
-        git checkout e6d8c620090a7b184afdf5b5123d10ac45776eaf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/kvm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/s390/kvm/pci.c:14:5: warning: no previous prototype for 'kvm_s390_pci_dev_open' [-Wmissing-prototypes]
-      14 | int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
-         |     ^~~~~~~~~~~~~~~~~~~~~
->> arch/s390/kvm/pci.c:29:6: warning: no previous prototype for 'kvm_s390_pci_dev_release' [-Wmissing-prototypes]
-      29 | void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/kvm_s390_pci_dev_open +14 arch/s390/kvm/pci.c
-
-    13	
-  > 14	int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
-    15	{
-    16		struct kvm_zdev *kzdev;
-    17	
-    18		kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
-    19		if (!kzdev)
-    20			return -ENOMEM;
-    21	
-    22		kzdev->zdev = zdev;
-    23		zdev->kzdev = kzdev;
-    24	
-    25		return 0;
-    26	}
-    27	EXPORT_SYMBOL_GPL(kvm_s390_pci_dev_open);
-    28	
-  > 29	void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

@@ -2,165 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64D2512314
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDC7512317
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234809AbiD0Tu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S234783AbiD0Twe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbiD0Tun (ORCPT
+        with ESMTP id S233814AbiD0Tw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:50:43 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1962BB03;
-        Wed, 27 Apr 2022 12:47:30 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l18so5442903ejc.7;
-        Wed, 27 Apr 2022 12:47:30 -0700 (PDT)
+        Wed, 27 Apr 2022 15:52:28 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C8F49C8B;
+        Wed, 27 Apr 2022 12:49:16 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id h12so2459041plf.12;
+        Wed, 27 Apr 2022 12:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LONo22GFE8+qb+RTFT1FYUQE4k/LGm5GxuD++oCjNCo=;
-        b=oVQ5t51PpqRAKOMWTnUjjYB06RAXdeQijIcB3h4gxPdrJg919IHzOauTtrCaKnUB7p
-         jrj+4kHdkxThd9OtNJgoJjy4qllr60TxUP6f2E8aVsBjZv7/LXEyKM2TdQ+m9i9ABzHN
-         ta2jM7RaQ/rIby5LSeUxG03DlsalsdUlvbcOitNiJ6cJ8Bx+XXxMFfxEwAx1tF5h0m8j
-         0BT7Azw8ss+JqOhBijJrAvTAmwr9xhjfxbEyTqrebMJv8xjrkQbgUin+aWphFPGDAj5C
-         60w1oj59WmxZ2l8g/h66lzVQZnaKmNUWql4qtC/zAts+sHjQ4sUZFhyfd97SNJQNyqgO
-         K13Q==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=dHyaJhWWV2/0XVRasONV/Ot6Fn0AQBDrxMk4qZE1NjE=;
+        b=j2ccc9/tmPk1fdAf55kkSQPYg5qtpni4v4AYOGGuRC5Kc275Wz1QP0LZk6VSEAomca
+         LJ45O+/bKjIV8dVSZXzuyea5d1YHbou1nsPuHMfJVJXv7EGS4CyWTJyS52gkMqqntX5N
+         ybMZx6PAE1e2RF4VOQlALzstvb4Ja3mYTJiI3GFPU82iFnHIGEhOC1oH92roLwG0gu3v
+         E6Kc5bFKoAxaemNUCt3Yo5K/rPaqIXn5GqHaRVLjnwptdArBBUAbJeU2IivJVomYoxO2
+         nwbN+bg518RRO6yq4EKPISyZXVhnboeJh73dYApkF7Yf/Q3d+IuJwH2w3Nd3vl7YDhKj
+         fYTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LONo22GFE8+qb+RTFT1FYUQE4k/LGm5GxuD++oCjNCo=;
-        b=HjMEnnon6rR8R3AG0xhf2lPn5wdxG/QVPuqjwRzXm/ZblzkMhgE/xXJ0Yslz7T5I2t
-         +dXN+/s/80+K2HdpV8p2lKdHQ54ZygT0CLoNbKLPAGNPZpnrKnV6TvWXW6Vjay6PRREh
-         83yJDLOhbBvRKFbRsFpllsTYevU4PJQDES1iWzwDOjjGnyDUPjqVwm6yy+jLfxPg7mky
-         I4GGc8pcrESpz65SW8CD5o49xFJ+P2PnpZszSs03dc5BBotevpDVgkQAWok/wGSmBSav
-         1LwgZIEjWqWmylpg2b1/bmiuquGartTQM2rxwfijXhh+wwcDciije/PeyCsJO8ELUuYb
-         Ebsg==
-X-Gm-Message-State: AOAM533aYdoYFh2IHzeqVPRMXDkiiH1TZdhmew+ImoXHhyuxJXH4jPOb
-        j1q90d2THjeSVgkR5E5zNEc9Hd0GBAuKOA==
-X-Google-Smtp-Source: ABdhPJzJatD17YnXsrf0yTeXgTJ1voZs9XJLvJEFIxSvdL3rgPSW4gimCHVTuvtYjbFSC2UjbCAuhQ==
-X-Received: by 2002:a17:907:968f:b0:6db:a3c5:ae3e with SMTP id hd15-20020a170907968f00b006dba3c5ae3emr29230108ejc.770.1651088848727;
-        Wed, 27 Apr 2022 12:47:28 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id s25-20020aa7d799000000b0042617ba6397sm96065edq.33.2022.04.27.12.47.27
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=dHyaJhWWV2/0XVRasONV/Ot6Fn0AQBDrxMk4qZE1NjE=;
+        b=jqmSRHw8IiBJekRQ1GjfMfM9+LzzDAWyn682IBavQCF44DcuFwcGfpzC9A7F/NXZyG
+         uXrU7G3zj4ZxH6vF+KVCvBvkEnIwS7RirksGVBoWtxnr093G1Jr4ET9i+GWoToTXhxTp
+         iLxk/E1hntNro2mz+cjucGzpzP1piM5vNmCwzXTA1/wAY076l41A0NWJRm9q6ax0ZZL3
+         oI3qcpVveF7dZPU5SdNmxNXF3UTUS519gTo17uu7ugs0NOL4wfCY41n2qsSZ9Jr+1Qmz
+         9EVU189V2rmzRNKm6TyB+sADpvJ568GipjfKseOgC0rNdoG8RfFDrM+2OJ0M3TyHOujK
+         cn3w==
+X-Gm-Message-State: AOAM531DvMXzWmElVZDyXLsF2ZiDYJjPwz/DGzwxgJjAB5Zlyj7ukG9g
+        3INorDF3Sr/fDBj8fc1SPU4=
+X-Google-Smtp-Source: ABdhPJwzV7jGfLMkNkr7Nc4QrooBYL9PbbBZexVN3BcRMkRjddWyw7MQE+tpvgzPcSSWq11ciWNqZg==
+X-Received: by 2002:a17:902:f64d:b0:151:3895:46bf with SMTP id m13-20020a170902f64d00b00151389546bfmr30687221plg.31.1651088955577;
+        Wed, 27 Apr 2022 12:49:15 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:4f81])
+        by smtp.gmail.com with ESMTPSA id w11-20020a17090a4f4b00b001d8abe4bb17sm3569076pjl.32.2022.04.27.12.49.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:47:28 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 35/45] media: sun6i-csi: Get bridge subdev directly in capture stream ops
-Date:   Wed, 27 Apr 2022 21:47:27 +0200
-Message-ID: <2128504.NgBsaNRSFp@jernej-laptop>
-In-Reply-To: <20220415152811.636419-36-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-36-paul.kocialkowski@bootlin.com>
+        Wed, 27 Apr 2022 12:49:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 27 Apr 2022 09:49:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Saravanan D <saravanand@fb.com>,
+        Christopher Obbard <chris.obbard@collabora.com>
+Subject: [PATCH block-5.18] Revert "block: inherit request start time from
+ bio for BLK_CGROUP"
+Message-ID: <YmmeOLfo5lzc+8yI@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:28:01 CEST je Paul Kocialkowski napisal(a):
-> The remote subdev connected to the capture video device is always
-> our bridge, so get the bridge subdev directly instead of using a
-> dedicated helper (which is removed by this commit).
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+This reverts commit 0006707723233cb2a9a23ca19fc3d0864835704c. It has a
+couple problems:
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+* bio_issue_time() is stored in bio->bi_issue truncated to 51 bits. This
+  overflows in slightly over 26 days. Setting rq->io_start_time_ns with it
+  means that io duration calculation would yield >26days after 26 days of
+  uptime. This, for example, confuses kyber making it cause high IO
+  latencies.
 
-Best regards,
-Jernej
+* rq->io_start_time_ns should record the time that the IO is issued to the
+  device so that on-device latency can be measured. However,
+  bio_issue_time() is set before the bio goes through the rq-qos controllers
+  (wbt, iolatency, iocost), so when the bio gets throttled in any of the
+  mechanisms, the measured latencies make no sense - on-device latencies end
+  up higher than request-alloc-to-completion latencies.
 
-> ---
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 30 ++-----------------
->  1 file changed, 3 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c index
-> b3452ed825ad..b92f8aa55a92 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -42,22 +42,6 @@ void sun6i_csi_capture_format(struct sun6i_csi_device
-> *csi_dev, *field = csi_dev->capture.format.fmt.pix.field;
->  }
-> 
-> -static struct v4l2_subdev *
-> -sun6i_csi_capture_remote_subdev(struct sun6i_csi_capture *capture, u32
-> *pad) -{
-> -	struct media_pad *remote;
-> -
-> -	remote = media_entity_remote_pad(&capture->pad);
-> -
-> -	if (!remote || !is_media_entity_v4l2_subdev(remote->entity))
-> -		return NULL;
-> -
-> -	if (pad)
-> -		*pad = remote->index;
-> -
-> -	return media_entity_to_v4l2_subdev(remote->entity);
-> -}
-> -
->  /* Format */
-> 
->  static const struct sun6i_csi_capture_format sun6i_csi_capture_formats[] =
-> { @@ -822,8 +806,8 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, struct sun6i_csi_capture *capture = &csi_dev->capture;
->  	struct sun6i_csi_capture_state *state = &capture->state;
->  	struct video_device *video_dev = &capture->video_dev;
-> +	struct v4l2_subdev *subdev = &csi_dev->bridge.subdev;
->  	struct device *dev = csi_dev->dev;
-> -	struct v4l2_subdev *subdev;
->  	int ret;
-> 
->  	state->sequence = 0;
-> @@ -832,12 +816,6 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, if (ret < 0)
->  		goto error_state;
-> 
-> -	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
-> -	if (!subdev) {
-> -		ret = -EINVAL;
-> -		goto error_media_pipeline;
-> -	}
-> -
->  	/* PM */
-> 
->  	ret = pm_runtime_resume_and_get(dev);
-> @@ -886,12 +864,10 @@ static void sun6i_csi_capture_stop_streaming(struct
-> vb2_queue *queue) {
->  	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
->  	struct sun6i_csi_capture *capture = &csi_dev->capture;
-> +	struct v4l2_subdev *subdev = &csi_dev->bridge.subdev;
->  	struct device *dev = csi_dev->dev;
-> -	struct v4l2_subdev *subdev;
-> 
-> -	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
-> -	if (subdev)
-> -		v4l2_subdev_call(subdev, video, s_stream, 0);
-> +	v4l2_subdev_call(subdev, video, s_stream, 0);
-> 
->  	sun6i_csi_capture_disable(csi_dev);
->  	sun6i_csi_capture_irq_disable(csi_dev);
+We'll need a smarter way to avoid calling ktime_get_ns() repeatedly
+back-to-back. For now, let's revert the commit.
 
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Cc: stable@vger.kernel.org # v5.16+
+---
+ block/blk-mq.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index c4370d2761706..84d749511f551 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -1131,14 +1131,7 @@ void blk_mq_start_request(struct request *rq)
+ 	trace_block_rq_issue(rq);
+ 
+ 	if (test_bit(QUEUE_FLAG_STATS, &q->queue_flags)) {
+-		u64 start_time;
+-#ifdef CONFIG_BLK_CGROUP
+-		if (rq->bio)
+-			start_time = bio_issue_time(&rq->bio->bi_issue);
+-		else
+-#endif
+-			start_time = ktime_get_ns();
+-		rq->io_start_time_ns = start_time;
++		rq->io_start_time_ns = ktime_get_ns();
+ 		rq->stats_sectors = blk_rq_sectors(rq);
+ 		rq->rq_flags |= RQF_STATS;
+ 		rq_qos_issue(q, rq);
+-- 
+2.36.0
 

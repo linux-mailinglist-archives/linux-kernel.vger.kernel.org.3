@@ -2,225 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513AA51175B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D68511752
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbiD0Mcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S234258AbiD0Me6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbiD0Mco (ORCPT
+        with ESMTP id S234196AbiD0Me4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:32:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02D504B1D2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651062572;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q3NajTnxfaXiUWEWzwoSS9j+6RIZ90UuUICFGJF5sxU=;
-        b=Jw6fsdIpn8tTL0nbWs3uREofrcf8EKyIYxRkepRQrB85rGPleALZO7UWWTZsOxrJR394JV
-        uIY2mBAYv6QPvkSh7upzoBLizE/aSEXQn/IOI0Vfqbqtq3wKTj0iAj6ehiEYid9DW2wbY4
-        zhhoBEH4cB6vrRONJyCXc1UxG6xsVu4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-150-wqhK2l1fPIGYh5d-WOzkaw-1; Wed, 27 Apr 2022 08:29:31 -0400
-X-MC-Unique: wqhK2l1fPIGYh5d-WOzkaw-1
-Received: by mail-wm1-f69.google.com with SMTP id p32-20020a05600c1da000b00393fbf9ab6eso1816915wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:29:31 -0700 (PDT)
+        Wed, 27 Apr 2022 08:34:56 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3116A4BBBF
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:31:46 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id b12so1419001plg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hGcMZHnjSns8JTuzYE9jTqed4AGG4r5oPIvvfDMdW4c=;
+        b=ctLrqDJVyjW8JBHbFLUPVekF8onbzNl/a4t84wK81WekIWLRCuh6Sw4R+qBreLXPnD
+         UcNRk83XmMea5li6P0bAyVfq6VP5NOXBZjFqEUVVnCrDGPuHnWxV6PDUaOCy+5yPru+r
+         Q6eD1QY+PNuHzH0iGGi5t1uzCeQajfU6siOQhYtgETdAiR6g9TyBqXXXncaeL4qZkc4J
+         wUA09XqVZxR/pdatWBk9mGjeXXPf5/am9eadh+65hS6Fhln13LYtcy2WApnGZiDa5+P2
+         Fz4jeLYDuXobHESeJXnl1+1l8NliE6Q99MosI26xJBw8Xo1THTFZpAzPN6g5fVJfrBrQ
+         qvWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q3NajTnxfaXiUWEWzwoSS9j+6RIZ90UuUICFGJF5sxU=;
-        b=VE/1BBZJhiNg64ng0cGS8akuo38gmjgfhBWrHPkOmfsgkthiBck8eMR0xTKkEG62mv
-         FuKe3/bdI2pbYu1dFThNJ+nI1dQOv6HzTfaf0ysktynq/JeemXDRbc6CLJYtVVXmscnz
-         1YOfG5jCaMhsbK0TVINPLEraf0R+IzcWxp+p63xXMLSniJ8+OfAZsi2nqJa1H9E253p3
-         MoM0ZAyosQDaywKqvfPcOi3tKetK8jYCTSP4A5JByj77rBgel4cdLz2bdDW82PKbyfx3
-         gNwBGevP5HHjIqJ300Uq2FXI116FVmA8eQi5frr4SnS60Slrt6JfK4ciHVTRTxs2rA1H
-         z7Dw==
-X-Gm-Message-State: AOAM530tHhJhdCDN74vDeWTuykiT/qgM05Ba6921eB6dL0AZ23hzebvW
-        qJDl505NemOkEzbiuPgdxbQsf019pZABMiC1fR/UJDUjCOcizTp+XWsf11hc4Qv8CgNZW0XyY+6
-        u/CgJJy4DH31I+LYcaZyopghn3361LKmwyYglK57l
-X-Received: by 2002:a05:6000:712:b0:20a:e5ee:2310 with SMTP id bs18-20020a056000071200b0020ae5ee2310mr6763126wrb.349.1651062570340;
-        Wed, 27 Apr 2022 05:29:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx2NwbomRB7oo5qB43mxERhmhA3DTKd91/iW0YBKGD5MzZODgFS2GGN77/iu24+f+xVUoV7Vyi36xCRLTKBGqU=
-X-Received: by 2002:a05:6000:712:b0:20a:e5ee:2310 with SMTP id
- bs18-20020a056000071200b0020ae5ee2310mr6763112wrb.349.1651062570075; Wed, 27
- Apr 2022 05:29:30 -0700 (PDT)
+        bh=hGcMZHnjSns8JTuzYE9jTqed4AGG4r5oPIvvfDMdW4c=;
+        b=P8ii2Ig+vYK5KNtnjjeHTolkl0bva67SsRdMLwusCsKw/yLEafMjb8eyUn9S6+hoPi
+         QXcZjuZtF7X7pWiwYT4DTQv0Qk4swjTX/HIPjfMlClYvS+r3m6D9ydWBxEopn7wrxK5E
+         Sd450K+GJFEY7eGp0tGo5lSMcdUYfkeTY2CIrjqkqp1/OdgXC35b6ofEPp3o1fZN58o3
+         3pgYnVflqeL/KPuT+nRnwOqsyaSpI+O4yy36l5OBEIRbaWddZV6+LhCTpv3uIhB2+R/Q
+         3V35l1SZAh9OUoAwZwf+WRIBZ8SIRL4k8WYdTT4SLtUdexutY/mw0nL5vmHGsmzy+jPW
+         TlFw==
+X-Gm-Message-State: AOAM533eayDQD2LXjJISAyhQlhTDD3ZPSWzVpDc7HsdBgC6Jo6SBuyM7
+        vLRrxJlJs/yHNd7uESB/HLQp3AuzHVaEm279p1I=
+X-Google-Smtp-Source: ABdhPJzgueqJcjLxOYi7REPhnZTGxdnFE9nNel8FAqBzRk28jxaFt0ZO09MW8p3LcOvq0TOjKd30ivxIi4Yp4RKaRAk=
+X-Received: by 2002:a17:90b:4c84:b0:1d2:cadc:4e4d with SMTP id
+ my4-20020a17090b4c8400b001d2cadc4e4dmr43321277pjb.8.1651062705339; Wed, 27
+ Apr 2022 05:31:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com> <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
-In-Reply-To: <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Wed, 27 Apr 2022 14:29:18 +0200
-Message-ID: <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <YlaWxh5qYCe40US7@alley> <20220413055305.1768223-1-maninder1.s@samsung.com>
+ <CGME20220413055318epcas5p3df3cdde54a559d4002a74de9f23289f2@epcms5p5>
+ <747830777.1512786.1650256482294@mail-kr5-3> <YmAlAvy6aSeeJKoO@bombadil.infradead.org>
+In-Reply-To: <YmAlAvy6aSeeJKoO@bombadil.infradead.org>
+From:   Vimal Agrawal <avimalin@gmail.com>
+Date:   Wed, 27 Apr 2022 18:01:34 +0530
+Message-ID: <CALkUMdQanGgtahQDqQV-r6oWF=cvTsteztOoe5bqHsJApST0Rw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kallsyms: add kallsyms_show_value definition in all cases
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Maninder Singh <maninder1.s@samsung.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "wedsonaf@google.com" <wedsonaf@google.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "gary@garyguo.net" <gary@garyguo.net>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vaneet Narang <v.narang@samsung.com>,
+        Onkarnath <onkarnath.1@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 1:33 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Tue, Apr 26, 2022 at 2:28 PM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+Hi Maninder,
+
+in sprint_module_info(), we need to take care of mod->init_layout
+addresses as well.
+Please test the patch against  init symbols.
+
+Vimal
+
+On Wed, Apr 20, 2022 at 8:51 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Mon, Apr 18, 2022 at 10:04:42AM +0530, Maninder Singh wrote:
+> > > What about splitting kallsyms.c into two source files where one
+> > > would be always compiled? It would be usable also for the
+> > > spring function introduced by
+> > > https://lore.kernel.org/r/20220323164742.2984281-1-maninder1.s@samsung.com
+> > >
+> > > It might be something like kallsyms_full.c and/or kallsyms_tiny.c.
+> > >
 > >
-> > Btrfs has a comment in that place that reads:
-> >
-> >     /* No increment (+=) because iomap returns a cumulative value. */
+> > This patch is not taken by Luis yet in module-tetsing branch.
 >
-> What a truly horrid interface. But you are triggering repressed
-> childhood memories:
+> Please resend that patch, as I'm happy to route it in through
+> modules-next [0]. I use modules-testing *prior* to pushing to
+> modules-next, if 0-day does not complain after about a few days
+> then I push to modules-next and this gets merged to linux-next.
 >
-> > That's so that we can complete the tail of an asynchronous write
-> > asynchronously after a failed page fault and subsequent fault-in.
+> You can send that patch and then this one and include in the subject
+> something like:
 >
-> yeah, that makes me go "I remember something like that".
+> [PATCH modules-next 1/1]
 >
-> > That would be great, but applications don't seem to be able to cope
-> > with short direct writes, so we must turn partial failure into total
-> > failure here. There's at least one xfstest that checks for that as
-> > well.
+> Vimal, I'd like your review of these patches too. And after those
+> we can see where your change fits / if it is still needed.
 >
-> What a complete crock. You're telling me that you did some writes, but
-> then you can't tell user space that writes happened because that would
-> confuse things.
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
 >
-> Direct-IO is some truly hot disgusting garbage.
->
-> Happily it's only used for things like databases that nobody sane
-> would care about anyway.
->
-> Anyway, none of that makes any sense, since you do this:
->
->                 ret = gfs2_file_direct_write(iocb, from, &gh);
->                 if (ret < 0 || !iov_iter_count(from))
->                         goto out_unlock;
->
->                 iocb->ki_flags |= IOCB_DSYNC;
->                 buffered = gfs2_file_buffered_write(iocb, from, &gh);
->
-> so you're saying that the direct write will never partially succeed,
-> but then in gfs2_file_write_iter() it very much looks like it's
-> falling back to buffered writes for that case.
->
-> Hmm. Very odd.
->
-> I assume this is all due to that
->
->         /* Silently fall back to buffered I/O when writing beyond EOF */
->         if (iocb->ki_pos + iov_iter_count(from) > i_size_read(&ip->i_inode))
->
-> thing, so this all makes some perverse kind of sense, but it still
-> looks like this code just needs some serious serious commentary.
-
-Yes, that, as well as writing into holes.
-
-During direct writes, gfs2 is holding the inode glock in a special
-"shared writable" mode which works like the usual "shared readable"
-mode as far as metadata goes, but can be held by multiple "shared
-writers" at the same time. This allows multiple nodes to write to the
-storage device concurrently as long as the file is preallocated (i.e.,
-databases). When it comes to allocations, it falls back to "exclusive"
-locking and buffered writes.
-
-> So you *can* have a partial write if you hit the end of the file, and
-> then you'll continue that partial write with the buffered code.
->
-> But an actual _failure_ will not do that, and instead return an error
-> even if the write was partially done.
->
-> But then *some* failures aren't failures at all, and without any
-> comments do this
->
->         if (ret == -ENOTBLK)
->                 ret = 0;
->
->
-> And remind me again - this all is meant for applications that
-> supposedly care about consistency on disk?
->
-> And the xfs tests actually have a *test* for that case, to make sure
-> that nobody can sanely *really* know how much of the write succeeded
-> if it was a DIO write?
->
-> Gotcha.
-
-I agree that it's pretty sad.
-
-> > > The reason I think I'm full of sh*t is that you say that the problem
-> > > occurs in gfs2_file_buffered_write(), not in that
-> > > gfs2_file_direct_write() case.
-> >
-> > Right, we're having that issue with buffered writes.
->
-> I have to say, compared to all the crazy things I see in the DIO path,
-> the buffered write path actually looks almost entirely sane.
->
-> Of course, gfs2_file_read_iter() counts how many bytes it has read in
-> a variable called 'written', and gfs2_file_buffered_write() counts the
-> bytes it has written in a variable called 'read', so "entirely sane"
-> is all very very relative.
->
-> I'm sure there's some good reason (job security?) for all this insanity.
-
-Point taken; I'll fix this up.
-
-> But I now have to go dig my eyes out with a rusty spoon.
->
-> But before I do that, I have one more question (I'm going to regret
-> this, aren't I?):
->
-> In gfs2_file_buffered_write(), when it has done that
-> fault_in_iov_iter_readable(), and it decides that that succeeded, it
-> does
->
->                         if (gfs2_holder_queued(gh))
->                                 goto retry_under_glock;
->                         if (read && !(iocb->ki_flags & IOCB_DIRECT))
->                                 goto out_uninit;
->                         goto retry;
->
-> so if it still has that lock (if I understand correctly), it will always retry.
->
-> But if it *lost* the lock, it will retry only if was a direct write,
-> and return a partial success for a regular write() rather than
-> continue the write.
->
-> Whaa? I'm assuming that this is more of that "direct writes have to
-> succeed fully or not at all", but according to POSIX *regular* writes
-> should also succeed fully, unless some error happens.
->
-> Losing the lock doesn't sound like an error to me.
-
-Regular (buffered) reads and writes are expected to be atomic with
-respect to each other. That atomicity comes from holding the lock.
-When we lose the lock, we can observe atomicity and return a short
-result, ignore atomicity and return the full result, or retry the
-entire operation. Which of those three options would you prefer?
-
-For what it's worth, none of this matters as long as there's no lock
-contention across the cluster.
-
-> And there are a lot of applications that do assume "write to a regular
-> file didn't complete fully means that the disk is full" etc. Because
-> that's the traditional meaning.
->
-> This doesn't seem to be related to any data corruption issue, but it does smell.
->
->              Linus
-
-Thanks,
-Andreas
-
+>   Luis

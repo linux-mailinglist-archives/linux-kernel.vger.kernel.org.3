@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F35D5110EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7AD5110EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357979AbiD0GNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
+        id S1357998AbiD0GNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232922AbiD0GNM (ORCPT
+        with ESMTP id S1357994AbiD0GNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:13:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598376A07C;
-        Tue, 26 Apr 2022 23:09:56 -0700 (PDT)
-X-UUID: adc1ddcc7a0a4aff8d34ddcea51eb800-20220427
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:fd893231-4fe4-488f-a2f6-05576ae9eee5,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:74e9da2e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: adc1ddcc7a0a4aff8d34ddcea51eb800-20220427
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1092186264; Wed, 27 Apr 2022 14:09:49 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 27 Apr 2022 14:09:49 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 27 Apr
- 2022 14:09:49 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 27 Apr 2022 14:09:49 +0800
-Message-ID: <26991dca6f52b2a8be11d03496cff084174222cb.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/2] arm64: dts: mt8183: add dpi node to mt8183
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Pi-Hsun Shih <pihsun@chromium.org>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Wed, 27 Apr 2022 14:09:49 +0800
-In-Reply-To: <20220426164547.434324-1-fparent@baylibre.com>
-References: <20220426164547.434324-1-fparent@baylibre.com>
+        Wed, 27 Apr 2022 02:13:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F992CC8A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651039830; x=1682575830;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8Xsmzpfs2gKjq0TcuQXIkZffXbq8rph1B7NCGu2V/ac=;
+  b=lIfqb/XmiwzsRzZ5PQtSmCUNfUq99dfOOJq5r0a8C0O8YmGw8YENulay
+   IdehNYqs3K0H868PeJRfQtiU049fZ7y/3NQakRqkYsPFgQICXJqWjmme4
+   feC0k8gKPlotBHUIPVW7ZtsGt5jEGBJXfd6MpJzymyMDPl1lmF6wzPJpw
+   OFmZXzxqUCqV9JI6cu0YJIWG/4dLB+2whRro+6HFEvbwDO5Q8u1EBrn93
+   a8kZm/LA4uEgzlCI47/j+22+Ag/VUoGwsxXWrwXNbEOIFUQFcm2LnN8Kk
+   /DvqJdLXNk6qBrYkxNfyQeeT0TRSgk4ah0g3AmECckcHOdrqVgKpH6wlI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265635519"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="265635519"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:10:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="580400044"
+Received: from kang1-mobl1.ccr.corp.intel.com ([10.254.212.35])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 23:10:27 -0700
+Message-ID: <75adcfe33483d5e30855226b6efcd8dcd2f52925.camel@intel.com>
+Subject: Re: [PATCH v3 3/6] mm/vmscan: activate swap-backed executable
+ folios after first usage
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Joonsoo Kim <js1304@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oscar Salvador <osalvador@suse.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Wed, 27 Apr 2022 14:10:25 +0800
+In-Reply-To: <CAAmzW4NV9_LiGsN3Qn3uv19ZLFn9zZ3hdLFy1HOgbec5Or0Ccw@mail.gmail.com>
+References: <20220425111232.23182-1-linmiaohe@huawei.com>
+         <20220425111232.23182-4-linmiaohe@huawei.com>
+         <20220425140711.0c1898862fc817135bbbc56e@linux-foundation.org>
+         <6b74e6f3799032d4f12bae0d97a453dc85d03028.camel@intel.com>
+         <5a108252-4eb8-e353-da3d-a96b8799fadf@huawei.com>
+         <CAAmzW4NV9_LiGsN3Qn3uv19ZLFn9zZ3hdLFy1HOgbec5Or0Ccw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 18:45 +0200, Fabien Parent wrote:
-> From: Pi-Hsun Shih <pihsun@chromium.org>
+On Wed, 2022-04-27 at 13:08 +0900, Joonsoo Kim wrote:
+> Hello,
 > 
-> Add dpi node to mt8183.
+> 2022년 4월 26일 (화) 오후 3:58, Miaohe Lin <linmiaohe@huawei.com>님이 작성:
+> > 
+> > On 2022/4/26 10:02, ying.huang@intel.com wrote:
+> > > On Mon, 2022-04-25 at 14:07 -0700, Andrew Morton wrote:
+> > > > On Mon, 25 Apr 2022 19:12:29 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> > > > 
+> > > > > We should activate swap-backed executable folios (e.g. tmpfs) after first
+> > > > > usage so that executable code gets yet better chance to stay in memory.
 > 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
-> v2: no changes
+> Missing activation for swap-backed executable page is the intended operation.
+> So, I disagree with this patch until some numbers are provided.
+> See following discussion.
 > 
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index 4b08691ed39e..49e662e34b36 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -1507,6 +1507,17 @@ dsi0: dsi@14014000 {
->  			phy-names = "dphy";
->  		};
->  
-> +		dpi0: dpi@14015000 {
-> +			compatible = "mediatek,mt8183-dpi";
-> +			reg = <0 0x14015000 0 0x1000>;
-> +			interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_LOW>;
-> +			power-domains = <&spm
-> MT8183_POWER_DOMAIN_DISP>;
-> +			clocks = <&mmsys CLK_MM_DPI_IF>,
-> +				 <&mmsys CLK_MM_DPI_MM>,
-> +				 <&apmixedsys CLK_APMIXED_TVDPLL>;
-> +			clock-names = "pixel", "engine", "pll";
-> +		};
-> +
->  		mutex: mutex@14016000 {
->  			compatible = "mediatek,mt8183-disp-mutex";
->  			reg = <0 0x14016000 0 0x1000>;
+> https://lore.kernel.org/all/20200316161208.GB67986@cmpxchg.org/T/#u
 
-Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Thanks for your pointer.  Now I understood more about this.  I agree to
+keep the original behavior unless we can prove the change with numbers.
 
-Regards,
-Macpaul Lin
+Best Regards,
+Huang, Ying
+
 

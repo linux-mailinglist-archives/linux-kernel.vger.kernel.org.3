@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC095121A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E865121A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiD0SxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S231316AbiD0Swy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbiD0SwY (ORCPT
+        with ESMTP id S231393AbiD0SwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:52:24 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D392DD3731;
-        Wed, 27 Apr 2022 11:38:29 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id m20so5096844ejj.10;
-        Wed, 27 Apr 2022 11:38:29 -0700 (PDT)
+        Wed, 27 Apr 2022 14:52:25 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FA2DF48F;
+        Wed, 27 Apr 2022 11:38:32 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g6so5167958ejw.1;
+        Wed, 27 Apr 2022 11:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3A9Xsphph+SQIianXjBh4+4o7zyb9BLunLh+E/0CQio=;
-        b=UnfU+HKtW2D06NU0bNOq17sb224h2OOputwJe94u41Qt8hwta0lHaQFIp972VNxMxw
-         NidlrzU1EDNDzfMvPXwIjMrmvr1NjR37cOhY1nYV+roOMxaNJKralBkSBGKZ/BN5Th8s
-         N9lRPYTPjGbr0cSTjbxEspuArLVLDdoBPgK6+upGAizAiELcdp5a9hMp/Xoahvusgq57
-         Th2ISXRFFfvep7ONNLZ0oteYokL2E120n27AHTizXeVhQ6Z8Bx7kArRZNl0nJnyk3Zz+
-         9wm2qfNSgd9FOpItl1vN8l1QYWQbKpnNcH79auchDN29l0o91cDPqLo/49TJ8Kt/t9PO
-         5Vvg==
+        bh=k75/spXS+k5a5+DVquVFeCXg9KobdD3U49dRA56k3UQ=;
+        b=JLJR2+S/v6It9gJr/TiqMLTTFSv6DyRzzADGLWON1JCaOTnKzH1+VU8NynzjGGEipx
+         IlwiMQmQSKbsYYZe2TAFZgbSeO1Iq2WRI84k2hkmS2IpVtJszMvFtZQSWdoaIZ17hVOw
+         WmGVbkfKSC2S3Xgkjxyk6XF2dvpCFcHT9541Hr4aYXwUXRLvUaYcRBxuC7jVD5OwGJDj
+         z4YbZyRk26qXUV04MGxMJaonQm8WpIderszxaLStgxJxo5mM147I4snLrhdjIx1Zi0RV
+         VQah7SZoLbHghWu1MBCQsIcP2UYYt7X/ORDcNTIXwlk0qdjmhnxNnLmlUB4eKqNAB2vu
+         KcMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3A9Xsphph+SQIianXjBh4+4o7zyb9BLunLh+E/0CQio=;
-        b=vdh5uG0cCkMHAU/TaFvgEZOTPuQtb/u1By18gXovY/oQYHoN/IZweRiMbQ7xB5XNWL
-         jxvW1nIit6SRlUsY4uITjp1pus3z9lirClGUZIgvkaItYQLNMr5fpzRyobrig2dZhNrj
-         GXxoIEcAbUiNemxDF0ibRMZsXtHs7YarBytjmFe7SYaEH4mziBXOQOIrULORlH2nM2fi
-         TtcrVwP7mlT9jwS5TKqLipYvoeo8E3bZqqNtbkCfo2doxGDNKh3AT8bvQ83Bfup/uzLj
-         Uaej56kkE5UyFEBsQ1K4fczf0KowK44eJ/BM2u9S/8N+z7aCYjS7gmSXWZTmhiTqx6np
-         329g==
-X-Gm-Message-State: AOAM5327NR0Q6Iwf/2IDNOnHVcGR7IQIBJ/BrbgdQ90Q9SErMmFQP5lM
-        iM1bDzqCrAfhqcCOy1hyZfo=
-X-Google-Smtp-Source: ABdhPJwbRHA28mPeqny4TiNCbUmpYR75vpZN6jbYw41zpIX7FDWDTPi4S99nZfjEdPb0JJjaOjNyZw==
-X-Received: by 2002:a17:907:da0:b0:6df:d4a4:9d0f with SMTP id go32-20020a1709070da000b006dfd4a49d0fmr29043562ejc.407.1651084708394;
-        Wed, 27 Apr 2022 11:38:28 -0700 (PDT)
+        bh=k75/spXS+k5a5+DVquVFeCXg9KobdD3U49dRA56k3UQ=;
+        b=T5aVOd5ND+Te8wbV8EbVvxQpUvLSGfueN6bxa6t+Gr1cfXFOWR9/T0wOdcuZRaxDXM
+         MtErKKe+tR768yxgYjb/5WDI9qY93h3B6K2y+8+VMd8FI7ggzIqvOEuaUAq6vIAToxGc
+         bvYM8Xzp3FIBGO+pk/pCNNMyVBi8l2SHmfSLDD/lRr2VXBErhDz5mjlj+O17DPZqP0F6
+         DhkUU6SqTBBcrTPFN34yoOcKH4F4U/LRkw82SSvylhWPK9/KgJ8EtN3glnmpCf2hO/UH
+         qCcIzyoMVWw0wVguHi2gI/XWMLFaNQ5qKnvVUzdxtu4XBJ36rnA2GOTBprw3JYhd/R32
+         axhg==
+X-Gm-Message-State: AOAM530oaYJq3AVzgob/BiSBKVFAh6NV0fQ/Q1pjvoFanYwqlkjzSJ/E
+        9Wp4AX7g0vYC472VUZ1RNao=
+X-Google-Smtp-Source: ABdhPJyqxAnZeuQdR1Pu7yQd2w8qzvmFZ+4CsZFyBpbjMJsQDuf9u3iTk+0FzzF16gNHyfq2yp+3/A==
+X-Received: by 2002:a17:907:8a0d:b0:6f3:a595:6136 with SMTP id sc13-20020a1709078a0d00b006f3a5956136mr12551715ejc.54.1651084710853;
+        Wed, 27 Apr 2022 11:38:30 -0700 (PDT)
 Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id ig8-20020a1709072e0800b006f38f2e9ebesm4691667ejc.64.2022.04.27.11.38.26
+        by smtp.gmail.com with ESMTPSA id ig8-20020a1709072e0800b006f38f2e9ebesm4691667ejc.64.2022.04.27.11.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:38:27 -0700 (PDT)
+        Wed, 27 Apr 2022 11:38:29 -0700 (PDT)
 From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 To:     Ira Weiny <ira.weiny@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -60,10 +60,13 @@ To:     Ira Weiny <ira.weiny@intel.com>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         outreachy@lists.linux.dev
 Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH v3 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
-Date:   Wed, 27 Apr 2022 20:38:18 +0200
-Message-Id: <20220427183821.1979-2-fmdefrancesco@gmail.com>
+Subject: [PATCH v3 2/4] Documentation/vm: Include kdocs from highmem*.h into highmem.rst
+Date:   Wed, 27 Apr 2022 20:38:19 +0200
+Message-Id: <20220427183821.1979-3-fmdefrancesco@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220427183821.1979-1-fmdefrancesco@gmail.com>
 References: <20220427183821.1979-1-fmdefrancesco@gmail.com>
@@ -79,108 +82,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`scripts/kernel-doc -v -none include/linux/highmem*` reports the following
-warnings:
+kernel-docs that are in include/linux/highmem.h and in
+include/linux/highmem-internal.h should be included in highmem.rst.
 
-include/linux/highmem.h:160: warning: expecting prototype for kunmap_atomic(). Prototype was for nr_free_highpages() instead
-include/linux/highmem.h:204: warning: No description found for return value of 'alloc_zeroed_user_highpage_movable'
-include/linux/highmem-internal.h:256: warning: Function parameter or member '__addr' not described in 'kunmap_atomic'
-include/linux/highmem-internal.h:256: warning: Excess function parameter 'addr' description in 'kunmap_atomic'
+Use kdocs directives to include the above-mentioned comments into
+highmem.rst.
 
-Fix these warnings by (1) moving the kernel-doc comments from highmem.h to
-highmem-internal.h (which is the file were the kunmap_atomic() macro is
-actually defined), (2) extending and merging it with the comment which was
-already in highmem-internal.h, (3) using correct parameter names, (4)
-adding description of return value of alloc_zeroed_user_highpage_movable(),
-(5) correcting some technical inaccuracies in comments, and (5) adding a
-deprecation notice in kunmap_atomic() for consistency with kmap_atomic().
-
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
 Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- include/linux/highmem-internal.h | 15 ++++++++++++---
- include/linux/highmem.h          | 20 ++++++--------------
- 2 files changed, 18 insertions(+), 17 deletions(-)
+ Documentation/vm/highmem.rst | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
-index a77be5630209..9968a1282317 100644
---- a/include/linux/highmem-internal.h
-+++ b/include/linux/highmem-internal.h
-@@ -236,9 +236,18 @@ static inline unsigned long totalhigh_pages(void) { return 0UL; }
- 
- #endif /* CONFIG_HIGHMEM */
- 
--/*
-- * Prevent people trying to call kunmap_atomic() as if it were kunmap()
-- * kunmap_atomic() should get the return value of kmap_atomic, not the page.
-+/**
-+ * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic() - deprecated!
-+ * @__addr:       Virtual address to be unmapped
-+ *
-+ * Unmaps an address previously mapped by kmap_atomic() and re-enables
-+ * pagefaults, migration, preemption (the latter was disabled only for
-+ * !PREEMP_RT configurations). Mappings should be unmapped in the reverse
-+ * order that they were mapped. See kmap_local_page() for details.
-+ * @__addr can be any address within the mapped page, so there is no need
-+ * to subtract any offset that has been added. In contrast to kunmap(),
-+ * this function takes the address returned from kmap_atomic(), not the
-+ * page passed to it. The compiler will warn you if you pass the page.
-  */
- #define kunmap_atomic(__addr)					\
- do {								\
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 39bb9b47fa9c..3623319a659d 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -37,7 +37,7 @@ static inline void *kmap(struct page *page);
- 
- /**
-  * kunmap - Unmap the virtual address mapped by kmap()
-- * @addr:	Virtual address to be unmapped
-+ * @page:	Pointer to the page which was mapped by kmap()
-  *
-  * Counterpart to kmap(). A NOOP for CONFIG_HIGHMEM=n and for mappings of
-  * pages in the low memory area.
-@@ -138,24 +138,14 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
-  *
-  * Returns: The virtual address of the mapping
-  *
-- * Effectively a wrapper around kmap_local_page() which disables pagefaults
-- * and preemption.
-+ * In fact a wrapper around kmap_local_page() which disables pagefaults,
-+ * migration, preemption (the latter disabled only for !PREEMP_RT
-+ * configurations).
-  *
-  * Do not use in new code. Use kmap_local_page() instead.
-  */
- static inline void *kmap_atomic(struct page *page);
- 
--/**
-- * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
-- * @addr:	Virtual address to be unmapped
-- *
-- * Counterpart to kmap_atomic().
-- *
-- * Effectively a wrapper around kunmap_local() which additionally undoes
-- * the side effects of kmap_atomic(), i.e. reenabling pagefaults and
-- * preemption.
-- */
--
- /* Highmem related interfaces for management code */
- static inline unsigned int nr_free_highpages(void);
- static inline unsigned long totalhigh_pages(void);
-@@ -191,6 +181,8 @@ static inline void clear_user_highpage(struct page *page, unsigned long vaddr)
-  * @vma: The VMA the page is to be allocated for
-  * @vaddr: The virtual address the page will be inserted into
-  *
-+ * Returns: The allocated and zeroed HIGHMEM page
-+ *
-  * This function will allocate a page for a VMA that the caller knows will
-  * be able to migrate in the future using move_pages() or reclaimed
-  *
+diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
+index 0f69a9fec34d..ccff08a8211d 100644
+--- a/Documentation/vm/highmem.rst
++++ b/Documentation/vm/highmem.rst
+@@ -145,3 +145,10 @@ The general recommendation is that you don't use more than 8GiB on a 32-bit
+ machine - although more might work for you and your workload, you're pretty
+ much on your own - don't expect kernel developers to really care much if things
+ come apart.
++
++
++Functions
++=========
++
++.. kernel-doc:: include/linux/highmem.h
++.. kernel-doc:: include/linux/highmem-internal.h
 -- 
 2.34.1
 

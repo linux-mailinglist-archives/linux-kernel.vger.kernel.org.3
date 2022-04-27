@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A3E5113FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 11:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4C6511423
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 11:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbiD0JDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 05:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S235206AbiD0JNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 05:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiD0JDc (ORCPT
+        with ESMTP id S234048AbiD0JNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 05:03:32 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F4D63BC
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 02:00:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VBS9g39_1651050003;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VBS9g39_1651050003)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 27 Apr 2022 17:00:09 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     stuyoder@gmail.com
-Cc:     laurentiu.tudor@nxp.com, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] bus: fsl-mc: Replace snprintf() with sysfs_emit()
-Date:   Wed, 27 Apr 2022 17:00:02 +0800
-Message-Id: <20220427090002.125846-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 27 Apr 2022 05:13:15 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2102711D94B;
+        Wed, 27 Apr 2022 02:09:54 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1njdfk-0000Hv-02; Wed, 27 Apr 2022 11:09:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 05C4EC01C9; Wed, 27 Apr 2022 11:00:50 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 11:00:50 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] MIPS: mscc: jaguar2: rename pinctrl nodes
+Message-ID: <20220427090050.GC8404@alpha.franken.de>
+References: <20220420195018.3417053-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420195018.3417053-1-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-coccicheck complains about the use of snprintf() in sysfs show
-functions.
+On Wed, Apr 20, 2022 at 09:50:16PM +0200, Michael Walle wrote:
+> The pinctrl device tree binding will be converted to YAML format. Rename
+> the pin nodes so they end with "-pins" to match the schema.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> The YAML conversion patch is alread in
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
+> 
+>  arch/mips/boot/dts/mscc/jaguar2_pcb110.dts | 10 +++++-----
+>  arch/mips/boot/dts/mscc/jaguar2_pcb111.dts | 10 +++++-----
+>  arch/mips/boot/dts/mscc/jaguar2_pcb118.dts |  6 +++---
+>  3 files changed, 13 insertions(+), 13 deletions(-)
 
-Fix the coccicheck warning:
+series applied to mips-next.
 
-./drivers/bus/fsl-mc/fsl-mc-bus.c:186:8-16: WARNING: use scnprintf or
-sprintf.
+Thomas.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/bus/fsl-mc/fsl-mc-bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/bus/fsl-mc/fsl-mc-bus.c b/drivers/bus/fsl-mc/fsl-mc-bus.c
-index ba01c7f4de92..9a91fd5c888d 100644
---- a/drivers/bus/fsl-mc/fsl-mc-bus.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-bus.c
-@@ -183,7 +183,7 @@ static ssize_t driver_override_show(struct device *dev,
- {
- 	struct fsl_mc_device *mc_dev = to_fsl_mc_device(dev);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", mc_dev->driver_override);
-+	return sysfs_emit(buf, "%s\n", mc_dev->driver_override);
- }
- static DEVICE_ATTR_RW(driver_override);
- 
 -- 
-2.20.1.7.g153144c
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

@@ -2,130 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905AB5117F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B7C5117BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbiD0MX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S234072AbiD0MYC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 27 Apr 2022 08:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiD0MXj (ORCPT
+        with ESMTP id S234001AbiD0MX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:23:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C8A3A199
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:20:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5B29B210E3;
-        Wed, 27 Apr 2022 12:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651062027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mZnZ1I8k+ftCApGqx0VMrkh9aJHI/MK3Cg/5kMjpBYg=;
-        b=rUoTgBFB55yqwDfI1zBrwZae4p1SVlnDeLtfzrXlgrEkuYxhTuCGakMejE4G2herRvyvGA
-        yIpBdMFptRNJH8YLv3JaqWZyhJKS+ndTxlHkfSYD5C5ILX7LYHLTehJbTLJNkVRw1rj6uZ
-        hScYwAQbRXnbTNlwWLJIr9Fzqq8NGqM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651062027;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mZnZ1I8k+ftCApGqx0VMrkh9aJHI/MK3Cg/5kMjpBYg=;
-        b=QOhOFA2i8zVbsB8S1KdpFOlz2g88qj17xpn8NYoEpCQaHJco9Yz0T8RngKwIN+Uu3vdrsN
-        RAM7A1+jHY6bpvDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2F4FF13A39;
-        Wed, 27 Apr 2022 12:20:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DPsRCAk1aWLFNwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Wed, 27 Apr 2022 12:20:25 +0000
-Date:   Wed, 27 Apr 2022 14:20:22 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/4] mm, hwpoison: improve handling workload
- related to hugetlb and memory_hotplug
-Message-ID: <Ymk1BkSEs5uCgV6e@localhost.localdomain>
-References: <20220427042841.678351-1-naoya.horiguchi@linux.dev>
- <54399815-10fe-9d43-7ada-7ddb55e798cb@redhat.com>
+        Wed, 27 Apr 2022 08:23:57 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBDA3A5DE;
+        Wed, 27 Apr 2022 05:20:46 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id a5so915896qvx.1;
+        Wed, 27 Apr 2022 05:20:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7IblRXw+IlRsIpma65z+vY+J/pcL54rFKRWppWIp02E=;
+        b=O3CdkQv4cYeQR75NZsj42LjUgccfGNp/y6NotezEn4kTtTka21SMi7uwxsFiN09zpC
+         uahxVZs73d7B2rXBfV1kfzM1A15v1buMS9JMTcUydE8IosadZCvEPiNp3xdC3Zj9PQpn
+         eBrShPkKOaM83wt1IpBSm2N3/XHin+c4nVGdO+jwe/R2nh0oPwpEytjX69GEiByNaZxO
+         Y1qnBPwq8aYIxcKl092guD+Yh5phHs6pkyJ1a0B0EmLy6g5rkxKsSquTUIlLfj0hsBqn
+         teFqNSaGFT80uCa1tpEUpXXMuH/WcSRep726ZKztZScEwAPl1RNmGDnQx4uXLlNENjcf
+         1W+Q==
+X-Gm-Message-State: AOAM533+3++Fou2ASMFTSOIZBBfoeNnsFfoVD3C3IYD7u8ujmwUoHf4Y
+        RGUGdGYXQrES84nr6FdegFjjdTPMClD0yQ==
+X-Google-Smtp-Source: ABdhPJyVQRDiG1YrApjp41wD1Jo0ktqu1HzK4hDe/+jDGHwfNgHMPIkn1Yz+S6jPqiZ9B4gA8gf7IQ==
+X-Received: by 2002:a05:6214:2aa7:b0:446:2f18:d005 with SMTP id js7-20020a0562142aa700b004462f18d005mr19705064qvb.33.1651062045462;
+        Wed, 27 Apr 2022 05:20:45 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id v12-20020a05620a0a8c00b0069eabadd6dasm7711882qkg.41.2022.04.27.05.20.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 05:20:44 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id w17so2993689ybh.9;
+        Wed, 27 Apr 2022 05:20:44 -0700 (PDT)
+X-Received: by 2002:a5b:24e:0:b0:63d:cba0:3d55 with SMTP id
+ g14-20020a5b024e000000b0063dcba03d55mr24895863ybp.613.1651062044076; Wed, 27
+ Apr 2022 05:20:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54399815-10fe-9d43-7ada-7ddb55e798cb@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220414122250.158113-1-clement.leger@bootlin.com> <20220414122250.158113-6-clement.leger@bootlin.com>
+In-Reply-To: <20220414122250.158113-6-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 27 Apr 2022 14:20:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+kosUPavthyPcWVAC_WhdwXiFKt61oSmgdV6Qxk_0xg@mail.gmail.com>
+Message-ID: <CAMuHMdU+kosUPavthyPcWVAC_WhdwXiFKt61oSmgdV6Qxk_0xg@mail.gmail.com>
+Subject: Re: [PATCH net-next 05/12] dt-bindings: net: dsa: add bindings for
+ Renesas RZ/N1 Advanced 5 port switch
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:48:16PM +0200, David Hildenbrand wrote:
-> I raised some time ago already that I don't quite see the value of
-> allowing memory offlining with poisened pages.
-> 
-> 1) It overcomplicates the offlining code and seems to be partially
->    broken
-> 2) It happens rarely (ever?), so do we even care?
-> 3) Once the memory is offline, we can re-online it and lost HWPoison.
->    The memory can be happily used.
-> 
-> 3) can happen easily if our DIMM consists of multiple memory blocks and
-> offlining of some memory block fails -> we'll re-online all already
-> offlined ones. We'll happily reuse previously HWPoisoned pages, which
-> feels more dangerous to me then just leaving the DIMM around (and
-> eventually hwpoisoning all pages on it such that it won't get used
-> anymore?).
-> 
-> So maybe we should just fail offlining once we stumble over a hwpoisoned
-> page?
-> 
-> Yes, we would disallow removing a semi-broken DIMM from the system that
-> was onlined MOVABLE. I wonder if we really need that and how often it
-> happens in real life. Most systems I am aware of don't allow for
-> replacing individual DIMMs, but only complete NUMA nodes. Hm.
+Hi Clément,
 
-I teend to agree with all you said.
-And to be honest, the mechanism of making a semi-broken DIMM healthy
-again has always been a mistery to me.
+On Thu, Apr 14, 2022 at 2:24 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> Add bindings for Renesas RZ/N1 Advanced 5 port switch. This switch is
+> present on Renesas RZ/N1 SoC and was probably provided by MoreThanIP.
+> This company does not exists anymore and has been bought by Synopsys.
+> Since this IP can't be find anymore in the Synospsy portfolio, lets use
+> Renesas as the vendor compatible for this IP.
+>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-One would think that:
+Thanks for your patch!
 
-1- you hot-remove the memory
-2- you fix/remove it
-3- you hotplug memory again
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+> @@ -0,0 +1,128 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/dsa/renesas,rzn1-a5psw.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/N1 Advanced 5 ports ethernet switch
+> +
+> +maintainers:
+> +  - Clément Léger <clement.leger@bootlin.com>
+> +
+> +description: |
+> +  The advanced 5 ports switch is present on the Renesas RZ/N1 SoC family and
+> +  handles 4 ports + 1 CPU management port.
+> +
+> +allOf:
+> +  - $ref: dsa.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: renesas,rzn1-a5psw
 
-but I am not sure how many times this came to be.
+Please document an SoC-specific compatible value
+"renesas,r9a06g032-a5psw", too, so we can easily handle differences
+between members within the RZ/N1 family, if ever needed.
 
-And there is also the thing about losing the hwpoison information
-between offline<->online transitions, so, the thing is unreliable.
+Gr{oetje,eeting}s,
 
-And for that to work, we would have to add a bunch of code
-to keep track of "offlined" pages that are hwpoisoned, so we
-flag them again once they get onlined, and that means more
-room for errors.
+                        Geert
 
-So, I would lean towards the fact of not allowing to offline
-memory that contain such pages in the first place, unless that
-proves to be a no-go.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
--- 
-Oscar Salvador
-SUSE Labs
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

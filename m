@@ -2,116 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570B25125D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26F151253D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbiD0WzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S232377AbiD0W14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238416AbiD0Wyf (ORCPT
+        with ESMTP id S232353AbiD0W1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:54:35 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C048CCCA
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:50:58 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id m11so3575216oib.11
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uO1mjNT4t8QFE2H4UTWyMQ/O+XjoVk8wmcfJNXUjbrc=;
-        b=SgqFgdXosM/ZYsAUz16MKVkJJBdinSAq5DNb8Wfpvs6H36XROkz/tVPkTu6r0qbWKC
-         W3EMwHETOmhuJAJPXayfGbXzUYzGsQLRRP6gDoh6MdqvZmBtm3zYnfYLJatRV/pLeTPP
-         +RzlgD1IS4LZAJR1eL5lkO4KHr1YxJ9pDDpK8=
+        Wed, 27 Apr 2022 18:27:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 965012E0BA
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651098281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Qr4MU4/s4LvUq27SfddGnKVd9R5tIj+q1sHUP3u3fiM=;
+        b=QmKekI113Xcmc8IF9hw+XncC+d/bglPabYXgM9ze+dJkrJRYLNmKtJX1CJZMG5uH7J0vB4
+        jTZriP6AKgx23+c2zdmWsyDjBGtYR7n4+QLECMQrwvtohq7EA6UGumy7app4CcOSqYPQM/
+        W2Aylypz9IWgfjT4YgG/k5QIPVMliQo=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-giruKvJsOwin5w5dxWY5jQ-1; Wed, 27 Apr 2022 18:24:40 -0400
+X-MC-Unique: giruKvJsOwin5w5dxWY5jQ-1
+Received: by mail-lf1-f71.google.com with SMTP id bt27-20020a056512261b00b004720e026d4dso1180817lfb.16
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:24:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uO1mjNT4t8QFE2H4UTWyMQ/O+XjoVk8wmcfJNXUjbrc=;
-        b=segJ+/ZiHu4y2027Oq8U1Vslur8CndStCYwja7tcIeORYrA4o0HesN7+YHd+9PJmuk
-         kNhTRlgk9+wuz2/ezjZdb/UhSvCoygqexgq23qIfVBq8T0r3Zq37t+SvoCZpYan/al2R
-         yfhIU4oPsCqonaTA0Ka6I8KpAoe8heHucnCFs9UH9oRLqK74PsPiqzsNEQ/gtvzET5aJ
-         NyntecQNZRQCYtoVKrZfZ/X3ownA45LbOEgOnHGQPDc0raik9pQ4TrxjJzGSwLyaPEOq
-         IOHmCk1b7yoiyqiLi3l/EsdZbAD0OCUynSByDg3YyycUDt37SPEAm0u8osQTgQ3ERPKf
-         97VA==
-X-Gm-Message-State: AOAM5304CMqslLcwKbZdw0Z8UYQmUtSV28Nm5mXY4D6B4qr12t3FoJjT
-        GHz15/zUJlzNYkR1DNtEuxVMh6RZCyGWZg==
-X-Google-Smtp-Source: ABdhPJwGQsxcEYHsElbh2khGaacRxR9nbyIgxqzl06IrsWFZAjxk7PRRQAWnOisR1XouvQSGymxDbg==
-X-Received: by 2002:a05:6808:114c:b0:322:a749:2d1b with SMTP id u12-20020a056808114c00b00322a7492d1bmr18616781oiu.64.1651099858023;
-        Wed, 27 Apr 2022 15:50:58 -0700 (PDT)
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com. [209.85.160.41])
-        by smtp.gmail.com with ESMTPSA id t11-20020a9d7f8b000000b00605e7880924sm221559otp.58.2022.04.27.15.50.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 15:50:57 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e68392d626so3555012fac.4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:50:57 -0700 (PDT)
-X-Received: by 2002:a05:6870:4201:b0:e6:47c4:e104 with SMTP id
- u1-20020a056870420100b000e647c4e104mr16438606oac.257.1651096086895; Wed, 27
- Apr 2022 14:48:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qr4MU4/s4LvUq27SfddGnKVd9R5tIj+q1sHUP3u3fiM=;
+        b=pIDa2EkaONaZX1s0rUNEzV6oEXzOh+E1PXowx+JNyl+bre/Ip/pe2WIXsV5ZH8LviQ
+         Gl0rBLRkPFdt9IwxqlOh7QIhTNrXoXpt/11OKE3M0w28v6hVPEo5oNObwhHZ/b2vw/fw
+         6Ce/ZJvIYOb34UEsqv9g1E/NZNLuJ6DJZpZybxlhRtN+K1CuD3lfI9Z13R5VcWpV2OAj
+         CUyDuht6bgL8go2toDvOQjpAHxMYfmcpuzit6DtEaxAH+6gCkNQjYW4SScPWKDIs45FY
+         ylqtyUfbNoMRbTX6rY6BC5nLcYHTk2g/dYgvZl0xSpjhlI0Q3YdXNv9RV3DURIaFIhFP
+         woEg==
+X-Gm-Message-State: AOAM530/KBMllJHeli0L4KRWhxTVN203OEt9pAeCjjzEFuKTaeOqOYsU
+        8QhWsFf6v46DSpBIy4R1jFmyu9S75YzrnkYPyKZ1L0CWIfAbJDim1OpzK5FNHGosFjTW1WcRB6S
+        z9kO5zntM07SSZt1T2LIJMksqsTJAJzkyGe1BhmOsReZdBNKb87SoXUzlp6w5eU/MCs7hTepGU0
+        Q=
+X-Received: by 2002:a05:6512:1319:b0:44a:c200:61e5 with SMTP id x25-20020a056512131900b0044ac20061e5mr21990117lfu.550.1651098278727;
+        Wed, 27 Apr 2022 15:24:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzRP5NVvfVLFQtoQbpfc/PozRMwNi4jv7Z/n1MdceTR2qQBqzUinnuR5+PQZQaDcs93GP369A==
+X-Received: by 2002:adf:ef01:0:b0:20a:8068:ca5e with SMTP id e1-20020adfef01000000b0020a8068ca5emr23634532wro.661.1651096541322;
+        Wed, 27 Apr 2022 14:55:41 -0700 (PDT)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0020a8781be70sm14377139wrr.12.2022.04.27.14.55.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 14:55:41 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Lyude Paul <lyude@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV and DRM_DP_CEC
+Date:   Wed, 27 Apr 2022 23:55:28 +0200
+Message-Id: <20220427215528.237861-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220426014545.628100-1-briannorris@chromium.org>
- <20220426014545.628100-2-briannorris@chromium.org> <CAMdYzYqyDr1HFYB4p8NK8ssq60qfjR2jyoSJ=tcRn8CWsZr16g@mail.gmail.com>
- <d72eb7a7-f922-3270-422b-4e27505de530@arm.com>
-In-Reply-To: <d72eb7a7-f922-3270-422b-4e27505de530@arm.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Wed, 27 Apr 2022 14:47:55 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNFPfp6J9bLpYh4uyZDtmhrbSb6Y3=T26_qxd4-YDMtcw@mail.gmail.com>
-Message-ID: <CA+ASDXNFPfp6J9bLpYh4uyZDtmhrbSb6Y3=T26_qxd4-YDMtcw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] soc: rockchip: power-domain: Replace dsb() with smb()
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 5:25 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> On 2022-04-27 00:55, Peter Geis wrote:
-> > On Mon, Apr 25, 2022 at 9:46 PM Brian Norris <briannorris@chromium.org> wrote:
-> >>
-> >> It's unclear if these are really needed at all, but seemingly their
-> >> purpose is only as a write barrier. Use the general macro instead of the
-> >> ARM-specific one.
-...
-> >> -       dsb(sy);
-> >> +       wmb();
-> >
-> > Just curious, shouldn't this be mb() instead of wmb()?
-> >  From the arm64 barrier.h:
-> >
-> > #define mb() dsb(sy)
-> > #define wmb() dsb(st)
->
-> As I mentioned on v2, that would be the literal translation, however
-> there's no concurrency since this is happening under a mutex, so there's
-> no other agent against whose accesses loads would need to be
-> synchronised, therefore the only logical reason those DSBs were ever
-> there at all must be to ensure that the prior store(s) have been issued
-> to their destination before proceeding. The history implies that this
-> dates all the way back to RK3288, where Armv7's argument-less DSB lacked
-> that distinction anyway.
+The DRM_DP_AUX_CHARDEV and DRM_DP_CEC Kconfig symbols enable code that use
+DP helper functions, that are only present if CONFIG_DRM_DISPLAY_DP_HELPER
+is also enabled.
 
-Thanks Robin. I already tried to capture part of this in the commit message:
+But these don't select the DRM_DISPLAY_DP_HELPER symbol, meaning that it
+is possible to enable any of them without CONFIG_DRM_DISPLAY_DP_HELPER.
 
-"It's unclear if these are really needed at all, but seemingly their
-purpose is only as a write barrier."
+That will lead to the following linking errors with the mentioned config:
 
-i.e., it's intentional that I'm making a change, not a literal translation.
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+  MODINFO modules.builtin.modinfo
+  GEN     modules.builtin
+  LD      .tmp_vmlinux.kallsyms1
+  KSYMS   .tmp_vmlinux.kallsyms1.S
+  AS      .tmp_vmlinux.kallsyms1.S
+  LD      .tmp_vmlinux.kallsyms2
+  KSYMS   .tmp_vmlinux.kallsyms2.S
+  AS      .tmp_vmlinux.kallsyms2.S
+  LD      vmlinux
+  SYSMAP  System.map
+  SORTTAB vmlinux
+  OBJCOPY arch/arm64/boot/Image
+  MODPOST modules-only.symvers
+ERROR: modpost: "drm_dp_dpcd_write" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
+ERROR: modpost: "drm_dp_read_desc" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
+ERROR: modpost: "drm_dp_dpcd_read" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
+make[1]: *** [scripts/Makefile.modpost:134: modules-only.symvers] Error 1
+make[1]: *** Deleting file 'modules-only.symvers'
+make: *** [Makefile:1749: modules] Error 2
 
-I ran through a few tests on Rockchip RK3399, FWIW, although I suppose
-some nasty memory ordering bugs are not exactly the kind of thing that
-would fall out in smoke tests.
+Note: It seems this has been an issue for a long time but was made easier
+to reproduce after the commit 1e0f66420b13 ("drm/display: Introduce a DRM
+display-helper module"). Adding a Fixes: tag just to make sure that this
+fix will be picked for stable once the mentioned change also lands there.
 
-Brian
+Fixes: 1e0f66420b13 ("drm/display: Introduce a DRM display-helper module")
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
+
+Changes in v2:
+- Explain better the issue in the change description.
+- Only select DRM_DISPLAY_DP_HELPER and not DRM_DISPLAY_HELPER.
+
+ drivers/gpu/drm/display/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/display/Kconfig b/drivers/gpu/drm/display/Kconfig
+index f84f1b0cd23f..9fe80c4e555c 100644
+--- a/drivers/gpu/drm/display/Kconfig
++++ b/drivers/gpu/drm/display/Kconfig
+@@ -32,6 +32,7 @@ config DRM_DISPLAY_HDMI_HELPER
+ config DRM_DP_AUX_CHARDEV
+ 	bool "DRM DP AUX Interface"
+ 	depends on DRM
++	select DRM_DISPLAY_DP_HELPER
+ 	help
+ 	  Choose this option to enable a /dev/drm_dp_auxN node that allows to
+ 	  read and write values to arbitrary DPCD registers on the DP aux
+@@ -40,6 +41,7 @@ config DRM_DP_AUX_CHARDEV
+ config DRM_DP_CEC
+ 	bool "Enable DisplayPort CEC-Tunneling-over-AUX HDMI support"
+ 	depends on DRM
++	select DRM_DISPLAY_DP_HELPER
+ 	select CEC_CORE
+ 	help
+ 	  Choose this option if you want to enable HDMI CEC support for
+-- 
+2.35.1
+

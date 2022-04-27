@@ -2,118 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31CC511B0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5717451190D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237557AbiD0OVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S237606AbiD0OWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237483AbiD0OVl (ORCPT
+        with ESMTP id S237492AbiD0OWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:21:41 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194C76A002;
-        Wed, 27 Apr 2022 07:18:30 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-e5e433d66dso2073800fac.5;
-        Wed, 27 Apr 2022 07:18:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=PhXcDgK09TfJ0k4/TcfwOYlktcKSTjsxAO+dgwid8sU=;
-        b=2xOQh1XR7ym3OsES4idwVUbm/DSVPrsxVdgT0UpOOAb1dEfdsZZU2d3l3yTqksSKPy
-         Y4pESMLMBKnrNC/GGg7inPIsbtNdfr6E1LvMlF2g1J21IZdSIP4pavCyYwEyXMVCfvv2
-         ez+n4FXX1bKijJ9Q4nunRP3EcTTuHpYV8A5R/WrAp9D+vFuHk+ufsciWeg1Rz7Wuir6Q
-         zoFjbhF5rSTaXfgyO+38mLa8ww4KpHDDolMmvmJ/YAYXMxRpTIpX5agxrVdAWxYWzbB8
-         4Z/6ottxix+1Z/XryFLYy9z/SU6JY1V0b7xEQm6AkOImg9aZvchM6R49UIpfPVcByOAC
-         SLEg==
-X-Gm-Message-State: AOAM531lx7ZVuA/YFWgzxEHS/PhBhKB6W33hzGKD0bsXvaFJguF12p7F
-        SaEfjNcJaeiUhIeRjsXtO87Rk0Im8w==
-X-Google-Smtp-Source: ABdhPJzEazdYi+wBumpNxD6+bRTRjB1cnfTbRe3mJ/iYA6rFI8tXYvlUpz6mMwksoa3oLiTqbPubyQ==
-X-Received: by 2002:a05:6870:ea8d:b0:e6:135c:1a2e with SMTP id s13-20020a056870ea8d00b000e6135c1a2emr15718470oap.9.1651069109351;
-        Wed, 27 Apr 2022 07:18:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056870160e00b000e915a9121csm672499oae.52.2022.04.27.07.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:18:28 -0700 (PDT)
-Received: (nullmailer pid 4142584 invoked by uid 1000);
-        Wed, 27 Apr 2022 14:18:28 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220427010154.29749-2-zev@bewilderbeest.net>
-References: <20220427010154.29749-1-zev@bewilderbeest.net> <20220427010154.29749-2-zev@bewilderbeest.net>
-Subject: Re: [PATCH v4 1/7] dt-bindings: hwmon: Add nuvoton,nct6775
-Date:   Wed, 27 Apr 2022 09:18:28 -0500
-Message-Id: <1651069108.145838.4142583.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 10:22:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D066EC4D;
+        Wed, 27 Apr 2022 07:18:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4640761DDC;
+        Wed, 27 Apr 2022 14:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149FFC385A9;
+        Wed, 27 Apr 2022 14:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651069134;
+        bh=P8Re4rNifMUZz02aR6/5ZozvQhzoiFhDq0hEGf/tYts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MJRGjGMv6tJ4OmJ+tITFtZxSrxV+Z9f+GNWODbIlt5TvtckI4h7rtBbFHoeaQDCWU
+         /y+VgPCgKm32JQbTeJXvsn+aoJIcan79HYsiE/wBhTnJM8rDyBtlcW61w+X5c+YLLg
+         Le+quAgvn64nWhhnjUD58tzQJTBOm3uRq7orBR4o=
+Date:   Wed, 27 Apr 2022 16:18:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeffrey Vander Stoep <jeffv@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Alistair Delva <adelva@google.com>,
+        Adam Shih <adamshih@google.com>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] firmware_loader: use kernel credentials when reading
+ firmware
+Message-ID: <YmlQy7jnIY6Wh7/2@kroah.com>
+References: <20220422013215.2301793-1-tweek@google.com>
+ <20220427135823.GD71@qian>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220427135823.GD71@qian>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 18:01:48 -0700, Zev Weiss wrote:
-> These Super I/O chips have an i2c interface that some systems expose
-> to a BMC; the BMC's device tree can now describe that via this
-> binding.
+On Wed, Apr 27, 2022 at 09:58:23AM -0400, Qian Cai wrote:
+> On Fri, Apr 22, 2022 at 11:32:15AM +1000, Thiébaud Weksteen wrote:
+> >  drivers/base/firmware_loader/main.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> > 
+> > diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+> > index 94d1789a233e..8f3c2b2cfc61 100644
+> > --- a/drivers/base/firmware_loader/main.c
+> > +++ b/drivers/base/firmware_loader/main.c
+> > @@ -735,6 +735,8 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+> >  		  size_t offset, u32 opt_flags)
+> >  {
+> >  	struct firmware *fw = NULL;
+> > +	struct cred *kern_cred = NULL;
+> > +	const struct cred *old_cred;
+> >  	bool nondirect = false;
+> >  	int ret;
+> >  
+> > @@ -751,6 +753,18 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+> >  	if (ret <= 0) /* error or already assigned */
+> >  		goto out;
+> >  
+> > +	/*
+> > +	 * We are about to try to access the firmware file. Because we may have been
+> > +	 * called by a driver when serving an unrelated request from userland, we use
+> > +	 * the kernel credentials to read the file.
+> > +	 */
+> > +	kern_cred = prepare_kernel_cred(NULL);
 > 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  .../bindings/hwmon/nuvoton,nct6775.yaml       | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+> This triggers quite some leak reports from kmemleak.
 > 
+> unreferenced object 0xffff0801e47690c0 (size 176):
+>   comm "kworker/0:1", pid 14, jiffies 4294904047 (age 2208.624s)
+>   hex dump (first 32 bytes):
+>     01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>      kmem_cache_alloc
+>      prepare_kernel_cred
+>      _request_firmware
+>      firmware_request_nowarn
+>      firmware_request_nowarn at drivers/base/firmware_loader/main.c:933
+>      nvkm_firmware_get [nouveau]
+>      nvkm_firmware_get at drivers/gpu/drm/nouveau/nvkm/core/firmware.c:92
+>      nvkm_firmware_load_name [nouveau]
+>      nvkm_acr_lsfw_load_bl_inst_data_sig [nouveau]
+>      gm200_gr_load [nouveau]
+>      gf100_gr_new_ [nouveau]
+>      tu102_gr_new [nouveau]
+>      nvkm_device_ctor [nouveau]
+>      nvkm_device_pci_new [nouveau]
+>      nouveau_drm_probe [nouveau]
+>      local_pci_probe
+>      work_for_cpu_fn
+>      process_one_work
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Ugh, yeah, a put_cred() is not called after this.
 
-yamllint warnings/errors:
+I'll go revert this commit for now as it needs more work.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: properties:nuvoton,tsi-channel-mask: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('default', 'maximum' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: properties:nuvoton,tsi-channel-mask: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: properties:nuvoton,tsi-channel-mask: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml: ignoring, error in schema: properties: nuvoton,tsi-channel-mask
-Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.example.dtb:0:0: /example-0/i2c/superio@4d: failed to match any schema with compatible: ['nuvoton,nct6779']
+thanks,
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+greg k-h

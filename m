@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F573511316
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45539511319
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359206AbiD0IBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S1359214AbiD0IC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350586AbiD0IBa (ORCPT
+        with ESMTP id S1350586AbiD0IC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:01:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5156F517D2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 00:58:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E110A61BBD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:58:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6642C385A7;
-        Wed, 27 Apr 2022 07:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651046299;
-        bh=mE6x4iTlX7XDpvguF39C/1/ZadyoBD4PGaWQhRwJ2XU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUVjlRuT+7C7W2EzixGj/qPE71wC76XqDAimbEcmld5o7PIfZOW3oOLJ8vJiZyi+A
-         bh+H+d2Se3rxAarHz7SnPeQYMZS8mq0fqDdSiOcg8l1BZKAxl6T94UsTXkLVWJyxLE
-         QXYHIkXa678jDQwMH1lXis1t6DnDEzVqJTIjMsvs=
-Date:   Wed, 27 Apr 2022 09:58:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        rafael@kernel.org, rostedt@goodmis.org, mingo@redhat.com
-Subject: Re: [PATCH v3] arch_topology: Trace the update thermal pressure
-Message-ID: <Ymj3l6cdxfmQ+hb0@kroah.com>
-References: <20220427073551.19032-1-lukasz.luba@arm.com>
- <Ymj0ZZeUnhq4W/Ws@kroah.com>
- <38c8a684-5fcc-cfb3-424c-d353a7bafe03@arm.com>
+        Wed, 27 Apr 2022 04:02:26 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C623415C2B4;
+        Wed, 27 Apr 2022 00:59:15 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id i27so1745301ejd.9;
+        Wed, 27 Apr 2022 00:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9LEDPI0qQXi5RmLY6j4Xg8FabKVvm/+OTMrV23obG8w=;
+        b=ghejRdzYZV1zx9+g9hsebyJuSJYDtwFg0hIQpe266OEmV7L6ENPDmMkhqfOH+pH+a9
+         rrF58sEZE1XAlmx2ot1inFq2ezpUmGF9PM8db5opUvfYRJ1QnViWBkGglHAN3lB9rrHr
+         L49klEr9LCE1OJQtZwZveJ2Qpjg/A/5h0NNeiU3rmgwz2x/T968SfV6PSHvv0MsdUP45
+         Us/yPiqY0wZ9KKzs5/prm8woBh6roOUp3nuSS7R0U8D6rXZhh7esa4In5TI3ouW0Pweb
+         KSLSTJXDw75OB/6BiYjN+jV42/O+cBaTIHbghZBgCZ1XQL6DFE4VApeoWOybHQHe0R/R
+         JCsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=9LEDPI0qQXi5RmLY6j4Xg8FabKVvm/+OTMrV23obG8w=;
+        b=LgeDEuQSy69CKXumFaZp2gc35NgkgyrOFswKihM044wocIP46NzM1y2fPzs7k7y6q1
+         QaM/o6GsbVuP4gMnnce2XCGYRfX/xg1fpuK2z6KRAmJlu8fSAiUUTAXjNmh20uv+XWyS
+         F9UguDo5yK/xePsDfmqC9Ao8lt/dxhKjIM/c88WOEaFqJbhWl2lVeuU0J1ap/fMi04U3
+         BtLm2Y0pUwoLZUels4pCqH7Tf9DwJPX2yz6zwl/0uGqHzz5Jaf8BsoE+j/DngGrOMfMY
+         tLYFleX8ogPWl3sV2vkr62ku8dmUDcDKQmcJlcga5o8rTSSA56Xs+sEI4znqKAamiD8X
+         ckTw==
+X-Gm-Message-State: AOAM531Qkeg/KfyjS32b5TVVrW1xW376onRRdR23SKKdEvZ9MXrQLZ9W
+        ySdu6nSIrcRXEQv261ga3oo=
+X-Google-Smtp-Source: ABdhPJwjAAgMy/VYco9ifnd9MRdynu/jo/F8VKp9tZ1q4MTGuYt3QwRpX+w8D1dqYUGovYkFObQmQw==
+X-Received: by 2002:a17:906:2991:b0:6cd:ac19:ce34 with SMTP id x17-20020a170906299100b006cdac19ce34mr25772563eje.746.1651046354313;
+        Wed, 27 Apr 2022 00:59:14 -0700 (PDT)
+Received: from eldamar (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id h8-20020a1709066d8800b006e09a49a713sm6298198ejt.159.2022.04.27.00.59.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 00:59:12 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Wed, 27 Apr 2022 09:59:11 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     Dusty Mabe <dustymabe@redhat.com>, Stefan Roese <sr@denx.de>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Marek Vasut <marex@denx.de>, x86@kernel.org, maz@kernel.org
+Subject: Re: [tip: irq/urgent] PCI/MSI: Mask MSI-X vectors only on success
+Message-ID: <Ymj3zzjQ9PwYaX/p@eldamar.lan>
+References: <20211210161025.3287927-1-sr@denx.de>
+ <163948488617.23020.3934435568065766936.tip-bot2@tip-bot2>
+ <Yi9vH2F2OBDprwd8@jpiotrowski-Surface-Book-3>
+ <43418c23-5efd-4d14-706f-f536c504b75a@denx.de>
+ <c4a65b9a-d1e2-bf0d-2519-aac7185931d5@redhat.com>
+ <Yi+lwVRTu8xxi9Gy@jpiotrowski-Surface-Book-3>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <38c8a684-5fcc-cfb3-424c-d353a7bafe03@arm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yi+lwVRTu8xxi9Gy@jpiotrowski-Surface-Book-3>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 08:52:50AM +0100, Lukasz Luba wrote:
-> 
-> 
-> On 4/27/22 08:44, Greg KH wrote:
-> > On Wed, Apr 27, 2022 at 08:35:51AM +0100, Lukasz Luba wrote:
-> > > Add trace event to capture the moment of the call for updating the thermal
-> > > pressure value. It's helpful to investigate how often those events occur
-> > > in a system dealing with throttling. This trace event is needed since the
-> > > old 'cdev_update' might not be used by some drivers.
-> > > 
-> > > The old 'cdev_update' trace event only provides a cooling state
-> > > value: [0, n]. That state value then needs additional tools to translate
-> > > it: state -> freq -> capacity -> thermal pressure. This new trace event
-> > > just stores proper thermal pressure value in the trace buffer, no need
-> > > for additional logic. This is helpful for cooperation when someone can
-> > > simply sends to the list the trace buffer output from the platform (no
-> > > need from additional information from other subsystems).
-> > > 
-> > > There are also platforms which due to some design reasons don't use
-> > > cooling devices and thus don't trigger old 'cdev_update' trace event.
-> > > They are also important and measuring latency for the thermal signal
-> > > raising/decaying characteristics is in scope. This new trace event
-> > > would cover them as well.
-> > > 
-> > > We already have a trace point 'pelt_thermal_tp' which after a change to
-> > > trace event can be paired with this new 'thermal_pressure_update' and
-> > > derive more insight what is going on in the system under thermal pressure
-> > > (and why).
-> > > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
+Hi,
+
+On Mon, Mar 14, 2022 at 09:29:53PM +0100, Jeremi Piotrowski wrote:
+> On Mon, Mar 14, 2022 at 01:04:55PM -0400, Dusty Mabe wrote:
 > > 
-> > The kernel test robot did not report that you needed to add a new trace
-> > event :(
 > > 
+> > On 3/14/22 12:49, Stefan Roese wrote:
+> > 
+> > > I've added Dusty to Cc, as he (and others) already have been dealing
+> > > with this issue AFAICT.
+> > > 
+> > > Dusty, could you perhaps chime in with the latest status? AFAIU, it's
+> > > related to potential issues with the Xen version used on these systems?
+> > 
+> > Thanks Stefan,
+> > 
+> > Yes. My understanding is that the issue is because AWS is using older versions
+> > of Xen. They are in the process of updating their fleet to a newer version of
+> > Xen so the change introduced with Stefan's commit isn't an issue any longer.
+> > 
+> > I think the changes are scheduled to be completed in the next 10-12 weeks. For
+> > now we are carrying a revert in the Fedora Kernel.
+> > 
+> > You can follow this Fedora CoreOS issue if you'd like to know more about when
+> > the change lands in their backend. We work closely with one of their partner
+> > engineers and he keeps us updated. https://github.com/coreos/fedora-coreos-tracker/issues/1066
+> > 
+> > Dusty
 > 
-> I got feedback from the test robot for v1, which figured out that
-> the riscv configuration is broken. You can find it here
-> https://lore.kernel.org/lkml/202204201654.vcszVDGb-lkp@intel.com/
-> 
-> So, I've added that tag following:
-> "If you fix the issue, kindly add following tag as appropriate"
-> 
-> Should this only be honored when a patch actually got into next
-> and then following patch with a fix would have that tag?
+> Thanks for the link and explanation. What a fun coincidence that we hit this in
+> Flatcar Container Linux as well. We've reverted the commit in our kernels for
+> the time being, and will track that issue.
 
-Yes.  And you can mention it in the version information about what
-changed between each patch version below the --- line, but as is, you
-can see how this does not make sense.
+Does someone knows here on current state of the AWS instances using
+the older Xen version which causes the issues?
 
-thanks,
+AFAIU upstream is not planning to revert 83dbf898a2d4 ("PCI/MSI: Mask
+MSI-X vectors only on success") as it fixed a bug. Now several
+downstream distros do carry a revert of this commit, which I believe
+is an unfortunate situation and wonder if this can be addressed
+upstream to deal with the AWS m4.large instance issues.
 
-greg k-h
+Regards,
+Salvatore

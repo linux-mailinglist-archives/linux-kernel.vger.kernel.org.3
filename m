@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0188C51161C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7D451154F
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiD0K4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 06:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
+        id S231159AbiD0K6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 06:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiD0K4N (ORCPT
+        with ESMTP id S230481AbiD0K6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:56:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4690D3A03F7;
-        Wed, 27 Apr 2022 03:30:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EF7831F38D;
-        Wed, 27 Apr 2022 10:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651055458; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0SYO6S4wSS5TgNnn69ULkvPYv5FP7agaVxb8vZruMBA=;
-        b=ZtMWsp/vgSv0x+hV9X6XBgzBRpYAhz2Ni1JKSL4BLbE+tikPu/yDLv/LYgJmCiEku80xrF
-        1X5NMCVCrTj2gFM7w18PXmyMw4bPUaS1tJuAbxhTAsejm5cXz2+5gSgVWmlBgvv1zUAQUj
-        N9wH0oEGf1mWY6CurDEf3E9c9npyslo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651055458;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0SYO6S4wSS5TgNnn69ULkvPYv5FP7agaVxb8vZruMBA=;
-        b=6X6DqUjKXVYhZDBL9goi/XEUFK1JQuukpkPAwhQWeog8eUle97FBRv3cZZK8i/BbQk5H41
-        5dC/EF6L72Lx8jCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 73EA91323E;
-        Wed, 27 Apr 2022 10:30:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wzGnGmEbaWJ0AgAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 27 Apr 2022 10:30:57 +0000
-Message-ID: <96acbc76-1de8-4be0-314c-4a6a9284c5a3@suse.de>
-Date:   Wed, 27 Apr 2022 12:30:56 +0200
+        Wed, 27 Apr 2022 06:58:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD8A3C0744
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:34:33 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id k12so2333099lfr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=s9wfiyI3JBIiISlABF9nzSzidRhd08PN5K7/7gRJUwU=;
+        b=F1CrcAo2L4t+g24hKYKTkJrAIVD+uTem+dr8Xe28yedKWFGtVI7PftZuZcQfKZcEOu
+         z8H2qRwJPsk95KVz3cKAwjeZpfThWo2YICJwhmyX38kLU48FLwyTc4X1KU+Q0seSVK8o
+         SIoNSv6HijNeKMGu+McRx0LPACtUYGfr9OFlNsr53DrbB25SZKsV46crOk2U2kaEeS1v
+         n73RzjxPj+Dc+8m9++UWK2PmXlExBoFRwfte8OGfQKin+2u9FYxR9RdC7gS2PlqLFCVi
+         1bR/qi42emMrThTa7fgOLHgL2q7KukCh3+iI19VSkvx1t6PsRjP52JxxJxIyWn6CQNYp
+         HqNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=s9wfiyI3JBIiISlABF9nzSzidRhd08PN5K7/7gRJUwU=;
+        b=TpmitgDWZdVQTbcOmQw+TJa3PUIjfWSWQXQ9bTUA8fgJQ0CgULR63TheSqpfPHy1Tt
+         21HDniRKK0A5Pd2PE4DdzNrcpyOwCNX4iCxp65gj0tg136MvGXMNaRBNAQT4Wz4nZp0H
+         qVb2qxhjo5ln2d25li1qKa72NPeXv40TPwC7GAGviM5WQ6/wzd/5JvC1QeCXV+1LFtAd
+         kFbLPqKmlh3W06ZmnEvl61P9LJU4Aeufb6IkrBObuOMRenubHkrBJd5EEUqRcHHT1GJg
+         ixaiB3BMGKjZyB+GBrnxRovZluf517M38vMjuUVQK1kB/SkZL3ok9tygYA5G3iRnGPax
+         NTpQ==
+X-Gm-Message-State: AOAM530PIQccbpUKit83zYAH++b94TZ0h+kvvUVGxQG+Xd+Jm7XmFNbH
+        XB+ewfHaIm6Xm89/7JCkPEWtbw==
+X-Google-Smtp-Source: ABdhPJxiTFY6rBxC2YzE+gz4kYCDHrExSRB5wTlrCu3KWfOeIv1VagTWKbAP/FWpZ11dpTHTp1793g==
+X-Received: by 2002:a05:6512:228e:b0:471:9022:c4d3 with SMTP id f14-20020a056512228e00b004719022c4d3mr19562388lfu.513.1651055671334;
+        Wed, 27 Apr 2022 03:34:31 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id l21-20020a194955000000b00471f0aea31fsm1762928lfj.39.2022.04.27.03.34.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 03:34:30 -0700 (PDT)
+Message-ID: <1c338b99-8133-6126-2ff2-94a4d3f26451@openvz.org>
+Date:   Wed, 27 Apr 2022 13:34:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 01/10] block: Introduce queue limits for copy-offload
- support
+ Thunderbird/91.7.0
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH] memcg: enable accounting for veth queues
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
 Content-Language: en-US
-To:     Nitesh Shetty <nj.shetty@samsung.com>
-Cc:     chaitanyak@nvidia.com, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, dm-devel@redhat.com,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        axboe@kernel.dk, msnitzer@redhat.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, kbusch@kernel.org, hch@lst.de,
-        Frederick.Knight@netapp.com, osandov@fb.com,
-        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
-        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
-        jack@suse.com, nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Arnav Dawn <arnav.dawn@samsung.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-References: <20220426101241.30100-1-nj.shetty@samsung.com>
- <CGME20220426101910epcas5p4fd64f83c6da9bbd891107d158a2743b5@epcas5p4.samsung.com>
- <20220426101241.30100-2-nj.shetty@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220426101241.30100-2-nj.shetty@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 12:12, Nitesh Shetty wrote:
-> Add device limits as sysfs entries,
->          - copy_offload (RW)
->          - copy_max_bytes (RW)
->          - copy_max_hw_bytes (RO)
->          - copy_max_range_bytes (RW)
->          - copy_max_range_hw_bytes (RO)
->          - copy_max_nr_ranges (RW)
->          - copy_max_nr_ranges_hw (RO)
-> 
-> Above limits help to split the copy payload in block layer.
-> copy_offload, used for setting copy offload(1) or emulation(0).
-> copy_max_bytes: maximum total length of copy in single payload.
-> copy_max_range_bytes: maximum length in a single entry.
-> copy_max_nr_ranges: maximum number of entries in a payload.
-> copy_max_*_hw_*: Reflects the device supported maximum limits.
-> 
-> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-> Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
-> Signed-off-by: Arnav Dawn <arnav.dawn@samsung.com>
-> ---
->   Documentation/ABI/stable/sysfs-block |  83 ++++++++++++++++
->   block/blk-settings.c                 |  59 ++++++++++++
->   block/blk-sysfs.c                    | 138 +++++++++++++++++++++++++++
->   include/linux/blkdev.h               |  13 +++
->   4 files changed, 293 insertions(+)
-> 
+veth netdevice defines own rx queues and allocates array containing
+up to 4095 ~750-bytes-long 'struct veth_rq' elements. Such allocation
+is quite huge and should be accounted to memcg.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+ drivers/net/veth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-
-Hannes
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index d29fb9759cc9..bd67f458641a 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1310,7 +1310,7 @@ static int veth_alloc_queues(struct net_device *dev)
+ 	struct veth_priv *priv = netdev_priv(dev);
+ 	int i;
+ 
+-	priv->rq = kcalloc(dev->num_rx_queues, sizeof(*priv->rq), GFP_KERNEL);
++	priv->rq = kcalloc(dev->num_rx_queues, sizeof(*priv->rq), GFP_KERNEL_ACCOUNT);
+ 	if (!priv->rq)
+ 		return -ENOMEM;
+ 
 -- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+2.31.1
+

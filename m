@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BFB511FE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6191E511DCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiD0RBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S243645AbiD0RAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243639AbiD0RAX (ORCPT
+        with ESMTP id S243672AbiD0RAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:00:23 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C939638B;
-        Wed, 27 Apr 2022 09:57:03 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 23RGunuo003835;
-        Wed, 27 Apr 2022 18:56:49 +0200
-Date:   Wed, 27 Apr 2022 18:56:49 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     kernel test robot <lkp@intel.com>, netdev <netdev@vger.kernel.org>,
-        kbuild-all@lists.01.org, Jakub Kicinski <kuba@kernel.org>,
-        Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH net 1/7] secure_seq: return the full 64-bit of the siphash
-Message-ID: <20220427165649.GA3756@1wt.eu>
-References: <20220427065233.2075-2-w@1wt.eu>
- <202204271705.VrWNPv7n-lkp@intel.com>
- <20220427100714.GC1724@1wt.eu>
- <20220427163554.GA3746@1wt.eu>
- <CANn89iJTg8KZvDQ2wY=psThvS5eFzv0N15FF3CTf3i6qui=wsQ@mail.gmail.com>
+        Wed, 27 Apr 2022 13:00:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D95388C;
+        Wed, 27 Apr 2022 09:57:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAF98B8268B;
+        Wed, 27 Apr 2022 16:57:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF90CC385A9;
+        Wed, 27 Apr 2022 16:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651078636;
+        bh=bnHxQ3h3Lg/UJsi0PXwoX9a2WzQGKD488htac3O304M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NNbCrDvaxpbtVxAc4HQFB4Ib8FmcMhBjcG5hgpExJf3bU1F4V40Il3nJ2iVNOkJYb
+         3JVnDfrthrD1uvOICQF3B2FnQo8r0Rz104umyb/novwQhNJ2WWexNJNE6a+uvc3P0v
+         A2CN3c1rYL6ZA6mwvHqP46URueFBA6OevStpE+sM=
+Date:   Wed, 27 Apr 2022 18:57:12 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, linux-usb@vger.kernel.org, jun.li@nxp.com,
+        lznuaa@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] usb: cdns3: allocate TX FIFO size according to
+ composite EP number
+Message-ID: <Yml16DvnUR/tJSCO@kroah.com>
+References: <20220427163525.1129887-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANn89iJTg8KZvDQ2wY=psThvS5eFzv0N15FF3CTf3i6qui=wsQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427163525.1129887-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:50:06AM -0700, Eric Dumazet wrote:
-> On Wed, Apr 27, 2022 at 9:35 AM Willy Tarreau <w@1wt.eu> wrote:
-> >
-> > On Wed, Apr 27, 2022 at 12:07:14PM +0200, Willy Tarreau wrote:
-> > > On Wed, Apr 27, 2022 at 05:56:41PM +0800, kernel test robot wrote:
-> > > > Hi Willy,
-> > > >
-> > > > I love your patch! Yet something to improve:
-> > > >
-> > > > [auto build test ERROR on net/master]
-> > > >
-> > > > url:    https://github.com/intel-lab-lkp/linux/commits/Willy-Tarreau/insufficient-TCP-source-port-randomness/20220427-145651
-> > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 71cffebf6358a7f5031f5b208bbdc1cb4db6e539
-> > > > config: i386-randconfig-r026-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271705.VrWNPv7n-lkp@intel.com/config)
-> > > > compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-> > > > reproduce (this is a W=1 build):
-> > > >         # https://github.com/intel-lab-lkp/linux/commit/01b26e522b598adf346b809075880feab3dcdc08
-> > > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> > > >         git fetch --no-tags linux-review Willy-Tarreau/insufficient-TCP-source-port-randomness/20220427-145651
-> > > >         git checkout 01b26e522b598adf346b809075880feab3dcdc08
-> > > >         # save the config file
-> > > >         mkdir build_dir && cp config build_dir/.config
-> > > >         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> > > >
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > >
-> > > > All errors (new ones prefixed by >>):
-> > > >
-> > > >    ld: net/ipv4/inet_hashtables.o: in function `__inet_hash_connect':
-> > > > >> inet_hashtables.c:(.text+0x187d): undefined reference to `__umoddi3'
-> > >
-> > > Argh! indeed, we spoke about using div_u64_rem() at the beginning and
-> > > that one vanished over time. Will respin it.
-> >
-> > I fixed it, built it for i386 and x86_64, tested it on x86_64 and confirmed
-> > that it still does what I need. The change is only this:
-> >
-> > -       offset = (READ_ONCE(table_perturb[index]) + (port_offset >> 32)) % remaining;
-> > +       div_u64_rem(READ_ONCE(table_perturb[index]) + (port_offset >> 32), remaining, &offset);
-> >
-> > I'll send a v2 series in a few hours if there are no more comments.
+On Wed, Apr 27, 2022 at 11:35:25AM -0500, Frank Li wrote:
+> Some devices have USB compositions which may require multiple endpoints.
+> To get better performance, need bigger CDNS3_EP_BUF_SIZE.
 > 
-> We really do not need 33 bits here.
+> But bigger CDNS3_EP_BUF_SIZE may exceed total hardware FIFO size when
+> multiple endpoints.
 > 
-> I would suggest using a 32bit divide.
+> By introducing the check_config() callback, calculate CDNS3_EP_BUF_SIZE.
 > 
-> offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32));
-> offset %= remaining;
+> Move CDNS3_EP_BUF_SIZE into cnds3_device: ep_buf_size
+> Combine CDNS3_EP_ISO_SS_BURST and CDNS3_EP_ISO_HS_MULT into
+> ecnds3_device:ep_iso_burst
+> 
+> Using a simple algorithm to calculate ep_buf_size.
+> ep_buf_size = ep_iso_burst = (onchip_buffers - 2k) / (number of IN EP +
+> 1).
+> 
+> Test at 8qxp:
+> 
+> 	Gadget			ep_buf_size
+> 
+> 	RNDIS:				5
+> 	RNDIS+ACM:			3
+> 	Mass Storage + NCM + ACM	2
+> 
+> Previous CDNS3_EP_BUF_SIZE is 4, RNDIS + ACM will be failure because
+> exceed FIFO memory.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> Change from v1 to v2:
+>  Add safe check for mult, buffering and maxburst
 
-Yeah much better indeed, I'll do that. Thanks Eric!
+that's nice, but this is v8, not v2?
 
-Willy
+confused,
 
+greg k-h

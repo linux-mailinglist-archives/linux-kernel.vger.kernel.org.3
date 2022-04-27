@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D2A51154E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFA4511608
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbiD0LUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        id S232514AbiD0LWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiD0LUD (ORCPT
+        with ESMTP id S232461AbiD0LWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:20:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B84165A3;
-        Wed, 27 Apr 2022 04:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651058212; x=1682594212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HIRF5W5o/gV3DIQXa4xMa+ibJZeT9Xrw34R4dA4zxYo=;
-  b=B7o9vEFrJCS65f5xHiQWVGGAYQxaHrCOLKifntW21gPsPdFDeolQcxSN
-   +aR2ugrsv5ZnxFCisIUa0mlCt7HW9nvMPT6IRFlCK3F8GVBJnTrS322DU
-   3ffrpeUBKwG+6feTZeUB0ogkPE4Lz58S6AzFLYa14VjSSsoD3ZsQ9wuaw
-   w129/zZ6e0d5iPQubJOwVZpU9XBTZbIMBHhLkFM3XCCTJ21QoV8JWeq9F
-   9iQH3IZjHnkp9fnsLXKOADivJnsUFca9hxrBVsR5FBepY8RVrkbbTw7jW
-   K/nwgc4JPkn+LhgcdIqX/aOL/vgarfssuAelZiyEzXxumSxOK9nRK3Zax
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="291045239"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="291045239"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:16:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="705498756"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2022 04:16:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Apr 2022 14:16:48 +0300
-Date:   Wed, 27 Apr 2022 14:16:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] usb: typec: Separate USB Power Delivery from USB
- Type-C
-Message-ID: <YmkmILWlbvoZaXKZ@kuha.fi.intel.com>
-References: <20220425124946.13064-1-heikki.krogerus@linux.intel.com>
- <20220425124946.13064-2-heikki.krogerus@linux.intel.com>
- <YmfgfRA1ecJwf12i@kroah.com>
- <YmjlyxLk8wfziq9l@kuha.fi.intel.com>
- <YmjxFkpCwxz4fgqb@kroah.com>
- <Ymj8LWUgk6X/Alze@kuha.fi.intel.com>
- <YmkD2/r1imDT5qTz@kroah.com>
+        Wed, 27 Apr 2022 07:22:50 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB32F3AB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651058380; x=1682594380;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=bkeRCcZwT59nqDeoEiIxTZeS9TI5zISxzRCG0NQSDn0=;
+  b=LdxIz/jRt1Rh1O5sdAsJZQ/WQo8LY4vKoG3sykL7VGTZ3hz0ouLOy9CC
+   CwCc9xilaau4fnHIXzcWMaTnvFhFxmUupQsZ4CKOByTcqzEZpTWdc5yJd
+   3BUddqVPZUVZVGPNlROfkxriqXdBZMWRLB9+4MLnlaPsbJtiWllzPrcap
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 27 Apr 2022 04:19:39 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:19:39 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 04:19:39 -0700
+Received: from kvalo10 (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
+ 2022 04:19:36 -0700
+From:   Kalle Valo <quic_kvalo@quicinc.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Baochen Qiang <quic_bqiang@quicinc.com>
+CC:     <kbuild@lists.01.org>, <lkp@intel.com>, <kbuild-all@lists.01.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        <linux-kernel@vger.kernel.org>, <ath11k@lists.infradead.org>
+Subject: Re: [ammarfaizi2-block:kvalo/ath/pending 36/40]
+ drivers/net/wireless/ath/ath11k/mac.c:8293
+ ath11k_mac_op_set_bios_sar_specs() warn: variable dereferenced before
+ check 'sar' (see line 8280)
+References: <202204182315.h96VPgso-lkp@intel.com>
+Date:   Wed, 27 Apr 2022 14:19:34 +0300
+In-Reply-To: <202204182315.h96VPgso-lkp@intel.com> (Dan Carpenter's message of
+        "Fri, 22 Apr 2022 17:37:33 +0300")
+Message-ID: <o5hy1zqhiyh.fsf@quicinc.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (windows-nt)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmkD2/r1imDT5qTz@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 10:50:35AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Apr 27, 2022 at 11:17:49AM +0300, Heikki Krogerus wrote:
-> > On Wed, Apr 27, 2022 at 09:30:30AM +0200, Greg Kroah-Hartman wrote:
-> > > > > "struct pd" is just about the shortest structure name I've seen in the
-> > > > > kernel so far.  How about using some more letters?  :)
-> > > > 
-> > > > Okay, I'll make it usbpd.
-> > > 
-> > > How about some more vowels: "struct usb_power_delivery" please.  This
-> > > isn't the 1980's :)
-> > 
-> > "struct usb_power_delivery" is fine, but I would still really really
-> > want to use "struct usbpd_capabilities" instead of
-> > "struct usb_power_delivery_capabilities" - it's just too long.
-> > Is that okay?
-> 
-> Nah, spell it out please, we don't use "usbpd" anywhere, and again, we
-> don't have a limit of characters.  Most editors should auto-complete
-> anyway :)
++ ath11k list
 
-Very well.
+Dan Carpenter <dan.carpenter@oracle.com> writes:
 
-> > > > > The kobject question above goes to the code as well.  You are creating a
-> > > > > bunch of raw kobjects still, why?  This should all fit into the driver
-> > > > > model and kobjects shouldn't be needed.  Are you trying to nest too deep
-> > > > > in the attributes?  If so, kobjects will not work as userspace tools
-> > > > > will not realize they are there and are attributes at all.
-> > > > 
-> > > > They are not raw kobjects, they are all devices now. That header just
-> > > > needs to be fixed.
-> > > 
-> > > You have loads of kobject attributes in the .c file.  Either I read it
-> > > wrong, or you are doing something wrong, as that should never be the
-> > > case for a driver or device.
-> > 
-> > Hmm, I'm probable still doing something wrong...
-> 
-> All of your sysfs callbacks should have a struct device, not a kobject.
-> You might just be getting lucky in that we are casting around a pointer
-> of the correct layout.  But the compiler should have caught that
-> somewhere, please look into it.
+> tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+> head:   c9a8efc35304a89fc0751649945909caf03eeb29
+> commit: 5ad5b356e75f402fec930cf0d77b6c7862850b55 [36/40] ath11k: Add support for SAR
+> config: x86_64-randconfig-m001-20220418 (https://download.01.org/0day-ci/archive/20220418/202204182315.h96VPgso-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+> New smatch warnings:
+> drivers/net/wireless/ath/ath11k/mac.c:8293 ath11k_mac_op_set_bios_sar_specs() warn: variable dereferenced before check 'sar' (see line 8280)
+>
+> vim +/sar +8293 drivers/net/wireless/ath/ath11k/mac.c
+>
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8276  static int ath11k_mac_op_set_bios_sar_specs(struct ieee80211_hw *hw,
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8277  					    const struct cfg80211_sar_specs *sar)
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8278  {
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8279  	struct ath11k *ar = hw->priv;
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12 @8280  	const struct cfg80211_sar_sub_specs *sspec = sar->sub_specs;
+>                                                                                              ^^^^^^^^^^^^^^
+> Dereference
+>
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8281  	int ret, index;
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8282  	u8 *sar_tbl;
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8283  	u32 i;
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8284  
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8285  	mutex_lock(&ar->conf_mutex);
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8286  
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8287  	if (!test_bit(WMI_TLV_SERVICE_BIOS_SAR_SUPPORT, ar->ab->wmi_ab.svc_map) ||
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8288  	    !ar->ab->hw_params.bios_sar_capa) {
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8289  		ret = -EOPNOTSUPP;
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8290  		goto exit;
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8291  	}
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12  8292  
+> 5ad5b356e75f40 Baochen Qiang 2022-04-12 @8293  	if (!sar || sar->type != NL80211_SAR_TYPE_POWER ||
+>                                                      ^^^
+> Checked too late
 
-I'll fix this.
-
-thanks,
-
--- 
-heikki
+Baochen, please submit a fix for this.

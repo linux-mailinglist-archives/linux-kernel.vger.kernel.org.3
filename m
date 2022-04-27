@@ -2,39 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAB2511A5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03490511AE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiD0ObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S237749AbiD0Obp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237738AbiD0ObR (ORCPT
+        with ESMTP id S237691AbiD0Obo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:31:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94BDB260A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:28:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52234ED1;
-        Wed, 27 Apr 2022 07:28:04 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E20E3F5A1;
-        Wed, 27 Apr 2022 07:28:03 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH] clocksource/drivers/sp804: avoid error on multiple instances
-Date:   Wed, 27 Apr 2022 15:27:59 +0100
-Message-Id: <20220427142759.4138694-1-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 27 Apr 2022 10:31:44 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D54013D28;
+        Wed, 27 Apr 2022 07:28:31 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23RESJrn036102;
+        Wed, 27 Apr 2022 09:28:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651069700;
+        bh=mP/yWc581QChcTn+6JQhy5aJqoQd07YWtOKH5vWKUCc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=a5/mRTk2MoJSxRIjnbaN5FQqT2NReX9tNtfflFcH+94Tm0X4A2uXivRBuouZ3qmVQ
+         nvGrfmEtnQ2qYP5e/elovb5EUFYgNfbRDqwk2I2tKwKLXcM66RsP7ONeWs8ldRXVoH
+         ckn3DgGlyUmr1Z2KBJcSCnejC/TS+qd11HDC6hQo=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23RESJ6F075916
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 27 Apr 2022 09:28:19 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
+ Apr 2022 09:28:19 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 27 Apr 2022 09:28:19 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23RESIXX086823;
+        Wed, 27 Apr 2022 09:28:19 -0500
+Date:   Wed, 27 Apr 2022 19:58:17 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
+Subject: Re: [PATCH v4 2/2] arm64: dts: ti: k3-j721e-common-proc-board: add
+ DP to j7 evm
+Message-ID: <20220427142817.3dndojgqrwbrnsze@uda0490373>
+References: <20220426153553.18474-1-r-ravikumar@ti.com>
+ <20220426153553.18474-3-r-ravikumar@ti.com>
+ <20220426181301.z7jojik7zh7flh3h@gummy>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220426181301.z7jojik7zh7flh3h@gummy>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,57 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a machine sports more than one SP804 timer instance, we only bring
-up the first one, since multiple timers of the same kind are not useful
-to Linux. As this is intentional behaviour, we should not return an
-error message, as we do today:
-===============
-[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
-===============
+On 13:13-20220426, Nishanth Menon wrote:
+> On 21:05-20220426, Rahul T R wrote:
+> > From: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> > 
+> 
+> [...]
+> 
+> > 
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > index 2f119e94e783..4b9e3f671781 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > @@ -148,6 +148,28 @@
+> >  		pinctrl-0 = <&main_mcan2_gpio_pins_default>;
+> >  		standby-gpios = <&main_gpio0 127 GPIO_ACTIVE_HIGH>;
+> >  	};
+> > +
+> > +	dp_pwr_3v3: regulator-dp-prw {
+> 
+> See feedback in https://lore.kernel.org/all/c50819cb-8234-670f-c7c0-0507af2f96df@linaro.org/
 
-Replace the -EINVAL return with an informative message and return 0
-instead.
+Hi Nishanth,
 
-Also we do not reach the init function anymore if the DT node is
-disabled (as this is now handled by OF_DECLARE), so remove the explicit
-check for that case.
+As per the feedback in the above thread
+the name matches with below convention
+"regulator-foo-bar" or "foo-bar-regulator"
 
-This fixes a long standing bogus error when booting ARM's fastmodels.
+Are you referring to the typo here?
+regulator-dp-prw => regulator-dp-pwr
+will fix this in the respin
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- drivers/clocksource/timer-sp804.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Can you please clarify if you there is
+any issue other than the typo
 
-diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
-index 401d592e85f5a..30cbc580e0448 100644
---- a/drivers/clocksource/timer-sp804.c
-+++ b/drivers/clocksource/timer-sp804.c
-@@ -259,6 +259,12 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
- 	struct clk *clk1, *clk2;
- 	const char *name = of_get_property(np, "compatible", NULL);
- 
-+	if (initialized) {
-+		pr_info("%s: only instantiating one timer\n",
-+			of_node_full_name(np));
-+		return 0;
-+	}
-+
- 	base = of_iomap(np, 0);
- 	if (!base)
- 		return -ENXIO;
-@@ -270,11 +276,6 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
- 	writel(0, timer1_base + timer->ctrl);
- 	writel(0, timer2_base + timer->ctrl);
- 
--	if (initialized || !of_device_is_available(np)) {
--		ret = -EINVAL;
--		goto err;
--	}
--
- 	clk1 = of_clk_get(np, 0);
- 	if (IS_ERR(clk1))
- 		clk1 = NULL;
--- 
-2.25.1
+Regards
+Rahul T R
 
+> 
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "dp-pwr";
+> > +		regulator-min-microvolt = <3300000>;
+> > +		regulator-max-microvolt = <3300000>;
+> > +		gpio = <&exp4 0 GPIO_ACTIVE_HIGH>; /* P0 - DP0_PWR_SW_EN */
+> > +		enable-active-high;
+> > +	};
+> > +
+> -- 
+> Regards,
+> Nishanth Menon
+> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

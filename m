@@ -2,182 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAD5511930
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949DF511A71
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbiD0OVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S237602AbiD0OXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbiD0OUt (ORCPT
+        with ESMTP id S237492AbiD0OXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:20:49 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9124A5E740
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:17:35 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id c15so2811780ljr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:17:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=x/04ExZsssyHqK3ybhx4YVkpwU+WO3WPNrqX7DTqXG4=;
-        b=KcoQA4RUPwVoun+6cZl/pmYQbIgxcoqRYDMq1MFkIwR5zf/Z/nxThQRqsAXpO6fHl8
-         KIomzfKhTflfdyS3w9NrdfMQKGTVAnQBz25Pe3HQItAotLqhUfYkS1qxfbzk3sUS9duR
-         BFHXvCs1zMAiB27DkIhE0/vCtJMXpOFFAamo/+d1lmWh492Ftkv8Pm986gpCZzvuSn4y
-         ERQB0kCCij3s2rkuRuKB+Bc3jQrBnKaKTc5O6mddoYlQo+M5eKoU2+gi1W9epBhTqajZ
-         w6bW9WYrXOrScM6YsoZwQGiinAiJsHOebdQqSSZIfkdfg5JzYK5Qmpp4pvfSJhW+zZsP
-         iZZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x/04ExZsssyHqK3ybhx4YVkpwU+WO3WPNrqX7DTqXG4=;
-        b=KqiA7fkxxMIX+KGS1kG5oWUxrl1eOQptcxeGOUH1p4JaLPH9rcDRYfEBHX1SZDVX8t
-         2tqtJTjoC6aFoTInZH0Ioi7FMdoBgoUSXTqZjcaj9uMXgaf9qRsVYKNphbmANV7xUkl4
-         xPgoQCG7pZ1SlBbA0cdvuhUmHh8nwN8xisWwNo8Tpb9PAzTJWqMavZfNYTBjvImXVXv1
-         CCb8Xv4VH8UjUw4mXI/u42gpx9J+kTG83ib9S6w5zqvrZCwLX7VRCumNeQTA/whlLJIJ
-         bYqyeW1UBIlPHUqMzhydMT/rQqU3Sez1tFWXb2eHPFdyhXw/5N1o0URwHao6H4ONbR3M
-         BkfQ==
-X-Gm-Message-State: AOAM533NLYZaaFs73tr6MgMh+baSZHhaeM7Vzl5irphXVpMSE1195R2L
-        ycJF7Ykzk9FrH1K9c4+HI2df+Q==
-X-Google-Smtp-Source: ABdhPJxVjTj0vQFFkI6C0mpp7oyTSf4B40Jzv5S29tPlaFcLkO/RSz/P1O/faKPD1SWNzxgEvPAecQ==
-X-Received: by 2002:a05:651c:887:b0:247:f630:d069 with SMTP id d7-20020a05651c088700b00247f630d069mr18602831ljq.514.1651069053766;
-        Wed, 27 Apr 2022 07:17:33 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id t17-20020a192d51000000b0047212cead69sm633986lft.253.2022.04.27.07.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:17:32 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 4FE48103716; Wed, 27 Apr 2022 17:19:14 +0300 (+03)
-Date:   Wed, 27 Apr 2022 17:19:14 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Michael Roth <michael.roth@amd.com>, Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
-Message-ID: <20220427141914.s7y7lhlaau473mu7@box.shutemov.name>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
- <20220427001756.xefhkwwc7uhxuusk@amd.com>
+        Wed, 27 Apr 2022 10:23:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67431A921A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651069189; x=1682605189;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pIWY/z+Ufq043o7X2cdcCRk/WmAfJMJxxbg5nxLDFP8=;
+  b=R24P7DmgeCH+6m363k9+a672wncm0S+FktbJBYDFgxC4sSjdhVQucP55
+   ikBMIyudd26ku04lNt9ED6h/K5eiBX4fcw0zFMr7n0jjKLRXbuwv5Y3/9
+   o362CSPhtkBuVGonIWX9eg6ZzW0cuaY/JwUCiJ1DxlCs3WYvHj74bfDBX
+   IcIcbPnh26H2a/mspnh+Z3vPncwWvGogBDtD7ebvEW5vXP/OzSjRGRRIs
+   4LKtBPBXfatWclJtweVVNlWhllnDXqVjLSbgotsYYhK3tAoGf/miuYkYU
+   MW+YkIKQ5e9GBEjBUrlmf4En1uU8XNtmjqOOr09Y9AubBWaM0F5B7kkcR
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="245862715"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="245862715"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:19:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="650721408"
+Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Apr 2022 07:19:47 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf tools: Delete perf-with-kcore.sh script
+Date:   Wed, 27 Apr 2022 17:19:46 +0300
+Message-Id: <20220427141946.269523-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427001756.xefhkwwc7uhxuusk@amd.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:17:56PM -0500, Michael Roth wrote:
-> On Mon, Apr 25, 2022 at 06:39:28AM +0300, Kirill A. Shutemov wrote:
-> > The firmware will pre-accept the memory used to run the stub. But, the
-> > stub is responsible for accepting the memory into which it decompresses
-> > the main kernel. Accept memory just before decompression starts.
-> > 
-> > The stub is also responsible for choosing a physical address in which to
-> > place the decompressed kernel image. The KASLR mechanism will randomize
-> > this physical address. Since the unaccepted memory region is relatively
-> > small, KASLR would be quite ineffective if it only used the pre-accepted
-> > area (EFI_CONVENTIONAL_MEMORY). Ensure that KASLR randomizes among the
-> > entire physical address space by also including EFI_UNACCEPTED_MEMOR
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  arch/x86/boot/compressed/Makefile        |  2 +-
-> >  arch/x86/boot/compressed/kaslr.c         | 14 ++++++++++++--
-> >  arch/x86/boot/compressed/mem.c           | 21 +++++++++++++++++++++
-> >  arch/x86/boot/compressed/misc.c          |  9 +++++++++
-> >  arch/x86/include/asm/unaccepted_memory.h |  2 ++
-> >  5 files changed, 45 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> > index 7f672f7e2fea..b59007e57cbf 100644
-> > --- a/arch/x86/boot/compressed/Makefile
-> > +++ b/arch/x86/boot/compressed/Makefile
-> > @@ -102,7 +102,7 @@ endif
-> >  
-> >  vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
-> >  vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-> > -vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/mem.o
-> > +vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/find.o $(obj)/mem.o
-> 
-> Since it's possible to have CONFIG_UNACCEPTED_MEMORY=y while
-> CONFIG_INTEL_TDX_GUEST=n (e.g. for SNP-only guest kernels), this can
-> result in mem.o reporting linker errors due to tdx_accept_memory() not
-> being defined. I think it needs a stub for !CONFIG_INTEL_TDX_GUEST, or
-> something along that line.
+It has been obsolete since the introduction of the perf record --kcore
+option.
 
-Fair enough. This would do the trick:
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ tools/perf/.gitignore         |   1 -
+ tools/perf/Makefile.perf      |   5 +-
+ tools/perf/perf-with-kcore.sh | 247 ----------------------------------
+ 3 files changed, 1 insertion(+), 252 deletions(-)
+ delete mode 100644 tools/perf/perf-with-kcore.sh
 
-diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
-index 539fff27de49..4a49a2438180 100644
---- a/arch/x86/boot/compressed/mem.c
-+++ b/arch/x86/boot/compressed/mem.c
-@@ -19,6 +19,9 @@ static bool is_tdx_guest(void)
- 	static bool once;
- 	static bool is_tdx;
-
-+	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
-+	    return false;
-+
- 	if (!once) {
- 		u32 eax, sig[3];
-
-> >  vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
-> >  efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-> > diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-> > index 411b268bc0a2..59db90626042 100644
-> > --- a/arch/x86/boot/compressed/kaslr.c
-> > +++ b/arch/x86/boot/compressed/kaslr.c
-> > @@ -725,10 +725,20 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
-> >  		 * but in practice there's firmware where using that memory leads
-> >  		 * to crashes.
-> >  		 *
-> > -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
-> > +		 * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if
-> > +		 * supported) are guaranteed to be free.
-> >  		 */
-> > -		if (md->type != EFI_CONVENTIONAL_MEMORY)
-> > +
-> > +		switch (md->type) {
-> > +		case EFI_CONVENTIONAL_MEMORY:
-> > +			break;
-> > +		case EFI_UNACCEPTED_MEMORY:
-> 
-> Just FYI, but with latest tip boot/compressed now relies on a separate header
-> in arch/x86/boot/compressed/efi.h where this need to be defined again.
-
-Right.
-
-Borislav, how do you want to handle this? Do you want me to rebase the
-tree to a specific branch?
-
+diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
+index 20b8ab984d5f..4b9c71faa01a 100644
+--- a/tools/perf/.gitignore
++++ b/tools/perf/.gitignore
+@@ -19,7 +19,6 @@ perf.data
+ perf.data.old
+ output.svg
+ perf-archive
+-perf-with-kcore
+ perf-iostat
+ tags
+ TAGS
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 69473a836bae..6e5aded855cc 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -286,7 +286,6 @@ PYRF_OBJS =
+ SCRIPT_SH =
+ 
+ SCRIPT_SH += perf-archive.sh
+-SCRIPT_SH += perf-with-kcore.sh
+ SCRIPT_SH += perf-iostat.sh
+ 
+ grep-libs = $(filter -l%,$(1))
+@@ -973,8 +972,6 @@ ifndef NO_LIBBPF
+ endif
+ 	$(call QUIET_INSTALL, perf-archive) \
+ 		$(INSTALL) $(OUTPUT)perf-archive -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)'
+-	$(call QUIET_INSTALL, perf-with-kcore) \
+-		$(INSTALL) $(OUTPUT)perf-with-kcore -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)'
+ 	$(call QUIET_INSTALL, perf-iostat) \
+ 		$(INSTALL) $(OUTPUT)perf-iostat -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)'
+ ifndef NO_LIBAUDIT
+@@ -1088,7 +1085,7 @@ bpf-skel-clean:
+ 	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
+ 
+ clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean
+-	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-with-kcore $(OUTPUT)perf-iostat $(LANG_BINDINGS)
++	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-iostat $(LANG_BINDINGS)
+ 	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
+ 	$(Q)$(RM) $(OUTPUT).config-detected
+ 	$(call QUIET_CLEAN, core-progs) $(RM) $(ALL_PROGRAMS) perf perf-read-vdso32 perf-read-vdsox32 $(OUTPUT)pmu-events/jevents $(OUTPUT)$(LIBJVMTI).so
+diff --git a/tools/perf/perf-with-kcore.sh b/tools/perf/perf-with-kcore.sh
+deleted file mode 100644
+index 0b96545c8184..000000000000
+--- a/tools/perf/perf-with-kcore.sh
++++ /dev/null
+@@ -1,247 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0-only
+-# perf-with-kcore: use perf with a copy of kcore
+-# Copyright (c) 2014, Intel Corporation.
+-#
+-
+-set -e
+-
+-usage()
+-{
+-        echo "Usage: perf-with-kcore <perf sub-command> <perf.data directory> [<sub-command options> [ -- <workload>]]" >&2
+-        echo "       <perf sub-command> can be record, script, report or inject" >&2
+-        echo "   or: perf-with-kcore fix_buildid_cache_permissions" >&2
+-        exit 1
+-}
+-
+-find_perf()
+-{
+-	if [ -n "$PERF" ] ; then
+-		return
+-	fi
+-	PERF=`which perf || true`
+-	if [ -z "$PERF" ] ; then
+-		echo "Failed to find perf" >&2
+-	        exit 1
+-	fi
+-	if [ ! -x "$PERF" ] ; then
+-		echo "Failed to find perf" >&2
+-	        exit 1
+-	fi
+-	echo "Using $PERF"
+-	"$PERF" version
+-}
+-
+-copy_kcore()
+-{
+-	echo "Copying kcore"
+-
+-	if [ $EUID -eq 0 ] ; then
+-		SUDO=""
+-	else
+-		SUDO="sudo"
+-	fi
+-
+-	rm -f perf.data.junk
+-	("$PERF" record -o perf.data.junk "${PERF_OPTIONS[@]}" -- sleep 60) >/dev/null 2>/dev/null &
+-	PERF_PID=$!
+-
+-	# Need to make sure that perf has started
+-	sleep 1
+-
+-	KCORE=$(($SUDO "$PERF" buildid-cache -v -f -k /proc/kcore >/dev/null) 2>&1)
+-	case "$KCORE" in
+-	"kcore added to build-id cache directory "*)
+-		KCORE_DIR=${KCORE#"kcore added to build-id cache directory "}
+-	;;
+-	*)
+-		kill $PERF_PID
+-		wait >/dev/null 2>/dev/null || true
+-		rm perf.data.junk
+-		echo "$KCORE"
+-		echo "Failed to find kcore" >&2
+-		exit 1
+-	;;
+-	esac
+-
+-	kill $PERF_PID
+-	wait >/dev/null 2>/dev/null || true
+-	rm perf.data.junk
+-
+-	$SUDO cp -a "$KCORE_DIR" "$(pwd)/$PERF_DATA_DIR"
+-	$SUDO rm -f "$KCORE_DIR/kcore"
+-	$SUDO rm -f "$KCORE_DIR/kallsyms"
+-	$SUDO rm -f "$KCORE_DIR/modules"
+-	$SUDO rmdir "$KCORE_DIR"
+-
+-	KCORE_DIR_BASENAME=$(basename "$KCORE_DIR")
+-	KCORE_DIR="$(pwd)/$PERF_DATA_DIR/$KCORE_DIR_BASENAME"
+-
+-	$SUDO chown $UID "$KCORE_DIR"
+-	$SUDO chown $UID "$KCORE_DIR/kcore"
+-	$SUDO chown $UID "$KCORE_DIR/kallsyms"
+-	$SUDO chown $UID "$KCORE_DIR/modules"
+-
+-	$SUDO chgrp $GROUPS "$KCORE_DIR"
+-	$SUDO chgrp $GROUPS "$KCORE_DIR/kcore"
+-	$SUDO chgrp $GROUPS "$KCORE_DIR/kallsyms"
+-	$SUDO chgrp $GROUPS "$KCORE_DIR/modules"
+-
+-	ln -s "$KCORE_DIR_BASENAME" "$PERF_DATA_DIR/kcore_dir"
+-}
+-
+-fix_buildid_cache_permissions()
+-{
+-	if [ $EUID -ne 0 ] ; then
+-		echo "This script must be run as root via sudo " >&2
+-		exit 1
+-	fi
+-
+-	if [ -z "$SUDO_USER" ] ; then
+-		echo "This script must be run via sudo" >&2
+-		exit 1
+-	fi
+-
+-	USER_HOME=$(bash <<< "echo ~$SUDO_USER")
+-
+-	echo "Fixing buildid cache permissions"
+-
+-	find "$USER_HOME/.debug" -xdev -type d          ! -user "$SUDO_USER" -ls -exec chown    "$SUDO_USER" \{\} \;
+-	find "$USER_HOME/.debug" -xdev -type f -links 1 ! -user "$SUDO_USER" -ls -exec chown    "$SUDO_USER" \{\} \;
+-	find "$USER_HOME/.debug" -xdev -type l          ! -user "$SUDO_USER" -ls -exec chown -h "$SUDO_USER" \{\} \;
+-
+-	if [ -n "$SUDO_GID" ] ; then
+-		find "$USER_HOME/.debug" -xdev -type d          ! -group "$SUDO_GID" -ls -exec chgrp    "$SUDO_GID" \{\} \;
+-		find "$USER_HOME/.debug" -xdev -type f -links 1 ! -group "$SUDO_GID" -ls -exec chgrp    "$SUDO_GID" \{\} \;
+-		find "$USER_HOME/.debug" -xdev -type l          ! -group "$SUDO_GID" -ls -exec chgrp -h "$SUDO_GID" \{\} \;
+-	fi
+-
+-	echo "Done"
+-}
+-
+-check_buildid_cache_permissions()
+-{
+-	if [ $EUID -eq 0 ] ; then
+-		return
+-	fi
+-
+-	PERMISSIONS_OK+=$(find "$HOME/.debug" -xdev -type d          ! -user "$USER" -print -quit)
+-	PERMISSIONS_OK+=$(find "$HOME/.debug" -xdev -type f -links 1 ! -user "$USER" -print -quit)
+-	PERMISSIONS_OK+=$(find "$HOME/.debug" -xdev -type l          ! -user "$USER" -print -quit)
+-
+-	PERMISSIONS_OK+=$(find "$HOME/.debug" -xdev -type d          ! -group "$GROUPS" -print -quit)
+-	PERMISSIONS_OK+=$(find "$HOME/.debug" -xdev -type f -links 1 ! -group "$GROUPS" -print -quit)
+-	PERMISSIONS_OK+=$(find "$HOME/.debug" -xdev -type l          ! -group "$GROUPS" -print -quit)
+-
+-	if [ -n "$PERMISSIONS_OK" ] ; then
+-		echo "*** WARNING *** buildid cache permissions may need fixing" >&2
+-	fi
+-}
+-
+-record()
+-{
+-	echo "Recording"
+-
+-	if [ $EUID -ne 0 ] ; then
+-
+-		if [ "$(cat /proc/sys/kernel/kptr_restrict)" -ne 0 ] ; then
+-			echo "*** WARNING *** /proc/sys/kernel/kptr_restrict prevents access to kernel addresses" >&2
+-		fi
+-
+-		if echo "${PERF_OPTIONS[@]}" | grep -q ' -a \|^-a \| -a$\|^-a$\| --all-cpus \|^--all-cpus \| --all-cpus$\|^--all-cpus$' ; then
+-			echo "*** WARNING *** system-wide tracing without root access will not be able to read all necessary information from /proc" >&2
+-		fi
+-
+-		if echo "${PERF_OPTIONS[@]}" | grep -q 'intel_pt\|intel_bts\| -I\|^-I' ; then
+-			if [ "$(cat /proc/sys/kernel/perf_event_paranoid)" -gt -1 ] ; then
+-				echo "*** WARNING *** /proc/sys/kernel/perf_event_paranoid restricts buffer size and tracepoint (sched_switch) use" >&2
+-			fi
+-
+-			if echo "${PERF_OPTIONS[@]}" | grep -q ' --per-thread \|^--per-thread \| --per-thread$\|^--per-thread$' ; then
+-				true
+-			elif echo "${PERF_OPTIONS[@]}" | grep -q ' -t \|^-t \| -t$\|^-t$' ; then
+-				true
+-			elif [ ! -r /sys/kernel/debug -o ! -x /sys/kernel/debug ] ; then
+-				echo "*** WARNING *** /sys/kernel/debug permissions prevent tracepoint (sched_switch) use" >&2
+-			fi
+-		fi
+-	fi
+-
+-	if [ -z "$1" ] ; then
+-		echo "Workload is required for recording" >&2
+-		usage
+-	fi
+-
+-	if [ -e "$PERF_DATA_DIR" ] ; then
+-		echo "'$PERF_DATA_DIR' exists" >&2
+-		exit 1
+-	fi
+-
+-	find_perf
+-
+-	mkdir "$PERF_DATA_DIR"
+-
+-	echo "$PERF record -o $PERF_DATA_DIR/perf.data ${PERF_OPTIONS[@]} -- $@"
+-	"$PERF" record -o "$PERF_DATA_DIR/perf.data" "${PERF_OPTIONS[@]}" -- "$@" || true
+-
+-	if rmdir "$PERF_DATA_DIR" > /dev/null 2>/dev/null ; then
+-		exit 1
+-	fi
+-
+-	copy_kcore
+-
+-	echo "Done"
+-}
+-
+-subcommand()
+-{
+-	find_perf
+-	check_buildid_cache_permissions
+-	echo "$PERF $PERF_SUB_COMMAND -i $PERF_DATA_DIR/perf.data --kallsyms=$PERF_DATA_DIR/kcore_dir/kallsyms $@"
+-	"$PERF" $PERF_SUB_COMMAND -i "$PERF_DATA_DIR/perf.data" "--kallsyms=$PERF_DATA_DIR/kcore_dir/kallsyms" "$@"
+-}
+-
+-if [ "$1" = "fix_buildid_cache_permissions" ] ; then
+-	fix_buildid_cache_permissions
+-	exit 0
+-fi
+-
+-PERF_SUB_COMMAND=$1
+-PERF_DATA_DIR=$2
+-shift || true
+-shift || true
+-
+-if [ -z "$PERF_SUB_COMMAND" ] ; then
+-	usage
+-fi
+-
+-if [ -z "$PERF_DATA_DIR" ] ; then
+-	usage
+-fi
+-
+-case "$PERF_SUB_COMMAND" in
+-"record")
+-	while [ "$1" != "--" ] ; do
+-		PERF_OPTIONS+=("$1")
+-		shift || break
+-	done
+-	if [ "$1" != "--" ] ; then
+-		echo "Options and workload are required for recording" >&2
+-		usage
+-	fi
+-	shift
+-	record "$@"
+-;;
+-"script")
+-	subcommand "$@"
+-;;
+-"report")
+-	subcommand "$@"
+-;;
+-"inject")
+-	subcommand "$@"
+-;;
+-*)
+-	usage
+-;;
+-esac
 -- 
- Kirill A. Shutemov
+2.25.1
+

@@ -2,89 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D352F511E2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C42511DB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243446AbiD0Qje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S243490AbiD0QkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243455AbiD0QjY (ORCPT
+        with ESMTP id S243537AbiD0Qjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:39:24 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7ACEE0DF;
-        Wed, 27 Apr 2022 09:36:11 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 23RGZsbM003755;
-        Wed, 27 Apr 2022 18:35:54 +0200
-Date:   Wed, 27 Apr 2022 18:35:54 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     kernel test robot <lkp@intel.com>
-Cc:     netdev@vger.kernel.org, kbuild-all@lists.01.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH net 1/7] secure_seq: return the full 64-bit of the siphash
-Message-ID: <20220427163554.GA3746@1wt.eu>
-References: <20220427065233.2075-2-w@1wt.eu>
- <202204271705.VrWNPv7n-lkp@intel.com>
- <20220427100714.GC1724@1wt.eu>
+        Wed, 27 Apr 2022 12:39:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B14A66C9F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:36:36 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1njkeT-0000r5-57; Wed, 27 Apr 2022 18:36:29 +0200
+Message-ID: <635905f16b2ddf1d16f36e3c0e592eb492b1faf1.camel@pengutronix.de>
+Subject: Re: [RESEND PATCH v3] drm/cma-helper: Describe what a "contiguous
+ chunk" actually means
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Date:   Wed, 27 Apr 2022 18:36:27 +0200
+In-Reply-To: <20220427140910.1735188-1-daniel.thompson@linaro.org>
+References: <20220427140910.1735188-1-daniel.thompson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427100714.GC1724@1wt.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:07:14PM +0200, Willy Tarreau wrote:
-> On Wed, Apr 27, 2022 at 05:56:41PM +0800, kernel test robot wrote:
-> > Hi Willy,
-> > 
-> > I love your patch! Yet something to improve:
-> > 
-> > [auto build test ERROR on net/master]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Willy-Tarreau/insufficient-TCP-source-port-randomness/20220427-145651
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 71cffebf6358a7f5031f5b208bbdc1cb4db6e539
-> > config: i386-randconfig-r026-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271705.VrWNPv7n-lkp@intel.com/config)
-> > compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-> > reproduce (this is a W=1 build):
-> >         # https://github.com/intel-lab-lkp/linux/commit/01b26e522b598adf346b809075880feab3dcdc08
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Willy-Tarreau/insufficient-TCP-source-port-randomness/20220427-145651
-> >         git checkout 01b26e522b598adf346b809075880feab3dcdc08
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    ld: net/ipv4/inet_hashtables.o: in function `__inet_hash_connect':
-> > >> inet_hashtables.c:(.text+0x187d): undefined reference to `__umoddi3'
+Am Mittwoch, dem 27.04.2022 um 15:09 +0100 schrieb Daniel Thompson:
+> Since it's inception in 2012 it has been understood that the DRM GEM CMA
+> helpers do not depend on CMA as the backend allocator. In fact the first
+> bug fix to ensure the cma-helpers work correctly with an IOMMU backend
+> appeared in 2014. However currently the documentation for
+> drm_gem_cma_create() talks about "a contiguous chunk of memory" without
+> making clear which address space it will be a contiguous part of.
+> Additionally the CMA introduction is actively misleading because it only
+> contemplates the CMA backend.
 > 
-> Argh! indeed, we spoke about using div_u64_rem() at the beginning and
-> that one vanished over time. Will respin it.
+> This matters because when the device accesses the bus through an IOMMU
+> (and don't use the CMA backend) then the allocated memory is contiguous
+> only in the IOVA space. This is a significant difference compared to the
+> CMA backend and the behaviour can be a surprise even to someone who does
+> a reasonable level of code browsing (but doesn't find all the relevant
+> function pointers ;-) ).
+> 
+> Improve the kernel doc comments accordingly.
+> 
+> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-I fixed it, built it for i386 and x86_64, tested it on x86_64 and confirmed
-that it still does what I need. The change is only this:
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
--       offset = (READ_ONCE(table_perturb[index]) + (port_offset >> 32)) % remaining;
-+       div_u64_rem(READ_ONCE(table_perturb[index]) + (port_offset >> 32), remaining, &offset);
+> ---
+> 
+> Notes:
+>     RESEND is unaltered but rebased on v5.18-rc3.
+>     
+>     Changes in v3:
+>     - Rebased on v5.17-rc2
+>     - Minor improvements to wording.
+>     
+>     Changes in v2:
+>     - Oops. I did a final proof read and accidentally committed these
+>       changes as a seperate patch. This means that v1 contains only
+>       one tenth of the actual patch. This is fixed in v2. Many apologies
+>       for the noise!
+> 
+>  drivers/gpu/drm/drm_gem_cma_helper.c | 39 +++++++++++++++++++++-------
+>  1 file changed, 29 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm_gem_cma_helper.c
+> index f36734c2c9e1..42abee9a0f4f 100644
+> --- a/drivers/gpu/drm/drm_gem_cma_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_cma_helper.c
+> @@ -26,12 +26,22 @@
+>  /**
+>   * DOC: cma helpers
+>   *
+> - * The Contiguous Memory Allocator reserves a pool of memory at early boot
+> - * that is used to service requests for large blocks of contiguous memory.
+> + * The DRM GEM/CMA helpers are a means to provide buffer objects that are
+> + * presented to the device as a contiguous chunk of memory. This is useful
+> + * for devices that do not support scatter-gather DMA (either directly or
+> + * by using an intimately attached IOMMU).
+>   *
+> - * The DRM GEM/CMA helpers use this allocator as a means to provide buffer
+> - * objects that are physically contiguous in memory. This is useful for
+> - * display drivers that are unable to map scattered buffers via an IOMMU.
+> + * Despite the name, the DRM GEM/CMA helpers are not hardwired to use the
+> + * Contiguous Memory Allocator (CMA).
+> + *
+> + * For devices that access the memory bus through an (external) IOMMU then
+> + * the buffer objects are allocated using a traditional page-based
+> + * allocator and may be scattered through physical memory. However they
+> + * are contiguous in the IOVA space so appear contiguous to devices using
+> + * them.
+> + *
+> + * For other devices then the helpers rely on CMA to provide buffer
+> + * objects that are physically contiguous in memory.
+>   *
+>   * For GEM callback helpers in struct &drm_gem_object functions, see likewise
+>   * named functions with an _object_ infix (e.g., drm_gem_cma_object_vmap() wraps
+> @@ -111,8 +121,14 @@ __drm_gem_cma_create(struct drm_device *drm, size_t size, bool private)
+>   * @drm: DRM device
+>   * @size: size of the object to allocate
+>   *
+> - * This function creates a CMA GEM object and allocates a contiguous chunk of
+> - * memory as backing store.
+> + * This function creates a CMA GEM object and allocates memory as backing store.
+> + * The allocated memory will occupy a contiguous chunk of bus address space.
+> + *
+> + * For devices that are directly connected to the memory bus then the allocated
+> + * memory will be physically contiguous. For devices that access through an
+> + * IOMMU, then the allocated memory is not expected to be physically contiguous
+> + * because having contiguous IOVAs is sufficient to meet a devices DMA
+> + * requirements.
+>   *
+>   * Returns:
+>   * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
+> @@ -162,9 +178,12 @@ EXPORT_SYMBOL_GPL(drm_gem_cma_create);
+>   * @size: size of the object to allocate
+>   * @handle: return location for the GEM handle
+>   *
+> - * This function creates a CMA GEM object, allocating a physically contiguous
+> - * chunk of memory as backing store. The GEM object is then added to the list
+> - * of object associated with the given file and a handle to it is returned.
+> + * This function creates a CMA GEM object, allocating a chunk of memory as
+> + * backing store. The GEM object is then added to the list of object associated
+> + * with the given file and a handle to it is returned.
+> + *
+> + * The allocated memory will occupy a contiguous chunk of bus address space.
+> + * See drm_gem_cma_create() for more details.
+>   *
+>   * Returns:
+>   * A struct drm_gem_cma_object * on success or an ERR_PTR()-encoded negative
+> 
+> base-commit: b2d229d4ddb17db541098b83524d901257e93845
+> --
+> 2.35.1
+> 
 
-I'll send a v2 series in a few hours if there are no more comments.
 
-Willy

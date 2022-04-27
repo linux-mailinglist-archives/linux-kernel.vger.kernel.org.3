@@ -2,235 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B47B5113E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48E15113ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239693AbiD0I4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S233922AbiD0I5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiD0I4V (ORCPT
+        with ESMTP id S231565AbiD0I5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:56:21 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1D6BF509
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:53:09 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f7bb893309so10612407b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9kpONJ60lFyzwttZOfPhud+fUawgsiXiLYKJfmKmmSQ=;
-        b=dHn7N4VTH9EeRqwCJ6CO8Afiuya47AhpyLFd7zYglpPPq0QHt+k0oaIwBjd27+r9Rv
-         gwVVcJSuygTMyCNL/DpfDmgRcuKIwoQYygj+UBYUSMUkmiFtsOW0b/Sy/k2pwRidXORl
-         JpgyMGSws4gZUfj+mxrd/vN0FXd5lKyiH0j/KBPYo2IwyOcfGZ8jK5bxzAriS2NoeKap
-         C66d9ajEkNRph59GWqVBOfmHqHIr8oPzcQ5scTPHdfv8VbeikKsrZ2uzRt0PzlnkTatN
-         vRKosA5UqcNOMQ3SkoDdPGhpGiumfK2wCnOu4FQpLl8l5HhDFi4Keiiwc8LbWNrRgUt1
-         voXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9kpONJ60lFyzwttZOfPhud+fUawgsiXiLYKJfmKmmSQ=;
-        b=fUcrxSNRJ4100HPLS7fqLDgfRa7C1A2AYvQJmMed59edHby99fVaWxxqzXvIDmEs/O
-         o7xTCa75EK2fpIckuC5Awc7TgaThuf5GR/S072dcwSIcT/tqOp7u94gjhdJKWaeJdV5D
-         ZuRJDUA5v+I2gHT4TCCY4pUZeIbC/e3hpzXkGA9hBXxIa/wttcQq/8oCI1Xq4rrZ/rBL
-         W1DjMJMgkSTHi0tgaPIyD6VXl0l8j9e7pHytTq1J/mPRTCp2xVIPqFVEwR3asG4e1TYi
-         JvAiYJY7LAGM9y3P59cKEE0PbP6nR4bavJuOz06yiwwqwEteI3RDsU3HBycDnfCM8sEN
-         A9aQ==
-X-Gm-Message-State: AOAM530HbL45bmOd/rJKIKmtp8hD4Y5vXqwmZnXf9lNnYXXOOHBHv7PB
-        +MIwD3YE9Ai8id1VsBrBu9jy4yakVVfkAK2tOl6xwaRGauirvA==
-X-Google-Smtp-Source: ABdhPJyCcVWFnDByJpKfuEYYwe3XTMInjz482TE+AZk50r1lgwfc1XLyIqwuCDgCZKcV+K3cPkTlRK4GLIsNZL8vqo8=
-X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
- u133-20020a81478b000000b002eada8c5c21mr26812977ywa.189.1651049588081; Wed, 27
- Apr 2022 01:53:08 -0700 (PDT)
+        Wed, 27 Apr 2022 04:57:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F95C3EAE
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:54:07 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpCGL2FgtzhYhM;
+        Wed, 27 Apr 2022 16:53:46 +0800 (CST)
+Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 16:54:04 +0800
+Received: from [10.174.177.133] (10.174.177.133) by
+ dggpemm500015.china.huawei.com (7.185.36.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 16:54:03 +0800
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
+        <xiexiuqi@huawei.com>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <zengshun.wu@outlook.com>
+References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
+ <20220316100132.244849-4-bobo.shaobowang@huawei.com>
+ <YmFXrBG5AmX3+4f8@lakrids> <20220421100639.03c0d123@gandalf.local.home>
+From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
+Message-ID: <57b0c058-963b-fa9e-453c-b29165e13b45@huawei.com>
+Date:   Wed, 27 Apr 2022 16:54:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-References: <20220426081734.509314186@linuxfoundation.org>
-In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 27 Apr 2022 14:22:56 +0530
-Message-ID: <CA+G9fYssoW_r81q0Z8W2WwcYO_2MYvQv1BSNpUqFKQG_V3zMNA@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/43] 4.14.277-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220421100639.03c0d123@gandalf.local.home>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.133]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500015.china.huawei.com (7.185.36.181)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 13:55, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+
+ÔÚ 2022/4/21 22:06, Steven Rostedt Ð´µÀ:
+> On Thu, 21 Apr 2022 14:10:04 +0100
+> Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> This is the start of the stable review cycle for the 4.14.277 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>> On Wed, Mar 16, 2022 at 06:01:31PM +0800, Wang ShaoBo wrote:
+>>> From: Cheng Jian <cj.chengjian@huawei.com>
+>>>
+>>> When tracing multiple functions customly, a list function is called
+>>> in ftrace_(regs)_caller, which makes all the other traced functions
+>>> recheck the hash of the ftrace_ops when tracing happend, apparently
+>>> it is inefficient.
+>> ... and when does that actually matter? Who does this and why?
+> I don't think it was explained properly. What dynamically allocated
+> trampolines give you is this.
 >
-> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
-> Anything received after that time might be too late.
+> Let's say you have 10 ftrace_ops registered (with bpf and kprobes this can
+> be quite common). But each of these ftrace_ops traces a function (or
+> functions) that are not being traced by the other ftrace_ops. That is, each
+> ftrace_ops has its own unique function(s) that they are tracing. One could
+> be tracing schedule, the other could be tracing ksoftirqd_should_run
+> (whatever).
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.277-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
+> Without this change, because the arch does not support dynamically
+> allocated trampolines, it means that all these ftrace_ops will be
+> registered to the same trampoline. That means, for every function that is
+> traced, it will loop through all 10 of theses ftrace_ops and check their
+> hashes to see if their callback should be called or not.
 >
-> thanks,
+> With dynamically allocated trampolines, each ftrace_ops will have their own
+> trampoline, and that trampoline will be called directly if the function
+> is only being traced by the one ftrace_ops. This is much more efficient.
 >
-> greg k-h
+> If a function is traced by more than one ftrace_ops, then it falls back to
+> the loop.
+>
+> -- Steve
+> .
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+yes, this explanation is easier to understand, I will update commit 
+description according to this.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-- Wang ShaoBo
 
-## Build
-* kernel: 4.14.277-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: 29ecac2778fbc1ecdf9ac5ae9a564fd0a487eb5f
-* git describe: v4.14.276-44-g29ecac2778fb
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.276-44-g29ecac2778fb
-
-## Test Regressions (compared to v4.14.276)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.276)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.276)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.276)
-No metric fixes found.
-
-## Test result summary
-total: 83762, pass: 66336, fail: 1152, skip: 13814, xfail: 2460
-
-## Build Summary
-* arm: 280 total, 270 passed, 10 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 60 total, 16 passed, 44 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

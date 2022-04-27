@@ -2,154 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FCA512789
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A153C512792
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237822AbiD0XfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 19:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
+        id S229936AbiD0Xjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 19:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiD0Xez (ORCPT
+        with ESMTP id S229969AbiD0Xju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 19:34:55 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7570124BE0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651102303; x=1682638303;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gLrzp6duhkPkV6taMyjQM6C7cL2l+fGNVwimG4CXPYA=;
-  b=UxwxbAqsimwtwGRnt2pWvurMD3DKCoV4txQE4Qikvpz85X7zOij+G24A
-   dYV++q3vdl/S2zGz6mPwlw3o1/RtH7HvwCa8ouDXOzPy5ELiBfrGDraa5
-   0IEkT469+4ei67t8VBwIsBWL/yl4idrCL8X5+UMrjkWDN7PpE8s48Oelk
-   dKvPifu1CsGXUvSNt9jqMqul96gf8TVr+kGYhrqXORkDwY1Ul++seufeB
-   A/JxKLXZLOAx/MnYVHvYl+cijAIq2sAxagbSzApTmD7WDYoJAKe05MPUl
-   XYGG4e2PKccIJv7SwaS6GVdic4zJzXC/F+hBMZqGIb/GzXxXUbWLc+b4N
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,294,1643644800"; 
-   d="scan'208";a="197843992"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Apr 2022 07:31:41 +0800
-IronPort-SDR: u5zRuMAHLRXyvomKiQ/A2Iidcd56TFdqTVBQmQTRb4Ch4keX4cjmaiiZb26t+Hm9c0D15zmJ0G
- xVoCotHvbYT9A+kjqOBo4xLapn9dBtxncwCIid8EUmPD4q3K5QQ2KNWnXDRPdlTZsgr3B8t40U
- /FBmAy0ANxRrNUFw7KMpieJmk2PTdquzSALt7CZhNCNwsvBz9Ywmr913BQ7kwWUq5C/e6ljlKc
- 11kffB9YdCSZY1vKcJj6FdY+uuMmUvd5oBu8wR6nS3FvdV/9bQm1hbehWGf062kKGExihuIb1g
- Jg/2Z0W84eJ0watfW6pKBP+D
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 16:01:50 -0700
-IronPort-SDR: g8ONq31hVr5ZR9+jpOUGm0xDQDqFKLkeoj8UjaIII0lLAFM1RE55MRctFc8W/q/iFcprb0xxbz
- on7XKVTdIz15VjMAlcQcqbdAITZJPjuS1bCHf9Uy6jtrV7SI5uVgDYpuIhlJmu0DVQB1cFfUeO
- UDAbj7lZB7Q7r7lPpuCLWqQBxPt9QxsZNc3ye0kXNGeooDD4muH2jxAEWjcg+S64J3BWOku5L6
- 976t52EvVVYakl7NKXJ+bgBqHHDB5IMy5L8RK8P5ekp2oBisumVtZYrkLpc4Gzaoyf+g/Wdr+j
- 5kI=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 16:31:41 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KpZlJ5Lpjz1SHwl
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:31:40 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651102299; x=1653694300; bh=gLrzp6duhkPkV6taMyjQM6C7cL2l+fGNVwi
-        mG4CXPYA=; b=PdTQSxxj3EOLpYEGcnBYVKUPguXiBCCpr5ymI7+k28TTGz3mfSs
-        KbvC8k3lhS5m6XprU6x/phnhFmDH5Zdpl9mtNhPvxWLwoLZA79RJ39tzK0T66DJg
-        cQ1J9s5aD6mTMKCIx7SKO/H0j3TVPipsOior8762yACFqgZPSPwSaryNVkrWfY9P
-        vFK6Qn1Dlh6ebNdzrLYEPjfHxjH1TIuA8nWpktFuNYhAu/AUjrulRyzZmZH+ftr1
-        f82lyX/KB3APT/Gb/yPBy31svE2vEO1vB1f3Yyd5uBMXra+42NUkawZ+Cd66ga7/
-        bklmIOigH4dlDMngOOGM9ReZ0ePeHAN6LGA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9T_Ych45457I for <linux-kernel@vger.kernel.org>;
-        Wed, 27 Apr 2022 16:31:39 -0700 (PDT)
-Received: from [10.225.163.27] (unknown [10.225.163.27])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KpZlB5PzJz1Rvlc;
-        Wed, 27 Apr 2022 16:31:34 -0700 (PDT)
-Message-ID: <652c33b5-1d85-e356-05b9-7bd84b768143@opensource.wdc.com>
-Date:   Thu, 28 Apr 2022 08:31:33 +0900
+        Wed, 27 Apr 2022 19:39:50 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC0F49266
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:36:33 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id i62so2603041pgd.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FL5RmqjsnS96RItXhleCXY3INxI4L38U8zTk4H4kbRM=;
+        b=Fnjww4kTfxvDYxU1OPnCUQ05Dg7DEB2VNmgBa3iIVs1YziXLL5NPY22PxqWXh7lRlB
+         8vuXugqSz74/dVRL6IV85uoBkg1Axric6AIQ3KCnilEj1X6Rj1CCpiY1X8QSqFEDtLjL
+         x0EE+oQBe8Dvrs0rULZGjGplV+5cDIqQ7DQh2uofwdi1gqfXibZiQZSWhIX6812SQDV0
+         ooiysKmKTdtVuGN7sNGxHt52RH6aaUff+q46TbfeovpbaLTjLAzpyfjWwLcRjtDoU3Za
+         xFMGzikPBEx43dvuCJzWa0IU2IwO8irzQo5Ik4kcOU1/KW/jP+bE1ULp+1XD6wXL12nD
+         7wHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FL5RmqjsnS96RItXhleCXY3INxI4L38U8zTk4H4kbRM=;
+        b=d+SmtSNGfFmh37McKvPtvS5mwnDn7TheQ2M9ddLrXvXoiZRRQUa/rtvPJqRuqgR5Ex
+         bcRbQiKOoFaM13rpnw5Y5Z5TA/fkYE9frWykrsyi2/yJOHBZ6v7tJD5K1qDAnO/1W2GW
+         QKtrL0XVHqnPO+a0zM4PFUOz/G+j/62gRTUG1pVxf5uFrLCaxQAUOJIsO2hBp8f7WyVM
+         jErtSMwny8YGwGZx0WjxAmvtJ456psaJHTnXnEOouVkpSv040cOY13zKfXaAcsZORBo9
+         E+sraRsk/GejC7PJVhHZDTwTHND7prN/yipoX7+GwvAxYlbbrSIg5oSkAbLwyCPyYEGc
+         sCoA==
+X-Gm-Message-State: AOAM532fX4kwRY9PceAgDgv85rr1H9zXFxQX5tzBUeiPkuG6yeBLuIby
+        GwVoJXuM1QIdPhrnBzTdvUen/brzjwiDSa/DG9IXg0x87M4=
+X-Google-Smtp-Source: ABdhPJy4UALwll6c0xGRrMjr2HG+8qWZYoDKSENmN8Qp6glp0VyRbdy5DcsshId0F3jOAIOJmkP3RA8JC+4vWUV+Y8A=
+X-Received: by 2002:a63:9502:0:b0:386:3916:ca8e with SMTP id
+ p2-20020a639502000000b003863916ca8emr25446320pgd.357.1651102592948; Wed, 27
+ Apr 2022 16:36:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 03/16] block: add bdev_zone_no helper
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, jaegeuk@kernel.org,
-        axboe@kernel.dk, snitzer@kernel.org, hch@lst.de, mcgrof@kernel.org,
-        naohiro.aota@wdc.com, sagi@grimberg.me, dsterba@suse.com,
-        johannes.thumshirn@wdc.com
-Cc:     linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        clm@fb.com, gost.dev@samsung.com, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, josef@toxicpanda.com,
-        jonathan.derrick@linux.dev, agk@redhat.com, kbusch@kernel.org,
-        kch@nvidia.com, linux-nvme@lists.infradead.org,
-        dm-devel@redhat.com, bvanassche@acm.org, jiangbo.365@bytedance.com,
-        linux-fsdevel@vger.kernel.org, matias.bjorling@wdc.com,
-        linux-block@vger.kernel.org
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160259eucas1p25aab0637fec229cd1140e6aa08678f38@eucas1p2.samsung.com>
- <20220427160255.300418-4-p.raghav@samsung.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220427160255.300418-4-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220427160016.144237-1-hannes@cmpxchg.org> <20220427160016.144237-5-hannes@cmpxchg.org>
+ <Ymmnrkn0mSWcuvmH@google.com> <YmmznQ8AO5RLxicA@cmpxchg.org> <Ymm3WpvJWby4gaD/@cmpxchg.org>
+In-Reply-To: <Ymm3WpvJWby4gaD/@cmpxchg.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 27 Apr 2022 16:36:22 -0700
+Message-ID: <CALvZod5LBi5V6q1uHUTSNnLz64HbD499a+OZvdYsUcmcWSt8Jg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 01:02, Pankaj Raghav wrote:
-> Many places in the filesystem for zoned devices open code this function
-> to find the zone number for a given sector with power of 2 assumption.
-> This generic helper can be used to calculate zone number for a given
-> sector in a block device
-> 
-> This helper internally uses blk_queue_zone_no to find the zone number.
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  include/linux/blkdev.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index f8f2d2998afb..55293e0a8702 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -1392,6 +1392,15 @@ static inline bool bdev_zone_aligned(struct block_device *bdev, sector_t sec)
->  	return false;
->  }
->  
-> +static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
-> +{
-> +	struct request_queue *q = bdev_get_queue(bdev);
-> +
-> +	if (q)
+On Wed, Apr 27, 2022 at 3:32 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Wed, Apr 27, 2022 at 05:20:31PM -0400, Johannes Weiner wrote:
+> > On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
+> > > Hi Johannes,
+> > >
+> > > On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
+> > > > Currently it requires poking at debugfs to figure out the size and
+> > > > population of the zswap cache on a host. There are no counters for
+> > > > reads and writes against the cache. As a result, it's difficult to
+> > > > understand zswap behavior on production systems.
+> > > >
+> > > > Print zswap memory consumption and how many pages are zswapped out in
+> > > > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
+> > > >
+> > > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > > > ---
+> > > >  fs/proc/meminfo.c             |  7 +++++++
+> > > >  include/linux/swap.h          |  5 +++++
+> > > >  include/linux/vm_event_item.h |  4 ++++
+> > > >  mm/vmstat.c                   |  4 ++++
+> > > >  mm/zswap.c                    | 13 ++++++-------
+> > > >  5 files changed, 26 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+> > > > index 6fa761c9cc78..6e89f0e2fd20 100644
+> > > > --- a/fs/proc/meminfo.c
+> > > > +++ b/fs/proc/meminfo.c
+> > > > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+> > > >
+> > > >   show_val_kb(m, "SwapTotal:      ", i.totalswap);
+> > > >   show_val_kb(m, "SwapFree:       ", i.freeswap);
+> > > > +#ifdef CONFIG_ZSWAP
+> > > > + seq_printf(m,  "Zswap:          %8lu kB\n",
+> > > > +            (unsigned long)(zswap_pool_total_size >> 10));
+> > > > + seq_printf(m,  "Zswapped:       %8lu kB\n",
+> > > > +            (unsigned long)atomic_read(&zswap_stored_pages) <<
+> > > > +            (PAGE_SHIFT - 10));
+> > > > +#endif
+> > >
+> > > I agree it would be very handy to have the memory consumption in meminfo
+> > >
+> > > https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
+> > >
+> > > If we really go this Zswap only metric instead of general term
+> > > "Compressed", I'd like to post maybe "Zram:" with same reason
+> > > in this patchset. Do you think that's better idea instead of
+> > > introducing general term like "Compressed:" or something else?
+> >
+> > I'm fine with changing it to Compressed. If somebody cares about a
+> > more detailed breakdown, we can add Zswap, Zram subsets as needed.
+>
+> It does raise the question what to do about cgroup, though. Should the
+> control files (memory.zswap.current & memory.zswap.max) apply to zram
+> in the future? If so, we should rename them, too.
+>
+> I'm not too familiar with zram, maybe you can provide some
+> background. AFAIU, Google uses zram quite widely; all the more
+> confusing why there is no container support for it yet.
+>
+> Could you shed some light?
+>
 
-q is never NULL. So this can be simplified to:
+I can shed light on the datacenter workloads. We use cgroup (still on
+v1) and zswap. For the workloads/applications, the swap (or zswap) is
+transparent in the sense that they are charged exactly the same
+irrespective of how much their memory is zswapped-out. Basically the
+applications see the same usage which is actually v1's
+memsw.usage_in_bytes. We dynamically increase the swap size if it is
+low, so we are not really worried about one job hogging the swap
+space.
 
-	return blk_queue_zone_no(bdev_get_queue(bdev), sector);
-
-> +		return blk_queue_zone_no(q, sec);
-> +	return 0;
-> +}
-> +
->  static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
->  {
->  	struct request_queue *q = bdev_get_queue(bdev);
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Regarding stats we actually do have them internally representing
+compressed size and number of pages in zswap. The compressed size is
+actually used for OOM victim selection. The memsw or v2's swap usage
+in the presence of compression based swap does not actually tell how
+much memory can potentially be released by evicting a job. For example
+if there are two jobs 'A' and 'B'. Both of them have 100 pages
+compressed but A's 100 pages are compressed to let's say 10 pages
+while B's 100 pages are compressed to 70 pages. It is preferable to
+kill B as that will release 70 pages. (This is a very simplified
+explanation of what we actually do).

@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EBE510CF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 01:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE6C510CFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356205AbiD0ABm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S1356289AbiD0AEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiD0ABk (ORCPT
+        with ESMTP id S231330AbiD0AEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:01:40 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054885DA1C;
-        Tue, 26 Apr 2022 16:58:31 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id C6C17320010B;
-        Tue, 26 Apr 2022 19:58:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 26 Apr 2022 19:58:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1651017507; x=1651103907; bh=BtMmL7n/JRGJ14Fmmq/dwVsCTg2ZxcEpq+r
-        qW3S1p3A=; b=l/pSzQk4/Td483IRhu1k7tJ1TVQ232yVN5Dup90RCvvWdiwl7qS
-        tEV+CYktZmkdtNEgHzPYugpqqNegKQg5iwBqPA9yrqJgpXEbuU+dOOkxFVeZGec+
-        t6AgtgVI0Z7Yj3C5bqVsTiIseTcGa+VHYrLflHO71MP45hqmhbiQMHVzf6K4Ouc2
-        +XqDsFaZCxYJD5N6qIMSDlhDYzaqSeU3FONhon+UcrfH2Gy4bfXuCHRj6aGwDH70
-        uTWOhqN9WVM8XKKPCAvth+KP3Mo8gl5/uXsCvikSF1/yrErqTYstKWjj6O1PL4XT
-        3W5MytOZQQuvTKl6G+7eFPss6D4wq5NwEeg==
-X-ME-Sender: <xms:IodoYuFw54edr7sfwoPBUMp_SSCTkN9LpUN0xKzgmvbahtbrXOxDhg>
-    <xme:IodoYvVRV0IpGIAGX5uoe4gqFoMkglqDzj0sOMl-YUyRVqAHn6BKHdEEtNvaLtFYv
-    xAIzBhprYRcZw>
-X-ME-Received: <xmr:IodoYoJbDK65vnlGW8r5Y0eZsdBYAQF59YkN6jn3pVFmlRf0CdcidZLN4NGndrysQsdv-27d>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeggddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepofgrrhgvkhcu
-    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
-    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepkedvjefg
-    hefhteelkeeiveeihfektdegueehhfehvedvffehtedthfdtgfeufeelnecuffhomhgrih
-    hnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfr
-    rghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghksehinhhvihhsihgslhgvthhhih
-    hnghhslhgrsgdrtghomh
-X-ME-Proxy: <xmx:IodoYoEuNZIZmlaEHxSQrBCIiBHGsLAU6m6q9usPLfcU-hI4ddR0pg>
-    <xmx:IodoYkV3nAE6sRw6vEV4043rVz_Yye_-9GQlvJRHWdZrvfHvh8-I5w>
-    <xmx:IodoYrNiSY3O0pwr97lRuhLb3H9-urESbKAEQFY8BbtTVr4qUQBxpA>
-    <xmx:I4doYglaXAIgwcBt1yKP2oeeaon2j4egYHnTCG4xeyNwFd_6L2U7gQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Apr 2022 19:58:24 -0400 (EDT)
-From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, stable@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Candice Li <candice.li@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Jingwen Chen <Jingwen.Chen2@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Victor Skvortsov <victor.skvortsov@amd.com>,
-        Bokun Zhang <bokun.zhang@amd.com>,
-        Bernard Zhao <bernard@vivo.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS)
-Subject: [PATCH] drm/amdgpu: do not use passthrough mode in Xen dom0
-Date:   Wed, 27 Apr 2022 01:57:15 +0200
-Message-Id: <20220426235718.1634359-1-marmarek@invisiblethingslab.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 26 Apr 2022 20:04:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCFE177731;
+        Tue, 26 Apr 2022 17:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651017690; x=1682553690;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yJVAQLGQpmSEwTIQy0c+wdcVPv3sKrYh2NRxvL5xBC0=;
+  b=lph9hf2Nld+3oexIUm65IbGXk8OTlYnnQ8k05vx6lB5wQEEZvtaYdCIZ
+   YbVYTJ6Cp/Kx2MhWbyT25BNZYE7XRpVQVVHuhzUbuXsn4QfM8QDFScnXb
+   ocpyz5OLP6O7sH9RUZBtji255taXEz6UCt2VyAHQzm4f+Z/EKCQE3li5C
+   hwgVnlzUi4o15LqQ75ys9RJXTYMFpBXShCX7ZS3Xb10rq04kZxcQpK6fF
+   4vh/ae8aSFmPS9IUbqear23i/+UJC/bzJ+Ww1g8ga3vvJ795S4sGvCLNx
+   wwQQe8wydB796eZ8LAEDa7WrREbwi832bZO1ROpKNStmYmhIgTdUQBqDA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="265283244"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="265283244"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 17:01:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="564824694"
+Received: from ssaride-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.0.221])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 17:01:27 -0700
+Message-ID: <98af78402861b1982607c5fd14b0c89403c042a6.camel@intel.com>
+Subject: Re: [PATCH v3 05/21] x86/virt/tdx: Detect P-SEAMLDR and TDX module
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Wed, 27 Apr 2022 12:01:25 +1200
+In-Reply-To: <104a6959-3bd4-1e75-5e3d-5dc3ef025ed0@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <b9f4d4afd244d685182ce9ab5ffdd0bf245be6e2.1649219184.git.kai.huang@intel.com>
+         <104a6959-3bd4-1e75-5e3d-5dc3ef025ed0@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While technically Xen dom0 is a virtual machine too, it does have
-access to most of the hardware so it doesn't need to be considered a
-"passthrough". Commit b818a5d37454 ("drm/amdgpu/gmc: use PCI BARs for
-APUs in passthrough") changed how FB is accessed based on passthrough
-mode. This breaks amdgpu in Xen dom0 with message like this:
+On Tue, 2022-04-26 at 13:56 -0700, Dave Hansen wrote:
+> On 4/5/22 21:49, Kai Huang wrote:
+> > The P-SEAMLDR (persistent SEAM loader) is the first software module that
+> > runs in SEAM VMX root, responsible for loading and updating the TDX
+> > module.  Both the P-SEAMLDR and the TDX module are expected to be loaded
+> > before host kernel boots.
+> 
+> Why bother with the P-SEAMLDR here at all?  The kernel isn't loading the
+> TDX module in this series.  Why not just call into the TDX module directly?
 
-    [drm:dc_dmub_srv_wait_idle [amdgpu]] *ERROR* Error waiting for DMUB idle: status=3
+It's not absolutely needed in this series.  I choose to detect P-SEAMLDR because
+detecting it can also detect the TDX module, and eventually we will need to
+support P-SEAMLDR because the TDX module runtime update uses P-SEAMLDR's
+SEAMCALL to do that.
 
-While the reason for this failure is unclear, the passthrough mode is
-not really necessary in Xen dom0 anyway. So, to unbreak booting affected
-kernels, disable passthrough mode in this case.
+Also, even for this series, detecting the P-SEAMLDR allows us to provide the P-
+SEAMLDR information to user at a basic level in dmesg:
 
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1985
-Fixes: b818a5d37454 ("drm/amdgpu/gmc: use PCI BARs for APUs in passthrough")
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Cc: stable@vger.kernel.org
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+[..] tdx: P-SEAMLDR: version 0x0, vendor_id: 0x8086, build_date: 20211209,
+build_num 160, major 1, minor 0
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-index a025f080aa6a..5e3756643da3 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-@@ -24,6 +24,7 @@
- #include <linux/module.h>
- 
- #include <drm/drm_drv.h>
-+#include <xen/xen.h>
- 
- #include "amdgpu.h"
- #include "amdgpu_ras.h"
-@@ -710,7 +711,8 @@ void amdgpu_detect_virtualization(struct amdgpu_device *adev)
- 		adev->virt.caps |= AMDGPU_SRIOV_CAPS_ENABLE_IOV;
- 
- 	if (!reg) {
--		if (is_virtual_machine())	/* passthrough mode exclus sriov mod */
-+		/* passthrough mode exclus sriov mod */
-+		if (is_virtual_machine() && !xen_initial_domain())
- 			adev->virt.caps |= AMDGPU_PASSTHROUGH_MODE;
- 	}
- 
+This may be useful to users, but it's not a hard requirement for this series.
+
+
 -- 
-2.35.1
+Thanks,
+-Kai
+
 

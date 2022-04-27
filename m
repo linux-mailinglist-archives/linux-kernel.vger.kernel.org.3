@@ -2,143 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2A5511A81
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2702E5119A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbiD0OLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S237256AbiD0OLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237258AbiD0OLK (ORCPT
+        with ESMTP id S237215AbiD0OLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:11:10 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA70E4EA29;
-        Wed, 27 Apr 2022 07:07:53 -0700 (PDT)
+        Wed, 27 Apr 2022 10:11:36 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89014BBA1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:08:24 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id r9so1579103pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651068474; x=1682604474;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cblFLWU9Obld6XdJ/tWy2TbBqCQ/EgkBLiVDV/EwnE8=;
-  b=BCyogB2zQwYVpaI4Wyg/ClTnpnRTZnT7H4OgDKJ3+osds0vYTK7z7c6P
-   gQz4UN74uVemaXzrPpSfpv/CZ1V9O+FH9zZZiyp0heb2IkS5gIqmBYTrk
-   W6ExBO5Z1HVx/QuuSgSRvzMw0ULWIyCD10ZAMWfm46EIHp3MYWswnEfkV
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Apr 2022 07:07:53 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:07:52 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 27 Apr 2022 07:07:52 -0700
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 27 Apr 2022 07:07:51 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <kys@microsoft.com>, <haiyangz@microsoft.com>,
-        <sthemmin@microsoft.com>, <wei.liu@kernel.org>,
-        <decui@microsoft.com>, <lorenzo.pieralisi@arm.com>,
-        <robh@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>
-CC:     <bjorn.andersson@linaro.org>, <linux-hyperv@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [PATCH] PCI: hv: Fix hv_arch_irq_unmask() for multi-MSI
-Date:   Wed, 27 Apr 2022 08:07:33 -0600
-Message-ID: <1651068453-29588-1-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wcKBX/x7aHbwy2eQa/0b3oj/jc0z2fTHrAAn+gTDCRc=;
+        b=cbQDMg9fNNcB4Lp8zQBGRiZIVuDVCRQBnuWm0ShFQvBTPTyKeBHwxnZEZ2Qm5ge2V/
+         /A3xdNy/M1a5/U74cSqRRBxYfwVLFs8ZmroqKiPQyvWubn5q5GZMqkcDZ1Jkwu4tNREX
+         VxngRXDJgMRyrMVbJP6lhs/vPVcl/H6HPtEryQUcGXDOlNpB0UTjLaIy1tUxHDGnjN7f
+         VNNA3TYpSs5UOPWE7zg0KYHTUdCTZOQhzKnw5gZ1nNqN1FZnO8O1RPg5alkEfgyFRgkK
+         hObGk09T5NHAiQ6nCJxlaR3/hWY60yA4oN+4DyoYk9I0A+NnhBS8f+n1MCMfe+OY2K0p
+         NulA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wcKBX/x7aHbwy2eQa/0b3oj/jc0z2fTHrAAn+gTDCRc=;
+        b=eVdvDuy2da6Z8LDIpPF+9h+ATjSgqdn3BF+Vq+mEXGhQ1ZVlUk9yGkpyTeTp4RwgmW
+         jXQdSCWP43RyVRPffww7HcbS0DTC7c5NB28ZX4TLSOIxQcZA2aJf5EMp8bHSuTCqFj3m
+         rw796aBARHkJAQlCshza8UXEIhlF3Twz9joX8fmxHDT8lj1H+CJqbQUGpcE2Ek5xFntD
+         nE3+CMaQoa+19tOklsb/0Ak57W8vDFI48gTBKI7W3eXIAPZK4Qp6RpQhY8xHBlUweHgO
+         Tr5+1PEuEoJlsM46DUwN3bA4hjBUT1qF13VTweVaK9eQD10bcBm5cwWOQNRr4QljbSUR
+         TY3Q==
+X-Gm-Message-State: AOAM533Abl7ypgKzxhdV3pdboLssUgyrKOSIPQuXVFP8ySHD5pykwQs4
+        Jf36Bfn4XwevyliVx9klL4Zqwg==
+X-Google-Smtp-Source: ABdhPJxMFkyeA50O/t8Mv2R7XyttGzuDp/Jy9gQJ5gEhceX+lGxbN7XZKDrSvie2PtooYYn/Uez/vQ==
+X-Received: by 2002:a17:902:8e81:b0:158:fd26:1b95 with SMTP id bg1-20020a1709028e8100b00158fd261b95mr28443970plb.142.1651068504045;
+        Wed, 27 Apr 2022 07:08:24 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z23-20020a17090a609700b001d93118827asm2969315pji.57.2022.04.27.07.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:08:23 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 14:08:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before
+ lookup_address_in_mm()
+Message-ID: <YmlOVNAQodY+5p/N@google.com>
+References: <YkHRYY6x1Ewez/g4@google.com>
+ <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
+ <YkH7KZbamhKpCidK@google.com>
+ <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
+ <Ymg1lzsYAd6v/vGw@google.com>
+ <CAL715WK8-cOJWK+iai=ygdOTzPb-QUvEwa607tVEkmGOu3gyQA@mail.gmail.com>
+ <YmiZcZf9YXxMVcfx@google.com>
+ <CAL715W+nMyF_f762Qif8ZsiOT8vgxXJ3Rm8EjgG8A=b7iM-cbg@mail.gmail.com>
+ <YmiczBawg5s1z2DN@google.com>
+ <CAL715W+iZ+uwctT80pcsBrHsF96zWZMAfeVgvWcvvboLz0MkaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL715W+iZ+uwctT80pcsBrHsF96zWZMAfeVgvWcvvboLz0MkaQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the multi-MSI case, hv_arch_irq_unmask() will only operate on the first
-MSI of the N allocated.  This is because only the first msi_desc is cached
-and it is shared by all the MSIs of the multi-MSI block.  This means that
-hv_arch_irq_unmask() gets the correct address, but the wrong data (always
-0).
+On Tue, Apr 26, 2022, Mingwei Zhang wrote:
+> On Tue, Apr 26, 2022 at 6:30 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Tue, Apr 26, 2022, Mingwei Zhang wrote:
+> > > On Tue, Apr 26, 2022 at 6:16 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > >
+> > > > On Tue, Apr 26, 2022, Mingwei Zhang wrote:
+> > > > > > I completely agree that lookup_address() and friends are unnecessarily fragile,
+> > > > > > but I think that attempting to harden them to fix this KVM bug will open a can
+> > > > > > of worms and end up delaying getting KVM fixed.
+> > > > >
+> > > > > So basically, we need to:
+> > > > >  - choose perf_get_page_size() instead of using any of the
+> > > > > lookup_address*() in mm.
+> > > > >  - add a wrapper layer to adapt: 1) irq disabling/enabling and 2) size
+> > > > > -> level translation.
+> > > > >
+> > > > > Agree?
+> > > >
+> > > > Drat, I didn't see that it returns the page size, not the level.  That's a bit
+> > > > unfortunate.  It definitely makes me less averse to fixing lookup_address_in_pgd()
+> > > >
+> > > > Hrm.  I guess since we know there's at least one broken user, and in theory
+> > > > fixing lookup_address_in_pgd() should do no harm to users that don't need protection,
+> > > > it makes sense to just fix lookup_address_in_pgd() and see if the x86 maintainers
+> > > > push back.
+> > >
+> > > Yeah, fixing lookup_address_in_pgd() should be cleaner(), since the
+> > > page fault usage case does not need irq save/restore. But the other
+> > > one needs it. So, we can easily fix the function with READ_ONCE and
+> > > lockless staff. But wrapping the function with irq save/restore from
+> > > the KVM side.
+> >
+> > I think it makes sense to do the save/restore in lookup_address_in_pgd().  The
+> > Those helpers are exported, so odds are good there are broken users that will
+> > benefit from fixing all paths.
+> 
+> no, lookup_address_in_pgd() is probably just broken for KVM. In other
+> call sites, some may already disable IRQ, so doing that again inside
+> lookup_address_in_pgd() will be bad.
 
-This can break MSIs.
+No, it's not bad.  local_irq_save/restore() intended preciesly for cases where
+IRQs need to be disabled but IRQs may or may not have already been disabled by
+the caller.   PUSHF+POPF is not expensive relatively speaking, 
 
-Lets assume MSI0 is vector 34 on CPU0, and MSI1 is vector 33 on CPU0.
+> I am looking at here:
+> https://elixir.bootlin.com/linux/latest/source/arch/arm/kernel/traps.c#L304
 
-hv_arch_irq_unmask() is called on MSI0.  It uses a hypercall to configure
-the MSI address and data (0) to vector 34 of CPU0.  This is correct.  Then
-hv_arch_irq_unmask is called on MSI1.  It uses another hypercall to
-configure the MSI address and data (0) to vector 33 of CPU0.  This is
-wrong, and results in both MSI0 and MSI1 being routed to vector 33.  Linux
-will observe extra instances of MSI1 and no instances of MSI0 despite the
-endpoint device behaving correctly.
+That's arm code, lookup_address_in_pgd() is x86 specific.  :-) That said, I'm sure
+there exists at least one caller that runs with IRQs disabled.  But as above,
+it's not a problem.
 
-For the multi-MSI case, we need unique address and data info for each MSI,
-but the cached msi_desc does not provide that.  However, that information
-can be gotten from the int_desc cached in the chip_data by
-compose_msi_msg().  Fix the multi-MSI case to use that cached information
-instead.  Since hv_set_msi_entry_from_desc() is no longer applicable,
-remove it.
+> so, the save/restore are done in oops_begin() and oops_end(), which is
+> wrapping show_fault_oops() that calls lookup_address_in_pgd().
+> 
+> So, I think we need to ensure the READ_ONCE.
+> 
+> hmm, regarding the lockless macros, Paolo is right, for x86 it makes
+> no difference. s390 seems to have a different implementation, but
+> kvm_mmu_max_mapping_level() as well as host_pfn_mapping_level are both
+> functions in x86 mmu.
 
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
----
- drivers/pci/controller/pci-hyperv.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 5800ecf..7aea0b7 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -611,13 +611,6 @@ static unsigned int hv_msi_get_int_vector(struct irq_data *data)
- 	return cfg->vector;
- }
- 
--static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
--				       struct msi_desc *msi_desc)
--{
--	msi_entry->address.as_uint32 = msi_desc->msg.address_lo;
--	msi_entry->data.as_uint32 = msi_desc->msg.data;
--}
--
- static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
- 			  int nvec, msi_alloc_info_t *info)
- {
-@@ -647,6 +640,7 @@ static void hv_arch_irq_unmask(struct irq_data *data)
- {
- 	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
- 	struct hv_retarget_device_interrupt *params;
-+	struct tran_int_desc *int_desc;
- 	struct hv_pcibus_device *hbus;
- 	struct cpumask *dest;
- 	cpumask_var_t tmp;
-@@ -661,6 +655,7 @@ static void hv_arch_irq_unmask(struct irq_data *data)
- 	pdev = msi_desc_to_pci_dev(msi_desc);
- 	pbus = pdev->bus;
- 	hbus = container_of(pbus->sysdata, struct hv_pcibus_device, sysdata);
-+	int_desc = data->chip_data;
- 
- 	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
- 
-@@ -668,7 +663,8 @@ static void hv_arch_irq_unmask(struct irq_data *data)
- 	memset(params, 0, sizeof(*params));
- 	params->partition_id = HV_PARTITION_ID_SELF;
- 	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
--	hv_set_msi_entry_from_desc(&params->int_entry.msi_entry, msi_desc);
-+	params->int_entry.msi_entry.address.as_uint32 = int_desc->address & 0xffffffff;
-+	params->int_entry.msi_entry.data.as_uint32 = int_desc->data;
- 	params->device_id = (hbus->hdev->dev_instance.b[5] << 24) |
- 			   (hbus->hdev->dev_instance.b[4] << 16) |
- 			   (hbus->hdev->dev_instance.b[7] << 8) |
--- 
-2.7.4
-
+Yep, all of this is x86 specific.

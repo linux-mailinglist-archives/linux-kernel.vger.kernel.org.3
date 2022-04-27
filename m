@@ -2,104 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46598510DF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528F0510DF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356711AbiD0BdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S1356722AbiD0BdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:33:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356696AbiD0BdG (ORCPT
+        with ESMTP id S1356720AbiD0BdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:33:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0EA85951;
-        Tue, 26 Apr 2022 18:29:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBE6261B00;
-        Wed, 27 Apr 2022 01:29:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A544C385A4;
-        Wed, 27 Apr 2022 01:29:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CGbbkflC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651022993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MANIJ4dySSmqaJTF4fSL00Mb6tX9r5q9w+jDvanNPvI=;
-        b=CGbbkflC5ZOzObHN/pdheOjw12c696PG/stwJDnJ2opClpVC2rdF/VqP/+S8K2GTOHyrws
-        ORbm0zVxO6c+JToIF7Q+aq/0WTICrDr69w+iPJc/lX3sjmm3q9bbjAxlI13b6jukR2syR4
-        JX3AQvo+0WFiMT1u3rI8eNYT1pXMm7Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 83d69ec3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 27 Apr 2022 01:29:52 +0000 (UTC)
-Date:   Wed, 27 Apr 2022 03:29:49 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH v6 09/17] mips: use fallback for random_get_entropy()
- instead of just c0 random
-Message-ID: <YmicjVbkcppfzE1E@zx2c4.com>
-References: <20220423212623.1957011-1-Jason@zx2c4.com>
- <20220423212623.1957011-10-Jason@zx2c4.com>
- <alpine.DEB.2.21.2204250113440.9383@angie.orcam.me.uk>
+        Tue, 26 Apr 2022 21:33:15 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18362DF0;
+        Tue, 26 Apr 2022 18:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=RVBHFqV9TmrZIE98jV3fTbZU85zYa+qeuHeH76mXrhs=; b=bJ4MGg1L1rsKB/Io5rXbq3Sw81
+        6u3PwI405n5V8QKHK7+BDAQ7tPhXjU6qiMaQjZVYJWkqyPQKrIp3vzLG8UOoRVgZAIctDiI0LiXaD
+        06x/nWSJ7zEDd4dUYXhu/6DJS1nABDL2r4art1FNmO2myiMHhcl/epMTB6XWN/PdEpDI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1njWVF-0001z5-3f; Wed, 27 Apr 2022 03:30:01 +0200
+Date:   Wed, 27 Apr 2022 03:30:01 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] net: dsa: mv88e6xxx: Single chip mode detection for
+ MV88E6*41
+Message-ID: <YmicmQEGbAvITaNm@lunn.ch>
+References: <20220424125451.295435-1-nathan@nathanrossi.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2204250113440.9383@angie.orcam.me.uk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220424125451.295435-1-nathan@nathanrossi.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Maciej,
+On Sun, Apr 24, 2022 at 12:54:51PM +0000, Nathan Rossi wrote:
+> The mv88e6xxx driver expects switches that are configured in single chip
+> addressing mode to have the MDIO address configured as 0. This is due to
+> the switch ADDR pins representing the single chip addressing mode as 0.
+> However depending on the device (e.g. MV88E6*41) the switch does not
+> respond on address 0 or any other address below 16 (the first port
+> address) in single chip addressing mode. This allows for other devices
+> to be on the same shared MDIO bus despite the switch being in single
+> chip addressing mode.
+> 
+> When using a switch that works this way it is not possible to configure
+> switch driver as single chip addressing via device tree, along with
+> another MDIO device on the same bus with address 0, as both devices
+> would have the same address of 0 resulting in mdiobus_register_device
+> -EBUSY errors for one of the devices with address 0.
+> 
+> In order to support this configuration the switch node can have its MDIO
+> address configured as 16 (the first address that the device responds
+> to). During initialization the driver will treat this address similar to
+> how address 0 is, however because this address is also a valid
+> multi-chip address (in certain switch models, but not all) the driver
+> will configure the SMI in single chip addressing mode and attempt to
+> detect the switch model. If the device is configured in single chip
+> addressing mode this will succeed and the initialization process can
+> continue. If it fails to detect a valid model this is because the switch
+> model register is not a valid register when in multi-chip mode, it will
+> then fall back to the existing SMI initialization process using the MDIO
+> address as the multi-chip mode address.
+> 
+> This detection method is safe if the device is in either mode because
+> the single chip addressing mode read is a direct SMI/MDIO read operation
+> and has no side effects compared to the SMI writes required for the
+> multi-chip addressing mode.
 
-On Tue, Apr 26, 2022 at 09:28:39PM +0100, Maciej W. Rozycki wrote:
-> On Sat, 23 Apr 2022, Jason A. Donenfeld wrote:
-> 
-> > diff --git a/arch/mips/include/asm/timex.h b/arch/mips/include/asm/timex.h
-> > index b05bb70a2e46..8cfa485d19e6 100644
-> > --- a/arch/mips/include/asm/timex.h
-> > +++ b/arch/mips/include/asm/timex.h
-> [...]
-> > +	if (cpu_has_3kex)
-> > +		c0_random = (read_c0_random() >> 8) & 0x3f;
-> 
->  Hmm, I wonder whether we do need to mask the contents of the register out 
-> here given that known implementations return zeros in reserved bits.  Even 
-> though R3000 documentation I have access to makes no guarantee as to the 
-> values of the reserved bits here I think we can safely proceed according 
-> to what systems we do actually support do (even though it only saves one 
-> instruction).
-> 
-> >  	else
-> > -		return 0;	/* no usable register */
-> > +		c0_random = read_c0_random() & 0x3f;
-> 
->  Here the architecture guarantees unused bits to be zero, but the number 
-> of them varies between implementations.  However we'll only ever use this 
-> leg for the R4000/R4400 processors, which have 48 TLB entries, and for the 
-> Ingenic XBurst cores, which I have now verified in documentation (which 
-> user-reported dumps from /proc/cpuinfo are consistent with) that have 32 
-> TLB entries.  So I think this mask operation can go as well.
-> 
->  I guess these updates can be made with a follow-up change though.
+Thanks for rewording the commit message. This makes it a lot clearer
+what is going on and how it is fixed.
 
-There is lots of optimization potential on a few fronts we've identified
-in this thread. Let's save these for a follow-up. I'd rather this
-initial one be at least somewhat simple, so that as it gets optimized,
-it'll be easy to handle regressions. Also, it probably makes sense for
-you to send the patches for these, since you have both the hardware
-chops and the hardware itself to assess these ideas. I am interested in
-the topic though, so please do CC me.
+> @@ -6971,9 +6993,18 @@ static int mv88e6xxx_probe(struct mdio_device *mdiodev)
+>  	if (chip->reset)
+>  		usleep_range(1000, 2000);
+>  
+> -	err = mv88e6xxx_detect(chip);
+> -	if (err)
+> -		goto out;
+> +	/* Detect if the device is configured in single chip addressing mode,
+> +	 * otherwise continue with address specific smi init/detection.
+> +	 */
+> +	if (mv88e6xxx_single_chip_detect(chip, mdiodev)) {
+> +		err = mv88e6xxx_smi_init(chip, mdiodev->bus, mdiodev->addr);
+> +		if (err)
+> +			goto out;
+> +
 
-Jason
+This is confusing. Then name mv88e6xxx_single_chip_detect() suggests
+it will return true if it detects a single chip device. When it fact
+is return 0 == False if it does find such a device.
+
+So i think this would be better coded as
+
+	err = mv88e6xxx_single_chip_detect(chip, mdiodev);
+	if (err) {
+		err = mv88e6xxx_smi_init(chip, mdiodev->bus, mdiodev->addr);
+		if (err)
+			goto out;
+
+I did however test this code on my 370rd, and it does work. So once we
+get this sorted out, it is good to go.
+
+	Andrew			

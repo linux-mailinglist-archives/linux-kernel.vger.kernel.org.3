@@ -2,290 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B98511630
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA29F511512
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 12:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbiD0LBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S229812AbiD0KoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 06:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiD0LAT (ORCPT
+        with ESMTP id S229754AbiD0KoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:00:19 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C313C1093;
-        Wed, 27 Apr 2022 03:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651055880; x=1682591880;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MEdpCvTbebSfftKt7KRsTDu5tKkUZCjAgldDSUjcCVk=;
-  b=VTVlxI1BplZrwXD1IjhCykkZrZc7C0duoWIXFVUqSbeaObezt077eji7
-   lxYAqOUi7C0zD/87Ym4aQeRURIJPSQHlMS77y9czEuhEJwH/QQN8XBaaU
-   PWZDv3qM3QC4tWmCb+prfP6OC7DI83N3k2jUlki8s9Uz3rBUZ0Kohn/0C
-   pYvYff2zxUU5ezkUghonDBPhX5Ip4t55jbCjyDBNQNXa2PDjPYye7/3fB
-   6GaRObUg4Fb/CBg/FZfv+yuu1eKAjIBMuKNNLjMfdlO9ApVH/2kHTtkxA
-   PLR4A7MoXZ8ppS6EQXJuOx8DXxwc46EQlWDGZ7ZEB2Psmdy8MYWFu9K/D
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326363844"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="326363844"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 02:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="539773403"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 02:26:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njdwR-0004YM-0M;
-        Wed, 27 Apr 2022 09:26:35 +0000
-Date:   Wed, 27 Apr 2022 17:25:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
-        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, khilman@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Johnson Wang <johnson.wang@mediatek.com>
-Subject: Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-Message-ID: <202204271737.oAuTwqZH-lkp@intel.com>
-References: <20220425125546.4129-3-johnson.wang@mediatek.com>
+        Wed, 27 Apr 2022 06:44:04 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150050.outbound.protection.outlook.com [40.107.15.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98205496D79;
+        Wed, 27 Apr 2022 03:24:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q/UX2QfCwOrkP2gGqaHfe9ThjkZmdeW4LEOetSh/0O2/rVekGOecxCz9CJ7C3nZXqYb7dukcz7ASPrdmVcsLvEcMgV/m00KYBIa8VEVeoG0CT56CqQLueh2Ckg0okVdEDu/ktd69mPV51LUh9+YxLznDllNzI+8RFyEWV56vOYsif15xtF3ng8Fe8wbezwZBuiDiRv8V8d3tCButWy24TOwn8U1LmUJTFxxZfHh2WT15QAtyWR1uNhTEusfIcsvkePsvYlwSVjoIxyk+jTzEGfDtbSah0LEtG2nDto4Jir90JRgbE1+euLvgIf56C2gDZ6JmZWIx+hxnecnAz1WF3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mp0FTaZH9hnb589ga0E1VoHfM/vjPT3caA8LiNs3OT0=;
+ b=HaICJMdd53pi+NrtJ2SwlwAKA0D+vv8wMlpQMc1oaRfis2YkS5kG9rFcIFZ0CTwbcecq+yKctyLoO6n302QcmeaowwVQdx4d/cOta1ztavupBy9+f62PyMIaKZAH96OvhZm6Yqwv24JobA34eWw6o+ZSU5Czg722cS2UYCSSWBs+fg0Y8oGuogddzzsTGZFQyKH/LbzHci1PXh3DDdqkZE5NtgBgNTgSQyd3ivWV0W3LnFSVtVT59NwcyQM54CkvNxCXizrnREEmXn+ATmjkXRDQx3xtrAtok+v9VkFBI6DyXdkKZvLu5eh1IobteVj3kwQexDm/+4I22dHWIx3yHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mp0FTaZH9hnb589ga0E1VoHfM/vjPT3caA8LiNs3OT0=;
+ b=Xp4SQllnSxuTQDZ0agzA8QqOOem1nJxr9cOpTqW83PIuso8sn6d97DsAPj2WJ7NICv3wUL2xPxuK/jKYobvPeTM09ElH8Xch0syhN91jlCrpeSpzafPM+Ol5KeSUFiXzbl0IWAnPAaVor76dd8GosaOvt9cBNoAjVQCbPmhS+B4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by DBBPR04MB6218.eurprd04.prod.outlook.com (2603:10a6:10:d0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21; Wed, 27 Apr
+ 2022 09:26:21 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::ed87:b085:802d:2390]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::ed87:b085:802d:2390%6]) with mapi id 15.20.5206.013; Wed, 27 Apr 2022
+ 09:26:21 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] media: imx-jpeg: Don't fill the description field in struct v4l2_fmtdesc
+Date:   Wed, 27 Apr 2022 17:25:58 +0800
+Message-Id: <20220427092558.25607-1-ming.qian@nxp.com>
+X-Mailer: git-send-email 2.36.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0007.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::8)
+ To AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425125546.4129-3-johnson.wang@mediatek.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6e86810f-f25f-4ec2-8a1e-08da282ffddd
+X-MS-TrafficTypeDiagnostic: DBBPR04MB6218:EE_
+X-Microsoft-Antispam-PRVS: <DBBPR04MB6218B8C347421467B1F51BEDE7FA9@DBBPR04MB6218.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: L1j7RCVn7mnLFzfPqfMrU3gWmHUxL+GErtpG6+y1tHw1Zsx+fBJbkyrQbtaj6RImGPD/caYUuxETNq4ytqykKMmHDy6iX0IEibNGmpFnd+qL06kDZ7VXK6/TsFg35kskiW2nFlQcKHLM08WAF1UESQ3CzoKpEWb8ysIYkt3ufSXjkBLm0Pw8O3rYgcQSfJ/duxzJ+x1BW+X23lsNTtFpDE6z/kdfvx82Gd5zU7zhGAS0I4vCSFO71bABhsgQMB48uhhkux+EvVTIkHEWCbrKVn587kdlyIBWPC1+tOERcIN+/1EQTSmtsKXe2T3ZFIuWT9yi+EXJne/em9YUhbb6dVrWxV7dXMRNaVyjwYiT+FJMw2WB52Ehtw5CEZXUDN22Q1ako5HbywxSY1zwcUITgw4Jfq9K681f2LftZE3hPPWbvzsQn8Rvs6Vql0/OQhpDwtQnQarhn0Bj3ygbQBSgQYD4QRXR3wWVktlCFPqGm+J7/nTPstU8G8In0VakWaJwqxho/dmX813UF3hcVU4i4uOceVfWeMuiTr8fv99kQmAVRjBw2OEE55zFvt/z+ajfpCfi7r0IKnMt1nlmpoTjbg2jyRllPlylZxNdcGfVhg+di7/WS/WrrYU9JbzUjZ7utU8w690KDgnQWvydGmi6cAyGHzWv2aC5sY1r17o2R6ubWWr3tiaZN4ABn8FsLvR20MkfSk7UEmnB6Oa+vcfB7g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(6506007)(8936002)(36756003)(83380400001)(5660300002)(4326008)(186003)(2906002)(44832011)(4744005)(1076003)(8676002)(2616005)(26005)(38350700002)(86362001)(508600001)(52116002)(316002)(6486002)(38100700002)(66556008)(66946007)(6666004)(6512007)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P8J6Nael8F+0kGnTzMnlWzjrStPIEONMLIvgav8W9y0VIKeSmzufmtf80DHf?=
+ =?us-ascii?Q?eQJnc+2oOH2uHpED5m4W1dRZ/Gv9HKGBUk03oTgaYa/GB4W7nzoQjKlCXFFI?=
+ =?us-ascii?Q?rUvRFNIvQX7AurC7LPWtdeKiFVU+1E0r+3iWGPmCbIWog9spg60rWXO0/wbC?=
+ =?us-ascii?Q?k8yV0knMfQjrhs8hysVfgIpWHov2I98OQ5sI8/hEqUfN8zxNQR4jqQDZDok+?=
+ =?us-ascii?Q?b5ySQWtSzx3fs1Qz/sRz3lmbX3mYktSydBfnhMd5UiNoDxr/Mk6PGGoklwdZ?=
+ =?us-ascii?Q?OZn1a332uTP/aaElsOA58rKXE1ApOqgr4xMbWcya+btKdZ9nDBP2R1fOaway?=
+ =?us-ascii?Q?3SioWWP3NyaWnEeND0lMIL1JoXoLcDF0ivf2GebAAY8cZbqJ4Vpo4YPZmcmd?=
+ =?us-ascii?Q?QKsIfMhP9bCQLvS56JJpBlgGymdVw7MLrgtRF/ypHZEqxKzK5Brut3+LLSty?=
+ =?us-ascii?Q?sSygbYyrfS+xsDEdL7okg6JVN71tWARBm+oJ5sveEsO8ayayrMCGNiodgScI?=
+ =?us-ascii?Q?YkUo3cy1AfoQ3ug5QcQG+IzBg0RpF3a5XxqjZ3ny6MyAU/DyuiQSIBCL5Rml?=
+ =?us-ascii?Q?RZAY0nHE9GtBi4ytNghTe6YIuZ02InHey+KFhdX6/fO7xakM8r+/ER6RGXiE?=
+ =?us-ascii?Q?nAVcDZctR6Fiw6Y2BnhmRGE6GrNYGW5+cz1xuEvVrKIWQBDokKIBQhL0iJq0?=
+ =?us-ascii?Q?wcfxWHHtakgma2VhkxGeAEZ6pQFVii4+1CRLjten/uySoY+iiEOilnGMcp9k?=
+ =?us-ascii?Q?F04wrSFIYlzdesSC9zRsIdwvL11rLcHY+6x/NbcaGq3qkoDvCGnasxN+g7kA?=
+ =?us-ascii?Q?YJEszn4qMCMiCS8Hi70oHwwAoK0QKUZ3jluOnUKkTKswO6QNx5CX1CMfOuEJ?=
+ =?us-ascii?Q?NeW3wgemTGGkvUZxuGIsaEU7/TMumPJb7vbeuN0YsPF3EPB9LZQ+DYZ2qgB0?=
+ =?us-ascii?Q?W9m8FbOr/WPAPqYIpWioQ/r6Uac/qfhkpFKN9eXZotsoRaaN69W0ZvIefRCg?=
+ =?us-ascii?Q?oVLwze0LyWCLYziXTWpn2engDZ0a+czUNj80szkezi6btgW/8/820+B27T9/?=
+ =?us-ascii?Q?UGgVzgH8VdhLGEHr2xwf9ZAvgDXRdaUiMp4uQkfZ+9ACgrhiATN09+7YQdZa?=
+ =?us-ascii?Q?Jqo8nn+o8MeXrOnQZWLduoEXzdL0qv/SZm9eQkIc9ixYTrPFjWK+w4U1rWqU?=
+ =?us-ascii?Q?YULhUconBcq9ds55o/g4acSzWbpzLy4xyzpH/2HiUeRd5awe3Huh+2iEUAEM?=
+ =?us-ascii?Q?qU71UQG9SrmH1DkisJtpChbumBWvqB23PkFHlkffEJsddE8fylTfVG9TQXnd?=
+ =?us-ascii?Q?LFEfVZSWYi1n/NcLl6SN1+gH4wcs30uZjDnYkXrz9aMf51HIUBFWEl6OWrPd?=
+ =?us-ascii?Q?x95Ltrr9u/Hv55LcOY7MWWFkq9V0zeXJ7kP6CZ/12TTdpE06dUnbYths6nS0?=
+ =?us-ascii?Q?MFtfi2KQ2UAIgiuda5bqpUFHsTA/IrK5INLEek/niLgXpAV6cWlRuJ5YS7fO?=
+ =?us-ascii?Q?lPQxBXZW+O3WrFgPsPqbtnl7aEwOgOxENwZ5kL756YC35c0i/m0z6fAWtcU1?=
+ =?us-ascii?Q?w7f467Hyjdbl8GkLMMEg1gbX+2v7kwwmq1B9ctvwgA8Jn6BUAy1FxlygCRhS?=
+ =?us-ascii?Q?dshGBbRNeZVr3pqft+KxCgpqGYnTe2L6xMUqgnFYZnmt79pbmZqWCcp5XPz4?=
+ =?us-ascii?Q?jOClukMgwUv2JwvJZsWkQmT6OhiFkDrZw/o6i4KXxrc7WF0qrQh5Eib4HPiT?=
+ =?us-ascii?Q?3F32Q9SlBQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e86810f-f25f-4ec2-8a1e-08da282ffddd
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 09:26:21.6887
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5l8MdnTxDSPJBaf+ZJxziI4Zp254LHLeLkU4sHqPc6qTDkTJYlyrnkH97F/LHs6xMYOtZLwnY2Jx9qCZkX1o5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6218
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johnson,
+The core will fill this in v4l_fill_fmtdesc(),
+ensuring consistent format description names.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
+---
+ drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v5.18-rc4 next-20220427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
-        git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/ drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named 'parent_type' in 'struct devfreq_passive_data'
-           passive_data->parent_type = CPUFREQ_PARENT_DEV;
-           ~~~~~~~~~~~~  ^
-   drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared identifier 'CPUFREQ_PARENT_DEV'
-           passive_data->parent_type = CPUFREQ_PARENT_DEV;
-                                       ^
->> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-                           PTR_ERR(drv->devfreq));
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning and 2 errors generated.
-
-
-vim +379 drivers/devfreq/mtk-cci-devfreq.c
-
-   255	
-   256	static int mtk_ccifreq_probe(struct platform_device *pdev)
-   257	{
-   258		struct device *dev = &pdev->dev;
-   259		struct mtk_ccifreq_drv *drv;
-   260		struct devfreq_passive_data *passive_data;
-   261		struct dev_pm_opp *opp;
-   262		unsigned long rate, opp_volt;
-   263		int ret;
-   264	
-   265		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-   266		if (!drv)
-   267			return -ENOMEM;
-   268	
-   269		drv->dev = dev;
-   270		drv->soc_data = (const struct mtk_ccifreq_platform_data *)
-   271					of_device_get_match_data(&pdev->dev);
-   272		mutex_init(&drv->reg_lock);
-   273		platform_set_drvdata(pdev, drv);
-   274	
-   275		drv->cci_clk = devm_clk_get(dev, "cci");
-   276		if (IS_ERR(drv->cci_clk)) {
-   277			ret = PTR_ERR(drv->cci_clk);
-   278			return dev_err_probe(dev, ret,
-   279					     "failed to get cci clk: %d\n", ret);
-   280		}
-   281	
-   282		drv->inter_clk = devm_clk_get(dev, "intermediate");
-   283		if (IS_ERR(drv->inter_clk)) {
-   284			ret = PTR_ERR(drv->inter_clk);
-   285			dev_err_probe(dev, ret,
-   286				      "failed to get intermediate clk: %d\n", ret);
-   287			goto out_free_resources;
-   288		}
-   289	
-   290		drv->proc_reg = devm_regulator_get_optional(dev, "proc");
-   291		if (IS_ERR(drv->proc_reg)) {
-   292			ret = PTR_ERR(drv->proc_reg);
-   293			dev_err_probe(dev, ret,
-   294				      "failed to get proc regulator: %d\n", ret);
-   295			goto out_free_resources;
-   296		}
-   297	
-   298		ret = regulator_enable(drv->proc_reg);
-   299		if (ret) {
-   300			dev_err(dev, "failed to enable proc regulator\n");
-   301			goto out_free_resources;
-   302		}
-   303	
-   304		drv->sram_reg = regulator_get_optional(dev, "sram");
-   305		if (IS_ERR(drv->sram_reg))
-   306			drv->sram_reg = NULL;
-   307		else {
-   308			ret = regulator_enable(drv->sram_reg);
-   309			if (ret) {
-   310				dev_err(dev, "failed to enable sram regulator\n");
-   311				goto out_free_resources;
-   312			}
-   313		}
-   314	
-   315		/*
-   316		 * We assume min voltage is 0 and tracking target voltage using
-   317		 * min_volt_shift for each iteration.
-   318		 * The retry_max is 3 times of expeted iteration count.
-   319		 */
-   320		drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv->soc_data->sram_max_volt,
-   321						       drv->soc_data->proc_max_volt),
-   322						   drv->soc_data->min_volt_shift);
-   323	
-   324		ret = clk_prepare_enable(drv->cci_clk);
-   325		if (ret)
-   326			goto out_free_resources;
-   327	
-   328		ret = clk_prepare_enable(drv->inter_clk);
-   329		if (ret)
-   330			goto out_disable_cci_clk;
-   331	
-   332		ret = dev_pm_opp_of_add_table(dev);
-   333		if (ret) {
-   334			dev_err(dev, "failed to add opp table: %d\n", ret);
-   335			goto out_disable_inter_clk;
-   336		}
-   337	
-   338		rate = clk_get_rate(drv->inter_clk);
-   339		opp = dev_pm_opp_find_freq_ceil(dev, &rate);
-   340		if (IS_ERR(opp)) {
-   341			ret = PTR_ERR(opp);
-   342			dev_err(dev, "failed to get intermediate opp: %d\n", ret);
-   343			goto out_remove_opp_table;
-   344		}
-   345		drv->inter_voltage = dev_pm_opp_get_voltage(opp);
-   346		dev_pm_opp_put(opp);
-   347	
-   348		rate = U32_MAX;
-   349		opp = dev_pm_opp_find_freq_floor(drv->dev, &rate);
-   350		if (IS_ERR(opp)) {
-   351			dev_err(dev, "failed to get opp\n");
-   352			ret = PTR_ERR(opp);
-   353			goto out_remove_opp_table;
-   354		}
-   355	
-   356		opp_volt = dev_pm_opp_get_voltage(opp);
-   357		dev_pm_opp_put(opp);
-   358		ret = mtk_ccifreq_set_voltage(drv, opp_volt);
-   359		if (ret) {
-   360			dev_err(dev, "failed to scale to highest voltage %lu in proc_reg\n",
-   361				opp_volt);
-   362			goto out_remove_opp_table;
-   363		}
-   364	
-   365		passive_data = devm_kzalloc(dev, sizeof(struct devfreq_passive_data),
-   366					    GFP_KERNEL);
-   367		if (!passive_data) {
-   368			ret = -ENOMEM;
-   369			goto out_remove_opp_table;
-   370		}
-   371	
-   372		passive_data->parent_type = CPUFREQ_PARENT_DEV;
-   373		drv->devfreq = devm_devfreq_add_device(dev, &mtk_ccifreq_profile,
-   374						       DEVFREQ_GOV_PASSIVE,
-   375						       passive_data);
-   376		if (IS_ERR(drv->devfreq)) {
-   377			ret = -EPROBE_DEFER;
-   378			dev_err(dev, "failed to add devfreq device: %d\n",
- > 379				PTR_ERR(drv->devfreq));
-   380			goto out_remove_opp_table;
-   381		}
-   382	
-   383		drv->opp_nb.notifier_call = mtk_ccifreq_opp_notifier;
-   384		ret = dev_pm_opp_register_notifier(dev, &drv->opp_nb);
-   385		if (ret) {
-   386			dev_err(dev, "failed to register opp notifier: %d\n", ret);
-   387			goto out_remove_devfreq_device;
-   388		}
-   389		return 0;
-   390	
-   391	out_remove_devfreq_device:
-   392		devm_devfreq_remove_device(dev, drv->devfreq);
-   393	
-   394	out_remove_opp_table:
-   395		dev_pm_opp_of_remove_table(dev);
-   396	
-   397	out_disable_inter_clk:
-   398		clk_disable_unprepare(drv->inter_clk);
-   399	
-   400	out_disable_cci_clk:
-   401		clk_disable_unprepare(drv->cci_clk);
-   402	
-   403	out_free_resources:
-   404		if (regulator_is_enabled(drv->proc_reg))
-   405			regulator_disable(drv->proc_reg);
-   406		if (drv->sram_reg && regulator_is_enabled(drv->sram_reg))
-   407			regulator_disable(drv->sram_reg);
-   408	
-   409		if (!IS_ERR(drv->proc_reg))
-   410			regulator_put(drv->proc_reg);
-   411		if (!IS_ERR(drv->sram_reg))
-   412			regulator_put(drv->sram_reg);
-   413		if (!IS_ERR(drv->cci_clk))
-   414			clk_put(drv->cci_clk);
-   415		if (!IS_ERR(drv->inter_clk))
-   416			clk_put(drv->inter_clk);
-   417	
-   418		return ret;
-   419	}
-   420	
-
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index 869d2c388122..c916cb08b275 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -389,7 +389,6 @@ static int enum_fmt(const struct mxc_jpeg_fmt *mxc_formats, int n,
+ 	if (i >= n)
+ 		return -EINVAL;
+ 
+-	strscpy(f->description, mxc_formats[i].name, sizeof(f->description));
+ 	f->pixelformat = mxc_formats[i].fourcc;
+ 
+ 	return 0;
+@@ -1702,7 +1701,6 @@ static int mxc_jpeg_enum_fmt_vid_cap(struct file *file, void *priv,
+ 		if (f->index)
+ 			return -EINVAL;
+ 		f->pixelformat = q_data->fmt->fourcc;
+-		strscpy(f->description, q_data->fmt->name, sizeof(f->description));
+ 		return 0;
+ 	}
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0
+

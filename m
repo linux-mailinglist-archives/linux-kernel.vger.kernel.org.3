@@ -2,181 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E470F511799
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CDD511755
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbiD0Moj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S234781AbiD0Mod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 08:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234773AbiD0Moc (ORCPT
+        with ESMTP id S234615AbiD0Mob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:44:32 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D42B26F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:21 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso3386544wma.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=cbbrke0Y/62FpKxLP1THZreWJJ7JOW3ZusoLqpF2UmQ=;
-        b=ElTn2Yk9K1k2G6x565G88Wc8cknGDMkZGWGwEx0MgI1tUAt3pxFiwaRQiGJO5PQa8r
-         WrY1z7OKffnEmtIoMpN5jpA0Y1efS3cm5HNYvMxpqFOkQ4mOScWtqVrTrWANuyOt+MVC
-         sgurh5DJC694jmHjsf+lqbw3oMP0sIu5hgOb1qwTKxR0W7S1IUe2C4tfV15A84jDsg/y
-         cruH9+Y/PEuTXjfwydxBVa4Cc4+o8eO4Ml+CBKALdT68a6barcY6VPfkuZ6zTr/npjOg
-         qduMpQ6iBNsCRzySowGDHCX8WnJhNcnb5teLrNc/73s3uOOPt5dkulKJwN+VIis3tGbD
-         J/eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cbbrke0Y/62FpKxLP1THZreWJJ7JOW3ZusoLqpF2UmQ=;
-        b=Gwj7iC0rWUv0Hllt2OuI/zndPBcosljK4yucg6HVw9J+7GXXEM8ajV7FWzOv24E00h
-         cwxUWBv1yKkWlO68FLKVAWbmsZCWoWKClvcoc2K4Ue+uaxnwC8g5Bev+kKEJzR0zN/Zv
-         myBOveH/kPZ5IBEcVHtWtYXfKw/P+RGcDuA2mqqNM75l7OXCNTUv/sxYfXsx0VO9q4dc
-         y3aNlfl7n9vONO7TfkLZChAP15XDArdKEbZfhc67bCTOarDmYybL2cKgfaoGYKQ/BybT
-         W2g+JsaT5HxkQ6rgarkJ8j2+1yUWa8prK1FyAnD4xXvhy2pS+RI7VmuwDnemwjIvGTyt
-         Lmrw==
-X-Gm-Message-State: AOAM533AyRGPbKXY7wqHSMLX7kvAWwSBr6rCxhDEwYdkK85Tc+44KD+8
-        akBlxWuGt/5sjAcZMzj/KuQ6UQ==
-X-Google-Smtp-Source: ABdhPJx0wKS4OaLbYG7ps6he+395x2uxWDsg+VUCTEXspjydLhgvNgKNrwUEhSmg8kC98FSRSh8R4Q==
-X-Received: by 2002:a05:600c:3d0e:b0:38f:f83b:e7dc with SMTP id bh14-20020a05600c3d0e00b0038ff83be7dcmr34426400wmb.29.1651063279745;
-        Wed, 27 Apr 2022 05:41:19 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:493f:cd0f:324a:323c])
-        by smtp.gmail.com with ESMTPSA id p1-20020a1c7401000000b0038ed3bb00c9sm1471152wmc.6.2022.04.27.05.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 05:41:18 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 14:41:13 +0200
-From:   Marco Elver <elver@google.com>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        kasan-dev@googlegroups.com, glider@google.com
-Subject: Re: [PATCH 3/3] kfence: test: use new suite_{init/exit} support, add
- .kunitconfig
-Message-ID: <Ymk56YygGUU52CHG@elver.google.com>
-References: <20220426181925.3940286-1-dlatypov@google.com>
- <20220426181925.3940286-3-dlatypov@google.com>
+        Wed, 27 Apr 2022 08:44:31 -0400
+Received: from m228-13.mailgun.net (m228-13.mailgun.net [159.135.228.13])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id AFECF24F1B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:41:20 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
+ s=smtp; t=1651063280; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Subject: Cc: To: To: From: From: Date:
+ Sender: Sender; bh=+WEZIGOLRvKkp+v4jTpU5YBZwoC4o0Kps9wljdBLhfQ=; b=JVQHYEJ+tLNW8fYAnMecaFNJDOC6w0AX1Sr3RcJl4mLjZ0p1KdwKt8zLsxbd2RzhpEP01QsW
+ X7f6uz5IdFd67ccwtqIgANIy1DlQPBLNz6fNQMzNL96VO2AYVjQ7qlCeaWDZXthvlzjQFdjQ
+ 9Vfzk40sGszd+ZGFBvoek6i1E7Zrn7Fp0LYQw76f4j5npfIQHTZei2DaM1rrdtraoUWk7/0i
+ RSu+txerMt10pjgau8u67fOiaR26IKhcIIgmCJnX50z8FieaajrIhMAv8lQwPppV3OPs1qPS
+ kAT+FJ9kMDf/adKWmJiCYU+OqIow07MaaQuUs6AFuRzg9VAANzfzAQ==
+X-Mailgun-Sending-Ip: 159.135.228.13
+X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
+Received: from AN5Bruno (dynamic-user.170.84.57.140.mhnet.com.br
+ [170.84.57.140]) by smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 626939efc172fc5066278f6b (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Wed, 27 Apr 2022 12:41:19 GMT
+Sender: codeagain@codeagain.dev
+Date:   Wed, 27 Apr 2022 09:41:14 -0300
+From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH v3 0/3] staging: vme: Cleanup driver tree old structures
+Message-ID: <20220427124114.woiiuxr6pnxvadwg@AN5Bruno>
+References: <cover.1650321310.git.codeagain@codeagain.dev>
+ <YmA4QIRfx2QPhEJi@kroah.com>
+ <3e91b72a86294b542acf460657d0fd94adeb252e.camel@welchs.me.uk>
+ <YmJNqMjXEc4KGrJ8@kroah.com>
+ <20220427121851.4e2rjbbabw5sh3lk@AN5Bruno>
+ <Ymk3qimGl1tTjpSL@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="e2cpdvjfn6d6asay"
 Content-Disposition: inline
-In-Reply-To: <20220426181925.3940286-3-dlatypov@google.com>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ymk3qimGl1tTjpSL@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 11:19AM -0700, 'Daniel Latypov' via kasan-dev wrote:
-> Currently, the kfence test suite could not run via "normal" means since
-> KUnit didn't support per-suite setup/teardown. So it manually called
-> internal kunit functions to run itself.
-> This has some downsides, like missing TAP headers => can't use kunit.py
-> to run or even parse the test results (w/o tweaks).
-> 
-> Use the newly added support and convert it over, adding a .kunitconfig
-> so it's even easier to run from kunit.py.
-> 
-> People can now run the test via
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=mm/kfence --arch=x86_64
-> ...
-> [11:02:32] Testing complete. Passed: 23, Failed: 0, Crashed: 0, Skipped: 2, Errors: 0
-> [11:02:32] Elapsed time: 43.562s total, 0.003s configuring, 9.268s building, 34.281s running
-> 
-> Cc: kasan-dev@googlegroups.com
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-Reviewed-by: Marco Elver <elver@google.com>
+--e2cpdvjfn6d6asay
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  mm/kfence/.kunitconfig  |  6 ++++++
->  mm/kfence/kfence_test.c | 31 +++++++++++++------------------
->  2 files changed, 19 insertions(+), 18 deletions(-)
->  create mode 100644 mm/kfence/.kunitconfig
-> 
-> diff --git a/mm/kfence/.kunitconfig b/mm/kfence/.kunitconfig
-> new file mode 100644
-> index 000000000000..f3d65e939bfa
-> --- /dev/null
-> +++ b/mm/kfence/.kunitconfig
-> @@ -0,0 +1,6 @@
-> +CONFIG_KUNIT=y
-> +CONFIG_KFENCE=y
-> +CONFIG_KFENCE_KUNIT_TEST=y
-> +
-> +# Additional dependencies.
-> +CONFIG_FTRACE=y
-> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-> index 1b50f70a4c0f..96206a4ee9ab 100644
-> --- a/mm/kfence/kfence_test.c
-> +++ b/mm/kfence/kfence_test.c
-> @@ -826,14 +826,6 @@ static void test_exit(struct kunit *test)
->  	test_cache_destroy();
->  }
->  
-> -static struct kunit_suite kfence_test_suite = {
-> -	.name = "kfence",
-> -	.test_cases = kfence_test_cases,
-> -	.init = test_init,
-> -	.exit = test_exit,
-> -};
-> -static struct kunit_suite *kfence_test_suites[] = { &kfence_test_suite, NULL };
-> -
->  static void register_tracepoints(struct tracepoint *tp, void *ignore)
->  {
->  	check_trace_callback_type_console(probe_console);
-> @@ -847,11 +839,7 @@ static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
->  		tracepoint_probe_unregister(tp, probe_console, NULL);
->  }
->  
-> -/*
-> - * We only want to do tracepoints setup and teardown once, therefore we have to
-> - * customize the init and exit functions and cannot rely on kunit_test_suite().
-> - */
-> -static int __init kfence_test_init(void)
-> +static int kfence_suite_init(struct kunit_suite *suite)
->  {
->  	/*
->  	 * Because we want to be able to build the test as a module, we need to
-> @@ -859,18 +847,25 @@ static int __init kfence_test_init(void)
->  	 * won't work here.
->  	 */
->  	for_each_kernel_tracepoint(register_tracepoints, NULL);
-> -	return __kunit_test_suites_init(kfence_test_suites);
-> +	return 0;
->  }
->  
-> -static void kfence_test_exit(void)
-> +static void kfence_suite_exit(struct kunit_suite *suite)
->  {
-> -	__kunit_test_suites_exit(kfence_test_suites);
->  	for_each_kernel_tracepoint(unregister_tracepoints, NULL);
->  	tracepoint_synchronize_unregister();
->  }
->  
-> -late_initcall_sync(kfence_test_init);
-> -module_exit(kfence_test_exit);
-> +static struct kunit_suite kfence_test_suite = {
-> +	.name = "kfence",
-> +	.test_cases = kfence_test_cases,
-> +	.init = test_init,
-> +	.exit = test_exit,
-> +	.suite_init = kfence_suite_init,
-> +	.suite_exit = kfence_suite_exit,
-> +};
-> +
-> +kunit_test_suites(&kfence_test_suite);
+On Wed, Apr 27, 2022 at 02:31:38PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Apr 27, 2022 at 09:18:51AM -0300, Bruno Moreira-Guedes wrote:
+> > Hello,
+> >=20
+> > On Fri, Apr 22, 2022 at 08:39:36AM +0200, Greg Kroah-Hartman wrote:
+> > > On Thu, Apr 21, 2022 at 08:16:05PM +0100, Martyn Welch wrote:
+> > > > On Wed, 2022-04-20 at 18:43 +0200, Greg Kroah-Hartman wrote:
+> > > > > On Mon, Apr 18, 2022 at 08:29:49PM -0300, Bruno Moreira-Guedes wr=
+ote:
+> > > > > > This patch series modify the vme_user driver's place in
+> > > > > > menuconfig (1/3), fixes a missing `depends on` line in a Kconfig
+> > > > > > file
+> > > > > > (2/3), and rearrages the directory tree for the driver allowing=
+ a
+> > > > > > more
+> > > > > > straightforward comprehension of its contents (3/3).
+> > > > > >=20
+> > > > > > The 'vme_user/' driver is the only remaining vme-family driver =
+in
+> > > > > > the
+> > > > > > 'staging/' tree, but its structure, entry in menuconfig and
+> > > > > > building
+> > > > > > routines are still attached to the 'vme/' subtree now outside
+> > > > > > 'staging/'. The present patchset fixes it.
+> > > > > >=20
+> > > > > > Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
+> > > > >=20
+> > > > > What about deleting the vme drivers entirely?
+> > > >=20
+> > > > I assume you're suggesting deleting the "vme_user" driver from the
+> > > > staging directory?
+> > >=20
+> > > Yes, at the very least given that no one has tried to fix it up and g=
+et
+> > > it out of staging in many years.
+> >=20
+> > While I cannot comment anything on that regard, I imagine the v4 I sent
+> > a couple of days ago will wait for that decision, right?
+>=20
+> I do not know what you are referring to, sorry.  My staging patch queue
+> is empty right now.
+Ohhh, okay, no problem, I have sent a v4 around 6 days ago and thought
+you were waiting on this definition.
 
-Much nicer!
+>=20
+> > Should I prepare a patch removing them and also submit so when it's
+> > decided you can just pick one patch or the other?
+>=20
+> Let's wait on a removal patch for now.
+Sure, I'll be waiting for Martyn's response then, if he says it's still
+in use I resend the last one.
 
-Thanks,
--- Marco
+>=20
+> thanks,
+>=20
+> greg k-h
+>=20
+
+Sincerely,
+Bruno
+
+--e2cpdvjfn6d6asay
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYmk56gAKCRAZtd3tyEY2
+kqVNAP46+sz8lMkQkxa5zH4kz4AFOWtKxLiRqU6b7K/l26HhuwEAv7+U9qRfX/7Y
+lsog4ftgrh/j+V3GBskATqmDs0m4jAg=
+=GyLo
+-----END PGP SIGNATURE-----
+
+--e2cpdvjfn6d6asay--

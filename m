@@ -2,132 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1159511F44
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8DC511FE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243212AbiD0QbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S243309AbiD0Qbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244587AbiD0Q3w (ORCPT
+        with ESMTP id S244887AbiD0QaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:29:52 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AA1638B;
-        Wed, 27 Apr 2022 09:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1651076741;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=yCpWmVR6dk2+oovSw1y9OOXytQ1pCTE8knB7PaU+qWU=;
-    b=dSmJGcmxOgUVhJklI1OU8Jo83gTZWM2ql9f0eEnzf46RH+mi5Ty7BpQwU3V4L17f9c
-    def5tkkb0X25D+2SqzuHc0W69Bpxw3OQS6JWy7MCwTCAVg2guCsttTykoGZHv8DNvWE2
-    d1HTEOBuMi39PchmxH2thF5xkbCdKoWNG/Z6NusSnHFtjiAfhR2N/8RPACCVGlwTT9aH
-    3hasz7dFMoTYTx3A5eSmHgFuG4HvI8qkH5auDlBvJxcJWUA99ORr4SUWEfrfb07sEEGd
-    /PyBylMrrrd3AkFxqjQw7SgSkQIKjCRB0VqDXCXgeverFXeSdIc/RX7PYMw3IWkoATc7
-    XRWA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b00::b82]
-    by smtp.strato.de (RZmta 47.42.2 AUTH)
-    with ESMTPSA id 4544c9y3RGPeNFh
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 27 Apr 2022 18:25:40 +0200 (CEST)
-Message-ID: <9717187f-9fa2-8787-7771-8127e752e6f1@hartkopp.net>
-Date:   Wed, 27 Apr 2022 18:25:40 +0200
+        Wed, 27 Apr 2022 12:30:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C076DDFB5;
+        Wed, 27 Apr 2022 09:26:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 506EE61DB3;
+        Wed, 27 Apr 2022 16:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3F6C385A9;
+        Wed, 27 Apr 2022 16:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651076817;
+        bh=+OKlmgWgdB+jhvrK301YGaf77tLtn1CuLBwYTY305wY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=aqNYgc5miFVZD/qMi5HRONesbzvwbbU4e9Oo/2xvgNh/B/iMJ08os7ubDGhnxj+qD
+         KAJw1LDv2JGcF99wuJAW/bWLj4UcrpnXVa6wKNngIfgQz8p441ON3YbnLfpwh8tbxK
+         JoObX2LOJJ30uTydMhljm7JAMU2GmRtKchKsllyIFXgRdyZf5RlBt8taIRlhukACvX
+         Z+okLtvkST1TO4DaGDs1QlyiwQoCKGpUZ3cDlo8wN2WkytIL/zIcGYbUlTvy+TUxRY
+         SK8Qqy2DtQnz6IKkIs06db+ypxhzE5/5kj5LKYPh1DaJZ82O34o+Fwl10uhOWwYDdX
+         btBOm1o59dvyQ==
+Message-ID: <878e726c3caf36c624d2f43d6b8e6f8a488f97b0.camel@kernel.org>
+Subject: Re: [PATCH v3] ceph: fix statfs for subdir mounts
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ryan Taylor <rptaylor@uvic.ca>
+Date:   Wed, 27 Apr 2022 12:26:55 -0400
+In-Reply-To: <20220427155704.4758-1-lhenriques@suse.de>
+References: <20220427155704.4758-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net] drivers: net: can: Fix deadlock in grcan_close()
-Content-Language: en-US
-To:     Andreas Larsson <andreas@gaisler.com>,
-        Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220425042400.66517-1-duoming@zju.edu.cn>
- <caaa6059-6172-e562-e48e-5987884052b9@hartkopp.net>
- <2f5295c1-d787-84a5-1b3e-813f96dd4ae2@gaisler.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <2f5295c1-d787-84a5-1b3e-813f96dd4ae2@gaisler.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27.04.22 14:47, Andreas Larsson wrote:
-> On 2022-04-26 21:12, Oliver Hartkopp wrote:
->> On 25.04.22 06:24, Duoming Zhou wrote:
->>> There are deadlocks caused by del_timer_sync(&priv->hang_timer)
->>> and del_timer_sync(&priv->rr_timer) in grcan_close(), one of
->>> the deadlocks are shown below:
->>>
->>>     (Thread 1)              |      (Thread 2)
->>>                             | grcan_reset_timer()
->>> grcan_close()              |  mod_timer()
->>>   spin_lock_irqsave() //(1) |  (wait a time)
->>>   ...                       | grcan_initiate_running_reset()
->>>   del_timer_sync()          |  spin_lock_irqsave() //(2)
->>>   (wait timer to stop)      |  ...
->>>
->>> We hold priv->lock in position (1) of thread 1 and use
->>> del_timer_sync() to wait timer to stop, but timer handler
->>> also need priv->lock in position (2) of thread 2.
->>> As a result, grcan_close() will block forever.
->>>
->>> This patch extracts del_timer_sync() from the protection of
->>> spin_lock_irqsave(), which could let timer handler to obtain
->>> the needed lock.
->>>
->>> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
->>> ---
->>>   drivers/net/can/grcan.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
->>> index d0c5a7a60da..1189057b5d6 100644
->>> --- a/drivers/net/can/grcan.c
->>> +++ b/drivers/net/can/grcan.c
->>> @@ -1102,8 +1102,10 @@ static int grcan_close(struct net_device *dev)
->>>       priv->closing = true;
->>>       if (priv->need_txbug_workaround) {
->>> +        spin_unlock_irqrestore(&priv->lock, flags);
->>>           del_timer_sync(&priv->hang_timer);
->>>           del_timer_sync(&priv->rr_timer);
->>> +        spin_lock_irqsave(&priv->lock, flags);
->>
->> It looks weird to unlock and re-lock the operations like this. This 
->> breaks the intended locking for the closing process.
->>
->> Isn't there any possibility to e.g. move that entire if-section before 
->> the lock?
+On Wed, 2022-04-27 at 16:57 +0100, Lu�s Henriques wrote:
+> When doing a mount using as base a directory that has 'max_bytes' quotas
+> statfs uses that value as the total; if a subdirectory is used instead,
+> the same 'max_bytes' too in statfs, unless there is another quota set.
 > 
-> All functions wishing to start the timers both check priv->closing and
-> then, if false, start the timer within the priv->lock spinlock. Given
-> that, it should be ok that del_timer_sync is not done within the
-> spinlock as therefore no one can restart any timers after priv->closing
-> has been set to true.
+> Unfortunately, if this subdirectory only has the 'max_files' quota set,
+> then statfs uses the filesystem total.  Fix this by making sure we only
+> lookup realms that contain the 'max_bytes' quota.
 > 
-> It looks a bit weird, but setting priv->closing to true needs to happen
-> within the priv->lock spinlock protection and needs to happen before
-> del_timer_sync to avoid a race between grcan_close and someone starting
-> the timer.
+> Link: https://tracker.ceph.com/issues/55090
+> Cc: Ryan Taylor <rptaylor@uvic.ca>
+> Signed-off-by: Lu�s Henriques <lhenriques@suse.de>
+> ---
+> Changes since v2:
+> Renamed function __ceph_has_any_quota() to __ceph_has_quota()
 > 
-> Reviewed-by: Andreas Larsson <andreas@gaisler.com>
+> Changes since v1:
+> Moved some more logic into __ceph_has_any_quota() function.
 > 
+>  fs/ceph/inode.c |  2 +-
+>  fs/ceph/quota.c | 19 +++++++++++--------
+>  fs/ceph/super.h | 28 ++++++++++++++++++++++++----
+>  3 files changed, 36 insertions(+), 13 deletions(-)
+> 
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 5de7bb9048b7..1067209cf6f6 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -691,7 +691,7 @@ void ceph_evict_inode(struct inode *inode)
+>  
+>  	__ceph_remove_caps(ci);
+>  
+> -	if (__ceph_has_any_quota(ci))
+> +	if (__ceph_has_quota(ci, QUOTA_GET_ANY))
+>  		ceph_adjust_quota_realms_count(inode, false);
+>  
+>  	/*
+> diff --git a/fs/ceph/quota.c b/fs/ceph/quota.c
+> index a338a3ec0dc4..64592adfe48f 100644
+> --- a/fs/ceph/quota.c
+> +++ b/fs/ceph/quota.c
+> @@ -195,9 +195,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
+>  
+>  /*
+>   * This function walks through the snaprealm for an inode and returns the
+> - * ceph_snap_realm for the first snaprealm that has quotas set (either max_files
+> - * or max_bytes).  If the root is reached, return the root ceph_snap_realm
+> - * instead.
+> + * ceph_snap_realm for the first snaprealm that has quotas set (max_files,
+> + * max_bytes, or any, depending on the 'which_quota' argument).  If the root is
+> + * reached, return the root ceph_snap_realm instead.
+>   *
+>   * Note that the caller is responsible for calling ceph_put_snap_realm() on the
+>   * returned realm.
+> @@ -209,7 +209,9 @@ void ceph_cleanup_quotarealms_inodes(struct ceph_mds_client *mdsc)
+>   * will be restarted.
+>   */
+>  static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
+> -					       struct inode *inode, bool retry)
+> +					       struct inode *inode,
+> +					       enum quota_get_realm which_quota,
+> +					       bool retry)
+>  {
+>  	struct ceph_inode_info *ci = NULL;
+>  	struct ceph_snap_realm *realm, *next;
+> @@ -248,7 +250,7 @@ static struct ceph_snap_realm *get_quota_realm(struct ceph_mds_client *mdsc,
+>  		}
+>  
+>  		ci = ceph_inode(in);
+> -		has_quota = __ceph_has_any_quota(ci);
+> +		has_quota = __ceph_has_quota(ci, which_quota);
+>  		iput(in);
+>  
+>  		next = realm->parent;
+> @@ -279,8 +281,8 @@ bool ceph_quota_is_same_realm(struct inode *old, struct inode *new)
+>  	 * dropped and we can then restart the whole operation.
+>  	 */
+>  	down_read(&mdsc->snap_rwsem);
+> -	old_realm = get_quota_realm(mdsc, old, true);
+> -	new_realm = get_quota_realm(mdsc, new, false);
+> +	old_realm = get_quota_realm(mdsc, old, QUOTA_GET_ANY, true);
+> +	new_realm = get_quota_realm(mdsc, new, QUOTA_GET_ANY, false);
+>  	if (PTR_ERR(new_realm) == -EAGAIN) {
+>  		up_read(&mdsc->snap_rwsem);
+>  		if (old_realm)
+> @@ -483,7 +485,8 @@ bool ceph_quota_update_statfs(struct ceph_fs_client *fsc, struct kstatfs *buf)
+>  	bool is_updated = false;
+>  
+>  	down_read(&mdsc->snap_rwsem);
+> -	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root), true);
+> +	realm = get_quota_realm(mdsc, d_inode(fsc->sb->s_root),
+> +				QUOTA_GET_MAX_BYTES, true);
+>  	up_read(&mdsc->snap_rwsem);
+>  	if (!realm)
+>  		return false;
+> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+> index a2e1c83ab29a..0ecde1c12fee 100644
+> --- a/fs/ceph/super.h
+> +++ b/fs/ceph/super.h
+> @@ -1317,9 +1317,29 @@ extern void ceph_fs_debugfs_init(struct ceph_fs_client *client);
+>  extern void ceph_fs_debugfs_cleanup(struct ceph_fs_client *client);
+>  
+>  /* quota.c */
+> -static inline bool __ceph_has_any_quota(struct ceph_inode_info *ci)
+> +
+> +enum quota_get_realm {
+> +	QUOTA_GET_MAX_FILES,
+> +	QUOTA_GET_MAX_BYTES,
+> +	QUOTA_GET_ANY
+> +};
+> +
+> +static inline bool __ceph_has_quota(struct ceph_inode_info *ci,
+> +				    enum quota_get_realm which)
+>  {
+> -	return ci->i_max_files || ci->i_max_bytes;
+> +	bool has_quota = false;
+> +
+> +	switch (which) {
+> +	case QUOTA_GET_MAX_BYTES:
+> +		has_quota = !!ci->i_max_bytes;
+> +		break;
+> +	case QUOTA_GET_MAX_FILES:
+> +		has_quota = !!ci->i_max_files;
+> +		break;
+> +	default:
+> +		has_quota = !!(ci->i_max_files || ci->i_max_bytes);
+> +	}
+> +	return has_quota;
+>  }
+>  
+>  extern void ceph_adjust_quota_realms_count(struct inode *inode, bool inc);
+> @@ -1328,10 +1348,10 @@ static inline void __ceph_update_quota(struct ceph_inode_info *ci,
+>  				       u64 max_bytes, u64 max_files)
+>  {
+>  	bool had_quota, has_quota;
+> -	had_quota = __ceph_has_any_quota(ci);
+> +	had_quota = __ceph_has_quota(ci, QUOTA_GET_ANY);
+>  	ci->i_max_bytes = max_bytes;
+>  	ci->i_max_files = max_files;
+> -	has_quota = __ceph_has_any_quota(ci);
+> +	has_quota = __ceph_has_quota(ci, QUOTA_GET_ANY);
+>  
+>  	if (had_quota != has_quota)
+>  		ceph_adjust_quota_realms_count(&ci->vfs_inode, has_quota);
 
-Thanks Andreas!
-
-Best regards,
-Oliver
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

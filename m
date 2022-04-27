@@ -2,137 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113A1512003
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EB4511E6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243104AbiD0Q2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S242555AbiD0Q2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242471AbiD0Q1e (ORCPT
+        with ESMTP id S243186AbiD0Q1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BE63A5C2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:21:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7781761D73
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:21:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD61C385A7;
-        Wed, 27 Apr 2022 16:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651076514;
-        bh=NCQz/cItdvzI928NKVHeYCqXxxe530d87deKgvE5cRo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gHKOmHxtzi+3V/XsGaUnDgXUB5uPSnXt3nPEEwr4HhQzftCVVgUYP063mBfNCgsXA
-         vkQamAw5Z6JsMDUudjScGaiaTukB4gRoW88R/LfvFCs8htOVFdRBAVdKuhOAXv4YXv
-         qvpBJVou+6hDp7zv24erzIMa2Sijg9aC7PJLLsZE=
-Date:   Wed, 27 Apr 2022 18:21:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Matthias Maennich <maennich@google.com>
-Subject: Re: [PATCH v2] export: fix string handling of namespace in
- EXPORT_SYMBOL_NS
-Message-ID: <Ymltn72chRkV4P83@kroah.com>
-References: <20220427090442.2105905-1-gregkh@linuxfoundation.org>
- <CAK7LNASFK3z8Y=L1Q6uG3YZ2GBffBAASkc4tWfnPF__qeYh3SA@mail.gmail.com>
- <YmlYRMEzonSnwZ7q@kroah.com>
- <CAK7LNAT_YdE_nHL=KzXDydrzJ3gxEgTc14RFQfgxm9pjdC0pug@mail.gmail.com>
+        Wed, 27 Apr 2022 12:27:37 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 009BF41FB5;
+        Wed, 27 Apr 2022 09:22:12 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 23RGLwSQ003715;
+        Wed, 27 Apr 2022 18:21:58 +0200
+Date:   Wed, 27 Apr 2022 18:21:58 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 3/7] tcp: resalt the secret every 10 seconds
+Message-ID: <20220427162158.GC3488@1wt.eu>
+References: <20220427065233.2075-1-w@1wt.eu>
+ <20220427065233.2075-4-w@1wt.eu>
+ <20220427085621.5f2d1759@hermes.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNAT_YdE_nHL=KzXDydrzJ3gxEgTc14RFQfgxm9pjdC0pug@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427085621.5f2d1759@hermes.local>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 12:11:13AM +0900, Masahiro Yamada wrote:
-> On Wed, Apr 27, 2022 at 11:50 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Apr 27, 2022 at 11:29:19PM +0900, Masahiro Yamada wrote:
-> > > On Wed, Apr 27, 2022 at 6:06 PM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > Commit c3a6cf19e695 ("export: avoid code duplication in
-> > > > include/linux/export.h") broke the ability for a defined string to be
-> > > > used as a namespace value.
-> > >
-> > > In hindsight, this was a bad idea.
-> > >
-> > >
-> > > EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, "SPI_DW_CORE")
-> > >
-> > >    is much much better than:
-> > >
-> > > EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, SPI_DW_CORE)
-> >
-> > I agree, but it's really not that big of a deal.  We could change it if
-> > you want.
-> >
-> > > ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=USB_STORAGE
-> > >
-> > > is also a bad idea.
-> >
-> > That's not such a bad idea as it lets you set a namespace for a
-> > directory and below easily.  What would you want to use instead?
+Hi Stephen,
+
+On Wed, Apr 27, 2022 at 08:56:21AM -0700, Stephen Hemminger wrote:
+> On Wed, 27 Apr 2022 08:52:29 +0200
+> Willy Tarreau <w@1wt.eu> wrote:
 > 
-> I like "explicit" better than "implicit".
+> > From: Eric Dumazet <edumazet@google.com>
+> > 
+> > In order to limit the ability for an observer to recognize the source
+> > ports sequence used to contact a set of destinations, we should
+> > periodically shuffle the secret. 10 seconds looks effective enough
+> > without causing particular issues.
+> > 
+> > Cc: Moshe Kol <moshe.kol@mail.huji.ac.il>
+> > Cc: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
+> > Cc: Amit Klein <aksecurity@gmail.com>
+> > Tested-by: Willy Tarreau <w@1wt.eu>
+> > Signed-off-by: Eric Dumazet <edumazet@google.com>
+> > ---
+> >  net/core/secure_seq.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/net/core/secure_seq.c b/net/core/secure_seq.c
+> > index 2cdd43a63f64..200ab4686275 100644
+> > --- a/net/core/secure_seq.c
+> > +++ b/net/core/secure_seq.c
+> > @@ -22,6 +22,8 @@
+> >  static siphash_aligned_key_t net_secret;
+> >  static siphash_aligned_key_t ts_secret;
+> >  
 > 
-> With  EXPORT_SYMBOL_GPL(usb_stor_resume);
-> you need to check Makefile to know whether it is global
-> or is in a specific namespace.
-> 
-> EXPORT_SYMBOL_NS_GPL(usb_stor_resume, "USB_STORAGE");
-> will clarify the namespace at a glance.
+> Rather than hard coding, why not have a sysctl knob for this?
+> That way the tinfoil types can set it smaller.
 
-I agree, but currently I use the makefile change in a big out-of-tree
-project to do "all exported symbols in this directory and lower are now
-in this namespace".  That's a huge help and makes for a 2 line change
-vs. a hundreds-of-lines change.
+It's a legit question. First I think that there's no good value; before
+it used to be infinite, and now we're trying to figure a reasonable value
+that make the attack impractical without going too close to the risk of
+occasionally failing to establish a connection. I'm really not convinced
+that there's any benefit in fiddling with that, except for breaking one's
+stack by resalting too often and complaining about stupid network issues
+with ACK or RST being sent in response to a SYN.
 
-> > > When you look at EXPORT_SYMBOL_GPL() in C files, you will not be
-> > > aware of the presence of the namespace.
-> >
-> > It's easy to tell when things do not link properly :)
-> 
-> Right, modpost will tell you that once you compile it.
+And stupidly, dividing jiffies by a constant known at build time is
+slightly cheaper than dividing by a variable. I know it's a detail but
+we tried hard to limit the accumulation of details here :-/
 
-And that's the best thing, 'make nsdeps' will then even generate a patch
-to fix things up.
-
-> > > Anyway, it is presumably too late to fix it.
-> >
-> > Not really, the number of in-kernel users are still small and can be
-> > changed if you like.  External users can update when they hit the change
-> > as well, not a big deal.
-> >
-> > Other than using a string for the namespace definition, what would you
-> > like to see done differently?
-> 
-> Nothing else.
-> 
-> (but I am not a big fan of the module namespace itself.)
-
-I think more subsystems need to start using them as it instantly shows
-where some drivers are doing things that maybe they shouldn't be doing.
-It was insightful when the dma-buf code moved to a module namespace as
-it found places the maintainers were not even aware of.
-
-Anyway, it's on my long-term todo list...
-
-thanks,
-
-greg k-h
+Just my two cents,
+Willy

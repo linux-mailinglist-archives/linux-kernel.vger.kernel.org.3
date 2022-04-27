@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F8E5119D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE155119C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbiD0N20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S235941AbiD0N23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235703AbiD0N2R (ORCPT
+        with ESMTP id S235861AbiD0N2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:28:17 -0400
+        Wed, 27 Apr 2022 09:28:19 -0400
 Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471F538BF6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:25:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1309838BE3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:25:08 -0700 (PDT)
 Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23RCPLrX017559;
-        Wed, 27 Apr 2022 13:24:59 GMT
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23RCPLrY017559;
+        Wed, 27 Apr 2022 13:25:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=PPS06212021;
- bh=0lzRG+EqONpMi5RXnqZXZ4G9naGVOpSCFzOw5Z4gBPg=;
- b=O9qHjgEH/OPfJsvrKa8mG8s7AYC7D61OK89oPcrCaAK5+UaRl6F9FuA5IwfrTmgXv0Xg
- ydOBrDn+TW6Q6p48Cii1DED3oh9XgaaHJGAkN6e1Zwt931E2r9lXUh6q5O/7SAq89Awl
- 1jLWV5KBuxcsIRnl6SYHRktP5Ft9JGvUcmrNtaeaqws5nG6TO6Je0iFvbNnsyCmc0YGO
- oAR1TIJmETcEEGYX2aDPQGXAbzBA2e22mI/PDHrQsdMw6ZFlnLiT/jvVorjRcANs47sf
- 1+lTSoLLscSsWoWd+F7ZqVsbhwU1u1ZqIrz5mKGG3L779Ap0vrfVYcNRrgqGE93Il8f6 xQ== 
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version; s=PPS06212021;
+ bh=WuLyOIPpkpihnzDBH0OG6NoDN6nuCh6e8kzjSLjAWAQ=;
+ b=AeJEZ1cFYd8CHHOZ8gsvQimcXNliZN0o7q1pZmauxPlCwOVfasCcMauyyv2K9mBjO5mb
+ hsUxbgXy5Sgaug0rcWadrvuV4Zx3IvXj0RnLzTL7KiLJ2e4ezJ7IfQmnc67ATUKEIFNg
+ AC6Nm0JkqTDuX6YcntcV1WlzjjNz8dWUYtiJr+/3ceoBlfaEo0Q7Zbcybaymj8HDb+Uo
+ 7iB/QnhyPJ60FiVcmtOj0eSQJHjgfCkVGbRfiswS9xQ/WiLzbxGDVQ+VWEC0E//hPOaE
+ Ix737JdkSoEGAlrBlUgmZtBQSTl9PIUJYaVrvyyptRaYL6vHsZRC4vh+JPaDexx/glKh jA== 
 Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3fprtcrgym-1
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3fprtcrgym-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 13:24:59 +0000
+        Wed, 27 Apr 2022 13:25:00 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nSTnFD+U/IcHWMa7peCpDUwSZzmheG4ns6qLAOHHqjxZ6rLWZdAfRglPB+hG/B/J/uPPbjfeSQD8iKCHrmnlaulkVmBUbNxEeC1B0MQM2f2DhKiUHsICmCodTEcbJLRkmbBBOMGmo/MNsZFylceEpfdcUHg1wJMTpFB7UdJiNE5BYAlvdqR2kY/eYW/2qRdu3aIEZfnijKrTU+ZFvVTebwkG7KNtmuByTFF/WsazhCoWzhhdmjspgnfx4euz1z4VJpmjikQ97BYJHUrVAUUD9EZ6AhZZejsEGssTrEyTVTSHIjnKFzBWyia1UVIu1ofomRFruPtGhpIoFLZvLqr1Cw==
+ b=Z7KwdJ7gMSgWlY1lVZqucl65ldPBYt4DYwnpF7QV3OtKGxlRB80TnfZosljM+BTWf+QCl9t/DqwWX3DBsUbF296JvP1dexY2oOkqLzYMad2IMdFJRaTxmchMKxJRppFr8JRhX2QPm19w0REmsGkH3VXAAgmljjosJmZyg9VYVxUMpkTgBzCbtawGy0OhkCQSPcPqf8IPdJh/sMs5DAaBMDGPlJAFc6UTslok0yoNRVODAzgpvW/lAvuXLZrN2kUrlAai229qitmsoio9dFUA4moJqmczKV8rU1CtzVzj31rqZ72KiwBw/y9B0oF5ZMBH8oNMjXAs4JieQwQpOH3RSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0lzRG+EqONpMi5RXnqZXZ4G9naGVOpSCFzOw5Z4gBPg=;
- b=K5pyDWfyPtoubUcLsZz0MrAHUHV5nHdTwSL+dt2VmO+R49Z0ate6edcMQ5k9MFUNeZllvWcTVs90P239cV5UcYCohYJMdhleXSDilhhovA5L6+2GvyJ1JHfZD2c/uG2OIQmGhfLx9Na686tPEdRr9pRAsOe7jWaFBPZKDfX5M6YXpdpN78tMYYSoApv+IUgGYInBTRrlo0G3kZ8MposctQT+cVh0IAKayRj0eV8GUAWSL4LYZnhBGArkwgAfNMY/ka3LxKZrObwl01oL3p3KikvPv9viyku5RrLIlfkm0Wfu8fBqqi6j5cKkb2d7JcjmbyDX/GmprAmaF8z7eTySDw==
+ bh=WuLyOIPpkpihnzDBH0OG6NoDN6nuCh6e8kzjSLjAWAQ=;
+ b=BTYjMgjIIGULlHNUvTc8Uohbl8LgcSsi1HMqPuglsxW5XIwu15Us3sDRCVHTjpEHP4kbejjdt3YTj2NWNaAah7RCEcp2fZW03/Gk1gQtR+HZrbyd4/GqnEagchYTK5l0YjtB41/XwzebPUZwlMeE40iPcE8TIR3yM12/Aege/tFcmI1L7B6AW2Fh6D7zSp3hZ8PpE8pNx4Vees90NTuGrbg4jWEIc45+oJKBJWxqE0I18slTV7cDyCAO/Rh0D4cdAEyZnSouV/NX7ej1ppHIuEKb8P3fy1SyXUqoodr7yIWiDqeA5LGQCeSz12ARa3mX94kNqBFm1uYfY20iOK8HUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -45,21 +45,22 @@ Received: from DM6PR11MB4545.namprd11.prod.outlook.com (2603:10b6:5:2ae::14)
  by BN8PR11MB3650.namprd11.prod.outlook.com (2603:10b6:408:8f::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 27 Apr
- 2022 13:24:56 +0000
+ 2022 13:24:57 +0000
 Received: from DM6PR11MB4545.namprd11.prod.outlook.com
  ([fe80::89e0:ae63:8b71:4a0f]) by DM6PR11MB4545.namprd11.prod.outlook.com
  ([fe80::89e0:ae63:8b71:4a0f%5]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
- 13:24:56 +0000
+ 13:24:57 +0000
 From:   Paul Gortmaker <paul.gortmaker@windriver.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
         Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
         Phillip Potter <phil@philpotter.co.uk>
-Subject: [PATCH 0/3] remove remaining IDE driver fragments
-Date:   Wed, 27 Apr 2022 09:24:32 -0400
-Message-Id: <20220427132436.12795-1-paul.gortmaker@windriver.com>
+Subject: [PATCH 1/3] cdrom: remove the unused driver specific disc change ioctl
+Date:   Wed, 27 Apr 2022 09:24:33 -0400
+Message-Id: <20220427132436.12795-2-paul.gortmaker@windriver.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220427132436.12795-1-paul.gortmaker@windriver.com>
+References: <20220427132436.12795-1-paul.gortmaker@windriver.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: YT1PR01CA0059.CANPRD01.PROD.OUTLOOK.COM
@@ -67,65 +68,65 @@ X-ClientProxiedBy: YT1PR01CA0059.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:5:2ae::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f802e1c8-ef75-4753-5606-08da28515263
+X-MS-Office365-Filtering-Correlation-Id: 09bcedba-6abb-4dfc-d3cf-08da28515305
 X-MS-TrafficTypeDiagnostic: BN8PR11MB3650:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR11MB36509FD1DD76527F5E25DF0183FA9@BN8PR11MB3650.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BN8PR11MB365077E5025ABEEC8DD8979E83FA9@BN8PR11MB3650.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DtXToKxQDsNnCoF5F4a6CM4Nx9EaILaBAd+Qv4oYhqQ1OhgI837Jfc6TfGjAcp8zF/EIqYOldqRv7IVIEwh7K9912HM3pMUvgoEEUSp6TgXWG+/SZ+aQt6QD2JpWA78dFvDUByXcuRYoGTiS073vfrfJrYdmdMFKDaN+IAYhDbt9wnLzHosCQbQM/DuOz4YUhimb55fNORteAvkEVsgbSbM0ImoP9eBULvtL6q1q3R6ZcucZ3VpmeTLwbhwhumz6DAnZA4xGP5d0ypnObsXWkTXvSSxdVkE9Yg6ynnAnXyZyxtaKHlo/hsG00wWCNkI4Nz92Q1t6HFIZyznU6DxXx92Xk7epsWMyhibqis8/+RQA1MMx2ysVEPgaD1GYscZQLreYigjBT24LldlZQv71BUsR7SeJy0xuYt0nyE7BCqf4gaOLdo/5XiKzcub2ww//bTo5Gn3XOmr6/TS3TDdPvFPtZd/A75kS0MVAcaf8C8Be21Wx0i+AqY70RXjOZ0yIasN/8o5TJl9c1zFoJgxZoAYF6K91nPifb73w/fYXc39qMPPeoZAlSdL5R7rtqNY9rBviniPrggNvC9/IDZ5jNFFezcSFUv7B6A8lmyFZzBWvEWjoIl2VyIUJfxMap3nqQ6qa0MMPG8BJ/i5ovCWzjX8V8FObvifRpxBPM/4tnhsE7dUK2OMIth1bF8LhNycI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(38350700002)(1076003)(186003)(83380400001)(5660300002)(8936002)(4326008)(8676002)(36756003)(44832011)(2906002)(54906003)(6512007)(6486002)(52116002)(6666004)(6506007)(66476007)(66946007)(26005)(2616005)(66556008)(19627235002)(508600001)(6916009)(86362001)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ETv0yq+dJMd+a5GkW7NgK3lcagzCN8tbalXMo74cOst4kYd2HP3KzkdJW29ERM4jeCh2GJIvsyOQMWjfu5Dy1hVN43LMgn4PmqHO/HkIeLK1ic2+OubX3rRp9HpbB+NLQXJcaDTYQEMxYhfR0fO9qHaSWomc1CQd/ATzp/WA/Bg/hMunfU+UuaXiiWY0v94abOxjMB0DKnH0h2uyvilxGtZTh0OIFYztKZEVuixO3iBYQZNJB9utlXBleYhONQe7e+QpuMkuTjX5DeSlQA9F/Mo5MIN+NE+vsqkHj/7OmV6xtCQKF0SSEcGbQQ7FyA7De4JE/IRg/IuK7SSBgxoOPGEwD0FXowhcJoOsQruDqAbvDqSvtKLwz7BbmQKZ17E6mX0FyM0Blx0QafUJZj4H4APDnnXXMBYFlGvmF+lJiov6DSOfshYaYcCHhUVYfnX+z+Wd57jJqLmfje8XnXV8kSRlQXVuBKg02/QdRkIuHHocT8fvOC/qVx/hHOovHhfEAjGfbzCunKCQuTln81ci4YDq5mvxe5hUf+T7uJl/H/oDyuLCQDdE0w5KpWiNmxu1WiESHySSbrvcVI+9Oy3YzQFBplkXdKX8cZCfHhllH/goKlG25rExZlaDoKpedfo2Ol9kt2mgBcU85rV/f1i1qw2DztgKNC6ro57AYhdLZ0XDXGpiNINDdHgvQwnaMDmrl8hNdlfgiWna3cVTsgEQAw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(38350700002)(1076003)(186003)(83380400001)(5660300002)(8936002)(4326008)(8676002)(36756003)(44832011)(2906002)(54906003)(6512007)(6486002)(52116002)(6666004)(6506007)(66476007)(66946007)(26005)(2616005)(66556008)(508600001)(6916009)(86362001)(316002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xFILQlRvQ/ELgjnYKG3n8Gz4cMB6hh8GMZnV/XJUwBU5mPNEDjqmyvFL554r?=
- =?us-ascii?Q?Xns22lv/n56stXAVSpbrejX1jcEdfpcrij/EfnjVvOpN6ZGfFlOeMfSOI5WL?=
- =?us-ascii?Q?377froZ333OW+hIYN/9PD7HXeGhvGTVfCgvFZ7FVkojzO12rfF4ZTJlzKR8M?=
- =?us-ascii?Q?kO/RapXtOihYZn+jd8YAsE7zt8QAOU4JCZt9ShzrV/0OMBdepbX9hqNdXqxW?=
- =?us-ascii?Q?Hp0pTM9R5yYNVFffcRmqO6fmQ1jsYT2Oj7mnl5LoAzsdJtoT3AuCJFMT64gS?=
- =?us-ascii?Q?OYdj3fDou4OfUnByw1U2Bg9j9xzsz6LYUnIfDnWuYwXrftMaQbMGT17YzwIo?=
- =?us-ascii?Q?/6Lj8qLA48kEyaYCRwlGWS4P0kcsmnpl5uy47pIRtkmdDLIpDz0auyhIbwcB?=
- =?us-ascii?Q?ATLYSmhelMMn1kIru+2UhKdgIlnyabbxlT4BNN+0wyYCkagbnBFu9P/8J/6p?=
- =?us-ascii?Q?QO8raX2VSTFEKWnW6wZv2pxQBaieUJbB/AHQgKXtKCKNHvwKxUg26GrQHxOm?=
- =?us-ascii?Q?hcMKmRSY2YPvspBU+VSh8hmbd38WwSGyB7DlzvUGnfhUpMCeO7DxtmWNZI20?=
- =?us-ascii?Q?uWfSv/1PybDWfZ+IOhQJaiMXYCKbn1QjAvZ62HGkwyhxA/2Mthmg1y0zGVL/?=
- =?us-ascii?Q?C21z4Az6VHv4GAXd7q8l9tEiJt5cs+8Fo3R2FL+a+r9KlgguTlFst8xWoPke?=
- =?us-ascii?Q?c/GS4TkCpzSCetXaHt6052AGdQ6QVNqXb/785Ys3ZPNlSxY+zK+po9UWR4XV?=
- =?us-ascii?Q?/tj6FOeJWtMFywzO04SxTNLMCuKXQi3NnnaU0CJo5IIj23+89KIzYhDOeZFb?=
- =?us-ascii?Q?6j8eO2JKlIkQv1z68nPBUR5cPqPjiQfH9CrzRZd7UD0pfFFJnfOIl9BSbSeJ?=
- =?us-ascii?Q?tInAbxV0DOP1zIYXI2kiHzenwEFfjIANXiAh31fuk7UCwlMtoivn1ZV/QD0M?=
- =?us-ascii?Q?h69a+lSrcuWZ4FlhXT4mOiM4c23g0GB174qUBaBVcdz+tX243KFcDAyq1Wxm?=
- =?us-ascii?Q?0UDyGewctw2u3+g1ctlEHvA5nYxlD4B/B4hfJ0yauZZMKbbj4J2fKfQy+xua?=
- =?us-ascii?Q?kaM+dSvq0Yk1PEMydAR8icqC49yDXXLwbx/8b46Me7MChe7/BFQvDZPnVI2H?=
- =?us-ascii?Q?l8+jtaqGebZFlw8OYKpK94NKBGzdbAc6s62rPAuji2/8tbyfsom1WF7TzoPG?=
- =?us-ascii?Q?IIsz1hx29Wtt2hja/yjTRV/Sh1oo5HJ7LZQ8nHl9l/Y/bJuzUIWz96I5dcZo?=
- =?us-ascii?Q?4VWzj8iTOyTs484eYtT4pwx962lEh9IFmGl2U42NvIGEko4DEhXEuANpK2vc?=
- =?us-ascii?Q?wvXSlWM4buu/Tr78rw/YB1hoaEO0Y/nchsHUHQ88hKRIf8rHFJsuaqJN3cqa?=
- =?us-ascii?Q?QsFntL3/O2xXW8KUBIs3089X8sdPIT+yiyuA8BgO+ljBt1ihKIXmOekeNRyN?=
- =?us-ascii?Q?MpdehkcQOw7q2cHI6VIVzgIPjt2L8CTuy5GX38iJgjHAzPjs76HzAi2ocoDZ?=
- =?us-ascii?Q?CWLlSazYzmo1SYqvunTcEGCOC22BNAWwliK4TyfA4UtjB5Zapg4LuEASkJHt?=
- =?us-ascii?Q?RqLhh5eb0l+qlL3XATJgrulggFa3GtLl6norc3SIHJKL6oQZQDz0J6ymsFsV?=
- =?us-ascii?Q?mIhVXVHZFXXMKp+c0RejEnHX6sLnp5llL5Kbfd0Fu/BYQ5CKuXUF6ZRiEwc4?=
- =?us-ascii?Q?Y5zwl/3vMlJlQ5kdguj/Um8fu1Nf8BulKWj2SoCrZtgwQnbvwJz6w0fHfuXT?=
- =?us-ascii?Q?qQosfH/KRYgnNqnuSR5dNmp2SNFm5o4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2BvUqbwLz2HBP4pijFzGAqenyti69xHbRMsLbzXRFUYci5STkazuYKpUku8N?=
+ =?us-ascii?Q?jRDxZDst+8idBTWl0Ka5SJBtfO2A1aHI2KJm4fq24uN2L6nlo51Q0w4zBPx9?=
+ =?us-ascii?Q?A2MQxSht96Sl8nMSg9Lt1xPmIZPsHv+yfSEFa/s/zEN/l8d26eipI8wiJAnO?=
+ =?us-ascii?Q?nCnoMmCsFPUEEJ7sv3go3xYZdXze9zC6RbqFsa94H7275GYz8AZ+XlbC7qey?=
+ =?us-ascii?Q?j4Bpbr7tCmh13krVm7SzcJVukq6N3ieCJG1aiR5DoyQXjz62DpcSuhLi39Re?=
+ =?us-ascii?Q?jKB6PWB+vmgajADmT4IeF8Hj1MmVkLwLryU09J1pJAkvhOgE3SbV31PbeLdR?=
+ =?us-ascii?Q?N2NXr1qiFprUEzV+1tLnjGTtKZ7AgEhh26p7hQj3w4LwuTbvYJLiyNh1maFL?=
+ =?us-ascii?Q?9JCaBw+sJSIKaJzR8M20CSXr6parmyBcC4iIfBnc+cRZXlppLEFeIb0TutoF?=
+ =?us-ascii?Q?SO/GYxTsW/s5Qo7g+lkNj0l0sUdBFKM/eMiwYMU8oDhk3o8V/T12i1a2ykof?=
+ =?us-ascii?Q?QDBktezgydSBIl8cKM3sbrUFeN0BlGn4JKOixx+x/DWhWYqfkYKgptuULgWo?=
+ =?us-ascii?Q?ugtx3IMvkjqc8oddsUP+EHbjhZb8IVIm7hV6axbDUXud1ZAkkz7Ikc0ckEc9?=
+ =?us-ascii?Q?tYYfJGYC3SJT/4lMKrqxDrmD9oe3QEcsjpoxMe6D1OoxS7a4jTUl93ZEyMVf?=
+ =?us-ascii?Q?lgQzbqw3uQkOoLCzu7Ac23it+TN7f2oL4/nKbuv6NFQBytWf1kVOpSGo7y+r?=
+ =?us-ascii?Q?plspgZ4u3B3ITgTm3KgMXHaWQWjcRYUG5jLH6+JYIZ/g1rbWdvADvAzWxqSK?=
+ =?us-ascii?Q?eXTf/lJBBpaxWtjDcDg+Q2jWbfR3nvQ6PjIkv2i6xqWYtvHFa55R+vCNt7sQ?=
+ =?us-ascii?Q?XsKI+D/U4uWhdtsNkIntd1jkcp+hbGHn8uhlc5HQPhqmFUiANeGdJPzIbnKG?=
+ =?us-ascii?Q?yTr86q/itvOzFq/+8lKVvHtRe4uD+SUWf6GBFlMAFRe3SjYL+JCfMTdy0nKF?=
+ =?us-ascii?Q?Usj8T54jbe8Q+L5hR77s9wr5+0MyL7PasBgjMm1MSB1aAwaJvVfS2/r9tlk2?=
+ =?us-ascii?Q?rbVszcBukrNmOiPUkR0+HhyWnkv+GAhPLGyVGmVlTI0/+Ua9drcqxUWmpRKa?=
+ =?us-ascii?Q?M7ktkzQ3dxWr91D18p/BNVWe7j+nd+r4gX5d8U+tCjvLjMa7v4RB7bVtsImS?=
+ =?us-ascii?Q?a0ag/4xJBS8ezv54ihtNb71KqkrfpJMOYw1Cu6tWixqJwwqoaWxpworyFNRF?=
+ =?us-ascii?Q?T9023TTQXhGZ5k7FbzQaWpxGfctke0ELrdyHvbKL6tHRbWMDRDZ73hdGYsdH?=
+ =?us-ascii?Q?9+K7du5yCXHPAQJfkEfYgcqECB8bDaUhefxA5qu1xdfF6oP6PW8khveWsgoF?=
+ =?us-ascii?Q?q2OY57g+dGLLFldw3tu9xouFLTbNArazp8wVV92S7KEXdfu3UFCTol1pOznJ?=
+ =?us-ascii?Q?GorEDlpoWFFvYHZbuWzEr9DwZJ6lfuB4jRmHgu/GuwjSkumTQHZCAI0b+5uw?=
+ =?us-ascii?Q?0pp/Dgdc5L9BJ3OCGmWUglWLI7bZNHSL+SPlHm+EhYk6ctlgD7JU8+PRh011?=
+ =?us-ascii?Q?I78zK5ln1vNDb5PEgDyWwFMh086Pk7C5+k42Uk/WkytwIOs85GsU0cl9KmFF?=
+ =?us-ascii?Q?Dtk+zvRfcWUi8+4ss3iXf/qBOysxZyG24v00yV41L9LYHNOnUHJJv4i0QMF5?=
+ =?us-ascii?Q?WjYDQfgbZzS0AZMg7R49cJ0KkVmCDb9o6478AjBq8l6sb+vLSAkXk0w2llCk?=
+ =?us-ascii?Q?N79mCl3VhXrlkgVZSGP3M4qNh4ZRPsQ=3D?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f802e1c8-ef75-4753-5606-08da28515263
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09bcedba-6abb-4dfc-d3cf-08da28515305
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4545.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 13:24:56.7768
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 13:24:57.7949
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pr/xSCrbCZiTdwZ+8YSoUhe2oyUiNL/XRmUq7ChaibnJ/bSQ3csyzCd0pWd2s01MFm0ynDDBQ4wvHJLu5CTZT3nJmhp6kZ+vOZH1SmW2wCU=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wi0414Yu7e+zMeHPB915DYT0bAjqoxn4XYSMBQGyCsmt7R58Y6iBibLhjh/Is7sHdi0EbbBT7atVnR6Tnw9M5A3rrH1Poe4la+3BjbbFYnM=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3650
-X-Proofpoint-GUID: -NLs9_9xQ_zQbV_fMfsH1Lz2BtdjRTgK
-X-Proofpoint-ORIG-GUID: -NLs9_9xQ_zQbV_fMfsH1Lz2BtdjRTgK
+X-Proofpoint-GUID: tFCS8OKSGG-cMLFEwKn9qODKKfHacSMa
+X-Proofpoint-ORIG-GUID: tFCS8OKSGG-cMLFEwKn9qODKKfHacSMa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=541 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=693 mlxscore=0
  suspectscore=0 phishscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2204270087
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -136,56 +137,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A couple months back a grep had me find some IDE related bits by
-accident - which got orphaned by our removal of the old IDE in
+This was only used by the ide-cd driver, which went away in
 commit b7fb14d3ac63 ("ide: remove the legacy ide driver")
-in the v5.13 release.
-
-So we might as well get rid of these bits as well.  In untangling the
-connection to docs, I noticed that the driver removal orphaned some
-cdrom stuff that was only used by ide-cd so that is cleaned up too.
+so we might as well take advantage of that and get rid of
+this hook as well.
 
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Phillip Potter <phil@philpotter.co.uk>
-
+Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
 ---
+ Documentation/cdrom/cdrom-standard.rst | 10 ----------
+ drivers/cdrom/cdrom.c                  |  8 --------
+ include/linux/cdrom.h                  |  1 -
+ 3 files changed, 19 deletions(-)
 
-Paul Gortmaker (3):
-  cdrom: remove the unused driver specific disc change ioctl
-  cdrom: mark CDROMGETSPINDOWN/CDROMSETSPINDOWN obsolete
-  block: remove last remaining traces of IDE documentation
-
- .../admin-guide/kernel-parameters.txt         |  21 -
- Documentation/cdrom/cdrom-standard.rst        |  10 -
- Documentation/cdrom/ide-cd.rst                | 538 ------------------
- Documentation/cdrom/index.rst                 |   1 -
- Documentation/filesystems/proc.rst            |  92 +--
- Documentation/ide/ChangeLog.ide-cd.1994-2004  | 268 ---------
- .../ide/ChangeLog.ide-floppy.1996-2002        |  63 --
- .../ide/ChangeLog.ide-tape.1995-2002          | 257 ---------
- Documentation/ide/changelogs.rst              |  17 -
- Documentation/ide/ide-tape.rst                |  68 ---
- Documentation/ide/ide.rst                     | 265 ---------
- Documentation/ide/index.rst                   |  21 -
- Documentation/ide/warm-plug-howto.rst         |  18 -
- Documentation/userspace-api/ioctl/cdrom.rst   |   6 +
- drivers/block/pktcdvd.c                       |   2 +-
- drivers/cdrom/cdrom.c                         |   8 -
- include/linux/cdrom.h                         |   1 -
- include/uapi/linux/cdrom.h                    |   2 +-
- 18 files changed, 15 insertions(+), 1643 deletions(-)
- delete mode 100644 Documentation/cdrom/ide-cd.rst
- delete mode 100644 Documentation/ide/ChangeLog.ide-cd.1994-2004
- delete mode 100644 Documentation/ide/ChangeLog.ide-floppy.1996-2002
- delete mode 100644 Documentation/ide/ChangeLog.ide-tape.1995-2002
- delete mode 100644 Documentation/ide/changelogs.rst
- delete mode 100644 Documentation/ide/ide-tape.rst
- delete mode 100644 Documentation/ide/ide.rst
- delete mode 100644 Documentation/ide/index.rst
- delete mode 100644 Documentation/ide/warm-plug-howto.rst
-
+diff --git a/Documentation/cdrom/cdrom-standard.rst b/Documentation/cdrom/cdrom-standard.rst
+index 52ea7b6b2fe8..7964fe134277 100644
+--- a/Documentation/cdrom/cdrom-standard.rst
++++ b/Documentation/cdrom/cdrom-standard.rst
+@@ -218,7 +218,6 @@ current *struct* is::
+ 		int (*tray_move)(struct cdrom_device_info *, int);
+ 		int (*lock_door)(struct cdrom_device_info *, int);
+ 		int (*select_speed)(struct cdrom_device_info *, int);
+-		int (*select_disc)(struct cdrom_device_info *, int);
+ 		int (*get_last_session) (struct cdrom_device_info *,
+ 					 struct cdrom_multisession *);
+ 		int (*get_mcn)(struct cdrom_device_info *, struct cdrom_mcn *);
+@@ -419,15 +418,6 @@ this `auto-selection` capability, the decision should be made on the
+ current disc loaded and the return value should be positive. A negative
+ return value indicates an error.
+ 
+-::
+-
+-	int select_disc(struct cdrom_device_info *cdi, int number)
+-
+-If the drive can store multiple discs (a juke-box) this function
+-will perform disc selection. It should return the number of the
+-selected disc on success, a negative value on error. Currently, only
+-the ide-cd driver supports this functionality.
+-
+ ::
+ 
+ 	int get_last_session(struct cdrom_device_info *cdi,
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 2dc9da683a13..0a858bfea849 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -2443,14 +2443,6 @@ static int cdrom_ioctl_select_disc(struct cdrom_device_info *cdi,
+ 			return -EINVAL;
+ 	}
+ 
+-	/*
+-	 * ->select_disc is a hook to allow a driver-specific way of
+-	 * seleting disc.  However, since there is no equivalent hook for
+-	 * cdrom_slot_status this may not actually be useful...
+-	 */
+-	if (cdi->ops->select_disc)
+-		return cdi->ops->select_disc(cdi, arg);
+-
+ 	cd_dbg(CD_CHANGER, "Using generic cdrom_select_disc()\n");
+ 	return cdrom_select_disc(cdi, arg);
+ }
+diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+index 0a89f111e00e..67caa909e3e6 100644
+--- a/include/linux/cdrom.h
++++ b/include/linux/cdrom.h
+@@ -77,7 +77,6 @@ struct cdrom_device_ops {
+ 	int (*tray_move) (struct cdrom_device_info *, int);
+ 	int (*lock_door) (struct cdrom_device_info *, int);
+ 	int (*select_speed) (struct cdrom_device_info *, int);
+-	int (*select_disc) (struct cdrom_device_info *, int);
+ 	int (*get_last_session) (struct cdrom_device_info *,
+ 				 struct cdrom_multisession *);
+ 	int (*get_mcn) (struct cdrom_device_info *,
 -- 
 2.33.0
 

@@ -2,152 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D687512780
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1D7512781
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiD0XaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 19:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S234071AbiD0XbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 19:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiD0XaO (ORCPT
+        with ESMTP id S230018AbiD0XbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 19:30:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ED0186E6;
-        Wed, 27 Apr 2022 16:27:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDE4761E68;
-        Wed, 27 Apr 2022 23:26:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF00C385A7;
-        Wed, 27 Apr 2022 23:26:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aOdMBmtf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651102015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nWDNbsJItINsLR3yxg8JBi2xoW/BcHeKskSWcq4/k8M=;
-        b=aOdMBmtfuF0MGGiSVluZuDIGY65KoF2ta9QbQU0a3Hm+hoDaONoZWS7vc2OhhG29kmvk18
-        QfGyIUWoxVVN4SDAKHU3dsAUDECxHgIL1/LHRn+5hnQ+35V538hximU7N9JVimKepPTIIS
-        WpXigXH/FTevsDle9NY3UX8lVdVoEUI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 54c7499e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 27 Apr 2022 23:26:54 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 01:26:52 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Subject: Re: [PATCH v6 11/17] openrisc: use fallback for random_get_entropy()
- instead of zero
-Message-ID: <YmnRPPZOTfGZxDiD@zx2c4.com>
-References: <20220423212623.1957011-1-Jason@zx2c4.com>
- <20220423212623.1957011-12-Jason@zx2c4.com>
- <Ymm4xhRDWjvWS+3X@antec>
+        Wed, 27 Apr 2022 19:31:01 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB5331902;
+        Wed, 27 Apr 2022 16:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=qYpF45g7IqwmF2QX2YAhs+Nml0O9Dsi63w2rdyKZioc=; b=aosjYX/2C0rIYc1fnJA+YIlFho
+        EVLuyRTIeWj8NlZcff7jik81iFW0Nsf8bSd+oAtQbHMEFZ7s72OAuPjGJAv+51U3RYhHFFTLP1bJ/
+        U6XDDCKRhcXBpWqopPZx0njJ7vhXYTgBhem0yZRFus2U+Gu56mMZkcwJ5dChu/Vr+Thevmw6BO3mP
+        bpw19zXhGQBBQqp0jhECaqejjcj5Hv55ZZd7e5/LUp3XH4HhfBsTRfyIGaYCv7P4dOsExAT4pwL/w
+        JFlX36oGRTJyFw2RoyHjz+F80A7tTO3WIyVnVwcEtdtUhdAvVNa/M6YspiMeA/uiBum0dMlAjaM4s
+        1aw37QPw==;
+Received: from s0106ac1f6bb1ecac.cg.shawcable.net ([70.73.163.230] helo=[192.168.11.155])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1njr4T-000PMf-SE; Wed, 27 Apr 2022 17:27:46 -0600
+Message-ID: <2dd3e7b3-ac85-6de2-3130-4fdd7b366739@deltatee.com>
+Date:   Wed, 27 Apr 2022 17:27:43 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ymm4xhRDWjvWS+3X@antec>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+References: <20220420195425.34911-1-logang@deltatee.com>
+ <20220420195425.34911-10-logang@deltatee.com>
+ <56208e2a-5035-eb8e-c468-70b4dae66d5c@linux.dev>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <56208e2a-5035-eb8e-c468-70b4dae66d5c@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.73.163.230
+X-SA-Exim-Rcpt-To: guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 09/12] md/raid5: Keep a reference to last stripe_head
+ for batch
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stafford,
 
-On Thu, Apr 28, 2022 at 06:42:30AM +0900, Stafford Horne wrote:
-> On Sat, Apr 23, 2022 at 11:26:17PM +0200, Jason A. Donenfeld wrote:
-> > In the event that random_get_entropy() can't access a cycle counter or
-> > similar, falling back to returning 0 is really not the best we can do.
-> > Instead, at least calling random_get_entropy_fallback() would be
-> > preferable, because that always needs to return _something_, even
-> > falling back to jiffies eventually. It's not as though
-> > random_get_entropy_fallback() is super high precision or guaranteed to
-> > be entropic, but basically anything that's not zero all the time is
-> > better than returning zero all the time.
-> > 
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Jonas Bonn <jonas@southpole.se>
-> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> > Cc: Stafford Horne <shorne@gmail.com>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  arch/openrisc/include/asm/timex.h | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/arch/openrisc/include/asm/timex.h b/arch/openrisc/include/asm/timex.h
-> > index d52b4e536e3f..115e89b336cd 100644
-> > --- a/arch/openrisc/include/asm/timex.h
-> > +++ b/arch/openrisc/include/asm/timex.h
-> > @@ -23,6 +23,9 @@ static inline cycles_t get_cycles(void)
-> >  {
-> >  	return mfspr(SPR_TTCR);
-> >  }
-> > +#define get_cycles get_cycles
-> > +
-> > +#define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
-> >  
-> >  /* This isn't really used any more */
-> >  #define CLOCK_TICK_RATE 1000
-> > -- 
-> > 2.35.1
-> 
-> Hi Jason,
-> 
-> This looks OK, but I am wondering why we cannot add this to
-> "include/linux/timex.h" as the default implementation of random_get_entropy
-> if get_cycles is defined.  I see there are 2 cases:
-> 
->    1. architectures that define get_cycles, and random_get_entropy is defined in
->       include/linux/timex.h.
->       (openrisc, sparc*, xtensa*, nios2, um*, arm)
-> 
->    2. architectures that define random_get_entropy explicitly
->       (mips, m68k, riscv, x86)
-> 
-> * Those marked with * just define get_cycles as 0.
-> 
-> I would think in "include/linux/timex.h" we could define.
-> 
->     #ifndef random_get_entropy
->     #ifdef get_cycles
->     #define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
->     #else
->     #define random_get_entropy()   random_get_entropy_fallback()
->     #endif
->     #endif
-> 
-> For architectures that define get_cycles as 0, they can be cleaned up.
-> 
-> -Stafford
 
-What you've described is what patch 6 of this series already does.
+On 2022-04-26 19:36, Guoqing Jiang wrote:
+> On 4/21/22 3:54 AM, Logan Gunthorpe wrote:
+>>     /* we only do back search */
+>> -static void stripe_add_to_batch_list(struct r5conf *conf, struct
+>> stripe_head *sh)
+>> +static void stripe_add_to_batch_list(struct r5conf *conf,
+>> +        struct stripe_head *sh, struct stripe_head *last_sh)
+> 
+> Nit, from stripe_add_to_batch_list's view, I think "head_sh" makes more
+> sense than
+> "last_sh".
 
-However, it does it assuming that if get_cycles() exists, it returns a
-real value, because most architectures do the right thing by default
-when they choose to define that function, and thus there is no purpose
-in adding the needless branch.
+That made sense to me, but upon a closer look while making the change, I
+think it's not a good idea:
 
-OpenRISC, however, is a notable outlier in that the code generated by
-get_cycles() does not correspond to an actual cycle counter on all CPU
-implementations. In particular, the QEMU simulator always returns 0. And
-the QEMU simulator is in fact what people are using to test this stuff,
-so the kernel code needs to actually work for this prevalent "virtual
-silicon", which I assume is much more widely deployed than any real FPGA
-running this or that OpenRISC softcore.
+stripe_add_to_batch_list() already has a stripe_head variable called
+"head". If it now has an argument called "head_sh", it becomes very
+confusing. This statement wouldn't make any sense:
++    if (last_sh && head_sector == last_sh->sector) {
++        head = last_sh;
++        atomic_inc(&head->count);
++    } else {
 
-So this patch includes the branch as part of its definition, so that we
-get the best of both worlds, which seems to me like a pretty acceptable
-compromise.
+If it was changed to "head = head_sh" what would that even mean?
+
+From stripe_add_to_batch_list's perspective, it is the "last" stripe
+head. And it then decides whether the it is the correct stripe to use as
+the head of the list to add to.
+
+So I decline to make this change.
 
 Thanks,
-Jason
+
+Logan
+
+
+

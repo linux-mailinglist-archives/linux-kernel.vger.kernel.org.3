@@ -2,126 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714DE5110B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63525110BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357858AbiD0F6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S1357937AbiD0GBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiD0F6k (ORCPT
+        with ESMTP id S1357329AbiD0GBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:58:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA7E29C8A
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:55:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6457BB823F4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:55:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE39C385A7;
-        Wed, 27 Apr 2022 05:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651038926;
-        bh=7ryt9LQ2AnCmNgOLWlW1ntp7sNciS6gRukldGrC/JKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rlshWiyttey+KX7dMg2B263XRHwOtWuEGLP8AFXgF7oCeZwsziGJKFTGQ8BxKZs2k
-         1g6m523dBnFgX0hoyKBoQEuP+Ecvf59TlG+PaNwTBGq/xpQrVxfINFHT82H7kiUGE8
-         RVlL+VYW2AdxuX0+TeiCseJDC/4cpXeytf0bKDyI=
-Date:   Wed, 27 Apr 2022 07:55:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] staging: vt6655: Replace VNSvInPortD with ioread32
-Message-ID: <Ymjaxby2vDJYz6KA@kroah.com>
-References: <cover.1651036713.git.philipp.g.hortmann@gmail.com>
- <7a5f7f98379fb2af2741f613f5ddda53e5d4813e.1651036713.git.philipp.g.hortmann@gmail.com>
+        Wed, 27 Apr 2022 02:01:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0418D31343
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651039081; x=1682575081;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gfJsfPJq8cUzS9Ox+cK2uh+mhYc6kAesSnXXf9coeI8=;
+  b=P0AXcKQ/SSfxKpvwy5OsD9P2u/FkvnwoLHw+ASj3Svb9BD/Ji47toJjN
+   16+uqPt/iNhGZROK8jXui2ZynxsEsdnovL5f7IvSTb4uop7UwvCb/4Wjh
+   HjjsgqpgSIlRG2XrGU0F2DH3s21+MAFTn7IA9zNOWPuI7ZQ80FNkf4+6H
+   m3/ikDoNAFSAk0SPu/jSWKojEzJwKwPWaap31DYmWkIYY9ekWupjkxwK5
+   JGf+/Q9qpVF6VjotZaaf8Jw28HcWQiPZ7nQLSWbn78vPv1wttWcLUukHN
+   yOT+EeWOphU4FqsvprOBmHS5WMLcwczC+fBCG4cYL+sEUEggJRIILUhfQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="352262465"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="352262465"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 22:58:01 -0700
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="807869180"
+Received: from aliang-mobl3.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.1.170])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 22:57:59 -0700
+Message-ID: <191409fcadfed4c08eb818335008cb36167d9477.camel@intel.com>
+Subject: Re: [PATCH v4 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+Date:   Wed, 27 Apr 2022 17:57:57 +1200
+In-Reply-To: <20220427054523.GA4167861@ls.amr.corp.intel.com>
+References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220427054523.GA4167861@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7a5f7f98379fb2af2741f613f5ddda53e5d4813e.1651036713.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 07:42:23AM +0200, Philipp Hortmann wrote:
-> Replace macro VNSvInPortD with ioread32 and as it was
-> the only user, it can now be removed.
-> The name of macro and the arguments use CamelCase which
-> is not accepted by checkpatch.pl
+On Tue, 2022-04-26 at 22:45 -0700, Isaku Yamahata wrote:
+> > + */
+> > +long tdx_mcall_tdreport(void *data, void *reportdata)
+> > +{
+> > +	u64 ret;
+> > +
+> > +	/*
+> > +	 * Check for a valid TDX guest to ensure this API is only
+> > +	 * used by TDX guest platform. Also make sure "data" and
+> > +	 * "reportdata" pointers are valid.
+> > +	 */
+> > +	if (!data || !reportdata ||
+> > !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> > +		return -EINVAL;
+> > +
+> > +	/*
+> > +	 * Pass the physical address of user generated report data
+> > +	 * and the physical address of output buffer to the TDX module
+> > +	 * to generate the TD report. Generated data contains
+> > +	 * measurements/configuration data of the TD guest. More info
+> > +	 * about ABI can be found in TDX 1.0 Module specification, sec
+> > +	 * titled "TDG.MR.REPORT".
+> > +	 */
+> > +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(data),
+> > +				virt_to_phys(reportdata), 0, 0, NULL);
+> > +
+> > +	if (ret)
+> > +		return TDCALL_RETURN_CODE(ret);
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
-> V1 -> V2: This patch was 5/7 and is now 4/6
-> V2 -> V3: Inserted patch that was before in a different way in
->           "Rename macros VNSvInPortB,W,D with CamelCase ..."
->           This patch was part of 4/6 and is now 3/7
-> V3 -> V4: Removed casting of the output variable
-> V4 -> V5: Joint patch "Replace two VNSvInPortD with ioread64_lo_hi"
->           with this patch. Changed ioread64 to two ioread32 as
->           ioread64 does not work with 32 Bit computers.
->           Shorted and simplified patch description.
-> V5 -> V6: Added missing version in subject
-> ---
->  drivers/staging/vt6655/card.c        |  6 ++++--
->  drivers/staging/vt6655/device_main.c |  6 +++---
->  drivers/staging/vt6655/mac.h         | 18 +++++++++---------
->  drivers/staging/vt6655/rf.c          |  2 +-
->  drivers/staging/vt6655/upc.h         |  3 ---
->  5 files changed, 17 insertions(+), 18 deletions(-)
+> Why is status code masked?
 > 
-> diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
-> index 022310af5485..0dd13e475d6b 100644
-> --- a/drivers/staging/vt6655/card.c
-> +++ b/drivers/staging/vt6655/card.c
-> @@ -744,6 +744,7 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
->  	void __iomem *iobase = priv->port_offset;
->  	unsigned short ww;
->  	unsigned char data;
-> +	u32 low, high;
->  
->  	MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
->  	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-> @@ -753,8 +754,9 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
->  	}
->  	if (ww == W_MAX_TIMEOUT)
->  		return false;
-> -	VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
-> -	VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
-> +	low = ioread32(iobase + MAC_REG_TSFCNTR);
-> +	high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-> +	*pqwCurrTSF = low + ((u64)high << 32);
+> 
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
+> 
+> Can this function be put into attest.c. Instead, wecan export
+> __tdx_module_call.
 
-Are you _sure_ this is doing the same thing?
+As we discussed, there's no need to export this anymore.
 
-Adding 1 to a u64 pointer increments it by a full u64.  So I guess the
-cast to u32 * moves it only by a u32?  Hopefully?  That's messy.
+Btw, I even think we can move this function to attest.c so it can be static. 
+Theoretically there should be no other caller of this except attest.c.  I
+understand in this way we need to define TDX_GET_REPORT macro in attest.c but
+this looks fine to me.  This function can even be removed, and we can call
+__tdx_module_call() directly in attest.c.  This function literally doesn't do
+anything meaningful more than __tdx_module_call(), instead, calling
+__tdx_module_call() directly gives us more context, i.e., we can easily see the
+buffer is allocated by kernel and passed to TDX module, etc.
 
-Why not keep the current mess and do:
-	pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
-	((u32 *)pqwCurTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+-- 
+Thanks,
+-Kai
 
-Or does that not compile?  Ick, how about:
-	u32 *temp = (u32 *)pqwCurTSF;
 
-	temp = ioread32(iobase + MAC_REG_TSFCNTR);
-	temp++;
-	temp = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-As that duplicates the current code a bit better.
-
-I don't know, it's like polishing dirt, in the end, it's still dirt...
-
-How about looking at the caller of this to see what it expects to do
-with this information?  Unwind the mess from there?
-
-thanks,
-
-greg k-h

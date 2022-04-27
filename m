@@ -2,163 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA3C510F72
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBD8510F77
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 05:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354149AbiD0DXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 23:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
+        id S1357411AbiD0DYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 23:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348805AbiD0DXg (ORCPT
+        with ESMTP id S1355919AbiD0DYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 23:23:36 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44FC112A;
-        Tue, 26 Apr 2022 20:20:23 -0700 (PDT)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 23R3K1Qm008071;
-        Wed, 27 Apr 2022 12:20:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 23R3K1Qm008071
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651029602;
-        bh=m05V59uJysQY8vaTGqm7leyhJ6TqZcufOqEfqvArsLI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gnY1P8RvKDujIDOUMYSseZtlP8LPglPDlvSzzU+5Oabj09LfLfxhSr6c3t8Ymf+ex
-         ymb18YX6aRCHNi+0zxm7Y6MwMvI4pVnWyjhvh1r2IaZfkdWoNMNHDQm99ZW42O8Ofp
-         vYaz7AXsUvWJJp2KmB3VynjIzUwDNl2k4egVxVmY8wCcm1Ru9H9oCzDYIxyOoIaTeX
-         lEIRE0aL4Cwm5LUJTCWi3+wpBiumH+uGIlwrnzxMAoZClQBl9WRKbZuaeldb2K4F6u
-         PO1+v2FaCi2HhuKhtludmYh/uEb04H1XqEBFastCK+d2Y/j54ABfQsqQxPCxa3IR/W
-         mzW/TqosevnAA==
-X-Nifty-SrcIP: [209.85.214.178]
-Received: by mail-pl1-f178.google.com with SMTP id n18so470768plg.5;
-        Tue, 26 Apr 2022 20:20:01 -0700 (PDT)
-X-Gm-Message-State: AOAM53178XjwsVXTvoVZxbwAtXvMpdVJ86ekUr4D0b4KXVmGG/fZnUkt
-        2meHK7fIQZX0tM27D2g9lyCcnMj0fEg4hhiKZMs=
-X-Google-Smtp-Source: ABdhPJwk2QM2M3F1GBnYSDFbhuv7muAUvszgecWqtx6ceNyrVLGEHLvVXb91Em0JDXmIWLatqtFiesHnM9c3O6MIqro=
-X-Received: by 2002:a17:90a:e7d1:b0:1da:30d0:9327 with SMTP id
- kb17-20020a17090ae7d100b001da30d09327mr2119874pjb.144.1651029601047; Tue, 26
- Apr 2022 20:20:01 -0700 (PDT)
+        Tue, 26 Apr 2022 23:24:52 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825D7205D8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:21:41 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d15so483251plh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 20:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GM2I1rKciZlMERQtkMZfhLt0vQhC1yhQUebWl8r/Ftc=;
+        b=PAuYwkzn39WhGOmLN+8zMzQ1WBdfutgxwU5iZkZRy+TD2HWYFFW2FaCkD2lZqAkVht
+         B+ykPt4C5gWCFpugnodO1SzYCSLgXM4elWCWzzW6vgtUOHyiszmBjZLqQEvRDEzpgcL0
+         sUXTSQGaPa7wj2/GKBnLpVvCasFT4ZkBX+XsIScf8XgQWmCAEfITPYTHqEUdA1QUeiXT
+         pA8mwPT40ayBdOPzct6AWk1j/6crg5ZPCYiy+H2mWOnt/s3jq4+PSPFUclP2C+A06UxL
+         rI+cp0JuHUCffZupUtv0BJml2NFzUM7GRx2q4wQw5flOg225seTMPo0Sm5KMTFjC5Vn5
+         spSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GM2I1rKciZlMERQtkMZfhLt0vQhC1yhQUebWl8r/Ftc=;
+        b=x+0w+9T8s5Je0yjw9e73aZDM1KqL5OtpU/fHK3SLRUwGJh9T5xqy6aivX/J+zEgvq9
+         BMRC79QEvGSItReBmmwKR8cGga3/uMNx9XTgkEj/HZ/bROvO6UnpL/hBG2WtJttctFx4
+         7FUS3zeS/DdLYWRPJNZBPe6Qqbvg2XvXHfG5763yfY7K3yaf4ofB8OgG0c6XYhCmdG1F
+         5j/oenbi7fKOFipfPFBfQE7U3S5Llz1xupr5ZIUQUcWaPCRIDB+BBINtaVFGD3hIQXxT
+         AXX8p/smOz2LuFDVy60Jvn9cjMEtbB2fUGBTEdFkyzxl23CT5gNy+nMOL2OgNiYzIlJL
+         kPew==
+X-Gm-Message-State: AOAM532OF35VaMPxEF+efEN3C9L0FKpnlwasQbxWTGh1KNqy3NdoDJkf
+        7WT85aNUGR8tkxdfE5YE05w22Q==
+X-Google-Smtp-Source: ABdhPJzV2vdzAtHjQnsvfI1pw6Xr1L3VKxj4VdlGJPjfxSLca5WKu8NmWu/04ISxvSPeYZ0MTJbAQg==
+X-Received: by 2002:a17:902:6bc4:b0:154:6b3d:a720 with SMTP id m4-20020a1709026bc400b001546b3da720mr26395959plt.104.1651029701054;
+        Tue, 26 Apr 2022 20:21:41 -0700 (PDT)
+Received: from localhost ([122.177.141.190])
+        by smtp.gmail.com with ESMTPSA id y4-20020a056a00190400b004fac0896e35sm17135411pfi.42.2022.04.26.20.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 20:21:40 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 08:51:38 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 5/9] dt-bindings: opp: opp-v2-kryo-cpu: Remove SMEM
+Message-ID: <20220427032138.smvcg2nxekz6go7m@vireshk-i7>
+References: <T-ZqipM8xIaRroty0k9MEPCfD31BvtDXY6IaSm8uCD_ffIgJKYAcY-EZ49w0S-uX0w9sn1mUfBALTv0SqOb7OM1Uh6pskewGKxkOFYRJwfM=@protonmail.com>
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <YmhRz1SEjpEU8Nty@fjasle.eu>
-In-Reply-To: <YmhRz1SEjpEU8Nty@fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 27 Apr 2022 12:18:58 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS4X2d+7JgRSMizMsKFAKmF1OLXyJ0YAvzdgBuSB+UnfQ@mail.gmail.com>
-Message-ID: <CAK7LNAS4X2d+7JgRSMizMsKFAKmF1OLXyJ0YAvzdgBuSB+UnfQ@mail.gmail.com>
-Subject: Re: [PATCH 00/27] kbuild: yet another series of cleanups (modpost and LTO)
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <T-ZqipM8xIaRroty0k9MEPCfD31BvtDXY6IaSm8uCD_ffIgJKYAcY-EZ49w0S-uX0w9sn1mUfBALTv0SqOb7OM1Uh6pskewGKxkOFYRJwfM=@protonmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 5:11 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Mon, Apr 25, 2022 at 04:07:44AM +0900 Masahiro Yamada wrote:
-> > This is the third batch of cleanups in this development cycle.
-> >
-> > This weekend, I wrote up the code I have been planning.
-> >
-> > After a bunch of modpost refactoring, I got rid of the ugly code
-> > in Makefiles.
-> >
-> > With this, Kbuild will get back much simpler and cleaner.
-> >
->
-> Hi Masahiro,
->
-> I tried applying the patch set onto your kbuild and
-> kbuild-fixes-v5.18, but it didn't apply.  Can you give me
-> a hint on your commit base?
+On 09-04-22, 04:17, Yassine Oudjana wrote:
+> qcom-cpufreq-nvmem no longer uses SMEM. Remove all references
+> to SMEM and change the description and maximum value of
+> opp-supported-hw to reflect the new set of possible values.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> ---
+>  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 56 +++++++++----------
+>  1 file changed, 26 insertions(+), 30 deletions(-)
 
+Applied. Thanks.
 
-This series is based on  linux-kbuild/kbuild branch
-7c39c50dcb74 ("scripts: dummy-tools, add pahole")
-
-
-Anyway, this series is too big.
-For convenience, I pushed this to a topic branch.
-
-Please try:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
- lto-cleanup
-
-
-
-
-
-> Kind regards,
-> Nicolas
->
-> >
-> > Masahiro Yamada (27):
-> >   modpost: use snprintf() instead of sprintf() for safety
-> >   modpost: do not write out any file when error occurred
-> >   modpost: remove stale comment about sym_add_exported()
-> >   modpost: add a separate error for exported symbols without definition
-> >   modpost: retrieve the module dependency and CRCs in check_exports()
-> >   modpost: use bool type where appropriate
-> >   modpost: import include/linux/list.h
-> >   modpost: traverse modules in order
-> >   modpost: add sym_add_unresolved() helper
-> >   modpost: traverse unresolved symbols in order
-> >   modpost: use doubly linked list for dump_lists
-> >   modpost: move struct namespace_list to modpost.c
-> >   modpost: traverse the namespace_list in order
-> >   modpost: dump Module.symvers in the same order of modules.order
-> >   modpost: move static EXPORT_SYMBOL check to check_exports()
-> >   modpost: make multiple export error
-> >   modpost: make sym_add_exported() always allocate a new symbol
-> >   modpost: make sym_add_exported() a void function
-> >   modpost: use hlist for hash table implementation
-> >   modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
-> >   kbuild: record symbol versions in *.cmd files
-> >   kbuild: generate a list of objects in vmlinux
-> >   modpost: retrieve symbol versions by parsing *.cmd files
-> >   modpost: generate linker script to collect symbol versions
-> >   kbuild: embed symbol versions at final link of vmlinux or modules
-> >   kbuild: stop generating *.symversions
-> >   kbuild: do not create *.prelink.o for Clang LTO or IBT
-> >
-> >  .gitignore                |   1 +
-> >  Makefile                  |   1 +
-> >  scripts/Kbuild.include    |   4 +
-> >  scripts/Makefile.build    | 107 ++------
-> >  scripts/Makefile.lib      |   7 -
-> >  scripts/Makefile.modfinal |   6 +-
-> >  scripts/Makefile.modpost  |   9 +-
-> >  scripts/link-vmlinux.sh   |  38 ++-
-> >  scripts/mod/file2alias.c  |   2 -
-> >  scripts/mod/list.h        | 336 ++++++++++++++++++++++++
-> >  scripts/mod/modpost.c     | 529 +++++++++++++++++++++++---------------
-> >  scripts/mod/modpost.h     |  27 +-
-> >  12 files changed, 731 insertions(+), 336 deletions(-)
-> >  create mode 100644 scripts/mod/list.h
-> >
-> > --
-> > 2.32.0
->
-> --
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+viresh

@@ -2,178 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1971D51142B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 11:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60A351142A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 11:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiD0JNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 05:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S235203AbiD0JNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 05:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233205AbiD0JND (ORCPT
+        with ESMTP id S234099AbiD0JNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 05:13:03 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588E4245E6F;
-        Wed, 27 Apr 2022 02:09:43 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23R98xZS095481;
-        Wed, 27 Apr 2022 04:08:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651050539;
-        bh=kupnSmCLa8ukKSu5s2c5515veWPch3RoCk/juFoT/6Q=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KQLf9wV0dRUKRDV92bduBg3H2KjUfK739e7Ig2QfBKLkdLQ7+kQIWEAjikKqZRkvA
-         z3yzPgqiipGHSObsUQ69Yob2lsmFqY9W6C+eaDrzh9t/Sz7isplESuY/9WVoyVxa9x
-         NG8w5Z4hSwpUZEXbZKgK/gclYt5nQGRH8vR0eps8=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23R98xeu122332
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 Apr 2022 04:08:59 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
- Apr 2022 04:08:59 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 27 Apr 2022 04:08:59 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23R98ws5058588;
-        Wed, 27 Apr 2022 04:08:59 -0500
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH 4/4] arm64: dts: ti: k3-am625-sk: Add DSS ports, HDMI tx & peripherals
-Date:   Wed, 27 Apr 2022 14:38:50 +0530
-Message-ID: <20220427090850.32280-5-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220427090850.32280-1-a-bhatia1@ti.com>
-References: <20220427090850.32280-1-a-bhatia1@ti.com>
+        Wed, 27 Apr 2022 05:13:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E923724766B
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 02:09:57 -0700 (PDT)
+Received: from kwepemi100023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpCbz5DxlzgYkt;
+        Wed, 27 Apr 2022 17:09:03 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100023.china.huawei.com (7.221.188.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 17:09:21 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 17:09:20 +0800
+Message-ID: <6b18fed1-f802-b15c-95d9-718a48edbbfc@huawei.com>
+Date:   Wed, 27 Apr 2022 17:09:19 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v4 0/7]arm64: add machine check safe support
+To:     Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <20220420030418.3189040-1-tongtiangen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT nodes for sil9022 HDMI transmitter (tx), HDMI connector and the
-HDMI fixed master clock on the am625-sk board.
+Hi Mark, James, Robin, kindly ping...
 
-Additionally, add and connect output port for DSS (vp2), input and output
-ports for the sil9022 HDMI tx and the input port for the HDMI connector.
+Thanks.
 
-The sil9022 HDMI tx is connected on the i2c1 bus. The HDMI connector on
-the board is of type "a". The clock frequency of the master clock that
-supports the HDMI tx is 12.288 MHz.
-
-The dpi output signals from the vp2 of DSS are fed into the sil9022 HDMI
-transmitter. These signals are converted into HDMI signals which are
-further passed on to the HDMI connector on the board, on which display
-can be connected via appropriate HDMI cables.
-
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 63 ++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 96414c5dacf7..9567fa4a447b 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -134,6 +134,23 @@ led-0 {
- 			default-state = "off";
- 		};
- 	};
-+
-+	hdmi_mstrclk: hdmi-mstrclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <12288000>;
-+	};
-+
-+	hdmi: connector {
-+		compatible = "hdmi-connector";
-+		label = "hdmi";
-+		type = "a";
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&sii9022_out>;
-+			};
-+		};
-+	};
- };
- 
- &main_pmx0 {
-@@ -385,6 +402,38 @@ exp1: gpio@22 {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&main_gpio1_ioexp_intr_pins_default>;
- 	};
-+
-+	sii9022: sii9022@3b {
-+		compatible = "sil,sii9022";
-+		reg = <0x3b>;
-+
-+		clocks = <&hdmi_mstrclk>;
-+		clock-names = "mclk";
-+
-+		interrupt-parent = <&exp1>;
-+		interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+
-+				sii9022_in: endpoint {
-+					remote-endpoint = <&dpi1_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+
-+				sii9022_out: endpoint {
-+					remote-endpoint = <&hdmi_connector_in>;
-+				};
-+			};
-+		};
-+	};
- };
- 
- &main_i2c2 {
-@@ -450,6 +499,20 @@ &dss {
- 	pinctrl-0 = <&main_dss0_pins_default>;
- };
- 
-+&dss_ports {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* VP2: DPI Output */
-+	port@1 {
-+		reg = <1>;
-+
-+		dpi1_out: endpoint {
-+			remote-endpoint = <&sii9022_in>;
-+		};
-+	};
-+};
-+
- &mailbox0_cluster0 {
- 	mbox_m4_0: mbox-m4-0 {
- 		ti,mbox-rx = <0 0 0>;
--- 
-2.36.0
-
+在 2022/4/20 11:04, Tong Tiangen 写道:
+> With the increase of memory capacity and density, the probability of
+> memory error increases. The increasing size and density of server RAM
+> in the data center and cloud have shown increased uncorrectable memory
+> errors.
+> 
+> Currently, the kernel has a mechanism to recover from hardware memory
+> errors. This patchset provides an new recovery mechanism.
+> 
+> For arm64, the hardware memory error handling is do_sea() which divided
+> into two cases:
+>   1. The user state consumed the memory errors, the solution is kill the
+>      user process and isolate the error page.
+>   2. The kernel state consumed the memory errors, the solution is panic.
+> 
+> For case 2, Undifferentiated panic maybe not the optimal choice, it can be
+> handled better, in some scenes, we can avoid panic, such as uaccess, if the
+> uaccess fails due to memory error, only the user process will be affected,
+> kill the user process and isolate the user page with hardware memory errors
+> is a better choice.
+> 
+> This patchset can be divided into three parts:
+>   1. Patch 0/1/4    - make some minor fixes to the associated code.
+>   2. Patch 3      - arm64 add support for machine check safe framework.
+>   3. Pathc 5/6/7  - arm64 add uaccess and cow to machine check safe.
+> 
+> Since V4:
+>   1. According to Robin's suggestion, direct modify user_ldst and
+>   user_ldp in asm-uaccess.h and modify mte.S.
+>   2. Add new macro USER_MC in asm-uaccess.h, used in copy_from_user.S
+>   and copy_to_user.S.
+>   3. According to Robin's suggestion, using micro in copy_page_mc.S to
+>   simplify code.
+>   4. According to KeFeng's suggestion, modify powerpc code in patch1.
+>   5. According to KeFeng's suggestion, modify mm/extable.c and some code
+>   optimization.
+> 
+> Since V3:
+>   1. According to Mark's suggestion, all uaccess can be recovered due to
+>      memory error.
+>   2. Scenario pagecache reading is also supported as part of uaccess
+>      (copy_to_user()) and duplication code problem is also solved.
+>      Thanks for Robin's suggestion.
+>   3. According Mark's suggestion, update commit message of patch 2/5.
+>   4. According Borisllav's suggestion, update commit message of patch 1/5.
+> 
+> Since V2:
+>   1.Consistent with PPC/x86, Using CONFIG_ARCH_HAS_COPY_MC instead of
+>     ARM64_UCE_KERNEL_RECOVERY.
+>   2.Add two new scenes, cow and pagecache reading.
+>   3.Fix two small bug(the first two patch).
+> 
+> V1 in here:
+> https://lore.kernel.org/lkml/20220323033705.3966643-1-tongtiangen@huawei.com/
+> 
+> Robin Murphy (1):
+>    arm64: mte: Clean up user tag accessors
+> 
+> Tong Tiangen (6):
+>    x86, powerpc: fix function define in copy_mc_to_user
+>    arm64: fix types in copy_highpage()
+>    arm64: add support for machine check error safe
+>    arm64: add copy_{to, from}_user to machine check safe
+>    arm64: add {get, put}_user to machine check safe
+>    arm64: add cow to machine check safe
+> 
+>   arch/arm64/Kconfig                   |  1 +
+>   arch/arm64/include/asm/asm-extable.h | 33 +++++++++++
+>   arch/arm64/include/asm/asm-uaccess.h | 15 +++--
+>   arch/arm64/include/asm/extable.h     |  1 +
+>   arch/arm64/include/asm/page.h        | 10 ++++
+>   arch/arm64/include/asm/uaccess.h     |  4 +-
+>   arch/arm64/lib/Makefile              |  2 +
+>   arch/arm64/lib/copy_from_user.S      | 18 +++---
+>   arch/arm64/lib/copy_page_mc.S        | 86 ++++++++++++++++++++++++++++
+>   arch/arm64/lib/copy_to_user.S        | 18 +++---
+>   arch/arm64/lib/mte.S                 |  4 +-
+>   arch/arm64/mm/copypage.c             | 36 ++++++++++--
+>   arch/arm64/mm/extable.c              | 33 +++++++++++
+>   arch/arm64/mm/fault.c                | 27 ++++++++-
+>   arch/powerpc/include/asm/uaccess.h   |  1 +
+>   arch/x86/include/asm/uaccess.h       |  1 +
+>   include/linux/highmem.h              |  8 +++
+>   include/linux/uaccess.h              |  9 +++
+>   mm/memory.c                          |  2 +-
+>   19 files changed, 278 insertions(+), 31 deletions(-)
+>   create mode 100644 arch/arm64/lib/copy_page_mc.S
+> 

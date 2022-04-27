@@ -2,141 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287A3512509
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13411512508
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiD0WJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S230463AbiD0WJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiD0WIs (ORCPT
+        with ESMTP id S230087AbiD0WJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:08:48 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047B3116D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651097135; x=1682633135;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ltiub3iDq6D6Wb7M/70Y0VAAaW3D7ZlOojkFrPEHoeo=;
-  b=Skr8I68pPMUR8cKi472dj8zdn4PkG/n9dfNhokP02ci3cERKVdOZioRH
-   frEioB3FZ1BoI3the+3gdpWcVY+VPyHGX4jrhWEWIqrmeEKaChnlK3Maa
-   BUH3ogPnKm9tHdOWwiumM/BVL3viCR4/HLGjQ9CoYGWG9ZTOvJb1GOFpn
-   Paqsghnds83ZLrmNfJOVTRh1m87xjATOTqtoq6eRvuaCIERqVkrDMPGJD
-   sPOIYQUfDVHPLcK9cQmYQPRLh3EdSsoVB8i+vwjx0rISr/yrCZOLvA76c
-   /tJVQsmeTNeLTNkwmuu34vWd2RPStbaRCpjQZx4m8v85R74hWSL7kcN8V
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,294,1643644800"; 
-   d="scan'208";a="198996977"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Apr 2022 06:05:34 +0800
-IronPort-SDR: 0r5Q4ZNYO6bh4+cerOAUOdmxTjEP125t8HeUuj67yl3N7ChyEQq/6a+RKXLKtzhqh95Gk6ufr6
- N5didciv4LmkFXmCwMhJEy7Iy7My/kFVdLOSMMo9126FiD8xPrRWLE3H8aJNvH78yMNNxsdT0P
- 2glcaZmQUsHgf5RQBgRaiYOrFc+YMVGingxMlCUSn1T++RTiyHkxeOLKCU74kpUDpL7S+HzWlI
- MHwfPN4q4Wi8Cs5+8/QkZMM26k4SKe2HmiGfKS8c5nDAuDLR8kskIxGreTiNLN07mbb1wcSY2p
- i5baUeUrBgHDDkthAS/4BSUP
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 14:36:27 -0700
-IronPort-SDR: xotCpNalKIcyU+0M7pNRr4dRqpnD/blx5HRoYy4ZZEdX4m41eKdFK8+F+QeDUECKeb+43OB8Ep
- eGlkuskUK4c4g3rNYXHW3AuwQu9ynyqZSpAAHZ0TG7KB5NCOpXBhnKwjUvYDkgBJxvNsBEHtNJ
- 0E1rQgwsKilbvwDhgHNLGUMIPME8vqfFp28WKvBvEvZj49oLGeBk0gnSHXMO3cSSy7YWqmkq/x
- pGNmBTfktPvmUU5v3DSVC7LGtSjfYjn5tIRJ42yGJ1lj7H579c+ieMj8tLhcYro9amZ9X3PBT3
- O0w=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 15:05:35 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KpXqy5yfmz1SVnx
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:05:34 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651097134; x=1653689135; bh=Ltiub3iDq6D6Wb7M/70Y0VAAaW3D7ZlOojk
-        FrPEHoeo=; b=tf10gyOH0lx9kTAQMvmNEOqbTNS9DLTOZB9qsNe71qSj+MlslLY
-        F2EMsRT1hYv8Uex+f8eyJX1V+hNKxnq0ZvLAwm2N9h1bKDM2qAdaXd8XFxq2OFtZ
-        V4RlBXCG//INUr7wVIQqFsb2qymtVwVHXuxY8eD6UpYIYKBOcpCxEpfLcPWyOf+Z
-        a1goiEri2UoD+WOlXIFCHSZYAnDDnYTLxwQ44EG/xQ6NBuYZ4KdX6hPN8R/IC8+K
-        mjJuGAhmLtYWSzjRHY0sOUl5Yj3top3PIke6IkXYtsIwx8o7NXzckBhJqqv2uDvr
-        xwDwWqUps86ht4CXLQyUclRDU1FKcwhVZrQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QHkGM9_GOfPw for <linux-kernel@vger.kernel.org>;
-        Wed, 27 Apr 2022 15:05:34 -0700 (PDT)
-Received: from [10.225.163.27] (unknown [10.225.163.27])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KpXqx1gFtz1Rvlc;
-        Wed, 27 Apr 2022 15:05:33 -0700 (PDT)
-Message-ID: <c285f0da-ab1d-2b24-e5a4-21193ef93155@opensource.wdc.com>
-Date:   Thu, 28 Apr 2022 07:05:32 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 00/10] Add Copy offload support
-Content-Language: en-US
-To:     Nitesh Shetty <nj.shetty@samsung.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
+        Wed, 27 Apr 2022 18:09:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B27F2ED75
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:06:18 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651097176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fs8gFf3ZL711StLZ9jERccLggUnW1SGq3CEhUrINzV0=;
+        b=lNm2fzkOfKjGt1uFdPTtzYGBhEwjslUt4TR8A2eyU52xH7RNnZWoO2U0epSKTtiDGLzEr9
+        WWUEDeNksHlgwlxuatHDDaGfIYO2FXPy4zw6QO87O4jAooMw6jugsI3S4sTVteaOP4h9Y2
+        mLzOU1XjMoD8lapMBHl2aW+0ZxaejoKR8KX8DFK4YaWm0SUWXrWV9uiZRc2aKrl454YfhN
+        gDSFHAY3cYvKD8Q4e7p7LThXXxz3c5I//Qlf+gWUFQ02US/bJEQTc7sCtEZQEhdFqYzrCg
+        5KMwIEp1e0HSy3UT9ygBO5eM2SeQb+nAPAeE5/f4ySLbw1x10F+LkBw0Og7sWg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651097176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fs8gFf3ZL711StLZ9jERccLggUnW1SGq3CEhUrINzV0=;
+        b=GbZzHJd4aicLpdaUPaZIDklx21NZ41WOZeoc+3Lk47mVSt/uHp7/w3/aWDVl1BJ+HfZZ9c
+        N6MOg7kEndzMiCCg==
+To:     Prakash Sangappa <prakash.sangappa@oracle.com>,
         linux-kernel@vger.kernel.org
-References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
- <20220426101241.30100-1-nj.shetty@samsung.com>
- <6a85e8c8-d9d1-f192-f10d-09052703c99a@opensource.wdc.com>
- <20220427124951.GA9558@test-zns>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220427124951.GA9558@test-zns>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Cc:     akpm@linux-foundation.org, peterz@infradead.org,
+        prakash.sangappa@oracle.com
+Subject: Re: [PATCH] ipc: Update semtimedop() to use hrtimer
+In-Reply-To: <1650333099-27214-1-git-send-email-prakash.sangappa@oracle.com>
+References: <1650333099-27214-1-git-send-email-prakash.sangappa@oracle.com>
+Date:   Thu, 28 Apr 2022 00:06:16 +0200
+Message-ID: <87k0baw59j.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 21:49, Nitesh Shetty wrote:
-> O Wed, Apr 27, 2022 at 11:19:48AM +0900, Damien Le Moal wrote:
->> On 4/26/22 19:12, Nitesh Shetty wrote:
->>> The patch series covers the points discussed in November 2021 virtual=
- call
->>> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
->>> We have covered the Initial agreed requirements in this patchset.
->>> Patchset borrows Mikulas's token based approach for 2 bdev
->>> implementation.
->>>
->>> Overall series supports =E2=80=93
->>>
->>> 1. Driver
->>> - NVMe Copy command (single NS), including support in nvme-target (fo=
-r
->>>     block and file backend)
->>
->> It would also be nice to have copy offload emulation in null_blk for t=
-esting.
->>
->=20
-> We can plan this in next phase of copy support, once this series settle=
-s down.
+Prakash,
 
-So how can people test your series ? Not a lot of drives out there with
-copy support.
+On Mon, Apr 18 2022 at 18:51, Prakash Sangappa wrote:
+> @@ -1995,7 +1995,10 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>  	int max, locknum;
+>  	bool undos = false, alter = false, dupsop = false;
+>  	struct sem_queue queue;
+> -	unsigned long dup = 0, jiffies_left = 0;
+> +	unsigned long dup = 0;
+> +	ktime_t expires;
+> +	int timed_out = 0;
 
->=20
-> --
-> Nitesh Shetty
->=20
->=20
+bool perhaps?
 
+> +	struct timespec64 end_time;
+>  
+>  	if (nsops < 1 || semid < 0)
+>  		return -EINVAL;
+> @@ -2008,7 +2011,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
 
---=20
-Damien Le Moal
-Western Digital Research
+While at it, can you please replace the open coded validation of timeout
+with timespec64_valid()?
+
+>  			error = -EINVAL;
+>  			goto out;
+>  		}
+> -		jiffies_left = timespec64_to_jiffies(timeout);
+> +		ktime_get_ts64(&end_time);
+> +		end_time = timespec64_add_safe(end_time, *timeout);
+> +		expires = timespec64_to_ktime(end_time);
+
+Converting to ktime first makes this cheaper:
+
+                expires = ktime_get() + timespec64_to_ns(timeout);
+
+Less code lines and shorter execution time because adding scalars is
+obviously cheaper than adding timespecs.
+
+Now if you add:
+
+       ktime_t expires, *exp = NULL;
+
+then you can do here:
+
+                exp = &expires;
+>  	}
+>  
+>  
+> @@ -2167,7 +2172,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>  		rcu_read_unlock();
+>  
+>  		if (timeout)
+> -			jiffies_left = schedule_timeout(jiffies_left);
+> +			timed_out = !schedule_hrtimeout_range(&expires,
+> +						current->timer_slack_ns,
+> +						HRTIMER_MODE_ABS);
+>  		else
+>  			schedule();
+
+and this can be simplified to:
+
+                timed_out = !schedule_hrtimeout_range(exp, current->timer_slack_ns,
+						      HRTIMER_MODE_ABS)
+
+schedule_hrtimeout_range() directly invokes schedule() when @exp == NULL
+and returns != 0 when woken up in that case.
+
+> @@ -2210,7 +2217,7 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>  		/*
+>  		 * If an interrupt occurred we have to clean up the queue.
+>  		 */
+> -		if (timeout && jiffies_left == 0)
+> +		if (timeout && timed_out)
+
+and this becomes
+
+                if (timed_out)
+
+>  			error = -EAGAIN;
+>  	} while (error == -EINTR && !signal_pending(current)); /* spurious */
+
+Hmm?
+
+Done right, you should end up with a negative diffstat :)
+
+Thanks,
+
+        tglx

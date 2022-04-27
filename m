@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496D2510E42
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897D4510E31
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356928AbiD0BoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S1356884AbiD0BoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356862AbiD0Bnd (ORCPT
+        with ESMTP id S1356876AbiD0Bnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Apr 2022 21:43:33 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2ACA1903C
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:22 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id u5-20020a63f645000000b003aa5613d99cso175247pgj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:22 -0700 (PDT)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370D0140CC
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:24 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id b198-20020a6334cf000000b003ab23ccd0cbso170374pga.14
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:40:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=8PeOWxVB/PV7PL/FCA2ORAOWJEpKNecTkJJHdcIaayE=;
-        b=RrD+i50ol54Uu6raUIuaeZDx2/6IdM834axlPG+4v5t83Bf9s8q3RaAPFfrz1UDbux
-         f/PCyC6/ueKE9KKAUHYT+3LIrReYWTVceR/SULzRLFt4My46cLHXHeJZeR5XF5GYJ1cH
-         f9oq80168EdgIAO6wyQ9mkgLs656o3yPhX8AkI8exP2MCNUFPICdISLS99kzW+5x1Jfu
-         4HHLekp8Enb15xRwxsc0I875BdqXGInclxYZBRyLIfmlKh6w3kosxb5ByXEWTGz9vnju
-         zohLS8zFYF8QVQOd6o/XgkptJgI6RDkugHI5+57hIj3NIQFz9JXt5HVcb2kYEYrD50J/
-         SaMg==
+        bh=tdAby1TGlV1h8nD87XtrVih1Pygj0UJbvJREenj9JnE=;
+        b=ivkOoyYRCDwEv7I3kjEmBzKP6ALUjVb9oC8s04GcxHKSOoF9jV57s+M/xvmCOuZ5Yg
+         k40c1NhbKEZ2seHy59bKbLcsUw6Rdz3MuX5i9gug7+X87B3tVpe2wP9dTzva/K1IxLtt
+         I26MHaiA2rwTf1ZSIne2Yttolv+dAgzE5eL24RrjNyqLKt0DV37qo+El5ZftIedOh09l
+         xM7aae0kzHaAg+xUvOcMLjKaobcUyClomh6hC8XbMtv08PwP+klerPRKCOf/GmWUUgAO
+         Hy07rOqiLxmHuuVGMJF3nYBt0Ha9v/OQ5ckdJ+qEQsW8et6TScrzww4o6kVtW0iR+kIi
+         ReaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=8PeOWxVB/PV7PL/FCA2ORAOWJEpKNecTkJJHdcIaayE=;
-        b=K2snwmmRhBJ3kxpo3ukwJgeWA0WD2Z78r37cxnjY+nW/1a92Ecv5mGyOGovXPyOVmT
-         QnobKsww861HnUg1c5lgOL3iw6ZtV2Osz/n0uFQPZ0eRjtnVGXfgj7Kk9jcA0JZLXAaf
-         WP7eILkMP312EgFwipCr5Ex3K51v6g46yXxIYHttpubJu/ez92Lmqzul2OOayNuZmRi5
-         0XafmAbIvkEn9oknJ1ewxisCYAyLO8gdDjLZ94iAKPr6M9o4HIg9JDihS7tyRTjHoHJU
-         UWQE8eRHBRBipC5rSaezg6D6h4N10mqfwngGlLslxFop/xSXWehjZeST6BS6al37wm05
-         WIFQ==
-X-Gm-Message-State: AOAM531udCUOT5+cWe/FFNqRNENg6CyKCKagpRCRW7+tJdteDfv8t7tK
-        UT+YR+yqvVm0Gr7i/Vb7u61J9wCGbQ4=
-X-Google-Smtp-Source: ABdhPJzwMIlXwOTbAjJI80e2LYtYIqs3I3Oa8m6URYknPp/DdPTBkA86ZY2PcpnMUvkflq+1sIRo5oMw3vs=
+        bh=tdAby1TGlV1h8nD87XtrVih1Pygj0UJbvJREenj9JnE=;
+        b=Pd+Hcofw+5hYN8kN2OYD1IJqcd/IuU+VUrbyxdm//qlDEOopDQ5KBk9XZn+HW9zwaw
+         MBUgtfm7kbZstDZ2Vzt5JxaMB9LfHrmpbGgTTfqOlg9NyQcYaOikUPif2Ns5jR1T6Z/3
+         9hixaSVO6aKI1YmgB6FQnibEKZL8TEDay7XLPNC/MD+THVb8859TLY+/isqfDbt9CY/a
+         eAIvST/3cNf2xuWosYcd8BWP69FGip8FY6/M15dKsQXEDytdq3l+YxVlFAzhmd/fWWne
+         mYMB9YhLQEYSnX+Gytimg6IeTyit/s3t4cs8tHgJrwxhNfxQ/wvjNCpGkx/NhoYzn5by
+         h+9A==
+X-Gm-Message-State: AOAM533icSPLG36/oEOnsyOt+NqRvnKOmZ/xRC+JT03V5ui3y3Ir1OCl
+        92u9XqG6RRBeLTiFxl3ImnNVaAzjdRc=
+X-Google-Smtp-Source: ABdhPJzTNiP/xXqBgporbK59dMQrSzIVhqlhXvoYgY2x5e1mB/xWz+rutzl+rGM9cviXD5nxxb0Mo5Ef3D4=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:903:11c7:b0:151:7290:ccc with SMTP id
- q7-20020a17090311c700b0015172900cccmr26601873plh.95.1651023620966; Tue, 26
- Apr 2022 18:40:20 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1702:b0:50a:8181:fed7 with SMTP id
+ h2-20020a056a00170200b0050a8181fed7mr27400903pfc.56.1651023623746; Tue, 26
+ Apr 2022 18:40:23 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 27 Apr 2022 01:40:03 +0000
+Date:   Wed, 27 Apr 2022 01:40:04 +0000
 In-Reply-To: <20220427014004.1992589-1-seanjc@google.com>
-Message-Id: <20220427014004.1992589-8-seanjc@google.com>
+Message-Id: <20220427014004.1992589-9-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220427014004.1992589-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 7/8] KVM: Do not pin pages tracked by gfn=>pfn caches
+Subject: [PATCH v2 8/8] DO NOT MERGE: Hack-a-test to verify gpc invalidation+refresh
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -67,7 +67,7 @@ Cc:     Sean Christopherson <seanjc@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,97 +75,351 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Put the reference to any struct page mapped/tracked by a gfn=>pfn cache
-upon inserting the pfn into its associated cache, as opposed to putting
-the reference only when the cache is done using the pfn.  In other words,
-don't pin pages while they're in the cache.  One of the major roles of
-the gfn=>pfn cache is to play nicely with invalidation events, i.e. it
-exists in large part so that KVM doesn't rely on pinning pages.
+Add a VM-wide gfn=>pfn cache and a fake MSR to let userspace control the
+cache.  On writes, reflect the value of the MSR into the backing page of
+a gfn=>pfn cache so that userspace can detect if a value was written to
+the wrong page, i.e. to a stale mapping.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Spin up 16 vCPUs (arbitrary) to use/refresh the cache, and another thread
+to trigger mmu_notifier events and memslot updates.
+
+Not-signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/pfncache.c | 36 ++++++++++++++++++++----------------
- 1 file changed, 20 insertions(+), 16 deletions(-)
+ arch/x86/kvm/x86.c                     |  30 ++++
+ include/linux/kvm_host.h               |   2 +
+ tools/testing/selftests/kvm/.gitignore |   1 +
+ tools/testing/selftests/kvm/Makefile   |   2 +
+ tools/testing/selftests/kvm/gpc_test.c | 217 +++++++++++++++++++++++++
+ virt/kvm/pfncache.c                    |   2 +
+ 6 files changed, 254 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/gpc_test.c
 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 951d0a78ccda..7afdb7f39821 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3473,6 +3473,20 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		return kvm_xen_write_hypercall_page(vcpu, data);
+ 
+ 	switch (msr) {
++	case 0xdeadbeefu: {
++		struct gfn_to_pfn_cache *gpc = &vcpu->kvm->test_cache;
++		unsigned long flags;
++
++		if (kvm_gfn_to_pfn_cache_refresh(vcpu->kvm, gpc, data, 8))
++			break;
++
++		read_lock_irqsave(&gpc->lock, flags);
++		if (kvm_gfn_to_pfn_cache_check(vcpu->kvm, gpc, data, 8))
++			*(u64 *)(gpc->khva) = data;
++		read_unlock_irqrestore(&gpc->lock, flags);
++		break;
++	}
++
+ 	case MSR_AMD64_NB_CFG:
+ 	case MSR_IA32_UCODE_WRITE:
+ 	case MSR_VM_HSAVE_PA:
+@@ -3825,6 +3839,19 @@ static int get_msr_mce(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata, bool host)
+ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ {
+ 	switch (msr_info->index) {
++	case 0xdeadbeefu: {
++		struct gfn_to_pfn_cache *gpc = &vcpu->kvm->test_cache;
++		unsigned long flags;
++
++		read_lock_irqsave(&gpc->lock, flags);
++		if (kvm_gfn_to_pfn_cache_check(vcpu->kvm, gpc, gpc->gpa, 8))
++			msr_info->data = gpc->gpa;
++		else
++			msr_info->data = 0xdeadbeefu;
++		read_unlock_irqrestore(&gpc->lock, flags);
++		return 0;
++	}
++
+ 	case MSR_IA32_PLATFORM_ID:
+ 	case MSR_IA32_EBL_CR_POWERON:
+ 	case MSR_IA32_LASTBRANCHFROMIP:
+@@ -11794,6 +11821,9 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+ 	kvm_hv_init_vm(kvm);
+ 	kvm_xen_init_vm(kvm);
+ 
++	kvm_gfn_to_pfn_cache_init(kvm, &kvm->test_cache, NULL,
++				  KVM_HOST_USES_PFN, 0, 0);
++
+ 	return static_call(kvm_x86_vm_init)(kvm);
+ 
+ out_page_track:
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 252ee4a61b58..88ed76ad8bc7 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -718,6 +718,8 @@ struct kvm {
+ 	spinlock_t gpc_lock;
+ 	struct list_head gpc_list;
+ 
++	struct gfn_to_pfn_cache test_cache;
++
+ 	/*
+ 	 * created_vcpus is protected by kvm->lock, and is incremented
+ 	 * at the beginning of KVM_CREATE_VCPU.  online_vcpus is only
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 56140068b763..0310a57a1a4f 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -70,3 +70,4 @@
+ /steal_time
+ /kvm_binary_stats_test
+ /system_counter_offset_test
++/gpc_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index af582d168621..0adc9ac954d1 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -104,6 +104,8 @@ TEST_GEN_PROGS_x86_64 += steal_time
+ TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
+ TEST_GEN_PROGS_x86_64 += system_counter_offset_test
+ 
++TEST_GEN_PROGS_x86_64 += gpc_test
++
+ TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
+ TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
+ TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
+diff --git a/tools/testing/selftests/kvm/gpc_test.c b/tools/testing/selftests/kvm/gpc_test.c
+new file mode 100644
+index 000000000000..5c509e7bb4da
+--- /dev/null
++++ b/tools/testing/selftests/kvm/gpc_test.c
+@@ -0,0 +1,217 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#define _GNU_SOURCE /* for program_invocation_short_name */
++#include <errno.h>
++#include <fcntl.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <signal.h>
++#include <syscall.h>
++#include <sys/ioctl.h>
++#include <sys/sysinfo.h>
++#include <asm/barrier.h>
++#include <linux/atomic.h>
++#include <linux/rseq.h>
++#include <linux/unistd.h>
++
++#include "kvm_util.h"
++#include "processor.h"
++#include "test_util.h"
++
++#define NR_VCPUS 16
++
++#define NR_ITERATIONS	1000
++
++#define PAGE_SIZE 4096
++
++#ifndef MAP_FIXED_NOREPLACE
++#define MAP_FIXED_NOREPLACE	0x100000
++#endif
++
++static const uint64_t gpa_base = (4ull * (1 << 30));
++
++static struct kvm_vm *vm;
++
++static pthread_t memory_thread;
++static pthread_t vcpu_threads[NR_VCPUS];
++
++static bool fight;
++
++static uint64_t per_vcpu_gpa_aligned(int vcpu_id)
++{
++	return gpa_base + (vcpu_id * PAGE_SIZE);
++}
++
++static uint64_t per_vcpu_gpa(int vcpu_id)
++{
++	return per_vcpu_gpa_aligned(vcpu_id) + vcpu_id;
++}
++
++static void guest_code(int vcpu_id)
++{
++	uint64_t this_vcpu_gpa;
++	int i;
++
++	this_vcpu_gpa = per_vcpu_gpa(vcpu_id);
++
++	for (i = 0; i < NR_ITERATIONS; i++)
++		wrmsr(0xdeadbeefu, this_vcpu_gpa);
++	GUEST_SYNC(0);
++}
++
++static void *memory_worker(void *ign)
++{
++	int i, x, r, k;
++	uint64_t *hva;
++	uint64_t gpa;
++	void *mem;
++
++	while (!READ_ONCE(fight))
++		cpu_relax();
++
++	for (k = 0; k < 50; k++) {
++		i = (unsigned int)random() % NR_VCPUS;
++
++		gpa = per_vcpu_gpa_aligned(i);
++		hva = (void *)gpa;
++
++		x = (unsigned int)random() % 5;
++		switch (x) {
++		case 0:
++			r = munmap(hva, PAGE_SIZE);
++			TEST_ASSERT(!r, "Failed to mumap (hva = %lx), errno = %d (%s)",
++				    (unsigned long)hva, errno, strerror(errno));
++
++			mem = mmap(hva, PAGE_SIZE, PROT_READ | PROT_WRITE,
++				MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++			TEST_ASSERT(mem != MAP_FAILED || mem != hva,
++				    "Failed to mmap (hva = %lx), errno = %d (%s)",
++				    (unsigned long)hva, errno, strerror(errno));
++			break;
++		case 1:
++			vm_set_user_memory_region(vm, i + 1, KVM_MEM_LOG_DIRTY_PAGES,
++						  gpa, PAGE_SIZE, hva);
++			vm_set_user_memory_region(vm, i + 1, 0, gpa, PAGE_SIZE, hva);
++			break;
++		case 2:
++			r = mprotect(hva, PAGE_SIZE, PROT_NONE);
++			TEST_ASSERT(!r, "Failed to mprotect (hva = %lx), errno = %d (%s)",
++				    (unsigned long)hva, errno, strerror(errno));
++
++			r = mprotect(hva, PAGE_SIZE, PROT_READ | PROT_WRITE);
++			TEST_ASSERT(!r, "Failed to mprotect (hva = %lx), errno = %d (%s)",
++				    (unsigned long)hva, errno, strerror(errno));
++			break;
++		case 3:
++			r = mprotect(hva, PAGE_SIZE, PROT_READ);
++			TEST_ASSERT(!r, "Failed to mprotect (hva = %lx), errno = %d (%s)",
++				    (unsigned long)hva, errno, strerror(errno));
++
++			r = mprotect(hva, PAGE_SIZE, PROT_READ | PROT_WRITE);
++			TEST_ASSERT(!r, "Failed to mprotect (hva = %lx), errno = %d (%s)",
++				    (unsigned long)hva, errno, strerror(errno));
++			break;
++		case 4:
++			vm_set_user_memory_region(vm, i + 1, 0, gpa, 0, 0);
++			vm_set_user_memory_region(vm, i + 1, 0, gpa, PAGE_SIZE,
++						  (void *)per_vcpu_gpa_aligned(NR_VCPUS));
++			vm_set_user_memory_region(vm, i + 1, 0, gpa, 0, 0);
++			vm_set_user_memory_region(vm, i + 1, 0, gpa, PAGE_SIZE, hva);
++			break;
++		}
++	}
++	return NULL;
++}
++
++static void sync_guest(int vcpu_id)
++{
++	struct ucall uc;
++
++	switch (get_ucall(vm, vcpu_id, &uc)) {
++	case UCALL_SYNC:
++		TEST_ASSERT(uc.args[1] == 0,
++			   "Unexpected sync ucall, got %lx", uc.args[1]);
++		break;
++	case UCALL_ABORT:
++			TEST_FAIL("%s at %s:%ld\n\tvalues: %#lx, %#lx",
++		(const char *)uc.args[0],
++		__FILE__, uc.args[1], uc.args[2], uc.args[3]);
++		break;
++	default:
++		TEST_FAIL("Unexpected userspace exit, reason = %s\n",
++			  exit_reason_str(vcpu_state(vm, vcpu_id)->exit_reason));
++		break;
++	}
++}
++
++static void *vcpu_worker(void *data)
++{
++	int vcpu_id = (unsigned long)data;
++
++	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
++
++	while (!READ_ONCE(fight))
++		cpu_relax();
++
++	usleep(10);
++
++	vcpu_run(vm, vcpu_id);
++
++	sync_guest(vcpu_id);
++
++	return NULL;
++}
++
++int main(int argc, char *argv[])
++{
++	uint64_t *hva;
++	uint64_t gpa;
++	void *r;
++	int i;
++
++	srandom(time(0));
++
++	vm = vm_create_default_with_vcpus(NR_VCPUS, 0, 0, guest_code, NULL);
++	ucall_init(vm, NULL);
++
++	pthread_create(&memory_thread, NULL, memory_worker, 0);
++
++	for (i = 0; i < NR_VCPUS; i++) {
++		pthread_create(&vcpu_threads[i], NULL, vcpu_worker, (void *)(unsigned long)i);
++
++		gpa = per_vcpu_gpa_aligned(i);
++		hva = (void *)gpa;
++		r = mmap(hva, PAGE_SIZE, PROT_READ | PROT_WRITE,
++			 MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++		TEST_ASSERT(r != MAP_FAILED, "mmap() '%lx' failed, errno = %d (%s)",
++			    gpa, errno, strerror(errno));
++
++		vm_set_user_memory_region(vm, i + 1, 0, gpa, PAGE_SIZE, hva);
++	}
++
++	WRITE_ONCE(fight, true);
++
++	for (i = 0; i < NR_VCPUS; i++)
++		pthread_join(vcpu_threads[i], NULL);
++
++	pthread_join(memory_thread, NULL);
++
++	for (i = 0; i < NR_VCPUS; i++) {
++		gpa = per_vcpu_gpa(i);
++		hva = (void *)gpa;
++
++		TEST_ASSERT(*hva == 0 || *hva == gpa,
++			    "Want '0' or '%lx', got '%lx'\n", gpa, *hva);
++	}
++
++	gpa = vcpu_get_msr(vm, 0, 0xdeadbeefu);
++	hva = (void *)gpa;
++	if (gpa != 0xdeadbeefu)
++		TEST_ASSERT(*hva == gpa, "Want '%lx', got '%lx'\n", gpa, *hva);
++
++	kvm_vm_free(vm);
++
++	return 0;
++}
 diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index b1665d0e6c32..3cb439b505b4 100644
+index 3cb439b505b4..7881e6e6d91a 100644
 --- a/virt/kvm/pfncache.c
 +++ b/virt/kvm/pfncache.c
-@@ -95,20 +95,16 @@ bool kvm_gfn_to_pfn_cache_check(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- }
- EXPORT_SYMBOL_GPL(kvm_gfn_to_pfn_cache_check);
- 
--static void gpc_release_pfn_and_khva(struct kvm *kvm, kvm_pfn_t pfn, void *khva)
-+static void gpc_unmap_khva(struct kvm *kvm, kvm_pfn_t pfn, void *khva)
- {
--	/* Unmap the old page if it was mapped before, and release it */
--	if (!is_error_noslot_pfn(pfn)) {
--		if (khva) {
--			if (pfn_valid(pfn))
--				kunmap(pfn_to_page(pfn));
-+	/* Unmap the old pfn/page if it was mapped before. */
-+	if (!is_error_noslot_pfn(pfn) && khva) {
-+		if (pfn_valid(pfn))
-+			kunmap(pfn_to_page(pfn));
- #ifdef CONFIG_HAS_IOMEM
--			else
--				memunmap(khva);
-+		else
-+			memunmap(khva);
- #endif
--		}
--
--		kvm_release_pfn(pfn, false);
+@@ -372,6 +372,8 @@ int kvm_gfn_to_pfn_cache_init(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+ 		list_add(&gpc->list, &kvm->gpc_list);
+ 		spin_unlock(&kvm->gpc_lock);
  	}
++	if (!len)
++		return -EINVAL;
+ 	return kvm_gfn_to_pfn_cache_refresh(kvm, gpc, gpa, len);
  }
- 
-@@ -147,10 +143,10 @@ static kvm_pfn_t hva_to_pfn_retry(struct kvm *kvm, struct gfn_to_pfn_cache *gpc)
- 			 * Keep the mapping if the previous iteration reused
- 			 * the existing mapping and didn't create a new one.
- 			 */
--			if (new_khva == old_khva)
--				new_khva = NULL;
-+			if (new_khva != old_khva)
-+				gpc_unmap_khva(kvm, new_pfn, new_khva);
- 
--			gpc_release_pfn_and_khva(kvm, new_pfn, new_khva);
-+			kvm_release_pfn_clean(new_pfn);
- 
- 			cond_resched();
- 		}
-@@ -222,6 +218,14 @@ static kvm_pfn_t hva_to_pfn_retry(struct kvm *kvm, struct gfn_to_pfn_cache *gpc)
- 	gpc->valid = true;
- 	gpc->pfn = new_pfn;
- 	gpc->khva = new_khva + (gpc->gpa & ~PAGE_MASK);
-+
-+	/*
-+	 * Put the reference to the _new_ pfn.  The pfn is now tracked by the
-+	 * cache and can be safely migrated, swapped, etc... as the cache will
-+	 * invalidate any mappings in response to relevant mmu_notifier events.
-+	 */
-+	kvm_release_pfn_clean(new_pfn);
-+
- 	return 0;
- 
- out_error:
-@@ -315,7 +319,7 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- 	write_unlock_irq(&gpc->lock);
- 
- 	if (old_pfn != new_pfn)
--		gpc_release_pfn_and_khva(kvm, old_pfn, old_khva);
-+		gpc_unmap_khva(kvm, old_pfn, old_khva);
- 
- 	return ret;
- }
-@@ -342,7 +346,7 @@ void kvm_gfn_to_pfn_cache_unmap(struct kvm *kvm, struct gfn_to_pfn_cache *gpc)
- 
- 	write_unlock_irq(&gpc->lock);
- 
--	gpc_release_pfn_and_khva(kvm, old_pfn, old_khva);
-+	gpc_unmap_khva(kvm, old_pfn, old_khva);
- }
- EXPORT_SYMBOL_GPL(kvm_gfn_to_pfn_cache_unmap);
- 
+ EXPORT_SYMBOL_GPL(kvm_gfn_to_pfn_cache_init);
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 

@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57857511D7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E447511E5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241290AbiD0QGV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 27 Apr 2022 12:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241430AbiD0QDv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241655AbiD0QDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 27 Apr 2022 12:03:51 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28955291FD4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:00:13 -0700 (PDT)
-Received: from mail-yw1-f176.google.com ([209.85.128.176]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MhDEq-1oO2yc3jve-00eJTj for <linux-kernel@vger.kernel.org>; Wed, 27 Apr
- 2022 17:59:33 +0200
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f16645872fso24044307b3.4;
-        Wed, 27 Apr 2022 08:59:32 -0700 (PDT)
-X-Gm-Message-State: AOAM530zVO8LeX1h8HIQRV0fp2If6i2g9LCpsw1LUT37jPLz/QRiZKmM
-        AuedKsdJodkcVh4ia6OwQHbTl0pmgiJ6Yca8DlI=
-X-Google-Smtp-Source: ABdhPJzLjeye9A9OWhShH76hys3ishcYLuK3veH+wxcTEvEyq9x/yk6faCk7GM7cQVbAcpTgBWV2wb3Zfj0ajrT/jKo=
-X-Received: by 2002:a81:9213:0:b0:2f6:eaae:d22f with SMTP id
- j19-20020a819213000000b002f6eaaed22fmr25858625ywg.249.1651075171676; Wed, 27
- Apr 2022 08:59:31 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241160AbiD0QDg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 27 Apr 2022 12:03:36 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA560288EE4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:59:49 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id z16so1955173pfh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 08:59:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=B7bCPSAqni/eXnk1LqJkGqy1IOK7BdN/WKgexnP+sSs=;
+        b=wm5xTSYCz9ImGQOBbgtUP1ff6okO5z5MEKS4Ra9Q+9ZGRX4Sh2LozU7GiIrBErvXAR
+         3+Sv9iMqS+IT+wyhnbLG1cg59xi8BU96rjrfGqmrslU5A1fQ8/9xQpyxAsqScgLnvusw
+         haUA8dCRMZgbI5h2voBta7cefY4wYB+UQRRLm9fESog4XJpY0cjCQHVsNN+H7teOrdSU
+         SSajLEtZzEFwrOHv6JT22Qdii4pXDEzZwU5bxCebqkwdMdpJegLzdSOd3+GQUfjhqiSu
+         iGt31/fPbboUzAhv9SpTWYKuJ9HhuIu1o6fNCofEufP/1VaBAOrVOauzGH3I7cq+f0uv
+         EXnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=B7bCPSAqni/eXnk1LqJkGqy1IOK7BdN/WKgexnP+sSs=;
+        b=1Ee8SXUCSOJFSGc4kT7FO+C7BBwFcMi8lFPtq9DUoyXpMbMmK69EDWMdnT3o3a4zqO
+         YANQ3wBXZtEwbjsxjtvRKcrR2iaD2Iyr/80Q3k1kbkrlfU1VfTWfQbpfy/ul3/yGbDeP
+         TvsJryZ2FyDEA8NHzHsgapr9bR7Ozw0ccdSMbIgjLB/1qrkkpkbNxcbMJkwjM3s6Hssp
+         GIJSnwz402ofO8EFVsFevmm6L9MG3lOdLaBe9VGFtBS2OKBSkhhtGXQd7jizht1E5giJ
+         Yz6SrMf4eqDd3eeXzBfHmI62jRfqf43UHbXdBPTum6Sesikq8o0eeIiL3z2ErsOxJcGD
+         Q//g==
+X-Gm-Message-State: AOAM530XB8NtJNdOXR9PS3gOp0oJtkYLxerF0eahSKvDwqJDj7eEPkoQ
+        qrX9hPmCEwrlsenaO6BksziivA==
+X-Google-Smtp-Source: ABdhPJymOsPeD6HUMpzYXIRJtQHQErVz91u2xNJ09OSkyp0fxCsF6Ms6ClrJB2T8aUxViCrzVmZqNQ==
+X-Received: by 2002:a62:2742:0:b0:505:89a5:2023 with SMTP id n63-20020a622742000000b0050589a52023mr30923743pfn.18.1651075183688;
+        Wed, 27 Apr 2022 08:59:43 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id k198-20020a633dcf000000b003aa9116ba17sm16707374pga.35.2022.04.27.08.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 08:59:43 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 23:59:34 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ali Saidi <alisaidi@amazon.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, german.gomez@arm.com,
+        acme@kernel.org, benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v7 5/5] perf arm-spe: Use SPE data source for neoverse
+ cores
+Message-ID: <20220427155934.GC562576@leoy-ThinkPad-X240s>
+References: <20220426135937.18497-1-alisaidi@amazon.com>
+ <20220426135937.18497-6-alisaidi@amazon.com>
 MIME-Version: 1.0
-References: <cover.1644824638.git.quic_saipraka@quicinc.com> <9c7ff199d826b60e019c0eeeb6aa280abfdb9a82.1644824638.git.quic_saipraka@quicinc.com>
-In-Reply-To: <9c7ff199d826b60e019c0eeeb6aa280abfdb9a82.1644824638.git.quic_saipraka@quicinc.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 27 Apr 2022 17:59:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3_Ea2Szn61D-t--52V-zk+B-sq2mi5YbfMbTim7M9ZAQ@mail.gmail.com>
-Message-ID: <CAK8P3a3_Ea2Szn61D-t--52V-zk+B-sq2mi5YbfMbTim7M9ZAQ@mail.gmail.com>
-Subject: Re: [PATCHv10 4/6] drm/meson: Fix overflow implicit truncation warnings
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        quic_psodagud@quicinc.com, gregkh <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:JNeg52fHtEqelo16dAcn1Vtflrzc43MU8QX9pr//JGOAsEvcUUZ
- wEOvlxRgd5OA5vg06KRyALn/TtZeFIvL1i53rkiIx4hAz//EkI3/Bx+hMxtzJ1xIiXUgk8a
- 6PSkw3k5V1Lfoa6EmMZ8XnvKisARJGTUhxGX+YnhyPWSLJPvYE12jgHqm9pG2SfX6oYbCdr
- OvvuqwxfB3OdW24P+XK6w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:y9KGMoLJJWg=:5eJvyXeWYLg2M7ABpj+EsB
- Or+r+qHNg1RziXROIe5ZMdQX4Cktt4iSl1+AJTnsMxgwJkukznW2gN1CQGQfZYKm0Ua382Rv6
- Tmx+kdmgCMngab8VYcjbyH9B7O1E7SPPNBFJNjl0QNthHH7IxM0S1J8/LlPEqvneVfPBeGsDl
- J6rfRGtVigftiJQ7lxw0EO2za6192Xu2zIYiyTGJCHWAbwaLcVZgnbgLQFwEt7n+0baQBcD1e
- 5t0swPZAssJSJ9WE5ecN+nnuFLdvfDjdkd9gJHujWOg0eZEI4orMq7JAg1LVg/cFDOR5KxG4d
- jZvjhae46nq2ExkduMwOxhtDoY11LlF21kO9aRsTZ1JnZcXiRw9UZe2kzg3Ub40S9y2yyXOY/
- IHmAMXu0GgN7Y6uoVGhpbQQT6Y3nXUQwjztHhLWXNILf1MclmyHGCPvfUV7vqe5KOMrxSteE7
- /wvIKj312yWgBI0MmP6mkgBIxiF4cUbdYyNB6Rtgnh+WS3+VPrGDwyrmUnBAjfX6vnfJvoHtt
- tGOvyt5yKFc27uDIGyOsnGnp2rDyW24e1fuwag/x5zkk+ZptQQavr4QE2bwHmrJ7yjnbEgPML
- 14OT2vxFJ5sZapxnNfelgca6wn/JZ9DhLsjkYWq0nWwe8GHU8Wv7TsOGiY728zaEAW6bq4rBq
- 2TaU1IlMPjX5BCYKU68OBQYoWH8K/9Gs3UMJe5dWdLGh13QbB14AKkJxdYF3xJWi8ubbB0uNR
- 8u7iv3KQtTgmklOlpvkmZlf84fLi8kMUKbDnhj/u3JVhGKGks6vga+18JEaJKsREUyVVsscYD
- y4BHbwNOl+2M3ZBiIlheasF+VHa4mcfX6tBGIS1S+a77umYXiE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220426135937.18497-6-alisaidi@amazon.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 7:07 AM Sai Prakash Ranjan
-<quic_saipraka@quicinc.com> wrote:
->
-> Fix -Woverflow warnings for drm/meson driver which is a result
-> of moving arm64 custom MMIO accessor macros to asm-generic function
-> implementations giving a bonus type-checking now and uncovering these
-> overflow warnings.
->
-> drivers/gpu/drm/meson/meson_viu.c: In function ‘meson_viu_init’:
-> drivers/gpu/drm/meson/meson_registers.h:1826:48: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
->  #define  VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
->                                                 ^
-> drivers/gpu/drm/meson/meson_viu.c:472:18: note: in expansion of macro ‘VIU_OSD_BLEND_REORDER’
->    writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
->                   ^~~~~~~~~~~~~~~~~~~~~
->
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+On Tue, Apr 26, 2022 at 01:59:37PM +0000, Ali Saidi wrote:
+> When synthesizing data from SPE, augment the type with source information
+> for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
+> the same encoding. I can't find encoding information for any other SPE
+> implementations to unify their choices with Arm's thus that is left for
+> future work.
+> 
+> This change populates the mem_lvl_num for Neoverse cores as well as the
+> deprecated mem_lvl namespace.
+> 
+> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+I tested this patch and also did the integration testing with perf ć2c
+tool, this patch looks good to me:
 
-It took me a bit to understand why we got the warning in the first place, but I
-should have just read the patch description, it's all there....
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Tested-by: Leo Yan <leo.yan@linaro.org>
+
+James, German, it's better if this patch set can get the green light
+from you.  So please take a look, thanks!
+
+Leo

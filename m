@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F041511026
+	by mail.lfdr.de (Postfix) with ESMTP id 776B1511027
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357685AbiD0EcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S1357677AbiD0Ec2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357674AbiD0EcN (ORCPT
+        with ESMTP id S1357694AbiD0EcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:32:13 -0400
+        Wed, 27 Apr 2022 00:32:22 -0400
 Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31C94BB95
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:29:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB159156E03
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:29:06 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651033741;
+        t=1651033745;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4aX7odo5pcxf80dhjL+1ki2q7oMjNnbh5/VzkH5pVqg=;
-        b=EKimL9Toxeqt4HnHJHW5pRSliyYwJNFr9WPy84AXTdu3zPV6CCK1gzxtzJ+LCRxxYt2BYh
-        gBkQNKGYCvwoIb+XERgEhAUCTZaC2S9/q/TpjM5aTQQhpyvlef1g3TGgjrTU99sAcs+N71
-        F52kfL5TtQhvSQrQwaNLhxnNHymIzlA=
+        bh=7e1Yfv3+WJ1fxThypP2QZLDZeirFxR4HqHmaF3bZjlA=;
+        b=aUCORwS68E5McyVQBtJuE1xfpGbKspsKYsA73An8M7dgGg2jXwmKaxOfBHK+vTh+Ybuqhm
+        RbYaDMhrg8Ct30WsJQL40gpZQwRucwVZpbA7tc/YJM5KcxB8RJas6h7m2r4YWw5haVrxkp
+        PhWnKc6fmlZthsdkoh80jU3Mjzcbvys=
 From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
 To:     linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -37,9 +37,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Muchun Song <songmuchun@bytedance.com>,
         Naoya Horiguchi <naoya.horiguchi@nec.com>,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 2/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove memory section with hwpoisoned hugepage
-Date:   Wed, 27 Apr 2022 13:28:39 +0900
-Message-Id: <20220427042841.678351-3-naoya.horiguchi@linux.dev>
+Subject: [RFC PATCH v1 3/4] mm, hwpoison: add parameter unpoison to get_hwpoison_huge_page()
+Date:   Wed, 27 Apr 2022 13:28:40 +0900
+Message-Id: <20220427042841.678351-4-naoya.horiguchi@linux.dev>
 In-Reply-To: <20220427042841.678351-1-naoya.horiguchi@linux.dev>
 References: <20220427042841.678351-1-naoya.horiguchi@linux.dev>
 MIME-Version: 1.0
@@ -57,106 +57,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-HWPoisoned page is not supposed to prevent memory hotremove, but
-currently this does not properly work for hwpoisoned hugepages and the
-kernel tries to migrate them, which could cause consuming corrupted
-data.
+Now hwpoisoned hugepage is expected to be !HPageMigratable, so grabbing
+hugepage for unpoison should negate the check from that for poisoning.
+This patch implements it by logical XOR.
 
-Move dissolve_free_huge_pages() before scan_movable_pages(). This is
-because the result of the movable check depends on the result of the
-dissolve.  Now delayed dissolve is available, so hwpoisoned hugepages
-can be turned into 4kB hwpoison page which memory hotplug can handle.
-
-And clear HPageMigratable pseudo flag for hwpoisoned hugepages. This is
-also important because dissolve_free_huge_page() can fail.  So it's
-still necessary to prevent do_migrate_pages() from trying to migrate
-hwpoison hugepages.
-
-Reported-by: Miaohe Lin <linmiaohe@huawei.com>
 Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 ---
- mm/hugetlb.c        | 11 +++++++++++
- mm/memory-failure.c |  2 ++
- mm/memory_hotplug.c | 23 +++++++++++------------
- 3 files changed, 24 insertions(+), 12 deletions(-)
+ include/linux/hugetlb.h | 5 +++--
+ mm/hugetlb.c            | 4 ++--
+ mm/memory-failure.c     | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 689e69cb556b..99b7ded651f6 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -171,7 +171,7 @@ bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+ long hugetlb_unreserve_pages(struct inode *inode, long start, long end,
+ 						long freed);
+ bool isolate_huge_page(struct page *page, struct list_head *list);
+-int get_hwpoison_huge_page(struct page *page, bool *hugetlb);
++int get_hwpoison_huge_page(struct page *page, bool *hugetlb, bool unpoison);
+ int get_huge_page_for_hwpoison(unsigned long pfn, int flags);
+ void putback_active_hugepage(struct page *page);
+ void move_hugetlb_state(struct page *oldpage, struct page *newpage, int reason);
+@@ -377,7 +377,8 @@ static inline bool isolate_huge_page(struct page *page, struct list_head *list)
+ 	return false;
+ }
+ 
+-static inline int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
++static inline int get_hwpoison_huge_page(struct page *page, bool *hugetlb,
++					bool unpoison)
+ {
+ 	return 0;
+ }
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 6867ea8345d1..95b1db852ca9 100644
+index 95b1db852ca9..0fbdfa753b54 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -2159,6 +2159,17 @@ int dissolve_free_huge_pages(unsigned long start_pfn, unsigned long end_pfn)
+@@ -6788,7 +6788,7 @@ bool isolate_huge_page(struct page *page, struct list_head *list)
+ 	return ret;
+ }
  
- 	for (pfn = start_pfn; pfn < end_pfn; pfn += 1 << minimum_order) {
- 		page = pfn_to_page(pfn);
-+
-+		if (PageHuge(page) && PageHWPoison(page)) {
-+			/*
-+			 * Release the last refcount from hwpoison to turn into
-+			 * a free hugepage.
-+			 */
-+			if (page_count(page) == 1)
-+				put_page(page);
-+			page = hugetlb_page_hwpoison(page);
-+		}
-+
- 		rc = dissolve_free_huge_page(page);
- 		if (rc)
- 			break;
+-int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
++int get_hwpoison_huge_page(struct page *page, bool *hugetlb, bool unpoison)
+ {
+ 	int ret = 0;
+ 
+@@ -6798,7 +6798,7 @@ int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
+ 		*hugetlb = true;
+ 		if (HPageFreed(page))
+ 			ret = 0;
+-		else if (HPageMigratable(page))
++		else if (!unpoison != !HPageMigratable(page))
+ 			ret = get_page_unless_zero(page);
+ 		else
+ 			ret = -EBUSY;
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 73948a00ad4a..4a2e22bf0983 100644
+index 4a2e22bf0983..b5ee3cbc7fbc 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -1607,6 +1607,8 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 		return res == MF_RECOVERED ? 0 : -EBUSY;
- 	}
+@@ -1190,7 +1190,7 @@ static int __get_hwpoison_page(struct page *page, unsigned long flags)
+ 	int ret = 0;
+ 	bool hugetlb = false;
  
-+	ClearHPageMigratable(head);
-+
- 	page_flags = head->flags;
+-	ret = get_hwpoison_huge_page(head, &hugetlb);
++	ret = get_hwpoison_huge_page(head, &hugetlb, false);
+ 	if (hugetlb)
+ 		return ret;
  
- 	/*
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 416b38ca8def..4bc0590f4334 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1864,6 +1864,17 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+@@ -1283,7 +1283,7 @@ static int __get_unpoison_page(struct page *page)
+ 	int ret = 0;
+ 	bool hugetlb = false;
  
- 			cond_resched();
+-	ret = get_hwpoison_huge_page(head, &hugetlb);
++	ret = get_hwpoison_huge_page(head, &hugetlb, true);
+ 	if (hugetlb)
+ 		return ret;
  
-+			/*
-+			 * Dissolve free hugepages in the memory block before doing
-+			 * offlining actually in order to make hugetlbfs's object
-+			 * counting consistent.
-+			 */
-+			ret = dissolve_free_huge_pages(start_pfn, end_pfn);
-+			if (ret) {
-+				reason = "failure to dissolve huge pages";
-+				goto failed_removal_isolated;
-+			}
-+
- 			ret = scan_movable_pages(pfn, end_pfn, &pfn);
- 			if (!ret) {
- 				/*
-@@ -1879,19 +1890,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 			goto failed_removal_isolated;
- 		}
- 
--		/*
--		 * Dissolve free hugepages in the memory block before doing
--		 * offlining actually in order to make hugetlbfs's object
--		 * counting consistent.
--		 */
--		ret = dissolve_free_huge_pages(start_pfn, end_pfn);
--		if (ret) {
--			reason = "failure to dissolve huge pages";
--			goto failed_removal_isolated;
--		}
--
- 		ret = test_pages_isolated(start_pfn, end_pfn, MEMORY_OFFLINE);
--
- 	} while (ret);
- 
- 	/* Mark all sections offline and remove free pages from the buddy. */
 -- 
 2.25.1
 

@@ -2,331 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21175510DA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B32510DA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356609AbiD0BGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S1356650AbiD0BGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356567AbiD0BFu (ORCPT
+        with ESMTP id S1356597AbiD0BF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:05:50 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630A747076;
-        Tue, 26 Apr 2022 18:02:41 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 26 Apr 2022 21:05:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB8754A3F3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651021367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r8XIXCua6XMpuddJXBqkwZRJ8mNJ/vCZJPDOjmdzXLk=;
+        b=Kd6x1V7lMJzAl+cF9cXJa24fI8JHHH7TtRSgwW03WwBpm/a3SRlZ0rX9lF5JHkrv8G7AOC
+        eXr3YNEL3/A5+pMUOUqxkWszfN0bhAcKvgcMzERyW4LgEHuhVANHeOQWyPZ5wcNKsky58n
+        RqMO5+30tALdqYbJ1z07jYyqi5dcQ6o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-TWbqhmDYPOSqrJjWO_QpqQ-1; Tue, 26 Apr 2022 21:02:42 -0400
+X-MC-Unique: TWbqhmDYPOSqrJjWO_QpqQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id DED39CC7;
-        Tue, 26 Apr 2022 18:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1651021360;
-        bh=Jqw1bRVaiimL8uP3Lf2bgjdCXnCzie76MajKV7gWwJM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QmQH7cXsvwWgJY6pRxqt3m6+yZQjul/xQkJWIfrKTWQxJhXNlOnBbSEHIFc6A665U
-         MYKOQQb5C4JmcUbd7KohN/IBMQUGDdBRryN9AeBxtUYmI45m2DtdQEOnzLm2ahlNqH
-         2EiRlHV7V2TuJuTjxbI3PnQzqCBJ6phBf+04CCX8=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 7/7] hwmon: (nct6775) Add i2c driver
-Date:   Tue, 26 Apr 2022 18:01:54 -0700
-Message-Id: <20220427010154.29749-8-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220427010154.29749-1-zev@bewilderbeest.net>
-References: <20220427010154.29749-1-zev@bewilderbeest.net>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B5B18001EA;
+        Wed, 27 Apr 2022 01:02:42 +0000 (UTC)
+Received: from rh (vpn2-54-103.bne.redhat.com [10.64.54.103])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BC22A40314F;
+        Wed, 27 Apr 2022 01:02:40 +0000 (UTC)
+Received: from localhost ([::1] helo=rh)
+        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <dchinner@redhat.com>)
+        id 1njW4j-006M1M-Op; Wed, 27 Apr 2022 11:02:37 +1000
+Date:   Wed, 27 Apr 2022 11:02:35 +1000
+From:   Dave Chinner <dchinner@redhat.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v2 0/7] mm: introduce shrinker debugfs interface
+Message-ID: <YmiWK56bOHyrr64u@rh>
+References: <20220422202644.799732-1-roman.gushchin@linux.dev>
+ <YmeK6/eZYaMo2Ltm@rh>
+ <YmhCepfMRp49PTtA@carbon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmhCepfMRp49PTtA@carbon>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver provides an i2c I/O mechanism for the core nct6775 driver,
-as might be used by a BMC.  Because the Super I/O chip is shared with
-the host CPU in such a scenario (and the host should ultimately be in
-control of it), the i2c driver is strictly read-only to avoid
-interfering with any usage by the host (aside from the bank-select
-register, which seems to be replicated for the i2c interface).
+On Tue, Apr 26, 2022 at 12:05:30PM -0700, Roman Gushchin wrote:
+> On Tue, Apr 26, 2022 at 04:02:19PM +1000, Dave Chinner wrote:
+> > On Fri, Apr 22, 2022 at 01:26:37PM -0700, Roman Gushchin wrote:
+> > > There are 50+ different shrinkers in the kernel, many with their own bells and
+> > > whistles. Under the memory pressure the kernel applies some pressure on each of
+> > > them in the order of which they were created/registered in the system. Some
+> > > of them can contain only few objects, some can be quite large. Some can be
+> > > effective at reclaiming memory, some not.
+> > > 
+> > > The only existing debugging mechanism is a couple of tracepoints in
+> > > do_shrink_slab(): mm_shrink_slab_start and mm_shrink_slab_end. They aren't
+> > > covering everything though: shrinkers which report 0 objects will never show up,
+> > > there is no support for memcg-aware shrinkers. Shrinkers are identified by their
+> > > scan function, which is not always enough (e.g. hard to guess which super
+> > > block's shrinker it is having only "super_cache_scan").
+> > 
+> > In general, I've had no trouble identifying individual shrinker
+> > instances because I'm always looking at individual subsystem
+> > shrinker tracepoints, too.  Hence I've almost always got the
+> > identification information in the traces I need to trace just the
+> > individual shrinker tracepoints and a bit of sed/grep/awk and I've
+> > got something I can feed to gnuplot or a python script to graph...
+> 
+> You spent a lot of time working on shrinkers in general and xfs-specific
+> shrinkers in particular, no questions here. But imagine someone who's not
+> a core-mm developer and is adding a new shrinker.
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Tested-by: Renze Nicolai <renze@rnplus.nl>
----
- MAINTAINERS                 |   6 ++
- drivers/hwmon/Kconfig       |  17 ++++
- drivers/hwmon/Makefile      |   1 +
- drivers/hwmon/nct6775-i2c.c | 195 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 219 insertions(+)
- create mode 100644 drivers/hwmon/nct6775-i2c.c
+At which point, they add their own subsystem introspection to
+understand what their shrinker implementation is doing.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 88fdb7cb3197..01b97298f154 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13538,6 +13538,12 @@ F:	drivers/hwmon/nct6775-core.c
- F:	drivers/hwmon/nct6775-platform.c
- F:	drivers/hwmon/nct6775.h
- 
-+NCT6775 HARDWARE MONITOR DRIVER - I2C DRIVER
-+M:	Zev Weiss <zev@bewilderbeest.net>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	drivers/hwmon/nct6775-i2c.c
-+
- NETDEVSIM
- M:	Jakub Kicinski <kuba@kernel.org>
- S:	Maintained
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 85c22bba439b..a1dac1aa4e3a 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1489,6 +1489,23 @@ config SENSORS_NCT6775
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nct6775.
- 
-+config SENSORS_NCT6775_I2C
-+	tristate "I2C driver for Nuvoton NCT6775F and compatibles"
-+	depends on I2C
-+	select REGMAP_I2C
-+	select SENSORS_NCT6775
-+	help
-+	  If you say yes here you get support for the hardware monitoring
-+	  functionality of the Nuvoton NCT6106D, NCT6775F, NCT6776F, NCT6779D,
-+	  NCT6791D, NCT6792D, NCT6793D, NCT6795D, NCT6796D, and compatible
-+	  Super-I/O chips via their I2C interface.
-+
-+	  If you're not building a kernel for a BMC, this is probably
-+	  not the driver you want (see CONFIG_SENSORS_NCT6775_PLATFORM).
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called nct6775-i2c.
-+
- config SENSORS_NCT7802
- 	tristate "Nuvoton NCT7802Y"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 93f2b774cc5e..004ab87c9b80 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -157,6 +157,7 @@ obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
- obj-$(CONFIG_SENSORS_NCT6775_CORE) += nct6775-core.o
- nct6775-objs			:= nct6775-platform.o
- obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
-+obj-$(CONFIG_SENSORS_NCT6775_I2C) += nct6775-i2c.o
- obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
- obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
- obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
-diff --git a/drivers/hwmon/nct6775-i2c.c b/drivers/hwmon/nct6775-i2c.c
-new file mode 100644
-index 000000000000..e1bcd1146191
---- /dev/null
-+++ b/drivers/hwmon/nct6775-i2c.c
-@@ -0,0 +1,195 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * nct6775-i2c - I2C driver for the hardware monitoring functionality of
-+ *	         Nuvoton NCT677x Super-I/O chips
-+ *
-+ * Copyright (C) 2022 Zev Weiss <zev@bewilderbeest.net>
-+ *
-+ * This driver interacts with the chip via it's "back door" i2c interface, as
-+ * is often exposed to a BMC.  Because the host may still be operating the
-+ * chip via the ("front door") LPC interface, this driver cannot assume that
-+ * it actually has full control of the chip, and in particular must avoid
-+ * making any changes that could confuse the host's LPC usage of it.  It thus
-+ * operates in a strictly read-only fashion, with the only exception being the
-+ * bank-select register (which seems, thankfully, to be replicated for the i2c
-+ * interface so it doesn't affect the LPC interface).
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/i2c.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/err.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include "nct6775.h"
-+
-+static int nct6775_i2c_read(void *ctx, unsigned int reg, unsigned int *val)
-+{
-+	int ret;
-+	u32 tmp;
-+	u8 bank = reg >> 8;
-+	struct nct6775_data *data = ctx;
-+	struct i2c_client *client = data->driver_data;
-+
-+	if (bank != data->bank) {
-+		ret = i2c_smbus_write_byte_data(client, NCT6775_REG_BANK, bank);
-+		if (ret)
-+			return ret;
-+		data->bank = bank;
-+	}
-+
-+	ret = i2c_smbus_read_byte_data(client, reg & 0xff);
-+	if (ret < 0)
-+		return ret;
-+	tmp = ret;
-+
-+	if (nct6775_reg_is_word_sized(data, reg)) {
-+		ret = i2c_smbus_read_byte_data(client, (reg & 0xff) + 1);
-+		if (ret < 0)
-+			return ret;
-+		tmp = (tmp << 8) | ret;
-+	}
-+
-+	*val = tmp;
-+	return 0;
-+}
-+
-+/*
-+ * The write operation is a dummy so as not to disturb anything being done
-+ * with the chip via LPC.
-+ */
-+static int nct6775_i2c_write(void *ctx, unsigned int reg, unsigned int value)
-+{
-+	struct nct6775_data *data = ctx;
-+	struct i2c_client *client = data->driver_data;
-+
-+	dev_dbg(&client->dev, "skipping attempted write: %02x -> %03x\n", value, reg);
-+
-+	/*
-+	 * This is a lie, but writing anything but the bank-select register is
-+	 * something this driver shouldn't be doing.
-+	 */
-+	return 0;
-+}
-+
-+static const struct of_device_id __maybe_unused nct6775_i2c_of_match[] = {
-+	{ .compatible = "nuvoton,nct6106", .data = (void *)nct6106, },
-+	{ .compatible = "nuvoton,nct6116", .data = (void *)nct6116, },
-+	{ .compatible = "nuvoton,nct6775", .data = (void *)nct6775, },
-+	{ .compatible = "nuvoton,nct6776", .data = (void *)nct6776, },
-+	{ .compatible = "nuvoton,nct6779", .data = (void *)nct6779, },
-+	{ .compatible = "nuvoton,nct6791", .data = (void *)nct6791, },
-+	{ .compatible = "nuvoton,nct6792", .data = (void *)nct6792, },
-+	{ .compatible = "nuvoton,nct6793", .data = (void *)nct6793, },
-+	{ .compatible = "nuvoton,nct6795", .data = (void *)nct6795, },
-+	{ .compatible = "nuvoton,nct6796", .data = (void *)nct6796, },
-+	{ .compatible = "nuvoton,nct6797", .data = (void *)nct6797, },
-+	{ .compatible = "nuvoton,nct6798", .data = (void *)nct6798, },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, nct6775_i2c_of_match);
-+
-+static const struct i2c_device_id nct6775_i2c_id[] = {
-+	{ "nct6106", nct6106 },
-+	{ "nct6116", nct6116 },
-+	{ "nct6775", nct6775 },
-+	{ "nct6776", nct6776 },
-+	{ "nct6779", nct6779 },
-+	{ "nct6791", nct6791 },
-+	{ "nct6792", nct6792 },
-+	{ "nct6793", nct6793 },
-+	{ "nct6795", nct6795 },
-+	{ "nct6796", nct6796 },
-+	{ "nct6797", nct6797 },
-+	{ "nct6798", nct6798 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, nct6775_i2c_id);
-+
-+static int nct6775_i2c_probe_init(struct nct6775_data *data)
-+{
-+	u32 tsi_channel_mask;
-+	struct i2c_client *client = data->driver_data;
-+
-+	/*
-+	 * The i2c interface doesn't provide access to the control registers
-+	 * needed to determine the presence of other fans, but fans 1 and 2
-+	 * are (in principle) always there.
-+	 *
-+	 * In practice this is perhaps a little silly, because the system
-+	 * using this driver is mostly likely a BMC, and hence probably has
-+	 * totally separate fan tachs & pwms of its own that are actually
-+	 * controlling/monitoring the fans -- these are thus unlikely to be
-+	 * doing anything actually useful.
-+	 */
-+	data->has_fan = 0x03;
-+	data->has_fan_min = 0x03;
-+	data->has_pwm = 0x03;
-+
-+	/*
-+	 * Because on a BMC this driver may be bound very shortly after power
-+	 * is first applied to the device, the automatic TSI channel detection
-+	 * in nct6775_probe() (which has already been run at this point) may
-+	 * not find anything if a channel hasn't yet produced a temperature
-+	 * reading.  Augment whatever was found via autodetection (if
-+	 * anything) with the channels DT says should be active.
-+	 */
-+	if (!of_property_read_u32(client->dev.of_node, "nuvoton,tsi-channel-mask",
-+				  &tsi_channel_mask))
-+		data->have_tsi_temp |= tsi_channel_mask & GENMASK(NUM_TSI_TEMP - 1, 0);
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config nct6775_i2c_regmap_config = {
-+	.reg_bits = 16,
-+	.val_bits = 16,
-+	.reg_read = nct6775_i2c_read,
-+	.reg_write = nct6775_i2c_write,
-+};
-+
-+static int nct6775_i2c_probe(struct i2c_client *client)
-+{
-+	struct nct6775_data *data;
-+	const struct of_device_id *of_id;
-+	const struct i2c_device_id *i2c_id;
-+	struct device *dev = &client->dev;
-+
-+	of_id = of_match_device(nct6775_i2c_of_match, dev);
-+	i2c_id = i2c_match_id(nct6775_i2c_id, client);
-+
-+	if (of_id && (unsigned long)of_id->data != i2c_id->driver_data)
-+		dev_notice(dev, "Device mismatch: %s in device tree, %s detected\n",
-+			   of_id->name, i2c_id->name);
-+
-+	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->kind = i2c_id->driver_data;
-+
-+	data->read_only = true;
-+	data->driver_data = client;
-+	data->driver_init = nct6775_i2c_probe_init;
-+
-+	return nct6775_probe(dev, data, &nct6775_i2c_regmap_config);
-+}
-+
-+static struct i2c_driver nct6775_i2c_driver = {
-+	.class = I2C_CLASS_HWMON,
-+	.driver = {
-+		.name = "nct6775-i2c",
-+		.of_match_table = of_match_ptr(nct6775_i2c_of_match),
-+	},
-+	.probe_new = nct6775_i2c_probe,
-+	.id_table = nct6775_i2c_id,
-+};
-+
-+module_i2c_driver(nct6775_i2c_driver);
-+
-+MODULE_AUTHOR("Zev Weiss <zev@bewilderbeest.net>");
-+MODULE_DESCRIPTION("I2C driver for NCT6775F and compatible chips");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(HWMON_NCT6775);
+You keep talking about shrinkers as if they exist in isolation
+to the actual subsystems that implement shrinkers. I think that is a
+fundamental mistake - you cannot understand how a shrinker is
+actually working without understanding something about what the
+subsystem that implements the shrinker actually does.
+
+That is, the tracepoints in the shrinker code are largely
+supplemental to the subsystem introspection that is really
+determining the behaviour of the system.
+
+The shrinker infrastructure is only providing a measure of memory
+pressure - most shrinker implementations jsut don't care about what
+happens in the shrinker infrastructure - they just count and scan
+objects for reclaim, and mostly that just works for them.
+
+> > > They are a passive
+> > > mechanism: there is no way to call into counting and scanning of an individual
+> > > shrinker and profile it.
+> > 
+> > IDGI. profiling shrinkers iunder ideal conditions when there isn't
+> > memory pressure is largely a useless exercise because execution
+> > patterns under memory pressure are vastly different.
+> > 
+> > All the problems with shrinkers show up when progress cannot be made
+> > as fast as memory reclaim wants memory to be reclaimed. How do you
+> > trigger priority windup causing large amounts of deferred processing
+> > because shrinkers are running in GFP_NOFS/GFP_NOIO context? How do
+> > you simulate objects getting dirtied in memory so they can't be
+> > immediately reclaimed so the shrinker can't make any progress at all
+> > until IO completes? How do you simulate the unbound concurrency that
+> > direct reclaim can drive into the shrinkers that causes massive lock
+> > contention on shared structures and locks that need to be accessed
+> > to free objects?
+> 
+> These are valid points and I assume we can find ways to emulate some of
+> these conditions, e.g. by allowing to run scanning using the GFP_NOFS context.
+> I though about it but decided to left for further improvements.
+> 
+> > 
+> > IOWs, if all you want to do is profile shrinkers running in the
+> > absence of memory pressure, then you can do that perfectly well with
+> > the existing 'echo 2 > /proc/sys/vm/drop_caches' mechanism. We don't
+> > need some complex debugfs API just to profile the shrinker
+> > behaviour.
+> 
+> And then we need somehow separate shrinkers in the result?
+
+How do you profile a shrinker in the first place? You have to load
+up the slab cache/LRU before you have something you can actually
+profile. SO it's as simple as 'drop caches, load up cache to be
+profiled, drop caches'. It's trivial to isolate the specific cache
+that got loaded up from the tracepoints, and then with other
+tracepoints and/or perf profiling, you can extract the profile of
+the shrinker that is doing all the reclaim work.
+
+Indeed, you can point perf at the specific task that drops the
+caches, and that is all you'll get in the profile. If you can't
+isolate the specific shrinker profile from the output of such a
+simple test setup, then you should hand in your Kernel Developer
+badge....
+
+> > So why do we need any of the complexity and potential for abuse that
+> > comes from exposing control of shrinkers directly to userspace like
+> > these patches do?
+> 
+> I feel like the added complexity is minimal (unlike slab's sysfs, for
+> example). If the config option is off (by default), there is no additional
+> risk and overhead as well.
+
+No. The argument that "if we turn it off there's no overhead" means
+one of two things:
+
+1. nobody turns it on and it never gets tested and so bitrots and is
+useless, or
+2. distro's all turn it on because some tool they ship or customer
+they ship to wants it.
+
+Either way, hiding it behind a config option is not an acceptible
+solution for mering poorly thought out infrastructure.
+
+> > > To provide a better visibility and debug options for memory shrinkers
+> > > this patchset introduces a /sys/kernel/debug/shrinker interface, to some extent
+> > > similar to /sys/kernel/slab.
+> > 
+> > /sys/kernel/slab contains read-only usage information - it is
+> > analagous for visibility arguments, but it is not equivalent for
+> > the rest of the "active" functionality you want to add here....
+> > 
+> > > For each shrinker registered in the system a directory is created. The directory
+> > > contains "count" and "scan" files, which allow to trigger count_objects()
+> > > and scan_objects() callbacks. For memcg-aware and numa-aware shrinkers
+> > > count_memcg, scan_memcg, count_node, scan_node, count_memcg_node
+> > > and scan_memcg_node are additionally provided. They allow to get per-memcg
+> > > and/or per-node object count and shrink only a specific memcg/node.
+> > 
+> > Great, but why does the shrinker introspection interface need active
+> > scan control functions like these?
+> 
+> It makes testing of (new) shrinkers easier, for example.
+> For instance, shadow entries shrinker hides associated objects by returning
+> 0 count most of the time (unless the total consumed memory is bigger than a
+> certain amount of the total memory).
+> echo 2 > /proc/sys/vm/drop_caches won't even trigger the scanning.
+
+And that's exactly my point above: you cannot test shrinkers in
+isolation of the subsystem that loads them up. In this case, you
+*aren't testing the shrinker*, you are testing how the shadow entry
+subsystem manages the working set. The shrinker is an integrated
+part of that subsystem, so any test hooks needed to trigger the
+reclaim of shadow entries belong in the ->count method of the
+the shrinker implementation, such that it runs whenever the shrinker
+is called rather than only when the memory usage threshold is
+triggered.
+
+At that point, drop_caches then does exactly what you need.
+
+Shrinkers cannot be tested in isolation of the subsystem they act
+on!
+
+> > > 2) Get information about a specific shrinker:
+> > >   $ cd sb-btrfs-24/
+> > >   $ ls
+> > >     count  count_memcg  count_memcg_node  count_node  scan  scan_memcg  scan_memcg_node  scan_node
+> > > 
+> > > 3) Count objects on the system/root cgroup level
+> > >   $ cat count
+> > >     212
+> > > 
+> > > 4) Count objects on the system/root cgroup level per numa node (on a 2-node machine)
+> > >   $ cat count_node
+> > >     209 3
+> > 
+> > So a single space separated line with a number per node?
+> > 
+> > When you have a few hundred nodes and hundreds of thousands of objects per
+> > node, we overrun the 4kB page size with a single line. What then?
+> 
+> With seq_buf api we don't have 4kb limit, do we?
+
+No idea. Never cared enough about sysfs to need to know.
+
+But that doesn't avoid the issue: verbosity and overhead to
+create/parse this information.
+
+
+> > Also, this now iterates separate memcg per line. A parser now needs
+> > to know the difference between count/count_node and
+> > count_memcg/count_memcg_node because they are subtly different file
+> > formats.  These files should have the same format, otherwise it just
+> > creates needless complexity.
+> > 
+> > Indeed, why do we even need count/count_node? They are just the
+> > "index 1" memcg output, so are totally redundant.
+> 
+> Ok, but then we need a flag to indicate that a shrinker is memcg-aware?
+> But I got your point and I (partially) agree.
+> But do you think we're fine with just one interface and don't need
+> an aggregation over nodes? So just count_memcg_node?
+
+/me puts on the broken record
+
+Shrinker infrastructure needs to stop treating memcgs are something
+special and off to the side. We need to integrate the code so there
+is a single scan loop that simply treats the "no memcg" case as the
+root memcg. Bleeding architectural/implementation deficiencies into
+user visible APIs is even worse than just having to put up with them
+in the implementation....
+
+> > > 6) Same but with a per-node output
+> > >   $ cat count_memcg_node
+> > >     1 209 3
+> > >     20 96 0
+> > >     53 810 7
+> > >     2297 2 0
+> > >     218 13 0
+> > >     581 30 0
+> > >     911 124 0
+> > >     <CUT>
+> > 
+> > So now we have a hundred nodes in the machine and thousands of
+> > memcgs. And the information we want is in the numerically largest
+> > memcg that is last in the list. ANd we want to graph it's behaviour
+> > over time at high resolution (say 1Hz). Now we burn huge amounts
+> > of CPU counting memcgs that we don't care about and then throwing
+> > away most of the information. That's highly in-efficient and really
+> > doesn't scale.
+> 
+> For this case we can provide an interface which allows to specify both
+> node and memcg and get the count. Personally I don't have a machine
+> with hundred nodes, so it's not on my radar.
+
+Yup, but there are people how do have this sort of machine, which do
+use memcgs (in their thousands) and do have many, many superblocks
+(in their thousands). Just because you personally don't have such
+machines it does not mean you don't have to design for such
+machines. Saying "I don't care other people's requirements" is
+exactly what Kent had a rant about in the other leg of this thread.
+
+We know that we have these scalability issues in generic
+infrastructure, and therefore generic infrastructure has to handle
+these issues at a architecture and design level. We don't need the
+initial implementation to work well at such levels of scalability,
+but we sure as hell need the design, APIs and file formats to scale
+out because if it doesn't scale there is no question that *we will
+have to fix it*.
+
+So, yeah, you need to think about how to do fine-grained access to
+shrinker stats effectively. That might require a complete change of
+presentation API. For example, changing the filesystem layout to
+be memcg centric rather than shrinker instance centric would make an
+awful lot of this file parsing problem go away.
+
+e.g:
+
+/sys/kernel/debug/mm/memcg/<memcg instance>/shrinker/<shrinker instance>/stats
+
+Cheers,
+
+Dave.
 -- 
-2.36.0
+Dave Chinner
+dchinner@redhat.com
 

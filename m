@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F09510DDE
+	by mail.lfdr.de (Postfix) with ESMTP id A93F1510DDF
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 03:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356659AbiD0B0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 21:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S1356686AbiD0B1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 21:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353781AbiD0B0x (ORCPT
+        with ESMTP id S1350789AbiD0B1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 21:26:53 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F9B18A6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:23:44 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso2567084wma.0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:23:44 -0700 (PDT)
+        Tue, 26 Apr 2022 21:27:36 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602C06E57D
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:24:26 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n18so311577plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 18:24:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WADNevU3iLfLj8HeWS3JmYTBG3yWNRcchiXs+/9xM08=;
-        b=brb5i0oYVN7sckD6LzumI32hk5pONpJFe6n/S9d3lJc9ybOaK9j4xNUNyjzMAXA+s3
-         J7eaf1d8l7n7T67QylhnSFCkV/E9pDR84Y+aHyqzYNNmJIVhbCyKyFfziP+gqJOXH6lm
-         us3FixNsQ2MH1j+PsDtW7AggtMOcvpKWKF3ofAvdYyN1pHKkj3RIIoiRUvffpTK4W0lX
-         9DmR4GlxGwiwFLcdHJvkpiW6EmNgi09GVGau1iGzl1xXfQGKgyw17M/vTcUwwBrk0Scr
-         jnHygpLfymE2coV+jRSGAViHHGQ2wRaZ6VAWD6VKWkovBAywqCCCzpxlydFlw8eHcZNh
-         lIiw==
+         :cc;
+        bh=s+1DGNfP27csPmcEuUa6GdLkoCCKVhZfePm8utK72a0=;
+        b=gjJnXOsK4rrfZw+Ws5lrwQU5BDWtyWrRaNnMu7VdbR+x18pJ0FKC8xVKXILOkJdEn9
+         d68FeNLIwRy2jvUBtHmxu6bckYkT1xpyuBR7kmY0YT944RTmKgN3eT/WNwpkh0dpHP1j
+         Nzu+Zu9su1znHpY4uDer0N3Nr6TFlJmgCg/SeDJ6x5Ag2sklPVV8TbaLzg2dfyf7Yw1a
+         /zYN2skd8pq2/GfYIe7lZyZj3YbB41YaEHlr1J7onqUj+ly9hugUQR0ALOdDpeyWNs5d
+         TGRQ+CfM11cu6lV9tkvwrwXREJr9JpGboX4Qc9Re73LKIl4OUJRxTzqxX7iqquQFKtcL
+         +TPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WADNevU3iLfLj8HeWS3JmYTBG3yWNRcchiXs+/9xM08=;
-        b=l5YvENX+qbedx4Bgte0+s+tme5m4W5uOK6o8VeFqkJPLEA2tlQeW+fkPUNjEj9L4Oq
-         gnlw3j9ZB7RATaZHkCk3naJWPDdnsiyKT/5BAhqiDGTboFD0mjlaEezXRDYW99zkRCH5
-         3TXa2bXAdSHub4AD2i0ph271RlzJ0oi2nJ0mJeOPzNTCxOq9yxi/U/umNO8PXPom6Wek
-         QZKjszCAjA/fUKYZKQDtQVprTKowL+9mUU2HY6dS4Ct/ppDXHiSWv9iqDRBrCsVy9h0d
-         gLHOfdLzFclz2MVOLkKjr70qJk5FWli8fpp2jfYm5tFXySJuWIkGHDzW32LAnGRsQJvk
-         LTgg==
-X-Gm-Message-State: AOAM532WzuZJ1WdTqoAbJ63MiqoG+KHObe74Y+pGs7/WiGPWVIrjniAy
-        nCna7QMswZxtTMF224lMqGx9KLgfJy5M/E1jmuyufbOefSokaA==
-X-Google-Smtp-Source: ABdhPJxWYTasjBuqehyjR7KsqFbTWfzDzSv7onjnkNmWrPBH1QRD6xTuiaKvn7yVJNWspNQiJ/T3Mi7mF5YPQnu2Lpk=
-X-Received: by 2002:a05:600c:a03:b0:38c:f953:ae13 with SMTP id
- z3-20020a05600c0a0300b0038cf953ae13mr23367925wmp.99.1651022622631; Tue, 26
- Apr 2022 18:23:42 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=s+1DGNfP27csPmcEuUa6GdLkoCCKVhZfePm8utK72a0=;
+        b=pRXY1ZXpHhdZ+DEfphaMdcSjMEsNGXDUov+M4LskZQ1PFNM46b9U/OW/R4O12t+ERx
+         WXAx6ZvxFIIn/3z8pe5j72Y+59lJLzkYscnJ6WpUPZNL4DU2Ompb/5bOv0CAmctANAod
+         5ziMOidMDhr2A8JzBGzqfFylAsIZVjllROiUfu4RFRzAOQBf/9MtQS+ldDrwOl9vtm7s
+         NKEbyDMBappGsX7oBBG8341MyNB9pfaGjvys6U2XLNTHpsiwMogGWvqQ4ivgnQsXYWhf
+         ff1c9YTsRUFx23IOiexurN95rEEzG04GxXbXUYiVZhsqoeVAvXJAgZF9SC0CNraog9bT
+         GKvw==
+X-Gm-Message-State: AOAM5315MenHNITGdgEzZxPjU+YS4LGevyjZD3I+eeyy/gGmJaosfwIk
+        TF31viEyPnoY3HlnP98Uu1sqOx3UGHfnVFRcjfvSUg==
+X-Google-Smtp-Source: ABdhPJwUK91O5b+cbAzQvikG1pLBA2K0awm/orzrnsYaLD/yw4NUbNk63jNIpvhit8xkLMz9irAaJVgaGpEJd3Skf4Q=
+X-Received: by 2002:a17:903:2444:b0:15d:281d:87 with SMTP id
+ l4-20020a170903244400b0015d281d0087mr9336428pls.9.1651022665690; Tue, 26 Apr
+ 2022 18:24:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220425132410.2708304-1-gengcixi@gmail.com> <YmgFXLAGDlQe4LZ4@google.com>
-In-Reply-To: <YmgFXLAGDlQe4LZ4@google.com>
-From:   Cixi Geng <gengcixi@gmail.com>
-Date:   Wed, 27 Apr 2022 09:23:06 +0800
-Message-ID: <CAF12kFtjMEohkv27cWQYqTaFdASt05P1B02pAHEYugMYUJArJQ@mail.gmail.com>
-Subject: Re: [PATCH] mfd: sprd: Add SC2730 PMIC to SPI device ID table
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220327205803.739336-1-mizhang@google.com> <YkHRYY6x1Ewez/g4@google.com>
+ <CAL715WL7ejOBjzXy9vbS_M2LmvXcC-CxmNr+oQtCZW0kciozHA@mail.gmail.com>
+ <YkH7KZbamhKpCidK@google.com> <7597fe2c-ce04-0e21-bd6c-4051d7d5101d@redhat.com>
+ <Ymg1lzsYAd6v/vGw@google.com> <CAL715WK8-cOJWK+iai=ygdOTzPb-QUvEwa607tVEkmGOu3gyQA@mail.gmail.com>
+ <YmiZcZf9YXxMVcfx@google.com>
+In-Reply-To: <YmiZcZf9YXxMVcfx@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Tue, 26 Apr 2022 18:24:14 -0700
+Message-ID: <CAL715W+nMyF_f762Qif8ZsiOT8vgxXJ3Rm8EjgG8A=b7iM-cbg@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: add lockdep check before lookup_address_in_mm()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,46 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> =E4=BA=8E2022=E5=B9=B44=E6=9C=8826=E6=97=
-=A5=E5=91=A8=E4=BA=8C 22:44=E5=86=99=E9=81=93=EF=BC=9A
+On Tue, Apr 26, 2022 at 6:16 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> On Mon, 25 Apr 2022, Cixi Geng wrote:
->
-> > From: Cixi Geng <cixi.geng1@unisoc.com>
+> On Tue, Apr 26, 2022, Mingwei Zhang wrote:
+> > > I completely agree that lookup_address() and friends are unnecessarily fragile,
+> > > but I think that attempting to harden them to fix this KVM bug will open a can
+> > > of worms and end up delaying getting KVM fixed.
 > >
-> > Add the SC2730 PMIC support for module autoloading
-> > through SPI modalises.
+> > So basically, we need to:
+> >  - choose perf_get_page_size() instead of using any of the
+> > lookup_address*() in mm.
+> >  - add a wrapper layer to adapt: 1) irq disabling/enabling and 2) size
+> > -> level translation.
 > >
-> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> > ---
-> >  drivers/mfd/sprd-sc27xx-spi.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-sp=
-i.c
-> > index 55d2c31bdfb2..cf4f89114ae4 100644
-> > --- a/drivers/mfd/sprd-sc27xx-spi.c
-> > +++ b/drivers/mfd/sprd-sc27xx-spi.c
-> > @@ -248,6 +248,7 @@ MODULE_DEVICE_TABLE(of, sprd_pmic_match);
-> >
-> >  static const struct spi_device_id sprd_pmic_spi_ids[] =3D {
-> >       { .name =3D "sc2731", .driver_data =3D (unsigned long)&sc2731_dat=
-a },
-> > +     { .name =3D "sc2730", .driver_data =3D (unsigned long)&sc2730_dat=
-a },
+> > Agree?
 >
-> Nicer if these were ordered with the smallest number at the top.
-I followed the order of struct of_device_id sprd_pmic_match[1],Do I need
-adjust it as well?
-[1].https://elixir.bootlin.com/linux/v5.18-rc4/source/drivers/mfd/sprd-sc27=
-xx-spi.c#L242
+> Drat, I didn't see that it returns the page size, not the level.  That's a bit
+> unfortunate.  It definitely makes me less averse to fixing lookup_address_in_pgd()
 >
-> >       {},
-> >  };
-> >  MODULE_DEVICE_TABLE(spi, sprd_pmic_spi_ids);
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Principal Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+> Hrm.  I guess since we know there's at least one broken user, and in theory
+> fixing lookup_address_in_pgd() should do no harm to users that don't need protection,
+> it makes sense to just fix lookup_address_in_pgd() and see if the x86 maintainers
+> push back.
+
+Yeah, fixing lookup_address_in_pgd() should be cleaner(), since the
+page fault usage case does not need irq save/restore. But the other
+one needs it. So, we can easily fix the function with READ_ONCE and
+lockless staff. But wrapping the function with irq save/restore from
+the KVM side.
+
+ok, I think I can proceed and upload one version for that.
+
+Thanks.
+-Mingwei

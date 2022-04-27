@@ -2,291 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7F4512281
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA1E512283
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 21:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbiD0TZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 15:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S234497AbiD0T1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbiD0TZn (ORCPT
+        with ESMTP id S234473AbiD0T0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:25:43 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D3112AC5;
-        Wed, 27 Apr 2022 12:21:37 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bv19so5338183ejb.6;
-        Wed, 27 Apr 2022 12:21:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1pzX66OsBnNRuIBQz0pI37xgHgmuvAdxapWLaoZpVz4=;
-        b=mgI9NDd1ieXNF7QNWidr4aWzwJOOgDmiS6oC+dq25mEOwPWmmZfMbfbUaVEgrqDNJN
-         BhUOGjj82d4P4XgLSxaj6zUuNnCsUMsyySl2TcsSPp7CL3MPoPDzS8zgeMhLjwL4H5r9
-         xXrwoZVGE0EehHDynM903T+NnNhhly8qvlFtU5HPC2Le8F3v0sr424xNeqYldFuv/lx+
-         Wr/DHZnIQlYPDY5eHbnBSaaadyF0D/k2z3Z3erWbvfroUXuHwVlvL5HR/QFDovcBaudN
-         CoR7QUSt+xwG/BMK3Hr4kXTGJofkMkQa2UsifqaXddCuUBkLxnSi8oE8zPuQ32aTxhSi
-         mJog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1pzX66OsBnNRuIBQz0pI37xgHgmuvAdxapWLaoZpVz4=;
-        b=UBnqfDiw1Mc4NBt8ejmxMP+0jK0ynnHjCRJ4MP7xG1KlzAJLcA1mYbpj5QU3UfULBU
-         v19T4Wx74ejX/aITLIPF8pX+VuxSyjAebphGxStU0SZwF2O0u3MEHdDDb2adlg/+cxgw
-         aERncuqExKfwnCAUBIPnPXuqd+0ngGeklGvf7XZtbblh7LGxr8pa0r+qtQLaBQyF/ykJ
-         r8Ea2Idirl4pPveeHfUpFyr7FEOYY3Wiclhus72QEFenqegykbv0co17dvfCypmxOJJF
-         70kyz7nOc3aUsBv50KN2vCcAEInUsi60/xsROt9z3TqeIla1TDCy/V4yYPCuTtRY0iVF
-         pixw==
-X-Gm-Message-State: AOAM533cTLyslulw/PZUEgI99GKAkXSvThjYSgTuPulV1ef0+krtV95k
-        CH8ariNgjnV68Fa33zTceB/OvE0z9auxUA==
-X-Google-Smtp-Source: ABdhPJzXuvdaKSn1F0VRSzYT8LkBKGAMTiCWNvGj1LRVVyZfUiXEcy605iJSgEc+AlBZ5+UGN7zxuQ==
-X-Received: by 2002:a17:906:d20c:b0:6f3:9901:bc08 with SMTP id w12-20020a170906d20c00b006f39901bc08mr15875211ejz.351.1651087296332;
-        Wed, 27 Apr 2022 12:21:36 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056402170500b0042617ba63d3sm65241edu.93.2022.04.27.12.21.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 12:21:35 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 23/45] media: sun6i-csi: Move power management to runtime pm in capture
-Date:   Wed, 27 Apr 2022 21:21:34 +0200
-Message-ID: <8925609.CDJkKcVGEf@jernej-laptop>
-In-Reply-To: <20220415152811.636419-24-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-24-paul.kocialkowski@bootlin.com>
+        Wed, 27 Apr 2022 15:26:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6641533A28;
+        Wed, 27 Apr 2022 12:23:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0217F61A9F;
+        Wed, 27 Apr 2022 19:23:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 591CBC385A7;
+        Wed, 27 Apr 2022 19:23:04 +0000 (UTC)
+Date:   Wed, 27 Apr 2022 15:23:02 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kurt Kanzenbach <kurt@linutronix.de>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] timekeeping: Introduce fast accessor to clock
+ tai
+Message-ID: <20220427152302.558bfc35@gandalf.local.home>
+In-Reply-To: <20220427132205.386be5e6@gandalf.local.home>
+References: <20220414091805.89667-1-kurt@linutronix.de>
+        <20220414091805.89667-2-kurt@linutronix.de>
+        <20220426175338.3807ca4f@gandalf.local.home>
+        <87r15i9azg.fsf@kurt>
+        <20220427112759.1cedda69@gandalf.local.home>
+        <20220427132205.386be5e6@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:27:49 CEST je Paul Kocialkowski napisal(a):
-> Let's just enable the module when we start using it (at stream on)
-> and benefit from runtime pm instead of enabling it at first open.
-> 
-> Also reorder the call to v4l2_pipeline_pm_get.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+On Wed, 27 Apr 2022 13:22:05 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> I can see if I can play some games to detect this and replace the top 5
+> bits with the saved timestamp at the head of the sub buffer.
 
-Best regards,
-Jernej
+This appears to fix the issue. It adds a function when reading the absolute
+time stamp comparing it to a previous time stamp. If the previous time
+stamp has any of the 5 MSB set, then it will OR it into the absolute time
+stamp, and then compare it to the previous time stamp to check for overflow.
 
-> ---
->  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 24 -----------
->  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  7 ----
->  .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 41 ++++++++++---------
->  3 files changed, 22 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
-> 29892e8c2b9d..7801f5abe47e 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> @@ -148,30 +148,6 @@ bool sun6i_csi_is_format_supported(struct
-> sun6i_csi_device *csi_dev, return false;
->  }
-> 
-> -int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable)
-> -{
-> -	struct device *dev = csi_dev->dev;
-> -	struct regmap *regmap = csi_dev->regmap;
-> -	int ret;
-> -
-> -	if (!enable) {
-> -		regmap_update_bits(regmap, SUN6I_CSI_EN_REG,
-> -				   SUN6I_CSI_EN_CSI_EN, 0);
-> -		pm_runtime_put(dev);
-> -
-> -		return 0;
-> -	}
-> -
-> -	ret = pm_runtime_resume_and_get(dev);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
-> -			   SUN6I_CSI_EN_CSI_EN);
-> -
-> -	return 0;
-> -}
-> -
->  static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device
-> *csi_dev, u32 mbus_code, u32 pixformat)
->  {
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h index
-> 155527961280..3a4f2b45d267 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
-> @@ -77,13 +77,6 @@ struct sun6i_csi_variant {
->  bool sun6i_csi_is_format_supported(struct sun6i_csi_device *csi_dev,
->  				   u32 pixformat, u32 mbus_code);
-> 
-> -/**
-> - * sun6i_csi_set_power() - power on/off the csi
-> - * @csi:	pointer to the csi
-> - * @enable:	on/off
-> - */
-> -int sun6i_csi_set_power(struct sun6i_csi_device *csi_dev, bool enable);
-> -
->  /**
->   * sun6i_csi_update_config() - update the csi register settings
->   * @csi:	pointer to the csi
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c index
-> 72fcc60d2695..3e5c4f7df48d 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -6,6 +6,7 @@
->   */
-> 
->  #include <linux/of.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
-> 
->  #include <media/v4l2-device.h>
-> @@ -141,6 +142,9 @@ static void sun6i_csi_capture_enable(struct
-> sun6i_csi_device *csi_dev) {
->  	struct regmap *regmap = csi_dev->regmap;
-> 
-> +	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN,
-> +			   SUN6I_CSI_EN_CSI_EN);
-> +
->  	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
-SUN6I_CSI_CAP_VCAP_ON,
->  			   SUN6I_CSI_CAP_VCAP_ON);
->  }
-> @@ -150,6 +154,7 @@ static void sun6i_csi_capture_disable(struct
-> sun6i_csi_device *csi_dev) struct regmap *regmap = csi_dev->regmap;
-> 
->  	regmap_update_bits(regmap, SUN6I_CSI_CAP_REG, 
-SUN6I_CSI_CAP_VCAP_ON, 0);
-> +	regmap_update_bits(regmap, SUN6I_CSI_EN_REG, SUN6I_CSI_EN_CSI_EN, 
-0);
->  }
-> 
->  static void
-> @@ -382,6 +387,7 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, struct sun6i_csi_capture *capture = &csi_dev->capture;
->  	struct sun6i_csi_capture_state *state = &capture->state;
->  	struct video_device *video_dev = &capture->video_dev;
-> +	struct device *dev = csi_dev->dev;
->  	struct v4l2_subdev *subdev;
->  	int ret;
-> 
-> @@ -402,6 +408,12 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, goto error_media_pipeline;
->  	}
-> 
-> +	/* PM */
-> +
-> +	ret = pm_runtime_resume_and_get(dev);
-> +	if (ret < 0)
-> +		goto error_media_pipeline;
-> +
->  	/* Clear */
-> 
->  	sun6i_csi_capture_irq_clear(csi_dev);
-> @@ -429,6 +441,8 @@ static int sun6i_csi_capture_start_streaming(struct
-> vb2_queue *queue, sun6i_csi_capture_disable(csi_dev);
->  	sun6i_csi_capture_irq_disable(csi_dev);
-> 
-> +	pm_runtime_put(dev);
-> +
->  error_media_pipeline:
->  	media_pipeline_stop(&video_dev->entity);
-> 
-> @@ -442,6 +456,7 @@ static void sun6i_csi_capture_stop_streaming(struct
-> vb2_queue *queue) {
->  	struct sun6i_csi_device *csi_dev = vb2_get_drv_priv(queue);
->  	struct sun6i_csi_capture *capture = &csi_dev->capture;
-> +	struct device *dev = csi_dev->dev;
->  	struct v4l2_subdev *subdev;
-> 
->  	subdev = sun6i_csi_capture_remote_subdev(capture, NULL);
-> @@ -451,6 +466,8 @@ static void sun6i_csi_capture_stop_streaming(struct
-> vb2_queue *queue) sun6i_csi_capture_disable(csi_dev);
->  	sun6i_csi_capture_irq_disable(csi_dev);
-> 
-> +	pm_runtime_put(dev);
-> +
->  	media_pipeline_stop(&capture->video_dev.entity);
-> 
->  	sun6i_csi_capture_state_cleanup(csi_dev, true);
-> @@ -639,27 +656,20 @@ static int sun6i_csi_capture_open(struct file *file)
->  	if (mutex_lock_interruptible(&capture->lock))
->  		return -ERESTARTSYS;
-> 
-> -	ret = v4l2_fh_open(file);
-> +	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
->  	if (ret < 0)
->  		goto error_lock;
-> 
-> -	ret = v4l2_pipeline_pm_get(&capture->video_dev.entity);
-> +	ret = v4l2_fh_open(file);
->  	if (ret < 0)
-> -		goto error_v4l2_fh;
-> -
-> -	/* Power on at first open. */
-> -	if (v4l2_fh_is_singular_file(file)) {
-> -		ret = sun6i_csi_set_power(csi_dev, true);
-> -		if (ret < 0)
-> -			goto error_v4l2_fh;
-> -	}
-> +		goto error_pipeline;
-> 
->  	mutex_unlock(&capture->lock);
-> 
->  	return 0;
-> 
-> -error_v4l2_fh:
-> -	v4l2_fh_release(file);
-> +error_pipeline:
-> +	v4l2_pipeline_pm_put(&capture->video_dev.entity);
-> 
->  error_lock:
->  	mutex_unlock(&capture->lock);
-> @@ -671,19 +681,12 @@ static int sun6i_csi_capture_close(struct file *file)
->  {
->  	struct sun6i_csi_device *csi_dev = video_drvdata(file);
->  	struct sun6i_csi_capture *capture = &csi_dev->capture;
-> -	bool last_close;
-> 
->  	mutex_lock(&capture->lock);
-> 
-> -	last_close = v4l2_fh_is_singular_file(file);
-> -
->  	_vb2_fop_release(file, NULL);
->  	v4l2_pipeline_pm_put(&capture->video_dev.entity);
-> 
-> -	/* Power off at last close. */
-> -	if (last_close)
-> -		sun6i_csi_set_power(csi_dev, false);
-> -
->  	mutex_unlock(&capture->lock);
-> 
->  	return 0;
+It also does not complain of "big deltas" if the update is an absolute
+time stamp and the current time stamp has any of the 5 MSB set.
 
+I will need to update libtraceevent to handle this case as well.
 
+But looks like there's nothing on your end that needs to be done. Probably
+just set those other functions you found to notrace. But that can be a
+separate patch.
 
+-- Steve
 
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 655d6db3e3c3..3a0c7ed0e93f 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -29,6 +29,14 @@
+ 
+ #include <asm/local.h>
+ 
++/*
++ * The "absolute" timestamp in the buffer is only 59 bits.
++ * If a clock has the 5 MSBs set, it needs to be saved and
++ * reinserted.
++ */
++#define TS_MSB		(0xf8ULL << 56)
++#define ABS_TS_MASK	(~TS_MSB)
++
+ static void update_pages_handler(struct work_struct *work);
+ 
+ /*
+@@ -783,6 +791,24 @@ static inline void verify_event(struct ring_buffer_per_cpu *cpu_buffer,
+ }
+ #endif
+ 
++/*
++ * The absolute time stamp drops the 5 MSBs and some clocks may
++ * require them. The rb_fix_abs_ts() will take a previous full
++ * time stamp, and add the 5 MSB of that time stamp on to the
++ * saved absolute time stamp. Then they are compared in case of
++ * the unlikely event that the latest time stamp incremented
++ * the 5 MSB.
++ */
++static inline u64 rb_fix_abs_ts(u64 abs, u64 save_ts)
++{
++	if (save_ts & TS_MSB) {
++		abs |= save_ts & TS_MSB;
++		/* Check for overflow */
++		if (unlikely(abs < save_ts))
++			abs += 1ULL << 59;
++	}
++	return abs;
++}
+ 
+ static inline u64 rb_time_stamp(struct trace_buffer *buffer);
+ 
+@@ -811,8 +837,10 @@ u64 ring_buffer_event_time_stamp(struct trace_buffer *buffer,
+ 	u64 ts;
+ 
+ 	/* If the event includes an absolute time, then just use that */
+-	if (event->type_len == RINGBUF_TYPE_TIME_STAMP)
+-		return rb_event_time_stamp(event);
++	if (event->type_len == RINGBUF_TYPE_TIME_STAMP) {
++		ts = rb_event_time_stamp(event);
++		return rb_fix_abs_ts(ts, cpu_buffer->tail_page->page->time_stamp);
++	}
+ 
+ 	nest = local_read(&cpu_buffer->committing);
+ 	verify_event(cpu_buffer, event);
+@@ -2754,8 +2782,15 @@ static void rb_add_timestamp(struct ring_buffer_per_cpu *cpu_buffer,
+ 		(RB_ADD_STAMP_FORCE | RB_ADD_STAMP_ABSOLUTE);
+ 
+ 	if (unlikely(info->delta > (1ULL << 59))) {
++		/*
++		 * Some timers can use more than 59 bits, and when a timestamp
++		 * is added to the buffer, it will lose those bits.
++		 */
++		if (abs && (info->ts & TS_MSB)) {
++			info->delta &= ABS_TS_MASK;
++
+ 		/* did the clock go backwards */
+-		if (info->before == info->after && info->before > info->ts) {
++		} else if (info->before == info->after && info->before > info->ts) {
+ 			/* not interrupted */
+ 			static int once;
+ 
+@@ -3304,7 +3339,7 @@ static void dump_buffer_page(struct buffer_data_page *bpage,
+ 
+ 		case RINGBUF_TYPE_TIME_STAMP:
+ 			delta = rb_event_time_stamp(event);
+-			ts = delta;
++			ts = rb_fix_abs_ts(delta, ts);
+ 			pr_warn("  [%lld] absolute:%lld TIME STAMP\n", ts, delta);
+ 			break;
+ 
+@@ -3380,7 +3415,7 @@ static void check_buffer(struct ring_buffer_per_cpu *cpu_buffer,
+ 
+ 		case RINGBUF_TYPE_TIME_STAMP:
+ 			delta = rb_event_time_stamp(event);
+-			ts = delta;
++			ts = rb_fix_abs_ts(delta, ts);
+ 			break;
+ 
+ 		case RINGBUF_TYPE_PADDING:
+@@ -4367,6 +4402,7 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
+ 
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		delta = rb_event_time_stamp(event);
++		delta = rb_fix_abs_ts(delta, cpu_buffer->read_stamp);
+ 		cpu_buffer->read_stamp = delta;
+ 		return;
+ 
+@@ -4397,6 +4433,7 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
+ 
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		delta = rb_event_time_stamp(event);
++		delta = rb_fix_abs_ts(delta, iter->read_stamp);
+ 		iter->read_stamp = delta;
+ 		return;
+ 
+@@ -4650,6 +4687,7 @@ rb_buffer_peek(struct ring_buffer_per_cpu *cpu_buffer, u64 *ts,
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		if (ts) {
+ 			*ts = rb_event_time_stamp(event);
++			*ts = rb_fix_abs_ts(*ts, reader->page->time_stamp);
+ 			ring_buffer_normalize_time_stamp(cpu_buffer->buffer,
+ 							 cpu_buffer->cpu, ts);
+ 		}
+@@ -4741,6 +4779,7 @@ rb_iter_peek(struct ring_buffer_iter *iter, u64 *ts)
+ 	case RINGBUF_TYPE_TIME_STAMP:
+ 		if (ts) {
+ 			*ts = rb_event_time_stamp(event);
++			*ts = rb_fix_abs_ts(*ts, iter->head_page->page->time_stamp);
+ 			ring_buffer_normalize_time_stamp(cpu_buffer->buffer,
+ 							 cpu_buffer->cpu, ts);
+ 		}

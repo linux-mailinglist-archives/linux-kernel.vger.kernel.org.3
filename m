@@ -2,92 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4B351131F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E35511323
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359250AbiD0IDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
+        id S1359236AbiD0IFD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 27 Apr 2022 04:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359235AbiD0IDo (ORCPT
+        with ESMTP id S243567AbiD0IFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:03:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4538D1A399
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651046434; x=1682582434;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rZGiVUWYUDLckcZhXJwM3hUSIq5egffkTRg8FihuCwE=;
-  b=Yyj6HkKJMccelAO9Uhd2wkYt9MORNG3ZBfU/gds0JIXZj8qI6fdXpPCI
-   6uRjABL0M0YjQwJMieS89SLLMjEWLX+rKYaiziSVAfxTH5OwG0NEXcD3o
-   1FqGcTcUNgqXpP/bLui3ZQNSIN0HCeh4B2gSYHk9bwjrTcN3mK1bQBWxN
-   nmE10GC/LQqD9D8JXGchYrNEhezVpxlx4qeesi+qoTjKm7JKB2tHZiPem
-   lsnI3K2jtwASAWoZiWlxY/jtQ+CjlDuY3r1yzv6IjFSPX90ktCHoyMATH
-   d1eFXgrbEGkwhXExZ/soiwLKi1zfKN+a2UZsNCbP7298+Yw1LDx5cwpHF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326343471"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="326343471"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 01:00:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="596164720"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Apr 2022 01:00:32 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njcbA-0004US-1A;
-        Wed, 27 Apr 2022 08:00:32 +0000
-Date:   Wed, 27 Apr 2022 16:00:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: {standard input}:85: Error: unrecognized opcode: `tlbsx'
-Message-ID: <202204271547.NKU4sXn4-lkp@intel.com>
+        Wed, 27 Apr 2022 04:05:01 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85DB22A7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:01:50 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-322-BVrDXIS1P7uuIKPSUrae-A-1; Wed, 27 Apr 2022 09:01:47 +0100
+X-MC-Unique: BVrDXIS1P7uuIKPSUrae-A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 27 Apr 2022 09:01:46 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 27 Apr 2022 09:01:46 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        Philipp Hortmann <philipp.g.hortmann@gmail.com>
+CC:     Forest Bond <forest@alittletooquiet.net>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 3/3] staging: vt6655: Replace VNSvInPortD with ioread32
+Thread-Topic: [PATCH v3 3/3] staging: vt6655: Replace VNSvInPortD with
+ ioread32
+Thread-Index: AQHYWftqR1H/yljgC0KSKJflip6fA60DZMOg
+Date:   Wed, 27 Apr 2022 08:01:46 +0000
+Message-ID: <b8853bc9a9d041009103b76bd02ce08d@AcuMS.aculab.com>
+References: <cover.1651036713.git.philipp.g.hortmann@gmail.com>
+ <7a5f7f98379fb2af2741f613f5ddda53e5d4813e.1651036713.git.philipp.g.hortmann@gmail.com>
+ <Ymjaxby2vDJYz6KA@kroah.com>
+In-Reply-To: <Ymjaxby2vDJYz6KA@kroah.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   46cf2c613f4b10eb12f749207b0fd2c1bfae3088
-commit: 1a76e520ee1831a81dabf8a9a58c6453f700026e powerpc/64e: Tie PPC_BOOK3E_64 to PPC_FSL_BOOK3E
-date:   7 weeks ago
-config: powerpc64-randconfig-r021-20220427 (https://download.01.org/0day-ci/archive/20220427/202204271547.NKU4sXn4-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1a76e520ee1831a81dabf8a9a58c6453f700026e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1a76e520ee1831a81dabf8a9a58c6453f700026e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+From: Greg Kroah-Hartman
+> Sent: 27 April 2022 06:55
+> 
+> On Wed, Apr 27, 2022 at 07:42:23AM +0200, Philipp Hortmann wrote:
+> > Replace macro VNSvInPortD with ioread32 and as it was
+> > the only user, it can now be removed.
+> > The name of macro and the arguments use CamelCase which
+> > is not accepted by checkpatch.pl
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> > ---
+> > V1 -> V2: This patch was 5/7 and is now 4/6
+> > V2 -> V3: Inserted patch that was before in a different way in
+> >           "Rename macros VNSvInPortB,W,D with CamelCase ..."
+> >           This patch was part of 4/6 and is now 3/7
+> > V3 -> V4: Removed casting of the output variable
+> > V4 -> V5: Joint patch "Replace two VNSvInPortD with ioread64_lo_hi"
+> >           with this patch. Changed ioread64 to two ioread32 as
+> >           ioread64 does not work with 32 Bit computers.
+> >           Shorted and simplified patch description.
+> > V5 -> V6: Added missing version in subject
+> > ---
+> >  drivers/staging/vt6655/card.c        |  6 ++++--
+> >  drivers/staging/vt6655/device_main.c |  6 +++---
+> >  drivers/staging/vt6655/mac.h         | 18 +++++++++---------
+> >  drivers/staging/vt6655/rf.c          |  2 +-
+> >  drivers/staging/vt6655/upc.h         |  3 ---
+> >  5 files changed, 17 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
+> > index 022310af5485..0dd13e475d6b 100644
+> > --- a/drivers/staging/vt6655/card.c
+> > +++ b/drivers/staging/vt6655/card.c
+> > @@ -744,6 +744,7 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
+> >  	void __iomem *iobase = priv->port_offset;
+> >  	unsigned short ww;
+> >  	unsigned char data;
+> > +	u32 low, high;
+> >
+> >  	MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
+> >  	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
+> > @@ -753,8 +754,9 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
+> >  	}
+> >  	if (ww == W_MAX_TIMEOUT)
+> >  		return false;
+> > -	VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
+> > -	VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
+> > +	low = ioread32(iobase + MAC_REG_TSFCNTR);
+> > +	high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+> > +	*pqwCurrTSF = low + ((u64)high << 32);
+> 
+> Are you _sure_ this is doing the same thing?
+> 
+> Adding 1 to a u64 pointer increments it by a full u64.  So I guess the
+> cast to u32 * moves it only by a u32?  Hopefully?  That's messy.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The new code is mostly better.
+But is different on BE systems - who knows what is actually needed.
+Depends what is being copied.
 
-All errors (new ones prefixed by >>):
+Actually I suspect that 'iobase' should be an __iomem structure
+pointer, pqwCurrTSF a point of the same type and MAC_REG_xxxx
+structure members.
 
-   {standard input}: Assembler messages:
-   {standard input}:68: Error: unrecognized opcode: `lbarx'
-   {standard input}:68: Error: unrecognized opcode: `stbcx.'
->> {standard input}:85: Error: unrecognized opcode: `tlbsx'
-   {standard input}:151: Error: unrecognized opcode: `tlbwe'
->> {standard input}:208: Error: unrecognized opcode: `tlbsx.'
+Then the code should be using readl() not ioread32().
+I very much doubt that 'iobase' is in PCI IO space.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	David
+
+> 
+> Why not keep the current mess and do:
+> 	pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
+> 	((u32 *)pqwCurTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+> 
+> Or does that not compile?  Ick, how about:
+> 	u32 *temp = (u32 *)pqwCurTSF;
+> 
+> 	temp = ioread32(iobase + MAC_REG_TSFCNTR);
+> 	temp++;
+> 	temp = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+> As that duplicates the current code a bit better.
+> 
+> I don't know, it's like polishing dirt, in the end, it's still dirt...
+> 
+> How about looking at the caller of this to see what it expects to do
+> with this information?  Unwind the mess from there?
+> 
+> thanks,
+> 
+> greg k-h
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889C25123D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5331C5123DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiD0U0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S236710AbiD0U3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbiD0U0r (ORCPT
+        with ESMTP id S236408AbiD0U2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:26:47 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2043AD10D
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:23:32 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id d23-20020a17090a115700b001d2bde6c234so4437401pje.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Lf9in1R/IyB6rX6jUJyTZ+zPOwsufKTBlApv7ttWWfI=;
-        b=mkxmR1CbEjd7T2oSqQlrgTQGHLlxZ+wMChlXJfbXaJrep9GBLX60uCfKBbyXYGwQyY
-         KDeQaI/saGyf/LQwrsxRc4jpYpOJDNAOWSHS6RjaaHaFYnWhyYzY0WUVLU0fnQ65rQ1L
-         +IFWWit2h/ta/ZKMcHoXuZFGd2pAt9kJ0eIVPm2WL/+Y2ya5kO2EVd89BcXV+C2iWt2k
-         8j9H7dPQ2goG7B4GUDT7ajgoo8khiZPhogewkTSA26dLrc9B4lyzV5SLazc217D393SB
-         UOkHV1x8I5ReHmCKZvlenNboSq2xb/YT0q/ccK4jrEv5Sn8UVrX+fSmKgtGjVNIe16lI
-         URhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lf9in1R/IyB6rX6jUJyTZ+zPOwsufKTBlApv7ttWWfI=;
-        b=6YKLAVIfDOLkGH8+vN6AYlNtJRNPiZQr/xbesIOT2wqdQ/qDXR43h01dd5mUNDV9I7
-         ayFlnWLp38WP7VH4JTS3wk3Yoe55Wmu2p6ulAKG63lhOonQuzYuz9asYxd0Kf1akztO0
-         mf2Fak4iF/DH15aGY11QrwhXfhALtzhHJPZtlo+oUAMYekaR4XLXUcs9zqgno+vnh2VY
-         xG/id9+a1T1zVzfPKSK8zf9ek3tzzcN5i9ogm5/j0xyia9deLKX8Ut4IGqaHs2PyYoz6
-         GtCJV+z3cM3m/ehqBlL8X/laqtw79v/2IDpb5dQGoH54f92dkzlo85+RXjOysznuhnsH
-         /+dQ==
-X-Gm-Message-State: AOAM531/xZ0OeKwXWEhNL0VfJMUeqKmpgN7p63IPua5C4PeIryz/H53u
-        9dbtRqRT3oIYwzZZj1A/ytkf2g==
-X-Google-Smtp-Source: ABdhPJw3HiHU2l0Zxdnl8FI3SE8UUCEm63BOmZlO5wTWpPxNDy3Afc0ad7VVfEKZ63cdvh+uY/IWNA==
-X-Received: by 2002:a17:902:e8cf:b0:156:36e0:6bcb with SMTP id v15-20020a170902e8cf00b0015636e06bcbmr29286930plg.105.1651091012280;
-        Wed, 27 Apr 2022 13:23:32 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i23-20020a056a00225700b0050d38d0f58dsm12888790pfu.213.2022.04.27.13.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 13:23:31 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 20:23:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH v2 8/8] DO NOT MERGE: Hack-a-test to verify gpc
- invalidation+refresh
-Message-ID: <YmmmP0TSmj5CxV06@google.com>
-References: <20220427014004.1992589-1-seanjc@google.com>
- <20220427014004.1992589-9-seanjc@google.com>
- <68b3f18e156391e20aed8e10e974fdf8052b7f47.camel@infradead.org>
+        Wed, 27 Apr 2022 16:28:38 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF82B18A1;
+        Wed, 27 Apr 2022 13:25:20 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B4EC91EC0494;
+        Wed, 27 Apr 2022 22:25:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651091114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=p7e7y4U72pX1k0JV9DJGLjX/ZB6VPKh+920c8wxQ69Y=;
+        b=kGPTidYcAhLq7g882RDOr7ocQ1hwsPqncJq5vLderGzSWrvKThdIrUb73tjEv2tu7yTuAv
+        kD6mRsioraWGmp45IBix5vUcuK9B9LWtzy8xmaJ/pLTBTFXuFuvhrLK/zEhKnS9xp9B5hV
+        tDfvUs8zGpi5TWu4b+Q/fXgbtczXk2E=
+Date:   Wed, 27 Apr 2022 22:25:11 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 03/12] efi/x86: Get full memory map in allocate_e820()
+Message-ID: <YmmmpxVDyc3R5K2t@zn.tnic>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-4-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <68b3f18e156391e20aed8e10e974fdf8052b7f47.camel@infradead.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220425033934.68551-4-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022, David Woodhouse wrote:
-> On Wed, 2022-04-27 at 01:40 +0000, Sean Christopherson wrote:
-> > Add a VM-wide gfn=>pfn cache and a fake MSR to let userspace control the
-> > cache.  On writes, reflect the value of the MSR into the backing page of
-> > a gfn=>pfn cache so that userspace can detect if a value was written to
-> > the wrong page, i.e. to a stale mapping.
-> > 
-> > Spin up 16 vCPUs (arbitrary) to use/refresh the cache, and another thread
-> > to trigger mmu_notifier events and memslot updates.
-> 
-> Do you need the MSR hack? Can't you exercise this using Xen interrupt
-> delivery or runstate information and the same kind of thread setup?
+On Mon, Apr 25, 2022 at 06:39:25AM +0300, Kirill A. Shutemov wrote:
+>  static efi_status_t allocate_e820(struct boot_params *params,
+> +				  struct efi_boot_memmap *map,
+>  				  struct setup_data **e820ext,
+>  				  u32 *e820ext_size)
+>  {
+> -	unsigned long map_size, desc_size, map_key;
+>  	efi_status_t status;
+> -	__u32 nr_desc, desc_version;
+> +	__u32 nr_desc;
+>  
+> -	/* Only need the size of the mem map and size of each mem descriptor */
+> -	map_size = 0;
+> -	status = efi_bs_call(get_memory_map, &map_size, NULL, &map_key,
+> -			     &desc_size, &desc_version);
+> -	if (status != EFI_BUFFER_TOO_SMALL)
+> -		return (status != EFI_SUCCESS) ? status : EFI_UNSUPPORTED;
+> -
+> -	nr_desc = map_size / desc_size + EFI_MMAP_NR_SLACK_SLOTS;
+> +	status = efi_get_memory_map(map);
+> +	if (status != EFI_SUCCESS)
+> +		return status;
+>  
+> -	if (nr_desc > ARRAY_SIZE(params->e820_table)) {
+> -		u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table);
+> +	nr_desc = *map->map_size / *map->desc_size;
+> +	if (nr_desc > ARRAY_SIZE(params->e820_table) - EFI_MMAP_NR_SLACK_SLOTS) {
+> +		u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table) +
+> +			EFI_MMAP_NR_SLACK_SLOTS;
+>  
+>  		status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
+>  		if (status != EFI_SUCCESS)
+> -			return status;
+> +			goto out;
 
-Yeah, I asumme it's possible, and medium/long term I definitely want to have a
-proper test.  I went the hack route to get something that could hammer a cache
-with minimal chance of a test bug.  I only have a rough idea of what the Xen stuff
-does.
+Still silly, that label is useless then. Pasting the whole, simplified
+function below.
+
+It looks like it all boils down to propagating the retval up the chain...
+
+static efi_status_t allocate_e820(struct boot_params *params,
+                                  struct efi_boot_memmap *map,
+                                  struct setup_data **e820ext,
+                                  u32 *e820ext_size)
+{
+        efi_status_t status;
+        __u32 nr_desc;
+
+        status = efi_get_memory_map(map);
+        if (status != EFI_SUCCESS)
+                return status;
+
+        nr_desc = *map->map_size / *map->desc_size;
+        if (nr_desc > ARRAY_SIZE(params->e820_table) - EFI_MMAP_NR_SLACK_SLOTS) {
+                u32 nr_e820ext = nr_desc - ARRAY_SIZE(params->e820_table) + EFI_MMAP_NR_SLACK_SLOTS;
+
+                status = alloc_e820ext(nr_e820ext, e820ext, e820ext_size);
+        }
+
+        efi_bs_call(free_pool, *map->map);
+        return status;
+}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,129 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B624F5113D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B47B5113E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350218AbiD0Iy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S239693AbiD0I4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbiD0Iyt (ORCPT
+        with ESMTP id S234799AbiD0I4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:54:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203E8F69B4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651049499; x=1682585499;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cVH9YL+ouYJr/1XgoYPp1CM6c1MoJ+5usEhlyy5+ads=;
-  b=TWpG2MJnAJJ9n0wTmpct5gpE/FGMrMenyxSJ2yN3Tm9ZAUnLPPIPPUsx
-   lxNgYltxHcnwQv+yN6jK/fn3e98JRueYyStKiEcLu+sGmG9NHM4qmBROV
-   fiaFoLYUO9a0L0gberxmvbmCsrFMw033pA4Zy+Frmgeb+llKt6BKLweyy
-   MbQ+5S7u7Ian/YKD/+Pm6iaFO+GjoVqlVbU5K4SSKSMKK9El8RsM7PMi+
-   iCWAnf/P/KM5Fh4djrwFqocyUhFoRseA5jALk45Vih/CavcgeToJKD1mm
-   k5xXam3mWEanZlhz9uGi4IdC1vcS6Z41GaUFW8hoAqoAa3TTe/o8pR9h9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="246429605"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="246429605"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 01:51:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="539736231"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 01:51:34 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njdOX-0004WY-HH;
-        Wed, 27 Apr 2022 08:51:33 +0000
-Date:   Wed, 27 Apr 2022 16:51:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, glider@google.com, elver@google.com,
-        akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, dvyukov@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] mm/kfence: fix a potential NULL pointer dereference
-Message-ID: <202204271645.QTJoeela-lkp@intel.com>
-References: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
+        Wed, 27 Apr 2022 04:56:21 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1D6BF509
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:53:09 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f7bb893309so10612407b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9kpONJ60lFyzwttZOfPhud+fUawgsiXiLYKJfmKmmSQ=;
+        b=dHn7N4VTH9EeRqwCJ6CO8Afiuya47AhpyLFd7zYglpPPq0QHt+k0oaIwBjd27+r9Rv
+         gwVVcJSuygTMyCNL/DpfDmgRcuKIwoQYygj+UBYUSMUkmiFtsOW0b/Sy/k2pwRidXORl
+         JpgyMGSws4gZUfj+mxrd/vN0FXd5lKyiH0j/KBPYo2IwyOcfGZ8jK5bxzAriS2NoeKap
+         C66d9ajEkNRph59GWqVBOfmHqHIr8oPzcQ5scTPHdfv8VbeikKsrZ2uzRt0PzlnkTatN
+         vRKosA5UqcNOMQ3SkoDdPGhpGiumfK2wCnOu4FQpLl8l5HhDFi4Keiiwc8LbWNrRgUt1
+         voXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9kpONJ60lFyzwttZOfPhud+fUawgsiXiLYKJfmKmmSQ=;
+        b=fUcrxSNRJ4100HPLS7fqLDgfRa7C1A2AYvQJmMed59edHby99fVaWxxqzXvIDmEs/O
+         o7xTCa75EK2fpIckuC5Awc7TgaThuf5GR/S072dcwSIcT/tqOp7u94gjhdJKWaeJdV5D
+         ZuRJDUA5v+I2gHT4TCCY4pUZeIbC/e3hpzXkGA9hBXxIa/wttcQq/8oCI1Xq4rrZ/rBL
+         W1DjMJMgkSTHi0tgaPIyD6VXl0l8j9e7pHytTq1J/mPRTCp2xVIPqFVEwR3asG4e1TYi
+         JvAiYJY7LAGM9y3P59cKEE0PbP6nR4bavJuOz06yiwwqwEteI3RDsU3HBycDnfCM8sEN
+         A9aQ==
+X-Gm-Message-State: AOAM530HbL45bmOd/rJKIKmtp8hD4Y5vXqwmZnXf9lNnYXXOOHBHv7PB
+        +MIwD3YE9Ai8id1VsBrBu9jy4yakVVfkAK2tOl6xwaRGauirvA==
+X-Google-Smtp-Source: ABdhPJyCcVWFnDByJpKfuEYYwe3XTMInjz482TE+AZk50r1lgwfc1XLyIqwuCDgCZKcV+K3cPkTlRK4GLIsNZL8vqo8=
+X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
+ u133-20020a81478b000000b002eada8c5c21mr26812977ywa.189.1651049588081; Wed, 27
+ Apr 2022 01:53:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426081734.509314186@linuxfoundation.org>
+In-Reply-To: <20220426081734.509314186@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 27 Apr 2022 14:22:56 +0530
+Message-ID: <CA+G9fYssoW_r81q0Z8W2WwcYO_2MYvQv1BSNpUqFKQG_V3zMNA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/43] 4.14.277-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 26 Apr 2022 at 13:55, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.277 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.277-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thank you for the patch! Perhaps something to improve:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-[auto build test WARNING on hnaz-mm/master]
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
-base:   https://github.com/hnaz/linux-mm master
-config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204271645.QTJoeela-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/920e9e639493bc72bee803c763f09760e3acd063
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
-        git checkout 920e9e639493bc72bee803c763f09760e3acd063
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash mm/
+## Build
+* kernel: 4.14.277-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 29ecac2778fbc1ecdf9ac5ae9a564fd0a487eb5f
+* git describe: v4.14.276-44-g29ecac2778fb
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.276-44-g29ecac2778fb
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+## Test Regressions (compared to v4.14.276)
+No test regressions found.
 
-All warnings (new ones prefixed by >>):
+## Metric Regressions (compared to v4.14.276)
+No metric regressions found.
 
-   mm/kfence/core.c: In function '__try_free_kfence_meta':
-   mm/kfence/core.c:1067:37: error: 'addr' undeclared (first use in this function)
-    1067 |                 kfence_guarded_free(addr, meta, false);
-         |                                     ^~~~
-   mm/kfence/core.c:1067:37: note: each undeclared identifier is reported only once for each function it appears in
-   mm/kfence/core.c: In function '__kfence_free':
->> mm/kfence/core.c:1075:37: warning: passing argument 1 of 'kfence_report_error' makes integer from pointer without a cast [-Wint-conversion]
-    1075 |                 kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
-         |                                     ^~~~
-         |                                     |
-         |                                     void *
-   In file included from mm/kfence/core.c:37:
-   mm/kfence/kfence.h:129:40: note: expected 'long unsigned int' but argument is of type 'void *'
-     129 | void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *regs,
-         |                          ~~~~~~~~~~~~~~^~~~~~~
+## Test Fixes (compared to v4.14.276)
+No test fixes found.
 
+## Metric Fixes (compared to v4.14.276)
+No metric fixes found.
 
-vim +/kfence_report_error +1075 mm/kfence/core.c
+## Test result summary
+total: 83762, pass: 66336, fail: 1152, skip: 13814, xfail: 2460
 
-  1069	
-  1070	void __kfence_free(void *addr)
-  1071	{
-  1072		struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
-  1073	
-  1074		if (!meta) {
-> 1075			kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
-  1076			return;
-  1077		}
-  1078	
-  1079		__try_free_kfence_meta(meta);
-  1080	}
-  1081	
+## Build Summary
+* arm: 280 total, 270 passed, 10 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 60 total, 16 passed, 44 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

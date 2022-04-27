@@ -2,213 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC94751102E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E9A511032
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 06:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357655AbiD0Edk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 00:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S236382AbiD0Eeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 00:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbiD0Edh (ORCPT
+        with ESMTP id S233953AbiD0Eeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 00:33:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5206AFD15
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651033828; x=1682569828;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DjrPVN1OFKYz1MmgqNGxngfLRFxIbb97u1B8GQrB6qY=;
-  b=WJ18U/IrGmV+rfzx1Tg6E0HsA+iZTOlK+14ubS/foigw9NXdI9PXl6Hn
-   hgYZXWnP2Fr+4HZgd6EfW51Dl8F7XG+j/E0RLlyiIXxlUYgSxv0oxLtoK
-   xeO7IULpp7DegpnVDUBOpFDWsFVlRCLHUh8cQ7FuMkweqdXwTZj9kwKYO
-   lKw9JxYq0sC1OEBG4R3aN8q9RYZ4XBTCQhBMMnEvPwtQbbkYLE32UzCPE
-   UZVevZ+bNTr7gtZjaA9SprxtJfFsCQLfy/zHQA73pi/DxG+6jjdEGAU14
-   Sl0HfHwYrIcA3vDLfuFq+r1R0LxgoDaQssVonkWfeQ7uYaUvYxuQd09Us
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="253190117"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="253190117"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 21:30:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="533012262"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Apr 2022 21:30:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njZJn-0004KE-D3;
-        Wed, 27 Apr 2022 04:30:23 +0000
-Date:   Wed, 27 Apr 2022 12:30:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- a658353167bf2ea6052cee071dbcc13e0f229dc9
-Message-ID: <6268c6da.xd24vi16wE8/64NY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 27 Apr 2022 00:34:36 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202FC17047
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:31:26 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 79so527321qkk.10
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eDJ/TKi8MJj4cRz3lASeVWI34QxPexXoDljXobkQyGg=;
+        b=ZYSazkTWKQgXrTiBOPxNdhzCsnwoyOqM4V2N9vOQDG6HRKnC+gKK7I+aN0EPVfp3pH
+         j7jBmnk/fvOdyR4xI9ms8Ab++PWx5/p71SrZahPgOOdOaGA9EI7HhKnJxv5GkR/CpuZu
+         PX59oxiLlPIqvkE7FjDXFM6Z8ipB/iweREssM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eDJ/TKi8MJj4cRz3lASeVWI34QxPexXoDljXobkQyGg=;
+        b=HcCQE8QoNoj87ZtipjImx57qUgwfKsQr+S+GeotzmH1StHY0bMX67ql4uA20bHwnsE
+         igDVFSfStR8D+0Pon3LptIVsm+p5IV7G5GtptJchzpBPCzBrm0c7Kg1hlKNrsni2PIfH
+         UcvZihhhUrkBLXPfNOI5d7MQkD1/pzmzMSC526WzZeK5EKqclbLIiCaVsGX4A6jvyueK
+         xUrvSIQiaQ/4yVrRXKodxjJEljYukSDA3HO7yc04eAVhk8gErCk7KnnU0niss29XHU3v
+         eKczPWDt0BmRcM2W27DlW2s8Yq74jk9Kb1KzpmtDHuCOFmcN9GLGM0eoSaSxS4JCqhge
+         lOIA==
+X-Gm-Message-State: AOAM532bCP6EE0G+l2erv68d1FbiH/gjywbSeM7EeAhZ+8WqZoltoi4i
+        ou6x2PbZb2TJ7v7wKnWrLyQRdW8WDfgzDg==
+X-Google-Smtp-Source: ABdhPJxuAE2BtQBf4ewHiSv7XRNhL9wsn3+C9ClAM4/uoUwz5FV3h1mKjKU0hGr8Hut/2eXcj+uncA==
+X-Received: by 2002:a05:620a:2087:b0:69f:8a92:bdf3 with SMTP id e7-20020a05620a208700b0069f8a92bdf3mr1081446qka.443.1651033885130;
+        Tue, 26 Apr 2022 21:31:25 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id v67-20020a379346000000b0069bdb3bb132sm7681292qkd.37.2022.04.26.21.31.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 21:31:24 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2f7c57ee6feso5923327b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 21:31:23 -0700 (PDT)
+X-Received: by 2002:a0d:cb41:0:b0:2f7:d205:9c99 with SMTP id
+ n62-20020a0dcb41000000b002f7d2059c99mr17141871ywd.417.1651033882822; Tue, 26
+ Apr 2022 21:31:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426125751.108293-1-nicolas.dufresne@collabora.com> <20220426125751.108293-4-nicolas.dufresne@collabora.com>
+In-Reply-To: <20220426125751.108293-4-nicolas.dufresne@collabora.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 27 Apr 2022 13:31:11 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
+Message-ID: <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
+Subject: Re: [PATCH v4 03/24] media: videobuf2-v4l2: Warn on holding buffers
+ without support
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     nicolas@ndufresne.ca,
+        Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: a658353167bf2ea6052cee071dbcc13e0f229dc9  sched/fair: Revise comment about lb decision matrix
+Hi Nicolas, Sebastian,
 
-elapsed time: 6822m
+On Tue, Apr 26, 2022 at 9:58 PM Nicolas Dufresne
+<nicolas.dufresne@collabora.com> wrote:
+>
+> From: Sebastian Fricke <sebastian.fricke@collabora.com>
+>
+> Using V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF flag without specifying the
+> subsystem flag VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF, results in
+> silently ignoring it.
+> Warn the user via a debug print when the flag is requested but ignored
+> by the videobuf2 framework.
+>
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>  drivers/media/common/videobuf2/videobuf2-v4l2.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
 
-configs tested: 128
-configs skipped: 3
+Thanks for the patch. Please see my comments inline.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index 6edf4508c636..812c8d1962e0 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -329,8 +329,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
+>                  */
+>                 vbuf->flags &= ~V4L2_BUF_FLAG_TIMECODE;
+>                 vbuf->field = b->field;
+> -               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF))
+> +               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF)) {
+> +                       if (vbuf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF)
+> +                               dprintk(q, 1,
+> +                                       "Request holding buffer (%d), unsupported on output queue\n",
+> +                                       b->index);
 
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-powerpc                      ppc40x_defconfig
-powerpc                     redwood_defconfig
-powerpc                     asp8347_defconfig
-um                           x86_64_defconfig
-ia64                             alldefconfig
-m68k                         apollo_defconfig
-nios2                         10m50_defconfig
-openrisc                  or1klitex_defconfig
-ia64                             allyesconfig
-nios2                            allyesconfig
-sh                            migor_defconfig
-arc                      axs103_smp_defconfig
-arm                           imxrt_defconfig
-powerpc                     rainier_defconfig
-sh                              ul2_defconfig
-arm                           sama5_defconfig
-arm                             pxa_defconfig
-arm                            lart_defconfig
-arm                            zeus_defconfig
-arm                       aspeed_g5_defconfig
-sh                          r7785rp_defconfig
-mips                  decstation_64_defconfig
-sh                           se7780_defconfig
-powerpc                     pq2fads_defconfig
-nios2                            alldefconfig
-riscv             nommu_k210_sdcard_defconfig
-powerpc                      tqm8xx_defconfig
-arm                          badge4_defconfig
-arc                        vdk_hs38_defconfig
-m68k                         amcore_defconfig
-parisc                generic-64bit_defconfig
-um                                  defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220422
-ia64                                defconfig
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a005
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220422
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allyesconfig
-riscv                               defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+I wonder if we shouldn't just fail such a QBUF operation. Otherwise
+the application would get unexpected behavior from the kernel.
+Although it might be too late to do it now if there are applications
+that rely on this implicit ignore...
 
-clang tested configs:
-riscv                randconfig-c006-20220425
-mips                 randconfig-c004-20220425
-x86_64               randconfig-c007-20220425
-arm                  randconfig-c002-20220425
-i386                 randconfig-c001-20220425
-powerpc              randconfig-c003-20220425
-mips                 randconfig-c004-20220424
-powerpc              randconfig-c003-20220424
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220424
-s390                 randconfig-c005-20220424
-riscv                randconfig-c006-20220424
-powerpc                    ge_imp3a_defconfig
-arm                  colibri_pxa270_defconfig
-arm                        neponset_defconfig
-powerpc                      pmac32_defconfig
-arm                       netwinder_defconfig
-hexagon                          alldefconfig
-mips                          malta_defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                    gamecube_defconfig
-arm                       versatile_defconfig
-x86_64                           allyesconfig
-mips                          ath25_defconfig
-powerpc                     tqm8540_defconfig
-arm                         orion5x_defconfig
-mips                     cu1830-neo_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                     mpc5200_defconfig
-mips                     cu1000-neo_defconfig
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r041-20220422
-hexagon              randconfig-r045-20220422
-riscv                randconfig-r042-20220422
-s390                 randconfig-r044-20220422
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Tomasz

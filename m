@@ -2,103 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17095511AD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA7B511958
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiD0Nbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S236020AbiD0Ncl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235860AbiD0Nbm (ORCPT
+        with ESMTP id S235846AbiD0Ncc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:31:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574C633E23;
-        Wed, 27 Apr 2022 06:28:26 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651066104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XeLkj9226T84S9BXMt19LKkxjN+pWXBCLzkSQX80Wy0=;
-        b=CnD8+0uDIKN5dkS4D3kOiZHg/aTrcuU3CSgu/18pNHX4Bq8eAM1hY3aI4Xu+WNh8Jmn/j7
-        R+SzJ5YdJvI5nC5LZnNvdrrvEC1pm6pUjngAw2WcmmOvWeilo9o88BsPnZiOq5IP7iVI/U
-        Ld+1XVU5417idG7bq4A6e0TRt8nItIYLaV0EYBB8dfsEPPtRua6GcUSKSQk5VEUw7RDcyu
-        sGfWU16My8O6Qii/arx971F7FyOPp6CQNVj3UlU8KnyEdjlbltkVPpGGF181Oy1zG3PJcb
-        dlAkAuEeKrWfS/iDZAZL6H5bcANyx5Px2Bs4sti+fqx2XT88qk8IB+qGc5NGQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651066104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XeLkj9226T84S9BXMt19LKkxjN+pWXBCLzkSQX80Wy0=;
-        b=mqNvTWF9p2Pn5UfW0rssM+TDypdzsffTK7XDNT84SfjwuIlFAdc4suevqEXX1MmYnM9rdo
-        Ccy/wwrc6gkF4WCA==
-To:     Alexander Potapenko <glider@google.com>, glider@google.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 27/46] kmsan: instrumentation.h: add
- instrumentation_begin_with_regs()
-In-Reply-To: <20220426164315.625149-28-glider@google.com>
-References: <20220426164315.625149-1-glider@google.com>
- <20220426164315.625149-28-glider@google.com>
-Date:   Wed, 27 Apr 2022 15:28:23 +0200
-Message-ID: <87bkwmy7t4.ffs@tglx>
+        Wed, 27 Apr 2022 09:32:32 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE343F896;
+        Wed, 27 Apr 2022 06:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1651066159;
+        bh=svw2QKLySLeBa5NNG/2lDGa1cC2jheHbjip4Kiq8SFo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=QLwApHFr3nCbCYTm5CWgFeivIHf2YkzTif89S0W47Cy9Y2o2vuu66MxF4aeS4ilfg
+         GXAzMul1I56L0CYwOM5XA8WQ1isTAWoNasqrgdNrGpiaU3oRh+5odJiuCa127KQlIS
+         3vfSlWiDzLbLMEwrOYGlP41vjdLtYhAtOBlIZGhk=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 852711288C2B;
+        Wed, 27 Apr 2022 09:29:19 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 66aQ9DCPgOss; Wed, 27 Apr 2022 09:29:19 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1651066158;
+        bh=svw2QKLySLeBa5NNG/2lDGa1cC2jheHbjip4Kiq8SFo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=OB4HmMNFTRjCCWJIUeVZMKQsCcrkIEiWCs7jRmR5UbxTOyyWe3grkEMqiwmm3UkTl
+         oCz2+xF1VurT45hfyL0kOmice0jPJcJTVwPoweLGHWNqN8HyQejxi6R/Ytvh3NIcue
+         15gce1pryuw4ME8biooP3KzK9NTzL0RuN2t6B8VI=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5AA8C1288C2F;
+        Wed, 27 Apr 2022 09:29:15 -0400 (EDT)
+Message-ID: <d134571f381868e1cec74aca905012d8aec9fec8.camel@HansenPartnership.com>
+Subject: Re: Race-free block device opening
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Block Mailing List <linux-block@vger.kernel.org>,
+        Linux Filesystem Mailing List <linux-fsdevel@vger.kernel.org>
+Date:   Wed, 27 Apr 2022 09:29:12 -0400
+In-Reply-To: <Ymg2HIc8NGraPNbM@itl-email>
+References: <Ymg2HIc8NGraPNbM@itl-email>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-m2/yxg2jUsj/Q2J7p/Oh"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26 2022 at 18:42, Alexander Potapenko wrote:
-> +void kmsan_instrumentation_begin(struct pt_regs *regs)
-> +{
-> +	struct kmsan_context_state *state = &kmsan_get_context()->cstate;
-> +
-> +	if (state)
-> +		__memset(state, 0, sizeof(struct kmsan_context_state));
 
-  sizeof(*state) please
+--=-m2/yxg2jUsj/Q2J7p/Oh
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> +	if (!kmsan_enabled || !regs)
-> +		return;
+On Tue, 2022-04-26 at 14:12 -0400, Demi Marie Obenour wrote:
+> Right now, opening block devices in a race-free way is incredibly
+> hard.
 
-Why has state to be cleared when kmsan is not enabled and how do you end up
-with regs == NULL here?
+Could you be more specific about what the race you're having problems
+with is?  What is racing.
 
-Thanks,
+> The only reasonable approach I know of is sd_device_new_from_path() +
+> sd_device_open(), and is only available in systemd git main.  It also
+> requires waiting on systemd-udev to have processed udev rules, which
+> can be a bottleneck.
 
-        tglx
+This doesn't actually seem to be in my copy of systemd.
+
+>   There are better approaches in various special cases, such as using
+> device-mapper ioctls to check that the device one has opened still
+> has the name and/or UUID one expects.  However, none of them works
+> for a plain call to open(2).
+
+Just so we're clear: if you call open on, say /dev/sdb1 and something
+happens to hot unplug and then replug a different device under that
+node, the file descriptor you got at open does *not* point to the new
+node.  It points to a dead device responder that errors everything.
+
+The point being once you open() something, the file descriptor is
+guaranteed to point to the same device (or error).
+
+> A much better approach would be for udev to point its symlinks at
+> "/dev/disk/by-diskseq/$DISKSEQ" for non-partition disk devices, or at
+> "/dev/disk/by-diskseq/${DISKSEQ}p${PARTITION}" for partitions.  A
+> filesystem would then be mounted at "/dev/disk/by-diskseq" that
+> provides for race-free opening of these paths.  This could be
+> implemented in userspace using FUSE, either with difficulty using the
+> current kernel API, or easily and efficiently using a new kernel API
+> for opening a block device by diskseq + partition.  However, I think
+> this should be handled by the Linux kernel itself.
+>=20
+> What would be necessary to get this into the kernel?  I would like to
+> implement this, but I don=E2=80=99t have the time to do so anytime soon. =
+ Is
+> anyone else interested in taking this on?  I suspect the kernel code
+> needed to implement this would be quite a bit smaller than the FUSE
+> implementation.
+
+So it sounds like the problem is you want to be sure that the device
+doesn't change after you've called libblkid to identify it but before
+you call open?  If that's so, the way you do this in userspace is to
+call libblkid again after the open.  If the before and after id match,
+you're as sure as you can be the open was of the right device.
+
+James
+
+
+--=-m2/yxg2jUsj/Q2J7p/Oh
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABMIAB0WIQTnYEDbdso9F2cI+arnQslM7pishQUCYmlFKAAKCRDnQslM7pis
+hUPRAP9pjLs7yDBOO2c5Li9a7Pn7ceWfSbT5gPoE+EHnc411EAD+ILidPuqJQpgK
+dqmy5RX/RG/fj7Tt6j8VKRMWYrsXFbk=
+=fhrO
+-----END PGP SIGNATURE-----
+
+--=-m2/yxg2jUsj/Q2J7p/Oh--
+

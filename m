@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6731B511ACB
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D72511B38
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238492AbiD0OoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
+        id S238406AbiD0Ooo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiD0OoI (ORCPT
+        with ESMTP id S238387AbiD0Ooj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:44:08 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EB4340DB;
-        Wed, 27 Apr 2022 07:40:55 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id r17so90117iln.9;
-        Wed, 27 Apr 2022 07:40:55 -0700 (PDT)
+        Wed, 27 Apr 2022 10:44:39 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C6D34674
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:41:28 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id g21so3417330iom.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:41:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RIP0odJ8FMWTLgnXtzkMr+Uyp/bX3hgDcgXzYlSMea4=;
-        b=AAvSou3Nm0D6ALb5dyylq5aoEcmbA2/xvLmdzqtWL3bNWGX20nhW7UaSNbj9sC1GWs
-         XwwXS28sf5pZoA5Uo9Bpe1Bf+UAw8FewIs6ZqxQh+UuOI8LglJmtEfqlvpcObBXkwF7g
-         7ONPVl8vJcvL+d7REsalbnTr13hI7GuH3jy80GfRROYdlLMx6Y3yiODR8Mqapf+jBWDG
-         Yy1DdaWPa/J63kGID26hoT4pt0NUBDjWssQtPwiQubyjRQyxkyq1GXTg7TA8lsf6/T1M
-         VHpD1g0aANmqNnRCzlLX01NbuaeXDTF0aJtkwlBSU3CPA7mYX4Xb/iLEnRVhzZLQ0XM1
-         jMzA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=aKqOi2YxxgVMYrT/iMU227sAyZ3FZV58U8M3nF1WuNE=;
+        b=tiIRUA3tr38eZE/JFWO/cio3PgqEpC8xi0+AWAjkClai38fMT7rtoSAEezo0nAULjw
+         Hr72iHq2mpHjVU2IUm0aHnNGGN4DOGD6RdqxnVFniNhh3zZkCFR2jq9JYl+jPjqFS7no
+         GZNtzlD/INFWl4IaiMyiQzLuxg2cfRzyn/e/XnPRw6pDAXE5J/ZgBf1E4TYm8kbo5AfC
+         9mpEy3eWhLcO2eyOpcFReatZ3EI02FxESpD1Wh3SQzjDI17jtH7jW5Mjyj+OcKk0zGBK
+         RRdXw/mU4ow40cJ1nFFTg9ojGColhLHGX5NcsZKlov/knSQ9Dd/egGtD7VCAq1xqgOKj
+         UZ0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RIP0odJ8FMWTLgnXtzkMr+Uyp/bX3hgDcgXzYlSMea4=;
-        b=11m4AxX1s4EXARx0ey7J2WjWHH5rT4rA1vHeeDUHQ7Qf9gDml+7su7TqJC4COT4JvW
-         Z+KXakkZxUavlncUNySRAej1JSgQrH8OtcvZOyYG5kz3z3GjhZf+Tr0joGIApnJDBTGv
-         3pO8n/lr3MytCF9BmT1tBLr8IIIH6IehcSXl5i8mw9BCnuONBAfT4MZMc8cW0Uoonc9R
-         CDsUTtZutBmtmvJxuDB9REU1NWVcusMSlCKYpt4loc6GcbcLouqF396/JuMbHGm626eR
-         8BaM/y/1B3R2nRM4qvXjL64pMqnZxB3rfIv+RiFs8ISw2cmrtOfUYqnv+5yav42/+a6z
-         05Gg==
-X-Gm-Message-State: AOAM533lD+PeI4eBnHI545LhpthffywyyCrCtKK0VUtjNWfuVbFrLncs
-        u1gUai6DrjNvKHwkfpM34+dLtCThZitSIpv6i7kDQ/f4Gw4=
-X-Google-Smtp-Source: ABdhPJyf7cSAQIZ97hBPEyHZRO+ltdjYyvo4ENwvpOWDYd5w1PlmrMApuiRVL8aq2N2WoXOdbLo8tstJw0F3+LkBLKw=
-X-Received: by 2002:a05:6e02:1888:b0:2c8:713f:dcff with SMTP id
- o8-20020a056e02188800b002c8713fdcffmr10282601ilu.289.1651070454933; Wed, 27
- Apr 2022 07:40:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=aKqOi2YxxgVMYrT/iMU227sAyZ3FZV58U8M3nF1WuNE=;
+        b=8Fvc2r0v/d1zFN9iOSvZvRn7MEMHPivmS4Xw7Pk5Y88xB1jC1GCIFelfAwSM1lon3q
+         L6z6BLm5QAQmSvdrPyQENd1pb8K354wYp3tef9+91nHzzTxW8VEDvvHQLKfxb/hKexAG
+         EB7dZxsAHvh+PTvT+fFbAJr3KPgsBHeUlztmOWRpaJe8ugLW5Ub9vL2q+L6i5RiLYZdz
+         HUuWRZsGQyN/3m70zlrOLqd/pXlCzUGU8w0QurKwPdsZRvKD+fNeHHrXzefdcrOAts32
+         chKKZhoHO/0g0NZ9Hf8k7BxT7ti40Tid8sYv1indv6C1xk9YmsFlXEISH4JFWEq3CVkl
+         c8Ig==
+X-Gm-Message-State: AOAM531sL+XfdB/ostmNeGzzFWAy+81PM8vffKOmfbCUZJZFBdXHwDpb
+        khEx/QGaWDLQ7Se+lBY8YUykaw==
+X-Google-Smtp-Source: ABdhPJygX6DgElavYTVsAEod2epfkSAshtz+9yF4fNKo8e5vFnaACFmGEszqzVQV5wz/x6koPY+vnQ==
+X-Received: by 2002:a5d:94c2:0:b0:60b:bd34:bb6f with SMTP id y2-20020a5d94c2000000b0060bbd34bb6fmr11639151ior.32.1651070487499;
+        Wed, 27 Apr 2022 07:41:27 -0700 (PDT)
+Received: from [127.0.1.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id 123-20020a6b1581000000b00657b48baeb8sm1182576iov.41.2022.04.27.07.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:41:27 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     tj@kernel.org
+Cc:     riel@surriel.com, linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        linux-block@vger.kernel.org
+In-Reply-To: <YmjODd4aif9BzFuO@slm.duckdns.org>
+References: <YmjODd4aif9BzFuO@slm.duckdns.org>
+Subject: Re: [PATCH block-5.18] iocost: don't reset the inuse weight of under-weighted debtors
+Message-Id: <165107048684.42574.6493116001052820883.b4-ty@kernel.dk>
+Date:   Wed, 27 Apr 2022 08:41:26 -0600
 MIME-Version: 1.0
-References: <20220427143001.1443605-1-eugene.shalygin@gmail.com> <8698b0d9-e0c0-65b1-c44c-3cc765e1dfc8@roeck-us.net>
-In-Reply-To: <8698b0d9-e0c0-65b1-c44c-3cc765e1dfc8@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 27 Apr 2022 16:40:43 +0200
-Message-ID: <CAB95QAQ4-+5A5onNUMVN3oDjuTMa71xoTS3TSY-coh7Cc5-6pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] asus-ec-sensors: add support for board families
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,6 +69,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, G=C3=BCnter!
+On Tue, 26 Apr 2022 19:01:01 -1000, Tejun Heo wrote:
+> When an iocg is in debt, its inuse weight is owned by debt handling and
+> should stay at 1. This invariant was broken when determining the amount of
+> surpluses at the beginning of donation calculation - when an iocg's
+> hierarchical weight is too low, the iocg is excluded from donation
+> calculation and its inuse is reset to its active regardless of its
+> indebtedness, triggering warnings like the following:
+> 
+> [...]
 
-> Series applied to hwmon-next.
+Applied, thanks!
+
+[1/1] iocost: don't reset the inuse weight of under-weighted debtors
+      commit: 8c936f9ea11ec4e35e288810a7503b5c841a355f
+
+Best regards,
+-- 
+Jens Axboe
+
+

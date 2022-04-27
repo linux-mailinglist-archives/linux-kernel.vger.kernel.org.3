@@ -2,921 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1294C511A39
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92AA511A95
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbiD0N7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S236808AbiD0N5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236897AbiD0N7G (ORCPT
+        with ESMTP id S236645AbiD0N5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:59:06 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7BC2616;
-        Wed, 27 Apr 2022 06:55:54 -0700 (PDT)
-Received: from janitor.denx.de (unknown [62.91.23.180])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: noc@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 12B1483E4F;
-        Wed, 27 Apr 2022 15:55:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1651067753;
-        bh=N10tdwVskdIVBjgQABdC0UuUBg746fyeJufyCgVkEr4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WvRXOHifkAWvFgjQ1sGzM+0stqWt2GXAn2oBofwEFJv0er/sqVS/MsVqzietnG+bw
-         DDUl+2gH22iL7AsQ78x729Rp/PoNF+eEPJF252SDcWZ6RXOjCxg8rNb6wkch4YAxMo
-         9miX7O7l6cnCOKSslL8x9sfb6mGWNuZ44V+2zUl2Qi8uHzDfnhoSWcpHVhv5k6FblJ
-         06vVoABCKTYqC99OwgnN/nhN3MYxomqBdVyFrv1T1lleCqKmqlCQk2AhTzJKP4p6IJ
-         wBEAjf0L3PMefUrmtvQWuEbIv0eLp+oc+0lsbZmb1/m/AYc/eOd2qLpPVZ+RA2kzGb
-         ZZAnjDHxYJUDg==
-Received: by janitor.denx.de (Postfix, from userid 108)
-        id B2FA4A0228; Wed, 27 Apr 2022 15:55:52 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from xpert.denx.de (xpert.denx.de [192.168.0.4])
-        by janitor.denx.de (Postfix) with ESMTPS id 7E75AA00A4;
-        Wed, 27 Apr 2022 15:55:33 +0200 (CEST)
-Received: by xpert.denx.de (Postfix, from userid 535)
-        id 6707F3E0540; Wed, 27 Apr 2022 15:55:33 +0200 (CEST)
-From:   Philip Oberfichtner <pro@denx.de>
-Cc:     Philip Oberfichtner <pro@denx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, matthias.winker@de.bosch.com
-Subject: [PATCH v3 4/4] ARM: dts: Add bosch acc board
-Date:   Wed, 27 Apr 2022 15:52:33 +0200
-Message-Id: <20220427135229.2339865-4-pro@denx.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220427135229.2339865-1-pro@denx.de>
-References: <20220427135229.2339865-1-pro@denx.de>
+        Wed, 27 Apr 2022 09:57:38 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099AF27CEA;
+        Wed, 27 Apr 2022 06:54:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bQDVX6rPtyrtjBWynkiU77/38JSDSORw6ZpRDeErkXQwCVxmnMIJ3tMReImynodBcC9udSD49VKVjHykIzdq7pQKwFLgxlUZe5oBemMYL3XggV7jKJRJWP82buTzXy/YV/s0feRf183wITYSMqS9cRlJW85uM6rhqvQQM+3mK84lKPNMDMdFcPyyxrQaceEY5o0k93V0TCI4S+cTlVdsSJC0mNyZosaNMiTDUHEHJPNaBZDs3zGkG7ju5GS0a/dxXJqT4gsDTAtebyph4fl10AljMBt71dORWMuZm67tU88V9afQ+tiBsVtlM5MFuD14WJQAHltAogKFOfNzglkXgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pAVgVGnNIzAzztIix2UcVfLquXwIGbPNolosqIoIuks=;
+ b=X06CtIJqVbnhV2WRxc4M4IwOpPwNuDA12UoYe8XR1C0K6+2psMrd+A0AhAQnw0FW/GF/Zovj0oxvPcRtPchfqTo2VEhMzng+VwjGcIPe86H36xPuD/iYN7IcV+1XrkVNkXWhvaAQtgZw5TGL71U87f/aeKNOUCJrI+bR+O+qxMiEnowsmK4jY+1XUbRc7CHYyctMrTt+fr3rANV7ITpDO9c+FExKmRcRbm1PCPBp2MNQBiozcNSbnrkTmUZ/Ahp/ByyWTHiwnMNH6sMG6wGv3pPSSrN9Oamhgko/R04y5QJs2H0ElsiVfJnLbEuDXOdAcDxSliLuOtRQs5yFrZpLmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=amd.com; dmarc=temperror action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pAVgVGnNIzAzztIix2UcVfLquXwIGbPNolosqIoIuks=;
+ b=Ldi88uXbO5tHSdU2xPxtrBauOd8M0ITQbKgiBUMpBUtKg6LmXtCYmkYCjF8Zya5Ja9MOGq6sZOIRYQfZzhVMIgastmROHZRkGYbjCjRKMnWgV4N9iEPTa8maQlsFWhSouhI1E5xlW/MnUAs2d39tD0pnuKrV5bLiB/cPj2i77U0=
+Received: from BN8PR15CA0037.namprd15.prod.outlook.com (2603:10b6:408:80::14)
+ by SJ0PR12MB5662.namprd12.prod.outlook.com (2603:10b6:a03:429::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Wed, 27 Apr
+ 2022 13:54:23 +0000
+Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::d1) by BN8PR15CA0037.outlook.office365.com
+ (2603:10b6:408:80::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21 via Frontend
+ Transport; Wed, 27 Apr 2022 13:54:23 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=amd.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of amd.com: DNS Timeout)
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5206.12 via Frontend Transport; Wed, 27 Apr 2022 13:54:21 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
+ 2022 08:54:17 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V4 0/3] Add unit test module for AMD P-State driver
+Date:   Wed, 27 Apr 2022 21:53:12 +0800
+Message-ID: <20220427135315.3447550-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d23b2b9-5a96-44bd-c2c2-08da28556e80
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5662:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR12MB56624F101EDDDD211286030BF7FA9@SJ0PR12MB5662.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: syKTcMatMKohIFN8+CLvG4GovXKnzaTiNa7rlXTxRSyud03XOi/JxXSXsYOEns5XOmMW9DRMqgxJH/Vy32IhICOt0hEHG1r6FnOaWJpDITm31xLfFQ8pBmTjD6zTkbtj3EAz8SKnVfO7zH07MhYSqROUvGZmYFPME6t0xAJJDLxv0ZbYps5OF09fZZJhZL+uKsMemRV11mBGu7MddZWiw2bpiBxBCf9NuNaOKPQ9EyC3m9OEvUxAVj6ssSXaRdY7jQZL2MOfAP5clllAcIPmKRl/M8n/1CDf2m9McDeayewT+cqj8AcGbzDJJBhV/+Eirqfp0L0Cz3hPsx5QDcucnwDvNiCrVcmlYblpcu+478Ym1lDgHkgReyKQMh5ScdV0a+dD+kH/ahNAYBsGoiTpZjjUW7v7iBT+PcrbrHAxW5O2j2tZCJjDOxMw4CcSh25hd+R7vQx8Ju/wi0aVazYNBU8yj+VSuWT6psanie/YG2cdwmUPNo+V12m9cldDR/tkpn9IcCmh4om9bRIrDHteEolq+Ydujr+fQEDk+yFhrpGoND9CmIvFlRHOqDZ4Iw8Xp3WJ7IQSgJb0y+G5bFeA5X+8u7dyilbffcoPjqh9fYxW8vzbqZjoANVvpH+SRubeBP2kSWpXg2Uu0HdZ8rLoYXVRfvYeNFQIoAz0iO8ZoZsP6dFxX5OU6NekJwklHkr3i+jiNJDJOJy/8jW34vti0yA80V2t/HYRTIACtCromvs548dbGiC3hWReJPO7RZUOMZXnmNAahUV+c2h4CH3Wizzy8bHRRcrKPkoYLAQEsQJRSv1ATtO6OF1EdgRC6t6HgrPTgzsj1/havuW/r7W/+w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(2906002)(63370400001)(83380400001)(4326008)(8936002)(5660300002)(16526019)(356005)(63350400001)(316002)(2616005)(86362001)(966005)(82310400005)(508600001)(81166007)(7696005)(26005)(36756003)(70586007)(6666004)(1076003)(70206006)(54906003)(8676002)(110136005)(186003)(36860700001)(426003)(336012)(47076005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 13:54:21.6984
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d23b2b9-5a96-44bd-c2c2-08da28556e80
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5662
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree for the Bosch ACC board, based on i.MX6 Dual.
+Hi all:
 
-Signed-off-by: Philip Oberfichtner <pro@denx.de>
+AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+the functions of amd-pstate driver.
+It could import as a module to launch some test tasks.
+1) It can help all users to verify their processor support (SBIOS/
+Firmware or Hardware).
+2) Kernel can have a basic function test to avoid the kernel regression
+during the update.
+3) We can introduce more functional or performance tests to align the
+together, it will benefit power and performance scale optimization.
 
----
+We upstream out AMD P-state driver into Linux kernel and use this unit
+test module to verify the required conditions and basic functions of
+amd-pstate before integration test.
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Olof Johansson <olof@lixom.net>
-Cc: soc@kernel.org
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: matthias.winker@de.bosch.com
+We use test module in the kselftest frameworks to implement it.
+We create amd-pstate-ut module and tie it into kselftest.
 
----
+For example: The test case aput_acpi_cpc is used to check whether the
+_CPC object is exist in SBIOS.
+The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+existed at the detected processor, so it is a necessary condition.
 
-Changes in v3:
-- use panel compatible string instead of display-timings
-- adapt node naming for regulators and led
-- remove unreferenced pinctrl configs
-- remove unused audmux node
-- remove or adapt invalid or superfluous properties
-- use real pad settings instead of 0x80000000
-- fix other minor style issues
+At present, it only implements the basic framework and some simple test
+cases.
 
-Changes in v2:
-- fix style errors in node naming
-- place regulators under root node
-- remove superfluous status properties
-- remove undocumented nodes and properties
-- use color instead of label for leds
-- fix other minor style issues
----
- arch/arm/boot/dts/Makefile            |   1 +
- arch/arm/boot/dts/imx6q-bosch-acc.dts | 783 ++++++++++++++++++++++++++
- 2 files changed, 784 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6q-bosch-acc.dts
+TODO : 1) we will add more test cases to improve the depth and coverage of
+the test.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..a6eff45bfee3 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -547,6 +547,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
- 	imx6q-b450v3.dtb \
- 	imx6q-b650v3.dtb \
- 	imx6q-b850v3.dtb \
-+	imx6q-bosch-acc.dtb \
- 	imx6q-cm-fx6.dtb \
- 	imx6q-cubox-i.dtb \
- 	imx6q-cubox-i-emmc-som-v15.dtb \
-diff --git a/arch/arm/boot/dts/imx6q-bosch-acc.dts b/arch/arm/boot/dts/imx6q-bosch-acc.dts
-new file mode 100644
-index 000000000000..81711869210d
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6q-bosch-acc.dts
-@@ -0,0 +1,783 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Support for the i.MX6-based Bosch ACC board.
-+ *
-+ * Copyright (C) 2016 Garz & Fricke GmbH
-+ * Copyright (C) 2018 DENX Software Engineering GmbH, Heiko Schocher <hs@denx.de>
-+ * Copyright (C) 2018 DENX Software Engineering GmbH, Niel Fourie <lusus@denx.de>
-+ * Copyright (C) 2019-2021 Bosch Thermotechnik GmbH, Matthias Winker <matthias.winker@bosch.com>
-+ * Copyright (C) 2022 DENX Software Engineering GmbH, Philip Oberfichtner <pro@denx.de>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include "imx6q.dtsi"
-+
-+/ {
-+	model = "Bosch ACC";
-+	compatible = "bosch,imx6q-acc", "fsl,imx6q";
-+
-+	aliases {
-+		serial0 = &uart2;
-+		serial1 = &uart1;
-+		i2c0 = &i2c1;
-+		i2c1 = &i2c2;
-+		i2c2 = &i2c3;
-+		mmc0 = &usdhc4;
-+		mmc1 = &usdhc2;
-+	};
-+
-+	memory@10000000 {
-+		device_type = "memory";
-+		reg = <0x10000000 0x40000000>;
-+	};
-+
-+	backlight_lvds: backlight_lvds {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm1 0 200000>;
-+		brightness-levels = <0 61 499 1706 4079 8022 13938 22237 33328 47623 65535>;
-+		num-interpolated-steps = <10>;
-+		default-brightness-level = <60>;
-+		power-supply = <&reg_lcd>;
-+	};
-+
-+	panel {
-+		compatible = "dataimage,fg1001l0dsswmg01";
-+		backlight = <&backlight_lvds>;
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&lvds0_out>;
-+			};
-+		};
-+	};
-+
-+	refclk: refclk {
-+		compatible = "fixed-factor-clock";
-+		#clock-cells = <0>;
-+		clocks = <&clks IMX6QDL_CLK_CKO2>;
-+		clock-div = <1>;
-+		clock-mult = <1>;
-+		clock-output-names = "12mhz_refclk";
-+		assigned-clocks = <&clks IMX6QDL_CLK_CKO>,
-+				  <&clks IMX6QDL_CLK_CKO2>,
-+				  <&clks IMX6QDL_CLK_CKO2_SEL>;
-+		assigned-clock-parents = <&clks IMX6QDL_CLK_CKO2>,
-+					 <&clks IMX6QDL_CLK_CKO2_PODF>,
-+					 <&clks IMX6QDL_CLK_OSC>;
-+		assigned-clock-rates = <0>, <12000000>, <0>;
-+	};
-+
-+	cpus {
-+		cpu0: cpu@0 {
-+			operating-points = <
-+				/* kHz    uV */
-+				1200000 1275000
-+				996000  1225000
-+				852000  1225000
-+				792000  1150000
-+				396000  950000
-+			>;
-+			fsl,soc-operating-points = <
-+				/* ARM kHz  SOC-PU uV */
-+				1200000 1225000
-+				996000	1175000
-+				852000	1175000
-+				792000	1150000
-+				396000	1150000
-+			>;
-+		};
-+
-+		cpu1: cpu@1 {
-+			operating-points = <
-+				/* kHz    uV */
-+				1200000 1275000
-+				996000  1225000
-+				852000  1225000
-+				792000  1150000
-+				396000  950000
-+			>;
-+			fsl,soc-operating-points = <
-+				/* ARM kHz  SOC-PU uV */
-+				1200000 1225000
-+				996000	1175000
-+				852000	1175000
-+				792000	1150000
-+				396000	1150000
-+			>;
-+		};
-+	};
-+
-+	pwm-leds {
-+		compatible = "pwm-leds";
-+
-+		led_red: led-0 {
-+			color = <LED_COLOR_ID_RED>;
-+			max-brightness = <248>;
-+			default-state = "off";
-+			pwms = <&pwm2 0 500000>;
-+		};
-+
-+		led_white: led-1 {
-+			color = <LED_COLOR_ID_WHITE>;
-+			max-brightness = <248>;
-+			default-state = "off";
-+			pwms = <&pwm3 0 500000>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	gpio-leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reset_gpio_led>;
-+
-+		led-2 {
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+	};
-+
-+	reg_5P0: regulator-5P0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "5P0";
-+	};
-+
-+	reg_vin: regulator-vin {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VIN";
-+		regulator-min-microvolt = <4500000>;
-+		regulator-max-microvolt = <4500000>;
-+		regulator-always-on;
-+		vin-supply = <&reg_5P0>;
-+	};
-+
-+	reg_usb_otg_vbus: regulator-usb-otg-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb_otg_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_usb_h1_vbus: regulator-usb-h1-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb_h1_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		vin-supply = <&reg_5P0>;
-+	};
-+
-+	reg_usb_h2_vbus: regulator-usb-h2-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb_h2_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&reg_5P0> ;
-+		regulator-always-on;
-+	};
-+
-+	reg_vsnvs: regulator-vsnvs {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VSNVS_3V0";
-+		regulator-min-microvolt = <3000000>;
-+		regulator-max-microvolt = <3000000>;
-+		regulator-always-on;
-+		vin-supply = <&reg_5P0>;
-+	};
-+
-+	reg_lcd: regulator-lcd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "LCD0 POWER";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_lcd_enable>;
-+		gpio = <&gpio3 23 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-boot-on;
-+	};
-+
-+	reg_dac: regulator-dac {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vref_dac";
-+		regulator-min-microvolt = <20000>;
-+		regulator-max-microvolt = <20000>;
-+		vin-supply = <&reg_5P0> ;
-+		regulator-boot-on;
-+	};
-+
-+	reg_sw4: regulator-sw4 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SW4_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-always-on;
-+		vin-supply = <&reg_5P0>;
-+	};
-+
-+	reg_sys: regulator-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SYS_4V2";
-+		regulator-min-microvolt = <4200000>;
-+		regulator-max-microvolt = <4200000>;
-+		regulator-always-on;
-+		vin-supply = <&reg_5P0>;
-+	};
-+};
-+
-+&reg_arm {
-+	vin-supply = <&sw2_reg>;
-+};
-+
-+&reg_soc {
-+	vin-supply = <&sw1c_reg>;
-+};
-+
-+&reg_vdd1p1 {
-+	vin-supply = <&reg_vsnvs>;
-+};
-+
-+&reg_vdd2p5 {
-+	vin-supply = <&reg_vsnvs>;
-+};
-+
-+&reg_vdd3p0 {
-+	vin-supply = <&reg_vsnvs>;
-+};
-+
-+&fec {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_enet>;
-+	clocks = <&clks IMX6QDL_CLK_ENET>,
-+		<&clks IMX6QDL_CLK_ENET>,
-+		<&clks IMX6QDL_CLK_ENET>,
-+		<&clks IMX6QDL_CLK_ENET_REF>;
-+	clock-names = "ipg", "ahb", "ptp", "enet_out";
-+	phy-mode = "rmii";
-+	phy-supply = <&reg_sw4>;
-+	phy-handle = <&ethphy>;
-+	status = "okay";
-+
-+	mdio {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		ethphy: ethernet-phy@0 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+			reg = <0>;
-+			interrupt-parent = <&gpio1>;
-+			interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
-+			smsc,disable-energy-detect;
-+		};
-+	};
-+};
-+
-+&gpu_vg {
-+	status = "disabled";
-+};
-+
-+&gpu_2d {
-+	status = "disabled";
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c1>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	eeprom: eeprom@50 {
-+		compatible = "atmel,24c32";
-+		reg = <0x50>;
-+		pagesize = <32>;
-+	};
-+
-+	lm75: sensor@49 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_lm75>;
-+		compatible = "national,lm75b";
-+		reg = <0x49>;
-+	};
-+
-+	pmic: pmic@8 {
-+		compatible = "fsl,pfuze100";
-+		reg = <0x08>;
-+
-+		regulators {
-+			sw1c_reg: sw1c {
-+				regulator-name = "VDD_SOC (sw1abc)";
-+				regulator-min-microvolt = <1275000>;
-+				regulator-max-microvolt = <1500000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <6250>;
-+			};
-+
-+			sw2_reg: sw2 {
-+				regulator-name = "VDD_ARM (sw2)";
-+				regulator-min-microvolt = <1050000>;
-+				regulator-max-microvolt = <1500000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <6250>;
-+			};
-+
-+			sw3a_reg: sw3a {
-+				compatible = "regulator-fixed";
-+				regulator-name = "DDR_1V5a";
-+				regulator-boot-on;
-+				regulator-always-on;
-+
-+			};
-+
-+			sw3b_reg: sw3b {
-+				compatible = "regulator-fixed";
-+				regulator-name = "DDR_1V5b";
-+				regulator-boot-on;
-+				regulator-always-on;
-+
-+			};
-+
-+			sw4_reg: sw4 {
-+				regulator-name = "AUX 3V15 (sw4)";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+
-+			swbst_reg: swbst {
-+				status = "disabled";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5150000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			snvs_reg: vsnvs {
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vref_reg: vrefddr {
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vgen1_reg: vgen1 {
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1550000>;
-+				regulator-always-on;
-+			};
-+
-+			vgen2_reg: vgen2 {
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1550000>;
-+				regulator-always-on;
-+			};
-+
-+			vgen3_reg: vgen3 {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+
-+			vgen4_reg: vgen4 {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			vgen5_reg: vgen5 {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			vgen6_reg: vgen6 {
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+		};
-+	};
-+
-+	rtc: rtc@51 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_rtc>;
-+		compatible = "nxp,pcf8563";
-+		reg = <0x51>;
-+	};
-+};
-+
-+&i2c2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+
-+	eeprom_ext: eeprom@50 {
-+		compatible = "atmel,24c32";
-+		reg = <0x50>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+&i2c3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c3>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	exc3000: touchscreen@2a {
-+		compatible = "eeti,exc3000";
-+		reg = <0x2a>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_ctouch>;
-+		interrupt-parent = <&gpio4>;
-+		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
-+		touchscreen-size-x = <4096>;
-+		touchscreen-size-y = <4096>;
-+	};
-+
-+	usb3503: usb@8 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usb3503>;
-+		compatible = "smsc,usb3503";
-+		reg = <0x08>;
-+		connect-gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>; /* Old: 0, SS: HIGH */
-+		intn-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>; /* Old: 1, SS: HIGH */
-+		reset-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>; /* Old: 0, SS: HIGH */
-+		initial-mode = <1>;
-+		clocks = <&refclk>;
-+		clock-names = "refclk";
-+		refclk-frequency = <12000000>;
-+	};
-+
-+	vcnl4035: light-sensor@60 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_proximity>;
-+		compatible = "vishay,vcnl4035";
-+		reg = <0x60>;
-+	};
-+};
-+
-+&ldb {
-+	status = "okay";
-+
-+	lvds0: lvds-channel@0 {
-+		fsl,data-mapping = "spwg";
-+		fsl,data-width = <24>;
-+
-+		port@4 {
-+			reg = <4>;
-+
-+			lvds0_out: endpoint {
-+				remote-endpoint = <&panel_in>;
-+			};
-+		};
-+	};
-+};
-+
-+&pmu {
-+	interrupt-affinity = <&{/cpus/cpu@0}>,
-+			     <&{/cpus/cpu@1}>;
-+};
-+
-+&pwm1 {
-+	#pwm-cells = <2>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm1>;
-+	status = "okay";
-+};
-+
-+&pwm2 {
-+	#pwm-cells = <2>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm2>;
-+	status = "okay";
-+};
-+
-+&pwm3 {
-+	#pwm-cells = <2>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm3>;
-+	status = "okay";
-+};
-+
-+&pwm4 {
-+	#pwm-cells = <2>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm4>;
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+	rts-gpios = <&gpio7 8 GPIO_ACTIVE_HIGH>;
-+	linux,rs485-enabled-at-boot-time;
-+	rs485-rx-during-tx;
-+};
-+
-+&uart2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart2>;
-+	uart-has-rtscts;
-+	status = "okay";
-+};
-+
-+&usbh1 {
-+	vbus-supply = <&reg_usb_h1_vbus>;
-+	status = "okay";
-+};
-+
-+&usbh2 {
-+	pinctrl-names = "idle", "active";
-+	pinctrl-0 = <&pinctrl_usbh2_idle>;
-+	pinctrl-1 = <&pinctrl_usbh2_active>;
-+	status = "okay";
-+	vbus-supply = <&reg_usb_h2_vbus>;
-+};
-+
-+&usbotg {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usbotg>;
-+	status = "okay";
-+	vbus-supply = <&reg_usb_otg_vbus>;
-+	disable-over-current;
-+	dr_mode = "otg";
-+	srp-disable;
-+	hnp-disable;
-+	adp-disable;
-+};
-+
-+&usbphynop1 {
-+	clocks = <&clks IMX6QDL_CLK_USBPHY1>;
-+	clock-names = "main_clk";
-+	vcc-supply = <&reg_usb_h1_vbus>;
-+};
-+
-+&usbphynop2 {
-+	vcc-supply = <&reg_usb_h2_vbus>;
-+};
-+
-+&usdhc2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc2>;
-+	status = "okay";
-+	cd-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
-+	no-1-8-v;
-+	keep-power-in-suspend;
-+	enable-sdio-wakeup;
-+	voltage-ranges = <3300 3300>;
-+	vmmc-supply = <&reg_sw4>;
-+	fsl,wp-controller;
-+};
-+
-+&usdhc4 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc4>;
-+	status = "okay";
-+	bus-width = <8>;
-+	non-removable;
-+	no-1-8-v;
-+	keep-power-in-suspend;
-+	voltage-ranges = <3300 3300>;
-+	vmmc-supply = <&reg_sw4>;
-+	fsl,wp-controller;
-+};
-+
-+&wdog1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdog1>;
-+	fsl,ext-reset-output;
-+	status = "okay";
-+	timeout-sec=<10>;
-+};
-+
-+&iomuxc {
-+	pinctrl_enet: enetgrp {
-+		fsl,pins = <
-+			MX6QDL_PAD_ENET_MDC__ENET_MDC		0x1b0b0
-+			MX6QDL_PAD_ENET_MDIO__ENET_MDIO		0x1b0b0
-+			MX6QDL_PAD_ENET_CRS_DV__ENET_RX_EN	0x1b0b0
-+			MX6QDL_PAD_ENET_REF_CLK__GPIO1_IO23	0x1b0b0	/* FEC INT */
-+			MX6QDL_PAD_ENET_RX_ER__ENET_RX_ER	0x1b0b0
-+			MX6QDL_PAD_ENET_TX_EN__ENET_TX_EN	0x0001b098
-+			MX6QDL_PAD_ENET_RXD0__ENET_RX_DATA0	0x1b0b0
-+			MX6QDL_PAD_ENET_RXD1__ENET_RX_DATA1	0x1b0b0
-+			MX6QDL_PAD_ENET_TXD1__ENET_TX_DATA1	0x0001b098
-+			MX6QDL_PAD_ENET_TXD0__ENET_TX_DATA0	0x0001b098
-+			MX6QDL_PAD_GPIO_16__ENET_REF_CLK	0x4001b0a8
-+		>;
-+	};
-+
-+	pinctrl_reset_gpio_led: pinctrl-reset-gpio-led-grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_CSI0_PIXCLK__GPIO5_IO18		0x1b0b0
-+		>;
-+	};
-+
-+	pinctrl_i2c1: i2c1grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_CSI0_DAT8__I2C1_SDA 0x4001b8b1
-+			MX6QDL_PAD_CSI0_DAT9__I2C1_SCL 0x4001b8b1
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_KEY_COL3__I2C2_SCL 0x4001b810
-+			MX6QDL_PAD_KEY_ROW3__I2C2_SDA 0x4001b810
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_GPIO_5__I2C3_SCL  0x4001b8b1
-+			MX6QDL_PAD_GPIO_6__I2C3_SDA 0x4001b8b1
-+		>;
-+	};
-+
-+	pinctrl_lcd_enable: lcdenablerp {
-+		fsl,pins = <
-+			MX6QDL_PAD_EIM_D23__GPIO3_IO23  0x1b0b0 /* lcd enable */
-+			MX6QDL_PAD_EIM_D16__GPIO3_IO16  0x1b0b0 /* sel6_8 */
-+		>;
-+	};
-+
-+	pinctrl_lm75: lm75grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_KEY_ROW0__GPIO4_IO07		0x1b0b0
-+		>;
-+	};
-+
-+	pinctrl_proximity: proximitygrp {
-+		fsl,pins = <
-+			MX6QDL_PAD_KEY_ROW2__GPIO4_IO11  0x1b0b0
-+		>;
-+	};
-+
-+	pinctrl_pwm1: pwm1grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD1_DAT3__PWM1_OUT 0x0001b0b0
-+		>;
-+	};
-+
-+	pinctrl_pwm2: pwm2grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD1_DAT2__PWM2_OUT 0x0001b0b0
-+		>;
-+	};
-+
-+	pinctrl_pwm3: pwm3grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD1_DAT1__PWM3_OUT 0x0001b0b0
-+		>;
-+	};
-+
-+	pinctrl_pwm4: pwm4grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD1_CMD__PWM4_OUT 0x0001b0b0
-+		>;
-+	};
-+
-+	pinctrl_rtc: rtc-grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_KEY_COL1__GPIO4_IO08 0x1b0b0 /* RTC INT */
-+		>;
-+	};
-+
-+	pinctrl_ctouch: ctouch-grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_KEY_COL0__GPIO4_IO06 0x1b0b0 /* CTOUCH_INT */
-+			MX6QDL_PAD_SD1_CLK__GPIO1_IO20 0x0001b0b0 /* CTOUCH_RESET */
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD3_DAT6__UART1_RX_DATA 0x1b0b1
-+			MX6QDL_PAD_SD3_DAT7__UART1_TX_DATA 0x1b0b1
-+			MX6QDL_PAD_SD3_RST__GPIO7_IO08 0x0001b0b0
-+		>;
-+	};
-+
-+	pinctrl_uart2: uart2grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD3_DAT4__UART2_RX_DATA 0x1b0b1
-+			MX6QDL_PAD_SD3_DAT5__UART2_TX_DATA 0x1b0b1
-+			MX6QDL_PAD_EIM_D28__UART2_CTS_B 0x1b0b1
-+			MX6QDL_PAD_EIM_D29__UART2_RTS_B 0x1b0b1
-+		>;
-+	};
-+
-+	pinctrl_usbh2_idle: usbh2-idle-grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_RGMII_TXC__USB_H2_DATA      0x00013018
-+			MX6QDL_PAD_RGMII_TX_CTL__USB_H2_STROBE 0x00013018
-+		>;
-+	};
-+
-+	pinctrl_usbh2_active: usbh2-active-grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_RGMII_TXC__USB_H2_DATA      0x00013018
-+			MX6QDL_PAD_RGMII_TX_CTL__USB_H2_STROBE 0x00017018
-+		>;
-+	};
-+
-+	pinctrl_usb3503: pinctrl_usb3503-grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_CSI0_MCLK__CCM_CLKO1    0x00000018
-+			MX6QDL_PAD_GPIO_17__GPIO7_IO12     0x1b0b0 /* USB INT */
-+			MX6QDL_PAD_DISP0_DAT11__GPIO5_IO05 0x0001b0b0 /* USB Reset */
-+			MX6QDL_PAD_SD1_DAT0__GPIO1_IO16    0x1b0b0 /* USB Connect */
-+		>;
-+	};
-+
-+	pinctrl_usbotg: usbotggrp {
-+		fsl,pins = <
-+			MX6QDL_PAD_GPIO_1__USB_OTG_ID	0x17059
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD2_CMD__SD2_CMD    0x00017069
-+			MX6QDL_PAD_SD2_CLK__SD2_CLK    0x00010038
-+			MX6QDL_PAD_SD2_DAT0__SD2_DATA0 0x00017069
-+			MX6QDL_PAD_SD2_DAT1__SD2_DATA1 0x00017069
-+			MX6QDL_PAD_SD2_DAT2__SD2_DATA2 0x00017069
-+			MX6QDL_PAD_SD2_DAT3__SD2_DATA3 0x00017069
-+			MX6QDL_PAD_GPIO_4__SD2_CD_B    0x0001b0b0
-+		>;
-+	};
-+
-+	pinctrl_usdhc4: usdhc4grp {
-+		fsl,pins = <
-+			MX6QDL_PAD_SD4_CMD__SD4_CMD    0x00017059
-+			MX6QDL_PAD_SD4_CLK__SD4_CLK    0x00010059
-+			MX6QDL_PAD_SD4_DAT0__SD4_DATA0 0x00017059
-+			MX6QDL_PAD_SD4_DAT1__SD4_DATA1 0x00017059
-+			MX6QDL_PAD_SD4_DAT2__SD4_DATA2 0x00017059
-+			MX6QDL_PAD_SD4_DAT3__SD4_DATA3 0x00017059
-+			MX6QDL_PAD_SD4_DAT4__SD4_DATA4 0x00017059
-+			MX6QDL_PAD_SD4_DAT5__SD4_DATA5 0x00017059
-+			MX6QDL_PAD_SD4_DAT6__SD4_DATA6 0x00017059
-+			MX6QDL_PAD_SD4_DAT7__SD4_DATA7 0x00017059
-+		>;
-+	};
-+
-+	pinctrl_wdog1: wdoggrp {
-+		fsl,pins = <
-+			MX6QDL_PAD_GPIO_9__WDOG1_B 0x1b0b0
-+		>;
-+	};
-+};
+Please check the documentation amd-pstate.rst for details of the test steps.
+
+See patch series in below git repo:
+V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/ 
+
+Changes from V1 -> V2:
+- cpufreq: amd-pstate:
+- - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER.
+- selftests: cpufreq:
+- - add a wrapper shell script for the amd_pstate_testmod module.
+- selftests: cpufreq:
+- - remove amd_pstate_testmod kernel module to
+  .../cpufreq/amd_pstate_testmod.
+- Documentation: amd-pstate:
+- - amd_pstate_testmod rst document is not provided at present.
+
+Changes from V2 -> V3:
+- cpufreq: amd-pstate:
+- - adjust the order of add amd-pstate.h in MAINTAINERS.
+- selftests: cpufreq:
+- - remove the call of amd_pstate_testmod.sh from cpufreq Makefile to
+  main.sh.
+- selftests: cpufreq:
+- - add explain the goal or intention of the AMD P-State Unit Test
+  module.
+- - modify comments.
+- - use the checkpatch.pl to check my patches.
+- - add conditions judgment before formal test.
+- - delete some unnecessary test cases.
+- - modify test cases about perf and performance etc.
+
+Changes from V3 -> V4:
+- selftests: amd-pstate:
+- - remove script and test module to tools/testing/selftests/amd-pstate/
+- - uniformly named amd-pstate-ut.
+- - check current architectures and cpufreq driver in amd-pstate-ut.sh
+- - delete codes about conditions in amd-pstate-ut.c 
+- Documentation: amd-pstate:
+- - add introduce document about amd-pstate unit test.
+
+Thanks,
+Jasmine
+
+Meng Li (3):
+  cpufreq: amd-pstate: Expose struct amd_cpudata
+  selftests: amd-pstate: Add test module for amd-pstate driver
+  Documentation: amd-pstate: Add unit test introduction
+
+ Documentation/admin-guide/pm/amd-pstate.rst   |  87 ++++++
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate.c                  |  60 +---
+ include/linux/amd-pstate.h                    |  77 +++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/amd-pstate/Makefile   |   9 +
+ .../selftests/amd-pstate/amd-pstate-ut.sh     |  27 ++
+ .../amd-pstate/amd-pstate-ut/Makefile         |  20 ++
+ .../amd-pstate/amd-pstate-ut/amd-pstate-ut.c  | 275 ++++++++++++++++++
+ tools/testing/selftests/amd-pstate/config     |   1 +
+ 10 files changed, 499 insertions(+), 59 deletions(-)
+ create mode 100644 include/linux/amd-pstate.h
+ create mode 100644 tools/testing/selftests/amd-pstate/Makefile
+ create mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+ create mode 100644 tools/testing/selftests/amd-pstate/amd-pstate-ut/Makefile
+ create mode 100644 tools/testing/selftests/amd-pstate/amd-pstate-ut/amd-pstate-ut.c
+ create mode 100644 tools/testing/selftests/amd-pstate/config
+
 -- 
-2.34.1
+2.25.1
 

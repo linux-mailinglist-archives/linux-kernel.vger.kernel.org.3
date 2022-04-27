@@ -2,156 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB328511B3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3009E511B14
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235504AbiD0NOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S235517AbiD0NOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbiD0NOJ (ORCPT
+        with ESMTP id S235466AbiD0NOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:14:09 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8C0395CFD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:10:58 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 124B330B;
-        Wed, 27 Apr 2022 15:10:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1651065057;
-        bh=i2uclXUrfQLwDu1iiq+C9aTY3dK8CXN+ho6uH/lsmqo=;
+        Wed, 27 Apr 2022 09:14:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BCD1C1DC9;
+        Wed, 27 Apr 2022 06:11:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9304F61B98;
+        Wed, 27 Apr 2022 13:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FC1C385A9;
+        Wed, 27 Apr 2022 13:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651065090;
+        bh=tpIYWICrW+Xe2NYo9+47DtMMvdK4RGp2TzuVJyjTpZk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dJDrYQiUAtHijQ9VyBoWdtxporEh6I3QwjCwI9VMNlJhFJWk/LXfMpw3ACrJfqc5J
-         ndvLVQ2bCdD0ojXfD67FAsqIx+/UyfZi7gu0vslwhJfXhAntg4EerJFNwbQeWGq7Dv
-         Ox5AYAvmbGl7008LPJ9RmhTQB7RLlCgjDDBQNcb4=
-Date:   Wed, 27 Apr 2022 16:10:56 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
- bridge"
-Message-ID: <YmlA4EowtyMhIoic@pendragon.ideasonboard.com>
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org>
- <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat>
- <YmEdAVwZuA7Wo1Ch@aptenodytes>
- <YmelPCcWCCjALtRU@aptenodytes>
- <YmfYi5G7hMKLAH3T@pendragon.ideasonboard.com>
- <YmfoiD0r8MD/kr1N@aptenodytes>
- <20220426125401.yyrhg6aeafdjw4ad@houat>
+        b=b7unDFzV3JJ93notz6nFF8qVCFjJ34yZONp6aEjymzwqcKThuj8hPwyIEQp4oyGjH
+         Nc8Jwo6xRw7wqIP7Ns8of9TW2BnweRHUiYUyrMjQd1DIb/sLx9hQOnbS/xVOVBlv5D
+         jpweLVNSIvktWp6sp2qD0AeGPbAvvsw9GSj5Ubo+mhE7jJs0Z6hnFu8O2reeakEaLB
+         nPLS2QiotHoSXJ2c9gVDgnvYgW4X9HhFztis9wB6kcWMjX6hXOyg4MLlwCCTNp8Lsd
+         AB4wZIhMFlANHQU5JDN2+CIqPmx13fGtsyUgPL929Tsl5VD/ZlR4FVRmhmN8ti2Q2M
+         0XpGV3FuVmuYw==
+Date:   Wed, 27 Apr 2022 14:11:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
+Message-ID: <YmlA+tqqigjkRyMZ@sirena.org.uk>
+References: <20220424032527.673605-1-gch981213@gmail.com>
+ <20220427112857.7ddd7fc8@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3/axAlvjop7jo6tE"
 Content-Disposition: inline
-In-Reply-To: <20220426125401.yyrhg6aeafdjw4ad@houat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427112857.7ddd7fc8@xps13>
+X-Cookie: Buckle up!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 02:54:01PM +0200, Maxime Ripard wrote:
-> On Tue, Apr 26, 2022 at 02:41:44PM +0200, Paul Kocialkowski wrote:
-> > On Tue 26 Apr 22, 14:33, Laurent Pinchart wrote:
-> > > On Tue, Apr 26, 2022 at 09:54:36AM +0200, Paul Kocialkowski wrote:
-> > > > On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
-> > > > > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
-> > > > > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > > > > > + Linus
-> > > > > > > + Marek
-> > > > > > > + Laurent
-> > > > > > > + Robert
-> > > > > > > 
-> > > > > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson wrote:
-> > > > > > > >
-> > > > > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > > > > > > bridge")' attempted to simplify the case of expressing a simple panel
-> > > > > > > > under a DSI controller, by assuming that the first non-graph child node
-> > > > > > > > was a panel or bridge.
-> > > > > > > >
-> > > > > > > > Unfortunately for non-trivial cases the first child node might not be a
-> > > > > > > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > > > > > > DisplayPort, or an opp-table represented before the panel node.
-> > > > > > > >
-> > > > > > > > In these cases the reverted commit prevents the caller from ever finding
-> > > > > > > > a reference to the panel.
-> > > > > > > >
-> > > > > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > > > > > > > panel or bridge")', in favor of using an explicit graph reference to the
-> > > > > > > > panel in the trivial case as well.
-> > > > > > > 
-> > > > > > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > > > > > switched drivers.  Do you have any suggestions on how to proceed to
-> > > > > > > succeed in those use cases as well?
-> > > > > > 
-> > > > > > I guess we could create a new helper for those, like
-> > > > > > devm_drm_of_get_bridge_with_panel, or something.
-> > > > > 
-> > > > > Oh wow I feel stupid for not thinking about that.
-> > > > > 
-> > > > > Yeah I agree that it seems like the best option.
-> > > > 
-> > > > Should I prepare a patch with such a new helper?
-> > > > 
-> > > > The idea would be to keep drm_of_find_panel_or_bridge only for the of graph
-> > > > case and add one for the child node case, maybe:
-> > > > drm_of_find_child_panel_or_bridge.
-> > > > 
-> > > > I really don't have a clear idea of which driver would need to be switched
-> > > > over though. Could someone (Jagan?) let me know where it would be needed?
-> > > > 
-> > > > Are there cases where we could both expect of graph and child node?
-> > > > (i.e. does the new helper also need to try via of graph?)
-> > > 
-> > > I still think we should use OF graph uncondtionally, even in the DSI
-> > > case. We need to ensure backward-compatibility, but I'd like new
-> > > bindings (and thus new drivers) to always use OF graph.
-> > 
-> > I just went over the thread on "drm: of: Improve error handling in bridge/panel
-> > detection" again and I'm no longer sure there's actually still an issue that
-> > stands, with the fix that allows returning -ENODEV when possible.
-> > 
-> > The remaining issue that was brought up was with a connector node, but it should
-> > be up to the driver to detect that and avoid calling drm_of_find_panel_or_bridge
-> > in such situations.
-> > 
-> > So with that in mind it feels like the child node approach can be viable
-> > (and integrated in the same helper).
-> > 
-> > We might still want to favor an explicit OF graph approach, but note that
-> > dsi-controller.yaml also specifies extra properties that are specific to
-> > MIPI DSI and I'm not sure there are equivalent definitions for the OF graph
-> > approach.
-> > 
-> > What do you think?
-> 
-> I don't think Laurent's point was to move the child node away from its
-> DSI controller, that part doesn't make much sense. The panel or bridge
-> is still accessed through the DSI bus, so it very much belongs there.
-> 
-> What he meant I think was that we mandate the OF graph for all panels,
-> so for panels/bridges controlled through DCS, you would still list the
-> output through the graph.
 
-That's right. A DCS panel would still be a child of the DSI controller.
+--3/axAlvjop7jo6tE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Regards,
+On Wed, Apr 27, 2022 at 11:28:57AM +0200, Miquel Raynal wrote:
 
-Laurent Pinchart
+> The patch actually look independent, so if it's fine for you I can take
+> the two mtd patches and let you merge the spi/binding changes.
+
+> Would this work for you?
+
+That sounds great.
+
+--3/axAlvjop7jo6tE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJpQPkACgkQJNaLcl1U
+h9D1ngf/VxXyRrmMrFHXOQIT/K9jzEroGCHRoT3IkpzG2UwCERVkL3XY1VX8Bem6
+oeIQERn5z5pFMCvgeLOWDvW4LuV0J0E2Wp9IjvFxdX8fA5K7Tbg3albH0isMfcUp
+FZcnMXUynnhcg/dTJYMXHunlQH+8yv84MjxSqq1wDmrHWCy76vraVev5n2eoBdo9
+fQ06pKoqMEgkf1ICdUnlW8i9Y8LgmlZSyj7iGRhfw3H2MxBIHVmi2TOdAYM2u/eC
+sanKESRfPqRjsbK6kkTy4oePpH0uR+aRLqzqtX9qcF/Wnw+A+WZBc8gQPZZqLvjX
+9YGhLRk4sIgGwjyxbojuoeAw+pqSrA==
+=3uM/
+-----END PGP SIGNATURE-----
+
+--3/axAlvjop7jo6tE--

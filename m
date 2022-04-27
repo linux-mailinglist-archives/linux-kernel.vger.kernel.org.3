@@ -2,163 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08491511A04
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33F8511948
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbiD0Odw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S238024AbiD0OfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237948AbiD0Oda (ORCPT
+        with ESMTP id S237766AbiD0OfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:33:30 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB3F2630;
-        Wed, 27 Apr 2022 07:30:16 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w4so2743311wrg.12;
-        Wed, 27 Apr 2022 07:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=svV9IgBLsOwIZmPj9x7hu2PTvXDW3pGjVejTuhnh/mI=;
-        b=MDnnrjiWGOwxINe0CR2NtRtg3tFohitnFemsC7KPWxPgakmlwCBapdJpZ1PQv10tIt
-         NNFVT+oJi3BBncAEcqp1VzW+9ubQbT9W2S5/Po8pwj7jQPF8ru9RFwtAzzObjk+x54GL
-         RfOIboxHsC5p7JABnxayDVk91IK7vmXe3kqB+c0BpECFyW1qGiSvtdhOQyUpBhlHwoxU
-         SZobtnVNXBX5maDtcE8SJTBAMo0ujMvEgUc1rsoHcwcpPk3rO6PuRpL44KAmOMKEfAiL
-         v9Ez/NsHpvzaJK5jQ1zLTJKYpZnJ2ta/ZZPbp1gJ9FULmCE5GauIetkO+BarSbB26f4I
-         PUxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=svV9IgBLsOwIZmPj9x7hu2PTvXDW3pGjVejTuhnh/mI=;
-        b=vCdOMnAM8C13yvy9DkndPI8j3tHSr35W/SlBpd4So/oSt2LuXK33CxYo1BqZazXxFu
-         8FRBWf6sx3R+atZK0lhk9jhIIVFPNFJt/nHm6PLRZtZE6iK1eh42AcLRaNPBc3FK8MCQ
-         ZACTnL0Q6alVcwbOqwamwian9Hd/hPUsXsb38EqUDL8LS9tl0k1OrjpPU2ILmxX+/Okg
-         jZ44H31l5asbm0tJtgB5O5oTMm7SQFvekp+cduYHRdHsZ1wD4/7AXmoXiFYWxq0VMRsj
-         HoRHNOZiyUjpHuNuenPf3jlzyqIDUATyZlNa0hmp5esLKaaFz87IeywwayorA1b+yeeE
-         SV6Q==
-X-Gm-Message-State: AOAM531mUTWGo+e6Z+omqe70uzB4pHuj9TpY9jZ9oM8iMjHbOS0Hkey2
-        VOsyXXT7VVh4ClE30FKovUc=
-X-Google-Smtp-Source: ABdhPJyWckK2wEaJ73czrMXjyObmWPbFHWzDIiDtLWunHnZstbRXpOZFTOOkAjj0DjFFtwPUhM1bMQ==
-X-Received: by 2002:adf:eb07:0:b0:207:8534:2ef6 with SMTP id s7-20020adfeb07000000b0020785342ef6mr22294174wrn.62.1651069815015;
-        Wed, 27 Apr 2022 07:30:15 -0700 (PDT)
-Received: from tiger.museclub.art (p200300cf9f393100d379c1e4199524ea.dip0.t-ipconnect.de. [2003:cf:9f39:3100:d379:c1e4:1995:24ea])
-        by smtp.googlemail.com with ESMTPSA id i14-20020a1c540e000000b00393dc91e9c9sm1721625wmb.17.2022.04.27.07.30.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:30:14 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] hwmon: (asus-ec-sensors) add PRIME X470-PRO board
-Date:   Wed, 27 Apr 2022 16:30:01 +0200
-Message-Id: <20220427143001.1443605-5-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
-References: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+        Wed, 27 Apr 2022 10:35:18 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2133.outbound.protection.outlook.com [40.107.114.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A465C1FA6F;
+        Wed, 27 Apr 2022 07:32:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EkcUTNYEziQEaHYE/2n7+3eagM3cypNz3FqJ1F6kZ6padx2kBzUPSiXM8TVS9cOj8NJ3TMX3b8dsGcvRATjim92qn4L2ARc+o3o1PgoGovonBHd/FOUbhnS9w50JLT3ZCYClpc5XTteIK6ps6dRTUdEEFLjR3qJd+odiMmpPjTmwO8fFIAGsZga2h3ZtyUTEs0cJtvLwjgnTfme0Z59tgAzh3YUgH5GnhwznYHXrb3sR5bY+5kHHTkHirBjbsYXFIsCteonIzfJprb3yeYcV+vVKOgAGwd5BjIUArieQPWBf3mu91BKGZWUDbbjidguxkeN/0rR3HbjY+K4sIiOn9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9xt1Af93NnvzZI+ZBc34yLt27w4pz9djae310iRmfvY=;
+ b=Xv3m5VTMO6yWLpzf9ISAAc/xIudBhMv2Sfukz1j5EXZUSaOqQpGwJlV+ovlPEwPDlkccI9CWNobj+iaPouVheYXgLMPC5haLdo8H69jgl3RA2TmwEPLYsKXmWJkKJnGPknztPf/nMKApa+I3KkU0pHNo1pjXMyGTouGl6Xwtbtqg422n6pPf/T3+kVjx3xl60B2LjLAFLtrWz6JVWRrjKszAEjQVMemnWUoU8Vc2LyQLXzGXPJk7G4ea36wbpwWVfPL/fLEaNS68ixJkl3W5RdCDmv2gExEiIctEDlj9mBkmf5EgjNFk6jXeXJ06usSPWLW7OZzCC4lKAjgCYNLWEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9xt1Af93NnvzZI+ZBc34yLt27w4pz9djae310iRmfvY=;
+ b=fiBPlhrW0zDyrVkXYzs6YiIvg96gS4kwRSsDGIVOKDHpE0/y0Vux1ye/7MAIxfcrL5Ya8Xvp3DcnTjFPaZyv5Ml2ajNPLjyZve1+fFny2jayO3VFoyxRxCovqoYIPt1gNSZm0D4ur6rhSedD9jmv8U+fyncFtygjzj+DFeZH/+A=
+Received: from OS3PR01MB6593.jpnprd01.prod.outlook.com (2603:1096:604:101::7)
+ by OS3PR01MB8090.jpnprd01.prod.outlook.com (2603:1096:604:170::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Wed, 27 Apr
+ 2022 14:32:03 +0000
+Received: from OS3PR01MB6593.jpnprd01.prod.outlook.com
+ ([fe80::a07c:4b38:65f3:6663]) by OS3PR01MB6593.jpnprd01.prod.outlook.com
+ ([fe80::a07c:4b38:65f3:6663%9]) with mapi id 15.20.5206.012; Wed, 27 Apr 2022
+ 14:32:03 +0000
+From:   Min Li <min.li.xe@renesas.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH net 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
+ support
+Thread-Topic: [PATCH net 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
+ support
+Thread-Index: AQHYWaR3Qsdc/gnqv0WbXtgKN/pPKa0Cs/8AgAEffxA=
+Date:   Wed, 27 Apr 2022 14:32:03 +0000
+Message-ID: <OS3PR01MB6593BE917485C87E32D1E5FDBAFA9@OS3PR01MB6593.jpnprd01.prod.outlook.com>
+References: <1651001574-32457-1-git-send-email-min.li.xe@renesas.com>
+ <20220426142150.47b057a3@kernel.org>
+In-Reply-To: <20220426142150.47b057a3@kernel.org>
+Accept-Language: en-CA, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 76414dc4-6bdb-4a80-4615-08da285ab2d2
+x-ms-traffictypediagnostic: OS3PR01MB8090:EE_
+x-microsoft-antispam-prvs: <OS3PR01MB8090A50A83935D63B5A1DC97BAFA9@OS3PR01MB8090.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 97ZhPUHaxP+iXRGsfPs/1m+be5UtRIXMA9pYCG1RH9UTmUYRSCSXHa5LytBfsjIenn8O0SAZ0dOzFLWtMtmmZEJJxh9z0iUU2qfHGmoo27Uu/5vOXL8aM070KXEHQhzPQ5ADuiHu3mR2h5x9qugzkYSRh1hTprxGyQwhNA+LJG7PhGZFLZ6iLi3uNLMspkcCnhn7EqXcRZYULD9wwdBmLGlV+u4vqYr3oy+vVaCIn7sS1Bpq1CmpJZtxcKxbVOFkaTNd0JU5Z4FV5wqSHsSzVlJm7CuiP16/J/Q2J930vNxkOCizuJuc8eYWB+vTHccJM8WzSA/XJIRnbFUklPO8YpuBBTp+UXcqeVGWjGP+uWgkRyKsW9uTgfZUQ5jl/ia8Z4++h4RE7xVHDTjAVO8B9ug6UkZf629WEO8ssnd1L7vqO4f4ijqcBvd0FL1R06BKtdkYJ6fOhuqg0Yh3WviB6lGuo04mGUnZGcK4Fdga9Up0yjIw3rdzit82tpzGS7rOFg1BOp+5zSJJ5Ia05XDSDukVZIHgiDS0N/oe15Cjxa67mLjLzk61PlmfXscoNPMrYfGAJ+U/SKPToieSAWScKlUmWx4duQQay5Cdeq0sk1YfbSb576sQ9gcZ/yJIPPQbWtaDvAQEaOTWc4QJszf1cNdzmVPtU1j9DlAAT3FJ+2fZZ/A15mm2RX8im2mFKe6lGHcfnRSUrkLnwPJGRTmgIg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB6593.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(4326008)(66446008)(71200400001)(38100700002)(558084003)(86362001)(38070700005)(26005)(7696005)(66476007)(66556008)(6506007)(2906002)(122000001)(52536014)(5660300002)(33656002)(64756008)(8936002)(8676002)(508600001)(55016003)(66946007)(316002)(186003)(76116006)(6916009)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ga5oHeF0iTFzBa6NuJIFmZlCff5J3qA5oUa0LBL9AMrmRDk1MgR2tkESLbjj?=
+ =?us-ascii?Q?cz31jJUTQUawu+zEqJIgTk6DP26hP3UMt9YEPU/ZcJ+95G55EkpRz4atSYHX?=
+ =?us-ascii?Q?y3Vwt3aQQsFdxz1VHMOV4osgKRolkgZIEd/XgQVfUFkXdOoiyx7gmZScA8JP?=
+ =?us-ascii?Q?sFvWRrKIQdxua4a5g4567LPARnBZWN+b4IAceEC46Tsnc/DR+Sj98uegXfH8?=
+ =?us-ascii?Q?MQholJAX+XgcAshSs6Nl/uJjozsx2CMll1q2+6B5T7YDRIoXE7y8mK06jOiH?=
+ =?us-ascii?Q?HpGbL6l/jyAru9t0FFmhxB9zClbhi6/JAysEhspXs7fZ+SIIUUNHR3CJEWj6?=
+ =?us-ascii?Q?JlW3FalE1vAFWXgPCV7ouD0TCta77gVMVyo2z9bMS+E9FeL8YgrEGWsfqGk3?=
+ =?us-ascii?Q?djnIpZod7wa+nkbMoLadIXT0W7XWmzX6988w05XXfhsTb+XJVCgRVCMXJuEW?=
+ =?us-ascii?Q?QS9SsL8KwcOhLEh1xjgex5880G9ayYTxLjE8Tb0DCnstxqkFYGsWiMV3hd5Y?=
+ =?us-ascii?Q?2rMz+fpEMH3C0He9WW65qPaprDpwhWuDpNCPFVjbPRv4qSAuGO+ii53FFpV3?=
+ =?us-ascii?Q?bow/jYq73XnfQdikbuqXo9lVqfFWy1K6N71bg9pThVyOl6hjZpzeNjE3tZpY?=
+ =?us-ascii?Q?MsnNyXC8+x2KmMT+Pnfp+GzwTGQJ/m6r9Vv5+VL1AgCVY82UFsTRg5todL0l?=
+ =?us-ascii?Q?p5eFHwjRAE1PtGX/yG9VvbDSU4ChNF7sUFGyph364dC4DD8sB6MwOIHr7llu?=
+ =?us-ascii?Q?8aF7Nhq8BhIJivz9GMQ+nJXxUCKCP2lOeUTBYKQOZxQTdoyOpkKEeXGG70pg?=
+ =?us-ascii?Q?c8bGhhS9mERH6WxNepxkV9PMnh5fy6cDF3BywzLtWC5ERWCgf7oj8cSqhHEL?=
+ =?us-ascii?Q?kW8euJiX2o+SoP5nh5nrGtZtm6NTBNrHnGM54rI/eQhMiE15us4LO6SMeJnY?=
+ =?us-ascii?Q?ieqhkT/In1eIYRwh0udfqAqUYunTkqw2HO2XKcevFfJHUCTyRfB3CCsEWz7N?=
+ =?us-ascii?Q?4oz3D+HNjQymURVlr53yFf4xe87IJHAjnHmpe64AbVVnpvw+2CAhcsZYXnZd?=
+ =?us-ascii?Q?loJq7R63o+5KvMgJW9/T9pJU0M3fJvsIGJVfqTM/nGy02ZnS+LDI/NsnHKqj?=
+ =?us-ascii?Q?MKezc1v8g7LmenSGDPvzRAuGwcCaZenRwt7DGvvNfL/myIxHPipDv7p7beMR?=
+ =?us-ascii?Q?8Dh/mzMpw3gs8b36QzkKO6PrIOqp7nHNBhoHKK3whLzcpnx23hTubgCYMa/U?=
+ =?us-ascii?Q?S6xRkbvQH/Fkgh9BL8wJ3eA+wuUBuYpr7fdB0fevfB7mpJY1uE2qWiN+xyTL?=
+ =?us-ascii?Q?FzICqkE9DCTnTclSUEqJqEDvxCrkPFpIm5iCAT1PVh5lVa7VSbwwkC952vxN?=
+ =?us-ascii?Q?pDGpcRJZsOhCWC7g1IBLq/qbutjQ8y3+C6L+8jR4/NcRrJAYrgWt67kV7jbr?=
+ =?us-ascii?Q?DdLMtoBqUOoYgZuofpR7JavUEa1OkYljMYmTAnVY+ek0Xleq/wqQV/2oAPBj?=
+ =?us-ascii?Q?do8rYaERBFeC9hqdSdhCIPakOpmGs7dyIW5VdNWJXM0FNLdVneny0yKy9Lsu?=
+ =?us-ascii?Q?3/xeSCVcXJnGH3o8BMZZAasJ4wqmpOrQtfch13+OMjve2qjRE9PGqk+8z7dR?=
+ =?us-ascii?Q?6Tu5tYZvXwb8wysNv+EPAonx2Mj0THow0J3n3YQfZ3YPXJnNfkbQ9JWODkWT?=
+ =?us-ascii?Q?9NK9i43MGjNP1qmUBll214qPTlpb3br8GBkXWVnyv4UfPz5+KKG6viIj5eNc?=
+ =?us-ascii?Q?cWNIie3Wow=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB6593.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76414dc4-6bdb-4a80-4615-08da285ab2d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2022 14:32:03.8483
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: t4bSDYWhxr+UNBEFyYPGoKINMdV98NRac6rtDDZxCOhXdchpj7nNM6V19dVeUS/na02epORv3RUKAMwbIY229g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8090
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This board is supposed to be handled by the asus-wmi-sensors driver,
-but due to a buggy WMI implementation the driver and the official ASUS
-software make the BIOS hang together with fan controls [1, 2].
+> On Tue, 26 Apr 2022 15:32:53 -0400 Min Li wrote:
+> > Use TOD_READ_SECONDARY for extts to keep TOD_READ_PRIMARY for
+> gettime
+> > and settime exclusively
+>=20
+> Does not build on 32 bit.
+>=20
 
-This driver complements values provided by the SIO chip and does not
-freeze the BIOS, as tested by a user [2].
+Hi Jakub
 
-[1] https://github.com/electrified/asus-wmi-sensors/blob/master/README.md
-[2] https://github.com/zeule/asus-ec-sensors/issues/12
+I compiled with arm-linux-gnueabi-
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 43 +++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+By 32 bit, did you mean x86?
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 109c3920d77c..998d49d6b799 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -137,10 +137,41 @@ enum ec_sensors {
- 
- enum board_family {
- 	family_unknown,
-+	family_amd_400_series,
- 	family_amd_500_series,
- };
- 
- /* All the known sensors for ASUS EC controllers */
-+static const struct ec_sensor_info sensors_family_amd_400[] = {
-+	[ec_sensor_temp_chipset] =
-+		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-+	[ec_sensor_temp_cpu] =
-+		EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-+	[ec_sensor_temp_mb] =
-+		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] =
-+		EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+	[ec_sensor_in_cpu_core] =
-+		EC_SENSOR("CPU Core", hwmon_in, 2, 0x00, 0xa2),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
-+	[ec_sensor_fan_vrm_hs] =
-+		EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-+	[ec_sensor_fan_chipset] =
-+		/* no chipset fans in this generation */
-+		EC_SENSOR("Chipset", hwmon_fan, 0, 0x00, 0x00),
-+	[ec_sensor_fan_water_flow] =
-+		EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xb4),
-+	[ec_sensor_curr_cpu] =
-+		EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
-+	[ec_sensor_temp_water_in] =
-+		EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x0d),
-+	[ec_sensor_temp_water_out] =
-+		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x0b),
-+};
-+
- static const struct ec_sensor_info sensors_family_amd_500[] = {
- 	[ec_sensor_temp_chipset] =
- 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-@@ -186,6 +217,15 @@ struct ec_board_info {
- };
- 
- static const struct ec_board_info board_info[] = {
-+	{
-+		.board_names = {"PRIME X470-PRO"},
-+		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+			SENSOR_FAN_CPU_OPT |
-+			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+		.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+		.family = family_amd_400_series,
-+	},
- 	{
- 		.board_names = {"PRIME X570-PRO"},
- 		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
-@@ -753,6 +793,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
- 	ec_data->board_info = pboard_info;
- 
- 	switch (ec_data->board_info->family) {
-+	case family_amd_400_series:
-+		ec_data->sensors_info = sensors_family_amd_400;
-+		break;
- 	case family_amd_500_series:
- 		ec_data->sensors_info = sensors_family_amd_500;
- 		break;
--- 
-2.35.1
-
+Min=20

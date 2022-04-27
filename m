@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D3E511A29
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1294C511A39
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236886AbiD0N7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S236988AbiD0N7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236897AbiD0N6s (ORCPT
+        with ESMTP id S236897AbiD0N7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:58:48 -0400
+        Wed, 27 Apr 2022 09:59:06 -0400
 Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB17AE44;
-        Wed, 27 Apr 2022 06:55:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7BC2616;
+        Wed, 27 Apr 2022 06:55:54 -0700 (PDT)
 Received: from janitor.denx.de (unknown [62.91.23.180])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: noc@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 7995E83E9E;
-        Wed, 27 Apr 2022 15:55:32 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id 12B1483E4F;
+        Wed, 27 Apr 2022 15:55:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1651067732;
-        bh=8eYvVBd/3DpcmHQqYetFdTfTTiOdFCR9Rown27tb0EE=;
+        s=phobos-20191101; t=1651067753;
+        bh=N10tdwVskdIVBjgQABdC0UuUBg746fyeJufyCgVkEr4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e7L4iTXLuiajqZfBlTEBSf1IBTUllPmmHPSBnSFELKZXC9zroOQ2U8prp9nBPUmjh
-         s4oLl/5pBVQM4Db837ilGmUG055VTjc2qYta09NAhEQCVjABXU2q59DlEI27a86bYf
-         IflFC2lllOoOxdEe8+TEBCDfqU3gxqp95RsTpeo56X8rVt/wV+9UVRP1dM8eRJDXZ7
-         mjTRRdVHjvxgM/aO1+6j6SZcvRIACcnmwBMhh4ckPwDLFpZRkDLsLXqXilM7+Jf3V0
-         TDn3RfCnKhC2JeKPxOfKU+530ozWzup0q5HbBe1UZB/rCBa9GtE6sleMEOXdTs6acp
-         CFrPSU9WldxJQ==
+        b=WvRXOHifkAWvFgjQ1sGzM+0stqWt2GXAn2oBofwEFJv0er/sqVS/MsVqzietnG+bw
+         DDUl+2gH22iL7AsQ78x729Rp/PoNF+eEPJF252SDcWZ6RXOjCxg8rNb6wkch4YAxMo
+         9miX7O7l6cnCOKSslL8x9sfb6mGWNuZ44V+2zUl2Qi8uHzDfnhoSWcpHVhv5k6FblJ
+         06vVoABCKTYqC99OwgnN/nhN3MYxomqBdVyFrv1T1lleCqKmqlCQk2AhTzJKP4p6IJ
+         wBEAjf0L3PMefUrmtvQWuEbIv0eLp+oc+0lsbZmb1/m/AYc/eOd2qLpPVZ+RA2kzGb
+         ZZAnjDHxYJUDg==
 Received: by janitor.denx.de (Postfix, from userid 108)
-        id 33130A030E; Wed, 27 Apr 2022 15:55:32 +0200 (CEST)
+        id B2FA4A0228; Wed, 27 Apr 2022 15:55:52 +0200 (CEST)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 X-Spam-Level: 
@@ -40,29 +40,25 @@ X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 Received: from xpert.denx.de (xpert.denx.de [192.168.0.4])
-        by janitor.denx.de (Postfix) with ESMTPS id BE178A00A4;
-        Wed, 27 Apr 2022 15:55:17 +0200 (CEST)
+        by janitor.denx.de (Postfix) with ESMTPS id 7E75AA00A4;
+        Wed, 27 Apr 2022 15:55:33 +0200 (CEST)
 Received: by xpert.denx.de (Postfix, from userid 535)
-        id AF0EA3E0540; Wed, 27 Apr 2022 15:55:17 +0200 (CEST)
+        id 6707F3E0540; Wed, 27 Apr 2022 15:55:33 +0200 (CEST)
 From:   Philip Oberfichtner <pro@denx.de>
-Cc:     Philip Oberfichtner <pro@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc:     Philip Oberfichtner <pro@denx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, matthias.winker@de.bosch.com
-Subject: [PATCH v3 3/4] dt-bindings: arm: Add bosch acc board
-Date:   Wed, 27 Apr 2022 15:52:31 +0200
-Message-Id: <20220427135229.2339865-3-pro@denx.de>
+Subject: [PATCH v3 4/4] ARM: dts: Add bosch acc board
+Date:   Wed, 27 Apr 2022 15:52:33 +0200
+Message-Id: <20220427135229.2339865-4-pro@denx.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220427135229.2339865-1-pro@denx.de>
 References: <20220427135229.2339865-1-pro@denx.de>
@@ -75,49 +71,852 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree binding for the Bosch ACC board, based on i.MX6 Dual.
+Add device tree for the Bosch ACC board, based on i.MX6 Dual.
 
 Signed-off-by: Philip Oberfichtner <pro@denx.de>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
 
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Olof Johansson <olof@lixom.net>
+Cc: soc@kernel.org
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
 Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Tim Harvey <tharvey@gateworks.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
-Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Li Yang <leoyang.li@nxp.com>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-arm-kernel@lists.infradead.org
 Cc: devicetree@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Cc: matthias.winker@de.bosch.com
 
 ---
 
-Changes in v3: none
-Changes in v2: Acked-by Krzysztof
----
- Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v3:
+- use panel compatible string instead of display-timings
+- adapt node naming for regulators and led
+- remove unreferenced pinctrl configs
+- remove unused audmux node
+- remove or adapt invalid or superfluous properties
+- use real pad settings instead of 0x80000000
+- fix other minor style issues
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 08bdd30e511c..9deb568761c1 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -192,6 +192,7 @@ properties:
-         items:
-           - enum:
-               - auvidea,h100              # Auvidea H100
-+              - bosch,imx6q-acc           # Bosch ACC i.MX6 Dual
-               - boundary,imx6q-nitrogen6_max
-               - boundary,imx6q-nitrogen6_som2
-               - boundary,imx6q-nitrogen6x
+Changes in v2:
+- fix style errors in node naming
+- place regulators under root node
+- remove superfluous status properties
+- remove undocumented nodes and properties
+- use color instead of label for leds
+- fix other minor style issues
+---
+ arch/arm/boot/dts/Makefile            |   1 +
+ arch/arm/boot/dts/imx6q-bosch-acc.dts | 783 ++++++++++++++++++++++++++
+ 2 files changed, 784 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6q-bosch-acc.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7c16f8a2b738..a6eff45bfee3 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -547,6 +547,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
+ 	imx6q-b450v3.dtb \
+ 	imx6q-b650v3.dtb \
+ 	imx6q-b850v3.dtb \
++	imx6q-bosch-acc.dtb \
+ 	imx6q-cm-fx6.dtb \
+ 	imx6q-cubox-i.dtb \
+ 	imx6q-cubox-i-emmc-som-v15.dtb \
+diff --git a/arch/arm/boot/dts/imx6q-bosch-acc.dts b/arch/arm/boot/dts/imx6q-bosch-acc.dts
+new file mode 100644
+index 000000000000..81711869210d
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6q-bosch-acc.dts
+@@ -0,0 +1,783 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Support for the i.MX6-based Bosch ACC board.
++ *
++ * Copyright (C) 2016 Garz & Fricke GmbH
++ * Copyright (C) 2018 DENX Software Engineering GmbH, Heiko Schocher <hs@denx.de>
++ * Copyright (C) 2018 DENX Software Engineering GmbH, Niel Fourie <lusus@denx.de>
++ * Copyright (C) 2019-2021 Bosch Thermotechnik GmbH, Matthias Winker <matthias.winker@bosch.com>
++ * Copyright (C) 2022 DENX Software Engineering GmbH, Philip Oberfichtner <pro@denx.de>
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include "imx6q.dtsi"
++
++/ {
++	model = "Bosch ACC";
++	compatible = "bosch,imx6q-acc", "fsl,imx6q";
++
++	aliases {
++		serial0 = &uart2;
++		serial1 = &uart1;
++		i2c0 = &i2c1;
++		i2c1 = &i2c2;
++		i2c2 = &i2c3;
++		mmc0 = &usdhc4;
++		mmc1 = &usdhc2;
++	};
++
++	memory@10000000 {
++		device_type = "memory";
++		reg = <0x10000000 0x40000000>;
++	};
++
++	backlight_lvds: backlight_lvds {
++		compatible = "pwm-backlight";
++		pwms = <&pwm1 0 200000>;
++		brightness-levels = <0 61 499 1706 4079 8022 13938 22237 33328 47623 65535>;
++		num-interpolated-steps = <10>;
++		default-brightness-level = <60>;
++		power-supply = <&reg_lcd>;
++	};
++
++	panel {
++		compatible = "dataimage,fg1001l0dsswmg01";
++		backlight = <&backlight_lvds>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&lvds0_out>;
++			};
++		};
++	};
++
++	refclk: refclk {
++		compatible = "fixed-factor-clock";
++		#clock-cells = <0>;
++		clocks = <&clks IMX6QDL_CLK_CKO2>;
++		clock-div = <1>;
++		clock-mult = <1>;
++		clock-output-names = "12mhz_refclk";
++		assigned-clocks = <&clks IMX6QDL_CLK_CKO>,
++				  <&clks IMX6QDL_CLK_CKO2>,
++				  <&clks IMX6QDL_CLK_CKO2_SEL>;
++		assigned-clock-parents = <&clks IMX6QDL_CLK_CKO2>,
++					 <&clks IMX6QDL_CLK_CKO2_PODF>,
++					 <&clks IMX6QDL_CLK_OSC>;
++		assigned-clock-rates = <0>, <12000000>, <0>;
++	};
++
++	cpus {
++		cpu0: cpu@0 {
++			operating-points = <
++				/* kHz    uV */
++				1200000 1275000
++				996000  1225000
++				852000  1225000
++				792000  1150000
++				396000  950000
++			>;
++			fsl,soc-operating-points = <
++				/* ARM kHz  SOC-PU uV */
++				1200000 1225000
++				996000	1175000
++				852000	1175000
++				792000	1150000
++				396000	1150000
++			>;
++		};
++
++		cpu1: cpu@1 {
++			operating-points = <
++				/* kHz    uV */
++				1200000 1275000
++				996000  1225000
++				852000  1225000
++				792000  1150000
++				396000  950000
++			>;
++			fsl,soc-operating-points = <
++				/* ARM kHz  SOC-PU uV */
++				1200000 1225000
++				996000	1175000
++				852000	1175000
++				792000	1150000
++				396000	1150000
++			>;
++		};
++	};
++
++	pwm-leds {
++		compatible = "pwm-leds";
++
++		led_red: led-0 {
++			color = <LED_COLOR_ID_RED>;
++			max-brightness = <248>;
++			default-state = "off";
++			pwms = <&pwm2 0 500000>;
++		};
++
++		led_white: led-1 {
++			color = <LED_COLOR_ID_WHITE>;
++			max-brightness = <248>;
++			default-state = "off";
++			pwms = <&pwm3 0 500000>;
++			linux,default-trigger = "heartbeat";
++		};
++	};
++
++	gpio-leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reset_gpio_led>;
++
++		led-2 {
++			color = <LED_COLOR_ID_RED>;
++			gpios = <&gpio5 18 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++	};
++
++	reg_5P0: regulator-5P0 {
++		compatible = "regulator-fixed";
++		regulator-name = "5P0";
++	};
++
++	reg_vin: regulator-vin {
++		compatible = "regulator-fixed";
++		regulator-name = "VIN";
++		regulator-min-microvolt = <4500000>;
++		regulator-max-microvolt = <4500000>;
++		regulator-always-on;
++		vin-supply = <&reg_5P0>;
++	};
++
++	reg_usb_otg_vbus: regulator-usb-otg-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb_otg_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++
++	reg_usb_h1_vbus: regulator-usb-h1-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb_h1_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++		vin-supply = <&reg_5P0>;
++	};
++
++	reg_usb_h2_vbus: regulator-usb-h2-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "usb_h2_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&reg_5P0> ;
++		regulator-always-on;
++	};
++
++	reg_vsnvs: regulator-vsnvs {
++		compatible = "regulator-fixed";
++		regulator-name = "VSNVS_3V0";
++		regulator-min-microvolt = <3000000>;
++		regulator-max-microvolt = <3000000>;
++		regulator-always-on;
++		vin-supply = <&reg_5P0>;
++	};
++
++	reg_lcd: regulator-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "LCD0 POWER";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_lcd_enable>;
++		gpio = <&gpio3 23 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-boot-on;
++	};
++
++	reg_dac: regulator-dac {
++		compatible = "regulator-fixed";
++		regulator-name = "vref_dac";
++		regulator-min-microvolt = <20000>;
++		regulator-max-microvolt = <20000>;
++		vin-supply = <&reg_5P0> ;
++		regulator-boot-on;
++	};
++
++	reg_sw4: regulator-sw4 {
++		compatible = "regulator-fixed";
++		regulator-name = "SW4_3V3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++		vin-supply = <&reg_5P0>;
++	};
++
++	reg_sys: regulator-sys {
++		compatible = "regulator-fixed";
++		regulator-name = "SYS_4V2";
++		regulator-min-microvolt = <4200000>;
++		regulator-max-microvolt = <4200000>;
++		regulator-always-on;
++		vin-supply = <&reg_5P0>;
++	};
++};
++
++&reg_arm {
++	vin-supply = <&sw2_reg>;
++};
++
++&reg_soc {
++	vin-supply = <&sw1c_reg>;
++};
++
++&reg_vdd1p1 {
++	vin-supply = <&reg_vsnvs>;
++};
++
++&reg_vdd2p5 {
++	vin-supply = <&reg_vsnvs>;
++};
++
++&reg_vdd3p0 {
++	vin-supply = <&reg_vsnvs>;
++};
++
++&fec {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enet>;
++	clocks = <&clks IMX6QDL_CLK_ENET>,
++		<&clks IMX6QDL_CLK_ENET>,
++		<&clks IMX6QDL_CLK_ENET>,
++		<&clks IMX6QDL_CLK_ENET_REF>;
++	clock-names = "ipg", "ahb", "ptp", "enet_out";
++	phy-mode = "rmii";
++	phy-supply = <&reg_sw4>;
++	phy-handle = <&ethphy>;
++	status = "okay";
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		ethphy: ethernet-phy@0 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			reg = <0>;
++			interrupt-parent = <&gpio1>;
++			interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
++			smsc,disable-energy-detect;
++		};
++	};
++};
++
++&gpu_vg {
++	status = "disabled";
++};
++
++&gpu_2d {
++	status = "disabled";
++};
++
++&i2c1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	clock-frequency = <400000>;
++	status = "okay";
++
++	eeprom: eeprom@50 {
++		compatible = "atmel,24c32";
++		reg = <0x50>;
++		pagesize = <32>;
++	};
++
++	lm75: sensor@49 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_lm75>;
++		compatible = "national,lm75b";
++		reg = <0x49>;
++	};
++
++	pmic: pmic@8 {
++		compatible = "fsl,pfuze100";
++		reg = <0x08>;
++
++		regulators {
++			sw1c_reg: sw1c {
++				regulator-name = "VDD_SOC (sw1abc)";
++				regulator-min-microvolt = <1275000>;
++				regulator-max-microvolt = <1500000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <6250>;
++			};
++
++			sw2_reg: sw2 {
++				regulator-name = "VDD_ARM (sw2)";
++				regulator-min-microvolt = <1050000>;
++				regulator-max-microvolt = <1500000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <6250>;
++			};
++
++			sw3a_reg: sw3a {
++				compatible = "regulator-fixed";
++				regulator-name = "DDR_1V5a";
++				regulator-boot-on;
++				regulator-always-on;
++
++			};
++
++			sw3b_reg: sw3b {
++				compatible = "regulator-fixed";
++				regulator-name = "DDR_1V5b";
++				regulator-boot-on;
++				regulator-always-on;
++
++			};
++
++			sw4_reg: sw4 {
++				regulator-name = "AUX 3V15 (sw4)";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3300000>;
++			};
++
++			swbst_reg: swbst {
++				status = "disabled";
++				regulator-min-microvolt = <5000000>;
++				regulator-max-microvolt = <5150000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			snvs_reg: vsnvs {
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <3000000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			vref_reg: vrefddr {
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			vgen1_reg: vgen1 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1550000>;
++				regulator-always-on;
++			};
++
++			vgen2_reg: vgen2 {
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1550000>;
++				regulator-always-on;
++			};
++
++			vgen3_reg: vgen3 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++			};
++
++			vgen4_reg: vgen4 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			vgen5_reg: vgen5 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			vgen6_reg: vgen6 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++			};
++		};
++	};
++
++	rtc: rtc@51 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_rtc>;
++		compatible = "nxp,pcf8563";
++		reg = <0x51>;
++	};
++};
++
++&i2c2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	clock-frequency = <100000>;
++	status = "okay";
++
++	eeprom_ext: eeprom@50 {
++		compatible = "atmel,24c32";
++		reg = <0x50>;
++		pagesize = <32>;
++	};
++};
++
++&i2c3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c3>;
++	clock-frequency = <400000>;
++	status = "okay";
++
++	exc3000: touchscreen@2a {
++		compatible = "eeti,exc3000";
++		reg = <0x2a>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ctouch>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
++		touchscreen-size-x = <4096>;
++		touchscreen-size-y = <4096>;
++	};
++
++	usb3503: usb@8 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usb3503>;
++		compatible = "smsc,usb3503";
++		reg = <0x08>;
++		connect-gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>; /* Old: 0, SS: HIGH */
++		intn-gpios = <&gpio7 12 GPIO_ACTIVE_LOW>; /* Old: 1, SS: HIGH */
++		reset-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>; /* Old: 0, SS: HIGH */
++		initial-mode = <1>;
++		clocks = <&refclk>;
++		clock-names = "refclk";
++		refclk-frequency = <12000000>;
++	};
++
++	vcnl4035: light-sensor@60 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_proximity>;
++		compatible = "vishay,vcnl4035";
++		reg = <0x60>;
++	};
++};
++
++&ldb {
++	status = "okay";
++
++	lvds0: lvds-channel@0 {
++		fsl,data-mapping = "spwg";
++		fsl,data-width = <24>;
++
++		port@4 {
++			reg = <4>;
++
++			lvds0_out: endpoint {
++				remote-endpoint = <&panel_in>;
++			};
++		};
++	};
++};
++
++&pmu {
++	interrupt-affinity = <&{/cpus/cpu@0}>,
++			     <&{/cpus/cpu@1}>;
++};
++
++&pwm1 {
++	#pwm-cells = <2>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm1>;
++	status = "okay";
++};
++
++&pwm2 {
++	#pwm-cells = <2>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm2>;
++	status = "okay";
++};
++
++&pwm3 {
++	#pwm-cells = <2>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm3>;
++	status = "okay";
++};
++
++&pwm4 {
++	#pwm-cells = <2>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm4>;
++	status = "okay";
++};
++
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++	status = "okay";
++	rts-gpios = <&gpio7 8 GPIO_ACTIVE_HIGH>;
++	linux,rs485-enabled-at-boot-time;
++	rs485-rx-during-tx;
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	uart-has-rtscts;
++	status = "okay";
++};
++
++&usbh1 {
++	vbus-supply = <&reg_usb_h1_vbus>;
++	status = "okay";
++};
++
++&usbh2 {
++	pinctrl-names = "idle", "active";
++	pinctrl-0 = <&pinctrl_usbh2_idle>;
++	pinctrl-1 = <&pinctrl_usbh2_active>;
++	status = "okay";
++	vbus-supply = <&reg_usb_h2_vbus>;
++};
++
++&usbotg {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usbotg>;
++	status = "okay";
++	vbus-supply = <&reg_usb_otg_vbus>;
++	disable-over-current;
++	dr_mode = "otg";
++	srp-disable;
++	hnp-disable;
++	adp-disable;
++};
++
++&usbphynop1 {
++	clocks = <&clks IMX6QDL_CLK_USBPHY1>;
++	clock-names = "main_clk";
++	vcc-supply = <&reg_usb_h1_vbus>;
++};
++
++&usbphynop2 {
++	vcc-supply = <&reg_usb_h2_vbus>;
++};
++
++&usdhc2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usdhc2>;
++	status = "okay";
++	cd-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
++	no-1-8-v;
++	keep-power-in-suspend;
++	enable-sdio-wakeup;
++	voltage-ranges = <3300 3300>;
++	vmmc-supply = <&reg_sw4>;
++	fsl,wp-controller;
++};
++
++&usdhc4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usdhc4>;
++	status = "okay";
++	bus-width = <8>;
++	non-removable;
++	no-1-8-v;
++	keep-power-in-suspend;
++	voltage-ranges = <3300 3300>;
++	vmmc-supply = <&reg_sw4>;
++	fsl,wp-controller;
++};
++
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog1>;
++	fsl,ext-reset-output;
++	status = "okay";
++	timeout-sec=<10>;
++};
++
++&iomuxc {
++	pinctrl_enet: enetgrp {
++		fsl,pins = <
++			MX6QDL_PAD_ENET_MDC__ENET_MDC		0x1b0b0
++			MX6QDL_PAD_ENET_MDIO__ENET_MDIO		0x1b0b0
++			MX6QDL_PAD_ENET_CRS_DV__ENET_RX_EN	0x1b0b0
++			MX6QDL_PAD_ENET_REF_CLK__GPIO1_IO23	0x1b0b0	/* FEC INT */
++			MX6QDL_PAD_ENET_RX_ER__ENET_RX_ER	0x1b0b0
++			MX6QDL_PAD_ENET_TX_EN__ENET_TX_EN	0x0001b098
++			MX6QDL_PAD_ENET_RXD0__ENET_RX_DATA0	0x1b0b0
++			MX6QDL_PAD_ENET_RXD1__ENET_RX_DATA1	0x1b0b0
++			MX6QDL_PAD_ENET_TXD1__ENET_TX_DATA1	0x0001b098
++			MX6QDL_PAD_ENET_TXD0__ENET_TX_DATA0	0x0001b098
++			MX6QDL_PAD_GPIO_16__ENET_REF_CLK	0x4001b0a8
++		>;
++	};
++
++	pinctrl_reset_gpio_led: pinctrl-reset-gpio-led-grp {
++		fsl,pins = <
++			MX6QDL_PAD_CSI0_PIXCLK__GPIO5_IO18		0x1b0b0
++		>;
++	};
++
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX6QDL_PAD_CSI0_DAT8__I2C1_SDA 0x4001b8b1
++			MX6QDL_PAD_CSI0_DAT9__I2C1_SCL 0x4001b8b1
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX6QDL_PAD_KEY_COL3__I2C2_SCL 0x4001b810
++			MX6QDL_PAD_KEY_ROW3__I2C2_SDA 0x4001b810
++		>;
++	};
++
++	pinctrl_i2c3: i2c3grp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_5__I2C3_SCL  0x4001b8b1
++			MX6QDL_PAD_GPIO_6__I2C3_SDA 0x4001b8b1
++		>;
++	};
++
++	pinctrl_lcd_enable: lcdenablerp {
++		fsl,pins = <
++			MX6QDL_PAD_EIM_D23__GPIO3_IO23  0x1b0b0 /* lcd enable */
++			MX6QDL_PAD_EIM_D16__GPIO3_IO16  0x1b0b0 /* sel6_8 */
++		>;
++	};
++
++	pinctrl_lm75: lm75grp {
++		fsl,pins = <
++			MX6QDL_PAD_KEY_ROW0__GPIO4_IO07		0x1b0b0
++		>;
++	};
++
++	pinctrl_proximity: proximitygrp {
++		fsl,pins = <
++			MX6QDL_PAD_KEY_ROW2__GPIO4_IO11  0x1b0b0
++		>;
++	};
++
++	pinctrl_pwm1: pwm1grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD1_DAT3__PWM1_OUT 0x0001b0b0
++		>;
++	};
++
++	pinctrl_pwm2: pwm2grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD1_DAT2__PWM2_OUT 0x0001b0b0
++		>;
++	};
++
++	pinctrl_pwm3: pwm3grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD1_DAT1__PWM3_OUT 0x0001b0b0
++		>;
++	};
++
++	pinctrl_pwm4: pwm4grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD1_CMD__PWM4_OUT 0x0001b0b0
++		>;
++	};
++
++	pinctrl_rtc: rtc-grp {
++		fsl,pins = <
++			MX6QDL_PAD_KEY_COL1__GPIO4_IO08 0x1b0b0 /* RTC INT */
++		>;
++	};
++
++	pinctrl_ctouch: ctouch-grp {
++		fsl,pins = <
++			MX6QDL_PAD_KEY_COL0__GPIO4_IO06 0x1b0b0 /* CTOUCH_INT */
++			MX6QDL_PAD_SD1_CLK__GPIO1_IO20 0x0001b0b0 /* CTOUCH_RESET */
++		>;
++	};
++
++	pinctrl_uart1: uart1grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD3_DAT6__UART1_RX_DATA 0x1b0b1
++			MX6QDL_PAD_SD3_DAT7__UART1_TX_DATA 0x1b0b1
++			MX6QDL_PAD_SD3_RST__GPIO7_IO08 0x0001b0b0
++		>;
++	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD3_DAT4__UART2_RX_DATA 0x1b0b1
++			MX6QDL_PAD_SD3_DAT5__UART2_TX_DATA 0x1b0b1
++			MX6QDL_PAD_EIM_D28__UART2_CTS_B 0x1b0b1
++			MX6QDL_PAD_EIM_D29__UART2_RTS_B 0x1b0b1
++		>;
++	};
++
++	pinctrl_usbh2_idle: usbh2-idle-grp {
++		fsl,pins = <
++			MX6QDL_PAD_RGMII_TXC__USB_H2_DATA      0x00013018
++			MX6QDL_PAD_RGMII_TX_CTL__USB_H2_STROBE 0x00013018
++		>;
++	};
++
++	pinctrl_usbh2_active: usbh2-active-grp {
++		fsl,pins = <
++			MX6QDL_PAD_RGMII_TXC__USB_H2_DATA      0x00013018
++			MX6QDL_PAD_RGMII_TX_CTL__USB_H2_STROBE 0x00017018
++		>;
++	};
++
++	pinctrl_usb3503: pinctrl_usb3503-grp {
++		fsl,pins = <
++			MX6QDL_PAD_CSI0_MCLK__CCM_CLKO1    0x00000018
++			MX6QDL_PAD_GPIO_17__GPIO7_IO12     0x1b0b0 /* USB INT */
++			MX6QDL_PAD_DISP0_DAT11__GPIO5_IO05 0x0001b0b0 /* USB Reset */
++			MX6QDL_PAD_SD1_DAT0__GPIO1_IO16    0x1b0b0 /* USB Connect */
++		>;
++	};
++
++	pinctrl_usbotg: usbotggrp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_1__USB_OTG_ID	0x17059
++		>;
++	};
++
++	pinctrl_usdhc2: usdhc2grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD2_CMD__SD2_CMD    0x00017069
++			MX6QDL_PAD_SD2_CLK__SD2_CLK    0x00010038
++			MX6QDL_PAD_SD2_DAT0__SD2_DATA0 0x00017069
++			MX6QDL_PAD_SD2_DAT1__SD2_DATA1 0x00017069
++			MX6QDL_PAD_SD2_DAT2__SD2_DATA2 0x00017069
++			MX6QDL_PAD_SD2_DAT3__SD2_DATA3 0x00017069
++			MX6QDL_PAD_GPIO_4__SD2_CD_B    0x0001b0b0
++		>;
++	};
++
++	pinctrl_usdhc4: usdhc4grp {
++		fsl,pins = <
++			MX6QDL_PAD_SD4_CMD__SD4_CMD    0x00017059
++			MX6QDL_PAD_SD4_CLK__SD4_CLK    0x00010059
++			MX6QDL_PAD_SD4_DAT0__SD4_DATA0 0x00017059
++			MX6QDL_PAD_SD4_DAT1__SD4_DATA1 0x00017059
++			MX6QDL_PAD_SD4_DAT2__SD4_DATA2 0x00017059
++			MX6QDL_PAD_SD4_DAT3__SD4_DATA3 0x00017059
++			MX6QDL_PAD_SD4_DAT4__SD4_DATA4 0x00017059
++			MX6QDL_PAD_SD4_DAT5__SD4_DATA5 0x00017059
++			MX6QDL_PAD_SD4_DAT6__SD4_DATA6 0x00017059
++			MX6QDL_PAD_SD4_DAT7__SD4_DATA7 0x00017059
++		>;
++	};
++
++	pinctrl_wdog1: wdoggrp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_9__WDOG1_B 0x1b0b0
++		>;
++	};
++};
 -- 
 2.34.1
 

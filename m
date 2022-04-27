@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1EF51217F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA72512181
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiD0StW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        id S230481AbiD0Stb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 14:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiD0Ssg (ORCPT
+        with ESMTP id S232298AbiD0StF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:48:36 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E629943388;
-        Wed, 27 Apr 2022 11:31:35 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y3so5061229ejo.12;
-        Wed, 27 Apr 2022 11:31:35 -0700 (PDT)
+        Wed, 27 Apr 2022 14:49:05 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1953CA0D9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:32:14 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id bu29so4728387lfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6weLRPbBPe57uX8mMeORt7L2XcJU22sNULRsCXuuqBw=;
-        b=PiczsENkZ+IGeiQ7DFmSWw8yPWNNVyv2Z6WiZwRZquvk+RNiNnBvL3HcWk7WAGiIrs
-         F3A8AYKJCF8lLs1iNkRC5k+LP1pXir/b4IS/vb0HbmlOEKAKjJb2Y+l/WL0G8QpCM/3z
-         eVJIXKZOtRSTPMOLXRDanzlayXynDkDdtu5fmwDe3RuTfqvBu7mWAgqeFCj0cDf67mvY
-         NrydXtrfBCy6oG8N2F22EyOWbQNfVuKQ3Z+cilquh38PgWy0DaAh85N7w7D/TmAhz+bI
-         drM/mRjxwyhYXCbnyDa4i1/GKREAjzUQUrofzA4ZR8gNnReMwGAxEFKiNmdLrztXwgEd
-         rowg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LE417ya6E7m+nXp6VV/VN8esAD2AhVJo0XqStc9jrKk=;
+        b=RkRpVLCj/djXRGkAnPrqrRcldz58N/lNU769t9fa5KcRaUz9rB5K4dE6u1yXQlsMfx
+         I8k1XxLo6SaOA6pzgCwIGoXlEXQp6Z49mUgLLqc1AFPoQbQABpvC25LOj0cySPWBi5xY
+         mlkA0T+/0sIcHgYnsbRjyF5k3OCP5ahpJ5jFk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6weLRPbBPe57uX8mMeORt7L2XcJU22sNULRsCXuuqBw=;
-        b=PlRAJBsx9IH1pv1D26VLHLht/S79TdX7z46l6W8aOCW49WIuzPn0RRndMmFRlEokr8
-         MXDzOr1WTFzRhn5P8Ae9pweLnQbsv+mq4x5QUNXBf1l6tztNxKYpbJvMdXprtoHruU9f
-         e0U6B8QEkE6rBB0aN4Eb5JnyxJF8tw7jrs+fTFYS+GBsqxekCSuo/iQWvDutILtkxgeu
-         JQ5c6g3VqWDR6dXNzNaNlnYYnGIhL27A8x9pOoJuF7HMYnp4Rb3hhrOB3OCMtOeYrheg
-         cxDPs3DSqFi3NwZz5TBjnrJgUDHB6n6wCsA1QrAbFQ2iaT34wXVBMLIBBpEbJJvZoCzg
-         2KXA==
-X-Gm-Message-State: AOAM533btItGjjYGfnYDMkBuBNcsWTSFDQoUdKOma65Decwk7ygSnHDf
-        iEuDnDLC9HXQwnC0xf/X6NnsoYfr8ecFPg==
-X-Google-Smtp-Source: ABdhPJzOCctqhaZ1rAdSx0HEdgoTqOncuYDpDoFARLqN9WUF0CuaH4PfNeKCKcg+QQnLuF6Fb9lzdg==
-X-Received: by 2002:a17:907:7215:b0:6f3:98da:a823 with SMTP id dr21-20020a170907721500b006f398daa823mr15354929ejc.284.1651084294402;
-        Wed, 27 Apr 2022 11:31:34 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170906284b00b006e108693850sm6989840ejc.28.2022.04.27.11.31.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:31:33 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 06/45] media: sun6i-csi: Use runtime pm for clocks and reset
-Date:   Wed, 27 Apr 2022 20:31:32 +0200
-Message-ID: <2625748.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20220415152811.636419-7-paul.kocialkowski@bootlin.com>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com> <20220415152811.636419-7-paul.kocialkowski@bootlin.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LE417ya6E7m+nXp6VV/VN8esAD2AhVJo0XqStc9jrKk=;
+        b=dtzXGLCwH+2fr7vsEmiVTUQahqze8ba3x3W7ySQ6xjjcJ4guUXQyvW/bLNSComl6YP
+         JRQbhYncQtPZ+R8SPIXmvpVbhe7p9nONdvaP8packIi+nWo6o4cFtQkhTHbLtcPKNMtr
+         0Hu3GeUjcg1AnwXrGBUZoksHjz1SwRsWxxt4Drva2RCJqmM0hi8x+IWxXTMD+YP5NogE
+         kZoU79KgOU3tuPPtONMP5oNZz4henuhXCBhviLgKM0u3BQ32147fxlRreUzgPUBxxQs6
+         U15JBhjrkogh8MBEfwDnzSsub3cHnUPjc+yvIZe49BRmdEbJKZ1ZTD8tyHI+Np6jqXLx
+         hhBQ==
+X-Gm-Message-State: AOAM530cSRDEamsy2IvsW4Hbsi1ARHBloV5uD4bIItSV45rtodEbrk5X
+        gxMHVCK/Rqq3uqI7DNmrVldUsInwp2VNdufITAs=
+X-Google-Smtp-Source: ABdhPJzGn2Zy5alS/0GvyVjREl1T512u/z0lzcJDBnD8gBFCI289CcxnpF90SH7s2dEAujMG7s/hHg==
+X-Received: by 2002:a05:6512:3091:b0:471:ae9d:5136 with SMTP id z17-20020a056512309100b00471ae9d5136mr21251179lfd.535.1651084332758;
+        Wed, 27 Apr 2022 11:32:12 -0700 (PDT)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id y21-20020a056512045500b00472053b2dcfsm1215475lfk.48.2022.04.27.11.32.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 11:32:11 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id y19so3803147ljd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 11:32:10 -0700 (PDT)
+X-Received: by 2002:a2e:8789:0:b0:24f:124c:864a with SMTP id
+ n9-20020a2e8789000000b0024f124c864amr10454141lji.164.1651084330452; Wed, 27
+ Apr 2022 11:32:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
+ <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
+In-Reply-To: <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 27 Apr 2022 11:31:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
+Message-ID: <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
+Subject: Re: Linux 5.18-rc4
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, gwml@vger.gnuweeb.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,185 +81,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+This looks like it might be AppArmor-related.
 
-Dne petek, 15. april 2022 ob 17:27:32 CEST je Paul Kocialkowski napisal(a):
-> Wrap the clock and reset preparation into runtime pm functions
-> for better organization of the code. Also fix the clock and
-> reset enable order to first deassert reset, as recommended in
-> Allwinner litterature.
+Adding AppArmor and security module people to the participants.
 
-s/litterature/literature/
+Sorry for top-posting and quoting the whole thing, but this is really
+just bringing in more people to the discussion.
 
-Otherwise,
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+So on the exec path we have
 
-Best regards,
-Jernej
+  apparmor_bprm_committing_creds() ->
+    aa_inherit_files() ->
+      iterate_fd (takes files->file_lock) ->
+        aa_file_perm ->
+          update_file_ctx (takes aa_file_ctx->lock)
 
-> 
-> Make the driver depend on PM while at it since runtime pm is
-> mandatory for the driver to work.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../media/platform/sunxi/sun6i-csi/Kconfig    |  2 +-
->  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 84 +++++++++++++------
->  2 files changed, 60 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/Kconfig
-> b/drivers/media/platform/sunxi/sun6i-csi/Kconfig index
-> 0345901617d4..965fbd937841 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/Kconfig
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/Kconfig
-> @@ -2,7 +2,7 @@
->  config VIDEO_SUN6I_CSI
->  	tristate "Allwinner V3s Camera Sensor Interface driver"
->  	depends on V4L_PLATFORM_DRIVERS
-> -	depends on VIDEO_DEV && COMMON_CLK  && HAS_DMA
-> +	depends on VIDEO_DEV && COMMON_CLK  && HAS_DMA && PM
->  	depends on ARCH_SUNXI || COMPILE_TEST
->  	select MEDIA_CONTROLLER
->  	select VIDEO_V4L2_SUBDEV_API
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
-> 46d92b925cc8..dcc9e7a125e2 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-> @@ -152,40 +152,18 @@ int sun6i_csi_set_power(struct sun6i_csi_device
-> *csi_dev, bool enable)
-> 
->  	if (!enable) {
->  		regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 
-0);
-> +		pm_runtime_put(dev);
-> 
-> -		clk_disable_unprepare(csi_dev->clock_ram);
-> -		clk_disable_unprepare(csi_dev->clock_mod);
-> -		reset_control_assert(csi_dev->reset);
->  		return 0;
->  	}
-> 
-> -	ret = clk_prepare_enable(csi_dev->clock_mod);
-> -	if (ret) {
-> -		dev_err(csi_dev->dev, "Enable csi clk err %d\n", ret);
-> +	ret = pm_runtime_resume_and_get(dev);
-> +	if (ret < 0)
->  		return ret;
-> -	}
-> -
-> -	ret = clk_prepare_enable(csi_dev->clock_ram);
-> -	if (ret) {
-> -		dev_err(csi_dev->dev, "Enable clk_dram_csi clk err 
-%d\n", ret);
-> -		goto clk_mod_disable;
-> -	}
-> -
-> -	ret = reset_control_deassert(csi_dev->reset);
-> -	if (ret) {
-> -		dev_err(csi_dev->dev, "reset err %d\n", ret);
-> -		goto clk_ram_disable;
-> -	}
-> 
->  	regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 
-CSI_EN_CSI_EN);
-> 
->  	return 0;
-> -
-> -clk_ram_disable:
-> -	clk_disable_unprepare(csi_dev->clock_ram);
-> -clk_mod_disable:
-> -	clk_disable_unprepare(csi_dev->clock_mod);
-> -	return ret;
->  }
-> 
->  static enum csi_input_fmt get_csi_input_format(struct sun6i_csi_device
-> *csi_dev, @@ -800,6 +778,56 @@ static irqreturn_t sun6i_csi_interrupt(int
-> irq, void *private) return IRQ_HANDLED;
->  }
-> 
-> +static int sun6i_csi_suspend(struct device *dev)
-> +{
-> +	struct sun6i_csi_device *csi_dev = dev_get_drvdata(dev);
-> +
-> +	reset_control_assert(csi_dev->reset);
-> +	clk_disable_unprepare(csi_dev->clock_ram);
-> +	clk_disable_unprepare(csi_dev->clock_mod);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sun6i_csi_resume(struct device *dev)
-> +{
-> +	struct sun6i_csi_device *csi_dev = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = reset_control_deassert(csi_dev->reset);
-> +	if (ret) {
-> +		dev_err(dev, "failed to deassert reset\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = clk_prepare_enable(csi_dev->clock_mod);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable module clock\n");
-> +		goto error_reset;
-> +	}
-> +
-> +	ret = clk_prepare_enable(csi_dev->clock_ram);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable ram clock\n");
-> +		goto error_clock_mod;
-> +	}
-> +
-> +	return 0;
-> +
-> +error_clock_mod:
-> +	clk_disable_unprepare(csi_dev->clock_mod);
-> +
-> +error_reset:
-> +	reset_control_assert(csi_dev->reset);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct dev_pm_ops sun6i_csi_pm_ops = {
-> +	.runtime_suspend	= sun6i_csi_suspend,
-> +	.runtime_resume		= sun6i_csi_resume,
-> +};
-> +
->  static const struct regmap_config sun6i_csi_regmap_config = {
->  	.reg_bits       = 32,
->  	.reg_stride     = 4,
-> @@ -879,6 +907,10 @@ static int sun6i_csi_resources_setup(struct
-> sun6i_csi_device *csi_dev, goto error_clock_rate_exclusive;
->  	}
-> 
-> +	/* Runtime PM */
-> +
-> +	pm_runtime_enable(dev);
-> +
->  	return 0;
-> 
->  error_clock_rate_exclusive:
-> @@ -889,6 +921,7 @@ static int sun6i_csi_resources_setup(struct
-> sun6i_csi_device *csi_dev,
-> 
->  static void sun6i_csi_resources_cleanup(struct sun6i_csi_device *csi_dev)
->  {
-> +	pm_runtime_disable(csi_dev->dev);
->  	clk_rate_exclusive_put(csi_dev->clock_mod);
->  }
-> 
-> @@ -971,6 +1004,7 @@ static struct platform_driver sun6i_csi_platform_driver
-> = { .driver	= {
->  		.name		= SUN6I_CSI_NAME,
->  		.of_match_table	= 
-of_match_ptr(sun6i_csi_of_match),
-> +		.pm		= &sun6i_csi_pm_ops,
->  	},
->  };
+which gives us that file_lock -> ctx lock order. All within AppArmor.
 
+And then we apparently _also_ have the reverse ctx lock -> file_lock
+order by way of 'alloc_lock', which is the 'task_lock()' thing
 
+That one is a horror to decode and I didn't, but seems to go through
+ipcget -> newseg..
 
+Anybody?
 
+         Linus
+
+On Wed, Apr 27, 2022 at 11:00 AM Ammar Faizi <ammarfaizi2@gnuweeb.org> wrote:
+>
+> On 4/25/22 5:22 AM, Linus Torvalds wrote:
+> > Fairly slow and calm week - which makes me just suspect that the other
+> > shoe will drop at some point.
+> >
+> > But maybe things are just going really well this release. It's bound
+> > to happen _occasionally_, after all.
+>
+> + fs/exec.c maintainers.
+>
+> Testing Linux 5.18-rc4 on my laptop, it has been running for 2 days. Got
+> the following lockdep splat this night. I don't have the reproducer. If
+> you need more information, feel free to let me know.
+>
+> [78140.503644] ======================================================
+> [78140.503646] WARNING: possible circular locking dependency detected
+> [78140.503648] 5.18.0-rc4-superb-owl-00006-gd615b5416f8a #12 Tainted: G        W
+> [78140.503650] ------------------------------------------------------
+> [78140.503651] preconv/111629 is trying to acquire lock:
+> [78140.503653] ffff88834d633248 (&ctx->lock){+.+.}-{2:2}, at: update_file_ctx+0x19/0xe0
+> [78140.503663]
+>                 but task is already holding lock:
+> [78140.503664] ffff888103d80458 (&newf->file_lock){+.+.}-{2:2}, at: iterate_fd+0x34/0x150
+> [78140.503669]
+>                 which lock already depends on the new lock.
+>
+> [78140.503671]
+>                 the existing dependency chain (in reverse order) is:
+> [78140.503672]
+>                 -> #4 (&newf->file_lock){+.+.}-{2:2}:
+> [78140.503675]        _raw_spin_lock+0x2f/0x40
+> [78140.503679]        seq_show+0x72/0x280
+> [78140.503681]        seq_read_iter+0x125/0x3c0
+> [78140.503684]        seq_read+0xd0/0xe0
+> [78140.503686]        vfs_read+0xf5/0x2f0
+> [78140.503688]        ksys_read+0x58/0xb0
+> [78140.503690]        do_syscall_64+0x3d/0x90
+> [78140.503693]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [78140.503695]
+>                 -> #3 (&p->alloc_lock){+.+.}-{2:2}:
+> [78140.503699]        _raw_spin_lock+0x2f/0x40
+> [78140.503700]        newseg+0x25b/0x360
+> [78140.503703]        ipcget+0x3fb/0x480
+> [78140.503705]        __x64_sys_shmget+0x48/0x50
+> [78140.503708]        do_syscall_64+0x3d/0x90
+> [78140.503710]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [78140.503713]
+>                 -> #2 (&new->lock){+.+.}-{2:2}:
+> [78140.503716]        _raw_spin_lock+0x2f/0x40
+> [78140.503718]        ipc_addid+0xb3/0x700
+> [78140.503720]        newseg+0x238/0x360
+> [78140.503722]        ipcget+0x3fb/0x480
+> [78140.503724]        __x64_sys_shmget+0x48/0x50
+> [78140.503727]        do_syscall_64+0x3d/0x90
+> [78140.503729]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [78140.503731]
+>                 -> #1 (lock#3){+.+.}-{2:2}:
+> [78140.503735]        local_lock_acquire+0x1d/0x70
+> [78140.503738]        __radix_tree_preload+0x38/0x150
+> [78140.503740]        idr_preload+0xa/0x40
+> [78140.503743]        aa_alloc_secid+0x15/0xb0
+> [78140.503745]        aa_label_alloc+0x6c/0x1b0
+> [78140.503747]        aa_label_merge+0x52/0x430
+> [78140.503750]        update_file_ctx+0x3f/0xe0
+> [78140.503752]        aa_file_perm+0x56e/0x5c0
+> [78140.503754]        common_file_perm+0x70/0xd0
+> [78140.503756]        security_mmap_file+0x4b/0xd0
+> [78140.503759]        vm_mmap_pgoff+0x50/0x150
+> [78140.503761]        elf_map+0x9f/0x120
+> [78140.503763]        load_elf_binary+0x521/0xc80
+> [78140.503767]        bprm_execve+0x39f/0x660
+> [78140.503769]        do_execveat_common+0x1d0/0x220
+> [78140.503771]        __x64_sys_execveat+0x3d/0x50
+> [78140.503773]        do_syscall_64+0x3d/0x90
+> [78140.503775]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [78140.503777]
+>                 -> #0 (&ctx->lock){+.+.}-{2:2}:
+> [78140.503780]        __lock_acquire+0x1573/0x2ce0
+> [78140.503783]        lock_acquire+0xbd/0x190
+> [78140.503785]        _raw_spin_lock+0x2f/0x40
+> [78140.503787]        update_file_ctx+0x19/0xe0
+> [78140.503788]        aa_file_perm+0x56e/0x5c0
+> [78140.503790]        match_file+0x78/0x90
+> [78140.503792]        iterate_fd+0xae/0x150
+> [78140.503794]        aa_inherit_files+0xbe/0x170
+> [78140.503796]        apparmor_bprm_committing_creds+0x50/0x80
+> [78140.503798]        security_bprm_committing_creds+0x1d/0x30
+> [78140.503800]        begin_new_exec+0x3c5/0x450
+> [78140.503802]        load_elf_binary+0x269/0xc80
+> [78140.503804]        bprm_execve+0x39f/0x660
+> [78140.503806]        do_execveat_common+0x1d0/0x220
+> [78140.503808]        __x64_sys_execve+0x36/0x40
+> [78140.503809]        do_syscall_64+0x3d/0x90
+> [78140.503812]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [78140.503815]
+>                 other info that might help us debug this:
+>
+> [78140.503816] Chain exists of:
+>                   &ctx->lock --> &p->alloc_lock --> &newf->file_lock
+>
+> [78140.503820]  Possible unsafe locking scenario:
+>
+> [78140.503821]        CPU0                    CPU1
+> [78140.503823]        ----                    ----
+> [78140.503824]   lock(&newf->file_lock);
+> [78140.503826]                                lock(&p->alloc_lock);
+> [78140.503828]                                lock(&newf->file_lock);
+> [78140.503830]   lock(&ctx->lock);
+> [78140.503832]
+>                  *** DEADLOCK ***
+>
+> [78140.503833] 3 locks held by preconv/111629:
+> [78140.503835]  #0: ffff888111b62550 (&sig->cred_guard_mutex){+.+.}-{3:3}, at: bprm_execve+0x39/0x660
+> [78140.503840]  #1: ffff888111b625e8 (&sig->exec_update_lock){++++}-{3:3}, at: exec_mmap+0x4e/0x250
+> [78140.503844]  #2: ffff888103d80458 (&newf->file_lock){+.+.}-{2:2}, at: iterate_fd+0x34/0x150
+> [78140.503849]
+>                 stack backtrace:
+> [78140.503851] CPU: 3 PID: 111629 Comm: preconv Tainted: G        W         5.18.0-rc4-superb-owl-00006-gd615b5416f8a #12 6fd282a37da6f0e0172ecfa29689f3d250476a2b
+> [78140.503855] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
+> [78140.503856] Call Trace:
+> [78140.503858]  <TASK>
+> [78140.503860]  dump_stack_lvl+0x5a/0x74
+> [78140.503863]  check_noncircular+0xd3/0xe0
+> [78140.503866]  ? register_lock_class+0x35/0x2a0
+> [78140.503870]  __lock_acquire+0x1573/0x2ce0
+> [78140.503872]  ? prepend_path+0x375/0x410
+> [78140.503876]  ? d_absolute_path+0x48/0x80
+> [78140.503879]  ? aa_path_name+0x132/0x470
+> [78140.503883]  ? lock_is_held_type+0xd0/0x130
+> [78140.503886]  lock_acquire+0xbd/0x190
+> [78140.503888]  ? update_file_ctx+0x19/0xe0
+> [78140.503892]  _raw_spin_lock+0x2f/0x40
+> [78140.503894]  ? update_file_ctx+0x19/0xe0
+> [78140.503896]  update_file_ctx+0x19/0xe0
+> [78140.503899]  aa_file_perm+0x56e/0x5c0
+> [78140.503904]  ? aa_inherit_files+0x170/0x170
+> [78140.503906]  match_file+0x78/0x90
+> [78140.503909]  iterate_fd+0xae/0x150
+> [78140.503912]  aa_inherit_files+0xbe/0x170
+> [78140.503915]  apparmor_bprm_committing_creds+0x50/0x80
+> [78140.503918]  security_bprm_committing_creds+0x1d/0x30
+> [78140.503921]  begin_new_exec+0x3c5/0x450
+> [78140.503924]  load_elf_binary+0x269/0xc80
+> [78140.503928]  ? lock_release+0x1ee/0x260
+> [78140.503930]  ? bprm_execve+0x399/0x660
+> [78140.503933]  bprm_execve+0x39f/0x660
+> [78140.503936]  do_execveat_common+0x1d0/0x220
+> [78140.503940]  __x64_sys_execve+0x36/0x40
+> [78140.503942]  do_syscall_64+0x3d/0x90
+> [78140.503946]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [78140.503948] RIP: 0033:0x7f700a8ea33b
+> [78140.503954] Code: Unable to access opcode bytes at RIP 0x7f700a8ea311.
+> [78140.503955] RSP: 002b:00007fff315e7db8 EFLAGS: 00000246 ORIG_RAX: 000000000000003b
+> [78140.503958] RAX: ffffffffffffffda RBX: 00007fff315e7dc0 RCX: 00007f700a8ea33b
+> [78140.503960] RDX: 000056419e9ea7e0 RSI: 000056419e9e9160 RDI: 00007fff315e7dc0
+> [78140.503962] RBP: 00007fff315e7f60 R08: 0000000000000008 R09: 0000000000000000
+> [78140.503964] R10: 0000000000000001 R11: 0000000000000246 R12: 000056419e9ea760
+> [78140.503965] R13: 000056419e9e9160 R14: 00007fff315e9eb4 R15: 00007fff315e9ebc
+> [78140.503971]  </TASK>
+>
+> --
+> Ammar Faizi

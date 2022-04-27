@@ -2,101 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63458512786
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FCA512789
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 01:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237459AbiD0XbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 19:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
+        id S237822AbiD0XfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 19:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235668AbiD0XbX (ORCPT
+        with ESMTP id S232465AbiD0Xez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 19:31:23 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C5186E6;
-        Wed, 27 Apr 2022 16:28:10 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id 125so4838002iov.10;
-        Wed, 27 Apr 2022 16:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J+PADB9F5WqUqK6GNU+Fxyjymg7zexYWmAXBuu5DB9g=;
-        b=U7azQ2bUah5mgLR/JEX/N2A3mspp3zwA+qStLEeStwS/w5mOfeanqxTJ1Z7BpA7t77
-         sZ0ei5lKcGnDWrRQDT3q33zjz86xpbg5Rmq1Qq8gw4iA/FaZE9vx6qGrhS4mtTlrk6T9
-         B+XVrTVRwAryBUF+e1GO9yoNSwkP2HEhwXth1LBTj0wvToNjx9VyRqtyQm0Md/nR//vN
-         rkmpHlaE2fKHvCMdXR9OMwX6CcD+KVKBdR1mIq77GAGa3hYM2xzCqMmznRpl5j4X68wY
-         rMuThzJzcNs75oXtKDvpHctRzmFNKb14YbU5Gr3w+N7O+N8ZuUTgZqgmTqUdfN5d1pDG
-         sUJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J+PADB9F5WqUqK6GNU+Fxyjymg7zexYWmAXBuu5DB9g=;
-        b=zm1lG4HUgLS+WHpKIJsR9rxFLhjv23BYl8d5+v76BeHsGU+8lkl0MwvLm7uPLf5XrX
-         W4JG3MwbihToR7P+L3GcO+fpyD0be6RfEql0j1ipEI/HkY1MMHtl6Njle6I91+ALSeKU
-         IXBgMPyrjnF+d5CtM8YaNHGY4/QTrlwneOwg4orMWYhAkfqe4NkzxvY55ytGXRt7T+2w
-         HEc/nLFnFW/IaJzUCsRB7InEXE6UgI0t+VPQSEFoxIl0XEMv1vGRu/y1u7rcWyzcTfVF
-         2FJSmeI6DGFktT3jE0xl1Em4JJ6SxabAAc3DZlEmxxpadRGf61X4GED0WfVKqEXWhc3M
-         qEng==
-X-Gm-Message-State: AOAM533reNHTqa8rYaSo/ewOTBL4XV4ffQ81FYxkVq2PfIuwIAD9/Uq1
-        ZUQaF1oUy8Gpulfqxbu+cn2UvwztJsrVulx0CmI=
-X-Google-Smtp-Source: ABdhPJwalUssHr/J/IX56j230ASTn2a0DzhQdRKHS90estxGTH5SmnfwW1oCy4oBOZPZNCVeFyK+3AZUfPLC5S3vyxw=
-X-Received: by 2002:a05:6638:533:b0:32a:d418:b77b with SMTP id
- j19-20020a056638053300b0032ad418b77bmr9771567jar.237.1651102090204; Wed, 27
- Apr 2022 16:28:10 -0700 (PDT)
+        Wed, 27 Apr 2022 19:34:55 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7570124BE0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1651102303; x=1682638303;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gLrzp6duhkPkV6taMyjQM6C7cL2l+fGNVwimG4CXPYA=;
+  b=UxwxbAqsimwtwGRnt2pWvurMD3DKCoV4txQE4Qikvpz85X7zOij+G24A
+   dYV++q3vdl/S2zGz6mPwlw3o1/RtH7HvwCa8ouDXOzPy5ELiBfrGDraa5
+   0IEkT469+4ei67t8VBwIsBWL/yl4idrCL8X5+UMrjkWDN7PpE8s48Oelk
+   dKvPifu1CsGXUvSNt9jqMqul96gf8TVr+kGYhrqXORkDwY1Ul++seufeB
+   A/JxKLXZLOAx/MnYVHvYl+cijAIq2sAxagbSzApTmD7WDYoJAKe05MPUl
+   XYGG4e2PKccIJv7SwaS6GVdic4zJzXC/F+hBMZqGIb/GzXxXUbWLc+b4N
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,294,1643644800"; 
+   d="scan'208";a="197843992"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Apr 2022 07:31:41 +0800
+IronPort-SDR: u5zRuMAHLRXyvomKiQ/A2Iidcd56TFdqTVBQmQTRb4Ch4keX4cjmaiiZb26t+Hm9c0D15zmJ0G
+ xVoCotHvbYT9A+kjqOBo4xLapn9dBtxncwCIid8EUmPD4q3K5QQ2KNWnXDRPdlTZsgr3B8t40U
+ /FBmAy0ANxRrNUFw7KMpieJmk2PTdquzSALt7CZhNCNwsvBz9Ywmr913BQ7kwWUq5C/e6ljlKc
+ 11kffB9YdCSZY1vKcJj6FdY+uuMmUvd5oBu8wR6nS3FvdV/9bQm1hbehWGf062kKGExihuIb1g
+ Jg/2Z0W84eJ0watfW6pKBP+D
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 16:01:50 -0700
+IronPort-SDR: g8ONq31hVr5ZR9+jpOUGm0xDQDqFKLkeoj8UjaIII0lLAFM1RE55MRctFc8W/q/iFcprb0xxbz
+ on7XKVTdIz15VjMAlcQcqbdAITZJPjuS1bCHf9Uy6jtrV7SI5uVgDYpuIhlJmu0DVQB1cFfUeO
+ UDAbj7lZB7Q7r7lPpuCLWqQBxPt9QxsZNc3ye0kXNGeooDD4muH2jxAEWjcg+S64J3BWOku5L6
+ 976t52EvVVYakl7NKXJ+bgBqHHDB5IMy5L8RK8P5ekp2oBisumVtZYrkLpc4Gzaoyf+g/Wdr+j
+ 5kI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Apr 2022 16:31:41 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KpZlJ5Lpjz1SHwl
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 16:31:40 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1651102299; x=1653694300; bh=gLrzp6duhkPkV6taMyjQM6C7cL2l+fGNVwi
+        mG4CXPYA=; b=PdTQSxxj3EOLpYEGcnBYVKUPguXiBCCpr5ymI7+k28TTGz3mfSs
+        KbvC8k3lhS5m6XprU6x/phnhFmDH5Zdpl9mtNhPvxWLwoLZA79RJ39tzK0T66DJg
+        cQ1J9s5aD6mTMKCIx7SKO/H0j3TVPipsOior8762yACFqgZPSPwSaryNVkrWfY9P
+        vFK6Qn1Dlh6ebNdzrLYEPjfHxjH1TIuA8nWpktFuNYhAu/AUjrulRyzZmZH+ftr1
+        f82lyX/KB3APT/Gb/yPBy31svE2vEO1vB1f3Yyd5uBMXra+42NUkawZ+Cd66ga7/
+        bklmIOigH4dlDMngOOGM9ReZ0ePeHAN6LGA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9T_Ych45457I for <linux-kernel@vger.kernel.org>;
+        Wed, 27 Apr 2022 16:31:39 -0700 (PDT)
+Received: from [10.225.163.27] (unknown [10.225.163.27])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KpZlB5PzJz1Rvlc;
+        Wed, 27 Apr 2022 16:31:34 -0700 (PDT)
+Message-ID: <652c33b5-1d85-e356-05b9-7bd84b768143@opensource.wdc.com>
+Date:   Thu, 28 Apr 2022 08:31:33 +0900
 MIME-Version: 1.0
-References: <20220427210345.455611-1-jolsa@kernel.org> <20220427210345.455611-6-jolsa@kernel.org>
-In-Reply-To: <20220427210345.455611-6-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Apr 2022 16:27:59 -0700
-Message-ID: <CAEf4BzaT45OszajSQJbxES1RveBh0ingzAzkK0BOchBGZuavTw@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 5/5] selftests/bpf: Add attach bench test
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 03/16] block: add bdev_zone_no helper
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, jaegeuk@kernel.org,
+        axboe@kernel.dk, snitzer@kernel.org, hch@lst.de, mcgrof@kernel.org,
+        naohiro.aota@wdc.com, sagi@grimberg.me, dsterba@suse.com,
+        johannes.thumshirn@wdc.com
+Cc:     linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        clm@fb.com, gost.dev@samsung.com, chao@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, josef@toxicpanda.com,
+        jonathan.derrick@linux.dev, agk@redhat.com, kbusch@kernel.org,
+        kch@nvidia.com, linux-nvme@lists.infradead.org,
+        dm-devel@redhat.com, bvanassche@acm.org, jiangbo.365@bytedance.com,
+        linux-fsdevel@vger.kernel.org, matias.bjorling@wdc.com,
+        linux-block@vger.kernel.org
+References: <20220427160255.300418-1-p.raghav@samsung.com>
+ <CGME20220427160259eucas1p25aab0637fec229cd1140e6aa08678f38@eucas1p2.samsung.com>
+ <20220427160255.300418-4-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220427160255.300418-4-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 2:04 PM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Adding test that reads all functions from ftrace available_filter_functions
-> file and attach them all through kprobe_multi API.
->
-> It also prints stats info with -v option, like on my setup:
->
->   test_bench_attach: found 48712 functions
->   test_bench_attach: attached in   1.069s
->   test_bench_attach: detached in   0.373s
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+On 4/28/22 01:02, Pankaj Raghav wrote:
+> Many places in the filesystem for zoned devices open code this function
+> to find the zone number for a given sector with power of 2 assumption.
+> This generic helper can be used to calculate zone number for a given
+> sector in a block device
+> 
+> This helper internally uses blk_queue_zone_no to find the zone number.
+> 
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 > ---
+>  include/linux/blkdev.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index f8f2d2998afb..55293e0a8702 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -1392,6 +1392,15 @@ static inline bool bdev_zone_aligned(struct block_device *bdev, sector_t sec)
+>  	return false;
+>  }
+>  
+> +static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
+> +{
+> +	struct request_queue *q = bdev_get_queue(bdev);
+> +
+> +	if (q)
 
-LGTM.
+q is never NULL. So this can be simplified to:
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+	return blk_queue_zone_no(bdev_get_queue(bdev), sector);
 
->  .../bpf/prog_tests/kprobe_multi_test.c        | 133 ++++++++++++++++++
->  .../selftests/bpf/progs/kprobe_multi_empty.c  |  12 ++
->  2 files changed, 145 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
->
+> +		return blk_queue_zone_no(q, sec);
+> +	return 0;
+> +}
+> +
+>  static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
+>  {
+>  	struct request_queue *q = bdev_get_queue(bdev);
 
-[...]
+
+-- 
+Damien Le Moal
+Western Digital Research

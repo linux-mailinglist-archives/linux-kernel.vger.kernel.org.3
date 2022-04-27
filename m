@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B23511B73
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F8E5119AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbiD0N5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 09:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S236813AbiD0N6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbiD0N5b (ORCPT
+        with ESMTP id S236807AbiD0N6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 09:57:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E834248B
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 06:54:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Apr 2022 09:58:39 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D210EA7;
+        Wed, 27 Apr 2022 06:55:28 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:a50b:1f6f:4fce:a4b])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A526B82778
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A50CC385A9;
-        Wed, 27 Apr 2022 13:54:16 +0000 (UTC)
-Date:   Wed, 27 Apr 2022 09:54:15 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-Message-ID: <20220427095415.594e5120@gandalf.local.home>
-In-Reply-To: <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C71DF1F44800;
+        Wed, 27 Apr 2022 14:55:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651067727;
+        bh=ipCjbGKYkux+/ojU36BdkoNBWKXYuJDGrkOmJsKx1ig=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M0xTcz5QKH9w9GcgU87+Ap9lLq4wMXK4YxTmePcmhfJ2I65J9GcKNr1KEFijMb3zS
+         UKzUjI5tmVRGjiOEjdaiyvhJgRFX83YPdhjjbXjjYLFlOfkmytXhXLNJFycFojKOAN
+         L4uN88LYRYTn88d4ioqVpoVXwjjx9Dg1aLV5rvksRlf0GB66V2QgaLMr6eYV4pCROM
+         N8eRwZAj3cZm6w948CeiHYClXCKR+a4YgVciGvG2AkXnYbFwRA7YAht6oj1Y7lwf4k
+         RXgPsDQGy+fkoEV2/WWVI5PgA/AQIr5lYXx2Vya5m0+/En1p+VRMJeUIc09tozF1EO
+         yJSi+Z5+ZmFVg==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jon@nanocrew.net, aford173@gmail.com, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH] media: hantro: HEVC: Fix tile info buffer value computation
+Date:   Wed, 27 Apr 2022 15:55:17 +0200
+Message-Id: <20220427135517.381959-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,27 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 15:01:22 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+Use pps->column_width_minus1[j] + 1 as value for the tile info buffer
+instead of pps->column_width_minus1[j + 1].
+The patch fix DBLK_E_VIXS_2, DBLK_F_VIXS_2, DBLK_G_VIXS_2,
+SAO_B_MediaTek_5, TILES_A_Cisco_2 and TILES_B_Cisco_1 tests in fluster.
 
-> If one or both of these weak functions are overridden in future, in the
-> final vmlinux mcount table, references to these will change over to the
-> non-weak variant which has its own mcount location entry. As such, there
-> will now be two entries for these functions, both pointing to the same
-> non-weak location.
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But is that really true in all cases? x86 uses fentry these days, and other
-archs do things differently too. But the original mcount (-pg) call
-happened *after* the frame setup. That means the offset of the mcount call
-would be at different offsets wrt the start of the function. If you have
-one of these architectures that still use mcount, and the weak function
-doesn't have the same size frame setup as the overriding function, then the
-addresses will not be the same.
-
--- Steve
-
-
-> We don't need the non-weak locations since they will
-> never be executed. Ftrace skips the duplicate entries due to a previous
-> commit.
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index bb512389c1a5..ffeb2fbeefd2 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -74,7 +74,7 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+ 					no_chroma = 1;
+ 				for (j = 0, tmp_w = 0; j < num_tile_cols - 1; j++) {
+ 					tmp_w += pps->column_width_minus1[j] + 1;
+-					*p++ = pps->column_width_minus1[j + 1];
++					*p++ = pps->column_width_minus1[j] + 1;
+ 					*p++ = h;
+ 					if (i == 0 && h == 1 && ctb_size == 16)
+ 						no_chroma = 1;
+-- 
+2.32.0
 

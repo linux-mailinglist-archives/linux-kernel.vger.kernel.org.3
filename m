@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178A551190F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445215119F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238427AbiD0OlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
+        id S238315AbiD0Omy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238430AbiD0OlU (ORCPT
+        with ESMTP id S238242AbiD0Omt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:41:20 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C733E1B
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:37:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id i27so3808105ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:37:58 -0700 (PDT)
+        Wed, 27 Apr 2022 10:42:49 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A8D33357;
+        Wed, 27 Apr 2022 07:39:38 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id f8-20020a4ae608000000b0035ea1486af9so173888oot.5;
+        Wed, 27 Apr 2022 07:39:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bp4nvCVNUoCNEAKvKfnnGKwiKlXJzQznkSn+Xrwkfm0=;
-        b=MhMHiFv6IziSDkdNlh2UkxZ6wRadtQURhNooR20okqyWTqd2+czoeWuBhz0z4JWzm8
-         D14A391nTFsO7zVvvx68QGBFV/NOikeIxpN3XqZJczoNMYIaJUUeSeasMMd31dP0x4yz
-         HAHkEH/ctSv3WhVSG4cQx1OEqpCyiyr1jKS9XAn8ktOm8kgEyzvseAsBYBpB9+LMuoZl
-         Oc7jIsPs+Ji4y7A79TbeEByv2p4W2COBmGrtXw7KkVbhO3Q5qvacwutoKX53YUG81m/B
-         cLitJrR/sKOPueb/Er8XqOnIr3YzTOYxjeLUWGAzANVG7pwKUvFsaq7ewf82X0ralNxK
-         uZzw==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vTxpUA215DFAgCWRsxj8jTjennVn40DBH7zdM0caEec=;
+        b=oOigsJ/PRaAumCPze8pLjvvkNpXC2GAhd43ctlCMFPmG7wUiXeKjn5HDLLTMuC1tOg
+         qitGuYrFpJ6GHWdFN/svAoBVTaJK1/poD2lSt53iNfG4jOtqtHZMME9DitmGdOnrcPZd
+         MqlPG49jJnSm1VRaZgNGlsHIjE3MCP70I+UNMPj/VXFi2iW0Qbg0eUEWW/ylAT/npEpa
+         lc2+pBEps5vtAMS5AmEo6uJzupAINduBWE2OVaCO2M6BdElX/GeWB0yTzwDbprDxtWd2
+         /+TB30JgNnhwVBgtdlBfGNUEGmp5Zwnj05BV3iPGYQRt92uMmMno+/cpOARHBOkGZope
+         0AOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bp4nvCVNUoCNEAKvKfnnGKwiKlXJzQznkSn+Xrwkfm0=;
-        b=QIL+To8jrwN1bbxB+gnQ0gOuHl5hJxC/ohnS1nPT+nSyCeJDUgw0rqbKVwNZu6rlha
-         gYRWxeEne5UbmtceTj5Ak4hMpBJsjk8zulemC2tF/1YFhySQU+cpbKWU/L/Ac/8x2Fn3
-         VQZtlLNBwgnyYylpQZD8P6Z3T3MnoXLbJErtHZKquesPyDeeUphEjdub4zfR8+WLQTN4
-         TcE98m6Leh9yBe+ojLcW1dOY2xs+dayVlfUOgAbfpZD9odH6URIF9Ox5VKX8V16Rea3z
-         zwzB3pe/yIbRrH0DuwGP0qtIR//fiAs9blDSj2x+gLEVUJFmufD2/mbGfsYZ2ssdMl+f
-         rt9w==
-X-Gm-Message-State: AOAM532CYJUgIrweXfFmsKV67JUmfEN5malFCdWY/Tw2tcjlvSTlQ46C
-        FepwU0pyeqHaN2L6HNBKlJU4HEAPZeTnAMHWEiEjug==
-X-Google-Smtp-Source: ABdhPJx/b1z9pzoC8wsJhdzRIvOPilfrnLEqVf6eXmNt9pExpQjAD0KJZeU/Mw5BgndZemcvxbOMWpKWQSi9IhO4Dcc=
-X-Received: by 2002:a17:907:9506:b0:6da:b4cd:515b with SMTP id
- ew6-20020a170907950600b006dab4cd515bmr26917366ejc.602.1651070274544; Wed, 27
- Apr 2022 07:37:54 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vTxpUA215DFAgCWRsxj8jTjennVn40DBH7zdM0caEec=;
+        b=qq2z+Ih4SqcmevhzFjYDODtDdQaaiBafTmvQc0a5WLd4t2YasA8gUyaMSxiNuEJhEj
+         8z0964/MPXPGXPzpJGf//lma5nFwSk/77HaHV9wvKdit/10IL9rrsQCt0pVYADL3gQPy
+         l7WFrJeMHE4vhgEmIRZeUb51Tgr3FeKff6eZVjv/kzEhGr1ZYG6HQb7TSyBZgUBlb8ed
+         6YPGNIARKPKEmg6qfb8fQX4lDog0v9MKVn7+HhurvNL6BUTSR60F+v+n2N5jIHCIoejF
+         xsLWUVKseW+3uQomY1MYIZTj12OZUK2KE2NtO4UBMWwEYrHs72Dz2YUhN5jfMRUluXO4
+         O44w==
+X-Gm-Message-State: AOAM532ezmVhqkjhBA3RTmVZk6dRQLNGedOuHmiElJbp8HX3na3GygXq
+        YhBx2bpObgdGPkCrwjx6l90=
+X-Google-Smtp-Source: ABdhPJyF9fR1IsbcBcNpXpmhtnaNfu9wpueJhGN8nIOXozOcMcA7NMyZcV66Hn8rmnMEAiszi6kmPg==
+X-Received: by 2002:a4a:d450:0:b0:324:c398:7305 with SMTP id p16-20020a4ad450000000b00324c3987305mr10225534oos.45.1651070377873;
+        Wed, 27 Apr 2022 07:39:37 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y18-20020a056870381200b000d6c86ea98dsm708837oal.1.2022.04.27.07.39.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 07:39:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8698b0d9-e0c0-65b1-c44c-3cc765e1dfc8@roeck-us.net>
+Date:   Wed, 27 Apr 2022 07:39:35 -0700
 MIME-Version: 1.0
-References: <20220426060536.15594-1-hbh25y@gmail.com> <20220426060536.15594-4-hbh25y@gmail.com>
- <20220426165613.GA2007637@p14s> <55c946ad-5d19-1d38-3484-1ab059a27642@gmail.com>
-In-Reply-To: <55c946ad-5d19-1d38-3484-1ab059a27642@gmail.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Wed, 27 Apr 2022 08:37:42 -0600
-Message-ID: <CANLsYkx7fB1O001cPLZbidDLmWyobb2zmhEX23naef7kb-RcAw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] rpmsg: virtio: Fix the unregistration of the
- device rpmsg_ctrl
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 0/4] asus-ec-sensors: add support for board families
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220427143001.1443605-1-eugene.shalygin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 20:50, Hangyu Hua <hbh25y@gmail.com> wrote:
->
-> On 2022/4/27 00:56, Mathieu Poirier wrote:
-> > On Tue, Apr 26, 2022 at 02:05:36PM +0800, Hangyu Hua wrote:
-> >> Unregister the rpmsg_ctrl device instead of just freeing the
-> >> the virtio_rpmsg_channel structure.
-> >> This will properly unregister the device and call
-> >> virtio_rpmsg_release_device() that frees the structure.
-> >>
-> >> Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> >> Cc: Hangyu Hua <hbh25y@gmail.com>
-> >> Reviewed-by: Hangyu Hua <hbh25y@gmail.com>
-> >> ---
-> >>   drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> >> index 291fc1cfab7f..485e95f506df 100644
-> >> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> >> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> >> @@ -862,7 +862,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct rpmsg_device *rpdev_ctrl)
-> >>   {
-> >>      if (!rpdev_ctrl)
-> >>              return;
-> >> -    kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
-> >> +    device_unregister(&rpdev_ctrl->dev);
-> >
-> > The author of this patch should have been Arnaud, something I have fixed before
-> > applying this set.
-> >
-> > Thanks,
-> > Mathieu
-> >
->
-> I get it. I'm sorry i thought Signed-off-by and a description in cover
-> letter are enough to express. Do i need to do anything else?
+On 4/27/22 07:29, Eugene Shalygin wrote:
+> Users provided information for boards from AMD-400 and sTRX40 families
+> and demonstrated that sensor addresses differ from those for the AMD-500
+> family. Also the AMD-400 family board uses the global ACPI lock instead
+> of a dedicated mutex to guard access to the hardware.
+> 
+> This patchset implements required changes to support other board
+> families:
+>   - per-family sensor definitions
+>   - options to choose hardware/state guard mutex: an AML mutex or the
+>     global ACPI lock.
+> 
+> These changes are used to add support for the PRIME X470-PRO board.
+> 
+Series applied to hwmon-next.
 
-I don't.
+Thanks,
+Guenter
 
->
-> Thanks,
-> Hangyu
-> >>   }
-> >>
-> >>   static int rpmsg_probe(struct virtio_device *vdev)
-> >> --
-> >> 2.25.1
-> >>
+> 
+> Changes in
+> v3:
+>   - Added family_unknown member to the board_family enum to ensure the
+> 	 default value of 0 is not a valid family value.
+>   - Added a note explaining why module_platform_driver_probe() is chosen
+> 	 over module_platform_driver().
+> 
+> v2:
+>   - Removed the case without ACPI mutex where the state was guarded using
+>           the normal mutex. After receiving an update from user that case
+>           turned out to be non-existent.
+>   - Removed the __initconst attribute from the board data array.
+>   - Updated documentation to include the special string for the mutex
+>           path module parameters which make the driver use the global ACPI
+>           lock.
+> 
+> Eugene Shalygin (4):
+>    hwmon: (asus-ec-sensors) introduce ec_board_info struct for board data
+>    hwmon: (asus-ec-sensors) implement locking via the ACPI global lock
+>    hwmon: (asus-ec-sensors) add support for board families
+>    hwmon: (asus-ec-sensors) add PRIME X470-PRO board
+> 
+>   Documentation/hwmon/asus_ec_sensors.rst |   2 +
+>   drivers/hwmon/asus-ec-sensors.c         | 420 +++++++++++++++++-------
+>   2 files changed, 302 insertions(+), 120 deletions(-)
+> 
+

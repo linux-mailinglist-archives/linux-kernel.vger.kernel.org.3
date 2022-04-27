@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F0F51177C
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9EE511721
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbiD0Llk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S232906AbiD0LlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbiD0Lli (ORCPT
+        with ESMTP id S232855AbiD0LlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:41:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CA641F9F
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651059507; x=1682595507;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5TCsS4H2FgSYiKzRFMy/PRIxIgDmsoFmuDlmsLxXLrU=;
-  b=QjwhB/In2GbNzGyjUk/EqsRYs5cwMJ/30/xHeVDRdkJ6QyalSaUME0ki
-   mJNGCUSJOJ9Trz5BR43EeDiA3Z0bPXmg3gT7oTNJXBj3tokQG157ERTA0
-   uyi0RitjR6qFMJU73KbGXqWRa0tzAxzq93fO8MoRjEpWqKZFexax4+rEh
-   1Opg9w6nh51MtoYdXUtWije4+icpYfBEZhwPwgmCpRk5ZHHPtHfD5W+T3
-   /rMuZIBepSYEu+ilpWc93FtAgkw6Je7eXho22XEsmMO8TecDWLogaV1KV
-   crB2IUjOLgN041m2uuMCW2i+R/IM5MPcyY5RRI4ejfjzVDOHzllfh5eGR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="266059587"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="266059587"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 04:38:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="617465323"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Apr 2022 04:38:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1njfzz-0004dC-Ch;
-        Wed, 27 Apr 2022 11:38:23 +0000
-Date:   Wed, 27 Apr 2022 19:37:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, glider@google.com, elver@google.com,
-        akpm@linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, dvyukov@google.com,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] mm/kfence: fix a potential NULL pointer dereference
-Message-ID: <202204271916.aTcNyVdc-lkp@intel.com>
-References: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
+        Wed, 27 Apr 2022 07:41:01 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6759741635;
+        Wed, 27 Apr 2022 04:37:50 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E0F0A1EC04F9;
+        Wed, 27 Apr 2022 13:37:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651059465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1fVJWQta5i4UbygG37TRGkW+2cfnzRwz9q+gHhnuUTY=;
+        b=p+LNdQEMNifB7YsATeBFDQ+UR+1pEbHv/mPGJL/Jqc29oWfE0oJwMlcoBgQWwMtl7p13vE
+        VSV9sLwNR+sMxejGKaXiJUir/uvE+23UHGyEQX1LWcEz109Pe29hGLEcNCei5kfTxOhxYC
+        tJk7UBgAhOzVnNzXioI9wMoaxnrD4Hg=
+Date:   Wed, 27 Apr 2022 13:37:45 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, peterz@infradead.org, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
+        eranian@google.com, puwen@hygon.cn, ananth.narayan@amd.com,
+        ravi.bangoria@amd.com, santosh.shukla@amd.com
+Subject: Re: [PATCH v4 0/7] perf/x86/amd/core: Add AMD PerfMonV2 support
+Message-ID: <YmkrCYZxG6cbCPGq@zn.tnic>
+References: <cover.1651058600.git.sandipan.das@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220427071100.3844081-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1651058600.git.sandipan.das@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Apr 27, 2022 at 05:01:42PM +0530, Sandipan Das wrote:
+> Sandipan Das (7):
+>   x86/cpufeatures: Add PerfMonV2 feature bit
+>   x86/msr: Add PerfCntrGlobal* registers
+>   perf/x86/amd/core: Detect PerfMonV2 support
+>   perf/x86/amd/core: Detect available counters
+>   perf/x86/amd/core: Add PerfMonV2 counter control
+>   perf/x86/amd/core: Add PerfMonV2 overflow handling
+>   kvm: x86/cpuid: Fix CPUID leaf 0xA
+> 
+>  arch/x86/events/amd/core.c         | 227 +++++++++++++++++++++++++++--
+>  arch/x86/include/asm/cpufeatures.h |   2 +-
+>  arch/x86/include/asm/msr-index.h   |   5 +
+>  arch/x86/include/asm/perf_event.h  |  17 +++
+>  arch/x86/kernel/cpu/scattered.c    |   1 +
+>  arch/x86/kvm/cpuid.c               |   5 +
+>  6 files changed, 240 insertions(+), 17 deletions(-)
 
-Thank you for the patch! Perhaps something to improve:
+From: Documentation/process/submitting-patches.rst
 
-[auto build test WARNING on hnaz-mm/master]
+Don't get discouraged - or impatient
+------------------------------------
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
-base:   https://github.com/hnaz/linux-mm master
-config: arm-buildonly-randconfig-r004-20220427 (https://download.01.org/0day-ci/archive/20220427/202204271916.aTcNyVdc-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/920e9e639493bc72bee803c763f09760e3acd063
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-kfence-fix-a-potential-NULL-pointer-dereference/20220427-151258
-        git checkout 920e9e639493bc72bee803c763f09760e3acd063
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash mm/kfence/
+After you have submitted your change, be patient and wait.  Reviewers are
+busy people and may not get to your patch right away.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   mm/kfence/core.c:1067:23: error: use of undeclared identifier 'addr'
-                   kfence_guarded_free(addr, meta, false);
-                                       ^
->> mm/kfence/core.c:1075:23: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
-                   kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
-                                       ^~~~
-   mm/kfence/kfence.h:129:40: note: passing argument to parameter 'address' here
-   void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *regs,
-                                          ^
-   1 warning and 1 error generated.
-
-
-vim +1075 mm/kfence/core.c
-
-  1069	
-  1070	void __kfence_free(void *addr)
-  1071	{
-  1072		struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
-  1073	
-  1074		if (!meta) {
-> 1075			kfence_report_error(addr, false, NULL, NULL, KFENCE_ERROR_INVALID);
-  1076			return;
-  1077		}
-  1078	
-  1079		__try_free_kfence_meta(meta);
-  1080	}
-  1081	
+Once upon a time, patches used to disappear into the void without comment,
+but the development process works more smoothly than that now.  You should
+receive comments within a week or so; if that does not happen, make sure
+that you have sent your patches to the right place.  Wait for a minimum of
+						     ^^^^^^^^^^^^^^^^^^^^^
+one week before resubmitting or pinging reviewers - possibly longer during
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+busy times like merge windows.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

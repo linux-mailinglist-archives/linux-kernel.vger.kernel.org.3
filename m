@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B15511E1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E8D511FAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233918AbiD0Rv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 13:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S244426AbiD0RwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 13:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiD0Rvz (ORCPT
+        with ESMTP id S232138AbiD0Rv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 13:51:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B863B292
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 10:48:43 -0700 (PDT)
+        Wed, 27 Apr 2022 13:51:59 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FC044A27;
+        Wed, 27 Apr 2022 10:48:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651081723; x=1682617723;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BAgtZv3LL6vYocWtwL+398lVVpady9I/YbNdXUVxTOQ=;
-  b=mzyNXwPSScwzUzdHYaST0jJkjsNtvQSMClZvbSDRONf2MVjiylTjRE2y
-   sIK/pO1OH8NSvBOzhEn+DxP+BKuMHwSPQCSYes2DAq9GSKQOs4NirfXHR
-   VdOANN8s5QQWyTlofwdkhIzTq+NhPUcOHQoIqZXJO8uEnz2PWXfpe/shs
-   m3sL02oh0s/l7ii7eupwt04rn+3ps0EDQjlEdUqSVOy6AiKn9QLuzUWm8
-   O7Ar1UC3DQb7XvyGz/Ew398oHNOqjXav6+b+z+mhbMUgUT82mhY/J9UY5
-   64jZNkqKgnSwysISveONqIRbzzsJbLrGL424DXOHc3iGlCFRBOoMYuAwQ
+  t=1651081727; x=1682617727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xBAq5Piq6zlH26AVb2ZRSlxIH2G6Cn1Xw2pn1sMDNSQ=;
+  b=a4X1S4lk2XBDuLY2pUrWJj/mrxcsB3DCWoSOdmCyuPIx6n9QOL6S9dgk
+   FTO+mPQyYq1uFceIKNcxd7P2Dm4K/6/UYu03bhUY1TZqo7sffUg/lS3Iu
+   JSGfm9V/RcwCVKsIExKOqRrt3R2xa9SnYQtNUh1g3FgejyOgWkqE2Wfra
+   wvQjqUrkwdTMccQqwn1Ue9cq8sTSfSrTo4AXBASEgQPLCuwqsT0GEn/wy
+   PR+s5/XGBNqJDyMk0pC11endH5qookT1L8i+6dVQRWYutZ5AURS9bwIgC
+   8QLbSBE55X90FFm4SCtf3gbp/VHBd9L+3Lvlgo3DWkxk3DH9P6LVz5GfJ
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="328959565"
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352451559"
 X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="328959565"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 10:48:42 -0700
+   d="scan'208";a="352451559"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 10:48:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
-   d="scan'208";a="617631023"
+   d="scan'208";a="533345178"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Apr 2022 10:48:41 -0700
+  by orsmga006.jf.intel.com with ESMTP; 27 Apr 2022 10:48:41 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1njlmK-0004pi-DK;
+        id 1njlmK-0004pk-E2;
         Wed, 27 Apr 2022 17:48:40 +0000
-Date:   Thu, 28 Apr 2022 01:47:58 +0800
+Date:   Thu, 28 Apr 2022 01:47:59 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: drivers/staging/r8188eu/os_dep/ioctl_linux.c:3431:31: sparse:
- sparse: incorrect type in argument 1 (different address spaces)
-Message-ID: <202204280108.t15hLKmX-lkp@intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 2/3] PCI: of: create DT nodes for PCI devices if they do
+ not exists
+Message-ID: <202204280126.T5VOPZdN-lkp@intel.com>
+References: <20220427094502.456111-3-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220427094502.456111-3-clement.leger@bootlin.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -61,107 +80,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   46cf2c613f4b10eb12f749207b0fd2c1bfae3088
-commit: 0a2b782a00f33e7d06dc43d099fa071ae97bee77 fortify: Make pointer arguments const
-date:   2 months ago
-config: mips-randconfig-s032-20220427 (https://download.01.org/0day-ci/archive/20220428/202204280108.t15hLKmX-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce:
+Hi "Clément,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.18-rc4 next-20220427]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cl-ment-L-ger/add-dynamic-PCI-device-of_node-creation-for-overlay/20220427-190828
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: sparc64-buildonly-randconfig-r003-20220427 (https://download.01.org/0day-ci/archive/20220428/202204280126.T5VOPZdN-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a2b782a00f33e7d06dc43d099fa071ae97bee77
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0a2b782a00f33e7d06dc43d099fa071ae97bee77
+        # https://github.com/intel-lab-lkp/linux/commit/787f8567f04db060522e198fbdc55a805e99b922
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cl-ment-L-ger/add-dynamic-PCI-device-of_node-creation-for-overlay/20220427-190828
+        git checkout 787f8567f04db060522e198fbdc55a805e99b922
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/r8188eu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/pci/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
-   command-line: note: in included file:
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-   builtin:0:0: sparse: this was the original definition
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3430:17: sparse: sparse: cast removes address space '__user' of expression
->> drivers/staging/r8188eu/os_dep/ioctl_linux.c:3431:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3431:31: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3431:31: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3433:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3433:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3433:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3435:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3435:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3435:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3437:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3437:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3437:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3439:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3439:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3439:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3442:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3442:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3442:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3444:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3444:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3444:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3447:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __user *pointer @@
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3447:38: sparse:     expected void const *const p
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3447:38: sparse:     got void [noderef] __user *pointer
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c:3459:9: sparse: sparse: cast removes address space '__user' of expression
+   drivers/pci/of.c: In function 'of_pci_add_property':
+>> drivers/pci/of.c:54:15: error: implicit declaration of function 'of_changeset_add_property'; did you mean 'of_pci_add_property'? [-Werror=implicit-function-declaration]
+      54 |         ret = of_changeset_add_property(ocs, np, prop);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |               of_pci_add_property
+   drivers/pci/of.c: In function 'of_pci_make_dev_node':
+>> drivers/pci/of.c:129:9: error: implicit declaration of function 'of_changeset_init' [-Werror=implicit-function-declaration]
+     129 |         of_changeset_init(&cs);
+         |         ^~~~~~~~~~~~~~~~~
+>> drivers/pci/of.c:147:15: error: implicit declaration of function 'of_changeset_attach_node' [-Werror=implicit-function-declaration]
+     147 |         ret = of_changeset_attach_node(&cs, node);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/pci/of.c:151:15: error: implicit declaration of function 'of_changeset_apply' [-Werror=implicit-function-declaration]
+     151 |         ret = of_changeset_apply(&cs);
+         |               ^~~~~~~~~~~~~~~~~~
+>> drivers/pci/of.c:160:9: error: implicit declaration of function 'of_changeset_destroy' [-Werror=implicit-function-declaration]
+     160 |         of_changeset_destroy(&cs);
+         |         ^~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-vim +3431 drivers/staging/r8188eu/os_dep/ioctl_linux.c
 
-2b42bd58b32155 Phillip Potter 2021-07-28  3420  
-2b42bd58b32155 Phillip Potter 2021-07-28  3421  static int rtw_p2p_get(struct net_device *dev,
-2b42bd58b32155 Phillip Potter 2021-07-28  3422  			       struct iw_request_info *info,
-2b42bd58b32155 Phillip Potter 2021-07-28  3423  			       union iwreq_data *wrqu, char *extra)
-2b42bd58b32155 Phillip Potter 2021-07-28  3424  {
-2b42bd58b32155 Phillip Potter 2021-07-28  3425  	int ret = 0;
-2b42bd58b32155 Phillip Potter 2021-07-28  3426  
-2b42bd58b32155 Phillip Potter 2021-07-28  3427  	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
-2b42bd58b32155 Phillip Potter 2021-07-28  3428  
-2b42bd58b32155 Phillip Potter 2021-07-28  3429  	if (padapter->bShowGetP2PState)
-2b42bd58b32155 Phillip Potter 2021-07-28 @3430  		DBG_88E("[%s] extra = %s\n", __func__, (char *)wrqu->data.pointer);
-2b42bd58b32155 Phillip Potter 2021-07-28 @3431  	if (!memcmp(wrqu->data.pointer, "status", 6)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3432  		rtw_p2p_get_status(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3433  	} else if (!memcmp(wrqu->data.pointer, "role", 4)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3434  		rtw_p2p_get_role(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3435  	} else if (!memcmp(wrqu->data.pointer, "peer_ifa", 8)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3436  		rtw_p2p_get_peer_ifaddr(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3437  	} else if (!memcmp(wrqu->data.pointer, "req_cm", 6)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3438  		rtw_p2p_get_req_cm(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3439  	} else if (!memcmp(wrqu->data.pointer, "peer_deva", 9)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3440  		/*	Get the P2P device address when receiving the provision discovery request frame. */
-2b42bd58b32155 Phillip Potter 2021-07-28  3441  		rtw_p2p_get_peer_devaddr(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3442  	} else if (!memcmp(wrqu->data.pointer, "group_id", 8)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3443  		rtw_p2p_get_groupid(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3444  	} else if (!memcmp(wrqu->data.pointer, "peer_deva_inv", 9)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3445  		/*	Get the P2P device address when receiving the P2P Invitation request frame. */
-2b42bd58b32155 Phillip Potter 2021-07-28  3446  		rtw_p2p_get_peer_devaddr_by_invitation(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3447  	} else if (!memcmp(wrqu->data.pointer, "op_ch", 5)) {
-2b42bd58b32155 Phillip Potter 2021-07-28  3448  		rtw_p2p_get_op_ch(dev, info, wrqu, extra);
-2b42bd58b32155 Phillip Potter 2021-07-28  3449  	}
-2b42bd58b32155 Phillip Potter 2021-07-28  3450  	return ret;
-2b42bd58b32155 Phillip Potter 2021-07-28  3451  }
-2b42bd58b32155 Phillip Potter 2021-07-28  3452  
+vim +54 drivers/pci/of.c
 
-:::::: The code at line 3431 was first introduced by commit
-:::::: 2b42bd58b32155a1be4dd78991845dec05aaef9e staging: r8188eu: introduce new os_dep dir for RTL8188eu driver
-
-:::::: TO: Phillip Potter <phil@philpotter.co.uk>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    17	
+    18	#ifdef CONFIG_PCI
+    19	static int of_pci_add_property(struct of_changeset *ocs, struct device_node *np,
+    20				       const char *name, const void *value, int length)
+    21	{
+    22		struct property *prop;
+    23		int ret = -ENOMEM;
+    24	
+    25		prop = kzalloc(sizeof(*prop), GFP_KERNEL);
+    26		if (!prop)
+    27			return -ENOMEM;
+    28	
+    29		prop->name = kstrdup(name, GFP_KERNEL);
+    30		if (!prop->name)
+    31			goto out_err;
+    32	
+    33		if (value) {
+    34			prop->value = kmemdup(value, length, GFP_KERNEL);
+    35			if (!prop->value)
+    36				goto out_err;
+    37		} else {
+    38			/*
+    39			 * Even if the property has no value, it must be set to a
+    40			 * non-null value since of_get_property() is used to check
+    41			 * some values that might or not have a values (ranges for
+    42			 * instance). Moreover, when the node is released, prop->value
+    43			 * is kfreed so the memory must come from kmalloc.
+    44			 */
+    45			prop->value = kmalloc(1, GFP_KERNEL);
+    46			if (!prop->value)
+    47				goto out_err;
+    48		}
+    49	
+    50		of_property_set_flag(prop, OF_DYNAMIC);
+    51	
+    52		prop->length = length;
+    53	
+  > 54		ret = of_changeset_add_property(ocs, np, prop);
+    55		if (!ret)
+    56			return 0;
+    57	
+    58	out_err:
+    59		kfree(prop->value);
+    60		kfree(prop->name);
+    61		kfree(prop);
+    62	
+    63		return ret;
+    64	}
+    65	
+    66	static struct device_node *of_pci_make_node(void)
+    67	{
+    68		struct device_node *node;
+    69	
+    70		node = kzalloc(sizeof(*node), GFP_KERNEL);
+    71		if (!node)
+    72			return NULL;
+    73	
+    74		of_node_set_flag(node, OF_DYNAMIC);
+    75		of_node_set_flag(node, OF_DETACHED);
+    76		of_node_init(node);
+    77	
+    78		return node;
+    79	}
+    80	
+    81	static int of_pci_add_cells_props(struct device_node *node,
+    82					  struct of_changeset *cs, int n_addr_cells,
+    83					  int n_size_cells)
+    84	{
+    85		__be32 val;
+    86		int ret;
+    87	
+    88		ret = of_pci_add_property(cs, node, "ranges", NULL, 0);
+    89		if (ret)
+    90			return ret;
+    91	
+    92		val = __cpu_to_be32(n_addr_cells);
+    93		ret = of_pci_add_property(cs, node, "#address-cells", &val,
+    94					  sizeof(__be32));
+    95		if (ret)
+    96			return ret;
+    97	
+    98		val = __cpu_to_be32(n_size_cells);
+    99		return of_pci_add_property(cs, node, "#size-cells", &val,
+   100					   sizeof(__be32));
+   101	}
+   102	
+   103	static int of_pci_add_pci_bus_props(struct device_node *node,
+   104					    struct of_changeset *cs)
+   105	{
+   106		int ret;
+   107	
+   108		ret = of_pci_add_property(cs, node, "device_type", "pci",
+   109					  strlen("pci") + 1);
+   110		if (ret)
+   111			return ret;
+   112	
+   113		return of_pci_add_cells_props(node, cs, 3, 2);
+   114	}
+   115	
+   116	static void of_pci_make_dev_node(struct pci_dev *dev)
+   117	{
+   118		static struct of_changeset cs;
+   119		const char *pci_type = "dev";
+   120		struct device_node *node;
+   121		__be32 val[5] = {0};
+   122		int ret;
+   123	
+   124		node = of_pci_make_node();
+   125		if (!node)
+   126			return;
+   127	
+   128		node->parent = dev->bus->dev.of_node;
+ > 129		of_changeset_init(&cs);
+   130	
+   131		if (pci_is_bridge(dev)) {
+   132			ret = of_pci_add_pci_bus_props(node, &cs);
+   133			if (ret)
+   134				goto changeset_destroy;
+   135			pci_type = "pci";
+   136		}
+   137	
+   138		node->full_name = kasprintf(GFP_KERNEL, "%s@%x,%x", pci_type,
+   139					    PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
+   140	
+   141		val[0] = __cpu_to_be32(dev->devfn << 8);
+   142		val[4] = __cpu_to_be32(SZ_4K);
+   143		ret = of_pci_add_property(&cs, node, "reg", val, 5 * sizeof(__be32));
+   144		if (ret)
+   145			goto changeset_destroy;
+   146	
+ > 147		ret = of_changeset_attach_node(&cs, node);
+   148		if (ret)
+   149			goto changeset_destroy;
+   150	
+ > 151		ret = of_changeset_apply(&cs);
+   152		if (ret)
+   153			goto changeset_destroy;
+   154	
+   155		dev->dev.of_node = node;
+   156	
+   157		return;
+   158	
+   159	changeset_destroy:
+ > 160		of_changeset_destroy(&cs);
+   161		kfree(node);
+   162	}
+   163	
 
 -- 
 0-DAY CI Kernel Test Service

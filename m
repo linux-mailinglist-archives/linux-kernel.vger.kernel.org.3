@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B55D511FC1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF4D512057
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiD0P4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 11:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S240435AbiD0P4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 11:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240746AbiD0P4E (ORCPT
+        with ESMTP id S240735AbiD0P4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 11:56:04 -0400
+        Wed, 27 Apr 2022 11:56:03 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C12D5B8BF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D830E5B8AC;
         Wed, 27 Apr 2022 08:52:47 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23RFqc3F059657;
-        Wed, 27 Apr 2022 10:52:38 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23RFqeGZ059667;
+        Wed, 27 Apr 2022 10:52:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651074758;
-        bh=Av/a1Q3ivltDpAcmy8Hg5LNnEffWVpKZ9vsFCXZxLS8=;
+        s=ti-com-17Q1; t=1651074760;
+        bh=iQNR/J2TTO4CXprgVUyWcFOqEc9DDh1c8RUauqT+Jcs=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=DnU0G3oRVGNDAEPe/NzsElmDfX5pIpr++2czKq3aG2fvCaBRm6RkG7YzlGpaQPNwx
-         tXd20XXJVCfe2sHGOWiEfj+RURGF82qPh7NFbS8eW6g1a6vAC/Pvocs00Ot0N4yATX
-         XTf38+y+ZEs7FeOOiFL+EnhnREi3WkAyWIvsFZvE=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23RFqcOv030285
+        b=TJeN4mxqfRUWMiwVSogSPUjZ7Fs7E/6PomW6RzxTdIy3NwaRa4jIq1cok0tFBDk8G
+         5LpHhujgBww6MorDwI6w40bBn3J5j1OX+2OPNwE8mvPiz7+Tnev8wjc2KWCmahKM0C
+         Q8UgLXg2jIE7WKwhlpyrglwuamWSBADDcGoZLDow=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23RFqeZ0085305
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 Apr 2022 10:52:38 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 27 Apr 2022 10:52:40 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 27
- Apr 2022 10:52:37 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2022 10:52:39 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 27 Apr 2022 10:52:37 -0500
+ Frontend Transport; Wed, 27 Apr 2022 10:52:39 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23RFqalZ068397;
-        Wed, 27 Apr 2022 10:52:37 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23RFqc9Q013951;
+        Wed, 27 Apr 2022 10:52:39 -0500
 From:   Rahul T R <r-ravikumar@ti.com>
 To:     <nm@ti.com>
 CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
         <tomi.valkeinen@ideasonboard.com>,
         <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>,
         <r-ravikumar@ti.com>
-Subject: [PATCH 1/2] arm64: dts: ti: k3-j721e-sk: Enable DisplayPort
-Date:   Wed, 27 Apr 2022 21:22:31 +0530
-Message-ID: <20220427155232.10659-2-r-ravikumar@ti.com>
+Subject: [PATCH 2/2] arm64: dts: ti: k3-j721e-sk: Enable HDMI
+Date:   Wed, 27 Apr 2022 21:22:32 +0530
+Message-ID: <20220427155232.10659-3-r-ravikumar@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220427155232.10659-1-r-ravikumar@ti.com>
 References: <20220427155232.10659-1-r-ravikumar@ti.com>
@@ -67,91 +67,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the endpoint nodes to describe connection from
-DSS => MHDP => DisplayPort connector.
+Add node for dvi bridge and the endpoint nodes to
+describe connection from
+DSS => TI TFP410 DPI-to-DVI Bridge => HDMI connector.
+Also add the required pinmux for HDMI hotplug and
+powerdown
 
 Signed-off-by: Rahul T R <r-ravikumar@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 45 +++++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 80 +++++++++++++++++++++++++-
+ 1 file changed, 79 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index 98177a20b45f..07b1e40fbc47 100644
+index 07b1e40fbc47..27a5911dfa8f 100644
 --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
 +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -213,6 +213,18 @@
- 		enable-active-high;
+@@ -225,6 +225,59 @@
+ 			};
+ 		};
  	};
- 
-+	dp0: connector {
-+		compatible = "dp-connector";
-+		label = "DP0";
-+		type = "full-size";
-+		dp-pwr-supply = <&dp_pwr_3v3>;
++
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		label = "hdmi";
++		type = "a";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&hdmi_hpd_pins_default>;
++
++		ddc-i2c-bus = <&main_i2c1>;
++
++		/* HDMI_HPD */
++		hpd-gpios = <&main_gpio1 0 GPIO_ACTIVE_HIGH>;
 +
 +		port {
-+			dp_connector_in: endpoint {
-+				remote-endpoint = <&dp0_out>;
++			hdmi_connector_in: endpoint {
++				remote-endpoint = <&tfp410_out>;
++			};
++		};
++	};
++
++	dvi-bridge {
++		compatible = "ti,tfp410";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&hdmi_pdn_pins_default>;
++
++		powerdown-gpios = <&main_gpio0 127 GPIO_ACTIVE_LOW>;
++		ti,deskew = <0>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				tfp410_in: endpoint {
++					remote-endpoint = <&dpi_out0>;
++					pclk-sample = <1>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				tfp410_out: endpoint {
++					remote-endpoint =
++						<&hdmi_connector_in>;
++				};
 +			};
 +		};
 +	};
  };
  
  &main_pmx0 {
-@@ -638,6 +650,8 @@
- &mhdp {
- 	phys = <&torrent_phy_dp>;
- 	phy-names = "dpphy";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&dp0_pins_default>;
- };
+@@ -329,6 +382,18 @@
+ 		>;
+ 	};
  
- &usbss0 {
-@@ -718,6 +732,33 @@
- 				 <&k3_clks 152 18>;	/* DPI1_EXT_CLKSEL_OUT0 */
- };
- 
-+&dss_ports {
-+	port {
-+		dpi0_out: endpoint {
-+			remote-endpoint = <&dp0_in>;
-+		};
++	hdmi_hpd_pins_default: hdmi-hpd-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x204, PIN_INPUT, 7) /* (AD5) UART1_RTSn.GPIO1_0 */
++		>;
 +	};
-+};
 +
-+&dp0_ports {
++	hdmi_pdn_pins_default: hdmi-pdn-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x200, PIN_INPUT, 7) /* (AC4) UART1_CTSn.GPIO0_127 */
++		>;
++	};
++
+ 	/* Reset for M.2 E Key slot on PCIe0  */
+ 	ekey_reset_pins_default: ekey-reset-pns-pins-default {
+ 		pinctrl-single,pins = <
+@@ -733,11 +798,24 @@
+ };
+ 
+ &dss_ports {
+-	port {
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +
-+	port@0 {
++	port@0  {
 +		reg = <0>;
-+		dp0_in: endpoint {
-+			remote-endpoint = <&dpi0_out>;
++
+ 		dpi0_out: endpoint {
+ 			remote-endpoint = <&dp0_in>;
+ 		};
+ 	};
++
++	port@1 {
++		reg = <1>;
++
++		dpi_out0: endpoint {
++			remote-endpoint = <&tfp410_in>;
 +		};
 +	};
-+
-+	port@4 {
-+		reg = <4>;
-+		dp0_out: endpoint {
-+			remote-endpoint = <&dp_connector_in>;
-+		};
-+	};
-+};
-+
- &mcasp0 {
- 	/* Unused */
- 	status = "disabled";
-@@ -852,10 +893,6 @@
- 	status = "disabled";
  };
  
--&dss {
--	status = "disabled";
--};
--
- &icssg0_mdio {
- 	status = "disabled";
- };
+ &dp0_ports {
 -- 
 2.17.1
 

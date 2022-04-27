@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8743F5121D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087E45121DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiD0S7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 14:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S231730AbiD0TAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 15:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiD0S7Y (ORCPT
+        with ESMTP id S232401AbiD0TAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 14:59:24 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67561611DF;
-        Wed, 27 Apr 2022 11:44:53 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id q8so2517951oif.13;
-        Wed, 27 Apr 2022 11:44:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/sIxYWvFlMoHReoMPfX2NBRTuxsiKhz/pal5GhylPqg=;
-        b=PN/WCN/lJCiNMu10xuaOmS9MxjYy07TYnJnbrxcJxLZ1TetHbPoXZQtIfiGNYcxKtD
-         lh3/cwwSi0xfgQxrTnIyDXEaRD/wMRqiN6NcusaHLhw+A9kvsWOfH2Y5uUgPciYzEgWU
-         RtA5WbOPgWpURhbmCrMoZ85lPvmLo+w63G6yJP4A1uUpXWUijK/sYZ8pwb+tN5vTmyb0
-         mClV+PlUfZimMiAfTqOvbIet7GAB+LuJguREm3pu7i6KWwrq5cBdbehwRL9jFj+ut3SZ
-         951R6nbqKUJihdotbl6MQzzXG+aSTSZnsAQgde5y1V5kuGZcZRvFnFIOsoSHYjm2UaKw
-         2Axg==
-X-Gm-Message-State: AOAM532FkCy6BldeuvC7cvcCzGG6kmifJNV4yPSX/SvNxTYXZOT3c1Rl
-        R6SKLatMnpp0kukK0paBXg==
-X-Google-Smtp-Source: ABdhPJz6nKdb0AwwSKP/n1AYikKnnui7VO1eKjkTuDHiUj8S52Lm4O++NP3zOk3jiqIIDRQN/19pQA==
-X-Received: by 2002:aca:1a09:0:b0:325:90ab:a812 with SMTP id a9-20020aca1a09000000b0032590aba812mr1384519oia.131.1651085093218;
-        Wed, 27 Apr 2022 11:44:53 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056870030400b000e686d13890sm963611oaf.42.2022.04.27.11.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 11:44:52 -0700 (PDT)
-Received: (nullmailer pid 436853 invoked by uid 1000);
-        Wed, 27 Apr 2022 18:44:52 -0000
-Date:   Wed, 27 Apr 2022 13:44:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: pinctrl: aspeed: Drop referenced nodes in
- examples
-Message-ID: <YmmPJLcI7PnsBtXn@robh.at.kernel.org>
-References: <20220422192139.2592632-1-robh@kernel.org>
- <CACPK8XcQNJNyzqdjMQuCP+z-L-A9mcMqs-HJJrh9MscasV+D=A@mail.gmail.com>
+        Wed, 27 Apr 2022 15:00:38 -0400
+Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F122D081C;
+        Wed, 27 Apr 2022 11:46:13 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru C5C71209A0EB
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH v3] sh: avoid using IRQ0 on SH3/4
+To:     Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Organization: Open Mobile Platform
+Message-ID: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
+Date:   Wed, 27 Apr 2022 21:46:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACPK8XcQNJNyzqdjMQuCP+z-L-A9mcMqs-HJJrh9MscasV+D=A@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 08:40:31AM +0000, Joel Stanley wrote:
-> On Fri, 22 Apr 2022 at 19:21, Rob Herring <robh@kernel.org> wrote:
-> >
-> > The additional nodes in the example referenced from the pinctrl node
-> > 'aspeed,external-nodes' properties are either incorrect (aspeed,ast2500-lpc)
-> > or not documented with a schema (aspeed,ast2500-gfx). There's no need to
-> > show these nodes as part of the pinctrl example, so just remove them.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> 
-> Nak.
+Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
+see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
+at 0 -- modify that code to start the IRQ #s from 16 instead.
 
-I welcome patches that add schemas for the undocumented compatibles 
-instead. Otherwise, I will be turning on this check by default and 
-nagging people to fix them.
+The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
 
-> This removes the information on how to use the bindings. Surely we
-> prefer to over document rather than under document?
+[1] https://lore.kernel.org/all/025679e1-1f0a-ae4b-4369-01164f691511@omp.ru/
 
-How is what the 'gfx' and 'lpc' nodes contain relevant to how the 
-pinctrl binding works? If a user wants to know, then they should go look 
-at the aspeed,ast2500-lpc/aspeed,ast2500-gfx bindings and their 
-examples. Which brings up my secondary issue which is having the same 
-example multiple times. It is multiple chances for errors (that I end 
-up fixing).
+Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
-How do we know the example is even correct without any schema checks? 
-The 'framebuffer' node is not in a valid location is the most obvious 
-thing I see.
+---
+The patch is against Linus Torvalds' 'linux.git' repo.
 
-Rob
+Changes in version 3:
+- added an appropriate Fixes: tag and added a passage about it to the patch
+  description;
+- added actual cases of the boards using IRQ0 to the patch description;
+- added Geert Uytterhoeven's and John Paul Adrian Glaubitz's tags;
+- updated the link to point to the version 2 of the patch.
+
+Changes in version 2:
+- changed cmp/ge to cmp/hs in the assembly code.
+
+ arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
+ include/linux/sh_intc.h        |    6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+===================================================================
+--- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
++++ linux/arch/sh/kernel/cpu/sh3/entry.S
+@@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+ 	mov	r4, r0		! save vector->jmp table offset for later
+ 
+ 	shlr2	r4		! vector to IRQ# conversion
+-	add	#-0x10, r4
+ 
+-	cmp/pz	r4		! is it a valid IRQ?
++	mov	#0x10, r5
++	cmp/hs	r5, r4		! is it a valid IRQ?
+ 	bt	10f
+ 
+ 	/*
+Index: linux/include/linux/sh_intc.h
+===================================================================
+--- linux.orig/include/linux/sh_intc.h
++++ linux/include/linux/sh_intc.h
+@@ -13,9 +13,9 @@
+ /*
+  * Convert back and forth between INTEVT and IRQ values.
+  */
+-#ifdef CONFIG_CPU_HAS_INTEVT
+-#define evt2irq(evt)		(((evt) >> 5) - 16)
+-#define irq2evt(irq)		(((irq) + 16) << 5)
++#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
++#define evt2irq(evt)		((evt) >> 5)
++#define irq2evt(irq)		((irq) << 5)
+ #else
+ #define evt2irq(evt)		(evt)
+ #define irq2evt(irq)		(irq)

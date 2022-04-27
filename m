@@ -2,219 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43305510E72
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843D7510E83
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357039AbiD0CE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 22:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S1357042AbiD0CFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 22:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349881AbiD0CER (ORCPT
+        with ESMTP id S1349881AbiD0CFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 22:04:17 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802A611C23
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651024868; x=1682560868;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aVEYVQf35+Uh7XzM6a1kJevWBsv5Uf3EWaUSl6Zi8N0=;
-  b=UocUzM1qIfxCSJF7NWfoqXYekFW684jLBtzH2jlb2RWBGcCrVcdMPJ9F
-   XiEFqrc0D3rXpOuRIe7xmKl/p437JlT5OfCrFUqAEjAI+TsmIXYyF4rYI
-   M0qyp8TPiyUqlvd9bGRFvu1TkCrxGrlpxHCf95nyi6S4G2m5xvPiGB4cY
-   FciILnk/Sb4D4JxOI9s10JJJNiLvLiy6MTG69/zdbFQIqs3s2n0/w+qb5
-   hMs8lu5kGRGq6YSHg5CYMXRDDNZsY2uFpUKUzlJGHO/LD4MolpCsMU0YI
-   Am3cDZOFkGV7NnKXLtOZhdykUHAHrW+vcIPWqSl6SkXKPg2W44xn0rMbU
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,292,1643644800"; 
-   d="scan'208";a="197753711"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Apr 2022 10:01:06 +0800
-IronPort-SDR: KmSwHkVVMX6zPKYGZTwazbbH5nJkXirJXdo5QLBGrIq2rVEAiaarWuh3WkYCaQDKwc1ujwni4W
- GdvqAdXm9S6ctQtAfgWA0W2/oIPYCSA6IYOBKUw4d5EF6Yonot0mePxiB6epDphbQr/T5jyQSz
- NZumnUDok454zOzznBA5HU8WZ0b5gZWuPDGpWJ6V86Q3da0BdhcqVxtfGXHUf75SThq6fTH5Y4
- P1h+FGU28FgZ2Lg/OlmnmkeRuyI9M6yHhBLd+7AsJjiNT7e3LcTAjXk7j1vZLTGJd9i+IZKVGs
- 4XoSkgi9Fxwy7NqT5KmaAQ9V
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Apr 2022 18:32:00 -0700
-IronPort-SDR: Xk5xSXGOZHjJQmG5okrqXGTE/IhgrDpTfQserdeiJTuB3l6i8piaSrQDbtz/osvR6phUiDY7x+
- mAt0BRle8QeOfvnS/QyXjzWGxZyFm1jGwexTNIhIsYuhu4Bzl+g3ROmiKt7pYz060VHzcJkqhQ
- NwHXzwPSmrklHedgFKfaD5FZm+Cp0AQZHX5EWyIz28cykS3KHfS4L0VXKDLrUM6Bxw122s7LJG
- vzxmNjQexP29jcC3gsbfY7SBo3IFtpyNTTs8cIUNi7JEMXXlMsVTpv/1Y5lkiRr81Tk0U+rjnT
- 5Gc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Apr 2022 19:01:06 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kp2694qRHz1SHwl
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:01:05 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651024864; x=1653616865; bh=aVEYVQf35+Uh7XzM6a1kJevWBsv5Uf3EWaU
-        Sl6Zi8N0=; b=ZeDu48TMfnVRErQO6FzvxanT5ICopH9ORrv5SXtzpLS+TiS0T1L
-        EslfKXJQX2/T9xqFy13DS5nGg7dJk8rDtOsBGPPKHcJJI+m7qA1MLvDaIJ998MgH
-        pkygMtaPu/DXgGLux0zswiFie054ZB7iv3BT5mE/YBREugGO9xdrOgdEaf/dmqvB
-        72o8h+CGsfiWyOv75mY/aKeyV0zqngz0FPYSa68ifoXAbXUoa7Gju5gS3swYI1cO
-        oewUYT/UGVPUfenfsXFN51gWKa7q3FgurVlWK29TzRw0BM4jlt75vWJUNhN9Gb0i
-        gzdM0ndxIZDSjQm+VOEsWjcQE1YiHf6F9sA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vCeM9lp0059W for <linux-kernel@vger.kernel.org>;
-        Tue, 26 Apr 2022 19:01:04 -0700 (PDT)
-Received: from [10.225.163.27] (unknown [10.225.163.27])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kp25z67Pcz1Rvlc;
-        Tue, 26 Apr 2022 19:00:55 -0700 (PDT)
-Message-ID: <76a89205-f4f1-1e51-aa23-c8082bfefd3c@opensource.wdc.com>
-Date:   Wed, 27 Apr 2022 11:00:54 +0900
+        Tue, 26 Apr 2022 22:05:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8419B12096
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651024944;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=53mrPkeW9KOi0bl6N4Fte0+icOguROXqZAbaSV/DmGo=;
+        b=a43Ip8qzLzaqdObpcucL72gEUd2wufndV1SyNya5E8zU/vSbmEufk3PBxqOh4w1QMUXMH3
+        vsxGuwbgMvSzmVpkd5ybJ7nxVMYl4SMavaV95Whfr2SHwl3ApilkGXSMWDbPAFUC2TqOdi
+        E6jXk20ELIXOZEGEBYYB5xbvGvlmrhM=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-ZjTMPR_2O-O59-TryGYHhg-1; Tue, 26 Apr 2022 22:02:22 -0400
+X-MC-Unique: ZjTMPR_2O-O59-TryGYHhg-1
+Received: by mail-ej1-f71.google.com with SMTP id nc20-20020a1709071c1400b006f3726da7d3so201477ejc.15
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:02:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=53mrPkeW9KOi0bl6N4Fte0+icOguROXqZAbaSV/DmGo=;
+        b=s88iCB+EPGUYIK7neNktccGC8nEJnZRCHn2ddkjyDI4fLMf88tsL/lCNshqpxssMxO
+         zWI+N4HSA1MP5EVQtabywOcmXy6zgX420/a/3bV5/az/ytYSrQ6f2I+bkpuJmy8x/wXC
+         gMoypRBMNzTe6cQHoborh76G7mYcu/d8hGovFzgqG+GXpMwJJ+k/1QxPblSEVU00y+2s
+         eXa1H48Gpng22C/61ZYh/9Rbkaqyyv65krlbM5iSGSKnXAbfSkvPgbohVqyHABO/p7Ju
+         IoEudjo8/dXgUZbQ4vHkoM4qogeN+nbB2OsFI0ji3cQ3m8pB/ZASivhshskDet3iO0M0
+         pufQ==
+X-Gm-Message-State: AOAM531C1shntCRnzgFipXllbMqiXa+hEOJkYsFsGMTMHS+DmZWVQaLt
+        Lnd7tfwYjLOhJvzKElq9QlKbfwc2HbgbGn2X0oscq4Zdb1OrBm0L2ZzyMIHn4UAFESpTOM6NL6f
+        Ym3SJZ6R5S9x3OdXQ0pxD/sVvadGJ17bUEUxguOyj
+X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id g12-20020a056402090c00b00415d3404ae2mr28082575edz.331.1651024941489;
+        Tue, 26 Apr 2022 19:02:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxKs+y0+3qWvY+IVaCiqw2RfHdBAhFgQvTiOo4p2FBOD+qS4pDrRNfnuJro7UGcKXZyrlyqYHuCVOIu4hdEbC8=
+X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id
+ g12-20020a056402090c00b00415d3404ae2mr28082563edz.331.1651024941345; Tue, 26
+ Apr 2022 19:02:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 00/10] Add Copy offload support
-Content-Language: en-US
-To:     Nitesh Shetty <nj.shetty@samsung.com>
-Cc:     chaitanyak@nvidia.com, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, dm-devel@redhat.com,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        axboe@kernel.dk, msnitzer@redhat.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
-        hch@lst.de, Frederick.Knight@netapp.com, osandov@fb.com,
-        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
-        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
-        jack@suse.com, nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
- <20220426101241.30100-1-nj.shetty@samsung.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220426101241.30100-1-nj.shetty@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220425062735.172576-1-lulu@redhat.com> <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
+In-Reply-To: <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Wed, 27 Apr 2022 10:01:42 +0800
+Message-ID: <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/22 19:12, Nitesh Shetty wrote:
-> The patch series covers the points discussed in November 2021 virtual c=
-all
-> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
-> We have covered the Initial agreed requirements in this patchset.
-> Patchset borrows Mikulas's token based approach for 2 bdev
-> implementation.
-
-Please reduce the distribution list. List servers (and email clients) are
-complaining about it being too large.
-
->=20
-> Overall series supports =E2=80=93
->=20
-> 1. Driver
-> - NVMe Copy command (single NS), including support in nvme-target (for
->     block and file backend)
->=20
-> 2. Block layer
-> - Block-generic copy (REQ_COPY flag), with interface accommodating
->     two block-devs, and multi-source/destination interface
-> - Emulation, when offload is natively absent
-> - dm-linear support (for cases not requiring split)
->=20
-> 3. User-interface
-> - new ioctl
-> - copy_file_range for zonefs
->=20
-> 4. In-kernel user
-> - dm-kcopyd
-> - copy_file_range in zonefs
->=20
-> For zonefs copy_file_range - Seems we cannot levearge fstest here. Limi=
-ted
-> testing is done at this point using a custom application for unit testi=
-ng.
->=20
-> Appreciate the inputs on plumbing and how to test this further?
-> Perhaps some of it can be discussed during LSF/MM too.
->=20
-> [0] https://lore.kernel.org/linux-nvme/CA+1E3rJ7BZ7LjQXXTdX+-0Edz=3DzT1=
-4mmPGMiVCzUgB33C60tbQ@mail.gmail.com/
->=20
-> Changes in v4:
-> - added copy_file_range support for zonefs
-> - added documentaion about new sysfs entries
-> - incorporated review comments on v3
-> - minor fixes
->=20
->=20
-> Arnav Dawn (2):
->   nvmet: add copy command support for bdev and file ns
->   fs: add support for copy file range in zonefs
->=20
-> Nitesh Shetty (7):
->   block: Introduce queue limits for copy-offload support
->   block: Add copy offload support infrastructure
->   block: Introduce a new ioctl for copy
->   block: add emulation for copy
->   nvme: add copy offload support
->   dm: Add support for copy offload.
->   dm: Enable copy offload for dm-linear target
->=20
-> SelvaKumar S (1):
->   dm kcopyd: use copy offload support
->=20
->  Documentation/ABI/stable/sysfs-block |  83 +++++++
->  block/blk-lib.c                      | 358 +++++++++++++++++++++++++++
->  block/blk-map.c                      |   2 +-
->  block/blk-settings.c                 |  59 +++++
->  block/blk-sysfs.c                    | 138 +++++++++++
->  block/blk.h                          |   2 +
->  block/ioctl.c                        |  32 +++
->  drivers/md/dm-kcopyd.c               |  55 +++-
->  drivers/md/dm-linear.c               |   1 +
->  drivers/md/dm-table.c                |  45 ++++
->  drivers/md/dm.c                      |   6 +
->  drivers/nvme/host/core.c             | 116 ++++++++-
->  drivers/nvme/host/fc.c               |   4 +
->  drivers/nvme/host/nvme.h             |   7 +
->  drivers/nvme/host/pci.c              |  25 ++
->  drivers/nvme/host/rdma.c             |   6 +
->  drivers/nvme/host/tcp.c              |  14 ++
->  drivers/nvme/host/trace.c            |  19 ++
->  drivers/nvme/target/admin-cmd.c      |   8 +-
->  drivers/nvme/target/io-cmd-bdev.c    |  65 +++++
->  drivers/nvme/target/io-cmd-file.c    |  49 ++++
->  fs/zonefs/super.c                    | 178 ++++++++++++-
->  fs/zonefs/zonefs.h                   |   1 +
->  include/linux/blk_types.h            |  21 ++
->  include/linux/blkdev.h               |  17 ++
->  include/linux/device-mapper.h        |   5 +
->  include/linux/nvme.h                 |  43 +++-
->  include/uapi/linux/fs.h              |  23 ++
->  28 files changed, 1367 insertions(+), 15 deletions(-)
->=20
->=20
-> base-commit: e7d6987e09a328d4a949701db40ef63fbb970670
+On Mon, Apr 25, 2022 at 5:00 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+> >
+> > To support the dynamic ids in vp_vdpa, we need to add the check for
+> > id table. If the id table is NULL, will not set the device type
+> >
+> > Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > ---
+> >  drivers/vdpa/vdpa.c | 11 +++++++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> > index 1ea525433a5c..09edd92cede0 100644
+> > --- a/drivers/vdpa/vdpa.c
+> > +++ b/drivers/vdpa/vdpa.c
+> > @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdpa_mgmt_dev *mdev, struct sk_buff *m
+> >         if (err)
+> >                 goto msg_err;
+> >
+> > -       while (mdev->id_table[i].device) {
+> > -               if (mdev->id_table[i].device <= 63)
+> > -                       supported_classes |= BIT_ULL(mdev->id_table[i].device);
+> > -               i++;
+> > +       if (mdev->id_table != NULL) {
+> > +               while (mdev->id_table[i].device) {
+> > +                       if (mdev->id_table[i].device <= 63)
+> > +                               supported_classes |=
+> > +                                       BIT_ULL(mdev->id_table[i].device);
+> > +                       i++;
+> > +               }
+> >         }
+>
+> This will cause 0 to be advertised as the supported classes.
+>
+> I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
+> export it to via uAPI probably).
+>
+> Thanks
+>
+like the below one? not sure if this ok to use like this?
+static struct virtio_device_id vp_vdpa_id_table[] = {
+{ VIRTIO_DEV_ANY_ID, VIRTIO_DEV_ANY_ID },
+{ 0 },
+};
 
 
---=20
-Damien Le Moal
-Western Digital Research
+> >
+> >         if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLASSES,
+> > --
+> > 2.34.1
+> >
+>
+

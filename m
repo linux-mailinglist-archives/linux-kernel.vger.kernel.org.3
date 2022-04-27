@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83905123E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDC55123E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbiD0Ub1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        id S236186AbiD0Uby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiD0UbU (ORCPT
+        with ESMTP id S231933AbiD0Ubv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:31:20 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7A1B18B6;
-        Wed, 27 Apr 2022 13:28:07 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id r13so5648086ejd.5;
-        Wed, 27 Apr 2022 13:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XvGmY2mQG936hGzg2VuapP2qnKpxxaFYjmRXixs6VIw=;
-        b=MzXqmOkEd24dbNwdLzRcxZTb2yAdP6lxjxolSFWkLK094wVT5610q89FwZ/ACmJWZz
-         JaZsD+iFtBu7Sd6EofSiptXIMuutK5FJMnSMgPchBU9BGddEjtH4AOh/Z4XN4wZ3NX6j
-         9nDsIiBBcII8jofTbK2AxsQNZEqufmuwgsddUp/Y9xx4sc3lrZZl0wgF/5at5HQGtbMD
-         0AD0ey2KzlA/t+OU6RpGmuHsmo9ixIkh6lpPGIRnzR485erVPeMxThYWyHMF+UKv4sbJ
-         sUmr9ycIMaf8KZr6Z3btAq0qF4LLK9owYVro7lHFGpXk2nOKHJY0+5zRHUYx3L5ve0dJ
-         u3rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XvGmY2mQG936hGzg2VuapP2qnKpxxaFYjmRXixs6VIw=;
-        b=hH/UKpS2Pr105BsHVkmQzs+MrjcgCl3FdZAfLov/rksRF/pZfeXLJPYxnbtFmsbMif
-         JorE5qFzoe3Rk4M8cnNkwnyfpVqw+Sl2Bnh8+06upmd0BByclDXcJrCDDEminfqpmYgO
-         /+fRTJ/sVEbO+8ZIbttT+/YLnXspdcwy+NwifV3NUwoCh4+lBdELLdI+8TEdAbLFLhyF
-         7jYhyjQNAJoYyII6Zx+3DXdJOzFxvuTrQ97GS5SLb6uhKquvVFtykhBdJAmAIoZubT5l
-         hX99aa2FA/9a+iXdxJVHzLwXNfObfEf6TF6jSDyTdgxEaN13avh90EVDZMa93nXtD6lF
-         MCZg==
-X-Gm-Message-State: AOAM53060V899XtmEIFwppkjU1Sq9fizFnOOprZDcYVWKJmQugNK597J
-        FMl66yeLnHdkBqALeasd/AcAjvrEauaVfQ==
-X-Google-Smtp-Source: ABdhPJynfDhtkkRIX5oDrXpoq2M/wKC5ZG0bQaQWExaqc1wCyweARLqXzr5tTgNf04q7vp1gnE2VVg==
-X-Received: by 2002:a17:907:7286:b0:6ef:f594:e063 with SMTP id dt6-20020a170907728600b006eff594e063mr28032902ejc.611.1651091284058;
-        Wed, 27 Apr 2022 13:28:04 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170906924200b006f3d1141693sm1004812ejx.44.2022.04.27.13.28.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 13:28:03 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 6/8] MAINTAINERS: Add entry for the Allwinner A31 MIPI CSI-2 bridge driver
-Date:   Wed, 27 Apr 2022 22:28:02 +0200
-Message-ID: <3412158.V25eIC5XRa@jernej-laptop>
-In-Reply-To: <20220415152138.635525-7-paul.kocialkowski@bootlin.com>
-References: <20220415152138.635525-1-paul.kocialkowski@bootlin.com> <20220415152138.635525-7-paul.kocialkowski@bootlin.com>
+        Wed, 27 Apr 2022 16:31:51 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF120B18B7;
+        Wed, 27 Apr 2022 13:28:39 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 0691E1C0B8E; Wed, 27 Apr 2022 22:28:37 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 22:28:36 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.10 14/86] dmaengine: mediatek:Fix PM usage reference
+ leak of mtk_uart_apdma_alloc_chan_resources
+Message-ID: <20220427202836.GA1337@duo.ucw.cz>
+References: <20220426081741.202366502@linuxfoundation.org>
+ <20220426081741.617352615@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="CE+1k2dSO48ffgeK"
+Content-Disposition: inline
+In-Reply-To: <20220426081741.617352615@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 15. april 2022 ob 17:21:36 CEST je Paul Kocialkowski napisal(a):
-> Add myself as maintainer of the Allwinner A31 MIPI CSI-2 bridge media
-> driver.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+--CE+1k2dSO48ffgeK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> pm_runtime_get_sync will increment pm usage counter even it failed.
+> Forgetting to putting operation will result in reference leak here.
+> We fix it:
+> 1) Replacing it with pm_runtime_resume_and_get to keep usage counter
+>    balanced.
+
+Suspect.
+
+> 2) Add putting operation before returning error.
+
+Yes but you also put in success case, which is likely
+wrong. mtk_uart_apdma_free_chan_resources() does second put.
+
+> +++ b/drivers/dma/mediatek/mtk-uart-apdma.c
+> @@ -274,7 +274,7 @@ static int mtk_uart_apdma_alloc_chan_resources(struct=
+ dma_chan *chan)
+>  	unsigned int status;
+>  	int ret;
+> =20
+> -	ret =3D pm_runtime_get_sync(mtkd->ddev.dev);
+> +	ret =3D pm_runtime_resume_and_get(mtkd->ddev.dev);
+>  	if (ret < 0) {
+>  		pm_runtime_put_noidle(chan->device->dev);
+>  		return ret;
+
+
+This is suspect, too. What is the put_noidle doing there? Seems like
+it was meant to undo the get_sync operation, but uses different
+argument?
+
+> @@ -288,18 +288,21 @@ static int mtk_uart_apdma_alloc_chan_resources(stru=
+ct dma_chan *chan)
+> =20
+>  	if (mtkd->support_33bits)
+>  		mtk_uart_apdma_write(c, VFF_4G_SUPPORT, VFF_4G_SUPPORT_CLR_B);
+> =20
+> +err_pm:
+> +	pm_runtime_put_noidle(mtkd->ddev.dev);
+>  	return ret;
+>  }
+
+This should only be done in error case.
 
 Best regards,
-Jernej
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fd768d43e048..0c7a3c792837 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -761,6 +761,14 @@ T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-
-csi.yaml
->  F:	drivers/media/platform/sunxi/sun4i-csi/
-> 
-> +ALLWINNER A31 MIPI CSI-2 BRIDGE DRIVER
-> +M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> +L:	linux-media@vger.kernel.org
-> +S:	Maintained
-> +T:	git git://linuxtv.org/media_tree.git
-> +F:	Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-
-csi2.ya
-> ml +F:	drivers/media/platform/sunxi/sun6i-mipi-csi2/
-> +
->  ALLWINNER CPUFREQ DRIVER
->  M:	Yangtao Li <tiny.windzz@gmail.com>
->  L:	linux-pm@vger.kernel.org
+--CE+1k2dSO48ffgeK
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYmmndAAKCRAw5/Bqldv6
+8ofDAJ9Wn50KlpBHmmRdY76q8yRqCjKaCACcC0Z9sLXZFmOs9LULKyBcCPbpmmE=
+=N0Sr
+-----END PGP SIGNATURE-----
 
-
+--CE+1k2dSO48ffgeK--

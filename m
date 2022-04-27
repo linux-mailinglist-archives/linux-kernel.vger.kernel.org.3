@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB88A51105B
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7456051105C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 07:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357765AbiD0FET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 01:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S1357776AbiD0FFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 01:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240085AbiD0FEP (ORCPT
+        with ESMTP id S240085AbiD0FFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 01:04:15 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272633F307;
-        Tue, 26 Apr 2022 22:01:06 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id h1so611967pfv.12;
-        Tue, 26 Apr 2022 22:01:06 -0700 (PDT)
+        Wed, 27 Apr 2022 01:05:50 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CE975226
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:02:39 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id g3so583102pgg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 22:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=SFTg9MPpAQTp6TISgZC7JwgCd+VZygIltX3qHXtuEIY=;
-        b=M9T5s2utd20CnMnOeMpcBa4bYx7nj5rJZtAwndg5kj3H5PopvrFBSzHq02FziZkf0D
-         4sQ4y/7n/Xwj/nwxCJEoey3LR/SmgJl9zeHG37Di0cWLYg5F17aF3MA+a5D33z6BRvrA
-         WXTL/ZWvYyAztswWc+j345du08QD3O0c8Cq9ijTCDVCNkCFlfrSJ01m7+MMVbvyT3e4j
-         yZfoV07Cx0jUbPlbB8MRpJM3dL8ALM9hBG4K8q0UAt5AaRvZDGfGTvP4xw2cLuLbFbb9
-         HF/BWAz/0tVtyLITz/1CaeHiHhF6EF+ZTwITITJWF3ZegZMDDOGJPOAaLrvOP742Wtgh
-         Smyw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VlpEDtcvA+To0Ed3cwb9iScxFZaMjp5cfRG/gTpfLho=;
+        b=heaGRX2MBNx+YN1imPTz3HhCOViVeBMHIdVlwdrhyB8JEFeDwmSLYtRiZlAyB2ePWZ
+         CaFKJp0ZCmYnEExgXzGbpvMQvUfMhy657rqfL1EpSN1h7CaaYEsLJrUHmkEkwJZ77Zn/
+         xAvPQCxXNom9qF8FO3WkWUA5if3rMbKrKAh3LNtPRh3XZkSTL1aoLuQVjbXS2jn/uzsV
+         rhRVhDcPdM0U3QPBTQBrrXEwzVfUo2eIaoUdCIAwL4pS0s4CEiIZnOO/AoYdrBOlzhlS
+         f3QA8QtVgFi05KJhpB+K5nETGtMo1BBhOsjvj/zKaDkLcuCooTA3cCitJ64+tA/69241
+         UkTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=SFTg9MPpAQTp6TISgZC7JwgCd+VZygIltX3qHXtuEIY=;
-        b=JBhhvTgCdlXuBx5yQiZP9ps0UFIQZ5suT3W/T0Zg7KhoiA57Px8AB2GDvcO3LtphZP
-         ep1H1CCZmuqA+5zak549QWJaUExVAyZuEgIIuCm3AF01JOY9RuNZRSrc4rwvjRSzf/vi
-         7TcJ/yOyNfNZrTWAV8BMs45pq2HdOzY0akeTlbjcEnPmcuJCQ1pEjana0dw81C4Iqavm
-         rdai+JNd4Uq0rYGC1ioq+gthNNSX7hW7UJt5SBZrD/ASmmnNcLhsmwcXJa/WEHVJ1Ggo
-         4Wyou2DOP+t9SQpYjKj76K5B5JHzyaOtfLtGpP2CpNBkUISZvmU/0Vbf5GB5lD1tsrk2
-         CkrQ==
-X-Gm-Message-State: AOAM53241FGuDV0D16MVeLQd2dAtKSJd0L1FBtnVjQETZtdLUgpC1whY
-        HUmybtqefOMbmEZG0cVNsO4=
-X-Google-Smtp-Source: ABdhPJyMcdiaF/JnIL8yZrYft4WsH/fwDZRML7R1hbRK74iYsx6XgOIzGNwB0a/19H8GoJYefSCdHg==
-X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id bj2-20020a056a02018200b003745a57cbf9mr21979675pgb.616.1651035664985;
-        Tue, 26 Apr 2022 22:01:04 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:7a3e])
-        by smtp.gmail.com with ESMTPSA id t15-20020a62d14f000000b0050d3846c538sm10587628pfl.57.2022.04.26.22.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 22:01:04 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 26 Apr 2022 19:01:01 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, Rik van Riel <riel@surriel.com>
-Subject: [PATCH block-5.18] iocost: don't reset the inuse weight of
- under-weighted debtors
-Message-ID: <YmjODd4aif9BzFuO@slm.duckdns.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VlpEDtcvA+To0Ed3cwb9iScxFZaMjp5cfRG/gTpfLho=;
+        b=hh7gFf05YhJy3KPO/AQGcXXTJhxYsFkSwMMQM/aI8SO5r+nwwhgerLTkIC+OqzMEAG
+         EmFnpv2JpcL+2qW3MLDDAhiZli1qOa9mw8FoKcqppUGSiBTRrSDC4eqTAsnx/khdcO0q
+         1C7PH2jAtWb3dMalc1VUGawW1VLjH5YxwlPOinKQ8htLH3q6RuNUAibJpTK0MwHZvh1x
+         yOajVmlbeOR4TmHeOKJCTAZSvRigR6nTLZQxzglkkUdCh41I24bdf/khI3On5KAgoezM
+         iQlAKGDya4b0ntcyU3WO+PI5mhhW8+tx6lNYlhMptLxSsLBIB2ozJMOoNommLARWpFyf
+         qdbg==
+X-Gm-Message-State: AOAM530PQrkTgeqlrSabWrRxYESHdTiL0QDoLqryr92JKb8bqCgVcUGj
+        rjRlVYq1RxhaiXC42ll7c20/2EelyoSp62y/M5y1Cg==
+X-Google-Smtp-Source: ABdhPJyALh4fvlb0O6nAb99jtMwkx94OVbaXwL9Zh6eVK/Dd3FonRJEwBkLgV93oxKxkgSq3EeMv9vgGg2HRVORhRLg=
+X-Received: by 2002:a63:fd07:0:b0:3aa:1cd9:194f with SMTP id
+ d7-20020a63fd07000000b003aa1cd9194fmr22594340pgh.509.1651035759004; Tue, 26
+ Apr 2022 22:02:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220420055807.GA16310@xsang-OptiPlex-9020> <43598597-72e1-6750-9bee-031fd463fc3b@intel.com>
+In-Reply-To: <43598597-72e1-6750-9bee-031fd463fc3b@intel.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 26 Apr 2022 22:02:28 -0700
+Message-ID: <CALvZod4_vNWYxzGR3BksZYgoti-9hOioMGwF2UVRnwcAGpFqXA@mail.gmail.com>
+Subject: Re: [memcg] a8c49af3be: hackbench.throughput -13.7% regression
+To:     Yin Fengwei <fengwei.yin@intel.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kernel test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an iocg is in debt, its inuse weight is owned by debt handling and
-should stay at 1. This invariant was broken when determining the amount of
-surpluses at the beginning of donation calculation - when an iocg's
-hierarchical weight is too low, the iocg is excluded from donation
-calculation and its inuse is reset to its active regardless of its
-indebtedness, triggering warnings like the following:
+Hi Yin,
 
- WARNING: CPU: 5 PID: 0 at block/blk-iocost.c:1416 iocg_kick_waitq+0x392/0x3a0
- ...
- RIP: 0010:iocg_kick_waitq+0x392/0x3a0
- Code: 00 00 be ff ff ff ff 48 89 4d a8 e8 98 b2 70 00 48 8b 4d a8 85 c0 0f 85 4a fe ff ff 0f 0b e9 43 fe ff ff 0f 0b e9 4d fe ff ff <0f> 0b e9 50 fe ff ff e8 a2 ae 70 00 66 90 0f 1f 44 00 00 55 48 89
- RSP: 0018:ffffc90000200d08 EFLAGS: 00010016
- ...
-  <IRQ>
-  ioc_timer_fn+0x2e0/0x1470
-  call_timer_fn+0xa1/0x2c0
- ...
+On Tue, Apr 26, 2022 at 7:53 PM Yin Fengwei <fengwei.yin@intel.com> wrote:
+>
+[...]
+>
+> If I comment out one line added by the commit <a8c49af3be> :
+> static void memcg_account_kmem(struct mem_cgroup *memcg, int nr_pages)
+> {
+>         /* mod_memcg_state(memcg, MEMCG_KMEM, nr_pages); */  <--- comment out this line.
 
-As this happens only when an iocg's hierarchical weight is negligible, its
-impact likely is limited to triggering the warnings. Fix it by skipping
-resetting inuse of under-weighted debtors.
+Can you to comment out the following block instead of the above line
+and see if there is any impact?
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: Rik van Riel <riel@surriel.com>
-Fixes: c421a3eb2e27 ("blk-iocost: revamp debt handling")
-Cc: stable@vger.kernel.org # v5.10+
----
- block/blk-iocost.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 70a0a3d680a35..9bd670999d0af 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2322,7 +2322,17 @@ static void ioc_timer_fn(struct timer_list *timer)
- 				iocg->hweight_donating = hwa;
- 				iocg->hweight_after_donation = new_hwi;
- 				list_add(&iocg->surplus_list, &surpluses);
--			} else {
-+			} else if (!iocg->abs_vdebt) {
-+				/*
-+				 * @iocg doesn't have enough to donate. Reset
-+				 * its inuse to active.
-+				 *
-+				 * Don't reset debtors as their inuse's are
-+				 * owned by debt handling. This shouldn't affect
-+				 * donation calculuation in any meaningful way
-+				 * as @iocg doesn't have a meaningful amount of
-+				 * share anyway.
-+				 */
- 				TRACE_IOCG_PATH(inuse_shortage, iocg, &now,
- 						iocg->inuse, iocg->active,
- 						iocg->hweight_inuse, new_hwi);
+>         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys)) {
+>                 if (nr_pages > 0)
+>                         page_counter_charge(&memcg->kmem, nr_pages);
+>                 else
+>                         page_counter_uncharge(&memcg->kmem, -nr_pages);
+>         }
+> }
+>

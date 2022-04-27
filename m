@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AB05111BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DDD5111C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 08:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358456AbiD0G5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 02:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S1358468AbiD0G6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 02:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358390AbiD0G4o (ORCPT
+        with ESMTP id S1356571AbiD0G6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 02:56:44 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D2F15A438
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:53:32 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j15so1110157wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 23:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sywIeG2HiiTWZv6dh3lrACwyYZG/9USPPQqRRJss/TE=;
-        b=DvSH0nPKb9aM98q9+fEQAqLrjxBAcJzGLcasafpsh3qomqG4I15sC20qPFuFYFNxF/
-         RAakzMH+eO4jSr+1snlOji8jEeir0z2pJeL8krJ8SfJxAc4fpTW3pNMG7AnFuvMIhqR2
-         mSM4oGe/GNnDnma0ho1soJUNlPkpIl4m0BoTm2SeKqOfl+MXHmKE0xZrTS5/KTc9DIdv
-         HpM2M4ULJGzUtObLmdaTNAglnFIFup/zr5CHcZnhH894YLzFiydg0DWwpU72Ha1BeMbs
-         fXUCWzSWdAEAQ1Hd0ZtFp7dcZsFZKKsd3evVKgwbWnSq2F1w2ThqDLO7IbIB9SdxAPNQ
-         R10A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sywIeG2HiiTWZv6dh3lrACwyYZG/9USPPQqRRJss/TE=;
-        b=Hw3muAe1L2trW6DuyjfX4Rwgtm0cn98Pwmj685epSipD1/TYF5vgYj+DbfVa6rd8a4
-         KAyHqWtTc/ugi4A4YA+URLSfckh4Lop16TsJ1pC+ZYZDVih/CioNMTcNSm3vFA2f1dIl
-         zBo6O5sfO49DI/Pi+KHTWERklTrxOvc0zRiTJ8b6jnmZPha3N8a7GzMRq5CredIJqCv1
-         m4VFfNi6+imdVH27FHGCOSzQjbLi9SFx0eFX0/td3RssW2o5iX8TLUu6UQHwwz5dauPu
-         STFrX6dLFq5j/GTL7/rCY3xYYI2DtdV94y6GN9gEditRgFQqZsTWUVGDfKcuLphavHMd
-         jDBw==
-X-Gm-Message-State: AOAM532ggmLibJm78f83BSYHB9jLGtQx+Cwy1A6/DWV7ytGBOnKQW8zx
-        MhgKLQJrBqNw0oXRM2hlJSpQXQ==
-X-Google-Smtp-Source: ABdhPJweJ1wsocYd5uHXP0OXjVrnlCbkD8i4KnvVgqQkJEwOxyNjOI0ktncE+no4NH0K3sQ9l6WJqA==
-X-Received: by 2002:a05:6000:144f:b0:20a:e51a:1f71 with SMTP id v15-20020a056000144f00b0020ae51a1f71mr5490547wrx.410.1651042410821;
-        Tue, 26 Apr 2022 23:53:30 -0700 (PDT)
-Received: from radium ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id w4-20020a7bc104000000b0038eba17a797sm859839wmi.31.2022.04.26.23.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 23:53:30 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 08:53:18 +0200
-From:   Fabien Parent <fparent@baylibre.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lee Jones <lee.jones@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the input tree
-Message-ID: <20220427065318.bdn5h6rdcvdpxdd2@radium>
-References: <20220427104825.15a04680@canb.auug.org.au>
+        Wed, 27 Apr 2022 02:58:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E746E15B440;
+        Tue, 26 Apr 2022 23:54:55 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kp8Z91bRFzGpVQ;
+        Wed, 27 Apr 2022 14:52:17 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 14:54:53 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 14:54:52 +0800
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-6-thunder.leizhen@huawei.com> <YmgzxsrrMlCDYsWp@arm.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <ee8daaa9-3258-e7e8-e5c4-c51dc9841580@huawei.com>
+Date:   Wed, 27 Apr 2022 14:54:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kxp3ossrzkuyes7u"
-Content-Disposition: inline
-In-Reply-To: <20220427104825.15a04680@canb.auug.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <YmgzxsrrMlCDYsWp@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,75 +71,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---kxp3ossrzkuyes7u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 2022/4/27 2:02, Catalin Marinas wrote:
+> On Thu, Apr 14, 2022 at 07:57:16PM +0800, Zhen Lei wrote:
+>>  /*
+>>   * reserve_crashkernel() - reserves memory for crash kernel
+>>   *
+>>   * This function reserves memory area given in "crashkernel=" kernel command
+>>   * line parameter. The memory reserved is used by dump capture kernel when
+>>   * primary kernel is crashing.
+>> + *
+>> + * NOTE: Reservation of crashkernel,low is special since its existence
+>> + * is not independent, need rely on the existence of crashkernel,high.
+>> + * Here, four cases of crashkernel low memory reservation are summarized:
+>> + * 1) crashkernel=Y,low is specified explicitly, the size of crashkernel low
+>> + *    memory takes Y;
+>> + * 2) crashkernel=,low is not given, while crashkernel=,high is specified,
+>> + *    take the default crashkernel low memory size;
+>> + * 3) crashkernel=X is specified, while fallback to get a memory region
+>> + *    in high memory, take the default crashkernel low memory size;
+>> + * 4) crashkernel='invalid value',low is specified, failed the whole
+>> + *    crashkernel reservation and bail out.
+> 
+> Following the x86 behaviour made sense when we were tried to get that
+> code generic. Now that we moved the logic under arch/arm64, we can
+> diverge a bit. I lost track of the original (v1/v2) proposal but I
+> wonder whether we still need the fallback to high for crashkernel=Y.
 
-On Wed, Apr 27, 2022 at 10:48:25AM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the input tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATUS' u=
-ndeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
->    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
->       |                                    ^~~~~~~~~~~~~~~~
-> drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of macr=
-o 'MTK_PMIC_KEYS_REGS'
->    48 |         .deb_reg                =3D _deb_reg,             \
->       |                                   ^~~~~~~~
-> drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_MISC=
-' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MISC'?
->    98 |         .pmic_rst_reg =3D MT6359_TOP_RST_MISC,
->       |                         ^~~~~~~~~~~~~~~~~~~
->       |                         MT6358_TOP_RST_MISC
->=20
-> Caused by commit
->=20
->   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
->=20
-> I have used the input tree from next-20220426 for today.
+I don't think anyone has raised this demand yet! If it weren't for the
+fact that crashkernel=X appeared earlier, it would probably have been
+enough for a combination of crashkernel=X,high and crashkernel=Y,low.
 
-The commit is depending on another commit from the same patch serie: [0]. T=
-hat
-patch has been merged in the tree of the MFD maintainer: [1].
+In fact, I also tend not to support "fallback to high for crashkernel=Y".
+I took over this from Chen Zhou. In the absence of any objection, I had
+to inherit. Now that you've brought it up, I'm happy to delete it.
+Supporting this feature complicates the code logic a lot. The point is,
+it's not fully backwards compatible yet. For example, someone may want
+crashkernel=3G to report failure, but the the new support make it work.
 
-[0] https://lore.kernel.org/all/20220426135313.245466-3-fparent@baylibre.co=
-m/
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=3Dfo=
-r-mfd-next
+> Maybe simpler, no fallbacks:
+> 
+> 	crashkernel=Y - keep the current behaviour, ignore high,low
+> 	crashkernel=Y,high - allocate above ZONE_DMA
+> 	crashkernel=Y,low - allocate within ZONE_DMA
+> 
+>>From your proposal, the difference is that the Y,high option won't
+> have any default ZONE_DMA fallback, one would have to explicitly pass
+> the Y,low option if needed.
 
-Fabien
+I agree with you. Now we don't need code generic, so there is no need to
+carry the historical burden of other ARCHs. arm64 does not need to delve
+into that empirical value(the default size of crash low memory).
 
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
+> 
+> Just a thought, maybe it makes the code simpler. But I'm open to
+> discussion if there are good arguments for the proposed (x86-like)
+> behaviour. One argument could be for crashkernel=Y to fall back to high
+> if distros don't want to bother with high/low settings.
+
+I think distros should take precedence over "crashkernel=Y,high". After all,
+ZONE_DMA memory is more valuable than high memory.
 
 
+> 
+> Another thing I may have asked in the past, what happens if we run a new
+> kernel with these patches with old kexec user tools. I suspect the
+> crashkernel=Y with the fallback to high will confuse the tools.
 
---kxp3ossrzkuyes7u
-Content-Type: application/pgp-signature; name="signature.asc"
+If crashkernel=Y can reserve the memory in Zone_DMA successfully, the old
+kexec works well. But if crashkernel=Y fallback to high memory, the second
+kernel will boot failed, because the old kexec can only use dtb to pass the
+high memory range to the second kernel. In comparison, if no fallback, we can
+see crash memory reservation failure in the first kernel, so we have a chance
+to adjust Y.
 
------BEGIN PGP SIGNATURE-----
+Currently, the new kexec tool will pick the last memory range(sorted by address
+in ascending order) to store Image,dtb,initrd.
 
-iQIzBAABCgAdFiEEQyJHfU3UNW7IG61XVJKc6g3CeAAFAmJo6FgACgkQVJKc6g3C
-eADQ/xAAlzWDjGksWrnDRRkWRhJgtwqNsf5Hwa7QarXTGZjz0xyOsII1/dscXhuI
-6chHhMQvDTUgIrzcmLnVg/2F4Bow/WUVv2hlyYZv8sPolhp1WBPM7B90TIBZctF0
-xmyzzlD+tkDSjn6Roy2Zg/cPWFNuLSeSkijveptrp8e34hO8MBcwxdMXUTXpsC3I
-qY3BybtG5VlbbZ8NkFw/wHghrlEMezrb1ivtyenaemrjn4yUu46kIb4PmFRP0Oco
-p5SGqdl+3tv1pFBFJI4IeYjChBwHzADHQRrwYxD8uAvc3/1ZbPzSsyNAtTxNVueZ
-mWQbB5iC9pVOgICCZxhkybVxkniOKKjHvEwUBjYCXq/foj3ZshJD3vrFeGGgEGMe
-t4yGuJ+i+L4KHsS7dwu2SusEavvBFrFt5UKqt0qE3X8MHAichJk30HR3NWsOdy+u
-ACf7CVLLUW1JtL9IGGzGqBZ4FfIzkaZzwmypVUUvfdNiTbfV8TEp2cO+ld4qF/9N
-APaXpqGf085Jge9/XG7dwxAPuGjE5SQ70YfYlkjzMT/fpMg9EV2wTFMQlzmWMrYo
-iP+9W2htw/6JpGd6HCHS30MXcixGKbVqB0w4M+kCZmBxii8J4i1MagWy8tXWg3hD
-nA38erjOFrm/aYCigAfpzkO+LQ4KZpm4qIAl0BbvZdbtRvBsXZk=
-=M5RR
------END PGP SIGNATURE-----
 
---kxp3ossrzkuyes7u--
+> 
+> BTW, please separate the NO_BLOCK_MAPPINGS optimisations from the
+> crashkernel above 4G. Let's get the crashkernel reservations sorted
+> first, it's been around for too long.
+
+OK, thank you. That's a good suggestion.
+
+> 
+> Thanks.
+> 
+
+-- 
+Regards,
+  Zhen Lei

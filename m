@@ -2,155 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10B2511B60
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2BE511B6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbiD0OH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S237125AbiD0OHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236817AbiD0OHZ (ORCPT
+        with ESMTP id S236817AbiD0OHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:07:25 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2082.outbound.protection.outlook.com [40.107.236.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE54F49F3C;
-        Wed, 27 Apr 2022 07:04:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WkPup6EzLRaxXvm9iCwACLlNUOJUZVQgm2h8UHW+Oo/bEWeGQMLBZKcEGIHO/ll9QJnxUznOsFvmTo31HdQGV2IfR5plfmpFN1FBqTi6ePlXMeCIrk91Xd3ZJ3wdKl4QxdSZKzpi5bH11QOTquNtmscs52zh2F+LyGn8SJnecAGAi44evK/PQ5yaqo4C+yJAfOxV029QeiZVm1YuqPJobDRzPUNXzTvWQsrO0iq2cP2gSXAsLkxshPx5PjeU3thMi3AIhvxPr4V5JxzQnqrfGE1yViO8hEZgap15eUm6Omt1Od+40sM8awXydiFpBaNeu8U8DmL2tpn3i/+d2yCbzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OOgcx4a9oXkoYntP12BfQ3X6+7t7XYyNmex6/Vx0HUw=;
- b=LdTBEruiHTzwmB11CEyxduJimQC0abd2Vd9yw61fVDhRf8Au/XIsrSFF2Pm8RoYYmVx72LlDjlRYxXyG0iEqED5REF+9H+pZ7tevcYtGu0QP5kbzMQWYdnkpqkK1fbE8Xc3M7ESViFivZ/W8af0qJ1/Rqm5KyyOi+COa0c6fww4aSAzdwI7v8jgaibJHzQFJDpsKFfK2h+k9kSsnA4bJRrK26CF0cev4bRODVazjsyvtYH6OGfQd2VCuUgiDd6WM8DSZ0EXyucQOgR3+VjgeJoJprkNsLorr3DjREOJQwyncN4KfN+V71SXvQaG/GP5TbTKCi1/hCehzvPhbMu114Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OOgcx4a9oXkoYntP12BfQ3X6+7t7XYyNmex6/Vx0HUw=;
- b=FdUs5HEPKE5HMbRaEV5HEkIHQS6NwzQF/QfxpmcL+AV1tWnG3PfIznBOj0y4/z6Uu8Xjx1t9dGV2pjNksqyotKli2dyk6VW6nRNOJdPZHGcxVkxsrP7Xul5ePLDRe696ojMwbgQspHmVNXzDFmMyDWZFXm/wBpvft6/L9X4J7b77O0Sejarpi41rxJEt/eGzxIGADJqQ6QzyfoqBq7yOkGhvSdBMa1LDa6kqF2fNDL7Cbswm9782gJPmwLgG6DgqpSOKAKGYmP5d6qHshfH1AspVOL1flem1DHHhJ+hfc2UgoBSFEKKWXJhSqpuvgqLQHQGXRl+pgVKqgFvjEmHM7g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB3728.namprd12.prod.outlook.com (2603:10b6:208:167::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Wed, 27 Apr
- 2022 14:04:12 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.021; Wed, 27 Apr 2022
- 14:04:12 +0000
-Date:   Wed, 27 Apr 2022 11:04:10 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 16/21] vfio-pci/zdev: add open/close device hooks
-Message-ID: <20220427140410.GX2125828@nvidia.com>
-References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
- <20220426200842.98655-17-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426200842.98655-17-mjrosato@linux.ibm.com>
-X-ClientProxiedBy: BL0PR1501CA0033.namprd15.prod.outlook.com
- (2603:10b6:207:17::46) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 27 Apr 2022 10:07:33 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C1249FA4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:04:21 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id k12so1103039qvc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=LjQKVytm/xCXHpyQGfg/kRRHlpZIrxA9mlpFOjG1W5A=;
+        b=L2ks9x6opAWkip0omwIpFRnabs3PeH6D7A2PkDG1wx6ynBu8hULjI+oD6/UxBoUbgr
+         oKaX3UKxijBHUjLwYKazD6tNbcKmZfxFStyHpS7s8hjPkXGCOEBDhmT2rDEDJ2QeNQV1
+         HEHDxo7RHuAbTXs5aZLt99ZG+HoklzrLw9oEZNnFHEzfbaHELWty6k5zd2q66g40hseL
+         4/XvSJesBO5UQw04IsXkwBTtL+HsbGTM3LNv3Wk/92IQd0c1bcm0OXQCnV1OeLFww9c1
+         XfHmIHwBHI3OJgaVhGPRfKMUe/UIlVcMJ3IbasHCk4LKCTgiIlbarWV0l789ppuetTHp
+         HjSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LjQKVytm/xCXHpyQGfg/kRRHlpZIrxA9mlpFOjG1W5A=;
+        b=WNl5SZJhswxzshZsXREXKSDfhoX8OUM/hb1BnjO28TniLfaK0LZix+HOP7uyw7tkxI
+         tlJpgEBOmyOvfJLyhd8dn2LA+qiN0jhSIvkXib9HoQz99OhRNR8dIwTZMfZNXqpr3TgY
+         BjY0Qr5VKLBr0ApTvCEVgZD/qzJNrsDiLnLcq4mwRPDcpoy/I+1gcB2lbtz8tzmdGyYo
+         kH8FUbuHrhuhIoI7Z4aJLHXfYAJ0hYJAiTr3z0N7Hzs//D0Qt8gUJJ36i4uz+PTJVo05
+         1GDf6u+8wVn4wXPPXkhuwVy+ueuUaeJti/Zimo2yHzdEUXSht/ihKuv72jRvQSQsJASk
+         4oog==
+X-Gm-Message-State: AOAM5339Tb30yb1QmxoTxUg7BtYPSZo6O3tPXJBg2yk4VFNF6pqvm9L/
+        iJCPBw8sFfNvj7FexuxXC/Y=
+X-Google-Smtp-Source: ABdhPJypDO9eXvH8yce11aUJEQGS4cr5LpYoYj3SvzVJ0x+cGllwwTp0+UbyMKAb93m78a5eHVvD8g==
+X-Received: by 2002:ad4:5504:0:b0:456:35e0:1968 with SMTP id az4-20020ad45504000000b0045635e01968mr11224127qvb.126.1651068260539;
+        Wed, 27 Apr 2022 07:04:20 -0700 (PDT)
+Received: from localhost ([2601:c4:c432:813:8ecb:cb1e:b8e0:947])
+        by smtp.gmail.com with ESMTPSA id d134-20020a37688c000000b0069f7bc789cesm2331574qkc.24.2022.04.27.07.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:04:20 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 07:04:18 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, gcc@gcc.gnu.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: Re: [PATCH] linux/find: ignore -Wtype-limits to reduce W=2 warnings
+ by 34% tree-wide
+Message-ID: <YmlNYt0qVgVPz1+2@yury-laptop>
+References: <20220426161658.437466-1-mailhol.vincent@wanadoo.fr>
+ <YmhZSZWg9YZZLRHA@yury-laptop>
+ <CAMZ6RqJuUPuEJQvyHZr0Gxzh9ZZ2iACTHe3XE70jZ38hmePfuA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 505dafd7-d316-448b-8802-08da2856ce5c
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3728:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB3728D46821AAF5FCF8383642C2FA9@MN2PR12MB3728.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lSgGXmr/9EtqD0Nf6fx9+BBsyXVrXHUnWN9d4KbHNbXfeEnE6C5O5GGstGZqR/STpYAVZBuwE9Rj2YdEuTGFzXyY9Ziw3ns4lSIwieMLH5QyGoOpDp1FQysJAn/TeB+Wcs1Ad4GwggizrAnXEfZzVxxXyf4jo/GO5d+jyS2aZHrm8+GG5TdZ6gHBVEb/RJmCZ6766dHzoMyOKRoc31FIhOYGZB/PFxK7xE6QPwzWg8NsgnnheuSXorPcPoCGasdUGfk9x/BRKJXvOJF1bZBC3AFgZHKym3OOlaZxw4oWxQt4DWwM8fJGtBweXu0LnbFYEE7AzFdaxduR+S3ccG4rUuVXYn8kC+CJ7Hjp2zh/erxVfvbb4uwg/22GWW3ntbC+0MjI2rb6rHiwqpt1tnaWe4Znt7JFIwsPLz7ISCGzgwZYW0asn/OoNsswwYcz5d814VSvBIoMGc65KQ03S5a8RgNvhYXVSVd8F46PvzPczHrJi4aCirPr8UfvyWKjMIZwlLlQiiSEiJe3c3QVPTwCvq+5UhiveInzRYM81akNJ6L8SSVqTD0u41cftsMEuHBGehc+Js2nrNiWPLwpnvJE2uvllK2xQBU9n3/njxzKH1NZlVn9i1YRfO8vQov7IJb1dbpXJxO0tIwFVnNQPqFXPg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(38100700002)(186003)(1076003)(508600001)(86362001)(4744005)(7416002)(36756003)(5660300002)(8936002)(33656002)(2906002)(26005)(66476007)(4326008)(2616005)(6916009)(6512007)(8676002)(66946007)(66556008)(316002)(6506007)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L6qgz2jmcKSxmzQgj41HZKGbOV90psXvEfj0Om74ctEr9eF6230O8S2PO1Ox?=
- =?us-ascii?Q?rfCXX3jFRgok1BgFkBInk+QmaFvip7UQZCrOKRN/Nq5RoE+3+TLgtcUEesd2?=
- =?us-ascii?Q?IlEFKX4u7r3ly/XYGgaAmkvF51CvgUb0OqG+qVLMPzgXRS6cKsj3YV4k8Q9H?=
- =?us-ascii?Q?SW4J2PB+SCI/utlyE5vksWHW0abdPEa7Fne8QiQNOIdO5yg/r7mH/IoeHD1H?=
- =?us-ascii?Q?fWXtCjRApXNfrYWrLLrEnCv2x0G4NODqyTmqaIInu0kAQXZXd1iWHDnkC+6V?=
- =?us-ascii?Q?fEudAJzkmZG/LdP/KZWFFw1Ma/hGZv7Zgs3iPRg31lOzeAP8fLiihM5QMQOd?=
- =?us-ascii?Q?UaAMDFwbkBVeD/sUOiKVEPvq8QbJkZn0sw8mBp1+Thb6EM15U9B3Kjo3DSdZ?=
- =?us-ascii?Q?oEhvvI7TQ6kZuaU0uLI1KlgFFDmoHPBlas9v0jh4dcGybKHeoS8W0XRP7i9x?=
- =?us-ascii?Q?zzRybdoiq+/ma+AQWE2xRNIPlACC1JkVy3R4dBbkAs2EKE4xWda2vB8arEeA?=
- =?us-ascii?Q?NwtM+M/8Kk+QZkGpgLMKW9asYfKrGTWTaoGN3XUXnlgxlbTgnvOW3Y9zXTi1?=
- =?us-ascii?Q?50+dVOPE97s9+AdcqQh58MtLwpAl22a85HazyWJib/3wiC8A31GqlmJrR230?=
- =?us-ascii?Q?59ibX3ibNwFgojA+lsNXt1+CbO/cUajDW+cdhPjzWUsT2dj61TXWLaRCp6tI?=
- =?us-ascii?Q?Chw5IoU1igdZonRAVgJUtQLKC27ddi+mfwQf7raTA4cb8JFNzimoVvk67P3L?=
- =?us-ascii?Q?I6AM5FQRavNnV6RRXySU4C3qugLBk27itgRVQtfPZEJEFCSScFvSlc7QTwqv?=
- =?us-ascii?Q?Gd2DSBZY8fyOTUkLFx935iAYNNOGeuWnC2sPZrqvQFe+XIABB81C2fYygsED?=
- =?us-ascii?Q?5LFr/YVUeieGmtShhGIOc4uJnfjOWC6666S9pptvi26gkJu1Kxzo9yk3msfX?=
- =?us-ascii?Q?KDqnRl6L59gjEj6Hkn8SDkFGwUFlzBFebJDmJFApF+Dzo2eKJqsw4iNUv9Ue?=
- =?us-ascii?Q?tZjOtdsRGxa5huzeWbTLohrcrWxJf89Ex2tD+baDnxtsNs+GA8sLnwvChWw4?=
- =?us-ascii?Q?o+Sb3dktLTgTVkhA5/NdWwqPd7Facsw3wZbXOmH/iesaBcui6dTaPLAcg5YW?=
- =?us-ascii?Q?vMt62shuz1elO5AuEFSCRlPSTWuwDKOUBW7VdhGVRSGc/S91M8gvZqpsV1yF?=
- =?us-ascii?Q?pbi0ZZLQTGS0dShu2JWNrAZIB5wers2fc0KE9C2G6XbjHqw3UTrDow21hX8c?=
- =?us-ascii?Q?YhqBchsBwHVaoQoFRx4BJO20CVNhB84lfDvk/XDFQcFw/Z28XPTOFGUUAwXG?=
- =?us-ascii?Q?eduhd0rTXmUGX4aWKIkc0M3FbDg1zU4Q0Xtev5huGzJMWJn4+n2dMpJ7dSJ/?=
- =?us-ascii?Q?aYzzRysnIo4LQg+AoWYztfI1XHelqa8tqEaEFPiLUutDktTiVabmZpizLfJo?=
- =?us-ascii?Q?rRIdRUNXnZcT4j0nAJRMChB7trLxfN407frwnit90ZPzG0XSxrxi72X2hgBx?=
- =?us-ascii?Q?suy72XhJ2VNylWzPji8CcO88lf+ujDxzHHMCr/4OHUwfoqAdpVjZObfRxRxR?=
- =?us-ascii?Q?0XFZ/c+Ve/rnIBbTUn0ozUMAFzaonzWVWoVsWhc4nxeptU4ZJ5+whzPJA0i/?=
- =?us-ascii?Q?9rmXppiAfisTZvFXC1HVauICZJtUaOnDRuK6+XZyr5j3Cr9CpugTBmAOwrKs?=
- =?us-ascii?Q?PoR3rirAYZzvasIO6M0ftoBjmVohcQbVBO2rSnVOphUlod5Uhhwwf+2CSjv6?=
- =?us-ascii?Q?nk3Rgzq+7Q=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 505dafd7-d316-448b-8802-08da2856ce5c
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 14:04:12.2690
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HiGgoAPoWyId0kfiep94wpP3bUV0x/SfgWABIuO/aD59p+vUZHj//MSCRXhG11UO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3728
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMZ6RqJuUPuEJQvyHZr0Gxzh9ZZ2iACTHe3XE70jZ38hmePfuA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 04:08:37PM -0400, Matthew Rosato wrote:
+On Wed, Apr 27, 2022 at 11:58:58AM +0900, Vincent MAILHOL wrote:
+> + Alexander Lobakin <alexandr.lobakin@intel.com>
+> 
+> On Wed. 27 Apr 2022 at 05:42, Yury Norov <yury.norov@gmail.com> wrote:
+> > + gcc@gcc.gnu.org
+> > + Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> >
+> > On Wed, Apr 27, 2022 at 01:16:58AM +0900, Vincent Mailhol wrote:
+> > > find_first_bit(), find_first_and_bit(), find_first_and_bit() and
+> > > find_first_and_bit() all invokes GENMASK(size - 1, 0).
+> > >
+> > > This triggers below warning when compiled with W=2.
+> > >
+> > > | ./include/linux/find.h: In function 'find_first_bit':
+> > > | ./include/linux/bits.h:25:36: warning: comparison of unsigned
+> > > | expression in '< 0' is always false [-Wtype-limits]
+> > > |    25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+> > > |       |                                    ^
+> > > | ./include/linux/build_bug.h:16:62: note: in definition of macro
+> > > | 'BUILD_BUG_ON_ZERO'
+> > > |    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+> > > |       |                                                              ^
+> > > | ./include/linux/bits.h:25:17: note: in expansion of macro '__is_constexpr'
+> > > |    25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+> > > |       |                 ^~~~~~~~~~~~~~
+> > > | ./include/linux/bits.h:38:10: note: in expansion of macro 'GENMASK_INPUT_CHECK'
+> > > |    38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+> > > |       |          ^~~~~~~~~~~~~~~~~~~
+> > > | ./include/linux/find.h:119:45: note: in expansion of macro 'GENMASK'
+> > > |   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+> > > |       |                                             ^~~~~~~
+> > >
+> > > linux/find.h being a widely used header file, above warning show up in
+> > > thousand of files which include this header (either directly on
+> > > indirectly).
+> > >
+> > > Because it is a false positive, we just silence -Wtype-limits flag
+> > > locally to remove the spam. clang does not warn about it, so we just
+> > > apply the diag_ignore() directive to gcc.
+> > >
+> > > By doing so, the warnings for a W=2 build are reduced by
+> > > 34%. Benchmark was done with gcc 11.2.1 on Linux v5.17 x86_64
+> > > allyesconfig (except CONFIG_WERROR). Beforethe patch: 515496 warnings
+> > > and after: 340097.
+> > >
+> > > For reference, past proposal to modify GENMASK_INPUT_CHECK() was
+> > > rejected in:
+> > > https://lore.kernel.org/all/20220304124416.1181029-1-mailhol.vincent@wanadoo.fr/
+> >
+> > So, here is nothing wrong with the kernel code and we have an alternative
+> > compiler (clang) that doesn't throw Wtype-limits. It sounds to me like an
+> > internal GCC problem, and I don't understand how hiding broken Wtype-limits
+> > on kernel side would help people to improve GCC.
+> >
+> > On the thread you mentioned above:
+> >
+> > > > > > Have you fixed W=1 warnings?
+> > > > > > Without fixing W=1 (which makes much more sense, when used with
+> > > > > > WERROR=y && COMPILE_TEST=y) this has no value.
+> > > > >
+> > > > > How is this connected?
+> > > >
+> > > > By priorities.
+> > > > I don't see much value in fixing W=2 per se if the code doesn't compile for W=1.
+> > >
+> > > *My code* compiles for W=1. For me, fixing this W=2 in the next in line
+> > > if speaking of priorities.
+> > >
+> > > I do not understand why I should be forbidden to fix a W=2 in the
+> > > file which I am maintaining on the grounds that some code to which
+> > > I do not care still has some W=1.
+> >
+> > If you are concerned about a particular driver - why don't you silence
+> > the warning in there? Or alternatively build it with clang?
+> 
+> Sorry if my previous comments looked selfish. I used the first
+> person to illustrate my point but because this W=2 appears in
+> thousands of files my real intent is to fix it for everybody, not
+> only for myself.
 
-> +static int vfio_pci_zdev_group_notifier(struct notifier_block *nb,
-> +					unsigned long action, void *data)
-> +{
-> +	struct zpci_dev *zdev = container_of(nb, struct zpci_dev, nb);
-> +	int (*fn)(struct zpci_dev *zdev, struct kvm *kvm);
-> +	int rc = NOTIFY_OK;
-> +
-> +	if (action == VFIO_GROUP_NOTIFY_SET_KVM) {
-> +		if (!zdev)
-> +			return NOTIFY_DONE;
-> +
-> +		fn = symbol_get(kvm_s390_pci_register_kvm);
-> +		if (!fn)
-> +			return NOTIFY_DONE;
-> +
-> +		if (fn(zdev, (struct kvm *)data))
-> +			rc = NOTIFY_BAD;
-> +
-> +		symbol_put(kvm_s390_pci_register_kvm);
+Globally, we have not yet fixed W=1, that's why W=2 isn't that important.
+(If the above statement is wrong - can someone explain me the logic of
+splitting warnings by levels?)
 
-Is it possible this function can be in statically linked arch code?
+Locally you cleared W=1, which is great, and I understand that you'd 
+like to have clean W=2 too.
+ 
+> > With all that, I think that the right way to go is to fix the root
+> > cause of this churn - broken Wtype-limits in GCC, and after that move
+> > Wtype-limits to W=1. Anything else looks hacky to me.
+> 
+> Why is this use of __diag_ignore() hacky compared when compared
+> to the other use of __diag_ignore() or the use of -Wno-something
+> in local Makefiles?
 
-Or, actually, is zPCI useful anyhow without kvm ie can you just have a
-direct dependency here?
+__diag_ignore() is not hacky when it's well-justified. Globally
+there's a single user of __diag_ignore() - SYSCALL_DEFINE, and
+it looks well-justified to me:
+    The new warning seems reasonable in principle, but it doesn't
+    help us here, since we rely on the type mismatch to sanitize the
+    system call arguments. After I reported this as GCC PR82435, a new
+    -Wno-attribute-alias option was added that could be used to turn the
+    warning off globally on the command line, but I'd prefer to do it a
+    little more fine-grained.
 
-Jason
+Locally, there are just 3 users of the macro in the codebase. All
+they appeal to local issues, i.e. don't shut up warnings because
+they are broken.
+
+In case of Wtype-limits, the proposed solution is hacky because it
+silences broken warning instead of fixing compiler.
+
+> I did my due diligence and researched GCC’s buzilla before
+> sending this patch. There is an opened ticket here:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86647
+> 
+> In a perfect word, yes, all false positives should be fixed in
+> the compiler, but the reality is that this bug was reported in
+> July 2018, nearly four years ago. GCC developers have their own
+> priorities and fixing this bug does not appear to be part of
+> those. And I do not have the knowledge of GCC's internals to fix
+> this myself.  So what do we do next, blame GCC and do nothing or
+> silence it on our side in order to have a mininfull W=2 output?
+
+1. Yes, do blame GCC and disable Wtype-limits locally where W=1
+   is clean.
+2. Use clang.
+3. Move Wtype-limits to W=3.
+4. Test Wtype-limits in Makefile, and enable it if not broken.
+
+My main objection is that this patch puts dirt in *my* selfish area
+of responsibility. The code that causes issues is GENMASK_INPUT_CHECK,
+but the suggested patch modifies find.h - an innocent random user.
+
+The argument that we need to silence find_bit because it clears 34%
+of warnings doesn't work for me. Instead, we'd push GCC community
+to provide proper fix and clear 34% of warnings.
+
+Thanks,
+Yury

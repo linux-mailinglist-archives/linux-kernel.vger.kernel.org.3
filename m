@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B74511EFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69821511D3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 20:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242274AbiD0QNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 12:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
+        id S242474AbiD0QN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 12:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241917AbiD0QMR (ORCPT
+        with ESMTP id S242256AbiD0QMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:12:17 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E0D3F3D53;
-        Wed, 27 Apr 2022 09:08:31 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d15so1960593plh.2;
-        Wed, 27 Apr 2022 09:08:31 -0700 (PDT)
+        Wed, 27 Apr 2022 12:12:03 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18953ECC92
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:08:23 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id p18so2497830edr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 09:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=no2dRxhaPo5kKkkNtYDviUL8aWZxcIpM0ihWfE784Qo=;
-        b=QSugq2x0W9ZgFZS2awb0WG1lP1D6yw+gw1IeXAl14ic+8y8v4p/ptpenf+qyKnO/aP
-         PtDMqmvYgNp7f5ji3XOX9KSZBcjjTH1W5s29F16RqsAhYBzAw/173R2GBEnaGHKabzk7
-         LRa74Ag+maLLZ7cOva724Wvu+fNrrndGJodwNBSWsFT9yrqQqQH4CQkib7hs74qVqrZV
-         wjgyIY/DvcbYflbFFz/soFDlXspEu6X7kJt84WRQy/eEoermUy4a8BoMc6MFlRD/9Cpw
-         YMfJdMNn4IKO++kv9ylkRPfmy6LF8MYM13x46HIax9NIIQv6j1cNB2SHJr6Uq6KYAXyR
-         icJw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=EH19v7uRS5y35PzgKTDX53x9j+gtyqhUDRdsKb/IaUM=;
+        b=ybse66WgmNsBI29z+NNV6x8EFLgtMxe6qFw8I8vTnLFgoYkWXlVyNDekvdljpmae8Q
+         dWx62rAf7xRwXPxV2X1FxO0/4/DGvPc3zYbb7OBAkhzjuut4c1v1tt7ty/2dghm+TWlj
+         YvTykt8HW80i/plhDgwxbKz2P3lgZwGSamHjUBUgkqlc8X/LxHQQf0tzR7dKt8P8/VNs
+         YSLddjait6XwavUyJTWWmCHCZKqdJQ9hl3Lc5bizgtcR9SM/6pV82NuKUZurRSj2xVa+
+         rUNNtTz4LyQdK8OVzomJzlLjGro0iItms1bu/vXzchVgW0jMPG/NVM0TqpQKodPoJCZM
+         yeAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=no2dRxhaPo5kKkkNtYDviUL8aWZxcIpM0ihWfE784Qo=;
-        b=VvRtkw+ZPCnWgkbnJGesgLVluK93OD2jqY0UF4XyNi1E7OusptHXC2T/cNsz+5I3d8
-         e1ajqYdCi7qQVm2TrbWlN4U9gWzlTI4xh1ShWkz8L945QANXLCeDBwRBzwihRaunlAkQ
-         JFiUjcESxgN3jIzCifdnmX+VQqtOb/uPg+YpWsWi/9IFMO7DsA7OqrM3msPhSiN8Vd1k
-         4sLpft8KX8WpnfUTClblVnylaU3juJiJvxfynRWWCfOya2R5Iy9JbL8bMRDAQQl0v8Cn
-         vIGtG13atzRKJFsJc19zrYMFSY+Jw2kJVEVA1tin1De815FusP4QSxKpJaOaTIGqvPYa
-         rk9w==
-X-Gm-Message-State: AOAM532JOaM48LMDacGcQGoq/b/vdZzjohOgALviAhtcW3jWgDk23GdU
-        hxsWbT22D5+TFWDyOcNfHyWd++v+TdJpPtB/o20=
-X-Google-Smtp-Source: ABdhPJyJiYeFLo2KCPfmWmqXn3NYPJKWYK4GgiOxpR72sCQj0AxvJmSjoEeR1qTP7EuM8zgMlcNrDZq5Rz4ueQkrbQ8=
-X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id
- m17-20020a17090a859100b001b9da102127mr44674409pjn.13.1651075660046; Wed, 27
- Apr 2022 09:07:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EH19v7uRS5y35PzgKTDX53x9j+gtyqhUDRdsKb/IaUM=;
+        b=jy5gMYIafcghDfFTqCBQP2THgZdTlOUflYttWc3nfTDkYKDmVN/SrDxqToTA+LfQ+8
+         etPu6Wtj99HQMAWuAfHOAjvwl74OK3c0/5kzbv8/zn0yMoXWkU+/N/gI3MXxw1+44IwW
+         jblQqFz5wF1eUkotJ2KRsqHFD7+4ju04yObFVmK0bzAgBNUUZf3k3lxyEFkjMF3S67Ej
+         4K7Vc5/uJLHi6l3fbWp8cxqVYgoTei/JB5BO4Cir6MbqUXkMRaXP/f8X6YM6vuEhE8cE
+         xDxhjhIrCRiAYxThmYekbEo91StPL/jDgmiuDIWqs1w84uY5Wu+FWuVnr3wgl74dCRnX
+         V/rw==
+X-Gm-Message-State: AOAM533s/bAc750Aqj72s7dGwV8Tg5oFSISTuSfXs4+931t+J+zYqA+c
+        nOA76vZ0eDljIfjbS7mJKQKbXg/H3Kstxw==
+X-Google-Smtp-Source: ABdhPJx/S8bwtVp+agXtCpxr/09KbDVlmln3NcFIhrjgot+hU0xUEJktlvNVH4ZgcBbXYGegOatVTQ==
+X-Received: by 2002:a05:6402:400b:b0:425:f59a:c221 with SMTP id d11-20020a056402400b00b00425f59ac221mr13269412eda.307.1651075652996;
+        Wed, 27 Apr 2022 09:07:32 -0700 (PDT)
+Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e17-20020a170906505100b006f3beab8af8sm2074452ejk.204.2022.04.27.09.07.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 09:07:32 -0700 (PDT)
+Message-ID: <a8472edd-388c-7bcf-de6a-9924dee6f959@linaro.org>
+Date:   Wed, 27 Apr 2022 18:07:31 +0200
 MIME-Version: 1.0
-References: <202204271656.OTIj2QNJ-lkp@intel.com> <Ymj5AJtiBx0UjEdT@8276d8ba1d54>
-In-Reply-To: <Ymj5AJtiBx0UjEdT@8276d8ba1d54>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 27 Apr 2022 09:07:29 -0700
-Message-ID: <CAADnVQLSfbc8rNQC+0rGxgJCbXYCENsAORZmiXqcXc+W0N8A0g@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: fix returnvar.cocci warnings
-To:     kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@inria.fr>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 00/0x] dmaengine/ARM: use proper 'dma-channels/requests'
+ properties
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220427160538.646044-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220427160538.646044-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 1:04 AM kernel test robot <lkp@intel.com> wrote:
->
-> From: kernel test robot <lkp@intel.com>
->
-> tools/lib/bpf/relo_core.c:1064:8-11: Unneeded variable: "len". Return "0" on line 1086
->
->
->  Remove unneeded variable used to store return value.
->
-> Generated by: scripts/coccinelle/misc/returnvar.cocci
->
-> Fixes: b58af63aab11 ("libbpf: Refactor CO-RE relo human description formatting routine")
-> CC: Andrii Nakryiko <andrii@kernel.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
-> ---
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   f02ac5c95dfd45d2f50ecc68d79177de326c668c
-> commit: b58af63aab11e4ae00fe96de9505759cfdde8ee9 [6746/7265] libbpf: Refactor CO-RE relo human description formatting routine
-> :::::: branch date: 2 hours ago
-> :::::: commit date: 9 hours ago
->
->  tools/lib/bpf/relo_core.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> --- a/tools/lib/bpf/relo_core.c
-> +++ b/tools/lib/bpf/relo_core.c
-> @@ -1061,7 +1061,7 @@ static int bpf_core_format_spec(char *bu
->         const struct btf_enum *e;
->         const char *s;
->         __u32 type_id;
-> -       int i, len = 0;
-> +       int i;
->
->  #define append_buf(fmt, args...)                               \
->         ({                                                      \
-> @@ -1083,7 +1083,7 @@ static int bpf_core_format_spec(char *bu
->                    type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
->
->         if (core_relo_is_type_based(spec->relo_kind))
-> -               return len;
-> +               return 0;
+On 27/04/2022 18:05, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> The core DT schema defines generic 'dma-channels' and 'dma-requests'
+> properties, so in preparation to moving bindings to DT schema, convert
+> existing users of '#dma-channels' and '#dma-requests' to the generic
+> variant.
+> 
+> Not tested on hardware.
 
-cocci is wrong.
-It missed append_buf() macro.
+Sorry for the mess, but I missed here one patch.
 
-Please fix cocci so we don't have to manually deal with
-broken patches like this one.
+I will resend.
+
+Best regards,
+Krzysztof

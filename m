@@ -2,126 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AE1510D1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92530510D20
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356384AbiD0AZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S1356392AbiD0A11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356375AbiD0AZs (ORCPT
+        with ESMTP id S243117AbiD0A1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:25:48 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3BC4EDC0
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:22:39 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id h12so201873plf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 17:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9ewLJKlH5zy14vPQwt03lQTFufmxKgCiHNQV6gaoQdc=;
-        b=Zp0fAJXPYfQHtfD/574b5Ctm9LKGBHi6SdFtrrS9nbSK0rnjaNH/ZflGxIlKAEpgQ7
-         fCuqLnT8AdInvq79GrOlL7DhzsSnaJyUI0+tLN6mhM/u5qdyJ1xXaAEcLGmV2ETDTUBK
-         1Kq/p8KqfaUcSJ9BtggMPh82WeHPIySE6tv7z4Jniso6L38NOwhnpOteHLqBZ00xCX49
-         dJ7z8PE0nrmjDH/VuuPHZoym+WxS/RT0BuniPVSuzrtBmW/75pV+vfYOtgCtDrVlb3Ga
-         UOOwRQZPQN0piq9ySZtanVROVE8/WKq2eTu8+qkzxQdOoJYnZ1r6X/T7Gda0bUuZPfYA
-         8kpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9ewLJKlH5zy14vPQwt03lQTFufmxKgCiHNQV6gaoQdc=;
-        b=6rTZe3fHjZVJLn5KS8yBTxT3XiGXai9yHvMRnRYsjKasJRzP9PdpkU1e2H2GiXvpbo
-         5E/JJypShAJ6XmTUxvP7FOeWej1IdYZ1PceVakQ2/P+9WCG3SXtIjSS71jis25wDq/0W
-         rd2ivEgomGTivJz8r56mCqr+nr8eaQY75+a42JNPdc8RC9NKkViAw90uexEZzlMD6uSP
-         SG2UDmP5vW8T/HNu/KHrDV197dCGYYdI8zoYwkEQpKbCrWL92i7EmzE78DOS5AIZ4fOa
-         Ct2mrjnqorT3Umoy3MpdiptLJyzYph0i/Mfv5TbUhBxPgNk5hbfhlPSPEomfaMrHNMVA
-         smaA==
-X-Gm-Message-State: AOAM533vZZa65S/3vup4Ufvltdde58uLDqyogcHtr25CS4qQsxamZQLz
-        ZHWeCFM62k1SPFnBmDQW780veA==
-X-Google-Smtp-Source: ABdhPJzEEdQZBsmr7EWIjVk3IQur/XOj0itw/Uu6+82+3t3Y+Rt1zhEsPNHWrcr5W3ZmqzVJhbvpqQ==
-X-Received: by 2002:a17:90a:488c:b0:1c7:b62e:8e8c with SMTP id b12-20020a17090a488c00b001c7b62e8e8cmr40228125pjh.157.1651018958588;
-        Tue, 26 Apr 2022 17:22:38 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056a00194400b004fb358ffe84sm16589662pfk.104.2022.04.26.17.22.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 17:22:38 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 00:22:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Subject: Re: [PATCH v3 01/21] x86/virt/tdx: Detect SEAM
-Message-ID: <YmiMyk6T5zNhYeRB@google.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
- <334c4b90-52c4-cffc-f3e2-4bd6a987eb69@intel.com>
- <ce325155bada13c829b6213a3ec65294902c72c8.camel@intel.com>
- <15b34b16-b0e9-b1de-4de8-d243834caf9a@intel.com>
- <79ad9dd9373d1d4064e28d3a25bfe0f9e8e55558.camel@intel.com>
+        Tue, 26 Apr 2022 20:27:23 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B10E3CC4;
+        Tue, 26 Apr 2022 17:24:14 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:40810)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njVTX-00D8XQ-QC; Tue, 26 Apr 2022 18:24:11 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35786 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1njVTW-006ZIp-P2; Tue, 26 Apr 2022 18:24:11 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <20220425174719.GB12412@redhat.com>
+Date:   Tue, 26 Apr 2022 19:24:03 -0500
+In-Reply-To: <20220425174719.GB12412@redhat.com> (Oleg Nesterov's message of
+        "Mon, 25 Apr 2022 19:47:20 +0200")
+Message-ID: <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79ad9dd9373d1d4064e28d3a25bfe0f9e8e55558.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1njVTW-006ZIp-P2;;;mid=<8735hzcr18.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+K+Sik1kCOuihclgFx72Bbye8aJrSXdAA=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 401 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 5 (1.3%), b_tie_ro: 3.5 (0.9%), parse: 1.19
+        (0.3%), extract_message_metadata: 4.9 (1.2%), get_uri_detail_list: 2.6
+        (0.7%), tests_pri_-1000: 3.1 (0.8%), tests_pri_-950: 1.15 (0.3%),
+        tests_pri_-900: 0.92 (0.2%), tests_pri_-90: 53 (13.3%), check_bayes:
+        52 (12.9%), b_tokenize: 7 (1.6%), b_tok_get_all: 8 (2.1%),
+        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 32 (7.9%), b_finish: 0.75
+        (0.2%), tests_pri_0: 312 (78.0%), check_dkim_signature: 0.41 (0.1%),
+        check_dkim_adsp: 2.8 (0.7%), poll_dns_idle: 1.42 (0.4%), tests_pri_10:
+        2.3 (0.6%), tests_pri_500: 9 (2.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022, Kai Huang wrote:
-> On Tue, 2022-04-26 at 16:28 -0700, Dave Hansen wrote:
-> > On 4/26/22 16:12, Kai Huang wrote:
-> > > Hi Dave,
-> > > 
-> > > Thanks for review!
-> > > 
-> > > On Tue, 2022-04-26 at 13:21 -0700, Dave Hansen wrote:
-> > > > > +config INTEL_TDX_HOST
-> > > > > +	bool "Intel Trust Domain Extensions (TDX) host support"
-> > > > > +	default n
-> > > > > +	depends on CPU_SUP_INTEL
-> > > > > +	depends on X86_64
-> > > > > +	help
-> > > > > +	  Intel Trust Domain Extensions (TDX) protects guest VMs from
-> > > > > malicious
-> > > > > +	  host and certain physical attacks.  This option enables necessary
-> > > > > TDX
-> > > > > +	  support in host kernel to run protected VMs.
-> > > > > +
-> > > > > +	  If unsure, say N.
-> > > > 
-> > > > Nothing about KVM?
-> > > 
-> > > I'll add KVM into the context. How about below?
-> > > 
-> > > "Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
-> > > host and certain physical attacks.  This option enables necessary TDX
-> > > support in host kernel to allow KVM to run protected VMs called Trust
-> > > Domains (TD)."
-> > 
-> > What about a dependency?  Isn't this dead code without CONFIG_KVM=y/m?
-> 
-> Conceptually, KVM is one user of the TDX module, so it doesn't seem correct to
-> make CONFIG_INTEL_TDX_HOST depend on CONFIG_KVM.  But so far KVM is the only
-> user of TDX, so in practice the code is dead w/o KVM.
-> 
-> What's your opinion?
+Oleg Nesterov <oleg@redhat.com> writes:
 
-Take a dependency on CONFIG_KVM_INTEL, there's already precedence for this specific
-case of a feature that can't possibly have an in-kernel user.  See
-arch/x86/kernel/cpu/feat_ctl.c, which in the (very) unlikely event IA32_FEATURE_CONTROL
-is left unlocked by BIOS, will deliberately disable VMX if CONFIG_KVM_INTEL=n.
+> On 04/21, Peter Zijlstra wrote:
+>>
+>> @@ -2225,7 +2238,7 @@ static int ptrace_stop(int exit_code, in
+>>  	 * schedule() will not sleep if there is a pending signal that
+>>  	 * can awaken the task.
+>>  	 */
+>> -	current->jobctl |= JOBCTL_TRACED;
+>> +	current->jobctl |= JOBCTL_TRACED | JOBCTL_TRACED_QUIESCE;
+>>  	set_special_state(TASK_TRACED);
+>
+> OK, this looks wrong. I actually mean the previous patch which sets
+> JOBCTL_TRACED.
+>
+> The problem is that the tracee can be already killed, so that
+> fatal_signal_pending(current) is true. In this case we can't rely on
+> signal_wake_up_state() which should clear JOBCTL_TRACED, or the
+> callers of ptrace_signal_wake_up/etc which clear this flag by hand.
+>
+> In this case schedule() won't block and ptrace_stop() will leak
+> JOBCTL_TRACED. Unless I missed something.
+>
+> We could check fatal_signal_pending() and damn! this is what I think
+> ptrace_stop() should have done from the very beginning. But for now
+> I'd suggest to simply clear this flag before return, along with
+> DELAY_WAKEKILL and LISTENING.
+
+Oh.  That is an interesting case for JOBCTL_TRACED.  The
+scheduler refuses to stop if signal_pending_state(TASK_TRACED, p)
+returns true.
+
+The ptrace_stop code used to handle this explicitly and in commit
+7d613f9f72ec ("signal: Remove the bogus sigkill_pending in ptrace_stop")
+I actually removed the test.  As the test was somewhat wrong and
+redundant, and in slightly the wrong location.
+
+But doing:
+
+	/* Don't stop if the task is dying */
+	if (unlikely(__fatal_signal_pending(current)))
+		return exit_code;
+
+Should work.
+
+>
+>>  	current->jobctl &= ~JOBCTL_LISTENING;
+>> +	current->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
+>
+> 	current->jobctl &=
+> 		~(~JOBCTL_TRACED | JOBCTL_DELAY_WAKEKILL | JOBCTL_LISTENING);
+
+
+I presume you meant:
+
+	current->jobctl &=
+ 		~(JOBCTL_TRACED | JOBCTL_DELAY_WAKEKILL | JOBCTL_LISTENING);
+
+I don't think we want to do that.  For the case you are worried about it
+is a valid fix.
+
+In general this is the wrong approach as we want the waker to clear
+JOBCTL_TRACED.  If the waker does not it is possible that
+ptrace_freeze_traced might attempt to freeze a process whose state
+is not appropriate for attach, because the code is past the call
+to schedule().
+
+In fact I think clearing JOBCTL_TRACED at the end of ptrace_stop
+will allow ptrace_freeze_traced to come in while siglock is dropped,
+expect the process to stop, and have the process not stop.  Of
+course wait_task_inactive coming first that might not be a problem.
+
+
+
+This is a minor problem with the patchset I just posted.  I thought the
+only reason wait_task_inactive could fail was if ptrace_stop() hit the
+!current->ptrace case.  Thinking about any it any SIGKILL coming in
+before tracee stops in schedule will trigger this, so it is not as
+safe as I thought to not pass a state into wait_task_inactive.
+
+It is time for me to shut down today.  I will sleep on that and
+see what I can see tomorrow.
+
+Eric
+

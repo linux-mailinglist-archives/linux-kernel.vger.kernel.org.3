@@ -2,142 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9832C5123DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B3E5123E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236488AbiD0UaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S236231AbiD0Ua6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbiD0U3v (ORCPT
+        with ESMTP id S235960AbiD0Uaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:29:51 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEA5B3C7E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:26:15 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p12so5138399lfs.5
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GbCA6ryLcC+4N1YdXeSNdc1G8PlnnlULw8ksimgMuYk=;
-        b=HL6XnPOB2cCe63b0h5x/a8gP+zbRlCPKnbXPFV7fYpOt1yy25Yf61QDmr7xsIZFUmn
-         +yXtJy3b+AsKT5LNlnyXrAGm37GXim0rcEYWsjTmis0AoYryTRHre6dfIOKveplodh9J
-         re0VUnEeHDqH3Qpv2GruCiiOuz0GUmZkMG0ok=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GbCA6ryLcC+4N1YdXeSNdc1G8PlnnlULw8ksimgMuYk=;
-        b=HcOo0sAYy2lPrzloFFfKpQD6jDJZ9BHz7SkGWvgJB4D4L9NZnIu02D5HDdgxOZsvtz
-         7IaCP46UcvhwlAVN2kf5h5B57vCAuTeujn95QB18M89oIb99DOirFFjE6+Dp5fNk21S2
-         BK5Bld0ZEO5LSrv2Im87qXcSazeT4YnhpYbedRYBJHzEtx/A7xfRKMoYOT5fRbpM5Yfo
-         2uwU8xmkdt/U4Z1EaaXkNedQhXclLgYtAT4GH7gmTEdWsZf8Yc2KG54Zu9JUlxWP5aHo
-         pY7hR8sTBFdnMAlbPG2RvkUxNgES2pLpnvZFhlqSe6+i+v9X3iSOhlFGTFVCUOBDHaoP
-         TkdQ==
-X-Gm-Message-State: AOAM530mnq9lp2MoUuS9fKXtAAnUNTiV7dX7MJJE5QF/U3dUv540b7tq
-        gqGjhWH4f7EXfXttSxbCIn9MaCuk1MEsWUvu5PU=
-X-Google-Smtp-Source: ABdhPJzO1eXQpNJu2EYp1DbYOF+gLAkOAFDo1F/+/Ub/UJnTSYlBSbwWLBgQBfEd6+KEcTHXPmrGeQ==
-X-Received: by 2002:ac2:4250:0:b0:44a:ff88:3795 with SMTP id m16-20020ac24250000000b0044aff883795mr21748738lfl.384.1651091173731;
-        Wed, 27 Apr 2022 13:26:13 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id b15-20020a2e894f000000b0024db8e1248csm1940889ljk.124.2022.04.27.13.26.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 13:26:13 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id v1so4176802ljv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:26:12 -0700 (PDT)
-X-Received: by 2002:a2e:8789:0:b0:24f:124c:864a with SMTP id
- n9-20020a2e8789000000b0024f124c864amr10737718lji.164.1651091172382; Wed, 27
- Apr 2022 13:26:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com> <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
-In-Reply-To: <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 27 Apr 2022 13:25:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
-Message-ID: <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 16:30:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081CA186D4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:27:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B6C7B82AA7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:27:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E48C385A7;
+        Wed, 27 Apr 2022 20:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1651091260;
+        bh=PNzTs04YGfVJqUOp9XkMtqOAV64XCLp9v01FsUXZTRU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A+M6kHjNvfai+j0U+w/cLm4+H+4+WKxswbC35c44KSpbf1wFNmYKKCkaGEY/8vBJT
+         l8MLLXbGclipdQ+lgAauKOm8C9yM0763CJ5+NTAlJyF30qzKaG0bSNs2li3P+/T6Z5
+         1qof2ZIMlqrfQH5wOp4sUXuN68uQeCHpFdtfCsng=
+Date:   Wed, 27 Apr 2022 13:27:38 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        vbabka@suse.cz, penberg@kernel.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v5 2/2] mm: make minimum slab alignment a runtime
+ property
+Message-Id: <20220427132738.fdca02736b5d067c92185c5b@linux-foundation.org>
+In-Reply-To: <20220427195820.1716975-2-pcc@google.com>
+References: <20220427195820.1716975-1-pcc@google.com>
+        <20220427195820.1716975-2-pcc@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:41 PM Andreas Gruenbacher
-<agruenba@redhat.com> wrote:
+On Wed, 27 Apr 2022 12:58:20 -0700 Peter Collingbourne <pcc@google.com> wrote:
+
+> When CONFIG_KASAN_HW_TAGS is enabled we currently increase the minimum
+> slab alignment to 16. This happens even if MTE is not supported in
+> hardware or disabled via kasan=off, which creates an unnecessary
+> memory overhead in those cases. Eliminate this overhead by making
+> the minimum slab alignment a runtime property and only aligning to
+> 16 if KASAN is enabled at runtime.
+> 
+> On a DragonBoard 845c (non-MTE hardware) with a kernel built with
+> CONFIG_KASAN_HW_TAGS, waiting for quiescence after a full Android
+> boot I see the following Slab measurements in /proc/meminfo (median
+> of 3 reboots):
+> 
+> ...
 >
-> I wonder if this could be documented in the read and write manual
-> pages. Or would that be asking too much?
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3009,10 +3009,9 @@ static void *cache_alloc_debugcheck_after(struct kmem_cache *cachep,
+>  	objp += obj_offset(cachep);
+>  	if (cachep->ctor && cachep->flags & SLAB_POISON)
+>  		cachep->ctor(objp);
+> -	if (ARCH_SLAB_MINALIGN &&
+> -	    ((unsigned long)objp & (ARCH_SLAB_MINALIGN-1))) {
+> -		pr_err("0x%px: not aligned to ARCH_SLAB_MINALIGN=%d\n",
+> -		       objp, (int)ARCH_SLAB_MINALIGN);
+> +	if ((unsigned long)objp & (arch_slab_minalign() - 1)) {
+> +		pr_err("0x%px: not aligned to arch_slab_minalign()=%d\n", objp,
+> +		       (int)arch_slab_minalign());
 
-I don't think it would be asking too much, since it's basically just
-describing what Linux has always done in all the major filesystems.
+printf/printk know about size_t.  Use %zu, no cast needed.  But...
 
-Eg look at filemap_read(), which is basically the canonical read
-function, and note how it doesn't take a single lock at that level.
+>  	}
+>  	return objp;
+>  }
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 2b3206a2c3b5..33cc49810a54 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -154,8 +154,7 @@ static unsigned int calculate_alignment(slab_flags_t flags,
+>  		align = max(align, ralign);
+>  	}
+>  
+> -	if (align < ARCH_SLAB_MINALIGN)
+> -		align = ARCH_SLAB_MINALIGN;
+> +	align = max_t(size_t, align, arch_slab_minalign());
 
-We *do* have synchronization at a page level, though, ie we've always
-had that page-level "uptodate" bit, of course (ok, so "always" isn't
-true - back in the distant past it was the 'struct buffer_head' that
-was the synchronization point).
+max_t/min_t are nature's way of telling us "you screwed up the types".
 
-That said, even that is not synchronizing against "new writes", but
-only against "new creations" (which may, of course, be writers, but is
-equally likely to be just reading the contents from disk).
+So what type _is_ slab alignment?  size_t seems sensible, but the code
+prefers unsigned int.  So how about we stick with that?
 
-That said:
 
- (a) different filesystems can and will do different things.
+This compiles.  Still some max_t's in slob.c because I was too lazy to
+go fix the type of ARCH_KMALLOC_MINALIGN.
 
-Not all filesystems use filemap_read() at all, and even the ones that
-do often have their own wrappers. Such wrappers *can* do extra
-serialization, and have their own rules. But ext4 does not, for
-example (see ext4_file_read_iter()).
+Shrug, I don't know if we can be bothered.   You decide :)
 
-And as mentioned, I *think* XFS honors that old POSIX rule for
-historical reasons.
 
- (b) we do have *different* locking
+ arch/arm64/include/asm/cache.h |    2 +-
+ include/linux/slab.h           |    2 +-
+ mm/slab.c                      |    4 ++--
+ mm/slab_common.c               |    2 +-
+ mm/slob.c                      |   16 +++++++++++-----
+ 5 files changed, 16 insertions(+), 10 deletions(-)
 
-for example, we these days do actually serialize properly on the
-file->f_pos, which means that a certain *class* of read/write things
-are atomic wrt each other, because we actually hold that f_pos lock
-over the whole operation and so if you do file reads and writes using
-the same file descriptor, they'll be disjoint.
+--- a/arch/arm64/include/asm/cache.h~mm-make-minimum-slab-alignment-a-runtime-property-fix
++++ a/arch/arm64/include/asm/cache.h
+@@ -58,7 +58,7 @@
+ #ifdef CONFIG_KASAN_SW_TAGS
+ #define ARCH_SLAB_MINALIGN	(1ULL << KASAN_SHADOW_SCALE_SHIFT)
+ #elif defined(CONFIG_KASAN_HW_TAGS)
+-static inline size_t arch_slab_minalign(void)
++static inline unsigned int arch_slab_minalign(void)
+ {
+ 	return kasan_hw_tags_enabled() ? MTE_GRANULE_SIZE :
+ 					 __alignof__(unsigned long long);
+--- a/include/linux/slab.h~mm-make-minimum-slab-alignment-a-runtime-property-fix
++++ a/include/linux/slab.h
+@@ -215,7 +215,7 @@ void kmem_dump_obj(void *object);
+  * of two and >= ARCH_SLAB_MINALIGN.
+  */
+ #ifndef arch_slab_minalign
+-static inline size_t arch_slab_minalign(void)
++static inline unsigned int arch_slab_minalign(void)
+ {
+ 	return ARCH_SLAB_MINALIGN;
+ }
+--- a/mm/slab.c~mm-make-minimum-slab-alignment-a-runtime-property-fix
++++ a/mm/slab.c
+@@ -3010,8 +3010,8 @@ static void *cache_alloc_debugcheck_afte
+ 	if (cachep->ctor && cachep->flags & SLAB_POISON)
+ 		cachep->ctor(objp);
+ 	if ((unsigned long)objp & (arch_slab_minalign() - 1)) {
+-		pr_err("0x%px: not aligned to arch_slab_minalign()=%d\n", objp,
+-		       (int)arch_slab_minalign());
++		pr_err("0x%px: not aligned to arch_slab_minalign()=%u\n", objp,
++		       arch_slab_minalign());
+ 	}
+ 	return objp;
+ }
+--- a/mm/slab_common.c~mm-make-minimum-slab-alignment-a-runtime-property-fix
++++ a/mm/slab_common.c
+@@ -154,7 +154,7 @@ static unsigned int calculate_alignment(
+ 		align = max(align, ralign);
+ 	}
+ 
+-	align = max_t(size_t, align, arch_slab_minalign());
++	align = max(align, arch_slab_minalign());
+ 
+ 	return ALIGN(align, sizeof(void *));
+ }
+--- a/mm/slob.c~mm-make-minimum-slab-alignment-a-runtime-property-fix
++++ a/mm/slob.c
+@@ -478,9 +478,11 @@ static __always_inline void *
+ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
+ {
+ 	unsigned int *m;
+-	int minalign = max_t(size_t, ARCH_KMALLOC_MINALIGN, arch_slab_minalign());
++	unsigned int minalign;
+ 	void *ret;
+ 
++	minalign = max_t(unsigned int, ARCH_KMALLOC_MINALIGN,
++			 arch_slab_minalign());
+ 	gfp &= gfp_allowed_mask;
+ 
+ 	might_alloc(gfp);
+@@ -493,7 +495,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp
+ 		 * kmalloc()'d objects.
+ 		 */
+ 		if (is_power_of_2(size))
+-			align = max(minalign, (int) size);
++			align = max_t(unsigned int, minalign, size);
+ 
+ 		if (!size)
+ 			return ZERO_SIZE_PTR;
+@@ -555,8 +557,11 @@ void kfree(const void *block)
+ 
+ 	sp = virt_to_folio(block);
+ 	if (folio_test_slab(sp)) {
+-		int align = max_t(size_t, ARCH_KMALLOC_MINALIGN, arch_slab_minalign());
++		unsigned int align = max_t(unsigned int,
++					   ARCH_KMALLOC_MINALIGN,
++					   arch_slab_minalign());
+ 		unsigned int *m = (unsigned int *)(block - align);
++
+ 		slob_free(m, *m + align);
+ 	} else {
+ 		unsigned int order = folio_order(sp);
+@@ -573,7 +578,7 @@ EXPORT_SYMBOL(kfree);
+ size_t __ksize(const void *block)
+ {
+ 	struct folio *folio;
+-	int align;
++	unsigned int align;
+ 	unsigned int *m;
+ 
+ 	BUG_ON(!block);
+@@ -584,7 +589,8 @@ size_t __ksize(const void *block)
+ 	if (unlikely(!folio_test_slab(folio)))
+ 		return folio_size(folio);
+ 
+-	align = max_t(size_t, ARCH_KMALLOC_MINALIGN, arch_slab_minalign());
++	align = max_t(unsigned int, ARCH_KMALLOC_MINALIGN,
++		      arch_slab_minalign());
+ 	m = (unsigned int *)(block - align);
+ 	return SLOB_UNITS(*m) * SLOB_UNIT;
+ }
+_
 
-That, btw, hasn't always been true. If you had multiple threads using
-the same file pointer, I think we used to get basically random
-results. So we have actually strengthened our locking in this area,
-and made it much better.
-
-But note how even if you have the same file descriptor open, and then
-do pread/pwrite, those can and will happen concurrently.
-
-And mmap accesses and modifications are obviously *always* concurrent,
-even if the fault itself - but not the accesses - might end up being
-serialized due to some filesystem locking implementation detail.
-
-End result: the exact serialization is complex, depends on the
-filesystem, and is just not really something that should be described
-or even relied on (eg that f_pos serialization is something we do
-properly now, but didn't necessarily do in the past, so ..)
-
-Is it then worth pointing out one odd POSIX rule that basically nobody
-but some very low-level filesystem people have ever heard about, and
-that no version of Linux has ever conformed to in the main default
-filesystems, and that no user has ever cared about?
-
-             Linus

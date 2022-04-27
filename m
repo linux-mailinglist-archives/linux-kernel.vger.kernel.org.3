@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FF451122E
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B5B511234
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 09:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358674AbiD0HRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 03:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S1358717AbiD0HSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 03:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358669AbiD0HRe (ORCPT
+        with ESMTP id S1358692AbiD0HSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 03:17:34 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709FD4B1D6;
-        Wed, 27 Apr 2022 00:14:24 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id t16so542512qtr.9;
-        Wed, 27 Apr 2022 00:14:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1mvUlrTirU9klnitg8TwDGH+tVvlE6Lo8EZa9hr0GIw=;
-        b=e9ZmajDgZ/7jQVApNUA0/JMJ24Otyi0XhG2iNMRupVMuPcsGh5ATNibPYGrgyP0b1C
-         UGYRkLCEsBXAZIpHEJbok8rzjWZ4ePE2XiZ11HCuV0518dv6UAM/fPrc+wG8GUc8o5+L
-         LFwK/Z0ti482txpd/+JARJ9Y6pVhje9sJ5Q3JOhZ1mfJLuYMcxxWXtBd8UcbWxdM1VG8
-         vq6fhPvX3RORob6XxhO25g+ov2OhqtsN0qZVANPVS5tsJe46TI/8DnA0xisfc9yqy+P2
-         WVlqdu5ZA1m2EuCnjYWA04zT/iBSUUwA0GiHp0P+Bnz5ccCfz7j8k4u8TTKUJLCD7tog
-         JSKw==
-X-Gm-Message-State: AOAM531PsUzcKakfkKBs1PfIvtptbDvFE4eS9IEFAHfwiXf5iVI9DxO5
-        1MuTqk1TVk5fwDmrdeEp714dpg7n24tGPA==
-X-Google-Smtp-Source: ABdhPJxlOWa55m+1hstWZnHF/1z6+9yCfsZu+RhdCKKDJSHMuZdFct+KSkQ8gdhKmcG62slG7Iz0UQ==
-X-Received: by 2002:ac8:5894:0:b0:2f3:7266:e378 with SMTP id t20-20020ac85894000000b002f37266e378mr6568661qta.631.1651043663435;
-        Wed, 27 Apr 2022 00:14:23 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 22-20020ac85916000000b002f3402e34a3sm9820192qty.55.2022.04.27.00.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 00:14:22 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2ec42eae76bso8455087b3.10;
-        Wed, 27 Apr 2022 00:14:21 -0700 (PDT)
-X-Received: by 2002:a81:e10d:0:b0:2f7:bb2a:6529 with SMTP id
- w13-20020a81e10d000000b002f7bb2a6529mr22442009ywh.62.1651043661690; Wed, 27
- Apr 2022 00:14:21 -0700 (PDT)
+        Wed, 27 Apr 2022 03:18:38 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CABB18361;
+        Wed, 27 Apr 2022 00:15:17 -0700 (PDT)
+Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MJVU0-1nPjat3wIS-00JqT6; Wed, 27 Apr 2022 09:15:16 +0200
+Received: by mail-yb1-f180.google.com with SMTP id w17so1715863ybh.9;
+        Wed, 27 Apr 2022 00:15:15 -0700 (PDT)
+X-Gm-Message-State: AOAM533E2K1UKjQFKhxNn/wdImyAEmBaafMaXYWOvCMulOdDVFdC9ijE
+        Zm/D+8CvgAwimat2r9gkZmpVLphVqGAuYeO5QqQ=
+X-Google-Smtp-Source: ABdhPJwaD1kOWmwPG8YXCJoPZvqoD54e+nnssat4O6xYNRUCaG64TDt/4SOl6wpW8DE+BePexx2QnPchQt4gdqTD0N8=
+X-Received: by 2002:a25:c604:0:b0:645:d969:97a7 with SMTP id
+ k4-20020a25c604000000b00645d96997a7mr20381066ybf.134.1651043704287; Wed, 27
+ Apr 2022 00:15:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220427001226.1224704-1-keescook@chromium.org>
-In-Reply-To: <20220427001226.1224704-1-keescook@chromium.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Apr 2022 09:14:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWJczJGLxbFUyO8YDOAcCqdVQmo1zHj5PYtxruL9MzeOg@mail.gmail.com>
-Message-ID: <CAMuHMdWJczJGLxbFUyO8YDOAcCqdVQmo1zHj5PYtxruL9MzeOg@mail.gmail.com>
-Subject: Re: [PATCH] lkdtm: cfi: Fix type width for masking PAC bits
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-6-glider@google.com>
+In-Reply-To: <20220426164315.625149-6-glider@google.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 27 Apr 2022 09:14:48 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
+Message-ID: <CAK8P3a2eDDAAQ8RiQi0B+Jk4KvGeMk+pe78RB+bB9qwTTyhuag@mail.gmail.com>
+Subject: Re: [PATCH v3 05/46] x86: asm: instrument usercopy in get_user() and __put_user_size()
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:X825Nodsp/CILpTFtsaUc0WqmlMiOdJWzevNH4xFQGBXKufG+O9
+ DShGp8pTm7eRlyTooBJO8zwF/De5Wf7IvyAFn0Gog4gPQ0f+3onWS2ZWVKVgf1sP3OD7cjc
+ aaGMv0hF/PZbLWkRZ+lSqMbnh+dJqCqfF2O0Zlas+maOkYQrJJO0FBS8VcUi3fAQEkvtJFo
+ jetBEutOri6z3WtTCzMPA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:12eyt6cQDXI=:8QIbwNy4LP8WPQWFVHlWHU
+ e/YPQYO3s12X/fDA6oxZ3hCKFlp8qR04u+RkK57XAvRjtYAEq517/fuEjA4PCWy1Hwwvl1F6c
+ ++XWcZLbnjCh7SXkZ1SJ3iUME/7yBmjptkHCKmJQ+5pepHcGs2eDvI+Cqqaegt2fxRw4XZCHt
+ D2vyr62TtToYwOeSUI02/gf859OzVFMs4Az960I4nFiYQrP1DdlePOVR5XFy1QRdRTSU1M7cT
+ 0db8mDjL1z8ZStXuQOrYp3JXkTDwzXHC6TnyEQR7krnmLXHANvfvncE3TGk8DocG+3dtovCEZ
+ cfIj+mcbeDgsqmS3LeW9VX19CBY5QYrZxbEJWIeL+UyizIEGAPjAOcexTrgVP2Z8NBen2JaDs
+ A120nq7iJmfagKAeaATAF414EqqkCHiUlIPFaEdyXPN+F4HL13k+iRfkyw4zf0HGYUI0oQuCR
+ 6nuVEiKFHVgXMH41Gq8711UNohSjWfVr853Csiz6D9HW30zTrqMD4p5cCCGAX2/LnpdJE+rT6
+ 1ZsVA46LEeQo4k2wIcpvjnkpUqGcxwJLj+Fk+GxkTFrORaFqQJcYes/QsTFO+AcOo3wQBoxEC
+ wYGAdehiyGui/UMvXkU5MB55PlzlytpjDsH0XxsRs5me29OsZKqPqxWXOSO7/okvPpiiQtpD+
+ b514fgcGooNVehZcW1LGBXB4I+Gz9e4Q8HiunEueeWS72w/ZmmGPLjbiebCsmmDzx+X8Mdz7U
+ 0DY8Kb1oboqDlOAtOCtqF8b/fELc0/AgA/QjMacS0u8Lp/ZrFQIyhfcE95l0AwVs7octblUmf
+ XjfsqZIGo0NeODzJASPK3SVFrhg6R4kjIloqCIVOOzAHHAvGD0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On Tue, Apr 26, 2022 at 6:42 PM Alexander Potapenko <glider@google.com> wrote:
+> @@ -99,11 +100,13 @@ extern int __get_user_bad(void);
+>         int __ret_gu;                                                   \
+>         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
+>         __chk_user_ptr(ptr);                                            \
+> +       instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(ptr))); \
+>         asm volatile("call __" #fn "_%P4"                               \
+>                      : "=a" (__ret_gu), "=r" (__val_gu),                \
+>                         ASM_CALL_CONSTRAINT                             \
+>                      : "0" (ptr), "i" (sizeof(*(ptr))));                \
+>         (x) = (__force __typeof__(*(ptr))) __val_gu;                    \
+> +       instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr)), 0); \
 
-On Wed, Apr 27, 2022 at 2:12 AM Kees Cook <keescook@chromium.org> wrote:
-> The masking for PAC bits wasn't handling 32-bit architectures correctly.
-> Replace the u64 cast with uintptr_t.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Link: https://lore.kernel.org/lkml/CAMuHMdVz-J-1ZQ08u0bsQihDkcRmEPrtX5B_oRJ+Ns5jrasnUw@mail.gmail.com
-> Fixes: 2e53b877dc12 ("lkdtm: Add CFI_BACKWARD to test ROP mitigations")
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+Isn't "ptr" the original pointer here? I think what happened with the
+reported warning is that you get one output line for every instance this
+is used in. There should probably be a
 
-Thank you, that fixes the m68k allmodconfig build, so
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+      __auto_type __ptr = (ptr);
 
-> --- a/drivers/misc/lkdtm/cfi.c
-> +++ b/drivers/misc/lkdtm/cfi.c
-> @@ -59,7 +59,7 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
->  #endif
->
->  #define no_pac_addr(addr)      \
-> -       ((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
-> +       ((__force __typeof__(addr))((uintptr_t)(addr) | PAGE_OFFSET))
+at the beginning of the macro to ensure that 'ptr' is only evaluated once.
 
-Not related to this patch, but "| PAGE_OFFSET" is not identical
-to "+ PAGE_OFFSET" for large kernel sizes.
+>>> arch/x86/kernel/signal.c:360:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __user *to @@     got unsigned long long [usertype] * @@
 
-More specifically, I'm thinking about platforms where "large" would
-be >= 32 MiB:
-arch/mips/include/asm/mach-ar7/spaces.h:#define PAGE_OFFSET
-_AC(0x94000000, UL)
-or >= 128 MiB:
-arch/x86/Kconfig:         default 0x78000000 if VMSPLIT_2G_OPT
+It would also make sense to add the missing __user annotation in this line, but
+I suspect there are others like it in drivers.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+      Arnd

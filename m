@@ -2,98 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA78511328
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1ED51133A
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359239AbiD0IHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S1359297AbiD0IIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243567AbiD0IHL (ORCPT
+        with ESMTP id S1359282AbiD0IH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:07:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A70151585
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:04:00 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651046639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NVrj/IozLz+YLWMa6Aoyk1/gX+kCZfAflMvOSoBkH+U=;
-        b=hRfN7NDAQ6mU9wp5eFxj+DYfCHPs9azOITyD2BKrRWG0JFePx7KCJTmu+rNLr5KB3sXW5m
-        vD/VA9RgieHmpARGPQt4YAUGCf0frQwHN3SPu+ooQNKpBLtV0wEgIGpF5mEEq0Jpw+mBOG
-        +bCQM8MpHbOGL61wq2Iru3KuEqA5ZaRI1f+1RhkI6xuO2jDNkldnVpBIu/ertS1HOUp+xB
-        vH1KfL8RhmkqWeLBMeKAUFX5CT72lcolpIDSGbWepumi2Onr8hsbJK3SLPmTp1jtxV+Xyk
-        i+Q2GSF6aEMASPkWEzy2NYL5DM8vwRCievUk/6Xh4aoaqAUl7eqh+2b/sERsIQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651046639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NVrj/IozLz+YLWMa6Aoyk1/gX+kCZfAflMvOSoBkH+U=;
-        b=IPl5zJQ4XmUiSpIBPJlMNPVh+Fw5TE3wmL6lz2+trLDTLAUelYj15SAtSOpdktYrXScZCb
-        eP50UJN3nNpdjkAw==
-To:     Marcelo Tosatti <mtosatti@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [patch v12 07/13] task isolation: sync vmstats conditional on
- changes
-In-Reply-To: <20220315153314.042469218@fedora.localdomain>
-References: <20220315153132.717153751@fedora.localdomain>
- <20220315153314.042469218@fedora.localdomain>
-Date:   Wed, 27 Apr 2022 10:03:58 +0200
-Message-ID: <87tuafx89d.ffs@tglx>
+        Wed, 27 Apr 2022 04:07:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA98B15C3AE;
+        Wed, 27 Apr 2022 01:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651046677; x=1682582677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=23kSWxJrZI80+FxhewCBs4Zt/CG0UV6J7Lqk+S2dTCo=;
+  b=FQUpsRpWZrqkR8YQwusf527oQaJraTOGDNswl+9R2qesjguVymGCdb81
+   MK3l5J416F20t+vyn3y5b3R3UN2VanaGPqItL+PBuVYrChs0koZiOsFrw
+   rmVoxojKyGMNZ1TbQo3L5Frdzv5CcEmgJGN//RHJCd919XfsYj+sCj4dT
+   jMiZwrVBcHl+/+43AgFGS8NoO/UeM/4EQ5igGXAiPD9XUHulq87VlwUKQ
+   ILx0id7A18zBDxkVzgWoSQQu6eb0uJAVDkG2xDSS+rUKyr9EIb+8d/YXP
+   v2dXQzMLUYibTOwS2yDZMQIp6Z1QMYc+XOx25he9aYR39g5neRKjBsVxV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="247784561"
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="247784561"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 01:04:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
+   d="scan'208";a="617405147"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Apr 2022 01:04:32 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njcf2-0004Uk-76;
+        Wed, 27 Apr 2022 08:04:32 +0000
+Date:   Wed, 27 Apr 2022 16:04:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] libbpf: fix returnvar.cocci warnings
+Message-ID: <Ymj5AJtiBx0UjEdT@8276d8ba1d54>
+References: <202204271656.OTIj2QNJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204271656.OTIj2QNJ-lkp@intel.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15 2022 at 12:31, Marcelo Tosatti wrote:
->  
-> +#ifdef CONFIG_TASK_ISOLATION
-> +struct static_key vmstat_sync_enabled;
+From: kernel test robot <lkp@intel.com>
 
-jump_label.h:
+tools/lib/bpf/relo_core.c:1064:8-11: Unneeded variable: "len". Return "0" on line 1086
 
-"The use of 'struct static_key' directly, is now DEPRECATED."
 
-> +DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
-> +
-> +static inline void mark_vmstat_dirty(void)
-> +{
-> +	if (!static_key_false(&vmstat_sync_enabled))
-> +		return;
-> +
-> +	raw_cpu_write(vmstat_dirty, true);
+ Remove unneeded variable used to store return value.
 
-What's the justification for raw_cpu_write()?
+Generated by: scripts/coccinelle/misc/returnvar.cocci
 
->  
-> @@ -1512,6 +1543,7 @@ static void pagetypeinfo_showfree_print(
->  		}
->  		seq_putc(m, '\n');
->  	}
-> +	mark_vmstat_dirty();
+Fixes: b58af63aab11 ("libbpf: Refactor CO-RE relo human description formatting routine")
+CC: Andrii Nakryiko <andrii@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
-Why does a function which just dumps information via /proc/pagetypeinfo
-make vmstats dirty?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   f02ac5c95dfd45d2f50ecc68d79177de326c668c
+commit: b58af63aab11e4ae00fe96de9505759cfdde8ee9 [6746/7265] libbpf: Refactor CO-RE relo human description formatting routine
+:::::: branch date: 2 hours ago
+:::::: commit date: 9 hours ago
 
-Thanks,
+ tools/lib/bpf/relo_core.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-        tglx
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -1061,7 +1061,7 @@ static int bpf_core_format_spec(char *bu
+ 	const struct btf_enum *e;
+ 	const char *s;
+ 	__u32 type_id;
+-	int i, len = 0;
++	int i;
+ 
+ #define append_buf(fmt, args...)				\
+ 	({							\
+@@ -1083,7 +1083,7 @@ static int bpf_core_format_spec(char *bu
+ 		   type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
+ 
+ 	if (core_relo_is_type_based(spec->relo_kind))
+-		return len;
++		return 0;
+ 
+ 	if (core_relo_is_enumval_based(spec->relo_kind)) {
+ 		t = skip_mods_and_typedefs(spec->btf, type_id, NULL);
+@@ -1091,7 +1091,7 @@ static int bpf_core_format_spec(char *bu
+ 		s = btf__name_by_offset(spec->btf, e->name_off);
+ 
+ 		append_buf("::%s = %u", s, e->val);
+-		return len;
++		return 0;
+ 	}
+ 
+ 	if (core_relo_is_field_based(spec->relo_kind)) {
+@@ -1110,10 +1110,10 @@ static int bpf_core_format_spec(char *bu
+ 			append_buf(" @ offset %u.%u)", spec->bit_offset / 8, spec->bit_offset % 8);
+ 		else
+ 			append_buf(" @ offset %u)", spec->bit_offset / 8);
+-		return len;
++		return 0;
+ 	}
+ 
+-	return len;
++	return 0;
+ #undef append_buf
+ }
+ 

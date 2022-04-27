@@ -2,46 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9D65114F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 12:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6985115BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 13:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiD0Kml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 06:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S230259AbiD0Kvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 06:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiD0Kmg (ORCPT
+        with ESMTP id S230286AbiD0Kve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 06:42:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98FA548E863
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 03:22:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AD2E143D;
-        Wed, 27 Apr 2022 03:22:41 -0700 (PDT)
-Received: from [10.0.0.20] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F9AA3F774;
-        Wed, 27 Apr 2022 03:22:39 -0700 (PDT)
-Message-ID: <2c389633-9b9c-3db9-6c07-a124596e3799@arm.com>
-Date:   Wed, 27 Apr 2022 11:22:27 +0100
+        Wed, 27 Apr 2022 06:51:34 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CAA3AB7CF;
+        Wed, 27 Apr 2022 03:22:57 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id ke5so733441qvb.5;
+        Wed, 27 Apr 2022 03:22:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DFvDs4UX2zax4adbziwn0RYfIrK/tqgpmI5wyJl9xWk=;
+        b=txl9N971Mitb19L/rporh9pX+gSFiofYsUEsWQqmAP8yoWcvMfaiKi0HoyXVykX9YZ
+         +BVFExqw44qOaaUGTGPFgGsoZAAXlnhsT5fnc8/c3iMQJjWJ1gcKbNW5isoK/0ed9a1b
+         mwZFgZW4D/xhp6dg6tRjHzCNE0fvbrW0PVeReKZ86PIzkjJ62+uQDDjd13yID1y7rgh0
+         jh2EvZt07FXfG5Ifg0KIiw0NjqR5xgMV05b08n6HiwsVYmmC2NEeqmxF2inFogQrb/k6
+         3lepXM4uGARxFNsaXcicxgi49dphhOZZPDSvttlPoIZYo7AzgPgLL26ZxY4aQDlUykCy
+         abHA==
+X-Gm-Message-State: AOAM530unhwEdaKc69mkv3lc8vhloUsAkN+WoZkhGEIadOmoln2zpnhq
+        qFdW2V/89CK7ahJkCjNVzhtZt5Xkje/Fag==
+X-Google-Smtp-Source: ABdhPJz6UTZZL4BURTn67KGPUyleLdhEDIehR5hbmEP7UX3/qw0Fi0yopLbmmzlkt/pHta1qP3CD8w==
+X-Received: by 2002:a05:6214:248c:b0:441:2a61:659d with SMTP id gi12-20020a056214248c00b004412a61659dmr19331590qvb.59.1651054976735;
+        Wed, 27 Apr 2022 03:22:56 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05622a031100b002f1d478c218sm10090861qtw.62.2022.04.27.03.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 03:22:56 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7bb893309so12858617b3.12;
+        Wed, 27 Apr 2022 03:22:56 -0700 (PDT)
+X-Received: by 2002:a81:8489:0:b0:2f7:edff:239f with SMTP id
+ u131-20020a818489000000b002f7edff239fmr14119456ywf.256.1651054976217; Wed, 27
+ Apr 2022 03:22:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v6 2/7] sched/fair: Decay task PELT values during wakeup
- migration
-Content-Language: en-US
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
-References: <20220426093506.3415588-1-vincent.donnefort@arm.com>
- <20220426093506.3415588-3-vincent.donnefort@arm.com>
- <YmkL7CevuugEHsol@geo.homenetwork>
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-In-Reply-To: <YmkL7CevuugEHsol@geo.homenetwork>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20210922091007.5516-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 27 Apr 2022 12:22:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWJZM=-Py=W+qKUfCQU=Y5=G6qdp9uubNv56o+5JztaGA@mail.gmail.com>
+Message-ID: <CAMuHMdWJZM=-Py=W+qKUfCQU=Y5=G6qdp9uubNv56o+5JztaGA@mail.gmail.com>
+Subject: Re: [RFC PATCH] memory: renesas-rpc-if: Correct QSPI data transfer in
+ Manual mode
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,65 +66,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram,
 
+On Wed, Sep 22, 2021 at 11:10 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> This patch fixes 2 problems:
+> [1] The output warning logs and data loss when performing
+> mount/umount then remount the device with jffs2 format.
+> [2] The access width of SMWDR[0:1]/SMRDR[0:1] register is wrong.
 
-On 27/04/2022 10:25, Tao Zhou wrote:
-> On Tue, Apr 26, 2022 at 10:35:01AM +0100, Vincent Donnefort wrote:
-> 
->> Before being migrated to a new CPU, a task sees its PELT values
->> synchronized with rq last_update_time. Once done, that same task will also
->> have its sched_avg last_update_time reset. This means the time between
->> the migration and the last clock update (B) will not be accounted for in
->> util_avg and a discontinuity will appear. This issue is amplified by the
->> PELT clock scaling. If the clock hasn't been updated while the CPU is
->> idle, clock_pelt will not be aligned with clock_task and that time (A)
->> will be also lost.
->>
->>     ---------|----- A -----|-----------|------- B -----|>
->>          clock_pelt   clock_task     clock            now
->>
->> This is especially problematic for asymmetric CPU capacity systems which
->> need stable util_avg signals for task placement and energy estimation.
->>
->> Ideally, this problem would be solved by updating the runqueue clocks
->> before the migration. But that would require taking the runqueue lock
->> which is quite expensive [1]. Instead estimate the missing time and update
->> the task util_avg with that value:
->>
->>    A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
->>
->> sched_clock_cpu() is a costly functinon. Limit the usage to the case where
->> the source CPU is idle as we know this is when the clock is having the
->> biggest risk of being outdated.
->>
->> Neither clock_task, clock_pelt nor clock can be accessed without the
->> runqueue lock. We then need to store those values in a timestamp variable
->> which can be accessed during the migration. rq's enter_idle will give the
->> wall-clock time when the rq went idle. We have then:
->>
->>    B = sched_clock_cpu() - rq->enter_idle.
->>
->> Then, to catch-up the PELT clock scaling (A), two cases:
->>
->>    * !CFS_BANDWIDTH: We can simply use clock_task(). This value is stored
->>      in rq's clock_pelt_idle, before the rq enters idle. The estimated time
->>      is then:
->>
->>        rq->clock_pelt_idle + sched_clock_cpu() - rq->enter_idle.
->>
->>    * CFS_BANDWIDTH: We can't catch-up with clock_task because of the
->>      throttled_clock_task_time offset. cfs_rq's clock_pelt_idle is then
->>      giving the PELT clock when the cfs_rq becomes idle. This gives:
->>
->>        A = rq->clock_pelt_idle - cfs_rq->clock_pelt_idle
-> 
-> The code calulating A below is not consistent with this. The order is reversed.
-> 
+Revisiting commit fff53a551db50f5e ("memory: renesas-rpc-if: Correct
+QSPI data transfer in Manual mode") in  v5.16-rc1...
 
-Good catch, but this comment is actually correct, the code is not. 
-rq->clock_pelt_idle is updated _after_ cfs_rq->clock_pelt_idle. (see
-previous email to Vincent)
+> --- a/drivers/memory/renesas-rpc-if.c
+> +++ b/drivers/memory/renesas-rpc-if.c
 
-Thanks,
+>  int rpcif_manual_xfer(struct rpcif *rpc)
+>  {
+> -       u32 smenr, smcr, pos = 0, max = 4;
+> +       u32 smenr, smcr, pos = 0, max = rpc->bus_size == 2 ? 8 : 4;
+>         int ret = 0;
+>
+> -       if (rpc->bus_size == 2)
+> -               max = 8;
+> -
+>         pm_runtime_get_sync(rpc->dev);
+>
+>         regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+> @@ -378,37 +424,36 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+>         regmap_write(rpc->regmap, RPCIF_SMOPR, rpc->option);
+>         regmap_write(rpc->regmap, RPCIF_SMDMCR, rpc->dummy);
+>         regmap_write(rpc->regmap, RPCIF_SMDRENR, rpc->ddr);
+> +       regmap_write(rpc->regmap, RPCIF_SMADR, rpc->smadr);
+>         smenr = rpc->enable;
+>
+>         switch (rpc->dir) {
+>         case RPCIF_DATA_OUT:
+>                 while (pos < rpc->xferlen) {
+> -                       u32 nbytes = rpc->xferlen - pos;
+> -                       u32 data[2];
+> +                       u32 bytes_left = rpc->xferlen - pos;
+> +                       u32 nbytes, data[2];
+>
+>                         smcr = rpc->smcr | RPCIF_SMCR_SPIE;
+> -                       if (nbytes > max) {
+> -                               nbytes = max;
+> +
+> +                       /* nbytes may only be 1, 2, 4, or 8 */
+> +                       nbytes = bytes_left >= max ? max : (1 << ilog2(bytes_left));
+> +                       if (bytes_left > nbytes)
+>                                 smcr |= RPCIF_SMCR_SSLKP;
+> -                       }
+> +
+> +                       smenr |= RPCIF_SMENR_SPIDE(rpcif_bits_set(rpc, nbytes));
+> +                       regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
+>
+>                         memcpy(data, rpc->buffer + pos, nbytes);
+> -                       if (nbytes > 4) {
+> +                       if (nbytes == 8) {
+>                                 regmap_write(rpc->regmap, RPCIF_SMWDR1,
+>                                              data[0]);
+>                                 regmap_write(rpc->regmap, RPCIF_SMWDR0,
+>                                              data[1]);
+> -                       } else if (nbytes > 2) {
+> +                       } else {
+>                                 regmap_write(rpc->regmap, RPCIF_SMWDR0,
+>                                              data[0]);
+> -                       } else  {
+> -                               regmap_write(rpc->regmap, RPCIF_SMWDR0,
+> -                                            data[0] << 16);
+>                         }
+>
+> -                       regmap_write(rpc->regmap, RPCIF_SMADR,
+> -                                    rpc->smadr + pos);
 
-[...]
+Removing this implies SMADR is auto-incrementing for writes...
+
+> -                       regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
+>                         regmap_write(rpc->regmap, RPCIF_SMCR, smcr);
+>                         ret = wait_msg_xfer_end(rpc);
+>                         if (ret)
+> @@ -448,14 +493,16 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+>                         break;
+>                 }
+>                 while (pos < rpc->xferlen) {
+> -                       u32 nbytes = rpc->xferlen - pos;
+> -                       u32 data[2];
+> +                       u32 bytes_left = rpc->xferlen - pos;
+> +                       u32 nbytes, data[2];
+>
+> -                       if (nbytes > max)
+> -                               nbytes = max;
+> +                       /* nbytes may only be 1, 2, 4, or 8 */
+> +                       nbytes = bytes_left >= max ? max : (1 << ilog2(bytes_left));
+>
+>                         regmap_write(rpc->regmap, RPCIF_SMADR,
+>                                      rpc->smadr + pos);
+
+... while keeping this assumes SMADR is not auto-incrementing for
+reads?
+
+Figure 62.17 "Example of Data Transfer Setting Flow in Manual Operating
+Mode" does show writing SMADR in each loop iteration.
+I cannot find anything about auto-incrementing in the documentation,
+except for Figure 62.28 "Write Buffer Usage Sequence", which does
+not apply as Linux does not support the write buffer yet.
+
+Given you tested this, and the BSP commit 0d37f69cacb33435 ("memory:
+renesas-rpc-if: Correct QSPI data transfer in Manual mode") does the
+same, I assume it's working fine?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

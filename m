@@ -2,146 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F215123D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9832C5123DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 22:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbiD0U3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 16:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S236488AbiD0UaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 16:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiD0U2l (ORCPT
+        with ESMTP id S236252AbiD0U3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 16:28:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1B22B18A4
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651091120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DWkcC1Mw2kGsDS6+CAaSOc7PdrzllYlAOUnL4kSDScE=;
-        b=SzGQQII8i5ZjOrdpkhW6N5DvWZwjAuKqw0koUZQEh4+B8I79YEPwbB2g7xojimOfqX9NnI
-        guj586IV91epcQ0/ok/vu1PdL4fYaI3OX55hgLdXcdcfsIak4vp8qzCZoD5RFW4n8DYhHf
-        IImUWZoD28e1kXOJR2ExadK+Kk9i50M=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-1ik5oXm6Pz-gKhopaSSKNA-1; Wed, 27 Apr 2022 16:25:19 -0400
-X-MC-Unique: 1ik5oXm6Pz-gKhopaSSKNA-1
-Received: by mail-wr1-f70.google.com with SMTP id e21-20020adfa455000000b0020ae075cf35so1151329wra.11
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:25:19 -0700 (PDT)
+        Wed, 27 Apr 2022 16:29:51 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEA5B3C7E
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:26:15 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id p12so5138399lfs.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GbCA6ryLcC+4N1YdXeSNdc1G8PlnnlULw8ksimgMuYk=;
+        b=HL6XnPOB2cCe63b0h5x/a8gP+zbRlCPKnbXPFV7fYpOt1yy25Yf61QDmr7xsIZFUmn
+         +yXtJy3b+AsKT5LNlnyXrAGm37GXim0rcEYWsjTmis0AoYryTRHre6dfIOKveplodh9J
+         re0VUnEeHDqH3Qpv2GruCiiOuz0GUmZkMG0ok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DWkcC1Mw2kGsDS6+CAaSOc7PdrzllYlAOUnL4kSDScE=;
-        b=rnzP6OVu8m2Nu9c//66M6KMsXXVltlkzWozNctrfiRtCLnuUz8C25VYH8SSeDl7E//
-         p6NJZMj7DyQ0OjjaKewrkYWUK8Ucumu/50TLXSkgvpRLD93o6uc/sdQtG9GT4UP7aBE+
-         7AdEZf6KahDn7mKYHb2N/nc89xKr09+cj7bpoHD6QmmDJsNkVakW89ivlaVJC4HbLdiT
-         q0MbJd5CcN7odKMqkdDfj1miV9Ne1CD+0NCfqDbA7MoTA9nDZgA9PAZkOP0w1+9CkyCr
-         fH8/m6wl2gnMvWbMZa5zypZSlBZghsk+9qbn1ajvATVP0RqWclWQNUYp3AETbjh44zyU
-         W+AQ==
-X-Gm-Message-State: AOAM532BkF2gsttdc916VxOx0tfTCtxrjmrAxRmKUk1XssAnicItmBdu
-        +NbTFN4UX8Ur8iC8xmT01sTiLI+q5V3jkVjiweaNfP/4r3sQ3NVW94+g5DyM2kybGqT75qd5b4g
-        vR7BXudBcCk9/SJIW6sjHFqCy04NpTs+WKrpcIqcdq0w5vTx62ZfnCqWCDMiNr5PY3/iVjvuzej
-        8=
-X-Received: by 2002:a05:6000:178f:b0:20a:8009:7cd3 with SMTP id e15-20020a056000178f00b0020a80097cd3mr23927710wrg.532.1651091118348;
-        Wed, 27 Apr 2022 13:25:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyeyUQBNyusRg7cR3OhmiRejZFOBGxuVFHcl4pM81Q6ah77SVWgTi13DCfSIVex/7kUiivQwQ==
-X-Received: by 2002:a05:6000:178f:b0:20a:8009:7cd3 with SMTP id e15-20020a056000178f00b0020a80097cd3mr23927684wrg.532.1651091118025;
-        Wed, 27 Apr 2022 13:25:18 -0700 (PDT)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id v2-20020adf8b42000000b0020aa790a258sm15147634wra.8.2022.04.27.13.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 13:25:17 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/display: Select DP helpers for DRM_DP_AUX_CHARDEV and DRM_DP_CEC
-Date:   Wed, 27 Apr 2022 22:25:13 +0200
-Message-Id: <20220427202513.46996-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GbCA6ryLcC+4N1YdXeSNdc1G8PlnnlULw8ksimgMuYk=;
+        b=HcOo0sAYy2lPrzloFFfKpQD6jDJZ9BHz7SkGWvgJB4D4L9NZnIu02D5HDdgxOZsvtz
+         7IaCP46UcvhwlAVN2kf5h5B57vCAuTeujn95QB18M89oIb99DOirFFjE6+Dp5fNk21S2
+         BK5Bld0ZEO5LSrv2Im87qXcSazeT4YnhpYbedRYBJHzEtx/A7xfRKMoYOT5fRbpM5Yfo
+         2uwU8xmkdt/U4Z1EaaXkNedQhXclLgYtAT4GH7gmTEdWsZf8Yc2KG54Zu9JUlxWP5aHo
+         pY7hR8sTBFdnMAlbPG2RvkUxNgES2pLpnvZFhlqSe6+i+v9X3iSOhlFGTFVCUOBDHaoP
+         TkdQ==
+X-Gm-Message-State: AOAM530mnq9lp2MoUuS9fKXtAAnUNTiV7dX7MJJE5QF/U3dUv540b7tq
+        gqGjhWH4f7EXfXttSxbCIn9MaCuk1MEsWUvu5PU=
+X-Google-Smtp-Source: ABdhPJzO1eXQpNJu2EYp1DbYOF+gLAkOAFDo1F/+/Ub/UJnTSYlBSbwWLBgQBfEd6+KEcTHXPmrGeQ==
+X-Received: by 2002:ac2:4250:0:b0:44a:ff88:3795 with SMTP id m16-20020ac24250000000b0044aff883795mr21748738lfl.384.1651091173731;
+        Wed, 27 Apr 2022 13:26:13 -0700 (PDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id b15-20020a2e894f000000b0024db8e1248csm1940889ljk.124.2022.04.27.13.26.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 13:26:13 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id v1so4176802ljv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 13:26:12 -0700 (PDT)
+X-Received: by 2002:a2e:8789:0:b0:24f:124c:864a with SMTP id
+ n9-20020a2e8789000000b0024f124c864amr10737718lji.164.1651091172382; Wed, 27
+ Apr 2022 13:26:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
+ <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
+ <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
+ <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
+ <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com> <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
+In-Reply-To: <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 27 Apr 2022 13:25:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
+Message-ID: <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
+Subject: Re: [GIT PULL] gfs2 fix
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     cluster-devel <cluster-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DRM_DP_AUX_CHARDEV and DRM_DP_CEC boolean Kconfig symbols enable code
-that use DP helper functions, exported by the display-helper module.
+On Wed, Apr 27, 2022 at 12:41 PM Andreas Gruenbacher
+<agruenba@redhat.com> wrote:
+>
+> I wonder if this could be documented in the read and write manual
+> pages. Or would that be asking too much?
 
-But these don't select the DRM_DISPLAY_DP_HELPER and DRM_DISPLAY_HELPER
-symbols, to make sure that the functions used will be present. This leads
-to the following linking errors if CONFIG_DRM_DISPLAY_HELPER is set to m:
+I don't think it would be asking too much, since it's basically just
+describing what Linux has always done in all the major filesystems.
 
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-  MODINFO modules.builtin.modinfo
-  GEN     modules.builtin
-  LD      .tmp_vmlinux.kallsyms1
-  KSYMS   .tmp_vmlinux.kallsyms1.S
-  AS      .tmp_vmlinux.kallsyms1.S
-  LD      .tmp_vmlinux.kallsyms2
-  KSYMS   .tmp_vmlinux.kallsyms2.S
-  AS      .tmp_vmlinux.kallsyms2.S
-  LD      vmlinux
-  SYSMAP  System.map
-  SORTTAB vmlinux
-  OBJCOPY arch/arm64/boot/Image
-  MODPOST modules-only.symvers
-ERROR: modpost: "drm_dp_dpcd_write" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
-ERROR: modpost: "drm_dp_read_desc" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
-ERROR: modpost: "drm_dp_dpcd_read" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
-make[1]: *** [scripts/Makefile.modpost:134: modules-only.symvers] Error 1
-make[1]: *** Deleting file 'modules-only.symvers'
-make: *** [Makefile:1749: modules] Error 2
+Eg look at filemap_read(), which is basically the canonical read
+function, and note how it doesn't take a single lock at that level.
 
-Note: It seems this has been an issue for a long time but was made easier
-to reproduce after the commit 1e0f66420b13 ("drm/display: Introduce a DRM
-display-helper module"). Adding a Fixes: tag just to make sure that this
-fix will be picked for stable once the mentioned change also lands there.
+We *do* have synchronization at a page level, though, ie we've always
+had that page-level "uptodate" bit, of course (ok, so "always" isn't
+true - back in the distant past it was the 'struct buffer_head' that
+was the synchronization point).
 
-Fixes: 1e0f66420b13 ("drm/display: Introduce a DRM display-helper module")
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+That said, even that is not synchronizing against "new writes", but
+only against "new creations" (which may, of course, be writers, but is
+equally likely to be just reading the contents from disk).
 
- drivers/gpu/drm/display/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+That said:
 
-diff --git a/drivers/gpu/drm/display/Kconfig b/drivers/gpu/drm/display/Kconfig
-index f84f1b0cd23f..d7a413a2c6cc 100644
---- a/drivers/gpu/drm/display/Kconfig
-+++ b/drivers/gpu/drm/display/Kconfig
-@@ -32,6 +32,8 @@ config DRM_DISPLAY_HDMI_HELPER
- config DRM_DP_AUX_CHARDEV
- 	bool "DRM DP AUX Interface"
- 	depends on DRM
-+	select DRM_DISPLAY_DP_HELPER
-+	select DRM_DISPLAY_HELPER
- 	help
- 	  Choose this option to enable a /dev/drm_dp_auxN node that allows to
- 	  read and write values to arbitrary DPCD registers on the DP aux
-@@ -40,6 +42,8 @@ config DRM_DP_AUX_CHARDEV
- config DRM_DP_CEC
- 	bool "Enable DisplayPort CEC-Tunneling-over-AUX HDMI support"
- 	depends on DRM
-+	select DRM_DISPLAY_DP_HELPER
-+	select DRM_DISPLAY_HELPER
- 	select CEC_CORE
- 	help
- 	  Choose this option if you want to enable HDMI CEC support for
--- 
-2.35.1
+ (a) different filesystems can and will do different things.
 
+Not all filesystems use filemap_read() at all, and even the ones that
+do often have their own wrappers. Such wrappers *can* do extra
+serialization, and have their own rules. But ext4 does not, for
+example (see ext4_file_read_iter()).
+
+And as mentioned, I *think* XFS honors that old POSIX rule for
+historical reasons.
+
+ (b) we do have *different* locking
+
+for example, we these days do actually serialize properly on the
+file->f_pos, which means that a certain *class* of read/write things
+are atomic wrt each other, because we actually hold that f_pos lock
+over the whole operation and so if you do file reads and writes using
+the same file descriptor, they'll be disjoint.
+
+That, btw, hasn't always been true. If you had multiple threads using
+the same file pointer, I think we used to get basically random
+results. So we have actually strengthened our locking in this area,
+and made it much better.
+
+But note how even if you have the same file descriptor open, and then
+do pread/pwrite, those can and will happen concurrently.
+
+And mmap accesses and modifications are obviously *always* concurrent,
+even if the fault itself - but not the accesses - might end up being
+serialized due to some filesystem locking implementation detail.
+
+End result: the exact serialization is complex, depends on the
+filesystem, and is just not really something that should be described
+or even relied on (eg that f_pos serialization is something we do
+properly now, but didn't necessarily do in the past, so ..)
+
+Is it then worth pointing out one odd POSIX rule that basically nobody
+but some very low-level filesystem people have ever heard about, and
+that no version of Linux has ever conformed to in the main default
+filesystems, and that no user has ever cared about?
+
+             Linus

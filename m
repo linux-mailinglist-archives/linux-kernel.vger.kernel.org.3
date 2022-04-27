@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1366C510D07
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71DC510D0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 02:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356308AbiD0AJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 20:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S1356321AbiD0AOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 20:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbiD0AJs (ORCPT
+        with ESMTP id S229520AbiD0AOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 20:09:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424462F382;
-        Tue, 26 Apr 2022 17:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651017998; x=1682553998;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WF0BUOeCUWjXtygZ0fA+ocYyTRB01MF/mxmqK/OFDYg=;
-  b=H1jbq50hw9Me9mg3kFpgKW5OEP7gVVm4g6eN4TPRg3eBmVqkYFLAr9UJ
-   oWUIuwqacAdmNdWTK1uI121j5mmgBlufe3L+/oiOWVyxyjs3vwTrD4zZi
-   5epcYRYawq5SeeMN35CumMuh+OMOkC2FZUJc6y5GqeAGLjcCaofBTuRxE
-   47Vvjiie76QAafrBA3rjD4A612VRY0igR3h885xGNNVy3t7hWKlyqTLUD
-   QSUxZrSrcuYEVoAlyhpnko2wEFDtxFig93FipC+CZtMenlVsDxbAALyKK
-   aMMPTtX7iv95KAXT4gOzrd2AL89OfRH7ziiIH31wCV+q1Z9rEfXsipCj0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="245685354"
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="245685354"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 17:06:37 -0700
-X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="558612050"
-Received: from ssaride-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.0.221])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 17:06:34 -0700
-Message-ID: <345753e50e4c113b1dfb71bba1ed841eee55aed3.camel@intel.com>
-Subject: Re: [PATCH v3 06/21] x86/virt/tdx: Shut down TDX module in case of
- error
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Wed, 27 Apr 2022 12:06:32 +1200
-In-Reply-To: <b3c81b7f-3016-8f4e-3ac5-bff1fc52a879@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <3f19ac995d184e52107e7117a82376cb7ecb35e7.1649219184.git.kai.huang@intel.com>
-         <b3c81b7f-3016-8f4e-3ac5-bff1fc52a879@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 26 Apr 2022 20:14:20 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E4E37BC5;
+        Tue, 26 Apr 2022 17:11:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Knzg90bM8z4yST;
+        Wed, 27 Apr 2022 10:11:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651018262;
+        bh=rc6ouf0q7clHmR3t+iRyYoy2gBHvA2Kpy8t+RH03srM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i8DJb/m9la4nUh9WbxLUdksWkSHI/bnhEN52UKh75dhJXzwVzrx00/MsnkiLXv9gb
+         mL5uUSdKpFPhlT25hsOkNPbOsN8ttkH3k8kusBxJP8G9n40MXiej4ci1f7Mr5pDmTD
+         97eoLqWS3g2bU5a1hqtDoGeUakV/pbotw8iVH26VB2quS5Q7lwjU3t/GzOJyQRNKlI
+         NqyOix/MB50Ecu3xGuYQ9NsFXHOp2W6pb059ZpCAUFxZKyrvtoyupORGloTRZvmPeV
+         3r/r7ESLamega59/MqZwSlwqc/EQHIcbUU9xSPQatGInfFZqza5QE5n505fJ4L6bDK
+         h6i62CQ4H8IcQ==
+Date:   Wed, 27 Apr 2022 10:10:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220427101059.3bf55262@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-26 at 13:59 -0700, Dave Hansen wrote:
-> On 4/5/22 21:49, Kai Huang wrote:
-> > TDX supports shutting down the TDX module at any time during its
-> > lifetime.  After TDX module is shut down, no further SEAMCALL can be
-> > made on any logical cpu.
-> 
-> Is this strictly true?
-> 
-> I thought SEAMCALLs were used for the P-SEAMLDR too.
+--Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry will change to no TDX module SEAMCALL can be made on any logical cpu.
+Hi all,
 
-[...]
+After merging the tip tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-> >  
-> > +/* Data structure to make SEAMCALL on multiple CPUs concurrently */
-> > +struct seamcall_ctx {
-> > +	u64 fn;
-> > +	u64 rcx;
-> > +	u64 rdx;
-> > +	u64 r8;
-> > +	u64 r9;
-> > +	atomic_t err;
-> > +	u64 seamcall_ret;
-> > +	struct tdx_module_output out;
-> > +};
-> > +
-> > +static void seamcall_smp_call_function(void *data)
-> > +{
-> > +	struct seamcall_ctx *sc = data;
-> > +	int ret;
-> > +
-> > +	ret = seamcall(sc->fn, sc->rcx, sc->rdx, sc->r8, sc->r9,
-> > +			&sc->seamcall_ret, &sc->out);
-> > +	if (ret)
-> > +		atomic_set(&sc->err, ret);
-> > +}
-> > +
-> > +/*
-> > + * Call the SEAMCALL on all online cpus concurrently.
-> > + * Return error if SEAMCALL fails on any cpu.
-> > + */
-> > +static int seamcall_on_each_cpu(struct seamcall_ctx *sc)
-> > +{
-> > +	on_each_cpu(seamcall_smp_call_function, sc, true);
-> > +	return atomic_read(&sc->err);
-> > +}
-> 
-> Why bother returning something that's not read?
+Documentation/virt/index.rst:7: WARNING: toctree contains reference to none=
+xisting document 'virt/coco/sev-guest'
+Documentation/virt/coco/sevguest.rst: WARNING: document isn't included in a=
+ny toctree
 
-It's not needed.  I'll make it void.
+Introduced by commit
 
-Caller can check seamcall_ctx::err directly if they want to know whether any
-error happened.
+  9617f2f48310 ("virt: sevguest: Rename the sevguest dir and files to sev-g=
+uest")
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Thanks,
--Kai
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJoihQACgkQAVBC80lX
+0Gy45QgAgTABkU0bgbyt76BS5pG5oeSkJaoueIvA2Xd6e/n57oklURjTlVBCAL4e
+994AFxZEswSqqS+oZtSEirOJMPXBm/b2vlR0CujkG7Cvy1cnrY7LLDlMtIl0Yxxx
+z/8UCS6IZ0rqCf1lfYXIL8RqB0DwWmQRYw0kjTuNQlqIySab4+XZXGHHQn4Vmgw4
+Nm6J+lMoyTXATIZ0hd3Rarl9In0459VZXMkbUcNj1/i6xnfttjy+Tbn0K1Tus1re
+fXG/j8+hfec69oRCHzb7F6KR/BaQ4hc3O0WyoIlM5gsheVD6uaaZ9+3YFq6jABlg
+N394+Xj97HT9EWx3gA92/H5V74kiTQ==
+=ahdu
+-----END PGP SIGNATURE-----
 
+--Sig_/Z_9JhSAR0Hmyk3B.PLdtIuD--

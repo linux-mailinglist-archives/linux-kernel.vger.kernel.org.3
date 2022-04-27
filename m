@@ -2,133 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA636511984
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E877511A26
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbiD0Muy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 08:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S235167AbiD0NBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 09:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiD0Mux (ORCPT
+        with ESMTP id S235076AbiD0NBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 08:50:53 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD541C123
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:47:42 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id y21so1090850wmi.2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 05:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4ZU7ssA0uBUIH6XIuoYvcPvJ99ZnRQPUGmPQtpNi76c=;
-        b=IW2c9joHq/hwifhAacbBVc1qzogNoXNAxtBDcYWCPJ6fPOM9y6yKnxL7LpTymyi1Mw
-         hjMcixIyPI70Pi2PTqQlosHfCg1E8SnZ5l0ArWRvMWodQsPK5LhTsudvfWJN9kI4hau8
-         q0lDTsSvPRBac4hfb3TQ0orhvL6MUxOyjUvtvP5Yq/D4+mHZPSQn08XLD3G61YIjeSEa
-         M4MO+l2LtH2/6N7jEwuGc9ZS+61BVh/gEjsKIastxGEQjzGbgP8+YNOkNsjzSS3tgsLX
-         VM7ssK8zNESBLZCy1G0Aser5Eb5kq6GNeP6Wm6p+hwwD3361fyDBWfdauodf69g0q6sq
-         eP3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4ZU7ssA0uBUIH6XIuoYvcPvJ99ZnRQPUGmPQtpNi76c=;
-        b=uXKqet+W9I12zXcLf3GJQGSyfyipBMnQph1KQJWU0vev/zEoRKwL0PwYj/YVDnFBCW
-         6PHbC5J34wedtvX+6d9NoeTuE+DUTRgMA6EHKz/OLg31htt1L4qNTDBpnOMwUM8qSyep
-         tYU349/VqiPtQklY5uMcodgMrIGcXLCv06/U6XpsRt92GZOSWNnhOyUm8Dzp/WA3cvwH
-         jZZ9d2eBF5Z8J11OInniYbObn4ypz2MXTzKOrGWkwZPqc3J4dZmq9H1yXpmgBGhTV0ON
-         mbMW0T+i1xUfOkYNnh70bvlZuP3IfhPKH+XuJlU+cqX01XLeUYpQ28hrpLlg6HikrcbU
-         ryIQ==
-X-Gm-Message-State: AOAM5321CTz887oNnYaq65ZAwr/nNILJ9SMVz3VRRoQ74mbOjNx/2Yhc
-        A2mLCh3hRRKHepl1D+IwjTmzgQ==
-X-Google-Smtp-Source: ABdhPJz5NK+Ha567qr3bpxGvIn7U9ze3IwWfwIo5TY6HK+pg7ceZbULrFiJZ/aDUS4aMuFui3oFWlQ==
-X-Received: by 2002:a05:600c:1584:b0:38e:c80e:b8b5 with SMTP id r4-20020a05600c158400b0038ec80eb8b5mr34457739wmf.99.1651063660964;
-        Wed, 27 Apr 2022 05:47:40 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:493f:cd0f:324a:323c])
-        by smtp.gmail.com with ESMTPSA id w12-20020adf8bcc000000b002060e3da33fsm13564171wra.66.2022.04.27.05.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 05:47:40 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 14:47:34 +0200
-From:   Marco Elver <elver@google.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/46] kasan: common: adapt to the new prototype of
- __stack_depot_save()
-Message-ID: <Ymk7ZkkIq6rF+BmI@elver.google.com>
-References: <20220426164315.625149-1-glider@google.com>
- <20220426164315.625149-4-glider@google.com>
+        Wed, 27 Apr 2022 09:01:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417D12C6E10;
+        Wed, 27 Apr 2022 05:58:36 -0700 (PDT)
+X-UUID: 18f6b30eee0d4f45bfcdf202e41777c7-20220427
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:fb2ad7dd-64a7-4742-b634-438b1994c429,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:25d9e82e-6199-437e-8ab4-9920b4bc5b76,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 18f6b30eee0d4f45bfcdf202e41777c7-20220427
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <sam.shih@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 434883125; Wed, 27 Apr 2022 20:58:30 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 27 Apr 2022 20:48:02 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 27 Apr 2022 20:48:02 +0800
+From:   Sam Shih <sam.shih@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     John Crispin <john@phrozen.org>, Ryder Lee <ryder.lee@kernel.org>,
+        Sam Shih <sam.shih@mediatek.com>
+Subject: [PATCH 2/5] arm64: dts: mt7986: add spi related device nodes
+Date:   Wed, 27 Apr 2022 20:47:38 +0800
+Message-ID: <20220427124741.18245-3-sam.shih@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220427124741.18245-1-sam.shih@mediatek.com>
+References: <20220427124741.18245-1-sam.shih@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426164315.625149-4-glider@google.com>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 06:42PM +0200, Alexander Potapenko wrote:
-> Pass extra_bits=0, as KASAN does not intend to store additional
-> information in the stack handle. No functional change.
-> 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+This patch adds spi support for MT7986.
 
-I think this patch needs to be folded into the previous one, otherwise
-bisection will be broken.
+Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+---
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 35 ++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 28 +++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 37 ++++++++++++++++++++
+ 3 files changed, 100 insertions(+)
 
-> ---
-> Link: https://linux-review.googlesource.com/id/I932d8f4f11a41b7483e0d57078744cc94697607a
-> ---
->  mm/kasan/common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index d9079ec11f313..5d244746ac4fe 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -36,7 +36,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
->  	unsigned int nr_entries;
->  
->  	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-> -	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
-> +	return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
->  }
->  
->  void kasan_set_track(struct kasan_track *track, gfp_t flags)
-> -- 
-> 2.36.0.rc2.479.g8af0fa9b8e-goog
-> 
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+index 5a1a605a7828..eb14e82d74b1 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+@@ -26,6 +26,20 @@
+ };
+ 
+ &pio {
++	spi_flash_pins: spi-flash-pins {
++		mux {
++			function = "spi";
++			groups = "spi0", "spi0_wp_hold";
++		};
++	};
++
++	spic_pins: spic-pins {
++		mux {
++			function = "spi";
++			groups = "spi1_2";
++		};
++	};
++
+ 	uart1_pins: uart1-pins {
+ 		mux {
+ 			function = "uart";
+@@ -41,6 +55,27 @@
+ 	};
+ };
+ 
++&spi0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi_flash_pins>;
++	cs-gpios = <0>, <0>;
++	status = "okay";
++	spi_nand: spi_nand@0 {
++		compatible = "spi-nand";
++		reg = <0>;
++		spi-max-frequency = <10000000>;
++		spi-tx-buswidth = <4>;
++		spi-rx-buswidth = <4>;
++	};
++};
++
++&spi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spic_pins>;
++	cs-gpios = <0>, <0>;
++	status = "okay";
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+index 694acf8f5b70..069d3a9bdac9 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -106,6 +106,34 @@
+ 			#clock-cells = <1>;
+ 		};
+ 
++		spi0: spi@1100a000 {
++			compatible = "mediatek,mt7986-spi-ipm", "mediatek,spi-ipm";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x1100a000 0 0x100>;
++			interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&topckgen CLK_TOP_MPLL_D2>,
++				 <&topckgen CLK_TOP_SPI_SEL>,
++				 <&infracfg CLK_INFRA_SPI0_CK>,
++				 <&infracfg CLK_INFRA_SPI0_HCK_CK>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk", "hclk";
++			status = "disabled";
++		};
++
++		spi1: spi@1100b000 {
++			compatible = "mediatek,mt7986-spi-ipm", "mediatek,spi-ipm";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0 0x1100b000 0 0x100>;
++			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&topckgen CLK_TOP_MPLL_D2>,
++				 <&topckgen CLK_TOP_SPIM_MST_SEL>,
++				 <&infracfg CLK_INFRA_SPI1_CK>,
++				 <&infracfg CLK_INFRA_SPI1_HCK_CK>;
++			clock-names = "parent-clk", "sel-clk", "spi-clk", "hclk";
++			status = "disabled";
++		};
++
+ 		topckgen: topckgen@1001b000 {
+ 			compatible = "mediatek,mt7986-topckgen", "syscon";
+ 			reg = <0 0x1001B000 0 0x1000>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+index d73467ea3641..f159f1ac618b 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+@@ -25,6 +25,43 @@
+ 	};
+ };
+ 
++&pio {
++	spi_flash_pins: spi-flash-pins {
++		mux {
++			function = "spi";
++			groups = "spi0", "spi0_wp_hold";
++		};
++	};
++
++	spic_pins: spic-pins {
++		mux {
++			function = "spi";
++			groups = "spi1_2";
++		};
++	};
++};
++
++&spi0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi_flash_pins>;
++	cs-gpios = <0>, <0>;
++	status = "okay";
++	spi_nand: spi_nand@0 {
++		compatible = "spi-nand";
++		reg = <0>;
++		spi-max-frequency = <10000000>;
++		spi-tx-buswidth = <4>;
++		spi-rx-buswidth = <4>;
++	};
++};
++
++&spi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spic_pins>;
++	cs-gpios = <0>, <0>;
++	status = "okay";
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
+-- 
+2.18.0
+

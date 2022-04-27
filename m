@@ -2,121 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB39E511AB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8A75119A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 16:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238712AbiD0Owv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 10:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S238603AbiD0Oty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 10:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238693AbiD0Owq (ORCPT
+        with ESMTP id S238516AbiD0Oto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 10:52:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C86113EF2E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651070973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S8aF0VPL+4RQxQVtMfo2MXRnGizw2GrCzAZka9s1hOs=;
-        b=G19+4oyUuDeDaMlw+9isrJr7y5Wz7Nd15BR8TrcyLrFqpng6wewFUB7L0X9nDvUkytxgFT
-        n/oWqccr9vvrhr9FL1oVxQ8M4UC5Xy13Q697mGaZxW5ePc8DfeyCYejItQSFswyeMLDRrl
-        ZZwVQWdcw75pYDMlwAv3twQLPTE5iXs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-Y_zw08UAN02MVwYp7h4qaw-1; Wed, 27 Apr 2022 10:49:32 -0400
-X-MC-Unique: Y_zw08UAN02MVwYp7h4qaw-1
-Received: by mail-wm1-f70.google.com with SMTP id bh7-20020a05600c3d0700b003940829b48dso444167wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 07:49:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S8aF0VPL+4RQxQVtMfo2MXRnGizw2GrCzAZka9s1hOs=;
-        b=UWosbDpUtP/DycuRm5kaVywkhBvEfhj8xZP3f8gZxiksBZlfZORglkRoWBeHl5mur0
-         NHdKY8/kPlnbLUUrox1Ce8iCiK0GB3ChD4ng1xTkFsjtSnZlQYcfzud1dmDYWvYvFIWO
-         rBvydkhZKUCjevDq6KA3HrBkpfo1NZ8gRo0DLsjM3sEK+upnCZpTUXrVe/CdwsnLPMge
-         W4dL+VXEHDZhw7Z6TqJnKrGc1RH50rieKx0MhybMu3I56Tr16fn57iYNv+CxtdlKGgHc
-         oRXXW2VAmni3YH6Hgam7nFRWfLum6YYflaiZVerCVaN6V6YZuZA7Dki5qVq+BoX33tbJ
-         qMrg==
-X-Gm-Message-State: AOAM533cffLM70asdGSmaBZ1kOloJkOGN23lqCm3IMeuvmKPVBNemnbr
-        PQ6d7TsBLZVl6Z8b39LgitQxZ0vM9jO9k8Im6B0Sz0ObdfbAdXiNgXeIDxDt02RKgLJQAyw2gPj
-        9FV1ZbvL32NbSsjz1f1F3IjY=
-X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id z19-20020a1cf413000000b0037bd1de5762mr26699628wma.108.1651070971381;
-        Wed, 27 Apr 2022 07:49:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxHKXnL5bdu2mcDHhShjxqFTABJ09lFyznMIxEOecs7P5FwwJkvPf6gtu0Nf8qzIhsHmQki6g==
-X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id z19-20020a1cf413000000b0037bd1de5762mr26699608wma.108.1651070971212;
-        Wed, 27 Apr 2022 07:49:31 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id n4-20020a1ca404000000b00392965e41d6sm1707631wme.39.2022.04.27.07.49.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:49:30 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 15:49:27 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christoph Lameter <cl@gentwo.de>, frederic@kernel.org,
-        mingo@kernel.org, pauld@redhat.com, neelx@redhat.com,
-        oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-ID: <20220427144927.c5as3sa4mheawea5@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220422193647.3808657-1-atomlin@redhat.com>
- <alpine.DEB.2.22.394.2204250919400.2367@gentwo.de>
- <20220425113909.u3smtztp66svlw4o@ava.usersys.com>
- <alpine.DEB.2.22.394.2204251406370.13839@gentwo.de>
- <20220425132700.GK2731@worktop.programming.kicks-ass.net>
- <20220425141717.vw2jfnn3zp6c5ib2@ava.usersys.com>
- <Ymb018EaVlOUfx87@fuller.cnet>
- <20220427115020.kyaxc5j67lq5zrfq@ava.usersys.com>
- <875ymuy4h8.ffs@tglx>
+        Wed, 27 Apr 2022 10:49:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938A39149;
+        Wed, 27 Apr 2022 07:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651070791; x=1682606791;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PyxzdMNHi5SNpD/gU2LCc0lK3E+ymcTdlRxMk2lgO8o=;
+  b=AXWZK2UHoI5YXfJhu7FvNjF7LOQL9GCl9zHoX7n8ovqMG/ulE8VrSufc
+   MZCSupTgn6LRqORCVu5hPhk1QMg5Urtzwt3O/u41vRX6jxdMn5YrSD5U9
+   Kt5rz9W4uQdm8M/B7ohrmjtEof/hDSmq5lR/L8KoOOqsNLknR9R0FhvC/
+   8Sdjo7s4RjesqJd3ZCabGOSxyUVr+yhO0GyIpdqrLx4uno9Owiqa1DYRH
+   YiN+7zXCxBGOqHcJ1ZHx7mvIbeiCbRs0IFwmmx1y7+hhzrquNJjEDFgK0
+   5rPpvYAAL60WnagovszliJ8ZlN1kABAjjuqW6XTpstVbKRAOOQz5AfWx9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352384332"
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="352384332"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:46:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,293,1643702400"; 
+   d="scan'208";a="533239142"
+Received: from pcurcohe-mobl.amr.corp.intel.com (HELO [10.212.68.237]) ([10.212.68.237])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 07:46:29 -0700
+Message-ID: <c833aff2-b459-a1d7-431f-bce5c5f29182@intel.com>
+Date:   Wed, 27 Apr 2022 07:49:50 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <875ymuy4h8.ffs@tglx>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 04/21] x86/virt/tdx: Add skeleton for detecting and
+ initializing TDX on demand
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
+ <ac482f2b-d2d1-0643-faa4-1b36340268c5@intel.com>
+ <22e3adf42b8ea2cae3aabc26f762acb983133fea.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <22e3adf42b8ea2cae3aabc26f762acb983133fea.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-27 16:40 +0200, Thomas Gleixner wrote:
-> On Wed, Apr 27 2022 at 12:50, Aaron Tomlin wrote:
-> > On Mon 2022-04-25 16:21 -0300, Marcelo Tosatti wrote:
-> >> Is there anything that prevents a nohz full CPU from running an
-> >> application with short and frequent idling?
-> >
-> > I'm not sure I understand the question; albeit, if I understand correctly,
-> > yes: the scheduling-clock tick, if it was stopped.
-> > Yet I believe this behaviour is correct. Consider the following example:
-> >
-> >   When a CFS task is moved/or migrated to a nohz_full CPU that was
-> >   previously idle and had its tick stopped, if its the only task on the
-> >   run-queue then it is possible that the idle task may not restart the
-> >   tick (see __tick_nohz_full_update_tick()).  Thus once the CFS task exits
-> >   manual intervention i.e. a reschedule IPI to wake the idle task, would be
-> >   required to run again, on the same CPU.
+On 4/26/22 17:43, Kai Huang wrote:
+> On Tue, 2022-04-26 at 13:53 -0700, Dave Hansen wrote:
+>> On 4/5/22 21:49, Kai Huang wrote:
+...
+>>> +static bool tdx_keyid_sufficient(void)
+>>> +{
+>>> +	if (!cpumask_equal(&cpus_booted_once_mask,
+>>> +					cpu_present_mask))
+>>> +		return false;
+>>
+>> I'd move this cpumask_equal() to a helper.
 > 
-> When the task exits and the tick was stopped, why should idle restart
-> the tick? There is nothing to do, so what?
+> Sorry to double confirm, do you want something like:
+> 
+> static bool tdx_detected_on_all_cpus(void)
+> {
+> 	/*
+> 	 * To detect any BIOS misconfiguration among cores, all logical
+> 	 * cpus must have been brought up at least once.  This is true
+> 	 * unless 'maxcpus' kernel command line is used to limit the
+> 	 * number of cpus to be brought up during boot time.  However
+> 	 * 'maxcpus' is basically an invalid operation mode due to the
+> 	 * MCE broadcast problem, and it should not be used on a TDX
+> 	 * capable machine.  Just do paranoid check here and do not
+> 	 * report SEAMRR as enabled in this case.
+> 	 */
+> 	return cpumask_equal(&cpus_booted_once_mask, cpu_present_mask);
+> }
 
-Hi Thomas,
+That's logically the right idea, but I hate the name since the actual
+test has nothing to do with TDX being detected.  The comment is also
+rather verbose and rambling.
 
-Indeed. As per my response, I do not see an issue. Perhaps I misunderstood
-Marcelo's question, no?
+It should be named something like:
 
-Kind regards,
+	all_cpus_booted()
 
--- 
-Aaron Tomlin
+and with a comment like this:
 
+/*
+ * To initialize TDX, the kernel needs to run some code on every
+ * present CPU.  Detect cases where present CPUs have not been
+ * booted, like when maxcpus=N is used.
+ */
+
+> static bool seamrr_enabled(void)
+> {
+> 	if (!tdx_detected_on_all_cpus())
+> 		return false;
+> 
+> 	return __seamrr_enabled();
+> }
+> 
+> static bool tdx_keyid_sufficient()
+> {
+> 	if (!tdx_detected_on_all_cpus())
+> 		return false;
+> 
+> 	...
+> }
+
+Although, looking at those, it's *still* unclear why you need this.  I
+assume it's because some later TDX SEAMCALL will fail if you get this
+wrong, and you want to be able to provide a better error message.
+
+*BUT* this code doesn't actually provide halfway reasonable error
+messages.  If someone uses maxcpus=99, then this code will report:
+
+	pr_info("SEAMRR not enabled.\n");
+
+right?  That's bonkers.
+
+>>> +	/*
+>>> +	 * TDX requires at least two KeyIDs: one global KeyID to
+>>> +	 * protect the metadata of the TDX module and one or more
+>>> +	 * KeyIDs to run TD guests.
+>>> +	 */
+>>> +	return tdx_keyid_num >= 2;
+>>> +}
+>>> +
+>>> +static int __tdx_detect(void)
+>>> +{
+>>> +	/* The TDX module is not loaded if SEAMRR is disabled */
+>>> +	if (!seamrr_enabled()) {
+>>> +		pr_info("SEAMRR not enabled.\n");
+>>> +		goto no_tdx_module;
+>>> +	}
+>>
+>> Why even bother with the SEAMRR stuff?  It sounded like you can "ping"
+>> the module with SEAMCALL.  Why not just use that directly?
+> 
+> SEAMCALL will cause #GP if SEAMRR is not enabled.  We should check whether
+> SEAMRR is enabled before making SEAMCALL.
+
+So...  You could actually get rid of all this code.  if SEAMCALL #GP's,
+then you say, "Whoops, the firmware didn't load the TDX module
+correctly, sorry."
+
+Why is all this code here?  What is it for?
+
+>>> +	/*
+>>> +	 * Also do not report the TDX module as loaded if there's
+>>> +	 * no enough TDX private KeyIDs to run any TD guests.
+>>> +	 */
+>>> +	if (!tdx_keyid_sufficient()) {
+>>> +		pr_info("Number of TDX private KeyIDs too small: %u.\n",
+>>> +				tdx_keyid_num);
+>>> +		goto no_tdx_module;
+>>> +	}
+>>> +
+>>> +	/* Return -ENODEV until the TDX module is detected */
+>>> +no_tdx_module:
+>>> +	tdx_module_status = TDX_MODULE_NONE;
+>>> +	return -ENODEV;
+>>> +}
+
+Again, if someone uses maxcpus=1234 and we get down here, then it
+reports to the user:
+	
+	Number of TDX private KeyIDs too small: ...
+
+????  When the root of the problem has nothing to do with KeyIDs.
+
+>>> +static int init_tdx_module(void)
+>>> +{
+>>> +	/*
+>>> +	 * Return -EFAULT until all steps of TDX module
+>>> +	 * initialization are done.
+>>> +	 */
+>>> +	return -EFAULT;
+>>> +}
+>>> +
+>>> +static void shutdown_tdx_module(void)
+>>> +{
+>>> +	/* TODO: Shut down the TDX module */
+>>> +	tdx_module_status = TDX_MODULE_SHUTDOWN;
+>>> +}
+>>> +
+>>> +static int __tdx_init(void)
+>>> +{
+>>> +	int ret;
+>>> +
+>>> +	/*
+>>> +	 * Logical-cpu scope initialization requires calling one SEAMCALL
+>>> +	 * on all logical cpus enabled by BIOS.  Shutting down the TDX
+>>> +	 * module also has such requirement.  Further more, configuring
+>>> +	 * the key of the global KeyID requires calling one SEAMCALL for
+>>> +	 * each package.  For simplicity, disable CPU hotplug in the whole
+>>> +	 * initialization process.
+>>> +	 *
+>>> +	 * It's perhaps better to check whether all BIOS-enabled cpus are
+>>> +	 * online before starting initializing, and return early if not.
+>>
+>> But you did some of this cpumask checking above.  Right?
+> 
+> Above check only guarantees SEAMRR/TDX KeyID has been detected on all presnet
+> cpus.  the 'present' cpumask doesn't equal to all BIOS-enabled CPUs.
+
+I have no idea what this is saying.  In general, I have no idea what the
+comment is saying.  It makes zero sense.  The locking pattern for stuff
+like this is:
+
+	cpus_read_lock();
+
+	for_each_online_cpu()
+		do_something();
+
+	cpus_read_unlock();
+
+because you need to make sure that you don't miss "do_something()" on a
+CPU that comes online during the loop.
+
+But, now that I think about it, all of the checks I've seen so far are
+for *booted* CPUs.  While the lock (I assume) would keep new CPUs from
+booting, it doesn't do any good really since the "cpus_booted_once_mask"
+bits are only set and not cleared.  A CPU doesn't un-become booted once.
+
+Again, we seem to have a long, verbose comment that says very little and
+only confuses me.
+
+...
+>> Why does this need both a tdx_detect() and a tdx_init()?  Shouldn't the
+>> interface from outside just be "get TDX up and running, please?"
+> 
+> We can have a single tdx_init().  However tdx_init() can be heavy, and having a
+> separate non-heavy tdx_detect() may be useful if caller wants to separate
+> "detecting the TDX module" and "initializing the TDX module", i.e. to do
+> something in the middle.
+
+<Sigh>  So, this "design" went unmentioned, *and* I can't review if the
+actual callers of this need the functionality or not because they're not
+in this series.
+
+> However tdx_detect() basically only detects P-SEAMLDR.  If we move P-SEAMLDR
+> detection to tdx_init(), or we git rid of P-SEAMLDR completely, then we don't
+> need tdx_detect() anymore.  We can expose seamrr_enabled() and TDX KeyID
+> variables or functions so caller can use them to see whether it should do TDX
+> related staff and then call tdx_init().
+
+I don't think you've made a strong case for why P-SEAMLDR detection is
+even necessary in this series.

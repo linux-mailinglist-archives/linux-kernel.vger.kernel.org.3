@@ -2,150 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8788B51133F
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AB2511341
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 10:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359322AbiD0IL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 04:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S1359332AbiD0IL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 04:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354468AbiD0IL0 (ORCPT
+        with ESMTP id S1354468AbiD0ILr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 04:11:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EAE551E71
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:08:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3FC8AED1;
-        Wed, 27 Apr 2022 01:08:16 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.7.196])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1B42C3F5A1;
-        Wed, 27 Apr 2022 01:08:13 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     sudeep.holla@arm.com, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        lukasz.luba@arm.com
-Subject: [PATCH v4] arch_topology: Trace the update thermal pressure
-Date:   Wed, 27 Apr 2022 09:08:06 +0100
-Message-Id: <20220427080806.1906-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 27 Apr 2022 04:11:47 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D81B14D299
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:08:34 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id w17so1925427ybh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 01:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ocOESGw7XVASTSwvCDpOuAgEDVf5NNf8AWJY82qKm8o=;
+        b=v8WwPOOemO641H3Y7HLAacEFdl940XbrIoASvS4InWwLy9z+Sa+PFmpEzChvN2s7BX
+         BdbatpcQ3CxNerO8rJE3AbIgcg7XMxQeJDCnBfH5SyojxGZCziVi/YmU7feF6tPF/Kkg
+         4rImV+LTbm1Yk6wwS1cqMtv+8bviLyd5VM+fufpDJq4WKQSAyZkcOcs7HR4ubmzilvK3
+         QpYZQjo+uCaNLTVsMWLTyuFXjncUPfXGMlDBwcITKCyaYsvJtHgL4jJfqa4xsz5S85gq
+         K4L/VVU2dBSZSU5Q5sJXyig1Bdmj0LRR1mJ8CfHm/3IWNBa8OGRVBVmEBC2qmn2QL+tc
+         gCCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ocOESGw7XVASTSwvCDpOuAgEDVf5NNf8AWJY82qKm8o=;
+        b=WEPXg0yXWYW8dFoJb9oysO/erhYwfH0LhpAI8LZKFgS2TKGDsEC1msFG0TWcp5r4wA
+         qOQn9C78T179uvyexyb2ATerQAFP+Vgu1tc36tefM2h4nRAJbIYkOf0EnRxhfsDAirWn
+         Sutjoio2Y1aYqzJZVqPDn4Xm6/0qgCjhNfbCtIrVhSPQk8wmyS1X8sO9Lt32MVJKRfb/
+         +rtKdLJAA1larFO41YxQJ6iN/uq0x0HR8ug129XYiCBtMayoYn6Jv/SxAu9eZDRa/uru
+         tvKo80zr7fWM6TZJQAV6zbKINDrYaszCsQ24UntFVTHQlfTn9XWnUIQjuFrhc64Xshqw
+         kr3w==
+X-Gm-Message-State: AOAM532yTZ7jRbGXpk/PXgTKz/sn6pl2Cs3TOV9bF5FhlHDhN01YJLA3
+        Df/fvGYUHNduKjzHqyZtZpcP02/kYKzjvByaLXQOpw==
+X-Google-Smtp-Source: ABdhPJxISh9cGWWhc1zMyKGqPyx3MjqK5qah/U6lO55iKVFy4GWRVkb+Zjqixq31S/zQ8f6I89fJCcNvPqF8wtxymHg=
+X-Received: by 2002:a25:c012:0:b0:648:4912:7b9a with SMTP id
+ c18-20020a25c012000000b0064849127b9amr16152605ybf.474.1651046913582; Wed, 27
+ Apr 2022 01:08:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220426081741.202366502@linuxfoundation.org>
+In-Reply-To: <20220426081741.202366502@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 27 Apr 2022 13:38:21 +0530
+Message-ID: <CA+G9fYsodOu4GKm8jFr=vbWECJ6a2iLKifsMCUjLg1i1027=wA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/86] 5.10.113-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add trace event to capture the moment of the call for updating the thermal
-pressure value. It's helpful to investigate how often those events occur
-in a system dealing with throttling. This trace event is needed since the
-old 'cdev_update' might not be used by some drivers.
+On Tue, 26 Apr 2022 at 14:03, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.113 release.
+> There are 86 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 28 Apr 2022 08:17:22 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.113-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The old 'cdev_update' trace event only provides a cooling state
-value: [0, n]. That state value then needs additional tools to translate
-it: state -> freq -> capacity -> thermal pressure. This new trace event
-just stores proper thermal pressure value in the trace buffer, no need
-for additional logic. This is helpful for cooperation when someone can
-simply sends to the list the trace buffer output from the platform (no
-need from additional information from other subsystems).
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-There are also platforms which due to some design reasons don't use
-cooling devices and thus don't trigger old 'cdev_update' trace event.
-They are also important and measuring latency for the thermal signal
-raising/decaying characteristics is in scope. This new trace event
-would cover them as well.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-We already have a trace point 'pelt_thermal_tp' which after a change to
-trace event can be paired with this new 'thermal_pressure_update' and
-derive more insight what is going on in the system under thermal pressure
-(and why).
+## Build
+* kernel: 5.10.113-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 889ce55360e75088d2b85d71e5119d5e3d45c90c
+* git describe: v5.10.112-87-g889ce55360e7
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.112-87-g889ce55360e7
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
+## Test Regressions (compared to v5.10.111-106-gd5c581fe77b5)
+No test regressions found.
 
-Changes v4:
-- following Greg's comment, removed the test robot tag 'Reported-by'
-  which is not need for this patch; the compilation issue was captured
-  in v1 not in mainline code
+## Metric Regressions (compared to v5.10.111-106-gd5c581fe77b5)
+No metric regressions found.
 
-The v3 is here:
-https://lore.kernel.org/lkml/20220427073551.19032-1-lukasz.luba@arm.com/
+## Test Fixes (compared to v5.10.111-106-gd5c581fe77b5)
+No test fixes found.
 
-The v2 is here:
-https://lore.kernel.org/lkml/20220425135317.5880-1-lukasz.luba@arm.com/
+## Metric Fixes (compared to v5.10.111-106-gd5c581fe77b5)
+No metric fixes found.
 
-The v1 and discussion can be found here at:
-https://lore.kernel.org/lkml/20220419164801.29078-1-lukasz.luba@arm.com/
+## Test result summary
+total: 99479, pass: 83784, fail: 947, skip: 13672, xfail: 1076
 
-Regards,
-Lukasz
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 51 passed, 9 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
 
- drivers/base/arch_topology.c            |  5 +++++
- include/trace/events/thermal_pressure.h | 29 +++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 include/trace/events/thermal_pressure.h
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index f73b836047cf..579c851a2bd7 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -19,6 +19,9 @@
- #include <linux/rcupdate.h>
- #include <linux/sched.h>
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/thermal_pressure.h>
-+
- static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
- static struct cpumask scale_freq_counters_mask;
- static bool scale_freq_invariant;
-@@ -195,6 +198,8 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
- 
- 	th_pressure = max_capacity - capacity;
- 
-+	trace_thermal_pressure_update(cpu, th_pressure);
-+
- 	for_each_cpu(cpu, cpus)
- 		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
- }
-diff --git a/include/trace/events/thermal_pressure.h b/include/trace/events/thermal_pressure.h
-new file mode 100644
-index 000000000000..b68680201360
---- /dev/null
-+++ b/include/trace/events/thermal_pressure.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM thermal_pressure
-+
-+#if !defined(_TRACE_THERMAL_PRESSURE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_THERMAL_PRESSURE_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(thermal_pressure_update,
-+	TP_PROTO(int cpu, unsigned long thermal_pressure),
-+	TP_ARGS(cpu, thermal_pressure),
-+
-+	TP_STRUCT__entry(
-+		__field(unsigned long, thermal_pressure)
-+		__field(int, cpu)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->thermal_pressure = thermal_pressure;
-+		__entry->cpu = cpu;
-+	),
-+
-+	TP_printk("cpu=%d thermal_pressure=%lu", __entry->cpu, __entry->thermal_pressure)
-+);
-+#endif /* _TRACE_THERMAL_PRESSURE_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
--- 
-2.17.1
-
+--
+Linaro LKFT
+https://lkft.linaro.org

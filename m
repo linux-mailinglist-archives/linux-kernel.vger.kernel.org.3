@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761B9512572
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6467E51257F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 00:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbiD0Wso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S237072AbiD0Wtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiD0Wsk (ORCPT
+        with ESMTP id S236994AbiD0Wtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:48:40 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F321C11A;
-        Wed, 27 Apr 2022 15:45:27 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y3so6094212ejo.12;
-        Wed, 27 Apr 2022 15:45:27 -0700 (PDT)
+        Wed, 27 Apr 2022 18:49:39 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BE23FBDB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:46:21 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id g20so3548999edw.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 15:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pyZvRC+ImUtuat2otlAa+f33aNRxDWXd/DqxIdwCo1s=;
-        b=QpNFUZCPgzvdxrGKeCw1W41OpBdSFRjJwTsfaMThDGiHLWIhgzSokitg8g8IM2htVc
-         YsApSbH22jVkv+rHfesfbCLj9PDAcGtoWK2fekHjf6RK5ZPvcWpUFXB0LFrZJ2wM0fhN
-         PKz1VqaEDxpHiP9mHlZ25CR2gR1AACS8PjNhMoyakaagTgVDCFrDvxfwgGWTTM1yEy9i
-         noQFafrImDYAxOwP+jQkxagBInbL7K+ZBDmu5hWeoIwVyxFLXC+MkBcs/D9xffKHSVc7
-         SgazfLKyoewySjF/D6sXLEX+wL1ozb+foLEmuakwzMoVrW2SmzPYgFk3Vo8OWzjZSu6M
-         3w/A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ue6rVu6i+LhfCao8kUR1Z6Jfs0LQjlJynwWVcrWd6VM=;
+        b=Gndc1RCGkDncdLnhWZGKEMfSDA6RiY6gYsq2cfbAeZNK4nrXaz/6N1hr6sqvdr311j
+         JWoa0bmCoQ403+CD/hq+Sfq2bCXRvGzfLvjnwjye9dkw8VgX78EKPb1PHzbS6qOQ4x67
+         IfrxMTZCU0wjTwJB4VIaKx7ERPHXDEo7k7W8VQosJNY/stX38nDCk3GR6BRnaPrk7dmm
+         6fFhd/zSnRznh4bRhxzaNHYIxwfYNBvel6PUZnkpkDdpVak3IFPGVWSZ5NWYIn9gwwkR
+         ZxNPOZKzDXvQu/0bdtnoy4oXB1JsUhap5CcqYbV3WUp3mfjo3KFJ+zFdt4MxQlGAZ+4Q
+         G55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pyZvRC+ImUtuat2otlAa+f33aNRxDWXd/DqxIdwCo1s=;
-        b=sw+Td6H4FbD0gNNUaCMdlXkRGSqnvStMn/WncT0TbkF/rJEeJr/OmrwxO7nayQRp24
-         N4TOAWDfeI0lMs8i53nuFCAlvK1JLOnBcKGk+y2ndAmDaKU2OAIf3g+Xph4TFXoJ7kyu
-         kCjU/edqj4+5v94U9f9ucDwhj7/1LCzaa0fwJc12s8X8IlPkP5Q94Q5X/vnr+ot3fs0V
-         f7eKNfOxdAqpB/gkPzo8hb0BPvdyZMV8mPQk7kHZPkoOcRNmwjfhodFYqixxzt3QXbYj
-         vpt3U2uolGFyEvdJ9hEoCyjgO68DGHun4XVgWvyqkRaJmpRI9WtoAMl1CFl+jd2qGtI+
-         SmNQ==
-X-Gm-Message-State: AOAM532X4eq7YbpKdGjkTgSlZTH187PAaBIUS3zDC8a9BXJELP1LXpun
-        C7l5A/SyAUXDIOZ32nLJ9k0=
-X-Google-Smtp-Source: ABdhPJxSIML5RaPid0dIjEvzf2jN0CDXNzAePhE3vd+DNERD2jnVTiDLJbNV7Y0XeAhPFY4oIwLgIg==
-X-Received: by 2002:a17:907:3ea1:b0:6f3:d6a0:e5be with SMTP id hs33-20020a1709073ea100b006f3d6a0e5bemr1607123ejc.522.1651099525898;
-        Wed, 27 Apr 2022 15:45:25 -0700 (PDT)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id t27-20020a1709063e5b00b006f3a94f5194sm3762594eji.77.2022.04.27.15.45.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ue6rVu6i+LhfCao8kUR1Z6Jfs0LQjlJynwWVcrWd6VM=;
+        b=UMd2BBO5xHUx6ZBgYmfeMdKaxi+L+oYTjAgnc6Gd7EPEhzzx223h8oi8TVNu58LMZX
+         XM/hlGft+e3iqBjDr5hDJZcJvrpD1AzwQ1TdU1otyC3VA5iPPx+XP1nmDXmM+tMF3Aw+
+         UQlYBodtUDgNgcaTtBJcFRxHyCb0UTX03Q2wxG2kwmUid/zyr/DkrVCVzMMiuoh79+Zn
+         J6MPcvL68xc+Hb1Mdo2pOtL4HmDIJuflTHDLSU5Q35sE6kS4OYaL9QsWNbHKegcTFE/S
+         lZrmx/07WMGB/L5OOZv2qWW7oVJbB6MVJ7XV5DW+FJD96RBmBvcv9D7iC4VuTP1OHQKo
+         dEVw==
+X-Gm-Message-State: AOAM530bLckXxo9f10QbGd0FdBOuhfc2Hz5XPbpU776KVedpOFouSFp1
+        v+gN89lI2KV+e/mlAnZVw5TX0Jms1Y4=
+X-Google-Smtp-Source: ABdhPJxd0YZSftPkxD/+f96yvJ2QI3MqleeuNByzeM6djihWCYdTQgVG4j7ZbQTiHW3uDizGz0UT8Q==
+X-Received: by 2002:aa7:ce84:0:b0:425:d2e0:a75f with SMTP id y4-20020aa7ce84000000b00425d2e0a75fmr25946415edv.263.1651099579646;
+        Wed, 27 Apr 2022 15:46:19 -0700 (PDT)
+Received: from nlaptop.localdomain (ptr-dtfv0poj8u7zblqwbt6.18120a2.ip6.access.telenet.be. [2a02:1811:cc83:eef0:f2b6:6987:9238:41ca])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170906774e00b006d5b915f27dsm7351657ejn.169.2022.04.27.15.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 15:45:25 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: media: rockchip-vpu: Add RK3568 JPEG compatible
-Date:   Thu, 28 Apr 2022 00:44:36 +0200
-Message-Id: <20220427224438.335327-2-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
-References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
+        Wed, 27 Apr 2022 15:46:19 -0700 (PDT)
+From:   Niels Dossche <dossche.niels@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mina Almasry <almasrymina@google.com>,
+        Niels Dossche <dossche.niels@gmail.com>
+Subject: [PATCH 0/2] mm: mremap: fix sign for EFAULT error return value
+Date:   Thu, 28 Apr 2022 00:44:37 +0200
+Message-Id: <20220427224439.23828-1-dossche.niels@gmail.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,35 +69,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RK3568 and RK3566 have a VPU node solely dedicated to JPEG
-encoding. This patch adds a compatible for it, and also allows
-the bindings to only come with a vepu interrupt.
+The mremap syscall is supposed to return a pointer to the new virtual
+memory area on success, and a negative value of the error code in case
+of failure. Currently, EFAULT is returned when the VMA is not found,
+instead of -EFAULT. The users of this syscall will therefore believe
+the syscall succeeded in case the VMA didn't exist, as it returns a
+pointer to address 0xe (0xe being the value of EFAULT).
 
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
- Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+This can easily be reproduced by the following C program. I expected
+mremap to fail, but it does not. If the bug is present, it will print
+0xe, otherwise the mremap will fail.
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-index bacb60a34989..cd62b44c34c3 100644
---- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-@@ -22,6 +22,7 @@ properties:
-           - rockchip,rk3288-vpu
-           - rockchip,rk3328-vpu
-           - rockchip,rk3399-vpu
-+          - rockchip,rk3568-jpeg-vepu
-           - rockchip,px30-vpu
-       - items:
-           - const: rockchip,rk3188-vpu
-@@ -40,6 +41,7 @@ properties:
-   interrupt-names:
-     oneOf:
-       - const: vdpu
-+      - const: vepu
-       - items:
-           - const: vepu
-           - const: vdpu
+The patchset contains two patches: one that fixes the error, and
+one that adds a small test case.
+
+
+#define _GNU_SOURCE
+#include <sys/mman.h>
+#include <stdio.h>
+int main() {
+	// Get pointer that's definitely not mapped
+	void* ptr = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (ptr == MAP_FAILED) { perror("mmap"); return 1; }
+	int err = munmap(ptr, 4096);
+	if (err < 0) { perror("munmap"); return 1; }
+	// Remap unexisting VMA
+	ptr = mremap(ptr, 4096, 4096, 0);
+	if (ptr == MAP_FAILED) { perror("mremap"); return 1; }
+	printf("%p\n", ptr);
+	return 0;
+}
+
+
+Niels Dossche (2):
+  mm: mremap: fix sign for EFAULT error return value
+  selftest/vm: test that mremap fails on non-existent vma
+
+ mm/mremap.c                                  | 2 +-
+ tools/testing/selftests/vm/hugepage-mremap.c | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
 -- 
-2.36.0
+2.35.2
 

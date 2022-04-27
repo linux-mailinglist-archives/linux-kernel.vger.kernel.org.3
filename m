@@ -2,118 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6DA5117D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67995117AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 14:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233178AbiD0Lxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 07:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
+        id S233203AbiD0Lz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 07:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233131AbiD0Lxk (ORCPT
+        with ESMTP id S233170AbiD0Lz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 07:53:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFDE212EB78
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651060227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J8PqE4iMUPFqCcEpgWE5Kb02oz8+U7so76j9i/Ng+DY=;
-        b=JcJ0GTTC0PdKSeb4FV1XoHlcP6LTsML9BT2C1NUSG6IYe/k8g0PpuKa0V65j90sTGdY1Wg
-        /+UMbxOCHgd8T5zoPi4zeFF6n+MVTbZ4hrXeeI00bLwcDz0V/v0e2qCmh6RBSYRgMMguh2
-        Y0c3Bb9JWiHkGk+KG3IPzh6Xya7WkZM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-164-fIUCw_7DNmi3VP8wvjY9_g-1; Wed, 27 Apr 2022 07:50:23 -0400
-X-MC-Unique: fIUCw_7DNmi3VP8wvjY9_g-1
-Received: by mail-wr1-f70.google.com with SMTP id o11-20020adfca0b000000b0020adc114131so661130wrh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:50:23 -0700 (PDT)
+        Wed, 27 Apr 2022 07:55:56 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2522ACB
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:52:44 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id a1so1650875edt.3
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 04:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FrT1A6ut1uHKtiSP9a1wbP1BfO/8mxv8g9Z5KDxbsgg=;
+        b=D9kCHFcz6/5eS56jF4XO7+B8nsp/FXL//Gs7ZpwFJ3ITljvLViSfef0c1agsVezvvb
+         TAoBp12GBo4zOFJ3Z1XOQWKGN/j4dDEFGn6C+dMW7e3K+adHJVTG7+gZKXbxjXswHIpK
+         4zmg9dTBOqNWSubqRmBalWlXPzCfv1BVk54lc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J8PqE4iMUPFqCcEpgWE5Kb02oz8+U7so76j9i/Ng+DY=;
-        b=1O3hpQi2796mqUD4/wvPjgRtXdbA6TaOuV2FEOVdW33F86I3bSd6MouH1kBiUi+Yns
-         OGQq0PEjgIcbT78BpCvxDvzLErEgcT7r8C++zuFlYssKThhXgHzHDqXfw+NstE+32bAk
-         8x/byzmXuAHaahnm8tJ+053i9hIqIxAQIsJDAzUR5EoprH+bBk6siL9gccf1OhY/+3jB
-         WnKS+7g20+NVTGpQO3m+LDaM85hiJ1cG/G6D1az80hvLxgGq26YUAzj9amCpMoFphDer
-         hnIh4KjGGKTWZh7KUaoYr/QkXYReUPoJbFi6o5UnP6iJjylsDX2DWvmW65iZDhr8V9BE
-         FlYQ==
-X-Gm-Message-State: AOAM533VQoTrJitqiBfiz08dp9iOjDDO+bK0XgVTUt0DSrlzTVSdXzaD
-        bnI5S1EyVOh7pAigdvop5H1fE5bv4XZ8gm2GIbrJsUVcO2kBUjmds3txGZB3NjKBmdSO7CPOH/I
-        O3/3i8ffbX8ykQEX9LUhhpx8=
-X-Received: by 2002:adf:d1ea:0:b0:20a:2823:9e22 with SMTP id g10-20020adfd1ea000000b0020a28239e22mr22270414wrd.332.1651060222725;
-        Wed, 27 Apr 2022 04:50:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxruJAcFFnwCKM2VIWdU+E2VKz7/9vQJEA5ARsZEoZUTPcTbcsCslaRw0/qYREPWJUz4acTdQ==
-X-Received: by 2002:adf:d1ea:0:b0:20a:2823:9e22 with SMTP id g10-20020adfd1ea000000b0020a28239e22mr22270403wrd.332.1651060222535;
-        Wed, 27 Apr 2022 04:50:22 -0700 (PDT)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id f66-20020a1c3845000000b00393e84ea043sm1390797wma.44.2022.04.27.04.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 04:50:21 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 12:50:20 +0100
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Christoph Lameter <cl@gentwo.de>, frederic@kernel.org,
-        tglx@linutronix.de, mingo@kernel.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-ID: <20220427115020.kyaxc5j67lq5zrfq@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220422193647.3808657-1-atomlin@redhat.com>
- <alpine.DEB.2.22.394.2204250919400.2367@gentwo.de>
- <20220425113909.u3smtztp66svlw4o@ava.usersys.com>
- <alpine.DEB.2.22.394.2204251406370.13839@gentwo.de>
- <20220425132700.GK2731@worktop.programming.kicks-ass.net>
- <20220425141717.vw2jfnn3zp6c5ib2@ava.usersys.com>
- <Ymb018EaVlOUfx87@fuller.cnet>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FrT1A6ut1uHKtiSP9a1wbP1BfO/8mxv8g9Z5KDxbsgg=;
+        b=YXls2kPy545pnIYZO19v7JmdNC88LvwV1X+wWJ6TzY7kO2/AQbJ5cIXPNCqklY4bI/
+         ssGZs5wqygd+tXVKoWRLvGEiRbXaY1Hsuk13E+jfJamVB22Nb1S0i0x/JIQTvVIeFfme
+         lczQuoXpufxSiJwkgUfMxy5ZOR9vQ50HU6OtCK2+SHrKwvoG69GUiNc6Bze0GAw/BSxN
+         NlTw+imfn6FfYUSLliPILXgUPGg72GvieDl/fzCoyS0PSnlgRIB7s7vUfcT26cNxEpUP
+         jPgOTJilKSSP8iCRYyVVA7jz0cRp50E1m+sfG1w6ADEH+vYOLWXSTqY7nz4Ev8t7a+yA
+         r8Wg==
+X-Gm-Message-State: AOAM533CGthHmznAFYG5mFY53mHwc/m6CFn9XKJwcvXOfe9E20I20EFs
+        /tHrXh6gqarVhVurNtxSMdB0SXdmnnNxbnqAwp9yNg==
+X-Google-Smtp-Source: ABdhPJzYWsmTaAC0VH47hY2rZx4yVkhqdbfMoHddMAJ4KislzzUG4O781iD+rcleMDYil+1uX244oGBdSJF69e/fHpg=
+X-Received: by 2002:a05:6402:c9c:b0:425:d5e0:b69 with SMTP id
+ cm28-20020a0564020c9c00b00425d5e00b69mr21314156edb.271.1651060363213; Wed, 27
+ Apr 2022 04:52:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ymb018EaVlOUfx87@fuller.cnet>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+ <20220420231230.58499-2-bjorn.andersson@linaro.org> <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+ <20220421082358.ivpmtak3ednvddrc@houat> <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
+In-Reply-To: <CAMty3ZCLEMv4cqUcUGUAkLtH8tmh1WO582cDjZWynAifZJy=_w@mail.gmail.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 27 Apr 2022 17:22:32 +0530
+Message-ID: <CAMty3ZAkw0rssCzR_ka7U9JeoGxJr5JPM7GWDfd1dob9goL-BQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robert Foss <robert.foss@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-04-25 16:21 -0300, Marcelo Tosatti wrote:
-> > Hi Peter, Christoph,
-> > 
-> > Indeed. Which was why I decided, initially, against the general-purpose
-> > case/or approach. Personally, I would prefer to keep this somewhat
-> > restrictive to nohz.
-> 
-> Is there anything that prevents a nohz full CPU from running an
-> application with short and frequent idling?
+On Wed, Apr 27, 2022 at 12:29 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
+>
+> On Thu, Apr 21, 2022 at 1:54 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> >
+> > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
+> > > + Linus
+> > > + Marek
+> > > + Laurent
+> > > + Robert
+> > >
+> > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
+> > > <bjorn.andersson@linaro.org> wrote:
+> > > >
+> > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+> > > > bridge")' attempted to simplify the case of expressing a simple panel
+> > > > under a DSI controller, by assuming that the first non-graph child node
+> > > > was a panel or bridge.
+> > > >
+> > > > Unfortunately for non-trivial cases the first child node might not be a
+> > > > panel or bridge.  Examples of this can be a aux-bus in the case of
+> > > > DisplayPort, or an opp-table represented before the panel node.
+> > > >
+> > > > In these cases the reverted commit prevents the caller from ever finding
+> > > > a reference to the panel.
+> > > >
+> > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
+> > > > panel or bridge")', in favor of using an explicit graph reference to the
+> > > > panel in the trivial case as well.
+> > >
+> > > This eventually breaks many child-based devm_drm_of_get_bridge
+> > > switched drivers.  Do you have any suggestions on how to proceed to
+> > > succeed in those use cases as well?
+> >
+> > I guess we could create a new helper for those, like
+> > devm_drm_of_get_bridge_with_panel, or something.
+>
+> I think using the same existing helper and updating child support is
+> make sense, as there is a possibility to use the same host for child
+> and OF-graph bindings.
+>
+> I can see two possible solutions (as of now)
+>
+> 1. adding "dcs-child-type" bindings for child-based panel or bridge
+> 2. iterate child and skip those nodes other than panel or bridge. or
+> iterate sub-child to find it has a panel or bridge-like aux-bus (which
+> is indeed hard as this configuration seems not 'standard' i think )
+>
+> Any inputs?
 
-Hi Marcelo,
+Checking aux-bus with the sub-node panel can be a possible check to
+look at it, any comments?
 
-I'm not sure I understand the question; albeit, if I understand correctly,
-yes: the scheduling-clock tick, if it was stopped.
-Yet I believe this behaviour is correct. Consider the following example:
+--- a/drivers/gpu/drm/drm_of.c
++++ b/drivers/gpu/drm/drm_of.c
+@@ -244,6 +244,25 @@ int drm_of_find_panel_or_bridge(const struct
+device_node *np,
+        if (panel)
+                *panel = NULL;
 
-  When a CFS task is moved/or migrated to a nohz_full CPU that was
-  previously idle and had its tick stopped, if its the only task on the
-  run-queue then it is possible that the idle task may not restart the
-  tick (see __tick_nohz_full_update_tick()).  Thus once the CFS task exits
-  manual intervention i.e. a reschedule IPI to wake the idle task, would be
-  required to run again, on the same CPU.
++       /**
++        * Devices can also be child nodes when we also control that device
++        * through the upstream device (ie, MIPI-DCS for a MIPI-DSI device).
++        *
++        * Lookup for a child node of the given parent that isn't either port
++        * or ports.
++        */
++       for_each_available_child_of_node(np, remote) {
++               if (of_node_name_eq(remote, "port") ||
++                   of_node_name_eq(remote, "ports"))
++                       continue;
++
++               if (!(of_node_name_eq(remote, "aux-bus") &&
++                     of_get_child_by_name(remote, "panel")))
++                       continue;
++
++               goto of_find_panel_or_bridge;
++       }
++
+        /*
+         * of_graph_get_remote_node() produces a noisy error message if port
+         * node isn't found and the absence of the port is a legit case here,
+@@ -254,6 +273,8 @@ int drm_of_find_panel_or_bridge(const struct
+device_node *np,
+                return -ENODEV;
 
+        remote = of_graph_get_remote_node(np, port, endpoint);
++
++of_find_panel_or_bridge:
+        if (!remote)
+                return -ENODEV;
 
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+Jagan.

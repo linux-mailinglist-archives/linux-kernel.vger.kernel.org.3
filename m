@@ -2,127 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843D7510E83
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2813510E87
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357042AbiD0CFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 22:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
+        id S1357047AbiD0CGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 22:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349881AbiD0CFe (ORCPT
+        with ESMTP id S1349881AbiD0CGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 22:05:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8419B12096
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651024944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=53mrPkeW9KOi0bl6N4Fte0+icOguROXqZAbaSV/DmGo=;
-        b=a43Ip8qzLzaqdObpcucL72gEUd2wufndV1SyNya5E8zU/vSbmEufk3PBxqOh4w1QMUXMH3
-        vsxGuwbgMvSzmVpkd5ybJ7nxVMYl4SMavaV95Whfr2SHwl3ApilkGXSMWDbPAFUC2TqOdi
-        E6jXk20ELIXOZEGEBYYB5xbvGvlmrhM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-ZjTMPR_2O-O59-TryGYHhg-1; Tue, 26 Apr 2022 22:02:22 -0400
-X-MC-Unique: ZjTMPR_2O-O59-TryGYHhg-1
-Received: by mail-ej1-f71.google.com with SMTP id nc20-20020a1709071c1400b006f3726da7d3so201477ejc.15
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:02:22 -0700 (PDT)
+        Tue, 26 Apr 2022 22:06:51 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2A04BB86
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:03:42 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id k4so358415plk.7
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wc+2XZPEQYFH8y8VTjcF8pWwSz487fhH3cfdOdvAYWY=;
+        b=mZ8usUoirqcoTx9Hs24a9CJ/Vus3WeuHhFuyQW79gUnyF0wurc/Bx6DpY9EEYitYiy
+         x5OBFxn8PVsSVmB6f4nEvvHOMR5x7akAdh5p/MaEh2aopCQAWSZ2X2q56b0xG/M04sZF
+         1BteDlHlgMMv6dDVmdphUnP04lkZfHxtWaNgg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=53mrPkeW9KOi0bl6N4Fte0+icOguROXqZAbaSV/DmGo=;
-        b=s88iCB+EPGUYIK7neNktccGC8nEJnZRCHn2ddkjyDI4fLMf88tsL/lCNshqpxssMxO
-         zWI+N4HSA1MP5EVQtabywOcmXy6zgX420/a/3bV5/az/ytYSrQ6f2I+bkpuJmy8x/wXC
-         gMoypRBMNzTe6cQHoborh76G7mYcu/d8hGovFzgqG+GXpMwJJ+k/1QxPblSEVU00y+2s
-         eXa1H48Gpng22C/61ZYh/9Rbkaqyyv65krlbM5iSGSKnXAbfSkvPgbohVqyHABO/p7Ju
-         IoEudjo8/dXgUZbQ4vHkoM4qogeN+nbB2OsFI0ji3cQ3m8pB/ZASivhshskDet3iO0M0
-         pufQ==
-X-Gm-Message-State: AOAM531C1shntCRnzgFipXllbMqiXa+hEOJkYsFsGMTMHS+DmZWVQaLt
-        Lnd7tfwYjLOhJvzKElq9QlKbfwc2HbgbGn2X0oscq4Zdb1OrBm0L2ZzyMIHn4UAFESpTOM6NL6f
-        Ym3SJZ6R5S9x3OdXQ0pxD/sVvadGJ17bUEUxguOyj
-X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id g12-20020a056402090c00b00415d3404ae2mr28082575edz.331.1651024941489;
-        Tue, 26 Apr 2022 19:02:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxKs+y0+3qWvY+IVaCiqw2RfHdBAhFgQvTiOo4p2FBOD+qS4pDrRNfnuJro7UGcKXZyrlyqYHuCVOIu4hdEbC8=
-X-Received: by 2002:a05:6402:90c:b0:415:d340:4ae2 with SMTP id
- g12-20020a056402090c00b00415d3404ae2mr28082563edz.331.1651024941345; Tue, 26
- Apr 2022 19:02:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wc+2XZPEQYFH8y8VTjcF8pWwSz487fhH3cfdOdvAYWY=;
+        b=bP3Q+eDvb9+jt8Q7wk0y6zmBas3Jabe+y7h2vvsg1+59vAq3TFiEjh8KbT1Nr7Xouv
+         VvtkeAl0m2jjI1rC7t+Dti6zW3Elp84RIE6rSeZ89O5iKjAtDLJ4X4UU4ncZWSSSop04
+         O8M4JqT02gVOsJ4MNz947ql8AbBKv8OFNHPobgrwIWjyB3t5smDd7cJQi1a/5LBwXnai
+         CloZSiFOtmt1w514t4ZnH35Pkz/EE7SA1ZG9nezJXm3hBd4zxI3XA7aUisdWtTEr02L3
+         MGmWDjIITm6J4GFdrnxkm4la45TSKu3xiv9FVHdsNOyQZ2XdQUX5uoPk4n5NU2Kdwm19
+         ZbVw==
+X-Gm-Message-State: AOAM531yMEgVthpCB22h2sJqBuZlNC4qJAP23N2lxZdSuE3LH1+Ja6pW
+        WCYAxflUZhUep/gr1x93vJwNdQAtKuSLCA==
+X-Google-Smtp-Source: ABdhPJwbzaogkQCtlbv1RZNPvF9OcQIiCWJ5G1M9CMws5WnO3sCYZskphMfOjbW7oZHd3/44RVMyZw==
+X-Received: by 2002:a17:90a:3d02:b0:1ca:7f92:1bf1 with SMTP id h2-20020a17090a3d0200b001ca7f921bf1mr41124131pjc.177.1651025021797;
+        Tue, 26 Apr 2022 19:03:41 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:482e:60bc:84d1:bf5c])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a0023cf00b004e17e11cb17sm18324197pfc.111.2022.04.26.19.03.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 19:03:41 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH v2 0/3] arm64: dts: qcom: sc7180-trogdor: Simplify!
+Date:   Tue, 26 Apr 2022 19:03:36 -0700
+Message-Id: <20220427020339.360855-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-References: <20220425062735.172576-1-lulu@redhat.com> <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
-In-Reply-To: <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
-From:   Cindy Lu <lulu@redhat.com>
-Date:   Wed, 27 Apr 2022 10:01:42 +0800
-Message-ID: <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:00 PM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
-> >
-> > To support the dynamic ids in vp_vdpa, we need to add the check for
-> > id table. If the id table is NULL, will not set the device type
-> >
-> > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> > ---
-> >  drivers/vdpa/vdpa.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> > index 1ea525433a5c..09edd92cede0 100644
-> > --- a/drivers/vdpa/vdpa.c
-> > +++ b/drivers/vdpa/vdpa.c
-> > @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdpa_mgmt_dev *mdev, struct sk_buff *m
-> >         if (err)
-> >                 goto msg_err;
-> >
-> > -       while (mdev->id_table[i].device) {
-> > -               if (mdev->id_table[i].device <= 63)
-> > -                       supported_classes |= BIT_ULL(mdev->id_table[i].device);
-> > -               i++;
-> > +       if (mdev->id_table != NULL) {
-> > +               while (mdev->id_table[i].device) {
-> > +                       if (mdev->id_table[i].device <= 63)
-> > +                               supported_classes |=
-> > +                                       BIT_ULL(mdev->id_table[i].device);
-> > +                       i++;
-> > +               }
-> >         }
->
-> This will cause 0 to be advertised as the supported classes.
->
-> I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
-> export it to via uAPI probably).
->
-> Thanks
->
-like the below one? not sure if this ok to use like this?
-static struct virtio_device_id vp_vdpa_id_table[] = {
-{ VIRTIO_DEV_ANY_ID, VIRTIO_DEV_ANY_ID },
-{ 0 },
-};
+Here's a couple patches to simplify sc7180-trogdor dtsi files further.
+There will be logical conflicts with the wormdingler patch because it
+will need to have similar changes done for the swizzle and include, but
+that can be cleaned up later or I can resend if the wormdingler patch
+gets merged first. Either way nothing will be broken from what I can
+tell.
 
+I compiled these and diffed the dtbs before and after and found no
+changes.
 
-> >
-> >         if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLASSES,
-> > --
-> > 2.34.1
-> >
->
+Changes from v1 (https://lore.kernel.org/r/20220325234344.199841-1-swboyd@chromium.org):
+ * Another patch to move around sc7180.dtsi includes
+ * Fixed trackpad for trogdor-r1 and pompom
+ * Made spi0/spi6 patch not as aggressive
+
+Stephen Boyd (3):
+  arm64: dts: qcom: sc7180-trogdor: Simplify trackpad enabling
+  arm64: dts: qcom: sc7180-trogdor: Simplify spi0/spi6 labeling
+  arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi
+
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 11 +----------
+ .../boot/dts/qcom/sc7180-trogdor-homestar-r2.dts      |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-homestar-r3.dts      |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-homestar-r4.dts      |  2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi |  7 -------
+ .../qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dts    |  2 +-
+ .../qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dts    |  2 +-
+ .../dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dts     |  2 +-
+ .../dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dts     |  2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts  |  2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts  |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dts      |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dts     |  2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dts  |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dts      |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dts     |  2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dts  |  2 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi    |  7 ++++---
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi   |  9 ++++-----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts        |  9 ++++-----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi          |  8 ++++----
+ 21 files changed, 32 insertions(+), 49 deletions(-)
+
+Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+
+base-commit: f238ff81e8946540e1a7c1496aa92fa2386893dc
+-- 
+https://chromeos.dev
 

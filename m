@@ -2,104 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790015124E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0545124E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 23:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237821AbiD0WBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 18:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S237851AbiD0WCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 18:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237763AbiD0WBF (ORCPT
+        with ESMTP id S236499AbiD0WCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 18:01:05 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762ED21A1;
-        Wed, 27 Apr 2022 14:57:51 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:57788)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njpfP-0010l2-WF; Wed, 27 Apr 2022 15:57:48 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35986 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njpfO-00BQOO-4X; Wed, 27 Apr 2022 15:57:47 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <20220427155335.GH17421@redhat.com>
-Date:   Wed, 27 Apr 2022 16:57:39 -0500
-In-Reply-To: <20220427155335.GH17421@redhat.com> (Oleg Nesterov's message of
-        "Wed, 27 Apr 2022 17:53:37 +0200")
-Message-ID: <87sfpy42b0.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 27 Apr 2022 18:02:14 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80640114E;
+        Wed, 27 Apr 2022 14:59:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651096741; x=1682632741;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=ReKgWjo5Fy4ccefVXI5WqZ17NyQEm0KPvtdTQFFhd4Q=;
+  b=XIEFDv4nLLeFa23t1t7QlsI5v58+4bHEJgRxkXlij5a/xy4oGoWAklR4
+   UPnGJD5ExNUteH/67Nwdj3/Y6Gzl01FvuRyQkyvUrWuC1b1Ub89v4hGNq
+   n3Z068La5opclGRXXO5YsGS2xt/FDFLG2w204arE2Pi9ZbzW3z2eEZjFv
+   Rj9KnIjuT2pB4njb31XdQFTbevvT4nCtioMnMFC9mTFhbwLZuoaNiX33x
+   ZggpYENMKJELjr87cnT25T7Tgzmbokoq73ZfczDqbQ+l55aDWqZ6vIaoj
+   4tNAK8oOX1A0Yy4iMcM19zYleIQ2UgevL6dConqZYlvQysu1bNHCJrVKo
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="263666520"
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="263666520"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 14:59:01 -0700
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="513905331"
+Received: from lcdaughe-mobl1.amr.corp.intel.com (HELO [10.212.72.252]) ([10.212.72.252])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 14:59:00 -0700
+Message-ID: <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com>
+Date:   Wed, 27 Apr 2022 14:59:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1njpfO-00BQOO-4X;;;mid=<87sfpy42b0.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX181KTp4kKYFA1nut2sJgRrZ1wCAbW/YUAA=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+Content-Language: en-US
+In-Reply-To: <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1330 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (0.9%), b_tie_ro: 10 (0.8%), parse: 1.05
-        (0.1%), extract_message_metadata: 3.3 (0.2%), get_uri_detail_list:
-        1.00 (0.1%), tests_pri_-1000: 4.1 (0.3%), tests_pri_-950: 1.35 (0.1%),
-        tests_pri_-900: 1.09 (0.1%), tests_pri_-90: 87 (6.6%), check_bayes: 86
-        (6.4%), b_tokenize: 6 (0.4%), b_tok_get_all: 5 (0.4%), b_comp_prob:
-        2.0 (0.2%), b_tok_touch_all: 69 (5.2%), b_finish: 1.04 (0.1%),
-        tests_pri_0: 1195 (89.9%), check_dkim_signature: 0.56 (0.0%),
-        check_dkim_adsp: 2.9 (0.2%), poll_dns_idle: 1.07 (0.1%), tests_pri_10:
-        3.1 (0.2%), tests_pri_500: 12 (0.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
-
-> On 04/21, Peter Zijlstra wrote:
+On 4/26/22 18:15, Kai Huang wrote:
+> On Tue, 2022-04-26 at 13:13 -0700, Dave Hansen wrote:
+>> On 4/5/22 21:49, Kai Huang wrote:
+>>> SEAM VMX root operation is designed to host a CPU-attested, software
+>>> module called the 'TDX module' which implements functions to manage
+>>> crypto protected VMs called Trust Domains (TD).  SEAM VMX root is also
 >>
->> @@ -1329,8 +1337,7 @@ SYSCALL_DEFINE4(ptrace, long, request, l
->>  		goto out_put_task_struct;
->>  
->>  	ret = arch_ptrace(child, request, addr, data);
->> -	if (ret || request != PTRACE_DETACH)
->> -		ptrace_unfreeze_traced(child);
->> +	ptrace_unfreeze_traced(child);
->
-> Forgot to mention... whatever we do this doesn't look right.
->
-> ptrace_unfreeze_traced() must not be called if the tracee was untraced,
-> anothet debugger can come after that. I agree, the current code looks
-> a bit confusing, perhaps it makes sense to re-write it:
->
-> 	if (request == PTRACE_DETACH && ret == 0)
-> 		; /* nothing to do, no longer traced by us */
-> 	else
-> 		ptrace_unfreeze_traced(child);
+>> "crypto protected"?  What the heck is that?
+> 
+> How about "crypto-protected"?  I googled and it seems it is used by someone
+> else.
 
-This was a bug in my original JOBCTL_DELAY_WAITKILL patch and it was
-just cut and pasted here.  I thought it made sense when I was throwing
-things together but when I looked more closely I realized that it is
-not safe.
+Cryptography itself doesn't provide (much) protection in the TDX
+architecture.  TDX guests are isolated from the VMM in ways that
+traditional guests are not, but that has almost nothing to do with
+cryptography.
 
-Eric
+Is it cryptography that keeps the host from reading guest private data
+in the clear?  Is it cryptography that keeps the host from reading guest
+ciphertext?  Does cryptography enforce the extra rules of Secure-EPT?
+
+>>> 3. Memory hotplug
+>>>
+>>> The first generation of TDX architecturally doesn't support memory
+>>> hotplug.  And the first generation of TDX-capable platforms don't support
+>>> physical memory hotplug.  Since it physically cannot happen, this series
+>>> doesn't add any check in ACPI memory hotplug code path to disable it.
+>>>
+>>> A special case of memory hotplug is adding NVDIMM as system RAM using
+>>> kmem driver.  However the first generation of TDX-capable platforms
+>>> cannot enable TDX and NVDIMM simultaneously, so in practice this cannot
+>>> happen either.
+>>
+>> What prevents this code from today's code being run on tomorrow's
+>> platforms and breaking these assumptions?
+> 
+> I forgot to add below (which is in the documentation patch):
+> 
+> "This can be enhanced when future generation of TDX starts to support ACPI
+> memory hotplug, or NVDIMM and TDX can be enabled simultaneously on the
+> same platform."
+> 
+> Is this acceptable?
+
+No, Kai.
+
+You're basically saying: *this* code doesn't work with feature A, B and
+C.  Then, you're pivoting to say that it doesn't matter because one
+version of Intel's hardware doesn't support A, B, or C.
+
+I don't care about this *ONE* version of the hardware.  I care about
+*ALL* the hardware that this code will ever support.  *ALL* the hardware
+on which this code will run.
+
+In 5 years, if someone takes this code and runs it on Intel hardware
+with memory hotplug, CPU hotplug, NVDIMMs *AND* TDX support, what happens?
+
+You can't just ignore the problems because they're not present on one
+version of the hardware.
+
+>>> Another case is admin can use 'memmap' kernel command line to create
+>>> legacy PMEMs and use them as TD guest memory, or theoretically, can use
+>>> kmem driver to add them as system RAM.  To avoid having to change memory
+>>> hotplug code to prevent this from happening, this series always include
+>>> legacy PMEMs when constructing TDMRs so they are also TDX memory.
+>>>
+>>> 4. CPU hotplug
+>>>
+>>> The first generation of TDX architecturally doesn't support ACPI CPU
+>>> hotplug.  All logical cpus are enabled by BIOS in MADT table.  Also, the
+>>> first generation of TDX-capable platforms don't support ACPI CPU hotplug
+>>> either.  Since this physically cannot happen, this series doesn't add any
+>>> check in ACPI CPU hotplug code path to disable it.
+>>>
+>>> Also, only TDX module initialization requires all BIOS-enabled cpus are
+>>> online.  After the initialization, any logical cpu can be brought down
+>>> and brought up to online again later.  Therefore this series doesn't
+>>> change logical CPU hotplug either.
+>>>
+>>> 5. TDX interaction with kexec()
+>>>
+>>> If TDX is ever enabled and/or used to run any TD guests, the cachelines
+>>> of TDX private memory, including PAMTs, used by TDX module need to be
+>>> flushed before transiting to the new kernel otherwise they may silently
+>>> corrupt the new kernel.  Similar to SME, this series flushes cache in
+>>> stop_this_cpu().
+>>
+>> What does this have to do with kexec()?  What's a PAMT?
+> 
+> The point is the dirty cachelines of TDX private memory must be flushed
+> otherwise they may slightly corrupt the new kexec()-ed kernel.
+> 
+> Will use "TDX metadata" instead of "PAMT".  The former has already been
+> mentioned above.
+
+Longer description for the patch itself:
+
+TDX memory encryption is built on top of MKTME which uses physical
+address aliases to designate encryption keys.  This architecture is not
+cache coherent.  Software is responsible for flushing the CPU caches
+when memory changes keys.  When kexec()'ing, memory can be repurposed
+from TDX use to non-TDX use, changing the effective encryption key.
+
+Cover-letter-level description:
+
+Just like SME, TDX hosts require special cache flushing before kexec().
+
+>>> uninitialized state so it can be initialized again.
+>>>
+>>> This implies:
+>>>
+>>>   - If the old kernel fails to initialize TDX, the new kernel cannot
+>>>     use TDX too unless the new kernel fixes the bug which leads to
+>>>     initialization failure in the old kernel and can resume from where
+>>>     the old kernel stops. This requires certain coordination between
+>>>     the two kernels.
+>>
+>> OK, but what does this *MEAN*?
+> 
+> This means we need to extend the information which the old kernel passes to the
+> new kernel.  But I don't think it's feasible.  I'll refine this kexec() section
+> to make it more concise next version.
+> 
+>>
+>>>   - If the old kernel has initialized TDX successfully, the new kernel
+>>>     may be able to use TDX if the two kernels have the exactly same
+>>>     configurations on the TDX module. It further requires the new kernel
+>>>     to reserve the TDX metadata pages (allocated by the old kernel) in
+>>>     its page allocator. It also requires coordination between the two
+>>>     kernels.  Furthermore, if kexec() is done when there are active TD
+>>>     guests running, the new kernel cannot use TDX because it's extremely
+>>>     hard for the old kernel to pass all TDX private pages to the new
+>>>     kernel.
+>>>
+>>> Given that, this series doesn't support TDX after kexec() (except the
+>>> old kernel doesn't attempt to initialize TDX at all).
+>>>
+>>> And this series doesn't shut down TDX module but leaves it open during
+>>> kexec().  It is because shutting down TDX module requires CPU being in
+>>> VMX operation but there's no guarantee of this during kexec().  Leaving
+>>> the TDX module open is not the best case, but it is OK since the new
+>>> kernel won't be able to use TDX anyway (therefore TDX module won't run
+>>> at all).
+>>
+>> tl;dr: kexec() doesn't work with this code.
+>>
+>> Right?
+>>
+>> That doesn't seem good.
+> 
+> It can work in my understanding.  We just need to flush cache before booting to
+> the new kernel.
+
+What about all the concerns about TDX module configuration changing?
 

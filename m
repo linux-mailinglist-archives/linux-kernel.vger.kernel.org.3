@@ -2,137 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DAF510EA8
+	by mail.lfdr.de (Postfix) with ESMTP id D4718510EAA
 	for <lists+linux-kernel@lfdr.de>; Wed, 27 Apr 2022 04:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357141AbiD0CWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Apr 2022 22:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S1357156AbiD0CXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Apr 2022 22:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352940AbiD0CWN (ORCPT
+        with ESMTP id S1357143AbiD0CXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Apr 2022 22:22:13 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665D081191
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:19:02 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 19:18:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651025940;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aKjMvPM+2MJ2yRO8Ts8TLANuj83FMCxVybjtRrJhsDw=;
-        b=OBTgeN3lChLzxmMfe4teyWHnkTWxurZczcrbXhakAoxuwu0Dp8CYE/eOIPWEE9rYYndeHM
-        zHg1uAH9G8HSBO5U1KhcGIemGGBiahWklJBS4q86wiTWQ+2tV248ivfCkUSy1UaUOaYX/2
-        JtmsAyowfVd2PozU/7V3CBiWosXJ9vw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Dave Chinner <dchinner@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH v2 0/7] mm: introduce shrinker debugfs interface
-Message-ID: <YmioDchdnpIh8HlC@carbon>
-References: <20220422202644.799732-1-roman.gushchin@linux.dev>
- <YmeK6/eZYaMo2Ltm@rh>
- <Ymggvr4Boc5JIf9j@carbon>
- <Ymia75Bh/sn/FQdV@rh>
+        Tue, 26 Apr 2022 22:23:10 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AEF1134
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1651026000; x=1682562000;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5TeQN5lhR4Ahp6383VgZCh7eErXQ5BHljxeq6DTkar0=;
+  b=BrV63yRSdIXWT3fI7F7e4Dm1FzMcW1uUipwMJQUqAdabKsYg6NxMii6O
+   zMJX7R5fI8oIk9x3LV390zYwIq2EriNr3gHCrl+cDWPadIpM48NlM/1iS
+   Uv/1H3FTgHwsz3qGCvPbm+LP//NKBNJCY9ZgRE+IxoG/jtmdskxI8anVd
+   N+kA9GayhohMHElPEXe814NYAecHx4Zp9U+17lowEUNmVwdfPCc/yFgqo
+   w71v/hGfvU1JV73KmoKK9jOEALT8QEvmuQ6kEeJUeywKzpXVlopftgZdw
+   XAbI44Jumu4Fj7ESK7GBjY0XTwIsfdisPjGL4+R/c9OrwpqJiQEm2crDm
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,292,1643644800"; 
+   d="scan'208";a="303120016"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Apr 2022 10:19:58 +0800
+IronPort-SDR: O3jHDK5Qijs5R1Ipc0iIC9SlY6j2MrGj9fxw/Hebin2451Wu2L2WLO+PFOXOz/wJtniUtVX06w
+ dFJ5AFJuClQ7iOt7XQdzNrilMLoeRVPSHklID/DgEaSozjOovYFFMNZTThpUIk9Z42BlH7jYsE
+ 9eu50ggz9MqCU4Iox9x+Z5SoE5RFPnjUf8jpjjg2uKLiIt3RtahJlcFGdWsuaFK6pR+JXMQjcb
+ kjyyU+dCoO0o87vShz5H6k0r3G6I4V7nfX4l35+UoQhXMBa5ddJy0hGrnXB99GXuHgVgD9kXOq
+ yAMzHmtVlMxkRi7kUy2HeSr6
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Apr 2022 18:50:08 -0700
+IronPort-SDR: FAJE0lZuyFETOFe9eGadjC5ras4GV0Nb1eQBDPCF6CIyD3/IgcY2v/x3z3EOFTn/IKuP+oYYvx
+ g5sOKFLInR0yMndgOjwBHzC2At4EkWceeS7IxugD8dkDg8mKX81+183zG3p83XkLZKvy5+KSPX
+ Mq53zmirIZNfYov2ke9kWS+Uyip/pAQhhr2RnRXkN/8rMtA9G2VK3x7b3M860JR6TBGRdIvSw+
+ pzMaxw/YqdeNJSDi6H5skyAvSQx6TF0x+0aC+iB9ikPxwwEUk7xBP0VVyqLfSgKdLvdCSJZVha
+ mLU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Apr 2022 19:19:58 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kp2Wx6krKz1SVnx
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Apr 2022 19:19:57 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1651025996; x=1653617997; bh=5TeQN5lhR4Ahp6383VgZCh7eErXQ5BHljxe
+        q6DTkar0=; b=HLh3gOdIoLSGUUyUMi7ugQ80WGd64u85fuvUH7mJ8KLbrYvw+n4
+        ZfEA4vmz1fIqGmNkLDTQnp/EARZTn46QbXeSk9AgyEeRoc7QmzuDr9+HSFQaGPS8
+        f1KVXkLxmHZEAFQGUY6AEqMMZEzD6CBczxJOM0lOCUAGFZdIHa4uWWiTNs+eHmga
+        PvLhDA+WtojKoy1rBnwEqxVn9ie+kA361GS9CQqkEl2D2izLQHDP6fZUcMAJX4bG
+        PN52+3YAVZz25etiQ45f0l/NwYQB1q3ZmAaDgflCx0DlZ/VOoK33B2u08wb5A2no
+        P8lJfWB4SE71FKiYeaqRUK95YDBBPOWivdg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bNS6KAZ-J8_n for <linux-kernel@vger.kernel.org>;
+        Tue, 26 Apr 2022 19:19:56 -0700 (PDT)
+Received: from [10.225.163.27] (unknown [10.225.163.27])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kp2Wn4QZqz1Rvlc;
+        Tue, 26 Apr 2022 19:19:49 -0700 (PDT)
+Message-ID: <6a85e8c8-d9d1-f192-f10d-09052703c99a@opensource.wdc.com>
+Date:   Wed, 27 Apr 2022 11:19:48 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ymia75Bh/sn/FQdV@rh>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 00/10] Add Copy offload support
+Content-Language: en-US
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     chaitanyak@nvidia.com, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        axboe@kernel.dk, msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
+        hch@lst.de, Frederick.Knight@netapp.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, nitheshshetty@gmail.com, gost.dev@samsung.com,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
+ <20220426101241.30100-1-nj.shetty@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220426101241.30100-1-nj.shetty@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 11:22:55AM +1000, Dave Chinner wrote:
-> On Tue, Apr 26, 2022 at 09:41:34AM -0700, Roman Gushchin wrote:
-> > Can you, please, summarize your position, because it's a bit unclear.
-> > You made a lot of good points about some details (e.g. shrinkers naming,
-> > and I totally agree there; machines with hundreds of nodes etc), then
-> > you said the active scanning is useless and then said the whole thing
-> > is useless and we're fine with what we have regarding shrinkers debugging.
-> 
-> Better introspection the first thing we need. Work on improving
-> that. I've been making suggestions to help improve introspection
-> infrastructure.
-> 
-> Before anything else, we need to improve introspection so we can
-> gain better insight into the problems we have. Once we understand
-> the problems better and have evidence to back up where the problems
-> lie and we have a plan to solve them, then we can talk about whether
-> we need other user accessible shrinker APIs.
+On 4/26/22 19:12, Nitesh Shetty wrote:
+> The patch series covers the points discussed in November 2021 virtual c=
+all
+> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
+> We have covered the Initial agreed requirements in this patchset.
+> Patchset borrows Mikulas's token based approach for 2 bdev
+> implementation.
+>=20
+> Overall series supports =E2=80=93
+>=20
+> 1. Driver
+> - NVMe Copy command (single NS), including support in nvme-target (for
+>     block and file backend)
 
-Ok, at least we do agree here.
+It would also be nice to have copy offload emulation in null_blk for test=
+ing.
 
-This is exactly why I've started with this debugfs stuff.
+>=20
+> 2. Block layer
+> - Block-generic copy (REQ_COPY flag), with interface accommodating
+>     two block-devs, and multi-source/destination interface
+> - Emulation, when offload is natively absent
+> - dm-linear support (for cases not requiring split)
+>=20
+> 3. User-interface
+> - new ioctl
+> - copy_file_range for zonefs
+>=20
+> 4. In-kernel user
+> - dm-kcopyd
+> - copy_file_range in zonefs
+>=20
+> For zonefs copy_file_range - Seems we cannot levearge fstest here. Limi=
+ted
+> testing is done at this point using a custom application for unit testi=
+ng.
+>=20
+> Appreciate the inputs on plumbing and how to test this further?
+> Perhaps some of it can be discussed during LSF/MM too.
+>=20
+> [0] https://lore.kernel.org/linux-nvme/CA+1E3rJ7BZ7LjQXXTdX+-0Edz=3DzT1=
+4mmPGMiVCzUgB33C60tbQ@mail.gmail.com/
+>=20
+> Changes in v4:
+> - added copy_file_range support for zonefs
+> - added documentaion about new sysfs entries
+> - incorporated review comments on v3
+> - minor fixes
+>=20
+>=20
+> Arnav Dawn (2):
+>   nvmet: add copy command support for bdev and file ns
+>   fs: add support for copy file range in zonefs
+>=20
+> Nitesh Shetty (7):
+>   block: Introduce queue limits for copy-offload support
+>   block: Add copy offload support infrastructure
+>   block: Introduce a new ioctl for copy
+>   block: add emulation for copy
+>   nvme: add copy offload support
+>   dm: Add support for copy offload.
+>   dm: Enable copy offload for dm-linear target
+>=20
+> SelvaKumar S (1):
+>   dm kcopyd: use copy offload support
+>=20
+>  Documentation/ABI/stable/sysfs-block |  83 +++++++
+>  block/blk-lib.c                      | 358 +++++++++++++++++++++++++++
+>  block/blk-map.c                      |   2 +-
+>  block/blk-settings.c                 |  59 +++++
+>  block/blk-sysfs.c                    | 138 +++++++++++
+>  block/blk.h                          |   2 +
+>  block/ioctl.c                        |  32 +++
+>  drivers/md/dm-kcopyd.c               |  55 +++-
+>  drivers/md/dm-linear.c               |   1 +
+>  drivers/md/dm-table.c                |  45 ++++
+>  drivers/md/dm.c                      |   6 +
+>  drivers/nvme/host/core.c             | 116 ++++++++-
+>  drivers/nvme/host/fc.c               |   4 +
+>  drivers/nvme/host/nvme.h             |   7 +
+>  drivers/nvme/host/pci.c              |  25 ++
+>  drivers/nvme/host/rdma.c             |   6 +
+>  drivers/nvme/host/tcp.c              |  14 ++
+>  drivers/nvme/host/trace.c            |  19 ++
+>  drivers/nvme/target/admin-cmd.c      |   8 +-
+>  drivers/nvme/target/io-cmd-bdev.c    |  65 +++++
+>  drivers/nvme/target/io-cmd-file.c    |  49 ++++
+>  fs/zonefs/super.c                    | 178 ++++++++++++-
+>  fs/zonefs/zonefs.h                   |   1 +
+>  include/linux/blk_types.h            |  21 ++
+>  include/linux/blkdev.h               |  17 ++
+>  include/linux/device-mapper.h        |   5 +
+>  include/linux/nvme.h                 |  43 +++-
+>  include/uapi/linux/fs.h              |  23 ++
+>  28 files changed, 1367 insertions(+), 15 deletions(-)
+>=20
+>=20
+> base-commit: e7d6987e09a328d4a949701db40ef63fbb970670
 
-> 
-> For the moment, exposing shrinker control interfaces to userspace
-> could potentially be very bad because it exposes internal
-> architectural and implementation details to a user API.  Just
-> because it is in /sys/kernel/debug it doesn't mean applications
-> won't start to use it and build dependencies on it.
-> 
-> That doesn't mean I'm opposed to exposing a shrinker control
-> mechanism to debugfs - I'm still on the fence on that one. However,
-> I definitely think that an API that directly exposes the internal
-> implementation to userspace is the wrong way to go about this.
 
-Ok, if it's about having memcg-aware and other interfaces, I can
-agree here as well.
-
-I actually made an attempt to unify memcg-aware and system-wide
-shrinker scanning, not very successful yet, but it's definitely
-on my todo list. I'm pretty sure we're iterating over and over
-some empty root-level shrinkers without benefiting the bitmap
-infrastructure which works for memory cgroups.
-
-> 
-> Fine grained shrinker control is not necessary to improve shrinker
-> introspection and OOM debugging capability, so if you want/need
-> control interfaces then I think you should separate those out into a
-> separate line of development where it doesn't derail the discussion
-> on how to improve shrinker/OOM introspection.
-
-Ok, no problems here. Btw, tem OOM debugging is a separate topic brought
-in by Kent, I'd keep it separate too, as it comes with many OOM-specific
-complications.
-
-From your another email:
-> So, yeah, you need to think about how to do fine-grained access to
-> shrinker stats effectively. That might require a complete change of
-> presentation API. For example, changing the filesystem layout to be
-> memcg centric rather than shrinker instance centric would make an
-> awful lot of this file parsing problem go away.
->
-> e.g:
->
-> /sys/kernel/debug/mm/memcg/<memcg instance>/shrinker/<shrinker instance>/stats
-
-The problem with this approach (I though about it) is that it comes
-with a high memory overhead especially on that machine with thousands cgroups
-and mount points. And beside the memory overhead, it's really expensive to
-collect system-wide data and get a big picture, as it requires opening
-and reading of thousand of files.
-
-Actually, you wrote recently:
-"I've thought about it, too, and can see where it could be useful.
-However, when I consider the list_lru memcg integration, I suspect
-it becomes a "can't see the forest for the trees" problem. We're
-going to end up with millions of sysfs objects with no obvious way
-to navigate, iterate or search them if we just take the naive "sysfs
-object + stats per list_lru instance" approach."
-
-It all makes me think we need both: a way to iterate over all memcgs and dump
-all the numbers at once and a way to get a specific per-memcg (per-node) count.
-
-Thanks!
+--=20
+Damien Le Moal
+Western Digital Research

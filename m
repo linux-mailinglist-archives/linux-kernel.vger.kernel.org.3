@@ -2,204 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA5D513364
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F14513367
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346069AbiD1MRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
+        id S1346071AbiD1MRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345829AbiD1MRI (ORCPT
+        with ESMTP id S1346043AbiD1MRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:17:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E6ADAD135
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651148033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=peo0ScnOD/kREKuRjyBJPvH3MAbi5TUpXP5WbTNJH+g=;
-        b=hxGrb9uYlJdARRv1tMRKq6l8zXqXnvEy1Dwo8QtWH8MSJDtLO447Tb91krx3tjqAsSIFlI
-        rYDgyabcljK+f1i7/s4hioXmcDd/1i1fvkoWEbak9ftrGimnrSdStZJtwVjTQpiMwa7Ts6
-        m407XQP2cJyfRdmlZwESxDS3/P4pJTg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-lYx3b5tlMMq_0I_NyAD27Q-1; Thu, 28 Apr 2022 08:13:49 -0400
-X-MC-Unique: lYx3b5tlMMq_0I_NyAD27Q-1
-Received: by mail-ed1-f72.google.com with SMTP id r26-20020a50aada000000b00425afa72622so2624707edc.19
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:13:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=peo0ScnOD/kREKuRjyBJPvH3MAbi5TUpXP5WbTNJH+g=;
-        b=DwtS6M/v19TTMBVln6NTsmmgjLuSjKiHYu9vy0uBiSzs3GF8hcoy0yK1RS0iWxmFH7
-         DQEmyiJ4+DDeCtagtws9g8OyI2vv9Wdpb79HVjpgxZY0olNg7gxSp5VRWXJsxWvhltgq
-         vzpO0t0SFAJLjfNcAVxq6Pi66ylNEN/kvWWPUx4fcQQ/VIMAtsPeiR36kyHFaGbuAgRV
-         KPODnz7JtvSnttK/+DZRyzOzT1YJJwpGXGk5FCqAKqhTUYu4hdLUnLoOvWXLUafx59Xp
-         c3WHttwxlK2hjuxdeqEpKiiNTv3iSRPVfIA0LkdHVqCCJ1kZxpgKivZq1z4oO4+SR0yT
-         QL/Q==
-X-Gm-Message-State: AOAM530dlWVuFpqDPt38EzurJnFM8eT7CkRDyTWEiQvmyknQKwOr9PWu
-        9Q3HZDlG+RYTcDBEIaJ0UciNPe7nl9GGHKPmTA4eOEZFMadpVHFU/fABGQvvSbdDrfuOxUObOum
-        hUJiNFY01kD05DL/rSLMwah3R
-X-Received: by 2002:a05:6402:2309:b0:41f:a5a9:fe13 with SMTP id l9-20020a056402230900b0041fa5a9fe13mr35794019eda.123.1651148028278;
-        Thu, 28 Apr 2022 05:13:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyWtRVzz9fglE7R6LGmifRxKTF/DA9SAlgj9lilGJMS+YqAMwvtx7BmKuyQwqme/iq0QpQoA==
-X-Received: by 2002:a05:6402:2309:b0:41f:a5a9:fe13 with SMTP id l9-20020a056402230900b0041fa5a9fe13mr35793998eda.123.1651148028036;
-        Thu, 28 Apr 2022 05:13:48 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
-        by smtp.gmail.com with ESMTPSA id cy19-20020a0564021c9300b0042617ba6386sm1461422edb.16.2022.04.28.05.13.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 05:13:47 -0700 (PDT)
-Message-ID: <f31caf6a-fb13-0be3-9fa2-0b4959cc0810@redhat.com>
-Date:   Thu, 28 Apr 2022 14:13:46 +0200
+        Thu, 28 Apr 2022 08:17:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE6AD11B;
+        Thu, 28 Apr 2022 05:13:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35F48B82BBF;
+        Thu, 28 Apr 2022 12:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D50C385A9;
+        Thu, 28 Apr 2022 12:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651148034;
+        bh=vxjMPjiYyFGhSMcGT25wyA/WTwatpL4xQZLW21y1LrY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CZ6V0X68DhdaTkp6BMzGTX1rWbkZ1DzkL2YhYLd502WaLC5hwoO4uMqjMlVQlu898
+         yTH+GdehFwnErraXDMs8PVMX4Ha7/ae6hCmg8SHgzegUoSqyvR7RBqyoEq4QZo31zL
+         2PVwD+W7KLhSKfZW8BxscVA/BHixp+9TiSPUUBvcJ4PZP7u0b0z5zUHdWq+gGArmoF
+         kcs73wCOduTNJz5pS2rtOBXp1/eEd0ykp1evkbcjfN8BAUC3UiiZktAJWVeIEpuC5a
+         0OzZZsLv0dTEuYuSJUffm9lb6Gr1CT/f+naBJKllxKJED3w2hUgx0b4PkL2nFRArvv
+         PLwyVC3QwZCnw==
+Date:   Thu, 28 Apr 2022 13:13:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     robh+dt@kernel.org, angelogioacchino.delregno@collabora.com,
+        aaronyu@google.com, matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        tzungbi@google.com, julianbraha@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [v4 07/18] ASoC: mediatek: mt8186: support i2s in platform driver
+Message-ID: <YmqE+80xyBoIJvto@sirena.org.uk>
+References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
+ <20220428093355.16172-8-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220307150725.6810-1-osalvador@suse.de>
- <20220307150725.6810-2-osalvador@suse.de>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/3] mm/page_alloc: Do not calculate node's total pages
- and memmap pages when empty
-In-Reply-To: <20220307150725.6810-2-osalvador@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qf2Y0CXE7QOl/F3W"
+Content-Disposition: inline
+In-Reply-To: <20220428093355.16172-8-jiaxin.yu@mediatek.com>
+X-Cookie: Bedfellows make strange politicians.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.22 16:07, Oscar Salvador wrote:
-> free_area_init_node() calls calculate_node_totalpages() and
-> free_area_init_core(). The former to get node's {spanned,present}_pages,
-> and the latter to calculate, among other things, how many pages per zone
-> we spent on memmap_pages, which is used to substract zone's free pages.
-> 
-> On memoryless-nodes, it is pointless to perform such a bunch of work, so
-> make sure we skip the calculations when having a node or empty zone.
-> 
-> Signed-off-by: Oscar Salvador <osalvador@suse.de>
 
-Sorry, I'm late with review. My mailbox got flooded.
+--qf2Y0CXE7QOl/F3W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
->  mm/page_alloc.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 967085c1c78a..0b7d176a8990 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -7312,6 +7312,10 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
->  	unsigned long realtotalpages = 0, totalpages = 0;
->  	enum zone_type i;
->  
-> +	/* Skip calculation for memoryless nodes */
-> +	if (node_start_pfn == node_end_pfn)
-> +		goto no_pages;
+On Thu, Apr 28, 2022 at 05:33:44PM +0800, Jiaxin Yu wrote:
+
+> +/* clock source control */
+> +static const char * const mt8186_i2s_src_str[] = {
+> +	"Master", "Slave"
+> +};
 > +
+> +static const struct soc_enum mt8186_i2s_src_enum[] = {
+> +	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(mt8186_i2s_src_str),
+> +			    mt8186_i2s_src_str),
+> +};
 
-Just a NIT:
+Not clear why this is user visible?  Shouldn't the machine driver be
+setting this.  Also please use more modern provider/consumer terminology
+for the clocking.
 
-E.g., in zone_spanned_pages_in_node() we test for
-	!node_start_pfn && !node_end_pfn
+> +static int mt8186_i2s_hd_set(struct snd_kcontrol *kcontrol,
+> +			     struct snd_ctl_elem_value *ucontrol)
+> +{
 
-In update_pgdat_span(), we set
-	node_start_pfn = node_end_pfn = 0;
-when we find an empty node during memory unplug.
-
-Therefore, I wonder if a helper "is_memoryless_node()" or "node_empty()"
-might be reasonable, that just checks for either
-	!node_start_pfn && !node_end_pfn
-or
-	node_start_pfn == node_end_pfn
-
-
-
->  	for (i = 0; i < MAX_NR_ZONES; i++) {
->  		struct zone *zone = pgdat->node_zones + i;
->  		unsigned long zone_start_pfn, zone_end_pfn;
-> @@ -7344,6 +7348,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
->  		realtotalpages += real_size;
->  	}
->  
-> +no_pages:
->  	pgdat->node_spanned_pages = totalpages;
->  	pgdat->node_present_pages = realtotalpages;
->  	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, realtotalpages);
-> @@ -7562,6 +7567,10 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
->  		size = zone->spanned_pages;
->  		freesize = zone->present_pages;
->  
-> +		/* No pages? Nothing to calculate then. */
-> +		if (!size)
-> +			goto no_pages;
+> +		return -EINVAL;
+> +	}
 > +
->  		/*
->  		 * Adjust freesize so that it accounts for how much memory
->  		 * is used by this zone for memmap. This affects the watermark
-> @@ -7597,6 +7606,7 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
->  		 * when the bootmem allocator frees pages into the buddy system.
->  		 * And all highmem pages will be managed by the buddy system.
->  		 */
-> +no_pages:
->  		zone_init_internals(zone, j, nid, freesize);
->  
->  		if (!size)
+> +	i2s_priv->low_jitter_en = hd_en;
+> +
+> +	return 0;
+> +}
 
-We have another size check below. We essentially have right now:
+Same issue as on the other patch with the events - like I said there
+mixer-test will find a bunch of these issues for you.
 
-"
-	if (!size)
-		goto no_pages;
+--qf2Y0CXE7QOl/F3W
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	[code]
-no_pages:
-	zone_init_internals(zone, j, nid, freesize);
+-----BEGIN PGP SIGNATURE-----
 
-	if (!size)
-		continue
-	[more code]
-"
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJqhPsACgkQJNaLcl1U
+h9DxEAf7BCZnRGuhD7QVceeLK9ft/+r5G6bcDYr/AzaD0m2ib8uHS9gAD2tNCPzS
+hqNii0XqfHOk8qRHngTUCf2jArvOxs/04PUbVN9osjE3US4GasV3r5A2mjdH5Xjb
+YfmoJbCF/LDmP3if9QwJkJEPJ13sqaEQLbO6MKBn9H/iMDXQGzXtLT+A/7vFmnlz
+5Z4kFX2c+4/M3Kkh/tL+5mAWE42SYETASHjOFnvFvK8EyRsHraxWahmN7Q1ZlcIb
+O/hK/hlH53YEyBysNZ4WG7U3CHHIJdf7XUN9/akMdwFo69exz+qHy2PItw6cix2Q
+B26GhDB6BEav6uk7TLEz59R0iKw+eQ==
+=QnX1
+-----END PGP SIGNATURE-----
 
-IMHO, it would be nicer to avoid the label/goto by just doing a:
-
-"
-	if (!size) {
-		zone_init_internals(zone, j, nid, 0);
-		continue;
-	}
-
-	[code]
-	zone_init_internals(zone, j, nid, freesize);
-	[more code]
-"
-
-Or factoring out [code] into a separate function.
-
-
-Anyhow, the change itself looks sane.
-
--- 
-Thanks,
-
-David / dhildenb
-
+--qf2Y0CXE7QOl/F3W--

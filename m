@@ -2,182 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700B9512DB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AD0512DBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343990AbiD1IJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S237120AbiD1IK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343847AbiD1IIr (ORCPT
+        with ESMTP id S233548AbiD1IKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:08:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBBB13F89
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:05:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C11211F88A;
-        Thu, 28 Apr 2022 08:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651133114; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=98oHi700xFOE02Vfn35dIwzesf4K3FljW87BzHJLrQU=;
-        b=fQhuQ2AbAnE1rRzJrjxkZfleHvwI0UivAXv2yhV069POMNFwFmtBgjvuOdpBKiYsiuAnFF
-        e1JMUtswDgXIG0CMgfiYYgveoQJkji8AB7PYvMBGTtuNJuru8J2WQ5/ZFOB7MRQRZsR4ax
-        DCvv6VLzFxlopelnT5PadpfxpS5sIjs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651133114;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=98oHi700xFOE02Vfn35dIwzesf4K3FljW87BzHJLrQU=;
-        b=6FcnaTQlmCIMgFemIbEhNxQMu+kfVDrobPwD6SwNuojCE4QEpHcOwY1uK24q3E9zZQZuLX
-        YvdXMN1mtXgKv+Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F59D13AF8;
-        Thu, 28 Apr 2022 08:05:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RpjOJbpKamJ2IgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 28 Apr 2022 08:05:14 +0000
-Message-ID: <7cccce3d-b154-0a9c-31bd-f41f998300da@suse.de>
-Date:   Thu, 28 Apr 2022 10:05:14 +0200
+        Thu, 28 Apr 2022 04:10:21 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFEE54F9D;
+        Thu, 28 Apr 2022 01:07:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id C5D1A1F45034
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651133225;
+        bh=gkofCbla6q/11zKU00zv0OsLH0Kg1dBauD7EEXXr8w4=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=nIeU3RHTyPGIbfsEWhwWP2fVMUQQGuJtXlVD9kFzxnPfRWMhllRUjI6u8vypNIVN1
+         eu5cHaG3n9ZXhp5V0x+Jf73SMqKL3ceJeaWwg/m5gnjeiUO1Lk3UuaB20pLNZryoDz
+         XfhHxrUIAcPO/NxiDtUFBcV+SeCuArS5mWrsQTaxFQAEHs6+4Xak2qTkB/r9e3xVLF
+         zirWf7yQjIrqAO3iiIzePtDqizqzGS0G3clZvhCHmq6HKa5jxswEmgUjt7W0zgvuzt
+         5PZlEXA7u9a/1YAtHxNSnPF/XdiH0rnqPh8pD3XCcSFKgJQTOXdSu5tF19o5iqJ2Cx
+         dY4T1R3CTKPVw==
+Message-ID: <8acef982-0aec-aaf0-7e26-b02cf024cdf8@collabora.com>
+Date:   Thu, 28 Apr 2022 13:06:48 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
- and DRM_DP_CEC
+ Thunderbird/91.8.0
+Cc:     usama.anjum@collabora.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
+        gwendal@chromium.org, vbendeb@chromium.org, andy@infradead.org,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>
+Subject: Re: [PATCH v8] platform: x86: Add ChromeOS ACPI device driver
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-References: <20220427215528.237861-1-javierm@redhat.com>
- <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
- <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
- <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
- <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------mvVyOA8ZAtO3EHbb06WV8lLg"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <Ylmmf03fewXEjRr0@debian-BULLSEYE-live-builder-AMD64>
+ <YmUNnq5tH8mykNOF@kroah.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <YmUNnq5tH8mykNOF@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------mvVyOA8ZAtO3EHbb06WV8lLg
-Content-Type: multipart/mixed; boundary="------------hYgqoZl4rysfPenpEgA0cNW2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@linux.intel.com>,
- Lyude Paul <lyude@redhat.com>
-Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-Message-ID: <7cccce3d-b154-0a9c-31bd-f41f998300da@suse.de>
-Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
- and DRM_DP_CEC
-References: <20220427215528.237861-1-javierm@redhat.com>
- <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
- <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
- <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
- <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
-In-Reply-To: <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
+On 4/24/22 1:43 PM, Greg Kroah-Hartman wrote:
+> On Fri, Apr 15, 2022 at 10:08:15PM +0500, Muhammad Usama Anjum wrote:
+>> +	i = 0;
+>> +	list_for_each_entry(aag, &chromeos_acpi.groups, list) {
+>> +		chromeos_acpi.dev_groups[i] = &aag->group;
+>> +		i++;
+>> +	}
+>> +
+>> +	ret = sysfs_create_groups(&dev->kobj, chromeos_acpi.dev_groups);
+> 
+> You have raced with userspace and lost here :(
+> 
+> Use the default groups pointer in the platform driver for this, and use
+> the is_visible() callback to know to show, or not show, the attribute
+> instead of building up dynamic lists of attributes at runtime.  That
+> will save you lots of crazy logic and housekeeping _AND_ userspace tools
+> will work properly as well.
+> 
+Yeah, using dev_group pointer in platform driver makes it simple. We
+need to define the attributes at compile time. At run time, we can only
+make decision to show or not to show the attribute. This simplifies
+logic for the static attributes which will always be there. But there
+are some set of attributes which may be 1 to N depending upon the
+platform such as GPIO.0, GPIO.2 .... and GPIO.N. I'm working on
+overcoming this. Once this is done, the driver is going to be very simple.
 
---------------hYgqoZl4rysfPenpEgA0cNW2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> thanks,
+> 
+> greg k-h
 
-KGNjIEphbmkgYW5kIEx5dWRlKQ0KDQpBbSAyOC4wNC4yMiB1bSAwOTo1MiBzY2hyaWViIEph
-dmllciBNYXJ0aW5leiBDYW5pbGxhczoNCj4gT24gNC8yOC8yMiAwOTo0NSwgVGhvbWFzIFpp
-bW1lcm1hbm4gd3JvdGU6DQo+IA0KPiBbc25pcF0NCj4gDQo+Pj4+IFlvdSBjYW5ub3Qgc2Vs
-ZWN0IERJU1BMQVlfRFBfSEVMUEVSIHdpdGhvdXQgRElTUExBWV9IRUxQRVIuDQo+Pj4+DQo+
-Pj4NCj4+PiBUaGF0IHdhcyBteSBvcmlnaW5hbCB0aG91Z2h0IGFzIHdlbGwgYW5kIHdoYXQg
-ZGlkIGluIHYxLCBidXQgdGhlbiBJIG5vdGljZWQNCj4+PiB0aGF0IGRvaW5nIHRoYXQgaXQg
-d291bGQgZm9yY2UgRFJNX0RJU1BMQVlfSEVMUEVSIHRvIGJlIHNldCBhcyBidWlsdC1pbiBh
-bmQNCj4+PiBub3QgYWxsb3cgdG8gYmUgYnVpbHQgYXMgYSBtb2R1bGUuDQo+Pg0KPj4gSXQg
-d2FzIGEgcmhldG9yaWNhbCBvbmx5LiBJIGRpZG4ndCBtZWFuIHRvIGFjdHVhbGx5IHNldCBE
-SVNQTEFZX0hFTFBFUi4NCj4+DQo+IA0KPiBBaCwgc29ycnkgZm9yIG1pc3VuZGVyc3RhbmRp
-bmcuDQo+IA0KPj4+ICAgIA0KPj4+PiBDYW4ndCB5b3Ugc2ltcGx5IG1ha2UgaXQgZGVwZW5k
-IG9uIERJU1BMQVlfRFBfSEVMUEVSLiAgVGhlIG1lbnUgZW50cnkNCj4+Pj4gd2lsbCBzaG93
-IHVwIGFzIHNvb24gYXMgdGhlcmUncyBhIGRyaXZlciB0aGF0IHNlbGNldHMgRElTUExBWV9E
-UF9IRUxQRVIuDQo+Pj4+DQo+Pj4NCj4+PiBJIGNvdWxkIGJ1dCB0aGVuIHRoYXQgbWVhbnMg
-dGhhdCBvbmNlIHdvbid0IGJlIGFibGUgdG8gc2VsZWN0IHRoZXNlIHR3byBjb25maWcNCj4+
-PiBvcHRpb25zIHVubGVzcyBzb21lIGVuYWJsZSBzeW1ib2wgc2VsZWN0cyBEUk1fRElTUExB
-WV9EUF9IRUxQRVIuDQo+Pj4NCj4+PiBJbiBteSBvcGluaW9uLCBEUk1fRFBfQVVYX0NIQVJE
-RVYgYW5kIERSTV9EUF9DRUMgYXJlIGRpZmZlcmVudCB0aGFuIGFsbCBvdGhlcg0KPj4+IG9w
-dGlvbnMgdGhhdCBzZWxlY3QgRFJNX0RJU1BMQVlfRFBfSEVMUEVSLCBzaW5jZSB0aG9zZSBh
-cmUgZHJpdmVycyBhbmQgd2FudCB0bw0KPj4+IGhhdmUgYm90aCBEUk1fRElTUExBWV9EUF9I
-RUxQRVIgYW5kIERSTV9ESVNQTEFZX0hFTFBFUiBzZXQuDQo+Pj4NCj4+PiBCdXQgRFJNX0RQ
-X0FVWF9DSEFSREVWIGFuZCBEUk1fRFBfQ0VDIGFyZSBqdXN0IGluY2x1ZGVkIGluIGRybV9k
-aXNwbGF5X2hlbHBlci5vDQo+Pj4gaWYgZW5hYmxlZCwgYW5kIGRlcGVuZCBvbiBzeW1ib2xz
-IHRoYXQgYXJlIHByZXNlbnQgaWYgQ09ORklHX0RSTV9ESVNQTEFZX0RQX0hFTFBFUg0KPj4+
-IGlzIGVuYWJsZWQuIFNvIGp1c3QgbmVlZCB0aGUgbGF0dGVyLCBpZiBEUk1fRElTUExBWV9I
-RUxQRVIgaXMgbm90IGVuYWJsZWQgdGhlbiBpdA0KPj4+IHdpbGwganVzdCBiZSBhIG5vLW9w
-Lg0KPj4+DQo+Pj4gSGF2aW5nIHdyaXR0ZW4gdGhhdCB0aG91Z2ggSSBub3RpY2VkIHRoYXQg
-YSAiZGVwZW5kcyBvbiBEUk1fRElTUExBWV9IRUxQRVIiIG1ha2VzDQo+Pj4gc2Vuc2UuIElm
-IHlvdSBhZ3JlZSBJIGNhbiBhZGQgaXQgYW5kIHBvc3QgYSB2My4NCj4+DQo+PiBZZXMgcGxl
-YXNlLiAgVGhlc2Ugb3B0aW9ucyBlbmFibGUgZmVhdHVyZXMgb2YgdGhlIERQIGNvZGUuIElm
-IHRoZXJlJ3Mgbm8NCj4+IGRyaXZlciB3aXRoIERQLCBpdCBkb2Vzbid0IG1ha2Ugc2Vuc2Ug
-dG8gYWxsb3cgdGhlbS4NCj4+DQo+PiBJIGtub3cgdGhhdCB0aGVyZSBjb3VsZCBiZSBhbiBv
-ZGQgc2l0dWF0aW9uIHdoZXJlIHVzZXJzcGFjZSBtaWdodCBub3QNCj4+IGhhdmUgRFAsIGJ1
-dCBzdGlsbCB3YW50cyB0aGUgY2hhcmRldiBmaWxlIG9mIGF1eCBidXMuICBCdXQgdGhhdA0K
-Pj4gc2l0dWF0aW9uIGV4aXN0ZWQgYWxyZWFkeSB3aGVuIHRoZSBjb2RlIHdhcyBsb2NhdGVk
-IHdpdGhpbiBLTVMgaGVscGVycy4NCj4+DQo+IA0KPiBBZ3JlZWQuDQo+IA0KPj4+DQo+Pj4g
-Tm93LCBwb25kZXJpbmcgbW9yZSBhYm91dCB0aGlzIGlzc3VlLCBwcm9iYWJseSB0aGUgbW9z
-dCBjb3JyZWN0IHRoaW5nIHRvIGRvIGlzIGZvcg0KPj4+IHRoZSBkcml2ZXJzIHRoYXQgbWFr
-ZSB1c2Ugb2YgdGhlIHN5bWJvbHMgZXhwb3J0ZWQgYnkgRFJNX0RQX3tBVVhfQ0hBUkRFVixD
-RUN9IHRvDQo+Pj4gc2VsZWN0IHRoZXNlLiBXaGF0IGRvIHlvdSB0aGluayA/DQo+Pg0KPj4g
-VGhhdCdzIG5vdCBjb25zaWRlcmVkIGdvb2Qgc3R5bGUuIFNlbGVjdCBzaG91bGQgbm90IGJl
-IHVzZWQgZm9yIGFueXRoaW5nDQo+PiB0aGF0IGlzIHVzZXItY29uZmlndXJhYmxlLiBbMV0N
-Cj4+DQo+IA0KPiBSaWdodC4gU28gZ2l2aW5nIGV2ZW4gbW9yZSB0aG91Z2h0IHRvIHRoaXMs
-IG5vdyBJIHRoaW5rIHRoYXQgd2Ugc2hvdWxkIGp1c3QgaW5jbHVkZQ0KPiBkcm1fZHBfYXV4
-X2Rldi5vLCBkcm1fZHBfY2VjLm8gKGFuZCBwcm9iYWJseSBkcm1fZHBfYXV4X2J1cy5vPykg
-dW5jb25kaXRpb25hbGx5IHRvDQo+IGRybV9kaXNwbGF5X2hlbHBlci0kKENPTkZJR19EUk1f
-RElTUExBWV9EUF9IRUxQRVIpLg0KPiANCj4gQWZ0ZXIgYWxsLCB0aGVzZSBhcmUgbm90IGJp
-ZyBvYmplY3RzIGFuZCBkcm1fZGlzcGxheV9oZWxwZXIgY2FuIG5vdyBiZSBidWlsdCBhcyBt
-b2R1bGUuDQo+IA0KPiBJIGRvbid0IHNlZSB0aGF0IG11Y2ggdmFsdWUgdG8gaGF2ZSBzZXBh
-cmF0ZSB1c2VyLWNvbmZpZ3VyYWJsZSBjb25maWcgb3B0aW9ucy4uLg0KPiANCg0KLS0gDQpU
-aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
-d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
-bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
-w7xocmVyOiBJdm8gVG90ZXYNCg==
-
---------------hYgqoZl4rysfPenpEgA0cNW2--
-
---------------mvVyOA8ZAtO3EHbb06WV8lLg
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJqSroFAwAAAAAACgkQlh/E3EQov+CY
-UA//f3AJes9k2c+Wi4Qj/QhKkmBa3dWRAxIUNk6V+4sRVBHdnFzHyVCybNuCj0zM+MWM1AOw9PiC
-vPSjX0zA4IOM608gt6vyy8T9IBLey6CdidYEoHiJ0ASokLvRR29/Tw4TN6nbHvUo6+gBogCk7U5Y
-5J6t/BUCz1EmXVRc+IT8dynf4bFaZiqn2SQA7Ca6xJeqimKTrXw8j+Fl9Rd6rtgW7cDjHeW6zj22
-9shl1dIQ6kxgQhJXoiXxrtsxlfiLkfi/w0JSZhgUzF2n2BNYW6sZGsA3rpUVuUFZCfqb1hcxKH9R
-+GQC4yUSTyXmiRz2cB9n9MBizBSkmF5020Zs+EjgAgp9/vaTu2lXHT7dnJZDfxlGIiuqojqnTG6d
-upsM9lwpOIvl4K6nWqfpv+Oqs66w+xg3r8YI+BKJvikj148NaSHxgLr15NV/czs1Zg2eEAXJeDqa
-OPnHXoJrbIR8gR3ROvWHKehzNAMn77ERQGKNlJr4XAhnd0yXMeR4A+5iYKVWz3oVlL5a9Vgv9R5W
-SNkxT3jt1nUoFZn2uZt9KAnkNydj9226k3BtL93vDIswT+A2QggA/VDSQRcoIpeRVKI7KOulhKpB
-UzKkq9m48k+lSOcyby4HSXjXdZbYD27iT3gnOuLgztSz+KvIZdulEPt8wyq0n9CjC1PH7mnXIQ65
-j1Q=
-=eWAz
------END PGP SIGNATURE-----
-
---------------mvVyOA8ZAtO3EHbb06WV8lLg--
+-- 
+Muhammad Usama Anjum

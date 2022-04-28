@@ -2,166 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A28F512D44
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176D3512D4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245679AbiD1HsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S1343498AbiD1Ht0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbiD1HsX (ORCPT
+        with ESMTP id S1343500AbiD1Hs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:48:23 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59D0237CE;
-        Thu, 28 Apr 2022 00:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651131909; x=1682667909;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/YDX52+/j/A44N39TMxngrTWx9Wn1Ivl+//mFrTAagE=;
-  b=b7npyMeSF0t/bUci2XNOTuSV8liiLwUo9J1+xPURfD76vGPsnbupdPrl
-   fCZMK3zGra9LQ1T9ny5vOfIM1GtgczuCLG9IWGwL95I6KcHeC7pO9igGV
-   qiJoFYykhDlX5nERw6yPoim44EDziQ6QmY22muESipe3hc9bkxKOw3Ooi
-   I=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 00:45:07 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:45:06 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 00:45:06 -0700
-Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
- 2022 00:45:03 -0700
-Message-ID: <8b0ad0da-55ab-7b8b-e4a6-cd134567fb44@quicinc.com>
-Date:   Thu, 28 Apr 2022 13:14:59 +0530
+        Thu, 28 Apr 2022 03:48:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D09E2AC70
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:45:42 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S6LsWf030667;
+        Thu, 28 Apr 2022 07:45:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2a2qnf85dZLG0wjLA1P68akEZ8qtEpjIISNNdWGejsE=;
+ b=cnAO7dcKd8ACPVw3/k9vvdSONpztsPMY62GDMT8AQYx1dNrRMVOh2nfE2SmIJHcEqAW0
+ 0v5COD3OMBclGwvQ/oHSf/8T8Y/2+sfpQ+VCuILKd8wwwnqao165SgBMTi/ck2KmFsdc
+ 2fsEQYcqMq8qHPfypm1GbPvMyJ/UeEcgOmm+sgTbqa5nbynuvZLtHQ30IpKcacTBMmUy
+ BtNdr/pLoGVCz/4/BTWQkE3NPq9mBpaJr7CS5V8MmfYKAA8A4dQEP6Ixn3Mh4uO64pdM
+ zuIlYAQ2f3kDZvWJ1Hs6OBxPqZZ5fVHQ/BhDBSm3EqBs749IC0q3o09C9e4eGFKMxObj qQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqnkd1e5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 07:45:30 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23S7DPUL000441;
+        Thu, 28 Apr 2022 07:45:29 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqnkd1e4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 07:45:29 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S7gdL3025874;
+        Thu, 28 Apr 2022 07:45:27 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3fpuyg9jh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 07:45:27 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S7jPWU51773828
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 07:45:25 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E740252050;
+        Thu, 28 Apr 2022 07:45:24 +0000 (GMT)
+Received: from localhost (unknown [9.43.72.179])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 566455204E;
+        Thu, 28 Apr 2022 07:45:24 +0000 (GMT)
+Date:   Thu, 28 Apr 2022 13:15:22 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
+ symbols
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+        <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+        <20220427095415.594e5120@gandalf.local.home>
+In-Reply-To: <20220427095415.594e5120@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv11 6/6] asm-generic/io: Add logging support for MMIO
- accessors
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <will@kernel.org>
-References: <cover.1645772606.git.quic_saipraka@quicinc.com>
- <3de35c9f4a3a070d197bab499acefc709a6f5336.1645772606.git.quic_saipraka@quicinc.com>
- <YmorayBozWWRlTpP@kroah.com>
- <96dc5e2e-5d88-52ce-c295-779603e668f2@quicinc.com>
- <YmpD3tIQK2iiqt46@kroah.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <YmpD3tIQK2iiqt46@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1651129169.fpixr00hgx.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: v1C5Ow42GOdWULG5-pKCgFOsRicu5ma7
+X-Proofpoint-GUID: r79zgnhln1Qj5M-PyjrND798Rs2ceafb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=766 bulkscore=0
+ malwarescore=0 suspectscore=0 impostorscore=0 clxscore=1015 adultscore=0
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280045
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/2022 1:05 PM, Greg KH wrote:
-> On Thu, Apr 28, 2022 at 12:59:13PM +0530, Sai Prakash Ranjan wrote:
->> On 4/28/2022 11:21 AM, Greg KH wrote:
->>> On Thu, Apr 28, 2022 at 09:00:13AM +0530, Sai Prakash Ranjan wrote:
->>>> Add logging support for MMIO high level accessors such as read{b,w,l,q}
->>>> and their relaxed versions to aid in debugging unexpected crashes/hangs
->>>> caused by the corresponding MMIO operation. Also add a generic flag
->>>> (__DISABLE_TRACE_MMIO__) which is used to disable MMIO tracing in nVHE KVM
->>>> and if required can be used to disable MMIO tracing for specific drivers.
->>> This "add a build flag to a Makefile to change how a driver operates"
->>> feels very wrong to me given that this is now a totally new way to
->>> control how a driver works at build time.  That's not anything we have
->>> done before for drivers and if added, is only going to create much added
->>> complexity.
->> Not exactly, there are already many such build flags being used currently across kernel.
->>
->> Example: "-D__KVM_NVHE_HYPERVISOR__, D__KVM_VHE_HYPERVISOR__,
-> That's crazy KVM stuff, don't extrapoloate that to all kernel drivers
-> please.
+Steven Rostedt wrote:
+> On Wed, 27 Apr 2022 15:01:22 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>=20
+>> If one or both of these weak functions are overridden in future, in the
+>> final vmlinux mcount table, references to these will change over to the
+>> non-weak variant which has its own mcount location entry. As such, there
+>> will now be two entries for these functions, both pointing to the same
+>> non-weak location.
+>=20
+> But is that really true in all cases? x86 uses fentry these days, and oth=
+er
+> archs do things differently too. But the original mcount (-pg) call
+> happened *after* the frame setup. That means the offset of the mcount cal=
+l
+> would be at different offsets wrt the start of the function. If you have
+> one of these architectures that still use mcount, and the weak function
+> doesn't have the same size frame setup as the overriding function, then t=
+he
+> addresses will not be the same.
 
-Ok :)
+Indeed, plain old -pg will be a problem. I'm not sure there is a generic=20
+way to address this. I suppose architectures will have to validate the=20
+mcount locations, something like this?
 
->> -D__NO_FORTIFY, -D__DISABLE_EXPORTS, -DDISABLE_BRANCH_PROFILING".
-> Those are compiler flags that affect gcc, not kernel code functionality.
->
->> It gives us even more flexibility to disable feature for multiple files under a directory
->> rather than individually cluttering each file, look at "-D__KVM_NVHE_HYPERVISOR__"
->> for files under "arch/arm64/kvm/hyp/nvhe/".
-> Again, crazy KVM stuff, do not want that for all drivers in the kernel.
->
->>> How about requiring that the #define be in the .c files, and not in the
->>> Makefile, as Makefile changes are much much harder to notice and review
->>> over time.
->> How is this cleaner, lets say we have many such drivers like all drivers under drivers/serial,
->> so we go and add #define for each of them? That looks more spread out than having all
->> such information under one file (Makefile).
-> If you have to go and add this to each and every driver, that is a HUGE
-> hint that this feature is not a good one and that no one should be using
-> it in the first place, right?
->
-> Again, this is a new way to modify driver functionality that is outside
-> of the driver itself, which is not something that I would like to see
-> added without a whole lot of discussion and planning.  To throw it in as
-> part of a kvm change is not a nice way to hide such a thing.
+diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/f=
+trace.h
+index d83758acd1c7c3..d8b104ed2fdf38 100644
+--- a/arch/powerpc/include/asm/ftrace.h
++++ b/arch/powerpc/include/asm/ftrace.h
+@@ -12,13 +12,7 @@
+=20
+ #ifndef __ASSEMBLY__
+ extern void _mcount(void);
+-
+-static inline unsigned long ftrace_call_adjust(unsigned long addr)
+-{
+-       /* relocation of mcount call site is the same as the address */
+-       return addr;
+-}
+-
++unsigned long ftrace_call_adjust(unsigned long addr);
+ unsigned long prepare_ftrace_return(unsigned long parent, unsigned long ip=
+,
+                                    unsigned long sp);
+=20
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
+/ftrace.c
+index 4ee04aacf9f13c..976c08cd0573f7 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -858,6 +858,17 @@ void arch_ftrace_update_code(int command)
+        ftrace_modify_all_code(command);
+ }
+=20
++unsigned long ftrace_call_adjust(unsigned long addr)
++{
++       ppc_inst_t op =3D ppc_inst_read((u32 *)addr);
++
++       if (!is_bl_op(op))
++               return 0;
++
++       /* relocation of mcount call site is the same as the address */
++       return addr;
++}
++
+ #ifdef CONFIG_PPC64
+ #define PACATOC offsetof(struct paca_struct, kernel_toc)
+=20
 
-Sure, will make the change as you suggested.
+We can tighten those checks as necessary, but it will be upto the=20
+architectures to validate the mcount locations. This all will have to be=20
+opt-in so that only architectures doing necessary validation will allow=20
+mcount relocations against weak symbols.
 
->> And I didn't understand how is it harder to track changes to makefile? Makefile is  part
->> of the driver directory and any changes to makefile is visible to the corresponding maintainers.
->> Do you mean something else?
-> I mean that we review driver changes all the time, and code is
-> self-contained and the functionality is only affected right now by
-> Kconfig options, and what is in the .c files itself.  You are adding a
-> new way to change functionality by adding a Makefile configuration
-> option as well.  That is a major functional change for how we do our
-> configuration logic in Linux.
 
-Ah ok, you mean like that. Sure I don't have any strong opinion, so will move it
-to the driver file.
-
->
->>> Also, I see that this "disable the trace" feature has already been asked
->>> for for 2 other drivers in the Android kernel tree, why not include
->>> those changes here as well?  That kind of shows that this new feature is
->>> limited in that driver authors are already wanting it disabled, even
->>> before it is accepted.
->> That can be done later on top of this series right? This series mainly deals with adding
->> initial support for such tracing, there could be numerous drivers who might or might
->> not want the feature which can be added onto later. We can't actually identify all
->> the driver requirements upfront. As an example, we have already used the flag to
->> disable tracing for nVHE KVM, so we know how to use the flag.
-> Again, make it explicit in the driver file itself that it is doing this,
-> not in the Makefile, and I will not have any objections.
-
-Ok, for kernel drivers I will make the define at the top of the .c driver file and include
-those 2 driver changes in the series.
-
->>> Because of that, who _will_ be using this feature?
->>>
->> Every driver except those two or few more, and it is not a bug or anything, they just want to disable it
->> to limit the logs in case of example UART driver since the reads/writes are very frequent in those cases
->> and the logs are not necessarily useful for them.
-> I have a feeling that lots more drivers will want this disabled due to
-> the noise it will cause.  The fact that we already have 2 requests to
-> change this _before_ the code is even merged is proof of that.
->
-> thanks,
->
-> greg k-h
-
-Thanks,
-Sai
+- Naveen

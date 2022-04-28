@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3040B512A95
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 06:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B708B512A99
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 06:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242516AbiD1Ecj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 00:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
+        id S242652AbiD1Ege (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 00:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiD1Ech (ORCPT
+        with ESMTP id S232726AbiD1Egb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 00:32:37 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0E825B
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 21:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651120164; x=1682656164;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RGMadu+1Xkb2tt1NiDlTW3bS0dGKre4RRVHQdcuUPEU=;
-  b=gUwAAnAq3mWYmzY1bLN6/6DZ8WRaTDJ1TwuPZZyl6i5B4SPOJVHm155F
-   GOg04RKDHeXOekZ24gz2n7KeGYuyZcljsHYcpCSdi5PAh4REe9g46VAQk
-   z2PHsgixUMzlD2nOi1aavfmcZlgPy5eniZ+IQ4vpZRQ7j83FlmrA0fgYO
-   0cMDUx8Acmaf0gfYbVh9GqpBngGyIC7YtvSOIQelwm2I2MP6Iv36LsXsE
-   KJk8YroR2iNJ/Es1QD9SBIe5NTzibKGjeat0Bq+6wn1BL962ZSc4tP8/s
-   T7jVsTPZ8Wpstzmdb4jhlqk/z3zbe8PaG1ieJNtSipZm/PKOT7GB192jE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266315700"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="266315700"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 21:29:24 -0700
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="581029867"
-Received: from arayamur-mobl.amr.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.153])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 21:29:22 -0700
-Message-ID: <876a4ae9-3081-8f11-1ee7-470030edb2a1@intel.com>
-Date:   Thu, 28 Apr 2022 07:29:18 +0300
-MIME-Version: 1.0
+        Thu, 28 Apr 2022 00:36:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BED754BE4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 21:33:16 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S4LJA2033958;
+        Thu, 28 Apr 2022 04:32:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=iCKW0yrERGuzdNcsk+TTKd9Fbk2qUe5WNgFQ65bW3Sk=;
+ b=bS1kQjVtj1pwKMFiHDiOap5ToSuj4mRI74SEbjpMrubR9BF+wh67qbYKhVy7OtR+17EV
+ pH5r2YAgMb1yNMJu+13H9ZVWabqKoNJvnYw1AeNrApZwtCCsi9657YqKGi/enzeiauLI
+ CwZDNIdlfUR+9oF9avPCceGnTKpU5rEWvLmiRyXrnzQP252FSlyVOJHZTACqohshvNhj
+ fdd/Apx0keb4NaoghV1LRRIsnvpIvkl456MuJjnNNsj2i4Oc9w5EY7UvnhjYnETwXjhg
+ gCVBO9gvwGd/mSKd8WCz4UXzlcgsLvP9dT1Om335Ydf9ZZBMga3hv7J2vzBUvEzmSWro CA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqktv84h7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 04:32:53 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S4WbxO007519;
+        Thu, 28 Apr 2022 04:32:52 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm938xv03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 04:32:51 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S4JiQF48234776
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 04:19:44 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6AADAE045;
+        Thu, 28 Apr 2022 04:32:49 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 73CECAE04D;
+        Thu, 28 Apr 2022 04:32:48 +0000 (GMT)
+Received: from [9.43.113.95] (unknown [9.43.113.95])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 04:32:48 +0000 (GMT)
+Message-ID: <d2684252-8c85-ba0e-2356-29837e836f6f@linux.ibm.com>
+Date:   Thu, 28 Apr 2022 10:02:47 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH RFC 05/21] perf auxtrace: Do not mix up mmap idx
+ Thunderbird/91.7.0
+Subject: Re: ndctl tests usable?
 Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220422162402.147958-1-adrian.hunter@intel.com>
- <20220422162402.147958-6-adrian.hunter@intel.com>
- <CAM9d7cg8Awh9oXdCL4-GQT_R5FpgTz6DYFCfd=9g1YFQ463xSQ@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAM9d7cg8Awh9oXdCL4-GQT_R5FpgTz6DYFCfd=9g1YFQ463xSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>
+References: <20220426123839.GF163591@kunlun.suse.cz>
+ <CAPcyv4j66HAE_x-eAHQR71pNyR0mk5b463S6OfeokLzZHq5ezw@mail.gmail.com>
+ <20220426161435.GH163591@kunlun.suse.cz>
+ <CAPcyv4iG4L3rA3eX-H=6nVkwhO2FGqDCbQHB2Lv_gLb+jy3+bw@mail.gmail.com>
+ <20220426163834.GI163591@kunlun.suse.cz>
+ <CAPcyv4jUj3v+4Sf=1i5EjxTeX9Ur65Smib-vkuaBdKYjUrh7yA@mail.gmail.com>
+ <20220426180958.GJ163591@kunlun.suse.cz>
+From:   Shivaprasad G Bhat <sbhat@linux.ibm.com>
+In-Reply-To: <20220426180958.GJ163591@kunlun.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wDpgUURbyXBAy9ZfDpjFB9XN5cBgsnuj
+X-Proofpoint-ORIG-GUID: wDpgUURbyXBAy9ZfDpjFB9XN5cBgsnuj
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204280027
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/22 00:54, Namhyung Kim wrote:
-> On Fri, Apr 22, 2022 at 9:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> The idx is with respect to evlist not evsel. That hasn't mattered because
->> they are the same at present. Prepare for that not being the case, which it
->> won't be when sideband tracking events are allowed on all CPUs even when
->> auxtrace is limited to selected CPUs.
->>
->> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
->> ---
->>  tools/perf/util/auxtrace.c | 10 ++++++++--
->>  1 file changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
->> index 10936a38031f..2d015b0be549 100644
->> --- a/tools/perf/util/auxtrace.c
->> +++ b/tools/perf/util/auxtrace.c
->> @@ -640,8 +640,14 @@ static int evlist__enable_event_idx(struct evlist *evlist, struct evsel *evsel,
->>  {
->>         bool per_cpu_mmaps = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
->>
->> -       if (per_cpu_mmaps)
->> -               return perf_evsel__enable_cpu(&evsel->core, idx);
->> +       if (per_cpu_mmaps) {
->> +               struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->core.all_cpus, idx);
->> +               int cpu = perf_cpu_map__idx(evsel->core.cpus, evlist_cpu);
-> 
-> While it can be thought of as an index from the function name,
-> it'd be nice if we could be explicit like cpu_map_idx.
+On 4/26/22 23:39, Michal Suchánek wrote:
+> On Tue, Apr 26, 2022 at 09:47:19AM -0700, Dan Williams wrote:
+>> On Tue, Apr 26, 2022 at 9:43 AM Michal Suchánek <msuchanek@suse.de> wrote:
+>>>
+>>> On Tue, Apr 26, 2022 at 09:32:24AM -0700, Dan Williams wrote:
+>>>> On Tue, Apr 26, 2022 at 9:15 AM Michal Suchánek <msuchanek@suse.de> wrote:
+>>>>>
+>>>>> On Tue, Apr 26, 2022 at 08:51:25AM -0700, Dan Williams wrote:
+>>>>>> On Tue, Apr 26, 2022 at 5:39 AM Michal Suchánek <msuchanek@suse.de> wrote:
+>>>>>>>
+> ...
+>>>>
+>>>> The modinfo just tells you what modules are available, but it does not
+>>>> necessarily indicate which modules are actively loaded in the system
+>>>> which is what ndctl_test_init() validates.
+>>>
+>>> Isn't what modinfo lists also what modrobe loads?
 
-Ok
+<snip>
+
+> modules are not loaded before the test.
+> 
+> Maybe something goes wrong with the test module build?
+> 
+> It is very fragile and requires complete kernel source for each
+> configuration built. See below for the package
+> 
+> https://build.opensuse.org/package/show/home:michals/nfit_test
+> 
+> Attaching the log of test run which does not report any missing tools,
+> only complains about nfit.ko being production.
+
+I have attempted to fix few of the known issues in the first 3 patches 
+of the series posted here.
+
+https://patchwork.kernel.org/project/linux-nvdimm/list/?series=633103
 
 > 
-> Thanks,
-> Namhyung
+> Thanks
 > 
->> +
->> +               if (cpu == -1)
->> +                       return -EINVAL;
->> +               return perf_evsel__enable_cpu(&evsel->core, cpu);
->> +       }
->>
->>         return perf_evsel__enable_thread(&evsel->core, idx);
->>  }
->> --
->> 2.25.1
->>
-
+> Michal

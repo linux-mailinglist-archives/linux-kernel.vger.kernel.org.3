@@ -2,414 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67AF513A6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3FE513A67
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350455AbiD1QyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S245475AbiD1Qye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350376AbiD1Qxe (ORCPT
+        with ESMTP id S235333AbiD1Qyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:53:34 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C784F4505F;
-        Thu, 28 Apr 2022 09:50:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hzC1LavcGerU7o8A78K9NGmiQIBVjUH6JiETKjl/EVwr3eDveqZGjPNQbCOyXag2EGmWv4VLlXtQG/AegzK/6cb2XxTWmbwyXFPDqYfagsu39wNZs9se3KQQvp+sUqogWsvM7si/0M1GFwBJ8k2LdY1Mm0qGjP/yGC2b8GFCfg/grYhobzpkSS+tr3pMnSLO6tHgbgapsewYKVmEEDk09eaFdVutqDW7PKhJ7lVfEVpkwJEvPgetiTdBOSD7PT8p7idS6/AolK1gHy/2AKg6iH8xW8akZL7/A/Jh5Sj0R2dhpyrfw8t7VdACz3i8K1SAJFiErbYYQA1YcQsMmMUDlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OWBqL8RkSkz6TRdwC5CjpcFGATujoZff33d8nD3mCLU=;
- b=anhsCCWnNrCw20swWA1FWXciWAQyCqtV0sdJaOxJL2N/gUwcTiU9vSgxWiWZMNMmSZfm1b+BLUdF071qMQL1n8U2Q2Mzu4VRfID/YdnseApV234jyVMpCXUNAvuNf0zWtEYidIofKN83TwdNCgyMLdcrUEB3FqDc8gfBrFGCb0bPR2lOCIfIRyjGQFqW8jRYWuzy83/o+bKDvDlsK14jZNcNPqSElmI6lXbJTiXrfhbddjlYj7FlLuOxTdAVLHeQMUI761N8AS/XT21J/2odeQdU3qatdjvHA13SUAO7ggfCjKtaQrcbm3CjnVN1//EnhuuRCZaReh/gv8d7aCLVhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OWBqL8RkSkz6TRdwC5CjpcFGATujoZff33d8nD3mCLU=;
- b=BAKsVWI3YRML67O0iFlsvYL4QQmW1J3FYHUvoUI2VRRkZpNb44kBBnBAkiAkVhe3jhSocbCZbauKuP7CTg7G0bBFqrRF3i+a0VX684IbhCy2oCufCduh6agIwXITimrLZ3YrRSaCQ5SNHDFa2JdhZTQoH6FF1mu4FHw3YQnWVQM=
-Received: from SA9PR13CA0140.namprd13.prod.outlook.com (2603:10b6:806:27::25)
- by BL0PR02MB4578.namprd02.prod.outlook.com (2603:10b6:208:49::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 28 Apr
- 2022 16:50:11 +0000
-Received: from SN1NAM02FT0014.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:27:cafe::dd) by SA9PR13CA0140.outlook.office365.com
- (2603:10b6:806:27::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.6 via Frontend
- Transport; Thu, 28 Apr 2022 16:50:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0014.mail.protection.outlook.com (10.97.4.112) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Thu, 28 Apr 2022 16:50:10 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 28 Apr 2022 09:50:08 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 28 Apr 2022 09:50:08 -0700
-Envelope-to: git@xilinx.com,
- devicetree@vger.kernel.org,
- jassisinghbrar@gmail.com,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.39] (port=56568 helo=xhdsgoud40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1nk7LE-000Fww-AA; Thu, 28 Apr 2022 09:50:08 -0700
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <devicetree@vger.kernel.org>
-CC:     <jassisinghbrar@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <michal.simek@xilinx.com>,
-        <git@xilinx.com>, <linux-kernel@vger.kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH v4] dt-bindings: mailbox: zynqmp_ipi: convert to yaml
-Date:   Thu, 28 Apr 2022 22:20:04 +0530
-Message-ID: <20220428165004.3212654-1-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 28 Apr 2022 12:54:32 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664038C7C7;
+        Thu, 28 Apr 2022 09:51:13 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:46722)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nk7MD-006d9A-2m; Thu, 28 Apr 2022 10:51:09 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36046 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nk7MC-000I0h-0D; Thu, 28 Apr 2022 10:51:08 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <20220426225211.308418-9-ebiederm@xmission.com>
+        <87czh2160k.fsf@email.froward.int.ebiederm.org>
+        <20220428151110.GB15485@redhat.com>
+Date:   Thu, 28 Apr 2022 11:50:19 -0500
+In-Reply-To: <20220428151110.GB15485@redhat.com> (Oleg Nesterov's message of
+        "Thu, 28 Apr 2022 17:11:11 +0200")
+Message-ID: <875ymtywxg.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2aa62436-9176-448b-a67a-08da293728b9
-X-MS-TrafficTypeDiagnostic: BL0PR02MB4578:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR02MB457874BC6317AF8135AD29FDAAFD9@BL0PR02MB4578.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: njoa+6e9+vnksaUnjTasIOpAxOCn7yfIbeNQS9LTvPH7EznUc1MpDN219GwWRH3Xn1h8sNYMlpbUxX7H4U6LIya6zRv6K/FRIvjJM05tQ2eSUGGVO/yTQEIZ1NpTnJL4f4DYuYFp29hkewOl0smOTXNuP+MFsmFdlSyNc/X5JEOT34TejlfIvNZqvz2NYcyjG1OGEXfWTR0i76KCGv/l3Vnk1VMjBeF+ty8E7cYc0EVMkXznD3rbPiMLLof9kiW0gsBARJMzybHU0nejeSag1ZgRoWxYm2I4rn7Y8ZfUEJHY7IKWai20kvSWuWwmjorIpYghYG1EVgzbbaaVP6yNNg7CNLEs8hqBN8TWKoFi4MsrIzXxcHccHaIT9xMJmpRiFFR42Gdxej+zaLPHTd5xojKcVR7ZLJgN2uNMjdjcicBbxe60CATf919Vm/yz+XOtjfK4M36vnU1DxJ95iN/9yAQD5rCG7XKwFf+bwVcDj3y/yYERKCjT22Dgoob/IDwH0TjT+mCdRiBK+dh8Ur+q+nEJHoL5a4kniQlaaAKvYAkO7W+0BAtAK+OWZa1uo4jR2FzYLCYo9ajrCA8zaAwT9J2K/BccFS/THqLcvRKG8tX72PrMQHdTW/p0z5i2VlFVrWs9kHEFhLFvHxFvnR+CVrTqoxoER5nr6SPx/QnkYKIizvHGCn87c29qE51veVjKl9VYd9hhqwy4+hMfoVKJCXhQM6Rq6nFEXyomHc3KWawpI48t/UwrVmgx9QDIDAsymwNaIEJN6J+288qZ27livrJzjCxOYDLQZZ+8j923La+y06v2ardLlcWDbYhBke0YkKP9oJOAPW81PVleUljYQA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(9786002)(5660300002)(8936002)(7636003)(1076003)(40460700003)(6666004)(2906002)(44832011)(36756003)(356005)(508600001)(15650500001)(83380400001)(8676002)(7696005)(70586007)(316002)(47076005)(426003)(70206006)(336012)(186003)(4326008)(36860700001)(82310400005)(54906003)(2616005)(6916009)(107886003)(26005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 16:50:10.8760
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2aa62436-9176-448b-a67a-08da293728b9
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0014.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4578
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-XM-SPF: eid=1nk7MC-000I0h-0D;;;mid=<875ymtywxg.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+Nj5WvQO35/e863lcGlkfLjjTdj24OUTQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 484 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 13 (2.7%), b_tie_ro: 11 (2.3%), parse: 1.21
+        (0.3%), extract_message_metadata: 14 (2.8%), get_uri_detail_list: 2.4
+        (0.5%), tests_pri_-1000: 14 (2.9%), tests_pri_-950: 1.54 (0.3%),
+        tests_pri_-900: 1.31 (0.3%), tests_pri_-90: 116 (23.9%), check_bayes:
+        114 (23.5%), b_tokenize: 9 (1.9%), b_tok_get_all: 11 (2.2%),
+        b_comp_prob: 3.5 (0.7%), b_tok_touch_all: 85 (17.5%), b_finish: 1.26
+        (0.3%), tests_pri_0: 309 (64.0%), check_dkim_signature: 0.62 (0.1%),
+        check_dkim_adsp: 2.9 (0.6%), poll_dns_idle: 0.93 (0.2%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 8 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 9/9] ptrace: Don't change __state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the ipi doc to yaml.
+Oleg Nesterov <oleg@redhat.com> writes:
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
-v2:
- Fix the warnings reported by Rob
-v3:
- Run dtbs_check
-v4:
- fix the formatting
- fix the ranges
- 
- .../mailbox/xlnx,zynqmp-ipi-mailbox.txt       | 127 ----------------
- .../mailbox/xlnx,zynqmp-ipi-mailbox.yaml      | 142 ++++++++++++++++++
- 2 files changed, 142 insertions(+), 127 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.txt
- create mode 100644 Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
+> On 04/27, Eric W. Biederman wrote:
+>>
+>> "Eric W. Biederman" <ebiederm@xmission.com> writes:
+>>
+>> > diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+>> > index 3c8b34876744..1947c85aa9d9 100644
+>> > --- a/include/linux/sched/signal.h
+>> > +++ b/include/linux/sched/signal.h
+>> > @@ -437,7 +437,8 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
+>> >
+>> >  static inline void signal_wake_up(struct task_struct *t, bool resume)
+>> >  {
+>> > -	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
+>> > +	bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
+>> > +	signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
+>> >  }
+>> >  static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
+>> >  {
+>>
+>> Grrr.  While looking through everything today I have realized that there
+>> is a bug.
+>>
+>> Suppose we have 3 processes: TRACER, TRACEE, KILLER.
+>>
+>> Meanwhile TRACEE is in the middle of ptrace_stop, just after siglock has
+>> been dropped.
+>>
+>> The TRACER process has performed ptrace_attach on TRACEE and is in the
+>> middle of a ptrace operation and has just set JOBCTL_DELAY_WAKEKILL.
+>>
+>> Then comes in the KILLER process and sends the TRACEE a SIGKILL.
+>> The TRACEE __state remains TASK_TRACED, as designed.
+>>
+>> The bug appears when the TRACEE makes it to schedule().  Inside
+>> schedule there is a call to signal_pending_state() which notices
+>> a SIGKILL is pending and refuses to sleep.
+>
+> And I think this is fine. This doesn't really differ from the case
+> when the tracee was killed before it takes siglock.
 
-diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.txt b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.txt
-deleted file mode 100644
-index ad76edccf881..000000000000
---- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.txt
-+++ /dev/null
-@@ -1,127 +0,0 @@
--Xilinx IPI Mailbox Controller
--========================================
--
--The Xilinx IPI(Inter Processor Interrupt) mailbox controller is to manage
--messaging between two Xilinx Zynq UltraScale+ MPSoC IPI agents. Each IPI
--agent owns registers used for notification and buffers for message.
--
--               +-------------------------------------+
--               | Xilinx ZynqMP IPI Controller        |
--               +-------------------------------------+
--    +--------------------------------------------------+
--ATF                    |                     |
--                       |                     |
--                       |                     |
--    +--------------------------+             |
--                       |                     |
--                       |                     |
--    +--------------------------------------------------+
--            +------------------------------------------+
--            |  +----------------+   +----------------+ |
--Hardware    |  |  IPI Agent     |   |  IPI Buffers   | |
--            |  |  Registers     |   |                | |
--            |  |                |   |                | |
--            |  +----------------+   +----------------+ |
--            |                                          |
--            | Xilinx IPI Agent Block                   |
--            +------------------------------------------+
--
--
--Controller Device Node:
--===========================
--Required properties:
----------------------
--IPI agent node:
--- compatible:		Shall be: "xlnx,zynqmp-ipi-mailbox"
--- interrupt-parent:	Phandle for the interrupt controller
--- interrupts:		Interrupt information corresponding to the
--			interrupt-names property.
--- xlnx,ipi-id:		local Xilinx IPI agent ID
--- #address-cells:	number of address cells of internal IPI mailbox nodes
--- #size-cells:		number of size cells of internal IPI mailbox nodes
--
--Internal IPI mailbox node:
--- reg:			IPI buffers address ranges
--- reg-names:		Names of the reg resources. It should have:
--			* local_request_region
--			  - IPI request msg buffer written by local and read
--			    by remote
--			* local_response_region
--			  - IPI response msg buffer written by local and read
--			    by remote
--			* remote_request_region
--			  - IPI request msg buffer written by remote and read
--			    by local
--			* remote_response_region
--			  - IPI response msg buffer written by remote and read
--			    by local
--- #mbox-cells:		Shall be 1. It contains:
--			* tx(0) or rx(1) channel
--- xlnx,ipi-id:		remote Xilinx IPI agent ID of which the mailbox is
--			connected to.
--
--Optional properties:
----------------------
--- method:              The method of accessing the IPI agent registers.
--                       Permitted values are: "smc" and "hvc". Default is
--                       "smc".
--
--Client Device Node:
--===========================
--Required properties:
----------------------
--- mboxes:		Standard property to specify a mailbox
--			(See ./mailbox.txt)
--- mbox-names:		List of identifier  strings for each mailbox
--			channel.
--
--Example:
--===========================
--	zynqmp_ipi {
--		compatible = "xlnx,zynqmp-ipi-mailbox";
--		interrupt-parent = <&gic>;
--		interrupts = <0 29 4>;
--		xlnx,ipi-id = <0>;
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges;
--
--		/* APU<->RPU0 IPI mailbox controller */
--		ipi_mailbox_rpu0: mailbox@ff990400 {
--			reg = <0xff990400 0x20>,
--			      <0xff990420 0x20>,
--			      <0xff990080 0x20>,
--			      <0xff9900a0 0x20>;
--			reg-names = "local_request_region",
--				    "local_response_region",
--				    "remote_request_region",
--				    "remote_response_region";
--			#mbox-cells = <1>;
--			xlnx,ipi-id = <1>;
--		};
--		/* APU<->RPU1 IPI mailbox controller */
--		ipi_mailbox_rpu1: mailbox@ff990440 {
--			reg = <0xff990440 0x20>,
--			      <0xff990460 0x20>,
--			      <0xff990280 0x20>,
--			      <0xff9902a0 0x20>;
--			reg-names = "local_request_region",
--				    "local_response_region",
--				    "remote_request_region",
--				    "remote_response_region";
--			#mbox-cells = <1>;
--			xlnx,ipi-id = <2>;
--		};
--	};
--	rpu0 {
--		...
--		mboxes = <&ipi_mailbox_rpu0 0>,
--			 <&ipi_mailbox_rpu0 1>;
--		mbox-names = "tx", "rx";
--	};
--	rpu1 {
--		...
--		mboxes = <&ipi_mailbox_rpu1 0>,
--			 <&ipi_mailbox_rpu1 1>;
--		mbox-names = "tx", "rx";
--	};
-diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-new file mode 100644
-index 000000000000..46e91828b6b1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-@@ -0,0 +1,142 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/mailbox/xlnx,zynqmp-ipi-mailbox.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Xilinx IPI(Inter Processor Interrupt) mailbox controller
-+
-+description: |
-+  The Xilinx IPI(Inter Processor Interrupt) mailbox controller is to manage
-+  messaging between two Xilinx Zynq UltraScale+ MPSoC IPI agents. Each IPI
-+  agent owns registers used for notification and buffers for message.
-+
-+               +-------------------------------------+
-+               | Xilinx ZynqMP IPI Controller        |
-+               +-------------------------------------+
-+    +--------------------------------------------------+
-+  TF-A                   |                     |
-+                         |                     |
-+                         |                     |
-+    +--------------------------+               |
-+                         |                     |
-+                         |                     |
-+    +--------------------------------------------------+
-+              +------------------------------------------+
-+              |  +----------------+   +----------------+ |
-+  Hardware    |  |  IPI Agent     |   |  IPI Buffers   | |
-+              |  |  Registers     |   |                | |
-+              |  |                |   |                | |
-+              |  +----------------+   +----------------+ |
-+              |                                          |
-+              | Xilinx IPI Agent Block                   |
-+              +------------------------------------------+
-+
-+maintainers:
-+  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-+
-+properties:
-+  compatible:
-+    const: xlnx,zynqmp-ipi-mailbox
-+
-+  method:
-+    description: |
-+                 The method of calling the PM-API firmware layer.
-+                 Permitted values are.
-+                 - "smc" : SMC #0, following the SMCCC
-+                 - "hvc" : HVC #0, following the SMCCC
-+
-+    $ref: /schemas/types.yaml#/definitions/string-array
-+    enum:
-+      - smc
-+      - hvc
-+    default: smc
-+
-+  '#address-cells':
-+    const: 2
-+
-+  '#size-cells':
-+    const: 2
-+
-+  xlnx,ipi-id:
-+    description: |
-+      Remote Xilinx IPI agent ID of which the mailbox is connected to.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+patternProperties:
-+  '^mailbox@[0-9a-f]+$':
-+    description: Internal ipi mailbox node
-+    type: object  # DT nodes are json objects
-+    properties:
-+      xlnx,ipi-id:
-+        description:
-+          Remote Xilinx IPI agent ID of which the mailbox is connected to.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      "#mbox-cells":
-+        const: 1
-+        description:
-+          It contains  tx(0) or rx(1) channel IPI id number.
-+
-+      reg:
-+        maxItems: 4
-+
-+      reg-names:
-+        items:
-+          - const: local_request_region
-+          - const: local_response_region
-+          - const: remote_request_region
-+          - const: remote_response_region
-+
-+
-+    required:
-+      - reg
-+      - "#mbox-cells"
-+
-+examples:
-+  - |
-+    amba {
-+      #address-cells = <0x2>;
-+      #size-cells = <0x2>;
-+      zynqmp_ipi {
-+        compatible = "xlnx,zynqmp-ipi-mailbox";
-+        interrupts = <0 29 4>;
-+        xlnx,ipi-id = <0>;
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        ranges;
-+
-+        ipi_mailbox_rpu0: mailbox@ff9905c0 {
-+          reg = <0x0 0xff9905c0 0x0 0x20>,
-+                <0x0 0xff9905e0 0x0 0x20>,
-+                <0x0 0xff990e80 0x0 0x20>,
-+                <0x0 0xff990ea0 0x0 0x20>;
-+          reg-names = "local_request_region",
-+                "local_response_region",
-+                "remote_request_region",
-+                "remote_response_region";
-+          #mbox-cells = <1>;
-+          xlnx,ipi-id = <4>;
-+        };
-+      };
-+    };
-+
-+    rpu0 {
-+      mboxes = <&ipi_mailbox_rpu0 0>,
-+               <&ipi_mailbox_rpu0 1>;
-+      mbox-names = "tx", "rx";
-+    };
-+...
--- 
-2.25.1
+Hmm.  Maybe.
+
+> The only problem (afaics) is that, once we introduce JOBCTL_TRACED,
+> ptrace_stop() can leak this flag. That is why I suggested to clear
+> it along with LISTENING/DELAY_WAKEKILL before return, exactly because
+> schedule() won't block if fatal_signal_pending() is true.
+>
+> But may be I misunderstood you concern?
+
+Prior to JOBCTL_DELAY_WAKEKILL once __state was set to __TASK_TRACED
+we were guaranteed that schedule() would stop if a SIGKILL was
+received after that point.  As well as being immune from wake-ups
+from SIGKILL.
+
+I guess we are immune from wake-ups with JOBCTL_DELAY_WAKEKILL as I have
+implemented it.
+
+The practical concern then seems to be that we are not guaranteed
+wait_task_inactive will succeed.  Which means that it must continue
+to include the TASK_TRACED bit.
+
+Previously we were actually guaranteed in ptrace_check_attach that after
+ptrace_freeze_traced would succeed as any pending fatal signal would
+cause ptrace_freeze_traced to fail.  Any incoming fatal signal would not
+stop schedule from sleeping.  The ptraced task would continue to be
+ptraced, as all other ptrace operations are blocked by virtue of ptrace
+being single threaded.
+
+I think in my tired mind yesterday I thought it would messing things
+up after schedule decided to sleep.  Still I would like to be able to
+let wait_task_inactive not care about the state of the process it is
+going to sleep for.
+
+Eric
 

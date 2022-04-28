@@ -2,259 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E680F512CFB
+	by mail.lfdr.de (Postfix) with ESMTP id 0B167512CF8
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245456AbiD1HiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S239422AbiD1Hhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245434AbiD1HiC (ORCPT
+        with ESMTP id S234672AbiD1Hhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:38:02 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11AA9BAE6;
-        Thu, 28 Apr 2022 00:34:48 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so3700455pjf.0;
-        Thu, 28 Apr 2022 00:34:48 -0700 (PDT)
+        Thu, 28 Apr 2022 03:37:36 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40DF9BAD1;
+        Thu, 28 Apr 2022 00:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PyeuYNXmzkjWDa6213Nn+RP5RRNEwW8v57e0cAbPzO8=;
-        b=MKqpOMM5OpNR68G0XQ6+Jg+AKi0V5VD4npSUgiyfnEm+8O+SkNjJkQaq9OUhTP+UB1
-         Jdvruq9j9LxWMB+/mfuG/qrq2EQRI8djaHKbrB6QMnIzAx+H7006ZUiWfHlGfgDXwwE7
-         bOzoMZS6UjLc7RHk6sd1pcnbQ+NlUPdGdxxNe/NnzD2GYtD6j0JWKx1P/OE2qx9TEmem
-         L1Mk88D9Slhj/RzUYmxhnlMSuuYGxAkVEIKUdC2OPCG84Xrg3mK17js61RLzSFlR0jtH
-         29vOxlYDXx+3vjV8oedAVn8LsB1Riu0/YLVfoYltMmgjPsNqPaOtcgD5cjs/LZlnFnpK
-         ZOLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PyeuYNXmzkjWDa6213Nn+RP5RRNEwW8v57e0cAbPzO8=;
-        b=flPfnIVC2+T8JsfErRaxU568aR/YKx4L4jBwafN/sKI31O2Kf5UQuKJs21+HVPCeAw
-         5k99VNNn1SMioaqQ1l5acnLT/y10tW/lSAqXqAlU+UGKKq5b7JcyF8E0UJhd6KZcwLOu
-         9HqNnbSv7l5bZQQpAAHXW54lRmudZAvjCdFexBkqNcq9tjtH7ltbhG5CARPfOdA1A3FH
-         6kYsyJvLfG1K4nX5Lgnb1nOmUr6KzAOVNhbSVZ34wmcSzkTNo15ydSlTNKKCn32D4Pb8
-         BiRD+ElHzFQ4MhVXNqQ7PounWPZWaKnQI+qqks6f/xP43yZUcSxy+t9uezEh0w4LnbuB
-         aOgg==
-X-Gm-Message-State: AOAM530rRFD/T9l51Z1F0WqB3tZQStiTliMx3N4GWk14TlB4dHkybnCk
-        SbaOPIk9Tta3JybUjm+3p5Q=
-X-Google-Smtp-Source: ABdhPJxOk3oChZeXXTKxJEL/zK2Yj1xBMf2uG+U1f11+mR2yVsn9peH+JTwsi95XNZfzHGZOkcIyIg==
-X-Received: by 2002:a17:90b:3742:b0:1d9:5dc6:dede with SMTP id ne2-20020a17090b374200b001d95dc6dedemr24174038pjb.92.1651131288193;
-        Thu, 28 Apr 2022 00:34:48 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.114])
-        by smtp.gmail.com with ESMTPSA id a9-20020aa78649000000b004fe3d6c1731sm21369511pfo.175.2022.04.28.00.34.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 00:34:47 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     edumazet@google.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, benbjiang@tencent.com, flyingpeng@tencent.com,
-        imagedong@tencent.com, kafai@fb.com, talalahmad@google.com,
-        keescook@chromium.org, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] net: tcp: add skb drop reasons to route_req()
-Date:   Thu, 28 Apr 2022 15:33:40 +0800
-Message-Id: <20220428073340.224391-3-imagedong@tencent.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220428073340.224391-1-imagedong@tencent.com>
-References: <20220428073340.224391-1-imagedong@tencent.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651131262; x=1682667262;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=tCs7ErG885gKztJRvUVGDYnI/7nNF4ztVwUO/AczKV8=;
+  b=Y076bJgAWC9OnwVedBMkuXtvUq1by3OfqsZkLUvhMUcP9OfKKoIeK4Nx
+   mRky2Yr7LwNLmFHFpWLF3xKPDCFdwec3n6zrvN2u6roBtiJvL7xi7ipYR
+   Lf961z20oPf5hFSdWFKIY53+cJtI3j+7Yjc+vjfuphE9vha22CSkEa3Y/
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 00:34:22 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:34:22 -0700
+Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 00:34:19 -0700
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <stanimir.varbanov@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <quic_vgarodia@quicinc.com>, <frkoenig@chromium.org>,
+        <quic_dikshita@quicinc.com>
+Subject: [PATCH] media: venus: set ubwc configuration on specific video hardware
+Date:   Thu, 28 Apr 2022 13:04:08 +0530
+Message-ID: <1651131248-20313-1-git-send-email-quic_vgarodia@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+UBWC configuration parameters would vary across video hardware
+generations. At the same time, driver is expected to configure
+these parameters, without relying on video firmware to use the
+default configurations.
+Setting the configuration parameters for sc7280.
 
-Add skb drop reasons to the route_req() in struct tcp_request_sock_ops.
-Following functions are involved:
-
-  tcp_v4_route_req()
-  tcp_v6_route_req()
-  subflow_v4_route_req()
-  subflow_v6_route_req()
-
-And the new reason SKB_DROP_REASON_SECURITY is added, which is used when
-skb is dropped by LSM.
-
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
 ---
- include/linux/skbuff.h     |  1 +
- include/net/tcp.h          |  3 ++-
- include/trace/events/skb.h |  1 +
- net/ipv4/tcp_input.c       |  2 +-
- net/ipv4/tcp_ipv4.c        | 14 +++++++++++---
- net/ipv6/tcp_ipv6.c        | 14 +++++++++++---
- net/mptcp/subflow.c        | 10 ++++++----
- 7 files changed, 33 insertions(+), 12 deletions(-)
+ drivers/media/platform/qcom/venus/core.c       |  5 +++
+ drivers/media/platform/qcom/venus/core.h       | 18 +++++++++
+ drivers/media/platform/qcom/venus/hfi_cmds.c   |  9 +++++
+ drivers/media/platform/qcom/venus/hfi_cmds.h   |  1 +
+ drivers/media/platform/qcom/venus/hfi_helper.h | 20 ++++++++++
+ drivers/media/platform/qcom/venus/hfi_venus.c  | 54 ++++++++++++++++++++++++++
+ 6 files changed, 107 insertions(+)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index f33b3636bbce..5909759e1b95 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -473,6 +473,7 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_TCP_REQQFULLDROP, /* request queue of the listen
- 					   * socket is full
- 					   */
-+	SKB_DROP_REASON_SECURITY,	/* dropped by LSM */
- 	SKB_DROP_REASON_MAX,
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 877eca1..75d8e14 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -832,6 +832,10 @@ static const struct reg_val sm7280_reg_preset[] = {
+ 	{ 0xb0088, 0 },
  };
  
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 679b1964d494..01f841611895 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2075,7 +2075,8 @@ struct tcp_request_sock_ops {
- 	struct dst_entry *(*route_req)(const struct sock *sk,
- 				       struct sk_buff *skb,
- 				       struct flowi *fl,
--				       struct request_sock *req);
-+				       struct request_sock *req,
-+				       enum skb_drop_reason *reason);
- 	u32 (*init_seq)(const struct sk_buff *skb);
- 	u32 (*init_ts_off)(const struct net *net, const struct sk_buff *skb);
- 	int (*send_synack)(const struct sock *sk, struct dst_entry *dst,
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index de6c93670437..aff57cd43e85 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -82,6 +82,7 @@
- 	EM(SKB_DROP_REASON_PKT_TOO_BIG, PKT_TOO_BIG)		\
- 	EM(SKB_DROP_REASON_LISTENOVERFLOWS, LISTENOVERFLOWS)	\
- 	EM(SKB_DROP_REASON_TCP_REQQFULLDROP, TCP_REQQFULLDROP)	\
-+	EM(SKB_DROP_REASON_SECURITY, SECURITY)			\
- 	EMe(SKB_DROP_REASON_MAX, MAX)
- 
- #undef EM
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 412367b7dfd6..e55340059c19 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6932,7 +6932,7 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
- 	/* Note: tcp_v6_init_req() might override ir_iif for link locals */
- 	inet_rsk(req)->ir_iif = inet_request_bound_dev_if(sk, skb);
- 
--	dst = af_ops->route_req(sk, skb, &fl, req);
-+	dst = af_ops->route_req(sk, skb, &fl, req, &reason);
- 	if (!dst)
- 		goto drop_and_free;
- 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 6a49470d30db..0ae55c9e8428 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1424,14 +1424,22 @@ static void tcp_v4_init_req(struct request_sock *req,
- static struct dst_entry *tcp_v4_route_req(const struct sock *sk,
- 					  struct sk_buff *skb,
- 					  struct flowi *fl,
--					  struct request_sock *req)
-+					  struct request_sock *req,
-+					  enum skb_drop_reason *reason)
- {
-+	struct dst_entry *dst;
++static const struct ubwc_config sc7280_ubwc_config[] = {
++	{{1, 1, 1, 0, 0, 0}, 8, 32, 14, 0, 0},
++};
 +
- 	tcp_v4_init_req(req, sk, skb);
+ static const struct venus_resources sc7280_res = {
+ 	.freq_tbl = sc7280_freq_table,
+ 	.freq_tbl_size = ARRAY_SIZE(sc7280_freq_table),
+@@ -841,6 +845,7 @@ static const struct venus_resources sc7280_res = {
+ 	.bw_tbl_enc_size = ARRAY_SIZE(sc7280_bw_table_enc),
+ 	.bw_tbl_dec = sc7280_bw_table_dec,
+ 	.bw_tbl_dec_size = ARRAY_SIZE(sc7280_bw_table_dec),
++	.ubwc_conf = sc7280_ubwc_config,
+ 	.clks = {"core", "bus", "iface"},
+ 	.clks_num = 3,
+ 	.vcodec0_clks = {"vcodec_core", "vcodec_bus"},
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index c3023340..ef71462 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -47,6 +47,23 @@ struct bw_tbl {
+ 	u32 peak_10bit;
+ };
  
--	if (security_inet_conn_request(sk, skb, req))
-+	if (security_inet_conn_request(sk, skb, req)) {
-+		SKB_DR_SET(*reason, SECURITY);
- 		return NULL;
-+	}
- 
--	return inet_csk_route_req(sk, &fl->u.ip4, req);
-+	dst = inet_csk_route_req(sk, &fl->u.ip4, req);
-+	if (!dst)
-+		SKB_DR_SET(*reason, IP_OUTNOROUTES);
-+	return dst;
++struct ubwc_config {
++	struct {
++		u32 max_channel_override : 1;
++		u32 mal_length_override : 1;
++		u32 hb_override : 1;
++		u32 bank_swzl_level_override : 1;
++		u32 bank_spreading_override : 1;
++		u32 reserved : 27;
++	} override_bit_info;
++
++	u32 max_channels;
++	u32 mal_length;
++	u32 highest_bank_bit;
++	u32 bank_swzl_level;
++	u32 bank_spreading;
++};
++
+ struct venus_resources {
+ 	u64 dma_mask;
+ 	const struct freq_tbl *freq_tbl;
+@@ -57,6 +74,7 @@ struct venus_resources {
+ 	unsigned int bw_tbl_dec_size;
+ 	const struct reg_val *reg_tbl;
+ 	unsigned int reg_tbl_size;
++	const struct ubwc_config *ubwc_conf;
+ 	const char * const clks[VIDC_CLKS_NUM_MAX];
+ 	unsigned int clks_num;
+ 	const char * const vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+index 4ecd444..036eaca 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.c
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+@@ -58,6 +58,15 @@ void pkt_sys_coverage_config(struct hfi_sys_set_property_pkt *pkt, u32 mode)
+ 	pkt->data[1] = mode;
  }
  
- struct request_sock_ops tcp_request_sock_ops __read_mostly = {
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index 92f4a58fdc2c..d1f9266a81ed 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -802,14 +802,22 @@ static void tcp_v6_init_req(struct request_sock *req,
- static struct dst_entry *tcp_v6_route_req(const struct sock *sk,
- 					  struct sk_buff *skb,
- 					  struct flowi *fl,
--					  struct request_sock *req)
-+					  struct request_sock *req,
-+					  enum skb_drop_reason *reason)
- {
-+	struct dst_entry *dst;
++void pkt_sys_ubwc_config(struct hfi_sys_set_property_pkt *pkt, struct hfi_ubwc_config *hfi)
++{
++	pkt->hdr.size = struct_size(pkt, data, 1) + sizeof(*hfi);
++	pkt->hdr.pkt_type = HFI_CMD_SYS_SET_PROPERTY;
++	pkt->num_properties = 1;
++	pkt->data[0] = HFI_PROPERTY_SYS_UBWC_CONFIG;
++	memcpy(&pkt->data[1], hfi, sizeof(*hfi));
++}
 +
- 	tcp_v6_init_req(req, sk, skb);
+ int pkt_sys_set_resource(struct hfi_sys_set_resource_pkt *pkt, u32 id, u32 size,
+ 			 u32 addr, void *cookie)
+ {
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
+index 327ed90..ce7179e 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.h
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
+@@ -256,6 +256,7 @@ void pkt_sys_init(struct hfi_sys_init_pkt *pkt, u32 arch_type);
+ void pkt_sys_pc_prep(struct hfi_sys_pc_prep_pkt *pkt);
+ void pkt_sys_idle_indicator(struct hfi_sys_set_property_pkt *pkt, u32 enable);
+ void pkt_sys_power_control(struct hfi_sys_set_property_pkt *pkt, u32 enable);
++void pkt_sys_ubwc_config(struct hfi_sys_set_property_pkt *pkt, struct hfi_ubwc_config *hfi);
+ int pkt_sys_set_resource(struct hfi_sys_set_resource_pkt *pkt, u32 id, u32 size,
+ 			 u32 addr, void *cookie);
+ int pkt_sys_unset_resource(struct hfi_sys_release_resource_pkt *pkt, u32 id,
+diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+index 2daa88e..d2d6719 100644
+--- a/drivers/media/platform/qcom/venus/hfi_helper.h
++++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+@@ -427,6 +427,7 @@
+ #define HFI_PROPERTY_SYS_CODEC_POWER_PLANE_CTRL			0x5
+ #define HFI_PROPERTY_SYS_IMAGE_VERSION				0x6
+ #define HFI_PROPERTY_SYS_CONFIG_COVERAGE			0x7
++#define HFI_PROPERTY_SYS_UBWC_CONFIG				0x8
  
--	if (security_inet_conn_request(sk, skb, req))
-+	if (security_inet_conn_request(sk, skb, req)) {
-+		SKB_DR_SET(*reason, SECURITY);
- 		return NULL;
-+	}
+ /*
+  * HFI_PROPERTY_PARAM_COMMON_START
+@@ -626,6 +627,25 @@ struct hfi_debug_config {
+ 	u32 mode;
+ };
  
--	return inet6_csk_route_req(sk, &fl->u.ip6, req, IPPROTO_TCP);
-+	dst = inet6_csk_route_req(sk, &fl->u.ip6, req, IPPROTO_TCP);
-+	if (!dst)
-+		SKB_DR_SET(*reason, IP_OUTNOROUTES);
-+	return dst;
++struct hfi_ubwc_config {
++	u32 size;
++	u32 packet_type;
++	struct {
++		u32 max_channel_override : 1;
++		u32 mal_length_override : 1;
++		u32 hb_override : 1;
++		u32 bank_swzl_level_override : 1;
++		u32 bank_spreading_override : 1;
++		u32 reserved : 27;
++		} override_bit_info;
++	u32 max_channels;
++	u32 mal_length;
++	u32 highest_bank_bit;
++	u32 bank_swzl_level;
++	u32 bank_spreading;
++	u32 reserved[2];
++};
++
+ struct hfi_enable {
+ 	u32 enable;
+ };
+diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
+index 3a75a27..25131d0 100644
+--- a/drivers/media/platform/qcom/venus/hfi_venus.c
++++ b/drivers/media/platform/qcom/venus/hfi_venus.c
+@@ -904,6 +904,52 @@ static int venus_sys_set_power_control(struct venus_hfi_device *hdev,
+ 	return 0;
  }
  
- struct request_sock_ops tcp6_request_sock_ops __read_mostly = {
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index aba260f547da..03d07165cda6 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -283,7 +283,8 @@ EXPORT_SYMBOL_GPL(mptcp_subflow_init_cookie_req);
- static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- 					      struct sk_buff *skb,
- 					      struct flowi *fl,
--					      struct request_sock *req)
-+					      struct request_sock *req,
-+					      enum skb_drop_reason *reason)
++static int venus_sys_set_ubwc_config(struct venus_hfi_device *hdev)
++{
++	struct hfi_sys_set_property_pkt *pkt;
++	u8 packet[IFACEQ_VAR_SMALL_PKT_SIZE];
++	struct hfi_ubwc_config *hfi;
++	const struct venus_resources *res = hdev->core->res;
++	const struct ubwc_config *ubwc_conf = res->ubwc_conf;
++	int ret;
++
++	hfi = kzalloc(sizeof(*hfi), GFP_KERNEL);
++	if (!hfi)
++		return -ENOMEM;
++
++	pkt = (struct hfi_sys_set_property_pkt *)packet;
++
++	hfi->max_channels = ubwc_conf->max_channels;
++	hfi->override_bit_info.max_channel_override =
++		ubwc_conf->override_bit_info.max_channel_override;
++
++	hfi->mal_length = ubwc_conf->mal_length;
++	hfi->override_bit_info.mal_length_override =
++		ubwc_conf->override_bit_info.mal_length_override;
++
++	hfi->highest_bank_bit = ubwc_conf->highest_bank_bit;
++	hfi->override_bit_info.hb_override =
++		ubwc_conf->override_bit_info.hb_override;
++
++	hfi->bank_swzl_level = ubwc_conf->bank_swzl_level;
++	hfi->override_bit_info.bank_swzl_level_override =
++		ubwc_conf->override_bit_info.bank_swzl_level_override;
++
++	hfi->bank_spreading = ubwc_conf->bank_spreading;
++	hfi->override_bit_info.bank_spreading_override =
++		ubwc_conf->override_bit_info.bank_spreading_override;
++
++	pkt_sys_ubwc_config(pkt, hfi);
++
++	kfree(hfi);
++
++	ret = venus_iface_cmdq_write(hdev, pkt, false);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
+ static int venus_get_queue_size(struct venus_hfi_device *hdev,
+ 				unsigned int index)
  {
- 	struct dst_entry *dst;
- 	int err;
-@@ -291,7 +292,7 @@ static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- 	tcp_rsk(req)->is_mptcp = 1;
- 	subflow_init_req(req, sk);
- 
--	dst = tcp_request_sock_ipv4_ops.route_req(sk, skb, fl, req);
-+	dst = tcp_request_sock_ipv4_ops.route_req(sk, skb, fl, req, reason);
- 	if (!dst)
- 		return NULL;
- 
-@@ -309,7 +310,8 @@ static struct dst_entry *subflow_v4_route_req(const struct sock *sk,
- static struct dst_entry *subflow_v6_route_req(const struct sock *sk,
- 					      struct sk_buff *skb,
- 					      struct flowi *fl,
--					      struct request_sock *req)
-+					      struct request_sock *req,
-+					      enum skb_drop_reason *reason)
+@@ -922,6 +968,7 @@ static int venus_get_queue_size(struct venus_hfi_device *hdev,
+ static int venus_sys_set_default_properties(struct venus_hfi_device *hdev)
  {
- 	struct dst_entry *dst;
- 	int err;
-@@ -317,7 +319,7 @@ static struct dst_entry *subflow_v6_route_req(const struct sock *sk,
- 	tcp_rsk(req)->is_mptcp = 1;
- 	subflow_init_req(req, sk);
+ 	struct device *dev = hdev->core->dev;
++	const struct venus_resources *res = hdev->core->res;
+ 	int ret;
  
--	dst = tcp_request_sock_ipv6_ops.route_req(sk, skb, fl, req);
-+	dst = tcp_request_sock_ipv6_ops.route_req(sk, skb, fl, req, reason);
- 	if (!dst)
- 		return NULL;
+ 	ret = venus_sys_set_debug(hdev, venus_fw_debug);
+@@ -945,6 +992,13 @@ static int venus_sys_set_default_properties(struct venus_hfi_device *hdev)
+ 		dev_warn(dev, "setting hw power collapse ON failed (%d)\n",
+ 			 ret);
+ 
++	/* For specific venus core, it is mandatory to set the UBWC configuration */
++	if (res->ubwc_conf) {
++		ret = venus_sys_set_ubwc_config();
++		if (ret)
++			dev_warn(dev, "setting ubwc config failed (%d)\n", ret);
++	}
++
+ 	return ret;
+ }
  
 -- 
-2.36.0
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

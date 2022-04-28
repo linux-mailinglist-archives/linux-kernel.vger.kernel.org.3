@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D4E512BA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BF7512B9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244135AbiD1Ghl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S244067AbiD1GgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244112AbiD1Ghg (ORCPT
+        with ESMTP id S243955AbiD1GgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:37:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438188FF8C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:34:23 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1njxhg-0001Q8-Hr; Thu, 28 Apr 2022 08:32:40 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-6c64-eec7-9c08-9d9e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6c64:eec7:9c08:9d9e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D7C416F531;
-        Thu, 28 Apr 2022 06:32:11 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 08:32:11 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Erin MacNeil <lnx.erin@gmail.com>
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Martynas Pumputis <m@lambda.lt>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wei Wang <weiwan@google.com>, Yangbo Lu <yangbo.lu@nxp.com>,
-        Florian Westphal <fw@strlen.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Richard Sanger <rsanger@wand.net.nz>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK
- with recvmsg()
-Message-ID: <20220428063211.4ndwg7xzudl7l7h7@pengutronix.de>
-References: <202204270907.nUUrw3dS-lkp@intel.com>
- <20220427200259.2564-1-lnx.erin@gmail.com>
+        Thu, 28 Apr 2022 02:36:23 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8306973A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:33:09 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id p4so4400653edx.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZGNUaKvmhdWADegA9+35rNWReEdvm/VLEsDmu8SXlcI=;
+        b=uxezT5LnyHKSBkq6AQW89pc3qDtfxZHYMAix0t8fNa7iN8SiPU1Ilsl1nM1G37M5R+
+         +iu92f1x/5vR1NTnqi8ROX0/LwJwdGKQmoBkn8pixlB6fKZyo7GpO6a7YYkK1pW1jNQT
+         wNHmkFGVSfRqXb8sEShA2W6HoHm5NLbFl5Spems7FPFI6zXPRgGCACekKLjBWUJQMl4E
+         73ek80xKQJ1KRfH67Egat8mV375c+FUSf/cJw5OVhhrlizX0esnpjiAi8Erb1aORY0vE
+         o3rPGR9G86LWNf4VY5otQY/Gm6CzHNWFv8J3C1ofMgFmk3ptIhJGQ5VBAyLp82amwWr1
+         6tbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZGNUaKvmhdWADegA9+35rNWReEdvm/VLEsDmu8SXlcI=;
+        b=MpusQUdGJGUg2G1I0mau2zSFgMXoQ7hArddhunNuM7ls8CXSvQxyj7x/ju1h3nyYbi
+         UcST89yVwPcXMgDfJdFktl+VaP3b5/vRz5a/nXnuOMVJW1dqVq/ZB3CZrI+FNgRme/58
+         eq9YVu6HiV9T7vCyNG1efbWJ0z9zYFdr+o7IHcO20HoFLQRY+WJ8yrO6EWBoD59vLpjl
+         QOJTZUNJrS5qAFIFkrvBNDtnGrj1qGmmBTmxrDycT1ZGH+GhAQZU3D2HbOXPc/sQH0kn
+         PBj4gihmTB3niS8O1dcXcXoxfLmTopjufL0MpD1u743U/95CbUoH6W4mxL/EXE1YA+WW
+         GZwg==
+X-Gm-Message-State: AOAM533q4ifwJ2SsVGHss3JWgIV3an+axkdRfBMjR3CGZZd0uCc/WNFX
+        nzVj+zFLD7Cf51W780FKzRGOaA==
+X-Google-Smtp-Source: ABdhPJw0+ayf81Ms9n+w6fNeDibHnLry7oeKKqMj4gZt2cgaTDG/qOgtHFpuAxQnWZ5n0HmQ9WFJHA==
+X-Received: by 2002:a05:6402:43cc:b0:425:fda3:ac3a with SMTP id p12-20020a05640243cc00b00425fda3ac3amr12162862edc.70.1651127587742;
+        Wed, 27 Apr 2022 23:33:07 -0700 (PDT)
+Received: from [192.168.0.159] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i23-20020a0564020f1700b0042617ba6382sm943988eda.12.2022.04.27.23.33.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 23:33:06 -0700 (PDT)
+Message-ID: <f002b635-75c5-b7ba-72c4-70f0e20369e7@linaro.org>
+Date:   Thu, 28 Apr 2022 08:33:05 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="twk6owb5igwqlcml"
-Content-Disposition: inline
-In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC/RFT v2 01/11] dt-bindings: phy: rockchip: add PCIe v3 phy
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <20220426132139.26761-1-linux@fw-web.de>
+ <20220426132139.26761-2-linux@fw-web.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220426132139.26761-2-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,50 +90,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---twk6owb5igwqlcml
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 27.04.2022 16:02:37, Erin MacNeil wrote:
-> Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
-> should be included in the ancillary data returned by recvmsg().
->=20
-> Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
->=20
-> Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
+On 26/04/2022 15:21, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add a new binding file for Rockchip PCIe v3 phy driver.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> 
 > ---
->  net/can/bcm.c                           |  2 +-
->  net/can/j1939/socket.c                  |  2 +-
->  net/can/raw.c                           |  2 +-
+> v2:
+> dt-bindings: rename yaml for PCIe v3
+> rockchip-pcie3-phy.yaml => rockchip,pcie3-phy.yaml
+> 
+> changes in pcie3 phy yaml
+> - change clock names to ordered const list
+> - extend pcie30-phymode description
+> - add phy-cells to required properties
+> - drop unevaluatedProperties
+> - example with 1 clock each line
+> - use default property instead of text describing it
+> - update license
+> ---
+>  .../bindings/phy/rockchip,pcie3-phy.yaml      | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> new file mode 100644
+> index 000000000000..3592888b5ee2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/rockchip,pcie3-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip PCIe v3 phy
+> +
+> +maintainers:
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3568-pcie3-phy
+> +      - rockchip,rk3588-pcie3-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: "refclk_m"
+> +      - const: "refclk_n"
+> +      - const: "pclk"
 
-For the net/can changes:
+Drop quotes.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> +
+> +    minItems: 1
 
-regards,
-Marc
+I think we agreed to skip rk3588 or make the number of clocks strict?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    const: phy
+> +
+> +  rockchip,phy-grf:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the syscon managing the phy "general register files"
+> +
+> +  rockchip,pipe-grf:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the syscon managing the pipe "general register files"
+> +
+> +  rockchip,pcie30-phymode:
+> +    $ref: '/schemas/types.yaml#/definitions/uint32'
 
---twk6owb5igwqlcml
-Content-Type: application/pgp-signature; name="signature.asc"
+No need for quotes. You don't use it in other places.
 
------BEGIN PGP SIGNATURE-----
+> +    description: |
+> +      set the phy-mode for enabling bifurcation
+> +      bit0: bifurcation for port 0
+> +      bit1: bifurcation for port 1
+> +      bit2: aggregation
+> +      constants are defined in the dt-bindings/phy/phy-rockchip-pcie3.h
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJqNOgACgkQrX5LkNig
-010oWwf/YQtdMP9EhexK+DgW94m7NnyknIp9mL/PgS712H8tMgbdcesQGNCYJvag
-mWhVZeGq5XI/oC3he0VDrAvI+i0WVRjj4ljyd3hVnL5o6Y0+0V2kV8Te5+/qHKqp
-HG3KiLAkGO2LNKpoUXMVORu/+V4Mwl/oiggQbQ+tzAjZ4BIZ7fCHQVv39LSUDXAY
-NrrZ8oF+gi5QTRhvbvQXUlskp2Idym5ND+QevTxOX5Uo3zUV5H7ERo0iwpIZwRJw
-8/t1/a+pX6V8hgtHEgi8kmJOlw9AAWjiUFZY9ngresTMZL7pjyuz1cHTOaGt4Sve
-Y5A7ifvkLmiO+EpPJ8FsaWn53qpmgQ==
-=kyeH
------END PGP SIGNATURE-----
+Full path. It should also follow vendor,device naming convention.
 
---twk6owb5igwqlcml--
+> +    minimum: 0x0
+> +    maximum: 0x4
+> +    default: 0x4
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - rockchip,phy-grf
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/rk3568-cru.h>
+> +    pcie30phy: phy@fe8c0000 {
+> +      compatible = "rockchip,rk3568-pcie3-phy";
+> +      reg = <0x0 0xfe8c0000 0x0 0x20000>;
+> +      #phy-cells = <0>;
+> +      clocks = <&pmucru CLK_PCIE30PHY_REF_M>,
+> +               <&pmucru CLK_PCIE30PHY_REF_N>,
+> +               <&cru PCLK_PCIE30PHY>;
+> +      clock-names = "refclk_m", "refclk_n", "pclk";
+> +      resets = <&cru SRST_PCIE30PHY>;
+> +      reset-names = "phy";
+> +      rockchip,phy-grf = <&pcie30_phy_grf>;
+> +    };
+
+
+Best regards,
+Krzysztof

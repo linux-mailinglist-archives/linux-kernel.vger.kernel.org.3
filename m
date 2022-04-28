@@ -2,90 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19CE512ADC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B75A512ADF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242964AbiD1FW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 01:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S233231AbiD1F0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 01:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242945AbiD1FWy (ORCPT
+        with ESMTP id S229627AbiD1F0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 01:22:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A89B3E0DC;
-        Wed, 27 Apr 2022 22:19:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpkSn1qbkz4xbw;
-        Thu, 28 Apr 2022 15:19:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1651123178;
-        bh=T3xw8PkqnOjqmTSDDFwrwXQIvUMB4kShWDdGYGByBuM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ArKpHBv8jw7gBr9LkLJwp1cncxQuTqbX2E5hC3ujYwqdGP9BrrGIBw/8y8RhvZAMk
-         egkEo1s0XTZhwduoAakDiITU2RTGx92HehKtFYdYvtwNDreLHlaC/vnVgmSeyHp6QW
-         lUm4XoXmEs8f+U3mOaopk/o/jKKqTYVLXN004G3E9goxgtixCayk/Hf8N4R0t3oBpT
-         9MLusDWqZnpIPUN0yS/JiYbCwCtBgsoJyzr9E/hrRkkX8I5sNGN5BvEyPy5Tn2caQ2
-         raD+RD7ZQTR1HEIR9/b1G23xgrYlBKquNTJ7XOtYEZJkfPtzWqhsq0HPey9VJRvJNV
-         24fb4FP6/fq7g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH v6 05/17] powerpc: define get_cycles macro for
- arch-override
-In-Reply-To: <20220423212623.1957011-6-Jason@zx2c4.com>
-References: <20220423212623.1957011-1-Jason@zx2c4.com>
- <20220423212623.1957011-6-Jason@zx2c4.com>
-Date:   Thu, 28 Apr 2022 15:19:30 +1000
-Message-ID: <87ilqtaiot.fsf@mpe.ellerman.id.au>
+        Thu, 28 Apr 2022 01:26:39 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A00F22B2C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:23:24 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so3809805iov.9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:23:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=bm23MXbMzdThqZ1F077AT/Z/gr+FTIvmlXivxB5424E=;
+        b=H9OcX6rUJ41yaSJZC0d/2F1gSPtLnT3CR1o2FioUetBEGlQewW781krvxxkXVISS16
+         yUS+LB7AJYJfzfALqNLES1fqGuILUwHs4SL3NgNrkrIaRUepGqrjRhegDO/z/3XjNMfx
+         9PTAqFJZCeqtb/ET9S6D4Xc4pqtenZRO83ubS+fzLkl31gP7QuFeEezd6e4e+XfaJHWm
+         lHvbGSSTF9mE8otjWxgE5NML/TN1GocxNyQF266CRs0z1JWIx97z+JNGK0TWIESEEKIv
+         3FFOP/VJCm1PvoT/0/fmRe5R2kUqxW/fPUtm/eFP823CRCYprQg6Qdxdp6yLvaimPb2u
+         n+mA==
+X-Gm-Message-State: AOAM5312rbOR0KokZk0w81o5YTlO/3IZGehQbLdCcwZsSzRF6D0P3aR3
+        B1arXdXVTLY5s5stop0qEhvN12OFh2ruvZyG7lf1NH/EYsTE
+X-Google-Smtp-Source: ABdhPJxGGPvScdSkXuIH+e1B1XoCqv3aYDtbq5KVm8tjAQWdifCATaRYv6usd2VOoprDnriONEXdr2z6DH3qm8dlelOF6wJmAEXS
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1233:b0:657:b1d2:c31a with SMTP id
+ z19-20020a056602123300b00657b1d2c31amr3088114iot.35.1651123403490; Wed, 27
+ Apr 2022 22:23:23 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 22:23:23 -0700
+In-Reply-To: <20220427234836.3637-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f20e5105ddb01f09@google.com>
+Subject: Re: [syzbot] general protection fault in btrfs_stop_all_workers
+From:   syzbot <syzbot+a2c720e0f056114ea7c6@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
-> PowerPC defines a get_cycles() function, but it forgot to do the usual
-> `#define get_cycles get_cycles` dance, making it impossible for generic
-> code to see if an arch-specific function was defined.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/powerpc/include/asm/timex.h | 1 +
->  1 file changed, 1 insertion(+)
+Hello,
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-cheers
+Reported-and-tested-by: syzbot+a2c720e0f056114ea7c6@syzkaller.appspotmail.com
 
-> diff --git a/arch/powerpc/include/asm/timex.h b/arch/powerpc/include/asm/timex.h
-> index fa2e76e4093a..14b4489de52c 100644
-> --- a/arch/powerpc/include/asm/timex.h
-> +++ b/arch/powerpc/include/asm/timex.h
-> @@ -19,6 +19,7 @@ static inline cycles_t get_cycles(void)
->  {
->  	return mftb();
->  }
-> +#define get_cycles get_cycles
->  
->  #endif	/* __KERNEL__ */
->  #endif	/* _ASM_POWERPC_TIMEX_H */
-> -- 
-> 2.35.1
+Tested on:
+
+commit:         088fb7ef Add linux-next specific files for 20220426
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f49713d2574602b3
+dashboard link: https://syzkaller.appspot.com/bug?extid=a2c720e0f056114ea7c6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11537ee2f00000
+
+Note: testing is done by a robot and is best-effort only.

@@ -2,315 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39FF513B37
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43EEB513B39
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350749AbiD1SNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        id S1350763AbiD1SOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350741AbiD1SNs (ORCPT
+        with ESMTP id S1350741AbiD1SOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:13:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49DA9AC061
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651169430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7dDyceV1TUlC7/PQyERYvmSbdxlDPIYvmS7s+vUk8bs=;
-        b=R6gHnMbDzqAVbl5vHhx1BHgGXvOrxcO7OZbTqUYasYLflyhUhwPMf5vvN5wKhJN/zzXyyI
-        z0vGiQxTpD4yWpsAVMp++b4qfCQweAaywWYyOXgaUGuBccUGRLYiS4VK9iOPGPAf3rjLjf
-        Mx7kVZhBz1Zs3ae7en1ehk4b1y/27Lk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-yyamK1lpMjuaPTAvKfYC0w-1; Thu, 28 Apr 2022 14:10:27 -0400
-X-MC-Unique: yyamK1lpMjuaPTAvKfYC0w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94B4A185A7BA;
-        Thu, 28 Apr 2022 18:10:26 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F5CD2024CCC;
-        Thu, 28 Apr 2022 18:10:26 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id EB2D8416F574; Thu, 28 Apr 2022 15:10:05 -0300 (-03)
-Date:   Thu, 28 Apr 2022 15:10:05 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     frederic@kernel.org, cl@linux.com, tglx@linutronix.de,
-        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
- the idle tick was stopped too
-Message-ID: <YmrYfSSepamn5fVc@fuller.cnet>
-References: <20220422193647.3808657-1-atomlin@redhat.com>
+        Thu, 28 Apr 2022 14:14:18 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A47B6E6C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651169463; x=1682705463;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=fn2OSIoko8drRj2wBoJaL4X9X6xa/xytRJ+aFijI5lE=;
+  b=lUyC+2RuAGxGhLkgZBBbOYMMfaUfJtxrK2uwF0u+Htq17KzPJ0eQNFWl
+   pjKWnVnO5pQ26PtQ7gJjaLD7r5JIMdcFuVzswgunfOTCo+jUAranKxFUZ
+   Ra5i1ynE25CqsZpPsQm1lrdF5sA7KGKFCBk5qUnPw8bgdfNQSTpxZaY+J
+   KWSBM/HpAdl9qi9HoRzfTKAO7iDB+eP4LJutH9deUwvKApb5o3KecrO1N
+   1d1y6iGEE/DMc/ohGrnVtIJaKw5XfNoUJBFwS0UfJ7BxikfD8U99FGpUN
+   St3WoI4aV6ZI//Vs8MCuomQxX5+V0IokjyvuEfwpOAHHVY8KtOiiX2cIH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="265903475"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="265903475"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 11:11:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="559806115"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga007.jf.intel.com with ESMTP; 28 Apr 2022 11:11:02 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 28 Apr 2022 11:11:02 -0700
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15]) by
+ ORSMSX602.amr.corp.intel.com ([10.22.229.15]) with mapi id 15.01.2308.027;
+ Thu, 28 Apr 2022 11:11:02 -0700
+From:   "Winkler, Tomas" <tomas.winkler@intel.com>
+To:     Won Chung <wonchung@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Usyskin, Alexander" <alexander.usyskin@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/2] misc/mei: Add NULL check to component match callback
+ functions
+Thread-Topic: [PATCH 1/2] misc/mei: Add NULL check to component match callback
+ functions
+Thread-Index: AQHYWMWF45jFBXcTi0GPRZghoKepzq0FjbrQ
+Date:   Thu, 28 Apr 2022 18:11:02 +0000
+Message-ID: <0136fcb26ca8433899593208af4351c9@intel.com>
+References: <20220418175932.1809770-1-wonchung@google.com>
+ <20220418175932.1809770-2-wonchung@google.com>
+ <CAOvb9yjCnw=-5wO5_X6ond3GFdpRaNUPyyzojE49zTGfaWNNsg@mail.gmail.com>
+In-Reply-To: <CAOvb9yjCnw=-5wO5_X6ond3GFdpRaNUPyyzojE49zTGfaWNNsg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.15
+x-originating-ip: [10.184.70.1]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422193647.3808657-1-atomlin@redhat.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 08:36:47PM +0100, Aaron Tomlin wrote:
-> Hi Frederic and Marcelo,
-> 
-> Oops, please ignore RFC Patch v2 [1] since I forgot to compile test - sorry
-> about that! Any feedback would be appreciated. Thanks.
-> 
-> [1]: https://lore.kernel.org/lkml/20220422112053.3695526-1-atomlin@redhat.com/
-> 
-> 
-> In the context of the idle task and an adaptive-tick mode/or a nohz_full
-> CPU, quiet_vmstat() can be called: before stopping the idle tick,
-> entering an idle state and on exit. In particular, for the latter case,
-> when the idle task is required to reschedule, the idle tick can remain
-> stopped and the timer expiration time endless i.e., KTIME_MAX. Now,
-> indeed before a nohz_full CPU enters an idle state, CPU-specific vmstat
-> counters should be processed to ensure the respective values have been
-> reset and folded into the zone specific 'vm_stat[]'. That being said, it
-> can only occur when: the idle tick was previously stopped, and
-> reprogramming of the timer is not required.
-> 
-> A customer provided some evidence which indicates that the idle tick was
-> stopped; albeit, CPU-specific vmstat counters still remained populated.
-> Thus one can only assume quiet_vmstat() was not invoked on return to the
-> idle loop.
-> 
-> If I understand correctly, I suspect this divergence might erroneously
-> prevent a reclaim attempt by kswapd. If the number of zone specific free
-> pages are below their per-cpu drift value then
-> zone_page_state_snapshot() is used to compute a more accurate view of
-> the aforementioned statistic.  Thus any task blocked on the NUMA node
-> specific pfmemalloc_wait queue will be unable to make significant
-> progress via direct reclaim unless it is killed after being woken up by
-> kswapd (see throttle_direct_reclaim()).
-> 
-> Consider the following theoretical scenario:
-> 
->         1.      CPU Y migrated running task A to CPU X that was
->                 in an idle state i.e. waiting for an IRQ - not
->                 polling; marked the current task on CPU X to
->                 need/or require a reschedule i.e., set
->                 TIF_NEED_RESCHED and invoked a reschedule IPI to
->                 CPU X (see sched_move_task())
-> 
->         2.      CPU X acknowledged the reschedule IPI from CPU Y;
->                 generic idle loop code noticed the
->                 TIF_NEED_RESCHED flag against the idle task and
->                 attempts to exit of the loop and calls the main
->                 scheduler function i.e. __schedule().
-> 
->                 Since the idle tick was previously stopped no
->                 scheduling-clock tick would occur.
->                 So, no deferred timers would be handled
-> 
->         3.      Post transition to kernel execution Task A
->                 running on CPU Y, indirectly released a few pages
->                 (e.g. see __free_one_page()); CPU Y's
->                 'vm_stat_diff[NR_FREE_PAGES]' was updated and zone
->                 specific 'vm_stat[]' update was deferred as per the
->                 CPU-specific stat threshold
-> 
->         4.      Task A does invoke exit(2) and the kernel does
->                 remove the task from the run-queue; the idle task
->                 was selected to execute next since there are no
->                 other runnable tasks assigned to the given CPU
->                 (see pick_next_task() and pick_next_task_idle())
-> 
->         5.      On return to the idle loop since the idle tick
->                 was already stopped and can remain so (see [1]
->                 below) e.g. no pending soft IRQs, no attempt is
->                 made to zero and fold CPU Y's vmstat counters
->                 since reprogramming of the scheduling-clock tick
->                 is not required/or needed (see [2])
-> 
-> 		  ...
-> 		    do_idle
-> 		    {
-> 
-> 		      __current_set_polling()
-> 		      tick_nohz_idle_enter()
-> 
-> 		      while (!need_resched()) {
-> 
-> 			local_irq_disable()
-> 
-> 			...
-> 
-> 			/* No polling or broadcast event */
-> 			cpuidle_idle_call()
-> 			{
-> 
-> 			  if (cpuidle_not_available(drv, dev)) {
-> 			    tick_nohz_idle_stop_tick()
-> 			      __tick_nohz_idle_stop_tick(this_cpu_ptr(&tick_cpu_sched))
-> 			      {
-> 				int cpu = smp_processor_id()
-> 
-> 				if (ts->timer_expires_base)
-> 				  expires = ts->timer_expires
-> 				else if (can_stop_idle_tick(cpu, ts))
-> 	      (1) ------->        expires = tick_nohz_next_event(ts, cpu)
-> 				else
-> 				  return
-> 
-> 				ts->idle_calls++
-> 
-> 				if (expires > 0LL) {
-> 
-> 				  tick_nohz_stop_tick(ts, cpu)
-> 				  {
-> 
-> 				    if (ts->tick_stopped && (expires == ts->next_tick)) {
-> 	      (2) ------->            if (tick == KTIME_MAX || ts->next_tick ==
-> 					hrtimer_get_expires(&ts->sched_timer))
-> 					return
-> 				    }
-> 				    ...
-> 				  }
-> 
-> So the idea of with this patch is to ensure refresh_cpu_vm_stats(false) is
-> called, when it is appropriate, on return to the idle loop when the idle
-> tick was previously stopped too. Additionally, when the scheduling-tick
-> is stopped and a task in kernel-mode, modifies the CPU-specific
-> 'vm_stat_diff[]' and goes to user-mode for a long time.
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> ---
->  include/linux/tick.h     |  9 ++-------
->  kernel/time/tick-sched.c | 18 +++++++++++++++++-
->  2 files changed, 19 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/tick.h b/include/linux/tick.h
-> index bfd571f18cfd..4c576c9ca0a2 100644
-> --- a/include/linux/tick.h
-> +++ b/include/linux/tick.h
-> @@ -11,7 +11,6 @@
->  #include <linux/context_tracking_state.h>
->  #include <linux/cpumask.h>
->  #include <linux/sched.h>
-> -#include <linux/rcupdate.h>
->  
->  #ifdef CONFIG_GENERIC_CLOCKEVENTS
->  extern void __init tick_init(void);
-> @@ -123,6 +122,8 @@ enum tick_dep_bits {
->  #define TICK_DEP_MASK_RCU		(1 << TICK_DEP_BIT_RCU)
->  #define TICK_DEP_MASK_RCU_EXP		(1 << TICK_DEP_BIT_RCU_EXP)
->  
-> +void tick_nohz_user_enter_prepare(void);
-> +
->  #ifdef CONFIG_NO_HZ_COMMON
->  extern bool tick_nohz_enabled;
->  extern bool tick_nohz_tick_stopped(void);
-> @@ -305,10 +306,4 @@ static inline void tick_nohz_task_switch(void)
->  		__tick_nohz_task_switch();
->  }
->  
-> -static inline void tick_nohz_user_enter_prepare(void)
-> -{
-> -	if (tick_nohz_full_cpu(smp_processor_id()))
-> -		rcu_nocb_flush_deferred_wakeup();
-> -}
-> -
->  #endif
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index d257721c68b8..c6cac2d8e8ed 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -26,6 +26,7 @@
->  #include <linux/posix-timers.h>
->  #include <linux/context_tracking.h>
->  #include <linux/mm.h>
-> +#include <linux/rcupdate.h>
->  
->  #include <asm/irq_regs.h>
->  
-> @@ -43,6 +44,19 @@ struct tick_sched *tick_get_tick_sched(int cpu)
->  	return &per_cpu(tick_cpu_sched, cpu);
->  }
->  
-> +void tick_nohz_user_enter_prepare(void)
-> +{
-> +	struct tick_sched *ts;
-> +
-> +	if (tick_nohz_full_cpu(smp_processor_id())) {
-> +		ts = this_cpu_ptr(&tick_cpu_sched);
-> +
-> +		if (ts->tick_stopped)
-> +			quiet_vmstat();
-> +		rcu_nocb_flush_deferred_wakeup();
-> +	}
-> +}
-
-So you are syncing the vmstats on every system call return:
-
-static void exit_to_user_mode_prepare(struct pt_regs *regs)
-{
-        unsigned long ti_work = read_thread_flags();
-        
-        lockdep_assert_irqs_disabled();
-
-        /* Flush pending rcuog wakeup before the last need_resched() check */
-        tick_nohz_user_enter_prepare();
-
-As PeterZ mentioned for idle (which can be very frequent), returning 
-to userspace can be very frequent as well. 
-
-Have you measured performance of any system call heavy application
-with this change?
-
-From my experience with the task isolation patchset, it will cause
-noticeable slowdown to system call return.
-
-Then the comment on why its so slow:
-
-"This loop is quite heavy. Maybe reducing the data necessary to be read
-to a couple of cachelines would improve it considerably."
-
-The comment:
-
-"Is there anything that prevents a nohz full CPU from running an
-application with short and frequent idling?"
-
-Is confusing and can be ignored.
-
-> +
->  #if defined(CONFIG_NO_HZ_COMMON) || defined(CONFIG_HIGH_RES_TIMERS)
->  /*
->   * The time, when the last jiffy update happened. Write access must hold
-> @@ -891,6 +905,9 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
->  		ts->do_timer_last = 0;
->  	}
->  
-> +	/* Attempt to fold when the idle tick is stopped or not */
-> +	quiet_vmstat();
-> +
->  	/* Skip reprogram of event if its not changed */
->  	if (ts->tick_stopped && (expires == ts->next_tick)) {
->  		/* Sanity check: make sure clockevent is actually programmed */
-> @@ -912,7 +929,6 @@ static void tick_nohz_stop_tick(struct tick_sched *ts, int cpu)
->  	 */
->  	if (!ts->tick_stopped) {
->  		calc_load_nohz_start();
-> -		quiet_vmstat();
->  
->  		ts->last_tick = hrtimer_get_expires(&ts->sched_timer);
->  		ts->tick_stopped = 1;
-> -- 
-> 2.34.1
-> 
-> 
-
+PiANCj4gT24gVHVlLCBBcHIgMTksIDIwMjIgYXQgMjo1OSBBTSBXb24gQ2h1bmcgPHdvbmNodW5n
+QGdvb2dsZS5jb20+DQo+IHdyb3RlOg0KPiA+DQo+ID4gQ3VycmVudGx5LCBjb21wb25lbnRfbWF0
+Y2ggY2FsbGJhY2sgZnVuY3Rpb25zIHVzZWQgaW4gbWVpIHJlZmVycyB0bw0KPiA+IHRoZSBkcml2
+ZXIgbmFtZSwgYXNzdW1pbmcgdGhhdCB0aGUgY29tcG9uZW50IGRldmljZSBiZWluZyBtYXRjaGVk
+IGhhcw0KPiA+IGEgZHJpdmVyIGJvdW5kLiBJdCBjYW4gY2F1c2UgYSBOVUxMIHBvaW50ZXIgZGVy
+ZWZlcmVuY2Ugd2hlbiBhIGRldmljZQ0KPiA+IHdpdGhvdXQgYSBkcml2ZXIgYm91bmQgcmVnaXN0
+ZXJzIGEgY29tcG9uZW50LiBUaGlzIGlzIGR1ZSB0byB0aGUNCj4gPiBuYXR1cmUgb2YgdGhlIGNv
+bXBvbmVudCBmcmFtZXdvcmsgd2hlcmUgYWxsIHJlZ2lzdGVyZWQgY29tcG9uZW50cyBhcmUNCj4g
+PiBtYXRjaGVkIGluIGFueSBjb21wb25lbnRfbWF0Y2ggY2FsbGJhY2sgZnVuY3Rpb25zLiBTbyBl
+dmVuIGlmIGENCj4gPiBjb21wb25lbnQgaXMgcmVnaXN0ZXJlZCBieSBhIHRvdGFsbHkgaXJyZWxl
+dmFudCBkZXZpY2UsIHRoYXQgY29tcG9uZW50DQo+ID4gaXMgYWxzbyBzaGFyZWQgdG8gdGhlc2Ug
+Y2FsbGJhY2tzIGZvciBpOTE1IGRyaXZlci4NCj4gPg0KPiA+IFRvIHByZXZlbnQgdG90YWxseSBp
+cnJlbGV2YW50IGRldmljZSBiZWluZyBtYXRjaGVkIGZvciBpOTE1IGFuZA0KPiA+IGNhdXNpbmcg
+YSBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgZm9yIGNoZWNraW5nIGRyaXZlciBuYW1lLCBhZGQg
+YQ0KPiA+IE5VTEwgY2hlY2sgb24NCj4gPiBkZXYtPmRyaXZlciB0byBjaGVjayBpZiB0aGVyZSBp
+cyBhIGRyaXZlciBib3VuZCBiZWZvcmUgY2hlY2tpbmcgdGhlDQo+ID4gZHJpdmVyIG5hbWUuDQo+
+ID4NCj4gPiBJbiB0aGUgZnV0dXJlLCB0aGUgc3RyaW5nIGNvbXBhcmUgb24gdGhlIGRyaXZlciBu
+YW1lLCAiaTkxNSIgbWF5IG5lZWQNCj4gPiB0byBiZSByZWZhY3RvcmVkIHRvby4NCj4gPg0KPiA+
+IFJldmlld2VkLWJ5OiBIZWlra2kgS3JvZ2VydXMgPGhlaWtraS5rcm9nZXJ1c0BsaW51eC5pbnRl
+bC5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IFByYXNoYW50IE1hbGFuaSA8cG1hbGFuaUBjaHJvbWl1
+bS5vcmc+DQo+ID4gU2lnbmVkLW9mZi1ieTogV29uIENodW5nIDx3b25jaHVuZ0Bnb29nbGUuY29t
+Pg0KQWNrZWQtYnk6IFRvbWFzIFdpbmtsZXIgPHRvbWFzLndpbmtsZXJAaW50ZWwuY29tPiANCg0K
+PiA+IC0tLQ0KPiA+ICBkcml2ZXJzL21pc2MvbWVpL2hkY3AvbWVpX2hkY3AuYyB8IDIgKy0NCj4g
+PiAgZHJpdmVycy9taXNjL21laS9weHAvbWVpX3B4cC5jICAgfCAyICstDQo+ID4gIDIgZmlsZXMg
+Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvbWlzYy9tZWkvaGRjcC9tZWlfaGRjcC5jDQo+ID4gYi9kcml2ZXJzL21p
+c2MvbWVpL2hkY3AvbWVpX2hkY3AuYw0KPiA+IGluZGV4IGVjMmE0ZmNlODU4MS4uZTg4OWE4YmQ3
+YWM4IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvbWlzYy9tZWkvaGRjcC9tZWlfaGRjcC5jDQo+
+ID4gKysrIGIvZHJpdmVycy9taXNjL21laS9oZGNwL21laV9oZGNwLmMNCj4gPiBAQCAtNzg0LDcg
+Kzc4NCw3IEBAIHN0YXRpYyBpbnQgbWVpX2hkY3BfY29tcG9uZW50X21hdGNoKHN0cnVjdA0KPiBk
+ZXZpY2UNCj4gPiAqZGV2LCBpbnQgc3ViY29tcG9uZW50LCAgew0KPiA+ICAgICAgICAgc3RydWN0
+IGRldmljZSAqYmFzZSA9IGRhdGE7DQo+ID4NCj4gPiAtICAgICAgIGlmIChzdHJjbXAoZGV2LT5k
+cml2ZXItPm5hbWUsICJpOTE1IikgfHwNCj4gPiArICAgICAgIGlmICghZGV2LT5kcml2ZXIgfHwg
+c3RyY21wKGRldi0+ZHJpdmVyLT5uYW1lLCAiaTkxNSIpIHx8DQo+ID4gICAgICAgICAgICAgc3Vi
+Y29tcG9uZW50ICE9IEk5MTVfQ09NUE9ORU5UX0hEQ1ApDQo+ID4gICAgICAgICAgICAgICAgIHJl
+dHVybiAwOw0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9tZWkvcHhwL21laV9w
+eHAuYw0KPiA+IGIvZHJpdmVycy9taXNjL21laS9weHAvbWVpX3B4cC5jIGluZGV4IGY3MzgwZDM4
+N2JhYi4uNWMzOTQ1N2UzZjUzDQo+ID4gMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9taXNjL21l
+aS9weHAvbWVpX3B4cC5jDQo+ID4gKysrIGIvZHJpdmVycy9taXNjL21laS9weHAvbWVpX3B4cC5j
+DQo+ID4gQEAgLTEzMSw3ICsxMzEsNyBAQCBzdGF0aWMgaW50IG1laV9weHBfY29tcG9uZW50X21h
+dGNoKHN0cnVjdCBkZXZpY2UNCj4gPiAqZGV2LCBpbnQgc3ViY29tcG9uZW50LCAgew0KPiA+ICAg
+ICAgICAgc3RydWN0IGRldmljZSAqYmFzZSA9IGRhdGE7DQo+ID4NCj4gPiAtICAgICAgIGlmIChz
+dHJjbXAoZGV2LT5kcml2ZXItPm5hbWUsICJpOTE1IikgfHwNCj4gPiArICAgICAgIGlmICghZGV2
+LT5kcml2ZXIgfHwgc3RyY21wKGRldi0+ZHJpdmVyLT5uYW1lLCAiaTkxNSIpIHx8DQo+ID4gICAg
+ICAgICAgICAgc3ViY29tcG9uZW50ICE9IEk5MTVfQ09NUE9ORU5UX1BYUCkNCj4gPiAgICAgICAg
+ICAgICAgICAgcmV0dXJuIDA7DQo+ID4NCj4gPiAtLQ0KPiA+IDIuMzYuMC5yYzAuNDcwLmdkMzYx
+Mzk3ZjBkLWdvb2cNCj4gPg0KPiANCj4gSGkgVG9tYXMsDQo+IA0KPiBJIGFtIGFkZGluZyB5b3Ug
+dG8gdGhpcyBwYXRjaCBzaW5jZSB5b3UgYXJlIHRoZSBtYWludGFpbmVyIG9mIE1FSS4NCj4gSWYg
+dGhpcyBsb29rcyBva2F5IHRvIHlvdSwgY291bGQgeW91IGFsc28gdGFrZSBhIGxvb2sgYXQgdGhl
+IGNvbW1lbnQgdGhyZWFkIG9uDQo+IHRoZSBjb3ZlciBsZXR0ZXIgYW5kIGdpdmUgYW4gYWNrIGlm
+IGl0IGlzIG9rYXkgdG8gYmUgbWVyZ2VkIGludG8gdGh1bmRlcmJvbHQNCj4gdHJlZT8NCj4gaHR0
+cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjIwNDE4MTc1OTMyLjE4MDk3NzAtMS0NCj4gd29u
+Y2h1bmdAZ29vZ2xlLmNvbS8NCj4gDQo+IFRoYW5rIHlvdSwNCj4gV29uDQo=

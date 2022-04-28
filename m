@@ -2,295 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39066513F1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DB8513F1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353308AbiD1Xhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 19:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S1353312AbiD1XlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 19:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349993AbiD1Xhj (ORCPT
+        with ESMTP id S232494AbiD1XlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 19:37:39 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21A1AAB79
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:34:22 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id w3-20020a17090ac98300b001b8b914e91aso3338962pjt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=5pHMEPma0oFr5+q1aO+yvgHhZ7a6IOyPSMScr6+UUVc=;
-        b=VdD/vwCpVCQmuzzeiGHOQjtnPQKhgTj8VnaCOizDpYuelZytsGrrdNBH/qNgJeNXoI
-         ErN9xys17CpClOm5qqyY0Po+S5wqgmwiN5KklpowCvQaV5zSsTC2pT3S6QZ9H9pTT+HS
-         mU+WB7BiVzVMUQnLJTBDPIJ4hLh7DSR2MGI0V74mb2UiRqzGllmy90uIiwwH84w/IUv7
-         IUCwODfZS3a7G43sn12Firxn1+02nNTw9cFIDSP3Q0IZSq9EpX0RklKp//snXiuafF1m
-         Yfw7JAp8+SAI3o83AWR+RUe4t24z7bXn/y9TH/GYlZazc5wsE9CmmY50du5RfczCNyZx
-         igww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=5pHMEPma0oFr5+q1aO+yvgHhZ7a6IOyPSMScr6+UUVc=;
-        b=qv+xEQeEUsOe6tS7hQwoywZ50VDOR4ZpUEKW/DvVIJtCdQtmmlk4k8yiYxxzRmFJUP
-         HZTRptmoj1n79bdT5Uk0o+Wqxm26xU0w3q6crZULWVDSLB1L293ckxIrWK4gihvRFrW8
-         CCp5VPK3s6CKY7otMYnB+pf9hm/1wuMwsmTnxd/OL5JmDJyHEZIRyWT11nZ1scEpItDx
-         nhzegvBSQ9+0g5TbBaZrF0ZzbAkhCjZA5CoTbcCCuxh67Bw0Bl7YfsnLHLgI7Q1lRy5w
-         p5laye/CfGrDssgm0QRS1D8+8rrRIgwiJgx47bOgG6YA2QsFUzGh2zGlBF9KBjS0BBHH
-         hV4A==
-X-Gm-Message-State: AOAM5326/JCWSr5e9KAkNPnrS7oMqX9lzeJi+wIecBo4GjIQ829P2SeB
-        6NCE1/4dg4HAOaZDhWWkj3wPjB+Q+VA=
-X-Google-Smtp-Source: ABdhPJyP1oIGL2MjKOc17LUccRNWwj31R5OHG8G+bLaOk//awuStItppfdPfNFSZ77flropLhdrXvbEavjM=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:8304:b0:155:d594:5c04 with SMTP id
- bd4-20020a170902830400b00155d5945c04mr35348308plb.105.1651188862437; Thu, 28
- Apr 2022 16:34:22 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 28 Apr 2022 23:34:16 +0000
-Message-Id: <20220428233416.2446833-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed host.MAXPHYADDR
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 19:41:00 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4111018E1D;
+        Thu, 28 Apr 2022 16:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651189064; x=1682725064;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kS1UILR4AHiwNi6IYltlQY0rL520T3mlgEVXlEzBVgU=;
+  b=RekTOzvblznWodREYrlmwJDoyNP5Wr2NE4bp3CpFse5Zvhw/19L4sE5r
+   hlook0WcLTia3k/UF+RdMwP/8Umxexi/NrabdVMBGBMYizKak0z9Vuc7M
+   u3w37XIEWrZSMx5e7/ShfdQi7Lh2Hixc7T7KBWtrup2m1GhYNM0uaFFLu
+   EF0JhftVLTqPiu25EYJ93OyAjFHnuPtR38/pe6PbH2sXI0RwZZd929QTK
+   qrAwtB/7dU0zEtw02WaBbuIl2VbNgodI6YZnPvcrTx9erlW4T0usTQCr2
+   ElEij+3Y9sSAJdIyqMP4WY7HyAs/Fqfc0UWLmAvYprn7kSh1JKzKksm/V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="265987659"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="265987659"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 16:37:43 -0700
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="731766364"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.212.153.220])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 16:37:43 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v17 0/5] Intel FPGA Card BMC Secure Update Driver
+Date:   Thu, 28 Apr 2022 16:37:27 -0700
+Message-Id: <20220428233732.189425-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disallow memslots and MMIO SPTEs whose gpa range would exceed the host's
-MAXPHYADDR, i.e. don't create SPTEs for gfns that exceed host.MAXPHYADDR.
-The TDP MMU bounds its zapping based on host.MAXPHYADDR, and so if the
-guest, possibly with help from userspace, manages to coerce KVM into
-creating a SPTE for an "impossible" gfn, KVM will leak the associated
-shadow pages (page tables).
+Note: These patches are dependent on the firmware-upload patches that
+are currently in driver-core-next. There are also a couple of fixup
+patches are recommended. These are not necessary if you turn on
+both CONFIG_FW_LOADER_USER_HELPER CONFIG_FW_UPLOAD:
+https://lore.kernel.org/lkml/20220426200356.126085-1-russell.h.weight@intel.com/
 
-On bare metal, encountering an impossible gpa in the page fault path is
-well and truly impossible, barring CPU bugs, as the CPU will signal #PF
-during the gva=>gpa translation (or a similar failure when stuffing a
-physical address into e.g. the VMCS/VMCB).  But if KVM is running as a VM
-itself, the MAXPHYADDR enumerated to KVM may not be the actual MAXPHYADDR
-of the underlying hardware, in which case the hardware will not fault on
-the illegal-from-KVM's-perspective gpa.
+The Intel FPGA Card BMC Secure Update driver instantiates the new
+Firmware Upload functionality of the Firmware Loader and provides the
+callback functions required to support secure updates on Intel n3000 PAC
+devices.  This driver is implemented as a sub-driver of the Intel MAX10
+BMC mfd driver.
 
-Alternatively, KVM could continue allowing the dodgy behavior and simply
-zap the max possible range.  But, for hosts with MAXPHYADDR < 52, that's
-a (minor) waste of cycles, and more importantly, KVM can't reasonably
-support impossible memslots when running on bare metal (or with an
-accurate MAXPHYADDR as a VM).  Note, limiting the overhead by checking if
-KVM is running as a guest is not a safe option as the host isn't required
-to announce itself to the guest in any way, e.g. doesn't need to set the
-HYPERVISOR CPUID bit.
+This driver interacts with the HW secure update engine of the FPGA
+card BMC in order to transfer new FPGA and BMC images to FLASH on
+the FPGA card.  Security is enforced by hardware and firmware.  The
+FPGA Card BMC Secure Update driver interacts with the firmware to
+initiate an update, pass in the necessary data, and collect status
+on the update.
 
-A second alternative to disallowing the memslot behavior would be to
-disallow creating a VM with guest.MAXPHYADDR > host.MAXPHYADDR.  That
-restriction is undesirable as there are legitimate use cases for doing
-so, e.g. using the highest host.MAXPHYADDR out of a pool of heterogeneous
-systems so that VMs can be migrated between hosts with different
-MAXPHYADDRs without running afoul of the allow_smaller_maxphyaddr mess.
+This driver provides sysfs files for displaying the flash count, the
+root entry hashes (REH), and the code-signing-key (CSK) cancellation
+vectors.
 
-Opportunistically make the now common kvm_mmu_max_gfn_host() inclusive
-instead of exclusive.  The inclusive approach is somewhat silly as the
-memslot and TDP MMU code want an exclusive value, but the name implies
-the returned value is inclusive, and the MMIO path needs an inclusive
-check.
+Changelog v16 -> v17:
+  - Change m10bmc to cardbmc to reflect the fact that the future devices
+    will not necessarily use the MAX10. This affects filenames, configs,
+    symbol names, and the driver name.
+  - Update the Date and KernelVersion for the ABI documentation to Jul 2022
+    and 5.19 respectively.
+  - Updated the copyright end-date to 2022 for the secure update driver.
+  - Removed references to the FPGA Image Load class driver and replaced
+    them with the new firmware-upload service from the firmware loader.
+  - Use xarray_alloc to generate a unique number/name firmware-upload.
+  - Chang the license from GPL to GPLv2 per commit bf7fbeeae6db ("module:
+    Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
+  - fw_upload_ops functions will return "enum fw_upload_err" data types
+    instead of integer values.
 
-  WARNING: CPU: 10 PID: 1122 at arch/x86/kvm/mmu/tdp_mmu.c:57
-                                kvm_mmu_uninit_tdp_mmu+0x4b/0x60 [kvm]
-  Modules linked in: kvm_intel kvm irqbypass
-  CPU: 10 PID: 1122 Comm: set_memory_regi Tainted: G        W         5.18.0-rc1+ #293
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-  RIP: 0010:kvm_mmu_uninit_tdp_mmu+0x4b/0x60 [kvm]
-  Call Trace:
-   <TASK>
-   kvm_arch_destroy_vm+0x130/0x1b0 [kvm]
-   kvm_destroy_vm+0x162/0x2d0 [kvm]
-   kvm_vm_release+0x1d/0x30 [kvm]
-   __fput+0x82/0x240
-   task_work_run+0x5b/0x90
-   exit_to_user_mode_prepare+0xd2/0xe0
-   syscall_exit_to_user_mode+0x1d/0x40
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
+Changelog v15 -> v16:
+  - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
+  - The size alignment check was moved from the FPGA Image Load framework
+    to the prepare() op.
+  - Added cancel_request boolean flag to struct m10bmc_sec.
+  - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
+    rsu_cancel() function.
+  - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
+    The cancel_request flag is checked at the beginning of the
+    m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
+  - Adapt to changed prototypes for the prepare() and write() ops. The
+    m10bmc_sec_write_blk() function has been renamed to
+    m10bmc_sec_write().
+  - Created a cleanup op, m10bmc_sec_cleanup(), to attempt to cancel an
+    ongoing op during when exiting the update process.
 
-Fixes: faaf05b00aec ("kvm: x86/mmu: Support zapping SPTEs in the TDP MMU")
-Fixes: 524a1e4e381f ("KVM: x86/mmu: Don't leak non-leaf SPTEs when zapping all SPTEs")
-Cc: stable@vger.kernel.org
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Cc: Ben Gardon <bgardon@google.com>
-Cc: David Matlack <dmatlack@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
+Changelog v14 -> v15:
+  - Updated the Dates and KernelVersions in the ABI documentation
+  - Change driver name from "n3000bmc-secure" to "n3000bmc-sec-update".
+  - Change CONFIG_FPGA_M10_BMC_SECURE to CONFIG_FPGA_M10_BMC_SEC_UPDATE.
+  - Change instances of *bmc-secure to *bmc-sec-update in file name
+    and symbol names.
+  - Change instances of *m10bmc_secure* to *m10bmc-sec_update* in symbol
+    names.
+  - Adapted to changes in the FPGA Image Load framework:
+    (1) All enum types (progress and errors) are now type u32
+    (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
+        and uses *blk_size as provided by the caller.
+    (3) m10bmc_sec_poll_complete() no long checks the driver_unload
+        flag.
 
-Maxim, I didn't add you as Reported-by because I'm not confident this is
-actually the cause of the bug you're hitting.  I wasn't able to reproduce
-using your ipi_stress test, I found this horror via inspection and proved
-it by hacking a selftest.
+Changelog v13 -> v14:
+  - Changed symbol and text references to reflect the renaming of the
+    Security Manager Class driver to FPGA Image Load.
 
-That said, I'm holding out hope that this does fix your issue.  Your
-config doesn't specify host-phys-bits and IIUC you haven't been able to
-repro on bare metal, which fits the kvm.MAXPHYADDR < cpu.MAXPHYADDR
-scenario.  In theory if the test went rogue it could acccess a bad gfn and
-cause KVM to insert an MMIO SPTE.  Fingers crossed :-)
+Changelog v12 -> v13:
+  - Updated copyright to 2021
+  - Updated Date and KernelVersion fields in ABI documentation
+  - Call updated fpga_sec_mgr_register() and fpga_sec_mgr_unregister()
+    functions instead of devm_fpga_sec_mgr_create() and
+    devm_fpga_sec_mgr_register().
 
-If it does fix your case, a Reported-by for both you and Syzbot is
-definitely in order.
+Changelog v11 -> v12:
+  - Updated Date and KernelVersion fields in ABI documentation
+  - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
+    no longer has a size parameter, and the block size is determined
+    in this (the lower-level) driver.
 
- arch/x86/kvm/mmu.h         | 21 +++++++++++++++++++++
- arch/x86/kvm/mmu/mmu.c     | 10 ++++++++--
- arch/x86/kvm/mmu/spte.h    |  6 ------
- arch/x86/kvm/mmu/tdp_mmu.c | 15 ++++++++-------
- arch/x86/kvm/x86.c         |  6 +++++-
- 5 files changed, 42 insertions(+), 16 deletions(-)
+Changelog v10 -> v11:
+  - Added Reviewed-by tag to patch #1
 
-diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-index 671cfeccf04e..d291ff3065dc 100644
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -65,6 +65,27 @@ static __always_inline u64 rsvd_bits(int s, int e)
- 	return ((2ULL << (e - s)) - 1) << s;
- }
- 
-+/*
-+ * The number of non-reserved physical address bits irrespective of features
-+ * that repurpose legal bits, e.g. MKTME.
-+ */
-+extern u8 __read_mostly shadow_phys_bits;
-+
-+static inline gfn_t kvm_mmu_max_gfn_host(void)
-+{
-+	/*
-+	 * Disallow SPTEs (via memslots or cached MMIO) whose gfn would exceed
-+	 * host.MAXPHYADDR.  Assuming KVM is running on bare metal, guest
-+	 * accesses beyond host.MAXPHYADDR will hit a #PF(RSVD) and never hit
-+	 * an EPT Violation/Misconfig / #NPF, and so KVM will never install a
-+	 * SPTE for such addresses.  That doesn't hold true if KVM is running
-+	 * as a VM itself, e.g. if the MAXPHYADDR KVM sees is less than
-+	 * hardware's real MAXPHYADDR, but since KVM can't honor such behavior
-+	 * on bare metal, disallow it entirely to simplify e.g. the TDP MMU.
-+	 */
-+	return (1ULL << (shadow_phys_bits - PAGE_SHIFT)) - 1;
-+}
-+
- void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
- void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
- 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 904f0faff218..c10ae25135e3 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3010,9 +3010,15 @@ static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fa
- 		/*
- 		 * If MMIO caching is disabled, emulate immediately without
- 		 * touching the shadow page tables as attempting to install an
--		 * MMIO SPTE will just be an expensive nop.
-+		 * MMIO SPTE will just be an expensive nop.  Do not cache MMIO
-+		 * whose gfn is greater than host.MAXPHYADDR, any guest that
-+		 * generates such gfns is either malicious or in the weeds.
-+		 * Note, it's possible to observe a gfn > host.MAXPHYADDR if
-+		 * and only if host.MAXPHYADDR is inaccurate with respect to
-+		 * hardware behavior, e.g. if KVM itself is running as a VM.
- 		 */
--		if (unlikely(!enable_mmio_caching)) {
-+		if (unlikely(!enable_mmio_caching) ||
-+		    unlikely(fault->gfn > kvm_mmu_max_gfn_host())) {
- 			*ret_val = RET_PF_EMULATE;
- 			return true;
- 		}
-diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-index ad8ce3c5d083..43eceb821b31 100644
---- a/arch/x86/kvm/mmu/spte.h
-+++ b/arch/x86/kvm/mmu/spte.h
-@@ -203,12 +203,6 @@ static inline bool is_removed_spte(u64 spte)
-  */
- extern u64 __read_mostly shadow_nonpresent_or_rsvd_lower_gfn_mask;
- 
--/*
-- * The number of non-reserved physical address bits irrespective of features
-- * that repurpose legal bits, e.g. MKTME.
-- */
--extern u8 __read_mostly shadow_phys_bits;
--
- static inline bool is_mmio_spte(u64 spte)
- {
- 	return (spte & shadow_mmio_mask) == shadow_mmio_value &&
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 566548a3efa7..a81994ad43de 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -815,14 +815,15 @@ static inline bool __must_check tdp_mmu_iter_cond_resched(struct kvm *kvm,
- 	return iter->yielded;
- }
- 
--static inline gfn_t tdp_mmu_max_gfn_host(void)
-+static inline gfn_t tdp_mmu_max_exclusive_gfn_host(void)
- {
- 	/*
--	 * Bound TDP MMU walks at host.MAXPHYADDR, guest accesses beyond that
--	 * will hit a #PF(RSVD) and never hit an EPT Violation/Misconfig / #NPF,
--	 * and so KVM will never install a SPTE for such addresses.
-+	 * Bound TDP MMU walks at host.MAXPHYADDR.  KVM disallows memslots with
-+	 * a gpa range that would exceed the max gfn, and KVM does not create
-+	 * MMIO SPTEs for "impossible" gfns, instead sending such accesses down
-+	 * the slow emulation path every time.
- 	 */
--	return 1ULL << (shadow_phys_bits - PAGE_SHIFT);
-+	return kvm_mmu_max_gfn_host() + 1;
- }
- 
- static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-@@ -830,7 +831,7 @@ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
- {
- 	struct tdp_iter iter;
- 
--	gfn_t end = tdp_mmu_max_gfn_host();
-+	gfn_t end = tdp_mmu_max_exclusive_gfn_host();
- 	gfn_t start = 0;
- 
- 	for_each_tdp_pte_min_level(iter, root, zap_level, start, end) {
-@@ -923,7 +924,7 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
- {
- 	struct tdp_iter iter;
- 
--	end = min(end, tdp_mmu_max_gfn_host());
-+	end = min(end, tdp_mmu_max_exclusive_gfn_host());
- 
- 	lockdep_assert_held_write(&kvm->mmu_lock);
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 951d0a78ccda..26ea5999d72b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12078,8 +12078,12 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
- 				   struct kvm_memory_slot *new,
- 				   enum kvm_mr_change change)
- {
--	if (change == KVM_MR_CREATE || change == KVM_MR_MOVE)
-+	if (change == KVM_MR_CREATE || change == KVM_MR_MOVE) {
-+		if ((new->base_gfn + new->npages - 1) > kvm_mmu_max_gfn_host())
-+			return -EINVAL;
-+
- 		return kvm_alloc_memslot_metadata(kvm, new);
-+	}
- 
- 	if (change == KVM_MR_FLAGS_ONLY)
- 		memcpy(&new->arch, &old->arch, sizeof(old->arch));
+Changelog v9 -> v10:
+  - Changed the path expressions in the sysfs documentation to
+    replace the n3000 reference with something more generic to
+    accommodate other devices that use the same driver.
 
-base-commit: 2a39d8b39bffdaf1a4223d0d22f07baee154c8f3
+Changelog v8 -> v9:
+  - Rebased to 5.12-rc2 next
+  - Updated Date and KernelVersion in ABI documentation
+
+Changelog v7 -> v8:
+  - Split out patch "mfd: intel-m10-bmc: support for MAX10 BMC Secure
+    Updates" and submitted it separately:
+    https://marc.info/?l=linux-kernel&m=161126987101096&w=2
+
+Changelog v6 -> v7:
+  - Rebased patches for 5.11-rc2
+  - Updated Date and KernelVersion in ABI documentation
+
+Changelog v5 -> v6:
+  - Added WARN_ON() prior to several calls to regmap_bulk_read()
+    to assert that the (SIZE / stride) calculations did not result
+    in remainders.
+  - Changed the (size / stride) calculation in regmap_bulk_write()
+    call to ensure that we don't write one less than intended.
+  - Changed flash_count_show() parameter list to achieve
+    reverse-christmas tree format.
+  - Removed unnecessary call to rsu_check_complete() in
+    m10bmc_sec_poll_complete() and changed while loop to
+    do/while loop.
+  - Initialized auth_result and doorbell to HW_ERRINFO_POISON
+    in m10bmc_sec_hw_errinfo() and removed unnecessary if statements.
+
+Changelog v4 -> v5:
+  - Renamed sysfs node user_flash_count to flash_count and updated
+    the sysfs documentation accordingly to more accurately descirbe
+    the purpose of the count.
+
+Changelog v3 -> v4:
+  - Moved sysfs files for displaying the flash count, the root
+    entry hashes (REH), and the code-signing-key (CSK) cancellation
+    vectors from the FPGA Security Manager class driver to this
+    driver (as they are not generic enough for the class driver).
+  - Added a new ABI documentation file with informtaion about the
+    new sysfs entries: sysfs-driver-intel-m10-bmc-secure
+  - Updated the MAINTAINERS file to add the new ABI documentation
+    file: sysfs-driver-intel-m10-bmc-secure
+  - Removed unnecessary ret variable from m10bmc_secure_probe()
+  - Incorporated new devm_fpga_sec_mgr_register() function into
+    m10bmc_secure_probe() and removed the m10bmc_secure_remove()
+    function.
+
+Changelog v2 -> v3:
+  - Changed "MAX10 BMC Security Engine driver" to "MAX10 BMC Secure
+    Update driver"
+  - Changed from "Intel FPGA Security Manager" to FPGA Security Manager"
+  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+  - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+    underlying functions are now called directly.
+  - Changed "_root_entry_hash" to "_reh", with a comment explaining
+    what reh is.
+  - Renamed get_csk_vector() to m10bmc_csk_vector()
+  - Changed calling functions of functions that return "enum fpga_sec_err"
+    to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
+
+Changelog v1 -> v2:
+  - These patches were previously submitted as part of a larger V1
+    patch set under the title "Intel FPGA Security Manager Class Driver".
+  - Grouped all changes to include/linux/mfd/intel-m10-bmc.h into a
+    single patch: "mfd: intel-m10-bmc: support for MAX10 BMC Security
+    Engine".
+  - Removed ifpga_sec_mgr_init() and ifpga_sec_mgr_uinit() functions.
+  - Adapted to changes in the Intel FPGA Security Manager by splitting
+    the single call to ifpga_sec_mgr_register() into two function
+    calls: devm_ifpga_sec_mgr_create() and ifpga_sec_mgr_register().
+  - Replaced small function-creation macros for explicit function
+    declarations.
+  - Bug fix for the get_csk_vector() function to properly apply the
+    stride variable in calls to m10bmc_raw_bulk_read().
+  - Added m10bmc_ prefix to functions in m10bmc_iops structure
+  - Implemented HW_ERRINFO_POISON for m10bmc_sec_hw_errinfo() to
+    ensure that corresponding bits are set to 1 if we are unable
+    to read the doorbell or auth_result registers.
+  - Added comments and additional code cleanup per V1 review.
+
+Russ Weight (5):
+  mfd: intel-m10-bmc: Rename n3000bmc-secure driver
+  fpga: cardbmc-sec: create bmc secure update driver
+  fpga: cardbmc-sec: expose flash update count
+  fpga: cardbmc-sec: expose canceled keys in sysfs
+  fpga: cardbmc-sec: add card BMC secure update functions
+
+ .../sysfs-driver-intel-cardbmc-sec-update     |  61 ++
+ MAINTAINERS                                   |   7 +
+ drivers/fpga/Kconfig                          |  12 +
+ drivers/fpga/Makefile                         |   3 +
+ drivers/fpga/intel-cardbmc-sec-update.c       | 587 ++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c                   |   2 +-
+ 6 files changed, 671 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-cardbmc-sec-update
+ create mode 100644 drivers/fpga/intel-cardbmc-sec-update.c
+
+
+base-commit: 4388f887b857de8576a8bf7fefc1202dc7dd10df
 -- 
-2.36.0.464.gb9c8b46e94-goog
+2.25.1
 

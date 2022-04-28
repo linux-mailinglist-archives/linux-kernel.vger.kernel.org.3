@@ -2,227 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1180512DB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700B9512DB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343797AbiD1IIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S1343990AbiD1IJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343806AbiD1IIC (ORCPT
+        with ESMTP id S1343847AbiD1IIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:08:02 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0966F9D4E9;
-        Thu, 28 Apr 2022 01:04:47 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CE5A46000D;
-        Thu, 28 Apr 2022 08:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651133085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 28 Apr 2022 04:08:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBBB13F89
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:05:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C11211F88A;
+        Thu, 28 Apr 2022 08:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651133114; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XFs4BoPFxxMdlDnM4BwqsNcAhqErhYQfhGYqvICNnic=;
-        b=mp/2iSH7tfbe8g/5WJ3MiWav+wygO0D+A4ld69PaCo5bU9jE9M5pyY2WpYYMvhE10xe2lY
-        mtIvqWtsvYA3PCbxGlgXbTbEDoqEG1m+xDzrUovm1CYfVOBaDNQlYzpwe8lvXiyCafaVS3
-        zVFguuWu/SLdpeqvTHVavojWQydWEfBNw8iZXfOrE9pQSnsWUulwrG2eCKsZyEImte8tyK
-        6ik1cj/nbQTTh61UqFA6YA35nBhqLAaK3S8EffM1M7DY96sDD45Yk7P4sDV/NlEvf4MhvE
-        v+/ppmeXSHhl2abOjUsm1EvUIdFzWMCYUPK1wMEUTRrKmkKyhIAS/FtvjazP6A==
-Date:   Thu, 28 Apr 2022 10:04:37 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 13/45] media: sun6i-csi: Introduce and use video
- helper functions
-Message-ID: <YmpKlePweCAyeOT0@aptenodytes>
-References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
- <20220415152811.636419-14-paul.kocialkowski@bootlin.com>
- <13001485.uLZWGnKmhe@jernej-laptop>
+        bh=98oHi700xFOE02Vfn35dIwzesf4K3FljW87BzHJLrQU=;
+        b=fQhuQ2AbAnE1rRzJrjxkZfleHvwI0UivAXv2yhV069POMNFwFmtBgjvuOdpBKiYsiuAnFF
+        e1JMUtswDgXIG0CMgfiYYgveoQJkji8AB7PYvMBGTtuNJuru8J2WQ5/ZFOB7MRQRZsR4ax
+        DCvv6VLzFxlopelnT5PadpfxpS5sIjs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651133114;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=98oHi700xFOE02Vfn35dIwzesf4K3FljW87BzHJLrQU=;
+        b=6FcnaTQlmCIMgFemIbEhNxQMu+kfVDrobPwD6SwNuojCE4QEpHcOwY1uK24q3E9zZQZuLX
+        YvdXMN1mtXgKv+Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9F59D13AF8;
+        Thu, 28 Apr 2022 08:05:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RpjOJbpKamJ2IgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 28 Apr 2022 08:05:14 +0000
+Message-ID: <7cccce3d-b154-0a9c-31bd-f41f998300da@suse.de>
+Date:   Thu, 28 Apr 2022 10:05:14 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
+ and DRM_DP_CEC
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220427215528.237861-1-javierm@redhat.com>
+ <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
+ <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
+ <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
+ <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hbLKg0yuMi8/nDoQ"
-Content-Disposition: inline
-In-Reply-To: <13001485.uLZWGnKmhe@jernej-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ protocol="application/pgp-signature";
+ boundary="------------mvVyOA8ZAtO3EHbb06WV8lLg"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------mvVyOA8ZAtO3EHbb06WV8lLg
+Content-Type: multipart/mixed; boundary="------------hYgqoZl4rysfPenpEgA0cNW2";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@linux.intel.com>,
+ Lyude Paul <lyude@redhat.com>
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+Message-ID: <7cccce3d-b154-0a9c-31bd-f41f998300da@suse.de>
+Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
+ and DRM_DP_CEC
+References: <20220427215528.237861-1-javierm@redhat.com>
+ <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
+ <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
+ <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
+ <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
+In-Reply-To: <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
 
---hbLKg0yuMi8/nDoQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--------------hYgqoZl4rysfPenpEgA0cNW2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Hi Jernej,
+KGNjIEphbmkgYW5kIEx5dWRlKQ0KDQpBbSAyOC4wNC4yMiB1bSAwOTo1MiBzY2hyaWViIEph
+dmllciBNYXJ0aW5leiBDYW5pbGxhczoNCj4gT24gNC8yOC8yMiAwOTo0NSwgVGhvbWFzIFpp
+bW1lcm1hbm4gd3JvdGU6DQo+IA0KPiBbc25pcF0NCj4gDQo+Pj4+IFlvdSBjYW5ub3Qgc2Vs
+ZWN0IERJU1BMQVlfRFBfSEVMUEVSIHdpdGhvdXQgRElTUExBWV9IRUxQRVIuDQo+Pj4+DQo+
+Pj4NCj4+PiBUaGF0IHdhcyBteSBvcmlnaW5hbCB0aG91Z2h0IGFzIHdlbGwgYW5kIHdoYXQg
+ZGlkIGluIHYxLCBidXQgdGhlbiBJIG5vdGljZWQNCj4+PiB0aGF0IGRvaW5nIHRoYXQgaXQg
+d291bGQgZm9yY2UgRFJNX0RJU1BMQVlfSEVMUEVSIHRvIGJlIHNldCBhcyBidWlsdC1pbiBh
+bmQNCj4+PiBub3QgYWxsb3cgdG8gYmUgYnVpbHQgYXMgYSBtb2R1bGUuDQo+Pg0KPj4gSXQg
+d2FzIGEgcmhldG9yaWNhbCBvbmx5LiBJIGRpZG4ndCBtZWFuIHRvIGFjdHVhbGx5IHNldCBE
+SVNQTEFZX0hFTFBFUi4NCj4+DQo+IA0KPiBBaCwgc29ycnkgZm9yIG1pc3VuZGVyc3RhbmRp
+bmcuDQo+IA0KPj4+ICAgIA0KPj4+PiBDYW4ndCB5b3Ugc2ltcGx5IG1ha2UgaXQgZGVwZW5k
+IG9uIERJU1BMQVlfRFBfSEVMUEVSLiAgVGhlIG1lbnUgZW50cnkNCj4+Pj4gd2lsbCBzaG93
+IHVwIGFzIHNvb24gYXMgdGhlcmUncyBhIGRyaXZlciB0aGF0IHNlbGNldHMgRElTUExBWV9E
+UF9IRUxQRVIuDQo+Pj4+DQo+Pj4NCj4+PiBJIGNvdWxkIGJ1dCB0aGVuIHRoYXQgbWVhbnMg
+dGhhdCBvbmNlIHdvbid0IGJlIGFibGUgdG8gc2VsZWN0IHRoZXNlIHR3byBjb25maWcNCj4+
+PiBvcHRpb25zIHVubGVzcyBzb21lIGVuYWJsZSBzeW1ib2wgc2VsZWN0cyBEUk1fRElTUExB
+WV9EUF9IRUxQRVIuDQo+Pj4NCj4+PiBJbiBteSBvcGluaW9uLCBEUk1fRFBfQVVYX0NIQVJE
+RVYgYW5kIERSTV9EUF9DRUMgYXJlIGRpZmZlcmVudCB0aGFuIGFsbCBvdGhlcg0KPj4+IG9w
+dGlvbnMgdGhhdCBzZWxlY3QgRFJNX0RJU1BMQVlfRFBfSEVMUEVSLCBzaW5jZSB0aG9zZSBh
+cmUgZHJpdmVycyBhbmQgd2FudCB0bw0KPj4+IGhhdmUgYm90aCBEUk1fRElTUExBWV9EUF9I
+RUxQRVIgYW5kIERSTV9ESVNQTEFZX0hFTFBFUiBzZXQuDQo+Pj4NCj4+PiBCdXQgRFJNX0RQ
+X0FVWF9DSEFSREVWIGFuZCBEUk1fRFBfQ0VDIGFyZSBqdXN0IGluY2x1ZGVkIGluIGRybV9k
+aXNwbGF5X2hlbHBlci5vDQo+Pj4gaWYgZW5hYmxlZCwgYW5kIGRlcGVuZCBvbiBzeW1ib2xz
+IHRoYXQgYXJlIHByZXNlbnQgaWYgQ09ORklHX0RSTV9ESVNQTEFZX0RQX0hFTFBFUg0KPj4+
+IGlzIGVuYWJsZWQuIFNvIGp1c3QgbmVlZCB0aGUgbGF0dGVyLCBpZiBEUk1fRElTUExBWV9I
+RUxQRVIgaXMgbm90IGVuYWJsZWQgdGhlbiBpdA0KPj4+IHdpbGwganVzdCBiZSBhIG5vLW9w
+Lg0KPj4+DQo+Pj4gSGF2aW5nIHdyaXR0ZW4gdGhhdCB0aG91Z2ggSSBub3RpY2VkIHRoYXQg
+YSAiZGVwZW5kcyBvbiBEUk1fRElTUExBWV9IRUxQRVIiIG1ha2VzDQo+Pj4gc2Vuc2UuIElm
+IHlvdSBhZ3JlZSBJIGNhbiBhZGQgaXQgYW5kIHBvc3QgYSB2My4NCj4+DQo+PiBZZXMgcGxl
+YXNlLiAgVGhlc2Ugb3B0aW9ucyBlbmFibGUgZmVhdHVyZXMgb2YgdGhlIERQIGNvZGUuIElm
+IHRoZXJlJ3Mgbm8NCj4+IGRyaXZlciB3aXRoIERQLCBpdCBkb2Vzbid0IG1ha2Ugc2Vuc2Ug
+dG8gYWxsb3cgdGhlbS4NCj4+DQo+PiBJIGtub3cgdGhhdCB0aGVyZSBjb3VsZCBiZSBhbiBv
+ZGQgc2l0dWF0aW9uIHdoZXJlIHVzZXJzcGFjZSBtaWdodCBub3QNCj4+IGhhdmUgRFAsIGJ1
+dCBzdGlsbCB3YW50cyB0aGUgY2hhcmRldiBmaWxlIG9mIGF1eCBidXMuICBCdXQgdGhhdA0K
+Pj4gc2l0dWF0aW9uIGV4aXN0ZWQgYWxyZWFkeSB3aGVuIHRoZSBjb2RlIHdhcyBsb2NhdGVk
+IHdpdGhpbiBLTVMgaGVscGVycy4NCj4+DQo+IA0KPiBBZ3JlZWQuDQo+IA0KPj4+DQo+Pj4g
+Tm93LCBwb25kZXJpbmcgbW9yZSBhYm91dCB0aGlzIGlzc3VlLCBwcm9iYWJseSB0aGUgbW9z
+dCBjb3JyZWN0IHRoaW5nIHRvIGRvIGlzIGZvcg0KPj4+IHRoZSBkcml2ZXJzIHRoYXQgbWFr
+ZSB1c2Ugb2YgdGhlIHN5bWJvbHMgZXhwb3J0ZWQgYnkgRFJNX0RQX3tBVVhfQ0hBUkRFVixD
+RUN9IHRvDQo+Pj4gc2VsZWN0IHRoZXNlLiBXaGF0IGRvIHlvdSB0aGluayA/DQo+Pg0KPj4g
+VGhhdCdzIG5vdCBjb25zaWRlcmVkIGdvb2Qgc3R5bGUuIFNlbGVjdCBzaG91bGQgbm90IGJl
+IHVzZWQgZm9yIGFueXRoaW5nDQo+PiB0aGF0IGlzIHVzZXItY29uZmlndXJhYmxlLiBbMV0N
+Cj4+DQo+IA0KPiBSaWdodC4gU28gZ2l2aW5nIGV2ZW4gbW9yZSB0aG91Z2h0IHRvIHRoaXMs
+IG5vdyBJIHRoaW5rIHRoYXQgd2Ugc2hvdWxkIGp1c3QgaW5jbHVkZQ0KPiBkcm1fZHBfYXV4
+X2Rldi5vLCBkcm1fZHBfY2VjLm8gKGFuZCBwcm9iYWJseSBkcm1fZHBfYXV4X2J1cy5vPykg
+dW5jb25kaXRpb25hbGx5IHRvDQo+IGRybV9kaXNwbGF5X2hlbHBlci0kKENPTkZJR19EUk1f
+RElTUExBWV9EUF9IRUxQRVIpLg0KPiANCj4gQWZ0ZXIgYWxsLCB0aGVzZSBhcmUgbm90IGJp
+ZyBvYmplY3RzIGFuZCBkcm1fZGlzcGxheV9oZWxwZXIgY2FuIG5vdyBiZSBidWlsdCBhcyBt
+b2R1bGUuDQo+IA0KPiBJIGRvbid0IHNlZSB0aGF0IG11Y2ggdmFsdWUgdG8gaGF2ZSBzZXBh
+cmF0ZSB1c2VyLWNvbmZpZ3VyYWJsZSBjb25maWcgb3B0aW9ucy4uLg0KPiANCg0KLS0gDQpU
+aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
+d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
+bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
+w7xocmVyOiBJdm8gVG90ZXYNCg==
 
-On Wed 27 Apr 22, 20:50, Jernej =C5=A0krabec wrote:
-> Dne petek, 15. april 2022 ob 17:27:39 CEST je Paul Kocialkowski napisal(a=
-):
-> > Introduce some helpers for buffer and general video configuration.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > ---
-> >  .../platform/sunxi/sun6i-csi/sun6i_video.c    | 46 +++++++++++--------
-> >  1 file changed, 28 insertions(+), 18 deletions(-)
-> >=20
-> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-> > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c index
-> > e6c85fcc65bb..e47eeb27dc4e 100644
-> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-> > @@ -92,6 +92,29 @@ static bool sun6i_video_format_check(u32 format)
-> >  	return false;
-> >  }
-> >=20
-> > +/* Video */
-> > +
-> > +static void sun6i_video_buffer_configure(struct sun6i_csi_device *csi_=
-dev,
-> > +					 struct sun6i_csi_buffer=20
-> *csi_buffer)
-> > +{
-> > +	csi_buffer->queued_to_csi =3D true;
-> > +	sun6i_csi_update_buf_addr(csi_dev, csi_buffer->dma_addr);
-> > +}
-> > +
-> > +static void sun6i_video_configure(struct sun6i_csi_device *csi_dev)
-> > +{
-> > +	struct sun6i_video *video =3D &csi_dev->video;
-> > +	struct sun6i_csi_config config =3D { 0 };
-> > +
-> > +	config.pixelformat =3D video->format.fmt.pix.pixelformat;
-> > +	config.code =3D video->mbus_code;
-> > +	config.field =3D video->format.fmt.pix.field;
-> > +	config.width =3D video->format.fmt.pix.width;
-> > +	config.height =3D video->format.fmt.pix.height;
-> > +
-> > +	sun6i_csi_update_config(csi_dev, &config);
-> > +}
-> > +
-> >  /* Queue */
-> >=20
-> >  static int sun6i_video_queue_setup(struct vb2_queue *queue,
-> > @@ -160,7 +183,6 @@ static int sun6i_video_start_streaming(struct vb2_q=
-ueue
-> > *queue, struct video_device *video_dev =3D &video->video_dev;
-> >  	struct sun6i_csi_buffer *buf;
-> >  	struct sun6i_csi_buffer *next_buf;
-> > -	struct sun6i_csi_config config;
-> >  	struct v4l2_subdev *subdev;
-> >  	unsigned long flags;
-> >  	int ret;
-> > @@ -182,22 +204,13 @@ static int sun6i_video_start_streaming(struct
-> > vb2_queue *queue, goto error_media_pipeline;
-> >  	}
-> >=20
-> > -	config.pixelformat =3D video->format.fmt.pix.pixelformat;
-> > -	config.code =3D video->mbus_code;
-> > -	config.field =3D video->format.fmt.pix.field;
-> > -	config.width =3D video->format.fmt.pix.width;
-> > -	config.height =3D video->format.fmt.pix.height;
-> > -
-> > -	ret =3D sun6i_csi_update_config(csi_dev, &config);
-> > -	if (ret < 0)
-> > -		goto error_media_pipeline;
-> > +	sun6i_video_configure(csi_dev);
->=20
-> What happened to that error handling? New helper function ignores return =
-value=20
-> of sun6i_csi_update_config(). Why?
+--------------hYgqoZl4rysfPenpEgA0cNW2--
 
-Ah that's a good point, the error value is still being returned by
-sun6i_csi_update_config so it should be kept around at this stage.
-
-Note that this is a transitional commit and sun6i_video_configure
-(which gets renamed to sun6i_csi_capture_configure) is eventually
-reworked to only configure registers (no checks) and returns void.
-
-If you think it's important to keep it in the meantime I can do that.
-
-Paul
-
-> Best regards,
-> Jernej
->=20
-> >=20
-> >  	spin_lock_irqsave(&video->dma_queue_lock, flags);
-> >=20
-> >  	buf =3D list_first_entry(&video->dma_queue,
-> >  			       struct sun6i_csi_buffer, list);
-> > -	buf->queued_to_csi =3D true;
-> > -	sun6i_csi_update_buf_addr(csi_dev, buf->dma_addr);
-> > +	sun6i_video_buffer_configure(csi_dev, buf);
-> >=20
-> >  	sun6i_csi_set_stream(csi_dev, true);
-> >=20
-> > @@ -219,8 +232,7 @@ static int sun6i_video_start_streaming(struct vb2_q=
-ueue
-> > *queue, * would also drop frame when lacking of queued buffer.
-> >  	 */
-> >  	next_buf =3D list_next_entry(buf, list);
-> > -	next_buf->queued_to_csi =3D true;
-> > -	sun6i_csi_update_buf_addr(csi_dev, next_buf->dma_addr);
-> > +	sun6i_video_buffer_configure(csi_dev, next_buf);
-> >=20
-> >  	spin_unlock_irqrestore(&video->dma_queue_lock, flags);
-> >=20
-> > @@ -294,8 +306,7 @@ void sun6i_video_frame_done(struct sun6i_csi_device
-> > *csi_dev) * for next ISR call.
-> >  	 */
-> >  	if (!next_buf->queued_to_csi) {
-> > -		next_buf->queued_to_csi =3D true;
-> > -		sun6i_csi_update_buf_addr(csi_dev, next_buf->dma_addr);
-> > +		sun6i_video_buffer_configure(csi_dev, next_buf);
-> >  		dev_dbg(csi_dev->dev, "Frame dropped!\n");
-> >  		goto complete;
-> >  	}
-> > @@ -309,8 +320,7 @@ void sun6i_video_frame_done(struct sun6i_csi_device
-> > *csi_dev) /* Prepare buffer for next frame but one.  */
-> >  	if (!list_is_last(&next_buf->list, &video->dma_queue)) {
-> >  		next_buf =3D list_next_entry(next_buf, list);
-> > -		next_buf->queued_to_csi =3D true;
-> > -		sun6i_csi_update_buf_addr(csi_dev, next_buf->dma_addr);
-> > +		sun6i_video_buffer_configure(csi_dev, next_buf);
-> >  	} else {
-> >  		dev_dbg(csi_dev->dev, "Next frame will be dropped!\n");
-> >  	}
->=20
->=20
->=20
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---hbLKg0yuMi8/nDoQ
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------mvVyOA8ZAtO3EHbb06WV8lLg
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJqSpUACgkQ3cLmz3+f
-v9F9WQf/Yw9U3I/o7JqV+HsxUfKaf4gX6vbH1O2ZCv4jD06TNpE+RVR8CE2SjqVo
-wI0w+RbVZMBT64ueuuqr2dRPuYlJ15WVCgMKU21N8vEAXDxfYVQr4f3/7cj8CBzK
-x6vCvWs5dbqKF3ek3S3h7y9iMhDQ9nbVh7dZlJnQfwcAWK+K/aQEfpqnTBKpL3km
-MCk9PxVjRtk23TS1pS/GtDids1vtMMNjnaDvfRR/NWd3dfEL25wC72N+7bxNv0fX
-06IcEdCHll0ZanSeo/2Rdpy4KFCtC8LI+5xmv4lOZ7M/4+1UdlhI9ArYZvseiK3N
-u8wy39tlfO0JuXma+sRGdMQDtSWPQQ==
-=30KN
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJqSroFAwAAAAAACgkQlh/E3EQov+CY
+UA//f3AJes9k2c+Wi4Qj/QhKkmBa3dWRAxIUNk6V+4sRVBHdnFzHyVCybNuCj0zM+MWM1AOw9PiC
+vPSjX0zA4IOM608gt6vyy8T9IBLey6CdidYEoHiJ0ASokLvRR29/Tw4TN6nbHvUo6+gBogCk7U5Y
+5J6t/BUCz1EmXVRc+IT8dynf4bFaZiqn2SQA7Ca6xJeqimKTrXw8j+Fl9Rd6rtgW7cDjHeW6zj22
+9shl1dIQ6kxgQhJXoiXxrtsxlfiLkfi/w0JSZhgUzF2n2BNYW6sZGsA3rpUVuUFZCfqb1hcxKH9R
++GQC4yUSTyXmiRz2cB9n9MBizBSkmF5020Zs+EjgAgp9/vaTu2lXHT7dnJZDfxlGIiuqojqnTG6d
+upsM9lwpOIvl4K6nWqfpv+Oqs66w+xg3r8YI+BKJvikj148NaSHxgLr15NV/czs1Zg2eEAXJeDqa
+OPnHXoJrbIR8gR3ROvWHKehzNAMn77ERQGKNlJr4XAhnd0yXMeR4A+5iYKVWz3oVlL5a9Vgv9R5W
+SNkxT3jt1nUoFZn2uZt9KAnkNydj9226k3BtL93vDIswT+A2QggA/VDSQRcoIpeRVKI7KOulhKpB
+UzKkq9m48k+lSOcyby4HSXjXdZbYD27iT3gnOuLgztSz+KvIZdulEPt8wyq0n9CjC1PH7mnXIQ65
+j1Q=
+=eWAz
 -----END PGP SIGNATURE-----
 
---hbLKg0yuMi8/nDoQ--
+--------------mvVyOA8ZAtO3EHbb06WV8lLg--

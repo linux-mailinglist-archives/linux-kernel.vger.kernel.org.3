@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E538513661
+	by mail.lfdr.de (Postfix) with ESMTP id 35582513660
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348169AbiD1OKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47806 "EHLO
+        id S1347996AbiD1OKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240550AbiD1OJ4 (ORCPT
+        with ESMTP id S1348141AbiD1OJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:09:56 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A8E27CDD;
-        Thu, 28 Apr 2022 07:06:41 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z19so5640490edx.9;
-        Thu, 28 Apr 2022 07:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QJZCrq2E0rQnS/46bb0lykjV+BZFhQWSf3jC5XNL6+g=;
-        b=VG+XGeXwtrnao2belQIyDCpE53M+TwDLG20Z28noaE9BVO82F0ddshJZXxkTLWVum8
-         UYkJLSUkmoK4IrzEOw+SOSZ4otS6LysxF3nZlcwmAldFEA3e3GvZtwE3Gt2cRMM0bpjb
-         oBxXg38LRbYVwbCPAAXGtnh8uz9y2NJ/c471sBW6UBCQ0fmqVC/UYqiQclAFoSWe3Nin
-         8mOZNTKMqB4r3rRd3+QM5+GHIIEjJUlefvO8CA/DNF+CaKHnjjNNjE8fYLj4N+Ul1gwL
-         +qF5EOnp6Gx6L07d87O6MSNBxEmv7pl6ei+OsMOCo47eoL+0ryvZd5eXqCFWWTTs9LF4
-         incg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QJZCrq2E0rQnS/46bb0lykjV+BZFhQWSf3jC5XNL6+g=;
-        b=jNKAqjlcB3NsFyjUq50ElN4BkPODUl3wTVMMqiOMb0GLY8bBaXzDNnQhRn9uoIgGYl
-         iI9AxZEnoQGfYtFj9lXgGvrG7w5cswY1dJS9wN1DUu6EmWf2dczpwYiXggFufPftWRTA
-         Q4xPeHpQhUH0kyifPjTq0MGQw28TOwOTLlAbS0JmzE/3DAd50Cs7p4oxSuJ55sEq1Yh+
-         xxOt6ekAzO/shh52RPNzKhREMXhdV8wvNQP/Kp5X/krle1VLKmnkdXfVlmsoLs4Z5aI5
-         R+1YxFDHOfwCVE8D6CYfUz0GKL58NGu0ayK8ECVNYBBUSAhu4gc9b7w/Xkf2OnDp9vpI
-         nH1A==
-X-Gm-Message-State: AOAM5326WsQIfEbTX6McCD247E09PInlroHfzqZpwCgs3qL6Sjz6xEFH
-        /B/hWpPtTnD4qHN88xGejAk=
-X-Google-Smtp-Source: ABdhPJxTCl1+kKIl67NUFmKgRu5wamXoHx5lN8bjrDkSjVSzRa95wx4v0+F1jUFAHdsDFJfH4vzhjQ==
-X-Received: by 2002:a05:6402:35d6:b0:425:f2c5:ba0d with SMTP id z22-20020a05640235d600b00425f2c5ba0dmr19355166edc.369.1651154799729;
-        Thu, 28 Apr 2022 07:06:39 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id h7-20020a1709060f4700b006e8d0746969sm2158ejj.222.2022.04.28.07.06.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 10:09:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD2E286EF;
         Thu, 28 Apr 2022 07:06:38 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 16:06:35 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCHv3 bpf-next 1/5] kallsyms: Fully export
- kallsyms_on_each_symbol function
-Message-ID: <Ymqfa6rooEIm4c/f@krava>
-References: <20220427210345.455611-1-jolsa@kernel.org>
- <20220427210345.455611-2-jolsa@kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651154798; x=1682690798;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iu+rc0+JdwazCgqT5q1CfpFbh0ggfQOpl3l/mKEVveo=;
+  b=VDwdo7B+Hq7QUc4GrAxdo7o2ycv4cZ/Sw4Kp5cD7nKr/lLNSjHAXjaYk
+   UzjA8pkGmVdfNyJEkj10ofMI/wU+D6nuJd9Pg8Mid55PIKg9LO6dQqYc6
+   8DYNSDD/fpa7N48/bV3iw7uR0ntYsxqv1LDNpiJcpQ6o4ZURm8n+I7g7z
+   5RGpKuaOFF9JvdEPJlwQCA4Z6dPHaLEyC2nyrCl7oPSNOvtHR4egryeZE
+   7MieoerhnnRabBIV/M+NJmZmubT/fpch0JuLn2lEEm5HiaPnLi5a/sQqZ
+   HtU0eGzCwRhmhHdx3dYCY1JPHA5EL8M1HUYTepR3DXe8mPC8l2xcegODo
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352732658"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="352732658"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:06:37 -0700
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="559685466"
+Received: from mpoursae-mobl2.amr.corp.intel.com (HELO [10.212.0.84]) ([10.212.0.84])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:06:36 -0700
+Message-ID: <98f81eed-e532-75bc-d2d8-4e020517b634@intel.com>
+Date:   Thu, 28 Apr 2022 07:06:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427210345.455611-2-jolsa@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
+ and convertible memory
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
+ <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
+ <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,113 +72,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 11:03:41PM +0200, Jiri Olsa wrote:
-> Fully exporting kallsyms_on_each_symbol function, so it can be used
-> in following changes.
+On 4/27/22 17:15, Kai Huang wrote:
+> On Wed, 2022-04-27 at 15:15 -0700, Dave Hansen wrote:
+>> On 4/5/22 21:49, Kai Huang wrote:
+>>> TDX provides increased levels of memory confidentiality and integrity.
+>>> This requires special hardware support for features like memory
+>>> encryption and storage of memory integrity checksums.  Not all memory
+>>> satisfies these requirements.
+>>>
+>>> As a result, TDX introduced the concept of a "Convertible Memory Region"
+>>> (CMR).  During boot, the firmware builds a list of all of the memory
+>>> ranges which can provide the TDX security guarantees.  The list of these
+>>> ranges, along with TDX module information, is available to the kernel by
+>>> querying the TDX module via TDH.SYS.INFO SEAMCALL.
+>>>
+>>> Host kernel can choose whether or not to use all convertible memory
+>>> regions as TDX memory.  Before TDX module is ready to create any TD
+>>> guests, all TDX memory regions that host kernel intends to use must be
+>>> configured to the TDX module, using specific data structures defined by
+>>> TDX architecture.  Constructing those structures requires information of
+>>> both TDX module and the Convertible Memory Regions.  Call TDH.SYS.INFO
+>>> to get this information as preparation to construct those structures.
+>>>
+>>> Signed-off-by: Kai Huang <kai.huang@intel.com>
+>>> ---
+>>>  arch/x86/virt/vmx/tdx/tdx.c | 131 ++++++++++++++++++++++++++++++++++++
+>>>  arch/x86/virt/vmx/tdx/tdx.h |  61 +++++++++++++++++
+>>>  2 files changed, 192 insertions(+)
+>>>
+>>> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+>>> index ef2718423f0f..482e6d858181 100644
+>>> --- a/arch/x86/virt/vmx/tdx/tdx.c
+>>> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+>>> @@ -80,6 +80,11 @@ static DEFINE_MUTEX(tdx_module_lock);
+>>>  
+>>>  static struct p_seamldr_info p_seamldr_info;
+>>>  
+>>> +/* Base address of CMR array needs to be 512 bytes aligned. */
+>>> +static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
+>>> +static int tdx_cmr_num;
+>>> +static struct tdsysinfo_struct tdx_sysinfo;
+>>
+>> I really dislike mixing hardware and software structures.  Please make
+>> it clear which of these are fully software-defined and which are part of
+>> the hardware ABI.
 > 
-> Rather than adding another ifdef option let's export the function
-> completely (when CONFIG_KALLSYMS option is defined).
+> Both 'struct tdsysinfo_struct' and 'struct cmr_info' are hardware structures. 
+> They are defined in tdx.h which has a comment saying the data structures below
+> this comment is hardware structures:
 > 
-> Cc: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/kallsyms.h | 5 +++++
->  kernel/kallsyms.c        | 2 --
->  2 files changed, 5 insertions(+), 2 deletions(-)
+> 	+/*
+> 	+ * TDX architectural data structures
+> 	+ */
 > 
-> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> index ce1bd2fbf23e..d423f3cffa6d 100644
-> --- a/include/linux/kallsyms.h
-> +++ b/include/linux/kallsyms.h
-> @@ -163,6 +163,11 @@ static inline bool kallsyms_show_value(const struct cred *cred)
->  	return false;
->  }
->  
-> +static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
-> +					  void *data)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->  #endif /*CONFIG_KALLSYMS*/
->  
->  static inline void print_ip_sym(const char *loglvl, unsigned long ip)
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 79f2eb617a62..fdfd308bebc4 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -228,7 +228,6 @@ unsigned long kallsyms_lookup_name(const char *name)
->  	return module_kallsyms_lookup_name(name);
->  }
->  
-> -#ifdef CONFIG_LIVEPATCH
->  /*
->   * Iterate over all symbols in vmlinux.  For symbols from modules use
->   * module_kallsyms_on_each_symbol instead.
-> @@ -251,7 +250,6 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
->  	}
->  	return 0;
->  }
-> -#endif /* CONFIG_LIVEPATCH */
->  
->  static unsigned long get_symbol_pos(unsigned long addr,
->  				    unsigned long *symbolsize,
-> -- 
-> 2.35.1
+> It is introduced in the P-SEAMLDR patch.
 > 
+> Should I explicitly add comments around the variables saying they are used by
+> hardware, something like:
+> 
+> 	/*
+> 	 * Data structures used by TDH.SYS.INFO SEAMCALL to return CMRs and
+> 	 * TDX module system information.
+> 	 */
 
-got this one wrong, it needs one more change
-I'll send new version
+I think we know they are data structures. :)
 
-jirka
+But, saying:
 
+	/* Used in TDH.SYS.INFO SEAMCALL ABI: */
 
----
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index ce1bd2fbf23e..89f063651192 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -65,11 +65,11 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- 	return ptr;
- }
- 
-+#ifdef CONFIG_KALLSYMS
- int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 				      unsigned long),
- 			    void *data);
- 
--#ifdef CONFIG_KALLSYMS
- /* Lookup the address for a symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name);
- 
-@@ -163,6 +163,11 @@ static inline bool kallsyms_show_value(const struct cred *cred)
- 	return false;
- }
- 
-+static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
-+					  void *data)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /*CONFIG_KALLSYMS*/
- 
- static inline void print_ip_sym(const char *loglvl, unsigned long ip)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 79f2eb617a62..fdfd308bebc4 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -228,7 +228,6 @@ unsigned long kallsyms_lookup_name(const char *name)
- 	return module_kallsyms_lookup_name(name);
- }
- 
--#ifdef CONFIG_LIVEPATCH
- /*
-  * Iterate over all symbols in vmlinux.  For symbols from modules use
-  * module_kallsyms_on_each_symbol instead.
-@@ -251,7 +250,6 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 	}
- 	return 0;
- }
--#endif /* CONFIG_LIVEPATCH */
- 
- static unsigned long get_symbol_pos(unsigned long addr,
- 				    unsigned long *symbolsize,
+*is* actually helpful.  It (probably) tells us where in the spec we can
+find the definition and tells how it gets used.  Plus, it tells us this
+isn't a software data structure.
+
+>>> +	/* Get TDX module information and CMRs */
+>>> +	ret = tdx_get_sysinfo();
+>>> +	if (ret)
+>>> +		goto out;
+>>
+>> Couldn't we get rid of that comment if you did something like:
+>>
+>> 	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
+> 
+> Yes will do.
+> 
+>> and preferably make the variables function-local.
+> 
+> 'tdx_sysinfo' will be used by KVM too.
+
+In other words, it's not a part of this series so I can't review whether
+this statement is correct or whether there's a better way to hand this
+information over to KVM.
+
+This (minor) nugget influencing the design also isn't even commented or
+addressed in the changelog.

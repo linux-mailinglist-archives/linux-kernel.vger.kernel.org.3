@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B007513565
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20337513568
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347492AbiD1NmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S1347496AbiD1Nnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbiD1NmS (ORCPT
+        with ESMTP id S241572AbiD1Nn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:42:18 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EF3B36A1;
-        Thu, 28 Apr 2022 06:39:03 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23SDcqgS090391;
-        Thu, 28 Apr 2022 08:38:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651153132;
-        bh=EJ4fnrD4BvK043dOMejGSN/ckd1dhvSUTS0L46UrWy4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=GA+QPi5kHQgwVa92Cy+y684o2KGJ5EfCNk59oivvynmrBEntMT0dmBWGy1MJYdEcB
-         LhQx6486ACDJ6GNSi3OtzscCuZHThmpv6AspwvgIz0o+ixfoCEdzL36NUjIqRTlYAe
-         RZ2K5syaDUgT0l7WmIMRYu4AdAdgr/rJX1/E6GOk=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23SDcqMe056859
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 28 Apr 2022 08:38:52 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 28
- Apr 2022 08:38:51 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 28 Apr 2022 08:38:51 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23SDcoQp072458;
-        Thu, 28 Apr 2022 08:38:51 -0500
-Date:   Thu, 28 Apr 2022 19:08:50 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, <y@uda0490373>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] arm64: dts: ti: k3-am62-main: Add node for Display
- SubSystem
-Message-ID: <20220428133849.df7it6m6z35azy6x@uda0490373>
-References: <20220427090850.32280-1-a-bhatia1@ti.com>
- <20220427090850.32280-2-a-bhatia1@ti.com>
+        Thu, 28 Apr 2022 09:43:28 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148601FA49;
+        Thu, 28 Apr 2022 06:40:14 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id b12so4391966plg.4;
+        Thu, 28 Apr 2022 06:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=J6PdeDybWktJ3VOINyxTrk1DVabwU+Bt41DCAGyrJqw=;
+        b=IPsajGJEOyFy0KXi5MbqNqA+B6gzB8xNg++FY3nWAd50+XLHI3IiiXgHM0D0hOvAGP
+         NHzF/Fmjx3BKNr25mf0LCvUD+BlCo9/dmB2/lCRjW51Eam0ExUwFK3YH7YMSti0A4ZZd
+         xEcKqHyrldXKx9tcqf+yWyAzrg4cetWf1poIiq59krbuM8OrRi/cvudto62nFlc/aWbk
+         VsWQAj+C5W8ABz7FdqFhorEwMN6BDyPdq5A590Zmk4vzVVXSN0QQbskvoIT0LCXuVqwX
+         BMeO8voLLYnahizk2FNYrugh1ix+nJ07EM4TTaj80NJn1xQL7mAjorMIdiY2reS7pEos
+         TqYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=J6PdeDybWktJ3VOINyxTrk1DVabwU+Bt41DCAGyrJqw=;
+        b=pFIaISZuLVNtC9oxx6qyQW03KrRpszL4YwWPrup9S2I375shOfrNU1PasuPi9TBsQB
+         vTjP5KgAnk4UExzKfq8qtoZ2hAqEzV0jTkEwL72d/oAPs9ozAlrt7eaEuw8fBwgySe/t
+         +AxrgszU25SBZ1O8YWWPXZA34jUwU/c00itxH0gj4X1+yulErccQvZwfAS2SZ4exwrH3
+         6a2Hee55SdE55nBClST7qqF2cHXRFovItiONFJ1kKk2A6ELx1eHYgTNW8z8s7l18ita/
+         5i7PENJGUNcIiCE19VUpI4BRO38bVdIxTMd3fHww6latZ3oNBRDKErmu4QXTJSzeSqdF
+         ey1A==
+X-Gm-Message-State: AOAM530rQ6FMFwaDEFho/Ub9sSI1BgFXcl2xAZpZyj7OlHtP347SN9sr
+        MRqpHhScuduroFC+dkz87H0=
+X-Google-Smtp-Source: ABdhPJx25FcLG2JQe24kaXZecI9BCEFvz9z8SheCmciK7YDm8iNJkM8WfVpRJ48uQcNgOpHj2YG0Yw==
+X-Received: by 2002:a17:902:d54d:b0:15d:2ff:b0e2 with SMTP id z13-20020a170902d54d00b0015d02ffb0e2mr23275845plf.131.1651153213528;
+        Thu, 28 Apr 2022 06:40:13 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.119])
+        by smtp.gmail.com with ESMTPSA id z15-20020a056a001d8f00b004fda37855ddsm21177011pfw.168.2022.04.28.06.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 06:40:13 -0700 (PDT)
+Message-ID: <5c227ef8-72d2-9254-f061-128974a6dc7d@gmail.com>
+Date:   Thu, 28 Apr 2022 21:40:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220427090850.32280-2-a-bhatia1@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH v4 6/7] perf/x86/amd/core: Add PerfMonV2 overflow handling
+Content-Language: en-US
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
+        puwen@hygon.cn, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, x86@kernel.org
+References: <cover.1651058600.git.sandipan.das@amd.com>
+ <6bb3a6de79afbdb1ebc1b804fb8c2002c00cbaee.1651058600.git.sandipan.das@amd.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <6bb3a6de79afbdb1ebc1b804fb8c2002c00cbaee.1651058600.git.sandipan.das@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aradhya,
+On 27/4/2022 7:31 pm, Sandipan Das wrote:
+> +static inline void amd_pmu_ack_global_status(u64 status)
+> +{
+> +	/*
+> +	 * PerfCntrGlobalStatus is read-only but an overflow acknowledgment
 
-On 14:38-20220427, Aradhya Bhatia wrote:
-> Add DT node for the Display SubSystem on the am62x soc in cbass_main.
-> The DSS IP on this soc is compatible with the one on the am65x soc.
-> 
-> The DSS supports one each of video pipeline (vid) and video-lite
-> pipeline (vidl1). It outputs OLDI signals on one video port (vp1) and
-> DPI signals on another (vp2). The video ports are connected to the
-> pipelines via 2 identical overlay managers (ovr1 and ovr2).
-> 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 30 ++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> index eec8dae65e7c..ff21efa4ffad 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> @@ -515,6 +515,36 @@ cpts@3d000 {
->  		};
->  	};
->  
-> +	dss: dss@30200000 {
-> +		compatible = "ti,am65x-dss";
-> +
-> +		reg = <0x00 0x30200000 0x00 0x1000>, /* common */
-> +		      <0x00 0x30202000 0x00 0x1000>, /* vidl1 */
-> +		      <0x00 0x30206000 0x00 0x1000>, /* vid */
-> +		      <0x00 0x30207000 0x00 0x1000>, /* ovr1 */
-> +		      <0x00 0x30208000 0x00 0x1000>, /* ovr2 */
-> +		      <0x00 0x3020a000 0x00 0x1000>, /* vp1: Used for OLDI */
-> +		      <0x00 0x3020b000 0x00 0x1000>; /* vp2: Used as DPI Out */
-> +
-> +		reg-names = "common", "vidl1", "vid",
-> +			"ovr1", "ovr2", "vp1", "vp2";
-> +
-> +		power-domains = <&k3_pds 186 TI_SCI_PD_EXCLUSIVE>;
-> +
-> +		clocks = <&k3_clks 186 4>,
-> +			 <&k3_clks 186 0>,
-> +			 <&k3_clks 186 2>;
-> +
-> +		clock-names = "fck", "vp1", "vp2";
-> +
-> +		interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +		dss_ports: ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
+If wrmsrl PerfCntrGlobalStatus, remain silent or report #GP ?
 
-address and size cells are added in dts as well, its not required here
-
-> +		};
-> +	};
+> +	 * mechanism exists; writing 1 to a bit in PerfCntrGlobalStatusClr
+> +	 * clears the same bit in PerfCntrGlobalStatus
+> +	 */
 > +
->  	hwspinlock: spinlock@2a000000 {
->  		compatible = "ti,am64-hwspinlock";
->  		reg = <0x00 0x2a000000 0x00 0x1000>;
-> -- 
-> 2.36.0
-> 
+> +	/* Only allow modifications to PerfCntrGlobalStatus.PerfCntrOvfl */
+> +	status &= amd_pmu_global_cntr_mask;
+> +	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, status);
+
+If rdmsrl PerfCntrGlobalStatusClr, does it return 0 or the value of 
+PerfCntrGlobalStatus ?
+
+> +}

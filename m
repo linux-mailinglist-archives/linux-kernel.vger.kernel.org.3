@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC960513B95
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B06E513B81
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351083AbiD1SfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
+        id S1350897AbiD1S2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351079AbiD1Se7 (ORCPT
+        with ESMTP id S1348944AbiD1S2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:34:59 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760A4BC851;
-        Thu, 28 Apr 2022 11:31:43 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:3d::5f6])
+        Thu, 28 Apr 2022 14:28:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0965FB7C78;
+        Thu, 28 Apr 2022 11:24:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 200CB37A;
-        Thu, 28 Apr 2022 18:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 200CB37A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1651170703; bh=9RTbBSdubyXbieuSV3NDuJy87KZ+iQDFdQOlLDDRTRI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=q7QcXzbs88fWQT1Qdw2ss7nNNHYDW58bGibi7ZkWEMtYi0vYlNOmq2iofLvvCcahx
-         LidQ5eyvMy6xgJsyDpbu62tbhX4dC1Yf996OyB5svwu5VAdRbBlKmVWH2ECmddGURr
-         BdyIvccqyJCTJHWgWF22O8+CRzF8eu765/VquTaVb7KYA413ptVL+5Kc1PIBzsouN7
-         rIWugTnqwjebrKiOfvn9dqAGZ4AlKWD1EaeQ4H1fKcw/1uWxWLJTzJ+IdvaJYiN/8k
-         XWuIto6E9oqYK1qaCj0sGlwPH2WHhR6rfjKwVzyiJZ1uqGNoUT/T46/8zVJdKLcu+l
-         05p9hXKc0GQMA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>, akiyks@gmail.com
-Cc:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Tsugikazu Shibata <shibata@linuxfoundation.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2] docs/ja_JP/index: update section title in Japanese
-In-Reply-To: <20220425124853.8347-1-fujimotokosuke0@gmail.com>
-References: <20220425124853.8347-1-fujimotokosuke0@gmail.com>
-Date:   Thu, 28 Apr 2022 12:31:42 -0600
-Message-ID: <8735hx6ovl.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 975546175C;
+        Thu, 28 Apr 2022 18:24:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E50C385A9;
+        Thu, 28 Apr 2022 18:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651170293;
+        bh=JXRHqXGYhAN3qdh93Rjj4pMQrePTMavErqL2y6eIzws=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YQrU1JHRjIWCkra4lxvDexdfa9qtNic2BsHyXxU6j8u49pwBATTGd4HxWgEvzYSig
+         CXHPqaP3RhrfMChRdLXuVJT6cRdmhZWuqVNjSacAYsxIwGeA4uhXT1FlhdVQzD0zE6
+         Z4S/O7zAPPh+pA5XqwZEZh0WhNaOhIRCRXB4IwCEC8kIviRtVFX9YzZuTz8HDAJjMb
+         Uq3kcuLbZlVtQG7gpMYmXTsRzQJdgBMNmwtJQCJwV+F6ShOXgMz0IrmulqVJkj0lmu
+         JEL6yZ6upitM4TjwGyFMmaC2OL3lFGVZlrGNyYVdzeJjNQtAIio1bwYCo4MOxgA+lo
+         zJ235mQbq24og==
+Date:   Thu, 28 Apr 2022 19:33:04 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Subject: Re: [PATCH v1 1/1] iio: trigger: stm32-lptimer-trigger: Make use of
+ device properties
+Message-ID: <20220428193304.016c46a3@jic23-huawei>
+In-Reply-To: <20220413185656.21994-1-andriy.shevchenko@linux.intel.com>
+References: <20220413185656.21994-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,33 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kosuke Fujimoto <fujimotokosuke0@gmail.com> writes:
+On Wed, 13 Apr 2022 21:56:56 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> Update section title "Japanese Translation" in Japanese.
-> This change is to keep consistency with other translations.
->
-> Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
-> Cc: Akira Yokosawa <akiyks@gmail.com>
-> Cc: linux-doc@vger.kernel.org
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+MAINTAINERS entry for this one uses extensive wild cards so may
+escape scripts...
+
++CC Fabrice.
+
 > ---
->  Documentation/translations/ja_JP/index.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/translations/ja_JP/index.rst b/Documentation/t=
-ranslations/ja_JP/index.rst
-> index 20738c931d02..43b9fb7246d3 100644
-> --- a/Documentation/translations/ja_JP/index.rst
-> +++ b/Documentation/translations/ja_JP/index.rst
-> @@ -5,7 +5,7 @@
->  	\kerneldocCJKon
->  	\kerneldocBeginJP{
->=20=20
-> -Japanese translations
-> +=E6=97=A5=E6=9C=AC=E8=AA=9E=E8=A8=B3
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  drivers/iio/trigger/stm32-lptimer-trigger.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/trigger/stm32-lptimer-trigger.c b/drivers/iio/trigger/stm32-lptimer-trigger.c
+> index 98cdc7e47f3d..af46c10cea92 100644
+> --- a/drivers/iio/trigger/stm32-lptimer-trigger.c
+> +++ b/drivers/iio/trigger/stm32-lptimer-trigger.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/mfd/stm32-lptimer.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  
+>  /* List Low-Power Timer triggers */
+>  static const char * const stm32_lptim_triggers[] = {
+> @@ -77,7 +78,7 @@ static int stm32_lptim_trigger_probe(struct platform_device *pdev)
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> -	if (of_property_read_u32(pdev->dev.of_node, "reg", &index))
+> +	if (device_property_read_u32(&pdev->dev, "reg", &index))
+>  		return -EINVAL;
+>  
+>  	if (index >= ARRAY_SIZE(stm32_lptim_triggers))
 
-Applied, thanks.
-
-jon

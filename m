@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E37C513CAD
+	by mail.lfdr.de (Postfix) with ESMTP id BE384513CB0
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351851AbiD1Ugf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 16:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S1351868AbiD1Ugi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350377AbiD1Ugc (ORCPT
+        with ESMTP id S1351834AbiD1Ugd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 16:36:32 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1ADC0D3F;
-        Thu, 28 Apr 2022 13:33:15 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id o2-20020a4ad142000000b0035e6578a91dso1084695oor.7;
-        Thu, 28 Apr 2022 13:33:15 -0700 (PDT)
+        Thu, 28 Apr 2022 16:36:33 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A889C0E42;
+        Thu, 28 Apr 2022 13:33:17 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e67799d278so6270760fac.11;
+        Thu, 28 Apr 2022 13:33:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=B9x15wnuwFtq/3VYQAzVD5Jvl0nQdR42CrutQYJJh2g=;
-        b=4MZq7ptmyWUU+K2Z6cl+8G1o1CF/r53S9jU3NRdJXoZDG+UEClvDK3fn3E/gh1QlpH
-         Ow5dx7Cwc/UVD23NJUexciMDrAy2UbagS35ttaGqizumbU0uX7ep+0O7j1XI2k50gUpq
-         CMys9RgHfnVqq/JAA62Vc6nCwEU5uiF3TMA9s4EKXG5M5ChZf/Jx2EDbBsRYerUYeFpl
-         xGc7sXvNxW+QyVSUD6MjvniHRGkPWNUjvWZoP03AsiUSvtarPLtI5gcTHItvMwZZSSfq
-         glxOvwfVMh7KIyLis9Qcrvr1hM4mp3o3tj+O99s086qDg49x94PoqTGUdkNwAQzuqnEg
-         11hQ==
-X-Gm-Message-State: AOAM533aocziUPkG8Hq+p7qAAMlYKzTFgiwG6MiaPA8obfDrQNUIXwzv
-        LtYShh4zZsTakwV6OmWL1Q==
-X-Google-Smtp-Source: ABdhPJx5fiCLEo8Nkxa3liF7wTlGPWAq3+bwWVA6vMmHt8EESLBE81C80gHKvonIz3kygiYb9WMqVg==
-X-Received: by 2002:a4a:bb0b:0:b0:338:e8bb:d5fc with SMTP id f11-20020a4abb0b000000b00338e8bbd5fcmr12524249oop.16.1651177994946;
-        Thu, 28 Apr 2022 13:33:14 -0700 (PDT)
+        bh=J3cE7MiG6hZTV7t9gy7Edw0SJtbuoMz271VEnExHnD0=;
+        b=U4dFi7C3iyteroEe/7stMm3G5K1uMZazAmwUJje2D33ZH7rGiS+WJw1mM12JsuLWAm
+         y+0SaPoP5Hse/EgkFAmw7rsn3pe8s+nKnLOZF1UQ4kA0pbWSHG6p97F/M/1GifZyu3Pv
+         W8ofFMGFm6hFMuQhS5+n6tC2ldK8MWvethTcIfxL7kWwq228I8y8LALs1g5d+RaIyriC
+         8dwvlobJ12ain1tnIoi6BOjWqd7ChuUpqIXg0jhp2bCEBBwy1T67YXQOGzMBI/y8446s
+         vxQhYmUt3jqh5VXub6Plxb9KBHjdk+seTlZwn6iRm2NLYgQA5f06NaZ7RJxXokWHDvU8
+         CKSQ==
+X-Gm-Message-State: AOAM5336jpRk41VmCs84zAFKN6/MIsf0tX3a6wOHEH3Gxrt7Q1Swa675
+        RIX8gtxAMLpAA4f5qDEAig==
+X-Google-Smtp-Source: ABdhPJyIKCSFE8HADOvXCq4XSg7Q4QHv4eXtCiwjB/aZX//rs5FVokO0n3huOkyorbSQ8hAuq+erfA==
+X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id n14-20020a056870558e00b000e1db7c26aamr5244oao.63.1651177996283;
+        Thu, 28 Apr 2022 13:33:16 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f60-20020a9d2c42000000b00605d61e3a16sm372946otb.35.2022.04.28.13.33.13
+        by smtp.gmail.com with ESMTPSA id q22-20020a056870e89600b000e686d13895sm2214899oan.47.2022.04.28.13.33.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 13:33:14 -0700 (PDT)
-Received: (nullmailer pid 220465 invoked by uid 1000);
+        Thu, 28 Apr 2022 13:33:15 -0700 (PDT)
+Received: (nullmailer pid 220468 invoked by uid 1000);
         Thu, 28 Apr 2022 20:33:13 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
-        chunkuang.hu@kernel.org, jitao.shi@mediatek.com,
-        linux-kernel@vger.kernel.org, airlied@linux.ie,
-        krzysztof.kozlowski+dt@linaro.org, daniel@ffwll.ch,
-        xinlei.lee@mediatek.com, devicetree@vger.kernel.org,
-        p.zabel@pengutronix.de, linux-mediatek@lists.infradead.org,
-        robh+dt@kernel.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <20220428133753.8348-2-rex-bc.chen@mediatek.com>
-References: <20220428133753.8348-1-rex-bc.chen@mediatek.com> <20220428133753.8348-2-rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH v5 1/4] dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        git@xilinx.com, brgl@bgdev.pl, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shubhrajyoti.datta@xilinx.com
+In-Reply-To: <1651163798-15123-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+References: <1651163798-15123-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+Subject: Re: [PATCH] dt-bindings: gpio: zynq: Add all the supported compatibles
 Date:   Thu, 28 Apr 2022 15:33:13 -0500
-Message-Id: <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
+Message-Id: <1651177993.343093.220467.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -64,19 +61,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 21:37:50 +0800, Rex-BC Chen wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+On Thu, 28 Apr 2022 22:06:38 +0530, Radhey Shyam Pandey wrote:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 > 
-> Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> Add the compatibles for zynqmp, versal and platform management controller
+> nodes.
 > 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Fixes: 45ca16072b70 ("dt-bindings: gpio: zynq: convert bindings to YAML")
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 > ---
->  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
->  .../display/mediatek/mediatek,dsi.yaml        | 122 ++++++++++++++++++
->  2 files changed, 122 insertions(+), 62 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
+> NOTE- There is 'gpio@e000a000: interrupts: [[0], [20], [4]] is too long'
+> warning coming with upstream yaml. I am checking it on devicetree mailing
+> list. https://www.spinics.net/lists/devicetree/msg493762.html
+> ---
+>  Documentation/devicetree/bindings/gpio/gpio-zynq.yaml | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
 
 Running 'make dtbs_check' with the schema in this patch gives the
@@ -89,82 +89,27 @@ This will change in the future.
 Full log is available here: https://patchwork.ozlabs.org/patch/
 
 
-dsi@1400c000: compatible: ['mediatek,mt7623-dsi', 'mediatek,mt2701-dsi'] is too long
-	arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dtb
-	arch/arm/boot/dts/mt7623n-rfb-emmc.dtb
+gpio@ff0a0000: '#address-cells', 'gpio-line-names', 'power-domains' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dtb
 
-dsi@14014000: #address-cells:0:0: 2 was expected
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-
-dsi@14014000: 'port' is a required property
-	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-
-dsi@14014000: #size-cells:0:0: 2 was expected
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-
-dsi@1401b000: 'port' is a required property
-	arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
-	arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
-	arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
+gpio@ff0a0000: '#address-cells', 'power-domains' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dtb
 

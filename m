@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DB6512ED8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E148512EE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344627AbiD1Is2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S1344279AbiD1Itj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344722AbiD1Irs (ORCPT
+        with ESMTP id S1344709AbiD1IsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:47:48 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8461666F97
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:40:38 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id p6so3703026pjm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:40:38 -0700 (PDT)
+        Thu, 28 Apr 2022 04:48:18 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC576E8D2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:41:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o69so2325360pjo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OkXGXbOPHTpYIjxBxkyJjocsF1Qn/6hjvv7ynLH3v10=;
-        b=T2KPFPWUercpIyW1rqm56mNhIfWEQHg2nNPVfVNk20iXEIb/XdcYLowMGE5LQVGaJY
-         oMcRN+ikEOr1i4AkwgvkYUusnXybalqfp29ijKj/iI+b/SLN8VKVXcCe/E5tKS0Yxp3l
-         8HQR+/qzsB6z8Io+WsDltIAEGabncojUIzoAk=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bXZP+N1W8fXu7+L5j5j9rjdK9XbMzmaaXJPe797XS+0=;
+        b=g9D8kQqantSnm5fD8zpBxmmhl/IXNdAQtphK8BkRdu7KHnxTheurq2s8KXSCbcNuaI
+         CtiOug5F3pE97EdeNlx555k7dT3U/wZOj11WJEjt+z7MW9fapZkaHTlChVO088HuQfQq
+         qxP96nZYI/EuqF2LfK5DSYQyDL3GqgZyTUZNw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OkXGXbOPHTpYIjxBxkyJjocsF1Qn/6hjvv7ynLH3v10=;
-        b=bgADV+wC31RL0t/ES3R3NO0gbqzuDnOqpGU03F3FbETDQodZ7DXqoC+l5aMMyFVE8N
-         y0ow/YHlzjwWI7HSXaAHsFWQpd4k3eJJHiWosbjtdMfbBEjSiPhE+epjMx4HE8JGuSZp
-         HjjBIiFeIfB8HtdRS/6SXJBx3+muI2az8yQSkbbCY4vMxV+mHwoZQ0DRa/CLfCjr6TRe
-         dV1WIPHaNKUicL4nc88PMgD4yk2dGazMDDtsLkCBQqaE2YAAkVvGh3pqp9ePK/W+yAod
-         AOC3u22ovBG7EwBKqQ5Bm2ZNU8geJ+2gSy6KWtG1TODnYPigMVojop3NAR4CU9zSj6LV
-         XtVw==
-X-Gm-Message-State: AOAM531CfDYyn5xf7pqU2t9FR5PLBnK1yTCH3zb5LT8pubr4yHSRdpzB
-        rMN02eGOYwv7d6vWUtjN3o1d+zaSN/gHuYhXvEpM8g==
-X-Google-Smtp-Source: ABdhPJyLRMFh56wB5twrRw2iMtEQYrRfo73s3gtC847TUA66wBrRVe4W78BUhNsrDVUlCZCPhjNaZ80RKvb/AnG9G/0=
-X-Received: by 2002:a17:90a:4417:b0:1ca:a861:3fbf with SMTP id
- s23-20020a17090a441700b001caa8613fbfmr48581026pjg.80.1651135238061; Thu, 28
- Apr 2022 01:40:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bXZP+N1W8fXu7+L5j5j9rjdK9XbMzmaaXJPe797XS+0=;
+        b=YGZV7mMDHvPEZ55NnWxZr5Bmsc11qWDZSOmIlDDaQke7ezF4FR7i6ZRwn3HtsL2Yvb
+         94SaIy9+HbmUhlmFWi/ca87r42PR8R2+1hBwsmeFIv/f5mnf9IJKhiM956sNOShFB5+6
+         rfjrFO7FUbDP3+3ON0iiRtfjefa4A4tsJg6bWAcpXXw7/K35lB4gwfjCELmYro2u9MIP
+         7r5GYAU62iYxGN1l55iJMhpHRzjsb/M4vEWc5uZrwKIYoiTi9jXspsOHB/tLkMvXKcdZ
+         +XsIAx/GXAai+X64Nrb/S5kauiAUn4nuXX+tVJSZ7Bs7O89EW9gfLrucQmjm65DnWm7N
+         QaCQ==
+X-Gm-Message-State: AOAM5324IxdhbFu7MV2Rzixoa8/Sy6pUR4DokvNJoJcPRlCiAbNEjgw6
+        tloOYoH2ZqG3o3vfSmkTbtPLraMEVTWNdQ==
+X-Google-Smtp-Source: ABdhPJzzpkkJCyC33/cHxkFrX+5tixgTafTfw0TGhGw/GymT9QyQfcIN4j3DeWk05dEaOvGUj3vTEA==
+X-Received: by 2002:a17:902:8a95:b0:156:a40a:71e5 with SMTP id p21-20020a1709028a9500b00156a40a71e5mr32515940plo.144.1651135265995;
+        Thu, 28 Apr 2022 01:41:05 -0700 (PDT)
+Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
+        by smtp.gmail.com with ESMTPSA id g15-20020aa7818f000000b00505ce2e4640sm21011462pfi.100.2022.04.28.01.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 01:41:05 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v1] arm64: dts: qcom: sc7180: Add mrbland dts files
+Date:   Thu, 28 Apr 2022 01:41:00 -0700
+Message-Id: <20220428014022.v1.1.I08a15a73996211d37dff16810c40ee1539658601@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-References: <20220424122745.15386-1-fujimotokosuke0@gmail.com>
-In-Reply-To: <20220424122745.15386-1-fujimotokosuke0@gmail.com>
-From:   Tsugikazu Shibata <shibata@linuxfoundation.org>
-Date:   Thu, 28 Apr 2022 17:40:27 +0900
-Message-ID: <CAO+cJp0adp9W22zBbOnUvaLxa2fbsTky431NE_K+MbwyOLpZYQ@mail.gmail.com>
-Subject: Re: [PATCH v2] docs/ja_JP/howto: Don't mention specific kernel versions
-To:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Cc:     Akira Yokosawa <akiyks@gmail.com>, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_50,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,95 +70,573 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rmlyc3Qgb2YgYWxsLCBUaGFua3MgdG8gRnVqaW1vdG8tc2FuIGFuZCBZb2tvc2F3YS1zYW4gZm9y
-IHdha2luZyBtZSB1cC4NCk5vdyBJIGdldCBiYWNrIHRvIGhlcmUgYnkgbmV3IGVtYWlsIGFkZHJl
-c3MuDQoNCkkgaGF2ZSBhIGZldyBjb21tZW50cyBhcyBiZWxvdzoNCg0KT24gU3VuLCBBcHIgMjQs
-IDIwMjIgYXQgOToyOCBQTSBLb3N1a2UgRnVqaW1vdG8NCjxmdWppbW90b2tvc3VrZTBAZ21haWwu
-Y29tPiB3cm90ZToNCj4NCj4gVGhpcyBjaGFuZ2UgaXMgYmFzZWQgb24gY29tbWl0IGQyYjAwOGYx
-MzRiNw0KPiAoIkRvY3VtZW50YXRpb24vcHJvY2Vzcy9ob3d0bzogVXBkYXRlIGZvciA0LnggLT4g
-NS54IHZlcnNpb25pbmciKS4NCj4NCj4gUmVwbGFjZSAiNC54IGtlcm5lbCB2ZXJzaW9uIiB3aXRo
-IGdlbmVyaWMgdGVybSBzdWNoIGFzICJtYWlubGluZSB0cmVlIg0KPg0KPiBTaWduZWQtb2ZmLWJ5
-OiBLb3N1a2UgRnVqaW1vdG8gPGZ1amltb3Rva29zdWtlMEBnbWFpbC5jb20+DQo+IFJldmlld2Vk
-LWJ5OiBBa2lyYSBZb2tvc2F3YSA8YWtpeWtzQGdtYWlsLmNvbT4NCj4gQ2M6IEpvbmF0aGFuIENv
-cmJldCA8Y29yYmV0QGx3bi5uZXQ+DQo+IENjOiBUc3VnaWthenUgU2hpYmF0YSA8c2hpYmF0YUBs
-aW51eGZvdW5kYXRpb24ub3JnPg0KPiBDYzogQWtpcmEgWW9rb3Nhd2EgPGFraXlrc0BnbWFpbC5j
-b20+DQo+IENjOiBsaW51eC1kb2NAdmdlci5rZXJuZWwub3JnDQo+IC0tLQ0KPiBWMjogUmVmb3Jt
-YXR0ZWQgY29tbWl0IGxvZyBtZXNzYWdlDQo+IC0tLQ0KPiAgRG9jdW1lbnRhdGlvbi90cmFuc2xh
-dGlvbnMvamFfSlAvaG93dG8ucnN0IHwgNDMgKysrKysrKysrKy0tLS0tLS0tLS0tLQ0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKyksIDIzIGRlbGV0aW9ucygtKQ0KPg0KPiBkaWZm
-IC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvamFfSlAvaG93dG8ucnN0IGIvRG9j
-dW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvamFfSlAvaG93dG8ucnN0DQo+IGluZGV4IGQ2NjdmOWQ4
-YTAyYS4uOWI3MTE5MzJhZTZkIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0
-aW9ucy9qYV9KUC9ob3d0by5yc3QNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMv
-amFfSlAvaG93dG8ucnN0DQo+IEBAIC0yNjIsMjEgKzI2MiwyMSBAQCBMaW51eCDjgqvjg7zjg43j
-g6vjga7plovnmbrjg5fjg63jgrvjgrnjga/nj77lnKjlub7jgaTjgYvjga7nlbDjgarjgovjg6Hj
-gqTjg7MNCj4gIOODgeOAjeOBqOWkmuaVsOOBruOCteODluOCt+OCueODhuODoOavjuOBruOCq+OD
-vOODjeODq+ODluODqeODs+ODgeOBi+OCieani+aIkOOBleOCjOOBvuOBmeOAguOBk+OCjOOCieOB
-rg0KPiAg44OW44Op44Oz44OB44Go44GvIC0NCj4NCj4gLSAgLSDjg6HjgqTjg7Pjga4gNC54IOOC
-q+ODvOODjeODq+ODhOODquODvA0KPiAtICAtIDQueC55IC1zdGFibGUg44Kr44O844ON44Or44OE
-44Oq44O8DQo+IC0gIC0g44K144OW44K344K544OG44Og5q+O44Gu44Kr44O844ON44Or44OE44Oq
-44O844Go44OR44OD44OBDQo+IC0gIC0g57Wx5ZCI44OG44K544OI44Gu44Gf44KB44GuIDQueCAt
-bmV4dCDjgqvjg7zjg43jg6vjg4Tjg6rjg7wNCj4gKyAgLSBMaW51cyDjga7jg6HjgqTjg7Pjg6nj
-gqTjg7Pjg4Tjg6rjg7wNCj4gKyAgLSDjg6Hjgrjjg6Pjg7znlarlj7fjgpLjgb7jgZ/jgZDmlbDm
-nKzjga7lronlrprniYjjg4Tjg6rjg7wNCj4gKyAgLSDjgrXjg5bjgrfjgrnjg4bjg6Dmr47jga7j
-gqvjg7zjg43jg6vjg4Tjg6rjg7wNCj4gKyAgLSDntbHlkIjjg4bjgrnjg4jjga7jgZ/jgoHjga4g
-bGludXgtbmV4dCDjgqvjg7zjg43jg6vjg4Tjg6rjg7wNCj4NCj4gLTQueCDjgqvjg7zjg43jg6vj
-g4Tjg6rjg7wNCj4gK+ODoeOCpOODs+ODqeOCpOODs+ODhOODquODvA0KPiAgfn5+fn5+fn5+fn5+
-fn5+fn5+DQo+DQo+IC00Lngg44Kr44O844ON44Or44GvIExpbnVzIFRvcnZhbGRzIOOBq+OCiOOB
-o+OBpuODoeODs+ODhuODiuODs+OCueOBleOCjOOAgQ0KPiAtaHR0cHM6Ly9rZXJuZWwub3JnIOOB
-riBwdWIvbGludXgva2VybmVsL3Y0LngvIOODh+OCo+ODrOOCr+ODiOODquOBq+WtmOWcqOOBl+OB
-vuOBmeOAgg0KPiAr44Oh44Kk44Oz44Op44Kk44Oz44OE44Oq44O844GvIExpbnVzIFRvcnZhbGRz
-IOOBq+OCiOOBo+OBpuODoeODs+ODhuODiuODs+OCueOBleOCjOOAgQ0KPiAraHR0cHM6Ly9rZXJu
-ZWwub3JnIOOBruODquODneOCuOODiOODquOBq+WtmOWcqOOBl+OBvuOBmeOAgg0KPiAg44GT44Gu
-6ZaL55m644OX44Ot44K744K544Gv5Lul5LiL44Gu44Go44GK44KKIC0NCj4NCj4gICAgLSDmlrDj
-gZfjgYTjgqvjg7zjg43jg6vjgYzjg6rjg6rjg7zjgrnjgZXjgozjgZ/nm7TlvozjgavjgIEy6YCx
-6ZaT44Gu54m55Yil5pyf6ZaT44GM6Kit44GR44KJ44KM44CBDQo+ICAgICAg44GT44Gu5pyf6ZaT
-5Lit44Gr44CB44Oh44Oz44OG44OK6YGU44GvIExpbnVzIOOBq+Wkp+OBjeOBquW3ruWIhuOCkumA
-geOCi+OBk+OBqOOBjOOBp+OBjeOBvuOBmeOAgg0KPiAtICAgIOOBk+OBruOCiOOBhuOBquW3ruWI
-huOBr+mAmuW4uCAtbmV4dCDjgqvjg7zjg43jg6vjgavmlbDpgLHplpPlkKvjgb7jgozjgabjgY3j
-gZ/jg5Hjg4Pjg4HjgafjgZnjgIINCj4gKyAgICDjgZPjga7jgojjgYbjgarlt67liIbjga/pgJrl
-uLggbGludXgtbmV4dCDjgqvjg7zjg43jg6vjgavmlbDpgLHplpPlkKvjgb7jgozjgabjgY3jgZ/j
-g5Hjg4Pjg4HjgafjgZnjgIINCj4gICAgICDlpKfjgY3jgarlpInmm7Tjga8gZ2l0KOOCq+ODvOOD
-jeODq+OBruOCveODvOOCueeuoeeQhuODhOODvOODq+OAgeips+e0sOOBrw0KPiAgICAgIGh0dHA6
-Ly9naXQtc2NtLmNvbS8g5Y+C54WnKSDjgpLkvb/jgaPjgabpgIHjgovjga7jgYzlpb3jgb7jgZfj
-gYTjgoTjgormlrnjgafjgZnjgYzjgIHjg5Hjg4MNCj4gICAgICDjg4Hjg5XjgqHjgqTjg6vjga7l
-vaLlvI/jga7jgb7jgb7pgIHjgovjga7jgafjgoLljYHliIbjgafjgZnjgIINCj4gQEAgLTMwMywy
-MCArMzAzLDE3IEBAIEFuZHJldyBNb3J0b24g44GMIExpbnV4LWtlcm5lbCDjg6Hjg7zjg6rjg7Pj
-grDjg6rjgrnjg4jjgavjgqvjg7zjg43jg6vjg6rjg6rjg7wNCj4gICAgICAgICAg5YmN44KC44Gj
-44Gm5rG644KB44KJ44KM44Gf6KiI55S744Gr44KI44Gj44Gm44Oq44Oq44O844K544GV44KM44KL
-44KC44Gu44Gn44Gv44Gq44GE44GL44KJDQo+ICAgICAgICAgIOOBp+OBmeOAguOAjSoNCj4NCj4g
-LTQueC55IC1zdGFibGUg44Kr44O844ON44Or44OE44Oq44O8DQo+IC1+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+DQo+ICvjg6Hjgrjjg6Pjg7znlarlj7fjgpLjgb7jgZ/jgZDmlbDmnKzjga7l
-ronlrprniYjjg4Tjg6rjg7wNCj4gK35+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fg0KPg0KPiAg44OQ44O844K444On44Oz55Wq5Y+344GMM+OBpOOBruaVsOWtl+OBq+WIhuOB
-i+OCjOOBpuOBhOOCi+OCq+ODvOODjeODq+OBryAtc3RhYmxlIOOCq+ODvOODjeODq+OBp+OBmeOA
-gg0KPiAt44GT44KM44Gr44Gv44CBNC54IOOCq+ODvOODjeODq+OBp+imi+OBpOOBi+OBo+OBn+OC
-u+OCreODpeODquODhuOCo+WVj+mhjOOChOmHjeWkp+OBquW+jOaIu+OCiuOBq+WvvuOBmQ0KPiAt
-44KL5q+U6LyD55qE5bCP44GV44GE6YeN6KaB44Gq5L+u5q2j44GM5ZCr44G+44KM44G+44GZ44CC
-DQo+ICvjgZPjgozjgavjga/mnIDliJ3jga4y44Gk44Gu5pWw5a2X44Gr5a++5b+c44GX44Gf44CB
-44Oh44Kk44Oz44Op44Kk44Oz44Oq44Oq44O844K544Gn6KaL44Gk44GL44Gj44Gf44K744Kt44Ol
-44Oq44OG44Kj5ZWP6aGM44KEDQoNCkFib3ZlIGxpbmUgY29tZXMgZnJvbToNCi4uLnNlY3VyaXR5
-IHByb2JsZW1zIG9yIHNpZ25pZmljYW50IHJlZ3Jlc3Npb25zIGRpc2NvdmVyZWQgaW4gYSBnaXZl
-bg0KbWFqb3IgbWFpbmxpbmUgcmVsZWFzZSwNCndpdGggdGhlIGZpcnN0IDItcGFydCBvZiB2ZXJz
-aW9uIG51bWJlciBhcmUgdGhlIHNhbWUgY29ycmVzcG9uZGluZ2x5Lg0KDQpJdCBtYXkgYmV0dGVy
-IHRvIGJlOg0K44GT44KM44Gr44Gv5pyA5Yid44GuMuOBpOOBruODkOODvOOCuOODp+ODs+eVquWP
-t+OBruaVsOWtl+OBq+WvvuW/nOOBl+OBn+OAgeODoeOCpOODs+ODqeOCpOODs+ODquODquODvOOC
-ueOBp+imi+OBpOOBi+OBo+OBn+OCu+OCreODpeODquODhuOCo+WVj+mhjOOChA0KDQo+ICvph43l
-pKfjgarlvozmiLvjgorjgavlr77jgZnjgovmr5TovIPnmoTlsI/jgZXjgYTph43opoHjgarkv67m
-raPjgYzlkKvjgb7jgozjgb7jgZnjgIINCj4NCj4gIOOBk+OCjOOBr+OAgemWi+eZui/lrp/pqJPn
-moTjg5Djg7zjgrjjg6fjg7Pjga7jg4bjgrnjg4jjgavljZTlipvjgZnjgovjgZPjgajjgavoiIjl
-kbPjgYznhKHjgY/jgIHmnIDmlrANCj4gIOOBruWuieWumuOBl+OBn+OCq+ODvOODjeODq+OCkuS9
-v+OBhOOBn+OBhOODpuODvOOCtuOBq+aOqOWlqOOBmeOCi+ODluODqeODs+ODgeOBp+OBmeOAgg0K
-Pg0KPiAt44KC44GX44CBNC54Lnkg44Kr44O844ON44Or44GM5a2Y5Zyo44GX44Gq44GE5aC05ZCI
-44Gr44Gv44CB55Wq5Y+344GM5LiA55Wq5aSn44GN44GEIDQueCDjgYzmnIDmlrANCj4gLeOBruWu
-ieWumueJiOOCq+ODvOODjeODq+OBp+OBmeOAgg0KPiAtDQo+IC00LngueSDjga8gInN0YWJsZSIg
-44OB44O844OgIDxzdGFibGVAdmdlci5rZXJuZWwub3JnPiDjgafjg6Hjg7Pjg4bjgZXjgozjgabj
-gYrjgorjgIENCj4gK+WuieWumueJiOOCq+ODvOODjeODqyDjga8gInN0YWJsZSIg44OB44O844Og
-IDxzdGFibGVAdmdlci5rZXJuZWwub3JnPiDjgafjg6Hjg7Pjg4bjgZXjgozjgabjgYrjgorjgIEN
-Cg0KVGhpcyBsaW5lIGNvbWVzIGZyb206DQpTdGFibGUgdHJlZXMgYXJlIG1haW50YWluZWQgYnkg
-dGhlICJzdGFibGUiIHRlYW0gPHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc+LCAuLi4NCg0KU28sIEl0
-IG1heSBhbHNvIGJldHRlciB0byBiZToNCuWuieWumueJiOODhOODquODvOOBryJzdGFibGUiIOOD
-geODvOODoCA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4g44Gn44Oh44Oz44OG44GV44KM44Gm44GK
-44KK44CBDQoNCkZvciBvdGhlciBwYXJ0cyBpdCBsb29rcyBnb29kIHRvIG1lLiBJIGhvcGUgeW91
-IHdpbGwgZml4IGFuZCBzdWJtaXQNCnlvdXIgcGF0Y2ggYWdhaW4uDQpUaGFuayB5b3UgZm9yIHlv
-dXIgcGF0Y2guDQoNClRzdWdpa2F6dSBTaGliYXRhDQo=
+Mrbland is a trogdor-based board which may ship as the Lenovo 10e Gen 2.
+These dts files are copies from the downstream Chrome OS 5.4 kernel,
+but with the camera (sc7180-trogdor-mipi-camera.dtsi) #include removed.
+
+Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+---
+
+ arch/arm64/boot/dts/qcom/Makefile             |   4 +
+ .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 ++
+ .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 ++
+ .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  53 +++
+ .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 ++
+ .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 ++
+ .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 351 ++++++++++++++++++
+ 7 files changed, 498 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index f9e6343acd03..93758a62f4d7 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -75,6 +75,10 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-r9.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r4.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r5.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-lazor-limozeen-nots-r9.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-auo.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev0-boe.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-auo.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-mrbland-rev1-boe.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1-lte.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
+new file mode 100644
+index 000000000000..2767817fb053
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Mrbland board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x0 => 0
++ *  - bits 7..4: Panel ID: 0x0 (AUO)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-mrbland-rev0.dtsi"
++
++/ {
++	model = "Google Mrbland rev0 AUO panel board";
++	compatible = "google,mrbland-rev0-sku0", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "auo,b101uan08.3";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
+new file mode 100644
+index 000000000000..711485574a03
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Mrbland board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x10 => 16
++ *  - bits 7..4: Panel ID: 0x1 (BOE)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-mrbland-rev0.dtsi"
++
++/ {
++	model = "Google Mrbland rev0 BOE panel board";
++	compatible = "google,mrbland-rev0-sku16", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "boe,tv101wum-n53";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
+new file mode 100644
+index 000000000000..7bc8402c018e
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Mrbland board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-mrbland.dtsi"
++
++&avdd_lcd {
++	gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
++};
++
++&panel {
++	enable-gpios = <&tlmm 76 GPIO_ACTIVE_HIGH>;
++};
++
++&v1p8_mipi {
++	gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
++};
++
++/* PINCTRL - modifications to sc7180-trogdor-mrbland.dtsi */
++&avdd_lcd_en {
++	pinmux {
++		pins = "gpio80";
++	};
++
++	pinconf {
++		pins = "gpio80";
++	};
++};
++
++&mipi_1800_en {
++	pinmux {
++		pins = "gpio81";
++	};
++
++	pinconf {
++		pins = "gpio81";
++	};
++};
++&vdd_reset_1800 {
++	pinmux {
++		pins = "gpio76";
++	};
++
++	pinconf {
++		pins = "gpio76";
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
+new file mode 100644
+index 000000000000..275313ef7554
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Mrbland board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x600 => 1536
++ *  - bits 11..8: Panel ID: 0x6 (AUO)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-mrbland.dtsi"
++
++/ {
++	model = "Google Mrbland rev1+ AUO panel board";
++	compatible = "google,mrbland-sku1536", "qcom,sc7180";
++};
++
++&panel {
++	compatible = "auo,b101uan08.3";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
+new file mode 100644
+index 000000000000..87c6b6c30b5e
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Mrbland board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ *
++ * SKU: 0x300 => 768
++ *  - bits 11..8: Panel ID: 0x3 (BOE)
++ */
++
++/dts-v1/;
++
++#include "sc7180-trogdor-mrbland.dtsi"
++
++/ {
++	model = "Google Mrbland (rev1 - 2) BOE panel board";
++	/* Uses ID 768 on rev1 and 1024 on rev2+ */
++	compatible = "google,mrbland-sku1024", "google,mrbland-sku768",
++		"qcom,sc7180";
++};
++
++&panel {
++	compatible = "boe,tv101wum-n53";
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+new file mode 100644
+index 000000000000..49c75990954a
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+@@ -0,0 +1,351 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Google Mrbland board device tree source
++ *
++ * Copyright 2021 Google LLC.
++ */
++
++/dts-v1/;
++
++#include "sc7180.dtsi"
++
++ap_ec_spi: &spi6 {};
++ap_h1_spi: &spi0 {};
++
++#include "sc7180-trogdor.dtsi"
++
++/* This board only has 1 USB Type-C port. */
++/delete-node/ &usb_c1;
++
++/ {
++	avdd_lcd: avdd-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "avdd_lcd";
++
++		gpio = <&tlmm 88 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&avdd_lcd_en>;
++
++		vin-supply = <&pp5000_a>;
++	};
++
++	avee_lcd: avee-lcd {
++		compatible = "regulator-fixed";
++		regulator-name = "avee_lcd";
++
++		gpio = <&tlmm 21 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&avee_lcd_en>;
++
++		vin-supply = <&pp5000_a>;
++	};
++
++	v1p8_mipi: v1p8-mipi {
++		compatible = "regulator-fixed";
++		regulator-name = "v1p8_mipi";
++
++		gpio = <&tlmm 86 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&mipi_1800_en>;
++
++		vin-supply = <&pp3300_a>;
++	};
++};
++
++&ap_tp_i2c {
++	status = "disabled";
++};
++
++&backlight {
++	pwms = <&cros_ec_pwm 0>;
++};
++
++&camcc {
++	status = "okay";
++};
++
++&dsi0 {
++
++	panel: panel@0 {
++		reg = <0>;
++		enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vdd_reset_1800>;
++		avdd-supply = <&avdd_lcd>;
++		avee-supply = <&avee_lcd>;
++		pp1800-supply = <&v1p8_mipi>;
++		pp3300-supply = <&pp3300_dx_edp>;
++		backlight = <&backlight>;
++		rotation = <270>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			port@0 {
++				reg = <0>;
++				panel_in: endpoint {
++					remote-endpoint = <&dsi0_out>;
++				};
++			};
++		};
++	};
++
++	ports {
++		port@1 {
++			endpoint {
++				remote-endpoint = <&panel_in>;
++				data-lanes = <0 1 2 3>;
++			};
++		};
++	};
++};
++
++&gpio_keys {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	ap_ts: touchscreen@5d {
++		compatible = "goodix,gt7375p";
++		reg = <0x5d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++
++		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
++
++		vdd-supply = <&pp3300_ts>;
++	};
++};
++
++&pp1800_uf_cam {
++	status = "okay";
++};
++
++&pp1800_wf_cam {
++	status = "okay";
++};
++
++&pp2800_uf_cam {
++	status = "okay";
++};
++
++&pp2800_wf_cam {
++	status = "okay";
++};
++
++&wifi {
++	qcom,ath10k-calibration-variant = "GO_MRBLAND";
++};
++
++/*
++ * No eDP on this board but it's logically the same signal so just give it
++ * a new name and assign the proper GPIO.
++ */
++pp3300_disp_on: &pp3300_dx_edp {
++	gpio = <&tlmm 85 GPIO_ACTIVE_HIGH>;
++};
++
++/* PINCTRL - modifications to sc7180-trogdor.dtsi */
++
++/*
++ * No eDP on this board but it's logically the same signal so just give it
++ * a new name and assign the proper GPIO.
++ */
++
++tp_en: &en_pp3300_dx_edp {
++	pinmux {
++		pins = "gpio85";
++		};
++	pinconf {
++		pins = "gpio85";
++	};
++};
++
++/* PINCTRL - board-specific pinctrl */
++
++&tlmm {
++	gpio-line-names = "HUB_RST_L",
++			  "AP_RAM_ID0",
++			  "AP_SKU_ID2",
++			  "AP_RAM_ID1",
++			  "",
++			  "AP_RAM_ID2",
++			  "UF_CAM_EN",
++			  "WF_CAM_EN",
++			  "TS_RESET_L",
++			  "TS_INT_L",
++			  "",
++			  "",
++			  "AP_EDP_BKLTEN",
++			  "UF_CAM_MCLK",
++			  "WF_CAM_CLK",
++			  "",
++			  "",
++			  "UF_CAM_SDA",
++			  "UF_CAM_SCL",
++			  "WF_CAM_SDA",
++			  "WF_CAM_SCL",
++			  "AVEE_LCD_EN",
++			  "",
++			  "AMP_EN",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "HP_IRQ",
++			  "WF_CAM_RST_L",
++			  "UF_CAM_RST_L",
++			  "AP_BRD_ID2",
++			  "",
++			  "AP_BRD_ID0",
++			  "AP_H1_SPI_MISO",
++			  "AP_H1_SPI_MOSI",
++			  "AP_H1_SPI_CLK",
++			  "AP_H1_SPI_CS_L",
++			  "BT_UART_CTS",
++			  "BT_UART_RTS",
++			  "BT_UART_TXD",
++			  "BT_UART_RXD",
++			  "H1_AP_INT_ODL",
++			  "",
++			  "UART_AP_TX_DBG_RX",
++			  "UART_DBG_TX_AP_RX",
++			  "HP_I2C_SDA",
++			  "HP_I2C_SCL",
++			  "FORCED_USB_BOOT",
++			  "AMP_BCLK",
++			  "AMP_LRCLK",
++			  "AMP_DIN",
++			  "PEN_DET_ODL",
++			  "HP_BCLK",
++			  "HP_LRCLK",
++			  "HP_DOUT",
++			  "HP_DIN",
++			  "HP_MCLK",
++			  "AP_SKU_ID0",
++			  "AP_EC_SPI_MISO",
++			  "AP_EC_SPI_MOSI",
++			  "AP_EC_SPI_CLK",
++			  "AP_EC_SPI_CS_L",
++			  "AP_SPI_CLK",
++			  "AP_SPI_MOSI",
++			  "AP_SPI_MISO",
++			  /*
++			   * AP_FLASH_WP_L is crossystem ABI. Schematics
++			   * call it BIOS_FLASH_WP_L.
++			   */
++			  "AP_FLASH_WP_L",
++			  "",
++			  "AP_SPI_CS0_L",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "WLAN_SW_CTRL",
++			  "",
++			  "REPORT_E",
++			  "",
++			  "ID0",
++			  "",
++			  "ID1",
++			  "",
++			  "",
++			  "",
++			  "CODEC_PWR_EN",
++			  "HUB_EN",
++			  "TP_EN",
++			  "MIPI_1.8V_EN",
++			  "VDD_RESET_1.8V",
++			  "AVDD_LCD_EN",
++			  "",
++			  "AP_SKU_ID1",
++			  "AP_RST_REQ",
++			  "",
++			  "AP_BRD_ID1",
++			  "AP_EC_INT_L",
++			  "SDM_GRFC_3",
++			  "",
++			  "",
++			  "BOOT_CONFIG_4",
++			  "BOOT_CONFIG_2",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "BOOT_CONFIG_3",
++			  "WCI2_LTE_COEX_TXD",
++			  "WCI2_LTE_COEX_RXD",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "FORCED_USB_BOOT_POL",
++			  "AP_TS_PEN_I2C_SDA",
++			  "AP_TS_PEN_I2C_SCL",
++			  "DP_HOT_PLUG_DET",
++			  "EC_IN_RW_ODL";
++
++	vdd_reset_1800: vdd-reset-1800 {
++		pinmux {
++			pins = "gpio87";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio87";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
++	avdd_lcd_en: avdd-lcd-en {
++		pinmux {
++			pins = "gpio88";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio88";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
++	avee_lcd_en: avee-lcd_en {
++		pinmux {
++			pins = "gpio21";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio21";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++
++	mipi_1800_en: mipi-1800-en {
++		pinmux {
++			pins = "gpio86";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio86";
++			drive-strength = <2>;
++			bias-disable;
++		};
++	};
++};
+-- 
+2.31.0
+

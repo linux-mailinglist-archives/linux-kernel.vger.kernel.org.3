@@ -2,107 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D459513285
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C1F51328B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345587AbiD1Lfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S1344640AbiD1Lgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345579AbiD1Lfe (ORCPT
+        with ESMTP id S231983AbiD1Lgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:35:34 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E9027CDA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:32:19 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id f2so5867010ioh.7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UXiI1Ou+hgS6xUOBleoXBZ0P1W6h3cfa19FRe+lKcNc=;
-        b=qdRXWsH4VboVZqMp+U+9xgTkruA8gP1PnMemdrmmg0YO6COokK/UN2OFrTer0rQTAT
-         L/Gk1tYZKKFPFqo7JdutorIHaZilUNgMXSNSOCNevKkAHmcBVMElQGq6HpkYC/lBhR+z
-         cGdhDa6PfwxJvXH1rpfTD2kgzo8ZHUp1se8gwJDs9ievPavEXtbkGq5W5APCsSBEjbhG
-         b6RpLTbmn4cGsMi3ZP7Vc/UnPeVn3UhTzAwx9cOph6YMcAfGfSlA3NE/eQL+O/fC+ky6
-         WCEFGtzo/pZQofGZq0COcl2SR3VgReM6aVbjBeulJfsOg1nbD9JO0lCeZ9TTXm3ROS5F
-         lBgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UXiI1Ou+hgS6xUOBleoXBZ0P1W6h3cfa19FRe+lKcNc=;
-        b=yLqMCjHqCb2f4qn4WkRXQMhCAWgSxqyu9cCoCfur9YiKfjnqdaY4eWDBxHS2sD0v0a
-         b08Uf39mE/cafPGLNfhSWwnZSbTQLGab4NrJsi/fm5OZjZn4QuiJ8UWr3G0rR4Bar5HM
-         sKpwQ9kisvpGASZT+ZJXyzpmTLzhNiNfYceDbFVk6qB6RqlqYZDpwP1pXfwddzyOMBo+
-         +eTmoM+edO8+896g6jg83+CBvRwn8PVhj+++wsfPkpz1+5dVMdgtilvBYInXhZ4NO0ar
-         FwARsigjyxe4Sq4VF4ZGXHyYTLH8VHFQLVLIWByFWEVGRxIaSCrqnVV8UZpZnGuQ1giw
-         PKdQ==
-X-Gm-Message-State: AOAM533cKoawuB3fdVGitxQv12MOO72GXydIqR2ExrwezVhKQ7tDBSSb
-        AmAPR7knPrhqlF2gARAwvqQfxQ1BmrUrm9Oi7mI=
-X-Google-Smtp-Source: ABdhPJy//UOmnScX3U+9HAMHSaslp0Zg2kKG2rsRF1VyHdz+6Vg1gTuTmghrLA5VXddaXujrR+D0UZta7z+mQH+DG2g=
-X-Received: by 2002:a6b:680c:0:b0:657:aecd:c666 with SMTP id
- d12-20020a6b680c000000b00657aecdc666mr4431049ioc.218.1651145538572; Thu, 28
- Apr 2022 04:32:18 -0700 (PDT)
+        Thu, 28 Apr 2022 07:36:44 -0400
+Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10C361DA46;
+        Thu, 28 Apr 2022 04:33:27 -0700 (PDT)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(27732:0:AUTH_RELAY)
+        (envelope-from <wells.lu@sunplus.com>); Thu, 28 Apr 2022 19:33:01 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Thu, 28 Apr 2022 19:32:56 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Thu, 28 Apr 2022 19:32:56 +0800
+From:   =?big5?B?V2VsbHMgTHUgp2aq2sTL?= <wells.lu@sunplus.com>
+To:     Francois Romieu <romieu@fr.zoreil.com>,
+        Wells Lu <wellslutw@gmail.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "roopa@nvidia.com" <roopa@nvidia.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "edumazet@google.com" <edumazet@google.com>
+Subject: RE: [PATCH net-next v9 2/2] net: ethernet: Add driver for Sunplus
+ SP7021
+Thread-Topic: [PATCH net-next v9 2/2] net: ethernet: Add driver for Sunplus
+ SP7021
+Thread-Index: AQHYWI+jS4JtiaXpFUyrVgs1l1MK560CSWcAgALotYA=
+Date:   Thu, 28 Apr 2022 11:32:56 +0000
+Message-ID: <ff2077684c4c45fca929a8f61447242b@sphcmbx02.sunplus.com.tw>
+References: <1650882640-7106-1-git-send-email-wellslutw@gmail.com>
+ <1650882640-7106-3-git-send-email-wellslutw@gmail.com>
+ <Ymh3si+MTg5i0Bnl@electric-eye.fr.zoreil.com>
+In-Reply-To: <Ymh3si+MTg5i0Bnl@electric-eye.fr.zoreil.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.39]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:20e7:0:0:0:0 with HTTP; Thu, 28 Apr 2022 04:32:18
- -0700 (PDT)
-Reply-To: barristerbenwaidhoferb@gmail.com
-From:   "Barrister. Ben Waidhofer" <gogalonasiru@gmail.com>
-Date:   Thu, 28 Apr 2022 04:32:18 -0700
-Message-ID: <CAPs4PmpVKkFuMtUTtqYzDMEM1tkHd6mExwR5ngFD_ZF_qd_qtg@mail.gmail.com>
-Subject: Investment Offer
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d44 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9261]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gogalonasiru[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
-
-I am Barrister. Ben Waidhofer from the stated law firm in London. I act
-for Mr. Andrew Walker, a former loyalist and a personal Friend to the
-President of Russia Vladimir Putin presently in London; he flew into
-the UK months ago before the invasion of Ukraine by Russian government.
-The sum of $3.5b was deposited in a Private bank in Switzerland for
-the procurement of MIC war equipment from North Korea to fight the
-war, but he has decided to back out of the initial plan to divert part
-of the fund for investment in a viable venture.
-
-There is a need for a matured and trusted individual or corporate
-organization to receive part of the fund. All the needed documentation
-will be perfected here in London.
-
-You are at liberty to respond for more detail.
-
-Thanks.
-Regards,
-Barrister. Ben Waidhofer
+SGkgRnJhbmNvaXMsDQoNCg0KPiBbLi4uXQ0KPiA+ICtpbnQgc3BsMnN3X3J4X3BvbGwoc3RydWN0
+IG5hcGlfc3RydWN0ICpuYXBpLCBpbnQgYnVkZ2V0KSB7DQo+IFsuLi5dDQo+ID4gKwl3bWIoKTsJ
+LyogbWFrZSBzdXJlIHNldHRpbmdzIGFyZSBlZmZlY3RpdmUuICovDQo+ID4gKwltYXNrID0gcmVh
+ZGwoY29tbS0+bDJzd19yZWdfYmFzZSArIEwyU1dfU1dfSU5UX01BU0tfMCk7DQo+ID4gKwltYXNr
+ICY9IH5NQUNfSU5UX1JYOw0KPiA+ICsJd3JpdGVsKG1hc2ssIGNvbW0tPmwyc3dfcmVnX2Jhc2Ug
+KyBMMlNXX1NXX0lOVF9NQVNLXzApOw0KPiA+ICsNCj4gPiArCW5hcGlfY29tcGxldGUobmFwaSk7
+DQo+ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiAraW50IHNwbDJzd190eF9wb2xs
+KHN0cnVjdCBuYXBpX3N0cnVjdCAqbmFwaSwgaW50IGJ1ZGdldCkgew0KPiBbLi4uXQ0KPiA+ICsJ
+d21iKCk7CQkJLyogbWFrZSBzdXJlIHNldHRpbmdzIGFyZSBlZmZlY3RpdmUuICovDQo+ID4gKwlt
+YXNrID0gcmVhZGwoY29tbS0+bDJzd19yZWdfYmFzZSArIEwyU1dfU1dfSU5UX01BU0tfMCk7DQo+
+ID4gKwltYXNrICY9IH5NQUNfSU5UX1RYOw0KPiA+ICsJd3JpdGVsKG1hc2ssIGNvbW0tPmwyc3df
+cmVnX2Jhc2UgKyBMMlNXX1NXX0lOVF9NQVNLXzApOw0KPiA+ICsNCj4gPiArCW5hcGlfY29tcGxl
+dGUobmFwaSk7DQo+ID4gKwlyZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiAraXJxcmV0dXJu
+X3Qgc3BsMnN3X2V0aGVybmV0X2ludGVycnVwdChpbnQgaXJxLCB2b2lkICpkZXZfaWQpIHsNCj4g
+Wy4uLl0NCj4gPiArCWlmIChzdGF0dXMgJiBNQUNfSU5UX1JYKSB7DQo+ID4gKwkJLyogRGlzYWJs
+ZSBSWCBpbnRlcnJ1cHRzLiAqLw0KPiA+ICsJCW1hc2sgPSByZWFkbChjb21tLT5sMnN3X3JlZ19i
+YXNlICsgTDJTV19TV19JTlRfTUFTS18wKTsNCj4gPiArCQltYXNrIHw9IE1BQ19JTlRfUlg7DQo+
+ID4gKwkJd3JpdGVsKG1hc2ssIGNvbW0tPmwyc3dfcmVnX2Jhc2UgKyBMMlNXX1NXX0lOVF9NQVNL
+XzApOw0KPiBbLi4uXQ0KPiA+ICsJCW5hcGlfc2NoZWR1bGUoJmNvbW0tPnJ4X25hcGkpOw0KPiA+
+ICsJfQ0KPiA+ICsNCj4gPiArCWlmIChzdGF0dXMgJiBNQUNfSU5UX1RYKSB7DQo+ID4gKwkJLyog
+RGlzYWJsZSBUWCBpbnRlcnJ1cHRzLiAqLw0KPiA+ICsJCW1hc2sgPSByZWFkbChjb21tLT5sMnN3
+X3JlZ19iYXNlICsgTDJTV19TV19JTlRfTUFTS18wKTsNCj4gPiArCQltYXNrIHw9IE1BQ19JTlRf
+VFg7DQo+ID4gKwkJd3JpdGVsKG1hc2ssIGNvbW0tPmwyc3dfcmVnX2Jhc2UgKyBMMlNXX1NXX0lO
+VF9NQVNLXzApOw0KPiA+ICsNCj4gPiArCQlpZiAodW5saWtlbHkoc3RhdHVzICYgTUFDX0lOVF9U
+WF9ERVNfRVJSKSkgew0KPiBbLi4uXQ0KPiA+ICsJCX0gZWxzZSB7DQo+ID4gKwkJCW5hcGlfc2No
+ZWR1bGUoJmNvbW0tPnR4X25hcGkpOw0KPiA+ICsJCX0NCj4gPiArCX0NCj4gDQo+IFRoZSByZWFk
+bC93cml0ZWwgc2VxdWVuY2UgaW4gcnhfcG9sbCAob3IgdHhfcG9sbCkgcmFjZXMgd2l0aCB0aGUg
+aXJxIGhhbmRsZXIgcGVyZm9ybWluZw0KPiBNQUNfSU5UX1RYIChvciBNQUNfSU5UX1JYKSB3b3Jr
+LiBJZiB0aGUgcmVhZGwgcmV0dXJucyB0aGUgc2FtZSB2YWx1ZSB0byBib3RoIGNhbGxlcnMsDQo+
+IG9uZSBvZiB0aGUgd3JpdGVsIHdpbGwgYmUgb3ZlcndyaXR0ZW4uDQo+IA0KPiAtLQ0KPiBVZWlt
+b3INCg0KSSB3aWxsIGFkZCBkaXNhYmxlX2lycSgpIGFuZCBlbmFibGVfaXJxKCkgZm9yIHNwbDJz
+d19yeF9wb2xsKCkgYW5kIHNwbDJzd190eF9wb2xsKCkgYXMgc2hvd24gYmVsb3c6DQoNCnNwbDJz
+d19yeF9wb2xsKCk6DQoNCgl3bWIoKTsJLyogbWFrZSBzdXJlIHNldHRpbmdzIGFyZSBlZmZlY3Rp
+dmUuICovDQoJZGlzYWJsZV9pcnEoY29tbS0+aXJxKTsNCgltYXNrID0gcmVhZGwoY29tbS0+bDJz
+d19yZWdfYmFzZSArIEwyU1dfU1dfSU5UX01BU0tfMCk7DQoJbWFzayAmPSB+TUFDX0lOVF9SWDsN
+Cgl3cml0ZWwobWFzaywgY29tbS0+bDJzd19yZWdfYmFzZSArIEwyU1dfU1dfSU5UX01BU0tfMCk7
+DQoJZW5hYmxlX2lycShjb21tLT5pcnEpOw0KDQpzcGwyc3dfdHhfcG9sbCgpOg0KDQoJd21iKCk7
+CQkJLyogbWFrZSBzdXJlIHNldHRpbmdzIGFyZSBlZmZlY3RpdmUuICovDQoJZGlzYWJsZV9pcnEo
+Y29tbS0+aXJxKTsNCgltYXNrID0gcmVhZGwoY29tbS0+bDJzd19yZWdfYmFzZSArIEwyU1dfU1df
+SU5UX01BU0tfMCk7DQoJbWFzayAmPSB+TUFDX0lOVF9UWDsNCgl3cml0ZWwobWFzaywgY29tbS0+
+bDJzd19yZWdfYmFzZSArIEwyU1dfU1dfSU5UX01BU0tfMCk7DQoJZW5hYmxlX2lycShjb21tLT5p
+cnEpOw0KDQoNCklzIHRoZSBtb2RpZmljYXRpb24gb2s/DQoNCg0KVGhhbmsgeW91IGZvciB5b3Vy
+IHJldmlldy4NCg0KQmVzdCByZWdhcmRzLA0KV2VsbHMNCg0K

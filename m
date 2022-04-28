@@ -2,189 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3EE512C42
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9297F512C40
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244750AbiD1HJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S244881AbiD1HJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbiD1HJQ (ORCPT
+        with ESMTP id S244801AbiD1HJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:09:16 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782FD7CB03;
-        Thu, 28 Apr 2022 00:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651129561; x=1682665561;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KV3xSjx5IORH3nBw259kA2U6vXkqu4AbHZhtuFZNwhY=;
-  b=vi8bvwbPWIWkzIr1DwDGamI7KLO/B1X2wWsTUwoPRrx6MNg0Djaz17mC
-   XZSk5+2jEkvwSfJ54+A8tTKfC2QSmmfnV9Jf2Y13z2Hvz2JG5G+9hm+jb
-   HxFRPD2RqF9d3H20NWjftzB/I1kAprbqJHZfahkkQOlhM+BooDlSLgedR
-   E=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 28 Apr 2022 00:06:01 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:06:01 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 00:06:00 -0700
-Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
- 2022 00:05:57 -0700
-Message-ID: <cbf3c7e4-a8c8-51d1-f245-cfbcbccc6a51@quicinc.com>
-Date:   Thu, 28 Apr 2022 12:35:54 +0530
+        Thu, 28 Apr 2022 03:09:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 958377CDD6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651129564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RX0IluUFjyFGJB9XgIGY/YNKpJD21MjW7iyGoQ/bciQ=;
+        b=MgCRQOR0bXRwCG/n9wB3V/1V5KF7AWuuzIMVPknPI4vVCSoQUbZH5PD17M/bicFwyCK9zd
+        U/c+O6emWUPdgwPJC0U7hmZdBHcKzCzJPpiiZKIqxmIpg0F+bxXZzlHF14bswCE95j41Bt
+        KWQsumSgUPpfKbM7Lxgo1yrCyjPR6xo=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-uIZMLnaMMkSTSVrOnAexow-1; Thu, 28 Apr 2022 03:06:03 -0400
+X-MC-Unique: uIZMLnaMMkSTSVrOnAexow-1
+Received: by mail-qt1-f199.google.com with SMTP id i3-20020ac813c3000000b002f202d9471dso2725855qtj.15
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:06:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=RX0IluUFjyFGJB9XgIGY/YNKpJD21MjW7iyGoQ/bciQ=;
+        b=eGMOW9f+tIZYaFMuyRugZb2DccstpHb2t2Zunk1GBV4gBgeogMyS9KWlrqe9D3RbNm
+         EKdamZyrlNS53ULBLaRBfDHNU7PGbNMQzepX5UJPi/JdBYUZ08RHJh7O8Ce4lT87FxBN
+         RSAFjJtDEFHUr27zE/i0Ymoc0BVUYyB7aMQCb4P9pwTGwm+67v7bqAEYD6zn4fob05IQ
+         ilInjrWzBw9VnM57ny+ngOImWMZ5ZGKseRgnG6VqmmGZYUcqtZFKu8cqxd7h22SWoM++
+         KQ5UnbabnaWCua5hnOnK4TVpNf3t4K/BDP/mxNY07j5fvCu9gBLer/Fb1OcZRkTaGOZE
+         OgWQ==
+X-Gm-Message-State: AOAM531anJCi4HI8x9brZwA/JEwcRBRXDvXi43njjikwv8ZQuIt1qDyA
+        DJ1FIhqn2IqrCVOgfHzBP9aXMsKxlctkFdPVVquKfUtCkNM/5MNsa28AZGXn4dCWl32cjuxhito
+        0Wpt3fbEyuFmym32q1v52lCAp
+X-Received: by 2002:ac8:5fcb:0:b0:2f3:4799:1649 with SMTP id k11-20020ac85fcb000000b002f347991649mr22339580qta.522.1651129562779;
+        Thu, 28 Apr 2022 00:06:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyU2oeLrstNHTLoVNiOiYqy8PCp5qFcyD0PvqMZ6dBrsfSJtI6yAgZINx2lBg+bbQaYrXCEkQ==
+X-Received: by 2002:ac8:5fcb:0:b0:2f3:4799:1649 with SMTP id k11-20020ac85fcb000000b002f347991649mr22339552qta.522.1651129562541;
+        Thu, 28 Apr 2022 00:06:02 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-117-160.dyn.eolo.it. [146.241.117.160])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm11706888qtx.58.2022.04.28.00.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 00:06:02 -0700 (PDT)
+Message-ID: <530adc71b52e774c92c53d235701710dbc9866a9.camel@redhat.com>
+Subject: Re: [PATCH net 1/1] net: stmmac: disable Split Header (SPH) for
+ Intel platforms
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>,
+        Ong@vger.kernel.org, Boon Leong <boon.leong.ong@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Date:   Thu, 28 Apr 2022 09:05:57 +0200
+In-Reply-To: <20220428015538.GC26326@linux.intel.com>
+References: <20220426074531.4115683-1-tee.min.tan@linux.intel.com>
+         <8735i0ndy7.fsf@kurt> <20220428015538.GC26326@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv6] tty: hvc: dcc: Bind driver to CPU core0 for reads and
- writes
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <20220310032636.7286-1-quic_saipraka@quicinc.com>
- <YlkPvnBYzJo9aeZ2@kroah.com>
- <cad739da-75af-8d2f-4107-72c657b9acab@quicinc.com>
- <Ymo7ODt+bToCf5Y2@kroah.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <Ymo7ODt+bToCf5Y2@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/2022 12:29 PM, Greg Kroah-Hartman wrote:
-> On Thu, Apr 28, 2022 at 10:04:34AM +0530, Sai Prakash Ranjan wrote:
->> Hi Greg,
->>
->> On 4/15/2022 11:55 AM, Greg Kroah-Hartman wrote:
->>> On Thu, Mar 10, 2022 at 08:56:36AM +0530, Sai Prakash Ranjan wrote:
->>>> From: Shanker Donthineni <shankerd@codeaurora.org>
->>>>
->>>> Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
->>>> reads/writes from/to DCC on secondary cores. Each core has its
->>>> own DCC device registers, so when a core reads or writes from/to DCC,
->>>> it only accesses its own DCC device. Since kernel code can run on
->>>> any core, every time the kernel wants to write to the console, it
->>>> might write to a different DCC.
->>>>
->>>> In SMP mode, Trace32 creates multiple windows, and each window shows
->>>> the DCC output only from that core's DCC. The result is that console
->>>> output is either lost or scattered across windows.
->>>>
->>>> Selecting this option will enable code that serializes all console
->>>> input and output to core 0. The DCC driver will create input and
->>>> output FIFOs that all cores will use. Reads and writes from/to DCC
->>>> are handled by a workqueue that runs only core 0.
->>>>
->>>> Signed-off-by: Shanker Donthineni <shankerd@codeaurora.org>
->>>> Acked-by: Adam Wallis <awallis@codeaurora.org>
->>>> Signed-off-by: Timur Tabi <timur@codeaurora.org>
->>>> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
->>>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->>>> ---
->>>>
->>>> Changes in v6:
->>>>    * Disable CPU hotplug when CONFIG_HVC_DCC_SERIALIZE_SMP=y.
->>>>
->>>> Changes in v5:
->>>>    * Use get_cpu() and put_cpu() for CPU id check in preemptible context.
->>>>    * Revert back to build time Kconfig.
->>>>    * Remove unnecessary hotplug locks, they result in sleeping in atomic context bugs.
->>>>    * Add a comment for the spinlock.
->>>>
->>>> Changes in v4:
->>>>    * Use module parameter for runtime choice of enabling this feature.
->>>>    * Use hotplug locks to avoid race between cpu online check and work schedule.
->>>>    * Remove ifdefs and move to common ops.
->>>>    * Remove unnecessary check for this configuration.
->>>>    * Use macros for buf size instead of magic numbers.
->>>>    * v3 - https://lore.kernel.org/lkml/20211213141013.21464-1-quic_saipraka@quicinc.com/
->>>>
->>>> Changes in v3:
->>>>    * Handle case where core0 is not online.
->>>>
->>>> Changes in v2:
->>>>    * Checkpatch warning fixes.
->>>>    * Use of IS_ENABLED macros instead of ifdefs.
->>>>
->>>> ---
->>>>    drivers/tty/hvc/Kconfig   |  20 +++++
->>>>    drivers/tty/hvc/hvc_dcc.c | 175 +++++++++++++++++++++++++++++++++++++-
->>>>    2 files changed, 192 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/tty/hvc/Kconfig b/drivers/tty/hvc/Kconfig
->>>> index 8d60e0ff67b4..62560cd0c04d 100644
->>>> --- a/drivers/tty/hvc/Kconfig
->>>> +++ b/drivers/tty/hvc/Kconfig
->>>> @@ -87,6 +87,26 @@ config HVC_DCC
->>>>    	  driver. This console is used through a JTAG only on ARM. If you don't have
->>>>    	  a JTAG then you probably don't want this option.
->>>> +config HVC_DCC_SERIALIZE_SMP
->>>> +	bool "Use DCC only on CPU core 0"
->>>> +	depends on SMP && HVC_DCC
->>>> +	help
->>>> +	  Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
->>>> +	  reads/writes from/to DCC on more than one CPU core. Each core has its
->>>> +	  own DCC device registers, so when a CPU core reads or writes from/to
->>>> +	  DCC, it only accesses its own DCC device. Since kernel code can run on
->>>> +	  any CPU core, every time the kernel wants to write to the console, it
->>>> +	  might write to a different DCC.
->>>> +
->>>> +	  In SMP mode, Trace32 creates multiple windows, and each window shows
->>>> +	  the DCC output only from that core's DCC. The result is that console
->>>> +	  output is either lost or scattered across windows.
->>> Why are we documenting, and supporting, a closed source userspace tool
->>> with kernel changes?  Does this advertisement deserve to be in the
->>> kernel source tree?
->> Ok, I will remove the comment.
->>
->>> And why can't they just fix their tool if this is such a big issue?  Why
->>> does this only affect this one platform and not all other smp systems?
->> Hmm, this has been discussed in all the past versions of this series and still we
->> are at the same question :) I will write a small summary below which will cover
->> mostly relevant discussions we discussed till now and then I can point to it
->> whenever this question is asked again.
-> No, it needs to go into the changelog text so that we know what we are
-> reviewing and considering when you submit it.  Never refer back to some
-> old conversation, how are we supposed to remember that?
+Hello,
 
-True given the amount of patches you handle. I will be explicit and add more details in the next
-version.
+On Thu, 2022-04-28 at 09:55 +0800, Tan Tee Min wrote:
+> On Tue, Apr 26, 2022 at 03:58:56PM +0200, Kurt Kanzenbach wrote:
+> > Hi,
+> > 
+> > On Tue Apr 26 2022, Tan Tee Min wrote:
+> > > Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
+> > > of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
+> > > This SPH limitation will cause ping failure when the packets size exceed
+> > > the MTU size. For example, the issue happens once the basic ping packet
+> > > size is larger than the configured MTU size and the data is lost inside
+> > > the fragmented packet, replaced by zeros/corrupted values, and leads to
+> > > ping fail.
+> > > 
+> > > So, disable the Split Header for Intel platforms.
+> > 
+> > Does this issue only apply on Intel platforms?
+> 
+> According to Synopsys IP support, they have confirmed the header-payload
+> splitting for IPv4 fragmented packets is not supported for the Synopsys
+> Ether IPs.
+> 
+> Intel platforms are integrating with GMAC EQoS IP which is impacted by the
+> limitation above, so we are changing the default SPH setting to disabled
+> for Intel Platforms only.
+> 
+> If anyone can confirm on their platform also having the same issues,
+> then we would change the SPH default to disable across the IPs.
 
-> So this all seems to be debugging-only code, and this config option
-> should NEVER be turned on for a real system.  That makes much more
-> sense, and is something that I don't recall anyone saying before.
+Could you please provide a Fixes tag here? 
 
-Ah my bad, I thought it was known thing given the DCC driver was already
-present.
+Thanks!
 
-> So make this very very explicit, both in the changelog, and in the
-> Kconfig text, AND when the driver loads have it spit out a huge message
-> in the kernel log saying that this is for debugging only and that no one
-> should see this on a normal running system.  We have examples of other
-> Kconfig options that do this at runtime, copy what they do so it's
-> painfully obvious.  Like what is in clk_debug_init().
+Paolo
 
-Sure, I will make these changes and post.
-
-Thanks,
-Sai

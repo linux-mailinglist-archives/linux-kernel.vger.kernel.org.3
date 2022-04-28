@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD95E51285F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74F951286B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239876AbiD1BD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S240050AbiD1BEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239874AbiD1BDy (ORCPT
+        with ESMTP id S229718AbiD1BEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:03:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120E442A18;
-        Wed, 27 Apr 2022 18:00:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kpcjq1bD4z4xLb;
-        Thu, 28 Apr 2022 11:00:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651107631;
-        bh=mzl1zsy7DHmvyTHK6qnmEixG54pMXsdUPzzLOtswW3U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IawRtdf0t1sZym9gZ1uRt1aVPh1BEhZRFTc346cYNu2CCR6ydKpVfcuFjVpBqjzI8
-         e9k8N0NtpjdT2UNx4ZqrNA8PvKnpYg74oGD3//0RA5Tn5qHOglBdTTiooSdu5xSWJT
-         /zLPMZegozaspTHA2Xsk919dkTR7SvE1R9YHGcMfyXLb8Kf+cMU8YgPWzDBGAwkRKY
-         6XCXCIVtUUTvla7TL7Ni0ycfVKteC/fnQj9kO7s93rKwWw9bEYS9RDZyad/CYZYjuk
-         oVcoxU2HNFCSEIW4Kv8quz+q9X/ldg9EuWJb8kT4hNSt67qDCf89i1EgfZRkyl/Gjr
-         pDQPiFZrCweAQ==
-Date:   Thu, 28 Apr 2022 11:00:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pm tree
-Message-ID: <20220428110030.7090a45b@canb.auug.org.au>
+        Wed, 27 Apr 2022 21:04:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3747A13DC0;
+        Wed, 27 Apr 2022 18:01:18 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kpcgf1MZfzGpMl;
+        Thu, 28 Apr 2022 08:58:38 +0800 (CST)
+Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
+ (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
+ 2022 09:01:14 +0800
+Subject: Re: [PATCH 18/30] notifier: Show function names on notifier routines
+ if DEBUG_NOTIFIERS is set
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        <akpm@linux-foundation.org>, <bhe@redhat.com>, <pmladek@suse.com>,
+        <kexec@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <coresight@lists.linaro.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-alpha@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+        <linux-leds@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-parisc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <linux-xtensa@linux-xtensa.org>, <netdev@vger.kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>, <rcu@vger.kernel.org>,
+        <sparclinux@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
+        <x86@kernel.org>, <kernel-dev@igalia.com>, <kernel@gpiccoli.net>,
+        <halves@canonical.com>, <fabiomirmar@gmail.com>,
+        <alejandro.j.jimenez@oracle.com>,
+        <andriy.shevchenko@linux.intel.com>, <arnd@arndb.de>,
+        <bp@alien8.de>, <corbet@lwn.net>, <d.hatayama@jp.fujitsu.com>,
+        <dave.hansen@linux.intel.com>, <dyoung@redhat.com>,
+        <feng.tang@intel.com>, <gregkh@linuxfoundation.org>,
+        <mikelley@microsoft.com>, <hidehiro.kawai.ez@hitachi.com>,
+        <jgross@suse.com>, <john.ogness@linutronix.de>,
+        <keescook@chromium.org>, <luto@kernel.org>, <mhiramat@kernel.org>,
+        <mingo@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <rostedt@goodmis.org>, <senozhatsky@chromium.org>,
+        <stern@rowland.harvard.edu>, <tglx@linutronix.de>,
+        <vgoyal@redhat.com>, <vkuznets@redhat.com>, <will@kernel.org>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-19-gpiccoli@igalia.com>
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+Message-ID: <9f44aae6-ec00-7ede-ec19-6e67ceb74510@huawei.com>
+Date:   Thu, 28 Apr 2022 09:01:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QOcjZBC_Hhk3zbI+QXUkdw.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <20220427224924.592546-19-gpiccoli@igalia.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.83]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,70 +82,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QOcjZBC_Hhk3zbI+QXUkdw.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/4/28 6:49, Guilherme G. Piccoli wrote:
+> Currently we have a debug infrastructure in the notifiers file, but
+> it's very simple/limited. This patch extends it by:
+> 
+> (a) Showing all registered/unregistered notifiers' callback names;
+> 
+> (b) Adding a dynamic debug tuning to allow showing called notifiers'
+> function names. Notice that this should be guarded as a tunable since
+> it can flood the kernel log buffer.
+> 
+> Cc: Arjan van de Ven <arjan@linux.intel.com>
+> Cc: Cong Wang <xiyou.wangcong@gmail.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Xiaoming Ni <nixiaoming@huawei.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+> 
+> We have some design decisions that worth discussing here:
+> 
+> (a) First of call, using C99 helps a lot to write clear and concise code, but
+> due to commit 4d94f910e79a ("Kbuild: use -Wdeclaration-after-statement") we
+> have a warning if mixing variable declarations with code. For this patch though,
+> doing that makes the code way clear, so decision was to add the debug code
+> inside brackets whenever this warning pops up. We can change that, but that'll
+> cause more ifdefs in the same function.
+> 
+> (b) In the symbol lookup helper function, we modify the parameter passed but
+> even more, we return it as well! This is unusual and seems unnecessary, but was
+> the strategy taken to allow embedding such function in the pr_debug() call.
+> 
+> Not doing that would likely requiring 3 symbol_name variables to avoid
+> concurrency (registering notifier A while calling notifier B) - we rely in
+> local variables as a serialization mechanism.
+> 
+> We're open for suggestions in case this design is not appropriate;
+> thanks in advance!
+> 
+>   kernel/notifier.c | 48 +++++++++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 46 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/notifier.c b/kernel/notifier.c
+> index ba005ebf4730..21032ebcde57 100644
+> --- a/kernel/notifier.c
+> +++ b/kernel/notifier.c
+> @@ -7,6 +7,22 @@
+>   #include <linux/vmalloc.h>
+>   #include <linux/reboot.h>
+>   
+> +#ifdef CONFIG_DEBUG_NOTIFIERS
+> +#include <linux/kallsyms.h>
+> +
+> +/*
+> + *	Helper to get symbol names in case DEBUG_NOTIFIERS is set.
+> + *	Return the modified parameter is a strategy used to achieve
+> + *	the pr_debug() functionality - with this, function is only
+> + *	executed if the dynamic debug tuning is effectively set.
+> + */
+> +static inline char *notifier_name(struct notifier_block *nb, char *sym_name)
+> +{
+> +	lookup_symbol_name((unsigned long)(nb->notifier_call), sym_name);
+> +	return sym_name;
+> +}
+> +#endif
+> +
+>   /*
+>    *	Notifier list for kernel code which wants to be called
+>    *	at shutdown. This is used to stop any idling DMA operations
+> @@ -34,20 +50,41 @@ static int notifier_chain_register(struct notifier_block **nl,
+>   	}
+>   	n->next = *nl;
+>   	rcu_assign_pointer(*nl, n);
+> +
+> +#ifdef CONFIG_DEBUG_NOTIFIERS
+> +	{
+> +		char sym_name[KSYM_NAME_LEN];
+> +
+> +		pr_info("notifiers: registered %s()\n",
+> +			notifier_name(n, sym_name));
+> +	}
 
-Hi all,
+Duplicate Code.
 
-After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Is it better to use __func__ and %pS?
 
-drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
-drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e' undecl=
-ared (first use in this function)
- 1701 |                 disable_promotion_to_c1e =3D true;
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier is repo=
-rted only once for each function it appears in
-drivers/idle/intel_idle.c:1706:9: error: implicit declaration of function '=
-c1e_promotion_enable' [-Werror=3Dimplicit-function-declaration]
- 1706 |         c1e_promotion_enable();
-      |         ^~~~~~~~~~~~~~~~~~~~
-drivers/idle/intel_idle.c: At top level:
-drivers/idle/intel_idle.c:1854:13: error: conflicting types for 'c1e_promot=
-ion_enable'; have 'void(void)' [-Werror]
- 1854 | static void c1e_promotion_enable(void)
-      |             ^~~~~~~~~~~~~~~~~~~~
-drivers/idle/intel_idle.c:1854:13: error: static declaration of 'c1e_promot=
-ion_enable' follows non-static declaration
-drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration of 'c=
-1e_promotion_enable' with type 'void(void)'
- 1706 |         c1e_promotion_enable();
-      |         ^~~~~~~~~~~~~~~~~~~~
+pr_info("%s: %pS\n", __func__, n->notifier_call);
 
-Caused by commit
 
-  39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module parameter")
+> +#endif
+>   	return 0;
+>   }
+>   
+>   static int notifier_chain_unregister(struct notifier_block **nl,
+>   		struct notifier_block *n)
+>   {
+> +	int ret = -ENOENT;
+> +
+>   	while ((*nl) != NULL) {
+>   		if ((*nl) == n) {
+>   			rcu_assign_pointer(*nl, n->next);
+> -			return 0;
+> +			ret = 0;
+> +			break;
+>   		}
+>   		nl = &((*nl)->next);
+>   	}
+> -	return -ENOENT;
+> +
+> +#ifdef CONFIG_DEBUG_NOTIFIERS
+> +	if (!ret) {
+> +		char sym_name[KSYM_NAME_LEN];
+> +
+> +		pr_info("notifiers: unregistered %s()\n",
+> +			notifier_name(n, sym_name));
+> +	}
+Duplicate Code.
 
-interacting with commit
+Is it better to use __func__ and %pS?
 
-  cc6e234b8264 ("intel_idle: Add AlderLake support")
+pr_info("%s: %pS\n", __func__, n->notifier_call);
+> +#endif
+> +	return ret;
+>   }
+>   
+>   /**
+> @@ -80,6 +117,13 @@ static int notifier_call_chain(struct notifier_block **nl,
+>   			nb = next_nb;
+>   			continue;
+>   		}
+> +
+Is the "#ifdef" missing here?
+> +		{
+> +			char sym_name[KSYM_NAME_LEN];
+> +
+> +			pr_debug("notifiers: calling %s()\n",
+> +				 notifier_name(nb, sym_name));
+Duplicate Code.
 
-Presumably this should have been fixed up in commit
+Is it better to use __func__ and %pS?
 
-  55ecda6f25ef ("Merge branch 'intel-idle' into linux-next")
+pr_info("%s: %pS\n", __func__, n->notifier_call);
+> +		}
+>   #endif
+>   		ret = nb->notifier_call(nb, val, v);
+>   
+> 
 
-I have used the pm tree from next-20220427 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QOcjZBC_Hhk3zbI+QXUkdw.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJp5y4ACgkQAVBC80lX
-0GwbzAgAly0iS4mrQudZx/5Y7NlhGXKItMlDSNnRv/sSJU3uF0iQwkO/oVsekX8Z
-jRw3KZmpoMtnOhFepXSBdjfKz7QMRnQxPCmLjP3YTNhWoIPNlQuyf0lryycAdORO
-I9lUlPK5xjwXGupnfTyPvzOP2QK8+ZxQtRpPyb0R7I+3uC71ipqGg6NiJIDFmYpH
-UfVf2SnFZAHjS+au+uB9GWQVgzEl+VjD2j/Mni+6/RctGgoYosKh3eP1Y5WI86wl
-XNavH2U/fo2qVZErtdtxru5hfrZDWHIFC8PXgmLdXWOKVR7YfxhtjZKVrQcDmfdi
-N8enPGwTk/rnz20bnPbcBSRoLB1V5A==
-=CJeI
------END PGP SIGNATURE-----
-
---Sig_/QOcjZBC_Hhk3zbI+QXUkdw.--
+Thanks
+Xiaoming Ni

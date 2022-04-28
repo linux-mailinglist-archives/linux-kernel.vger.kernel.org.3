@@ -2,164 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8CD5136D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFDA5136DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348330AbiD1O3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        id S1348349AbiD1OaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347045AbiD1O3V (ORCPT
+        with ESMTP id S1347045AbiD1OaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:29:21 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0883B57C;
-        Thu, 28 Apr 2022 07:26:06 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id m11so5471697oib.11;
-        Thu, 28 Apr 2022 07:26:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zXubuPjx2pjAm7hx5cD02wC66amPUE4R4gLIeK6MStk=;
-        b=Hgi6UFYBOnfLbtFt3RVphkX7kyVyE0dWBeCF9+GFZIrwHTU07TyDVoycqB4ZceuCeC
-         /ITKNTjYNtQyhXdbWynMaYs1aExYGEF1YL37IPS/1XnsjYSSVuluPw6nB2MW2F2i7Oi9
-         l5bQYkYWY2erPfQ34x1MSGLoZ8eFIenJimtyHuUt6juNlAF3KRix/Lz/2a0FFM1tqBHC
-         BmUyMFkq2VJupPtVN07orIB2CErgPBitg3IsW0+ftJRa7s0hCN/Mv5COsV0EPkB8jC8O
-         QMrvdYwgDWwQKPgq10XLhwBxZ6AY3FYUDflhxjaBT7Wbl9bGg1Bkhyvofk/jGMofwFCI
-         JO8Q==
-X-Gm-Message-State: AOAM5332D4ayo57SKa5zR2EpXsFV4lR5oKJ1mRHQi41NBMIaso38Wxtw
-        FkWdKA1kATkpy7lVdLjY+w==
-X-Google-Smtp-Source: ABdhPJyGuPF0HOA0tIXbE2tN+YPk6d3A782bnuVeS4IVfJscr45WQBcONamKAO4aNHjqSxXj6dJ9ww==
-X-Received: by 2002:aca:1811:0:b0:2ef:3c0f:f169 with SMTP id h17-20020aca1811000000b002ef3c0ff169mr15678035oih.61.1651155965318;
-        Thu, 28 Apr 2022 07:26:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x21-20020a4aea15000000b0035e9a8d6e58sm68641ood.26.2022.04.28.07.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 07:26:04 -0700 (PDT)
-Received: (nullmailer pid 2177702 invoked by uid 1000);
-        Thu, 28 Apr 2022 14:26:03 -0000
-Date:   Thu, 28 Apr 2022 09:26:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Detlev Casanova <detlev.casanova@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        arm-soc <soc@kernel.org>, Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Re: [RFC PATCH v2 3/3] ARM: dto: Add bcm2711-rpi-7-inches-ts.dts
- overlay
-Message-ID: <Ymqj+2xBuHCmGUd/@robh.at.kernel.org>
-References: <20220427185243.173594-1-detlev.casanova@collabora.com>
- <20220427185243.173594-4-detlev.casanova@collabora.com>
- <YmmyvdjiG7s/Qil4@robh.at.kernel.org>
- <CAMuHMdXHRQOOrmUO1AyDXye+nnRtpzx7WHiC__whcg0aBtzAmw@mail.gmail.com>
+        Thu, 28 Apr 2022 10:30:17 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851F5427C6;
+        Thu, 28 Apr 2022 07:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651156022; x=1682692022;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1TTI2/iHO5RXgsAytHz7L5iHVv4ElQrAH3SAtwKGs0o=;
+  b=IwMqB1ujI9TkrGwbFJDdsnlUZWOJdzznK6ICINWrIXIKyx8LuV/CFy9s
+   Bk3YCZpMnNOj5xpqd2ikgD8NBIByZDfG+L3UYTL2GfV/uTwIXnC9f62fn
+   FznL7V1yYuq2h1ZtEYx24V3FSY0Qs0ZD48HpbCMyO1xEnAqfCJGGd9+Vq
+   f8ceVwQEPxc2DoWX+lBYRkHu9gLXqGtnBlU/TrpyOLw1O1w/mhbdTdzXe
+   i5ZP56ZK8Us7U3lP3DsqFed/3fDssXcYUEFsVLqIJoOyoyE/1xr12D/B5
+   j3uYy4slFbmNNjtS2gX5BQySrwK3k9v6piuem5v+YHLikteIKp1Sm6cRD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="263893606"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="263893606"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:26:47 -0700
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="559692964"
+Received: from mpoursae-mobl2.amr.corp.intel.com (HELO [10.212.0.84]) ([10.212.0.84])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:26:45 -0700
+Message-ID: <3731a852-71b8-b081-2426-3b0a650e174c@intel.com>
+Date:   Thu, 28 Apr 2022 07:27:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXHRQOOrmUO1AyDXye+nnRtpzx7WHiC__whcg0aBtzAmw@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 04/21] x86/virt/tdx: Add skeleton for detecting and
+ initializing TDX on demand
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
+ <ac482f2b-d2d1-0643-faa4-1b36340268c5@intel.com>
+ <22e3adf42b8ea2cae3aabc26f762acb983133fea.camel@intel.com>
+ <c833aff2-b459-a1d7-431f-bce5c5f29182@intel.com>
+ <37efe2074eba47c51bf5c1a2369a05ddf9082885.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <37efe2074eba47c51bf5c1a2369a05ddf9082885.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 08:44:17AM +0200, Geert Uytterhoeven wrote:
-> Hi Rob,
+On 4/27/22 17:00, Kai Huang wrote:
+> On Wed, 2022-04-27 at 07:49 -0700, Dave Hansen wrote:
+> I think we can use pr_info_once() when all_cpus_booted() returns false, and get
+> rid of printing "SEAMRR not enabled" in seamrr_enabled().  How about below?
 > 
-> On Wed, Apr 27, 2022 at 11:23 PM Rob Herring <robh@kernel.org> wrote:
-> > On Wed, Apr 27, 2022 at 02:52:43PM -0400, Detlev Casanova wrote:
-> > > Add a device tree overlay to support the official Raspberrypi 7" touchscreen for
-> > > the bcm2711 devices.
-> > >
-> > > The panel is connected on the DSI 1 port and uses the simple-panel
-> > > driver.
-> > >
-> > > The device tree also makes sure to activate the pixelvalve[0-4] CRTC modules
-> > >
-> > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> > > ---
-> > >  arch/arm/boot/dts/Makefile                    |   4 +
-> > >  arch/arm/boot/dts/overlays/Makefile           |   3 +
-> > >  .../dts/overlays/bcm2711-rpi-7-inches-ts.dts  | 125 ++++++++++++++++++
-> >
-> > .dtso is preferred. I think... It was discussed, but I never got an
-> > updated patch to switch.
+> static bool seamrr_enabled(void)
+> {
+> 	if (!all_cpus_booted())
+> 		pr_info_once("Not all present CPUs have been booted.  Report
+> SEAMRR as not enabled");
 > 
-> Unfortunately that switch indeed hasn't happened yet.
-> My main gripe with .dts for overlays is that you cannot know whether
-> it's an overlay or not without reading the file's contents.
-> Hence tools like make also cannot know, and you need to e.g. list
-> all files explicitly in a Makefile.
-
-See my reply in the other thread for that.
-
-> > >  arch/arm64/boot/dts/broadcom/Makefile         |   4 +
-> > >  .../arm64/boot/dts/broadcom/overlays/Makefile |   3 +
-> > >  .../overlays/bcm2711-rpi-7-inches-ts.dts      |   2 +
-> > >  6 files changed, 141 insertions(+)
-> > >  create mode 100644 arch/arm/boot/dts/overlays/Makefile
-> > >  create mode 100644 arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
-> >
-> > A global (to arm) 'overlays' directory will create the same mess that we
-> > have in arch/arm/boot/dts/. IMO, first you should move all the Broadcom
-> > dts files to a 'broadcom' subdirectory like we have for arm64.
+> 	return __seamrr_enabled();
+> }
 > 
-> As I believe this display is not only used with real Raspberry Pi
-> devices, it makes sense to not have it a broadcom directory.
+> And we don't print "SEAMRR not enabled".
 
-Then at a minimum 'bcm2711' in the name is not appropriate.
+That's better, but even better than that would be removing all that
+SEAMRR gunk in the first place.
 
-I'm doubtful that as-is the overlay would apply to boards outside of 
-RPi's. For this to work (well), there needs to be a connector node to 
-translate between connector resources and the base board resources. See 
-the recent mikrobus thread[2].
+>>>>> +	/*
+>>>>> +	 * TDX requires at least two KeyIDs: one global KeyID to
+>>>>> +	 * protect the metadata of the TDX module and one or more
+>>>>> +	 * KeyIDs to run TD guests.
+>>>>> +	 */
+>>>>> +	return tdx_keyid_num >= 2;
+>>>>> +}
+>>>>> +
+>>>>> +static int __tdx_detect(void)
+>>>>> +{
+>>>>> +	/* The TDX module is not loaded if SEAMRR is disabled */
+>>>>> +	if (!seamrr_enabled()) {
+>>>>> +		pr_info("SEAMRR not enabled.\n");
+>>>>> +		goto no_tdx_module;
+>>>>> +	}
+>>>>
+>>>> Why even bother with the SEAMRR stuff?  It sounded like you can "ping"
+>>>> the module with SEAMCALL.  Why not just use that directly?
+>>>
+>>> SEAMCALL will cause #GP if SEAMRR is not enabled.  We should check whether
+>>> SEAMRR is enabled before making SEAMCALL.
+>>
+>> So...  You could actually get rid of all this code.  if SEAMCALL #GP's,
+>> then you say, "Whoops, the firmware didn't load the TDX module
+>> correctly, sorry."
+> 
+> Yes we can just use the first SEAMCALL (TDH.SYS.INIT) to detect whether TDX
+> module is loaded.  If SEAMCALL is successful, the module is loaded.
+> 
+> One problem is currently the patch to flush cache for kexec() uses
+> seamrr_enabled() and tdx_keyid_sufficient() to determine whether we need to
+> flush the cache.  The reason is, similar to SME, the flush is done in
+> stop_this_cpu(), but the status of TDX module initialization is protected by
+> mutex, so we cannot use TDX module status in stop_this_cpu() to determine
+> whether to flush.
+> 
+> If that patch makes sense, I think we still need to detect SEAMRR?
 
-> In fact it may be used on other architectures than arm, too, so I
-> think we need an arch-agnostic directory for overlays[1]?
+Please go look at stop_this_cpu() closely.  What are the AMD folks doing
+for SME exactly?  Do they, for instance, do the WBINVD when the kernel
+used SME?  No, they just use a pretty low-level check if the processor
+supports SME.
 
-Probably so.
+Doing the same kind of thing for TDX is fine.  You could check the MTRR
+MSR bits that tell you if SEAMRR is supported and then read the MSR
+directly.  You could check the CPUID enumeration for MKTME or
+CPUID.B.0.EDX (I'm not even sure what this is but the SEAMCALL spec says
+it is part of SEAMCALL operation).
 
-Personally, I would prefer no DTs under /arch.
+Just like the SME test, it doesn't even need to be precise.  It just
+needs to be 100% accurate in that it is *ALWAYS* set for any system that
+might have dirtied cache aliases.
 
-> This may need remapping of labels. I'm aware the rpi infrastructure has
-> support for remapping labels when applying overlays during boot, but
-> AFAIK this is not yet supported by fdtoverlay (or perhaps by a fork?)?
-> Note that the remapping is also needed if you want to apply two
-> instances of the same overlay.
+I'm not sure why you are so fixated on SEAMRR specifically for this.
 
-First I've heard of label remapping... I have a lot of concerns about 
-using labels for overlays. For starters, with a flip of a switch (-@), 
-they all become an ABI when they were not previously. I think at a 
-minimum, we need an annotation so that a subset can be exported. 
-Anything that's an ABI, we should be documenting and reviewing.
 
-The requirement for overlays upstream is that they are applied at build 
-time to a base DT. Otherwise, we can't validate them completely. So if 
-there's a label remapping dependency on these, sounds like there is some 
-more work to do. The first being getting agreement that label remapping 
-is the right approach.
+...
+> "During initializing the TDX module, one step requires some SEAMCALL must be
+> done on all logical cpus enabled by BIOS, otherwise a later step will fail. 
+> Disable CPU hotplug during the initialization process to prevent any CPU going
+> offline during initializing the TDX module.  Note it is caller's responsibility
+> to guarantee all BIOS-enabled CPUs are in cpu_present_mask and all present CPUs
+> are online."
 
-Common label names or some remapping for targets kind of works, but 
-easily falls apart. For example, GPIO (or any provider with identifier 
-cells) numbering or SPI CS numbering would be different. 
+But, what if a CPU went offline just before this lock was taken?  What
+if the caller make sure all present CPUs are online, makes the call,
+then a CPU is taken offline.  The lock wouldn't do any good.
 
-Rob
-
-[2] https://lore.kernel.org/all/YmFo+EntwxIsco%2Ft@robh.at.kernel.org/
+What purpose does the lock serve?

@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4637D513805
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198E35137FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348999AbiD1PUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S1348934AbiD1PTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348985AbiD1PUB (ORCPT
+        with ESMTP id S1348927AbiD1PTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:20:01 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B3AFAE8;
-        Thu, 28 Apr 2022 08:16:46 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id B4B30E0015;
-        Thu, 28 Apr 2022 15:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651159005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rjMeOqT8ckJ1eXw+bfbfwC2c+Yq4ThpPuZa9Zo7yK8U=;
-        b=je9uKP3oAuzqhXRoB8bOqzQe6pF/53qYe0Mtpx6xOwZhStOWNNGMHw/SMCy0jyw0kcKoV2
-        AZioG16T8tuF8gU9utfETbOceeltBIs4V2hXo8gRH8pig5v07jwf1cxI07XqOLejbX+OR+
-        mOnL7RDcDDOmno+twpmMCG4foNVDNVwn8FE2v8rkKkt7aoEVD4Z3ZTUHStfxZs7wt/zZxJ
-        uzD6/Xvj7bF+dWmr9pIxLnnVCCKvVcRoHi0/L9pdB5jV2Iwh7MnKvAg5yXZ3t8ENYoVlyD
-        qe52C8xfS0bjJQV7vJdqOggk5LnzxNXcBUTIlAXeLM1QboB/UC8ukCn7rtTXGA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH v4 3/6] PCI: rcar-gen2: Add RZ/N1 SOCs family compatible string
-Date:   Thu, 28 Apr 2022 17:16:27 +0200
-Message-Id: <20220428151630.586009-4-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220428151630.586009-1-herve.codina@bootlin.com>
-References: <20220428151630.586009-1-herve.codina@bootlin.com>
+        Thu, 28 Apr 2022 11:19:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2A4AF1E6;
+        Thu, 28 Apr 2022 08:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651158989; x=1682694989;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pr+ey4rRc9gYEaidZyl/0OLhL2bGWJUaGv02tvBN1vQ=;
+  b=XTy1BaP/iaSUjNBrGrzJuxCS9XnwlC9pOvppE0ALCJMFuHDl937BZ69N
+   wU3CnLJGTib1ikLiq6bxJem+bs1Bo23FrsyUNoASgYOTERYDFoPRjKOgG
+   tlWbS+auv4re7pRXe1CRBH2iang/Y4BpnvwXl09tmfwgnDPgTeMbHQfLw
+   H7gNx9c2vvgLV+aBMEiLBa0oKq+0AfL+ygjpoaIFOywdw7uq+Lercb8P9
+   0dMKIUPujmlCpkAV/aSlUmbCLumEvKiylG/h0rxgbM5lgVYm4qNguMvoS
+   oDtKBGLNsXJf513HSveylikMOpk+BSF8MclbZOQnZL00sujJMVZV5IqZg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="329264513"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="329264513"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 08:16:29 -0700
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="651259674"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.19.92]) ([10.209.19.92])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 08:16:27 -0700
+Message-ID: <25fdc11c-06b9-c16f-8427-77ac7673855c@linux.intel.com>
+Date:   Thu, 28 Apr 2022 08:16:27 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH 1/2] swiotlb: Split up single swiotlb lock
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Tianyu Lan <ltykernel@gmail.com>, m.szyprowski@samsung.com,
+        michael.h.kelley@microsoft.com, kys@microsoft.com,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com,
+        wei.liu@kernel.org, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        linux-hyperv@vger.kernel.org, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org, kirill.shutemov@intel.com,
+        iommu@lists.linux-foundation.org, andi.kleen@intel.com,
+        brijesh.singh@amd.com, vkuznets@redhat.com, hch@lst.de
+References: <20220428141429.1637028-1-ltykernel@gmail.com>
+ <20220428141429.1637028-2-ltykernel@gmail.com>
+ <e7b644f0-6c90-fe99-792d-75c38505dc54@arm.com>
+ <YmqonHKBT8ftYHgY@infradead.org>
+ <1517d2f0-08d6-a532-7810-2161b2dff421@linux.intel.com>
+ <YmqtJr5lxDruT/9s@infradead.org>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <YmqtJr5lxDruT/9s@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Renesas RZ/N1 SOCs family support to the Renesas R-Car Gen2
-PCI bridge driver.
 
-The Renesas RZ/N1 SOCs internal PCI bridge is compatible with the one
-available in the R-Car Gen2 family.
+On 4/28/2022 8:05 AM, Christoph Hellwig wrote:
+> On Thu, Apr 28, 2022 at 07:55:39AM -0700, Andi Kleen wrote:
+>> At least for TDX need parallelism with a single device for performance.
+> So find a way to make it happen without exposing details to random
+> drivers.
 
-Tested with the RZ/N1D (R9A06G032) SOC.
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- drivers/pci/controller/pci-rcar-gen2.c | 1 +
- 1 file changed, 1 insertion(+)
+That's what the original patch (that this one is derived from) did.
 
-diff --git a/drivers/pci/controller/pci-rcar-gen2.c b/drivers/pci/controller/pci-rcar-gen2.c
-index 35804ea394fd..839695791757 100644
---- a/drivers/pci/controller/pci-rcar-gen2.c
-+++ b/drivers/pci/controller/pci-rcar-gen2.c
-@@ -328,6 +328,7 @@ static const struct of_device_id rcar_pci_of_match[] = {
- 	{ .compatible = "renesas,pci-r8a7791", },
- 	{ .compatible = "renesas,pci-r8a7794", },
- 	{ .compatible = "renesas,pci-rcar-gen2", },
-+	{ .compatible = "renesas,pci-rzn1", },
- 	{ },
- };
- 
--- 
-2.35.1
+It was completely transparent to everyone outside swiotlb.c
+
+-Andi
 

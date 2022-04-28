@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EACF513967
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2110551396A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbiD1QLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
+        id S1349303AbiD1QM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiD1QLi (ORCPT
+        with ESMTP id S232927AbiD1QM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:11:38 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B834A3E0;
-        Thu, 28 Apr 2022 09:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651162103; x=1682698103;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Ir4T5uqY+GX2tlG/wVzI1xs8T7NLnwE/od0GN7231xQ=;
-  b=nqs0/Z474mMw2UkUDmi9VYZ669Dgh2igJbavv1ofFaietJIOCrADOXyE
-   QeTyHuJCI0NBkNWjIr4fVj8ttHsuooD3R4fwICJz1fmpIyddTe9eXEH3k
-   oA31usmbcPwNOzm1lDxaLIml5XCgs3YHfJ67ZCNugSPS3uucwBY9mNkGI
-   0DCo0JYoyAqBNW0/a2bJqHxJV3LNMXOzJuivImUT7FGN+VTGK7QtM5K1T
-   6h7mnsM7ZWBY6XCeij0fphRv6OMCiGzbISZTOxp3zGw8LpOBrQP5kCO+X
-   qZgRbjnyAhOGyYtW6SDK50tyN+UdW3peVz1RBX3PYzosz6LrRJ9SPw8mC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="246893415"
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="246893415"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 09:07:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="651280527"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Apr 2022 09:07:46 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 28 Apr 2022 09:07:46 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 28 Apr 2022 09:07:45 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Thu, 28 Apr 2022 09:07:45 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v5 00/10] Introduce In Field Scan driver
-Thread-Topic: [PATCH v5 00/10] Introduce In Field Scan driver
-Thread-Index: AQHYWxYVdsKdZt61BUSHj1qB1cqAT60F8LwA//+M88A=
-Date:   Thu, 28 Apr 2022 16:07:45 +0000
-Message-ID: <08c593c1aecd4131bf9c2558198a2dc1@intel.com>
-References: <20220422200219.2843823-1-tony.luck@intel.com>
- <20220428153849.295779-1-tony.luck@intel.com> <Ymq5nH/A9c88wIM/@kroah.com>
-In-Reply-To: <Ymq5nH/A9c88wIM/@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 28 Apr 2022 12:12:27 -0400
+X-Greylist: delayed 20983 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Apr 2022 09:09:12 PDT
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FB64A3E0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:09:12 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 18:09:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1651162151;
+        bh=EFIxJKLXRND1+RqQt43Rt2lySMTfl9maJOfaKECS52E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LSPywKfczIqIU5RFrDA+zcwxNzF9vfVLeaZAoggwkKgC/w8NPn92Igcqvupp4iLVl
+         3zvapYjzdZ8PtOY/FeJDohJxFgYpaemZV+7c27hwuw4jXfx+bcdcqR1TQvyrdp3C2D
+         uw2VnGKYlScHzfH2D1JmOs1tnB92ZTE6vHTr3Xpk=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH] nvme-pci: fix host memory buffer allocation size
+Message-ID: <676c02ef-4bbc-43f3-b3e6-27a7d353f974@t-8ch.de>
+References: <20220428101922.14216-1-linux@weissschuh.net>
+ <20220428143603.GA20460@lst.de>
+ <5060d75e-46c0-4d29-a334-62c7e9714fa7@t-8ch.de>
+ <20220428150644.GA22685@lst.de>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220428150644.GA22685@lst.de>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Much nicer and simpler as compared to the first version submitted,
-> thanks for sticking with it.  The diff seems about 1/3 smaller from the
-> first version sent out, peer-review works :)
->=20
-> Reviewed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 2022-04-28 17:06+0200, Christoph Hellwig wrote:
+> On Thu, Apr 28, 2022 at 04:44:47PM +0200, Thomas Weißschuh wrote:
+> > Is the current code supposed to reach HMPRE? It does not for me.
+> > 
+> > The code tries to allocate memory for HMPRE in chunks.
+> > The best allocation would be to allocate one chunk for all of HMPRE.
+> > If this fails we half the chunk size on each iteration and try again.
+> > 
+> > On my hardware we start with a chunk_size of 4MiB and just allocate
+> > 8 (hmmaxd) * 4 = 32 MiB which is worse than 1 * 200MiB.
+> 
+> And that is because the hardware only has a limited set of descriptors.
 
-Thanks for your patience leading me to a much better driver.
+Wouldn't it make more sense then to allocate as much memory as possible for
+each descriptor that is available?
 
--Tony
+The comment in nvme_alloc_host_mem() tries to "start big".
+But it actually starts with at most 4MiB.
 
+And on devices that have hmminds > 4MiB the loop condition will never succeed
+at all and HMB will not be used.
+My fairly boring hardware already is at a hmminds of 3.3MiB.
+
+> Is there any real problem you are fixing with this?  Do you actually
+> see a performance difference on a relevant workload?
+
+I don't have a concrete problem or performance issue.
+During some debugging I stumbled in my kernel logs upon
+"nvme nvme0: allocated 32 MiB host memory buffer"
+and investigated why it was so low.

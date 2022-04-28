@@ -2,281 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B117512ECE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7041A512EC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344544AbiD1In7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S1344788AbiD1IoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344654AbiD1ImF (ORCPT
+        with ESMTP id S1344539AbiD1ImL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:42:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 690524F442
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651135034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q1E+KMue8g2Twd1f0luBts2gnotv4rv0hB9jbuWnJHk=;
-        b=Y1nMONai2mgTxjUBgg+6TWtorD+l0Qv8R5hfhDeFhh6VewmCUJvBjEn3zJUYpLbsFj1aHZ
-        lMsWfBphDXCt88LtZx++/9/UwTPzuh5eknXqn7VvvzfG23OFy/NgwraXouH/vcONDv08p/
-        LRRgTLC10c6vgVGDtwSJhy6KHCG7WDE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-290-rJEzsNo8MP-3O6m1r5W8qw-1; Thu, 28 Apr 2022 04:37:13 -0400
-X-MC-Unique: rJEzsNo8MP-3O6m1r5W8qw-1
-Received: by mail-wm1-f69.google.com with SMTP id r186-20020a1c44c3000000b00393f52ed5ceso3308725wma.7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:37:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=q1E+KMue8g2Twd1f0luBts2gnotv4rv0hB9jbuWnJHk=;
-        b=moIV0G+bMzTPLl5TPCKjqeMcCBK1ImVA/1WqWFaBd9secoZp6wk1OCiKSWRRtr16TB
-         VV+up0ti80RKFBEc3ucRSITW/EHDQcDXr1JkfrNFjAbtFbLU0uFdFffs+r5yVCzYtJ+q
-         m11GoU87lW/YH2XYgyl5Us4CAVF3k660kt0D6xK4s4ftsfiKlGLnD2h/qD5ayAzv0wO3
-         G3laDyBlaxgZEErPwAMdKHKv4yvuobOe3wZU4z7hKF4H6XqRFfdES4ZXgMuydLAGYjvg
-         i4kqfl+A1cqYqN7gTkgSjxAKCnYW2jSsqpuYD7+J0ByBZB+YgLd2JzJUPiBORDlWcV41
-         GsJA==
-X-Gm-Message-State: AOAM531QWkmfAQsm7ArHauyMXbvz0LNhvyqVektyjcz7f6dGh1EmUjuC
-        7d79ixlVqwWODtyZntl6WShY+OilP/27+x7b7/wq3WFmG6+zos7uqccAxBkeI9UN4egqZMtazBF
-        uXSiMSv5VSPuhizjL4qVvEsGpR5ablxaEmsgR2ednjgdMdWvGky9XRDcAWgRrzQZK/8ggG9Nz
-X-Received: by 2002:a05:600c:1ca6:b0:393:eb0e:afd9 with SMTP id k38-20020a05600c1ca600b00393eb0eafd9mr18424623wms.87.1651135032259;
-        Thu, 28 Apr 2022 01:37:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzSJ0QHTwEs60aBWmopOnQJRhew2BaINvB4E9Ek8+vpssmjqmFKccDSw/5yQr2SZc63ctObjg==
-X-Received: by 2002:a05:600c:1ca6:b0:393:eb0e:afd9 with SMTP id k38-20020a05600c1ca600b00393eb0eafd9mr18424571wms.87.1651135031824;
-        Thu, 28 Apr 2022 01:37:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
-        by smtp.gmail.com with ESMTPSA id t8-20020adfa2c8000000b0020ad7121495sm11584858wra.23.2022.04.28.01.37.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 01:37:11 -0700 (PDT)
-Message-ID: <e5e8fdce-eea6-9926-c352-e73dfe3e2579@redhat.com>
-Date:   Thu, 28 Apr 2022 10:37:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4 00/17] mm: COW fixes part 2: reliable GUP pins of
- anonymous pages
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
+        Thu, 28 Apr 2022 04:42:11 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285605A2E5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651135059; x=1682671059;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HwmGF4rIcjwwV8q8uxbE8wsBmcCLazT1Q+3ogCoTicE=;
+  b=A8SOJrCMa4+f87NROAvN5jfY4u9BTZYiyiAnyA8oxrj9ZFT6dKZ3kqIu
+   g0U6wzkhLXcUi2XrJAUGkAxjDdUF2uB6S69kr/gPQHY7ngO4/9Ry/mnjQ
+   vo/cql9sC7A6odBzFpOkSf6UyvcwuiNSpJFP/oxhkVdUyyV4JL5rgtlB7
+   s8D5r+8JqW7EC/A/39I094SgWUK88HAk2uFUsEPkzUballJxYTJPsXQpa
+   8sAOuexLRUHWBijOhGuDcZ6QfrT70LG1pD7eeWWcTRtpsdq1DTKwB5TS1
+   s5TNWymB9Flup+ibXnkHncSf8ORqHdvwa9wI5XpdG4sVAumPmB4J6kA95
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="253589079"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="253589079"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 01:37:38 -0700
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="581158956"
+Received: from shanlinl-mobl.ccr.corp.intel.com ([10.254.212.81])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 01:37:34 -0700
+Message-ID: <cb424fff95cf2b1a6e31616ebb261660e8000425.camel@intel.com>
+Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
+ N_DEMOTION_TARGETS
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>,
         Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
-        Khalid Aziz <khalid.aziz@oracle.com>
-References: <20220428083441.37290-1-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220428083441.37290-1-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Greg Thelen <gthelen@google.com>,
+        MichalHocko <mhocko@kernel.org>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Tim C Chen <tim.c.chen@intel.com>
+Date:   Thu, 28 Apr 2022 16:37:32 +0800
+In-Reply-To: <CAAPL-u8b3m2yx8A-MhPmJUasuz8Ra9mW2E2dwT2KvJ06FeZofQ@mail.gmail.com>
+References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
+         <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
+         <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
+         <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
+         <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
+         <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
+         <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
+         <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
+         <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
+         <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
+         <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
+         <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
+         <CAAPL-u94H9FLjVtYLhi_A2AqLTOCTMRh6=Sx9cX8A3WGNM-OdA@mail.gmail.com>
+         <a1b875913df743355e1ff3752c0eb7ddf74bae91.camel@intel.com>
+         <CAAPL-u8b3m2yx8A-MhPmJUasuz8Ra9mW2E2dwT2KvJ06FeZofQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.04.22 10:34, David Hildenbrand wrote:
-> This is roughly what we have in -mm and -next, however, includes one
-> additional patch and some minor differences, especially minor fixes in the
-> patch descriptions.
+On Wed, 2022-04-27 at 09:27 -0700, Wei Xu wrote:
+> On Wed, Apr 27, 2022 at 12:11 AM ying.huang@intel.com
+> <ying.huang@intel.com> wrote:
+> > 
+> > On Mon, 2022-04-25 at 09:56 -0700, Wei Xu wrote:
+> > > On Sat, Apr 23, 2022 at 8:02 PM ying.huang@intel.com
+> > > <ying.huang@intel.com> wrote:
+> > > > 
+> > > > Hi, All,
+> > > > 
+> > > > On Fri, 2022-04-22 at 16:30 +0530, Jagdish Gediya wrote:
+> > > > 
+> > > > [snip]
+> > > > 
+> > > > > I think it is necessary to either have per node demotion targets
+> > > > > configuration or the user space interface supported by this patch
+> > > > > series. As we don't have clear consensus on how the user interface
+> > > > > should look like, we can defer the per node demotion target set
+> > > > > interface to future until the real need arises.
+> > > > > 
+> > > > > Current patch series sets N_DEMOTION_TARGET from dax device kmem
+> > > > > driver, it may be possible that some memory node desired as demotion
+> > > > > target is not detected in the system from dax-device kmem probe path.
+> > > > > 
+> > > > > It is also possible that some of the dax-devices are not preferred as
+> > > > > demotion target e.g. HBM, for such devices, node shouldn't be set to
+> > > > > N_DEMOTION_TARGETS. In future, Support should be added to distinguish
+> > > > > such dax-devices and not mark them as N_DEMOTION_TARGETS from the
+> > > > > kernel, but for now this user space interface will be useful to avoid
+> > > > > such devices as demotion targets.
+> > > > > 
+> > > > > We can add read only interface to view per node demotion targets
+> > > > > from /sys/devices/system/node/nodeX/demotion_targets, remove
+> > > > > duplicated /sys/kernel/mm/numa/demotion_target interface and instead
+> > > > > make /sys/devices/system/node/demotion_targets writable.
+> > > > > 
+> > > > > Huang, Wei, Yang,
+> > > > > What do you suggest?
+> > > > 
+> > > > We cannot remove a kernel ABI in practice.  So we need to make it right
+> > > > at the first time.  Let's try to collect some information for the kernel
+> > > > ABI definitation.
+> > > > 
+> > > > The below is just a starting point, please add your requirements.
+> > > > 
+> > > > 1. Jagdish has some machines with DRAM only NUMA nodes, but they don't
+> > > > want to use that as the demotion targets.  But I don't think this is a
+> > > > issue in practice for now, because demote-in-reclaim is disabled by
+> > > > default.
+> > > > 
+> > > > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
+> > > > 
+> > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow
+> > > > memory node near node 0,
+> > > > 
+> > > > available: 3 nodes (0-2)
+> > > > node 0 cpus: 0 1
+> > > > node 0 size: n MB
+> > > > node 0 free: n MB
+> > > > node 1 cpus:
+> > > > node 1 size: n MB
+> > > > node 1 free: n MB
+> > > > node 2 cpus: 2 3
+> > > > node 2 size: n MB
+> > > > node 2 free: n MB
+> > > > node distances:
+> > > > node   0   1   2
+> > > >   0:  10  40  20
+> > > >   1:  40  10  80
+> > > >   2:  20  80  10
+> > > > 
+> > > > We have 2 choices,
+> > > > 
+> > > > a)
+> > > > node    demotion targets
+> > > > 0       1
+> > > > 2       1
+> > > > 
+> > > > b)
+> > > > node    demotion targets
+> > > > 0       1
+> > > > 2       X
+> > > > 
+> > > > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
+> > > > traffic.  Both are OK as defualt configuration.  But some users may
+> > > > prefer the other one.  So we need a user space ABI to override the
+> > > > default configuration.
+> > > 
+> > > I think 2(a) should be the system-wide configuration and 2(b) can be
+> > > achieved with NUMA mempolicy (which needs to be added to demotion).
+> > 
+> > Unfortunately, some NUMA mempolicy information isn't available at
+> > demotion time, for example, mempolicy enforced via set_mempolicy() is
+> > for thread. But I think that cpusets can work for demotion.
+> > 
+> > > In general, we can view the demotion order in a way similar to
+> > > allocation fallback order (after all, if we don't demote or demotion
+> > > lags behind, the allocations will go to these demotion target nodes
+> > > according to the allocation fallback order anyway).  If we initialize
+> > > the demotion order in that way (i.e. every node can demote to any node
+> > > in the next tier, and the priority of the target nodes is sorted for
+> > > each source node), we don't need per-node demotion order override from
+> > > the userspace.  What we need is to specify what nodes should be in
+> > > each tier and support NUMA mempolicy in demotion.
+> > 
+> > This sounds interesting. Tier sounds like a natural and general concept
+> > for these memory types. It's attracting to use it for user space
+> > interface too. For example, we may use that for mem_cgroup limits of a
+> > specific memory type (tier).
+> > 
+> > And if we take a look at the N_DEMOTION_TARGETS again from the "tier"
+> > point of view. The nodes are divided to 2 classes via
+> > N_DEMOTION_TARGETS.
+> > 
+> > - The nodes without N_DEMOTION_TARGETS are top tier (or tier 0).
+> > 
+> > - The nodes with N_DEMOTION_TARGETS are non-top tier (or tier 1, 2, 3,
+> > ...)
+> > 
 > 
-> v4 is located at:
-> 	https://github.com/davidhildenbrand/linux/tree/cow_fixes_part_2_v4
+> Yes, this is one of the main reasons why we (Google) want this interface.
 > 
-> Please refer to to v3 cover letter:
-> 	https://lkml.kernel.org/r/20220329160440.193848-1-david@redhat.com
+> > So, another possibility is to fit N_DEMOTION_TARGETS and its overriding
+> > into "tier" concept too.  !N_DEMOTION_TARGETS == TIER0.
+> > 
+> > - All nodes start with TIER0
+> > 
+> > - TIER0 can be cleared for some nodes via e.g. kmem driver
+> > 
+> > TIER0 node list can be read or overriden by the user space via the
+> > following interface,
+> > 
+> >   /sys/devices/system/node/tier0
+> > 
+> > In the future, if we want to customize more tiers, we can add tier1,
+> > tier2, tier3, .....  For now, we can add just tier0.  That is, the
+> > interface is extensible in the future compared with
+> > .../node/demote_targets.
+> > 
 > 
+> This more explicit tier definition interface works, too.
 > 
 
-Essential diff to v3:
+In addition to make tiering definition explicit, more importantly, this
+makes it much easier to support more than 2 tiers.  For example, for a
+system with HBM (High Bandwidth Memory), CPU+DRAM, DRAM only, and PMEM,
+that is, 3 tiers, we can put HBM in tier 0, CPU+DRAM and DRAM only in
+tier 1, and PMEM in tier 2, automatically, or via user space
+overridding.  N_DEMOTION_TARGETS isn't natural to be extended to support
+this.
 
+Best Regards,
+Huang, Ying
 
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 06280fc1c99b..8b6e4cd1fab8 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -299,7 +299,7 @@ static inline bool is_pfn_swap_entry(swp_entry_t entry)
- struct page_vma_mapped_walk;
- 
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
--extern void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
-+extern int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 		struct page *page);
- 
- extern void remove_migration_pmd(struct page_vma_mapped_walk *pvmw,
-@@ -332,7 +332,7 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
- 	return !pmd_present(pmd) && is_migration_entry(pmd_to_swp_entry(pmd));
- }
- #else
--static inline void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
-+static inline int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 		struct page *page)
- {
- 	BUILD_BUG();
-diff --git a/mm/gup.c b/mm/gup.c
-index 5c17d4816441..46ffd8c51c6e 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -564,8 +564,8 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 		goto out;
- 	}
- 
--	VM_BUG_ON((flags & FOLL_PIN) && PageAnon(page) &&
--		  !PageAnonExclusive(page));
-+	VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
-+		       !PageAnonExclusive(page), page);
- 
- 	/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
- 	if (unlikely(!try_grab_page(page, flags))) {
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index c7ac1b462543..a2f44d8d3d47 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1392,8 +1392,8 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
- 	if (!pmd_write(*pmd) && gup_must_unshare(flags, page))
- 		return ERR_PTR(-EMLINK);
- 
--	VM_BUG_ON((flags & FOLL_PIN) && PageAnon(page) &&
--		  !PageAnonExclusive(page));
-+	VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
-+			!PageAnonExclusive(page), page);
- 
- 	if (!try_grab_page(page, flags))
- 		return ERR_PTR(-ENOMEM);
-@@ -3080,7 +3080,7 @@ late_initcall(split_huge_pages_debugfs);
- #endif
- 
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
--void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
-+int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 		struct page *page)
- {
- 	struct vm_area_struct *vma = pvmw->vma;
-@@ -3092,7 +3092,7 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 	pmd_t pmdswp;
- 
- 	if (!(pvmw->pmd && !pvmw->pte))
--		return;
-+		return 0;
- 
- 	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
- 	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
-@@ -3100,7 +3100,7 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
- 	if (anon_exclusive && page_try_share_anon_rmap(page)) {
- 		set_pmd_at(mm, address, pvmw->pmd, pmdval);
--		return;
-+		return -EBUSY;
- 	}
- 
- 	if (pmd_dirty(pmdval))
-@@ -3118,6 +3118,8 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
- 	page_remove_rmap(page, vma, true);
- 	put_page(page);
- 	trace_set_migration_pmd(address, pmd_val(pmdswp));
-+
-+	return 0;
- }
- 
- void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index ee0542f77130..534747d661dd 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6100,8 +6100,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 		pfn_offset = (vaddr & ~huge_page_mask(h)) >> PAGE_SHIFT;
- 		page = pte_page(huge_ptep_get(pte));
- 
--		VM_BUG_ON((flags & FOLL_PIN) && PageAnon(page) &&
--			  !PageAnonExclusive(page));
-+		VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
-+			       !PageAnonExclusive(page), page);
- 
- 		/*
- 		 * If subpage information not requested, update counters
-diff --git a/mm/memory.c b/mm/memory.c
-index 2046de391da2..1a25d28ee5d9 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3132,7 +3132,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 			free_swap_cache(old_page);
- 		put_page(old_page);
- 	}
--	return page_copied && !unshare ? VM_FAULT_WRITE : 0;
-+	return (page_copied && !unshare) ? VM_FAULT_WRITE : 0;
- oom_free_new:
- 	put_page(new_page);
- oom:
-@@ -4557,7 +4557,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- 	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
- 
- 	if (vma_is_anonymous(vmf->vma)) {
--		if (unlikely(unshare) &&
-+		if (likely(!unshare) &&
- 		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
- 			return handle_userfault(vmf, VM_UFFD_WP);
- 		return do_huge_pmd_wp_page(vmf);
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 00418faaf4ce..12f54fbdb920 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1217,8 +1217,6 @@ void page_add_new_anon_rmap(struct page *page,
- 
- 		__mod_lruvec_page_state(page, NR_ANON_THPS, nr);
- 	} else {
--		/* Anon THP always mapped first with PMD */
--		VM_BUG_ON_PAGE(PageTransCompound(page), page);
- 		/* increment count (starts at -1) */
- 		atomic_set(&page->_mapcount, 0);
- 	}
-@@ -1814,7 +1812,11 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 			VM_BUG_ON_FOLIO(folio_test_hugetlb(folio) ||
- 					!folio_test_pmd_mappable(folio), folio);
- 
--			set_pmd_migration_entry(&pvmw, subpage);
-+			if (set_pmd_migration_entry(&pvmw, subpage)) {
-+				ret = false;
-+				page_vma_mapped_walk_done(&pvmw);
-+				break;
-+			}
- 			continue;
- 		}
- #endif
+> > This isn't as flexible as the writable per-node demotion targets.  But
+> > it may be enough for most requirements?
+> 
+> I would think so. Besides, it doesn't really conflict with the
+> per-node demotion target interface if we really want to introduce the
+> latter.
+> 
+> > Best Regards,
+> > Huang, Ying
+> > 
+> > > Cross-socket demotion should not be too big a problem in practice
+> > > because we can optimize the code to do the demotion from the local CPU
+> > > node (i.e. local writes to the target node and remote read from the
+> > > source node).  The bigger issue is cross-socket memory access onto the
+> > > demoted pages from the applications, which is why NUMA mempolicy is
+> > > important here.
+> > > 
+> > > > 3. For machines with HBM (High Bandwidth Memory), as in
+> > > > 
+> > > > https://lore.kernel.org/lkml/39cbe02a-d309-443d-54c9-678a0799342d@gmail.com/
+> > > > 
+> > > > > [1] local DDR = 10, remote DDR = 20, local HBM = 31, remote HBM = 41
+> > > > 
+> > > > Although HBM has better performance than DDR, in ACPI SLIT, their
+> > > > distance to CPU is longer.  We need to provide a way to fix this.  The
+> > > > user space ABI is one way.  The desired result will be to use local DDR
+> > > > as demotion targets of local HBM.
+> > > > 
+> > > > Best Regards,
+> > > > Huang, Ying
+> > > > 
+> > 
+> > 
+> > 
 
-
--- 
-Thanks,
-
-David / dhildenb
 

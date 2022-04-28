@@ -2,92 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6915134AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724415134C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346779AbiD1NTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S1346985AbiD1NUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242393AbiD1NTe (ORCPT
+        with ESMTP id S1346944AbiD1NUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:19:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 622483B57C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:16:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651151779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NRPdSokHoes2nKz8ut6Ka8cDht5BCp3IPjnMMamZWzY=;
-        b=ZeIoNxncXcVbOmfcWsM6JIL4gei4KljBDGh30Kjw+IlOZF5zuqOhUQ805fSLp0St/lxWM5
-        Kmn/NhixlGajHsCH3JSZX29I+9lJgm3khG6Loa2oN8Qz2ntSHWLCgIWLtmvdFv8K2kUIJT
-        vd0Mv8G0w61VpdLC7y7MgjJPNWo4O58=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-215-rH_Y5Wa7OlWTwf10LeOmLg-1; Thu, 28 Apr 2022 09:16:18 -0400
-X-MC-Unique: rH_Y5Wa7OlWTwf10LeOmLg-1
-Received: by mail-qk1-f197.google.com with SMTP id bs18-20020a05620a471200b0069f8c1c8b27so3138964qkb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:16:18 -0700 (PDT)
+        Thu, 28 Apr 2022 09:20:19 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B8E5C85D;
+        Thu, 28 Apr 2022 06:17:04 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id l203so5335608oif.0;
+        Thu, 28 Apr 2022 06:17:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NRPdSokHoes2nKz8ut6Ka8cDht5BCp3IPjnMMamZWzY=;
-        b=dboGXrWZDncdPUNM48mgsUS8SL4YzKZ5REfcyBmsVJ/Z+9sqgLUYy5PLCOjsQ7FjW3
-         qCshxB1b9uSSXkPHTeWv4FwcuysfoRGtJFK4xr2zScdfsakX8YbQOBZFvlVcAJZJwkz0
-         AlJPhdGd7cYwrRSDIzNGf2hUnoXZ0Td+T917YXUNCr+3xw1Wx+vusNaNeRlBCMPSUrAm
-         6oxNezz+ncN2Pj93TanPn3oZPgKsoHeKd1nvpp/YNsxIg9VwBOlkqp+lwsNT5Y3NHUNZ
-         GcAdiZk6tsMEvodXKAug6bU/qfEwkmXQ3rnMqTJiqHV1kW4ehTijLln0vULTH76X/aei
-         NxlQ==
-X-Gm-Message-State: AOAM531dArPDb3FjAdOLTQfANMgDDZky3L89WCgq+YLNJgMQdR2bZYQR
-        5Q59rBLIjOLghktjjL2oNtFXem6/FrEUxudgFx7E8cFmAGZoF2agPnIm5OpCzgaebrC6M4S9Byq
-        wKKzbiyosTZUBuDrc3fX1i7ob
-X-Received: by 2002:ac8:7e89:0:b0:2f3:6ae3:338a with SMTP id w9-20020ac87e89000000b002f36ae3338amr12897230qtj.559.1651151777537;
-        Thu, 28 Apr 2022 06:16:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9/6WIEvG9trtpR5c38666xWxMtS3pgU8Uku5RvhPr66YCsL7aqqkeRkNWBbvsJo2hSozEZw==
-X-Received: by 2002:ac8:7e89:0:b0:2f3:6ae3:338a with SMTP id w9-20020ac87e89000000b002f36ae3338amr12897211qtj.559.1651151777358;
-        Thu, 28 Apr 2022 06:16:17 -0700 (PDT)
-Received: from fedora (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id h18-20020ac85e12000000b002f341c6d20esm11748102qtx.80.2022.04.28.06.16.16
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2KX0k1wrXX43D5TeLkqocszqE72U0xXm9eQIEdaCUbE=;
+        b=TgY5XBw5uqMfXtjMf9sYoal5HTrNfcmvw4StcnpzzB0rDlRM45ZMcSDfPOKmgQTUjQ
+         hPGz2xRhQn6EZt0Sp+F3f+bZHH5hburNjsjxkVLrLYejteID6EgeD08ceI9NzeoFmbQA
+         skGVhl790JO4uD/JjOUx+t6ourfAKFAkT+efo2mC/Ohh3UToye5wqL9LqTbSti5NwFjy
+         fGqjOmWAV2oMt63uQeByzICkDc1w05coNbBQoBTU2LsewXi8dIPNBjZs5Yd+behASMB8
+         8UtjZW99RQcyyrLBj8/cK9EW8v7cD2z8N5WTxfDda43d0atYjjEvVkGIWQJ690+8/Qrd
+         ZupQ==
+X-Gm-Message-State: AOAM532fWHsXpUkXv9rmqVs1tdtdD/cxmzkv/ZUtAwI0mvVS38GL/FJC
+        FWAFOp/yOVl8tte2V4D23g==
+X-Google-Smtp-Source: ABdhPJz/d8BYWGUSJp+sBgndd/ngWTLW1+V3dbP8Dggh5IlPgtUXaU65s/zWtk3vrKBC101akso2uw==
+X-Received: by 2002:a05:6808:2021:b0:322:ba69:53d2 with SMTP id q33-20020a056808202100b00322ba6953d2mr19985135oiw.22.1651151823956;
+        Thu, 28 Apr 2022 06:17:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dt48-20020a0568705ab000b000e686d13875sm1825089oab.15.2022.04.28.06.17.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 06:16:17 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 09:16:15 -0400
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: vchiq_arm: use standard print helpers
-Message-ID: <YmqTnzoNVmU7PC88@fedora>
-References: <20220427182439.424963-1-athierry@redhat.com>
- <Ymon2OgJhbwaH2H8@kroah.com>
+        Thu, 28 Apr 2022 06:17:03 -0700 (PDT)
+Received: (nullmailer pid 2082134 invoked by uid 1000);
+        Thu, 28 Apr 2022 13:17:02 -0000
+Date:   Thu, 28 Apr 2022 08:17:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Gene Chen <gene.chen.richtek@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gene Chen <gene_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Subject: Re: [PATCH 2/2] dt-bindings: mfd: Add bindings for the Mediatek
+ MT6360
+Message-ID: <YmqTzlrVL5KaVPuz@robh.at.kernel.org>
+References: <20220427080330.40136-1-gene.chen.richtek@gmail.com>
+ <20220427080330.40136-3-gene.chen.richtek@gmail.com>
+ <YmmQpg/Hh6qTNhj2@robh.at.kernel.org>
+ <CAE+NS34SawC_pdTm=eDmp6zq1zLZgEaA+_s_xZOc4LuFHDV1iQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Ymon2OgJhbwaH2H8@kroah.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE+NS34SawC_pdTm=eDmp6zq1zLZgEaA+_s_xZOc4LuFHDV1iQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Apr 28, 2022 at 05:30:38PM +0800, Gene Chen wrote:
+> Rob Herring <robh@kernel.org> 於 2022年4月28日 週四 上午2:51寫道：
+> >
+> > On Wed, Apr 27, 2022 at 04:03:30PM +0800, Gene Chen wrote:
+> > > From: Gene Chen <gene_chen@richtek.com>
+> > >
+> > > Add bindings for the Mediatek MT6360
+> > >
+> > > Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> > > ---
+> > >  .../devicetree/bindings/mfd/mt6360.yaml       | 258 ++++++++++++++++++
+> > >  1 file changed, 258 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/mfd/mt6360.yaml
+> >
+> > As I mentioned, I applied your previous version. Please send a patch on
+> > top of it adding the child nodes.
+> >
+> > Rob
+> 
+> Hi Rob,
+> 
+>     I try to sync latest code and can't find the mt6360 led fixed patch.
+>     Could you please tell me how to get and apply previous version?
+>     And should I add a tags in commit message to tell which previous
+> commit I based on?
 
-> As dev_dbg() provides the output of the function name, there's no need
-> to keep it in here when you convert to using it.  Can you fix this up
-> and resend?
+The led fix is in my dt/linus branch and today's linux next.
 
-Sure, I'll do that today
+The mfd patch is in my dt/next branch.
 
-Thanks,
-
-Adrien
-
+Rob

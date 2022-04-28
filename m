@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB10C513A01
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D28513A04
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350135AbiD1Qmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S1350190AbiD1Qmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350169AbiD1Qmc (ORCPT
+        with ESMTP id S1350180AbiD1Qmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:42:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0875B1AB2;
-        Thu, 28 Apr 2022 09:39:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B35F8B82E55;
-        Thu, 28 Apr 2022 16:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCA1C385A0;
-        Thu, 28 Apr 2022 16:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651163954;
-        bh=TbNY5tMdiOJsUndqHUIgwjtYqFvQZxRvr7x1ta32hY0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=i5CkhbODY8Sum9+Yz4Fpb6tkKF2ca7C34NwKO/9j+IqF2xnOuQoxCIjqd5DOQpDCU
-         uHFJFj0989Dpyn1ipb8cVX10kPs/46uKbG2t6aorIeTU+L6iuJITnR5ipgZKMEKKAe
-         5sJrn8tocJDsB+4U+Rmn4CvL5xQnXL0SxSIUCQMNUrVzfJBAn/QcdPXfyG6ucxBsZP
-         mI06EdGRtO6B0bh1WtkAhE9cdfC+mDafcLuDSpa+szuCXF/ur7EnevbchY9uuN496l
-         UnSnr20gFnRCfyL5nVlkhIvOj2Ii1RgwNKNjjKTghg8x+DpVs3Zv2L+j+dD/vh76Ru
-         5S0vt35Xu+Rbw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E52985C0564; Thu, 28 Apr 2022 09:39:13 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 09:39:13 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] rcu: Add nocb_cb_kthread check to
- rcu_is_callbacks_kthread()
-Message-ID: <20220428163913.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220426070031.3759998-1-qiang1.zhang@intel.com>
+        Thu, 28 Apr 2022 12:42:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9927EB1A9E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:39:30 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z16so4716939pfh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OishM2Ohmr+kYlQe5SkAz9BtPZkoomlu7LPNGSJ2ClE=;
+        b=u7nZKZDVays2QDNH2VtzL6JzqCxQtKmVJ05vA0Qh15RfF/RKoywYKbo7R1AwwL5O2r
+         RtK4G5Gu/OGthZt5qS1XjTsc/lYACRzGRicoMEFJx/lg2/KHeeZC2MTFXx7hczWqMDLq
+         htvFsJ71K8lh9Y8lyOxUTkqxEsxf//IUxZpjV/kCwm+STjttxOrBNRjIw5NOQ2qJo9N5
+         sMQF4Fu9bovWCEKv1aUlrpcVL9RHEi6gvJWH772VhND6FcKXn90NLh3KdpttZqLK2/l4
+         99k0nEE7+toZmQ31nY7l/D2x+Rh7YcWAEnRecD6urFxMriP/tDi0y3nEq+kh21zTgR0o
+         IWhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OishM2Ohmr+kYlQe5SkAz9BtPZkoomlu7LPNGSJ2ClE=;
+        b=OnCdY6oAw8HQd5locoFdS/1oVV7czLYRYK53NLAPUZf9IQcl7CBJE8IrPru7gmOq5L
+         /JMqNNrxUx8SSt9g1NNY9dR4rzhc5EyFMi9Uw9fFdUbm7efGT208EpZCeFt4qDnRVSsI
+         b3+pYBKRCCRUj3OmqAnk/rHwyGwygq/yTaPPeRO75MVqQE3RMVpoFdt9V1sBUHQKcuLq
+         w+MUfigKZInrbvTR9KU7R3bd9f7l1R9hDXH8hGCUt9tuwH8/mCh00f3qR+yOq5SHTqg/
+         0qLCip6ykDsjZiLzd4WN7HvK+Xsxu2Uk10wkd3UUHvh7/J+8JkND2AldFyijINcGiYPe
+         3HPA==
+X-Gm-Message-State: AOAM533xp4lw6zgevwMqiN++zbcbsF3s6OgqbouyGYqnNwDlVGAJIymz
+        VCLhGGd1gNfGuyNAoAW6HbkcFw==
+X-Google-Smtp-Source: ABdhPJxv7MgFSCKX0HWae5LBmuz7wGHf99NMnYXbPhBmDm04njRi6iJzRU1xUs9aliBZiu+ID7N7ag==
+X-Received: by 2002:a05:6a00:e0e:b0:50a:cb86:883c with SMTP id bq14-20020a056a000e0e00b0050acb86883cmr35844844pfb.11.1651163970098;
+        Thu, 28 Apr 2022 09:39:30 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id p64-20020a622943000000b004fdd5c07d0bsm330301pfp.63.2022.04.28.09.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 09:39:29 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 10:39:26 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
+        linux-arm-kernel@lists.infradead.org, rogerq@kernel.org,
+        grygorii.strashko@ti.com, vigneshr@ti.com, kishon@ti.com
+Subject: Re: [PATCH v3 0/5] Introduce PRU remoteproc consumer API
+Message-ID: <20220428163926.GA2265266@p14s>
+References: <20220418104118.12878-1-p-mohan@ti.com>
+ <ee1c1601-6db9-70d7-401a-8f67ec406ffc@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426070031.3759998-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <ee1c1601-6db9-70d7-401a-8f67ec406ffc@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,115 +74,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:00:31PM +0800, Zqiang wrote:
-> At present, there are two situations which the rcu callback function
-> be exectued in the kthreads, one is if the use_softirq is set to zero,
-> the RCU_SOFTIRQ processing is carried out by the per-CPU rcuc kthreads,
-> for non-offload rdp, the rdp's rcu callback function be exectued in rcuc
-> kthreads. another one is if the rdp is set to offloaded, the rdp's rcu
-> callback function be exectued in the rcuop kthreads.
+On Thu, Apr 28, 2022 at 04:53:22PM +0530, Puranjay Mohan wrote:
+> Hi Bjorn,
+> Hi Mathieu,
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> I am writing to follow up on this patch series.
+> This has been on the list for the last 10 days and I have not received
+> any comments on it. So, does this look good to everyone?
+>
 
-Good catch!
+10 days - Euh!
 
-From what I can see, this affects only tracing.  Or did I miss a
-use case?
+Just to put things in perspective, I am currently reviewing patches that have
+been sent around March 16th.
 
-Also, should the two definitions of rcu_is_callbacks_kthread() be merged?
-It looks like the current situation dates back to when the only time
-rcuc kthreads were created was in kernels built with CONFIG_RCU_BOOST=y.
-If so, the definition of this function should move from tree_plugin.h
-to tree.c.
-
-							Thanx, Paul
-
-> ---
->  v1->v2:
->  fix compilation error when CONFIG_RCU_NOCB_CPU is no define
+> I had solved the minor checkpatch issues from v2 so I guess this series
+> should be good now?
 > 
->  kernel/rcu/tree.c        |  4 ++--
->  kernel/rcu/tree.h        |  2 +-
->  kernel/rcu/tree_plugin.h | 12 +++++++++---
->  3 files changed, 12 insertions(+), 6 deletions(-)
+> Looking forward to your comments.
 > 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 5c587e00811c..9dc4c4e82db6 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2610,7 +2610,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
->  		trace_rcu_batch_end(rcu_state.name, 0,
->  				    !rcu_segcblist_empty(&rdp->cblist),
->  				    need_resched(), is_idle_task(current),
-> -				    rcu_is_callbacks_kthread());
-> +				    rcu_is_callbacks_kthread(rdp));
->  		return;
->  	}
->  
-> @@ -2688,7 +2688,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
->  	rcu_nocb_lock_irqsave(rdp, flags);
->  	rdp->n_cbs_invoked += count;
->  	trace_rcu_batch_end(rcu_state.name, count, !!rcl.head, need_resched(),
-> -			    is_idle_task(current), rcu_is_callbacks_kthread());
-> +			    is_idle_task(current), rcu_is_callbacks_kthread(rdp));
->  
->  	/* Update counts and requeue any remaining callbacks. */
->  	rcu_segcblist_insert_done_cbs(&rdp->cblist, &rcl);
-> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-> index 996387962de3..3cdc18997a38 100644
-> --- a/kernel/rcu/tree.h
-> +++ b/kernel/rcu/tree.h
-> @@ -433,7 +433,7 @@ static void rcu_flavor_sched_clock_irq(int user);
->  static void dump_blkd_tasks(struct rcu_node *rnp, int ncheck);
->  static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags);
->  static void rcu_preempt_boost_start_gp(struct rcu_node *rnp);
-> -static bool rcu_is_callbacks_kthread(void);
-> +static bool rcu_is_callbacks_kthread(struct rcu_data *rdp);
->  static void rcu_cpu_kthread_setup(unsigned int cpu);
->  static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp);
->  static bool rcu_preempt_has_tasks(struct rcu_node *rnp);
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index 971bb6a00ede..120bade40e02 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -1155,9 +1155,15 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
->   * Is the current CPU running the RCU-callbacks kthread?
->   * Caller must have preemption disabled.
->   */
-> -static bool rcu_is_callbacks_kthread(void)
-> +static bool rcu_is_callbacks_kthread(struct rcu_data *rdp)
->  {
-> -	return __this_cpu_read(rcu_data.rcu_cpu_kthread_task) == current;
-> +	bool ret;
-> +#ifdef CONFIG_RCU_NOCB_CPU
-> +	ret = rdp->rcu_cpu_kthread_task == current || rdp->nocb_cb_kthread == current;
-> +#else
-> +	ret = rdp->rcu_cpu_kthread_task == current;
-> +#endif
-
-The problem here is that the first part of that condition is duplicated.
-This is an accident waiting to happen when someone fixes one side of that
-#ifdef without also adjusting the other side.  One approach is to define a
-function that tests "nocb_cb_kthread == current" in CONFIG_RCU_NOCB_CPU=y
-kernels and just returns "false" otherwise.
-
-Alternatively, you could make ->nocb_cb_kthread defined unconditionally,
-but left always NULL in CONFIG_RCU_NOCB_CPU=n kernels.
-
-> +	return ret;
->  }
->  
->  #define RCU_BOOST_DELAY_JIFFIES DIV_ROUND_UP(CONFIG_RCU_BOOST_DELAY * HZ, 1000)
-> @@ -1242,7 +1248,7 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
->  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
->  }
->  
-> -static bool rcu_is_callbacks_kthread(void)
-> +static bool rcu_is_callbacks_kthread(struct rcu_data *rdp)
->  {
->  	return false;
->  }
-> -- 
-> 2.25.1
+> Thanks
+> Puranjay Mohan
 > 
+> On 18/04/22 16:11, Puranjay Mohan wrote:
+> > This is the v3 of the patch series [1]. The v2 had some minor comments
+> > which have been addressed here.
+> > 
+> > I will be posting two more patch series which depend on this series, one to
+> > the soc tree and another to the networking tree. I had sent all the 3
+> > series, including this one as RFC [2] to get comments and to explain the
+> > dependencies.
+> > 
+> > The Programmable Real-Time Unit and Industrial Communication Subsystem
+> > (PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+> > RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
+> > 
+> > There are 3 foundation components for PRUSS subsystem: the PRUSS platform
+> > driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
+> > already merged and can be found under:
+> > 1) drivers/soc/ti/pruss.c
+> >    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> > 2) drivers/irqchip/irq-pruss-intc.c
+> >    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+> > 3) drivers/remoteproc/pru_rproc.c
+> >    Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
+> > 
+> > The programmable nature of the PRUs provide flexibility to implement custom
+> > peripheral interfaces, fast real-time responses, or specialized data handling.
+> > Example of a PRU consumer drivers will be:
+> >   - Software UART over PRUSS
+> >   - PRU-ICSS Ethernet EMAC
+> > 
+> > In order to make usage of common PRU resources and allow the consumer drivers to
+> > configure the PRU hardware for specific usage the PRU API is introduced.
+> > 
+> > [1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20201216165239.2744-1-grzegorz.jaszczyk@linaro.org/
+> > [2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+> > 
+> > Thanks,
+> > Puranjay Mohan
+> > 
+> > Roger Quadros (1):
+> >   remoteproc: pru: Add pru_rproc_set_ctable() function
+> > 
+> > Suman Anna (2):
+> >   dt-bindings: remoteproc: Add PRU consumer bindings
+> >   remoteproc: pru: Make sysfs entries read-only for PRU client driven
+> >     boots
+> > 
+> > Tero Kristo (2):
+> >   remoteproc: pru: Add APIs to get and put the PRU cores
+> >   remoteproc: pru: Configure firmware based on client setup
+> > 
+> >  .../bindings/remoteproc/ti,pru-consumer.yaml  |  70 ++++++
+> >  drivers/remoteproc/pru_rproc.c                | 234 +++++++++++++++++-
+> >  include/linux/pruss.h                         |  78 ++++++
+> >  3 files changed, 377 insertions(+), 5 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> >  create mode 100644 include/linux/pruss.h
+> > 

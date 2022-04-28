@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F435135AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295065135B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347728AbiD1Nxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S1347750AbiD1NyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235801AbiD1Nxv (ORCPT
+        with ESMTP id S1347868AbiD1NyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:53:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86996362
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:50:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C3F2B82D0B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:50:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E66C385A9;
-        Thu, 28 Apr 2022 13:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651153834;
-        bh=lpXW7055S+mTrTHlyLLA0eB+NCa94ZOzWfpWLd/fvcE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dp1/EdM2gducaCfo1aZYBYWNogr4eU6pawZUi1s51wQa5EroOvfHsoyXSZ7uuWO5X
-         HpiT0bnngSpsf4ztXmMq1cfdCefPzzlBlqkRc5OgGD3biE0MahzbMtMsd2A9Sgs9Z3
-         w3Mz3dSoDQCFfAcG+eRiUSU0HJxPCixVx8ZLe2vXIHKw47pp3yJXOdjNcLvx/dIA/g
-         VSFYtZX/QexAzH8Z2cOyGVJvdqLS3PUdrBEoB56CLge9PKtZjl9tvKjhd1qOsL0ZLf
-         2ky8OSmPV9GNKxQHVh60AHidyizKXqJ7KLlU3yXaQHp+hrsJoLPvE0yr+irtAQkGUV
-         85FJiaFj/h0Rg==
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Machado <luis.machado@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Richard Earnshaw <Richard.Earnshaw@arm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] elf: Fix the arm64 MTE ELF segment name and value
-Date:   Thu, 28 Apr 2022 14:50:27 +0100
-Message-Id: <165114222645.2893052.12842449930657953509.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220425151833.2603830-1-catalin.marinas@arm.com>
-References: <20220425151833.2603830-1-catalin.marinas@arm.com>
+        Thu, 28 Apr 2022 09:54:13 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401A1CFF9;
+        Thu, 28 Apr 2022 06:50:58 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id i27so9690194ejd.9;
+        Thu, 28 Apr 2022 06:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JzMy2V75+2RkRM3hC16Okfk05xCfzTEH6hCOihCPOw4=;
+        b=aqrq7jvWEXIy4wf3skeE+sg2EkRA7jIecbJU8r2w60hulNE1g2BUkeESzpGwHZ67/Q
+         3VvEu1BIFt0fGoiHnR4zXOus3hPX4ivHUUI/Hn1s2gg9mohnN4dqVrIg4RRr0qS/hYLC
+         rChtzdauN68WYFXKUGWl54nse3ZpIzdx8Vbsl3h8NmpWT7QnN3Lu1TK8tGEIbA/hJSjP
+         Ds+yRtTGcFBUuk3TBTnxsygN+UZ0AigKL8QE5wN4cWQ9OjcF3WB4bGCF1UdqSofs+cLi
+         bfMCdhC1G9KhlaQVhVB4NtLRurbeRNAQWjCEGQuNBL0AawLxc9U6HuqiMsLSNFRJz2bg
+         xHZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JzMy2V75+2RkRM3hC16Okfk05xCfzTEH6hCOihCPOw4=;
+        b=6dXJSN87DOnm17VGrnJYY1ZOlZ4yCjOFC9e4L4DHUU8lGwwbIeUXzwu75oLZFH6ceU
+         kS9EBtaSPWQPqL4kJ/0RGBbotpSvLrnOCmngXgctqm3GXoTBAi0Jkzrdl9cWOeA/GqTv
+         BOTOGA8iDPGEp6pbcAL7VNKxhO5ZZjydXadJVodZWAdXYUJLDm3UuE0BqFsMAHzdIq0p
+         gDOQvMiOeh6F3PXVyFQMFlPExNMm/dBrh0BTpuUcN7vLwUdlVp3A+d3pXYC7JJaS4vK7
+         GldIXI/d4d7Gbx6ZUjhlxhr8DwpQx0DfjXaYM91zNQr1FCAtorh3+kqtPc4aSno2RXI7
+         fVqA==
+X-Gm-Message-State: AOAM532e3zXa33XF+FBgWSrg6ewNEOyISHMSqQczP6vma8HsMTFFAppw
+        zUEw7APMR+sXFFRu46Uxf/sSGiCcog4=
+X-Google-Smtp-Source: ABdhPJwIUOQPUWbQB4o3qorPtX80ru10OUnOo1TGsLqZMM6Dras8gJi67n46E4rTXMfx40oWnNQRVQ==
+X-Received: by 2002:a17:906:7954:b0:6f3:b2f4:b22b with SMTP id l20-20020a170906795400b006f3b2f4b22bmr13331113ejo.536.1651153856994;
+        Thu, 28 Apr 2022 06:50:56 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.235.145])
+        by smtp.gmail.com with ESMTPSA id z22-20020a1709063ad600b006e8867caa5dsm8325649ejd.72.2022.04.28.06.50.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 06:50:56 -0700 (PDT)
+Message-ID: <82d33f81-a343-b781-47a1-53fd9ba18e16@gmail.com>
+Date:   Thu, 28 Apr 2022 14:50:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next 08/10] ipv6: refactor opts push in
+ __ip6_make_skb()
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1651071506.git.asml.silence@gmail.com>
+ <3d72bc581954b5a9156661cf6957a72c5940a459.1651071506.git.asml.silence@gmail.com>
+ <ff39b718a1eb5a41081beeee24f2c2b57a8a1602.camel@redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ff39b718a1eb5a41081beeee24f2c2b57a8a1602.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Apr 2022 16:18:33 +0100, Catalin Marinas wrote:
-> Unfortunately, the name/value choice for the MTE ELF segment type
-> (PT_ARM_MEMTAG_MTE) was pretty poor: LOPROC+1 is already in use by
-> PT_AARCH64_UNWIND, as defined in the AArch64 ELF ABI
-> (https://github.com/ARM-software/abi-aa/blob/main/aaelf64/aaelf64.rst).
+On 4/28/22 14:42, Paolo Abeni wrote:
+> On Thu, 2022-04-28 at 11:56 +0100, Pavel Begunkov wrote:
+>> Don't preload v6_cork->opt before we actually need it, it likely to be
+>> saved on the stack and read again for no good reason.
+>>
+>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 > 
-> Update the ELF segment type value to LOPROC+2 and also change the define
-> to PT_AARCH64_MEMTAG_MTE to match the AArch64 ELF ABI namespace. The
-> AArch64 ELF ABI document is updating accordingly (segment type not
-> previously mentioned in the document).
-> 
-> [...]
+> It looks like most part of this series has been lost ?!? only 8/10,
+> 9/10 and 10/10 landed on the ML. Could you please double check?
 
-Applied to arm64 (for-next/fixes), thanks!
+Seems I somehow sent duplicates of those and with weird numbering,
+sorry for that. Let me resend the set, will tag v2 for convenience.
 
-[1/1] elf: Fix the arm64 MTE ELF segment name and value
-      https://git.kernel.org/arm64/c/c35fe2a68f29
-
-Cheers,
 -- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Pavel Begunkov

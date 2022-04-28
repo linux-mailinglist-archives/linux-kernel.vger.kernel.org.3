@@ -2,79 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688DF512983
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5180512992
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241464AbiD1CfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S241549AbiD1Cgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbiD1Ce5 (ORCPT
+        with ESMTP id S234530AbiD1Cgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:34:57 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9C58AE56;
-        Wed, 27 Apr 2022 19:31:44 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id a1so3952539edt.3;
-        Wed, 27 Apr 2022 19:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rsECo+2OlRIIUX6px+ZZedqf8Qza4lbnki5ll/KBNjU=;
-        b=NLed8agnFcwlUPM9IZ/j7FQ4+Mzu64jql5QkMCdls5tCo+wgQ/hDxjoJbNKvpjMlzh
-         lpd25fx8qXqOi72uCZANGtZWU84pO5AKT2HHa5ZOPLkwf9gS5RS9gqjVv2sNhyMl2DxA
-         MMhwnMyZi19AiSh14c+t+AzGKJu+nPqGjfDOFdJLNIJbmgc/0J9FoX5tgbhCkmtmj8aK
-         4/SuilzIQcXvF6nqX1Bbr6wcf9wKhYHMPN71C/wtWl87PvP8t56CldPtruhYgZPhJ6cW
-         7qFyn2RC5ZCxhhrTO3d6EkiDfdUH1qDGtpKlDKTys2pSIWOoovAYiJYKltW8NsPvmFvU
-         flSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rsECo+2OlRIIUX6px+ZZedqf8Qza4lbnki5ll/KBNjU=;
-        b=TR5oVyRN/6pFEz/5XxPcSfs70uc8cReqybeTNaSpZuTRqLD85s35lBnG5R6b/rDs56
-         Y8DyYhk9KyfbDseTkJ8kRw1uEJIvN85qP0H05nWj8FTGaQwOEMxLmxajzoLQWJ1j6Y9S
-         ZEXsfaFtWFiD0XS2bhl8htW/lsVaqCaNBxdxGnX6+ZK8d55gp0jwd2vgVtHcOZCvOEH5
-         eUtA0ApVpfqebzSkLjMaxtzAbZ95w7CMOikizyyOKl0b0PRZHonayItgxmXUWwh1QB/g
-         h7daczHAL+J3xQ00MP3lJGH5bXcFZNq+fmA6RTOT+23QsNyL3oS1lsIWvCQ97S66wtjQ
-         3RMA==
-X-Gm-Message-State: AOAM530yT/QNx9EFyMB+6Ur1YvhIID07yWVY3bDabtRPL07Wztk7uKBt
-        h+ykICp1IUBhCWaiGsnUtrcshwtsPqhkz/QnyuQ=
-X-Google-Smtp-Source: ABdhPJwzd+wNN/Ghq9mRwrycbsK5MTBwpY7MI6hugkMW/Mi/0p4fFeNLt7O2W6LKcCYeXCzFuM5NuyJxu3SzbPpTO1I=
-X-Received: by 2002:a05:6402:358c:b0:426:19c0:2ee7 with SMTP id
- y12-20020a056402358c00b0042619c02ee7mr5371296edc.137.1651113102771; Wed, 27
- Apr 2022 19:31:42 -0700 (PDT)
+        Wed, 27 Apr 2022 22:36:42 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2045.outbound.protection.outlook.com [40.107.21.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060AC941A5;
+        Wed, 27 Apr 2022 19:33:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IdorFVm0rLiUpT3IS8WAjO44B0MmPPapCcCNuhtFTCereQzP0bClt54hsbJ9GvVDZXb9gAdLfaNNEQS6lICPSWxRdeUcoo3ld7OUOKf/YQFcRH7NciSd4/lf+VB5NeDAxJ8l89X5fhEDHv5sADpheqB3l1dcdSoznO6zzBdrQn+nrlfjYJqcIexhgWvXX6yfK2qkv1dVtr3OK4lfPl9ZWx8bjJjFbq17v/zYVHXr5LDu22dvGfZG4Zyw/oehH6CdX4u8JTnJcmMqtjuyZD6b+qSjmosRJ/Cx3IHwqKMuGa3GdKnvumCJrgpBAZWz0MFmuZZ1C0WR40le4qP+fOlvYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BbrIfNF6E+84k5sFEpuyK2PAorsQ79gB8Cl9SADoRD0=;
+ b=BVO15Pg8nAh3xcFaDJCiyZs6NJs23vES0KrwIFTT/z6ThrpNTj3T/NVyAb9pNZ2PyIm7y3tYKiOlFDJ0FVkZKebSQpLEgNVe/5U3YW2urcxeNfyutjX/qiGjr7BaQ8LL2E48xAAJwD0iG7oKtgh5HQD+bCLgE9IJBq4XB8vH+Hl6ZjCBlVek2g0iHElz8o7JbDSb9bzDF+yLuN2DtLoBt6/FrZvm0wMYiIlHF78T5BnFVLMpPztc/Pgj9naqvaj47U2wO3Gqh4DlKGUBrz4S95ZxMADn0W3BVkeUuJIm50eC/SKB4iUDyDz2lb3zjPaAU/zCgewlYEvD+PUsqHXOiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BbrIfNF6E+84k5sFEpuyK2PAorsQ79gB8Cl9SADoRD0=;
+ b=JnIq0jwfIml9XJiOndju/Ifccug04ocMXFkpb7taD1QZSgENzMkavqLPwS+XNOHQc3Crpvg2vBjbZdRpFAOucUtP/nvrfzOHnV3oN4z5PWGzQdKWhEQF0nHcc85pmdupUM/qzT9ZjoPjuJWdy2wII35Xjv358PCc4+mBnOHA/ZE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by VI1PR0401MB2560.eurprd04.prod.outlook.com (2603:10a6:800:58::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Thu, 28 Apr
+ 2022 02:33:25 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::1cff:564b:c3cf:46e6]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::1cff:564b:c3cf:46e6%5]) with mapi id 15.20.5206.013; Thu, 28 Apr 2022
+ 02:33:25 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     bp@alien8.de, michal.simek@xilinx.com,
+        Shubhrajyoti.datta@xilinx.com, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH V2] EDAC/synopsys: Add edac driver support for i.MX platforms
+Date:   Thu, 28 Apr 2022 10:32:09 +0800
+Message-Id: <20220428023209.18087-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0219.apcprd06.prod.outlook.com
+ (2603:1096:4:68::27) To AS8PR04MB8404.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-References: <20220426080709.6504-1-imagedong@tencent.com> <20220426080709.6504-2-imagedong@tencent.com>
- <CANn89iJa3FZHXfUWHw-OwOu8X_Cc0-YzxkgE_M=8DrBN1jWnAQ@mail.gmail.com>
-In-Reply-To: <CANn89iJa3FZHXfUWHw-OwOu8X_Cc0-YzxkgE_M=8DrBN1jWnAQ@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 28 Apr 2022 10:31:31 +0800
-Message-ID: <CADxym3ZrdVWUy=vrNWMHUK83243VE_LT3WOn0ThuqnwLDNQtKw@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/2] net: add skb drop reasons to inet connect request
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Biao Jiang <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mengen Sun <mengensun@tencent.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1fd417f0-60eb-4932-bf7b-08da28bf7881
+X-MS-TrafficTypeDiagnostic: VI1PR0401MB2560:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0401MB25609DFB2076C141278AF6FB92FD9@VI1PR0401MB2560.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fCH/7QpueCL25FE8uyDpAtdaLD4H/ufdx/+2u/fbwrOt48EV9JzRcQ+BDSNq8s5behnmugdqcgezjfrRNMeqXi7gOqsYFaw45myjBble+m2GkIuNKCgM44LY1+D0vl8zPCnAgKcQ1TARVSJ5CX/hdr5lQPLAJAmwx/11Tlc0DYUDrezgBn6Z21ke2dBFkkrXqs51/EjfsVIKGbDQRHwTO0/qATr0C/vYenBdbDHYplTMQ29bz5T7LWxpkM9P1Clu4iFB99cvoW1I9dr7/Y09dvLotCyg+RjM4qoS0MJEKnSwZFMVe0YM/5fmeWx0R3+fNZ46sV0HE7Bk90tqG52dr2Uz5OZ5hWFxxYICmPrqvvDKhyKFNAzkBNo9pBNFNMM7omN4PQtdcI8xDgbJy6d0nl0sUi290AEZCaTqu5LksRzJZlX+WoGxFootEUTmsoNozN+1dJUdL1pvFcdudDzsExr3DswFV69SYefa7jta0vGwpu/xmjLry2nhdIT531XY/ev+0aNAZMz3Q9pcjlhVMIp73ZoCH5eLkWZGI6CHCSWxtnQr/g9QjV+0iazd/KSZ/S+3GyL8utPlDUwGtwVGJGhSqjRwWjK+Avbg/xm+RTk3U9RdzFX/cESjOctfo1a0m7apcYGLCfg2a7V6AdsMtJ8AQz84Te1Wt5KG0qR12QvN1ZhBwcvglXpE5suoz/ZxyU28+wVi7zX3L9OKv4swaQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(1076003)(44832011)(316002)(4326008)(26005)(6512007)(2616005)(86362001)(6486002)(5660300002)(508600001)(38100700002)(38350700002)(8936002)(52116002)(6506007)(36756003)(6666004)(186003)(83380400001)(8676002)(66476007)(66946007)(66556008)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d3bJZbco4pN1NqembIL8va8Zil+nadLKU3xusCOCm95OpwoPPYdmePS8FVzU?=
+ =?us-ascii?Q?9RFuQZho4jAParkzJgYe1p70mREONYbKHlXtv5ubt8dsiZ/LSX/Jsu4DtSoZ?=
+ =?us-ascii?Q?kewpx5P1p6QRnHQe9HXeQ29pHXdRaRS7rrACThkqZ8+gHzZ74wBWL4eWKNoh?=
+ =?us-ascii?Q?5cbNopKVZtlberfQboiwnIdZfuWFVxTjQ9JHX7ObZtFLpsqsZAoDlo4mZAyC?=
+ =?us-ascii?Q?OSS041UnCxHb7eVVFeRoUenjxDy79Ik5gnlQq+qn6M20+YTKuGlE2yzoYt/P?=
+ =?us-ascii?Q?YNE20lP9ZfdLJ2i7vAkjlpb+CVnDpJouakOWnmMbrfgCEN3txQq8bamgVaYk?=
+ =?us-ascii?Q?OiSeDvlIT5aigfIH6Mn7710wrZUdUiUNmRC2KEN/Tp20nAfp9Y1xBxQuLEhm?=
+ =?us-ascii?Q?WoKgMTh0XNY/DP2+9NyDujaNDzeQqMrZoxYzNe+iyzZSrkejVHDmfjV9eQxL?=
+ =?us-ascii?Q?AiszOfcUfLd+HdIzmzPL0dE1Q91LrSMbEVriCspaXRyBD8g2++oXkXvxADuf?=
+ =?us-ascii?Q?+PAhLDanuTeL2OFcx2ig+6a5G/M/8prght0wBwMfw5EHQnHKl73OeaiiCMfy?=
+ =?us-ascii?Q?hiciFZoCtFATZ8i0Mq+tGyRY5ra3KrwAQ2W7Tx9F61aPKjFbGuksvlfkPBTk?=
+ =?us-ascii?Q?ZFeHLWIO5vNbPmfqpiDKjboIhaiRrKEzWUv5tiGnwnfTunHTIxuXJ5DmB7ZM?=
+ =?us-ascii?Q?uD4xZYNT35VetFoxDZnAZnX36Eqnbko7omRCIQtDDnuyRaiZdyfa2yOnAYfk?=
+ =?us-ascii?Q?fKXFzZczChx6hGpIEg4JBi8rX+HaKH58B8JtK/N9WlYJiHE+GUTX9WIF8Hv0?=
+ =?us-ascii?Q?rAhV8qwZIEWvYcxoOjvX1VeYtKy/gOQC2hQKfT4YotbXfeNyiNG108A9eU6W?=
+ =?us-ascii?Q?r2HSnfn2MN/Qsq06Q1EvG2QKfadTNu2Mq0Hjj+7OCF2pKvdyEGtuWKE6Aas5?=
+ =?us-ascii?Q?opJhDidRTXGUKEaWSKg/e61W1wkgEANkN7AeumdSDeCdZWBo6Yi/0GVCWWlz?=
+ =?us-ascii?Q?9T+dYqXMT6E0ctEPtggsDYvXtUxfVOAHpASt7UqQKn+/areBOJ5C73jws0wu?=
+ =?us-ascii?Q?JVugWpv681I+x6BZ+rVluTvL/lEav1UUmuPzpWmZ7mJH6kNeogssOUoSaMIJ?=
+ =?us-ascii?Q?NGNcUr65t7CYfIgG5HtNGPkom+UoXgFLtsJHIFuc9nINuRWnmjG9aTVDbtOw?=
+ =?us-ascii?Q?Xfxp6/tGNDsaRD/KTUIIck0OM37uEr9XhzdYmeL6HXI2KPIfXyddwD6S2P9k?=
+ =?us-ascii?Q?/3w1qAIv1QpDwPRNbVqf80Jlcb5x8ueOm9Nr3UHASP4h1DtzMF9dAY2sY+68?=
+ =?us-ascii?Q?tHgi58c4GqLVQv37f1QAygDuYqXU53CYdnQdDGtrUgTqykAm1dp9RxQNhQYD?=
+ =?us-ascii?Q?Y/lsByAq0kU8a3PB6XO3NcGcv2H0spM6F3LvivvtJ9f8eF0FfLaLrtz6H7eO?=
+ =?us-ascii?Q?tNMx65a0uuCZU8z50S+rcOwHB+uiAjvjDQy/TOBcF5stJiaNfFwiIaSCueP9?=
+ =?us-ascii?Q?yfCVAChMn5N4ePLqOXg4DhpOt0biHTIeaMZ+tTJrvdUsoVEeTdfDuWTN5+HL?=
+ =?us-ascii?Q?bOEUF3/H//N+SP8hAMSqFAUAMVhGFeaXi48MHK/LyyoQj4mA4bD0vSxlQFFJ?=
+ =?us-ascii?Q?xZTy7Xy3Rdk+A/dhDh6pi/6p5bhpp4aGAUU3aWcqX/3yTielr+pIIzxRXRMQ?=
+ =?us-ascii?Q?eLg/V12gUsp1dQhkV3boZgF91CxrIEBWB0gF1XjM0gosZGBypeIARwJV/RYD?=
+ =?us-ascii?Q?WAKgEHv1lw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd417f0-60eb-4932-bf7b-08da28bf7881
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 02:33:25.6198
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vryl7LyOI19QgzRBxgeuVjcu6d9XaHFxBVRY0jfIwshi9MIAur/j0RrXbSzKVMnLpquRWYN2BMo1gTtoMiDkgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2560
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,154 +116,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 9:32 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Tue, Apr 26, 2022 at 1:07 AM <menglong8.dong@gmail.com> wrote:
-> >
-[......]
-> > +                       if (!err)
-> > +                               consume_skb(skb);
->
-> Please, do not add more mess like that, where skb is either freed by
-> the callee or the caller.
->
+i.MX8MP use synopsys v3.70a ddr controller IP, so add edac support
+for i.MX8MP based on the EDAC_SYNOPSYS driver.
 
-Yeah, this is a little chaotic.....I just can't find a way out :/
-keeping thinking
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+---
+Changes in V2:
+1. Improve the patch title and the commit message.
+---
+ drivers/edac/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> > +                       return err < 0;
->
-> Where err is set to a negative value ?
+diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+index 23f11554f400..d3e2477948c8 100644
+--- a/drivers/edac/Kconfig
++++ b/drivers/edac/Kconfig
+@@ -485,7 +485,7 @@ config EDAC_ARMADA_XP
+ 
+ config EDAC_SYNOPSYS
+ 	tristate "Synopsys DDR Memory Controller"
+-	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
++	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || ARCH_MXC
+ 	help
+ 	  Support for error detection and correction on the Synopsys DDR
+ 	  memory controller.
+-- 
+2.17.1
 
--1 is returned in dccp_v4_conn_request()
-
->
->
-> >                 }
-> >                 SKB_DR_SET(reason, TCP_FLAGS);
-> >                 goto discard;
-> > @@ -6878,6 +6877,7 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
-> >         bool want_cookie = false;
-> >         struct dst_entry *dst;
-> >         struct flowi fl;
-> > +       SKB_DR(reason);
-> >
-> >         /* TW buckets are converted to open requests without
-> >          * limitations, they conserve resources and peer is
-> > @@ -6886,12 +6886,15 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
-> >         if ((net->ipv4.sysctl_tcp_syncookies == 2 ||
-> >              inet_csk_reqsk_queue_is_full(sk)) && !isn) {
-> >                 want_cookie = tcp_syn_flood_action(sk, rsk_ops->slab_name);
-> > -               if (!want_cookie)
-> > +               if (!want_cookie) {
-> > +                       SKB_DR_SET(reason, TCP_REQQFULLDROP);
-> >                         goto drop;
-> > +               }
-> >         }
-> >
-> >         if (sk_acceptq_is_full(sk)) {
-> >                 NET_INC_STATS(sock_net(sk), LINUX_MIB_LISTENOVERFLOWS);
-> > +               SKB_DR_SET(reason, LISTENOVERFLOWS);
-> >                 goto drop;
-> >         }
-> >
-> > @@ -6947,6 +6950,7 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
-> >                          */
-> >                         pr_drop_req(req, ntohs(tcp_hdr(skb)->source),
-> >                                     rsk_ops->family);
-> > +                       SKB_DR_SET(reason, TCP_REQQFULLDROP);
-> >                         goto drop_and_release;
-> >                 }
-> >
-> > @@ -7006,7 +7010,8 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
-> >  drop_and_free:
-> >         __reqsk_free(req);
-> >  drop:
-> > +       kfree_skb_reason(skb, reason);
->
-> Ugh no, prefer "return reason" and leave to the caller the freeing part.
->
-> Your changes are too invasive and will hurt future backports.
->
-
-Okey, I'll try some way else.
-
->
-> >         tcp_listendrop(sk);
-> > -       return 0;
-> > +       return 1;
-> >  }
-> >  EXPORT_SYMBOL(tcp_conn_request);
-> > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> > index 157265aecbed..b8daf49f54a5 100644
-> > --- a/net/ipv4/tcp_ipv4.c
-> > +++ b/net/ipv4/tcp_ipv4.c
-> > @@ -1470,7 +1470,8 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
-> >
-> >  drop:
-> >         tcp_listendrop(sk);
-> > -       return 0;
->
-> This return 0 meant : do not send reset.
->
->
-> > +       kfree_skb_reason(skb, SKB_DROP_REASON_IP_INADDRERRORS);
->
-> double kfree_skb() ?
->
-> > +       return 1;
->
-> -> send RESET
->
-
-No, this return 1 means not send RESET and this skb is already freed in
-icsk_af_ops->conn_request(), since I made a change to the caller of
-conn_request() in tcp_rcv_state_process() and dccp_rcv_state_process():
-
-    err = icsk->icsk_af_ops->conn_request(sk, skb);
-    local_bh_enable();
-    rcu_read_unlock();
-    if (!err)
-        consume_skb(skb);
-    return err < 0;
-
-if err==1, the skb will not be freed again, as 0 is returned by
-tcp_rcv_state_process()
-
-> >  }
-> >  EXPORT_SYMBOL(tcp_v4_conn_request);
-> >
-> > --
-> > 2.36.0
-> >
->
-> I have a hard time understanding this patch.
->
-> Where is the related IPv6 change ?
->
-> I really wonder if you actually have tested this.
-
-Yeah, I missed the IPv6....but it still works, the changes are
-compatible with current IPv6 code.
-
-In fact, I have tested it, and everything is ok, no double free
-happens:
-
-  drop at: tcp_conn_request+0xf1/0xcb0 (0xffffffff81d43271)
-  origin: software
-  input port ifindex: 1
-  timestamp: Thu Apr 28 10:19:42 2022 917631574 nsec
-  protocol: 0x800
-  length: 74
-  original length: 74
-  drop reason: LISTENOVERFLOWS
-
-  drop at: tcp_conn_request+0xf1/0xcb0 (0xffffffff81d43271)
-  origin: software
-  input port ifindex: 1
-  timestamp: Thu Apr 28 10:19:43 2022 930983132 nsec
-  protocol: 0x800
-  length: 74
-  original length: 74
-  drop reason: LISTENOVERFLOWS

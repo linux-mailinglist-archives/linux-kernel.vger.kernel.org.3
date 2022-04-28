@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F779513CA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BD2513CA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351838AbiD1Ucv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 16:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
+        id S1351848AbiD1UeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351793AbiD1Ucu (ORCPT
+        with ESMTP id S1349078AbiD1UeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 16:32:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23D7C0D2C;
-        Thu, 28 Apr 2022 13:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8UxpUSIPFug1Y4nwjJyq8teHc+MOpvF2UGEYKEOV43Y=; b=TzP45iG3tZMjjelPcKDQ2a8+uf
-        OqoazTEfDEiG+dijLrUG9d85XImXNf8KX0/v/ygkBqAfZavGHhptl1uvOKRBjLoIzUcXPzsFg1lDR
-        8thWV0xvmSqlBGakqtRpU11LQprwQb91hxGQUTDoioYL2vDVWcVO6g/GTfQWL2GndVhe8KlERl6wL
-        Hs0snVz32/ORHthHjF9o8bWIi/Ykb6PzEDV6tWpK3nKeCQblw4TcOSWCWh3JNSYSHZ181Un5hdNpG
-        a72m6Cx/dvo08RDeB23r4SaIHPU+byd4VnMS/if0Q+4TOWeqxVoPjMyKJdOmvStPM7rcbJ8+LTAq3
-        M6w9O7Hg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nkAlI-009QA7-FQ; Thu, 28 Apr 2022 20:29:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D80C3001F7;
-        Thu, 28 Apr 2022 22:29:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4FBBD2029F4C3; Thu, 28 Apr 2022 22:29:13 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 22:29:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>, rjw@rjwysocki.net,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-Message-ID: <Ymr5Ga3gcqG4ZAMt@hirez.programming.kicks-ass.net>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <20220425174719.GB12412@redhat.com>
- <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+        Thu, 28 Apr 2022 16:34:06 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB7FC0D3C;
+        Thu, 28 Apr 2022 13:30:50 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id y2so11075989ybi.7;
+        Thu, 28 Apr 2022 13:30:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gSGOnYTcc5ZEbyXrmCTwPn3swHJvidZ0wfFFy4W9DxE=;
+        b=JAZVq1yf4shuv61SA0wIQ8MymZvvQNl3J2Ku3VJNyBVK79/T2e0OVVK24awmHR3PFR
+         5NDZ2cUiOxWiXHca4xGSs70ka31dRmSttNkHY9hmC5q6EwQFc2thgwmzyPVWEC3RrGvC
+         Q686maKmbyDKx8CTisTQ179g2HoU22DRIDRL6dZibIa6HVoa5QjNAPutrA/qQRORD+TT
+         pf4XEbqdDlTSDk4qF4gKf7LnkUZl6LIEd35Y+QI2xYZMPvbCWLjEAoxv7iYv0STysJdo
+         c1QjzcRffdPKw7T3YWjcsbpDVeHbeH5KhFqh5H6IrgspZs+z0u57LuaR1fA6IqhVvdtM
+         MnWA==
+X-Gm-Message-State: AOAM533b83DmVf60f+Di8D9siZFkwuEqboLCGAHeMP7EgG8IjC7zJvdA
+        0cyImo/xUGMFzAaN5/lIBPrL/Otmj+cck856Zew=
+X-Google-Smtp-Source: ABdhPJyok7JCeyk4IsE+a/CFQvlzuPTnIbkp7HWU7XD1rXNrzQY+xxfTnnOuNS08Pt7JaVKHhYUurgYAfGWjq/2Tyt8=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr24541320ybf.137.1651177849779; Thu, 28
+ Apr 2022 13:30:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735hzcr18.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220428142854.1065953-1-gregkh@linuxfoundation.org>
+ <20220428155858.GA14614@bhelgaas> <Ymq/W+KcWD9DKQr/@kroah.com> <CAJZ5v0hCiO6_deYnUK-5pfqE+fy1XLSUiBvkBgWw2nbqu9ggXA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hCiO6_deYnUK-5pfqE+fy1XLSUiBvkBgWw2nbqu9ggXA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 28 Apr 2022 22:30:38 +0200
+Message-ID: <CAJZ5v0itRry98=7X=NOmituD3VH=GYdY3REtrhx3ubH0wf=ckw@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ACPI: do not reference a pci device after it has been released
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        whitehat002 <hackyzh002@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:24:03PM -0500, Eric W. Biederman wrote:
-> But doing:
-> 
-> 	/* Don't stop if the task is dying */
-> 	if (unlikely(__fatal_signal_pending(current)))
-> 		return exit_code;
-> 
-> Should work.
+On Thu, Apr 28, 2022 at 10:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Apr 28, 2022 at 6:22 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Apr 28, 2022 at 10:58:58AM -0500, Bjorn Helgaas wrote:
+> > > On Thu, Apr 28, 2022 at 04:28:53PM +0200, Greg Kroah-Hartman wrote:
+> > > > In acpi_get_pci_dev(), the debugging message for when a PCI bridge is
+> > > > not found uses a pointer to a pci device whose reference has just been
+> > > > dropped.  The chance that this really is a device that is now been
+> > > > removed from the system is almost impossible to happen, but to be safe,
+> > > > let's print out the debugging message based on the acpi root device
+> > > > which we do have a valid reference to at the moment.
+> > >
+> > > This code was added by 497fb54f578e ("ACPI / PCI: Fix NULL pointer
+> > > dereference in acpi_get_pci_dev() (rev. 2)").  Not sure if it's worth
+> > > a Fixes: tag.
+> >
+> > Can't hurt, I'll add it for the v2 based on this review.
+> >
+> > >
+> > > acpi_get_pci_dev() is used by only five callers, three of which are
+> > > video/backlight related.  I'm always skeptical of one-off interfaces
+> > > like this, but I don't know enough to propose any refactoring or other
+> > > alternatives.
+> > >
+> > > I'll leave this for Rafael, but if I were applying I would silently
+> > > touch up the subject to match convention:
+> > >
+> > >   PCI/ACPI: Do not reference PCI device after it has been released
+> >
+> > Much simpler, thanks.
+> >
+> > >
+> > > > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > Cc: Len Brown <lenb@kernel.org>
+> > > > Cc: linux-pci@vger.kernel.org
+> > > > Cc: linux-acpi@vger.kernel.org
+> > > > Reported-by: whitehat002 <hackyzh002@gmail.com>
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > ---
+> > > >  drivers/acpi/pci_root.c | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> > > > index 6f9e75d14808..ecda378dbc09 100644
+> > > > --- a/drivers/acpi/pci_root.c
+> > > > +++ b/drivers/acpi/pci_root.c
+> > > > @@ -303,7 +303,8 @@ struct pci_dev *acpi_get_pci_dev(acpi_handle handle)
+> > > >              * case pdev->subordinate will be NULL for the parent.
+> > > >              */
+> > > >             if (!pbus) {
+> > > > -                   dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
+> > > > +                   dev_dbg(&root->device->dev,
+> > > > +                           "dev %d, function %d is not a PCI-to-PCI bridge\n", dev, fn);
+> > >
+> > > This should use "%02x.%d" to be consistent with the dev_set_name() in
+> > > pci_setup_device().
+> >
+> > Ah, missed that, will change it and send out a new version tomorrow.
+>
+> I would make the change below (modulo the gmail-induced wthite space
+> breakage), though.
 
-Something like so then...
+That said ->
 
----
-Subject: signal,ptrace: Don't stop dying tasks
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Thu Apr 28 22:17:56 CEST 2022
+> ---
+>  drivers/acpi/pci_root.c |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> Index: linux-pm/drivers/acpi/pci_root.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/pci_root.c
+> +++ linux-pm/drivers/acpi/pci_root.c
+> @@ -295,8 +295,6 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
+>              break;
+>
+>          pbus = pdev->subordinate;
+> -        pci_dev_put(pdev);
+> -
+>          /*
+>           * This function may be called for a non-PCI device that has a
+>           * PCI parent (eg. a disk under a PCI SATA controller).  In that
+> @@ -304,9 +302,12 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
+>           */
+>          if (!pbus) {
+>              dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
+> +            pci_dev_put(pdev);
+>              pdev = NULL;
+>              break;
+>          }
+> +
+> +        pci_dev_put(pdev);
 
-Oleg pointed out that the tracee can already be killed such that
-fatal_signal_pending() is true. In that case signal_wake_up_state()
-cannot be relied upon to be responsible for the wakeup -- something
-we're going to want to rely on.
+-> we are going to use pbus after this and it is pdev->subordinate
+which cannot survive without pdev AFAICS.
 
-As such, explicitly handle this case.
+Are we not concerned about this case?
 
-Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/signal.c |    4 ++++
- 1 file changed, 4 insertions(+)
-
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2226,6 +2226,10 @@ static int ptrace_stop(int exit_code, in
- 		spin_lock_irq(&current->sighand->siglock);
- 	}
- 
-+	/* Don't stop if the task is dying. */
-+	if (unlikely(__fatal_signal_pending(current)))
-+		return exit_code;
-+
- 	/*
- 	 * schedule() will not sleep if there is a pending signal that
- 	 * can awaken the task.
+>      }
+>  out:
+>      list_for_each_entry_safe(node, tmp, &device_list, node)

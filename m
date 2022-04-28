@@ -2,155 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2995136F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB2D5136F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348437AbiD1Ofc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S1348461AbiD1OhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348250AbiD1Ofb (ORCPT
+        with ESMTP id S1346564AbiD1Og7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:35:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4950FAAE0C;
-        Thu, 28 Apr 2022 07:32:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAADCB82DA9;
-        Thu, 28 Apr 2022 14:32:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD6AC385A0;
-        Thu, 28 Apr 2022 14:32:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651156333;
-        bh=UWru8GZaZ3MvEmpIc/sqRP2thhFeKXYUEpRuYeCOnKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fMYKYIde7l8Qib9ryMtpNnHzGhmLdDZAmQAWeAB65QaYxS7MyzIS/KiZ9+0+2BgZT
-         DRJA6c2p3bXj5Mg4GiAE/SRcV4r2Yb3043XYaoB+3A1Qds4p7sKdV1ke7fUkl+tYXZ
-         zJVhTv7rtGi1I42ufJc4kBRU5RLJi0JW/D4HdwNFQZ1hUuGC7EJzOYpHc/h/qGYpDI
-         Vplp69SeJjxEL8bMj5YIpKiQ7Dm/PmqKRYNXw5/ULUwDP41+CdalqxB6h0kUML/OJm
-         Smpx8vCwUJ7pjJC7MXFssTDpD7hk7jp4Q0y4bGKcEbRVuZQuJczBJAqsMS1gkNLDWs
-         dd5cHZUCwI+QQ==
-Received: by pali.im (Postfix)
-        id 4FCB28A0; Thu, 28 Apr 2022 16:32:10 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 16:32:10 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 28 Apr 2022 10:36:59 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0C8B646C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651156425; x=1682692425;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P7R3NniOUVQ571w6+hROLmu3RMmQFSvj5HRSEytbIvI=;
+  b=Vb0vfedW2WpSesfbzbTVnYiacFZp17J/ThNERALEECbvHm/dJqhrYt+t
+   Vx7I5waUZV6hCC2vlwgqurAOwCOyZl3Ha/N1U2QCsW4jgopmh9DUQgxjo
+   QPHno60VjD78Jp1oN2oPgaHtFAuoGhfWVep6N4PpCOisuntkK9efybCeX
+   ERJ+FFdAFGWNTeGW+BaQIAFvcG2sjo4yPqBGs9qBshmk40sqcdgWo3jJG
+   Nqzj6C1MIBh9ZqgGySlO/76myp+iZ5ESSfZ0Y75JpAX7N8bAqhjYQYlfo
+   12JVzgX2e+6udu8CZK74kV1kSiJe8V8WUYrlgjMJJR0Rm5uyG6x1SEoBL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266121038"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="266121038"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:33:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="565624406"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Apr 2022 07:33:42 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nk5DB-0005Rk-85;
+        Thu, 28 Apr 2022 14:33:41 +0000
+Date:   Thu, 28 Apr 2022 22:32:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: max63xx_wdt: Add support for specifying WDI
- logic via GPIO
-Message-ID: <20220428143210.6cbvik2kmjul3qo5@pali>
-References: <20220428091603.6838-1-pali@kernel.org>
- <b19ce453-1235-689b-8796-fa6cba35c1f0@roeck-us.net>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 25/45]
+ ld.lld: error: undefined symbol: fscache_begin_cache_operation
+Message-ID: <202204282239.2Pg6F5y5-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b19ce453-1235-689b-8796-fa6cba35c1f0@roeck-us.net>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 28 April 2022 06:10:56 Guenter Roeck wrote:
-> On 4/28/22 02:16, Pali Rohár wrote:
-> > On some boards is WDI logic of max6370 chip connected via GPIO. So extend
-> > max63xx_wdt driver and DTS schema to allow specifying WDI logic via GPIO.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> 
-> How is that different to just using the gpio watchdog driver ?
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   a20ca5707a9b524115f5ded439fed1f8e552dd6b
+commit: 506cacdcdfd787336db327e5f38d5a378d5998fd [25/45] fscache: Add a function to begin an cache op from a netfslib request
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220428/202204282239.2Pg6F5y5-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/506cacdcdfd787336db327e5f38d5a378d5998fd
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout 506cacdcdfd787336db327e5f38d5a378d5998fd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-GPIO watchdog driver does not support max6370 memory mapped
-configuration.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-With this change, max6370 can use memory mapped space for watchdog
-configuration and GPIO WDI for pinging.
+All errors (new ones prefixed by >>):
 
-> Guenter
-> 
-> > ---
-> >   .../bindings/watchdog/maxim,max63xx.yaml      |  4 +++
-> >   drivers/watchdog/max63xx_wdt.c                | 28 +++++++++++++++++++
-> >   2 files changed, 32 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > index ab9641e845db..a97aa0135ef9 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > @@ -27,6 +27,10 @@ properties:
-> >       description: This is a 1-byte memory-mapped address
-> >       maxItems: 1
-> > +  gpios:
-> > +    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
-> > +    maxItems: 1
-> > +
-> >   required:
-> >     - compatible
-> >     - reg
-> > diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
-> > index 9e1541cfae0d..eaf00c3f06a5 100644
-> > --- a/drivers/watchdog/max63xx_wdt.c
-> > +++ b/drivers/watchdog/max63xx_wdt.c
-> > @@ -27,6 +27,7 @@
-> >   #include <linux/io.h>
-> >   #include <linux/slab.h>
-> >   #include <linux/property.h>
-> > +#include <linux/gpio/consumer.h>
-> >   #define DEFAULT_HEARTBEAT 60
-> >   #define MAX_HEARTBEAT     60
-> > @@ -53,6 +54,9 @@ struct max63xx_wdt {
-> >   	void __iomem *base;
-> >   	spinlock_t lock;
-> > +	/* GPIOs */
-> > +	struct gpio_desc *gpio_wdi;
-> > +
-> >   	/* WDI and WSET bits write access routines */
-> >   	void (*ping)(struct max63xx_wdt *wdt);
-> >   	void (*set)(struct max63xx_wdt *wdt, u8 set);
-> > @@ -158,6 +162,17 @@ static const struct watchdog_info max63xx_wdt_info = {
-> >   	.identity = "max63xx Watchdog",
-> >   };
-> > +static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
-> > +{
-> > +	spin_lock(&wdt->lock);
-> > +
-> > +	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
-> > +	udelay(1);
-> > +	gpiod_set_value_cansleep(wdt->gpio_wdi, 0);
-> > +
-> > +	spin_unlock(&wdt->lock);
-> > +}
-> > +
-> >   static void max63xx_mmap_ping(struct max63xx_wdt *wdt)
-> >   {
-> >   	u8 val;
-> > @@ -225,6 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
-> >   		return -EINVAL;
-> >   	}
-> > +	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
-> > +	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT) {
-> > +		if (PTR_ERR(wdt->gpio_wdi) != -EPROBE_DEFER)
-> > +			dev_err(dev, "unable to request gpio: %ld\n",
-> > +				PTR_ERR(wdt->gpio_wdi));
-> > +		return PTR_ERR(wdt->gpio_wdi);
-> > +	}
-> > +
-> > +	if (!IS_ERR(wdt->gpio_wdi))
-> > +		wdt->ping = max63xx_gpio_ping;
-> > +	else
-> > +		wdt->gpio_wdi = NULL;
-> > +
-> >   	err = max63xx_mmap_init(pdev, wdt);
-> >   	if (err)
-> >   		return err;
-> 
+>> ld.lld: error: undefined symbol: fscache_begin_cache_operation
+   >>> referenced by file.c
+   >>>               afs/file.o:(afs_req_ops) in archive fs/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

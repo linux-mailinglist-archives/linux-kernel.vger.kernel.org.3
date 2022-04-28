@@ -2,179 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCF3512EE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C628512EE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344747AbiD1It4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S1344785AbiD1IuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344973AbiD1ItW (ORCPT
+        with ESMTP id S1344990AbiD1ItX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:49:22 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB82B34654
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:43:57 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id l7so8155159ejn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9qK0+yT5ZuvbWECRaZtFlSv9cK0d+SeQzM8xONyxFCQ=;
-        b=stS617MSascC+M/L8Vm06gYeVbC9Dv8jmbtIYvajmhdVFUgUEad4GGTmYf86a3gPMc
-         gvOLmNgpK1lK1sbsCTVW+4luWQVpIPEg7SfHFaOMpKspPhr3oOl8f7ZSxS8qBr/8ik4F
-         8R6JHbL5w1QREHlPS2LLB983z3AxBfJVqSFgcEv1EN0oCFNXy7mtlMt4R0Wh8eJCcxyi
-         bZLuzpGQhFw4crbB6XiawB9l9SMUdKbMbECwK4Gvg37enM8206EJ1i4uiIYI9ZYLYbnL
-         ldHlrbha0JSRHqDrbR7I1bmgqI1sSEkxELfwb+tRgxVsJ1MNFoFy0Gozo8gNRuRndFwR
-         NbUA==
+        Thu, 28 Apr 2022 04:49:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 025AC34B83
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651135459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n3mG7OCWwWi6M3HbCNxE1UVDPEiuEaK15OULCVjtY8o=;
+        b=G6MKrfhoWwTjt8AxCAYMlAHhG+KbRNIzsUL8sjKaGM5n/DItIRb74m5IRneaDMN2KioSIP
+        /ZssTCzeaBxVAKSqhxBVDeAdVqEVaW+gV1IAYXGgJtzHZrfnRw81G1AdEFpSuxMNDsOHqB
+        giPY0UMoxr84+05AKduEoeSg13YPCIc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-1PltRjfxNru5bf1GWlYygg-1; Thu, 28 Apr 2022 04:44:18 -0400
+X-MC-Unique: 1PltRjfxNru5bf1GWlYygg-1
+Received: by mail-wm1-f71.google.com with SMTP id c125-20020a1c3583000000b0038e3f6e871aso1648102wma.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:44:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9qK0+yT5ZuvbWECRaZtFlSv9cK0d+SeQzM8xONyxFCQ=;
-        b=Cpue400ef3r+tCnDTXVRFC1CXfOHnRmbY1Ajzu5ETh2Bg9uHnuCcU9AtO/QFTLoRG8
-         T+4znFZNWVEkr3bqZ/f7hbIKcPj4DH3bcmd0cnx/5u8QTdP6XQ9UxRgPbbqFzuw8eXIW
-         yaui5qEQDyKiHMiJ22WETQufE0uCti6QwQ7xIvWGfFeIe2BBkDCdN5YzZaZqhmveFrw1
-         cm7zaidipExctpYmTGnYFiNwUaj/OfclVr76dpZIeCGj030zGSBgn4HHtjjt7BCk9pbN
-         e2LQLq3d904mw0ke4GDr495QMEoP5B6/G143Pgj0ew0IZH9o6ZcxIwaqSBt6QaIYjUBe
-         rMoA==
-X-Gm-Message-State: AOAM532Xm92Lb+aHYdWhG1perXE1sKRBJe6vwL7WSDMsBc3u8H39FQ9U
-        WZ15n26BPeo7A6h+vOh5XmL2cQ==
-X-Google-Smtp-Source: ABdhPJzJBVpp2d/wZQwgCg1qkQkqpQYVKtQS90/gVQhiKAu6DHwNEfi97i9sDvJSY3AS5SYynQrv5g==
-X-Received: by 2002:a17:906:6a14:b0:6f3:d26d:8923 with SMTP id qw20-20020a1709066a1400b006f3d26d8923mr5217702ejc.758.1651135436507;
-        Thu, 28 Apr 2022 01:43:56 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id x24-20020a1709064bd800b006ef606fe5c1sm8070635ejv.43.2022.04.28.01.43.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 01:43:55 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 09:43:31 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YmpTsw1xArrtgXaY@myrica>
-References: <YmLOznyBF0f7COYT@myrica>
- <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
- <Yman5hLomw9/c+bi@myrica>
- <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
- <YmavoKkVu+hd+x0M@myrica>
- <20220425083444.00af5674@jacob-builder>
- <YmbIjnHtibY7n4Wb@myrica>
- <YmdzFFx7fN586jcf@fyu1.sc.intel.com>
- <51514a02-0de9-2f9e-ec0e-c86e147fa74c@linaro.org>
- <Ymnl4S6ukb8kgwaq@fyu1.sc.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=n3mG7OCWwWi6M3HbCNxE1UVDPEiuEaK15OULCVjtY8o=;
+        b=aA1g0nsZcqXhuG3FapC21kDrWwFpsJQgHvSrGTHftO3A+RSBevWTf0jYabOpKD8LBc
+         KEbGVbsbJsmP0FFV5jN0mH+iQ3hrDdwjUpR6aycdhN5TFQaLljPIXal7lbGPa73U8Zf0
+         RYRqh/n92jimBiF+hSmf03UqXAKfGKxenXMqT4xQUlML2eQ43Bz8kD76mMnEQtMfKMTa
+         a42s3L7Q0FVus4UPrzlZ3QKU/8QODDJ1+wwmw223Qlhu750sjK8d9vkMmMzN+B8Qu8xG
+         dSytO4Tf9Td32Cb9YjGb6W/5kaTr7PXRjJBpBmawLo9p5yBYVARC0bKCMcKv51/UIsqJ
+         fHjQ==
+X-Gm-Message-State: AOAM532zXXKmME54HljdzzhVHXUU0zugMRbn6D1Uwb+rv+lENOt5kkGD
+        +EbZrhSU/lPWZSBt7NRaXrwVqyR0gQIXWTM+EYi+spukSwJ/yRUBjvuEOlp6XgKcub6ensf91xc
+        J/JMziO6uNGADAnSXSO1ALzyo
+X-Received: by 2002:a1c:1947:0:b0:392:b883:aac9 with SMTP id 68-20020a1c1947000000b00392b883aac9mr29100876wmz.155.1651135457032;
+        Thu, 28 Apr 2022 01:44:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyeSreX4jrrkiol2W8yhE4l74/X3ldbnoEnA/m0SAs98NLzNAnN4IKbE3Tf+6522jzFOLuWlA==
+X-Received: by 2002:a1c:1947:0:b0:392:b883:aac9 with SMTP id 68-20020a1c1947000000b00392b883aac9mr29100860wmz.155.1651135456802;
+        Thu, 28 Apr 2022 01:44:16 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
+        by smtp.gmail.com with ESMTPSA id bj3-20020a0560001e0300b0020af3d365f4sm1906215wrb.98.2022.04.28.01.44.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 01:44:16 -0700 (PDT)
+Message-ID: <bb1caf48-7e9d-61bf-e0dc-72fcc0228f28@redhat.com>
+Date:   Thu, 28 Apr 2022 10:44:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ymnl4S6ukb8kgwaq@fyu1.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220427042841.678351-1-naoya.horiguchi@linux.dev>
+ <54399815-10fe-9d43-7ada-7ddb55e798cb@redhat.com>
+ <20220427122049.GA3918978@hori.linux.bs1.fc.nec.co.jp>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH v1 0/4] mm, hwpoison: improve handling workload
+ related to hugetlb and memory_hotplug
+In-Reply-To: <20220427122049.GA3918978@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 05:54:57PM -0700, Fenghua Yu wrote:
-> Hi, Dave and Jean,
+>> 2) It happens rarely (ever?), so do we even care?
 > 
-> On Tue, Apr 26, 2022 at 01:04:45PM +0800, Zhangfei Gao wrote:
-> > 
-> > 
-> > On 2022/4/26 下午12:20, Fenghua Yu wrote:
-> > > Hi, Jean and Zhangfei,
-> > > 
-> > > On Mon, Apr 25, 2022 at 05:13:02PM +0100, Jean-Philippe Brucker wrote:
-> > > > Could we move mm_pasid_drop() to __mmdrop() instead of __mmput()?  For Arm
-> > > > we do need to hold the mm_count until unbind(), and mmgrab()/mmdrop() is
-> > > > also part of Lu's rework [1].
-> > > Is this a right fix for the issue? Could you please test it on ARM?
-> > > I don't have an ARM machine.
-> > > 
-> > > Thanks.
-> > > 
-> > > -Fenghua
-> > > 
-> > >  From 84aa68f6174439d863c40cdc2db0e1b89d620dd0 Mon Sep 17 00:00:00 2001
-> > > From: Fenghua Yu <fenghua.yu@intel.com>
-> > > Date: Fri, 15 Apr 2022 00:51:33 -0700
-> > > Subject: [PATCH] iommu/sva: Fix PASID use-after-free issue
-> > > 
-> > > A PASID might be still used on ARM after it is freed in __mmput().
-> > > 
-> > > process:
-> > > 	open()->sva_bind()->ioasid_alloc() = N; // Get PASID N for the mm
-> > > 	exit();
-> > > 	exit_mm()->__mmput()->mm_pasid_drop()->mm->pasid = -1; // PASID -1
-> > > 	exit_files()->release(dev)->sva_unbind()->use mm->pasid; // Failure
-> > > 
-> > > To avoid the use-after-free issue, free the PASID after no device uses it,
-> > > i.e. after all devices are unbound from the mm.
-> > > 
-> > > sva_bind()/sva_unbind() call mmgrab()/mmdrop() to track mm->mm_count.
-> > > __mmdrop() is called only after mm->mm_count is zero. So freeing the PASID
-> > > in __mmdrop() guarantees the PASID is safely freed only after no device
-> > > is bound to the mm.
-> > > 
-> > > Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
-> > > 
-> > > Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
-> > > Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> > > Suggested-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > > Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> > Thanks for the fix.
-> > 
-> > Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> > 
-> > 
-> > > ---
-> > >   kernel/fork.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/kernel/fork.c b/kernel/fork.c
-> > > index 9796897560ab..35a3beff140b 100644
-> > > --- a/kernel/fork.c
-> > > +++ b/kernel/fork.c
-> > > @@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
-> > >   	mmu_notifier_subscriptions_destroy(mm);
-> > >   	check_mm(mm);
-> > >   	put_user_ns(mm->user_ns);
-> > > +	mm_pasid_drop(mm);
-> > >   	free_mm(mm);
-> > >   }
-> > >   EXPORT_SYMBOL_GPL(__mmdrop);
-> > > @@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
-> > >   	}
-> > >   	if (mm->binfmt)
-> > >   		module_put(mm->binfmt->module);
-> > > -	mm_pasid_drop(mm);
-> > >   	mmdrop(mm);
-> > >   }
-> > 
+> I'm not certain of the rarity.  Some cloud service providers who maintain
+> lots of servers may care?
+
+About replacing broken DIMMs? I'm not so sure, especially because it
+requires a special setup with ZONE_MOVABLE (i.e., movablecore) to be
+somewhat reliable and individual DIMMs can usually not get replaced at all.
+
 > 
-> Is this patch a good fix? Will you help push the fix into upstream?
+>> 3) Once the memory is offline, we can re-online it and lost HWPoison.
+>>    The memory can be happily used.
+>>
+>> 3) can happen easily if our DIMM consists of multiple memory blocks and
+>> offlining of some memory block fails -> we'll re-online all already
+>> offlined ones. We'll happily reuse previously HWPoisoned pages, which
+>> feels more dangerous to me then just leaving the DIMM around (and
+>> eventually hwpoisoning all pages on it such that it won't get used
+>> anymore?).
+> 
+> I see. This scenario can often happen.
+> 
+>>
+>> So maybe we should just fail offlining once we stumble over a hwpoisoned
+>> page?
+> 
+> That could be one choice.
+> 
+> Maybe another is like this: offlining can succeed but HWPoison flags are
+> kept over offline-reonline operations.  If the system noticed that the
+> re-onlined blocks are backed by the original DIMMs or NUMA nodes, then the
+> saved HWPoison flags are still effective, so keep using them.  If the
+> re-onlined blocks are backed by replaced DIMMs/NUMA nodes, then we can clear
+> all HWPoison flags associated with replaced physical address range.  This
+> can be done automatically in re-onlining if there's a way for kernel to know
+> whether DIMM/NUMA nodes are replaced with new ones.  But if there isn't,
+> system applications have to check the HW and explicitly reset the HWPoison
+> flags.
 
-Yes, I think it's the right thing to do for now. Could you resend it
-separately so it gets visibility from the maintainers?
+Offline memory sections have a stale memmap, so there is no trusting on
+that. And trying to work around that or adjusting memory onlining code
+overcomplicates something we really don't care about supporting.
 
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+So if we continue allowing offlining memory blocks with poisoned pages,
+we could simply remember that that memory block had any posioned page
+(either for the memory section or maybe better for the whole memory
+block). We can then simply reject/fail memory onlining of these memory
+blocks.
+
+So that leaves us with either
+
+1) Fail offlining -> no need to care about reonlining
+2) Succeed offlining but fail re-onlining
+
+-- 
+Thanks,
+
+David / dhildenb
 

@@ -2,136 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3826D5130E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DDA5130DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiD1KK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S234660AbiD1KLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 06:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234100AbiD1KKd (ORCPT
+        with ESMTP id S234743AbiD1KK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:10:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DC563EB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 03:00:17 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id g6so8523272ejw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 03:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JxtII36nbuZuqFFrQ9crloovDc3cIeCGPM1GWAJ7BLU=;
-        b=pCcEyqd+tkY2mhRqzUUk2rMCfWrt8QcgDfnX0gsm1FZpbqGI6rPrEyrizoMKSKapta
-         etMIIfDFbsyRBj8/PTEVu6q3AJRLazQgshAi6dZAJ1UhocnkGxM9ZA1IwhwwrOEdcYVI
-         YhpZ5OD9k77k+MSb2dBpaGNqBPo7mUcTvzjImkOWOKWwcNGf85qD9fe413357VAaKaLV
-         bxZy/sdWDrtJft0G9rYfgpeSWwzuHN7SfP7BZwHeL6Mn+JXXGR1du2CstnxVezhBZx0M
-         wL2Vs1ikBdvgGlsNEWZHASqUOpAfL4mt4eUHjYhGHyWI0qRnfiYez74TN+XDibV04YdP
-         H1SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JxtII36nbuZuqFFrQ9crloovDc3cIeCGPM1GWAJ7BLU=;
-        b=IHZgwltjrx57BBliA2QIu4+LcduN4gYsE3uV4Lt/cFrgZBLNQxr9SUDpbi6PQkKdST
-         UMFcYVKyDGy94BpNY28kEujC/rgUojCLUiGZW4inyk2Xe8aU4zBgbxgSTAlBjAR+p8vg
-         e5dY/02C3BWKQKIG/BNclRa0VVdQFRzpzsFz7SeNvDY9TkXQaBYOWEan1wwKxGYzgDE6
-         MQiCI3eJrov9jr4QgSme/lsD7WwsUfn+rgzFtB25mHDIznnsMrzZWPReZ5NbzBwq6kjN
-         Wj1OnNdVs/gRVEIoQlVLQ5lxcNE+2Mou+/r8j8CwfHXmFghH5hxSjJzJx+47tMdbn/9B
-         C52w==
-X-Gm-Message-State: AOAM532r8Dn0W6+q13E+eDxG21KpW6XhQ4t5vIamgVV/G7kvxWFgVbWb
-        gECkDtIMST9YhbJtsnSk4qCfQw==
-X-Google-Smtp-Source: ABdhPJwcRvWItyXHeht/LhlESqknYCeryLeRXleMGkm95QPziD8ZUk2gXtIdbAX58t/rHGBMibiUTg==
-X-Received: by 2002:a17:906:4408:b0:6da:bec1:2808 with SMTP id x8-20020a170906440800b006dabec12808mr30471083ejo.543.1651140016399;
-        Thu, 28 Apr 2022 03:00:16 -0700 (PDT)
-Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o2-20020a170906768200b006e89514a449sm8021480ejm.96.2022.04.28.03.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 03:00:15 -0700 (PDT)
-Message-ID: <1399774c-f188-81f1-4d15-367b9d0e4a59@linaro.org>
-Date:   Thu, 28 Apr 2022 12:00:14 +0200
+        Thu, 28 Apr 2022 06:10:58 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3114866F99;
+        Thu, 28 Apr 2022 03:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+SJZNg+Xk4heuq73+EyP7PoiE7b/TUnLnQh49H6zDVM=; b=DLyCj+JcSSd05ekrLUtSXIcbsy
+        MWFhBPSFxHXc1CB4vrrLg8nk3448Qjti8NSQ/SuTisI3eaS8igzXpOH47fGCu03qwlsTouLJzKCR+
+        5ZqCBbiWZUBs5mZNwgvgJCiM8AjMTGkoaNurvNAhxc0QjKfnaSqlfttjCGKMth4oJuG4gPDbgh1yO
+        swYb7qZ85rPJJxdzUt0IAHFZQHOWa2vZkQKDGA+GmesYifM4zZ6vBw/UDvUgaA6xqlgbI1pxnVqSm
+        hi7yKZXO6OkWSNnN+U5gTSOc3lbPWkxXgLY0gZbkYNe049Za3G6b9SKi+68KD3CGpOg7B5VKv655i
+        odN+LnZQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nk0xB-009Jef-HU; Thu, 28 Apr 2022 10:00:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 76C2F3001F7;
+        Thu, 28 Apr 2022 12:00:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 60D2A2029F872; Thu, 28 Apr 2022 12:00:52 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 12:00:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <Ympl1D11gXAxF0s4@hirez.programming.kicks-ass.net>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.757693825@infradead.org>
+ <87fslzfmha.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 08/10] ARM: dts: exynos: use proper
- 'dma-channels/requests' properties
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220427155840.596535-1-krzysztof.kozlowski@linaro.org>
- <CGME20220427160347eucas1p23ce51e0fb49160d437961d98fd682c28@eucas1p2.samsung.com>
- <20220427155840.596535-9-krzysztof.kozlowski@linaro.org>
- <5eeac2a0-4293-675e-9dc2-25ed8ab3fb8f@samsung.com>
- <6981f93a-ef01-6ba0-4451-26526372d666@linaro.org>
- <05c908ce-217f-6938-6745-7405ac39d8ea@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <05c908ce-217f-6938-6745-7405ac39d8ea@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fslzfmha.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 11:57, Marek Szyprowski wrote:
-> On 28.04.2022 11:54, Krzysztof Kozlowski wrote:
->> On 28/04/2022 11:50, Marek Szyprowski wrote:
->>> On 27.04.2022 17:58, Krzysztof Kozlowski wrote:
->>>> pl330 DMA controller bindings documented 'dma-channels' and
->>>> 'dma-requests' properties (without leading hash sign), so fix the DTS to
->>>> match the bindings.
->>>>
->>>> Reported-by: Rob Herring <robh@kernel.org>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Are those properties really needed for PL330 driver on Exynos SoCs? I've
->>> removed them and I still see the proper values read from registers and
->>> reported in the log (Exynos4210):
->>>
->>> dma-pl330 12680000.dma-controller: Loaded driver for PL330 DMAC-141330
->>> dma-pl330 12680000.dma-controller:       DBUFF-32x4bytes Num_Chans-8
->>> Num_Peri-32 Num_Events-32
->>> dma-pl330 12690000.dma-controller: Loaded driver for PL330 DMAC-141330
->>> dma-pl330 12690000.dma-controller:       DBUFF-32x4bytes Num_Chans-8
->>> Num_Peri-32 Num_Events-32
->>> dma-pl330 12850000.dma-controller: Loaded driver for PL330 DMAC-141330
->>> dma-pl330 12850000.dma-controller:       DBUFF-64x8bytes Num_Chans-8
->>> Num_Peri-1 Num_Events-32
->>>
->>> I also don't see any code that would read those properties. IMHO they
->>> should be simply removed at all, at least for the PL330 related nodes.
->> In current Linux implementation they indeed are not used. Nothing parses
->> them. However:
->> 1. They describe (hopefully correct) the hardware.
->> 2. They might be used by other implementations of pl330 driver.
->>
->> I would not remove them from existing sources, but indeed maybe there is
->> no need to add for new files.
+On Tue, Apr 26, 2022 at 06:34:09PM -0500, Eric W. Biederman wrote:
+> Peter Zijlstra <peterz@infradead.org> writes:
 > 
-> What's the point in having dt properties duplicating data that might be 
-> read from the driver registers?
+> > Currently ptrace_stop() / do_signal_stop() rely on the special states
+> > TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
+> > state exists only in task->__state and nowhere else.
+> >
+> > There's two spots of bother with this:
+> >
+> >  - PREEMPT_RT has task->saved_state which complicates matters,
+> >    meaning task_is_{traced,stopped}() needs to check an additional
+> >    variable.
+> >
+> >  - An alternative freezer implementation that itself relies on a
+> >    special TASK state would loose TASK_TRACED/TASK_STOPPED and will
+> >    result in misbehaviour.
+> >
+> > As such, add additional state to task->jobctl to track this state
+> > outside of task->__state.
+> >
+> > NOTE: this doesn't actually fix anything yet, just adds extra state.
+> >
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> > --- a/kernel/signal.c
+> > +++ b/kernel/signal.c
+> > @@ -770,7 +773,9 @@ void signal_wake_up_state(struct task_st
+> >  	 * By using wake_up_state, we ensure the process will wake up and
+> >  	 * handle its death signal.
+> >  	 */
+> > -	if (!wake_up_state(t, state | TASK_INTERRUPTIBLE))
+> > +	if (wake_up_state(t, state | TASK_INTERRUPTIBLE))
+> > +		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
+> > +	else
+> >  		kick_process(t);
+> >  }
+> 
+> This hunk is subtle and I don't think it is actually what we want if the
+> code is going to be robust against tsk->__state becoming TASK_FROZEN.
 
-Hm, indeed, there is no point in this. Since they are read from
-registers, what was the idea behind in commit 42cf20980cde?
+Oooh, indeed. Yes, let me go back to that resume based thing as you
+suggest.
 
-Best regards,
-Krzysztof
+But first, let me go read all your patches :-)

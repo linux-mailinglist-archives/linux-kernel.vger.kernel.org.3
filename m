@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8060B51394A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC21513950
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349757AbiD1QCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S1349775AbiD1QF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349739AbiD1QCn (ORCPT
+        with ESMTP id S231591AbiD1QF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:02:43 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6353ADD78
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:59:27 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e93bbb54f9so5546291fac.12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:59:27 -0700 (PDT)
+        Thu, 28 Apr 2022 12:05:28 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E71F6562
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:02:13 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so4539347wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:02:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=RA5VF4RpL+61fXTh4Gfb3qkFwZI/LPrSMrG3g+d0iY4=;
-        b=tNO44O0A62NXKxNx7Jlp/mB7cZJdyYrl8dtt4xWYmRSg6gWx9uCVh+z57vfuH1b2Uh
-         9Z8SueFxPCJ2g5ClOArf3S5f66/6YZOCXrprhfAioy3U5dBCSSndbekFjfii2DGUBqaR
-         /KPNkR4QGy3idrCl7vK8wxhlVoF+r/6BxG7qhxoLIpg96r7gJTLSMCdupHEZz+pSmn8B
-         XIr9fossAvwQR67bxd4yLMhm4qD49McjTgbOSm3xc26BsnaMnkAD/y91WnYwy+PZQiOS
-         1mKTkPYRCCvj9binmHztJiVs5/fPG7fiU7BoeI7JulJGPKgYSvymyxg3p4/C9/fsg/KI
-         8X2A==
+        bh=qmZUiFUPP8wYUiHrUlqJhgO7VbVwKJAKpj8W10R2YOQ=;
+        b=y5cpmqg5E14QepqUlmfEMAz04fMm1zi45VxE4Ue0OGvGJ8fM1byvnMaqzHq+ppFs3w
+         JnxbtA7kJWWMJJl3ouYlk3AjbA1cNCJDRpij/RajvJyXZrjpRcWwJb48vIKt715o3OVF
+         PiE80uXqVgbGn4QJruJfxuffMm6Q6uOUcMoqYYU16QEIgZiLU5jMiTcEbvCW+yaAPQah
+         IY2aBbMlrYGbhf4frrMPrU8x7Cpu22G5C5go8JIScX3x5GfM5NDkTkHNuImPEbvB8QqP
+         ZZtnGEAWAdCdDemlhaX2h2bCpVvoHRDUcI3MYsD8hLtLB3bIBaKZvTnJTd9PhFL5UdXN
+         FQeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=RA5VF4RpL+61fXTh4Gfb3qkFwZI/LPrSMrG3g+d0iY4=;
-        b=ZSMDZKKZ+xiJ8QB9VBJasZ0E1QtMQsaCNzBVaNtlTfBHXHtQuX0sU4FW5dEK5sl1MK
-         ivn720MvCy9G54mf1VVkmnbTU9NRCTjxEx88xE1BG7khXTdPLl4W+dDpoodVp8nfLQ1u
-         05og6OWj0cOeU3ceVFXs1gL2P1LQfvlpRVMuJ7YqDOgM+L3OysLnT0lW36KgE5n1Z1Fe
-         sCnfRb6glVdy3CRSItDR9Bi1b38S2U3M1uHGIBVQafLT/PeOccijesiOZ/f3/fYGQKQ8
-         0Q0St8g7xyB36Toa8LOWNDotRjdnOQssViTYcyCDO3f8HbJUy8TXNrGT5e0yaanCj4Fh
-         JUgQ==
-X-Gm-Message-State: AOAM530/uHWw0tRRHNN6p51ELJhUWE+NdYJV4u65uaQvl1VSuUpWLuRM
-        1TffqKXRR4se9mxOJj6hH0imuQ==
-X-Google-Smtp-Source: ABdhPJxhWKDV59y7XG07sok41TBFgDXIymy0jBtyvCQaoaeW7aHYiAkZVx9RK1PIFvCFrrvrFvDUQw==
-X-Received: by 2002:a05:6871:78b:b0:d4:2636:b26 with SMTP id o11-20020a056871078b00b000d426360b26mr14114234oap.14.1651161567048;
-        Thu, 28 Apr 2022 08:59:27 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id c30-20020a4a9c5e000000b0035e9d4fc486sm150270ook.39.2022.04.28.08.59.25
+        bh=qmZUiFUPP8wYUiHrUlqJhgO7VbVwKJAKpj8W10R2YOQ=;
+        b=ZrESXv7ay8aqjQRkH89HnnzdaWDuCGUKu/oDcRaNBb+4KbMTF6pnXDYNHkF7aJYoxp
+         FGImJBpWNcml0/pqhY/vjmBaCYp7toD1WOAbVu1ij9/7vY7n1c7I5LIE3BAXis631gM/
+         uTjffqC586PWK/5wz4c31jTzkFJ0K3ByMC16jx3/eRuqL+8uxupPNybL9u0FaVgM+H1S
+         mcADAyRgLQmXIg9ZgqqZ27sL3s4tiJMYrKsuH/uh1IbG4DMGMQbUjHWgY/OJ+k0Zg5db
+         QCU8HYGuGr4iS5PlbiunKnUlbsexHuJfTFto4FdckSd7jDTrTuU+YeQTNQ0PsNWgLUIa
+         IXCQ==
+X-Gm-Message-State: AOAM532VpQGk4wwBSmIB9tykLp5suhOPdopIwW8eOjDYsxAlEKG0nUCi
+        5XEZ7PrNnD++cIq3RB5xBwVjaQ==
+X-Google-Smtp-Source: ABdhPJxL4jzSFoCLq25i5k8etbhswfCdtRlZ7uAjJ5s+YgxKJFIWI2qzwygKSC+xkj15A4B9LX8IYA==
+X-Received: by 2002:a05:600c:590:b0:38c:804e:4197 with SMTP id o16-20020a05600c059000b0038c804e4197mr31616563wmd.22.1651161731620;
+        Thu, 28 Apr 2022 09:02:11 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id q1-20020a1c4301000000b00394145534bbsm325283wma.9.2022.04.28.09.02.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 08:59:25 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 09:01:20 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tdas@quicinc.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC
- bindings
-Message-ID: <Ymq6UOjrYgFlzl/W@ripper>
-References: <20220422230013.1332993-1-bjorn.andersson@linaro.org>
- <20220423014824.912ACC385A0@smtp.kernel.org>
- <YmNsYSxLtwLpw98t@ripper>
- <20220423031350.01299C385A0@smtp.kernel.org>
- <YmN11qt/PqogYruQ@ripper>
- <20220425223426.BE973C385A4@smtp.kernel.org>
- <3fb043e6-2748-24f8-0115-b5372c747a12@linaro.org>
+        Thu, 28 Apr 2022 09:02:10 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 17:01:45 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <Ymq6aZCTdrOE60cn@myrica>
+References: <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
+ <YmLOznyBF0f7COYT@myrica>
+ <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+ <Yman5hLomw9/c+bi@myrica>
+ <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
+ <YmavoKkVu+hd+x0M@myrica>
+ <20220425083444.00af5674@jacob-builder>
+ <YmbIjnHtibY7n4Wb@myrica>
+ <YmdzFFx7fN586jcf@fyu1.sc.intel.com>
+ <bc18351c-27f2-17ae-e781-6b60fbb72541@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3fb043e6-2748-24f8-0115-b5372c747a12@linaro.org>
+In-Reply-To: <bc18351c-27f2-17ae-e781-6b60fbb72541@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,147 +91,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 28 Apr 08:44 PDT 2022, Dmitry Baryshkov wrote:
+On Thu, Apr 28, 2022 at 08:09:04AM -0700, Dave Hansen wrote:
+> On 4/25/22 21:20, Fenghua Yu wrote:
+> >>From 84aa68f6174439d863c40cdc2db0e1b89d620dd0 Mon Sep 17 00:00:00 2001
+> > From: Fenghua Yu <fenghua.yu@intel.com>
+> > Date: Fri, 15 Apr 2022 00:51:33 -0700
+> > Subject: [PATCH] iommu/sva: Fix PASID use-after-free issue
+> > 
+> > A PASID might be still used on ARM after it is freed in __mmput().
+> 
+> Is it really just ARM?
+> 
+> > process:
+> > 	open()->sva_bind()->ioasid_alloc() = N; // Get PASID N for the mm
+> > 	exit();
+> > 	exit_mm()->__mmput()->mm_pasid_drop()->mm->pasid = -1; // PASID -1
+> > 	exit_files()->release(dev)->sva_unbind()->use mm->pasid; // Failure
+> > 
+> > To avoid the use-after-free issue, free the PASID after no device uses it,
+> > i.e. after all devices are unbound from the mm.
+> > 
+> > sva_bind()/sva_unbind() call mmgrab()/mmdrop() to track mm->mm_count.
+> > __mmdrop() is called only after mm->mm_count is zero. So freeing the PASID
+> > in __mmdrop() guarantees the PASID is safely freed only after no device
+> > is bound to the mm.
+> 
+> Does this changelog work for everyone?
+> 
+> ==
+> 
+> tl;dr: The PASID is being freed too early.  It needs to stay around
+> until after device drivers that might be using it have had a chance to
+> clear it out of the hardware.
+> 
+> --
+> 
+> As a reminder:
+> 
+> mmget() /mmput()  refcount the mm's address space
+> mmgrab()/mmdrop() refcount the mm itself
+> 
+> The PASID is currently tied to the life of the mm's address space and
+> freed in __mmput().  This makes logical sense because the PASID can't be
+> used once the address space is gone.
+> 
+> But, this misses an important point: even after the address space is
+> gone, the PASID will still be programmed into a device.  Device drivers
+> might, for instance, still need to flush operations that are outstanding
+> and need to use that PASID.  They do this at ->release() time.
 
-> On 26/04/2022 01:34, Stephen Boyd wrote:
-> > Quoting Bjorn Andersson (2022-04-22 20:43:18)
-> > > On Fri 22 Apr 20:13 PDT 2022, Stephen Boyd wrote:
-> > > > 
-> > > > I'd really rather not have clock-names at all because we spend a bunch
-> > > > of time comparing strings with them when we could just as easily use
-> > > > a number.
-> > > 
-> > > I know that you would like to get rid of the clock-names for the clock
-> > > controllers. I've looked at it since and while it will be faster to
-> > > execute I still feel that it's going to be harder to write and maintain.
-> > > 
-> > > E.g. look at gcc_pcie_4_pipe_clk_src, its parents today are
-> > > pcie_4_pipe_clk and bi_tcxo. Something I can reason about being correct
-> > > or not.
-> > > 
-> > > If we ditch the clock-names I will have:
-> > > 
-> > > static const struct clk_parent_data gcc_parent_data_14[] = {
-> > >          { .index = 30 },
-> > >          { .index = 0 },
-> > 
-> > Those numbers could have some #define.
-> > 
-> > 	{ .index = PCIE_4_PIPE_CLK_DT }
-> > 	{ .index = BI_TCXO_DT }
-> > 
-> > > };
-> > > 
-> > > Generally we would perhaps use some compile time constant, but that
-> > > won't work here because we're talking about the index in the clocks
-> > > array in the yaml.
-> > > 
-> > > 
-> > > But perhaps I'm missing something that would make this manageable?
-> > 
-> > I dunno. Maybe a macro in the dt-binding header could be used to specify
-> > the 'clocks' property of the DT node that is providing the other side?
-> > The idea is to make a bunch of macros that insert the arguments of the
-> > macro in the right place for the clocks property and then define the
-> > order of arguments otherwise. It would be similar to how
-> > CREATE_TRACE_POINTS is used in include/trace/define_trace.h
-> > 
-> > In the dt-bindings/qcom,gcc-soc.h file:
-> > 
-> > 	#ifdef IN_DTSI
-> > 
-> > 	#undef GCC_DT_NODE_CLOCKS
-> > 	#define GCC_DT_NODE_CLOCKS
-> > 		clocks = <BI_TCXO_DT>,
-> > 			 <SLEEP_CLK_DT>;
-> > 
-> > 	#endif /* IN_DTSI */
-> > 
-> > 	#define BI_TCXO_DT 0
-> > 	#define SLEEP_CLK_DT 1
-
-BI_TCXO_DT is not the value, its the index of the entry in the clocks
-array. And the actual values of the clock controller's clocks
-property is not a property of the clock controller, but the system
-definition.
-
-I.e. that should be clear and explicitly expressed in the dts.
+It's not really clear which release() this is. For us it's file descriptor
+release() (not MMU notifier release(), which is how I initially understood
+this sentence)
 
 > 
-> Isn't this being an overkill, to define exact properties in the bindings
-> header? Also this would mean that we'd have to add dt-binding headers for
-> all _consumers_ of clocks. And to make things more complex, e.g. for PCIe
-> devices different instances of the device would use different amount of
-> clocks. This would mean that we'd have to define SM8250_PCI0_CLOCKS,
-> SM8250_PCIE1_CLOCKS and SM8250_PCIE2_CLOCKS.
-> 
-> 
-> If we were to switch to this fragile path of using indices (yes I consider
-> it to be very fragile), I'd consider something like the following to work in
-> the platform dtsi file:
-> 
-> clocks =
-> BEGIN_CLOCK
-> CLOCK(BI_TCXO_DT, &bi_tcxo)
-> CLOCK(SLEEP_CLK_DT, &sleep_clk)
-> END_CLOCK;
-> 
-> While the following should give an error:
-> clocks =
-> BEGIN_CLOCK
-> CLOCK(SLEEP_CLK_DT, &sleep_clk)
-> CLOCK(BI_TCXO_DT, &bi_tcxo)
-> END_CLOCK;
-> 
-> I think we can make this error out by using some additional tool (or
-> additional preprocessor pass over the sources)
-> 
+> Device drivers hold a reference on the mm itself and drop it at
+> ->release() time.  But, the device driver holds a reference mm itself,
 
-Let's not invent some magical syntax for describing the clocks in the
-DT.
+"to the mm"
 
-These macros can't expand to sparse arrays anyways, so iiuc this would
-give a sense that the ordering might not be significant, when it really
-is.
+(To be pendantic it's the IOMMU driver that holds this reference, and
+the device driver calls the IOMMU driver to release it, but the idea is
+the same.)
 
-> > And then in the SoC.dtsi file have
-> > 
-> > 	#define IN_DTSI
-> > 	#include <dt-bindings/qcom,gcc-soc.h>
-> > 
-> > 	#define BI_TCXO_DT	&xo_board
-> > 	#define SLEEP_CLK_DT	&sleep_clk
-> > 
-> > 	...
-> > 
-> > 	clock-controller@a000000 {
-> > 		compatible = "qcom,gcc-soc";
-> > 		reg = <0xa000000 0x10000>;
-> > 		GCC_DT_NODE_CLOCKS
-> > 	};
-> > 
-> > 
-> > and then in drivers/clk/qcom/gcc-soc.c file:
-> > 
-> > 	#include <dt-bindings/qcom,gcc-soc.h>
-> > 
-> > 	static const struct clk_parent_data gcc_parent_data_14[] = {
-> > 		{ .index = PCIE_4_PIPE_CLK_DT },
-> > 		{ .index = BI_TCXO_DT },
-> > 	};
-> > 
-> > The benefit I see to this is that the index for each clock is in the
-> > header file (BI_TCXO_DT is 0) and it's next to the clocks property.
-> > Someone could still mess up the index based on where the macro is used
-> > in the clocks property though.
+> not the address space.  The address space (and the PASID) is long gone
+> by the time the driver tries to clean up.  This is effectively a
+> use-after-free bug on the PASID.
 > 
-> And actually might I suggest an alternative approach to manually using
-> indices everywhere? What about spending the time once during the boot to
-> convert .fw_name and clock_names to parent indices during clock registration
-> and then using them for all the further operations?
+> To fix this, move the PASID free operation from __mmput() to __mmdrop().
+>  This ensures that the device drivers' existing mmgrab() keeps the PASID
+> allocated until they drop their mm reference.
+
+Good changelog otherwise
+
+Thanks,
+Jean
+
 > 
-
-I'm pretty sure that's what clk_core_fill_parent_index() already does.
-
-Regards,
-Bjorn
+> >  kernel/fork.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/fork.c b/kernel/fork.c
+> > index 9796897560ab..35a3beff140b 100644
+> > --- a/kernel/fork.c
+> > +++ b/kernel/fork.c
+> > @@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
+> >  	mmu_notifier_subscriptions_destroy(mm);
+> >  	check_mm(mm);
+> >  	put_user_ns(mm->user_ns);
+> > +	mm_pasid_drop(mm);
+> >  	free_mm(mm);
+> >  }
+> >  EXPORT_SYMBOL_GPL(__mmdrop);
+> > @@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
+> >  	}
+> >  	if (mm->binfmt)
+> >  		module_put(mm->binfmt->module);
+> > -	mm_pasid_drop(mm);
+> >  	mmdrop(mm);
+> >  }
+> >  
+> 

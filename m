@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB45513ABA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6217C513ABB
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbiD1RVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S236583AbiD1RXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiD1RVG (ORCPT
+        with ESMTP id S231637AbiD1RXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 13:21:06 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2014BBB1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:17:50 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id y19so7581356ljd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RNIYBv55isrBKHu/0D73jjAPNihwP6eLiF1y+MnObN8=;
-        b=AmLtvfuUlEd/MFryMoi2KrW3MjkN8XUdj7WljzlzQs1mPZn+ae/YzFM7MSpad9hbWm
-         EyiTenkfgHh+omWU1OEZDTs4hBSvFJoVb3GAmjgCkrxjaTOk/0dpEr37PVDhIZWtaTOB
-         I6jTajI0npX3gJ5JUXa8daao7//s3+MPZamPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RNIYBv55isrBKHu/0D73jjAPNihwP6eLiF1y+MnObN8=;
-        b=bJ056Y8lJvC+qUH6N8WtUOcY7B8TR+Fkmr4g3X2CylDgzKBFqjEHNjgcBGGV6QN5bk
-         nlvgZiDA2ojLMx2sVB0cwbU6pKZvgNJht9hw2qKxOpPOKYvW20Nnn45YYaLSIkKVSLUF
-         jLZfEqmbtWKA1w7qpM9p6LrZEgBPvMzsXV7xt0s7axIg6+LR0NvT5uVt1yFFssyQFDp+
-         fbtLtZ12YC5hcnMlLRG7Ngourxo8u5vfvyJD4Mne4Lkuu3HA+1CJ6j4TxFs/J2OFrj3m
-         NgmcqP5bpNaCyBcosQd5lNh9Qxqzut7FdrAgW8CQN4GkT2ttXEjgJJRrsM3MrqRMfFio
-         C2gw==
-X-Gm-Message-State: AOAM532WwOeIO7XnVTYc0IZFO3wFWi9jZewKfC3Sad/XppwEbPKZvX4T
-        9ZDIukdYJnaT7z753MDqSX+FhgvQG6EApJCmx+o=
-X-Google-Smtp-Source: ABdhPJy+20izviJ0rT4kAwowDBqs2eDhenkxIUuS7VDY+1xc0OGqV457NUJIkgcbg6V9ml2Dy6mOaw==
-X-Received: by 2002:a2e:b5cd:0:b0:24f:e86:be54 with SMTP id g13-20020a2eb5cd000000b0024f0e86be54mr16254200ljn.250.1651166268702;
-        Thu, 28 Apr 2022 10:17:48 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id bj25-20020a2eaa99000000b0024f2b540bcesm42637ljb.85.2022.04.28.10.17.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 10:17:47 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id c15so7573318ljr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:17:47 -0700 (PDT)
-X-Received: by 2002:a2e:9d46:0:b0:24c:7f1d:73cc with SMTP id
- y6-20020a2e9d46000000b0024c7f1d73ccmr22272241ljj.358.1651166267188; Thu, 28
- Apr 2022 10:17:47 -0700 (PDT)
+        Thu, 28 Apr 2022 13:23:46 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446D5DFFF
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:20:30 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGxVwg030270;
+        Thu, 28 Apr 2022 17:20:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=b81Gpf58B1llpSnoIWzOlyyA7TxuZToP2ay+KjLRyA0=;
+ b=aoJ5u4cTHYwLX8caDwjcOw9MztBXn1ds2yQkX4kW4HR/9wVXsgMisJdwWKvc2Mn+H3Gv
+ ZxezaQ6/wfEydNd4mfuxL4btSU5g+bXmLeqO9ZSFV8PvUZyptp0WzjIm2MDRGmRbVEAg
+ +kNN9/P+m2H7Hj0EBfQuFLbR5jYDZ2zeCss9FyaoDuc+V1pRlIFfsHB9E/AAKXiJ+Qex
+ AJMPSCWUSuVlTQsZBq92749NC7EunvN13yTduAGwSz0ATuz+JMytiMC+RJGdFsg7NwSv
+ G8kvXiJofCE1AHAQspHDxAzkh70R4X9dZ0beWWSNUgW5EJhSjVppE0L3rzpMknY5uV7a VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvwynms-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 17:20:13 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SHDb0r025666;
+        Thu, 28 Apr 2022 17:20:12 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvwynkt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 17:20:12 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SHCmWc015445;
+        Thu, 28 Apr 2022 17:20:11 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fm938yu03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 17:20:10 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SHK8Fi46858656
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 17:20:08 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF765A4055;
+        Thu, 28 Apr 2022 17:20:08 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A92E5A404D;
+        Thu, 28 Apr 2022 17:20:05 +0000 (GMT)
+Received: from li-NotSettable.ibm.com.com (unknown [9.43.8.21])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 17:20:05 +0000 (GMT)
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        llvm@lists.linux.dev
+Subject: [PATCH v2 0/2] ftrace/recordmcount: Handle object files without section symbols
+Date:   Thu, 28 Apr 2022 22:49:50 +0530
+Message-Id: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vBxMN0AtfqFLmBDSoaaBQDg7Z5jcuklQ
+X-Proofpoint-GUID: jWT1IvNYrKeUGYORWvVdJ8qdO7dFK1UI
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com> <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
-In-Reply-To: <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Apr 2022 10:17:31 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiF8D6Bs2m8y85XpHU__c4XD1yFV9JXx9FuTqoge+-yhg@mail.gmail.com>
-Message-ID: <CAHk-=wiF8D6Bs2m8y85XpHU__c4XD1yFV9JXx9FuTqoge+-yhg@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=689 adultscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204280103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,18 +91,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:09 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I'll look at that copy_page_to_iter_iovec() some more regardless, but
-> doing that "let's double-check it's not somethign else" would be good.
+This is v2 of the series posted at:
+http://lkml.kernel.org/r/cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com
 
-Oh, and as I do that, it strikes me: What platform do you see the problem on?
+For v2, the first patch is slightly modified to skip the loop, rather 
+than depending on addr == 0 to do so. The second patch is updated to 
+make this behavior be opt-in by architectures so that they can validate 
+the read mcount locations.
 
-Because the code for that function is very different if HIGHMEM is
-enabled, so if you see this on x86-32 but not x86-64, for example,
-that is relevant.
+- Naveen
 
-I *assume* nobody uses x86-32 any more, but just checking...
 
-               Linus
+Naveen N. Rao (2):
+  ftrace: Drop duplicate mcount locations
+  ftrace: recordmcount: Handle sections with no non-weak symbols
+
+ Makefile                           |  4 ++
+ arch/powerpc/Kconfig               |  1 +
+ arch/powerpc/include/asm/ftrace.h  |  8 +--
+ arch/powerpc/kernel/trace/ftrace.c | 11 ++++
+ kernel/trace/Kconfig               |  6 ++
+ kernel/trace/ftrace.c              | 13 ++++-
+ scripts/Makefile.build             |  3 +
+ scripts/recordmcount.c             |  6 +-
+ scripts/recordmcount.h             | 94 ++++++++++++++++++++++++++----
+ 9 files changed, 125 insertions(+), 21 deletions(-)
+
+
+base-commit: 83d8a0d166119de813cad27ae7d61f54f9aea707
+-- 
+2.35.1
+

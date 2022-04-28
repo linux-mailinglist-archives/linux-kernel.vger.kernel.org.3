@@ -2,157 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3FE513A67
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896B2513A6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245475AbiD1Qye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S1350399AbiD1Qze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbiD1Qyc (ORCPT
+        with ESMTP id S236452AbiD1Qz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:54:32 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664038C7C7;
-        Thu, 28 Apr 2022 09:51:13 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:46722)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nk7MD-006d9A-2m; Thu, 28 Apr 2022 10:51:09 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36046 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nk7MC-000I0h-0D; Thu, 28 Apr 2022 10:51:08 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <20220426225211.308418-9-ebiederm@xmission.com>
-        <87czh2160k.fsf@email.froward.int.ebiederm.org>
-        <20220428151110.GB15485@redhat.com>
-Date:   Thu, 28 Apr 2022 11:50:19 -0500
-In-Reply-To: <20220428151110.GB15485@redhat.com> (Oleg Nesterov's message of
-        "Thu, 28 Apr 2022 17:11:11 +0200")
-Message-ID: <875ymtywxg.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 28 Apr 2022 12:55:29 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE97A94E6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:52:13 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id e128so4048124qkd.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=ge3ZPWN0M9amQ6mKSg0omt63Nk/S+2cZMmx9LZwp68s=;
+        b=ljDUmMK6e/vLTCndgDDSANmK5RkqAFHOzkTv1LANQNLVtJx7jHydDO96kr/QUFkFL5
+         8Mp9tmkS7I1gQxYtkwfpUlDsPs8GRBsJ0ykxxNJDKBb6pwlPNlweAukPs5GHsryNdD1b
+         UzIVHdKWP0fKg7XjBrKILhxYCgKFsUk1K9I12+QrUiMWpL+PVE6a2tekJuW80qnjvAQ8
+         3sdRbOUDWLoFE4GvDuaA6i9KYvoWLSxCsqbWD6osE3xFU4yOTQ3urv59AFsppRrpdZJn
+         lImagqiFa9fVCtEPY+qnzhumXUrNulpfVQK2fGBCxYK+/uPY0EFdjxXwfNDtcJfC2hEo
+         RCSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=ge3ZPWN0M9amQ6mKSg0omt63Nk/S+2cZMmx9LZwp68s=;
+        b=Zh23tWVyXgJ3Y9ZW4orVbb1SgQjqb8+9DoZBxZTN2wDDCB4MJ898YHRjt74RyKEs9M
+         PJUY0AhtH5H3QkTORSXFhwGJKk8tLUEU0jFE2SsHuclSdS7UGRJOn4k9/5hILs0q5tGr
+         0Q3EB71thGhhEzuPJ62f+ZKrQYrdVu4Lx5vEyYg+jFvt7BNVDuabqkHFK8lHy/BFXoE8
+         aMaEo+hia3aQ+wX0jIbkgMrrExcZqsZmL1BJdqkcZyGQm+HZTtq18jgxnvsg2Htz64dY
+         +ehpcr33CDoOylmBX8HIBYgV7Av4SYSUtuuqYVbUeH+qo22blumFv8zmKKgnzYlQ4RCG
+         eptA==
+X-Gm-Message-State: AOAM531QQ08mOAFqIQ9J7ifytUey0i61BtgMidsWRRzLa71lR3y10OYH
+        codDU72QYnTwexdKUiANX6mm5Q==
+X-Google-Smtp-Source: ABdhPJwzfes0ShPwouYNOLRg6xLyz9XwoSBWEQsuuqe3bVE9E4WYyzToSnX9IlhVbJ944pqcLt97bg==
+X-Received: by 2002:a05:620a:28cb:b0:69e:befa:a4c5 with SMTP id l11-20020a05620a28cb00b0069ebefaa4c5mr20228939qkp.477.1651164732094;
+        Thu, 28 Apr 2022 09:52:12 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id q27-20020a05620a039b00b0069c8307d9c4sm205919qkm.18.2022.04.28.09.52.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 09:52:11 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 09:51:58 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org
+Subject: Re: [PATCH AUTOSEL 13/14] mm/thp: ClearPageDoubleMap in first
+ page_add_file_rmap()
+In-Reply-To: <20220428154222.1230793-13-gregkh@linuxfoundation.org>
+Message-ID: <c2ed1fe1-247e-e644-c367-87d32eb92cf5@google.com>
+References: <20220428154222.1230793-1-gregkh@linuxfoundation.org> <20220428154222.1230793-13-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nk7MC-000I0h-0D;;;mid=<875ymtywxg.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+Nj5WvQO35/e863lcGlkfLjjTdj24OUTQ=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 484 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 13 (2.7%), b_tie_ro: 11 (2.3%), parse: 1.21
-        (0.3%), extract_message_metadata: 14 (2.8%), get_uri_detail_list: 2.4
-        (0.5%), tests_pri_-1000: 14 (2.9%), tests_pri_-950: 1.54 (0.3%),
-        tests_pri_-900: 1.31 (0.3%), tests_pri_-90: 116 (23.9%), check_bayes:
-        114 (23.5%), b_tokenize: 9 (1.9%), b_tok_get_all: 11 (2.2%),
-        b_comp_prob: 3.5 (0.7%), b_tok_touch_all: 85 (17.5%), b_finish: 1.26
-        (0.3%), tests_pri_0: 309 (64.0%), check_dkim_signature: 0.62 (0.1%),
-        check_dkim_adsp: 2.9 (0.6%), poll_dns_idle: 0.93 (0.2%), tests_pri_10:
-        2.2 (0.4%), tests_pri_500: 8 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 9/9] ptrace: Don't change __state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+On Thu, 28 Apr 2022, Greg Kroah-Hartman wrote:
 
-> On 04/27, Eric W. Biederman wrote:
->>
->> "Eric W. Biederman" <ebiederm@xmission.com> writes:
->>
->> > diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
->> > index 3c8b34876744..1947c85aa9d9 100644
->> > --- a/include/linux/sched/signal.h
->> > +++ b/include/linux/sched/signal.h
->> > @@ -437,7 +437,8 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
->> >
->> >  static inline void signal_wake_up(struct task_struct *t, bool resume)
->> >  {
->> > -	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
->> > +	bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
->> > +	signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
->> >  }
->> >  static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
->> >  {
->>
->> Grrr.  While looking through everything today I have realized that there
->> is a bug.
->>
->> Suppose we have 3 processes: TRACER, TRACEE, KILLER.
->>
->> Meanwhile TRACEE is in the middle of ptrace_stop, just after siglock has
->> been dropped.
->>
->> The TRACER process has performed ptrace_attach on TRACEE and is in the
->> middle of a ptrace operation and has just set JOBCTL_DELAY_WAKEKILL.
->>
->> Then comes in the KILLER process and sends the TRACEE a SIGKILL.
->> The TRACEE __state remains TASK_TRACED, as designed.
->>
->> The bug appears when the TRACEE makes it to schedule().  Inside
->> schedule there is a call to signal_pending_state() which notices
->> a SIGKILL is pending and refuses to sleep.
->
-> And I think this is fine. This doesn't really differ from the case
-> when the tracee was killed before it takes siglock.
+> From: Hugh Dickins <hughd@google.com>
+> 
+> commit bd55b0c2d64e84a75575f548a33a3dfecc135b65 upstream.
+> 
+> PageDoubleMap is maintained differently for anon and for shmem+file: the
+> shmem+file one was never cleared, because a safe place to do so could
+> not be found; so it would blight future use of the cached hugepage until
+> evicted.
+> 
+> See https://lore.kernel.org/lkml/1571938066-29031-1-git-send-email-yang.shi@linux.alibaba.com/
+> 
+> But page_add_file_rmap() does provide a safe place to do so (though later
+> than one might wish): allowing testing to return to an initial state
+> without a damaging drop_caches.
+> 
+> Link: https://lkml.kernel.org/r/61c5cf99-a962-9a25-597a-53ab1bd8fbc0@google.com
+> Fixes: 9a73f61bdb8a ("thp, mlock: do not mlock PTE-mapped file huge pages")
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Hmm.  Maybe.
+NAK.
 
-> The only problem (afaics) is that, once we introduce JOBCTL_TRACED,
-> ptrace_stop() can leak this flag. That is why I suggested to clear
-> it along with LISTENING/DELAY_WAKEKILL before return, exactly because
-> schedule() won't block if fatal_signal_pending() is true.
->
-> But may be I misunderstood you concern?
+I thought we had a long-standing agreement that AUTOSEL does not try
+to add patches from akpm's tree which had not been marked for stable.
 
-Prior to JOBCTL_DELAY_WAKEKILL once __state was set to __TASK_TRACED
-we were guaranteed that schedule() would stop if a SIGKILL was
-received after that point.  As well as being immune from wake-ups
-from SIGKILL.
+(Whereas, if a developer asks for such a patch to be added to stable
+later, and verifies the result, that's of course a different matter.)
 
-I guess we are immune from wake-ups with JOBCTL_DELAY_WAKEKILL as I have
-implemented it.
+I've chosen to answer to this patch of my 3 in your 14 AUTOSELs,
+because this one is just an improvement, not at all a bugfix needed
+for stable (maybe AUTOSEL noticed "racy" or "safely" in the comments,
+and misunderstood).  The "Fixes" was intended to help any humans who
+wanted to backport into their trees.
 
-The practical concern then seems to be that we are not guaranteed
-wait_task_inactive will succeed.  Which means that it must continue
-to include the TASK_TRACED bit.
+I do recall that this 13/14, and 14/14, are mods to mm/rmap.c
+which followed other (mm/munlock) mods to mm/rmap.c in 5.18-rc1,
+which affected the out path of the function involved, and somehow
+made 14/14 a little cleaner.  I'm sorry, but I just don't rate it
+worth my time at the moment, to verify whether 14/14 happens to
+have ended up as a correct patch or not.
 
-Previously we were actually guaranteed in ptrace_check_attach that after
-ptrace_freeze_traced would succeed as any pending fatal signal would
-cause ptrace_freeze_traced to fail.  Any incoming fatal signal would not
-stop schedule from sleeping.  The ptraced task would continue to be
-ptraced, as all other ptrace operations are blocked by virtue of ptrace
-being single threaded.
+And nobody can verify them without these AUTOSELs saying to which
+tree they are targeted - 5.17 I suppose.
 
-I think in my tired mind yesterday I thought it would messing things
-up after schedule decided to sleep.  Still I would like to be able to
-let wait_task_inactive not care about the state of the process it is
-going to sleep for.
+Hugh
 
-Eric
-
+> ---
+>  mm/rmap.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 9e27f9f038d3..444d0d958aff 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1252,6 +1252,17 @@ void page_add_file_rmap(struct page *page, bool compound)
+>  		}
+>  		if (!atomic_inc_and_test(compound_mapcount_ptr(page)))
+>  			goto out;
+> +
+> +		/*
+> +		 * It is racy to ClearPageDoubleMap in page_remove_file_rmap();
+> +		 * but page lock is held by all page_add_file_rmap() compound
+> +		 * callers, and SetPageDoubleMap below warns if !PageLocked:
+> +		 * so here is a place that DoubleMap can be safely cleared.
+> +		 */
+> +		VM_WARN_ON_ONCE(!PageLocked(page));
+> +		if (nr == nr_pages && PageDoubleMap(page))
+> +			ClearPageDoubleMap(page);
+> +
+>  		if (PageSwapBacked(page))
+>  			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
+>  						nr_pages);
+> -- 
+> 2.36.0

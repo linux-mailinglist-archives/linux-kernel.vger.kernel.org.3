@@ -2,138 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A76B513B15
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B53513B19
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350607AbiD1RtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
+        id S1350631AbiD1RvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350592AbiD1RtI (ORCPT
+        with ESMTP id S1350582AbiD1RvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 13:49:08 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522486E28
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:45:52 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id g21so7235860iom.13
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rYkNgcXPFsN0AZS9Gdq00dTATV9XxHLGEv5CoQhxVgg=;
-        b=hzMsoV3D0yJ0Unlop+rpTzklIYhRnWH7ICsyDlDVFdcLE9BIlkNP73Wm+4oXNVuiB8
-         plJ8GuyyvEt6ZXQbKxd1muNdZzq09naSLXrKhBTeETybRl01LEoPVDN68ktaYn9l0zsi
-         yoyQHHe1wradnURDVY6+HNGMMkWazXFQRLoTut+ycpEUb54hblTXLdMjgsITAqGXMdx5
-         3Y8FH49L78ooub0KNRfiN5ke97caoBhhHNMCuuOQncS7BD/mI1wPI6p0qS0ilNo4Z01F
-         oWlrVzL07peONZe79tOTcyd8YQZsNWlwpVd98T9TgcHmPXq0Kuzw5WruzgVtu+f1uIoR
-         iH0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rYkNgcXPFsN0AZS9Gdq00dTATV9XxHLGEv5CoQhxVgg=;
-        b=mOpcpjqCuAD6crwHRJaKLwwsVt5HZQ6A6rnhzfCs8fI7x/wDCJWzHBHz0xoUIdClZz
-         9n9WKUMoQ6+4DGT4doWzJVw6DR0VTqzr3iEcnKcyiak7So9kTDCNp3qF9F3UjTUCAzgS
-         4JUjgvnwrv8Cc5MJ10v7PTJ1GeDI23kKSneLTB0AG/z1LDTZHadBjWOi0tyVneHNiW/m
-         bVGpc16RRmiJSqAkKCQBVzIAQiREPnipltrWOME6X2dRr1R23UlnwuxvTRrfAHR+Bmw5
-         7S8gI5RwsELmhbPxCPuspr5jSfdw35+ou2rOwT/dvC6Z7ypDgxA365zVLXZcw5jCesJb
-         C88g==
-X-Gm-Message-State: AOAM530Sd89sBLo7Mrxft+/d9fKP2W+dg7kRlHbY/ncIdjQWFhZeyRfn
-        MunR+AMGoTlB33+7jP4vTAmGhQ==
-X-Google-Smtp-Source: ABdhPJx/sYY/i7dOFt3+PaiV4KhSUz6X+tqTVPbVDr2OqPDCjEE/yaOau4YnhKo+v4gz0/SI7nAHRg==
-X-Received: by 2002:a02:cc48:0:b0:32b:14:4186 with SMTP id i8-20020a02cc48000000b0032b00144186mr6761137jaq.189.1651167951414;
-        Thu, 28 Apr 2022 10:45:51 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056e020c6f00b002cbc9935527sm269640ilj.83.2022.04.28.10.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 10:45:50 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 17:45:47 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        cgroups@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v3 4/6] KVM: arm64/mmu: count KVM page table pages in
- pagetable stats
-Message-ID: <YmrSywSU1ezREvT6@google.com>
-References: <20220426053904.3684293-1-yosryahmed@google.com>
- <20220426053904.3684293-5-yosryahmed@google.com>
- <YmegoB/fBkfwaE5z@google.com>
- <CAJD7tkY-WZKcyer=TbWF0dVfOhvZO7hqPN=AYCDZe1f+2HA-QQ@mail.gmail.com>
+        Thu, 28 Apr 2022 13:51:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD2EBAB92
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651168073; x=1682704073;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l3asd7jUMKU9opiuGZOA/STECTct4mXum2WvbhBRH6A=;
+  b=FYH+zmqhYc/1C7r6KLuIssax1MGNhhWzmZoYtQrU2wRQzH9AmgKbd4Tr
+   4D5wTYLndNdlVlaRvuay76XYuvoIIhxbR9Pks8GzlKB/h8GQmdW3QtgwU
+   25KXY5qjr7uHP4zNLt9I4IEqpuzSvLB6V0IYzls1/By2+NWZhG9INkwrD
+   XQ6f9bMMVieRb5y1dU4N6bK/kmrEvc4lqO+bIZnxtjqMuTjvVUDo0ynE7
+   nxtYE5C8JFMtoKcRX3/Z8vRDMihb2std8IfkmGxEz0ByCNikWUOSLhAFb
+   CezZ9bPsKBYVaA0smKUBL/SuRlr76lU1EnBh8O0O+ADafGNamB8+DUNEh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="246924372"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="246924372"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 10:47:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="618246322"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Apr 2022 10:47:51 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nk8F4-0005aB-M4;
+        Thu, 28 Apr 2022 17:47:50 +0000
+Date:   Fri, 29 Apr 2022 01:47:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zong-Zhe Yang <kevin_yang@realtek.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+        Ping-Ke Shih <pkshih@realtek.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending 7/57]
+ drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202204290113.w78dhtXk-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJD7tkY-WZKcyer=TbWF0dVfOhvZO7hqPN=AYCDZe1f+2HA-QQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:27:57PM -0700, Yosry Ahmed wrote:
-> > What page tables do we want to account? KVM on ARM manages several page
-> > tables.
-> >
-> > For regular KVM, the host kernel manages allocations for the hyp stage 1
-> > tables in addition to the stage 2 tables used for a particular VM. The
-> > former is system overhead whereas the latter could be attributed to a
-> > guest VM.
-> 
-> Honestly I would love to get your input on this. The main motivation
-> here is to give users insights on the kernel memory usage on their
-> system (or in a cgroup). We currently have NR_PAGETABLE stats for
-> normal kernel page tables (allocated using
-> __pte_alloc_one()/pte_free()), this shows up in /proc/meminfo,
-> /path/to/cgroup/memory.stat, and node stats. The idea is to add
-> NR_SECONDARY_PAGETABLE that should include the memory used for kvm
-> pagetables, which should be a separate category (no overlap). What
-> gets included or not depends on the semantics of KVM and what exactly
-> falls under the category of secondary pagetables from the user's pov.
-> 
-> Currently it looks like s2 page table allocations get accounted to
-> kmem of memory control groups (GFP_KERNEL_ACCOUNT), while hyp page
-> table allocations do not (GFP_KERNEL). So we could either follow this
-> and only account s2 page table allocations in the stats, or make hyp
-> allocations use GFP_KERNEL_ACCOUNT as well and add them to the stats.
-> Let me know what you think.
+Hi Zong-Zhe,
 
-I think it is reasonable to just focus on stage 2 table allocations and
-ignore all else. As Marc pointed out it isn't workable in other
-contexts anyway (pKVM), and keeps the patch tidy too.
+FYI, the error/warning still remains.
 
-GFP_KERNEL_ACCOUNT for hyp allocations wouldn't make sense, as it is
-done at init to build out the system page tables for EL2.
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+head:   5c6cf64b40b98e4d4247fda11e4b4c859a24585d
+commit: 14f9f4790048f684c2b151c899895feae0b5731a [7/57] rtw89: ser: control hci interrupts on/off by state
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220429/202204290113.w78dhtXk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/14f9f4790048f684c2b151c899895feae0b5731a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
+        git checkout 14f9f4790048f684c2b151c899895feae0b5731a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/misc/lkdtm/ drivers/net/wireless/realtek/rtw89/
 
---
-Thanks,
-Oliver
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/net/wireless/realtek/rtw89/ser.c:319:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
+
+
+vim +319 drivers/net/wireless/realtek/rtw89/ser.c
+
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  301  
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  302  /* state handler */
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  303  static void ser_idle_st_hdl(struct rtw89_ser *ser, u8 evt)
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  304  {
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  305  	struct rtw89_dev *rtwdev = container_of(ser, struct rtw89_dev, ser);
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  306  
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  307  	switch (evt) {
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  308  	case SER_EV_STATE_IN:
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  309  		rtw89_hci_recovery_complete(rtwdev);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  310  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  311  	case SER_EV_L1_RESET:
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  312  		ser_state_goto(ser, SER_RESET_TRX_ST);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  313  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  314  	case SER_EV_L2_RESET:
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  315  		ser_state_goto(ser, SER_L2_RESET_ST);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  316  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  317  	case SER_EV_STATE_OUT:
+14f9f4790048f6 Zong-Zhe Yang 2022-03-14  318  		rtw89_hci_recovery_start(rtwdev);
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11 @319  	default:
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  320  		break;
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  321  	}
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  322  }
+e3ec7017f6a20d Ping-Ke Shih  2021-10-11  323  
+
+:::::: The code at line 319 was first introduced by commit
+:::::: e3ec7017f6a20d12ddd9fe23d345ebb7b8c104dd rtw89: add Realtek 802.11ax driver
+
+:::::: TO: Ping-Ke Shih <pkshih@realtek.com>
+:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,156 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B89151343E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D9151343A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346706AbiD1M4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        id S1346673AbiD1MzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346694AbiD1M4P (ORCPT
+        with ESMTP id S232445AbiD1MzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:56:15 -0400
-Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE88DAFAE0;
-        Thu, 28 Apr 2022 05:52:58 -0700 (PDT)
-Received: from pps.filterd (m0127837.ppops.net [127.0.0.1])
-        by mx0a-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SAMh1u002388;
-        Thu, 28 Apr 2022 05:51:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version;
- s=proofpoint20171006; bh=h4eqwdWuRHgZUk4ZID62/NEEEewfF4oGG5ZAnMPQjtg=;
- b=pe6g4otRTT9j5p3S2O8YaTAHHDxsIwrHlMwMPAPtNPBQb7zSXLo2UudsbNGZ3YxWISUC
- IOBQnrVAH4wZLv3Mi2DadNq8I5LGYkwyWRFzZhHHa2KBzoL1VtooNRuvdFAgQmP7lnRl
- PRf902jrwYIn1oTgvtMK3ZDjwyidJyGhJJNtvJ1eoHmVaC6NA2giHutJpfosuC5KW8er
- zqwtd+WtA9a6kQeKFewDEr52UCJ0FWKAzhmumXm8TxDqc84de3yckGWHLToFCyCL1GWY
- 2OFBpNVKR49eRICI31zHMXy+uAMYKL47cBpSDmTNu+/KSWGeYZibSjhCptGJLBB+cT0P Xw== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 3fps5bbtg0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 05:51:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hMsOg6RVuOm5DSDVSo56sMOkK7KbS6Bu04fgg8hC6rzG9coTRnmZOPL4kjtplKo1VfucirFDhAUeavL58eLrw0J2nWhrtXwXAHK0d7CCcJY3kzq4yKTkS/uJtA3kU98Bs4dqWiylkDN1yoI7Q4LCBY8s1aOMx6jpYUDBX/uj1q1uT6zWhKBRsEUoD4j5qfFgKBJZNJilsx/2JXAQyXm2WAJcyAXySGtbaqOQZAdEj+oEAe1kzDvj5+K8PiTjQGl57+47RCg93MQKn8YWxjn9OKmqePNVYPV/mnbD3aozyP4qjq4sH7xDCBlNey9KEXrGoJ+0jFhHG3kgFk10IkpnsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h4eqwdWuRHgZUk4ZID62/NEEEewfF4oGG5ZAnMPQjtg=;
- b=UBBU9jwckB5WybYACKkFlIVtxRKS7h8RVo5DHMRGMQb+B6rMpZSfkqX55elbUS06SJ9LAiN6HsrQtwMYiHn4gA9tEMnfLoo9j+K3QJ60ZhCgzvErpiK+DefaEtR3Q6o3XKFLQDvIGaUSzsRbjBfJMxe+LW3HzdQpanqqvqCKDAm9lnIwIL+8q6IqAyPcWWdaLsoavPZWse1oTGQouxlq52vEeuhuUzGASOh+A7ZJ+M/zAhT71/FhtLdhT/hxA6+S6MUgJPflLd95N8DU9B3DUHvU6k6C7f0+gzcHobfFJ9JGcIz5my14669bo+XmEFbsHM2Q7izzvqaUEmK3quOnrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from BL0PR02MB4579.namprd02.prod.outlook.com (2603:10b6:208:4b::10)
- by SA1PR02MB8416.namprd02.prod.outlook.com (2603:10b6:806:1f7::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Thu, 28 Apr
- 2022 12:51:31 +0000
-Received: from BL0PR02MB4579.namprd02.prod.outlook.com
- ([fe80::21f4:4c6:6a43:3882]) by BL0PR02MB4579.namprd02.prod.outlook.com
- ([fe80::21f4:4c6:6a43:3882%4]) with mapi id 15.20.5186.023; Thu, 28 Apr 2022
- 12:51:31 +0000
-From:   Jon Kohler <jon@nutanix.com>
-To:     Jon Kohler <jon@nutanix.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Thread-Topic: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Thread-Index: AQHYVmUALWKOwI7bhUetXwvEOXsG/a0FUJIA
-Date:   Thu, 28 Apr 2022 12:51:31 +0000
-Message-ID: <AB2123F1-F38C-40D2-9EA6-F288B2B845A9@nutanix.com>
-References: <20220422162103.32736-1-jon@nutanix.com>
-In-Reply-To: <20220422162103.32736-1-jon@nutanix.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.40.0.1.81)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6be7933c-f0ea-43c9-4a47-08da2915d1b6
-x-ms-traffictypediagnostic: SA1PR02MB8416:EE_
-x-microsoft-antispam-prvs: <SA1PR02MB8416DCE74C5815F9EE6562CBAFFD9@SA1PR02MB8416.namprd02.prod.outlook.com>
-x-proofpoint-crosstenant: true
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NZspD4deUR/Ft67Jy0bQsDuIMoy+zqvuE3bBaM0vxENTsUBW8WsU2avQYRiumD0Oxq/5R8WeDpjdD3z5jq3AyxV32wBN0izfDy8NuyxnV9cWgAuk6sz6nv69csHYob2oZHn1puu427Ie1+XozN1s1oIpWa3ivtGDCLSoSnc95BS+DXmT+aUuUxtlqyXa7oi1BhQMvGcq6lr2Qrw8Vp+OQRfwDi5/+aECtfZMNaSa3xPL4BZMGdwQQWCWBEV3j1/lY70/GOcmh3A5v0Pk2xWSpYQdAH+M+Dha4ZCheObeS/gvxGLYTdBCOnRtJJ+uSMFgRnqVCbjU86ZTirmnYw2M/QaZ5ZSM3p88WT9bmJkiSaAcgiPK73f4MI8q+eYSi79rc41riqD1aPxAcqbeCs9QpEck2NqPSDB/bpTvkXhNIIchJ2IxFau5aS+3EnbmCJfVrovVdzwkdX6P72UY2gX2ye8QVsK2J/S+piUp6udu5kdi+AxKdgvbPQtrGyboC6W2Cf2SI4V/qLxt9kQTuW+FyjnRr2nDXLlIlxflM9QtMWSRZ4ElXRMzOnLMxo2MDwCu+J3ToSoYW2Q2w0FvB5r+9tE29cHjRk7El4//bXUbOSHL4635vSAaKps4uLw2pdz2/N0STQr1NWDD7j962T73it36HTRYwq+3rMota+ZIeXRSxb8+kKTvlJEpjIvAfgKgj3op7wWy1/SeyKRmp+noI3ZbxgmUxBldo4yS4JylUqM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4579.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(86362001)(53546011)(83380400001)(38100700002)(38070700005)(36756003)(186003)(122000001)(8936002)(6200100001)(5660300002)(7416002)(2906002)(33656002)(71200400001)(6506007)(6486002)(4326008)(66446008)(66476007)(54906003)(2616005)(37006003)(64756008)(76116006)(8676002)(6512007)(6862004)(66946007)(66556008)(316002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+5Mv4DKWuXrAkecHrB2HrAzDJUCQNSzE0xZh2/W/QBuO5oGPwno3dmllI8hT?=
- =?us-ascii?Q?rGDtQQ6bsLo8yCU0BzR8q5AG9hL6Ebo0IKBSiMyqEmParmqqTlxONXfmQkKD?=
- =?us-ascii?Q?XSHzY3D1w0qLYxXcdPJCr57Z/tmknlOcd7iM9NhOWyfF/ZlU6xCve5YRv/Xi?=
- =?us-ascii?Q?Rmn9F+hhTMdTTQ5vYizKj8s0iZjlPkq7caylf3RfQM+hBedBF9gEtihq9kwt?=
- =?us-ascii?Q?qrDStwtLVYXZkgszo+YzwigcaLrzzPz9iIbdnxQJQWhmf5qGjLI6zKwaw813?=
- =?us-ascii?Q?vbdmYB0RjLOc6xwIZP5y1iQ/VWNgVLYgiBzgJDsr0eEbo1K/WsXlGRlLgR/+?=
- =?us-ascii?Q?4ZtuETvDm1NkAb1acZ+xJZLD38Oi27eTSj8dz2OG/VRo4xXsK6HhVG1ygmBo?=
- =?us-ascii?Q?jXeNEpmn+CETn4yLo1AuhKnDF3iGdP3mGF81IeM7GkMrjW1ELb/iLmmwakFQ?=
- =?us-ascii?Q?46X/kyHjF0F5/UyzPY/JYv5+ADJoLKOU46RdqkGXzc+FKC0ihrOS5kS/7KvE?=
- =?us-ascii?Q?4y8ARZsMI9vLlPG2T3xKCpNf6yE9GZBzDQuAMRc6H1SBuhMIetufumaAPJPL?=
- =?us-ascii?Q?KSScaChPSzgHvdwBYjQUiHzjslJdFaxeZ9vSfFyMmBZ6yNC47DiG4FA7pQtu?=
- =?us-ascii?Q?VsMw7NpSohALSndmOuJhbF5GnK82TYZ+D7DdZNi5C7/qsVaTDz7BwzUbo3Tu?=
- =?us-ascii?Q?27ie6dR/ddQG7UqEApboIKB/3saqphrk07cqWHMePIj++7PTl0nmP/sNTl8w?=
- =?us-ascii?Q?NP6V1tT1yUuw3SwWVBajVoUoeAUc7X1ic2JhPOTaxtCb7xaIttrGNYROzxTP?=
- =?us-ascii?Q?uLzT3Y4rHx5qjMWZUytpX63PGjrDSZKg1g0LmhCm1ah3CSO/eibbMqG7ZgJW?=
- =?us-ascii?Q?XwPCnY79ZXhF03zQmpLfwJ+5y6S4STVuQiLoWUXPsSYLzMlWvPjwk3D/N1nG?=
- =?us-ascii?Q?NoLHTuLZeG/eXskt5OD41hN6okJowd8O283fSJp0SuV0BCDswVW/H+apyyji?=
- =?us-ascii?Q?8rrtn2Q9CoOVbdsDOALTq7QJS7RjofrxDyCSZF67hYS3YPlwXFZ+JVXoYIcq?=
- =?us-ascii?Q?FKa+RPG77LfVETW785nf9kwvrqSLepLzIYDZZNxHvFgPOwEL15aBEpS9ptX1?=
- =?us-ascii?Q?0K3ZUGV/zuD99s9UsctFIxb8Y8dcW+auJWYM+68VRWhr+eBb1leVd7zBieWd?=
- =?us-ascii?Q?DCYi3GIrWM4PmYoIOd/G+VQRTKN04HVztF9gyfxZWzFJuETkkHF6X/9NvJep?=
- =?us-ascii?Q?yjQUGgNWes/xiT8D3h2Ts6lNBjaCuzKHI4zffVBNZk5PT0bMP8pTLsHt/GIF?=
- =?us-ascii?Q?zpqI6RIXO6DClcDBxq2Dy0mFoUpOFjXoOM8/zg6kAwr64LfMqQcf0asz3K42?=
- =?us-ascii?Q?6GA9lcXSQglfk8xtt1Z6aWPIrWPF8zhCyVnEQjn/MUOJ81uCIvxolEjL03FP?=
- =?us-ascii?Q?2eG8UD+9XjqhXR3Ny4YhKdAuDPKT467KCdfU1HKfq152lY3fDir7ijDXGGNS?=
- =?us-ascii?Q?ab/JNWrIZVxZlKC9ULniZdQQPrdIClTjyDr4TuNIITqDLf/svPg2nm6fhC/h?=
- =?us-ascii?Q?ChDUxON3oairAm0S8FthCGuJcpJO3b9AX8wLdnn/G0kmfY1wAhhmvM64qBbB?=
- =?us-ascii?Q?duAMmWr2Yds6hqFANP5tCdEC0v4rI8MSFximq5LZHqnk8LURiuZhumboBCJw?=
- =?us-ascii?Q?m3sRakC+zSeKqNuIUkDUsxcTOw32OCcfdOqiz9RHkSkmtCr/zrnSq+He1Zha?=
- =?us-ascii?Q?tXML4Rq/MlPjxIS3fC/WUORZ15V3P/+PlI+U/u2DhpLCk8822E9ygiIexeIE?=
-x-ms-exchange-antispam-messagedata-1: 6H0jBBGgAKsNei+OMU1ErdEdL53DxkZDlivz4wwF6u3J664w8zpa0ll6
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <0DDE0E715F87EF49BD33FE3C2DD81FBD@namprd02.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 28 Apr 2022 08:55:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB025AC068;
+        Thu, 28 Apr 2022 05:51:49 -0700 (PDT)
+Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpwRT7587zGp2D;
+        Thu, 28 Apr 2022 20:49:09 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 20:51:47 +0800
+Received: from [10.174.176.245] (10.174.176.245) by
+ kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 20:51:46 +0800
+Message-ID: <3bf34932-1444-b914-3610-422de259d60d@huawei.com>
+Date:   Thu, 28 Apr 2022 20:51:46 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4579.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6be7933c-f0ea-43c9-4a47-08da2915d1b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Apr 2022 12:51:31.5314
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wbgtgtcnKI31uk7AuW2kIuv6TuGN6Mp/j1lVJPYLU4FM4mm7XvoEPMpTsYwbDgId+IBpn1eIg5kTZp5IUi1H2L7yqjkhAkNd8SZ0PYrWv7E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB8416
-X-Proofpoint-GUID: Y3hCIwNqzNdT5yVzvYBXYIGCm1s-WU1c
-X-Proofpoint-ORIG-GUID: Y3hCIwNqzNdT5yVzvYBXYIGCm1s-WU1c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_01,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net] SUNRPC: Fix local socket leak in
+ xs_local_setup_socket()
+From:   "wanghai (M)" <wanghai38@huawei.com>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "kuba@kernel.org" <kuba@kernel.org>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220426132011.25418-1-wanghai38@huawei.com>
+ <d013bdc75085e380250cb79edf2b27680cbc9f7e.camel@hammerspace.com>
+ <2edb137e-b12f-e912-8c2b-9ad3737a0182@huawei.com>
+In-Reply-To: <2edb137e-b12f-e912-8c2b-9ad3737a0182@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.245]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -159,154 +63,420 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+在 2022/4/27 15:15, wanghai (M) 写道:
+>
+> 在 2022/4/27 2:51, Trond Myklebust 写道:
+>> On Tue, 2022-04-26 at 21:20 +0800, Wang Hai wrote:
+>>> If the connection to a local endpoint in xs_local_setup_socket()
+>>> fails,
+>>> fput() is missing in the error path, which will result in a socket
+>>> leak.
+>>> It can be reproduced in simple script below.
+>>>
+>>> while true
+>>> do
+>>>          systemctl stop rpcbind.service
+>>>          systemctl stop rpc-statd.service
+>>>          systemctl stop nfs-server.service
+>>>
+>>>          systemctl restart rpcbind.service
+>>>          systemctl restart rpc-statd.service
+>>>          systemctl restart nfs-server.service
+>>> done
+>>>
+>>> When executing the script, you can observe that the
+>>> "cat /proc/net/unix | wc -l" count keeps growing.
+>>>
+>>> Add the missing fput(), and restore transport to old socket.
+>>>
+>>> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+>>> ---
+>>>   net/sunrpc/xprtsock.c | 20 ++++++++++++++++++--
+>>>   1 file changed, 18 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+>>> index 0f39e08ee580..7219c545385e 100644
+>>> --- a/net/sunrpc/xprtsock.c
+>>> +++ b/net/sunrpc/xprtsock.c
+>>> @@ -1819,6 +1819,9 @@ static int xs_local_finish_connecting(struct
+>>> rpc_xprt *xprt,
+>>>   {
+>>>          struct sock_xprt *transport = container_of(xprt, struct
+>>> sock_xprt,
+>>>     xprt);
+>>> +       struct socket *trans_sock = NULL;
+>>> +       struct sock *trans_inet = NULL;
+>>> +       int ret;
+>>>            if (!transport->inet) {
+>>>                  struct sock *sk = sock->sk;
+>>> @@ -1835,6 +1838,9 @@ static int xs_local_finish_connecting(struct
+>>> rpc_xprt *xprt,
+>>>                    xprt_clear_connected(xprt);
+>>>   +               trans_sock = transport->sock;
+>>> +               trans_inet = transport->inet;
+>>> +
+>> Both values are NULL here
+> Got it, thanks
+>>
+>>>                  /* Reset to new socket */
+>>>                  transport->sock = sock;
+>>>                  transport->inet = sk;
+>>> @@ -1844,7 +1850,14 @@ static int xs_local_finish_connecting(struct
+>>> rpc_xprt *xprt,
+>>>            xs_stream_start_connect(transport);
+>>>   -       return kernel_connect(sock, xs_addr(xprt), xprt->addrlen, 0);
+>>> +       ret = kernel_connect(sock, xs_addr(xprt), xprt->addrlen, 0);
+>>> +       /* Restore to old socket */
+>>> +       if (ret && trans_inet) {
+>>> +               transport->sock = trans_sock;
+>>> +               transport->inet = trans_inet;
+>>> +       }
+>>> +
+>>> +       return ret;
+>>>   }
+>>>     /**
+>>> @@ -1887,7 +1900,7 @@ static int xs_local_setup_socket(struct
+>>> sock_xprt *transport)
+>>>                  xprt->stat.connect_time += (long)jiffies -
+>>> xprt->stat.connect_start;
+>>>                  xprt_set_connected(xprt);
+>>> -               break;
+>>> +               goto out;
+>>>          case -ENOBUFS:
+>>>                  break;
+>>>          case -ENOENT:
+>>> @@ -1904,6 +1917,9 @@ static int xs_local_setup_socket(struct
+>>> sock_xprt *transport)
+>>>                                  xprt-
+>>>> address_strings[RPC_DISPLAY_ADDR]);
+>>>          }
+>>>   +       transport->file = NULL;
+>>> +       fput(filp);
+>> Please just call xprt_force_disconnect() so that this can be cleaned up
+>> from     a safe context.
+>
+> Hi, Trond
+>
+> Thank you for your advice, I tried this, but it doesn't seem to
+>
+> work and an error is reported. I'll analyze why this happens
+>
+>
+Hi, Trond.
 
-> On Apr 22, 2022, at 12:21 PM, Jon Kohler <jon@nutanix.com> wrote:
->=20
-> On vmx_vcpu_load_vmcs and svm_vcpu_load, respect user controlled
-> configuration for conditional IBPB and only attempt IBPB MSR when
-> switching between different guest vCPUs IFF switch_mm_always_ibpb,
-> which fixes a situation where the kernel will issue IBPB
-> unconditionally even when conditional IBPB is enabled.
->=20
-> If a user has spectre_v2_user mitigation enabled, in any
-> configuration, and the underlying processor supports X86_FEATURE_IBPB,
-> X86_FEATURE_USE_IBPB is set and any calls to
-> indirect_branch_prediction_barrier() will issue IBPB MSR.
->=20
-> Depending on the spectre_v2_user configuration, either
-> switch_mm_always_ibpb key or switch_mm_cond_ibpb key will be set.
->=20
-> Both switch_mm_always_ibpb and switch_mm_cond_ibpb are handled by
-> switch_mm() -> cond_mitigation(), which works well in cases where
-> switching vCPUs (i.e. switching tasks) also switches mm_struct;
-> however, this misses a paranoid case where user space may be running
-> multiple guests in a single process (i.e. single mm_struct). This
-> presents two issues:
->=20
-> Issue 1:
-> This paranoid case is already covered by vmx_vcpu_load_vmcs and
-> svm_vcpu_load; however, this is done by calling
-> indirect_branch_prediction_barrier() and thus the kernel
-> unconditionally issues IBPB if X86_FEATURE_USE_IBPB is set.
->=20
-> Issue 2:
-> For a conditional configuration, this paranoid case is nonsensical.
-> If userspace runs multiple VMs in the same process, enables cond_ipbp,
-> _and_ sets TIF_SPEC_IB, then isn't getting full protection in any case,
-> e.g. if userspace is handling an exit-to-userspace condition for two
-> vCPUs from different VMs, then the kernel could switch between those
-> two vCPUs' tasks without bouncing through KVM and thus without doing
-> KVM's IBPB.
->=20
-> Fix both by using intermediary call to x86_virt_guest_switch_ibpb(),
-> which gates IBPB MSR IFF switch_mm_always_ibpb is true.
->=20
-> switch_mm_cond_ibpb is intentionally ignored from the KVM code side
-> as it really is nonsensical given the common case is already well
-> covered by switch_mm(), so issuing an additional IBPB from KVM is
-> just pure overhead.
->=20
-> Note: switch_mm_always_ibpb key is user controlled via spectre_v2_user
-> and will be true for the following configurations:
->  spectre_v2_user=3Don
->  spectre_v2_user=3Dprctl,ibpb
->  spectre_v2_user=3Dseccomp,ibpb
->=20
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> Cc: Waiman Long <longman@redhat.com>
-> ---
-> v1 -> v2:
-> - Addressed comments on approach from Sean.
-> v2 -> v3:
-> - Updated spec-ctrl.h comments and commit msg to incorporate
->   additional feedback from Sean.
->=20
+If I call xprt_force_disconnect(), it reports the following error,
+I spent a long time but couldn't find the cause of the error. If I
+call xs_close(), it works, is it possible to call xs_close() here?
 
-Gentle ping on this one, thanks, Jon
-
-> arch/x86/include/asm/spec-ctrl.h | 14 ++++++++++++++
-> arch/x86/kernel/cpu/bugs.c       |  6 +++++-
-> arch/x86/kvm/svm/svm.c           |  2 +-
-> arch/x86/kvm/vmx/vmx.c           |  2 +-
-> 4 files changed, 21 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/x86/include/asm/spec-ctrl.h b/arch/x86/include/asm/spec=
--ctrl.h
-> index 5393babc0598..99d3341d2e21 100644
-> --- a/arch/x86/include/asm/spec-ctrl.h
-> +++ b/arch/x86/include/asm/spec-ctrl.h
-> @@ -85,4 +85,18 @@ static inline void speculative_store_bypass_ht_init(vo=
-id) { }
-> extern void speculation_ctrl_update(unsigned long tif);
-> extern void speculation_ctrl_update_current(void);
->=20
-> +/*
-> + * Issue IBPB when switching guest vCPUs IFF switch_mm_always_ibpb.
-> + * For the more common case of running VMs in their own dedicated proces=
-s,
-> + * switching vCPUs that belong to different VMs, i.e. switching tasks,
-> + * will also switch mm_structs and thus do IPBP via cond_mitigation();
-> + * however, in the always_ibpb case, take a paranoid approach and issue
-> + * IBPB on both switch_mm() and vCPU switch.
-> + */
-> +static inline void x86_virt_guest_switch_ibpb(void)
-> +{
-> +	if (static_branch_unlikely(&switch_mm_always_ibpb))
-> +		indirect_branch_prediction_barrier();
-> +}
-> +
-> #endif
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 6296e1ebed1d..6aafb0279cbc 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -68,8 +68,12 @@ u64 __ro_after_init x86_amd_ls_cfg_ssbd_mask;
-> DEFINE_STATIC_KEY_FALSE(switch_to_cond_stibp);
-> /* Control conditional IBPB in switch_mm() */
-> DEFINE_STATIC_KEY_FALSE(switch_mm_cond_ibpb);
-> -/* Control unconditional IBPB in switch_mm() */
-> +/* Control unconditional IBPB in both switch_mm() and
-> + * x86_virt_guest_switch_ibpb().
-> + * See notes on x86_virt_guest_switch_ibpb() for KVM use case details.
-> + */
-> DEFINE_STATIC_KEY_FALSE(switch_mm_always_ibpb);
-> +EXPORT_SYMBOL_GPL(switch_mm_always_ibpb);
->=20
-> /* Control MDS CPU buffer clear before returning to user space */
-> DEFINE_STATIC_KEY_FALSE(mds_user_clear);
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index bd4c64b362d2..fc08c94df888 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1302,7 +1302,7 @@ static void svm_vcpu_load(struct kvm_vcpu *vcpu, in=
-t cpu)
->=20
-> 	if (sd->current_vmcb !=3D svm->vmcb) {
-> 		sd->current_vmcb =3D svm->vmcb;
-> -		indirect_branch_prediction_barrier();
-> +		x86_virt_guest_switch_ibpb();
-> 	}
-> 	if (kvm_vcpu_apicv_active(vcpu))
-> 		__avic_vcpu_load(vcpu, cpu);
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 04d170c4b61e..a8eed9b8221b 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1270,7 +1270,7 @@ void vmx_vcpu_load_vmcs(struct kvm_vcpu *vcpu, int =
-cpu,
-> 		 * The L1 VMM can protect itself with retpolines, IBPB or IBRS.
-> 		 */
-> 		if (!buddy || WARN_ON_ONCE(buddy->vmcs !=3D prev))
-> -			indirect_branch_prediction_barrier();
-> +			x86_virt_guest_switch_ibpb();
-> 	}
->=20
-> 	if (!already_loaded) {
-> --
-> 2.30.1 (Apple Git-130)
->=20
+[  107.147326][ T7128] 
+======================================================
+[  107.147329][ T7128] WARNING: possible circular locking dependency 
+detected
+[  107.147333][ T7128] 5.17.0+ #10 Not tainted
+[  107.147340][ T7128] 
+------------------------------------------------------
+[  107.147343][ T7128] rpc.nfsd/7128 is trying to acquire lock:
+[  107.147349][ T7128] ffffffff850f4960 (console_owner){..-.}-{0:0}, at: 
+console_unlock+0x1d7/0x790
+[  107.147384][ T7128]
+[  107.147384][ T7128] but task is already holding lock:
+[  107.147387][ T7128] ffff88824010b418 (&pool->lock/1){-.-.}-{2:2}, at: 
+__queue_work+0x450/0x810
+[  107.147420][ T7128]
+[  107.147420][ T7128] which lock already depends on the new lock.
+[  107.147420][ T7128]
+[  107.147423][ T7128]
+[  107.147423][ T7128] the existing dependency chain (in reverse order) is:
+[  107.147426][ T7128]
+[  107.147426][ T7128] -> #2 (&pool->lock/1){-.-.}-{2:2}:
+[  107.147444][ T7128]        _raw_spin_lock+0x32/0x50
+[  107.147482][ T7128]        __queue_work+0x131/0x810
+[  107.147496][ T7128]        queue_work_on+0x88/0x90
+[  107.147509][ T7128]        tty_flip_buffer_push+0x34/0x40
+[  107.147525][ T7128]        serial8250_rx_chars+0x73/0x80
+[  107.147537][ T7128] serial8250_handle_irq.part.21+0x124/0x160
+[  107.147552][ T7128] serial8250_default_handle_irq+0x79/0x90
+[  107.147566][ T7128]        serial8250_interrupt+0x73/0xd0
+[  107.147581][ T7128]        __handle_irq_event_percpu+0x54/0x3c0
+[  107.147597][ T7128]        handle_irq_event_percpu+0x1c/0x50
+[  107.147611][ T7128]        handle_irq_event+0x3e/0x60
+[  107.147624][ T7128]        handle_edge_irq+0xc3/0x250
+[  107.147636][ T7128]        __common_interrupt+0x71/0x140
+[  107.147649][ T7128]        common_interrupt+0xbc/0xe0
+[  107.147664][ T7128]        asm_common_interrupt+0x1e/0x40
+[  107.147677][ T7128]        default_idle+0x14/0x20
+[  107.147687][ T7128]        arch_cpu_idle+0xf/0x20
+[  107.147698][ T7128]        default_idle_call+0x6f/0x230
+[  107.147709][ T7128]        do_idle+0x1c4/0x250
+[  107.147722][ T7128]        cpu_startup_entry+0x1d/0x20
+[  107.147736][ T7128]        start_secondary+0xe6/0xf0
+[  107.147751][ T7128] secondary_startup_64_no_verify+0xc3/0xcb
+[  107.147767][ T7128]
+[  107.147767][ T7128] -> #1 (&port_lock_key){-.-.}-{2:2}:
+[  107.147783][ T7128]        _raw_spin_lock_irqsave+0x42/0x60
+[  107.147795][ T7128]        serial8250_console_write+0x31b/0x380
+[  107.147808][ T7128]        univ8250_console_write+0x3a/0x50
+[  107.147820][ T7128]        console_unlock+0x51d/0x790
+[  107.147832][ T7128]        vprintk_emit+0x252/0x320
+[  107.147844][ T7128]        vprintk_default+0x2b/0x30
+[  107.147856][ T7128]        vprintk+0x71/0x80
+[  107.147868][ T7128]        _printk+0x63/0x82
+[  107.147879][ T7128]        register_console+0x233/0x400
+[  107.147892][ T7128]        univ8250_console_init+0x35/0x3f
+[  107.147907][ T7128]        console_init+0x233/0x345
+[  107.147920][ T7128]        start_kernel+0xa70/0xbf8
+[  107.147931][ T7128]        x86_64_start_reservations+0x2a/0x2c
+[  107.147947][ T7128]        x86_64_start_kernel+0x90/0x95
+[  107.147961][ T7128] secondary_startup_64_no_verify+0xc3/0xcb
+[  107.147975][ T7128]
+[  107.147975][ T7128] -> #0 (console_owner){..-.}-{0:0}:
+[  107.147990][ T7128]        __lock_acquire+0x1552/0x1a30
+[  107.148002][ T7128]        lock_acquire+0x25e/0x2f0
+[  107.148014][ T7128]        console_unlock+0x22e/0x790
+[  107.148026][ T7128]        vprintk_emit+0x252/0x320
+[  107.148038][ T7128]        vprintk_default+0x2b/0x30
+[  107.148050][ T7128]        vprintk+0x71/0x80
+[  107.148061][ T7128]        _printk+0x63/0x82
+[  107.148072][ T7128]        report_bug+0x1a6/0x1c0
+[  107.148085][ T7128]        handle_bug+0x43/0x70
+[  107.148098][ T7128]        exc_invalid_op+0x18/0x70
+[  107.148111][ T7128]        asm_exc_invalid_op+0x12/0x20
+[  107.148123][ T7128]        __queue_work+0x72a/0x810
+[  107.148136][ T7128]        queue_work_on+0x88/0x90
+[  107.148149][ T7128] xprt_schedule_autoclose_locked+0x7a/0xb0
+[  107.148162][ T7128]        xprt_force_disconnect+0x53/0x150
+[  107.148173][ T7128]        xs_local_setup_socket+0x2b2/0x480
+[  107.148188][ T7128]        xs_setup_local+0x24b/0x280
+[  107.148200][ T7128]        xprt_create_transport+0xb0/0x340
+[  107.148212][ T7128]        rpc_create+0x104/0x2b0
+[  107.148226][ T7128]        rpcb_create_local_unix+0xb2/0x2c0
+[  107.148242][ T7128]        rpcb_create_local+0x79/0x90
+[  107.148256][ T7128]        svc_bind+0x92/0xd0
+[  107.148267][ T7128]        nfsd_create_serv+0x131/0x3a0
+[  107.148280][ T7128]        write_ports+0x2d4/0x8d0
+[  107.148292][ T7128]        nfsctl_transaction_write+0x70/0xb0
+[  107.148305][ T7128]        vfs_write+0x11d/0x4b0
+[  107.148319][ T7128]        ksys_write+0xe0/0x130
+[  107.148330][ T7128]        __x64_sys_write+0x23/0x30
+[  107.148343][ T7128]        do_syscall_64+0x34/0xb0
+[  107.148356][ T7128] entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  107.148369][ T7128]
+[  107.148369][ T7128] other info that might help us debug this:
+[  107.148369][ T7128]
+[  107.148372][ T7128] Chain exists of:
+[  107.148372][ T7128]   console_owner --> &port_lock_key --> &pool->lock/1
+[  107.148372][ T7128]
+[  107.148392][ T7128]  Possible unsafe locking scenario:
+[  107.148392][ T7128]
+[  107.148395][ T7128]        CPU0                    CPU1
+[  107.148397][ T7128]        ----                    ----
+[  107.148399][ T7128]   lock(&pool->lock/1);
+[  107.148409][ T7128] lock(&port_lock_key);
+[  107.148416][ T7128] lock(&pool->lock/1);
+[  107.148426][ T7128]   lock(console_owner);
+[  107.148432][ T7128]
+[  107.148432][ T7128]  *** DEADLOCK ***
+[  107.148432][ T7128]
+[  107.148434][ T7128] 7 locks held by rpc.nfsd/7128:
+[  107.148442][ T7128]  #0: ffff8882480a4460 
+(sb_writers#12){.+.+}-{0:0}, at: ksys_write+0xe0/0x130
+[  107.148474][ T7128]  #1: ffffffff8526ee88 (nfsd_mutex){+.+.}-{3:3}, 
+at: write_ports+0x41/0x8d0
+[  107.148503][ T7128]  #2: ffffffff854cdc88 
+(rpcb_create_local_mutex){+.+.}-{3:3}, at: rpcb_create_local+0x43/0x90
+[  107.148534][ T7128]  #3: ffff888243f14740 
+(&xprt->transport_lock){+.+.}-{2:2}, at: xprt_force_disconnect+0x4b/0x150
+[  107.148562][ T7128]  #4: ffffffff851d7a60 
+(rcu_read_lock){....}-{1:2}, at: __queue_work+0x5a/0x810
+[  107.148592][ T7128]  #5: ffff88824010b418 
+(&pool->lock/1){-.-.}-{2:2}, at: __queue_work+0x450/0x810
+[  107.148625][ T7128]  #6: ffffffff851d4d60 (console_lock){+.+.}-{0:0}, 
+at: vprintk_emit+0x114/0x320
+[  107.148653][ T7128]
+[  107.148653][ T7128] stack backtrace:
+[  107.148656][ T7128] CPU: 3 PID: 7128 Comm: rpc.nfsd Not tainted 
+5.17.0+ #10
+[  107.148670][ T7128] Hardware name: QEMU Standard PC (i440FX + PIIX, 
+1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+[  107.148677][ T7128] Call Trace:
+[  107.148680][ T7128]  <TASK>
+[  107.148685][ T7128]  dump_stack_lvl+0x6c/0x8b
+[  107.148702][ T7128]  dump_stack+0x15/0x17
+[  107.148715][ T7128]  print_circular_bug.isra.46+0x261/0x2c0
+[  107.148767][ T7128]  check_noncircular+0x105/0x120
+[  107.148787][ T7128]  __lock_acquire+0x1552/0x1a30
+[  107.148800][ T7128]  ? __lock_acquire+0x1552/0x1a30
+[  107.148820][ T7128]  lock_acquire+0x25e/0x2f0
+[  107.148833][ T7128]  ? console_unlock+0x1d7/0x790
+[  107.148848][ T7128]  ? lock_release+0x204/0x2c0
+[  107.148865][ T7128]  console_unlock+0x22e/0x790
+[  107.148878][ T7128]  ? console_unlock+0x1d7/0x790
+[  107.148900][ T7128]  vprintk_emit+0x252/0x320
+[  107.148916][ T7128]  vprintk_default+0x2b/0x30
+[  107.148931][ T7128]  vprintk+0x71/0x80
+[  107.148945][ T7128]  _printk+0x63/0x82
+[  107.148959][ T7128]  ? report_bug+0x19a/0x1c0
+[  107.148974][ T7128]  ? __queue_work+0x72a/0x810
+[  107.148988][ T7128]  report_bug+0x1a6/0x1c0
+[  107.149004][ T7128]  handle_bug+0x43/0x70
+[  107.149019][ T7128]  exc_invalid_op+0x18/0x70
+[  107.149034][ T7128]  asm_exc_invalid_op+0x12/0x20
+[  107.149047][ T7128] RIP: 0010:__queue_work+0x72a/0x810
+[  107.149063][ T7128] Code: 48 c7 c7 78 7b b8 84 c6 05 b1 f4 39 04 01 
+e8 ad 65 05 00 e9 7f fe ff ff e8 33 94 11 00 4c 8b 33 e9 ff f9 ff ff e8 
+26 94 11 00 <0f> 0b e9 d2 fa ff ff e8 1a 94 11 00 4c 8d 7b 68 41 83 cc 
+02 e9 aa
+[  107.149077][ T7128] RSP: 0018:ffffc900042efa88 EFLAGS: 00010093
+[  107.149087][ T7128] RAX: 0000000000000000 RBX: ffff88824013c100 RCX: 
+0000000000000000
+[  107.149096][ T7128] RDX: ffff888111b15140 RSI: ffffffff8119be6a RDI: 
+ffffffff84c6fd9e
+[  107.149104][ T7128] RBP: ffffc900042efac8 R08: 0000000000000001 R09: 
+0000000000000000
+[  107.149112][ T7128] R10: 0000000000000002 R11: 000000000000f2ce R12: 
+0000000000000000
+[  107.149120][ T7128] R13: ffff888243f14668 R14: ffff888237c2d440 R15: 
+ffff888240ffc000
+[  107.149134][ T7128]  ? __queue_work+0x72a/0x810
+[  107.149151][ T7128]  ? __queue_work+0x72a/0x810
+[  107.149169][ T7128]  queue_work_on+0x88/0x90
+[  107.149185][ T7128]  xprt_schedule_autoclose_locked+0x7a/0xb0
+[  107.149200][ T7128]  xprt_force_disconnect+0x53/0x150
+[  107.149213][ T7128]  xs_local_setup_socket+0x2b2/0x480
+[  107.149230][ T7128]  xs_setup_local+0x24b/0x280
+[  107.149245][ T7128]  xprt_create_transport+0xb0/0x340
+[  107.149259][ T7128]  rpc_create+0x104/0x2b0
+[  107.149278][ T7128]  ? __this_cpu_preempt_check+0x1c/0x20
+[  107.149293][ T7128]  ? lock_is_held_type+0xde/0x130
+[  107.149307][ T7128]  rpcb_create_local_unix+0xb2/0x2c0
+[  107.149332][ T7128]  rpcb_create_local+0x79/0x90
+[  107.149348][ T7128]  svc_bind+0x92/0xd0
+[  107.149363][ T7128]  nfsd_create_serv+0x131/0x3a0
+[  107.149378][ T7128]  write_ports+0x2d4/0x8d0
+[  107.149392][ T7128]  ? _copy_from_user+0x8b/0xe0
+[  107.149411][ T7128]  ? nfsd_init_net+0x2d0/0x2d0
+[  107.149425][ T7128]  nfsctl_transaction_write+0x70/0xb0
+[  107.149439][ T7128]  ? export_features_show+0x30/0x30
+[  107.149454][ T7128]  vfs_write+0x11d/0x4b0
+[  107.149470][ T7128]  ksys_write+0xe0/0x130
+[  107.149486][ T7128]  __x64_sys_write+0x23/0x30
+[  107.149501][ T7128]  do_syscall_64+0x34/0xb0
+[  107.149515][ T7128]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  107.149530][ T7128] RIP: 0033:0x7feb99b00130
+[  107.149540][ T7128] Code: 73 01 c3 48 8b 0d 58 ed 2c 00 f7 d8 64 89 
+01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d b9 45 2d 00 00 75 10 b8 01 00 
+00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 3e f3 01 00 48 
+89 04 24
+[  107.149553][ T7128] RSP: 002b:00007ffc849b68e8 EFLAGS: 00000246 
+ORIG_RAX: 0000000000000001
+[  107.149565][ T7128] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
+00007feb99b00130
+[  107.149574][ T7128] RDX: 0000000000000002 RSI: 000055d532e09620 RDI: 
+0000000000000003
+[  107.149581][ T7128] RBP: 0000000000000003 R08: 000055d532c06704 R09: 
+0000000000000000
+[  107.149589][ T7128] R10: 0000000000000000 R11: 0000000000000246 R12: 
+0000000000000004
+[  107.149597][ T7128] R13: 000055d532e09620 R14: 000055d532c066bf R15: 
+000055d533474730
+[  107.149614][ T7128]  </TASK>
+[  107.283659][ T7128] WARNING: CPU: 3 PID: 7128 at 
+kernel/workqueue.c:1499 __queue_work+0x72a/0x810
+[  107.283659][ T7128] Modules linked in:
+[  107.283659][ T7128] CPU: 3 PID: 7128 Comm: rpc.nfsd Not tainted 
+5.17.0+ #10
+[  107.283659][ T7128] Hardware name: QEMU Standard PC (i440FX + PIIX, 
+1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+[  107.283659][ T7128] RIP: 0010:__queue_work+0x72a/0x810
+[  107.283659][ T7128] Code: 48 c7 c7 78 7b b8 84 c6 05 b1 f4 39 04 01 
+e8 ad 65 05 00 e9 7f fe ff ff e8 33 94 11 00 4c 8b 33 e9 ff f9 ff ff e8 
+26 94 11 00 <0f> 0b e9 d2 fa ff ff e8 1a 94 11 00 4c 8d 7b 68 41 83 cc 
+02 e9 aa
+[  107.283659][ T7128] RSP: 0018:ffffc900042efa88 EFLAGS: 00010093
+[  107.283659][ T7128] RAX: 0000000000000000 RBX: ffff88824013c100 RCX: 
+0000000000000000
+[  107.283659][ T7128] RDX: ffff888111b15140 RSI: ffffffff8119be6a RDI: 
+ffffffff84c6fd9e
+[  107.283659][ T7128] RBP: ffffc900042efac8 R08: 0000000000000001 R09: 
+0000000000000000
+[  107.283659][ T7128] R10: 0000000000000002 R11: 000000000000f2ce R12: 
+0000000000000000
+[  107.283659][ T7128] R13: ffff888243f14668 R14: ffff888237c2d440 R15: 
+ffff888240ffc000
+[  107.283659][ T7128] FS:  00007feb9a89ac80(0000) 
+GS:ffff888437c80000(0000) knlGS:0000000000000000
+[  107.283659][ T7128] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  107.283659][ T7128] CR2: 00007ffc849ba084 CR3: 0000000247402000 CR4: 
+00000000000006e0
+[  107.283659][ T7128] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[  107.283659][ T7128] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 
+0000000000000400
+[  107.283659][ T7128] Call Trace:
+[  107.283659][ T7128]  <TASK>
+[  107.283659][ T7128]  queue_work_on+0x88/0x90
+[  107.283659][ T7128]  xprt_schedule_autoclose_locked+0x7a/0xb0
+[  107.283659][ T7128]  xprt_force_disconnect+0x53/0x150
+[  107.283659][ T7128]  xs_local_setup_socket+0x2b2/0x480
+[  107.283659][ T7128]  xs_setup_local+0x24b/0x280
+[  107.283659][ T7128]  xprt_create_transport+0xb0/0x340
+[  107.283659][ T7128]  rpc_create+0x104/0x2b0
+[  107.283659][ T7128]  ? __this_cpu_preempt_check+0x1c/0x20
+[  107.283659][ T7128]  ? lock_is_held_type+0xde/0x130
+[  107.283659][ T7128]  rpcb_create_local_unix+0xb2/0x2c0
+[  107.283659][ T7128]  rpcb_create_local+0x79/0x90
+[  107.283659][ T7128]  svc_bind+0x92/0xd0
+[  107.283659][ T7128]  nfsd_create_serv+0x131/0x3a0
+[  107.283659][ T7128]  write_ports+0x2d4/0x8d0
+[  107.283659][ T7128]  ? _copy_from_user+0x8b/0xe0
+[  107.283659][ T7128]  ? nfsd_init_net+0x2d0/0x2d0
+[  107.283659][ T7128]  nfsctl_transaction_write+0x70/0xb0
+[  107.283659][ T7128]  ? export_features_show+0x30/0x30
+[  107.283659][ T7128]  vfs_write+0x11d/0x4b0
+[  107.283659][ T7128]  ksys_write+0xe0/0x130
+[  107.283659][ T7128]  __x64_sys_write+0x23/0x30
+[  107.283659][ T7128]  do_syscall_64+0x34/0xb0
+[  107.283659][ T7128]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  107.283659][ T7128] RIP: 0033:0x7feb99b00130
+[  107.283659][ T7128] Code: 73 01 c3 48 8b 0d 58 ed 2c 00 f7 d8 64 89 
+01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d b9 45 2d 00 00 75 10 b8 01 00 
+00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 3e f3 01 00 48 
+89 04 24
+[  107.283659][ T7128] RSP: 002b:00007ffc849b68e8 EFLAGS: 00000246 
+ORIG_RAX: 0000000000000001
+[  107.283659][ T7128] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
+00007feb99b00130
+[  107.283659][ T7128] RDX: 0000000000000002 RSI: 000055d532e09620 RDI: 
+0000000000000003
+[  107.283659][ T7128] RBP: 0000000000000003 R08: 000055d532c06704 R09: 
+0000000000000000
+[  107.283659][ T7128] R10: 0000000000000000 R11: 0000000000000246 R12: 
+0000000000000004
+[  107.283659][ T7128] R13: 000055d532e09620 R14: 000055d532c066bf R15: 
+000055d533474730
+[  107.283659][ T7128]  </TASK>
+[  107.283659][ T7128] irq event stamp: 33702
+[  107.283659][ T7128] hardirqs last  enabled at (33701): 
+[<ffffffff814c2288>] cmpxchg_double_slab.isra.52+0xe8/0x220
+[  107.283659][ T7128] hardirqs last disabled at (33702): 
+[<ffffffff8119bfc3>] queue_work_on+0x73/0x90
+[  107.283659][ T7128] softirqs last  enabled at (33670): 
+[<ffffffff8367b7cc>] unix_release_sock+0xfc/0x540
+[  107.283659][ T7128] softirqs last disabled at (33668): 
+[<ffffffff8367b7a8>] unix_release_sock+0xd8/0x540
+[  107.283659][ T7128] ---[ end trace 0000000000000000 ]---
+[  107.622086][ T7128] svc: failed to register nfsdv2 RPC service (errno 
+111).
+[  107.627373][ T7128] svc: failed to register nfsaclv2 RPC service 
+(errno 111).
+Job for nfs-server.service canceled.
+[  109.560632][ T7174] NFSD: Using UMH upcall client tracking operations.
+[  109.564229][ T7174] NFSD: starting 90-second grace period (net f0000000)
+>>> +
+>>>   out:
+>>>          xprt_clear_connecting(xprt);
+>>>          xprt_wake_pending_tasks(xprt, status);
+>
+-- 
+Wang Hai
 

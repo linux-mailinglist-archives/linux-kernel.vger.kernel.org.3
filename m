@@ -2,164 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C32C51380A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B061513816
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349081AbiD1PVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S1349043AbiD1PVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349122AbiD1PUd (ORCPT
+        with ESMTP id S1349129AbiD1PVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:20:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1575B42D3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651159032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sHEg8M8sspeeYGEbdvtWdwBiaF22012ZA01u4D76s0o=;
-        b=DIAA9eXDe4EBs5P19W2U57CKOhZ68IiGDPs2Jn5BQncOUHZNwL+ZMQG9/la1h5dgZUsAoR
-        I2zITQYCdNG6X+YsyRP+RHYWtWNwV6Tu6fklQ6FFn88LhXnNW9Mpr1509ezA0UJR4VFVZp
-        CvOYv4JZGS+MAeqJtu+QOVOLNwCqYWk=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-150-20V6xIZ6MrGH6WOZNqlwcA-1; Thu, 28 Apr 2022 11:17:11 -0400
-X-MC-Unique: 20V6xIZ6MrGH6WOZNqlwcA-1
-Received: by mail-wr1-f72.google.com with SMTP id w4-20020adfbac4000000b0020acba4b779so2050621wrg.22
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:17:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=sHEg8M8sspeeYGEbdvtWdwBiaF22012ZA01u4D76s0o=;
-        b=QbQLp5HvXb+xznwaFbaT3VPrET+Z9qal91JRCMnukLPOwMwVjyn/DVPvRtnd/X+sOd
-         yq2+L3vcTuRZvWVs4wtZ5pBq5hcuVV2hIAPSrs4gWhP/TdGxzSdHOfArEiiXt2f1T1ms
-         0F1jWRn5p5IUCzwbps+dRa0o8jhgbP+3EeIBKg54vXMgUL6UfOggmFMVkpsmiEwLxS4z
-         UgXAZoCQXC7n0iM/NkZ9RSipPsE/ifc8a5tKLlyYS704g7pCgBdc6SVuEjUH/s1ybjBL
-         3nO3LjUfKuCdaIkrYy8sDc0xeaQXThKQQo9JrCfNIxAhhknRFBEqMs8znJMZEfIsZhOo
-         KnJg==
-X-Gm-Message-State: AOAM532dAFmSKv6YiG51BrCKy1awlIbVBFYH33ekTi0DHjpa3ELwMCM1
-        cN2979i9Fdu4nQ1bfxIp1rgzQK+WdfioXui3Bh3WXUCwovf5xeHHDOTTDpiKkQoyKIFmheeXqbz
-        NGkUbDPd9IYTZRfcxE7GRxWs/
-X-Received: by 2002:a05:6000:1e05:b0:20a:ecc7:41cf with SMTP id bj5-20020a0560001e0500b0020aecc741cfmr8115361wrb.102.1651159029912;
-        Thu, 28 Apr 2022 08:17:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5BQnX6mIdCOLdW46rgDYhg84e4FCHOWeThU4njV4qp4XrgDxqv1rwiDHi8KjnhsRdvQ2u9w==
-X-Received: by 2002:a05:6000:1e05:b0:20a:ecc7:41cf with SMTP id bj5-20020a0560001e0500b0020aecc741cfmr8115344wrb.102.1651159029619;
-        Thu, 28 Apr 2022 08:17:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05600c220b00b00393ffde5f5fsm4731134wml.36.2022.04.28.08.17.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 08:17:08 -0700 (PDT)
-Message-ID: <3a441789-b3e4-236e-2e44-e7a1c7258a94@redhat.com>
-Date:   Thu, 28 Apr 2022 17:17:07 +0200
+        Thu, 28 Apr 2022 11:21:10 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB84B7151;
+        Thu, 28 Apr 2022 08:17:34 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SFFtY0025437;
+        Thu, 28 Apr 2022 15:17:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Q+rV3z8C5E6PlcUoo4fQ3zmgPF5V/RMCDgir8bBJ3Zc=;
+ b=ZBsJB++JnSyV5DBadlLlSyGl168mG2kYIYEuS8+fRPf9bPZskTDRlvZqR8aMec8g55/8
+ SV/gI0wYhMg4ITVXpPnx7m+MIQRsoifawzWtegGbfZ1Ct/wCEQ2ivCXL4S893CcZXBPK
+ BOKE9EBlX9sMp04Mn8ESUTXb6ysrIEn4qqcbtqH3M1loUrwrgJZu/pHl0+ygqmHZfPeN
+ m7KQsFYG9p9ZFKM4wurkC2N46mgcZZ4eaXJWQn42fjteWJMxH4oBO3qenQXBfGFGQmr0
+ jbrk5xFeDJM1jtpPVwcc2eWaujA/5UbRbrF6ZDELCCK4PISACFX7byc0RMY7xA/EtcZ8 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtqv4nrr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 15:17:23 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SFFvNh025729;
+        Thu, 28 Apr 2022 15:17:22 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtqv4nr4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 15:17:22 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SFCxLJ023075;
+        Thu, 28 Apr 2022 15:17:20 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3fm938x46u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 15:17:20 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SFHS1022872346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 15:17:28 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5947711C04A;
+        Thu, 28 Apr 2022 15:17:17 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F226E11C050;
+        Thu, 28 Apr 2022 15:17:16 +0000 (GMT)
+Received: from [9.145.182.141] (unknown [9.145.182.141])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 15:17:16 +0000 (GMT)
+Message-ID: <4eb9f64c-aabd-8461-27a4-05b2e808e1f0@linux.ibm.com>
+Date:   Thu, 28 Apr 2022 17:17:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] perf test: Fix test case 81 on s390x
 Content-Language: en-US
-To:     Bibo Mao <maobibo@loongson.cn>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Shi <shy828301@gmail.com>
-References: <20220317065024.2635069-1-maobibo@loongson.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3] mm/khugepaged: sched to numa node when collapse huge
- page
-In-Reply-To: <20220317065024.2635069-1-maobibo@loongson.cn>
+To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        irogers@google.com
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com
+References: <20220428122821.3652015-1-tmricht@linux.ibm.com>
+ <768de4e7-7bf1-62b5-4446-28420c3a82d5@arm.com>
+From:   Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <768de4e7-7bf1-62b5-4446-28420c3a82d5@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QDqfq5GFwbNK7EvMlZwoZome8oN-hco_
+X-Proofpoint-ORIG-GUID: 9uEBVlsUS2ynLlyjHEnnq59iJVHsqyzG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204280091
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.03.22 07:50, Bibo Mao wrote:
-> collapse huge page will copy huge page from general small pages,
-> dest node is calculated from most one of source pages, however
-> THP daemon is not scheduled on dest node. The performance may be
-> poor since huge page copying across nodes, also cache is not used
-> for target node. With this patch, khugepaged daemon switches to
-> the same numa node with huge page. It saves copying time and makes
-> use of local cache better.
+On 4/28/22 15:43, German Gomez wrote:
 > 
-> With this patch, specint 2006 base performance is improved with 6%
-> on Loongson 3C5000L platform with 32 cores and 8 numa nodes.
-
-If it helps, that's nice as long as it doesn't hurt other cases.
-
+> On 28/04/2022 13:28, Thomas Richter wrote:
+>> perf test -F 81 -v fails on s390x on the linux-next branch.
+>> The test case is x86 specific can not be executed on s390x.
+>> The test case depends on x86 register names such as
+>>
+>>   ... | egrep -q 'available registers: AX BX CX DX ....'
+>>
+>> Skip this test case on s390x.
+>>
+>> Output before:
+>>  # perf test -F 81
+>>  81: perf record tests                       : FAILED!
+>>  #
+>>
+>> Output after:
+>>  # perf test -F 81
+>>  81: perf record tests                       : Skip
+>>  #
+>>
+>> Fixes: 24f378e66021 ("perf test: Add basic perf record tests")
+>> Cc: Ian Rogers <irogers@google.com>
+>> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+>> ---
+>>  tools/perf/tests/shell/record.sh | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+>> index cd1cf14259b8..d98f4d4a00e1 100755
+>> --- a/tools/perf/tests/shell/record.sh
+>> +++ b/tools/perf/tests/shell/record.sh
+>> @@ -37,6 +37,8 @@ test_register_capture() {
+>>    echo "Register capture test [Success]"
+>>  }
+>>  
+>> +# Test for platform support and return TEST_SKIP
+>> +[ $(uname -m) = s390x ] && exit 2
+>>  test_per_thread
 > 
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
-> changelog:
-> V2: remove node record for thp daemon
-> V3: remove unlikely statement
-> ---
->  mm/khugepaged.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> The "test_per_thread" might still be valid though, right?
 > 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 131492fd1148..b3cf0885f5a2 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1066,6 +1066,7 @@ static void collapse_huge_page(struct mm_struct *mm,
->  	struct vm_area_struct *vma;
->  	struct mmu_notifier_range range;
->  	gfp_t gfp;
-> +	const struct cpumask *cpumask;
->  
->  	VM_BUG_ON(address & ~HPAGE_PMD_MASK);
->  
-> @@ -1079,6 +1080,13 @@ static void collapse_huge_page(struct mm_struct *mm,
->  	 * that. We will recheck the vma after taking it again in write mode.
->  	 */
->  	mmap_read_unlock(mm);
-> +
-> +	/* sched to specified node before huage page memory copy */
 
-huage? I assume "huge"
+Right,
+this issue is the perf record -e instructions:u event
+which is not supported on all machine types and configurations
+we have in our test suite.
 
-> +	if (task_node(current) != node) {
-> +		cpumask = cpumask_of_node(node);
-> +		if (!cpumask_empty(cpumask))
-> +			set_cpus_allowed_ptr(current, cpumask);
-> +	}
+Because of the 'set -e' at the beginning, the first perf
+command fails and the shell exits with error code.
 
-I wonder if that will always be optimized out without NUMA and if we
-want to check for IS_ENABLED(CONFIG_NUMA).
+Since s390x does not support x86 register names anyway, it is easier
+to just omit this test case on s390x. At least I thought so.
 
+The alternative would be to add some more tests to check s390x
+machine supports instructions:u event and then just to bail
+out on the register_capture test function.
 
-Regarding comments from others, I agree: I think what we'd actually want
-is something like "try to reschedule to one of these CPUs immediately.
-If they are all busy, just stay here.
+Maybe this helps.
 
-
-Also, I do wonder if there could already be scenarios where someone
-wants to let khugepaged run only on selected housekeeping CPUs (e.g.,
-when pinning VCPUs in a VM to physical CPUs). It might even degrade the
-VM performance in that case if we schedule something unrelated on these
-CPUs. (I don't know which interfaces we might already have to configure
-housekeeping CPUs for kthreads).
-
-I can spot in kernel/kthread.c:kthread()
-
-set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_KTHREAD));
-
-Hmmmmm ...
+> In my case, the register test skips gracefully (arm64).
+> 
+> $ ./perf test 82 -v
+>  82: perf record tests                                               :
+> --- start ---
+> test child forked, pid 54345
+> Basic --per-thread mode test
+> Basic --per-thread mode test [Success]
+> Register capture test
+> Register capture test [Skipped missing instruction]
+> test child finished with 0
+> ---- end ----
+> perf record tests: Ok
+> 
+>>  test_register_capture
+>>  exit $err
 
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+Vorsitzender des Aufsichtsrats: Gregor Pillen
+Geschäftsführung: David Faller
+Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294

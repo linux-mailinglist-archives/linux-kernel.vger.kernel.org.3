@@ -2,84 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93408513C35
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9DA513C3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347108AbiD1Tx0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 28 Apr 2022 15:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S1350872AbiD1T7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 15:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236574AbiD1TxX (ORCPT
+        with ESMTP id S236900AbiD1T7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:53:23 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B3B26DA;
-        Thu, 28 Apr 2022 12:50:06 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id w17so10899115ybh.9;
-        Thu, 28 Apr 2022 12:50:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MjJFRl9zxHBD7Ef9rxT75GXYs6BfVSpg1GTO4h+nOHo=;
-        b=UQiHkrTTB5YhdWVQSBm5bxf43qLkP/SMGyIhUYGZv6HlxVg+UuclWuaUYIYT68oih+
-         MnBEvk4m1qIFWf8Qa7E6gqDc82HEEYhK+/LIN15uMwvqWF5xbRad8wIno5PRTBLB7jW1
-         Uo1+n7DjWOVM2mk9BUHOrvahYw5TfeYq1qIOYQ4unXNneuJe1KF80VK8aR6OGbmmOsYh
-         Z0T45p4+7Z/3FuYyj02xbBY3TZ61sMuVUAyZFMCBRnGdCrciOeIKl95rYrK0mroZvD5m
-         tJ5V/Iy4v9yMvjwFomo6SQZh33oeAQw11cADykZgSb7cTZmUhgYgg1N10UMnXrCpC3xq
-         zAAg==
-X-Gm-Message-State: AOAM531v+2fk/sZ01n7VvShL8Gf9hB1QsMOPBZKdV6eG4O9fg86VOr5D
-        Evb/BnhoGdjGE2IPJFVgHDFUTzPis++QKin+bsPYESvn4jQ=
-X-Google-Smtp-Source: ABdhPJzd1gMQJMRF8n6zclaqn9im1EeqLqzsuhBkQncyHUtYxezKcxxDsdklplYjnIyfEOOJ6nEHelJompr8vXe/7+U=
-X-Received: by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
- t7-20020a056902018700b0063d9c95edcamr31156818ybh.81.1651175405157; Thu, 28
- Apr 2022 12:50:05 -0700 (PDT)
+        Thu, 28 Apr 2022 15:59:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F6CBF531
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:55:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A64D3B82FD9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:55:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469DBC385AD;
+        Thu, 28 Apr 2022 19:55:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651175756;
+        bh=vRnZSRIcTqcHKCeWjmxMZBxVcLsxLI+m8lZ+XQEEza8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fUaqFQwLZ+kPqathikKDuZJIaOcX/OYkWvMud/2Qz5gdLLidFxSkYPPZxr1PSU9Xs
+         c3HxamY4IAekJMXwYztltninPRKr1Due435Q+1gTAeqOEGO35Dvd8KHySUb/wqeKiD
+         IK54zoxiEFBA9GXosZaccafRQzweNNc3wtrm4JqcdipGg4AyDQmVq3UkOpae/5hyND
+         QigfMuiwx+KbhsPWuT9bzpXHYrSSdSxSAGAZxkJn+KpUJ+Gt2HJud1ECcPhaXGhGY+
+         ksgSWmA1pXiuFh9aEjlAyRxzBukftfVNPEVn2Wsu4ON/nt/IudxV9rB3v+1RA9TDEC
+         FAfJpvgTgzSvA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkAEz-007l9y-Qp; Thu, 28 Apr 2022 20:55:53 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>, tabba@google.com,
+        Masahiro Yamada <masahiroy@kernel.org>, surenb@google.com,
+        kvmarm@lists.cs.columbia.edu,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Ard Biesheuvel <ardb@kernel.org>, will@kernel.org,
+        qperret@google.com, linux-kernel@vger.kernel.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Changbin Du <changbin.du@intel.com>, kernel-team@android.com,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v8 0/6] KVM: arm64: Hypervisor stack enhancements
+Date:   Thu, 28 Apr 2022 20:55:50 +0100
+Message-Id: <165117574186.3115452.6818682378273681624.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220420214317.3303360-1-kaleshsingh@google.com>
+References: <20220420214317.3303360-1-kaleshsingh@google.com>
 MIME-Version: 1.0
-References: <CAJZ5v0hHYRsWkRsJj+_Wa=jTS5cHasajYeh14yxEDvxu7gWWRQ@mail.gmail.com>
- <CAHk-=wit9xfwAf=z6YqkZerH28qFYeTnhr3GtBqCYBnsTsSYXw@mail.gmail.com>
-In-Reply-To: <CAHk-=wit9xfwAf=z6YqkZerH28qFYeTnhr3GtBqCYBnsTsSYXw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Apr 2022 21:49:53 +0200
-Message-ID: <CAJZ5v0jpaAwq0Ad-ZA60bA5AU8JG1Y2muYtXy-bA4LapX8_dJQ@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v5.18-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, james.morse@arm.com, tabba@google.com, masahiroy@kernel.org, surenb@google.com, kvmarm@lists.cs.columbia.edu, suzuki.poulose@arm.com, catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org, ardb@kernel.org, will@kernel.org, qperret@google.com, linux-kernel@vger.kernel.org, alexandru.elisei@arm.com, yuzenghui@huawei.com, changbin.du@intel.com, kernel-team@android.com, nathan@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 8:50 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Apr 28, 2022 at 8:30 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> >  - Make the ACPI processor driver avoid falling back to C3 type of
-> >    C-states when C3 cannot be requested (Ville Syrjälä).
->
-> Hmm.
->
-> Doesn't this avoid C3 for _everybody_ rather than some conditional
-> "when C3 cannot be requested"?
+On Wed, 20 Apr 2022 14:42:51 -0700, Kalesh Singh wrote:
+> This is v8 of the nVHE hypervisor stack enhancements. This version is based
+> on 5.18-rc3.
+> 
+> Previous versions can be found at:
+> v7: https://lore.kernel.org/r/20220408200349.1529080-1-kaleshsingh@google.com/
+> v6: https://lore.kernel.org/r/20220314200148.2695206-1-kaleshsingh@google.com/
+> v5: https://lore.kernel.org/r/20220307184935.1704614-1-kaleshsingh@google.com/
+> v4: https://lore.kernel.org/r/20220225033548.1912117-1-kaleshsingh@google.com/
+> v3: https://lore.kernel.org/r/20220224051439.640768-1-kaleshsingh@google.com/
+> v2: https://lore.kernel.org/r/20220222165212.2005066-1-kaleshsingh@google.com/
+> v1: https://lore.kernel.org/r/20220210224220.4076151-1-kaleshsingh@google.com/
+> 
+> [...]
 
-The bug was that if acpi_idle_bm_check() returned 1, it would "fall
-back"  to the same state via safe_state_index.
+Applied to next, thanks!
 
-> Of course, it looks like the 'has_lpi' state still potentially allows
-> C3 even for busmastering sleeps. Maybe that is what you meant.
+[1/6] KVM: arm64: Introduce hyp_alloc_private_va_range()
+      commit: 92abe0f81e1385afd8f1dc66206b5be9a514899b
+[2/6] KVM: arm64: Introduce pkvm_alloc_private_va_range()
+      commit: f922c13e778d6d5343d4576be785a8204c595113
+[3/6] KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
+      commit: ce3354318a57875dc59f4bb841662e95bfba03db
+[4/6] KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
+      commit: 1a919b17ef012ca0572bae759c27e5ea02bfb47f
+[5/6] KVM: arm64: Detect and handle hypervisor stack overflows
+      commit: 66de19fad9ef47c5376a99bb2b00661f1c788a94
+[6/6] KVM: arm64: Symbolize the nVHE HYP addresses
+      commit: 6ccf9cb557bd32073b0d68baed97f1bd8a40ff1d
 
-That too.
+Cheers,
 
-Thanks for pulling!
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
 
-Rafael
+

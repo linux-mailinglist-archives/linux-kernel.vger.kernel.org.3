@@ -2,176 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6EB512B6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28977512B71
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243718AbiD1G1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S243855AbiD1G1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239899AbiD1G10 (ORCPT
+        with ESMTP id S243792AbiD1G1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:27:26 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2075.outbound.protection.outlook.com [40.107.236.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706887486C;
-        Wed, 27 Apr 2022 23:24:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HTd5aqNDDLFK2DEt2YifAEQV7U5kuUaV2G+jBgNO8dFtFTDrBWk+sljVwrZ7RgiovKWhJ36a8Ghtz/sNtP/KiFxyToLuygZsBXrdo+6+SIlouIWlN5TtPNFx5LkG2cubGPKlG7wXJPVp+lrzaaS0sl6FEwvO8p2P4H9H4jv0OZwMEsFLttR6uwhqrRbnYTv3j0MEfJKQUJ31X7MvYKr/+QcdBUrvkrI2yvUvtM540kAmeYCoB0HK2lYSciPL7zGlUJTHADS2Ad6iUQwIIGp1WOpgWEQxvdUMsg7Clj5s2OWiuIp36jiXDuxva/kf8XIZGd7MLk++0Y9FO3HZh02nMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LoEGhvqA/i+0LdD/ysJU00w3j6d8iv0AhWTl8HSAiSs=;
- b=c58eDNEnqEs2DEH8I4i/3TAhxCesJQxe3/FeDmze+iWVR9gvj7PqKGRTj5goZdSfn+twR7FLyaHgRwdsQM5eIVNGrMaNN82EcV9urWzAthfNInqk2//zi6gbQxTNiuAQdzsQ0QJ3guvBGlr4X2cL/q3MP5COvGqzulynOOVMMuhRFodoIaN/oWt3Q0udZdOhS8JLBQibUHlI8axYRla8+43g/uLPddyFdfbGor/O0px3NuofQ2D0dcRMSPwl5NgCNW1cLcVpYSBUEfQ4y5IW/L4i+7695LFrKgUSaSqGdncuEn1xt96An6LfEN/V4b2MwGpq8AcBHMPjYT3VhM64Zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=linaro.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Thu, 28 Apr 2022 02:27:34 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67E6972FC
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:24:20 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id s131so4410126oie.1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LoEGhvqA/i+0LdD/ysJU00w3j6d8iv0AhWTl8HSAiSs=;
- b=qPlySODjpJGjWWwJHCpCMQzppkc8hh2wzzcEnG6DVaOd5CW9J+8i1TXu4N5F3FE7G7byEAAO74i1TH83A5WbelX3QwNQN71Gu84oY8PPOnQngpVMK1RJawNjfSk4QT/NBR+PF9uQJeeX7dqqLhkHiFwqhamfaIoFyO3RyosrakM=
-Received: from SA0PR11CA0186.namprd11.prod.outlook.com (2603:10b6:806:1bc::11)
- by SN6PR02MB4350.namprd02.prod.outlook.com (2603:10b6:805:a5::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Thu, 28 Apr
- 2022 06:24:07 +0000
-Received: from SN1NAM02FT0003.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:1bc:cafe::bf) by SA0PR11CA0186.outlook.office365.com
- (2603:10b6:806:1bc::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
- Transport; Thu, 28 Apr 2022 06:24:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0003.mail.protection.outlook.com (10.97.4.80) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Thu, 28 Apr 2022 06:24:07 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 27 Apr 2022 23:24:06 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 27 Apr 2022 23:24:06 -0700
-Envelope-to: krzysztof.kozlowski@linaro.org,
- lee.jones@linaro.org,
- robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org,
- alim.akhtar@samsung.com,
- dinguyen@kernel.org,
- liviu.dudau@arm.com,
- sudeep.holla@arm.com,
- lorenzo.pieralisi@arm.com,
- rjui@broadcom.com,
- sbranden@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com,
- s.nawrocki@samsung.com,
- devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- robh@kernel.org
-Received: from [10.254.241.50] (port=50846)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1njxZO-0005e1-6K; Wed, 27 Apr 2022 23:24:06 -0700
-Message-ID: <4c06af4b-e29d-48c7-c1aa-1347c359027c@xilinx.com>
-Date:   Thu, 28 Apr 2022 08:24:01 +0200
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=AOUBjawPmRnN8evNXoYGp+/SwIc2Lx8wXlLCMbXCewc=;
+        b=eFFoq6CzQtllJEhFXdGNNINBsySKH5Zogv5JnVRsgWjDI/7/fCM0iXGbg8y44gNgYE
+         CVtURwJlXlwY2byoC7a7YrZDuayY5qI04K0A0/BYFxuA1Bx1/JQEs7610miyQQZ86ZTl
+         dc/ZUERs0AX151PR25GDPOP78Pmgug2/iGiK4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=AOUBjawPmRnN8evNXoYGp+/SwIc2Lx8wXlLCMbXCewc=;
+        b=5AnykhMwqZH4n405dQO+8N2zBIJm4hDp5YjLyNl5xArj+o4fEShSHzNWI4oTMW4Sah
+         2KbCCmWFylOQLWJvhJchDFb3QmVJZKQcWpbF+uWrGlXT5DpZPnw3i2pmN9ZizjYeVbDL
+         h9Om4IrJitfqbwbKbsRb9JSOJrtYPq9FGoRANCDSze+wIEZuOE6g7efVPp9dkyzm0cua
+         dq68+vkXxxsxV2nAEhyS7uhozcj9QQ29g1Meq1EaRPoPPISdsitqRlileBS26Y/CuJMO
+         ey+CS/nQEfWxRLA/0dBS0h4up7Ft1ePTE2rNSUN5HqFeu5q8tz2YEQxfVQUrYm6xr0MN
+         xuLg==
+X-Gm-Message-State: AOAM5335bjzNEr6g1SoUfhO8NHZv0L1jfpnFUPBEWY8O2jggc2Tuchb9
+        uZjHOwhRQHcrUkCB7hifZe3Bm07vmy5mvEDICXHuZQ==
+X-Google-Smtp-Source: ABdhPJxTdgDULp8Ip+gh6w1tifiji7I8A/vnaeGTUOQvBOIBhBkdr1QUO8MYQFS6Fq24/UPeIqz1MmwGQ5SxG5Hr59k=
+X-Received: by 2002:a05:6808:1296:b0:325:8fb:68f3 with SMTP id
+ a22-20020a056808129600b0032508fb68f3mr10950982oiw.193.1651127060059; Wed, 27
+ Apr 2022 23:24:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 27 Apr 2022 23:24:19 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 01/10] ARM: dts: zynq-7000: use proper
- 'dma-channels/requests' properties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Rob Herring <robh@kernel.org>
-References: <20220427155840.596535-1-krzysztof.kozlowski@linaro.org>
- <20220427155840.596535-2-krzysztof.kozlowski@linaro.org>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220427155840.596535-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0843fd82-8c07-4d5f-ac6f-08da28dfb30b
-X-MS-TrafficTypeDiagnostic: SN6PR02MB4350:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR02MB4350B93CF22DBBD6DDB35CD3C6FD9@SN6PR02MB4350.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1UcjJ8eo0uUAEK/J9eCgfQiRPo2gIb1GMadP3ac2u3cqv5DTnooRXV3CRrQzp/14e9INg+V9EH6N1h2RqWgQZdoWgS+AIu4dHukOI8NimAVYyXv9TSt/3GQDCTHV1S3hJck/YWGU2PWwWRhWGOVscKkiQ929NNMjhkuMdqvtwTlEt+QoDeB/EtzLvXqc96j+3VE9elqSHah/ZbWxBpqb57C6hgTo1KRBmpS8U5rj2FA4cfd9X2TXtbvRcvL5ovRKJJMgfDjqtK3Pln6CB4vZZQrjSSN9hfNTobUVRCzx/rmAJ+a3LVzzhTXmtdih/gW3BCBaD9/4vHNWlwNr876s4IFQWyMFw0FZRxsxQMh3QfGbwWTzZXs6sc2/w38Tueh6zk8W79Vm1pE85tv2CzA2BXD0VG4TuyFi8EQQq3AQIt9jGMr88guNpn0vKUQXyFVbBUnd0KcxHxrm/7QxP7I8+1pQaOMzuyZcku7cc1C50i3rhH1MC11rnltGcrQ7kRXkOXa1MkrDkx460TJuI+AZVFzkqkDT/Uq+l4uPURCZSzzGNw102yU7oyi5+wIHyEUFwjZ9QzN5HuxTJzzF6VcfTxNT3kEWTxo89vmWh0VdYKk9vjhW45x+ojVQN1gBKkH34zmf4hRWGFJcoDpCvpkygAiOVz/limG8rEXhGZuxX9I2nNPzyAHRgmKvYipqXyaH7nENEEMbEdMJQg0pbXVBgr5ziAi91qYDWAKFPa8/e2HPYxTh8NjocaB1Vzi248VL0WWgZmaEuRk3ha4NkyFPNNiAi45fmXRo8YzrlIHGrCo=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(336012)(426003)(316002)(186003)(82310400005)(83380400001)(47076005)(26005)(40460700003)(2616005)(110136005)(31696002)(9786002)(4744005)(44832011)(5660300002)(36756003)(508600001)(7416002)(8936002)(36860700001)(53546011)(921005)(356005)(2906002)(8676002)(31686004)(6666004)(4326008)(7636003)(70206006)(70586007)(50156003)(2101003)(83996005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 06:24:07.2270
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0843fd82-8c07-4d5f-ac6f-08da28dfb30b
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0003.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4350
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9248da4f-ca04-82f0-2840-a20797c25d2a@linaro.org>
+References: <20220427203026.828183-1-swboyd@chromium.org> <20220427203026.828183-2-swboyd@chromium.org>
+ <9248da4f-ca04-82f0-2840-a20797c25d2a@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 27 Apr 2022 23:24:19 -0700
+Message-ID: <CAE-0n52Y=3EEZ6qguNx=hM44BahbH3cuq7x6Bbe5HELKkkvrUw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
+ only compatible
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Krzysztof Kozlowski (2022-04-27 23:12:47)
+> On 27/04/2022 22:30, Stephen Boyd wrote:
+> > If the device is a detachable, this device won't have a matrix keyboard
+> > but it may have some button switches, e.g. volume buttons and power
+> > buttons. Let's add a more specific compatible for this type of device
+> > that indicates to the OS that there are only switches and no matrix
+> > keyboard present.
+> >
+> > Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: <devicetree@vger.kernel.org>
+> > Cc: Benson Leung <bleung@chromium.org>
+> > Cc: Guenter Roeck <groeck@chromium.org>
+> > Cc: Douglas Anderson <dianders@chromium.org>
+> > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > ---
+> >  .../bindings/input/google,cros-ec-keyb.yaml          | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> > index e8f137abb03c..edc1194d558d 100644
+> > --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> > +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> > @@ -15,14 +15,20 @@ description: |
+> >    Google's ChromeOS EC Keyboard is a simple matrix keyboard
+> >    implemented on a separate EC (Embedded Controller) device. It provides
+> >    a message for reading key scans from the EC. These are then converted
+> > -  into keycodes for processing by the kernel.
+> > +  into keycodes for processing by the kernel. This device also supports
+> > +  switches/buttons like power and volume buttons.
+> >
+> >  allOf:
+> >    - $ref: "/schemas/input/matrix-keymap.yaml#"
+> >
+> >  properties:
+> >    compatible:
+> > -    const: google,cros-ec-keyb
+> > +    oneOf:
+> > +      - items:
+> > +          - const: google,cros-ec-keyb-switches
+> > +          - const: google,cros-ec-keyb
+> > +      - items:
+> > +          - const: google,cros-ec-keyb
+> >
+>
+> In such case matrix-keymap properties are not valid, right? The
+> matrix-keymap should not be referenced, IOW, you need to move allOf
+> below "required" and add:
+> if:not:...then: $ref: "/schemas/input/matrix-keymap.yaml
+>
 
-
-On 4/27/22 17:58, Krzysztof Kozlowski wrote:
-> pl330 DMA controller bindings documented 'dma-channels' and
-> 'dma-requests' properties (without leading hash sign), so fix the DTS to
-> match the bindings.
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm/boot/dts/zynq-7000.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/zynq-7000.dtsi b/arch/arm/boot/dts/zynq-7000.dtsi
-> index 47c2a4b14c06..40c60a2b6d2c 100644
-> --- a/arch/arm/boot/dts/zynq-7000.dtsi
-> +++ b/arch/arm/boot/dts/zynq-7000.dtsi
-> @@ -343,8 +343,8 @@ dmac_s: dmac@f8003000 {
->   			             <0 40 4>, <0 41 4>,
->   			             <0 42 4>, <0 43 4>;
->   			#dma-cells = <1>;
-> -			#dma-channels = <8>;
-> -			#dma-requests = <4>;
-> +			dma-channels = <8>;
-> +			dma-requests = <4>;
->   			clocks = <&clkc 27>;
->   			clock-names = "apb_pclk";
->   		};
-
-Acked-by: Michal Simek <michal.simek@amd.com>
-
-Thanks,
-Michal
+Eventually that sounds doable, but for the time being I want to merely
+add this new compatible in front of the original compatible so that
+updated DTBs still work with older kernels, i.e. the switches still get
+registered because the driver works with the original
+google,cros-ec-keyb compatible. Given that none of the properties are
+required for google,cros-ec-keyb it didn't seem necessary to make having
+the google,cros-ec-keyb-switches compatible deny the existence of the
+matrix-keymap properties.

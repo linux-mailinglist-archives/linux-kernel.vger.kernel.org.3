@@ -2,83 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487D151285D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD95E51285F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239708AbiD1BDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
+        id S239876AbiD1BD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238601AbiD1BDa (ORCPT
+        with ESMTP id S239874AbiD1BDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:03:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2263013DC0;
-        Wed, 27 Apr 2022 18:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 27 Apr 2022 21:03:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120E442A18;
+        Wed, 27 Apr 2022 18:00:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D00D6B82B46;
-        Thu, 28 Apr 2022 01:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CB20C385AD;
-        Thu, 28 Apr 2022 01:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651107612;
-        bh=Pjjgj1qW5hN2kuLyxha6b/2j3HMOPvEusI19sA57MgY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jim23m1gBgvIzz9oX/nxiUV6bxPwkAZNjKNQj1WtUYcdGvwzxR3fH8Seu8ImfmnIm
-         +8qGsaBxjRYFalKp0aUrBRMjaQ5fBAPOCZZkmwnanIel8yyn9oIfKzTubMAyFPakIA
-         4PmDmV5ew6f+KAOFDeryIP1SatRtrqpEK6+5JZCpscG1ErfmkrTg1wIOvzSlgi/txE
-         28UCmo3i5YKXUn9U7ySuxp9duJKsbHAKeEvCrupbUTbpJkJytpnVFQYbDMCBypxqJJ
-         kYhk+AnmHZEUm+QKExRrQovPYC3e0JGsZcOxQxw4tqVFXFgf8ktzdXlJLztFD08lBj
-         m3tqbQnQvdFZg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6978FE8DD67;
-        Thu, 28 Apr 2022 01:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kpcjq1bD4z4xLb;
+        Thu, 28 Apr 2022 11:00:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651107631;
+        bh=mzl1zsy7DHmvyTHK6qnmEixG54pMXsdUPzzLOtswW3U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IawRtdf0t1sZym9gZ1uRt1aVPh1BEhZRFTc346cYNu2CCR6ydKpVfcuFjVpBqjzI8
+         e9k8N0NtpjdT2UNx4ZqrNA8PvKnpYg74oGD3//0RA5Tn5qHOglBdTTiooSdu5xSWJT
+         /zLPMZegozaspTHA2Xsk919dkTR7SvE1R9YHGcMfyXLb8Kf+cMU8YgPWzDBGAwkRKY
+         6XCXCIVtUUTvla7TL7Ni0ycfVKteC/fnQj9kO7s93rKwWw9bEYS9RDZyad/CYZYjuk
+         oVcoxU2HNFCSEIW4Kv8quz+q9X/ldg9EuWJb8kT4hNSt67qDCf89i1EgfZRkyl/Gjr
+         pDQPiFZrCweAQ==
+Date:   Thu, 28 Apr 2022 11:00:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the pm tree
+Message-ID: <20220428110030.7090a45b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: fec: add missing of_node_put() in
- fec_enet_init_stop_mode()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165110761242.23759.9505223259706964605.git-patchwork-notify@kernel.org>
-Date:   Thu, 28 Apr 2022 01:00:12 +0000
-References: <20220426125231.375688-1-yangyingliang@huawei.com>
-In-Reply-To: <20220426125231.375688-1-yangyingliang@huawei.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        qiangqing.zhang@nxp.com, fugang.duan@nxp.com, davem@davemloft.net,
-        kuba@kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/QOcjZBC_Hhk3zbI+QXUkdw.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/QOcjZBC_Hhk3zbI+QXUkdw.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Hi all,
 
-On Tue, 26 Apr 2022 20:52:31 +0800 you wrote:
-> Put device node in error path in fec_enet_init_stop_mode().
-> 
-> Fixes: 8a448bf832af ("net: ethernet: fec: move GPR register offset and bit into DT")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/net/ethernet/freescale/fec_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-Here is the summary with links:
-  - net: fec: add missing of_node_put() in fec_enet_init_stop_mode()
-    https://git.kernel.org/netdev/net/c/d2b52ec056d5
+drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
+drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e' undecl=
+ared (first use in this function)
+ 1701 |                 disable_promotion_to_c1e =3D true;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier is repo=
+rted only once for each function it appears in
+drivers/idle/intel_idle.c:1706:9: error: implicit declaration of function '=
+c1e_promotion_enable' [-Werror=3Dimplicit-function-declaration]
+ 1706 |         c1e_promotion_enable();
+      |         ^~~~~~~~~~~~~~~~~~~~
+drivers/idle/intel_idle.c: At top level:
+drivers/idle/intel_idle.c:1854:13: error: conflicting types for 'c1e_promot=
+ion_enable'; have 'void(void)' [-Werror]
+ 1854 | static void c1e_promotion_enable(void)
+      |             ^~~~~~~~~~~~~~~~~~~~
+drivers/idle/intel_idle.c:1854:13: error: static declaration of 'c1e_promot=
+ion_enable' follows non-static declaration
+drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration of 'c=
+1e_promotion_enable' with type 'void(void)'
+ 1706 |         c1e_promotion_enable();
+      |         ^~~~~~~~~~~~~~~~~~~~
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Caused by commit
 
+  39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module parameter")
 
+interacting with commit
+
+  cc6e234b8264 ("intel_idle: Add AlderLake support")
+
+Presumably this should have been fixed up in commit
+
+  55ecda6f25ef ("Merge branch 'intel-idle' into linux-next")
+
+I have used the pm tree from next-20220427 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QOcjZBC_Hhk3zbI+QXUkdw.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJp5y4ACgkQAVBC80lX
+0GwbzAgAly0iS4mrQudZx/5Y7NlhGXKItMlDSNnRv/sSJU3uF0iQwkO/oVsekX8Z
+jRw3KZmpoMtnOhFepXSBdjfKz7QMRnQxPCmLjP3YTNhWoIPNlQuyf0lryycAdORO
+I9lUlPK5xjwXGupnfTyPvzOP2QK8+ZxQtRpPyb0R7I+3uC71ipqGg6NiJIDFmYpH
+UfVf2SnFZAHjS+au+uB9GWQVgzEl+VjD2j/Mni+6/RctGgoYosKh3eP1Y5WI86wl
+XNavH2U/fo2qVZErtdtxru5hfrZDWHIFC8PXgmLdXWOKVR7YfxhtjZKVrQcDmfdi
+N8enPGwTk/rnz20bnPbcBSRoLB1V5A==
+=CJeI
+-----END PGP SIGNATURE-----
+
+--Sig_/QOcjZBC_Hhk3zbI+QXUkdw.--

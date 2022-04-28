@@ -2,111 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76C75135A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0865135AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347666AbiD1Nv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S1347692AbiD1NxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344676AbiD1NvW (ORCPT
+        with ESMTP id S230239AbiD1NxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:51:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C41F49C87;
-        Thu, 28 Apr 2022 06:48:07 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651153684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRKdot5ttusBTKgjdBbqkbA/kf9Xlr83fTRIj0wkH84=;
-        b=TDVC34fSnSPxzYcINftwPpx5/duIBp2zqhZ+Np9mWNUL0oYWvhRdoBf/AVJSgjszCnJAKk
-        JtpIG2eGXh/BwJUdms03bJ3whjcZbsDcYN2eBeZY3OK2dOE5+DfZe7JezcpDL02cJsylP/
-        XREMKrt+eKlYFQ7HDhiYz41wRLWtQUanqgtU6N1RYVOCu6epwNlfRYvUYCseb0bJIe6p0U
-        uBqhjBhwWauqzZTyd5a7ZAFXdWimCnd67tZxj36aixFyahABpZxiytU2fc7ngNCxlCmiP0
-        HbtJe41fB/HMZx6AlVlRgyREuJ2Ge7F5gZXpzOPwKADXmTTPVjAnu06Kj7JkOg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651153684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRKdot5ttusBTKgjdBbqkbA/kf9Xlr83fTRIj0wkH84=;
-        b=iSex9BtdxA9VVKGTdcZeKTKYsnoSP0JqXGxVekCncx0EzMDri3nZItgkjhutaLCMDFCwLr
-        BfAMf7EIz+w2j8Aw==
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     Dusty Mabe <dustymabe@redhat.com>, Stefan Roese <sr@denx.de>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Marek Vasut <marex@denx.de>, x86@kernel.org, maz@kernel.org,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: Re: [tip: irq/urgent] PCI/MSI: Mask MSI-X vectors only on success
-In-Reply-To: <87v8uuwhs4.ffs@tglx>
-References: <20211210161025.3287927-1-sr@denx.de>
- <163948488617.23020.3934435568065766936.tip-bot2@tip-bot2>
- <Yi9vH2F2OBDprwd8@jpiotrowski-Surface-Book-3>
- <43418c23-5efd-4d14-706f-f536c504b75a@denx.de>
- <c4a65b9a-d1e2-bf0d-2519-aac7185931d5@redhat.com>
- <Yi+lwVRTu8xxi9Gy@jpiotrowski-Surface-Book-3>
- <Ymj3zzjQ9PwYaX/p@eldamar.lan> <87v8uuwhs4.ffs@tglx>
-Date:   Thu, 28 Apr 2022 15:48:03 +0200
-Message-ID: <87wnf9uxnw.ffs@tglx>
+        Thu, 28 Apr 2022 09:53:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BC85B3C47
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:49:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E905D1477;
+        Thu, 28 Apr 2022 06:49:51 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEB0A3F5A1;
+        Thu, 28 Apr 2022 06:49:50 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 14:49:48 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 22/22] firmware: arm_scmi: Add SCMIv3.1
+ PERFORMANCE_LIMITS_SET checks
+Message-ID: <Ymqba5DZqELVRulS@e120937-lin>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-23-cristian.marussi@arm.com>
+ <20220428131357.mbj5pksrnt5auotb@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428131357.mbj5pksrnt5auotb@bogus>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27 2022 at 19:35, Thomas Gleixner wrote:
-> On Wed, Apr 27 2022 at 09:59, Salvatore Bonaccorso wrote:
-> XEN guests do not use the common PCI mask/unmask machinery which would
-> unmask the interrupt on request_irq().
->
-> So I assume that the following happens:
->
-> Guest                     Hypervisor
->
-> msix_capabilities_init()
->         ....
->         alloc_irq()
->            xen_magic()  -> alloc_msix_interrupt()
->                            request_irq()
->
->         msix_mask_all() -> trap
->                              do_magic()
-> request_irq()
->    unmask()
->      xen_magic()
->        unmask_evtchn()  -> do_more_magic()
->
-> So I assume further that msix_mask_all() actually is able to mask the
-> interrupts in the hardware (ctrl word of the vector table) despite the
-> hypervisor having allocated and requested the interrupt already.
->
-> Nothing in XEN_HVM handles PCI/MSI[-X] mask/unmask in the guest, so I
-> really have to ask why XEN_HVM does not disable PCI/MSI[-X] masking like
-> XEN_PV does. I can only assume the answer is voodoo...
->
-> Maybe the XEN people have some more enlightened answers to that.
+On Thu, Apr 28, 2022 at 02:13:57PM +0100, Sudeep Holla wrote:
+> On Wed, Mar 30, 2022 at 04:05:51PM +0100, Cristian Marussi wrote:
+> > Starting with SCMIv3.1, the PERFORMANCE_LIMITS_SET command allows a user
+> > to request only one between max and min ranges to be changed, while leaving
+> > the other untouched if set to zero in the request; anyway SCMIv3.1 states
+> > also explicitly that you cannot leave both of those unchanged (zeroed) when
+> > issuing such command: add a proper check for this condition.
+> > 
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> >  drivers/firmware/arm_scmi/perf.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+> > index 65ffda5495d6..8f4051aca220 100644
+> > --- a/drivers/firmware/arm_scmi/perf.c
+> > +++ b/drivers/firmware/arm_scmi/perf.c
+> > @@ -423,6 +423,9 @@ static int scmi_perf_limits_set(const struct scmi_protocol_handle *ph,
+> >  	struct scmi_perf_info *pi = ph->get_priv(ph);
+> >  	struct perf_dom_info *dom = pi->dom_info + domain;
+> >  
+> > +	if (PROTOCOL_REV_MAJOR(pi->version) >= 0x3 && !max_perf && !min_perf)
+> > +		return -EINVAL;
+> > +
+> 
+> Do we really need the version check here ? I agree it was explicitly added
+> in v3.1, but it makes sense on any version really. No ?
 
-So I was talking to Juergen about this and he agrees, that for the case
-where a XEN HVM guest uses the PIRQ/Eventchannel mechanism PCI/MSI[-X]
-masking should be disabled like it is done for XEN PV.
+Indeed seemed a silly patch also to me but given that only in v3.1 it is
+explicitly stated that you cannot issue this command with both min and
+max ZEROED I though this could have broken older fw that allowed
+setting PERF_LIMITS_SET max=0 min=0
 
-Why the hypervisor grants the mask write is still mysterious, but I
-leave that to the folks who can master the XEN voodoo.
-
-I'll send out a patch in minute.
+....maybe overthought ...
 
 Thanks,
+Cristian
 
-        tglx

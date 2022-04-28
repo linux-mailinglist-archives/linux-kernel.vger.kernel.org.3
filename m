@@ -2,215 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA94513D92
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8432513D97
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352293AbiD1Vaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 17:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S1352317AbiD1Vbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 17:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347590AbiD1Vas (ORCPT
+        with ESMTP id S229947AbiD1Vbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 17:30:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA2C59961
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651181252; x=1682717252;
-  h=from:to:cc:subject:date:message-id:content-id:
-   content-transfer-encoding:mime-version;
-  bh=V6pxyC2I4PRKL1KcDZv8cD79Il0rBGMci+VTNoRObcA=;
-  b=kPeOgIaZazX3KoTS5KLTdonmYBePHuLrdb3zCYP9XWSkONyTRPX+pato
-   gmgoylVOw4VtC87XKLkYmPRsHqH811kdUZiC19XQqdR7btOr/oPJbcRJM
-   UAEGhzQsPE4RST0z8YaQT0ylxAmei2b87+NBlHfRa0lM4tXpHZsdEXPXx
-   p1DZyz7B6PYVPshsgCbQwG1in2gT2HozQoWdev3paqcZAj+0++YJFj9ea
-   48KRKVyPzWFH1e7AW+H3qvu6f9PAkLQMaEKvIagk42hFhcRycMM0L5VIG
-   WtYiBULVmXbFdGCL1KEmYqtPBBzYEqwKJBn1tbdXakTQNfnhZvPGY5+Mv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329372057"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="329372057"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 14:27:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="596986700"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga001.jf.intel.com with ESMTP; 28 Apr 2022 14:27:30 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 28 Apr 2022 14:27:30 -0700
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 28 Apr 2022 14:27:30 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 28 Apr 2022 14:27:30 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 28 Apr 2022 14:27:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YYcBQ4HWBjH/tfmPW7/U9OX73F94YHv+zBsnuy7MlLTGb8WS7lCgzz/FjJ4DpuFAO41MCe3Df8b4ttW3wze15n7hItZ1IgLN30Eag0FgQ+FNIkGjhPiHnLhCABVYJudcBuSW4gYx3TejStoOoV5/ppyXHaYRa1vX+0VLQUlHRAfYI6l+5LFnJ7nnV8w4hiqgfoOth4ysaSCpNoEZVlLEfuhrcGqCBVCZkeKNgexipgzwIgPHViOESiOqiL/4xFlNS4yM+fvtB9GHoz2UJx+JQKtWYIVljDtUxbR26WfCAf6GgAShtP4YjcRNIbndLc31DV7fjdpBWHyjLC0SKew5Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rcljYbfEzkT5ot2GYhrgB9p/ZzeFYuM3hY4t9fjBEFY=;
- b=gDQR6nhN92LCZzOul7kPslOoADCZGuyyGT+NZIGnsTmU5QDcOn3rVeY4eBm5pzQDsHyuiGCR4f89fnjAPlqazW2hCme4uGr0+I06IV7nwkgZynAG5k/86y/b89FSUGqz689y3XIFndLRoCoVVlzlELnLUto/hm52yfsn+KYrue+7LPB9fhIiQwpOFpUHgP+TK5DRZWHat3Jb5Qw64g0CQgaYyLElQldQQe/7NHAJZfp7EIdrLwDDgbJaS/AsE8+68OPuwLYKp1NMo12GpehDuYSAKLkqxEk0E/P6chSAgCS9Tz/r3bnHpuNcnQ48NquSqZLb1DVwdP37VuFUlcPzpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
- MN2PR11MB4062.namprd11.prod.outlook.com (2603:10b6:208:150::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Thu, 28 Apr
- 2022 21:27:26 +0000
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab]) by DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab%7]) with mapi id 15.20.5186.021; Thu, 28 Apr 2022
- 21:27:26 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-CC:     "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: [PULL] gvt-next-2022-04-29
-Thread-Topic: [PULL] gvt-next-2022-04-29
-Thread-Index: AQHYW0bBd/JlvWa/rEq+IIEFmQEI0A==
-Date:   Thu, 28 Apr 2022 21:27:25 +0000
-Message-ID: <9c2fc678-2e6e-a9d5-a540-2a6bfda31196@intel.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7a1be113-2da6-419e-0bce-08da295de3fe
-x-ms-traffictypediagnostic: MN2PR11MB4062:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MN2PR11MB4062B784F4E98EBA76F7A91ACAFD9@MN2PR11MB4062.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CVOFnD4yyya0dB758F5BddbcC7nPXBdEWWtmJBzxmaNORNdxt29tx/VE67PuULKMQIMpDkX76PgAnWGMOG9ERlvC8oBYgM77iwv9HkzvW2b1/1Jhnas/Z0iVAk4TeNBwJI1NmL2HmvYLSMghhI8HEZsYuNz9Wuk4utcY3Hur7Jr46Fg0evjhdhbgo1+SUkXPCM684RVX2D2ETedO8b8GYzIXOim0fsy1BxxKv4zI2pvmroRsJ07n7S0m7N10vA6S1M8XtJJu66tj+HPGq8gtRBb70f7feHFC/6Rra/TDiYAvrOoqXgAJ4UP3za0E0iW25201V63nARRCz9btaZO+KFAGh3bj4CyOvxu/HhxdyA8DRrnoprfDI5iASXEQzuaJ6T+RWZ4DgRyK5VOfM9GYAVxZnumdY9scQeenknziDtLMivHsw8/U2iOSs8XCtuJVwNvIPnJ0wJ0h5OkvAltzvlF4wc4K81oWR+jKhYobrJovVOJQ8Ns0tDZ0Bo7PJDmQx4L7I5NyccFG87cKaxIfwtqDfDS1vRgH3ixwvh6Owozjx0bhWBbTlWkFVtDrMY7xEv+Bokd+tdyZ5Dao/Khi1YZZaZpjjQv5jOgWOh66NzXXAH34zLCwJBI1Gb/1I+sqNXKVqZYhCw1TKXRccBgNQ/7Ye0DBcrA4AYu7IrfpEpippwgtavRVsjHK0eEPt+YdShAq0CkVNsalXi6In9IgnuA9fMgzA72NrEvOvRQ2kPULTp36Xc4RalIaamBy28AjkRLwaRoWr+bmxbpWtG6yv3uizFGn7GP07VlVlimC3fp03WdkSAi8Vnh6oMhbIw4Zo8oA6UsvN9VhEjchKaRBtCGCecbZXtcDJppc8c6vLC0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(26005)(5660300002)(7416002)(82960400001)(122000001)(8936002)(316002)(71200400001)(38100700002)(66946007)(4326008)(8676002)(38070700005)(110136005)(508600001)(86362001)(66446008)(66556008)(64756008)(66476007)(966005)(6486002)(76116006)(2616005)(6506007)(91956017)(31696002)(31686004)(186003)(36756003)(83380400001)(2906002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?CSWZCJJcBg8EqyEjSstp8VZTxmxTN9ATQrDvYBj2ZtHv4D0bTSSlb6yF?=
- =?Windows-1252?Q?GN+dLDMIO+WQA0Gs3i8YLrBDIdWK9bwgUMy1wc47axlitcK9VlPpjIm1?=
- =?Windows-1252?Q?uZk8yCwiel+c2gPSfZK3mUtM1R4mL0qKdb9Ax4wzAqFPNUMym9q2ygdn?=
- =?Windows-1252?Q?lm5D0/H7cAWWn8fRxM2CMCuBIxaDGpnXNZMERuRWqz2dzHcyb+LtNgRz?=
- =?Windows-1252?Q?oJq9mOak9NEZpJwc5pqni6S0Cq0OiXfhvc+QYJM4MM3dZ8+8f6p3KOcq?=
- =?Windows-1252?Q?r+zJyKvpPfuD4toF1IexHrbSVx/xir7dRaZfqYwor4/oEV94VX6iFUyg?=
- =?Windows-1252?Q?7nxJm4uiflBKdLgdKOVHOmOkSL/dI4gu/w/v0RM5jDeRBuBLm6/t52T7?=
- =?Windows-1252?Q?710ZAA5sS4S0NMcseUhFHfPdX0LGARB/DaSpVpi7bOeRGzak3yZOg10l?=
- =?Windows-1252?Q?4l0ispIvdaCXTjuMsxkiUXAcn9xMvDCkOqMHFGCBqnKZeyKTnK/im6SU?=
- =?Windows-1252?Q?duWSdWlhwMc2IKVqLGwQEOULsslsMuqNCfdNKdk9T2aml56bqqqiPLoe?=
- =?Windows-1252?Q?1ZAjEsqi2/QnL08v60FrpM3Q0ky9z7Z24hwISx7dsAM+Iklx9+pGDO5d?=
- =?Windows-1252?Q?IN0NV0b8o0MV0ysb7vtkaY520R5SJhLRAR1EqyFV0T6phBCa5zIh2n5P?=
- =?Windows-1252?Q?WELg6Q0qaF2f0xVZS1jOsrKJODWD1whPhS/7sBjINY+Xg19Tzue5lZFV?=
- =?Windows-1252?Q?2lqbmbhCyrPKGQs31Omt74qK3hq+chFroQ4mk70vnT9PCbppfPVIBhJw?=
- =?Windows-1252?Q?jGjqZdHyyKA6/Yci5MMCmfmrdnIwLeUAn+59iDMQ1sCajQuM0M8wli5/?=
- =?Windows-1252?Q?5uvz/vUtb6p+SVi5yaL+6j+bz7S1VQjFdMgjyrLcfOcmIRnf4CJ0YKwi?=
- =?Windows-1252?Q?6g2g8m/AxZLMNidcyqyp4R01KhsO3/IBV89EgfgDWqQAJGCKUgO75x4n?=
- =?Windows-1252?Q?t0TMBdLL1dVx/eVQz1T9xt5V2JbmEq7cXfpjsF1A1JCd/yeV+jZZ3UwH?=
- =?Windows-1252?Q?cMBVP1sMZ9wIr7FZYsMuISQoZtljYHZjizG5Cv53tfUs38wZsULf7buR?=
- =?Windows-1252?Q?qSqsaKTaoAaRBmm4FXlBpqomPa9XyGe24+jodxyCaOtHeTsK9PvlEA61?=
- =?Windows-1252?Q?pmf8GKLaR6P77W1M2qzc4FudYdFNX4gqkxt45JxyGaGizxRBVqnwu322?=
- =?Windows-1252?Q?2gtwZubAntPqL4W3BLdDyRS0zIL2uiFL4TpWHiwf27KBFT/36lPSRdia?=
- =?Windows-1252?Q?e8b6G8ITlg32Gh3078s7iMYiM2wi+1oENwHhRkNLDLW3lp39RednYuT4?=
- =?Windows-1252?Q?1vdHrK4Q43nala05sMETnicsAalw6uGhTpdF6cTK2fLggdDgr7hw2UIa?=
- =?Windows-1252?Q?etNUXvLpxGBwkSoWU4lMUbOY01bW91PGnGHYppUXV0eREKPGptXrJX0l?=
- =?Windows-1252?Q?NaC2J0JismsDxKAvSED0TQzFKLheZaY1oJ3ezzEF6CADmGidr9/OkeSU?=
- =?Windows-1252?Q?OtNwSOT6JTAxOmaplYUuBi9cvmJsK/O6RrMiqKFOL50x5xouCbkPnmft?=
- =?Windows-1252?Q?3WI0fm1NaA9t77tr0HHBAVbizQhXe3JX2HKg0uNHu8EcIWAGg6MIqrnP?=
- =?Windows-1252?Q?JIhfXqnliSOcBlbcqxOCR9f/FWdbDZML6QYMp3o1AEyBzbHnYackgveQ?=
- =?Windows-1252?Q?mhMx+vpGwZhbSgwnRQx8tQyv9Gj3I78MLV4UL5h8rL4kRpC1XeMVgHgt?=
- =?Windows-1252?Q?TXyIX9oMDqylMDMa8aykGSCN04ha0Rb8bfstHhmonjBcMu5eaw7AXk79?=
- =?Windows-1252?Q?YI5CT2gDUpdqdw=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <C65F82B58C702F48A233F175AA6C6524@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 28 Apr 2022 17:31:37 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE5D69718
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:28:20 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id n14so10819691lfu.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Bkwm56G8Y7QJPuweRPoHg97Ydlf3HkBjvFlQy90GFK0=;
+        b=j8ecA+fwUBStisq2hVVSQX9H3Ciop/uqbnHdnf1SMFF/1XkCfjkVrAtyh5SnH9akNz
+         GO5NYXKun+J6QCK9Q+710N91SKx/ESs113lcZsqgC64vTmpAtRwsKUGV9OC64Mu0w4VX
+         pVvaPK/EqFG6BNnpRhnFxfPMiXpOhZQN/pCJ7X7qenHKoKr8jEAc0TM6PCtcm5evBLZL
+         629zl38T512N5R50MLrLToZQkDK/+bX78EDXw6ZDpfB48rnkSeJ4mXImDOWMU01GfqFx
+         RDLVOcbY07YAjVjTDVETO2tfbQkJOLUbf3VtQFaFfB+AJo5dY6808gcdODScgpL7UYpl
+         6xag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bkwm56G8Y7QJPuweRPoHg97Ydlf3HkBjvFlQy90GFK0=;
+        b=23saS0pNUl0rrk3pf65xONJP8EibQLGpdpFk6HASlbhYzhGYuxkqMGIzEYcG2lU+Et
+         ak0B5REV0RCCwwKg2c0xnwMTi1aE6YuhP4y6v2pU49uSmrIWCn6sqv/zI9osoyt2AmOk
+         8OxgVoXEb70M3LmDExvagfMtOm9hzsh+1QTVzB30a5L1JtRp1+FZTLpn1PFetM5bKCTV
+         zNqdYAIOvz+9/qyLiVmUaeIvzz1O0BvsfP+nY1aylKv/T8rjreasCHNoYohEiZTRUV54
+         n4mnjiWDcikk1/Vs45WwkKYILKqQNrIjObrPKgmZUSVK6paFYQHE5xsDZ8xpiw/WYrA0
+         RgDw==
+X-Gm-Message-State: AOAM533zrSUnWBSqfdbGTVAJp0kKSS1/wx3fXxhsjhEKkOCGBt0gXLjK
+        kp2qokuh7yTcs74/8dLwS4XlkFzmHWc3snROpr7Miw==
+X-Google-Smtp-Source: ABdhPJzWKOj0CHH3UKDJnrvYLX5uCYVGltmTThXG3JneGx/DprH2BuRoU+iqLBFi6Wkf4UHNQBiYAkO6d11eKTZ9YyY=
+X-Received: by 2002:a05:6512:c01:b0:448:6aec:65c5 with SMTP id
+ z1-20020a0565120c0100b004486aec65c5mr25924602lfu.193.1651181298953; Thu, 28
+ Apr 2022 14:28:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a1be113-2da6-419e-0bce-08da295de3fe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Apr 2022 21:27:25.9496
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qcYxYDhf95czE9VE4j9yg+C3x4kP0LhetQ/LWXotS5EdQPQOUaquSiDq7H/zcVnReo02Et+ZpD/CnxZ1xK6lIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4062
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+ <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
+ <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
+ <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
+ <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
+In-Reply-To: <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 28 Apr 2022 15:28:07 -0600
+Message-ID: <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     John Sperbeck <jsperbeck@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks:
+On Wed, Apr 27, 2022 at 2:18 PM Peter Gonda <pgonda@google.com> wrote:
+>
+> On Wed, Apr 27, 2022 at 10:04 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >
+> > On 4/26/22 21:06, Peter Gonda wrote:
+> > > On Thu, Apr 21, 2022 at 9:56 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > >>
+> > >> On 4/20/22 22:14, Peter Gonda wrote:
+> > >>>>>> svm_vm_migrate_from() uses sev_lock_vcpus_for_migration() to lock all
+> > >>>>>> source and target vcpu->locks. Mark the nested subclasses to avoid false
+> > >>>>>> positives from lockdep.
+> > >>>> Nope. Good catch, I didn't realize there was a limit 8 subclasses:
+> > >>> Does anyone have thoughts on how we can resolve this vCPU locking with
+> > >>> the 8 subclass max?
+> > >>
+> > >> The documentation does not have anything.  Maybe you can call
+> > >> mutex_release manually (and mutex_acquire before unlocking).
+> > >>
+> > >> Paolo
+> > >
+> > > Hmm this seems to be working thanks Paolo. To lock I have been using:
+> > >
+> > > ...
+> > >                    if (mutex_lock_killable_nested(
+> > >                                &vcpu->mutex, i * SEV_NR_MIGRATION_ROLES + role))
+> > >                            goto out_unlock;
+> > >                    mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+> > > ...
+> > >
+> > > To unlock:
+> > > ...
+> > >                    mutex_acquire(&vcpu->mutex.dep_map, 0, 0, _THIS_IP_);
+> > >                    mutex_unlock(&vcpu->mutex);
+> > > ...
+> > >
+> > > If I understand correctly we are fully disabling lockdep by doing
+> > > this. If this is the case should I just remove all the '_nested' usage
+> > > so switch to mutex_lock_killable() and remove the per vCPU subclass?
+> >
+> > Yes, though you could also do:
+> >
+> >         bool acquired = false;
+> >         kvm_for_each_vcpu(...) {
+> >                 if (acquired)
+> >                         mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
+> >                 if (mutex_lock_killable_nested(&vcpu->mutex, role)
+> >                         goto out_unlock;
+> >                 acquired = true;
+> >                 ...
+> >
+> > and to unlock:
+> >
+> >         bool acquired = true;
+> >         kvm_for_each_vcpu(...) {
+> >                 if (!acquired)
+> >                         mutex_acquire(&vcpu->mutex.dep_map, 0, role, _THIS_IP_);
+> >                 mutex_unlock(&vcpu->mutex);
+> >                 acquired = false;
+> >         }
 
-Here is the pull of gvt-next which fixes the compilation error and warnings
-for the the GVT-g refactor patches:=20
+So when actually trying this out I noticed that we are releasing the
+current vcpu iterator but really we haven't actually taken that lock
+yet. So we'd need to maintain a prev_* pointer and release that one.
+That seems a bit more complicated than just doing this:
 
-- Fix a compiling warning of non-static function only having one caller.
-- Fix a potential NULL pointer reference in the code re-factor.
-- Fix a compiling error when CONFIG_DRM_I915_DEBUG_RUNTIME_PM=3Dn
+To lock:
 
-I also tried to apply this pull on the latest drm-inte-next and it succeede=
-d
-without error and warnings.
+         bool acquired = false;
+         kvm_for_each_vcpu(...) {
+                 if (!acquired) {
+                    if (mutex_lock_killable_nested(&vcpu->mutex, role)
+                        goto out_unlock;
+                    acquired = true;
+                 } else {
+                    if (mutex_lock_killable(&vcpu->mutex, role)
+                        goto out_unlock;
+                 }
+         }
 
-The following changes since commit 5e9ae5c47052e28a31fb4f55a6e735c28d4c3948=
-:
+To unlock:
 
-  drm/i915/gvt: Add missing symbol export. (2022-04-26 04:18:43 -0400)
+         kvm_for_each_vcpu(...) {
+            mutex_unlock(&vcpu->mutex);
+         }
 
-are available in the Git repository at:
+This way instead of mocking and releasing the lock_dep we just lock
+the fist vcpu with mutex_lock_killable_nested(). I think this
+maintains the property you suggested of "coalesces all the mutexes for
+a vm in a single subclass".  Thoughts?
 
-  https://github.com/intel/gvt-linux tags/gvt-next-2022-04-29
-
-for you to fetch changes up to 419f8299ddad6070a6c95aaedf78e50265871f36:
-
-  i915/gvt: Fix NULL pointer dereference in init_mmio_block_handlers (2022-=
-04-28 17:06:02 -0400)
-
-----------------------------------------------------------------
-gvt-next-2022-04-29
-
-Introduce fixes from previous pull.
-- Fix a compiling warning of non-static funtion only having one caller.
-- Fix a potential NULL pointer reference in the code re-factor.
-- Fix a compiling error when CONFIG_DRM_I915_DEBUG_RUNTIME_PM=3Dn
-
-----------------------------------------------------------------
-Wan Jiabing (1):
-      i915/gvt: Fix NULL pointer dereference in init_mmio_block_handlers
-
-Zhi Wang (2):
-      drm/i915/gvt: Make intel_gvt_match_device() static
-      drm/i915/gvt: Fix the compiling error when CONFIG_DRM_I915_DEBUG_RUNT=
-IME_PM=3Dn
-
- drivers/gpu/drm/i915/gvt/handlers.c | 4 ++--
- drivers/gpu/drm/i915/intel_gvt.c    | 2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+> >
+> > where role is either 0 or SINGLE_DEPTH_NESTING and is passed to
+> > sev_{,un}lock_vcpus_for_migration.
+> >
+> > That coalesces all the mutexes for a vm in a single subclass, essentially.
+>
+> Ah thats a great idea to allow for lockdep to work still. I'll try
+> that out, thanks again Paolo.
+>
+> >
+> > Paolo
+> >

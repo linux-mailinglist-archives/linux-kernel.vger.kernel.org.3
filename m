@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4586A512969
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A900551296C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241328AbiD1CTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        id S241350AbiD1CVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbiD1CTo (ORCPT
+        with ESMTP id S234546AbiD1CVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:19:44 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A16C403D3;
-        Wed, 27 Apr 2022 19:16:31 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id l18so6762656ejc.7;
-        Wed, 27 Apr 2022 19:16:31 -0700 (PDT)
+        Wed, 27 Apr 2022 22:21:53 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E0A71A37
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:18:37 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id w4so4792404wrg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g6n4I6TzHwm8R8g8eqrBG0aoEKEyYwydlynw+Z/STwg=;
-        b=ku/E4116+dMLILT4mN2sMMQur+bfyHDMJSM0bzMZjVR8KiOgz7dtnUCnuRD739CQKz
-         D6FQW0KYHyHbH3ZlllgrLiOPipzpU0k4fqC+ba7POBnZgCrpmpTgM/jYEZtEE3gPtcIm
-         Gf01Llh57JZ2sHPyZbS0pkzKheRjPWmBZDrcgIvUvEAsjh+XvA1vz9mDPYe02aFDsRJ0
-         1WguS39fo+cs7JoopiE31hJENrH7rXLfCa0VEucRrCEf69SvmFCrz+8xOCWFcWNFB8jv
-         ydXxRzfWZIwRgtEZJeiZVKfERtRLpVjnmKb0fWzMng2x1yudKxpSoGIMfZ7CqF44yGlc
-         EIWA==
+        bh=/YQLEpePQ0s5/TYsbGG8QOihmSo3DTXYfheeLH1cqLw=;
+        b=XoIWwqe+KggVK4FHK2yy56Lm5reOsZYSHm3tWwfV2KMdUYq/jtfDUyX5PRDseoMiKL
+         wZkMk7E5PdA4kwrLeouW40/33vowyy+3yZJWJLVtZ6fESI2WLq/yn1+pct1l11yDPaaS
+         j+w628LwBS54pVpkH2qXcAI28+tonAY9VuBA7KfSz4Bsv/uFzEnG4jPGbBaW1KSJPiOm
+         CbP7OoVCjn9WRRW47enKhO9PLFSpZ+udIisX0tiMYIOf3Z/m1w8RkxGkgb00B+SMXZQ9
+         7R7+u5lw7S7nSMwzKqlKp9bRhIiyVb+Vw3b72lrrhIBuHJqadVbYu1gBSXcloP26uxoe
+         zKiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g6n4I6TzHwm8R8g8eqrBG0aoEKEyYwydlynw+Z/STwg=;
-        b=RUp/w6LVd1aFXW5NFqT8YUvcGuTFRyPvpcCViZFG97WB4mLr69oSsG3JlduR5bThtQ
-         kfXtaG6QhgxKR4dsNuVdTqg0WFIT1gPSTz+VbFdK43ODbmFMshR2B4zSX3uZagyJyxWI
-         DxNPMxw1Uag9yYB+ncI7l/g+OYd2sLSe6Xoga6BDa7HdtufXrkjb12RksAUi0HQXz4q6
-         1UmhSeEydaiKMUbVpZIXBl9vAAOEOKgE7JMj23Ke+vXcA2W5Bgib0EXp9XDeaK9Gka+z
-         MhGD87SNeCl0SIwIt4gqRjXK2OGv2EJcUX1fk31wNkT0GJtcpr3GImskh24EPtlBZG41
-         sD0g==
-X-Gm-Message-State: AOAM533vYZIYBjh8mA5/QWKVYynUM6goqaWGwhueT+WAUnYQ1aRrf17u
-        RvK58E0s+I3hx5dqg6+KQ8iLM9+CS4lij5Ugi5o=
-X-Google-Smtp-Source: ABdhPJzuVrDZHKHiIgL3id6MfcVjsETQberIVpBsIg8AwLyb07WsbDXgKe2XUscNBJikhYAOJI7NidpImlXQDpns3TQ=
-X-Received: by 2002:a17:907:c06:b0:6e0:9149:8047 with SMTP id
- ga6-20020a1709070c0600b006e091498047mr28563176ejc.765.1651112189989; Wed, 27
- Apr 2022 19:16:29 -0700 (PDT)
+        bh=/YQLEpePQ0s5/TYsbGG8QOihmSo3DTXYfheeLH1cqLw=;
+        b=CgJX5uQQg3p9OOouYljxjO1PlutStlhJnByFQaIYoMy6CSFJjri8sxU975b8ikcWWc
+         pGZZx1DhcZIxNMJoCpZOpwmm5KRjPGUChFAEhhGsIX2CTWUM5osor6CvTqavq0xNfSzQ
+         k44JB5WB3T3gQIlyyHGURs3iA9FQ6SyxNXTNi0B1TCft1w/gLzF4s4+dUYXQmnRjR+P4
+         z38b9lr6g4ZsG7AVcTW3psupQ1fDcQKSereZvQ4Jpug4W3897JD3+mXCv0WD/9nwTjL3
+         IJ5yLyiOBkTz88eT2+lNpWNFSKYuo6aQwRm97bTak6iceyBBBosE1EVR7xYYGwYGWjK0
+         DyJg==
+X-Gm-Message-State: AOAM530gV7dtnN7eSZqcarwx8AxNwu29aaPxzgvm+Us7VE7rfDJGxI4A
+        Fwvx0RvJXXf2LlgSwKrJ0pe/Wl2GBSIormyvPZ1RnzJl900=
+X-Google-Smtp-Source: ABdhPJwLO+UCk9RGSNsvp53gMeOT5T82G/u+prscup3Mn4Wh8Uji/Dk9yHVlH0VQtb/gtKiZYJkNxuvRDV8nqAaoDMI=
+X-Received: by 2002:adf:ec51:0:b0:20a:cd42:fe3b with SMTP id
+ w17-20020adfec51000000b0020acd42fe3bmr21942602wrn.719.1651112316110; Wed, 27
+ Apr 2022 19:18:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220427070644.319661-1-imagedong@tencent.com> <CAEf4BzaED-93fAR9YYA2RcCYNgzqAQki6exMyoabiZfJMVd-aQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzaED-93fAR9YYA2RcCYNgzqAQki6exMyoabiZfJMVd-aQ@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 28 Apr 2022 10:16:18 +0800
-Message-ID: <CADxym3bt0c52iZjtfjT+pQtDhWo6YuwPS1W59E-yQh28m2k3Rg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] net: bpf: support direct packet access in
- tracing program
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
+References: <165109503652.611257.12851860419631266883.stgit@warthog.procyon.org.uk>
+In-Reply-To: <165109503652.611257.12851860419631266883.stgit@warthog.procyon.org.uk>
+From:   Xin Long <lucien.xin@gmail.com>
+Date:   Wed, 27 Apr 2022 22:18:06 -0400
+Message-ID: <CADvbK_fBafuWZq8wcxwyGFeS+YEuKfGrfs6igTR_ThhL+ZFDDQ@mail.gmail.com>
+Subject: Re: [PATCH] rxrpc: Enable IPv6 checksums on transport socket
+To:     David Howells <dhowells@redhat.com>
+Cc:     marc.dionne@auristor.com, Vadim Fedorenko <vfedorenko@novek.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-afs@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -78,80 +67,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 4:08 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Wed, Apr 27, 2022 at 5:30 PM David Howells <dhowells@redhat.com> wrote:
 >
-> On Wed, Apr 27, 2022 at 12:08 AM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > For now, eBPF program of type TRACING is able to access the arguments
-> > of the function or raw_tracepoint directly, which makes data access
-> > easier and efficient. And we can also output the raw data in skb to
-> > user space in tracing program by bpf_skb_output() helper.
-> >
-> > However, we still can't access the packet data in 'struct sk_buff'
-> > directly and have to use the helper bpf_probe_read_kernel() to analyse
-> > packet data.
-> >
-> > Network tools, which based on eBPF TRACING, often do packet analyse
-> > works in tracing program for filtering, statistics, etc. For example,
-> > we want to trace abnormal skb free through 'kfree_skb' tracepoint with
-> > special ip address or tcp port.
-> >
-> > In this patch, 2 helpers are introduced: bpf_skb_get_header() and
-> > bpf_skb_get_end(). The pointer returned by bpf_skb_get_header() has
-> > the same effect with the 'data' in 'struct __sk_buff', and
-> > bpf_skb_get_end() has the same effect with the 'data_end'.
-> >
-> > Therefore, we can now access packet data in tracing program in this
-> > way:
-> >
-> >   SEC("fentry/icmp_rcv")
-> >   int BPF_PROG(tracing_open, struct sk_buff* skb)
-> >   {
-> >         void *data, *data_end;
-> >         struct ethhdr *eth;
-> >
-> >         data = bpf_skb_get_header(skb, BPF_SKB_HEADER_MAC);
-> >         data_end = bpf_skb_get_end(skb);
-> >
-> >         if (!data || !data_end)
-> >                 return 0;
-> >
-> >         if (data + sizeof(*eth) > data_end)
-> >                 return 0;
-> >
-> >         eth = data;
-> >         bpf_printk("proto:%d\n", bpf_ntohs(eth->h_proto));
-> >
-> >         return 0;
-> >   }
-> >
-> > With any positive reply, I'll complete the selftests programs.
+> AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
+> socket it opens and the checksums in the packets it generates end up 0.
 >
-> See bpf_dynptr patches that Joanne is working on. That's an
-> alternative mechanism for data/data_end and is going to be easier and
-> more flexible to work with. It is the plan that once basic bpf_dynptr
-> functionality lands, we'll have dynptr "constructors" for xdp_buff and
-> sk_buff. I think it's a better path forward.
+> It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
+> checksums.  The latter only seem to be applied if the socket family is
+> AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
+> IPv6 socket seem to have checksums anyway.
 >
-
-Yeah, bpf_dynptr seems to be a nice feature, which I didn't notice :/
-Thanks for your explanation.
-
-Menglong Dong
-
-> >
-> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> > Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  include/linux/bpf.h      |  4 +++
-> >  include/uapi/linux/bpf.h | 29 ++++++++++++++++++++
-> >  kernel/bpf/verifier.c    |  6 +++++
-> >  kernel/trace/bpf_trace.c | 58 ++++++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 97 insertions(+)
-> >
+> What seems to have happened is that the inet_inv_convert_csum() call didn't
+> get converted to the appropriate udp_port_cfg parameters - and
+> udp_sock_create() disables checksums unless explicitly told not too.
 >
-> [...]
+> Fix this by enabling the three udp_port_cfg checksum options.
+>
+> Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
+> Reported-by: Marc Dionne <marc.dionne@auristor.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Xin Long <lucien.xin@gmail.com>
+> cc: Vadim Fedorenko <vfedorenko@novek.ru>
+> cc: David S. Miller <davem@davemloft.net>
+> cc: linux-afs@lists.infradead.org
+> ---
+>
+>  net/rxrpc/local_object.c |    3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
+> index a4111408ffd0..6a1611b0e303 100644
+> --- a/net/rxrpc/local_object.c
+> +++ b/net/rxrpc/local_object.c
+> @@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+>                local, srx->transport_type, srx->transport.family);
+>
+>         udp_conf.family = srx->transport.family;
+> +       udp_conf.use_udp_checksums = true;
+>         if (udp_conf.family == AF_INET) {
+>                 udp_conf.local_ip = srx->transport.sin.sin_addr;
+>                 udp_conf.local_udp_port = srx->transport.sin.sin_port;
+> @@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+>         } else {
+>                 udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
+>                 udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
+> +               udp_conf.use_udp6_tx_checksums = true;
+> +               udp_conf.use_udp6_rx_checksums = true;
+>  #endif
+>         }
+>         ret = udp_sock_create(net, &udp_conf, &local->socket);
+>
+>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>

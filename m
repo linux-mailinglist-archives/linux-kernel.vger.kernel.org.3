@@ -2,142 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7195135DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F585135EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347856AbiD1OB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
+        id S1347962AbiD1OC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347846AbiD1OBX (ORCPT
+        with ESMTP id S1347878AbiD1OCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:01:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54530506FC;
-        Thu, 28 Apr 2022 06:58:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6EC561CE1;
-        Thu, 28 Apr 2022 13:58:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0301C385A0;
-        Thu, 28 Apr 2022 13:58:04 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 09:58:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
-Message-ID: <20220428095803.66c17c32@gandalf.local.home>
-In-Reply-To: <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org>
-References: <20220407125224.310255-1-jolsa@kernel.org>
-        <20220407125224.310255-5-jolsa@kernel.org>
-        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
-        <20220412094923.0abe90955e5db486b7bca279@kernel.org>
-        <CAEf4BzaQRcZGMqq5wqHo3wSHZAAVvY6AhizDk_dV_GtnwHuxLQ@mail.gmail.com>
-        <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 28 Apr 2022 10:02:07 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EF5B53DA;
+        Thu, 28 Apr 2022 06:58:52 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kq17so9757702ejb.4;
+        Thu, 28 Apr 2022 06:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kmcy+WVcUMSTKq+Fw5VOoyUvErPXIVULV+9+XIhSEP4=;
+        b=AhG1ruQbfC+S1+aq8qQZicm+JQ6eFjo9U+seqTxUn6Wdv/069iL+/6wBL+2K11DAiA
+         YjL/C93lBMFqj7WpPFSoPilUlaoiJ4hxO8UhU0SbCDmEsduHi7jdlLlQF4ana6Xwgr9V
+         2wNgjaUA5EA20JCCLcv3rFiwA6PlyrzgEYGVrofb81Euq3VO59rR+Oap8gKRoDqckxYW
+         YrESuNqWY42sNN4z+a80rAZwAljtUkvh9u5T8yqLX8I/lhKsi90JFpvmEL5trh4KVKY0
+         x/HD6S4KojJ2elMxoNuKcHW+fMWMWIAxniwM1CVf2/y/Zgh7YoT5J4FKcf7HU+WxSQiv
+         k3KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kmcy+WVcUMSTKq+Fw5VOoyUvErPXIVULV+9+XIhSEP4=;
+        b=0/k/d7p8ojlJXmNPBpn3WZhohUwq5AjCdNjBUP3pNwwzQP6a7MbMi84jGRiOPimzZK
+         b48eGKcULV9dXnZPLHsZmCXetX91svR1Knz4yayIZlzQC+3yLN3iEnIp2mW0mY7nP2pc
+         a9WdrQfibmd3YX5RLmjuP/ZbRFDkF6hM1LKnt7Z4qhz2r9q3c+2mXSFhLNcXKV7EP1e5
+         SMPpLF1DLoFRhcFiNs/9exmoGYcMbD7fl8Z80PH4ujbYar4n3Icn3MAySIhWv9oEtz7b
+         L0zRNnfEU9tmljtTRyZpPeUJbRtcYg2+34PrBt0u/r/wSvNbA1tp7Kqx9dEZM54JEW+1
+         rCfA==
+X-Gm-Message-State: AOAM5320uItftD7gDkuASrXaz5tu2/XRTIoPKASXCXrRm9Le5JvegtJ8
+        L8jREj4eqnErrSG+WbALr2z0cvaEJHs=
+X-Google-Smtp-Source: ABdhPJzqAu3nWPsQh1b3nUXS4Fud941GK8pBuVyMMfVxT7x1bNfIZY6rKC3s5Kh19T36gcCnfohP1g==
+X-Received: by 2002:a17:907:1b02:b0:6ef:ea73:b2ea with SMTP id mp2-20020a1709071b0200b006efea73b2eamr32659309ejc.753.1651154330793;
+        Thu, 28 Apr 2022 06:58:50 -0700 (PDT)
+Received: from 127.0.0.1localhost ([85.255.235.145])
+        by smtp.gmail.com with ESMTPSA id t19-20020aa7d4d3000000b0042617ba63c2sm1652568edr.76.2022.04.28.06.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 06:58:50 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH v2 net-next 04/11] udp/ipv6: prioritise the ip6 path over ip4 checks
+Date:   Thu, 28 Apr 2022 14:57:59 +0100
+Message-Id: <4436ef2b79305e059a9c4c363a3ddd709003eda5.1651153920.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <cover.1651153920.git.asml.silence@gmail.com>
+References: <cover.1651153920.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 16 Apr 2022 23:21:03 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+For AF_INET6 sockets we care the most about ipv6 but not ip4 mappings as
+it's requires some extra hops anyway. Take AF_INET6 case from the address
+parsing switch and add an explicit path for it. It removes some extra
+ifs from the path and removes the switch overhead.
 
-> OK, I also confirmed that __bpf_tramp_exit is listed. (others seems no notrace)
-> 
-> /sys/kernel/tracing # cat available_filter_functions | grep __bpf_tramp
-> __bpf_tramp_image_release
-> __bpf_tramp_image_put_rcu
-> __bpf_tramp_image_put_rcu_tasks
-> __bpf_tramp_image_put_deferred
-> __bpf_tramp_exit
-> 
-> My gcc is older one.
-> gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 
-> 
-> But it seems that __bpf_tramp_exit() doesn't call __fentry__. (I objdump'ed) 
-> 
-> ffffffff81208270 <__bpf_tramp_exit>:
-> ffffffff81208270:       55                      push   %rbp
-> ffffffff81208271:       48 89 e5                mov    %rsp,%rbp
-> ffffffff81208274:       53                      push   %rbx
-> ffffffff81208275:       48 89 fb                mov    %rdi,%rbx
-> ffffffff81208278:       e8 83 70 ef ff          callq  ffffffff810ff300 <__rcu_read_lock>
-> ffffffff8120827d:       31 d2                   xor    %edx,%edx
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ net/ipv6/udp.c | 37 +++++++++++++++++--------------------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
 
-You need to look deeper ;-)
-> 
-> 
-> > 
-> > So it's quite bizarre and inconsistent.  
-> 
-> Indeed. I guess there is a bug in scripts/recordmcount.pl.
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index d6aedd4dab25..78ce5fc53b59 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1357,30 +1357,27 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 
+ 	/* destination address check */
+ 	if (sin6) {
+-		if (addr_len < offsetof(struct sockaddr, sa_data))
+-			return -EINVAL;
++		if (addr_len < SIN6_LEN_RFC2133 || sin6->sin6_family != AF_INET6) {
++			if (addr_len < offsetof(struct sockaddr, sa_data))
++				return -EINVAL;
+ 
+-		switch (sin6->sin6_family) {
+-		case AF_INET6:
+-			if (addr_len < SIN6_LEN_RFC2133)
++			switch (sin6->sin6_family) {
++			case AF_INET:
++				goto do_udp_sendmsg;
++			case AF_UNSPEC:
++				msg->msg_name = sin6 = NULL;
++				msg->msg_namelen = addr_len = 0;
++				goto no_daddr;
++			default:
+ 				return -EINVAL;
+-			daddr = &sin6->sin6_addr;
+-			if (ipv6_addr_any(daddr) &&
+-			    ipv6_addr_v4mapped(&np->saddr))
+-				ipv6_addr_set_v4mapped(htonl(INADDR_LOOPBACK),
+-						       daddr);
+-			break;
+-		case AF_INET:
+-			goto do_udp_sendmsg;
+-		case AF_UNSPEC:
+-			msg->msg_name = sin6 = NULL;
+-			msg->msg_namelen = addr_len = 0;
+-			daddr = NULL;
+-			break;
+-		default:
+-			return -EINVAL;
++			}
+ 		}
++
++		daddr = &sin6->sin6_addr;
++		if (ipv6_addr_any(daddr) && ipv6_addr_v4mapped(&np->saddr))
++			ipv6_addr_set_v4mapped(htonl(INADDR_LOOPBACK), daddr);
+ 	} else {
++no_daddr:
+ 		if (sk->sk_state != TCP_ESTABLISHED)
+ 			return -EDESTADDRREQ;
+ 		daddr = &sk->sk_v6_daddr;
+-- 
+2.36.0
 
-No there isn't.
-
-I added the addresses it was mapping and found this:
-
-ffffffffa828f680 T __bpf_tramp_exit
-
-(which is relocated, but it's trivial to map it with the actual function).
-
-At the end of that function we have:
-
-ffffffff8128f767:       48 8d bb e0 00 00 00    lea    0xe0(%rbx),%rdi
-ffffffff8128f76e:       48 8b 40 08             mov    0x8(%rax),%rax
-ffffffff8128f772:       e8 89 28 d7 00          call   ffffffff82002000 <__x86_indirect_thunk_array>
-                        ffffffff8128f773: R_X86_64_PLT32        __x86_indirect_thunk_rax-0x4
-ffffffff8128f777:       e9 4a ff ff ff          jmp    ffffffff8128f6c6 <__bpf_tramp_exit+0x46>
-ffffffff8128f77c:       0f 1f 40 00             nopl   0x0(%rax)
-ffffffff8128f780:       e8 8b df dc ff          call   ffffffff8105d710 <__fentry__>
-                        ffffffff8128f781: R_X86_64_PLT32        __fentry__-0x4
-ffffffff8128f785:       b8 f4 fd ff ff          mov    $0xfffffdf4,%eax
-ffffffff8128f78a:       c3                      ret    
-ffffffff8128f78b:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
-
-
-Notice the call to fentry!
-
-It's due to this:
-
-void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr)
-{
-	percpu_ref_put(&tr->pcref);
-}
-
-int __weak
-arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
-			    const struct btf_func_model *m, u32 flags,
-			    struct bpf_tramp_progs *tprogs,
-			    void *orig_call)
-{
-	return -ENOTSUPP;
-}
-
-The weak function gets a call to ftrace, but it still gets compiled into
-vmlinux but its symbol is dropped due to it being overridden. Thus, the
-mcount_loc finds this call to fentry, and maps it to the symbol that is
-before it, which just happened to be __bpf_tramp_exit.
-
-I made that weak function "notrace" and the __bpf_tramp_exit disappeared
-from the available_filter_functions list.
-
--- Steve

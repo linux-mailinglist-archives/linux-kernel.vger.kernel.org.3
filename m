@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAE551292B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F527512927
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241015AbiD1CBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S240959AbiD1CAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240745AbiD1CBG (ORCPT
+        with ESMTP id S240970AbiD1CAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:01:06 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FAB5C354;
-        Wed, 27 Apr 2022 18:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651111073; x=1682647073;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/vhHc0ORGV2b1XZMIu39ZLL/Kp9lOxc3E0MqPGKIEJE=;
-  b=EyuawpL2Pw0PjrsueiDin4SZeO2BaW1lgdRCXEPSVhRNwwnRTAoRN72Q
-   nd+CmR/xJmhKbUckjaayFifs3LnLV7XnDjQp+7XobWOnlhjo/QAGgxFZr
-   Vvk/rSUDqVMMffSxDFenuVRRfQ7+pBUk7/9EKLn/QzeBVbndsqXK2gncf
-   gASkKxRtX9ccyca86m9ehmdlQTvLUsii81h3YNXPfTYXId23kDxE/kC+/
-   kH+lwO0Oto4YCMdGBqBn8OijJAG14agcVXIjn4KQrFGacKjRWd2EXcjMR
-   /XsWVoXl+n8LkrlVRqR9Jtzs8CwJyzlAjWm7V1dKygRmX6ijyAWCQ3hWD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="291287028"
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="291287028"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:57:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="681605449"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 27 Apr 2022 18:57:52 -0700
-Received: from linux.intel.com (ssid-ilbpg3-teeminta.png.intel.com [10.88.227.74])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 00BCC580569;
-        Wed, 27 Apr 2022 18:57:46 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 09:55:38 +0800
-From:   Tan Tee Min <tee.min.tan@linux.intel.com>
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Ling Pei Lee <pei.lee.ling@intel.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Song Yoong Siang <yoong.siang.song@intel.com>,
-        Ong@vger.kernel.org, Boon Leong <boon.leong.ong@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>
-Subject: Re: [PATCH net 1/1] net: stmmac: disable Split Header (SPH) for
- Intel platforms
-Message-ID: <20220428015538.GC26326@linux.intel.com>
-References: <20220426074531.4115683-1-tee.min.tan@linux.intel.com>
- <8735i0ndy7.fsf@kurt>
+        Wed, 27 Apr 2022 22:00:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 244914EDD8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651111016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vg7BpXB18jK6A7IZMwZVA/IJ6u+tBfc3GXOTbmnF0Q4=;
+        b=NnCTS1K8ei/S86GqP+xuDp68NWbXvJp9keyxY+GXw6e/XIH+tDOnMCRl/qdY1GEEdQzgUw
+        6PJ2GuLVDqc8QU+tpuCWaGisdN1vDnE238OoIja0HMvGudNUDz/Q1dfMGjMTrEdpsMj9qs
+        xfIGcFIXcUfqippN6xRCJ9VPahLrlI4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-kV3DRZk0O1OcsRKDqVaiAQ-1; Wed, 27 Apr 2022 21:56:54 -0400
+X-MC-Unique: kV3DRZk0O1OcsRKDqVaiAQ-1
+Received: by mail-ej1-f71.google.com with SMTP id jg25-20020a170907971900b006f010192c19so2062451ejc.21
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:56:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vg7BpXB18jK6A7IZMwZVA/IJ6u+tBfc3GXOTbmnF0Q4=;
+        b=wvfeBvfw5/97XSEJCSZE/9QkAQC4ct7gHS6Eo6RdbwBZIivz501Im8juDYfaZHoEJp
+         ZCp+T74BaE+beFVKfKZMswDC4cmv2p2XLmF+OWbnrzBHwBKGfVjL5ELFhSXMBkxH6NfQ
+         uDyT59Ls+J9cGlBNeFj2VXuCvDsOhscaod/SSh6AS7ys7twwYKVXIZlqxehkqagahlZB
+         8OETotmLiW/AHfrX5maqyWQSGVXfrQQvX2Z5zLIg6FhiCbnCPLFVwt2cmlH5u99BwapD
+         lVlYc9nL8w5jPWCqOiwgJZT6KWpWXuHCFkU5FW8CaZiygPDpCrB3DjrkzHHEveWRBc3v
+         Q//g==
+X-Gm-Message-State: AOAM531LlQKg2uYcrHhSq5H5wJ8KmvfSNcnVDIyh7VWLp67w7kJrNJ24
+        O7ShupZEdiXySRhBeZUM+cOsqkgGaAbM7EAfxCcjRJ3aYgszwjbsciSjIBlzmGPqHaQ8ZXEAAzt
+        zI/ENBNfnjDD6zzi+dMUDcvJSvrK25SpgjwTOgisG
+X-Received: by 2002:a17:907:9621:b0:6d7:355d:6da5 with SMTP id gb33-20020a170907962100b006d7355d6da5mr28938701ejc.195.1651111013574;
+        Wed, 27 Apr 2022 18:56:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz60bAzEWZCJrTFmwCis+8dy402pafSSsNhhEagw/mgmkY7QsoDOQL6nONSCj0HSPrwpdzooZTPGEnkUT4pOwc=
+X-Received: by 2002:a17:907:9621:b0:6d7:355d:6da5 with SMTP id
+ gb33-20020a170907962100b006d7355d6da5mr28938690ejc.195.1651111013386; Wed, 27
+ Apr 2022 18:56:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735i0ndy7.fsf@kurt>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425062735.172576-1-lulu@redhat.com> <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
+ <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com> <46c9f96a-8fcf-fae8-5fd7-53557d59c324@redhat.com>
+In-Reply-To: <46c9f96a-8fcf-fae8-5fd7-53557d59c324@redhat.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Thu, 28 Apr 2022 09:56:12 +0800
+Message-ID: <CACLfguW+9OMPMUpehp+Zut7JosFtg2gzr7t7gZ6U-AdtV89S3g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:58:56PM +0200, Kurt Kanzenbach wrote:
-> Hi,
-> 
-> On Tue Apr 26 2022, Tan Tee Min wrote:
-> > Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
-> > of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
-> > This SPH limitation will cause ping failure when the packets size exceed
-> > the MTU size. For example, the issue happens once the basic ping packet
-> > size is larger than the configured MTU size and the data is lost inside
-> > the fragmented packet, replaced by zeros/corrupted values, and leads to
-> > ping fail.
+On Wed, Apr 27, 2022 at 12:04 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+>
+> =E5=9C=A8 2022/4/27 10:01, Cindy Lu =E5=86=99=E9=81=93:
+> > On Mon, Apr 25, 2022 at 5:00 PM Jason Wang <jasowang@redhat.com> wrote:
+> >> On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+> >>> To support the dynamic ids in vp_vdpa, we need to add the check for
+> >>> id table. If the id table is NULL, will not set the device type
+> >>>
+> >>> Signed-off-by: Cindy Lu <lulu@redhat.com>
+> >>> ---
+> >>>   drivers/vdpa/vdpa.c | 11 +++++++----
+> >>>   1 file changed, 7 insertions(+), 4 deletions(-)
+> >>>
+> >>> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> >>> index 1ea525433a5c..09edd92cede0 100644
+> >>> --- a/drivers/vdpa/vdpa.c
+> >>> +++ b/drivers/vdpa/vdpa.c
+> >>> @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdpa_=
+mgmt_dev *mdev, struct sk_buff *m
+> >>>          if (err)
+> >>>                  goto msg_err;
+> >>>
+> >>> -       while (mdev->id_table[i].device) {
+> >>> -               if (mdev->id_table[i].device <=3D 63)
+> >>> -                       supported_classes |=3D BIT_ULL(mdev->id_table=
+[i].device);
+> >>> -               i++;
+> >>> +       if (mdev->id_table !=3D NULL) {
+> >>> +               while (mdev->id_table[i].device) {
+> >>> +                       if (mdev->id_table[i].device <=3D 63)
+> >>> +                               supported_classes |=3D
+> >>> +                                       BIT_ULL(mdev->id_table[i].dev=
+ice);
+> >>> +                       i++;
+> >>> +               }
+> >>>          }
+> >> This will cause 0 to be advertised as the supported classes.
+> >>
+> >> I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
+> >> export it to via uAPI probably).
+> >>
+> >> Thanks
+> >>
+> > like the below one? not sure if this ok to use like this?
+> > static struct virtio_device_id vp_vdpa_id_table[] =3D {
+> > { VIRTIO_DEV_ANY_ID, VIRTIO_DEV_ANY_ID },
+> > { 0 },
+> > };
+>
+>
+> Something like this.
+>
+> Thanks
+>
+>
+I have checked the code, this maybe can not work, because the
+#define VIRTIO_DEV_ANY_ID 0xffffffff
+ it want't work in
+                supported_classes |=3D BIT_ULL(mdev->id_table[i].device);
+if we chane to
+            supported_classes |=3D VIRTIO_DEV_ANY_ID;
+the vdpa dev show will be
+pci/0000:00:04.0:
+  supported_classes net block < unknown class > < unknown class > <
+unknown class > < unknown class > < unknown class > < unknow>
+  max_supported_vqs 3
+  dev_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC GUEST_TSO4
+GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6 HOST_
+ I think we can use
+static struct virtio_device_id id_table[] =3D {
+{ VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+{ 0 },
+};
+ if we need to add another type of device, we can add the device id at that=
+ type
+
+Thanks
+cindy
+
+
+
 > >
-> > So, disable the Split Header for Intel platforms.
-> 
-> Does this issue only apply on Intel platforms?
-
-According to Synopsys IP support, they have confirmed the header-payload
-splitting for IPv4 fragmented packets is not supported for the Synopsys
-Ether IPs.
-
-Intel platforms are integrating with GMAC EQoS IP which is impacted by the
-limitation above, so we are changing the default SPH setting to disabled
-for Intel Platforms only.
-
-If anyone can confirm on their platform also having the same issues,
-then we would change the SPH default to disable across the IPs.
-
-Thanks,
-Tee Min
+> >
+> >>>          if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLASS=
+ES,
+> >>> --
+> >>> 2.34.1
+> >>>
+>
 

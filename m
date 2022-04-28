@@ -2,86 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C11513E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D9B513E9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352953AbiD1Wnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
+        id S1352979AbiD1WoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352944AbiD1Wne (ORCPT
+        with ESMTP id S1352944AbiD1WoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:43:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7121E692A1;
-        Thu, 28 Apr 2022 15:40:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 247F1B82FE1;
-        Thu, 28 Apr 2022 22:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E9C8C385AD;
-        Thu, 28 Apr 2022 22:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651185615;
-        bh=wXxogfL874XcDPPyxkQBPeMveMhFBfE8bS1aLYuh9GY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jpbCawBL6V4AJTyN9/txG1j79d8EmUpVaVhRPiqbk0PE53D68QWRi2kw8ZRj57+RU
-         o+OfxlbvZ7OuBoZLvBK2odjxQZBBzraEeyamVGnyAd4diF/BeR0OgNnXCCIQONUEEN
-         fzX/odth6/PHdPe+phUrxxBFSJCrnKowm+xnVh/ZM/PuiOAwO6UdliGZ79O7ui9dLf
-         4KDBio2ZuNqq+ltee7PbBh8ZXCg1RnDBWx81AIWeXRWot8XTV7VtlRQLu3hTLovMDV
-         5UTvpwHs0ksgdlMf4MEEx1i3nu92OTGvAcY6m5IaYXeeVBsQTL72sK892xdwkE3CBe
-         vs70ib3iW/dSg==
-Date:   Thu, 28 Apr 2022 15:40:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jianqun Xu <jay.xu@rock-chips.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@st.com,
-        joabreu@synopsys.com, davem@davemloft.net,
-        mcoquelin.stm32@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] ethernet: stmmac: fix for none child queue node
- for tx node
-Message-ID: <20220428154014.590f6655@kernel.org>
-In-Reply-To: <20220428010927.526310-1-jay.xu@rock-chips.com>
-References: <20220428010927.526310-1-jay.xu@rock-chips.com>
+        Thu, 28 Apr 2022 18:44:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340BB8C7FD
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:41:05 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651185663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tXbnnfydFtroMbNf34p+LMQVaGaqhjbOTNCg6WDSgTo=;
+        b=Jr8aBFOkezzGo3wUe/YArrBxSfTDbhAZxqyJN+hdWtYCak3cYpTU/1M17reSak2Ii7f76i
+        HTdOVqMYPmCjGsSfS7jm7jG+sbxVLsWxR3uAFYB1+30WrdARXO1LwMbhuRWNnLDm2gzfYn
+        rlGbZUVYwM1nJ0ZEWysUXhCQXoSU1qvPmtP199G9N2Fakf4d/qeuA/Qcs/m2BMjjmf/Yfx
+        sL+rHe4dFQAUGqfAHZNwaSIKrtf8r+iKVjguaQjJ80D38oLtfXCFJgP1kpOqCNkJf46DHv
+        YkoUyL2rcKEMHvwMgaI4+S3h+jw+DGFpyJGSQKlIj1yUI+77UDecXU+ayJVcBw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651185663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tXbnnfydFtroMbNf34p+LMQVaGaqhjbOTNCg6WDSgTo=;
+        b=aIy4s3felbXbltF+ChdPl8SDAn2dEbGGbdXE5jlw5rSqbiPf4QoBcev3Wx3aboiTWNA16V
+        cqbPl/EkoVRon/DA==
+To:     Prakash Sangappa <prakash.sangappa@oracle.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "manfred@colorfullife.com" <manfred@colorfullife.com>
+Subject: Re: [PATCH v3] ipc: Update semtimedop() to use hrtimer
+In-Reply-To: <5FEE7AB6-7560-4998-A7A3-B60A4B32E1DE@oracle.com>
+References: <1651178767-447-1-git-send-email-prakash.sangappa@oracle.com>
+ <20220428205001.hiuzwpn5emxtrh4s@offworld> <87zgk4ooi6.ffs@tglx>
+ <5FEE7AB6-7560-4998-A7A3-B60A4B32E1DE@oracle.com>
+Date:   Fri, 29 Apr 2022 00:41:03 +0200
+Message-ID: <87tuacomps.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 09:09:27 +0800 Jianqun Xu wrote:
-> In case of nothing to be set for tx node result in no child queue node
-> for the tx node, this patch init the queue to tx_queues_to_use instead
-> of 0 to support dt file set no queue node for tx node.
-> 
-> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
+On Thu, Apr 28 2022 at 22:23, Prakash Sangappa wrote:
+>> On Apr 28, 2022, at 3:02 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
+>> On Thu, Apr 28 2022 at 13:50, Davidlohr Bueso wrote:
+>>> On Thu, 28 Apr 2022, Prakash Sangappa wrote:
+>>>> -		if (timeout)
+>>>> -			jiffies_left = schedule_timeout(jiffies_left);
+>>>> -		else
+>>>> -			schedule();
+>>>> +		timed_out = !schedule_hrtimeout_range(exp,
+>>>> +				current->timer_slack_ns, HRTIMER_MODE_ABS);
+>>> 
+>>> I'm wondering if the slack parameter instead of passing the timer_slack_ns
+>>> value immediately, we should do a rt_task() check and pass zero if so.
+>> 
+>> We should have a wrapper function which takes care of that instead of
+>> having checks all over the place.
+>
+> Ok  it can be an inline function in sched.h which returns appropriate 
+> slack time. Use that in  futex_wait() and sigtimedwait() also in addition to 
+> semtimedop() & mqueue codepath?
 
-Something needs to initialize the settings
-(plat->tx_queues_cfg[queue].#) to the defaults, no? 
-Just ignoring the error may not be enough.
+No. What I meant is a function which handles this internally, not an inline
+function which has to be invoked on various call sites.
 
-Also has this ever worked? If you're trying to make the driver work for
-DTs that never worked (and are arguably invalid) -- please change the
-subject from "fix..." to "support...".
+> Should that be a separate patch?
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> index 2d8c095f3856..4f01a41c485c 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> @@ -279,7 +279,7 @@ static int stmmac_mtl_setup(struct platform_device *pdev,
->  
->  		queue++;
->  	}
-> -	if (queue != plat->tx_queues_to_use) {
-> +	if (queue != plat->tx_queues_to_use && of_get_child_count(tx_node)) {
->  		ret = -EINVAL;
->  		dev_err(&pdev->dev, "Not all TX queues were configured\n");
->  		goto out;
+Definitely. That's an orthogonal problem.
 
+Thanks,
+
+        tglx

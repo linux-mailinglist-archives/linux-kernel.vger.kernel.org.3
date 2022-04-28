@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A900551296C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F303512974
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241350AbiD1CVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S231985AbiD1CZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbiD1CVx (ORCPT
+        with ESMTP id S229826AbiD1CZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:21:53 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E0A71A37
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:18:37 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id w4so4792404wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/YQLEpePQ0s5/TYsbGG8QOihmSo3DTXYfheeLH1cqLw=;
-        b=XoIWwqe+KggVK4FHK2yy56Lm5reOsZYSHm3tWwfV2KMdUYq/jtfDUyX5PRDseoMiKL
-         wZkMk7E5PdA4kwrLeouW40/33vowyy+3yZJWJLVtZ6fESI2WLq/yn1+pct1l11yDPaaS
-         j+w628LwBS54pVpkH2qXcAI28+tonAY9VuBA7KfSz4Bsv/uFzEnG4jPGbBaW1KSJPiOm
-         CbP7OoVCjn9WRRW47enKhO9PLFSpZ+udIisX0tiMYIOf3Z/m1w8RkxGkgb00B+SMXZQ9
-         7R7+u5lw7S7nSMwzKqlKp9bRhIiyVb+Vw3b72lrrhIBuHJqadVbYu1gBSXcloP26uxoe
-         zKiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/YQLEpePQ0s5/TYsbGG8QOihmSo3DTXYfheeLH1cqLw=;
-        b=CgJX5uQQg3p9OOouYljxjO1PlutStlhJnByFQaIYoMy6CSFJjri8sxU975b8ikcWWc
-         pGZZx1DhcZIxNMJoCpZOpwmm5KRjPGUChFAEhhGsIX2CTWUM5osor6CvTqavq0xNfSzQ
-         k44JB5WB3T3gQIlyyHGURs3iA9FQ6SyxNXTNi0B1TCft1w/gLzF4s4+dUYXQmnRjR+P4
-         z38b9lr6g4ZsG7AVcTW3psupQ1fDcQKSereZvQ4Jpug4W3897JD3+mXCv0WD/9nwTjL3
-         IJ5yLyiOBkTz88eT2+lNpWNFSKYuo6aQwRm97bTak6iceyBBBosE1EVR7xYYGwYGWjK0
-         DyJg==
-X-Gm-Message-State: AOAM530gV7dtnN7eSZqcarwx8AxNwu29aaPxzgvm+Us7VE7rfDJGxI4A
-        Fwvx0RvJXXf2LlgSwKrJ0pe/Wl2GBSIormyvPZ1RnzJl900=
-X-Google-Smtp-Source: ABdhPJwLO+UCk9RGSNsvp53gMeOT5T82G/u+prscup3Mn4Wh8Uji/Dk9yHVlH0VQtb/gtKiZYJkNxuvRDV8nqAaoDMI=
-X-Received: by 2002:adf:ec51:0:b0:20a:cd42:fe3b with SMTP id
- w17-20020adfec51000000b0020acd42fe3bmr21942602wrn.719.1651112316110; Wed, 27
- Apr 2022 19:18:36 -0700 (PDT)
+        Wed, 27 Apr 2022 22:25:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C407523D;
+        Wed, 27 Apr 2022 19:22:41 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KpfXD1JHdzhYTS;
+        Thu, 28 Apr 2022 10:22:20 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 10:22:39 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 10:22:38 +0800
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-6-thunder.leizhen@huawei.com> <YmgzxsrrMlCDYsWp@arm.com>
+ <ee8daaa9-3258-e7e8-e5c4-c51dc9841580@huawei.com> <Ymk34NsIFqUgfk3b@arm.com>
+ <ae7211ad-e2ac-f5b1-5aa0-701802132e73@huawei.com> <YmlphvZVMsGfFksp@arm.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <42f4db6c-d3f9-e1c4-6a61-dc2bf4f89adf@huawei.com>
+Date:   Thu, 28 Apr 2022 10:22:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <165109503652.611257.12851860419631266883.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165109503652.611257.12851860419631266883.stgit@warthog.procyon.org.uk>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Wed, 27 Apr 2022 22:18:06 -0400
-Message-ID: <CADvbK_fBafuWZq8wcxwyGFeS+YEuKfGrfs6igTR_ThhL+ZFDDQ@mail.gmail.com>
-Subject: Re: [PATCH] rxrpc: Enable IPv6 checksums on transport socket
-To:     David Howells <dhowells@redhat.com>
-Cc:     marc.dionne@auristor.com, Vadim Fedorenko <vfedorenko@novek.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-afs@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <YmlphvZVMsGfFksp@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,55 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 5:30 PM David Howells <dhowells@redhat.com> wrote:
->
-> AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
-> socket it opens and the checksums in the packets it generates end up 0.
->
-> It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
-> checksums.  The latter only seem to be applied if the socket family is
-> AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
-> IPv6 socket seem to have checksums anyway.
->
-> What seems to have happened is that the inet_inv_convert_csum() call didn't
-> get converted to the appropriate udp_port_cfg parameters - and
-> udp_sock_create() disables checksums unless explicitly told not too.
->
-> Fix this by enabling the three udp_port_cfg checksum options.
->
-> Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
-> Reported-by: Marc Dionne <marc.dionne@auristor.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Xin Long <lucien.xin@gmail.com>
-> cc: Vadim Fedorenko <vfedorenko@novek.ru>
-> cc: David S. Miller <davem@davemloft.net>
-> cc: linux-afs@lists.infradead.org
-> ---
->
->  net/rxrpc/local_object.c |    3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-> index a4111408ffd0..6a1611b0e303 100644
-> --- a/net/rxrpc/local_object.c
-> +++ b/net/rxrpc/local_object.c
-> @@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
->                local, srx->transport_type, srx->transport.family);
->
->         udp_conf.family = srx->transport.family;
-> +       udp_conf.use_udp_checksums = true;
->         if (udp_conf.family == AF_INET) {
->                 udp_conf.local_ip = srx->transport.sin.sin_addr;
->                 udp_conf.local_udp_port = srx->transport.sin.sin_port;
-> @@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
->         } else {
->                 udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
->                 udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
-> +               udp_conf.use_udp6_tx_checksums = true;
-> +               udp_conf.use_udp6_rx_checksums = true;
->  #endif
->         }
->         ret = udp_sock_create(net, &udp_conf, &local->socket);
->
->
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
+
+
+On 2022/4/28 0:04, Catalin Marinas wrote:
+> On Wed, Apr 27, 2022 at 09:49:20PM +0800, Leizhen (ThunderTown) wrote:
+>> On 2022/4/27 20:32, Catalin Marinas wrote:
+>>> I think one could always pass a default command line like:
+>>>
+>>> 	crashkernel=1G,high crashkernel=128M,low
+>>>
+>>> without much knowledge of the SoC memory layout.
+>>
+>> Yes, that's what the end result is. The user specify crashkernel=128M,low
+>> and the implementation ensure the 128M low memory is allocated from DMA zone.
+>> We use arm64_dma_phys_limit as the upper limit for crash low memory.
+>>
+>> +#define CRASH_ADDR_LOW_MAX             arm64_dma_phys_limit
+>> +       unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>> +       crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>                                                crash_base, crash_max);
+>>
+>>> Another option is to only introduce crashkernel=Y,low and, when that is
+>>> passed, crashkernel=Y can go above arm64_dma_phys_limit. We won't need a
+>>> 'high' option at all:
+>>>
+>>> 	crashkernel=1G				- all within ZONE_DMA
+>>> 	crashkernel=1G crashkernel=128M,low	- 128M in ZONE_DMA
+>>> 						  1G above ZONE_DMA
+>>>
+>>> If ZONE_DMA is not present or it extends to the whole RAM, we can ignore
+>>> the 'low' option.
+>>
+>> I think although the code is hard to make generic, the interface is better to
+>> be relatively uniform. A user might have to maintain both x86 and arm64, and
+>> so on. It's not a good thing that the difference is too big.
+> 
+> There will be some difference as the 4G limit doesn't always hold for
+> arm64 (though it's true in most cases). Anyway, we can probably simplify
+> things a bit while following the documented behaviour:
+> 
+> 	crashkernel=Y		- current behaviour within ZONE_DMA
+> 	crashkernel=Y,high	- allocate from above ZONE_DMA
+> 	crashkernel=Y,low	- allocate within ZONE_DMA
+> 
+> There is no fallback from crashkernel=Y.
+
+Yes, I followed your guidelines yesterday to modify the code. Now the code flow
+is much clearer.
+
+> 
+> The question is whether we still want a default low allocation if
+> crashkernel=Y,low is missing but 'high' is present. If we add this, I
+> think we'd be consistent with kernel-parameters.txt for the 'low'
+> description. A default 'low' is probably not that bad but I'm tempted to
+> always mandate both 'high' and 'low'.
+
+Yes, I agree with you. Because the situation is complicated, the default value
+is hard to be accurate. It's better to let the user configure it according to
+the actual situation, they're also programmers.
+
+Whether mandate both 'high' and 'low', or allow only 'high' like x86(but the default
+value becomes zero). I prefer the latter. The size of 'low' maybe zero, for example,
+SMMU is enabled on the second kernel. If only high memory is required, only that
+high memory needs to be configured, seems more reasonable.
+
+> 
+
+-- 
+Regards,
+  Zhen Lei

@@ -2,205 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D631A512926
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAE551292B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241007AbiD1B7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S241015AbiD1CBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240950AbiD1B7g (ORCPT
+        with ESMTP id S240745AbiD1CBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:59:36 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EA746646
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:56:22 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so4485644pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sargun.me; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uEcNSiaDgqCQTOD0WHJ5CmXveRjV7YkdAup8UYWATQA=;
-        b=CQ81ynmmkryn0ZoG2mZWOm/YOBgsz/sPSKCuZXy2qvyQj1AvsNu7edzdJudne1VcOu
-         U5ZvctWsFrJ5LuwflBMasuGCA8ftt8drTqHu0m7BAgMfuAl50CORS2VbQxc+E4nb2izY
-         fJY+n8GhNnbdZyhjA4H64Ir8RqAmYZ+iKgkb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uEcNSiaDgqCQTOD0WHJ5CmXveRjV7YkdAup8UYWATQA=;
-        b=Vg6VEH4rLLq5wEhGjPmGrE+UD+wWPNnF+RcC3Ks6zmPxAuqxTAKVyCFcc4OhBABfLH
-         24SJnqAygmHHWyJVt4pQ7ykRZGPaJGeiM2HAuSu7dzWRJcLFUbcbWrZXWbhIjtyrRaMs
-         9Zx/+LH8EELz8mQSG4egvoDOifol5ZJ6peE0KPvBTKuP4LPXJfn4fJ2XHB3oMZdub/m/
-         MHt6GJMKaeSP9mRJ28pd9TmVEuGr1bhKpFrj3pIKFt/MibA9x1cXSt20EUeD5AxIKBEm
-         iUcryJekE+xLVFwQ2gGaGf/JmtHghvngn8sY8A7N2qyF5MA4IVXJ5hbmjwzBtK+GAf5o
-         L1iA==
-X-Gm-Message-State: AOAM531og1J1K3Tj+WHrO/AwsxhxRrVxutlj3U5ItK81f5vdXN5ZO3hh
-        xMp/o79qjpYgaP06Ok/Og1WXhQ==
-X-Google-Smtp-Source: ABdhPJzNlSkO0bLLdXqTAvV5hz+K17mPaE7qeYxp98oB1k3Q3mQ9gBDW2JIwev81mmEJuZH8FLShew==
-X-Received: by 2002:a17:903:20f:b0:158:d86a:f473 with SMTP id r15-20020a170903020f00b00158d86af473mr31568087plh.92.1651110981954;
-        Wed, 27 Apr 2022 18:56:21 -0700 (PDT)
-Received: from localhost.localdomain ([69.53.254.5])
-        by smtp.gmail.com with ESMTPSA id y14-20020a63ce0e000000b003c14af505edsm637814pgf.5.2022.04.27.18.56.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 18:56:20 -0700 (PDT)
-From:   Sargun Dhillon <sargun@sargun.me>
-To:     Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] selftests/seccomp: Ensure that notifications come in FIFO order
-Date:   Wed, 27 Apr 2022 18:54:47 -0700
-Message-Id: <20220428015447.13661-2-sargun@sargun.me>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220428015447.13661-1-sargun@sargun.me>
-References: <20220428015447.13661-1-sargun@sargun.me>
+        Wed, 27 Apr 2022 22:01:06 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FAB5C354;
+        Wed, 27 Apr 2022 18:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651111073; x=1682647073;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/vhHc0ORGV2b1XZMIu39ZLL/Kp9lOxc3E0MqPGKIEJE=;
+  b=EyuawpL2Pw0PjrsueiDin4SZeO2BaW1lgdRCXEPSVhRNwwnRTAoRN72Q
+   nd+CmR/xJmhKbUckjaayFifs3LnLV7XnDjQp+7XobWOnlhjo/QAGgxFZr
+   Vvk/rSUDqVMMffSxDFenuVRRfQ7+pBUk7/9EKLn/QzeBVbndsqXK2gncf
+   gASkKxRtX9ccyca86m9ehmdlQTvLUsii81h3YNXPfTYXId23kDxE/kC+/
+   kH+lwO0Oto4YCMdGBqBn8OijJAG14agcVXIjn4KQrFGacKjRWd2EXcjMR
+   /XsWVoXl+n8LkrlVRqR9Jtzs8CwJyzlAjWm7V1dKygRmX6ijyAWCQ3hWD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="291287028"
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="291287028"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:57:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="681605449"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 27 Apr 2022 18:57:52 -0700
+Received: from linux.intel.com (ssid-ilbpg3-teeminta.png.intel.com [10.88.227.74])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 00BCC580569;
+        Wed, 27 Apr 2022 18:57:46 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 09:55:38 +0800
+From:   Tan Tee Min <tee.min.tan@linux.intel.com>
+To:     Kurt Kanzenbach <kurt@linutronix.de>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>,
+        Ong@vger.kernel.org, Boon Leong <boon.leong.ong@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Subject: Re: [PATCH net 1/1] net: stmmac: disable Split Header (SPH) for
+ Intel platforms
+Message-ID: <20220428015538.GC26326@linux.intel.com>
+References: <20220426074531.4115683-1-tee.min.tan@linux.intel.com>
+ <8735i0ndy7.fsf@kurt>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735i0ndy7.fsf@kurt>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When multiple notifications are waiting, ensure they show up in order, as
-defined by the (predictable) seccomp notification ID. This ensures FIFO
-ordering of notification delivery as notification ids are monitonic and
-decided when the notification is generated (as opposed to received).
+On Tue, Apr 26, 2022 at 03:58:56PM +0200, Kurt Kanzenbach wrote:
+> Hi,
+> 
+> On Tue Apr 26 2022, Tan Tee Min wrote:
+> > Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
+> > of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
+> > This SPH limitation will cause ping failure when the packets size exceed
+> > the MTU size. For example, the issue happens once the basic ping packet
+> > size is larger than the configured MTU size and the data is lost inside
+> > the fragmented packet, replaced by zeros/corrupted values, and leads to
+> > ping fail.
+> >
+> > So, disable the Split Header for Intel platforms.
+> 
+> Does this issue only apply on Intel platforms?
 
-Signed-off-by: Sargun Dhillon <sargun@sargun.me>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 109 ++++++++++++++++++
- 1 file changed, 109 insertions(+)
+According to Synopsys IP support, they have confirmed the header-payload
+splitting for IPv4 fragmented packets is not supported for the Synopsys
+Ether IPs.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 9d126d7fabdb..33fb3d0c3347 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -4231,6 +4231,115 @@ TEST(user_notification_addfd_rlimit)
- 	close(memfd);
- }
- 
-+static char get_proc_stat(int pid)
-+{
-+	char proc_path[100] = {0};
-+	char *line = NULL;
-+	size_t len = 0;
-+	ssize_t nread;
-+	char status;
-+	FILE *f;
-+	int i;
-+
-+	snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
-+	f = fopen(proc_path, "r");
-+	if (f == NULL)
-+		ksft_exit_fail_msg("%s - Could not open %s\n",
-+				   strerror(errno), proc_path);
-+
-+	for (i = 0; i < 3; i++) {
-+		nread = getdelim(&line, &len, ' ', f);
-+		if (nread <= 0)
-+			ksft_exit_fail_msg("Failed to read status: %s\n",
-+					   strerror(errno));
-+	}
-+
-+	status = *line;
-+	free(line);
-+	fclose(f);
-+
-+	return status;
-+}
-+
-+TEST(user_notification_fifo)
-+{
-+	struct seccomp_notif_resp resp = {};
-+	struct seccomp_notif req = {};
-+	int i, status, listener;
-+	pid_t pid, pids[3];
-+	__u64 baseid;
-+	long ret;
-+	/* 100 ms */
-+	struct timespec delay = { .tv_nsec = 100000000 };
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	/* Setup a listener */
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	ASSERT_GE(listener, 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		ret = syscall(__NR_getppid);
-+		exit(ret != USER_NOTIF_MAGIC);
-+	}
-+
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+	baseid = req.id + 1;
-+
-+	resp.id = req.id;
-+	resp.error = 0;
-+	resp.val = USER_NOTIF_MAGIC;
-+
-+	/* check that we make sure flags == 0 */
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	/* Start children, and them generate notifications */
-+	for (i = 0; i < ARRAY_SIZE(pids); i++) {
-+		pid = fork();
-+		if (pid == 0) {
-+			ret = syscall(__NR_getppid);
-+			exit(ret != USER_NOTIF_MAGIC);
-+		}
-+		pids[i] = pid;
-+	}
-+
-+	/* This spins until all of the children are sleeping */
-+restart_wait:
-+	for (i = 0; i < ARRAY_SIZE(pids); i++) {
-+		if (get_proc_stat(pids[i]) != 'S') {
-+			nanosleep(&delay, NULL);
-+			goto restart_wait;
-+		}
-+	}
-+
-+	/* Read the notifications in order (and respond) */
-+	for (i = 0; i < ARRAY_SIZE(pids); i++) {
-+		memset(&req, 0, sizeof(req));
-+		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+		EXPECT_EQ(req.id, baseid + i);
-+		resp.id = req.id;
-+		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+	}
-+
-+	/* Make sure notifications were received */
-+	for (i = 0; i < ARRAY_SIZE(pids); i++) {
-+		EXPECT_EQ(waitpid(pids[i], &status, 0), pids[i]);
-+		EXPECT_EQ(true, WIFEXITED(status));
-+		EXPECT_EQ(0, WEXITSTATUS(status));
-+	}
-+}
-+
- /*
-  * TODO:
-  * - expand NNP testing
--- 
-2.25.1
+Intel platforms are integrating with GMAC EQoS IP which is impacted by the
+limitation above, so we are changing the default SPH setting to disabled
+for Intel Platforms only.
+
+If anyone can confirm on their platform also having the same issues,
+then we would change the SPH default to disable across the IPs.
+
+Thanks,
+Tee Min
 

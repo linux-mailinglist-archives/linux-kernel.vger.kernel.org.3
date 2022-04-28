@@ -2,194 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477065129C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D645129C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241917AbiD1DIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S241801AbiD1DIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241857AbiD1DIb (ORCPT
+        with ESMTP id S240958AbiD1DIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:08:31 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD9F333;
-        Wed, 27 Apr 2022 20:05:11 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.32]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MAwoL-1nZEGc2gll-00BNsv; Thu, 28 Apr 2022 05:04:31 +0200
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id A0BF03C01C;
-        Thu, 28 Apr 2022 05:04:29 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 0BE665F6; Thu, 28 Apr 2022 05:04:29 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 05:04:28 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 25/27] kbuild: embed symbol versions at final link of
- vmlinux or modules
-Message-ID: <YmoEPLkuIZaH4mbW@bergen.fjasle.eu>
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-26-masahiroy@kernel.org>
+        Wed, 27 Apr 2022 23:08:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08939255A9
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651115096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OgA3nNFGu0ZJlClNUFtGsmDCNPSPF05lYQrtZKmYE0Q=;
+        b=d4P73TqPPzDtbjDdkUz0tCIfnHXlEC8Y+WREoR237kFz6PiwvLJI1Iij4w2GroCUyFzfFE
+        a0YuZcEEO+LqTKM6qByc7mPfAHwF7qvM+G6/w0e8MrglMdKgIaKBhNBxZ6GLfcV5jfV2eb
+        YvD6EcOcrMB3E9ga0b7xZWwqbj6fCHk=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-471-VtATe6wYNGeDFMNTAqVESg-1; Wed, 27 Apr 2022 23:04:54 -0400
+X-MC-Unique: VtATe6wYNGeDFMNTAqVESg-1
+Received: by mail-lj1-f200.google.com with SMTP id v1-20020a2e2f01000000b0024da499933dso1370068ljv.19
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:04:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OgA3nNFGu0ZJlClNUFtGsmDCNPSPF05lYQrtZKmYE0Q=;
+        b=RRAM2xzV/3Hag5WC0l7hhOFYZxGCqQim4KPBZasJPkG7oNtV1fwhm/i2n7OFn6vt+9
+         bWL/gL4HgiAHR1eoKBJ9ng/fQT4PdEDP8/sYoaDBI6m/ZHseu53aWtoXPxpJScF2fx1I
+         1YSmhxN0m67JyQU4NNmy3nswhZZUXng9cJEUrSZ7alA+eulXVublVFA/ps8AqE16zkhv
+         Cfj08UwzL6gNMDAV/Y1R+k30hUm6odU7kTk+S3gaFbgplfKhCq+XapZL9LIbA1NyC2SJ
+         j5J6CyOhD2QYbWpNbsmbPNnLw0VcQFMIdqVXv50ncA7dgIdhrxYIgwLCYWtnW7YW+tOc
+         LjdQ==
+X-Gm-Message-State: AOAM533hcxb1ueX2bqlCoqBlCRsqdB+xLN5lE8re93IYsg+MRlay7P9K
+        0HNIkfsnZxcUQv8uUYxb8qJ5r2oElZch2r0m0kuC46LXBmG4pA50Hxvf9+6eIzRzPFjGBGvaUYB
+        zcQOTZgK+6X5q1lcHvUxHMBvWDtDybxVj25/fQZfz
+X-Received: by 2002:a05:6512:a8f:b0:471:948b:9b6b with SMTP id m15-20020a0565120a8f00b00471948b9b6bmr22939934lfu.471.1651115092948;
+        Wed, 27 Apr 2022 20:04:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxv318AyjnLP/y/hcTzOsn3aF+A+3WOw3SOPem9I7/1/ocqp0MGXggZvWaraT4bzvOsaKf2zYT8nNekp2BCIew=
+X-Received: by 2002:a05:6512:a8f:b0:471:948b:9b6b with SMTP id
+ m15-20020a0565120a8f00b00471948b9b6bmr22939923lfu.471.1651115092770; Wed, 27
+ Apr 2022 20:04:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220424190811.1678416-26-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:sPLxvyHC97PIhMYAbJr9xnxLkwIAWVPwIXXY+1JKXyagvq11wpe
- YITP+rn1r8efMaix5XiulPZqywP1aAyspZ2bulc3gZMRAK7NtQlP+bm8+GFgmm72VM50wcd
- B0ilI4C3aZ11rPzIdZfoXvPzsLiw3T3OpL0QzYdcnGfTIrj59cKwBxtQ9hsl5H4HksEn3rs
- EO/67yMACQup0ChHYiiBw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MD7ME2icglw=:uT6jCIwnSgZRDqtOBwb0dB
- kRDhk8bIARrgrpoJJ+tIOxn9S0YmQXm+B66WPJtIiN55E3/hUKMNIznw89b+skKK2MfshQGam
- 2NvcZrGqKdcFwAi7thjcqvdfeZBbYEA4AOUlquIGo363fkThfsqEi6iJfbgHY3cT/JsnkjlCC
- 7eLl906mw1z3/bPVJQgRFr8fY0+XAHE5CRpp2Zh9nTbuYfpMbTzQV2li4dQ3MEfddoCO5+pP+
- AGkdg+DVk1p4d8t+0fj+0hiNxkomYTy6Y6Hv70+gAvj1ghG01rnN/4v9kp+q0tQByw9VPoejk
- 1FP63fERbivVd9u+jSyXIao5zSUDQP3wW2ealPXjHIyv6qe+fLnPkwXjNTHCK2uDwPfjrrNrz
- wL5R4AjPor0kwG7CF0TKzX+f9JttrXa/u/oq+PxMd10ZzfdyKdGrjXjy8N1st18Kb3mlZmstz
- 5g2plKlEfr1hb6Djcdwtl4KTAOH/sADrvuMpWhnbmU94aaypxxgRBeLelGyuU72jIhPMGibQS
- tad+/vA+95axaCN8Yg3mJq7snA04ewQG6uhIwum5/SMDR82kxMlS6jBJNBhaZYhQl4WmaxESy
- zFfi4Lm3BDoq6Fh+PRkYYYm79pjqlGKSbpb7V5ZyiBfBto7yD4bqRY1su3k/ZM/MMjxiFZoRN
- nkb3L0g/zjXzo+dsm4TWWKh7d/X+fIlk23TIpSAXvHNhsqvLewYbkjIu66OgjEZbxKXo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425040512-mutt-send-email-mst@kernel.org>
+ <87a6c98rwf.fsf@redhat.com> <20220425095742-mutt-send-email-mst@kernel.org>
+ <20220426042911.544477f9.pasic@linux.ibm.com> <20220425233434-mutt-send-email-mst@kernel.org>
+ <20220425233604-mutt-send-email-mst@kernel.org> <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
+ <20220425235134-mutt-send-email-mst@kernel.org> <20220425235415-mutt-send-email-mst@kernel.org>
+ <87o80n7soq.fsf@redhat.com> <20220426124243-mutt-send-email-mst@kernel.org>
+ <87ilqu7u6w.fsf@redhat.com> <20220428044315.3945e660.pasic@linux.ibm.com>
+In-Reply-To: <20220428044315.3945e660.pasic@linux.ibm.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 28 Apr 2022 11:04:41 +0800
+Message-ID: <CACGkMEudDf=XXhV2tV+xZ586AnDyrQEotGAiSQZ4k1CTAWHZJQ@mail.gmail.com>
+Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
+To:     Halil Pasic <pasic@linux.ibm.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 25 Apr 2022 04:08:09 GMT Masahiro Yamada wrote:
-> Do not update objects with version CRCs while the directory 
-> descending.
-> 
-> Do it at the final link stage.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Thu, Apr 28, 2022 at 10:43 AM Halil Pasic <pasic@linux.ibm.com> wrote:
+>
+> On Wed, 27 Apr 2022 11:27:03 +0200
+> Cornelia Huck <cohuck@redhat.com> wrote:
+>
+> > On Tue, Apr 26 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> >
+> > > On Tue, Apr 26, 2022 at 05:47:17PM +0200, Cornelia Huck wrote:
+> > >> On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > >>
+> > >> > On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote=
+:
+> > >> >> On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
+> > >> >> >
+> > >> >> > =E5=9C=A8 2022/4/26 11:38, Michael S. Tsirkin =E5=86=99=E9=81=
+=93:
+> > >> >> > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin =
+wrote:
+> > >> >> > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote=
+:
+> > >> >> > > > > On Mon, 25 Apr 2022 09:59:55 -0400
+> > >> >> > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > >> >> > > > >
+> > >> >> > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck=
+ wrote:
+> > >> >> > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat=
+.com> wrote:
+> > >> >> > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wan=
+g wrote:
+> > >> >> > > > > > > > > This patch tries to implement the synchronize_cbs=
+() for ccw. For the
+> > >> >> > > > > > > > > vring_interrupt() that is called via virtio_airq_=
+handler(), the
+> > >> >> > > > > > > > > synchronization is simply done via the airq_info'=
+s lock. For the
+> > >> >> > > > > > > > > vring_interrupt() that is called via virtio_ccw_i=
+nt_handler(), a per
+> > >> >> > > > > > > > > device spinlock for irq is introduced ans used in=
+ the synchronization
+> > >> >> > > > > > > > > method.
+> > >> >> > > > > > > > >
+> > >> >> > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > >> >> > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > >> >> > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > >> >> > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > >> >> > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > >> >> > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+> > >> >> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > >> >> > > > > > > >
+> > >> >> > > > > > > > This is the only one that is giving me pause. Halil=
+, Cornelia,
+> > >> >> > > > > > > > should we be concerned about the performance impact=
+ here?
+> > >> >> > > > > > > > Any chance it can be tested?
+> > >> >> > > > > > > We can have a bunch of devices using the same airq st=
+ructure, and the
+> > >> >> > > > > > > sync cb creates a choke point, same as registering/un=
+registering.
+> > >> >> > > > > > BTW can callbacks for multiple VQs run on multiple CPUs=
+ at the moment?
+> > >> >> > > > > I'm not sure I understand the question.
+> > >> >> > > > >
+> > >> >> > > > > I do think we can have multiple CPUs that are executing s=
+ome portion of
+> > >> >> > > > > virtio_ccw_int_handler(). So I guess the answer is yes. C=
+onnie what do you think?
+> > >> >> > > > >
+> > >> >> > > > > On the other hand we could also end up serializing synchr=
+onize_cbs()
+> > >> >> > > > > calls for different devices if they happen to use the sam=
+e airq_info. But
+> > >> >> > > > > this probably was not your question
+> > >> >> > > >
+> > >> >> > > > I am less concerned about  synchronize_cbs being slow and m=
+ore about
+> > >> >> > > > the slowdown in interrupt processing itself.
+> > >> >> > > >
+> > >> >> > > > > > this patch serializes them on a spinlock.
+> > >> >> > > > > >
+> > >> >> > > > > Those could then pile up on the newly introduced spinlock=
+.
+> > >>
+> > >> How bad would that be in practice? IIUC, we hit on the spinlock when
+> > >> - doing synchronize_cbs (should be rare)
+> > >> - processing queue interrupts for devices using per-device indicator=
+s
+> > >>   (which is the non-preferred path, which I would basically only exp=
+ect
+> > >>   when running on an ancient or non-standard hypervisor)
+> > >
+> > > this one is my concern. I am worried serializing everything on a sing=
+le lock
+> > > will drastically regress performance here.
+> >
+> > Yeah, that case could get much worse. OTOH, how likely is it that any
+> > setup that runs a recent kernel will actually end up with devices using
+> > per-device indicators? Anything running under a QEMU released in the
+> > last couple of years is unlikely to not use airqs, I think. Halil, do
+> > you think that the classic indicator setup would be more common on any
+> > non-QEMU hypervisors?
+> >
+>
+> I really don't know. My opinion is that, two stages indicators are kind
+> of recommended for anybody who cares about notifications performance.
+>
+> > IOW, how much effort is it worth spending on optimizing this case? We
+> > certainly should explore any simple solutions, but I don't think we nee=
+d
+> > to twist ourselves into pretzels to solve it.
+> >
+>
+> Frankly, I would be fine with an rwlock based solution as proposed by
+> Jason. My rationale is: we recommend two stage indicators, and the two
+> stage indicators are already encumbered by an rwlock on the interrupt
+> path. Yes, the coalescence of adapter interrupts is architecturally
+> different, and so it is with GISA (without GISA, I'm not even sure), so
+> this rwlock end up being worse than the one for 2 stage. But my feeling
+> is, that it should be fine. On the other hand, I don't feel comfortable
+> with plain spinlock, and I am curious about a more advanced solution.
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Yes, I'm trying to use (S)RCU, let's see if it works.
 
-> ---
-> 
->  scripts/Makefile.build    | 19 +++----------------
->  scripts/Makefile.modfinal |  3 ++-
->  scripts/link-vmlinux.sh   |  4 +++-
->  3 files changed, 8 insertions(+), 18 deletions(-)
-> 
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index e03e85c90b26..aadc16e04632 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -162,12 +162,9 @@ ifdef CONFIG_MODVERSIONS
->  # o if <file>.o doesn't contain a __ksymtab version, i.e. does
->  #   not export symbols, it's done.
->  # o otherwise, we calculate symbol versions using the good old
-> -#   genksyms on the preprocessed source and postprocess them in a way
-> -#   that they are usable as a linker script
-> -# o generate .tmp_<file>.o from <file>.o using the linker to
-> -#   replace the unresolved symbols __crc_exported_symbol with
-> -#   the actual value of the checksum generated by genksyms
-> -# o remove .tmp_<file>.o to <file>.o
-> +#   genksyms on the preprocessed source and dump them into .cmd file.
-> +#   modpost will parse .cmd files to retrieve versions to create linker
-> +#   scripts that are fed to the final linking of vmlinux or modules.
->  
->  # Generate .o.symversions files for each .o with exported symbols, and link these
->  # to the kernel and/or modules at the end.
-> @@ -183,12 +180,6 @@ gen_symversions =								\
->  
->  cmd_gen_symversions_c =	$(call gen_symversions,c)
->  
-> -cmd_modversions =								\
-> -	if [ -r $@.symversions ]; then						\
-> -		$(LD) $(KBUILD_LDFLAGS) -r -o $(@D)/.tmp_$(@F) $@ 		\
-> -			-T $@.symversions;					\
-> -		mv -f $(@D)/.tmp_$(@F) $@;					\
-> -	fi
->  endif
->  
->  ifdef CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
-> @@ -268,7 +259,6 @@ define rule_cc_o_c
->  	$(call cmd,checkdoc)
->  	$(call cmd,gen_objtooldep)
->  	$(call cmd,gen_symversions_c)
-> -	$(if $(CONFIG_LTO_CLANG),,$(call cmd,modversions))
->  	$(call cmd,record_mcount)
->  endef
->  
-> @@ -277,7 +267,6 @@ define rule_as_o_S
->  	$(call cmd,gen_ksymdeps)
->  	$(call cmd,gen_objtooldep)
->  	$(call cmd,gen_symversions_S)
-> -	$(call cmd,modversions)
->  endef
->  
->  # Built-in and composite module parts
-> @@ -291,8 +280,6 @@ ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
->  quiet_cmd_cc_prelink_modules = LD [M]  $@
->        cmd_cc_prelink_modules =						\
->  	$(LD) $(ld_flags) -r -o $@					\
-> -               $(shell [ -s $(@:.prelink.o=.o.symversions) ] &&		\
-> -                       echo -T $(@:.prelink.o=.o.symversions))		\
->  		--whole-archive $(filter-out FORCE,$^)			\
->  		$(cmd_objtool)
->  
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 7f39599e9fae..d429e3f9ae1d 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -34,6 +34,7 @@ quiet_cmd_ld_ko_o = LD [M]  $@
->        cmd_ld_ko_o +=							\
->  	$(LD) -r $(KBUILD_LDFLAGS)					\
->  		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
-> +		$(addprefix -T, $(filter %.symver.lds, $(real-prereqs)))\
->  		-T scripts/module.lds -o $@ $(filter %.o, $^);		\
->  	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
->  
-> @@ -56,7 +57,7 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
->  
->  
->  # Re-generate module BTFs if either module's .ko or vmlinux changed
-> -$(modules): %.ko: %$(mod-prelink-ext).o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
-> +$(modules): %.ko: %$(mod-prelink-ext).o %.mod.o $(if $(CONFIG_MODVERSIONS), %.symver.lds) scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
->  	+$(call if_changed_except,ld_ko_o,vmlinux)
->  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index d2c193f82004..66a115f204eb 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -90,7 +90,6 @@ modpost_link()
->  
->  		if is_enabled CONFIG_MODVERSIONS; then
->  			gen_symversions
-> -			lds="${lds} -T .tmp_symversions.lds"
->  		fi
->  
->  		# This might take a while, so indicate that we're doing
-> @@ -196,6 +195,9 @@ vmlinux_link()
->  	fi
->  
->  	ldflags="${ldflags} ${wl}--script=${objtree}/${KBUILD_LDS}"
-> +	if is_enabled CONFIG_MODVERSIONS; then
-> +		ldflags="${ldflags} ${wl}--script=vmlinux.symver.lds"
-> +	fi
->  
->  	# The kallsyms linking does not need debug symbols included.
->  	if [ "$output" != "${output#.tmp_vmlinux.kallsyms}" ] ; then
-> -- 
-> 2.32.0
+> But my guess is that rwlock + some testing for the legacy indicator case
+> just to double check if there is a heavy regression despite of our
+> expectations to see none should do the trick.
 
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+I suggest this, rwlock (for not airq) seems better than spinlock, but
+at worst case it will cause cache line bouncing. But I wonder if it's
+noticeable (anyhow it has been used for airq).
+
+Thanks
+
+>
+> Regards,
+> Halil
+>
+> > >
+> > >
+> > >> - configuration change interrupts (should be rare)
+> > >> - during setup, reset, etc. (should not be a concern)
+> >
+>
+

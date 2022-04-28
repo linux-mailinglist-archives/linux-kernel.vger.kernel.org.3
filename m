@@ -2,157 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D846F513E8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BFD513E91
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352890AbiD1WfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
+        id S1352898AbiD1Whu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbiD1WfC (ORCPT
+        with ESMTP id S236003AbiD1Whq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:35:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982D74DD6;
-        Thu, 28 Apr 2022 15:31:46 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SKpWDk022478;
-        Thu, 28 Apr 2022 22:31:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=ZHei3AmziMOc2ZCq17jBr4Aqt3V9+CsjQoOHXb+Qrys=;
- b=DbUZqUqkB31z4mEo+zTlHU5cUifNDOf/iuWZaZuCPnEgkBlC2ATKV8f4FCXBjmjyBCfp
- YEHab2zkaj4xGlFVHrxhwL2KIKp9FvRJGufqFnnHqpwQkpomnnCx+chCW6+9RLfVcvwm
- mzLPk0MDUQk0ovaTkH+6cyHQPB+4AN8a32fiYG4REv/D5Z4GtntykQRdF4G1ua+l+Jzx
- q7+unwAxiZ+N/5RmG4N0ls1mTJQGZZFirAyU5ekVf9/O3bqHYZu9IArhqW1wAonvCZXd
- tqCDvL3QhQa9QbjZ9Nyks3rgdknPjM3AzNfsslUbzNn7TRz10tBqtcM5MFUAq7q/Q3fY Eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqs3n7uc4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:31:41 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SMRxbu022259;
-        Thu, 28 Apr 2022 22:31:41 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqs3n7ubv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:31:41 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SMSkWP002490;
-        Thu, 28 Apr 2022 22:31:40 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 3fm93af7vw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:31:40 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SMVcnr20840856
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 22:31:38 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8F3D86E04E;
-        Thu, 28 Apr 2022 22:31:38 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E6E76E052;
-        Thu, 28 Apr 2022 22:31:38 +0000 (GMT)
-Received: from localhost (unknown [9.41.178.242])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Apr 2022 22:31:38 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linuxppc-dev <linuxppc-dev@ozlabs.org>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mahesh Salgaonkar <mahesh@linux.ibm.com>
-Subject: Re: [PATCH v6] PCI hotplug: rpaphp: Error out on busy status from
- get-sensor-state
-In-Reply-To: <20220428204740.GA42242@bhelgaas>
-References: <20220428204740.GA42242@bhelgaas>
-Date:   Thu, 28 Apr 2022 17:31:38 -0500
-Message-ID: <87k0b8q1px.fsf@linux.ibm.com>
+        Thu, 28 Apr 2022 18:37:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0232BF945
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651185270; x=1682721270;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5Xaif9XTCLVj9HMqW7PV8obS8KjvJ3OUPUcIY2cWs4U=;
+  b=i0paNuGSZXnEfzWGGezoIgvFK4jR+G4i0YFGhZqus1JD0Bn9a8qR7wuL
+   krl9IpMNM0/eBKq4Ewo3wfq5W062BXURsASTPxijpNN58M70IWhQ6ediZ
+   imLLr4yAMrVAemeCwSc+b10hv+O8ok9F6YiGwat2K49ce7ht5rhMTm0Wi
+   kBOh5bUq0rQ8DKl/fOCCZ4l52mGwZVQAtAYU6mltV9nfNUDQaVXqhnZug
+   4ajLmw5hF2aZ47OMpTok8Bx9oVAVa6MvfbKMr3+Nol1PDGCVqoGUZpazM
+   5Rzo2qHncfvUP6+bKj9A0DsdqIb6lnD0ZZX7H+Tbu9gipRRwLykB/mNDM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329388635"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="329388635"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:34:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="597008914"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 Apr 2022 15:34:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkCiR-0005k1-S9;
+        Thu, 28 Apr 2022 22:34:27 +0000
+Date:   Fri, 29 Apr 2022 06:33:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Kossifidis <mick@ics.forth.gr>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: fs/proc/vmcore.c:443:42: warning: unused variable 'vmcore_mmap_ops'
+Message-ID: <202204290642.I2dLZBgO-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: F-0ZcXkTO6JddG-7JKT8snff0dGNk3kG
-X-Proofpoint-ORIG-GUID: RZlCNLCq1bI5dUkDbS47Z6Tpwzchd8as
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_05,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 lowpriorityscore=0 spamscore=0 phishscore=0 adultscore=0
- priorityscore=1501 clxscore=1011 mlxscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204280130
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn Helgaas <helgaas@kernel.org> writes:
-> On Tue, Apr 26, 2022 at 11:07:39PM +0530, Mahesh Salgaonkar wrote:
->> +/*
->> + * RTAS call get-sensor-state(DR_ENTITY_SENSE) return values as per PAPR:
->> + *    -1: Hardware Error
->> + *    -2: RTAS_BUSY
->> + *    -3: Invalid sensor. RTAS Parameter Error.
->> + * -9000: Need DR entity to be powered up and unisolated before RTAS call
->> + * -9001: Need DR entity to be powered up, but not unisolated, before RTAS call
->> + * -9002: DR entity unusable
->> + *  990x: Extended delay - where x is a number in the range of 0-5
->> + */
->> +#define RTAS_HARDWARE_ERROR	(-1)
->> +#define RTAS_INVALID_SENSOR	(-3)
->> +#define SLOT_UNISOLATED		(-9000)
->> +#define SLOT_NOT_UNISOLATED	(-9001)
->
-> I would say "isolated" instead of "not unisolated", but I suppose this
-> follows language in the spec.  If so, you should follow the spec.
+Hi Nick,
 
-"not unisolated" is the spec language.
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   249aca0d3d631660aa3583c6a3559b75b6e971b4
+commit: 5640975003d0234da08559677e22ec25b9cb3267 RISC-V: Add crash kernel support
+date:   1 year ago
+config: riscv-randconfig-c006-20220428 (https://download.01.org/0day-ci/archive/20220429/202204290642.I2dLZBgO-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5640975003d0234da08559677e22ec25b9cb3267
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5640975003d0234da08559677e22ec25b9cb3267
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/proc/vmcore.c:443:42: warning: unused variable 'vmcore_mmap_ops' [-Wunused-const-variable]
+   static const struct vm_operations_struct vmcore_mmap_ops = {
+                                            ^
+   8 warnings generated.
 
 
->> +#define SLOT_NOT_USABLE		(-9002)
->> +
->> +static int rtas_to_errno(int rtas_rc)
->> +{
->> +	int rc;
->> +
->> +	switch (rtas_rc) {
->> +	case RTAS_HARDWARE_ERROR:
->> +		rc = -EIO;
->> +		break;
->> +	case RTAS_INVALID_SENSOR:
->> +		rc = -EINVAL;
->> +		break;
->> +	case SLOT_UNISOLATED:
->> +	case SLOT_NOT_UNISOLATED:
->> +		rc = -EFAULT;
->> +		break;
->> +	case SLOT_NOT_USABLE:
->> +		rc = -ENODEV;
->> +		break;
->> +	case RTAS_BUSY:
->> +	case RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX:
->> +		rc = -EBUSY;
->> +		break;
->> +	default:
->> +		err("%s: unexpected RTAS error %d\n", __func__, rtas_rc);
->> +		rc = -ERANGE;
->> +		break;
->> +	}
->> +	return rc;
->
-> This basically duplicates rtas_error_rc().  Why do we need two copies?
+vim +/vmcore_mmap_ops +443 fs/proc/vmcore.c
 
-It treats RTAS_BUSY, RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX
-differently, which is part of the point of this change.
+9cb218131de1c59 Michael Holzheu 2013-09-11  442  
+9cb218131de1c59 Michael Holzheu 2013-09-11 @443  static const struct vm_operations_struct vmcore_mmap_ops = {
+9cb218131de1c59 Michael Holzheu 2013-09-11  444  	.fault = mmap_vmcore_fault,
+9cb218131de1c59 Michael Holzheu 2013-09-11  445  };
+9cb218131de1c59 Michael Holzheu 2013-09-11  446  
 
-Aside: rtas_error_rc() (from powerpc's rtas.c) is badly named. Its
-conversions make sense for only a handful of RTAS calls. RTAS error
-codes have function-specific interpretations.
+:::::: The code at line 443 was first introduced by commit
+:::::: 9cb218131de1c59dca9063b2efe876f053f316af vmcore: introduce remap_oldmem_pfn_range()
+
+:::::: TO: Michael Holzheu <holzheu@linux.vnet.ibm.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

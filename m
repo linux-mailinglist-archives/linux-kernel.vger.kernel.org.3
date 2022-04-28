@@ -2,67 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CFB513EA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB50513EA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352960AbiD1Wpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S1352994AbiD1Wsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349982AbiD1Wpc (ORCPT
+        with ESMTP id S1352965AbiD1Wsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:45:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8A5BABA9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:42:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9FC36207D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:42:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D0ECC385AD;
-        Thu, 28 Apr 2022 22:42:14 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 18:42:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
- non-weak symbols
-Message-ID: <20220428184212.18fbf438@gandalf.local.home>
-In-Reply-To: <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 28 Apr 2022 18:48:39 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1FC48E7D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:45:23 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y38so5433979pfa.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AqP7wSbo7WSzSy4l6HYEqupzMjO7gFTkhIq2MzyNb0A=;
+        b=JqDgqAkqxRfNNLmqV0twQnowQWIPaTFVuaA6ZtSE2/W9+7fCBmVrEfYajEb2YLBSLl
+         FLK4CRbHHZ7Adr96TTRTSNLbqFpTqCm7lDaCsi+ReAeevvlfLijXIIlJHigrlO3hAWxH
+         9EpDd9RGsANOfddzRbR+hpqBrPEqHTT7QYWnYEaqkBdZ10YQaukl3uZrWNJqv34AEams
+         bj+/Y7gd5kuuqZ9mbAxfsdfhb7PnR7I84PbvfJeEF0ZN22JHRTnofBOZ6YxtLY+84DS8
+         wm8xYzPO7IECkoYW9eMr9CEEIgSONOgWiY8dURFPl9tPSea7arRJiDHQU09dGvY3WFnz
+         ivIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AqP7wSbo7WSzSy4l6HYEqupzMjO7gFTkhIq2MzyNb0A=;
+        b=0e7oMPk5oSqc2WWY/D2XJqbipbJbKwMJnYrpzTD6E5TxnNefvpxP+3PT6GQ8D+Ab2g
+         /S9jfUEsOGNuMrMw7Kax5drfZ2QR7BzS+kgr7e7uK4v8YjcGmBQ/MIpW4kQbGh+qejHU
+         nr4yIXro4OIO9CXgiOlJlCk27oYkZEU+LEWBUYJLO9WZlAvVy+CV6y7sff5fi8vTM43M
+         Ux0BVWuEJV66qLLsGi+5MBwApPg9/f9V7GfUr7jaQO6+3DNGGfc+csv9cXmPZ25Srjzl
+         RG0oEhbyTHeUwBVqLw+Z3AnejZBaAtwotiPEQjEx5gluzWyasstDRZBkK0iugK5JWIaL
+         sqfQ==
+X-Gm-Message-State: AOAM530tJbe9Dv1SPJjDe4D51U15UCWcaWzw9Un8c+iNA2/UvhAr69y+
+        jrRuFCUQ7Q88jnXBU7PVCNhkMA==
+X-Google-Smtp-Source: ABdhPJwsExo1O7NKf8dvwXFhJjc/mnTP4ZYbb9E59TysQme5AwpU/tMHJ2sr1oRhM5YRyDB3LjC4pg==
+X-Received: by 2002:a05:6a00:190f:b0:50d:8b82:cb90 with SMTP id y15-20020a056a00190f00b0050d8b82cb90mr8179971pfi.65.1651185922372;
+        Thu, 28 Apr 2022 15:45:22 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n14-20020a17090a394e00b001d5f22845bdsm11955505pjf.1.2022.04.28.15.45.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 15:45:21 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 22:45:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, Sasha Levin <sashal@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH AUTOSEL 13/14] mm/thp: ClearPageDoubleMap in first
+ page_add_file_rmap()
+Message-ID: <YmsY/n+yXkoEaqqr@google.com>
+References: <20220428154222.1230793-1-gregkh@linuxfoundation.org>
+ <20220428154222.1230793-13-gregkh@linuxfoundation.org>
+ <c2ed1fe1-247e-e644-c367-87d32eb92cf5@google.com>
+ <YmrHsVZTEzqIDiKd@kroah.com>
+ <bec6e6cf-daa7-d632-7f81-471acba69c9d@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bec6e6cf-daa7-d632-7f81-471acba69c9d@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 22:49:52 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
++Sasha and Paolo
 
-> But, with ppc64 elf abi v1 which only supports the old -pg flag, mcount
-> location can differ between the weak and non-weak variants of a
-> function. In such scenarios, one of the two mcount entries will be
-> invalid. Such architectures need to validate mcount locations by
-> ensuring that the instruction(s) at those locations are as expected. On
-> powerpc, this can be a simple check to ensure that the instruction is a
-> 'bl'. This check can be further tightened as necessary.
+On Thu, Apr 28, 2022, Hugh Dickins wrote:
+> On Thu, 28 Apr 2022, Greg Kroah-Hartman wrote:
+> > On Thu, Apr 28, 2022 at 09:51:58AM -0700, Hugh Dickins wrote:
+> > > On Thu, 28 Apr 2022, Greg Kroah-Hartman wrote:
+> > > 
+> > > > From: Hugh Dickins <hughd@google.com>
+> > > > 
+> > > > commit bd55b0c2d64e84a75575f548a33a3dfecc135b65 upstream.
+> > > > 
+> > > > PageDoubleMap is maintained differently for anon and for shmem+file: the
+> > > > shmem+file one was never cleared, because a safe place to do so could
+> > > > not be found; so it would blight future use of the cached hugepage until
+> > > > evicted.
+> > > > 
+> > > > See https://lore.kernel.org/lkml/1571938066-29031-1-git-send-email-yang.shi@linux.alibaba.com/
+> > > > 
+> > > > But page_add_file_rmap() does provide a safe place to do so (though later
+> > > > than one might wish): allowing testing to return to an initial state
+> > > > without a damaging drop_caches.
+> > > > 
+> > > > Link: https://lkml.kernel.org/r/61c5cf99-a962-9a25-597a-53ab1bd8fbc0@google.com
+> > > > Fixes: 9a73f61bdb8a ("thp, mlock: do not mlock PTE-mapped file huge pages")
+> > > > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > > > Reviewed-by: Yang Shi <shy828301@gmail.com>
+> > > > Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > > > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> > > > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > 
+> > > NAK.
+> > > 
+> > > I thought we had a long-standing agreement that AUTOSEL does not try
+> > > to add patches from akpm's tree which had not been marked for stable.
+> > 
+> > True, this was my attempt at saying "hey these all look like they should
+> > go to stable trees, why not?"
+> 
+> Okay, it seems I should have read "AUTOSEL" as "Hey, GregKH here,
+> these all look like they should go to stable trees, why not?",
+> which would have drawn a friendlier response.
 
-I was thinking about this more, and I was thinking that we could create
-another section; Perhaps __mcount_loc_weak. And place these in that
-section. That way, we could check if these symbols to see if there's
-already a symbol for it, and if there is, then drop it.
-
--- Steve
+FWIW, Sasha has been using MANUALSEL for the KVM tree to solicit an explicit ACK
+from Paolo for these types of patches.  AFAICT, it has been working quite well.

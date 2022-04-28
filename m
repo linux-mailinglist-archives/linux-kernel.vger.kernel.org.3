@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95DD513B48
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CDF513B50
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349793AbiD1ST4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S1350879AbiD1SUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350874AbiD1STu (ORCPT
+        with ESMTP id S242119AbiD1SUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:19:50 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01937496BE;
-        Thu, 28 Apr 2022 11:16:34 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id i8so2516705ila.5;
-        Thu, 28 Apr 2022 11:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T6XQPBzj4qlVESNMSZre3n1h1i/4cIcF55AXPyrVmO0=;
-        b=b+L+dq2BmBZ5rFSSjn+fZzmtwTSK3h/eTgN3BK+wpEUunnkE+McgN7oLLboGmjrtAj
-         TFTGdCvYZYr4L8lUQyMAYYGiSStwV7B2FtAKG3hdDyD8uxRd87swTSH4uBy7Nom6pN+b
-         mqxXIsrH+XQvZYcj1OdD7cUWJsp5YGsEP/BahEZOBVhzpAIU/tygBQ745CMzJLcCmB2p
-         0VN0PU9xuuSGFfXfqlKTqHqgJ1+B+7v5RfAJ5COEUctUDtU7dXis5pfwhU98cQnLwzqU
-         ugkdUx2i3AjiVzNk3A9ySo2yaovSHYWEY6RpS9zqjVAq7TwKa7Wbrw+od3QgjDDbTmNv
-         NV+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=T6XQPBzj4qlVESNMSZre3n1h1i/4cIcF55AXPyrVmO0=;
-        b=TItOFLRWKN1HvEMplTGVIQKSkFNCEQxIOkt3cMiW2ey7BZQrHCJc3a8Kb1hN69c3n3
-         qEQaCv4H2CLP8N78fT54bKFiBs9pPJXRdysuq4FCJw+GWsbQzYcXSDq+BMpoCYfo5GbK
-         Y+Yds1GnuOioVgh46DHoZDnXZAD5K72mdLaXQ1RPyBd1dGd/q3IkpVbMknqsgpyMKC5X
-         Dq36Wf5nmSUEWuJxtXxZMV/tMxiDgYWdVr/058clITzkReedLD46EL0avAwayEq1dQWp
-         jiKn18N3VGrNvkEwxhSvfnBv+gm7GoKyy4NtdoExTCdMGP6UGiT/VDmCCa07w7oqWZVe
-         QOig==
-X-Gm-Message-State: AOAM532RoFXglrTQaHSJMqQ0euvyIh5e8f4NUO6zSJHEn1VM8pSsB13I
-        51pTX9EeZqOIIOK0VoJhFyA=
-X-Google-Smtp-Source: ABdhPJw7nR8ryMafd3FK4Xp5kpi8QwxX4jGk+pbNVcIsd5g7BYxHuiLfYeOTHDKBZJrVLy01ZuMLjw==
-X-Received: by 2002:a05:6e02:1905:b0:2cd:9176:58ab with SMTP id w5-20020a056e02190500b002cd917658abmr9225125ilu.81.1651169794434;
-        Thu, 28 Apr 2022 11:16:34 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:75d0:a34:61ff:fa0b? ([2600:1700:2442:6db0:75d0:a34:61ff:fa0b])
-        by smtp.gmail.com with ESMTPSA id k17-20020a92c9d1000000b002cacb37614esm302542ilq.43.2022.04.28.11.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 11:16:33 -0700 (PDT)
-Message-ID: <93d88940-1fb1-ce6c-4e1e-84bc868e7ff9@gmail.com>
-Date:   Thu, 28 Apr 2022 13:16:31 -0500
+        Thu, 28 Apr 2022 14:20:32 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2064.outbound.protection.outlook.com [40.107.22.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E32D5676A;
+        Thu, 28 Apr 2022 11:17:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PNsFLc1TF20lqJ5VwkT/m/zLQ2JhyeNLqWKAVdDdaorhpcvV8IAcBBgl8HdoSBl9feTpIiuEjRVhgrTOAy7b8TyJXQ3DOGy58LHr6eciIRZQJ+o7chEwOlrPsonmE+wpahuSMwOK9j5bzitxr5WjEFpplrQpS7qnR8hVPa1/3KDlCZjDmVyZkMC0hTz4Ib/9Ze5fxT56QMmLnWefj22/YOe0rWry30Votyr9nYj52MC+xT9ktP/+/uxKWdj2Uo42tH+gVPv7RbOnJh0mXz0mNzjtw5Xv4ZMbvNMkTk8yMIQ6f4AFELUouhkzO4HsE/bGXpqR0s/tzEktSGbwRsTHxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FS95gPAqjyt4XnA7kDTfu380VyfZNlv5oh9OBBTB+U4=;
+ b=JmLCy/aGw6iml3r4XEAM1rxBm20UPfCLyxLln3V0A8r7FMRSIr4GkopK93mPCo5vNkTiRME50WZTzgTuGlLccvGB5hdlU0z/mVCpYbSrzSrPhOmSWdjcEusN14bAk0bdXFVDKqrrCtC+aJCCk93KRxiyaGI9nIgG9w0IfYz5Ce28SDI9+W54P1Ztrpl5aUbzk+B/YO/DVqQRd2/ODpPOIas+3sj7MncuXt08ahgLt0iE6GxJ4y3dQGcMDzTSlfxiRvjjjzf8wF6or8fq9+BUBqDeyJa6VazAOxux/NB+gAJYNVdsbWUoYTpU+s9rlS3MZsYiCXst6DziGdmxFkycmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FS95gPAqjyt4XnA7kDTfu380VyfZNlv5oh9OBBTB+U4=;
+ b=lNB6zf8AyXf7k9iwWE8DClGi/EzRZ2l4XH5ncRzQf7IoLFNPgN8d9N2yuDXUTrR8DRlhywCUTuk/wa/8TbkbOdcFDr97zK7KOYxpM8UCk94hk4DUOu/xKerEW4YJqfn3x3wiBXgSEnX4H18pBFC0OXBKduWIWeRtKBYlVkcZi2ZrhBsBh2OQ319AE96YQmICyMVlcCXgjZWEYL7IYkbZpIJmkmWko4+xj3w83bvH/QViZU8xjBPG74DPMvz5oIOWZX5dbpfoxsriz8ALrgHlRvnmzScOo7XwFumuSYZ0ScWtLcy2vGcBAJVDgvF+xo2XBNCPAyYYBGdDH6DW7wx5sA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AS8PR03MB6775.eurprd03.prod.outlook.com (2603:10a6:20b:29d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Thu, 28 Apr
+ 2022 18:17:13 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::a9d3:8abd:3f5e:a0c]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::a9d3:8abd:3f5e:a0c%5]) with mapi id 15.20.5206.013; Thu, 28 Apr 2022
+ 18:17:13 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH v3 0/9] nvmem: sfp: binding updates and additions
+Date:   Thu, 28 Apr 2022 14:16:54 -0400
+Message-Id: <20220428181703.2194171-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0117.namprd13.prod.outlook.com
+ (2603:10b6:208:2b9::32) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/1] of: unittest: rename overlay source files from .dts
- to .dtso
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     David Gibson <david@gibson.dropbear.id.au>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Anmar Oueja <anmar.oueja@linaro.org>,
-        Bill Mills <bill.mills@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>
-References: <CAMuHMdXPn9FHr41xmihuuzNNNKvY-50yAwY4HyuyVo6qBn=Z1w@mail.gmail.com>
- <CAMuHMdWeL3DOXY3xcPOBW2WDDGW3PxgSM8didt7J1KxSm1ivJg@mail.gmail.com>
- <CAMuHMdWXXoS9mmX9VWRQyXfmsy8YROgpLZ-xB7zthEdPdM2u4A@mail.gmail.com>
- <CAMuHMdVWkSnki8VQDaYRzJ8yu8xtEKpXyfQppTtw3wXDQPmYzw@mail.gmail.com>
- <d4b7ce06-23e7-1c60-cc0c-b6aea07e0a1a@gmail.com>
- <CAL_JsqKTckMABk6cM8d=boZcHyLdcqYmbzfKDjAHdCXoCPSDtg@mail.gmail.com>
- <CAMuHMdU4oUKaGxmaPiC=cX0XpHG3KXhr+4MywEfeQ8sq-EG18A@mail.gmail.com>
- <CAL_JsqL3fHXNdGS=ap6+5Y25T2zmnDYRkt5dNV9mW7hyanVvuw@mail.gmail.com>
- <CAL_JsqJn459-8wnwT0N0CKumnvh_gDkVdgVebvMVa13oTxfQ=g@mail.gmail.com>
- <CAMuHMdUyuJbyHthc4ATuRXY=zM_Vbc7DmsZvWgX_u8w3FfhzDg@mail.gmail.com>
- <YmqRK1uWiady7BHD@robh.at.kernel.org>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <YmqRK1uWiady7BHD@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c2939103-0e71-4d6c-746d-08da294351b3
+X-MS-TrafficTypeDiagnostic: AS8PR03MB6775:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR03MB6775ADBFABF0176860DBC0FF96FD9@AS8PR03MB6775.eurprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sqi0ciE7r8i/c8Po1ScqpfsH/8Q59IT3JT430Juv/ErBrd7ulztEZNCcFT1Ae8UAV5kEr6lTLZqAl0G4EWAiF6nivowu8BxkYc8orW0Sbky/stopkQAPxq0nJ719wPz39tJ6JTqdKM+WeTShGxwVLLiH6MVM6SO6nqqBrsVmZI70de4OhF8J8cxpZE7qmD3whW3QHulC5DZuuO1SgtF04JeYQ3mCwVbJO04lI6D3ZKFC0WyBKVDGj4sSrV3i8Ldfsq6SGx1sQ8sZWH3uKVKl2XjMEPh5fBqMxCERt+Aktq1mce3TLpQ4qsZ38e4oTAl0IrLgn8wkD0e13IDdUVo7FZlfRZHV6Y40Kk+H9nG7TZC8E5AmFRo5lsHvTm9z22VR9ceJQOdMX+vz9/X3VuSHIMWex7wBnjOKfiQZrbZCccsEXaM25DXugU1USJIuwJpaa/1ch3m/PuuqheQNENWoniNtdRCdZkUsNEhrq2YQRNzzrzwUSACvUWHNf28tiW611kC6ImxqZROh47GT0y1iDj073kbI5hmXZX0i6Jc6Ui7g9r42xkKCBxAP8CowP+wfYWm/ze+HiHfgyukUVKGv6bTXKV4Mm+ze8X0oOe7BSsDVTfSfCeXvtD+24Bzxw34Pcecxla2sE01fNOl52nDWONbZnskbRPzf8tLA/5ixKUaUABw0E4c3vZpBSOuI3MEI32wlIniMER0CKNuQVVsgI5j7tUVHEMgPAcxII1RIbvTSOnQ9ETv+m7EfkCq9Xg5P8NQe18lswemJ2S4XpQIe3n5RmnIYU22UC8/4UtVzcMg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(966005)(5660300002)(8936002)(6486002)(86362001)(6666004)(2906002)(44832011)(1076003)(38350700002)(15650500001)(508600001)(7416002)(83380400001)(38100700002)(316002)(66946007)(186003)(66476007)(8676002)(66556008)(4326008)(36756003)(6506007)(54906003)(2616005)(107886003)(6512007)(26005)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n8RLPheHIpNbk9AzTLaCJlh7jdTV5RFFfqWTkuFlPAVI6u3F9HgNQYkhARem?=
+ =?us-ascii?Q?udiKSobrm73P57gf/c32fhRygqJyPpslKMnbKAoIerns05JZ3ofhUMxs+oUw?=
+ =?us-ascii?Q?NFqqCa/tszFx9QkeCptZQqwpkMmGeT3dl5Y3qO0Qlwex5gl1rWRlTrxoal6y?=
+ =?us-ascii?Q?nGomRAZBA/mgrq8IWqRckgENTmlel6nIHONo42APlCRlEiVSw6Mkr1gocQyr?=
+ =?us-ascii?Q?vvMm8VmCK6JUGDLI9/MlbYv2qzjE9DEZ720o0N0gvVp7vi41B+V31GV6QFGq?=
+ =?us-ascii?Q?MjIFpiy6XP0zf75ShbPi0DoEvWfouvfzWGjPZUfJopHnAqLO2ntqnimnAizO?=
+ =?us-ascii?Q?pjARL/3FyxbSUGd717fZyqgjgaIi7qF1oxA75QBv/qwsNuULUIRXNh0eEdFv?=
+ =?us-ascii?Q?wEr3QvxkXwpN13qiELPLYfrClKRSL0S/Qw+aWQN1QyhKIW7vpo5aK1je6280?=
+ =?us-ascii?Q?JwSDU/Ys8FgdwANPo7kCNLTvU++gxSv2EyAsPOU5d0zR/dIqaERqBKLLw5R2?=
+ =?us-ascii?Q?15M0VycpBLtYheX2PhWZv37QJGjz+Dcup6YbXiG5HCc1HRKgw54ie8rRy+AO?=
+ =?us-ascii?Q?XCpITr0GUJ092upnWfH9pe1SHoHHnTE6KJT8gH6BQ5h9BRw5YoxESFwd09MO?=
+ =?us-ascii?Q?d+VWYrcQv9znCqip8j+jdy0Ykb/QOMwOU+W1hgUAUA99QozfXEbbyt/+e1SR?=
+ =?us-ascii?Q?f3SQKsgwJrIimfjXiclj0jrsFX0nOId56w9PC0BpeAnpwU64dntNnQN36Hhz?=
+ =?us-ascii?Q?WtV21A4FP+2E8jFYLYLtIfZcwTpQ7gBo5enCu0dGzJQvuS27+dFPgxZ62HSE?=
+ =?us-ascii?Q?LaJhP+JFqPMXJg1GUrKi1SvY3Eg/qfdqoantQ1Sf4gYBWFUYuxsEOExjy3BA?=
+ =?us-ascii?Q?Ps+Jgf9MJVrpjGGc/F54nTWoY36UmYx1cFJe9nnC7BmlQWy/wBRKCTmboD05?=
+ =?us-ascii?Q?Fmps8f/atTL8S2j9lLiPm2ijoEJxgS/CyOb70dBx9ih8aXDiuDe4RLiNUj9s?=
+ =?us-ascii?Q?vYfBeWQeOI44pMmoKU2jl4TaOJZUTSusH3rDIaGTTL7AfjO1zQcn9wWGp1e0?=
+ =?us-ascii?Q?i5OaFwcJOeKPahQ/XWG55SS97WrCwLh4BH5L5PhwhI8fgLidmnCY/DFgtLtr?=
+ =?us-ascii?Q?O65A3UqYpAQZvulRejrfevkFU9OBhpwr4zaKIXD6dVuvdLRXBh07WXyqU7/P?=
+ =?us-ascii?Q?6shyN34KzdaJOut1OYrlr0p5WsyFN7eaFuJsNlCQuqeDNwJKrK7AgOmGkbVE?=
+ =?us-ascii?Q?hiFekLFpO/vCf6jmDU/3+wUwabOm3YM4srr0o40juNAV5zxmfjJJ4fZicRU8?=
+ =?us-ascii?Q?yv5Nh6qy2Fc5cHq9HePlr79qOmpjzJvaI7dj17JbI0MG5WgZmUTDgeQLSBBg?=
+ =?us-ascii?Q?w+DxueAS7Dg5nqbVASnb/pGauk4ZNtytwHTgSZ6pcgfb9gQMbfJMQ+9FwvtN?=
+ =?us-ascii?Q?9T1jn1ndsIdqfmHWeOZzIKTzv+npy4Og5U7KL4RyL1C0SFXPPhtppO+zCi37?=
+ =?us-ascii?Q?pyEQcRUaANEYxb85ELmGDIWm48u+DL0HjQp3LR318oL0Y7imAHobhQjosbSd?=
+ =?us-ascii?Q?MXjxCATIiazainnlS6y1CIo979BUilHGSudGIXiIxl5p5+2ylnDHVjHE5YO/?=
+ =?us-ascii?Q?masZio+ioQCSfqfeUbBcy2CpZVuzuCvxynxh8dGCXoRXL7YRP7kJb3yGyIzc?=
+ =?us-ascii?Q?hYkZpFCpVCmem7FNrg2nZlKKV3DqcVnIVK0/7l8yJBmfJ00Y7ji0qpKuORUk?=
+ =?us-ascii?Q?O0UG+EB2TCCxKJ60vMEbkHLL7Af+f04=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2939103-0e71-4d6c-746d-08da294351b3
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 18:17:13.7859
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ua4j2u7I/G1/n+t+9v2gZs3utoX2KTAtKoTTMRPGpZIczDP/2oiMeJbQNQrYjKFn1ogd40bk5W7bfB2d+M8DYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6775
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,77 +120,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 08:05, Rob Herring wrote:
-> On Thu, Apr 28, 2022 at 08:25:31AM +0200, Geert Uytterhoeven wrote:
->> Hi Rob,
->>
->> On Wed, Apr 27, 2022 at 11:14 PM Rob Herring <robh@kernel.org> wrote:
->>> On Wed, Jan 26, 2022 at 1:31 PM Rob Herring <robh@kernel.org> wrote:
->>>> On Fri, Jan 14, 2022 at 3:25 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>> On Fri, Jan 14, 2022 at 3:10 AM Rob Herring <robh@kernel.org> wrote:
->>>>>> On Thu, Jan 6, 2022 at 11:23 AM Frank Rowand <frowand.list@gmail.com> wrote:
->>>>>>> Patient Geert has pinged again.
->>>>>>
->>>>>> If it's not a patch to be reviewed, then I'm not going to see it most
->>>>>> likely. I don't read the DT list regularly...
->>>>>
->>>>> Fair enough...
->>>>>
->>>>>>> If I remember correctly you guys were not thrilled with this idea, but
->>>>>>> also did not seem strongly against it.  Are you willing to go along
->>>>>>> with .dtso for overlay source files?  If so, I will revive this patch
->>>>>>> series.
->>>>>>>
->>>>>>> David, if you are against supporting .dtso in the dtc compiler then
->>>>>>> the kernel can still support it through make rules.
->>>>>>
->>>>>> I'm not really interested in diverging from dtc. I'd suggest moving
->>>>>> the discussion to dtc list and/or devicetree-spec if you want to get
->>>>>> more attention on this.
->>>>>
->>>>> What needs to be supported in the dtc compiler?
->>>>> The fallback passed to guess_input_format() is "dts".
->>>>> So this has been working out-of-the-box since forever?
->>>>
->>>> Ah, okay.
->>>>
->>>>>> Also, keep in mind that extensions also affect MIME types which
->>>>>> someone was also asking about recently.
->>>>>
->>>>> You mean "MIME type of Devicetree Blobs and Sources"[1]?
->>>>> According to [2](2022-01-13), none of that has happened.
->>>>
->>>> This is what I was thinking of:
->>>>
->>>> https://github.com/devicetree-org/devicetree-specification/issues/46
->>>>
->>>> In any case, given everyone is ambivalent, send me an updated patch
->>>> and I'll apply it.
-> 
-> ^^^^^^^^
-> 
->>>
->>> Ping! Anyone still want this?
->>>
->>> What I don't want to see is a mixture of .dts and .dtso. And now I'm
->>> reviewing RPi overlay patches[1] with .dts.
->>
->> I still prefer .dtso over .dts, as it allows tools to detect the file
->> type without having to read the file's contents.
->> Without this, e.g. make needs to have all overlays listed explicitly
->> in a Makefile.
->>
->> We do have .c, .h, .s (even .S), .dtsi. So why not .dtso?
-> 
-> Read above! I said to resend this patch and I will apply it.
+This adds several properties to the Layerscape Security Fuse Processor
+(SFP) necessary for writing. Although the Linux driver does not use
+these bindings, I plan to use them in U-Boot [1]. It also adds a new
+compatibles for Trust Architecture (TA) 2.1 devices. In addition, it
+also adds an SFP binding for all TA 2.1 and 3.0 devices.
 
-Sorry for the delay.  Earlier I said the I would rework the patch (if needed
-for the current kernel) and resend.  I've been distracted by other things
-like bug fixes.  Otherwise resending this patch is at the top of my todo
-list.
+I would like to get this series merged for 5.18. As noted in patch 2,
+making the clock property mandatory is not an ABI break, but if this is
+not applied then it would become an ABI break. The absolute minimum
+patches to apply for this would be patches 2 and 5. The rest (including
+the regmap changes) could be deferred if necessary.
 
--Frank
+[1] https://lore.kernel.org/u-boot/7c8e206a-cd40-2a77-6282-7f4bead2b13a@seco.com/T/#m591f8425b6f096ab3d54e6f7bd258e41cfa4c43b
 
-> 
-> Rob
+Changes in v3:
+- Update commit message to note that this binding has not yet been
+  present in a relase, so it is OK to make otherwise breaking changes.
+
+Changes in v2:
+- Mention "regulator" in the description for ta-prog-sfp-supply
+- Convert sfp driver to use regmap
+- Fix various typos in commit messages
+
+Sean Anderson (9):
+  dt-bindings: nvmem: sfp: Fix typo
+  dt-bindings: nvmem: sfp: Add clock properties
+  dt-bindings: nvmem: sfp: Add TA_PROG_SFP supply
+  dt-bindings: nvmem: sfp: Add compatible binding for TA 2.1 SFPs
+  arm64: dts: ls1028a: Update SFP binding to include clock
+  ARM: dts: layerscape: Add SFP binding for TA 2.1 devices
+  ARM: dts: Add SFP binding for TA 3.0 devices
+  nvmem: sfp: Use regmap
+  nvmem: sfp: Add support for TA 2.1 devices
+
+ .../bindings/nvmem/fsl,layerscape-sfp.yaml    | 30 ++++++++++++++--
+ arch/arm/boot/dts/ls1021a.dtsi                |  7 ++++
+ .../arm64/boot/dts/freescale/fsl-ls1012a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  5 ++-
+ .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |  8 +++++
+ .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |  8 +++++
+ drivers/nvmem/Kconfig                         |  1 +
+ drivers/nvmem/layerscape-sfp.c                | 36 ++++++++++++++-----
+ 11 files changed, 115 insertions(+), 12 deletions(-)
+
+-- 
+2.35.1.1320.gc452695387.dirty
 

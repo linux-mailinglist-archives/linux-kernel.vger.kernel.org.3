@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E52513523
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B7B513528
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347169AbiD1NdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
+        id S1347216AbiD1NeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbiD1NdT (ORCPT
+        with ESMTP id S1347167AbiD1NeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:33:19 -0400
+        Thu, 28 Apr 2022 09:34:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D7CAC91B;
-        Thu, 28 Apr 2022 06:30:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584786378;
+        Thu, 28 Apr 2022 06:31:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22F8A60DF0;
-        Thu, 28 Apr 2022 13:30:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35295C385A0;
-        Thu, 28 Apr 2022 13:30:01 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 09:29:59 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     <arnd@arndb.de>, <catalin.marinas@arm.com>,
-        <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <will@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCHv13 9/9] soc: qcom: geni: Disable MMIO tracing for GENI
- SE
-Message-ID: <20220428092959.175b48ae@gandalf.local.home>
-In-Reply-To: <3b2fb1e02f7a9836b2388b9f2ce2184c5a0cd444.1651149615.git.quic_saipraka@quicinc.com>
-References: <cover.1651149615.git.quic_saipraka@quicinc.com>
-        <3b2fb1e02f7a9836b2388b9f2ce2184c5a0cd444.1651149615.git.quic_saipraka@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A98A460DE9;
+        Thu, 28 Apr 2022 13:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E685DC385A9;
+        Thu, 28 Apr 2022 13:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651152667;
+        bh=DnP9exkGhsGYgxJxwNecTILtYI5DRDFnOujuiuYepj0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A0aH/+ToIT48OzvZCW1iw33zWkGyK4bwq/us6yc9vdyyWwlPjTM7SeMkSWT6GBDj8
+         ofsXran7qP2k2IaWgpA/aNvpQlSiKEqsjcEoBUumZMBBzoN466NLksAyIYcREiKs9i
+         QaQQW7Hp/1vx8yUH6LNjCFBne4DoL/3lNp0LrbNJVH+LNh/mqTvu4h0w4mkgz7BU/G
+         a9OD0ZZjhkSU7ButZS9w3C64i86mYgMHUnMKMLwTkjsD/DTHxwF5CHgGGSLDIQ+B5m
+         og97rBUTxFfb+H19gb8deojTOIQaOd8XzBBoL1jTm7PvoOp0iCpRC5v25YQlMdxgB7
+         EGXsIxd0StTMw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5C017400B1; Thu, 28 Apr 2022 10:31:04 -0300 (-03)
+Date:   Thu, 28 Apr 2022 10:31:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 1/7] perf vendor events intel: Update CLX events to v1.15
+Message-ID: <YmqXGCMbBOLcd261@kernel.org>
+References: <20220428075730.797727-1-irogers@google.com>
+ <96b5c9f4-f0a0-0019-8059-3e833c95b011@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <96b5c9f4-f0a0-0019-8059-3e833c95b011@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 18:14:12 +0530
-Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
-
-> Disable MMIO tracing for geni serial engine driver as it is a
-> high frequency operation with many register reads/writes and
-> not very useful to log all MMIO traces and prevent excessive
-> logging.
-
-This states what it does but does not really state why. Are you using MMIO
-tracing in other locations and this is causing too much noise?
-
-What is the real issue. Just saying "excessive logging" is not sufficient.
-That would be a reason to disable function tracing ;-)
-
--- Steve
-
-
+Em Thu, Apr 28, 2022 at 09:12:26AM -0400, Liang, Kan escreveu:
 > 
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> ---
->  drivers/soc/qcom/qcom-geni-se.c | 3 +++
->  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index 28a8c0dda66c..a0ceeede450f 100644
-> --- a/drivers/soc/qcom/qcom-geni-se.c
-> +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -1,6 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0
->  // Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
->  
-> +/* Disable MMIO tracing to prevent excessive logging of unwanted MMIO traces */
-> +#define __DISABLE_TRACE_MMIO__
-> +
->  #include <linux/acpi.h>
->  #include <linux/clk.h>
->  #include <linux/slab.h>
+> On 4/28/2022 3:57 AM, Ian Rogers wrote:
+> > Events are generated for CascadeLake Server v1.15 with
+> > events from:
+> > https://download.01.org/perfmon/CLX/
+> > 
+> > Using the scripts at:
+> > https://github.com/intel/event-converter-for-linux-perf/
+> > 
+> > This change updates descriptions, adds INST_DECODED.DECODERS and
+> > corrects a counter mask in UOPS_RETIRED.TOTAL_CYCLES.
+> > 
+> > Signed-off-by: Ian Rogers<irogers@google.com>
+> 
+> Thanks Ian. For the whole series,
+> 
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks, applied.
+
+- Arnaldo
 

@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B1C513ECB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13A3513ED0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353096AbiD1W7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S1353118AbiD1XB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 19:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353087AbiD1W7V (ORCPT
+        with ESMTP id S1353087AbiD1XB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:59:21 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0DE2AE3E
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:56:04 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id i38so11562205ybj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:56:04 -0700 (PDT)
+        Thu, 28 Apr 2022 19:01:26 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A292F5A153
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:58:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y21so7160915edo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AZ8/ZHQt0GRQpJww4lct7d21fcaHvDESbeLqhd2I1bI=;
-        b=ucuXnzehNcoNaIFz9y++2PCcsmNoxYh67Y2KFZNW1unHKW3FnmC4jzYOewXM8Y7g4i
-         RCw2dTbN99FjrpiObL5fMg0NrgNqjjIxJ5Po0XBvbzx6JzwvnJ8DVM1zIs5zlD74E1q0
-         m1O/Hbi6ojuQ+0olAjqTdPvqAkMZ9yZUPWgFNvaDvkofZjKTwao9BpU8U58p7Ha3ctLs
-         Myce8HelYJRSbfctgbvNmZpVc9HR27CkzBi+prypXnuk44E85VVpxCQxnGUTA5Ry6iWf
-         5XGDUTo34p7wqyxHe6NPQzmfgS+/lpiLoDsVYKk0dhjZWwIDojmNRq91DoVwj1LdSjIR
-         axBg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R5/7OCxhqk5o9giaTDUQztGpi5IgQbeepSeYSbhWdII=;
+        b=BZQqEcfqgYTQ01yTJ3p6tPu0vaoYxHxTZYXAPCQDyng2F9JErAwf+wBYyeCYL3jbyn
+         fu7P7HVw2JjagdSunf6J7t0o3nqtfHGPh/ZLJHzYdg1s5shotJ5wMbZpAHCMdC4+K+BV
+         uL4JNuQnZmCRBiUFM+rtrpfaTepwEclOBBGoL9iE+tm/pWzx/WIR5WB9W8CutqsrDxF5
+         8r5IwxNz3GLYfDgZMejyxQ0BjUIeQeCMTqhf73P19V3Bgg4MUbJ2q163D/OWSpHCbJdH
+         OfKEAdrVw4U7Rx0/SOnvPBxeiyCVH2uAkdPiFk+O3ZvsaiODty7uqGGjbN4chYEWRdp+
+         7WBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AZ8/ZHQt0GRQpJww4lct7d21fcaHvDESbeLqhd2I1bI=;
-        b=dOSv/9yVNiVU/047pt0db5Y8DQyY7ggFaIc33uBd2v0rqdgq9wB4yINVKTPBMG5l6R
-         y4e5VA0xf8TpNPMj0yQ7CalCuU0iB2akEvCau9Lr9kUpwvVspOtt9veBKdFMXlQoLK0k
-         +extdJiyNM0QeJZH8tMt5zdtGkfnlSaK3pCpb9eE020kBZeRRPtm8XFB/oWVrEPNRi4d
-         zqYo9S4bZafujp6GlpOOm+dHQucEe0CQkajGk/KTs9LkmukNIRFq/FIiCdKd77rtDrlh
-         pKGZe0chxH2fzVvSA/ETL1C2oPfl/gvRXcYjzeWedkBdi+5Ted8sMPQ6vkgbZn30sNqC
-         a5WQ==
-X-Gm-Message-State: AOAM531w8ngCfb0Gi/L7FeIvkSzx9lvtQxvAiKRS5fdBd8tu/YrAeD/1
-        2jcxO7w4iZ90UQHQ66D3Pzvzw8QX4D9cdiY6SpRK2Q==
-X-Google-Smtp-Source: ABdhPJyhJ2SNA8+s8ZqNAY+1RfMSxJ4alux7Fu+Nxl0Epn8PePLV4XNSQZmCWxbE/uh/DAjUC1b9me8wZwZ/ybZMEvw=
-X-Received: by 2002:a25:aa94:0:b0:648:62f2:ef4e with SMTP id
- t20-20020a25aa94000000b0064862f2ef4emr21465149ybi.626.1651186563960; Thu, 28
- Apr 2022 15:56:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R5/7OCxhqk5o9giaTDUQztGpi5IgQbeepSeYSbhWdII=;
+        b=Jz51K48sHrXFgK3AqMlyrMwbfrQrBunRD9OVkqlIrVFFccMj4pBoDdECEcXrN9Fwzk
+         tYK37dsh1ZV8HVaSzNyjlzRxAJWtMKEG3v/7CSdxtcrfPYIKgQWjl4LuYAJcEuSXha1S
+         rhT3lWmHoa3jG2W3pGDpn5HswIOXvE6Ld/FUMUfMNq1FVVbxF5qqHfK9+CTC3CvHT2LL
+         GPBvdM+FDWG4OsgRIa0gUVZDPOB5a530HjVJJRjwEvJPM38alYzmFa0lhhlsqK41NR6f
+         Ma2EaiwxsOhH3DVfvMPdd6Uta/C7pZTiPNnwwLFXoPkVP0p32RE/DniwcFwUtfonNfMq
+         ZG2w==
+X-Gm-Message-State: AOAM532OvwoKxYHwXfKcdA6YJsVJhQWE8zU6xyZvJs1sHiDONjX7aaW/
+        2rbddRZtIF9KNrxotz/rFw==
+X-Google-Smtp-Source: ABdhPJyLbUuBj/1YYm+3qmglf7zy9b/YbbcMub3/HL40okdVxkr6/TVxIZulAoEV9PjbfrGkO2N3Bw==
+X-Received: by 2002:a05:6402:2920:b0:425:d7c7:41f with SMTP id ee32-20020a056402292000b00425d7c7041fmr29248373edb.370.1651186687432;
+        Thu, 28 Apr 2022 15:58:07 -0700 (PDT)
+Received: from crystalwell.adg.lan (a109-49-0-175.cpe.netcabo.pt. [109.49.0.175])
+        by smtp.gmail.com with ESMTPSA id a25-20020a056402169900b0042617ba63c8sm2219102edv.82.2022.04.28.15.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 15:58:06 -0700 (PDT)
+From:   Rui Salvaterra <rsalvaterra@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     matthias.bgg@gmail.com, ryder.lee@mediatek.com,
+        daniel@makrotopia.org, Rui Salvaterra <rsalvaterra@gmail.com>
+Subject: [PATCH] arm64: dts: mt7622: specify the L2 cache topology
+Date:   Thu, 28 Apr 2022 23:57:55 +0100
+Message-Id: <20220428225755.785153-1-rsalvaterra@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220422170920.401914-1-sebastian.reichel@collabora.com> <20220422170920.401914-14-sebastian.reichel@collabora.com>
-In-Reply-To: <20220422170920.401914-14-sebastian.reichel@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 29 Apr 2022 00:55:52 +0200
-Message-ID: <CACRpkdZXuLPpgKcM_OU+Xewuuq6zGJek0QXAT1Xxn5fcZofJvA@mail.gmail.com>
-Subject: Re: [PATCHv1 13/19] pinctrl/rockchip: add rk3588 support
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        Jianqun Xu <jay.xu@rock-chips.com>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 7:09 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
+On an MT7622 system, the kernel complains of not being able to detect the cache
+hierarchy of CPU 0. Specify the shared L2 cache node in the device tree, in
+order to fix this.
 
-> From: Jianqun Xu <jay.xu@rock-chips.com>
->
-> Add pinctrl support for RK3588.
->
-> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
-> [merged in downstream fixes, simplified register lookup logic for better
-> maintanence at the cost of a bit more static const memory and fixed some
-> incorrect registers]
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Rui Salvaterra <rsalvaterra@gmail.com>
+---
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Patch applied, unless Heiko does some loud protesting it stays
-in the tree.
+diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+index 6f8cb3ad1e84..3d6eaf6dd078 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+@@ -80,6 +80,7 @@ cpu0: cpu@0 {
+ 			enable-method = "psci";
+ 			clock-frequency = <1300000000>;
+ 			cci-control-port = <&cci_control2>;
++			next-level-cache = <&L2>;
+ 		};
+ 
+ 		cpu1: cpu@1 {
+@@ -94,6 +95,12 @@ cpu1: cpu@1 {
+ 			enable-method = "psci";
+ 			clock-frequency = <1300000000>;
+ 			cci-control-port = <&cci_control2>;
++			next-level-cache = <&L2>;
++		};
++
++		L2: l2-cache {
++			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 	};
+ 
+-- 
+2.36.0
 
-Yours,
-Linus Walleij

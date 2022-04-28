@@ -2,130 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E935137CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AD85137D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348844AbiD1PLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S1348852AbiD1PMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234234AbiD1PLi (ORCPT
+        with ESMTP id S234234AbiD1PME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:11:38 -0400
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E8B29803;
-        Thu, 28 Apr 2022 08:08:22 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id y21so3125982wmi.2;
-        Thu, 28 Apr 2022 08:08:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TuvJXwCxTMF9s75L3H+hv+7anX+/ghGmSwT77QY4zP8=;
-        b=4HVpBKwq2cPnaeoBt8UebBR6tx6SmDAA2qQe7kihgXzztJmOZHUNDVQC1Xf7ZrTdxA
-         7mmGD6zcTKIkwFPS11RuwcPcd6EnlyO0urXKIIrodOhecDpWizchTbJ1BnvuubA4BJ2W
-         pUf+wnAKG1Qz2zwsST9+07qUx2Ed3JPTg09zmVGYC3hp5WqYG+YDah8WjIkhrbkrtQsB
-         UZe5h5SXno978FfMklmE2GPMjnGTLl3I7VL3iDjubYabdGL9vaxYuyvPEm55MJwPoLTn
-         fSznsJqXMqZf2VyKCPz2H0EpBWLznkjydNOmjAbcCZotXd98TFITe/7OgR5NIne+FxdE
-         aoUQ==
-X-Gm-Message-State: AOAM531LucsiheyGIhIB4yfBBZznR4RK3hJ+V3hHYs9HZGzk4aNWZ7Yh
-        rHWxKBMQzUJoAFxbXuW9KJCoXO/l8c4=
-X-Google-Smtp-Source: ABdhPJyWmp6Skbs9TUpCJL9uBx1rklPO1cb+sQDParNc4Y7M0X4W7/LTGjpTnoK4PN2GAgyRkNmMmA==
-X-Received: by 2002:a1c:6a02:0:b0:38b:3661:47f1 with SMTP id f2-20020a1c6a02000000b0038b366147f1mr31116251wmc.5.1651158501549;
-        Thu, 28 Apr 2022 08:08:21 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id r21-20020a05600c35d500b00393fecce6b6sm200853wmq.23.2022.04.28.08.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 08:08:20 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 15:08:19 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com,
-        decui@microsoft.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, bjorn.andersson@linaro.org,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: hv: Fix hv_arch_irq_unmask() for multi-MSI
-Message-ID: <20220428150819.xwiqqdhgrgrxcstf@liuwe-devbox-debian-v2>
-References: <1651068453-29588-1-git-send-email-quic_jhugo@quicinc.com>
- <20220428145824.kp4p5qacgnncsxls@liuwe-devbox-debian-v2>
- <dec6b3a9-e988-aa10-817c-21f2d45194c9@quicinc.com>
+        Thu, 28 Apr 2022 11:12:04 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BDB95A22
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651158529; x=1682694529;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WjpidTVz5lUtD/efh8OlqCuRXiLpHTD6QLqjLK1bhbg=;
+  b=GcMra62ua/oSD44cZrzWiySFlTAY2+ug0dWgQ7PtTrBqsGdH5NYbEI+C
+   +JGNlVnjwFqydg3+Oe1zcA7WXZfLT+iZlPJ12q7P78jZee3/en89cl6ky
+   pRsBfj2UALILPDyNWwK0ECwQjc9I0oh3r4OR8nVHNKeszbU5Y7QK7XMrd
+   rjU/mTDhuPh88YB+Dlv9WeFEfF3ady/hCMD9AggDHXBV4LIP4tkOkCSqy
+   7hgoOTlLRukHXtGC+AppyKEUsQKVBx2srzvd7+VTY0eUZbcX51oRwkvKD
+   LSok7n2cHqMwzOsXwjKfNLy/Ao9cXvCeZtJaBWl1o+pu2Nwty8ezDKxyd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="329262567"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="329262567"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 08:08:49 -0700
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="559713585"
+Received: from mpoursae-mobl2.amr.corp.intel.com (HELO [10.212.0.84]) ([10.212.0.84])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 08:08:48 -0700
+Message-ID: <bc18351c-27f2-17ae-e781-6b60fbb72541@intel.com>
+Date:   Thu, 28 Apr 2022 08:09:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dec6b3a9-e988-aa10-817c-21f2d45194c9@quicinc.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Content-Language: en-US
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
+References: <tencent_7477100F8A445C6CAFA8F13601A55134480A@qq.com>
+ <YmJ/WA6KAQU/xJjA@myrica>
+ <tencent_A4E83BA6071B2204B6F5D4E69A50D21C1A09@qq.com>
+ <YmLOznyBF0f7COYT@myrica>
+ <tencent_2922DAB6F3D5789A1CD3A21A843B4007ED09@qq.com>
+ <Yman5hLomw9/c+bi@myrica> <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
+ <YmavoKkVu+hd+x0M@myrica> <20220425083444.00af5674@jacob-builder>
+ <YmbIjnHtibY7n4Wb@myrica> <YmdzFFx7fN586jcf@fyu1.sc.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <YmdzFFx7fN586jcf@fyu1.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 09:06:42AM -0600, Jeffrey Hugo wrote:
-> On 4/28/2022 8:58 AM, Wei Liu wrote:
-> > On Wed, Apr 27, 2022 at 08:07:33AM -0600, Jeffrey Hugo wrote:
-> > > In the multi-MSI case, hv_arch_irq_unmask() will only operate on the first
-> > > MSI of the N allocated.  This is because only the first msi_desc is cached
-> > > and it is shared by all the MSIs of the multi-MSI block.  This means that
-> > > hv_arch_irq_unmask() gets the correct address, but the wrong data (always
-> > > 0).
-> > > 
-> > > This can break MSIs.
-> > > 
-> > > Lets assume MSI0 is vector 34 on CPU0, and MSI1 is vector 33 on CPU0.
-> > > 
-> > > hv_arch_irq_unmask() is called on MSI0.  It uses a hypercall to configure
-> > > the MSI address and data (0) to vector 34 of CPU0.  This is correct.  Then
-> > > hv_arch_irq_unmask is called on MSI1.  It uses another hypercall to
-> > > configure the MSI address and data (0) to vector 33 of CPU0.  This is
-> > > wrong, and results in both MSI0 and MSI1 being routed to vector 33.  Linux
-> > > will observe extra instances of MSI1 and no instances of MSI0 despite the
-> > > endpoint device behaving correctly.
-> > > 
-> > > For the multi-MSI case, we need unique address and data info for each MSI,
-> > > but the cached msi_desc does not provide that.  However, that information
-> > > can be gotten from the int_desc cached in the chip_data by
-> > > compose_msi_msg().  Fix the multi-MSI case to use that cached information
-> > > instead.  Since hv_set_msi_entry_from_desc() is no longer applicable,
-> > > remove it.
-> > > 
-> > > Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> > > ---
-> > >   drivers/pci/controller/pci-hyperv.c | 12 ++++--------
-> > >   1 file changed, 4 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> > > index 5800ecf..7aea0b7 100644
-> > > --- a/drivers/pci/controller/pci-hyperv.c
-> > > +++ b/drivers/pci/controller/pci-hyperv.c
-> > > @@ -611,13 +611,6 @@ static unsigned int hv_msi_get_int_vector(struct irq_data *data)
-> > >   	return cfg->vector;
-> > >   }
-> > > -static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
-> > > -				       struct msi_desc *msi_desc)
-> > > -{
-> > > -	msi_entry->address.as_uint32 = msi_desc->msg.address_lo;
-> > > -	msi_entry->data.as_uint32 = msi_desc->msg.data;
-> > > -}
-> > > -
-> > 
-> > Instead of dropping this function, can you change the second argument to
-> > take struct tran_int_desc *?
-> > 
-> > This way you can use the same function in hv_compose_msi_msg.
+On 4/25/22 21:20, Fenghua Yu wrote:
+>>From 84aa68f6174439d863c40cdc2db0e1b89d620dd0 Mon Sep 17 00:00:00 2001
+> From: Fenghua Yu <fenghua.yu@intel.com>
+> Date: Fri, 15 Apr 2022 00:51:33 -0700
+> Subject: [PATCH] iommu/sva: Fix PASID use-after-free issue
 > 
-> I do not see how this could be reused in hv_compose_msi_msg() with the
-> proposed change of the second argument.  The hv_msi_entry type is not used
-> in hv_compose_msi_msg(), nor does it look like it is applicable anywhere
-> within the function.
+> A PASID might be still used on ARM after it is freed in __mmput().
+
+Is it really just ARM?
+
+> process:
+> 	open()->sva_bind()->ioasid_alloc() = N; // Get PASID N for the mm
+> 	exit();
+> 	exit_mm()->__mmput()->mm_pasid_drop()->mm->pasid = -1; // PASID -1
+> 	exit_files()->release(dev)->sva_unbind()->use mm->pasid; // Failure
 > 
-> What am I missing?
+> To avoid the use-after-free issue, free the PASID after no device uses it,
+> i.e. after all devices are unbound from the mm.
+> 
+> sva_bind()/sva_unbind() call mmgrab()/mmdrop() to track mm->mm_count.
+> __mmdrop() is called only after mm->mm_count is zero. So freeing the PASID
+> in __mmdrop() guarantees the PASID is safely freed only after no device
+> is bound to the mm.
 
-I mixed up two different types while going through the code --
-hv_msi_entry and Linux's own msi_entry type. Sorry for the noise.
+Does this changelog work for everyone?
 
-Wei.
+==
+
+tl;dr: The PASID is being freed too early.  It needs to stay around
+until after device drivers that might be using it have had a chance to
+clear it out of the hardware.
+
+--
+
+As a reminder:
+
+mmget() /mmput()  refcount the mm's address space
+mmgrab()/mmdrop() refcount the mm itself
+
+The PASID is currently tied to the life of the mm's address space and
+freed in __mmput().  This makes logical sense because the PASID can't be
+used once the address space is gone.
+
+But, this misses an important point: even after the address space is
+gone, the PASID will still be programmed into a device.  Device drivers
+might, for instance, still need to flush operations that are outstanding
+and need to use that PASID.  They do this at ->release() time.
+
+Device drivers hold a reference on the mm itself and drop it at
+->release() time.  But, the device driver holds a reference mm itself,
+not the address space.  The address space (and the PASID) is long gone
+by the time the driver tries to clean up.  This is effectively a
+use-after-free bug on the PASID.
+
+To fix this, move the PASID free operation from __mmput() to __mmdrop().
+ This ensures that the device drivers' existing mmgrab() keeps the PASID
+allocated until they drop their mm reference.
+
+>  kernel/fork.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 9796897560ab..35a3beff140b 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
+>  	mmu_notifier_subscriptions_destroy(mm);
+>  	check_mm(mm);
+>  	put_user_ns(mm->user_ns);
+> +	mm_pasid_drop(mm);
+>  	free_mm(mm);
+>  }
+>  EXPORT_SYMBOL_GPL(__mmdrop);
+> @@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
+>  	}
+>  	if (mm->binfmt)
+>  		module_put(mm->binfmt->module);
+> -	mm_pasid_drop(mm);
+>  	mmdrop(mm);
+>  }
+>  
+

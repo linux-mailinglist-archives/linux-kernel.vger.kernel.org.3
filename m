@@ -2,88 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB5F5130AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664DE5130CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbiD1KHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S233629AbiD1KH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 06:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233319AbiD1KGa (ORCPT
+        with ESMTP id S232211AbiD1KGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:06:30 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D4C3EF22
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:54:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id r13so8478284ejd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:54:51 -0700 (PDT)
+        Thu, 28 Apr 2022 06:06:53 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD63337C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:55:03 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id x33so7679837lfu.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:55:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DBbj9vS4RiFSbV5R5DxxG2khMbNBoKzLwuIctcI4Aas=;
-        b=L9cmlONc//L5dCt/4+WU2nzhjMngUTJ6znb5nHNh7fjINXCLkHSu7CVBmuQyI2GWeQ
-         munaiWap7dNmrg5VJHQVJD/fr++mtTu2Nzippq5fjCOPNglIZSC/3dhgQ6cQ/9xHzwHN
-         jdNaJrRJk4XO682JIf4A9MFDhKSEhDBxCfwVZwqCEkd01/nLxS6dMT6Tg0/4mvQrgCGN
-         8Egovu+UaeilDMQggA7ecZMKVfBNlQ7Sf5NhRwbnj9d9TqV/65muAt3/aRYLbPAdM2pF
-         uAcgXnhl0LvgCbhXruDxcaC4ApHSGjS0+BxjuJXR25lj3yLta4UouOgo7iZeytJxnhWM
-         eN3A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V0XeT7IXBftt0apFPjjxPnSRBK1X7ldQ9u0yIYHiPlU=;
+        b=YCg4LQSCCHVcvC/S2cQuookZz0GMC3S83n5ovXl/cTO4vUS871u/K85uaoRnHXZi5n
+         s8HCkmeTShWkJtH/RqXwANzdsUpcmgKpDfbzBqKiXU7uJ6y/1V3S9dxb8m8M+jiijopy
+         QA4yKCLxZguaqkZJ64WGbrnlJOHQkRyG8j9nUnVtKNMnMXpfRSznH0OX9F+VIoHEIv1n
+         ulAWX0gv39ng0xftKnC1sBNS+j1hQ5UpILJw+cEeg9Y66AOHRf+sOQpVKsLiXa64cyui
+         guTOM8XV+qM+BriDGY6F6KIbFr2f9PgoC9XHjHUfqp3QxuZ7owy9GFz3dzitjKq+QOKx
+         RE4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DBbj9vS4RiFSbV5R5DxxG2khMbNBoKzLwuIctcI4Aas=;
-        b=OYXaLTGEQl6gP8cmUdkT/coIcHC5QJz5H2OlHQl3E4JYl5ypQ+Jom1XX/nP7jAQfG9
-         dSzuHa+npK5GlCdH6ToLUfv38ql/VdOSgtFeE3BY+ZwlWcCFdC5OL5TQT/MvGL7Wv80e
-         lNBQZktz9YqI34L0SjP1wILFtMv790zRX3eNw/4HbsTzNS8Erw3Qj+TqFTqv9Q65jDRs
-         2plNoyoH3LNNnZtkcvzchOPQVCVHRrr8B1q7uq3VBZkFYGMqzx0ZeeIYy6GdpV6PQHg6
-         oj02x7AuUKSXTrD9YvwnrEaGDxAJVd/71vGaX93zw4gCtyDNQYwojjjBZ6j0kTp3VF0Z
-         bSnQ==
-X-Gm-Message-State: AOAM533IsH792IPc/e+FsgS4aCHEKEkpJdlv+ek2MTHZBKMALK5MrBqo
-        21xql3aBwsBoGTL/h6GtxM0KGA==
-X-Google-Smtp-Source: ABdhPJzUDZjZ6FqfqR9CbNRRWJcRTyZXYsJlcIWLhXC9v0jQj+VsOYGcUY63+9v8dDPDpntyVJYgcQ==
-X-Received: by 2002:a17:906:5d15:b0:6f3:77e6:2126 with SMTP id g21-20020a1709065d1500b006f377e62126mr23304886ejt.707.1651139690020;
-        Thu, 28 Apr 2022 02:54:50 -0700 (PDT)
-Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 22-20020a17090600d600b006dfbc46efabsm8125774eji.126.2022.04.28.02.54.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 02:54:49 -0700 (PDT)
-Message-ID: <6981f93a-ef01-6ba0-4451-26526372d666@linaro.org>
-Date:   Thu, 28 Apr 2022 11:54:48 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V0XeT7IXBftt0apFPjjxPnSRBK1X7ldQ9u0yIYHiPlU=;
+        b=oVdZ2f2cP5LtXPndSdeV7o86j5J07UJMos3IkUK///oPpM6AQSdmTDQu53q0PHy4i6
+         VhV82twfwpdMJ9mLR8bOQ8vfDsyqgFJWrs8okeI4s3dRE4kFOeLHvKNFT3DJ+ZRp5O0c
+         zlU9wiXZIz5TlRe1GWEjl0gxeK8usPw3NhuiSCQ6FYRIETOVfWGkdZr7hwqIF8rDVw0z
+         uEpSYzmwnyuHXJO+8a0LV9YiRpdjEaWV0n9V/uzDS4I2Z7l9bIcqY090qISeHnSSfD0z
+         spkQQftv30FIEjeNXSqcg7TGhCWrUOdueP9RUwQQgpEJ1ChBSfEnmw5DEFRg1mr1WuXV
+         Ya/A==
+X-Gm-Message-State: AOAM533n9TBZgRSgnCHpfhV1wUlK4jFeSVdOxfVH1DPBLarYQqhG8gSE
+        65d0qOjHRkmgbzyGpqwA8YdRkytq8z7xG/CRzlQw1Q==
+X-Google-Smtp-Source: ABdhPJy0ybox27E6e84jHMcEqHixOb1KpVI0stK6pmS/L2GkVDTmApxzKoDq6QSEYP6f0A9CtGwOMHzZsfN+e/ROgxI=
+X-Received: by 2002:a05:6512:110c:b0:472:3d96:bd24 with SMTP id
+ l12-20020a056512110c00b004723d96bd24mr678751lfg.389.1651139701661; Thu, 28
+ Apr 2022 02:55:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 08/10] ARM: dts: exynos: use proper
- 'dma-channels/requests' properties
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20220427155840.596535-1-krzysztof.kozlowski@linaro.org>
- <CGME20220427160347eucas1p23ce51e0fb49160d437961d98fd682c28@eucas1p2.samsung.com>
- <20220427155840.596535-9-krzysztof.kozlowski@linaro.org>
- <5eeac2a0-4293-675e-9dc2-25ed8ab3fb8f@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5eeac2a0-4293-675e-9dc2-25ed8ab3fb8f@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220428063924.3570409-1-songyuanzheng@huawei.com> <e4e5bd41-df5b-bb65-b92f-47122d1e7738@amd.com>
+In-Reply-To: <e4e5bd41-df5b-bb65-b92f-47122d1e7738@amd.com>
+From:   Sumit Semwal <sumit.semwal@linaro.org>
+Date:   Thu, 28 Apr 2022 15:24:49 +0530
+Message-ID: <CAO_48GG6vX35HTZNXz5Bqf341K9+6a5M63Jxb+nYSbpWDqMH=w@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: add the name field to the table header
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,41 +67,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 11:50, Marek Szyprowski wrote:
-> Hi Krzysztof,
-> 
-> On 27.04.2022 17:58, Krzysztof Kozlowski wrote:
->> pl330 DMA controller bindings documented 'dma-channels' and
->> 'dma-requests' properties (without leading hash sign), so fix the DTS to
->> match the bindings.
->>
->> Reported-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Are those properties really needed for PL330 driver on Exynos SoCs? I've 
-> removed them and I still see the proper values read from registers and 
-> reported in the log (Exynos4210):
-> 
-> dma-pl330 12680000.dma-controller: Loaded driver for PL330 DMAC-141330
-> dma-pl330 12680000.dma-controller:       DBUFF-32x4bytes Num_Chans-8 
-> Num_Peri-32 Num_Events-32
-> dma-pl330 12690000.dma-controller: Loaded driver for PL330 DMAC-141330
-> dma-pl330 12690000.dma-controller:       DBUFF-32x4bytes Num_Chans-8 
-> Num_Peri-32 Num_Events-32
-> dma-pl330 12850000.dma-controller: Loaded driver for PL330 DMAC-141330
-> dma-pl330 12850000.dma-controller:       DBUFF-64x8bytes Num_Chans-8 
-> Num_Peri-1 Num_Events-32
-> 
-> I also don't see any code that would read those properties. IMHO they 
-> should be simply removed at all, at least for the PL330 related nodes.
+Hi Christian,
 
-In current Linux implementation they indeed are not used. Nothing parses
-them. However:
-1. They describe (hopefully correct) the hardware.
-2. They might be used by other implementations of pl330 driver.
+On Thu, 28 Apr 2022 at 13:33, Christian K=C3=B6nig <christian.koenig@amd.co=
+m> wrote:
+>
+> Am 28.04.22 um 08:39 schrieb Yuanzheng Song:
+> > 'cat /sys/kernel/debug/dma_buf/bufinfo' will print the Dma-buf
+> > Objects' information when the CONFIG_DEBUG_FS=3Dy.
+> > However, the printed table header information does not contain
+> > the name field. So we need to add the name field to the table
+> > header and use the '<none>' to replace the empty buf_obj->name.
+> >
+> > Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> Sumit do you want to push this or should I go ahead?
 
-I would not remove them from existing sources, but indeed maybe there is
-no need to add for new files.
+No worries, I can push it out.
 
-Best regards,
-Krzysztof
+Thanks :)
+>
+> > ---
+> >   drivers/dma-buf/dma-buf.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > index 79795857be3e..a2f9a1815e38 100644
+> > --- a/drivers/dma-buf/dma-buf.c
+> > +++ b/drivers/dma-buf/dma-buf.c
+> > @@ -1351,7 +1351,7 @@ static int dma_buf_debug_show(struct seq_file *s,=
+ void *unused)
+> >               return ret;
+> >
+> >       seq_puts(s, "\nDma-buf Objects:\n");
+> > -     seq_printf(s, "%-8s\t%-8s\t%-8s\t%-8s\texp_name\t%-8s\n",
+> > +     seq_printf(s, "%-8s\t%-8s\t%-8s\t%-8s\texp_name\t%-8s\tname\n",
+> >                  "size", "flags", "mode", "count", "ino");
+> >
+> >       list_for_each_entry(buf_obj, &db_list.head, list_node) {
+> > @@ -1368,7 +1368,7 @@ static int dma_buf_debug_show(struct seq_file *s,=
+ void *unused)
+> >                               file_count(buf_obj->file),
+> >                               buf_obj->exp_name,
+> >                               file_inode(buf_obj->file)->i_ino,
+> > -                             buf_obj->name ?: "");
+> > +                             buf_obj->name ?: "<none>");
+> >               spin_unlock(&buf_obj->name_lock);
+> >
+> >               dma_resv_describe(buf_obj->resv, s);
+>
+
+Best,
+Sumit.

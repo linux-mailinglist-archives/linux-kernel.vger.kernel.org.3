@@ -2,139 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D269513559
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77774513554
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347419AbiD1Nkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
+        id S1347441AbiD1NlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235759AbiD1Nk0 (ORCPT
+        with ESMTP id S1347300AbiD1NlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:40:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9B972C0;
-        Thu, 28 Apr 2022 06:37:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72D77B82D13;
-        Thu, 28 Apr 2022 13:37:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD444C385A0;
-        Thu, 28 Apr 2022 13:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651153029;
-        bh=j8aQI14XIEgswr7w1bn7LZ21u3HZPMe7XhOS1IK4t1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1Ej7qvEr99F8mKrSJJv3VejrqNgv64Ui+b3yB7Fc+h74A4kvWN14um8eEPoCBjQdp
-         oP7Qo9IutHjy23rO6jOMWbc/CubxyxP7IMvUKvtqszfy2b5OCIiyy0rhOKxC+zwe1u
-         MK8cDg4o/SP1XkwmLeO3jlLu252ChcIgm07BQYEI=
-Date:   Thu, 28 Apr 2022 15:37:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lin Ma <linma@zju.edu.cn>
-Cc:     Duoming Zhou <duoming@zju.edu.cn>, krzysztof.kozlowski@linaro.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, alexander.deucher@amd.com,
-        akpm@linux-foundation.org, broonie@kernel.org,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data race-able
-Message-ID: <YmqYgu++0OuhfFxy@kroah.com>
-References: <20220427011438.110582-1-duoming@zju.edu.cn>
- <20220427174548.2ae53b84@kernel.org>
- <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
- <YmpEZQ7EnOIWlsy8@kroah.com>
- <2d7c9164.2b1f.1806f2a8ed9.Coremail.linma@zju.edu.cn>
- <YmpNZOaJ1+vWdccK@kroah.com>
- <15d09db2.2f76.1806f5c4187.Coremail.linma@zju.edu.cn>
- <YmpcUNf7O+OK6/Ax@kroah.com>
- <20220428060628.713479b2@kernel.org>
- <f51aa1.41ae.180705614b5.Coremail.linma@zju.edu.cn>
+        Thu, 28 Apr 2022 09:41:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C609F986D7;
+        Thu, 28 Apr 2022 06:38:01 -0700 (PDT)
+X-UUID: d309ffee3c9b4fbb96e6eb8d27b5a8e6-20220428
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:11fd026f-1d19-46a7-895e-072e0acfe536,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:ee51d6c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: d309ffee3c9b4fbb96e6eb8d27b5a8e6-20220428
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1992065373; Thu, 28 Apr 2022 21:37:55 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 28 Apr 2022 21:37:54 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 28 Apr 2022 21:37:54 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Apr 2022 21:37:54 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>
+CC:     <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
+        <jitao.shi@mediatek.com>, <xinlei.lee@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v5 0/4] Add mt8186 dsi compatoble & Convert dsi_dtbinding to .yaml
+Date:   Thu, 28 Apr 2022 21:37:49 +0800
+Message-ID: <20220428133753.8348-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f51aa1.41ae.180705614b5.Coremail.linma@zju.edu.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 09:22:11PM +0800, Lin Ma wrote:
-> Hello there,
-> 
-> > 
-> > Yes, that looks better, 
-> 
-> Cool, thanks again for giving comments. :)
-> 
-> > but what is the root problem here that you are
-> > trying to solve?  Why does NFC need this when no other subsystem does?
-> > 
-> 
-> Well, in fact, me and Duoming are keep finding concurrency bugs that happen 
-> between the device cleanup/detach routine and other undergoing routines.
-> 
-> That is to say, when a device, no matter real or virtual, is detached from 
-> the machine, the kernel awake cleanup routine to reclaim the resource. 
-> In current case, the cleanup routine will call nfc_unregister_device().
-> 
-> Other routines, mainly from user-space system calls, need to be careful of 
-> the cleanup event. In another word, the kernel need to synchronize these 
-> routines to avoid race bugs.
-> 
-> In our practice, we find that many subsystems are prone to this type of bug.
-> 
-> For example, in bluetooth we fix
-> 
-> BT subsystem
-> * e2cb6b891ad2 ("bluetooth: eliminate the potential race condition when removing
-> the HCI controller")
-> * fa78d2d1d64f ("Bluetooth: fix data races in smp_unregister(), smp_del_chan()")
-> ..
-> 
-> AX25 subsystem
-> * 1ade48d0c27d ("ax25: NPD bug when detaching AX25 device")
-> ..
-> 
-> we currently focus on the net relevant subsystems and we now is auditing the NFC 
-> code.
-> 
-> In another word, all subsystems need to take care of the synchronization issues.
-> But seems that the solutions are varied between different subsystem. 
-> 
-> Empirically speaking, most of them use specific flags + specific locks to prevent
-> the race. 
-> 
-> In such cases, if the cleanup routine first hold the lock, the other routines will
-> wait on the locks. Since the cleanup routine write the specific flag, the other
-> routine, after check the specific flag, will be aware of the cleanup stuff and just
-> abort their tasks.
-> If the other routines first hold the lock, the cleanup routine just wait them to 
-> finish.
-> 
-> NFC here is special because it uses device_is_registered. I thought the author may
-> believe this macro is race free. However, it is not. So we need to replace this check
-> to make sure the netlink functions will 100 percent be aware of the cleanup routine
-> and abort the task if they grab the device_lock lately. Otherwise, the nelink routine
-> will call sub-layer code and possilby dereference resources that already freed.
-> 
-> For example, one of my recent fix 3e3b5dfcd16a ("NFC: reorder the logic in 
-> nfc_{un,}register_device") takes the suggestion from maintainer as he thought the 
-> device_is_registered is enough. And for now we find out this device_is_registered
-> is not enough.
+Changes since v4:
+1. Modify DSI dt-binding.
+2. Add support for MT8186 DSI in mtk_drm_drv.c.
 
-How do you physically remove a NFC device from a system?  What types of
-busses are they on?  If non-removable one, then odds are there's not
-going to be many races so this is a low-priority thing.  If they can be
-on removable busses (USB, PCI, etc.), then that's a bigger thing.
+Changes since v3:
+1. Add dsi port property.
+2. Fix some formatting.
 
-But again, the NFC bus code should handle all of this for the drivers,
-there's nothing special about NFC that should warrant a special need for
-this type of thing.
+Changes since v2:
+1. Added #address-cells, #size-cells two properties.
+2. Fix some formatting issues.
 
-thanks,
+Changes since v1:
+1. Delete the mediatek,dsi.txt & Add the mediatek,dsi.yaml.
+2. Ignore the Move the getting bridge node function patch for V1.
 
-greg k-h
+Rex-BC Chen (1):
+  drm/mediatek: Add MT8186 DSI compatible for mtk_drm_drv.c
+
+Xinlei Lee (3):
+  dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
+  dt-bindings: display: mediatek: dsi: Add compatible for MediaTek
+    MT8186
+  drm/mediatek: Add mt8186 dsi compatible to mtk_dsi.c
+
+ .../display/mediatek/mediatek,dsi.txt         |  62 ---------
+ .../display/mediatek/mediatek,dsi.yaml        | 123 ++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   2 +
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |   8 ++
+ 4 files changed, 133 insertions(+), 62 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
+
+-- 
+2.18.0
+

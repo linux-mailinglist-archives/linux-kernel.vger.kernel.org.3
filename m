@@ -2,113 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7331E5129E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913035129EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241930AbiD1DXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S241752AbiD1DZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241671AbiD1DXd (ORCPT
+        with ESMTP id S242119AbiD1DZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:23:33 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C090812A88
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:20:19 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kpgp31BNxz1JBj2;
-        Thu, 28 Apr 2022 11:19:23 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 11:20:17 +0800
-Subject: Re: [RFC PATCH v1 4/4] mm, memory_hotplug: fix inconsistent
- num_poisoned_pages on memory hotremove
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-References: <20220427042841.678351-1-naoya.horiguchi@linux.dev>
- <20220427042841.678351-5-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <828cc111-40e8-88ed-bb50-fb185e5f0304@huawei.com>
-Date:   Thu, 28 Apr 2022 11:20:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 27 Apr 2022 23:25:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 280AA98F44
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651116113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RWTp4yaWdfWUPtHWFlBNQneS0qdCKFMJ9HDg1d8VUa8=;
+        b=OtT27f76gYlSb30jRVcS8ea2qkmDHjJDaxIWqYrfQbMzOh6lzOjRILzv3WxX+g55t3bRRX
+        D/beT0ZM3vIUP0IS8dnrRTglBw5i0CqwdFIT2KHx+gHWFTPH9bk5SDv0h3KzXdPDlWIJGx
+        pqs1rWTpDwVn2yvoLM9pKk/95SzLhmU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-RFkJdZ_1Ni26JTcIH0nh1Q-1; Wed, 27 Apr 2022 23:21:51 -0400
+X-MC-Unique: RFkJdZ_1Ni26JTcIH0nh1Q-1
+Received: by mail-ed1-f71.google.com with SMTP id n4-20020a5099c4000000b00418ed58d92fso1993332edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:21:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RWTp4yaWdfWUPtHWFlBNQneS0qdCKFMJ9HDg1d8VUa8=;
+        b=1GuOdc+UuWyppabs+uTx653kCuT+ahGFjOw8xcL2f3YVAnfNI8SA9viIQDbwApRwhi
+         bjmO7F2n113KWmOb3A4rnLSZ9bM0JUGTMIIxeYtG8zKBDJ//AVCVML7Fb+hvG1zl7YIo
+         7g1lkiiWLXh5G7IKTdHHobXXCOvyh0GXYXU6x/GBZIX+n+5c1xmUo6z+qEqQfYzv4/FS
+         mUP0zxlnhA1f9MsHoq0bVQHNAgRc6EyVXVfSB9r39PO3C7mHv/B3RyP13kRXw+H97fFN
+         SCJdzVq1Tt8JpUhiwCbaDLN2Rk9cixihk1+pMbUMfjLR1hmAlMeOskOrE9OAdj5Ai+Qp
+         kYlg==
+X-Gm-Message-State: AOAM532qrqWN9A4yQtKwZqnupCWkUrT7kc4zVqU6GpS3eBB1u5LckzqS
+        EpTpjOdlz/tus6QKn8ApF+I2mi5msvBlR8wI5qMi4bONnZFRjbry29BFeEgwBhm08cU23stwwLk
+        cZsQw3UaQWxyEyZW8fhfkjN40BSL9GwlYTW/3O3CR
+X-Received: by 2002:a17:906:4fc3:b0:6e0:66a5:d59c with SMTP id i3-20020a1709064fc300b006e066a5d59cmr28770500ejw.131.1651116109077;
+        Wed, 27 Apr 2022 20:21:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwVS2I0+viNy4osAXG1kjD9pnxU9sgoXgJ9kAdtvf3xONcbrWyidzTUb9rZNhBtITxIjolCSaHMRySkKl1cKtU=
+X-Received: by 2002:a17:906:4fc3:b0:6e0:66a5:d59c with SMTP id
+ i3-20020a1709064fc300b006e066a5d59cmr28770492ejw.131.1651116108889; Wed, 27
+ Apr 2022 20:21:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220427042841.678351-5-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220425062735.172576-1-lulu@redhat.com> <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
+ <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com>
+ <46c9f96a-8fcf-fae8-5fd7-53557d59c324@redhat.com> <CACLfguW+9OMPMUpehp+Zut7JosFtg2gzr7t7gZ6U-AdtV89S3g@mail.gmail.com>
+ <CACGkMEuJhrSxNc3v7hijSpBdA4X6aC-gA2Ogwed4oODUT_DJ6w@mail.gmail.com>
+In-Reply-To: <CACGkMEuJhrSxNc3v7hijSpBdA4X6aC-gA2Ogwed4oODUT_DJ6w@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Thu, 28 Apr 2022 11:21:10 +0800
+Message-ID: <CACLfguV9Za0fa7vXaPxLEKUY2brnNitW6i=Gofdt00cFBwss_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/27 12:28, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> When offlining memory section with hwpoisoned pages, the hwpoisons are
-> canceled. But num_poisoned_pages is not updated for that event, so the
-> counter becomes inconsistent.
+On Thu, Apr 28, 2022 at 11:07 AM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Thu, Apr 28, 2022 at 9:56 AM Cindy Lu <lulu@redhat.com> wrote:
+> >
+> > On Wed, Apr 27, 2022 at 12:04 PM Jason Wang <jasowang@redhat.com> wrote=
+:
+> > >
+> > >
+> > > =E5=9C=A8 2022/4/27 10:01, Cindy Lu =E5=86=99=E9=81=93:
+> > > > On Mon, Apr 25, 2022 at 5:00 PM Jason Wang <jasowang@redhat.com> wr=
+ote:
+> > > >> On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+> > > >>> To support the dynamic ids in vp_vdpa, we need to add the check f=
+or
+> > > >>> id table. If the id table is NULL, will not set the device type
+> > > >>>
+> > > >>> Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > > >>> ---
+> > > >>>   drivers/vdpa/vdpa.c | 11 +++++++----
+> > > >>>   1 file changed, 7 insertions(+), 4 deletions(-)
+> > > >>>
+> > > >>> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> > > >>> index 1ea525433a5c..09edd92cede0 100644
+> > > >>> --- a/drivers/vdpa/vdpa.c
+> > > >>> +++ b/drivers/vdpa/vdpa.c
+> > > >>> @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct v=
+dpa_mgmt_dev *mdev, struct sk_buff *m
+> > > >>>          if (err)
+> > > >>>                  goto msg_err;
+> > > >>>
+> > > >>> -       while (mdev->id_table[i].device) {
+> > > >>> -               if (mdev->id_table[i].device <=3D 63)
+> > > >>> -                       supported_classes |=3D BIT_ULL(mdev->id_t=
+able[i].device);
+> > > >>> -               i++;
+> > > >>> +       if (mdev->id_table !=3D NULL) {
+> > > >>> +               while (mdev->id_table[i].device) {
+> > > >>> +                       if (mdev->id_table[i].device <=3D 63)
+> > > >>> +                               supported_classes |=3D
+> > > >>> +                                       BIT_ULL(mdev->id_table[i]=
+.device);
+> > > >>> +                       i++;
+> > > >>> +               }
+> > > >>>          }
+> > > >> This will cause 0 to be advertised as the supported classes.
+> > > >>
+> > > >> I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
+> > > >> export it to via uAPI probably).
+> > > >>
+> > > >> Thanks
+> > > >>
+> > > > like the below one? not sure if this ok to use like this?
+> > > > static struct virtio_device_id vp_vdpa_id_table[] =3D {
+> > > > { VIRTIO_DEV_ANY_ID, VIRTIO_DEV_ANY_ID },
+> > > > { 0 },
+> > > > };
+> > >
+> > >
+> > > Something like this.
+> > >
+> > > Thanks
+> > >
+> > >
+> > I have checked the code, this maybe can not work, because the
+> > #define VIRTIO_DEV_ANY_ID 0xffffffff
+> >  it want't work in
+> >                 supported_classes |=3D BIT_ULL(mdev->id_table[i].device=
+);
+> > if we chane to
+> >             supported_classes |=3D VIRTIO_DEV_ANY_ID;
+> > the vdpa dev show will be
+> > pci/0000:00:04.0:
+> >   supported_classes net block < unknown class > < unknown class > <
+> > unknown class > < unknown class > < unknown class > < unknow>
+> >   max_supported_vqs 3
+>
+> That's why I suggest exporting the ANY_ID via uAPI and then we can fix
+> the userspace.
+>
+sure.But I think maybe we can fix this in another patch, since it
+related to userspace
 
-IIUC, this work is already done via clear_hwpoisoned_pages when __remove_pages.
-Or am I miss something?
+> >   dev_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC GUEST_TSO4
+> > GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6 HOST_
+> >  I think we can use
+> > static struct virtio_device_id id_table[] =3D {
+> > { VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+> > { 0 },
+> > };
+> >  if we need to add another type of device, we can add the device id at =
+that type
+> >
+>
+> My point is that, we have supported any virtio devices before. But
+> after this change, we only support virtio-net.
+>
+> So if we choose to use id arrays, let's just add all possible virtio
+> devices that are supported by the kernel here.
+>
+sorry=EF=BC=8C I didn't make it clearly,  I mean  we can use the vp_vdpa de=
+vice id as
+ static struct virtio_device_id id_table[] =3D {
+ { VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+{ 0 },
+since it now only support the net device and This will make the vp_vdpa wor=
+k.
 
-Thanks!
+Thanks
+cindy
 
-> 
-> Add num_poisoned_pages_dec() in __offline_isolated_pages(). PageHWPoison
-> can be set on a tail page of some high order buddy page, so we need check
-> PageHWPoison on each subpage.
-> 
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> ---
->  mm/page_alloc.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 6e5b4488a0c5..dcd962855617 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -9487,12 +9487,15 @@ void __offline_isolated_pages(unsigned long start_pfn, unsigned long end_pfn)
->  	zone = page_zone(pfn_to_page(pfn));
->  	spin_lock_irqsave(&zone->lock, flags);
->  	while (pfn < end_pfn) {
-> +		int i;
-> +
->  		page = pfn_to_page(pfn);
->  		/*
->  		 * The HWPoisoned page may be not in buddy system, and
->  		 * page_count() is not 0.
->  		 */
->  		if (unlikely(!PageBuddy(page) && PageHWPoison(page))) {
-> +			num_poisoned_pages_dec();
->  			pfn++;
->  			continue;
->  		}
-> @@ -9510,6 +9513,9 @@ void __offline_isolated_pages(unsigned long start_pfn, unsigned long end_pfn)
->  		BUG_ON(page_count(page));
->  		BUG_ON(!PageBuddy(page));
->  		order = buddy_order(page);
-> +		for (i = 0; i < 1 << order; i++)
-> +			if (PageHWPoison(page + i))
-> +				num_poisoned_pages_dec();
->  		del_page_from_free_list(page, zone, order);
->  		pfn += (1 << order);
->  	}
-> 
+> Thanks
+>
+> > Thanks
+> > cindy
+> >
+> >
+> >
+> > > >
+> > > >
+> > > >>>          if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_C=
+LASSES,
+> > > >>> --
+> > > >>> 2.34.1
+> > > >>>
+> > >
+> >
+>
 

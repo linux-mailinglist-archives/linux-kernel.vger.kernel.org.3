@@ -2,194 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8CF51368F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD99751369B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348172AbiD1OQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S1348142AbiD1ORT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348139AbiD1OQl (ORCPT
+        with ESMTP id S230021AbiD1ORQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:16:41 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54C484EC2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:13:24 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id g10so2055294ilf.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:13:24 -0700 (PDT)
+        Thu, 28 Apr 2022 10:17:16 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E65EB53CB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:14:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bCT2JlxzOcDaE6ycYVbjB0p6hzfQxFS5OmPVl0XHT4A=;
-        b=ByPVeKDwQRcuSB47O0Zefv/dFt5S0aRWMNs2oJF7maE4wXnsormuysnBE3KE+1D9p9
-         PB3FB3BjkOR/97x+74MBqA5RA9WqHK53ukE6KnmiwNvHyxwXKz6iLxoZSM4bciItAhHz
-         gddQYhhdQpsolBOdwDYZPGvNMFMyqb4ql/QD0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bCT2JlxzOcDaE6ycYVbjB0p6hzfQxFS5OmPVl0XHT4A=;
-        b=ia1G4MLKA00rAstBCikkvSFk5Bl+b+r+ZnwaibeOhYd6ycUO1N88ZMWbY+hFvoUOvj
-         DZA+YAsrqU+D0iiZpQCHfitmmlCxPHoXWsu13c6X1MtWuR2MCWESiNo8cEndKPPWfPyV
-         lZalJbVZ0HWxOAbZ4nKt/t/g+Su1BKb7GFnowzp/ABDI1rKxc5vJ/4KTPYDKjkhx59KM
-         897S5KN6vaT9DyPO2xlMH00M7TWt9qZ5W8dSUJtT/UW+pGiD896k8bNwclbHogw9Wwv7
-         b5V/VsbjtEEoGMntFijRZQ1I+azICeBmzOSPaaBla8GlfGzgL9VMKaxhomNxbRUcVIDQ
-         nkJg==
-X-Gm-Message-State: AOAM531DH/OAoM25Nu8nDdKlaEtdOFkS0iTVdVDRwiwl+KP901GWj9TX
-        fvjY8pkGEnMutAghiC8jpGc98Q==
-X-Google-Smtp-Source: ABdhPJw448TngRonNTsTASYhGkruvfda4Cqi/x7py0vOs1UkbxiFSjNKZ9c5oG5pi/4oeINikW5dJA==
-X-Received: by 2002:a92:cac3:0:b0:2c9:a265:4cab with SMTP id m3-20020a92cac3000000b002c9a2654cabmr13504351ilq.241.1651155203895;
-        Thu, 28 Apr 2022 07:13:23 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id y21-20020a6bc415000000b00648da092c8esm4431ioa.14.2022.04.28.07.13.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 07:13:23 -0700 (PDT)
-Message-ID: <4cae140c-982a-6b9f-661c-4e0fdfa3297b@ieee.org>
-Date:   Thu, 28 Apr 2022 09:13:19 -0500
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651155242; x=1682691242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c4OmeIZ6y+f2JRwt4I1DekUCqDfEai6t2MRiaiReNuU=;
+  b=ToK9CeE7zntyztH+u2THAsAMEXEdiBuoeewP7yfyvEcTkYJ4UTpfiRUC
+   jjhCQe/biTYz5AQQ+EqcnkAlheJ9BSoH9fkgN/2mrEBCt/7zxE/rMzT/T
+   v1cXiZvwGgKIob0uYfKk7sYwAs38kfshK/vp1dz/cTkishJhTEQaDyuoJ
+   U=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 07:14:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:14:01 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 07:14:01 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
+ 2022 07:13:59 -0700
+Date:   Thu, 28 Apr 2022 10:13:56 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     <andrey.konovalov@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        <kasan-dev@googlegroups.com>, <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Peter Collingbourne" <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH v6 00/39] kasan, vmalloc, arm64: add vmalloc tagging
+ support for SW/HW_TAGS
+Message-ID: <20220428141356.GB71@qian>
+References: <cover.1643047180.git.andreyknvl@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        James Morse <james.morse@arm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-22-gpiccoli@igalia.com>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20220427224924.592546-22-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cover.1643047180.git.andreyknvl@google.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 5:49 PM, Guilherme G. Piccoli wrote:
-> This patch renames the panic_notifier_list to panic_pre_reboot_list;
-> the idea is that a subsequent patch will refactor the panic path
-> in order to better split the notifiers, running some of them very
-> early, some of them not so early [but still before kmsg_dump()] and
-> finally, the rest should execute late, after kdump. The latter ones
-> are now in the panic pre-reboot list - the name comes from the idea
-> that these notifiers execute before panic() attempts rebooting the
-> machine (if that option is set).
+On Mon, Jan 24, 2022 at 07:02:08PM +0100, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> We also took the opportunity to clean-up useless header inclusions,
-> improve some notifier block declarations (e.g. in ibmasm/heartbeat.c)
-> and more important, change some priorities - we hereby set 2 notifiers
-> to run late in the list [iss_panic_event() and the IPMI panic_event()]
-> due to the risks they offer (may not return, for example).
-> Proper documentation is going to be provided in a subsequent patch,
-> that effectively refactors the panic path.
+> Hi,
 > 
-> Cc: Alex Elder <elder@kernel.org>
-
-For "drivers/net/ipa/ipa_smp2p.c":
-
-Acked-by: Alex Elder <elder@kernel.org>
-
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Corey Minyard <minyard@acm.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Richard Henderson <rth@twiddle.net>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: Stefano Stabellini <sstabellini@kernel.org>
-> Cc: Stephen Hemminger <sthemmin@microsoft.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
+> This patchset adds vmalloc tagging support for SW_TAGS and HW_TAGS
+> KASAN modes.
 > 
+> The tree with patches is available here:
+> 
+> https://github.com/xairy/linux/tree/up-kasan-vmalloc-tags-v6
+> 
+> About half of patches are cleanups I went for along the way. None of
+> them seem to be important enough to go through stable, so I decided
+> not to split them out into separate patches/series.
+> 
+> The patchset is partially based on an early version of the HW_TAGS
+> patchset by Vincenzo that had vmalloc support. Thus, I added a
+> Co-developed-by tag into a few patches.
+> 
+> SW_TAGS vmalloc tagging support is straightforward. It reuses all of
+> the generic KASAN machinery, but uses shadow memory to store tags
+> instead of magic values. Naturally, vmalloc tagging requires adding
+> a few kasan_reset_tag() annotations to the vmalloc code.
+> 
+> HW_TAGS vmalloc tagging support stands out. HW_TAGS KASAN is based on
+> Arm MTE, which can only assigns tags to physical memory. As a result,
+> HW_TAGS KASAN only tags vmalloc() allocations, which are backed by
+> page_alloc memory. It ignores vmap() and others.
 
-. . .
+I could use some help here. Ever since this series, our system starts to
+trigger bad page state bugs from time to time. Any thoughts?
+
+ BUG: Bad page state in process systemd-udevd  pfn:83ffffcd
+ page:fffffc20fdfff340 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x83ffffcd
+ flags: 0xbfffc0000001000(reserved|node=0|zone=2|lastcpupid=0xffff)
+ raw: 0bfffc0000001000 fffffc20fdfff348 fffffc20fdfff348 0000000000000000
+ raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+ page dumped because: PAGE_FLAGS_CHECK_AT_FREE flag(s) set
+ page_owner info is not present (never set?)
+ CPU: 76 PID: 1873 Comm: systemd-udevd Not tainted 5.18.0-rc4-next-20220428-dirty #67
+ Call trace:
+  dump_backtrace
+  show_stack
+  dump_stack_lvl
+  dump_stack
+  bad_page
+  free_pcp_prepare
+  free_unref_page
+  __free_pages
+  free_pages.part.0
+  free_pages
+  kasan_depopulate_vmalloc_pte
+  (inlined by) kasan_depopulate_vmalloc_pte at mm/kasan/shadow.c:361
+  apply_to_pte_range
+  apply_to_pmd_range
+  apply_to_pud_range
+  __apply_to_page_range
+  apply_to_existing_page_range
+  kasan_release_vmalloc
+  (inlined by) kasan_release_vmalloc at mm/kasan/shadow.c:469
+  __purge_vmap_area_lazy
+  purge_vmap_area_lazy
+  alloc_vmap_area
+  __get_vm_area_node.constprop.0
+  __vmalloc_node_range
+  module_alloc
+  move_module
+  layout_and_allocate
+  load_module
+  __do_sys_finit_module
+  __arm64_sys_finit_module
+  invoke_syscall
+  el0_svc_common.constprop.0
+  do_el0_svc
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync
+ Disabling lock debugging due to kernel taint
+ BUG: Bad page state in process systemd-udevd  pfn:83ffffcc
+ page:fffffc20fdfff300 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x83ffffcc
+ flags: 0xbfffc0000001000(reserved|node=0|zone=2|lastcpupid=0xffff)
+ raw: 0bfffc0000001000 fffffc20fdfff308 fffffc20fdfff308 0000000000000000
+ raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+ page dumped because: PAGE_FLAGS_CHECK_AT_FREE flag(s) set
+ page_owner info is not present (never set?)
+ CPU: 76 PID: 1873 Comm: systemd-udevd Tainted: G    B             5.18.0-rc4-next-20220428-dirty #67
+ Call trace:
+  dump_backtrace
+  show_stack
+  dump_stack_lvl
+  dump_stack
+  bad_page
+  free_pcp_prepare
+  free_unref_page
+  __free_pages
+  free_pages.part.0
+  free_pages
+  kasan_depopulate_vmalloc_pte
+  apply_to_pte_range
+  apply_to_pmd_range
+  apply_to_pud_range
+  __apply_to_page_range
+  apply_to_existing_page_range
+  kasan_release_vmalloc
+  __purge_vmap_area_lazy
+  purge_vmap_area_lazy
+  alloc_vmap_area
+  __get_vm_area_node.constprop.0
+  __vmalloc_node_range
+  module_alloc
+  move_module
+  layout_and_allocate
+  load_module
+  __do_sys_finit_module
+  __arm64_sys_finit_module
+  invoke_syscall
+  el0_svc_common.constprop.0
+  do_el0_svc
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync

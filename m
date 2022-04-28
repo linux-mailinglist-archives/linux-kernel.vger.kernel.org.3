@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC225132C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F4C5132C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343818AbiD1Lpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S1345651AbiD1LrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiD1Lp3 (ORCPT
+        with ESMTP id S229814AbiD1LrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:45:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8355666CAA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651146134; x=1682682134;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=MtXFmFdBA/Xh7A2EwjwjZhk6gds/vNt8CxM9cTpwiRk=;
-  b=kpOBeSr7dLlxM8j5munzlU2GalO2jf/J96yEkih5VOsd15f6W0QDcdXo
-   G4O3Cjfp34GfFJT56RLph79NrgL7Q9it9C5nFozL4oKiiixBkn8edEky/
-   A4xeFFIxeFdHSNPAstAOZZxdPMaDFA9cVsBDfBIpI2j1AFkfG8ly4a6PP
-   G4dL/xZ2hSok0xyUJ7CKzF2SbC7OEUaqV+rToNVVHZVEXRaBMqV+uRPxo
-   u4JUfNwSE5tZdr5AT3ad7yGf9bNxc2E3REjxuaiYRs94ka8pBl06moJA/
-   6kNSA+g06TvO6qvWGbm916e0yfCGdz+z3CGEgVTFC8d2yAg673EqCm1Nd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266422477"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="266422477"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:42:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="731422048"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.248]) ([10.255.31.248])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:42:11 -0700
-Subject: Re: [hnaz-mm:master 34/291] WARNING: modpost:
- vmlinux.o(.data+0x234bc8): Section mismatch in reference from the variable
- fc2580_driver to the function .init.text:set_reset_devices()
-To:     David Hildenbrand <david@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <202204241241.dnUrBBvT-lkp@intel.com>
- <1d67fd1c-29d8-d5a6-4d36-17fd238385cd@redhat.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <65cb0f22-c924-2347-fcfa-3cb1175a690c@intel.com>
-Date:   Thu, 28 Apr 2022 19:42:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Thu, 28 Apr 2022 07:47:08 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9DA66F96;
+        Thu, 28 Apr 2022 04:43:53 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 83352240007;
+        Thu, 28 Apr 2022 11:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651146230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tn250kJelEl8haaXg6wMumzcA9FUTRhEqD5DE4h8/UI=;
+        b=ouqPRGU9fc/m5/qzE9D5GZZ+PasktKbQBiBThrC2hu/67fsNMBnx4U4GN1Ht2r4TKpaM4a
+        gZcO4ryXKxyKiCfhmkgn7WZkabT+Gjd/t/awZyJ93HMWUEII3joXwdoHkAbTAwAc9Zw3yx
+        2UmejKxDIxEjbd4xaDemNNjoVb1KJ7FiuIYRobZcRcLqcbuuDa36OFVTTq1vIEeY8DFGKD
+        6DPty7i90P5XZL4sVWSnIq7cOGvc095fRFDKPvCTTWYEEDZgexg5vWnqXv8akbEJeav/h5
+        H9/K0qitg2ER4ZGevjGuidhOKm5/twv9RxlBFhOwdJyDusT1h6SMPlpJI8rOXg==
+Date:   Thu, 28 Apr 2022 13:43:44 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 43/45] media: sun6i-csi: Detect the availability of
+ the ISP
+Message-ID: <Ymp98LBQySvpz8/j@aptenodytes>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
+ <20220415152811.636419-44-paul.kocialkowski@bootlin.com>
+ <2029179.KlZ2vcFHjT@jernej-laptop>
+ <YmpIjPe8pw+yvGyL@aptenodytes>
+ <20220428081130.6deusqgnrsgqdp3e@houat>
 MIME-Version: 1.0
-In-Reply-To: <1d67fd1c-29d8-d5a6-4d36-17fd238385cd@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="st8DMu9oF2iUfIiW"
+Content-Disposition: inline
+In-Reply-To: <20220428081130.6deusqgnrsgqdp3e@houat>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,54 +64,94 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--st8DMu9oF2iUfIiW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/25/2022 4:04 PM, David Hildenbrand wrote:
-> On 24.04.22 06:21, kernel test robot wrote:
->> tree:   https://github.com/hnaz/linux-mm master
->> head:   ba42854fa9997614e0ffdbc35b082df3ba6e59da
->> commit: 477a4d0f1f38e738d1a50d5005b79aca719c30bc [34/291] mm/hugetlb: take src_mm->write_protect_seq in copy_hugetlb_page_range()
->> config: riscv-randconfig-r015-20220420 (https://download.01.org/0day-ci/archive/20220424/202204241241.dnUrBBvT-lkp@intel.com/config)
->> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project bac6cd5bf85669e3376610cfc4c4f9ca015e7b9b)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install riscv cross compiling tool for clang build
->>          # apt-get install binutils-riscv64-linux-gnu
->>          # https://github.com/hnaz/linux-mm/commit/477a4d0f1f38e738d1a50d5005b79aca719c30bc
->>          git remote add hnaz-mm https://github.com/hnaz/linux-mm
->>          git fetch --no-tags hnaz-mm master
->>          git checkout 477a4d0f1f38e738d1a50d5005b79aca719c30bc
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>, old ones prefixed by <<):
->>
->>>> WARNING: modpost: vmlinux.o(.data+0x234bc8): Section mismatch in reference from the variable fc2580_driver to the function .init.text:set_reset_devices()
->> The variable fc2580_driver references
->> the function __init set_reset_devices()
->> If the reference is valid then annotate the
->> variable with or __refdata (see linux/init.h) or name the variable:
-> 
-> I don't see my patch causing that. Seems unrelated.
-> 
+Hi Maxime,
 
+On Thu 28 Apr 22, 10:11, Maxime Ripard wrote:
+> On Thu, Apr 28, 2022 at 09:55:56AM +0200, Paul Kocialkowski wrote:
+> > Hi Jernej,
+> >=20
+> > Thanks a lot for all your reviews!
+> >=20
+> > On Wed 27 Apr 22, 22:07, Jernej =C5=A0krabec wrote:
+> > > Dne petek, 15. april 2022 ob 17:28:09 CEST je Paul Kocialkowski napis=
+al(a):
+> > > > Add a helper to detect whether the ISP is available and connected
+> > > > and store the indication in a driver-wide variable.
+> > > >=20
+> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > ---
+> > > >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++=
+++++
+> > > >  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+> > > >  2 files changed, 36 insertions(+)
+> > > >=20
+> > > > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > > > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
+> > > > a88deb8ba1e7..f185cbd113c7 100644
+> > > > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > > > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > > > @@ -25,6 +25,35 @@
+> > > >  #include "sun6i_csi_capture.h"
+> > > >  #include "sun6i_csi_reg.h"
+> > > >=20
+> > > > +/* ISP */
+> > > > +
+> > > > +static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
+> > > > +{
+> > > > +	struct device *dev =3D csi_dev->dev;
+> > > > +	struct fwnode_handle *handle =3D NULL;
+> > > > +
+> > > > +	/* ISP is not available if disabled in kernel config. */
+> > > > +	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
+> > >=20
+> > > Where is this symbol defined?
+> >=20
+> > That is defined through Kconfig's auto-generated header, from the assoc=
+iated
+> > option for the ISP driver. It is defined in the ISP support series so t=
+his
+> > will effectively always be false for now.
+>=20
+> Can the ISP be compiled as a module, but the CSI driver built-in?
 
-Hi David,
+I think so yes, I don't see any reason why not.
 
-Please ignore this report, similar warnings can be found on parent 
-commit too:
+> If so,
+> that would create a dependency from the kernel image to a module, which
+> won't compile.
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x13e3592): Section mismatch in 
-reference from the function usbhid_find_interface() to the variable 
-.init.text:.LBB0_1
-<< WARNING: modpost: vmlinux.o(.text+0x13e3596): Section mismatch in 
-reference from the function usbhid_find_interface() to the function 
-.init.text:set_reset_devices()
+I think this would introduce a run-time dependency (sun6i-csi needing sun6i=
+-isp
+in order to register) but I don't understand why it wouldn't compile though.
+Could you ellaborate a bit?
 
-Best Regards,
-Rong Chen
+Thanks!
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--st8DMu9oF2iUfIiW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJqffAACgkQ3cLmz3+f
+v9Emewf/Zlj04aHtR4cNVwZx04Pnb577X42nR1Wu/aUvkR8yxcNEDJFRoO7VuElK
+rACulRMpS4pMBqYPXtieuMirT1VTB0mBD0soOiC7/s9vRzsThpk01c3mY2c0IBZn
+sxWqTGkrqI/jDF4uKt60YL8KECEuGulSPkMAdJtjXWp+V8fJqPbzDOpGlILkNY++
+2fdyfhcI1Sy60qcdkwAgBNndnGc8Ce894PM5xZikiwwsbAf6XpTZ2QZOHUYTRpdr
+7nTk0ibe2TQJmGwnKp2Elzwl+o6oZn+qu8m6FnXnxwB08snRh7qUifMsNu6GqUVB
+0J4jx12tfFVhRwePRq1a9sM0Xb5h4Q==
+=MHAf
+-----END PGP SIGNATURE-----
+
+--st8DMu9oF2iUfIiW--

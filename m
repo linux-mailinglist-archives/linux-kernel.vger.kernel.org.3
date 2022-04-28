@@ -2,278 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFD051349E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCF4513499
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346857AbiD1NOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        id S1346841AbiD1NOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiD1NOp (ORCPT
+        with ESMTP id S1346952AbiD1NOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:14:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677681CFEF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:11:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E304D62057
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:11:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554E3C385AA;
-        Thu, 28 Apr 2022 13:11:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651151489;
-        bh=3cUbLRj0AS6ThTYaeUINo9N9tQusNC2k+C55ygza17A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dLPGFXXC3Yg3hkBK39uWfjKON3Qop7xypGm1ULKIbLDZ9A1Chiv/w4uk0ZSAu70mD
-         gQa/AV08INc3p/iKF0mmw85FqX+hXUHiT/pRszFetIVfz5ROyNJb4VnpJIVWZec7oF
-         rOpaPSRLNfGlq4R7Inbo1MzcfTxMjA10OmLNucSTccs+FVERcoDBssqiuDP8JmKhpg
-         y9A+eSBDVeKZjzyEBM9Schpdx6ltyhMf+qGf0hSZh8bKHInw9oUgJtXwtTKCgtqPwn
-         8LdgFA4T2t6dF8tESudf7XadBNKjbRdv7bz/DRzGxxlpzQIGrzkMhotzZ3Jx2tDBJ0
-         Hp9FzZBDHTynw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: pxa/sa1100: move I/O space to PCI_IOBASE
-Date:   Thu, 28 Apr 2022 15:10:34 +0200
-Message-Id: <20220428131115.986812-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Thu, 28 Apr 2022 09:14:15 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EAA1AF32;
+        Thu, 28 Apr 2022 06:11:00 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s131so5294718oie.1;
+        Thu, 28 Apr 2022 06:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m1086ZQTgciBDTHOLT4KKyAGoDAeJX2AiJjybJQ5ZuA=;
+        b=LOr1/Kv/sLO4NyKJzb6wqfS6o0gV4djWxJx68mOvZpgzsNuLzwrbG+2V7jAE76zIUj
+         iikJ8X+ovko/EHgij1nBQo/x7Bi/KPoLw5dbFg1zkl+o+xzs/STuev2VguEmliiioU9o
+         aCRBFz40yeAc2H4oCQbOSaMqx4cZT1CU8By5trHyfwPkvOAWyXlHhK8z6XGX/SWIIQLl
+         Q1L2YoO0TcjAiw0rojGcluE6Tex4gTGwkAVShpqBRAL9TZm38Dq0T+qg4j3LtP3jpc5T
+         CCMOla56w5vcgbaVApT13+c8dDBbEjXo0Hng5F4WYel0R7mCQx+yTsPc3q4uQqGQqOeU
+         09+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m1086ZQTgciBDTHOLT4KKyAGoDAeJX2AiJjybJQ5ZuA=;
+        b=4OqAqygbgnAM6NRfolPcwj2dafkw5q6nJwddL4HNmu1oJCi8xAqCNtbsQtB7BiryQs
+         WJ/rSBgVcHuQ33M1IA4zt3hNWdqXIDpCezaqQd3um4G1KpkFKaUBKkFBIo9Z2OF9dtqp
+         aaIpR2PV9zTPDXQAT3Yk4CprDEXH1jfC9iFsB90fcHLAE36d9tNkhZsq27e2shFYl2D8
+         E2kesnTAsRz3URdLKaayZOoK93lcYYW1zuiJK8ZnUmt35lBBixovvma+AkTdeNPv5vYv
+         wZs35F1ZXu+6ZVH5pzk3i+YRDNca12qPiZ/wH+ug9ZsFxQHapEFCKa34X5K9tGBsTFA3
+         xFLA==
+X-Gm-Message-State: AOAM532RIWCtDXP07UUKZJjJhPpMtnLvYozOnZj+bU9NgAAcMaF43B9X
+        D+03HikrJkqQByP5+cGAA+Q=
+X-Google-Smtp-Source: ABdhPJzcMUpV76tKlp2QvspGppKBwEJiHCceRqEhu5DMtQBUZJkt02KlvwVAfbzsG9cuehRDhFmpIQ==
+X-Received: by 2002:aca:782:0:b0:325:4771:90b1 with SMTP id 124-20020aca0782000000b00325477190b1mr8237240oih.236.1651151459806;
+        Thu, 28 Apr 2022 06:10:59 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i16-20020a056870d41000b000e686d1388esm1917184oag.40.2022.04.28.06.10.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 06:10:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b19ce453-1235-689b-8796-fa6cba35c1f0@roeck-us.net>
+Date:   Thu, 28 Apr 2022 06:10:56 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] watchdog: max63xx_wdt: Add support for specifying WDI
+ logic via GPIO
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220428091603.6838-1-pali@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220428091603.6838-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 4/28/22 02:16, Pali Rohár wrote:
+> On some boards is WDI logic of max6370 chip connected via GPIO. So extend
+> max63xx_wdt driver and DTS schema to allow specifying WDI logic via GPIO.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 
-PXA and StrongARM1100 traditionally map their I/O space 1:1 into virtual
-memory, using a per-bus io_offset that matches the base address of the
-ioremap mapping.
+How is that different to just using the gpio watchdog driver ?
 
-In order for PXA to work in a multiplatform config, this needs to
-change so I/O space starts at PCI_IOBASE (0xfee00000). Since the pcmcia
-soc_common support is shared with StrongARM1100, both have to change at
-the same time. The affected machines are:
+Guenter
 
- - Anything with a PCMCIA slot now uses pci_remap_iospace, which
-   is made available to PCMCIA configurations as well, rather than
-   just PCI
-
- - The Zeus and Viper platforms have PC/104-style ISA buses,
-   which have a static mapping for both I/O and memory space at
-   0xf1000000, which can no longer work. It does not appear to have
-   any in-tree users, so moving it to port number 0x2000 is unlikely to
-   break something.
-
- - SA1100 does support ISA slots in theory, but all machines that
-   originally enabled this appear to have been removed from the tree
-   ages ago, and the I/O space is never mapped anywhere.
-
- - The Nanoengine machine has support for PCI slots, but looks
-   like this never included I/O space, the resources only define the
-   location for memory and config space.
-
-With this, the definitions of __io() and IO_SPACE_LIMIT can be simplified,
-as the only remaining cases are the generic PCI_IOBASE and the custom
-inb()/outb() macros on RiscPC.  S3C24xx still has a custom inb()/outb()
-in this here, but this is already removed in another branch.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/include/asm/io.h   | 25 +++----------------------
- arch/arm/mach-pxa/viper.c   | 12 ++++++++++++
- arch/arm/mach-pxa/zeus.c    | 12 ++++++++++++
- arch/arm/mm/ioremap.c       |  2 +-
- drivers/pcmcia/soc_common.c | 16 ++++++++--------
- include/pcmcia/soc_common.h |  2 +-
- 6 files changed, 37 insertions(+), 32 deletions(-)
-
-diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-index 0c70eb688a00..3bdc54702baa 100644
---- a/arch/arm/include/asm/io.h
-+++ b/arch/arm/include/asm/io.h
-@@ -200,32 +200,13 @@ void __iomem *pci_remap_cfgspace(resource_size_t res_cookie, size_t size);
-  */
- #ifdef CONFIG_NEED_MACH_IO_H
- #include <mach/io.h>
--#elif defined(CONFIG_PCI)
--#define IO_SPACE_LIMIT	((resource_size_t)0xfffff)
--#define __io(a)		__typesafe_io(PCI_IO_VIRT_BASE + ((a) & IO_SPACE_LIMIT))
- #else
--#define __io(a)		__typesafe_io((a) & IO_SPACE_LIMIT)
--#endif
--
--/*
-- * This is the limit of PC card/PCI/ISA IO space, which is by default
-- * 64K if we have PC card, PCI or ISA support.  Otherwise, default to
-- * zero to prevent ISA/PCI drivers claiming IO space (and potentially
-- * oopsing.)
-- *
-- * Only set this larger if you really need inb() et.al. to operate over
-- * a larger address space.  Note that SOC_COMMON ioremaps each sockets
-- * IO space area, and so inb() et.al. must be defined to operate as per
-- * readb() et.al. on such platforms.
-- */
--#ifndef IO_SPACE_LIMIT
--#if defined(CONFIG_PCMCIA_SOC_COMMON) || defined(CONFIG_PCMCIA_SOC_COMMON_MODULE)
--#define IO_SPACE_LIMIT ((resource_size_t)0xffffffff)
--#elif defined(CONFIG_PCI) || defined(CONFIG_ISA) || defined(CONFIG_PCCARD)
--#define IO_SPACE_LIMIT ((resource_size_t)0xffff)
-+#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCI)
-+#define IO_SPACE_LIMIT	((resource_size_t)0xfffff)
- #else
- #define IO_SPACE_LIMIT ((resource_size_t)0)
- #endif
-+#define __io(a)		__typesafe_io(PCI_IO_VIRT_BASE + ((a) & IO_SPACE_LIMIT))
- #endif
- 
- /*
-diff --git a/arch/arm/mach-pxa/viper.c b/arch/arm/mach-pxa/viper.c
-index 0782f0ed5a6e..71e4d7ea77b8 100644
---- a/arch/arm/mach-pxa/viper.c
-+++ b/arch/arm/mach-pxa/viper.c
-@@ -998,6 +998,18 @@ static struct map_desc viper_io_desc[] __initdata = {
- 		.length  = 0x00800000,
- 		.type    = MT_DEVICE,
- 	},
-+	{
-+		/*
-+		 * ISA I/O space mapping:
-+		 * -  ports 0x0000-0x0fff are PCMCIA slot 0
-+		 * -  ports 0x1000-0x1fff are PCMCIA slot 1
-+		 * -  ports 0x2000-0x2fff are PC/104
-+		 */
-+		.virtual = PCI_IOBASE + 0x2000,
-+		.pfn     = __phys_to_pfn(0x30000000),
-+		.length  = 0x1000,
-+		.type    = MT_DEVICE,
-+	},
- };
- 
- static void __init viper_map_io(void)
-diff --git a/arch/arm/mach-pxa/zeus.c b/arch/arm/mach-pxa/zeus.c
-index 1fdef9426784..5ddb4223d1dc 100644
---- a/arch/arm/mach-pxa/zeus.c
-+++ b/arch/arm/mach-pxa/zeus.c
-@@ -929,6 +929,18 @@ static struct map_desc zeus_io_desc[] __initdata = {
- 		.length  = 0x00800000,
- 		.type    = MT_DEVICE,
- 	},
-+	{
-+		/*
-+		 * ISA I/O space mapping:
-+		 * -  ports 0x0000-0x0fff are PCMCIA slot 0
-+		 * -  ports 0x1000-0x1fff are PCMCIA slot 1
-+		 * -  ports 0x2000-0x2fff are PC/104
-+		 */
-+		.virtual = PCI_IOBASE + 0x2000,
-+		.pfn     = __phys_to_pfn(ZEUS_PC104IO_PHYS),
-+		.length  = 0x1000,
-+		.type    = MT_DEVICE,
-+	},
- };
- 
- static void __init zeus_map_io(void)
-diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
-index aa08bcb72db9..e6f5354ed1d7 100644
---- a/arch/arm/mm/ioremap.c
-+++ b/arch/arm/mm/ioremap.c
-@@ -455,7 +455,7 @@ void iounmap(volatile void __iomem *cookie)
- }
- EXPORT_SYMBOL(iounmap);
- 
--#ifdef CONFIG_PCI
-+#if defined(CONFIG_PCI) || defined(CONFIG_PCMCIA)
- static int pci_ioremap_mem_type = MT_DEVICE;
- 
- void pci_ioremap_set_mem_type(int mem_type)
-diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
-index 9276a628473d..fdeaefffd34a 100644
---- a/drivers/pcmcia/soc_common.c
-+++ b/drivers/pcmcia/soc_common.c
-@@ -46,6 +46,7 @@
- #include <linux/regulator/consumer.h>
- #include <linux/spinlock.h>
- #include <linux/timer.h>
-+#include <linux/pci.h>
- 
- #include "soc_common.h"
- 
-@@ -782,8 +783,7 @@ void soc_pcmcia_remove_one(struct soc_pcmcia_socket *skt)
- 	/* should not be required; violates some lowlevel drivers */
- 	soc_common_pcmcia_config_skt(skt, &dead_socket);
- 
--	iounmap(skt->virt_io);
--	skt->virt_io = NULL;
-+	pci_unmap_iospace(&skt->res_io_io);
- 	release_resource(&skt->res_attr);
- 	release_resource(&skt->res_mem);
- 	release_resource(&skt->res_io);
-@@ -816,11 +816,11 @@ int soc_pcmcia_add_one(struct soc_pcmcia_socket *skt)
- 	if (ret)
- 		goto out_err_4;
- 
--	skt->virt_io = ioremap(skt->res_io.start, 0x10000);
--	if (skt->virt_io == NULL) {
--		ret = -ENOMEM;
-+	skt->res_io_io = (struct resource)
-+		 DEFINE_RES_IO_NAMED(skt->nr * 0x1000, 0x1000, "PCMCIA I/O");
-+	ret = pci_remap_iospace(&skt->res_io_io, skt->res_io.start);
-+	if (ret)
- 		goto out_err_5;
--	}
- 
- 	/*
- 	 * We initialize default socket timing here, because
-@@ -838,7 +838,7 @@ int soc_pcmcia_add_one(struct soc_pcmcia_socket *skt)
- 	skt->socket.resource_ops = &pccard_static_ops;
- 	skt->socket.irq_mask = 0;
- 	skt->socket.map_size = PAGE_SIZE;
--	skt->socket.io_offset = (unsigned long)skt->virt_io;
-+	skt->socket.io_offset = (unsigned long)skt->res_io_io.start;
- 
- 	skt->status = soc_common_pcmcia_skt_state(skt);
- 
-@@ -872,7 +872,7 @@ int soc_pcmcia_add_one(struct soc_pcmcia_socket *skt)
-  out_err_7:
- 	soc_pcmcia_hw_shutdown(skt);
-  out_err_6:
--	iounmap(skt->virt_io);
-+	pci_unmap_iospace(&skt->res_io_io);
-  out_err_5:
- 	release_resource(&skt->res_attr);
-  out_err_4:
-diff --git a/include/pcmcia/soc_common.h b/include/pcmcia/soc_common.h
-index 26f1473a06c5..d4f18f4679df 100644
---- a/include/pcmcia/soc_common.h
-+++ b/include/pcmcia/soc_common.h
-@@ -46,9 +46,9 @@ struct soc_pcmcia_socket {
- 
- 	struct resource		res_skt;
- 	struct resource		res_io;
-+	struct resource		res_io_io;
- 	struct resource		res_mem;
- 	struct resource		res_attr;
--	void __iomem		*virt_io;
- 
- 	struct {
- 		int		gpio;
--- 
-2.29.2
+> ---
+>   .../bindings/watchdog/maxim,max63xx.yaml      |  4 +++
+>   drivers/watchdog/max63xx_wdt.c                | 28 +++++++++++++++++++
+>   2 files changed, 32 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> index ab9641e845db..a97aa0135ef9 100644
+> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> @@ -27,6 +27,10 @@ properties:
+>       description: This is a 1-byte memory-mapped address
+>       maxItems: 1
+>   
+> +  gpios:
+> +    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
+> +    maxItems: 1
+> +
+>   required:
+>     - compatible
+>     - reg
+> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+> index 9e1541cfae0d..eaf00c3f06a5 100644
+> --- a/drivers/watchdog/max63xx_wdt.c
+> +++ b/drivers/watchdog/max63xx_wdt.c
+> @@ -27,6 +27,7 @@
+>   #include <linux/io.h>
+>   #include <linux/slab.h>
+>   #include <linux/property.h>
+> +#include <linux/gpio/consumer.h>
+>   
+>   #define DEFAULT_HEARTBEAT 60
+>   #define MAX_HEARTBEAT     60
+> @@ -53,6 +54,9 @@ struct max63xx_wdt {
+>   	void __iomem *base;
+>   	spinlock_t lock;
+>   
+> +	/* GPIOs */
+> +	struct gpio_desc *gpio_wdi;
+> +
+>   	/* WDI and WSET bits write access routines */
+>   	void (*ping)(struct max63xx_wdt *wdt);
+>   	void (*set)(struct max63xx_wdt *wdt, u8 set);
+> @@ -158,6 +162,17 @@ static const struct watchdog_info max63xx_wdt_info = {
+>   	.identity = "max63xx Watchdog",
+>   };
+>   
+> +static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
+> +{
+> +	spin_lock(&wdt->lock);
+> +
+> +	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
+> +	udelay(1);
+> +	gpiod_set_value_cansleep(wdt->gpio_wdi, 0);
+> +
+> +	spin_unlock(&wdt->lock);
+> +}
+> +
+>   static void max63xx_mmap_ping(struct max63xx_wdt *wdt)
+>   {
+>   	u8 val;
+> @@ -225,6 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
+>   		return -EINVAL;
+>   	}
+>   
+> +	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
+> +	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT) {
+> +		if (PTR_ERR(wdt->gpio_wdi) != -EPROBE_DEFER)
+> +			dev_err(dev, "unable to request gpio: %ld\n",
+> +				PTR_ERR(wdt->gpio_wdi));
+> +		return PTR_ERR(wdt->gpio_wdi);
+> +	}
+> +
+> +	if (!IS_ERR(wdt->gpio_wdi))
+> +		wdt->ping = max63xx_gpio_ping;
+> +	else
+> +		wdt->gpio_wdi = NULL;
+> +
+>   	err = max63xx_mmap_init(pdev, wdt);
+>   	if (err)
+>   		return err;
 

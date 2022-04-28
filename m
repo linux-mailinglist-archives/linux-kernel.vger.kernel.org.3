@@ -2,183 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4476F5135EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7195135DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347951AbiD1OCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S1347856AbiD1OB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347872AbiD1OCG (ORCPT
+        with ESMTP id S1347846AbiD1OBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:02:06 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2CEB53C5;
-        Thu, 28 Apr 2022 06:58:51 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g6so9777133ejw.1;
-        Thu, 28 Apr 2022 06:58:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6yhw3vAgS0ezr9ZZJU/0JZnt1IXk8RP1bpIj/xq+Zmg=;
-        b=IJzn+Uub+BcVnQ8kpFx9x6zDXCNb2uL51LOFJY46LL2K/41dGUfoZfG2Iuj0iHJ76X
-         zjIDVLaPeCQsLFVU7bbCBrPapS3yowUVs1Dv1PeBoOq5rYDl/1AiG+bQ0mhR9/Bb7F5N
-         8RNJ/ZIp3oIzgarYAMdpIG4RgAuWdjvOIAWPfkY6TAp43zuoWwq5BG6FuSMHNhsd19nC
-         4X2A3vWUSb5CUtU7JZilTw+2tRErDDrEOGToAIIEX1t4sN4xUR6A3qmjlxsTURHN422/
-         w48rbL2DepvkVilSt0fDbcIiM+MjcVcNZpFChoWuceYss+VrZh6/mwh3CKtdf4jnj+7A
-         xc4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6yhw3vAgS0ezr9ZZJU/0JZnt1IXk8RP1bpIj/xq+Zmg=;
-        b=5uqu9VfpwZuMFco6AtBJNkkkZ/1y4zaBpvHZyiCoCkybIVVJvul1ZTHOqkU0Tn1vpT
-         Ds/DekZdNCobPFe5CQlzannRb6uQiPftrs1NVdPaepfDaf4921E4CmJjXUar5zShYYPR
-         aevO/bYA2eOnLeUtRQOUVzQK+vUc6k9mn9YhC9utaChW+DLeBG7qQWMo1B57Q7bBw1ao
-         uKd6z9h62rjaR7ncryHixrojWfTEP3daWgrVuTdjVxCIqq47v/Zo9QfWd4SYjGTBGJ0h
-         ZC+8mOa01z813ixXKoICj8G4SY4lh+a/t3n1LpkFd6VRJgA5RHs8odg/SFW4FvxYPiNM
-         cPFg==
-X-Gm-Message-State: AOAM532QZYY7pTvIGW83vzsCJvjlTA04w07MN8KPzR2afOPF9p1jGiQk
-        QKCKIvh2PgmLVFoyMlKb70fAg5+iCos=
-X-Google-Smtp-Source: ABdhPJz7Vh6WP6wbUIx82ccznHAN7Kq+d4typKfpOEjsy3QobDistd5qOS540Z3dajUQDOUa/TYcHA==
-X-Received: by 2002:a17:907:9621:b0:6d7:355d:6da5 with SMTP id gb33-20020a170907962100b006d7355d6da5mr31343828ejc.195.1651154329631;
-        Thu, 28 Apr 2022 06:58:49 -0700 (PDT)
-Received: from 127.0.0.1localhost ([85.255.235.145])
-        by smtp.gmail.com with ESMTPSA id t19-20020aa7d4d3000000b0042617ba63c2sm1652568edr.76.2022.04.28.06.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 06:58:49 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH v2 net-next 03/11] udp/ipv6: move pending section of udpv6_sendmsg
-Date:   Thu, 28 Apr 2022 14:57:58 +0100
-Message-Id: <4087b9a2cb175bca7c10404e33e8ba6c8de2ff1a.1651153920.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <cover.1651153920.git.asml.silence@gmail.com>
-References: <cover.1651153920.git.asml.silence@gmail.com>
+        Thu, 28 Apr 2022 10:01:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54530506FC;
+        Thu, 28 Apr 2022 06:58:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6EC561CE1;
+        Thu, 28 Apr 2022 13:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0301C385A0;
+        Thu, 28 Apr 2022 13:58:04 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 09:58:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+Message-ID: <20220428095803.66c17c32@gandalf.local.home>
+In-Reply-To: <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+        <20220407125224.310255-5-jolsa@kernel.org>
+        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+        <20220412094923.0abe90955e5db486b7bca279@kernel.org>
+        <CAEf4BzaQRcZGMqq5wqHo3wSHZAAVvY6AhizDk_dV_GtnwHuxLQ@mail.gmail.com>
+        <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move up->pending section of udpv6_sendmsg() to the beginning of the
-function. Even though it require some code duplication for sin6 parsing,
-it clearly localises the pending handling in one place, removes an extra
-if and more importantly will prepare the code for further patches.
+On Sat, 16 Apr 2022 23:21:03 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- net/ipv6/udp.c | 67 ++++++++++++++++++++++++++++++--------------------
- 1 file changed, 40 insertions(+), 27 deletions(-)
+> OK, I also confirmed that __bpf_tramp_exit is listed. (others seems no notrace)
+> 
+> /sys/kernel/tracing # cat available_filter_functions | grep __bpf_tramp
+> __bpf_tramp_image_release
+> __bpf_tramp_image_put_rcu
+> __bpf_tramp_image_put_rcu_tasks
+> __bpf_tramp_image_put_deferred
+> __bpf_tramp_exit
+> 
+> My gcc is older one.
+> gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 
+> 
+> But it seems that __bpf_tramp_exit() doesn't call __fentry__. (I objdump'ed) 
+> 
+> ffffffff81208270 <__bpf_tramp_exit>:
+> ffffffff81208270:       55                      push   %rbp
+> ffffffff81208271:       48 89 e5                mov    %rsp,%rbp
+> ffffffff81208274:       53                      push   %rbx
+> ffffffff81208275:       48 89 fb                mov    %rdi,%rbx
+> ffffffff81208278:       e8 83 70 ef ff          callq  ffffffff810ff300 <__rcu_read_lock>
+> ffffffff8120827d:       31 d2                   xor    %edx,%edx
 
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 705eea080f5e..d6aedd4dab25 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -1317,6 +1317,44 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	ipc6.sockc.tsflags = sk->sk_tsflags;
- 	ipc6.sockc.mark = sk->sk_mark;
- 
-+	/* Rough check on arithmetic overflow,
-+	   better check is made in ip6_append_data().
-+	   */
-+	if (unlikely(len > INT_MAX - sizeof(struct udphdr)))
-+		return -EMSGSIZE;
-+
-+	/* There are pending frames. */
-+	if (up->pending) {
-+		if (up->pending == AF_INET)
-+			return udp_sendmsg(sk, msg, len);
-+
-+		/* Do a quick destination sanity check before corking. */
-+		if (sin6) {
-+			if (msg->msg_namelen < offsetof(struct sockaddr, sa_data))
-+				return -EINVAL;
-+			if (sin6->sin6_family == AF_INET6) {
-+				if (msg->msg_namelen < SIN6_LEN_RFC2133)
-+					return -EINVAL;
-+				if (ipv6_addr_any(&sin6->sin6_addr) &&
-+				    ipv6_addr_v4mapped(&np->saddr))
-+					return -EINVAL;
-+			} else if (sin6->sin6_family != AF_UNSPEC) {
-+				return -EINVAL;
-+			}
-+		}
-+
-+		/* The socket lock must be held while it's corked. */
-+		lock_sock(sk);
-+		if (unlikely(up->pending != AF_INET6)) {
-+			/* Just now it was seen corked, userspace is buggy */
-+			err = up->pending ? -EAFNOSUPPORT : -EINVAL;
-+			release_sock(sk);
-+			return err;
-+		}
-+		dst = NULL;
-+		goto do_append_data;
-+	}
-+
- 	/* destination address check */
- 	if (sin6) {
- 		if (addr_len < offsetof(struct sockaddr, sa_data))
-@@ -1342,12 +1380,11 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		default:
- 			return -EINVAL;
- 		}
--	} else if (!up->pending) {
-+	} else {
- 		if (sk->sk_state != TCP_ESTABLISHED)
- 			return -EDESTADDRREQ;
- 		daddr = &sk->sk_v6_daddr;
--	} else
--		daddr = NULL;
-+	}
- 
- 	if (daddr) {
- 		if (ipv6_addr_v4mapped(daddr)) {
-@@ -1364,30 +1401,6 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		}
- 	}
- 
--	/* Rough check on arithmetic overflow,
--	   better check is made in ip6_append_data().
--	   */
--	if (len > INT_MAX - sizeof(struct udphdr))
--		return -EMSGSIZE;
--
--	if (up->pending) {
--		if (up->pending == AF_INET)
--			return udp_sendmsg(sk, msg, len);
--		/*
--		 * There are pending frames.
--		 * The socket lock must be held while it's corked.
--		 */
--		lock_sock(sk);
--		if (likely(up->pending)) {
--			if (unlikely(up->pending != AF_INET6)) {
--				release_sock(sk);
--				return -EAFNOSUPPORT;
--			}
--			dst = NULL;
--			goto do_append_data;
--		}
--		release_sock(sk);
--	}
- 	ulen += sizeof(struct udphdr);
- 
- 	memset(fl6, 0, sizeof(*fl6));
--- 
-2.36.0
+You need to look deeper ;-)
+> 
+> 
+> > 
+> > So it's quite bizarre and inconsistent.  
+> 
+> Indeed. I guess there is a bug in scripts/recordmcount.pl.
 
+No there isn't.
+
+I added the addresses it was mapping and found this:
+
+ffffffffa828f680 T __bpf_tramp_exit
+
+(which is relocated, but it's trivial to map it with the actual function).
+
+At the end of that function we have:
+
+ffffffff8128f767:       48 8d bb e0 00 00 00    lea    0xe0(%rbx),%rdi
+ffffffff8128f76e:       48 8b 40 08             mov    0x8(%rax),%rax
+ffffffff8128f772:       e8 89 28 d7 00          call   ffffffff82002000 <__x86_indirect_thunk_array>
+                        ffffffff8128f773: R_X86_64_PLT32        __x86_indirect_thunk_rax-0x4
+ffffffff8128f777:       e9 4a ff ff ff          jmp    ffffffff8128f6c6 <__bpf_tramp_exit+0x46>
+ffffffff8128f77c:       0f 1f 40 00             nopl   0x0(%rax)
+ffffffff8128f780:       e8 8b df dc ff          call   ffffffff8105d710 <__fentry__>
+                        ffffffff8128f781: R_X86_64_PLT32        __fentry__-0x4
+ffffffff8128f785:       b8 f4 fd ff ff          mov    $0xfffffdf4,%eax
+ffffffff8128f78a:       c3                      ret    
+ffffffff8128f78b:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+
+
+Notice the call to fentry!
+
+It's due to this:
+
+void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr)
+{
+	percpu_ref_put(&tr->pcref);
+}
+
+int __weak
+arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
+			    const struct btf_func_model *m, u32 flags,
+			    struct bpf_tramp_progs *tprogs,
+			    void *orig_call)
+{
+	return -ENOTSUPP;
+}
+
+The weak function gets a call to ftrace, but it still gets compiled into
+vmlinux but its symbol is dropped due to it being overridden. Thus, the
+mcount_loc finds this call to fentry, and maps it to the symbol that is
+before it, which just happened to be __bpf_tramp_exit.
+
+I made that weak function "notrace" and the __bpf_tramp_exit disappeared
+from the available_filter_functions list.
+
+-- Steve

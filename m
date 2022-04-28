@@ -2,133 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9297F512C40
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C20512C45
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244881AbiD1HJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S244844AbiD1HJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244801AbiD1HJT (ORCPT
+        with ESMTP id S244819AbiD1HIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:09:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 958377CDD6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651129564;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RX0IluUFjyFGJB9XgIGY/YNKpJD21MjW7iyGoQ/bciQ=;
-        b=MgCRQOR0bXRwCG/n9wB3V/1V5KF7AWuuzIMVPknPI4vVCSoQUbZH5PD17M/bicFwyCK9zd
-        U/c+O6emWUPdgwPJC0U7hmZdBHcKzCzJPpiiZKIqxmIpg0F+bxXZzlHF14bswCE95j41Bt
-        KWQsumSgUPpfKbM7Lxgo1yrCyjPR6xo=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-260-uIZMLnaMMkSTSVrOnAexow-1; Thu, 28 Apr 2022 03:06:03 -0400
-X-MC-Unique: uIZMLnaMMkSTSVrOnAexow-1
-Received: by mail-qt1-f199.google.com with SMTP id i3-20020ac813c3000000b002f202d9471dso2725855qtj.15
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:06:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=RX0IluUFjyFGJB9XgIGY/YNKpJD21MjW7iyGoQ/bciQ=;
-        b=eGMOW9f+tIZYaFMuyRugZb2DccstpHb2t2Zunk1GBV4gBgeogMyS9KWlrqe9D3RbNm
-         EKdamZyrlNS53ULBLaRBfDHNU7PGbNMQzepX5UJPi/JdBYUZ08RHJh7O8Ce4lT87FxBN
-         RSAFjJtDEFHUr27zE/i0Ymoc0BVUYyB7aMQCb4P9pwTGwm+67v7bqAEYD6zn4fob05IQ
-         ilInjrWzBw9VnM57ny+ngOImWMZ5ZGKseRgnG6VqmmGZYUcqtZFKu8cqxd7h22SWoM++
-         KQ5UnbabnaWCua5hnOnK4TVpNf3t4K/BDP/mxNY07j5fvCu9gBLer/Fb1OcZRkTaGOZE
-         OgWQ==
-X-Gm-Message-State: AOAM531anJCi4HI8x9brZwA/JEwcRBRXDvXi43njjikwv8ZQuIt1qDyA
-        DJ1FIhqn2IqrCVOgfHzBP9aXMsKxlctkFdPVVquKfUtCkNM/5MNsa28AZGXn4dCWl32cjuxhito
-        0Wpt3fbEyuFmym32q1v52lCAp
-X-Received: by 2002:ac8:5fcb:0:b0:2f3:4799:1649 with SMTP id k11-20020ac85fcb000000b002f347991649mr22339580qta.522.1651129562779;
-        Thu, 28 Apr 2022 00:06:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyU2oeLrstNHTLoVNiOiYqy8PCp5qFcyD0PvqMZ6dBrsfSJtI6yAgZINx2lBg+bbQaYrXCEkQ==
-X-Received: by 2002:ac8:5fcb:0:b0:2f3:4799:1649 with SMTP id k11-20020ac85fcb000000b002f347991649mr22339552qta.522.1651129562541;
-        Thu, 28 Apr 2022 00:06:02 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-117-160.dyn.eolo.it. [146.241.117.160])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm11706888qtx.58.2022.04.28.00.05.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 00:06:02 -0700 (PDT)
-Message-ID: <530adc71b52e774c92c53d235701710dbc9866a9.camel@redhat.com>
-Subject: Re: [PATCH net 1/1] net: stmmac: disable Split Header (SPH) for
- Intel platforms
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Ling Pei Lee <pei.lee.ling@intel.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Song Yoong Siang <yoong.siang.song@intel.com>,
-        Ong@vger.kernel.org, Boon Leong <boon.leong.ong@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>
-Date:   Thu, 28 Apr 2022 09:05:57 +0200
-In-Reply-To: <20220428015538.GC26326@linux.intel.com>
-References: <20220426074531.4115683-1-tee.min.tan@linux.intel.com>
-         <8735i0ndy7.fsf@kurt> <20220428015538.GC26326@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 28 Apr 2022 03:08:44 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B177C791
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:05:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VBYvof._1651129525;
+Received: from 30.32.85.129(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VBYvof._1651129525)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 28 Apr 2022 15:05:26 +0800
+Message-ID: <09bf0a55-d66e-40ee-e9b3-d8b7be136ac9@linux.alibaba.com>
+Date:   Thu, 28 Apr 2022 15:06:13 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 2/3] mm: rmap: Move the cache flushing to the correct
+ place for hugetlb PMD sharing
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        almasrymina@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1651056365.git.baolin.wang@linux.alibaba.com>
+ <4f7ae6dfdc838ab71e1655188b657c032ff1f28f.1651056365.git.baolin.wang@linux.alibaba.com>
+ <YmosZpGwSoB8TlnK@FVFYT0MHHV2J.usts.net>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YmosZpGwSoB8TlnK@FVFYT0MHHV2J.usts.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Thu, 2022-04-28 at 09:55 +0800, Tan Tee Min wrote:
-> On Tue, Apr 26, 2022 at 03:58:56PM +0200, Kurt Kanzenbach wrote:
-> > Hi,
-> > 
-> > On Tue Apr 26 2022, Tan Tee Min wrote:
-> > > Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
-> > > of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
-> > > This SPH limitation will cause ping failure when the packets size exceed
-> > > the MTU size. For example, the issue happens once the basic ping packet
-> > > size is larger than the configured MTU size and the data is lost inside
-> > > the fragmented packet, replaced by zeros/corrupted values, and leads to
-> > > ping fail.
-> > > 
-> > > So, disable the Split Header for Intel platforms.
-> > 
-> > Does this issue only apply on Intel platforms?
+
+On 4/28/2022 1:55 PM, Muchun Song wrote:
+> On Wed, Apr 27, 2022 at 06:52:06PM +0800, Baolin Wang wrote:
+>> The cache level flush will always be first when changing an existing
+>> virtual–>physical mapping to a new value, since this allows us to
+>> properly handle systems whose caches are strict and require a
+>> virtual–>physical translation to exist for a virtual address. So we
+>> should move the cache flushing before huge_pmd_unshare().
+>>
 > 
-> According to Synopsys IP support, they have confirmed the header-payload
-> splitting for IPv4 fragmented packets is not supported for the Synopsys
-> Ether IPs.
+> Right.
 > 
-> Intel platforms are integrating with GMAC EQoS IP which is impacted by the
-> limitation above, so we are changing the default SPH setting to disabled
-> for Intel Platforms only.
+>> As Muchun pointed out[1], now the architectures whose supporting hugetlb
+>> PMD sharing have no cache flush issues in practice. But I think we
+>> should still follow the cache/TLB flushing rules when changing a valid
+>> virtual address mapping in case of potential issues in future.
 > 
-> If anyone can confirm on their platform also having the same issues,
-> then we would change the SPH default to disable across the IPs.
+> Right. One point i need to clarify. I do not object this change but
+> want you to clarify this (not an issue in practice) in commit log
+> to let others know they do not need to bp this.
+> 
+>>
+>> [1] https://lore.kernel.org/all/YmT%2F%2FhuUbFX+KHcy@FVFYT0MHHV2J.usts.net/
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   mm/rmap.c | 40 ++++++++++++++++++++++------------------
+>>   1 file changed, 22 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/mm/rmap.c b/mm/rmap.c
+>> index 61e63db..4f0d115 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -1535,15 +1535,16 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>>   			 * do this outside rmap routines.
+>>   			 */
+>>   			VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+>> +			/*
+>> +			 * huge_pmd_unshare may unmap an entire PMD page.
+>> +			 * There is no way of knowing exactly which PMDs may
+>> +			 * be cached for this mm, so we must flush them all.
+>> +			 * start/end were already adjusted above to cover this
+>> +			 * range.
+>> +			 */
+>> +			flush_cache_range(vma, range.start, range.end);
+>> +
+> 
+> flush_cache_range() is always called even if we do not need to flush.
 
-Could you please provide a Fixes tag here? 
+Right, this is intended. In the original code, if it is not a shared 
+PMD, we will use flush_cache_page() to do cache flushing. However the 
+flush_cache_page() can not cover the whole size of a hugetlb page on 
+some architectures, which is fixed by patch 3.
 
-Thanks!
+> How about introducing a new helper like hugetlb_pmd_shared() which
+> returns true for shared PMD? Then:
+> 
+> 	if (hugetlb_pmd_shared(mm, vma, pvmw.pte)) {
+> 		flush_cache_range(vma, range.start, range.end);
+> 		huge_pmd_unshare(mm, vma, &address, pvmw.pte);
+> 		flush_tlb_range(vma, range.start, range.end);
+> 	}
+> 
+> The code could be a little simpler. Right?
 
-Paolo
+IMHO after patch 3, the code will be changed as below, so seems no need 
+to separate the validation of the shared PMDs from huge_pmd_unshare() 
+into a new function.
 
+if (folio_test_hugetlb(folio)) {
+	flush_cache_range(vma, range.start, range.end);
+
+	if (!folio_test_anon(folio)) {
+		VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+
+		if (hugetlb_pmd_shared(mm, vma, pvmw.pte)) {
+			huge_pmd_unshare(mm, vma, &address, pvmw.pte));
+			flush_tlb_range(vma, range.start, range.end);
+			......
+			break;
+		}
+	}
+} else {
+	......
+}

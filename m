@@ -2,69 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C78513906
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495D251390A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349634AbiD1PyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S1349649AbiD1Pyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349676AbiD1Pxv (ORCPT
+        with ESMTP id S1349338AbiD1Pyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:53:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344301837D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:50:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7waCegNdmWV/+5cUIChqCcCO8D0VgzGnfltekIAPXpg=; b=F6PQsH3l294YWXulP6sAVhmifo
-        LOH8oeGCcXdjyUar8wYcFbmNxU0b5meM7lMRecMAcsJmoxPEMr9GeJ/DR0RECAsojBRkPdGlFfJv2
-        i2hBZRvjEJDHe0h6lQLRsPsjfIGtu3jgPyb61mgW/yImvndzeUhfvnsPSYE//9ZPcxRiNPePVFQsq
-        SZ4wFzXbebBUCnw1Jt7DcJjJoU5R/A4cf9vG2k2i3QwfMWAZZ+u7aJhk66FmV5ucFeaU8ZQiW2TZy
-        DSW+2YLiT7C5v7G+d9hZYKkRNUZ0TaaT1AejuZV2vdJuMt8rqDjdCAdzr4fGyeNUQ1SP5ORfKHc7d
-        ESsMopSw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nk6Pa-007jU6-OH; Thu, 28 Apr 2022 15:50:34 +0000
-Date:   Thu, 28 Apr 2022 08:50:34 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     ira.weiny@intel.com
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V10 33/44] kmap: Make kmap work for devmap protected pages
-Message-ID: <Ymq3yrQ3rmgnbX1o@infradead.org>
-References: <20220419170649.1022246-1-ira.weiny@intel.com>
- <20220419170649.1022246-34-ira.weiny@intel.com>
+        Thu, 28 Apr 2022 11:54:41 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AA23B82CE;
+        Thu, 28 Apr 2022 08:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=+e7JZ
+        FWImB/gYWPb56BE8Z6CjV8zZZto66kxquF1544=; b=jn5dK5tSBLkHFi4I6rFPz
+        M8B6ivLS6y9bAG45SqnezsFdKLe3i90GDFnTwL9d53ihibzHAARm2FDGS8r7+o2o
+        McGDph9zhhjqhRK5VvmjzcLvPzIwXVhOkm1eaSrs8VecYC+Xbx9RAyxV2oH6nkEj
+        TAiJggSynkhLGcrZUYxCG8=
+Received: from carlis (unknown [120.229.64.124])
+        by smtp10 (Coremail) with SMTP id DsCowACX01rxt2pi8R3GDQ--.41376S2;
+        Thu, 28 Apr 2022 23:51:14 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Subject: [PATCH v3] scsi: pmcraid: convert sysfs snprintf to sysfs_emit
+Date:   Thu, 28 Apr 2022 15:51:11 +0000
+Message-Id: <20220428155111.257880-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419170649.1022246-34-ira.weiny@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowACX01rxt2pi8R3GDQ--.41376S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF48CF18tr47Zr45tFy3CFg_yoW8Ar4Dpa
+        yrGryUAr4kJr1UZrWjgay0va4FvayxJa4DtFWkZ3savF9ayrWkGa9rAayagFs5Gr4kZr9x
+        Zr4qyr1Y9a1jyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-5rcUUUUU=
+X-Originating-IP: [120.229.64.124]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiMhLwhVWBy9fKWgAAsN
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:06:38AM -0700, ira.weiny@intel.com wrote:
-> index a77be5630209..32ed07c2994b 100644
-> --- a/include/linux/highmem-internal.h
-> +++ b/include/linux/highmem-internal.h
-> @@ -151,6 +151,8 @@ static inline void totalhigh_pages_add(long count)
->  
->  #else /* CONFIG_HIGHMEM */
->  
-> +#include <linux/memremap.h>
+Fix the following coccicheck warnings:
+drivers/scsi/pmcraid.c:3591:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/pmcraid.c:3557:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/pmcraid.c:3496:8-16:
+WARNING: use scnprintf or sprintf
 
-Uuuh, I'd really prefer to avoid having to pull in memremap.h into
-basically the whole kernel build.
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+v2: fix the sysfs_emt error.
+v3: delete the added config changes in v2.
+---
+ drivers/scsi/pmcraid.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+index 3d5cd337a2a6..57a6fe8aaf70 100644
+--- a/drivers/scsi/pmcraid.c
++++ b/drivers/scsi/pmcraid.c
+@@ -3493,7 +3493,7 @@ static ssize_t pmcraid_show_log_level(
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct pmcraid_instance *pinstance =
+ 		(struct pmcraid_instance *)shost->hostdata;
+-	return snprintf(buf, PAGE_SIZE, "%d\n", pinstance->current_log_level);
++	return sysfs_emit(buf, "%d\n", pinstance->current_log_level);
+ }
+ 
+ /**
+@@ -3554,8 +3554,7 @@ static ssize_t pmcraid_show_drv_version(
+ 	char *buf
+ )
+ {
+-	return snprintf(buf, PAGE_SIZE, "version: %s\n",
+-			PMCRAID_DRIVER_VERSION);
++	return sysfs_emit(buf, "version: %s\n", PMCRAID_DRIVER_VERSION);
+ }
+ 
+ static struct device_attribute pmcraid_driver_version_attr = {
+@@ -3588,8 +3587,7 @@ static ssize_t pmcraid_show_adapter_id(
+ 		pinstance->pdev->devfn;
+ 	u32 aen_group = pmcraid_event_family.id;
+ 
+-	return snprintf(buf, PAGE_SIZE,
+-			"adapter id: %d\nminor: %d\naen group: %d\n",
++	return sysfs_emit(buf, "adapter id: %d\nminor: %d\naen group: %d\n",
+ 			adapter_id, MINOR(pinstance->cdev.dev), aen_group);
+ }
+ 
+-- 
+2.25.1
 

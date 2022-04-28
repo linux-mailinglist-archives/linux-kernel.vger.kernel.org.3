@@ -2,98 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB33E5133AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECCA5133B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346235AbiD1Map (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S1346242AbiD1Mbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346218AbiD1Mao (ORCPT
+        with ESMTP id S1344676AbiD1Mbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:30:44 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E221A777D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:27:29 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bq30so8338369lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D86VqWFsSM3Q2BxVORseBTMD8q1EWJ6nNtqyTRVzxzo=;
-        b=m0Z2OtpFG7W1/JRCK1QHki2+nTLtGozvlTi+CEdYgSrcoC+gkJGA/Z5cpXEAHZnApd
-         T2y4NjA2cdQPHZ0s3Bxtb+iGu4WvJAdiGJbvyVeya2YXiyPk0j7nf+LXpJfeROqWAXlf
-         hAkL3jmYjJHAZlOkZh9TFXQNxzxla/mVgcW5zLiCkuKHiysb/h2hNOyY+jGIgPNCvVE8
-         VfvSBjvX7blFyifiwkBIB2+3YcovnTxxj4Jf+6o/JLHow3ilROL+4MAk6CZhlJsDT9Lg
-         U2xAJPC1a/vS1wgds9M9xWG3zxvs9v53QZXEKMd3TQ4UdWLitMKneFHCB0WjHC8zaz85
-         yELA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D86VqWFsSM3Q2BxVORseBTMD8q1EWJ6nNtqyTRVzxzo=;
-        b=hnnFC2Dv6G64d8we4a0d08SwbsnIi4T8kdiEq5jZxHiuJG7jJGYwIInxUSn+ZrXz8F
-         SaQe1zrqKI/ButtVIG492DaRvI39JHln4Q+bM2JomhdUEx5YEjfPesaY167P1lGAl+gx
-         quuog0TQ+kC13X1s++r2YbczAdf6hkvrXSnCHTrP3gsiFq3WpJIJZ50srspyzrEuddVR
-         h9hYR4+A3+c6Ndrg4nJgY3jYvF82YvUp1ec6QpvBE9mSs7pyD2KO2TB6OID+Wtdhv43q
-         /wuXDFr2V2u0p9D4m1/OjJXhOe5IaAGIA2j1T0RbeZeQRF9yV07eUSGpMmwd/1H5PRST
-         SkWg==
-X-Gm-Message-State: AOAM533AZiKxx/9bKm+a4O2Vevp/2fRie95+eO5CDEtYZm+jjIuvdARc
-        5F9uQYRFZwymmaokKkupOgk30WBJ6AzNmQ==
-X-Google-Smtp-Source: ABdhPJwVaLVWeZh7xSITy/Q++AcEKHxRKqg7clfLQNHY+c1uh7VRfE5Rhk7uUtS+kWH1nGV1BbWf9w==
-X-Received: by 2002:a05:6512:694:b0:471:8eae:8c13 with SMTP id t20-20020a056512069400b004718eae8c13mr23805009lfe.37.1651148847853;
-        Thu, 28 Apr 2022 05:27:27 -0700 (PDT)
-Received: from dabros-l.wifi.semihalf.net ([185.157.14.92])
-        by smtp.gmail.com with ESMTPSA id s12-20020ac25fec000000b0044837422334sm2340475lfg.154.2022.04.28.05.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 05:27:27 -0700 (PDT)
-From:   Jan Dabros <jsd@semihalf.com>
-To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com
-Cc:     mika.westerberg@linux.intel.com, rrangel@chromium.org,
-        Nimesh.Easow@amd.com, upstream@semihalf.com,
-        Jan Dabros <jsd@semihalf.com>
-Subject: [PATCH] i2c: designware: Modify timing parameters for amdpsp mailbox
-Date:   Thu, 28 Apr 2022 14:26:51 +0200
-Message-Id: <20220428122651.208575-1-jsd@semihalf.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+        Thu, 28 Apr 2022 08:31:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB14A6E27;
+        Thu, 28 Apr 2022 05:28:36 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SCS31j019643;
+        Thu, 28 Apr 2022 12:28:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=j992jBLdnEVxEWRsfXLWGJqpHZbrTc37PTAf4yOvcOQ=;
+ b=my/SSP8VZ0A0f/qBz/VseFZTWUHwroawVPSE8QPKAEL9Q0eYbaGi/DouIA12b9DZxhrj
+ sBfmD8Nh+mYETwxmbbTWzQg3ypCFOgTNaYEOZqWbVVpbSyeWUFx1d7roMVkx0FSG5zBD
+ vt/3z+bEBbz2jHa4DPCCrvM/YXctAsCOfbz8pH167FKOV8HAngPq7NgGhGfN3DMku/t8
+ wZhyHwr67EsRwbijneaTFLlqFMCE1kE9tpMaSoQt4CdoTqZ+TBUL4UwuyY/mkaZI7MmZ
+ cfl5i9vhhTRpMLDSfBksmwoYDvVLo+XUSxViUvAR0aEQkgV5odItWmpVlw0GxdW37w3O 0g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqty480cx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 12:28:33 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SCSW76025950;
+        Thu, 28 Apr 2022 12:28:32 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqty480c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 12:28:32 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SCCg6Y017084;
+        Thu, 28 Apr 2022 12:28:31 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 3fm938wxa5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 12:28:30 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SCSRU738994316
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 12:28:27 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A286242041;
+        Thu, 28 Apr 2022 12:28:27 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52C8F4203F;
+        Thu, 28 Apr 2022 12:28:27 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 12:28:27 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, irogers@google.com
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH] perf test: Fix test case 81 on s390x
+Date:   Thu, 28 Apr 2022 14:28:21 +0200
+Message-Id: <20220428122821.3652015-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4gxbpMNmol9wwTGSHgQLdKtPKeyR4Omu
+X-Proofpoint-GUID: wdFwYW-ReZ28epVU1zo2SpLRnlSxvmKM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_01,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ mlxlogscore=999 bulkscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 phishscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280075
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust retry period and timeout values for x86-PSP mailbox based on the
-typical I2C traffic generated by PSP. In order to limit the possibility
-of timeouts, x86 should reduce the interval between retries as well as
-increase overall time after which it gives up.
+perf test -F 81 -v fails on s390x on the linux-next branch.
+The test case is x86 specific can not be executed on s390x.
+The test case depends on x86 register names such as
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
+  ... | egrep -q 'available registers: AX BX CX DX ....'
+
+Skip this test case on s390x.
+
+Output before:
+ # perf test -F 81
+ 81: perf record tests                       : FAILED!
+ #
+
+Output after:
+ # perf test -F 81
+ 81: perf record tests                       : Skip
+ #
+
+Fixes: 24f378e66021 ("perf test: Add basic perf record tests")
+Cc: Ian Rogers <irogers@google.com>
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
 ---
- drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/tests/shell/record.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-index 9b37f2b95abc..b624356c945f 100644
---- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-+++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-@@ -16,8 +16,8 @@
- #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
+diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+index cd1cf14259b8..d98f4d4a00e1 100755
+--- a/tools/perf/tests/shell/record.sh
++++ b/tools/perf/tests/shell/record.sh
+@@ -37,6 +37,8 @@ test_register_capture() {
+   echo "Register capture test [Success]"
+ }
  
- #define PSP_I2C_REQ_BUS_CMD		0x64
--#define PSP_I2C_REQ_RETRY_CNT		10
--#define PSP_I2C_REQ_RETRY_DELAY_US	(50 * USEC_PER_MSEC)
-+#define PSP_I2C_REQ_RETRY_CNT		400
-+#define PSP_I2C_REQ_RETRY_DELAY_US	(25 * USEC_PER_MSEC)
- #define PSP_I2C_REQ_STS_OK		0x0
- #define PSP_I2C_REQ_STS_BUS_BUSY	0x1
- #define PSP_I2C_REQ_STS_INV_PARAM	0x3
++# Test for platform support and return TEST_SKIP
++[ $(uname -m) = s390x ] && exit 2
+ test_per_thread
+ test_register_capture
+ exit $err
 -- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
+2.35.1
 

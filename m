@@ -2,175 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518D151324F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E59513209
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345514AbiD1LWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S1343930AbiD1LIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiD1LWD (ORCPT
+        with ESMTP id S242738AbiD1LIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:22:03 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F28A94F6;
-        Thu, 28 Apr 2022 04:18:48 -0700 (PDT)
-X-UUID: 6da760cb734a4341bb8b8abd0fde6d5b-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:d83dbdcb-c48c-45e9-af44-dd36e57a733c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:d83dbdcb-c48c-45e9-af44-dd36e57a733c,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:5198d3c6-85ee-4ac1-ac05-bd3f1e72e732,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: 6da760cb734a4341bb8b8abd0fde6d5b-20220428
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 228262536; Thu, 28 Apr 2022 19:18:43 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 28 Apr 2022 19:18:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 19:18:41 +0800
-Message-ID: <b83049a9cc9714a28c90a167245c43afddbc1aab.camel@mediatek.com>
-Subject: Re: [PATCH V4 12/15] dt-bindings: reset: mediatek: Add infra_ao
- reset bit for MT8192/MT8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 28 Apr 2022 19:18:41 +0800
-In-Reply-To: <d96797dc-8fbd-fe1c-f970-2f6fc8ca5b69@linaro.org>
-References: <20220427030950.23395-1-rex-bc.chen@mediatek.com>
-         <20220427030950.23395-13-rex-bc.chen@mediatek.com>
-         <d96797dc-8fbd-fe1c-f970-2f6fc8ca5b69@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 28 Apr 2022 07:08:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918CFBE19;
+        Thu, 28 Apr 2022 04:04:58 -0700 (PDT)
+Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kpt6x5lqBzhYcC;
+        Thu, 28 Apr 2022 19:04:41 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 19:04:56 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
+ 2022 19:04:55 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <tj@kernel.org>, <axboe@kernel.dk>,
+        <paolo.valente@linaro.org>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v4 0/3] support concurrent sync io for bfq on a specail occasion
+Date:   Thu, 28 Apr 2022 19:19:04 +0800
+Message-ID: <20220428111907.3635820-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-28 at 15:18 +0800, Krzysztof Kozlowski wrote:
-> On 27/04/2022 05:09, Rex-BC Chen wrote:
-> > - To support reset of infra_ao, add the bit definition of
-> >   thermal/PCIe/SVS for MT8192.
-> > - To support reset of infra_ao, add the bit definition of
-> >   thermal/SVS for MT8195.
-> > - Add the driver comment to separate the reset index for
-> >   TOPRGU and INFRA.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  include/dt-bindings/reset/mt8192-resets.h | 8 ++++++++
-> >  include/dt-bindings/reset/mt8195-resets.h | 6 ++++++
-> >  2 files changed, 14 insertions(+)
-> > 
-> > diff --git a/include/dt-bindings/reset/mt8192-resets.h
-> > b/include/dt-bindings/reset/mt8192-resets.h
-> > index be9a7ca245b9..ee0ca02a39bf 100644
-> > --- a/include/dt-bindings/reset/mt8192-resets.h
-> > +++ b/include/dt-bindings/reset/mt8192-resets.h
-> > @@ -7,6 +7,7 @@
-> >  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> >  #define _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> >  
-> > +/* TOPRGU resets */
-> >  #define MT8192_TOPRGU_MM_SW_RST					
-> > 1
-> >  #define MT8192_TOPRGU_MFG_SW_RST				2
-> >  #define MT8192_TOPRGU_VENC_SW_RST				3
-> > @@ -27,4 +28,11 @@
-> >  
-> >  #define MT8192_TOPRGU_SW_RST_NUM				23
-> >  
-> > +/* INFRA resets */
-> > +#define MT8192_INFRA_THERMAL_CTRL_RST			0
-> > +#define MT8192_INFRA_PEXTP_PHY_RST				79
-> > +#define MT8192_INFRA_PTP_RST					
-> > 101
-> > +#define MT8192_INFRA_RST4_PCIE_TOP				129
-> > +#define MT8192_INFRA_THERMAL_CTRL_MCU_RST		140
-> 
-> This is still wrong. I gave you exactly what has to be used:
-> 0
-> 1
-> 2
-> ...
-> 
-> It's a decimal number incremented by one.
-> 
-> 
-> > +
-> >  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
-> > diff --git a/include/dt-bindings/reset/mt8195-resets.h
-> > b/include/dt-bindings/reset/mt8195-resets.h
-> > index a26bccc8b957..a3226f40779c 100644
-> > --- a/include/dt-bindings/reset/mt8195-resets.h
-> > +++ b/include/dt-bindings/reset/mt8195-resets.h
-> > @@ -7,6 +7,7 @@
-> >  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
-> >  #define _DT_BINDINGS_RESET_CONTROLLER_MT8195
-> >  
-> > +/* TOPRGU resets */
-> >  #define MT8195_TOPRGU_CONN_MCU_SW_RST          0
-> >  #define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
-> >  #define MT8195_TOPRGU_APU_SW_RST               2
-> > @@ -26,4 +27,9 @@
-> >  
-> >  #define MT8195_TOPRGU_SW_RST_NUM               16
-> >  
-> > +/* INFRA resets */
-> > +#define MT8195_INFRA_THERMAL_AP_RST            0
-> > +#define MT8195_INFRA_PTP_RST                   101
-> > +#define MT8195_INFRA_THERMAL_MCU_RST           138
-> 
-> Same issue.
-> 
-> 
-> Best regards,
-> Krzysztof
+Changes in v4:
+ - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
+   suggested by Jan Kara.
+ - remove unused 'in_groups_with_pending_reqs',
 
-Hello Krzysztof,
+Changes in v3:
+ - remove the cleanup patch that is irrelevant now(I'll post it
+   separately).
+ - instead of hacking wr queues and using weights tree insertion/removal,
+   using bfq_add/del_bfqq_busy() to count the number of groups
+   (suggested by Jan Kara).
 
-Thanks for your review.
-As mentioned in prvious mail, I will add all reset bits in MT8192 and
-MT8195.
+Changes in v2:
+ - Use a different approch to count root group, which is much simple.
 
-BRs,
-Rex
+Currently, bfq can't handle sync io concurrently as long as they
+are not issued from root group. This is because
+'bfqd->num_groups_with_pending_reqs > 0' is always true in
+bfq_asymmetric_scenario().
+
+The way that bfqg is counted into 'num_groups_with_pending_reqs':
+
+Before this patchset:
+ 1) root group will never be counted.
+ 2) Count if bfqg or it's child bfqgs have pending requests.
+ 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+
+After this patchset:
+ 1) root group is counted.
+ 2) Count if bfqg have at least one bfqq that is marked busy.
+ 3) Don't count if bfqg doesn't have any busy bfqqs.
+
+The main reason to use busy state of bfqq instead of 'pending requests'
+is that bfqq can stay busy after dispatching the last request if idling
+is needed for service guarantees.
+
+With the above changes, concurrent sync io can be supported if only
+one group is activated.
+
+fio test script(startdelay is used to avoid queue merging):
+[global]
+filename=/dev/nvme0n1
+allow_mounted_write=0
+ioengine=psync
+direct=1
+ioscheduler=bfq
+offset_increment=10g
+group_reporting
+rw=randwrite
+bs=4k
+
+[test1]
+numjobs=1
+
+[test2]
+startdelay=1
+numjobs=1
+
+[test3]
+startdelay=2
+numjobs=1
+
+[test4]
+startdelay=3
+numjobs=1
+
+[test5]
+startdelay=4
+numjobs=1
+
+[test6]
+startdelay=5
+numjobs=1
+
+[test7]
+startdelay=6
+numjobs=1
+
+[test8]
+startdelay=7
+numjobs=1
+
+test result:
+running fio on root cgroup
+v5.18-rc1:	   550 Mib/s
+v5.18-rc1-patched: 550 Mib/s
+
+running fio on non-root cgroup
+v5.18-rc1:	   349 Mib/s
+v5.18-rc1-patched: 550 Mib/s
+
+Note that I also test null_blk with "irqmode=2
+completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+that service guarantees are still preserved.
+
+Previous versions:
+RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+
+Yu Kuai (3):
+  block, bfq: record how many queues are busy in bfq_group
+  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+  block, bfq: do not idle if only one group is activated
+
+ block/bfq-cgroup.c  |  1 +
+ block/bfq-iosched.c | 46 ++----------------------------------
+ block/bfq-iosched.h | 57 +++++++--------------------------------------
+ block/bfq-wf2q.c    | 35 +++++++++++++++++-----------
+ 4 files changed, 34 insertions(+), 105 deletions(-)
+
+-- 
+2.31.1
 

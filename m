@@ -2,156 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A73D512D61
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6772512D79
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343494AbiD1H4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S1343531AbiD1H6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245737AbiD1H4L (ORCPT
+        with ESMTP id S231307AbiD1H57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:56:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B81E5D9F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651132376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fwpLwYRRl15FISsOjXyGpPG6h0phY4GTTlpFR9suoQg=;
-        b=NN6yJnvM33yuTekllCPuiQonV9kJ7Vv0amFz3Vam8gok+/u6gEpzVETXKwJ/qq+fxxzivo
-        ZwFl3NkXul6AvaDLpVoPFRCFzT+9q9Gx5BEJtSujo9cleHxShCLj8bBbk6DD7rm8hFFZji
-        goK9PaP2Uu+nj8OR89K8md40tXgqozU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-OzjKI7QaOGmnqJCm7bWPYw-1; Thu, 28 Apr 2022 03:52:55 -0400
-X-MC-Unique: OzjKI7QaOGmnqJCm7bWPYw-1
-Received: by mail-wm1-f69.google.com with SMTP id n37-20020a05600c502500b0038fdc1394c6so1591574wmr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:52:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fwpLwYRRl15FISsOjXyGpPG6h0phY4GTTlpFR9suoQg=;
-        b=QuQ0bdBE7hGIzZ/7fe7uEf5OKbIFxFNquS85XNbL6vaqR7PpqjfJyacBxYGYUZPuE8
-         K5BTBpWODPYzdg9Q+SP0fcYKk30mIWb2g3fBd38CF8rSlv540o+zD7QIMAkJkbTDhdm8
-         ApIfF/l7HN9Mw6gpJ9E238z/O50grEwDpg5cyEscUDOTZq7RZigek7K+kZ+DySjKd01u
-         nckK0EHndqTzG0FN09F6I2HCd7xWbshbL4PU53/daNdtzaNh+vFYyvhQQpQ92zOaxz+G
-         D6fdF1PwVirAfQklMEEkxVZTHI6oBQLz/j+rpzv8D0DVrGm+RTIZMqu8aRBRugrgvBiZ
-         xLlw==
-X-Gm-Message-State: AOAM533qGWQCGm1Kcqnpgca1spCWLPqaLHjN3ASjl+hpz/22oDsePKq8
-        1m9+MLrAk9SWRR88Wy4QeC2wo+LCmmWKi9tCPk1Zu0GlCjDV2VSmBIWiRm8R9qBVD8f4DxPMsZz
-        Hp7BxIiZzsnWClr0MVjl3IHxI
-X-Received: by 2002:adf:db05:0:b0:20a:dbf1:fdf8 with SMTP id s5-20020adfdb05000000b0020adbf1fdf8mr14784253wri.404.1651132374001;
-        Thu, 28 Apr 2022 00:52:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy4nP57a8g94sEy+weZhg736sd16pvG88YCpRY4VbB3lBBzq0jKK+zIIYv2kWADbstM5n+KNA==
-X-Received: by 2002:adf:db05:0:b0:20a:dbf1:fdf8 with SMTP id s5-20020adfdb05000000b0020adbf1fdf8mr14784239wri.404.1651132373697;
-        Thu, 28 Apr 2022 00:52:53 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id 17-20020a05600c021100b00393faf12859sm3826617wmi.18.2022.04.28.00.52.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 00:52:53 -0700 (PDT)
-Message-ID: <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
-Date:   Thu, 28 Apr 2022 09:52:51 +0200
+        Thu, 28 Apr 2022 03:57:59 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600B15F253
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:54:44 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220428075442epoutp025169229d268b9926a933412f9a9e4d5e~qAD6WfwUV2115421154epoutp02K
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:54:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220428075442epoutp025169229d268b9926a933412f9a9e4d5e~qAD6WfwUV2115421154epoutp02K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651132482;
+        bh=ezbrraO8aVmu2laJsDo6jcJ3FLv2F245TKkCYuIqyHc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=otWKbaVxjlX9bFAq8CJP7AuCPO/c3nf7Dwxf8uzjg8fkLTzcODn0QwDaoZcJyde4V
+         YxhdO9Ospw9Wz27OSLhM5JSXF0NN0fT29DDl+dV4GZjc68k+8aJLoNpebJV7zzi40u
+         IO7k4P6S0yVy747u/9mVRaZ5FaaI7OIPNUj2T7KI=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220428075441epcas2p4a1cccd2ad3e178104bc6098cf5ebe21d~qAD5e1PfZ1539415394epcas2p4a;
+        Thu, 28 Apr 2022 07:54:41 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Kpnvg4HGqz4x9Q3; Thu, 28 Apr
+        2022 07:54:39 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E9.35.10069.B384A626; Thu, 28 Apr 2022 16:54:35 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220428075434epcas2p1792bc1c96afd57aff3af85c82761b99e~qADzfhaZZ1912219122epcas2p1L;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220428075434epsmtrp109bfd176b36bf1fff984b3ba672a5bad~qADzev3nA1575615756epsmtrp1R;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+X-AuditID: b6c32a45-a8fff70000002755-c1-626a483bf3ed
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        25.BF.08924.A384A626; Thu, 28 Apr 2022 16:54:34 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220428075434epsmtip12106b10af694ea89b2a9eaf5a55e51f9~qADzSWFpf1899518995epsmtip14;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+Date:   Thu, 28 Apr 2022 16:53:05 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
+Message-ID: <20220428075305.GH151827@ubuntu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
- and DRM_DP_CEC
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
-References: <20220427215528.237861-1-javierm@redhat.com>
- <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
- <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
- <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fa113ba0-1221-de93-a18f-e4e942cdb261@kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJJsWRmVeSWpSXmKPExsWy7bCmma61R1aSwfcHYhZPjixit2hevJ7N
+        4vqf94wW7c8vsFmcP7+B3WLj2x9MFpd3zWGzWLSsldmiedMUVouZa5Utuu7eYHTg9pjV0Mvm
+        cbmvl8ljwaZSj8V7XjJ5bFrVyeaxf+4ado++LasYPT5vkgvgiMq2yUhNTEktUkjNS85PycxL
+        t1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAG6U0mhLDGnFCgUkFhcrKRvZ1OUX1qS
+        qpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhgYGQKVJiQnXFixlLmgp+cFS/2ujUw9nJ0
+        MXJySAiYSLQu3M7SxcjFISSwg1Hia89iKOcTo8SFp6sZIZzPQJm9C5hhWn69WcoKkdjFKNF3
+        6hg7hPOEUeLfsRdMIFUsAqoSc9cfZgOx2QS0JO79OAHWLSKgKXH973ewbmaBOcwS15bcYAFJ
+        CAvYSvzaupMRxOYV0JFoXvmQDcIWlDg58wlYDaeAncTxFf+BBnFwiAqoSLw6WA8yR0JgJYfE
+        7MWrmSDOc5H48vMDK4QtLPHq+BZ2CFtK4mV/G5RdLLHrUysTRHMDo0TjgxNQvxlLzHrWDnYE
+        s0CGxMqWtWwgyyQElCWO3GKBCPNJdBz+yw4R5pXoaBOC6FSWmH55AtRaSYmDr89BTfSQ+PZ0
+        IxskgHYySxy5MZttAqP8LCSvzUKyDcLWkViw+xOQzQFkS0ss/8cBYWpKrN+lv4CRdRWjWGpB
+        cW56arFRgSE8tpPzczcxgtOwlusOxslvP+gdYmTiYDzEKMHBrCTC+2V3RpIQb0piZVVqUX58
+        UWlOavEhRlNgRE1klhJNzgdmgrySeEMTSwMTMzNDcyNTA3MlcV6vlA2JQgLpiSWp2ampBalF
+        MH1MHJxSDUzzmNYmzfkn3SOxcLu0bPMb6xmTb/ry6X+/69ViwLnr459P5dP0HRL+2zPNcJd9
+        HeKuJ9S7dPOWM8p2vio8p87cbPzewjdjgVvEBBGdrkNvQ3fuLZ8bfaKjeaMdc8Pi5eyqD3u6
+        rgXqpopUytz6msfxY0vYh0ftHQ9sllqs+jXpRes2hT95FhLmHn1aDbFvVX7+mXF4w5zS1x4f
+        0vdXzSi/4Ptejf213vHP0T8fPJ9gcHVCiOWJmvtZNxVjFxyJOVt4pjLM99Gqfw+Wmk3v4Fqm
+        ac3EbV3P0/Lk/++HoTMEp8zb1paRIMgvve1pt3fls3Pak3QXb9BkeeC33FH8+p47nPYLHjxr
+        5Nl+bXLo1IRrSizFGYmGWsxFxYkA/pV5/UwEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLLMWRmVeSWpSXmKPExsWy7bCSnK6VR1aSwdsv2hZPjixit2hevJ7N
+        4vqf94wW7c8vsFmcP7+B3WLj2x9MFpd3zWGzWLSsldmiedMUVouZa5Utuu7eYHTg9pjV0Mvm
+        cbmvl8ljwaZSj8V7XjJ5bFrVyeaxf+4ado++LasYPT5vkgvgiOKySUnNySxLLdK3S+DK2L/a
+        oGAne8WpZWcZGxifsXYxcnJICJhI/HqzFMwWEtjBKDHneT1EXFJi6dwb7BC2sMT9liNANVxA
+        NY8YJaZv2s8IkmARUJWYu/4wG4jNJqAlce/HCWYQW0RAU+L63+9gDcwCC5glzrXNAysSFrCV
+        +LV1J1gzr4CORPPKh2wQU3cyS7Q3NkIlBCVOznzCAmIzA0298e8lUxcjB5AtLbH8HwdImFPA
+        TuL4iv/MIGFRARWJVwfrJzAKzkLSPAtJ8yyE5gWMzKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz
+        0vWS83M3MYJjSEtrB+OeVR/0DjEycTAeYpTgYFYS4f2yOyNJiDclsbIqtSg/vqg0J7X4EKM0
+        B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqYzJlnqBcInOuzmOm5ewuAYuOWNVWhn1tFV
+        hy6yLX15avLiguSYM3/+VO35cffjsrjNVRxnfnx6nemtxqUlzsXye9uk+HcJ89YH2zS/rLnp
+        mpucnHpulY31ep43Z4KOTZkuJ3nNXoNRtP3Ens9/LvsFfLtk0bNzWq0g+5bcqyX3Nwmd+bTs
+        +rLAuu+h67wPdJZpvRFZl3b556zVAf8yHWWcWZj/XFmp56X8TS9CjmV3a5D+Vn6uf+J2p8RM
+        nB6VtorcY7OVvb9frKrCqcuh4JJI3/cz7jMM2K+ePK/Voj57hm+ef1/615Oq8lWOvay3j24T
+        i22qKLVguxcXuPfEkpJ7Qa/VPHUDc3fLcSauSlRiKc5INNRiLipOBAAAHGPbEAMAAA==
+X-CMS-MailID: 20220428075434epcas2p1792bc1c96afd57aff3af85c82761b99e
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220426092023epcas2p32946c087135ca4b7e63b03915060c55d
+References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
+        <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
+        <a9438aef-78a3-e8ab-2b78-cc872447df08@kernel.org>
+        <20220428012941.GF145620@ubuntu>
+        <01ec9962-e210-ce47-57cd-8849cca0a9df@kernel.org>
+        <20220428063634.GF151827@ubuntu>
+        <fa113ba0-1221-de93-a18f-e4e942cdb261@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 09:45, Thomas Zimmermann wrote:
+------ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-[snip]
-
->>> You cannot select DISPLAY_DP_HELPER without DISPLAY_HELPER.
->>>
->>
->> That was my original thought as well and what did in v1, but then I noticed
->> that doing that it would force DRM_DISPLAY_HELPER to be set as built-in and
->> not allow to be built as a module.
+On Thu, Apr 28, 2022 at 09:31:56AM +0200, Krzysztof Kozlowski wrote:
+> On 28/04/2022 08:36, Jung Daehwan wrote:
+> >>
+> >> Since you called everything here as "exynos" it is specific to one
+> >> hardware and not-reusable on anything else. How can then you use some
+> >> other compatible? It would be a misuse of Devicetree bindings.
+> >>
+> > 
+> > I got it. Let me add them. Is it still necessary if it is only used by
+> > other module on runtime as I said above?
 > 
-> It was a rhetorical only. I didn't mean to actually set DISPLAY_HELPER.
+> Except what Greg wrote, if by "other module" you mean out-of-tree, then
+> the patchset will not be accepted as it is unusable for Linux users.
+> Basically it would be a dead code in Linux kernel.
 > 
-
-Ah, sorry for misunderstanding.
-
->>   
->>> Can't you simply make it depend on DISPLAY_DP_HELPER.  The menu entry
->>> will show up as soon as there's a driver that selcets DISPLAY_DP_HELPER.
->>>
->>
->> I could but then that means that once won't be able to select these two config
->> options unless some enable symbol selects DRM_DISPLAY_DP_HELPER.
->>
->> In my opinion, DRM_DP_AUX_CHARDEV and DRM_DP_CEC are different than all other
->> options that select DRM_DISPLAY_DP_HELPER, since those are drivers and want to
->> have both DRM_DISPLAY_DP_HELPER and DRM_DISPLAY_HELPER set.
->>
->> But DRM_DP_AUX_CHARDEV and DRM_DP_CEC are just included in drm_display_helper.o
->> if enabled, and depend on symbols that are present if CONFIG_DRM_DISPLAY_DP_HELPER
->> is enabled. So just need the latter, if DRM_DISPLAY_HELPER is not enabled then it
->> will just be a no-op.
->>
->> Having written that though I noticed that a "depends on DRM_DISPLAY_HELPER" makes
->> sense. If you agree I can add it and post a v3.
-> 
-> Yes please.  These options enable features of the DP code. If there's no 
-> driver with DP, it doesn't make sense to allow them.
-> 
-> I know that there could be an odd situation where userspace might not 
-> have DP, but still wants the chardev file of aux bus.  But that 
-> situation existed already when the code was located within KMS helpers.
+> Best regards,
+> Krzysztof
 > 
 
-Agreed.
+I wanted to submit patches of just xhci. Let me add a patch together of other
+module(dwc3-exynos) that is in-tree on next submission.
 
->>
->> Now, pondering more about this issue, probably the most correct thing to do is for
->> the drivers that make use of the symbols exported by DRM_DP_{AUX_CHARDEV,CEC} to
->> select these. What do you think ?
-> 
-> That's not considered good style. Select should not be used for anything 
-> that is user-configurable. [1]
->
+Is it still necessary to add compatible or bindings in this case?
 
-Right. So giving even more thought to this, now I think that we should just include
-drm_dp_aux_dev.o, drm_dp_cec.o (and probably drm_dp_aux_bus.o?) unconditionally to
-drm_display_helper-$(CONFIG_DRM_DISPLAY_DP_HELPER).
+Best Regards,
+Jung Daehwan
 
-After all, these are not big objects and drm_display_helper can now be built as module.
+------ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_
+Content-Type: text/plain; charset="utf-8"
 
-I don't see that much value to have separate user-configurable config options...
 
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+------ibIraZXel8vAP7k4n32fW3YR3bsCcgqvt7YD6UTr0n_RukWR=_31fa8_--

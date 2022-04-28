@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AD3512E45
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114A8512E86
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344088AbiD1IbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S1343923AbiD1Ibn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344138AbiD1Iau (ORCPT
+        with ESMTP id S1344161AbiD1IbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:30:50 -0400
+        Thu, 28 Apr 2022 04:31:06 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769CBA0BD1;
-        Thu, 28 Apr 2022 01:27:35 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 893EE2186F;
-        Thu, 28 Apr 2022 08:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651134453; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YIozUSFdjDnLnEJpNn98rpE1d2R0anAtFMrgIZeUiR4=;
-        b=kk0y2HUNWPQ6yurCu47RXpWICv/UYYHPEiBz2vwYJUQU92TGjP6YsUB3QW/6bksx3k5t/F
-        F/My4Vm3K9vGazCfRQnqYqYdnsZXWxKy4/0UkrWqH/AOJ7+7WlUXGP+sLpj9pHauw349c/
-        +8XoiuZlexn/SXMwfGzlxoxmq0EliWI=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D7DA0BE4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:27:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D7C5B2C141;
-        Thu, 28 Apr 2022 08:27:32 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EE17421874;
+        Thu, 28 Apr 2022 08:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651134469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=27ryrQ9/V3A+L0L1cMkzg+znNHks8+NEi42Ak1eCxTQ=;
+        b=OuTXoWvhfYYiK6CpG+Xj3URKFgDVAutPiSkezySiwcZy5fZN/9LUWyECUUdJYzu/QyFtIK
+        IlWEbdsvMavVm0S7cE2dMet6r3Ofm33wYWqZxXMaKMQ+q2ofTy2NzLxMYjglo8jdcdMQIn
+        Gfl9iKNb3w0tnJ62vhff94o8tpqp+WM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFF4713491;
+        Thu, 28 Apr 2022 08:27:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mGl2LQVQamIBLgAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 28 Apr 2022 08:27:49 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+Subject: [PATCH v2 08/19] xen/shbuf: switch xen-front-pgdir-shbuf to use INVALID_GRANT_REF
 Date:   Thu, 28 Apr 2022 10:27:32 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     acme@kernel.org, akpm@linux-foundation.org,
-        alexander.shishkin@linux.intel.com, catalin.marinas@arm.com,
-        davem@davemloft.net, jolsa@redhat.com, jthierry@redhat.com,
-        keescook@chromium.org, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        masahiroy@kernel.org, matthias.bgg@gmail.com, maz@kernel.org,
-        mcgrof@kernel.org, mingo@redhat.com, namhyung@kernel.org,
-        nixiaoming@huawei.com, peterz@infradead.org,
-        sparclinux@vger.kernel.org, sumit.garg@linaro.org,
-        wangqing@vivo.com, will@kernel.org, yj.chiang@mediatek.com
-Subject: Re: [PATCH v3 5/5] arm64: Enable perf events based hard lockup
- detector
-Message-ID: <YmpP9PTa1/pSmuuQ@alley>
-References: <20220421163035.26402-1-lecopzer.chen@mediatek.com>
- <20220426163840.18871-1-lecopzer.chen@mediatek.com>
+Message-Id: <20220428082743.16593-9-jgross@suse.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220428082743.16593-1-jgross@suse.com>
+References: <20220428082743.16593-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426163840.18871-1-lecopzer.chen@mediatek.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,74 +62,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-04-27 00:38:40, Lecopzer Chen wrote:
-> > What about just introducing the API that will allow to try to
-> > initialize the hardlockup detector later:
-> > 
-> > /*
-> >  * Retry hardlockup detector init. It is useful when it requires some
-> >  * functionality that has to be initialized later on a particular
-> >  * platform.
-> >  */
-> > void __init retry_lockup_detector_init(void)
-> > {
-> > 	/* Must be called before late init calls. */
-> > 	if (!allow_lockup_detector_init_retry)
-> > 		return 0;
-> > 
-> > 	queue_work_on(__smp_processor_id(), system_wq, &detector_work);
-> > }
-> > 
-> > /*
-> >  * Ensure that optional delayed hardlockup init is proceed before
-> >  * the init code and memory is freed.
-> >  */
-> > static int __init lockup_detector_check(void)
-> > {
-> > 	/* Prevent any later retry. */
-> > 	allow_lockup_detector_init_retry = false;
-> > 
-> > 	/* Make sure no work is pending. */
-> > 	flush_work(&detector_work);
-> > }
-> > late_initcall_sync(lockup_detector_check);
-> > 
-> > You could leave lockup_detector_init() as it is. It does not really
-> > matter what was the exact error value returned by watchdog_nmi_probe().
-> > 
-> > Then you could call retry_lockup_detector_init() in
-> > armv8_pmu_driver_init() and be done with it.
-> > 
-> > It will be universal API that might be used on any architecture
-> > for any reason. If nobody calls retry_lockup_detector_init()
-> > then nohing will happen and the code will work as before.
-> > 
-> > It might make sense to provide the API only on architectures that
-> > really need it. We could hide it under
-> > 
-> >    ARCH_NEED_DELAYED_HARDLOCKUP_DETECTOR_INIT
-> > 
-> > , similar to ARCH_NEEDS_CPU_IDLE_COUPLE.
-> > 
-> 
-> During implementation, if I add ARCH_NEED_DELAYED_..., there will contain
-> many enclosed ifdef-endif and is a little bit ugly.
-> Also, I didn't find a must-have reason to this Kconfig after I rebase from
-> your suggestion.
-> 
-> The one calls retry_lockup_detector_init() must fail at lockup_detector_init,
-> so I think anyone who has aleady failed at lockup_detector_init() has right
-> to retry no matter HW, SW or Arch reason.
-> Thus I might not introduce a new Kconfig in v4, and I would be glad to see
-> if any further commet on this.
+Instead of using a private macro for an invalid grant reference use
+the common one.
 
-Sounds reasonable from my POV. There is not much code. It will be removed
-after the init phase. It will be most likely removed even during
-compilation when linked with gcc LTE optimization and the symbols
-are not used.
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+ drivers/xen/xen-front-pgdir-shbuf.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-Best Regards,
-Petr
+diff --git a/drivers/xen/xen-front-pgdir-shbuf.c b/drivers/xen/xen-front-pgdir-shbuf.c
+index a959dee21134..fa2921d4fbfc 100644
+--- a/drivers/xen/xen-front-pgdir-shbuf.c
++++ b/drivers/xen/xen-front-pgdir-shbuf.c
+@@ -21,15 +21,6 @@
+ 
+ #include <xen/xen-front-pgdir-shbuf.h>
+ 
+-#ifndef GRANT_INVALID_REF
+-/*
+- * FIXME: usage of grant reference 0 as invalid grant reference:
+- * grant reference 0 is valid, but never exposed to a PV driver,
+- * because of the fact it is already in use/reserved by the PV console.
+- */
+-#define GRANT_INVALID_REF	0
+-#endif
+-
+ /**
+  * This structure represents the structure of a shared page
+  * that contains grant references to the pages of the shared
+@@ -83,7 +74,7 @@ grant_ref_t
+ xen_front_pgdir_shbuf_get_dir_start(struct xen_front_pgdir_shbuf *buf)
+ {
+ 	if (!buf->grefs)
+-		return GRANT_INVALID_REF;
++		return INVALID_GRANT_REF;
+ 
+ 	return buf->grefs[0];
+ }
+@@ -142,7 +133,7 @@ void xen_front_pgdir_shbuf_free(struct xen_front_pgdir_shbuf *buf)
+ 		int i;
+ 
+ 		for (i = 0; i < buf->num_grefs; i++)
+-			if (buf->grefs[i] != GRANT_INVALID_REF)
++			if (buf->grefs[i] != INVALID_GRANT_REF)
+ 				gnttab_end_foreign_access(buf->grefs[i], 0UL);
+ 	}
+ 	kfree(buf->grefs);
+@@ -355,7 +346,7 @@ static void backend_fill_page_dir(struct xen_front_pgdir_shbuf *buf)
+ 	}
+ 	/* Last page must say there is no more pages. */
+ 	page_dir = (struct xen_page_directory *)ptr;
+-	page_dir->gref_dir_next_page = GRANT_INVALID_REF;
++	page_dir->gref_dir_next_page = INVALID_GRANT_REF;
+ }
+ 
+ /**
+@@ -384,7 +375,7 @@ static void guest_fill_page_dir(struct xen_front_pgdir_shbuf *buf)
+ 
+ 		if (grefs_left <= XEN_NUM_GREFS_PER_PAGE) {
+ 			to_copy = grefs_left;
+-			page_dir->gref_dir_next_page = GRANT_INVALID_REF;
++			page_dir->gref_dir_next_page = INVALID_GRANT_REF;
+ 		} else {
+ 			to_copy = XEN_NUM_GREFS_PER_PAGE;
+ 			page_dir->gref_dir_next_page = buf->grefs[i + 1];
+-- 
+2.34.1
 
-PS: It might take few days until I do the review of v4. I am a bit
-    overloaded at the moment.

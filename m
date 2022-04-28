@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F45137DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6965137E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348888AbiD1POk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S1348901AbiD1PP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348757AbiD1POh (ORCPT
+        with ESMTP id S1348662AbiD1PP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:14:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CB5965D22
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651158682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLKNKGr8DCgjevzFl33k7TMRU8EM/aNPYmQT5R2S5w8=;
-        b=UbgFSNqncYGJUmuLeDpMMUN1CLTAWQc69dv44n8yh3a+FVTiNOsldZisWi4ZySUYmBdJxS
-        g1STj1/ZMyX/UK/Ld/fkzO6XwtKnDCpMZio4zmHYEVCf61u5BrHDUTJfM+HJqxFR60KoRM
-        xBrTHgGro0+0bMEAsIH6A+usAN4GwcU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-N8lcjA7HMeetaX_6BRAbgw-1; Thu, 28 Apr 2022 11:11:18 -0400
-X-MC-Unique: N8lcjA7HMeetaX_6BRAbgw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB1D81014A67;
-        Thu, 28 Apr 2022 15:11:17 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.151])
-        by smtp.corp.redhat.com (Postfix) with SMTP id CBFF2414A7E7;
-        Thu, 28 Apr 2022 15:11:12 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 28 Apr 2022 17:11:17 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 17:11:11 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 9/9] ptrace: Don't change __state
-Message-ID: <20220428151110.GB15485@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-9-ebiederm@xmission.com>
- <87czh2160k.fsf@email.froward.int.ebiederm.org>
+        Thu, 28 Apr 2022 11:15:27 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBEE58E43;
+        Thu, 28 Apr 2022 08:12:12 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id q23so7216109wra.1;
+        Thu, 28 Apr 2022 08:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=14cOKhrtV85brj7EJLBSPT810oxXMK2MopA8VY0TkAU=;
+        b=XNVeILtiAib62IlV9+ASi6ROQuq0V1RgDvo+BTgl9R2j8ImTJUBEta78pI220+qa4b
+         kfTRgL1nCSqumleFcevxLe64m+Lob5jOe9QjzZI1MFlAzH4Ei1j7I0bCsIiqQ6sVRG0M
+         rogLJDHRPIsqhsLLkEMJzf2k2u75j07hFWRYMsRp1S5kOvNmqieeHX6mTWL8WU3PoVi3
+         INqKmk0SQ/s6I68FufchVowKEEVQySIe4wSuUMpcAHQEeFJVC8zv9keKewaxYzaKOFU6
+         plrHq+f1TRZvNrkCJXlej4hBP4UfpTCQJKvvFRZqpWEPCkr26S/ZtHfhizdqsL41uw1b
+         REBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=14cOKhrtV85brj7EJLBSPT810oxXMK2MopA8VY0TkAU=;
+        b=TBkQQ41RHnYLukocPitx2JTYEKZ8kUGjJtlGsrU8hwlMuTTPy30qOWxumTNgdZ5lOr
+         tNm98/YL4Vs3mDPLwgScnT/pTUjJesBhKr1PntH8sSdj99Sm2bSERf+utQPzZjUUolaK
+         khSNmPqnw9z85EmgRHzwaQmjuQoNB6lMyij5mD2MqCJ827G3IIJ41Uwue61HNCXyLJ7W
+         PQamN0yp90K2RDtuQ0XZymzGuuAOqOmETV9y0iM7/qOeORBgJ8Pxx7IRjhU5E3G3GfQi
+         LpfyYeLa40UPd2leau9CIKaIkm0vj5eg+gBsdibz2hu257TK+cXdWzmMESxeRBcW7Qke
+         sTCw==
+X-Gm-Message-State: AOAM530HK8dlUkSlie41LjTUkalHE+QpXlV8D4VqZt/h/2o+tk9KAAGP
+        Yb2SAW67xTYaoIn9NhKcRlf5sYLYUhk=
+X-Google-Smtp-Source: ABdhPJx7BcDxW6K5fn1I5IvZtYhoPkhaODGuV2G8cTePkRYvKM5oW41UxIr1UJ6/aG3VNldx+MAtrA==
+X-Received: by 2002:a5d:680a:0:b0:20a:e5ed:9b5e with SMTP id w10-20020a5d680a000000b0020ae5ed9b5emr11073431wru.110.1651158730785;
+        Thu, 28 Apr 2022 08:12:10 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.235.145])
+        by smtp.gmail.com with ESMTPSA id z11-20020a7bc14b000000b0039419dfbb39sm506553wmi.33.2022.04.28.08.12.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 08:12:10 -0700 (PDT)
+Message-ID: <790ca4e6-e0c0-b454-6a50-f2e907523dd9@gmail.com>
+Date:   Thu, 28 Apr 2022 16:11:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czh2160k.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net-next 02/11] udp/ipv6: refactor udpv6_sendmsg udplite
+ checks
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1651071843.git.asml.silence@gmail.com>
+ <33dfdf2119c86e35062f783d405bedec2fde2b4c.1651071843.git.asml.silence@gmail.com>
+ <229c169ccf8fdbf7fc826901982f1f15e86f3d17.camel@redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <229c169ccf8fdbf7fc826901982f1f15e86f3d17.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/27, Eric W. Biederman wrote:
->
-> "Eric W. Biederman" <ebiederm@xmission.com> writes:
->
-> > diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-> > index 3c8b34876744..1947c85aa9d9 100644
-> > --- a/include/linux/sched/signal.h
-> > +++ b/include/linux/sched/signal.h
-> > @@ -437,7 +437,8 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
-> >
-> >  static inline void signal_wake_up(struct task_struct *t, bool resume)
-> >  {
-> > -	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-> > +	bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
-> > +	signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
-> >  }
-> >  static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
-> >  {
->
-> Grrr.  While looking through everything today I have realized that there
-> is a bug.
->
-> Suppose we have 3 processes: TRACER, TRACEE, KILLER.
->
-> Meanwhile TRACEE is in the middle of ptrace_stop, just after siglock has
-> been dropped.
->
-> The TRACER process has performed ptrace_attach on TRACEE and is in the
-> middle of a ptrace operation and has just set JOBCTL_DELAY_WAKEKILL.
->
-> Then comes in the KILLER process and sends the TRACEE a SIGKILL.
-> The TRACEE __state remains TASK_TRACED, as designed.
->
-> The bug appears when the TRACEE makes it to schedule().  Inside
-> schedule there is a call to signal_pending_state() which notices
-> a SIGKILL is pending and refuses to sleep.
+On 4/28/22 15:09, Paolo Abeni wrote:
+> On Thu, 2022-04-28 at 11:56 +0100, Pavel Begunkov wrote:
+>> Don't save a IS_UDPLITE() result in advance but do when it's really
+>> needed, so it doesn't store/load it from the stack. Same for resolving
+>> the getfrag callback pointer.
+> 
+> It's quite unclear to me if this change brings really any performance
+> benefit. The end results will depend a lot on the optimization
+> performed by the compiler, and IMHO the code looks better before this
+> modifications.
 
-And I think this is fine. This doesn't really differ from the case
-when the tracee was killed before it takes siglock.
+There is a lot of code and function calls between IS_UDPLITE() and
+use sites, because of alias analysis the compiler will be forced
+to call it early in the function and store something on stack.
+I don't believe it will be able to keep in a register. But it's
+not a problem to drop it
 
-The only problem (afaics) is that, once we introduce JOBCTL_TRACED,
-ptrace_stop() can leak this flag. That is why I suggested to clear
-it along with LISTENING/DELAY_WAKEKILL before return, exactly because
-schedule() won't block if fatal_signal_pending() is true.
-
-But may be I misunderstood you concern?
-
-Oleg.
-
+-- 
+Pavel Begunkov

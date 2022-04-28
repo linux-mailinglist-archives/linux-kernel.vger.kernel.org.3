@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6C0513239
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAF751323E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345147AbiD1LS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S1345437AbiD1LTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345394AbiD1LSX (ORCPT
+        with ESMTP id S1344833AbiD1LTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:18:23 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8657922B21;
-        Thu, 28 Apr 2022 04:15:09 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id kq17so8874102ejb.4;
-        Thu, 28 Apr 2022 04:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=m+MfYH2YQ+litd9nC4WLDji5G/nTM7/Ix1hsN4aQQiE=;
-        b=jHDaRN+NjsQ+9ro4gz2Wvs/dDGIlEWHb+T9Y5mQ8AObnsBA5Pd0FlIoc/BIu2k8+bj
-         /SqLjEdJ0MZBiONiCGTKXiTaa5DqMmVe7Sph+iCnEyB20tu2Qw6eNSS3+zCc+D/axZsL
-         rjBBnKxSScWm3WwnPeg65OWtkedtlAZ8F1Kex53HXfIm2H88bMNA1Tn5HoEUlNUA65/6
-         NcxY+80Ezi1ctMi6XpRx/YS4rDtLM5kc8ZJhKrBI5XW/VL4O84FMUxs6FkQzkLKcsAx7
-         c5nTCPQ77/aJ3432dxYq66k7k7wrGE7gYwARTs4fAry2AD/KtPpSrv/UQkd6gSBBGF8O
-         ttjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m+MfYH2YQ+litd9nC4WLDji5G/nTM7/Ix1hsN4aQQiE=;
-        b=r42hFB3eOSmxHIsU/7K8rGnoGjuxObSrenqqk5jy4+alPC5xQN9oRibODWWwufTk/7
-         GExkrIOxv5FGdWjIsosgpkGrfS659ilkvdOc2r5yjp8M3klF+zYtgB84ednpDhLlXPlI
-         FamT77OfqDeQ0TyRiBTNQZaoUXPMvI3JnnPJa/8T64shgOOkRrQSLYME63+lNNtOhoDI
-         XUSlNuvv8PdNPsgof9DQtEutwakisuyk7K1GeAeHQwcbWh8rGe+Jv0lhtE2g5/sbfH0w
-         omJB/mNp6DJpHNSST9iwdLz6yY2tc1PALA1Asa8mGw3K5yzRDAeYY7CpwQWCgI/Xy/DY
-         hoLg==
-X-Gm-Message-State: AOAM532T6g3AYP6f0zuPiwbWi9eonOf1NQZEBpG/qWMhdQgMJSmtMuAD
-        Qn3AupRx1cG5NDWLt5rFuf+FvaGBmCgRLg==
-X-Google-Smtp-Source: ABdhPJzAYtvVXrl9CAWvbv76jT6c8d/n2DovgQHySmatr7l5Dm4yG1AqCIsF6qg23AwQhhKxNa+28Q==
-X-Received: by 2002:a17:906:6a22:b0:6f3:e768:7de0 with SMTP id qw34-20020a1709066a2200b006f3e7687de0mr1469172ejc.480.1651144507953;
-        Thu, 28 Apr 2022 04:15:07 -0700 (PDT)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id kk14-20020a170907766e00b006f3a6a528c8sm4898179ejc.146.2022.04.28.04.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 04:15:07 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Liang Chen <cl@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: Re: [PATCH 1/3] arm64: dts: rockchip: enable otg/drd operation of usb_host0_xhci in rk356x
-Date:   Thu, 28 Apr 2022 13:15:06 +0200
-Message-ID: <2087500.ItEYzMA54p@archbook>
-In-Reply-To: <20220425133502.405512-1-michael.riesch@wolfvision.net>
-References: <20220425133502.405512-1-michael.riesch@wolfvision.net>
+        Thu, 28 Apr 2022 07:19:45 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3764F9FD;
+        Thu, 28 Apr 2022 04:16:30 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id C8FFF22238;
+        Thu, 28 Apr 2022 13:16:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651144588;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JJo0GZRuGCtC68xA23LJ+wNLn42ignYVUjux2v0GG6Y=;
+        b=S2UnDOdTw/i8J6PL6OhZwY2nKe78AgaqGftt/FbNASYMOz9XRKyjOhxhquh3O9WcX85ZWT
+        mPPgU24Ig1a5wQTJvxSORcZvkfeBdbw2j7fX8vt2Bq3/fwchrjbYz/S5wL3GiDlwkOAX4j
+        HRmhZtdgqdEzuQ4VIGbAd7F1TmbgbVs=
+From:   Michael Walle <michael@walle.cc>
+To:     Marc Zyngier <maz@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] pinctrl: microchip-sgpio: make irq_chip immutable
+Date:   Thu, 28 Apr 2022 13:16:22 +0200
+Message-Id: <20220428111622.1395831-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 25. April 2022 15:35:00 CEST Michael Riesch wrote:
-> This USB 3.0 controller is capable of OTG/DRD operation. Enable it in the
-> device tree.
-> 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 55e6dcb948cc..f611aaf2d238 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -266,7 +266,7 @@ usb_host0_xhci: usb@fcc00000 {
->  			 <&cru ACLK_USB3OTG0>;
->  		clock-names = "ref_clk", "suspend_clk",
->  			      "bus_clk";
-> -		dr_mode = "host";
-> +		dr_mode = "otg";
->  		phy_type = "utmi_wide";
->  		power-domains = <&power RK3568_PD_PIPE>;
->  		resets = <&cru SRST_USB3OTG0>;
-> 
+Since recently, the kernel is nagging about mutable irq_chips:
 
-Hi Michael,
+[    4.967050] gpio gpiochip1: (e2004190.gpio-input): not an immutable chip, please consider fixing it!
 
-according to official specs[1], only the RK3568 is capable of using the
-USB 3.0 controller in OTG mode. For the RK3566, OTG is USB 2.0, if I
-understand this correctly.
+Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+helper functions and call the appropriate gpiolib functions.
 
-So I think this should be an override in rk3568.dtsi.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/pinctrl/pinctrl-microchip-sgpio.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-Regards,
-Nicolas Frattaroli
-
-[1]: Compare page 17 of the RK3568 datasheet to page 16 of the RK3566
-     datasheet
-
+diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+index 80a8939ad0c0..6dbe37d3d558 100644
+--- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
++++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+@@ -688,11 +688,17 @@ static void microchip_sgpio_irq_setreg(struct irq_data *data,
+ 
+ static void microchip_sgpio_irq_mask(struct irq_data *data)
+ {
++	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
++
+ 	microchip_sgpio_irq_setreg(data, REG_INT_ENABLE, true);
++	gpiochip_disable_irq(chip, data->hwirq);
+ }
+ 
+ static void microchip_sgpio_irq_unmask(struct irq_data *data)
+ {
++	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
++
++	gpiochip_enable_irq(chip, data->hwirq);
+ 	microchip_sgpio_irq_setreg(data, REG_INT_ENABLE, false);
+ }
+ 
+@@ -746,6 +752,8 @@ static const struct irq_chip microchip_sgpio_irqchip = {
+ 	.irq_ack	= microchip_sgpio_irq_ack,
+ 	.irq_unmask	= microchip_sgpio_irq_unmask,
+ 	.irq_set_type	= microchip_sgpio_irq_set_type,
++	.flags		= IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+ 
+ static void sgpio_irq_handler(struct irq_desc *desc)
+@@ -861,11 +869,7 @@ static int microchip_sgpio_register_bank(struct device *dev,
+ 		if (irq) {
+ 			struct gpio_irq_chip *girq = &gc->irq;
+ 
+-			girq->chip = devm_kmemdup(dev, &microchip_sgpio_irqchip,
+-						  sizeof(microchip_sgpio_irqchip),
+-						  GFP_KERNEL);
+-			if (!girq->chip)
+-				return -ENOMEM;
++			gpio_irq_chip_set_chip(girq, &microchip_sgpio_irqchip);
+ 			girq->parent_handler = sgpio_irq_handler;
+ 			girq->num_parents = 1;
+ 			girq->parents = devm_kcalloc(dev, 1,
+-- 
+2.30.2
 

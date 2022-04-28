@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8223513CEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A205A513CFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352061AbiD1Uyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 16:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S1351967AbiD1VD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 17:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351959AbiD1Uyn (ORCPT
+        with ESMTP id S241199AbiD1VDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 16:54:43 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA0FC0E5A;
-        Thu, 28 Apr 2022 13:51:27 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id s4so4585941qkh.0;
-        Thu, 28 Apr 2022 13:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=/BaooLzAKHS9Su+qBeGx1AzKlxdTJqpbBgALV7a+lkY=;
-        b=MSB06OYuM4vzrWqwQq2U1WVVBwEbaiCPelC6EXPkuZMcw/sC0MEEGljhHmrGZ1z798
-         536aKbryjcWX6KGezO6vag8k8Pp+hWnwm+aoTLJ6Pk47FYEcEuXsi0GfQwJdebEcxyvR
-         wAwgOyje2Tws5RQxcMNCaok+AI/fR0DOm+fCP1irGLWgwioHqNVXwaFgpzKhqBWSvF0e
-         6p0Np4HcorErIoOGYB183hT+pb4R+YbELFpj0PCKjCkpAgEVdeTT+YKNX90unvXGr1j/
-         rqTq+XJfwxpIvZeQFh37Z2U7BXv32Q2PWiXhzqIG3MssbY22vWlPidfP5c46y03srtEV
-         vZPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/BaooLzAKHS9Su+qBeGx1AzKlxdTJqpbBgALV7a+lkY=;
-        b=OFFty82rNeGBDZFSy6Chg3c87Yp718JegYkg3270oTKIr/qX0AznrOsbRDQ3Oj6msu
-         4ifavFoNY0Jub4Q9OJnvVHmkGBc2ZsBPUDqM++ha5UwujzwIJZwZWsWyh6vm8vD8bajP
-         LPNKNta3ZOufVU54ieeV6jMR+7tyVb/WQKh1/sQQGNkrgfK16dG3GUBb/Uy4x5MKqS1Z
-         JA7DH0qTHkOFXtZbVQd0oGFf9EVyT85hdu8jBVTDboXC052YXgVpk560a953hWl8MOFO
-         QgSqaHJI0MAvYbmVwhdGMqzjse7kb9ouyE9OiUny9OjG7Via4nbgikrvXFTMvx09EB47
-         W9Iw==
-X-Gm-Message-State: AOAM53096Rqkq8dif0I+tM/Nb5I4/kPY/GeZfH4tCavkWSEjuXHaHVyR
-        /C4qzoe2SB1PFsl6D7JQZR3H0amygmk=
-X-Google-Smtp-Source: ABdhPJwgTBNoaiyndhh2z4VT3EESH1Q5rsnilRmKWwzQG5A8cFDGXw3yE0CM9mJL0lvThT5ehcIv1A==
-X-Received: by 2002:a37:a3d2:0:b0:69f:74af:2aef with SMTP id m201-20020a37a3d2000000b0069f74af2aefmr10045059qke.388.1651179086102;
-        Thu, 28 Apr 2022 13:51:26 -0700 (PDT)
-Received: from localhost ([2601:c4:c432:4da:fa85:340e:2244:1d8c])
-        by smtp.gmail.com with ESMTPSA id d65-20020a37b444000000b0069e9f79795fsm494549qkf.67.2022.04.28.13.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 13:51:25 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yury Norov <yury.norov@gmail.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [PATCH 5/5] drm/amd/pm: use bitmap_{from,to}_arr32 where appropriate
-Date:   Thu, 28 Apr 2022 13:51:16 -0700
-Message-Id: <20220428205116.861003-6-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220428205116.861003-1-yury.norov@gmail.com>
-References: <20220428205116.861003-1-yury.norov@gmail.com>
+        Thu, 28 Apr 2022 17:03:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 156DDA19C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651179608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gd89wvyW0TX+SL1HQ733QRou6AZK6t/EmbFHHPi83OU=;
+        b=PteJiCDzL2RC5CDSP6P2obQnYwlWml2ciwT1q+wyNNR8VlPM/c/nZFvI6+fIIVoEF+dY7d
+        9f6LUmnAiCeaZRl7WFFFPVLN0k64E0deoxBp0I5YX5AWV5B0hrnx/3WqAVtxRKvjECP1PQ
+        0WZkhiDKCzBlZWYzdnlSX72JYSaJz8w=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-eina1oP_NISjhB_PkFm6kg-1; Thu, 28 Apr 2022 17:00:02 -0400
+X-MC-Unique: eina1oP_NISjhB_PkFm6kg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D94763C10AAA;
+        Thu, 28 Apr 2022 21:00:01 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.151])
+        by smtp.corp.redhat.com (Postfix) with SMTP id C2CD1407E243;
+        Thu, 28 Apr 2022 20:59:58 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 28 Apr 2022 23:00:01 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 22:59:57 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+Message-ID: <20220428205956.GG15485@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <20220425174719.GB12412@redhat.com>
+ <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+ <Ymr5Ga3gcqG4ZAMt@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ymr5Ga3gcqG4ZAMt@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The smu_v1X_0_set_allowed_mask() uses bitmap_copy() to convert
-bitmap to 32-bit array. This may be wrong due to endiannes issues.
-Fix it by switching to bitmap_{from,to}_arr32.
+On 04/28, Peter Zijlstra wrote:
+>
+> Oleg pointed out that the tracee can already be killed such that
+> fatal_signal_pending() is true. In that case signal_wake_up_state()
+> cannot be relied upon to be responsible for the wakeup -- something
+> we're going to want to rely on.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 +-
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Peter, I am all confused...
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-index b87f550af26b..5f8809f6990d 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-@@ -781,7 +781,7 @@ int smu_v11_0_set_allowed_mask(struct smu_context *smu)
- 		goto failed;
- 	}
- 
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					  feature_mask[1], NULL);
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-index cf09e30bdfe0..747430ce6394 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-@@ -730,7 +730,7 @@ int smu_v13_0_set_allowed_mask(struct smu_context *smu)
- 	    feature->feature_num < 64)
- 		return -EINVAL;
- 
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					      feature_mask[1], NULL);
--- 
-2.32.0
+If this patch is against the current tree, we don't need it.
+
+If it is on top of JOBCTL_TRACED/DELAY_WAKEKILL changes (yours or Eric's),
+then it can't help - SIGKILL can come right after the tracee drops siglock
+and calls schedule().
+
+Perhaps I missed something, but let me repeat the 3rd time: I'd suggest
+to simply clear JOBCTL_TRACED along with LISTENING/DELAY_WAKEKILL before
+return to close this race.
+
+Oleg.
+
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -2226,6 +2226,10 @@ static int ptrace_stop(int exit_code, in
+>  		spin_lock_irq(&current->sighand->siglock);
+>  	}
+>  
+> +	/* Don't stop if the task is dying. */
+> +	if (unlikely(__fatal_signal_pending(current)))
+> +		return exit_code;
+> +
+>  	/*
+>  	 * schedule() will not sleep if there is a pending signal that
+>  	 * can awaken the task.
+> 
 

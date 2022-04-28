@@ -2,169 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76B5512C1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD69A512C23
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244674AbiD1HC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
+        id S244697AbiD1HEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235345AbiD1HCZ (ORCPT
+        with ESMTP id S244689AbiD1HD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:02:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D34C986C7;
-        Wed, 27 Apr 2022 23:59:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 72F29CE0F19;
-        Thu, 28 Apr 2022 06:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14782C385A0;
-        Thu, 28 Apr 2022 06:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651129147;
-        bh=LvBswdVAcOBrI9uhbKqCt5QccRBOmdvICEn+wE2qsv4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ezQ03FeRQk9UBULzlKyZdOBdtFjUq99yGPibCzgjCt/604N6ne/a/bhycknVU3mKz
-         vfqdXoAIwcUuDqtTXwokKKZQK9GR6PaTEPreXjeGr1OueJVW9nJgq64zUSNueip5B0
-         Z9FaHWhoPA2pbObcFMoUNkn7+Qjz8bhHFdpgyiyA=
-Date:   Thu, 28 Apr 2022 08:59:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCHv6] tty: hvc: dcc: Bind driver to CPU core0 for reads and
- writes
-Message-ID: <Ymo7ODt+bToCf5Y2@kroah.com>
-References: <20220310032636.7286-1-quic_saipraka@quicinc.com>
- <YlkPvnBYzJo9aeZ2@kroah.com>
- <cad739da-75af-8d2f-4107-72c657b9acab@quicinc.com>
+        Thu, 28 Apr 2022 03:03:56 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8C0674CF;
+        Thu, 28 Apr 2022 00:00:34 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.49.32]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mbzdn-1oHvEf0zZX-00dX7D; Thu, 28 Apr 2022 08:59:50 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id 9BB183C09F;
+        Thu, 28 Apr 2022 08:59:48 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id C234F66B; Thu, 28 Apr 2022 08:59:45 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 08:59:45 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH 27/27] kbuild: do not create *.prelink.o for Clang LTO or
+ IBT
+Message-ID: <Ymo7YfSynpexX0cV@bergen.fjasle.eu>
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
+ <20220424190811.1678416-28-masahiroy@kernel.org>
+ <YmoKYjwvX49KLNwT@bergen.fjasle.eu>
+ <CAK7LNATJHfGDKfp0q_VH30xKXdsFmveRZ6CNqZpHdjM3UbYG+Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <cad739da-75af-8d2f-4107-72c657b9acab@quicinc.com>
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,THIS_AD autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAK7LNATJHfGDKfp0q_VH30xKXdsFmveRZ6CNqZpHdjM3UbYG+Q@mail.gmail.com>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:CWLNrX8xs6OHxyyoHxhJnyCEMmxZqi/vR0bJ46WktHgu4Cr/bKz
+ H/L9+edqiM6BEOs0aDumrHESjSMXFyrNGJV4xSUpcYLYibqmsXfygi7Mihp1TE3EjZjazTh
+ ZfOo7/P9s1sBN5n8N9+MKCiA+h9xLIvUEPy1fzFa16SH5ingsKyKxaj4N8lXuqIcsYYiTiv
+ vvZLenYD54hXU685a3Gqw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NO9kZTODQ9A=:AXqrbwC9aH2snoXnSKI68s
+ EbLwzhIVBqJ6gtYqmjjhermZUO2Pz5L0BfEfQburmXlbjlFbrnFp5YnwZ4YWqfmr1qiboff8g
+ BcM69lJ5XId1NYruqQOpWl6/vq7TD8J2LwbVOjgswImbHZ6mOXmxL1/pALpejU+w4hMpSYov+
+ 50nE5HLTfFOutAaWn3cRTCTJshsefOa8rky+BVaU9N2cb8yfrrUPZogRt21GWWtVV5UXNL+Kg
+ D/Kc7P7KwWRrHlyOSjR6HmkIOq77Qkq36vGBrWert1oHUSt+NZgvDAf9y7YOZC1RByCsSMr1d
+ Y2fazxBaBuAlX9OFH3gttSrohnGFiro46BrmDdFokLiARYysfM79XLrZ9mO0aGa8PnBODJjW9
+ dwZaROoygbjxlyP8YFw5mMcR9yTN2FD1Z8OHtSuOpa0yhTflxkRYzHePce+iWb8C7Mng1Wnif
+ SabJbfgnrIUxl+ywESKjR63tawM6NhU/C1NlTG0vhNCI+6ZSE8L9bVlbJ3hnc+C8oMO/j/k31
+ 0zR5RDuK58g0ag2hmWICuxCy+CYdBXss5Ldak9apePIWc19EWJQ6mIE8E2hthoNRaMKnOkc7O
+ QvAU6F2LvRwNxqox/Rul977SYkesxwUGNpC1Z7l20hrl4U4EleKVKaUzBvnfrsSGHd6Fj1kqZ
+ fRYwCymUymGC75AJSvI8/ZMiTqikzGO2m1UDAwH02Z/1rfkehM/LyUUWwr0mDum3C4C4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:04:34AM +0530, Sai Prakash Ranjan wrote:
-> Hi Greg,
+On Thu 28 Apr 2022 13:38:39 GMT Masahiro Yamada wrote:
 > 
-> On 4/15/2022 11:55 AM, Greg Kroah-Hartman wrote:
-> > On Thu, Mar 10, 2022 at 08:56:36AM +0530, Sai Prakash Ranjan wrote:
-> > > From: Shanker Donthineni <shankerd@codeaurora.org>
-> > > 
-> > > Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
-> > > reads/writes from/to DCC on secondary cores. Each core has its
-> > > own DCC device registers, so when a core reads or writes from/to DCC,
-> > > it only accesses its own DCC device. Since kernel code can run on
-> > > any core, every time the kernel wants to write to the console, it
-> > > might write to a different DCC.
-> > > 
-> > > In SMP mode, Trace32 creates multiple windows, and each window shows
-> > > the DCC output only from that core's DCC. The result is that console
-> > > output is either lost or scattered across windows.
-> > > 
-> > > Selecting this option will enable code that serializes all console
-> > > input and output to core 0. The DCC driver will create input and
-> > > output FIFOs that all cores will use. Reads and writes from/to DCC
-> > > are handled by a workqueue that runs only core 0.
-> > > 
-> > > Signed-off-by: Shanker Donthineni <shankerd@codeaurora.org>
-> > > Acked-by: Adam Wallis <awallis@codeaurora.org>
-> > > Signed-off-by: Timur Tabi <timur@codeaurora.org>
-> > > Signed-off-by: Elliot Berman <eberman@codeaurora.org>
-> > > Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> On Thu, Apr 28, 2022 at 12:31 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+> >
+> > On Mon 25 Apr 2022 04:08:11 GMT Masahiro Yamada wrote:
+> > > When CONFIG_LTO_CLANG=y, additional intermediate *.prelink.o is
+> > > created
+> > > for each module. Also, objtool is postponed until LLVM bitcode is
+> > > converted to ELF.
+> > >
+> > > CONFIG_X86_KERNEL_IBT works in a similar way to postpone objtool until
+> > > objects are merged together.
+> > >
+> > > This commit stops generating *.prelink.o, so the build flow will look
+> > > the same with/without LTO.
+> > >
+> > > The following figures show how the LTO build currently works, and
+> > > how this commit is changing it.
+> > >
+> > > Current build flow
+> > > ==================
+> > >
+> > >  [1] single-object module
+> > >
+> > >                                     [+objtool]
+> > >            $(CC)                      $(LD)                $(LD)
+> > >     foo.c --------------------> foo.o -----> foo.prelink.o -----> foo.ko
+> > >                            (LLVM bitcode)        (ELF)       |
+> > >                                                              |
+> > >                                                  foo.mod.o --/
+> > >
+> > >  [2] multi-object module
+> > >                                     [+objtool]
+> > >            $(CC)         $(AR)        $(LD)                $(LD)
+> > >     foo1.c -----> foo1.o -----> foo.o -----> foo.prelink.o -----> foo.ko
+> > >                            |  (archive)          (ELF)       |
+> > >     foo2.c -----> foo2.o --/                                 |
+> > >                 (LLVM bitcode)                   foo.mod.o --/
+> > >
+> > >   One confusion is foo.o in multi-object module is an archive despite of
+> > >   its suffix.
+> > >
+> > > New build flow
+> > > ==============
+> > >
+> > >  [1] single-object module
+> > >
+> > >   Since there is only one object, we do not need to have the LLVM
+> > >   bitcode stage. Use $(CC)+$(LD) to generate an ELF object in one
+> > >   build rule. Of course, only $(CC) is used when LTO is disabled.
+> > >
+> > >            $(CC)+$(LD)[+objtool]           $(LD)
+> > >     foo.c ------------------------> foo.o -------> foo.ko
+> > >                                     (ELF)    |
+> > >                                              |
+> > >                                  foo.mod.o --/
+> > >
+> > >  [2] multi-object module
+> > >
+> > >   Previously, $(AR) was used to combine LLVM bitcode into an archive,
+> > >   but there was not a technical reason to do so.
+> > >   This commit just uses $(LD) to combine and convert them into a single
+> > >   ELF object.
+> > >
+> > >                           [+objtool]
+> > >             $(CC)           $(LD)          $(LD)
+> > >     foo1.c -------> foo1.o -------> foo.o -------> foo.ko
+> > >                               |     (ELF)    |
+> > >     foo2.c -------> foo2.o ---/              |
+> > >                 (LLVM bitcode)   foo.mod.o --/
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > > > ---
-> > > 
-> > > Changes in v6:
-> > >   * Disable CPU hotplug when CONFIG_HVC_DCC_SERIALIZE_SMP=y.
-> > > 
-> > > Changes in v5:
-> > >   * Use get_cpu() and put_cpu() for CPU id check in preemptible context.
-> > >   * Revert back to build time Kconfig.
-> > >   * Remove unnecessary hotplug locks, they result in sleeping in atomic context bugs.
-> > >   * Add a comment for the spinlock.
-> > > 
-> > > Changes in v4:
-> > >   * Use module parameter for runtime choice of enabling this feature.
-> > >   * Use hotplug locks to avoid race between cpu online check and work schedule.
-> > >   * Remove ifdefs and move to common ops.
-> > >   * Remove unnecessary check for this configuration.
-> > >   * Use macros for buf size instead of magic numbers.
-> > >   * v3 - https://lore.kernel.org/lkml/20211213141013.21464-1-quic_saipraka@quicinc.com/
-> > > 
-> > > Changes in v3:
-> > >   * Handle case where core0 is not online.
-> > > 
-> > > Changes in v2:
-> > >   * Checkpatch warning fixes.
-> > >   * Use of IS_ENABLED macros instead of ifdefs.
-> > > 
-> > > ---
-> > >   drivers/tty/hvc/Kconfig   |  20 +++++
-> > >   drivers/tty/hvc/hvc_dcc.c | 175 +++++++++++++++++++++++++++++++++++++-
-> > >   2 files changed, 192 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/tty/hvc/Kconfig b/drivers/tty/hvc/Kconfig
-> > > index 8d60e0ff67b4..62560cd0c04d 100644
-> > > --- a/drivers/tty/hvc/Kconfig
-> > > +++ b/drivers/tty/hvc/Kconfig
-> > > @@ -87,6 +87,26 @@ config HVC_DCC
-> > >   	  driver. This console is used through a JTAG only on ARM. If you don't have
-> > >   	  a JTAG then you probably don't want this option.
-> > > +config HVC_DCC_SERIALIZE_SMP
-> > > +	bool "Use DCC only on CPU core 0"
-> > > +	depends on SMP && HVC_DCC
-> > > +	help
-> > > +	  Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
-> > > +	  reads/writes from/to DCC on more than one CPU core. Each core has its
-> > > +	  own DCC device registers, so when a CPU core reads or writes from/to
-> > > +	  DCC, it only accesses its own DCC device. Since kernel code can run on
-> > > +	  any CPU core, every time the kernel wants to write to the console, it
-> > > +	  might write to a different DCC.
+> > >
+> > >  scripts/Kbuild.include    |  4 +++
+> > >  scripts/Makefile.build    | 58 ++++++++++++---------------------------
+> > >  scripts/Makefile.lib      |  7 -----
+> > >  scripts/Makefile.modfinal |  5 ++--
+> > >  scripts/Makefile.modpost  |  9 ++----
+> > >  scripts/mod/modpost.c     |  7 -----
+> > >  6 files changed, 25 insertions(+), 65 deletions(-)
+> > >
+> > > diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+> > > index 3514c2149e9d..455a0a6ce12d 100644
+> > > --- a/scripts/Kbuild.include
+> > > +++ b/scripts/Kbuild.include
+> > > @@ -15,6 +15,10 @@ pound := \#
+> > >  # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
+> > >  dot-target = $(dir $@).$(notdir $@)
+> > >
+> > > +###
+> > > +# Name of target with a '.tmp_' as filename prefix. foo/bar.o => foo/.tmp_bar.o
+> > > +tmp-target = $(dir $@).tmp_$(notdir $@)
+> >
+> > This matches the dot-target definition above, otherwise $(@D).tmp_$(@F)
+> > would be an alternative.
+> 
+> Yes, I intentionally made dot-target and tmp-target look similar.
+> 
+> The difference is $(dir ...) leaves the trailing slash, but $(@D) does not.
+> 
+> The alternative would be
+> $(@D)/.tmp_$(@F)
+
+ah, yes, thanks.
+
+> >
 > > > +
-> > > +	  In SMP mode, Trace32 creates multiple windows, and each window shows
-> > > +	  the DCC output only from that core's DCC. The result is that console
-> > > +	  output is either lost or scattered across windows.
-> > Why are we documenting, and supporting, a closed source userspace tool
-> > with kernel changes?  Does this advertisement deserve to be in the
-> > kernel source tree?
+> > >  ###
+> > >  # The temporary file to save gcc -MMD generated dependencies must not
+> > >  # contain a comma
+> > > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > > index 7f199b0a5170..fe4d3a908dd0 100644
+> > > --- a/scripts/Makefile.build
+> > > +++ b/scripts/Makefile.build
+> > > @@ -88,10 +88,6 @@ endif
+> > >  targets-for-modules := $(foreach x, o mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usyms), \
+> > >                               $(patsubst %.o, %.$x, $(filter %.o, $(obj-m))))
+> > >
+> > > -ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
+> > > -targets-for-modules += $(patsubst %.o, %.prelink.o, $(filter %.o, $(obj-m)))
+> > > -endif
+> > > -
+> > >  ifdef need-modorder
+> > >  targets-for-modules += $(obj)/modules.order
+> > >  endif
+> > > @@ -153,8 +149,16 @@ $(obj)/%.ll: $(src)/%.c FORCE
+> > >  # The C file is compiled and updated dependency information is generated.
+> > >  # (See cmd_cc_o_c + relevant part of rule_cc_o_c)
+> > >
+> > > +is-single-obj-m = $(if $(part-of-module),$(if $(filter $@, $(obj-m)),y))
+> >
+> > Perhaps using $(and ..,..,y) instead if $(if ..,$(if ..,y))?
 > 
-> Ok, I will remove the comment.
 > 
-> > And why can't they just fix their tool if this is such a big issue?  Why
-> > does this only affect this one platform and not all other smp systems?
+> Good idea!
+> I did not notice this.  I will do it in v2.
 > 
-> Hmm, this has been discussed in all the past versions of this series and still we
-> are at the same question :) I will write a small summary below which will cover
-> mostly relevant discussions we discussed till now and then I can point to it
-> whenever this question is asked again.
+> 
+> 
+> > >
+> > > -endif
+> > > +delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
+> > > +
+> > > +$(obj)/%.o: objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
+> >
+> > same here?  $(and) versus $(if ..,$(if ..,y))
+> 
+> I am not sure about this case.
+> The second if-func is  $(if  cond, A, B) form.
 
-No, it needs to go into the changelog text so that we know what we are
-reviewing and considering when you submit it.  Never refer back to some
-old conversation, how are we supposed to remember that?
-
-So this all seems to be debugging-only code, and this config option
-should NEVER be turned on for a real system.  That makes much more
-sense, and is something that I don't recall anyone saying before.
-
-So make this very very explicit, both in the changelog, and in the
-Kconfig text, AND when the driver loads have it spit out a huge message
-in the kernel log saying that this is for debugging only and that no one
-should see this on a normal running system.  We have examples of other
-Kconfig options that do this at runtime, copy what they do so it's
-painfully obvious.  Like what is in clk_debug_init().
-
-thanks,
-
-greg k-h
+Oh, I didn't see it.  Then it might be the best to keep it the way it 
+is.

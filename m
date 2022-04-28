@@ -2,125 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980BF5133B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2125133C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346294AbiD1Mcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S1346363AbiD1MhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346291AbiD1Mcr (ORCPT
+        with ESMTP id S1346330AbiD1Mgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:32:47 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E37DAF1DE;
-        Thu, 28 Apr 2022 05:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651148973; x=1682684973;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gYMv6mhRM0NW8wmhbrz7A30S7YrVvPdbhJi1KdJ+nbs=;
-  b=yEcBT6F1+xYnXKQ+G7xAVLglS7pdi5RnQW7Znoy2ahnCOP3WBNkYOtFn
-   7uT0mDES9oSwOmGuiqszO08JFc0667yMiXKlpyqBAGVONC8cnu8uCEaeo
-   XXKiVvUBM9+rzFULc3lmXtBL3Li6GyWbOvEme7IE/0qRQpSdfZJuwVVN0
-   s=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 28 Apr 2022 05:29:33 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 05:29:32 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 05:29:32 -0700
-Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
- 2022 05:29:28 -0700
-Message-ID: <da3c667c-cec3-58d8-b06f-b4e79796a07b@quicinc.com>
-Date:   Thu, 28 Apr 2022 17:59:25 +0530
+        Thu, 28 Apr 2022 08:36:50 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637ACAF1F3;
+        Thu, 28 Apr 2022 05:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651149215; x=1682685215;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=JLTwnb6knAU2NJRTOD5Wxmiw692WpVrgjBsDWSNIg3I=;
+  b=lQn1s6u8Iq4uDvAvfxLLK7t+GpngNIVi3nYGeaF2m3rQ6AQs8wLDDNN9
+   u9nSd6LaHH4fAhe8Cq6OwaSoPF/BPHaHIeuDI4M2hXx8i8LU9sy+pxYN+
+   RDk9qfOn29Kgaf0S6sDTmPRzXHbqFygg2QfDl7rM7bBN5bNJsAYil4dQ/
+   geTrYrCZaBJeC8fENCUUhTgZ1fBGvPk9LZyYfcrfUgqNKCnrFwyMIrRof
+   IN3C9Otmg30C3lbByShy4EZ799LExzmfRVUmIsCIJlmsFOfRhd8AtuwYJ
+   89fAekUOzNoSHGNF/DsS1TU0LQo8/BlQZ/xxMTzen8QVuc50iky7tdbqe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352708323"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="352708323"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 05:33:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="706037490"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2022 05:33:24 -0700
+Date:   Thu, 28 Apr 2022 20:29:52 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Steven Price <steven.price@arm.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220428122952.GA10508@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
+ <YksIQYdG41v3KWkr@google.com>
+ <Ykslo2eo2eRXrpFR@google.com>
+ <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
+ <Ykwbqv90C7+8K+Ao@google.com>
+ <YkyEaYiL0BrDYcZv@google.com>
+ <20220422105612.GB61987@chaop.bj.intel.com>
+ <3b99f157-0f30-4b30-8399-dd659250ab8d@www.fastmail.com>
+ <20220425134051.GA175928@chaop.bj.intel.com>
+ <27616b2f-1eff-42ff-91e0-047f531639ea@www.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv12 7/9] asm-generic/io: Add logging support for MMIO
- accessors
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <will@kernel.org>
-References: <cover.1651139070.git.quic_saipraka@quicinc.com>
- <6673a2e73d3dd4c7aa01fee9b26cc4a52176ba7a.1651139070.git.quic_saipraka@quicinc.com>
- <YmpxxW5CZjMVrzF0@kroah.com>
- <6688ffa2-ec14-9126-1296-6180bab3e1d6@quicinc.com>
- <YmqCYZwHoRuKtFSN@kroah.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <YmqCYZwHoRuKtFSN@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27616b2f-1eff-42ff-91e0-047f531639ea@www.fastmail.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/2022 5:32 PM, Greg KH wrote:
-> On Thu, Apr 28, 2022 at 04:51:49PM +0530, Sai Prakash Ranjan wrote:
->> On 4/28/2022 4:21 PM, Greg KH wrote:
->>> On Thu, Apr 28, 2022 at 03:25:30PM +0530, Sai Prakash Ranjan wrote:
->>>> Add logging support for MMIO high level accessors such as read{b,w,l,q}
->>>> and their relaxed versions to aid in debugging unexpected crashes/hangs
->>>> caused by the corresponding MMIO operation.
->>>>
->>>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->>>> ---
->>>>    include/asm-generic/io.h | 82 ++++++++++++++++++++++++++++++++++++++--
->>>>    1 file changed, 78 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
->>>> index 7ce93aaf69f8..99090722cb4b 100644
->>>> --- a/include/asm-generic/io.h
->>>> +++ b/include/asm-generic/io.h
->>>> @@ -10,6 +10,7 @@
->>>>    #include <asm/page.h> /* I/O is all done through memory accesses */
->>>>    #include <linux/string.h> /* for memset() and memcpy() */
->>>>    #include <linux/types.h>
->>>> +#include <linux/instruction_pointer.h>
->>>>    #ifdef CONFIG_GENERIC_IOMAP
->>>>    #include <asm-generic/iomap.h>
->>>> @@ -61,6 +62,35 @@
->>>>    #define __io_par(v)     __io_ar(v)
->>>>    #endif
->>>> +#if IS_ENABLED(CONFIG_TRACE_MMIO_ACCESS) && !(defined(__DISABLE_TRACE_MMIO__))
->>> Shouldn't you document __DISABLE_TRACE_MMIO__ somewhere?  It's not even
->>> in the changelog.  Put a big comment above this for what is is for and
->>> how to use it.  Otherwise you will forget all about this in 6 months :)
->>>
->>> thanks,
->>>
->>> greg k-h
->> Didn't you ask me to split the patch to the one actually adding the flag and the one using it.
-> Yes, and isn't this the commit that adds the flag?  Or was that on an
-> earlier one that I missed?
->
-> Ah, it's in patch 6/9
->
-> But you should also document it here in the .h file, otherwise the only
-> place it is described is in some random kvm Makefile that no one will
-> ever notice :)
->
->
 
-Sure it makes sense, will add it.
++ Michael in case he has comment from SEV side.
+
+On Mon, Apr 25, 2022 at 07:52:38AM -0700, Andy Lutomirski wrote:
+> 
+> 
+> On Mon, Apr 25, 2022, at 6:40 AM, Chao Peng wrote:
+> > On Sun, Apr 24, 2022 at 09:59:37AM -0700, Andy Lutomirski wrote:
+> >> 
+> 
+> >> 
+> >> 2. Bind the memfile to a VM (or at least to a VM technology).  Now it's in the initial state appropriate for that VM.
+> >> 
+> >> For TDX, this completely bypasses the cases where the data is prepopulated and TDX can't handle it cleanly.  For SEV, it bypasses a situation in which data might be written to the memory before we find out whether that data will be unreclaimable or unmovable.
+> >
+> > This sounds a more strict rule to avoid semantics unclear.
+> >
+> > So userspace needs to know what excatly happens for a 'bind' operation.
+> > This is different when binds to different technologies. E.g. for SEV, it
+> > may imply after this call, the memfile can be accessed (through mmap or
+> > what ever) from userspace, while for current TDX this should be not allowed.
+> 
+> I think this is actually a good thing.  While SEV, TDX, pKVM, etc achieve similar goals and have broadly similar ways of achieving them, they really are different, and having userspace be aware of the differences seems okay to me.
+> 
+> (Although I don't think that allowing userspace to mmap SEV shared pages is particularly wise -- it will result in faults or cache incoherence depending on the variant of SEV in use.)
+> 
+> >
+> > And I feel we still need a third flow/operation to indicate the
+> > completion of the initialization on the memfile before the guest's 
+> > first-time launch. SEV needs to check previous mmap-ed areas are munmap-ed
+> > and prevent future userspace access. After this point, then the memfile
+> > becomes truely private fd.
+> 
+> Even that is technology-dependent.  For TDX, this operation doesn't really exist.  For SEV, I'm not sure (I haven't read the specs in nearly enough detail).  For pKVM, I guess it does exist and isn't quite the same as a shared->private conversion.
+> 
+> Maybe this could be generalized a bit as an operation "measure and make private" that would be supported by the technologies for which it's useful.
+
+Then I think we need callback instead of static flag field. Backing
+store implements this callback and consumers change the flags
+dynamically with this callback. This implements kind of state machine
+flow.
+
+> 
+> 
+> >
+> >> 
+> >> 
+> >> ----------------------------------------------
+> >> 
+> >> Now I have a question, since I don't think anyone has really answered it: how does this all work with SEV- or pKVM-like technologies in which private and shared pages share the same address space?  I sounds like you're proposing to have a big memfile that contains private and shared pages and to use that same memfile as pages are converted back and forth.  IO and even real physical DMA could be done on that memfile.  Am I understanding correctly?
+> >
+> > For TDX case, and probably SEV as well, this memfile contains private memory
+> > only. But this design at least makes it possible for usage cases like
+> > pKVM which wants both private/shared memory in the same memfile and rely
+> > on other ways like mmap/munmap or mprotect to toggle private/shared instead
+> > of fallocate/hole punching.
+> 
+> Hmm.  Then we still need some way to get KVM to generate the correct SEV pagetables.  For TDX, there are private memslots and shared memslots, and they can overlap.  If they overlap and both contain valid pages at the same address, then the results may not be what the guest-side ABI expects, but everything will work.  So, when a single logical guest page transitions between shared and private, no change to the memslots is needed.  For SEV, this is not the case: everything is in one set of pagetables, and there isn't a natural way to resolve overlaps.
+
+I don't see SEV has problem. Note for all the cases, both private/shared
+memory are in the same memslot. For a given GPA, if there is no private
+page, then shared page will be used to establish KVM pagetables, so this
+can guarantee there is no overlaps.
+
+> 
+> If the memslot code becomes efficient enough, then the memslots could be fragmented.  Or the memfile could support private and shared data in the same memslot.  And if pKVM does this, I don't see why SEV couldn't also do it and hopefully reuse the same code.
+
+For pKVM, that might be the case. For SEV, I don't think we require
+private/shared data in the same memfile. The same model that works for
+TDX should also work for SEV. Or maybe I misunderstood something here?
+
+> 
+> >
+> >> 
+> >> If so, I think this makes sense, but I'm wondering if the actual memslot setup should be different.  For TDX, private memory lives in a logically separate memslot space.  For SEV and pKVM, it doesn't.  I assume the API can reflect this straightforwardly.
+> >
+> > I believe so. The flow should be similar but we do need pass different
+> > flags during the 'bind' to the backing store for different usages. That
+> > should be some new flags for pKVM but the callbacks (API here) between
+> > memfile_notifile and its consumers can be reused.
+> 
+> And also some different flag in the operation that installs the fd as a memslot?
+> 
+> >
+> >> 
+> >> And the corresponding TDX question: is the intent still that shared pages aren't allowed at all in a TDX memfile?  If so, that would be the most direct mapping to what the hardware actually does.
+> >
+> > Exactly. TDX will still use fallocate/hole punching to turn on/off the
+> > private page. Once off, the traditional shared page will become
+> > effective in KVM.
+> 
+> Works for me.
+> 
+> For what it's worth, I still think it should be fine to land all the TDX memfile bits upstream as long as we're confident that SEV, pKVM, etc can be added on without issues.
+> 
+> I think we can increase confidence in this by either getting one other technology's maintainers to get far enough along in the design to be confident
+
+AFAICS, SEV shouldn't have any problem, But would like to see AMD people
+can comment. For pKVM, definitely need more work, but isn't totally
+undoable. Also would be good if pKVM people can comment.
 
 Thanks,
-Sai
+Chao
+
+> and/or by having a pure-kernel-software implementation that serves as a testbed.  For the latter, maybe it could support two different models with little overhead:
+> 
+> Pure software "interleaved" model: pages are shared or private and a hypercall converts them.  The access mode is entirely determined by the state programmed by hypercall.  I think this is essentially what Vishal implemented, but with the "HACK" replaced by something permanent and (if they're not already in the series) appropriate access checks implemented to actually protect the private memory.
+> 
+> Pure software "separate" mode: one GPA bit is set aside as the shared vs private bit.  The normal memslots are restricted to the shared half of GPA space.  Private memslots use the private half.  This works a lot like TDX.  This would be new code.  We don't *really* need this for testing, since TDX itself exercises the same programming model, but it would let people without TDX hardware exercise the interesting bits of the memory management.
+> 
+> Paolo, etc: what do you think?
+> 
+> >
+> > Chao
+> >> 
+> >> --Andy

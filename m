@@ -2,137 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8F2513A0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED0F513A18
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350188AbiD1QoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S1350233AbiD1QqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350180AbiD1QoQ (ORCPT
+        with ESMTP id S1349973AbiD1QqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:44:16 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB3E712D9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:41:01 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so4921330pjf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:41:01 -0700 (PDT)
+        Thu, 28 Apr 2022 12:46:08 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42013B1AB0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:42:53 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id f38so10077143ybi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qJiuRECSnpzr/r130WpbdVNxTjo81pv/mIIp2L+c/nY=;
-        b=MaxHFa7STH9vYwtHNlee8YnvBoz9jb2m71kuq/vvgUDzNkZxqniWwsHGm0s+Sgkuci
-         ilOqdeDIS3tNMfqs4Dg6nLMhtlE6k9uKtP3HP0L5WkkcTECJJz0RTi7ECE5+eCigR5qL
-         BZTT5e25NfiSRgivPpJ0kfv29X2BTav4VPOoU=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r56JqmyEKwLfjjTuw56FZ5cxoCmhZkz1FIGkAdMEzhg=;
+        b=gmEWLK/G4g326vlQfUkD0s/whD9rJnz2/equnQIJF2nnqQbb7pM3Ed+1fibophD2N7
+         CIa1/jAvm7oxqS3hLTUpPUD84dJivbYpULK+unSOmhJB0bFDTKwLDO0h8/WXg9AnVau6
+         /eZZhSk1wL0rTdkQQdONX8rlY2390cpw5zfJe1m+vvD4CErK/cim9uNN2ixWR5kCXw98
+         sKyiLO6SNAeFdazNmNIccaHuwNOpcCDd1uDbTbIyuRtBb6eesZm85F1l8qARnu7FPXZ6
+         kyIRcsOWWwVkvKcKgb8XkWMuGKki4vACrXFntBmRLJ4xOvBarkPtDxwDSGM+RbyM+45n
+         YxaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qJiuRECSnpzr/r130WpbdVNxTjo81pv/mIIp2L+c/nY=;
-        b=etSDRDEHDQEeEAm502khg4tAvRDK+EaVvlcBS9SreLu4Lywpy2siEVeBeGxtKFllE/
-         hDX2ImWOG3IxUu3i8ywCz73Y1DxSYDZCXVoGNjyUhWezzQTbghXseTxUIfrfVlRmtC9F
-         v8OO6mTZL2Hjq2UNhiMA3ZEYDiIwen5TSfES2swAAi+AYq69D6gzW+6BqyiP0G9pN0jF
-         IYwCXsW3S3TEeo725UAVJH9oegdVpvYaK79wp4aJh+WosM7DMiAKuwMDIPrbgA/0bC/t
-         0ls+hDemiSXRTDOGw22z2yCDCE4+uX0JKOdCKkaWKlit0irSu9La/R6g2zq0dmwB3KQR
-         M4Ug==
-X-Gm-Message-State: AOAM533fX9XuaVmoiyspAM6GTNxpDmLv6b49fqhDMJOM0IG/QPtSELIM
-        2xsO11n+pjFCTMbk+CWLAW0vtA==
-X-Google-Smtp-Source: ABdhPJydUjjFGkIU3AxGc8pfjmFxnieNTpgtxKdOVoA/+bH/vovl+jh2dzUtXXG2uuMcDf+pZuKbLg==
-X-Received: by 2002:a17:902:aa46:b0:159:6cb:163 with SMTP id c6-20020a170902aa4600b0015906cb0163mr34296390plr.83.1651164060892;
-        Thu, 28 Apr 2022 09:41:00 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:7a56:fc44:2682:8a2e])
-        by smtp.gmail.com with UTF8SMTPSA id d6-20020a17090acd0600b001cd4989fed4sm11986259pju.32.2022.04.28.09.40.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 09:41:00 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH v23 2/2] arm64: dts: qcom: sc7280-herobrine: Add nodes for onboard USB hub
-Date:   Thu, 28 Apr 2022 09:40:54 -0700
-Message-Id: <20220428094043.v23.2.I18481b296484eec47bdc292a31fa46fa8c655ca9@changeid>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-In-Reply-To: <20220428094043.v23.1.I7a1a6448d50bdd38e6082204a9818c59cc7a9bfd@changeid>
-References: <20220428094043.v23.1.I7a1a6448d50bdd38e6082204a9818c59cc7a9bfd@changeid>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r56JqmyEKwLfjjTuw56FZ5cxoCmhZkz1FIGkAdMEzhg=;
+        b=oEBq0qKBMS/qWWcJGtYXjXMJmKu7CeWf4bWZSsNTEbQ46YQw6wNDfRec4/3oBH2dGn
+         jUtIOibvhxBlmASbhgjqwa0rkgmYtUH7CsCItyFfisGXvjM+WuRee17GrdqN9rnC/bmg
+         8Q+Z5/C3czxj4NHCH5EhrjT+kE/Y7s3Zi/WbmTZHqcgRsfxJSY9uHjHi7y1mQNEKLaSj
+         vhZdVUIY5xFWD7CDdPRlX4nLUECQCpAI1TMLCvsNofsdt1CAzMVV15bxPS07InVLw0LF
+         X5TaAtLPkY7LpQfkcLMzfV471v1wgCxVHRXJbWCwNM6jmGNQ6Fmz1JD3kgXA1HVU75K9
+         5K9w==
+X-Gm-Message-State: AOAM533TpbiwS6nr3H0hRGO7kHDF5g5EKoO7Q3URVa5BwLP4EIJafmtK
+        vSbD1rIZRQEoYIjl02OkGA5G0CC+HqCKOVv2Wtu6bw==
+X-Google-Smtp-Source: ABdhPJwULhotWKO+NXz+dcEVz2aj7n4dvaBRBZ72IUvS4DL/hWhIkaotQI0g/VvhyXUYmLNxVAYiXldqMl9RMubQXGY=
+X-Received: by 2002:a25:9bc5:0:b0:644:c1bc:1f12 with SMTP id
+ w5-20020a259bc5000000b00644c1bc1f12mr30361921ybo.138.1651164172335; Thu, 28
+ Apr 2022 09:42:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <3167cbec7a82704c1ed2c6bfe85b77534a836fdc.1651162840.git.andreyknvl@google.com>
+In-Reply-To: <3167cbec7a82704c1ed2c6bfe85b77534a836fdc.1651162840.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 28 Apr 2022 18:42:16 +0200
+Message-ID: <CAG_fn=XFOA-qsvPwjwJ0iZH1Wy54aS7QtD4ETVdp9L-yvOkiWg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kasan: clean up comments in internal kasan.h
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for the onboard USB hub on herobrine devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+On Thu, Apr 28, 2022 at 6:21 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Clean up comments in mm/kasan/kasan.h: clarify, unify styles, fix
+> punctuation, etc.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-This requires "CONFIG_USB_ONBOARD_HUB=y".
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
+>
+> +/* alloca redzone size. Compiler's ABI, do not change. */
+s/Compiler's/Compiler ?
 
-Changes in v23:
-- added note about CONFIG_USB_ONBOARD_HUB to the commit message
-- added 'Reviewed-by' tags from Stephen and Doug
+>  #define KASAN_ALLOCA_REDZONE_SIZE      32
+>
+> -/*
+> - * Stack frame marker (compiler ABI).
+> - */
+> +/* Stack frame marker. Compiler's ABI, do not change. */
+Ditto
 
-Changes in v22:
-- patch added to the series
+>
+> -/* The layout of struct dictated by compiler */
+> +/* Do not change the struct layout: compiler's ABI. */
+Ditto
 
- .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 21 ++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+> -/* The layout of struct dictated by compiler */
+> +/* Do not change the struct layout: compiler's ABI. */
+Ditto
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index d58045dd7334..46937d21b229 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -143,8 +143,8 @@ pp3300_hub: pp3300-hub-regulator {
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 
-+		/* The BIOS leaves this regulator on */
- 		regulator-boot-on;
--		regulator-always-on;
- 
- 		gpio = <&tlmm 157 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
-@@ -560,6 +560,25 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.x hub on port 1 */
-+	usb_hub_2_x: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_x>;
-+	};
-+
-+	/* 3.x hub on port 2 */
-+	usb_hub_3_x: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_x>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.36.0.464.gb9c8b46e94-goog
+> -       unsigned long has_dynamic_init; /* This needed for C++ */
+> +       unsigned long has_dynamic_init; /* This needed for C++. */
+"is needed"?
 
+
+> -        * is accepted since SLAB redzones aren't enabled in production builds.
+> +        * is accepted since slab redzones aren't enabled in production builds.
+s/accepted/acceptable ?

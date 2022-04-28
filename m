@@ -2,154 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5559D513878
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFC4513882
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349256AbiD1Ph6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S234395AbiD1PlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243241AbiD1Ph5 (ORCPT
+        with ESMTP id S233590AbiD1PlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:37:57 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C25C83B2D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:34:42 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220428153441euoutp01658336018ef8c947096076114b39a0ad~qGVh1j0y43225932259euoutp01z
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:34:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220428153441euoutp01658336018ef8c947096076114b39a0ad~qGVh1j0y43225932259euoutp01z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651160081;
-        bh=us156qa8MCKGbktJV9qnN9R4FrbkYX7Qn3rv6LbG3K8=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=XUXJg/WtsWRuaO06yicPsTExN5siCl+GD+3wviC5xlWmIfk0XPQJhtsm9osP1q6yw
-         frVfHifnu1Z//t5gk8GNQrrZxgKMo1QpBY2NxaBWzYW6MHHmr76Wy5VgSHAuKWlqg+
-         MO3l3+oc3/vlr8lE5i3PA4bP2+3Jrdt/Ra+t6u9M=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220428153440eucas1p164ca6b64e70d22c1e77d10eecbad5841~qGVhbpA7q2201522015eucas1p1B;
-        Thu, 28 Apr 2022 15:34:40 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id BB.02.10260.014BA626; Thu, 28
-        Apr 2022 16:34:40 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220428153440eucas1p23b1f7b493670a1ea8dacec25f97b82a0~qGVhAbqRB0275402754eucas1p2Q;
-        Thu, 28 Apr 2022 15:34:40 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220428153440eusmtrp227876620b5d29cebe96d08de989746d0~qGVg-dRLb1518915189eusmtrp21;
-        Thu, 28 Apr 2022 15:34:40 +0000 (GMT)
-X-AuditID: cbfec7f5-bf3ff70000002814-77-626ab4104416
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 98.F4.09404.014BA626; Thu, 28
-        Apr 2022 16:34:40 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220428153439eusmtip18e007633712dd3486388cbf9d7ce0708~qGVgypn2R1761317613eusmtip1p;
-        Thu, 28 Apr 2022 15:34:39 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.162) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 28 Apr 2022 16:34:37 +0100
-Message-ID: <6bbc0766-63b6-3325-fd62-8309290d9edf@samsung.com>
-Date:   Thu, 28 Apr 2022 17:34:36 +0200
+        Thu, 28 Apr 2022 11:41:16 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D55DB18BA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:38:01 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gh6so10435138ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uAQT8HaM1F/C7tI0w3YAOWuIicIw4A32c+GrUwkdwpQ=;
+        b=aFj7WCsl9W2elIghvPF/0aoqi+ZIwLetMRy93r16p5B5v2Z9g0a/wGR9ENUf36Yqqn
+         P4N6UC5a1do9q3I7xV8inSoMr7BYKd/gM/oDozailW2vC4ysRvTBi32rUo1cFuw9pmGC
+         Ndiagl5DtuLdbsmZZLk+131jtQO4I2gs21A7s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uAQT8HaM1F/C7tI0w3YAOWuIicIw4A32c+GrUwkdwpQ=;
+        b=4WWKBd4uBmZRwLl+Xizs6y2KIrXzmRBNVHtZ8lNthCkD+JWZ9PM+HOyVfqBEn/NbU/
+         h4DORcwIsUUExNRqFr/2Fv1PphzaUAUId0PINgHE9PdgDv8vYVNOShNnlO9mwcpoaIQG
+         EPKvz7JCepIZ7NfR5H8dKUcGmqg+wpDEU7QCBOyxR31cs4c0V8SudOUjKpv+OwkVSNe9
+         WaqoEYrvpyuHZq4wxL2Qr5KvFxCd5gFsmaffp13ig1zFF3uo8PWm3iCRgwgoMC9BmcmZ
+         IsPA1giaMihfsh7o6EoYJ35TFgtxXvecy/HfSjHTjOvLCxK/TZTmdJlTEJkpd401XjTd
+         Ut5A==
+X-Gm-Message-State: AOAM533yljtSR45eYgqabowvjaXw8/fHxq+epdFft4VMcBzt4ozJFzIN
+        RVWjXgNv6JkbhoAZVXZ7eq5v45XXroAcHzzL
+X-Google-Smtp-Source: ABdhPJxp3CY/Gj7B2j5/rEtkgGymfpSvMfwDN+J6e4R0kpA6BU7oVMgkxJaW0hMrm4dRa7IROCybIw==
+X-Received: by 2002:a17:906:cb09:b0:6f3:87ca:1351 with SMTP id lk9-20020a170906cb0900b006f387ca1351mr22893015ejb.674.1651160279401;
+        Thu, 28 Apr 2022 08:37:59 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id sd22-20020a170906ce3600b006f3ce56ea9csm107598ejb.203.2022.04.28.08.37.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 08:37:57 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id x18so7351728wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:37:57 -0700 (PDT)
+X-Received: by 2002:a05:6000:c7:b0:20a:d8c1:d044 with SMTP id
+ q7-20020a05600000c700b0020ad8c1d044mr18483210wrx.422.1651160276475; Thu, 28
+ Apr 2022 08:37:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH 03/16] block: add bdev_zone_no helper
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, <jaegeuk@kernel.org>,
-        <axboe@kernel.dk>, <snitzer@kernel.org>, <hch@lst.de>,
-        <mcgrof@kernel.org>, <naohiro.aota@wdc.com>, <sagi@grimberg.me>,
-        <damien.lemoal@opensource.wdc.com>, <dsterba@suse.com>,
-        <johannes.thumshirn@wdc.com>
-CC:     <linux-kernel@vger.kernel.org>, <clm@fb.com>,
-        <gost.dev@samsung.com>, <chao@kernel.org>, <josef@toxicpanda.com>,
-        <jonathan.derrick@linux.dev>, <agk@redhat.com>,
-        <kbusch@kernel.org>, <kch@nvidia.com>,
-        <linux-nvme@lists.infradead.org>, <jiangbo.365@bytedance.com>,
-        <matias.bjorling@wdc.com>, <linux-block@vger.kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <bc18532b-a98f-26f2-4dd1-d189c0415820@acm.org>
+References: <20220428014022.v1.1.I08a15a73996211d37dff16810c40ee1539658601@changeid>
+In-Reply-To: <20220428014022.v1.1.I08a15a73996211d37dff16810c40ee1539658601@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 28 Apr 2022 08:37:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W716PePPFRJ+tjyKWg5CGtC7qz1+amVpq=iVk7neqkqg@mail.gmail.com>
+Message-ID: <CAD=FV=W716PePPFRJ+tjyKWg5CGtC7qz1+amVpq=iVk7neqkqg@mail.gmail.com>
+Subject: Re: [PATCH v1] arm64: dts: qcom: sc7180: Add mrbland dts files
+To:     "Joseph S. Barrera III" <joebar@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [106.210.248.162]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1CTdRzH7/mxZw+7Zs8GxjekeS7pLm0wo/ILiUFy9XjemaXnSXbEkOdg
-        NQZtIGJRM5jFLxlLURYGTo+QCWts8WvhcVPGgk00nCKmprC61MQSjmg623jwjv9enx/v773f
-        n/uSmLCRiCLlygJGpZQpxAQP73TOnZNQto8ypf/Ur4TmIScGTddqCFh3fw6Dw4c8KNTXHOFC
-        v2cEg+f/3YfCk6YBFE6aDRis6r+Pw0cV14O9spsYfHhzDdQ7LiHQ5zWgsG98NRztbSBgY7OP
-        C3X7ZzA4pvMhsHbQyoHtd6Zw6BpflhxJj17cRAdcpwi6tvQelx65bsHpUU8h3dFaTtDHNIcw
-        2nriC9p+RUPQ1aX3CLpHe4NDT532ErTZ5sVpndXCoR90iOiv+ivRLdT7vHVZjEK+m1HFrc/g
-        5TTZfsLyL+N7Ls64CQ1yC6tAwkhAvQK0Bx/iFQiPFFItCHCNneawxTQCaqwWlC0eIODouRvc
-        J5LfftHPs5D6HgGVXRksB5daq1awAjsCvvYMo6EBn1oPyi/3BpkkcSoGdJ8pYtsC8HP9JB7i
-        pdQOUGdwEyEOpxLA3Tn/vBSjIsH4ZOO8iQjqIAr6dBNYqMCoYRQEqjq5oUcJahXYVz6PYdTr
-        wGUUs9oXgbbLz2V5OSj98duFyM+DuW8qF7KUgDanmxt6ElB9PPDYpSPYQSooOzqysBQObg/a
-        FjgaPO5pRFn+FPjG/BgrLgueq8dMhEyAoIkDbgW7kwKqK6cwtr0EjP0lYP0sAfrOw5gOiTEs
-        OoVhUWTDogiGRRGaELwViWQK1bnZjDpeyRTFqmW56kJlduyuvNwOJPiHhwODM91Iy+2/Yx0I
-        SiIOBJCYOII/bc/JFPKzZMV7GVXeh6pCBaN2IMtIXBzJ3yX/QSaksmUFzMcMk8+onkxRMixK
-        g5ZIpXWigYFkoiTNtE10NZN5AzUaj2hTE9OntbvfrrCleSs1K8Q1G/ZMxCU1nT1WOx7d7he8
-        lIw92/0u5RrbERBEYattfUZTRvrOWctQ2F7/Zi1fJsl/5qnj8c112xPeKW53HH9tu/a/O7Np
-        o3f/2Jpy1ZcjqUhNShnIvuDZENDPJl6S25RbXw1ve+/X2SxOj/e50pgr9rykt6KjL1TLoyTn
-        7beK3/zE+UFte+8WS4rgmshHSyYOp8fVFzZI+5eu636hIZ63tmB/Am4t2tY2cabF/PnanScj
-        Eof+VPB1n33J3zx9wrnRoDH9/ijR5N50quu7p926l43xI82ikpGzy2F9mVSMq3Nka1ZhKrXs
-        fytJ8C4yBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGKsWRmVeSWpSXmKPExsVy+t/xu7oCW7KSDCaeYbVYf+oYs8Xqu/1s
-        FtM+/GS2OD31LJPFpP4Z7Ba/z55ntrjwo5HJYuXqo0wWT9bPYrboOfCBxeJv1z2gWMtDZos/
-        Dw0tJh26xmjx9OosJou9t7QtLu+aw2Yxf9lTdosJbV+ZLW5MeMpoMfH4ZlaLda/fs1icuCXt
-        IO5x+Yq3x78Ta9g8Jja/Y/c4f28ji8fls6Uem1Z1snksbJjK7LF5Sb3H7psNbB69ze/YPHa2
-        3mf1eL/vKpvH+i1XWTwmbN7I6vF5k5xH+4FupgCBKD2bovzSklSFjPziElulaEMLIz1DSws9
-        IxNLPUNj81grI1MlfTublNSczLLUIn27BL2MBVv2MBdcZ6m48vUMWwPjI+YuRk4OCQETiQeX
-        JrF3MXJxCAksZZQ4s+4CVEJG4tOVj+wQtrDEn2tdbBBFHxklXncshHJ2M0p0fmxjA6niFbCT
-        6Ly+i6mLkYODRUBVYsfhcoiwoMTJmU9YQGxRgQiJB7vPsoLYwgKWEm9+/mYCsZkFxCVuPZnP
-        BDJTRGAKk8TeCY+ZQRxmgdNMEv96tkHd9wHovpPHwDawCWhJNHayg5icAtYSJxYpQQzSlGjd
-        /psdwpaXaN46G+obZYmfk7uhvqmVeHV/N+MERtFZSO6bheSOWUhGzUIyagEjyypGkdTS4tz0
-        3GIjveLE3OLSvHS95PzcTYzABLbt2M8tOxhXvvqod4iRiYPxEKMEB7OSCO+X3RlJQrwpiZVV
-        qUX58UWlOanFhxhNgWE0kVlKNDkfmELzSuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNT
-        UwtSi2D6mDg4pRqYquNXC16bPUHxJMNit3eX3ytLNrOLfd2neJHn4Bq/qaWnDu/95lhr3cd3
-        2e/mW9F9Jw6pqzEZnpx99QSXzAwuzU8z+9I112pzn6jpeSQ6OY/ZdSbj/KOnz6mtXbgkdIlJ
-        Xr0fc6Py2c5FF3eos/LOmeDt5XfJUUf+kpKO9Xz1LHmufXqi8sZbF2b8Kovw8rUt735Ss1Z5
-        /n7LtA7R/N3rL955ZL5wktNGz6pd9VzHTVI+tfgIxOupNc4U6b3h/bfi9BuLHds6OjKUZl/h
-        /aLjYezFkP/wR6vYcjahohf6/f8YL66/s9PlpEKnNdfmqRauX7+whblmib2uk+UrcD3osaNt
-        xUq57QZ+Bi2FrleUWIozEg21mIuKEwH1NPeU6QMAAA==
-X-CMS-MailID: 20220428153440eucas1p23b1f7b493670a1ea8dacec25f97b82a0
-X-Msg-Generator: CA
-X-RootMTR: 20220427160259eucas1p25aab0637fec229cd1140e6aa08678f38
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220427160259eucas1p25aab0637fec229cd1140e6aa08678f38
-References: <20220427160255.300418-1-p.raghav@samsung.com>
-        <CGME20220427160259eucas1p25aab0637fec229cd1140e6aa08678f38@eucas1p2.samsung.com>
-        <20220427160255.300418-4-p.raghav@samsung.com>
-        <bc18532b-a98f-26f2-4dd1-d189c0415820@acm.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-28 01:53, Bart Van Assche wrote:
-> On 4/27/22 09:02, Pankaj Raghav wrote:
->> +static inline unsigned int bdev_zone_no(struct block_device *bdev,
->> sector_t sec)
->> +{
->> +    struct request_queue *q = bdev_get_queue(bdev);
->> +
->> +    if (q)
->> +        return blk_queue_zone_no(q, sec);
->> +    return 0;
->> +}
-> 
-> This patch series has been split incorrectly: the same patch that
-> introduces a new function should also introduce a caller to that function.
-> 
-Acked. I will make sure this happens in the next revision. Thanks.
-> Thanks,
-> 
-> Bart.
+Hi,
+
+On Thu, Apr 28, 2022 at 1:41 AM Joseph S. Barrera III
+<joebar@chromium.org> wrote:
+>
+> +&i2c4 {
+> +       status = "okay";
+> +       clock-frequency = <400000>;
+> +
+> +       ap_ts: touchscreen@5d {
+> +               compatible = "goodix,gt7375p";
+> +               reg = <0x5d>;
+> +               pinctrl-names = "default";
+> +               pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
+> +
+> +               interrupt-parent = <&tlmm>;
+> +               interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +               reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
+> +
+> +               vdd-supply = <&pp3300_ts>;
+> +       };
+> +};
+
+This is a detachable, right? So can you add these to match what
+Stephen is doing for existing detachables [1]
+
+&keyboard_controller {
+       /delete-property/keypad,num-rows;
+       /delete-property/keypad,num-columns;
+};
+
+It should be sorted based on the name of the node you're overriding,
+so it should come right after &i2c4 I believe.
+
+
+> +tp_en: &en_pp3300_dx_edp {
+> +       pinmux {
+> +               pins = "gpio85";
+> +               };
+> +       pinconf {
+> +               pins = "gpio85";
+> +       };
+> +};
+
+The above has the exact same problem that Stephen asked you to fix on
+wormdingler [2] about indentation / blank lines. Can you fix it here
+too?
+
+In addition to the changes requested above, it's probably nicer to
+keep all 3 patches you're sending in one series just because they all
+touch the Makefile.
+
+[1] https://lore.kernel.org/r/20220426225748.324759-1-swboyd@chromium.org
+[2] https://lore.kernel.org/r/CAE-0n53juQ8--Sai=wKypj8URw+V1giOOhzd-p13fVbe_vxZ0Q@mail.gmail.com/

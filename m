@@ -2,96 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32B25135BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0A85135C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347772AbiD1Nyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S1347789AbiD1N4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347775AbiD1Nyc (ORCPT
+        with ESMTP id S235821AbiD1Nz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:54:32 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8925AF1F3;
-        Thu, 28 Apr 2022 06:51:17 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id p18so5609332edr.7;
-        Thu, 28 Apr 2022 06:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wzLb2H0YcqmUah8DGfau1BD9HEOhRKzt1fvXpHtcIh4=;
-        b=FjkheFcaXEuFQtQdX/5QvXJmeX2G1CCMN74+ZPt3CKrIk7nB01k6OWMCt4vOL4nAuN
-         s5dBbT9JBC/4SY2Tx4bQPUvmKsEtCXmnP4i6mNfJ+2GRZeC7VYAwhpXGBhFnHP2ScHzF
-         VayIjF7pB00hoq9lm1dz7J9N1f2lu4rq2l0SNdPgEVXhsJ5/dLrzvOTszAsFnfpODn1r
-         aQtxmb/LahGa4inIw2csTWpj7H2RtD+exkl6QM+jZ/whGgEm56tAn0Hwtu2hjfWiAYMP
-         o5pZRHDw5YkqaqqcoSlNaKpojEMJv2BfIL+6kBXUemmc7e0bYu0GKzWCeBp15oI73aGJ
-         xl4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wzLb2H0YcqmUah8DGfau1BD9HEOhRKzt1fvXpHtcIh4=;
-        b=h4GX7YYaypjRkI51ydgg/oBmnRvAHtOe/chlfOG2pq1qH1dT4AFGwaaevRQnVe1bUK
-         FfS9xOnRmOeDHf/yNDUmIrLXcTMaXfZvJzJF4L8PXFV+HPUUeapGOSrPX2ugxR2Qklpu
-         fWIT0891JX0fXC/qXIfeM//rkAfvrU6TfmzqTJ916Qt1vOEQyNcN1Qx/oTzTm7G89AFb
-         n/1HvzDtd8G1zCQruLLi9dpS0SYY3LT4c66O1xqgmprjaC+zxvbEIB5+SkL4bfUbWZc5
-         IMv8d7OLXjyGq50VXvhD6Vc6FukkqfSXxlfm4/bvRlMfthHeyP7lLb+ePXueNSXiOYaM
-         P48Q==
-X-Gm-Message-State: AOAM532cgUeXIJtZ7ThgNalYxmZunBeNCnhqB8nO5pXLoDuC7oFGuuMY
-        nBD+3+178rsNqH6CLIzFjm7fRR+iwx24uX6EPh8=
-X-Google-Smtp-Source: ABdhPJzY8x+vpRvIT3jJFsms/VfptYvZpAhiELEKuWGYRDqQ1rFRPnlIxYZHfDgNz4b+MuyuuSNYAEUaw/tqUVGU7Zc=
-X-Received: by 2002:a05:6402:440d:b0:412:9e8a:5e51 with SMTP id
- y13-20020a056402440d00b004129e8a5e51mr36680407eda.362.1651153876361; Thu, 28
- Apr 2022 06:51:16 -0700 (PDT)
+        Thu, 28 Apr 2022 09:55:57 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6A6B42DA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651153962; x=1682689962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fHe2c0I+/bm/Zyv3YNuPcJLhU2ZLFZXztJWRk1LD5rU=;
+  b=n0gAV5lU8/Zy+9pvcvj4Iaacy13Mgq3TXhI30hpQS3jDPkSxuaRoeJ+p
+   B16YYamlnIX3+i+bpoA+6Wo1nbNTSzdWsHCq3/oC4De07jT+ywSxBW5YH
+   t36bulSxJLsRRXYyJLBZxc2ngNVKZQ7G8fWEcUOKjZimfFqH+nj8wbYYs
+   XEba8xrC2GgGEZWErehnPuJMANHbqo+6PUyLI2T1sAIvph8t1fH6hr1tb
+   P/xfhEMTDjB+S7zmV78CbJZbAgxbZTCE8wfKUxMKvxY8Oc4WxSQhK6hRl
+   X+Fty2WW3cjx3TKpTizhmJZzDFBTT7Mo538B7i1XqZAh/xzBvJtMAirVW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266110024"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="266110024"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 06:52:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="533890957"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 28 Apr 2022 06:52:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nk4ZT-0005Q5-Pv;
+        Thu, 28 Apr 2022 13:52:39 +0000
+Date:   Thu, 28 Apr 2022 21:52:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/fixes 1/5] include/linux/kallsyms.h:166:19: error:
+ static declaration of 'kallsyms_on_each_symbol' follows non-static
+ declaration
+Message-ID: <202204282157.sMS0vx7Y-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAH9NwWec6ovS1xQbuPsB5duskJdmK_qv4t+URTK6thCvGNST7w@mail.gmail.com>
- <20220323023714.GA1244184@bhelgaas> <CAH9NwWfZQWbfc6VJMT3isv2gmnWCoAOU4osDKQ7EBW_XsywGpg@mail.gmail.com>
-In-Reply-To: <CAH9NwWfZQWbfc6VJMT3isv2gmnWCoAOU4osDKQ7EBW_XsywGpg@mail.gmail.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Thu, 28 Apr 2022 15:51:05 +0200
-Message-ID: <CAH9NwWegh0E3-9PQy-t90SF3biZd3xtBXt-qCK4gtyjMQrVnAw@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: cadence: Enable Controller to respond to received
- PTM Requests
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> > > >
-> > > > > This enables the Controller [RP] to automatically respond with
-> > > > > Response/ResponseD messages if CDNS_PCIE_LM_TPM_CTRL_PTMRSEN
-> > > > > and PCI_PTM_CTRL_ENABLE bits are both set.
-> > > > >
-> > > > > Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> >
-> > We're in the middle of the merge window right now, but I'm sure
-> > Lorenzo will be able to look at it after -rc1.  This looks fine to me.
-> >
->
-> Another gentle ping :(
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fixes
+head:   35597ce11b848ee8a696d54223d1f7b64cb49cb2
+commit: 280f76918c82441cbe72620287fa24cbb7f74353 [1/5] kallsyms: Fully export kallsyms_on_each_symbol function
+config: nios2-randconfig-r023-20220428 (https://download.01.org/0day-ci/archive/20220428/202204282157.sMS0vx7Y-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=280f76918c82441cbe72620287fa24cbb7f74353
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/fixes
+        git checkout 280f76918c82441cbe72620287fa24cbb7f74353
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-Ping..
--- 
-greets
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from drivers/tty/sysrq.c:35:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from drivers/tty/sysrq.c:35:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/sysrq.c:412:34: warning: 'sysrq_thaw_op' defined but not used [-Wunused-const-variable=]
+     412 | static const struct sysrq_key_op sysrq_thaw_op = {
+         |                                  ^~~~~~~~~~~~~
 --
-Christian Gmeiner, MSc
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from drivers/char/random.c:52:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from drivers/char/random.c:52:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from init/main.c:21:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from init/main.c:21:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   init/main.c:769:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+     769 | void __init __weak arch_post_acpi_subsys_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   init/main.c:781:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
+     781 | void __init __weak mem_encrypt_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~
+   init/main.c:783:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
+     783 | void __init __weak poking_init(void) { }
+         |                    ^~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from arch/nios2/kernel/sys_nios2.c:15:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from arch/nios2/kernel/sys_nios2.c:15:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/nios2/kernel/sys_nios2.c:21:16: warning: no previous prototype for 'sys_cacheflush' [-Wmissing-prototypes]
+      21 | asmlinkage int sys_cacheflush(unsigned long addr, unsigned long len,
+         |                ^~~~~~~~~~~~~~
+   arch/nios2/kernel/sys_nios2.c:57:16: warning: no previous prototype for 'sys_getpagesize' [-Wmissing-prototypes]
+      57 | asmlinkage int sys_getpagesize(void)
+         |                ^~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from arch/nios2/kernel/kgdb.c:12:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from arch/nios2/kernel/kgdb.c:12:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/nios2/kernel/kgdb.c:130:17: warning: no previous prototype for 'kgdb_breakpoint_c' [-Wmissing-prototypes]
+     130 | asmlinkage void kgdb_breakpoint_c(struct pt_regs *regs)
+         |                 ^~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from arch/nios2/mm/fault.c:27:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from arch/nios2/mm/fault.c:27:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/nios2/mm/fault.c:43:17: warning: no previous prototype for 'do_page_fault' [-Wmissing-prototypes]
+      43 | asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long cause,
+         |                 ^~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/fork.c:55:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/fork.c:55:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:163:13: warning: no previous prototype for 'arch_release_task_struct' [-Wmissing-prototypes]
+     163 | void __weak arch_release_task_struct(struct task_struct *tsk)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:853:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
+     853 | void __init __weak arch_task_cache_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:948:12: warning: no previous prototype for 'arch_dup_task_struct' [-Wmissing-prototypes]
+     948 | int __weak arch_dup_task_struct(struct task_struct *dst,
+         |            ^~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from kernel/panic.c:15:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from kernel/panic.c:15:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/panic.c: In function '__warn':
+   kernel/panic.c:591:17: warning: function '__warn' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+     591 |                 vprintk(args->fmt, args->args);
+         |                 ^~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/exit.c:42:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from kernel/exit.c:42:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/exit.c:1814:13: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
+    1814 | __weak void abort(void)
+         |             ^~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from include/linux/syscalls_api.h:1,
+                    from kernel/sched/core.c:13:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/perf_event.h:51,
+                    from include/linux/trace_events.h:10,
+                    from include/trace/syscall.h:7,
+                    from include/linux/syscalls.h:88,
+                    from include/linux/syscalls_api.h:1,
+                    from kernel/sched/core.c:13:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:5235:20: warning: no previous prototype for 'task_sched_runtime' [-Wmissing-prototypes]
+    5235 | unsigned long long task_sched_runtime(struct task_struct *p)
+         |                    ^~~~~~~~~~~~~~~~~~
+   kernel/sched/core.c:9420:13: warning: no previous prototype for 'sched_init_smp' [-Wmissing-prototypes]
+    9420 | void __init sched_init_smp(void)
+         |             ^~~~~~~~~~~~~~
+   kernel/sched/core.c:9448:13: warning: no previous prototype for 'sched_init' [-Wmissing-prototypes]
+    9448 | void __init sched_init(void)
+         |             ^~~~~~~~~~
+--
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/livepatch.h:13,
+                    from kernel/sched/build_policy.c:23:
+>> include/linux/kallsyms.h:166:19: error: static declaration of 'kallsyms_on_each_symbol' follows non-static declaration
+     166 | static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/ftrace.h:13,
+                    from include/linux/livepatch.h:13,
+                    from kernel/sched/build_policy.c:23:
+   include/linux/kallsyms.h:68:5: note: previous declaration of 'kallsyms_on_each_symbol' with type 'int(int (*)(void *, const char *, struct module *, long unsigned int), void *)'
+      68 | int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/sched/build_policy.c:43:
+   kernel/sched/rt.c:666:6: warning: no previous prototype for 'sched_rt_bandwidth_account' [-Wmissing-prototypes]
+     666 | bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+..
 
-https://christian-gmeiner.info/privacypolicy
+
+vim +/kallsyms_on_each_symbol +166 include/linux/kallsyms.h
+
+   165	
+ > 166	static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *, unsigned long),
+   167						  void *data)
+   168	{
+   169		return -EOPNOTSUPP;
+   170	}
+   171	#endif /*CONFIG_KALLSYMS*/
+   172	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

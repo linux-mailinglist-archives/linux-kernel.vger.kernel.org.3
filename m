@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B0F512909
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA9451290B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240823AbiD1Brq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S240883AbiD1BsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiD1Bro (ORCPT
+        with ESMTP id S229494AbiD1BsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:47:44 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CBF98F5C;
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id bo5so3011939pfb.4;
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iFHqCQRjOjnZR4+Edhuht6dyVV23jVkd4G8gkgGiMd8=;
-        b=KkxJxoypCAU4IHX3T8/MwB3JJzUPsS7qKN8rj1qlGEDB7aweXU/UwntjuzFNfWlov0
-         1+QgRqC5aM29/cz/twV+pwJhD6TeqZ+0l5W9cGo5LzyWga8DAKyuPclsVU7advwHfNx6
-         eYI9+cpzYcKh6pM3FwwLt8o2kdvoAMzd4demBH8aS9969MYDVElqwNKVKNc55IoJZBxC
-         4kTMrPvxGKyRFxZtamUUwNzb3b7ZEOqesOFY7mDgtO4jQ/hv3UXcUNwO7POXcYSzKJvo
-         g0Hevg2GzKUN5C1u+h9HoFNCUiyEAm7rqI9OE1hb5iXmrB35UgRXyt/YzAMAuHac8mIw
-         PX0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iFHqCQRjOjnZR4+Edhuht6dyVV23jVkd4G8gkgGiMd8=;
-        b=Rxj7J0MJ+/oYTm26zPAUGGiQgpDkNhSOoXiPGsYhEymMKWTmglf7j3HFIgI8Q5EvW1
-         knIq1TuMh/vYSKlFpkUtBa4iHqNRXLFMr5TrNbXSN5Mf74Cy7ZlPCvntspN5nMhL1Cs9
-         8U+9fW2rjacW5N1uIxbI2HOwBwYGguay6S3h5ej98ys5oRDfCFg2PXQZgrrd+O4b6b6x
-         VbS78aY0hKVQmzYP/Srxy8n1Y+vLBlZnCvuOw5SRbXKRe4diMdnN+0R/anCBc5conu/b
-         5qhe4kEWO75bzudisEYoU5EiTLbXS7j36NG3/MatiZ9dau8kEu4eCAkfCI10iospVUhr
-         D9tg==
-X-Gm-Message-State: AOAM530w0n3otJ6KYsrF3Fkek+hJeQz/nce8fDe1do8Ms9FLVor4rbCa
-        5RLK8FYYIIfMu2GWgrPUxaU=
-X-Google-Smtp-Source: ABdhPJyLAcse4aT8yNI3XvKGkp0gEKbv+Sqha9Wd+n+TT2mpsyGXnI0AG2KhVUjMh6NJMyYFA6EcsQ==
-X-Received: by 2002:aa7:9085:0:b0:50d:35ae:271 with SMTP id i5-20020aa79085000000b0050d35ae0271mr21469622pfa.42.1651110271497;
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.52.85])
-        by smtp.gmail.com with ESMTPSA id w137-20020a62828f000000b0050d2f9c3409sm14420842pfd.199.2022.04.27.18.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 18:44:31 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 07:14:25 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: I2C: Add Qualcomm Geni based QUP I2C
- bindings
-Message-ID: <20220428014425.GB72033@9a2d8922b8f1>
-References: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
- <20220404182938.29492-2-singh.kuldeep87k@gmail.com>
+        Wed, 27 Apr 2022 21:48:06 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4779198F5C;
+        Wed, 27 Apr 2022 18:44:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kpdhz1Z6Zz4xNl;
+        Thu, 28 Apr 2022 11:44:50 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651110291;
+        bh=HtXJIGyoTrKSKRAaPLhhcsMtrJTWRfbpZoCE6v8AEbg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Mv39L4HE6xHaDHu1iIOcaAJSCegNylaIPhOWOvUd8S9Uh5h5H4mSS8UeswUGAxvgj
+         v7Mr7lrtpGSAndNWZWbi4q5LGpgYHmzyMfxSX8qXBz3dnATLHwM/s0oLnz7FkLI4SZ
+         TBtXX/DeH1DtuvA4TILCxavSshRUQxe6/zpj333vLLWMjGBigxIPGaA38KFGxWF5mZ
+         NMN4KOkRCf1D2i+4/26kVNrbrrR6lTe0AB8PFDVd4l2VGhR5aW/rjZWm2iAK0NSgVT
+         ZqgRIFrRLw2/29wMiM1f697Whp+T/1BZwFjLZ3UXPyerEexMm+Qgkhi7QqVrOH9MOP
+         x/60AVgarzB9g==
+Date:   Thu, 28 Apr 2022 11:44:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the block tree
+Message-ID: <20220428114449.4b2d2dd6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404182938.29492-2-singh.kuldeep87k@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Ne.rD_af4ZXlVFt5OYoEBKb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 11:59:34PM +0530, Kuldeep Singh wrote:
-> GENI(generic interface) based Qualcomm Universal Peripheral controller
-> can support multiple serial interfaces like SPI,UART and I2C.
-> 
-> Unlike other I2C controllers, QUP I2C bindings are present in parent
-> schema. Move it out from parent to an individual binding and let parent
-> refer to child schema later on.
-> 
-> Please note, current schema isn't complete as it misses out few
-> properties and thus, add these missing properties along the process.
-> 
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> ---
-> v2:
-> - Change compatible from enum to const
-> - Drop clock-frequency description
-> - Sort nodes
-> ---
+--Sig_/Ne.rD_af4ZXlVFt5OYoEBKb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Gentle ping to revive this thread.
-Patch 2,3,4 are accepted in this series and this one is only left.
+Hi all,
 
-Bjorn, could you please help in picking this up if there are no further
-review comments. Thanks!
+In commit
+
+  57668f0a4cc4 ("raid5: introduce MD_BROKEN")
+
+Fixes tag
+
+  Fixes: fb73b357fb9 ("raid5: block failing device if raid will be failed")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ne.rD_af4ZXlVFt5OYoEBKb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJp8ZEACgkQAVBC80lX
+0GwHeQgAoe5xbEsWz5sVl59f6z/hDkl7A+xF/HNm81EHFLPNrnb925Vw47nhgepD
+XI5C0c/rdYAs2frnJv4vXQjqcPEQT1DKkm3Gl2BwHaEwLgXneCLylVkOJ0E3gfR7
+TEd5gZmq2PXt+inUxH74CS9UqwGWbwHpx/WlpBUOOs57RUXTAHRia05RJ7mnGi7K
+7boajEA6lP5AMdwaustU8r2SMieFKUvJd1DFhi2KIUQ/PMVxheGGguwMQAfcAUyK
+pNfvpTGX/+fNKSNagtPXWBA+i6l6N1yXAPU90ENx4KiWsvypDhd5TXTx14E4Sc6K
+YVlZMKe/RFwNRna3b4Rl2Mgdj2ZtmA==
+=GV7/
+-----END PGP SIGNATURE-----
+
+--Sig_/Ne.rD_af4ZXlVFt5OYoEBKb--

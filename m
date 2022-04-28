@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A49513615
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3B1513618
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345814AbiD1OFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S1344483AbiD1OFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbiD1OF0 (ORCPT
+        with ESMTP id S233478AbiD1OF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:05:26 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83CDAC06A
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:02:08 -0700 (PDT)
+        Thu, 28 Apr 2022 10:05:27 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D443EAC071
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651154529;
-  x=1682690529;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651154531;
+  x=1682690531;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Eoadti+FXbHTDxNJiKrNmCrJcfdQH+IgsCTuKB5C8z0=;
-  b=cAMo2ztw3jFn7vGldLyhRLs9QvTcV2hFjoeqWsKSWoMzDzCLVmnTGQjP
-   Ghz3dJjyn+LoOFUYnFeqYAisaquFdQt7X0uVLgUKGW6UCxqOdX3xGAFli
-   SwKuHV7V0lgRR6osxO9kjb0r8GrkTSadC+3SvRVoPfK/J41ltWrGBasRK
-   AZavwG0HSxFMuyWte2lRQ6eEsCyD3FqRMnK7FvufCMljhDqhxf0aLf5d4
-   c8vU6uG+AzFeeWdlSCmfo2/d+xsHaMwlC9FbTQyeS4LM7AOfKUY/SHHA4
-   Emq81ISzLh+NRcInILgX6kYxGbIGMs9uKy2FwIl/QBwWXCtRkp3ShQTaR
-   w==;
+  bh=s9Yl1wMdrp/ororsKSLtd6aOtPFhY2okSFCoji6bXAg=;
+  b=mJgla4nvfAIK/rHr8Zoa5xgA9j09o9PA5CmkEwM+/vezk0xibuCQpeYd
+   xmNW3NXeCE5FVdYERZr3RiU85tsZWjTgGHmL1CKpi67T0G9Zk5LmYM4jE
+   pCXDdbwfZIzIQSPG0H9tvCTRGyqzpocuJ82E+7YQYC5XSvBIaRVir43WU
+   QTbpXvIRgYEWNokeKHyTwTQH9os96sQgITFhVZOugEDFZ/4F7bFI7+spT
+   PRSKWI9VmCAt9u0FICkN1SaJ1j1P2C4188igzYUlXONC5lp5JBlVKZKAL
+   bXlZyO+8LNhf60Gd6Zi4XvYTriAMFyStRoe/vHCaGsaOgylTQDrpRjDao
+   Q==;
 From:   Rickard Andersson <rickaran@axis.com>
 To:     <broonie@kernel.org>, <lgirdwood@gmail.com>,
         <linux-kernel@vger.kernel.org>, <yibin.gong@nxp.com>
 CC:     <rickaran@axis.com>, <rickard314.andersson@gmail.com>,
         <perdo@axis.com>
-Subject: [PATCH 3/5] dt-bindings: regulator: Add property for WDOG_B warm reset
-Date:   Thu, 28 Apr 2022 16:01:37 +0200
-Message-ID: <20220428140139.7349-3-rickaran@axis.com>
+Subject: [PATCH 4/5] regulator: pca9450: Make warm reset on WDOG_B assertion
+Date:   Thu, 28 Apr 2022 16:01:38 +0200
+Message-ID: <20220428140139.7349-4-rickaran@axis.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220428140139.7349-1-rickaran@axis.com>
 References: <20220428140139.7349-1-rickaran@axis.com>
@@ -56,30 +56,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rickard x Andersson <rickaran@axis.com>
 
-Make it possible to do warm reset on WDOG_B assertion.
+The default configuration of the PMIC behavior makes the PMIC
+power cycle most regulators on WDOG_B assertion. This power
+cycling causes the memory contents of OCRAM to be lost.
+Some systems neeeds some memory that survives reset and
+reboot, therefore this patch is created.
 
 Signed-off-by: Rickard x Andersson <rickaran@axis.com>
 ---
- .../bindings/regulator/nxp,pca9450-regulator.yaml           | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/regulator/pca9450-regulator.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-index e723f8cf6d74..b539781e39aa 100644
---- a/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/nxp,pca9450-regulator.yaml
-@@ -97,6 +97,12 @@ properties:
-     description:
-       Indicates that the I2C Level Translator is used.
+diff --git a/drivers/regulator/pca9450-regulator.c b/drivers/regulator/pca9450-regulator.c
+index 87b4e6e29ba1..4a3ae73c600c 100644
+--- a/drivers/regulator/pca9450-regulator.c
++++ b/drivers/regulator/pca9450-regulator.c
+@@ -702,6 +702,7 @@ static int pca9450_i2c_probe(struct i2c_client *i2c,
+ 	struct regulator_config config = { };
+ 	struct pca9450 *pca9450;
+ 	unsigned int device_id, i;
++	unsigned int reset_ctrl;
+ 	int ret;
  
-+  nxp,wdog_b-warm-reset:
-+    type: boolean
-+    description:
-+      When WDOG_B signal is asserted a warm reset will be done instead of cold
-+      reset.
+ 	if (!i2c->irq) {
+@@ -802,9 +803,14 @@ static int pca9450_i2c_probe(struct i2c_client *i2c,
+ 		return ret;
+ 	}
+ 
++	if (of_property_read_bool(i2c->dev.of_node, "nxp,wdog_b-warm-reset"))
++		reset_ctrl = WDOG_B_CFG_WARM;
++	else
++		reset_ctrl = WDOG_B_CFG_COLD_LDO12;
 +
- required:
-   - compatible
-   - reg
+ 	/* Set reset behavior on assertion of WDOG_B signal */
+ 	ret = regmap_update_bits(pca9450->regmap, PCA9450_REG_RESET_CTRL,
+-				WDOG_B_CFG_MASK, WDOG_B_CFG_COLD_LDO12);
++				 WDOG_B_CFG_MASK, reset_ctrl);
+ 	if (ret) {
+ 		dev_err(&i2c->dev, "Failed to set WDOG_B reset behavior\n");
+ 		return ret;
 -- 
 2.20.1
 

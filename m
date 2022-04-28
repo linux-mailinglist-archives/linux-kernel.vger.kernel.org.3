@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F585135EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9AE5135FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347962AbiD1OC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S1348001AbiD1OCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347878AbiD1OCH (ORCPT
+        with ESMTP id S1347884AbiD1OCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:02:07 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EF5B53DA;
-        Thu, 28 Apr 2022 06:58:52 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id kq17so9757702ejb.4;
-        Thu, 28 Apr 2022 06:58:52 -0700 (PDT)
+        Thu, 28 Apr 2022 10:02:14 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C0E54FB5;
+        Thu, 28 Apr 2022 06:58:53 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bv19so9755026ejb.6;
+        Thu, 28 Apr 2022 06:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kmcy+WVcUMSTKq+Fw5VOoyUvErPXIVULV+9+XIhSEP4=;
-        b=AhG1ruQbfC+S1+aq8qQZicm+JQ6eFjo9U+seqTxUn6Wdv/069iL+/6wBL+2K11DAiA
-         YjL/C93lBMFqj7WpPFSoPilUlaoiJ4hxO8UhU0SbCDmEsduHi7jdlLlQF4ana6Xwgr9V
-         2wNgjaUA5EA20JCCLcv3rFiwA6PlyrzgEYGVrofb81Euq3VO59rR+Oap8gKRoDqckxYW
-         YrESuNqWY42sNN4z+a80rAZwAljtUkvh9u5T8yqLX8I/lhKsi90JFpvmEL5trh4KVKY0
-         x/HD6S4KojJ2elMxoNuKcHW+fMWMWIAxniwM1CVf2/y/Zgh7YoT5J4FKcf7HU+WxSQiv
-         k3KA==
+        bh=gtTf6OOj87b2Qg9AkM3LVkPT3Rm+KpZX5qOlOG7aTiU=;
+        b=Gx257gqfWgJ/LzNF0zvajSwKTJAdku50mcLTP3RgtgUNB+lwjlaJdnjnqCIa4zcvuC
+         SZvAuIGJB1mplQtiTdUTUtMEcnqnPRlfk3l2QzGYiY6TFgrQqHFhox7JKOfna3xkFL3V
+         DcyfX9hCeIl7+1076cGJ/1aAR5XHbE5/fjvPCbguCikS8OR93DaGfAJh0U3V4JkMbZGi
+         n3oE+9bnjyG7Md/padfxXYhlYBWDcu9iWKDv11fB+F4be5KGh9zZNy4nuktM6RjP66ms
+         fRPpbo0q6U6gdS0T1GuUeY2fMTn55knpj1zH5k+D8zu4eJTCcU3B6eOPG01fL/m0ZOL8
+         R77A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kmcy+WVcUMSTKq+Fw5VOoyUvErPXIVULV+9+XIhSEP4=;
-        b=0/k/d7p8ojlJXmNPBpn3WZhohUwq5AjCdNjBUP3pNwwzQP6a7MbMi84jGRiOPimzZK
-         b48eGKcULV9dXnZPLHsZmCXetX91svR1Knz4yayIZlzQC+3yLN3iEnIp2mW0mY7nP2pc
-         a9WdrQfibmd3YX5RLmjuP/ZbRFDkF6hM1LKnt7Z4qhz2r9q3c+2mXSFhLNcXKV7EP1e5
-         SMPpLF1DLoFRhcFiNs/9exmoGYcMbD7fl8Z80PH4ujbYar4n3Icn3MAySIhWv9oEtz7b
-         L0zRNnfEU9tmljtTRyZpPeUJbRtcYg2+34PrBt0u/r/wSvNbA1tp7Kqx9dEZM54JEW+1
-         rCfA==
-X-Gm-Message-State: AOAM5320uItftD7gDkuASrXaz5tu2/XRTIoPKASXCXrRm9Le5JvegtJ8
-        L8jREj4eqnErrSG+WbALr2z0cvaEJHs=
-X-Google-Smtp-Source: ABdhPJzqAu3nWPsQh1b3nUXS4Fud941GK8pBuVyMMfVxT7x1bNfIZY6rKC3s5Kh19T36gcCnfohP1g==
-X-Received: by 2002:a17:907:1b02:b0:6ef:ea73:b2ea with SMTP id mp2-20020a1709071b0200b006efea73b2eamr32659309ejc.753.1651154330793;
-        Thu, 28 Apr 2022 06:58:50 -0700 (PDT)
+        bh=gtTf6OOj87b2Qg9AkM3LVkPT3Rm+KpZX5qOlOG7aTiU=;
+        b=OoDZfpZpIi4OgoIxyioba4LQgdyY70NVz1fIsqC+jrElaBYJGl0i+acVeDjzB+J+54
+         /wJGRTt9TKwPUi+FUfYsBv/wmfy8S/cok8TOsY6jzUJAhcoJvDQAdM2F72tjztikfVjb
+         Qucp33dHg4VUZPAs3EmwbhUimr/QlZ+glFq0cETMWMijcFTPUb73IRqd4ZwXe0347r85
+         klsD1R7PfeDjgKJPmYshHFtNditOWCy2Lzjt0XgdCHyq+t7ZqYlv2CwKcNLNKdiLwxcj
+         5R0mqEntMaqTI/1WnuxcIgXIGXHAcI9OsGjTt5Th43D5PqMg3Yam+8/XXdWe3Mv9JeVr
+         XU+w==
+X-Gm-Message-State: AOAM532r4dstBtQTc8VwHjOEC49E3/Iv5NdXSrNIXHaMSIMXJYkz0ZAx
+        AQcCoi9MVKZ0L7OIhm3GFoA4BE26PF0=
+X-Google-Smtp-Source: ABdhPJxyQ4KMR89VDmB1Dw7z/c306imVzPMyLDhFXKAbPhn3OCj465FmybaXLVGVwBXLhfRo154/sA==
+X-Received: by 2002:a17:907:9482:b0:6da:a24e:e767 with SMTP id dm2-20020a170907948200b006daa24ee767mr31614783ejc.479.1651154332124;
+        Thu, 28 Apr 2022 06:58:52 -0700 (PDT)
 Received: from 127.0.0.1localhost ([85.255.235.145])
-        by smtp.gmail.com with ESMTPSA id t19-20020aa7d4d3000000b0042617ba63c2sm1652568edr.76.2022.04.28.06.58.49
+        by smtp.gmail.com with ESMTPSA id t19-20020aa7d4d3000000b0042617ba63c2sm1652568edr.76.2022.04.28.06.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 06:58:50 -0700 (PDT)
+        Thu, 28 Apr 2022 06:58:51 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         linux-kernel@vger.kernel.org,
         Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH v2 net-next 04/11] udp/ipv6: prioritise the ip6 path over ip4 checks
-Date:   Thu, 28 Apr 2022 14:57:59 +0100
-Message-Id: <4436ef2b79305e059a9c4c363a3ddd709003eda5.1651153920.git.asml.silence@gmail.com>
+Subject: [PATCH v2 net-next 05/11] udp/ipv6: optimise udpv6_sendmsg() daddr checks
+Date:   Thu, 28 Apr 2022 14:58:00 +0100
+Message-Id: <785698dcf3e1f62e6fbe5b85a42d9704a3a48793.1651153920.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <cover.1651153920.git.asml.silence@gmail.com>
 References: <cover.1651153920.git.asml.silence@gmail.com>
@@ -74,68 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For AF_INET6 sockets we care the most about ipv6 but not ip4 mappings as
-it's requires some extra hops anyway. Take AF_INET6 case from the address
-parsing switch and add an explicit path for it. It removes some extra
-ifs from the path and removes the switch overhead.
+All paths taking udpv6_sendmsg() to the ipv6_addr_v4mapped() check set a
+non zero daddr, we can safely kill the NULL check just before it.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- net/ipv6/udp.c | 37 +++++++++++++++++--------------------
- 1 file changed, 17 insertions(+), 20 deletions(-)
+ net/ipv6/udp.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index d6aedd4dab25..78ce5fc53b59 100644
+index 78ce5fc53b59..1f05e165eb17 100644
 --- a/net/ipv6/udp.c
 +++ b/net/ipv6/udp.c
-@@ -1357,30 +1357,27 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 
- 	/* destination address check */
- 	if (sin6) {
--		if (addr_len < offsetof(struct sockaddr, sa_data))
--			return -EINVAL;
-+		if (addr_len < SIN6_LEN_RFC2133 || sin6->sin6_family != AF_INET6) {
-+			if (addr_len < offsetof(struct sockaddr, sa_data))
-+				return -EINVAL;
- 
--		switch (sin6->sin6_family) {
--		case AF_INET6:
--			if (addr_len < SIN6_LEN_RFC2133)
-+			switch (sin6->sin6_family) {
-+			case AF_INET:
-+				goto do_udp_sendmsg;
-+			case AF_UNSPEC:
-+				msg->msg_name = sin6 = NULL;
-+				msg->msg_namelen = addr_len = 0;
-+				goto no_daddr;
-+			default:
- 				return -EINVAL;
--			daddr = &sin6->sin6_addr;
--			if (ipv6_addr_any(daddr) &&
--			    ipv6_addr_v4mapped(&np->saddr))
--				ipv6_addr_set_v4mapped(htonl(INADDR_LOOPBACK),
--						       daddr);
--			break;
--		case AF_INET:
--			goto do_udp_sendmsg;
--		case AF_UNSPEC:
--			msg->msg_name = sin6 = NULL;
--			msg->msg_namelen = addr_len = 0;
--			daddr = NULL;
--			break;
--		default:
--			return -EINVAL;
-+			}
- 		}
-+
-+		daddr = &sin6->sin6_addr;
-+		if (ipv6_addr_any(daddr) && ipv6_addr_v4mapped(&np->saddr))
-+			ipv6_addr_set_v4mapped(htonl(INADDR_LOOPBACK), daddr);
- 	} else {
-+no_daddr:
- 		if (sk->sk_state != TCP_ESTABLISHED)
- 			return -EDESTADDRREQ;
+@@ -1383,19 +1383,18 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
  		daddr = &sk->sk_v6_daddr;
+ 	}
+ 
+-	if (daddr) {
+-		if (ipv6_addr_v4mapped(daddr)) {
+-			struct sockaddr_in sin;
+-			sin.sin_family = AF_INET;
+-			sin.sin_port = sin6 ? sin6->sin6_port : inet->inet_dport;
+-			sin.sin_addr.s_addr = daddr->s6_addr32[3];
+-			msg->msg_name = &sin;
+-			msg->msg_namelen = sizeof(sin);
++	if (ipv6_addr_v4mapped(daddr)) {
++		struct sockaddr_in sin;
++
++		sin.sin_family = AF_INET;
++		sin.sin_port = sin6 ? sin6->sin6_port : inet->inet_dport;
++		sin.sin_addr.s_addr = daddr->s6_addr32[3];
++		msg->msg_name = &sin;
++		msg->msg_namelen = sizeof(sin);
+ do_udp_sendmsg:
+-			if (__ipv6_only_sock(sk))
+-				return -ENETUNREACH;
+-			return udp_sendmsg(sk, msg, len);
+-		}
++		if (__ipv6_only_sock(sk))
++			return -ENETUNREACH;
++		return udp_sendmsg(sk, msg, len);
+ 	}
+ 
+ 	ulen += sizeof(struct udphdr);
 -- 
 2.36.0
 

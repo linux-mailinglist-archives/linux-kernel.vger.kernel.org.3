@@ -2,86 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCB5512F29
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E57512F2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344815AbiD1JBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S1344851AbiD1JB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiD1JBL (ORCPT
+        with ESMTP id S1344845AbiD1JBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:01:11 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A368321
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:57:56 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S84mPF013671;
-        Thu, 28 Apr 2022 03:57:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=lw4vPSC0Sg0RRx2v5dzNrqFzM/Hz4CzUnSZ52Sl0ZFk=;
- b=ZrlLZuEJLYh3LDQMwQVXkACvFBpiZn0Nez6BlpPvrug71GuV5HqLT3v3zpCSGfWZ3L/P
- QvGl4loqSYW55Qtbaq5jAMugtpwgTZeK7x1Kyt1eQ/F3P6mvtsmzyGnUMCtgSGPsSwFn
- bAhoxDmRuOZ34SSkznzSgeXloYcA3DTNHrifkQxV2El7zYYi4N7dHwJNymH4ZcA64Cwe
- hLuLQ/V2KAvfcl+JT9H3qebXSFUwPuijEtNQX9a8hSFGACOd/b08zUhImg3g07/+u52J
- 9N8AAqJGGCakLD5B/iBQhN6YJqrIHUbeFMJ4q+o0JHb9i5dHgK7H2kYF3k4YYUnUe1vZ ZA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fprt61vr0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 28 Apr 2022 03:57:42 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
- 2022 09:57:40 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Thu, 28 Apr 2022 09:57:40 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DDDEE46C;
-        Thu, 28 Apr 2022 08:57:40 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 08:57:40 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-CC:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: Re: [PATCH 06/26] ASoC: cs35l41: Move cs35l41_set_cspl_mbox_cmd to
- shared code
-Message-ID: <20220428085740.GK38351@ediswmail.ad.cirrus.com>
-References: <20220427150720.9194-1-vitalyr@opensource.cirrus.com>
- <20220427150720.9194-7-vitalyr@opensource.cirrus.com>
+        Thu, 28 Apr 2022 05:01:52 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F3769CCB;
+        Thu, 28 Apr 2022 01:58:38 -0700 (PDT)
+X-UUID: 368fd1d8b5de4865a84f9ee6299d5e62-20220428
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:aba822e1-5c03-4d59-b49f-f0249e168546,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:4772062f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 368fd1d8b5de4865a84f9ee6299d5e62-20220428
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yongqiang.niu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 587010160; Thu, 28 Apr 2022 16:58:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 28 Apr 2022 16:58:31 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Apr 2022 16:58:30 +0800
+From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>
+Subject: [PATCH v4, 0/1] drm/mediatek: add lut diff flag for new gamma hardware
+Date:   Thu, 28 Apr 2022 16:58:28 +0800
+Message-ID: <20220428085829.15855-1-yongqiang.niu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220427150720.9194-7-vitalyr@opensource.cirrus.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: EUz3WwI3f4dQHnV4upV0JBtdt1_0x9G7
-X-Proofpoint-ORIG-GUID: EUz3WwI3f4dQHnV4upV0JBtdt1_0x9G7
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 04:07:00PM +0100, Vitaly Rodionov wrote:
-> From: Stefan Binding <sbinding@opensource.cirrus.com>
-> 
-> This function is used to control the DSP Firmware for cs35l41,
-> and will be needed by the cs35l41 hda driver, when firmware
-> support is added.
-> 
-> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-> ---
+base v5.17-rc1
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+change since v3:
+-fix type error
 
-Thanks,
-Charles
+Yongqiang Niu (1):
+  drm/mediatek: add lut diff flag for new gamma hardware support
+
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c   |  2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 +-
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 34 +++++++++++++++++++----
+ 3 files changed, 30 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,167 +2,431 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435835136E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F3F5136E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348388AbiD1Oc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
+        id S1348403AbiD1Odq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348377AbiD1OcY (ORCPT
+        with ESMTP id S229650AbiD1Odh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:32:24 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4168E18B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:29:08 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id r11-20020a05600c35cb00b0039409c1111bso2181341wmq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dVispo4pExieFIRpZv+TTvYPHYnQEg3ZSO24r5MG9HI=;
-        b=XOGh55ExQa+tofFCzqAGnXzAnxRtFuFbXMauBFYn4C8d5jAFFKNLF1bPK707nqOghq
-         KknIBsABhTu2gShNJhMsd8kVuNuB86W6ZJ4iiLclp2Sb8zJ3/SOWkCODef0DqaTi/B88
-         WEMPV8Xd3PYNdTOndRnVZdCG1/niL0tU/Pi74KVZkcW1gzdEvOEe3BsIxA4Jh9eDFKSd
-         PXLgPRfcRJa0Ud8DqsOT3qwK6rgiyED7CDLDW9ffUj7SaDvLR3CA1agyzSTXXGT8eT1x
-         qzDavcoSdK39sDKZ/cwgTC6tqW3Qc7QMkPnKzkcDEuAq+tfHhZXV1/KACHsnlIzNvX40
-         rW/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dVispo4pExieFIRpZv+TTvYPHYnQEg3ZSO24r5MG9HI=;
-        b=ETdzQIg/05Np8GgZNXf5rI7jQoIypUuoJikALcfhNVQFEMk4ZMrblv0GozachZj8V3
-         noIo/g1WLqf55wVuh1vZWyE+odI0NdjGMuPIAeBvsako/B9GOwIecbDlmtA2JCRdmHGG
-         kOySHjKkkFBY/WNzGWtm29ZTF1WZXbknfgrBYfXCqb5ySz/1UaR6sUTBPNxIKTANwHd8
-         ICDZPFhMdfHj6isw68xbjAlHKs7ghQH1x6B6lsnflUkq1NQWcAaM3YTFj+E47+9nmM33
-         OYYvWRmkQrN4oMF8irK7eF6i+6STDEop0JwbxBkGLqETWJXuaAlVdY31u8gtcxZkWYIy
-         ey7A==
-X-Gm-Message-State: AOAM530UU2/NLVGR3dfoxch1NVJRAxi4J+PoW8ncrUl+Xu39LBxd/teV
-        Bir1qLA89LDGhuEW/tvEw/LfZmzxD+cyDsim
-X-Google-Smtp-Source: ABdhPJznWuJwk+EOYl5jsLHjb72Oqs8o0ksUJ6DBPP2VSQlw2fgQYnjSfMfqTwudzTMXYdd8eh3NYg==
-X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr32455609wml.160.1651156147203;
-        Thu, 28 Apr 2022 07:29:07 -0700 (PDT)
-Received: from google.com (49.222.77.34.bc.googleusercontent.com. [34.77.222.49])
-        by smtp.gmail.com with ESMTPSA id bs14-20020a056000070e00b0020af0a49c3bsm12585wrb.75.2022.04.28.07.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 07:29:06 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 14:29:05 +0000
-From:   Sebastian Ene <sebastianene@google.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        qperret@google.com, will@kernel.org, maz@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: vm-wdt: Add qemu,vm-watchdog
- compatible
-Message-ID: <Ymqksfth+sj5JOWo@google.com>
-References: <20220425134204.149042-1-sebastianene@google.com>
- <20220425134204.149042-2-sebastianene@google.com>
- <YmbonypWxzZJbjQ1@robh.at.kernel.org>
+        Thu, 28 Apr 2022 10:33:37 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888852CE3F;
+        Thu, 28 Apr 2022 07:30:20 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A8075C0003;
+        Thu, 28 Apr 2022 14:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651156219;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Glxz9IVdj5j7vTuvkmx5NfY8R84xnkUlqB5qF6D//Q=;
+        b=d4saSo0HxfntzYasdLoAwCnmifUjSPCX59t3p45uxJtbxaZMC2C4OLJFKzSeek2gTPsFYA
+        BmSnnwX9oumGzoZUWYycJ59yyBbMDegBHS6rNY/fD0tYiLUCetpkiMuhR4cqeU2zAQVjQz
+        zdo4Z2dKY2KLkmTuU+8oH9Nzmi+e3c+XcCnQU5V87ikQPvfsNj7noucT+6bj4Poah3REgW
+        6q7t+XDHKqg5EyNefxZs8zMPYRc7BxUoCaMSg6fh0Zv1OJUe1HQ048ZnVqdgV7w5lUWVtF
+        ihlUQIgmrs1HBN07dm5I5JQbw/4A30FJS/yWq09mKLWC9ljMKH20GNOVazS9PQ==
+Date:   Thu, 28 Apr 2022 16:30:11 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 3/4] staging: media: Add support for the Allwinner A31
+ ISP
+Message-ID: <Ymqk89e+mn/1kLLx@aptenodytes>
+References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
+ <20220415153708.637804-4-paul.kocialkowski@bootlin.com>
+ <YmqFQSRBsqs4ghNQ@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oDJ9GP/VwhMGHB5u"
 Content-Disposition: inline
-In-Reply-To: <YmbonypWxzZJbjQ1@robh.at.kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YmqFQSRBsqs4ghNQ@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 01:29:51PM -0500, Rob Herring wrote:
-> On Mon, Apr 25, 2022 at 01:42:05PM +0000, Sebastian Ene wrote:
-> > The stall detection mechanism allows to configure the expiration
-> > duration and the internal counter clock frequency measured in Hz.
-> > Add these properties in the schema.
-> > 
-> > Signed-off-by: Sebastian Ene <sebastianene@google.com>
-> > ---
-> >  .../devicetree/bindings/misc/vm-wdt.yaml      | 44 +++++++++++++++++++
-> >  1 file changed, 44 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/misc/vm-wdt.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/misc/vm-wdt.yaml b/Documentation/devicetree/bindings/misc/vm-wdt.yaml
-> > new file mode 100644
-> > index 000000000000..cb7665a0c5af
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/misc/vm-wdt.yaml
-> > @@ -0,0 +1,44 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/misc/vm-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+--oDJ9GP/VwhMGHB5u
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Sakari,
+
+On Thu 28 Apr 22, 15:14, Sakari Ailus wrote:
+> Hi Paul,
+>=20
+> Thanks for the set.
+>=20
+> A few comments below.
+
+Thanks a lot for your review!
+
+[...]
+
+> >  .../staging/media/sunxi/sun6i-isp/TODO.txt    |   6 +
+>=20
+> This should be called TODO (without .txt).
+
+Understood!
+
+> I understand this is an online ISP. How do you schedule the video buffer
+> queues? Say, what happens if it's time to set up buffers for a frame and
+> there's a buffer queued in the parameter queue but not in the image data
+> queue? Or the other way around?
+
+The ISP works in a quite atypical way, with a DMA buffer that is used to
+hold upcoming parameters (including buffer addresses) and a bit in a "direc=
+t"
+register to schedule the update of the parameters at next vsync.
+
+The update (setting the bit) is triggered whenever new parameters are
+submitted via the params video device or whenever there's a capture buffer
+available in the capture video device.
+
+So you don't particularly need to have one parameter buffer matching a capt=
+ure
+buffer, the two can be updated independently. Of course, a capture buffer w=
+ill
+only be returned after another buffer becomes active.
+
+I hope this answers your concern!
+
+[...]
+
+> > +static int sun6i_isp_tables_setup(struct sun6i_isp_device *isp_dev)
+> > +{
+> > +	struct sun6i_isp_tables *tables =3D &isp_dev->tables;
+> > +	int ret;
 > > +
-> > +title: VM watchdog
+> > +	/* Sizes are hardcoded for now but actually depend on the platform. */
+>=20
+> Would it be cleaner to have them defined in a platform-specific way, e.g.
+> in a struct you obtain using device_get_match_data()?
+
+Absolutely! I didn't do it at this stage since only one platform is support=
+ed
+but we could just as well introduce a variant structure already for the tab=
+le
+sizes.
+
 > > +
-> > +description: |
-> > +  This binding describes a CPU stall detector mechanism for virtual cpus.
+> > +	tables->load.size =3D 0x1000;
+> > +	ret =3D sun6i_isp_table_setup(isp_dev, &tables->load);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +maintainers:
-> > +  - Sebastian Ene <sebastianene@google.com>
+> > +	tables->save.size =3D 0x1000;
+> > +	ret =3D sun6i_isp_table_setup(isp_dev, &tables->save);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - qemu,vm-watchdog
-> > +  clock:
-
-Hi,
-
-> 
-> 'clocks' is already a defined property and 'clock' is too close. It's 
-> also ambiguous what it is. 'clock-frequency' instead perhaps.
-> 
-
-Yes, I think 'clock-frequency' is a better name. I will update it.
-
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description: |
-> > +      The watchdog internal clock measure in Hz used to decrement the
-> > +      watchdog counter register on each tick.
-> > +      Defaults to 10 if unset.
-> > +  timeout-sec:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description: |
-> > +      The watchdog expiration timeout measured in seconds.
-> > +      Defaults to 8 if unset.
+> > +	tables->lut.size =3D 0xe00;
+> > +	ret =3D sun6i_isp_table_setup(isp_dev, &tables->lut);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +required:
-> > +  - compatible
+> > +	tables->drc.size =3D 0x600;
+> > +	ret =3D sun6i_isp_table_setup(isp_dev, &tables->drc);
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +additionalProperties: false
+> > +	tables->stats.size =3D 0x2100;
+> > +	ret =3D sun6i_isp_table_setup(isp_dev, &tables->stats);
+>=20
+> You can return already here.
+
+Sure.
+
+> > +	if (ret)
+> > +		return ret;
 > > +
-> > +examples:
-> > +  - |
-> > +    watchdog {
-> > +      compatible = "qemu,vm-watchdog";
-> > +      clock = <10>;
-> > +      timeout-sec = <8>;
-> 
-> How does one access this 'hardware'?
-> 
+> > +	return 0;
+> > +}
+> > +
+> > +static void sun6i_isp_tables_cleanup(struct sun6i_isp_device *isp_dev)
+> > +{
+> > +	struct sun6i_isp_tables *tables =3D &isp_dev->tables;
+> > +
+> > +	sun6i_isp_table_cleanup(isp_dev, &tables->stats);
+> > +	sun6i_isp_table_cleanup(isp_dev, &tables->drc);
+> > +	sun6i_isp_table_cleanup(isp_dev, &tables->lut);
+> > +	sun6i_isp_table_cleanup(isp_dev, &tables->save);
+> > +	sun6i_isp_table_cleanup(isp_dev, &tables->load);
+> > +}
+> > +
+> > +/* Media */
+> > +
+> > +static const struct media_device_ops sun6i_isp_media_ops =3D {
+> > +	.link_notify =3D v4l2_pipeline_link_notify,
+> > +};
+> > +
+> > +/* V4L2 */
+> > +
+> > +static int sun6i_isp_v4l2_setup(struct sun6i_isp_device *isp_dev)
+> > +{
+> > +	struct sun6i_isp_v4l2 *v4l2 =3D &isp_dev->v4l2;
+> > +	struct v4l2_device *v4l2_dev =3D &v4l2->v4l2_dev;
+> > +	struct media_device *media_dev =3D &v4l2->media_dev;
+> > +	struct device *dev =3D isp_dev->dev;
+> > +	int ret;
+> > +
+> > +	/* Media Device */
+> > +
+> > +	strscpy(media_dev->model, SUN6I_ISP_DESCRIPTION,
+> > +		sizeof(media_dev->model));
+> > +	snprintf(media_dev->bus_info, sizeof(media_dev->bus_info),
+> > +		 "platform:%s", dev_name(dev));
+>=20
+> This is no longer needed, see commit b0e38610f40a0f89e34939d2c7420590d67d=
+86a3
 
-This is a MMIO device.
+Thanks!
 
-> Why does this need to be in DT?
-> 
-> We have DT because h/w designers are incapable of making h/w 
-> discoverable. Why repeat that problem with s/w interfaces?
-> 
+> > +	media_dev->ops =3D &sun6i_isp_media_ops;
+> > +	media_dev->hw_revision =3D 0;
+> > +	media_dev->dev =3D dev;
+> > +
+> > +	media_device_init(media_dev);
+> > +
+> > +	ret =3D media_device_register(media_dev);
+> > +	if (ret) {
+> > +		dev_err(dev, "failed to register media device\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	/* V4L2 Control Handler */
+> > +
+> > +	ret =3D v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
+>=20
+> I suppose you intend to add controls later on?
 
-We need to have this one in the DT because in a secure VM we only load
-trusted DT components. 
+I might be wrong but I thought this was necessary to expose sensor controls
+registered by subdevs that end up attached to this v4l2 device.
 
-> Rob
+I doubt the drivers itself will expose controls otherwise.
 
-Thanks,
-Sebastian
+[...]
+
+> > +	isp_dev->clock_ram =3D devm_clk_get(dev, "ram");
+> > +	if (IS_ERR(isp_dev->clock_ram)) {
+> > +		dev_err(dev, "failed to acquire ram clock\n");
+> > +		return PTR_ERR(isp_dev->clock_ram);
+> > +	}
+> > +
+> > +	ret =3D clk_set_rate_exclusive(isp_dev->clock_mod, 297000000);
+>=20
+> Is this also specific to the model?
+
+There is less certainty that another platform that will use this driver
+will need another rate, but I think it would look better to have it in the
+variant anyway.
+
+[...]
+
+> > +static int sun6i_isp_capture_open(struct file *file)
+> > +{
+> > +	struct sun6i_isp_device *isp_dev =3D video_drvdata(file);
+> > +	struct video_device *video_dev =3D &isp_dev->capture.video_dev;
+> > +	struct mutex *lock =3D &isp_dev->capture.lock;
+> > +	int ret;
+> > +
+> > +	if (mutex_lock_interruptible(lock))
+> > +		return -ERESTARTSYS;
+> > +
+> > +	ret =3D v4l2_pipeline_pm_get(&video_dev->entity);
+>=20
+> Do you need this?
+>=20
+> Drivers should primarily depend on runtime PM, this is only needed for
+> compatibility reasons. Instead I'd like to see sensor drivers being moved
+> to runtime PM.
+
+Yes it's still needed to support sensor drivers that don't use rpm yet.
+
+[...]
+
+> > +int sun6i_isp_capture_setup(struct sun6i_isp_device *isp_dev)
+> > +{
+> > +	struct sun6i_isp_capture *capture =3D &isp_dev->capture;
+> > +	struct sun6i_isp_capture_state *state =3D &capture->state;
+> > +	struct v4l2_device *v4l2_dev =3D &isp_dev->v4l2.v4l2_dev;
+> > +	struct v4l2_subdev *proc_subdev =3D &isp_dev->proc.subdev;
+> > +	struct video_device *video_dev =3D &capture->video_dev;
+> > +	struct vb2_queue *queue =3D &capture->queue;
+> > +	struct media_pad *pad =3D &capture->pad;
+> > +	struct v4l2_format *format =3D &capture->format;
+> > +	struct v4l2_pix_format *pix_format =3D &format->fmt.pix;
+> > +	int ret;
+> > +
+> > +	/* State */
+> > +
+> > +	INIT_LIST_HEAD(&state->queue);
+> > +	spin_lock_init(&state->lock);
+> > +
+> > +	/* Media Entity */
+> > +
+> > +	video_dev->entity.ops =3D &sun6i_isp_capture_entity_ops;
+> > +
+> > +	/* Media Pads */
+> > +
+> > +	pad->flags =3D MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_MUST_CONNECT;
+> > +
+> > +	ret =3D media_entity_pads_init(&video_dev->entity, 1, pad);
+> > +	if (ret)
+> > +		goto error_mutex;
+>=20
+> return ret;
+
+Good catch, thanks!
+
+[...]
+
+> > +	ret =3D video_register_device(video_dev, VFL_TYPE_VIDEO, -1);
+> > +	if (ret) {
+> > +		v4l2_err(v4l2_dev, "failed to register video device: %d\n",
+> > +			 ret);
+> > +		goto error_media_entity;
+> > +	}
+> > +
+> > +	v4l2_info(v4l2_dev, "device %s registered as %s\n", video_dev->name,
+> > +		  video_device_node_name(video_dev));
+>=20
+> This isn't really driver specific. I'd drop it.
+
+I agree but I see that many drivers are doing it and the information can
+actually be quite useful at times.
+
+> > +
+> > +	/* Media Pad Link */
+> > +
+> > +	ret =3D media_create_pad_link(&proc_subdev->entity,
+> > +				    SUN6I_ISP_PROC_PAD_SOURCE,
+> > +				    &video_dev->entity, 0,
+> > +				    MEDIA_LNK_FL_ENABLED |
+> > +				    MEDIA_LNK_FL_IMMUTABLE);
+> > +	if (ret < 0) {
+> > +		v4l2_err(v4l2_dev, "failed to create %s:%u -> %s:%u link\n",
+> > +			 proc_subdev->entity.name, SUN6I_ISP_PROC_PAD_SOURCE,
+> > +			 video_dev->entity.name, 0);
+>=20
+> This error message printing would be better to be added to
+> media_create_pad_link().
+
+Yeah that makes sense.
+
+[...]
+
+> > +void sun6i_isp_params_configure(struct sun6i_isp_device *isp_dev)
+> > +{
+> > +	struct sun6i_isp_params_state *state =3D &isp_dev->params.state;
+> > +	unsigned long flags;
+> > +
+> > +	spin_lock_irqsave(&state->lock, flags);
+> > +
+> > +	sun6i_isp_params_configure_base(isp_dev);
+> > +
+> > +	/* Default config is only applied at the very first stream start. */
+> > +	if (state->configured)
+> > +		goto complete;
+> > +
+> > +	 sun6i_isp_params_configure_modules(isp_dev,
+>=20
+> Indentation. Doesn't checkpatch.pl complain?
+
+It doesn't, even with --strict, but that's definitely an issue there.
+
+[...]
+
+> > +static int sun6i_isp_params_querycap(struct file *file, void *private,
+> > +				     struct v4l2_capability *capability)
+> > +{
+> > +	struct sun6i_isp_device *isp_dev =3D video_drvdata(file);
+> > +	struct video_device *video_dev =3D &isp_dev->params.video_dev;
+> > +
+> > +	strscpy(capability->driver, SUN6I_ISP_NAME, sizeof(capability->driver=
+));
+> > +	strscpy(capability->card, video_dev->name, sizeof(capability->card));
+> > +	snprintf(capability->bus_info, sizeof(capability->bus_info),
+> > +		 "platform:%s", dev_name(isp_dev->dev));
+>=20
+> This is no longer needed with commit
+> 2a792fd5cf669d379d82354a99998d9ae9ff7d14 .
+
+Thanks.
+
+[...]
+
+> > +static const struct v4l2_subdev_pad_ops sun6i_isp_proc_pad_ops =3D {
+> > +	.init_cfg	=3D sun6i_isp_proc_init_cfg,
+> > +	.enum_mbus_code	=3D sun6i_isp_proc_enum_mbus_code,
+> > +	.get_fmt	=3D sun6i_isp_proc_get_fmt,
+> > +	.set_fmt	=3D sun6i_isp_proc_set_fmt,
+> > +};
+> > +
+> > +const struct v4l2_subdev_ops sun6i_isp_proc_subdev_ops =3D {
+>=20
+> This can be static, can't it?
+
+Oops, yes and it should be. Same applies to sun6i-csi-bridge actually.
+
+[...]
+
+> > +struct sun6i_isp_params_config_bdnf {
+> > +	__u8	in_dis_min; // 8
+> > +	__u8	in_dis_max; // 10
+>=20
+> Are these default values or something else? Better documentation was in t=
+he
+> TODO.txt file already.
+
+Yes that's the default register values, but these comments are and overlook=
+ on
+my side and should be removed.
+
+Thanks!
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--oDJ9GP/VwhMGHB5u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJqpPMACgkQ3cLmz3+f
+v9HXvQgAn6cRhpKDno79TUNMn+J81Zq+1c5WzbdWbv19cDQ/IqRhnZuPZbKqtZ5I
+VKianyU2Waaf3F7EoCkfIunWmCUiZtOobpv0/05HIXuibtBM6PyQw8pYnW35llD8
+Uf0Cgfb+ogiyTbsTlw4mbtcPSjBqQp/B+cwyxyHDfDmDj9Djm9oXsb1b5agDnG0z
+NXOnNHqNNn1SDG+Q7/0C28EPwT5N8zaaMBK49ORUdA3E2GFwod0LhCGIMnFHGpjw
+MW5cpZKhRBgdGjkAbG7YVcrTW17C3Uzemqoe8zn/7g6p44TZNqruaQ7ZW7KY/8mW
+ZVyXC7w7lTrTnpmy1V1rrOBlHKwwFQ==
+=OasI
+-----END PGP SIGNATURE-----
+
+--oDJ9GP/VwhMGHB5u--

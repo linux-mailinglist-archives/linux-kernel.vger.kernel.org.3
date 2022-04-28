@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2457E512BF0
+	by mail.lfdr.de (Postfix) with ESMTP id 9B07B512BF1
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244540AbiD1GyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        id S244561AbiD1GyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiD1GyN (ORCPT
+        with ESMTP id S244529AbiD1GyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFED2985B8;
-        Wed, 27 Apr 2022 23:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B80E61E28;
+        Thu, 28 Apr 2022 02:54:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1233F986C1
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:51:04 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1njxzP-0003Yt-Of; Thu, 28 Apr 2022 08:50:59 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-6c64-eec7-9c08-9d9e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6c64:eec7:9c08:9d9e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9798E6F68F;
         Thu, 28 Apr 2022 06:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C88CC385A9;
-        Thu, 28 Apr 2022 06:50:56 +0000 (UTC)
-Message-ID: <5c04f8e6-6522-d26c-29fc-60eb18d4ad90@xs4all.nl>
-Date:   Thu, 28 Apr 2022 08:50:54 +0200
+Date:   Thu, 28 Apr 2022 08:50:58 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andreas Larsson <andreas@gaisler.com>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-kernel@vger.kernel.org, software@gaisler.com
+Subject: Re: [PATCH 0/3] can: grcan: Bug fixes
+Message-ID: <20220428065058.mf76kmhamddsqsvk@pengutronix.de>
+References: <20220427134307.22981-1-andreas@gaisler.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Documentation/media: Remove incorrect statement
-Content-Language: en-US
-To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-References: <20220422074024.1329082-1-dorota.czaplejewicz@puri.sm>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220422074024.1329082-1-dorota.czaplejewicz@puri.sm>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3ehkjv647hydu7gq"
+Content-Disposition: inline
+In-Reply-To: <20220427134307.22981-1-andreas@gaisler.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,44 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dorota,
 
-On 22/04/2022 09:50, Dorota Czaplejewicz wrote:
-> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> ---
-> Hi,
-> 
-> I tried to debug streaming in libcamera, where I stumbled upon this. I asked around on IRC where I was told that this statement in the documentation is wrong, so I'm submitting a removal.
+--3ehkjv647hydu7gq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For future reference: a patch needs to start with a commit message,
-followed by your Signed-off-by, then '---' and the patch itself.
+On 27.04.2022 15:43:04, Andreas Larsson wrote:
+> These patches
+> * makes sure that DMA memory is allocated properly
+> * avoids the tx errata workaround needlessly being applied
+> * fixes a bug where the driver can be left hanging without interrupts ena=
+bled
+>=20
+> Andreas Larsson (2):
+>   can: grcan: Fix broken system id check for errata workaround needs
+>   can: grcan: Only use the napi poll budget for rx
+>=20
+> Daniel Hellstrom (1):
+>   can: grcan: use ofdev->dev when allocating DMA memory
 
-I've taking the paragraph above as the commit message, so no need for
-you to do anything here.
+Thanks for the patches. Can you please add a "Fixes:" tag to each patch.
+=46rom the description it seems they should be backported to the stable
+kernels, correct?
 
-Regards,
+regards,
+Marc
 
-	Hans
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> 
-> Cheers,
-> Dorota Czaplejewicz
-> 
->  Documentation/userspace-api/media/v4l/vidioc-streamon.rst | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-streamon.rst b/Documentation/userspace-api/media/v4l/vidioc-streamon.rst
-> index 0bc86f06947b..1a79313a29fa 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-streamon.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-streamon.rst
-> @@ -43,8 +43,7 @@ the capture or output process during streaming
->  Capture hardware is disabled and no input buffers are filled (if there
->  are any empty buffers in the incoming queue) until ``VIDIOC_STREAMON``
->  has been called. Output hardware is disabled and no video signal is
-> -produced until ``VIDIOC_STREAMON`` has been called. The ioctl will
-> -succeed when at least one output buffer is in the incoming queue.
-> +produced until ``VIDIOC_STREAMON`` has been called.
->  
->  Memory-to-memory devices will not start until ``VIDIOC_STREAMON`` has
->  been called for both the capture and output stream types.
+--3ehkjv647hydu7gq
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJqOU8ACgkQrX5LkNig
+0138awf8CRjYpPJ61meelWmMiISKdKDVE6fz2p/o+FqwRqxM9dOkCV+/3WCTMH4b
+EwiTOn87Q5M9qO3M4gkzJhblIvo6HzExaOCKrbHazoTcK4mpWf5T3Ly+bNvMpp10
+oeUwDvc8oE/UIUyWMLtDDcEh1KNQoY/MihhlZwbt/8QXA5gSv+b9QnKRmzAPzI0p
+jGZUINJRUu40P5ZqxZJbHnXj19mTSyTZxcRty3ipvUR99MU8/mfmErQXlMMWdPeq
+IhxM215XSIWaU8bGNkqgyDedqZu4h9mrmsYxNiGf6icKr6Ps3BiwPWl/YQ3bJa6x
+HK/+DZKQvNVP5jw1/8EI5podZHMvXw==
+=QSKS
+-----END PGP SIGNATURE-----
+
+--3ehkjv647hydu7gq--

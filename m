@@ -2,105 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBD5513BF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAF0513C0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351358AbiD1TIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 15:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S1351378AbiD1TPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 15:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351350AbiD1TIK (ORCPT
+        with ESMTP id S238779AbiD1TPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:08:10 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F37BAB86;
-        Thu, 28 Apr 2022 12:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651172695; x=1682708695;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=2+AjbD7jqLLejH2LIwYZzfLa2wTbFMTWJ4g7CUb1Q6A=;
-  b=R1ycRTRbOB/ouqQTrpzbsfAM2jnVZPxiBp45XF+AifAd2fgiUjO3w/0c
-   sqh0CiVzgQDd0pg78imi6UkgWb7BToS5+0xVuzgZIrFBl8QSLseV+UKMT
-   x1YfMq8FxvJBQ1X0gMXDaG/p5UvQ9yenLOlDflt3k8nqpdDk9nbOs8EKf
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 12:04:54 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 12:04:54 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 12:04:54 -0700
-Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 28 Apr 2022 12:04:53 -0700
-From:   Mayank Rana <quic_mrana@quicinc.com>
-To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
-        <mathias.nyman@linux.intel.com>, <stern@rowland.harvard.edu>,
-        <chunfeng.yun@mediatek.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Mayank Rana <quic_mrana@quicinc.com>
-Subject: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
-Date:   Thu, 28 Apr 2022 12:04:48 -0700
-Message-ID: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 28 Apr 2022 15:15:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE269B3C75;
+        Thu, 28 Apr 2022 12:12:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CA64B82F6E;
+        Thu, 28 Apr 2022 19:12:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93EE0C385A0;
+        Thu, 28 Apr 2022 19:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651173137;
+        bh=Z5QrtyPoKtr4EXTz5f8XYaD44MEJLtU/UpYiIT1zJhQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=InTqMwimwY/xTFEieuVIfeswQ0EoYsWCrDONLYTJLJQe3xAd7iMGaEPYN1qBRZS7q
+         i1b7F7wFSFfr5pW+k1pHsP2+K1rGEWUXsgiifuLmsk1Z/yLnZ/NIWHfYlEznZCBqwd
+         GYgkjGQ9NTzNa2yswmEWoaqy5eX5LBMFHMxw//ePSz5Ip0HfgGYJhaC6VM5d7e8Xk7
+         eb/K72NLbZkTquWmEGRMzYUfcwgDQJS5dj4EzMDo41mYbbOyRHjE7KLxKTWj3KPhMb
+         rXXg2VEMGBY97I+7LzkyhwJwMk/6/ysxPAJE8cx/YfUwG9mmLZ0itIViS62avreQDf
+         75qKdG9k7Dz4w==
+Date:   Thu, 28 Apr 2022 14:12:13 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jake Oshins <jakeo@microsoft.com>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: Re: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
+ time
+Message-ID: <20220428191213.GA36573@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SN4PR2101MB0878E466880C047D3A0D0C92ABFB9@SN4PR2101MB0878.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ring_doorbell_for_active_rings() API is being called from
-multiple context. This specific API tries to get virt_dev
-based endpoint using passed slot_id and ep_index. Some caller
-API is having check against slot_id and ep_index using
-xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
-only check ep_index against -1 value but not upper bound i.e.
-EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
-based endpoint which checks both slot_id and ep_index to get
-valid endpoint.
+On Tue, Apr 26, 2022 at 07:25:43PM +0000, Jake Oshins wrote:
+> > -----Original Message-----
+> > From: Dexuan Cui <decui@microsoft.com>
+> > Sent: Tuesday, April 26, 2022 11:32 AM
+> > To: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: Jake Oshins <jakeo@microsoft.com>; Bjorn Helgaas <helgaas@kernel.org>;
+> > bhelgaas@google.com; Alex Williamson <alex.williamson@redhat.com>;
+> > wei.liu@kernel.org; KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
+> > <haiyangz@microsoft.com>; Stephen Hemminger <sthemmin@microsoft.com>;
+> > linux-hyperv@vger.kernel.org; linux-pci@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Michael Kelley (LINUX) <mikelley@microsoft.com>;
+> > robh@kernel.org; kw@linux.com; kvm@vger.kernel.org
+> > Subject: RE: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce
+> > VM boot time
+> > 
+> > > From: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > > Sent: Tuesday, April 26, 2022 9:45 AM
+> > > > ...
+> > > > Sorry I don't quite follow. pci-hyperv allocates MMIO for the bridge
+> > > > window in hv_pci_allocate_bridge_windows() and registers the MMIO
+> > > > ranges to the core PCI driver via pci_add_resource(), and later the
+> > > > core PCI driver probes the bus/device(s), validates the BAR sizes
+> > > > and the pre-initialized BAR values, and uses the BAR configuration.
+> > > > IMO the whole process doesn't require the bit PCI_COMMAND_MEMORY to
+> > > > be pre-set, and there should be no issue to delay setting the bit to
+> > > > a PCI device device's .probe() -> pci_enable_device().
+> > >
+> > > IIUC you want to bootstrap devices with PCI_COMMAND_MEMORY clear
+> > > (otherwise PCI core would toggle it on and off for eg BAR sizing).
+> > >
+> > > Is that correct ?
+> > 
+> > Yes, that's the exact purpose of this patch.
+> > 
+> > Do you see any potential architectural issue with the patch?
+> > From my reading of the core PCI code, it looks like this should be safe.
 
-Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
----
- drivers/usb/host/xhci-ring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+I don't know much about Hyper-V, but in general I don't think the PCI
+core should turn on PCI_COMMAND_MEMORY at all unless a driver requests
+it.  I assume that if a guest OS depends on PCI_COMMAND_MEMORY being
+set, guest firmware would take care of setting it.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index d0b6806..3bab4f3 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -62,6 +62,9 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 			 u32 field1, u32 field2,
- 			 u32 field3, u32 field4, bool command_must_succeed);
- 
-+static struct xhci_virt_ep *xhci_get_virt_ep(struct xhci_hcd *xhci,
-+			unsigned int slot_id, unsigned int ep_index);
-+
- /*
-  * Returns zero if the TRB isn't in this segment, otherwise it returns the DMA
-  * address of the TRB.
-@@ -457,7 +460,9 @@ static void ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
- 	unsigned int stream_id;
- 	struct xhci_virt_ep *ep;
- 
--	ep = &xhci->devs[slot_id]->eps[ep_index];
-+	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
-+	if (!ep)
-+		return;
- 
- 	/* A ring has pending URBs if its TD list is not empty */
- 	if (!(ep->ep_state & EP_HAS_STREAMS)) {
--- 
-2.7.4
+> > Jake has some concerns that I don't quite follow.
+> > @Jake, could you please explain the concerns with more details?
+> 
+> First, let me say that I really don't know whether this is an issue.
+> I know it's an issue with other operating system kernels.  I'm
+> curious whether the Linux kernel / Linux PCI driver would behave in
+> a way that has an issue here.
+> 
+> The VM has a window of address space into which it chooses to put
+> PCI device's BARs.  The guest OS will generally pick the value that
+> is within the BAR, by default, but it can theoretically place the
+> device in any free address space.  The subset of the VM's memory
+> address space which can be populated by devices' BARs is finite, and
+> generally not particularly large.
+> 
+> Imagine a VM that is configured with 25 NVMe controllers, each of
+> which requires 64KiB of address space.  (This is just an example.)
+> At first boot, all of these NVMe controllers are packed into address
+> space, one after the other.
+> 
+> While that VM is running, one of the 25 NVMe controllers fails and
+> is replaced with an NVMe controller from a separate manufacturer,
+> but this one requires 128KiB of memory, for some reason.  Perhaps it
+> implements the "controller buffer" feature of NVMe.  It doesn't fit
+> in the hole that was vacated by the failed NVMe controller, so it
+> needs to be placed somewhere else in address space.  This process
+> continues over months, with several more failures and replacements.
+> Eventually, the address space is very fragmented.
+> 
+> At some point, there is an attempt to place an NVMe controller into
+> the VM but there is no contiguous block of address space free which
+> would allow that NVMe controller to operate.  There is, however,
+> enough total address space if the other, currently functioning, NVMe
+> controllers are moved from the address space that they are using to
+> other ranges, consolidating their usage and reducing fragmentation.
+> Let's call this a rebalancing of memory resources.
+> 
+> When the NVMe controllers are moved, a new value is written into
+> their BAR.  In general, the PCI spec would require that you clear
+> the memory enable bit in the command register (PCI_COMMAND_MEMORY)
+> during this move operation, both so that there's never a moment when
+> two devices are occupying the same address space and because writing
+> a 64-bit BAR atomically isn't possible.  This is the reason that I
+> originally wrote the code in this driver to unmap the device from
+> the VM's address space when the memory enable bit is cleared.
+> 
+> What I don't know is whether this sequence of operations can ever
+> happen in Linux, or perhaps in a VM running Linux.  Will it
+> rebalance resources in order to consolidate address space?  If it
+> will, will this involve clearing the memory enable bit to ensure
+> that two devices never overlap?
 
+This sequence definitely can occur in Linux, but it hasn't yet become
+a real priority.  But we do already have issues with assigning space
+for hot-added devices in general, especially if firmware hasn't
+assigned large windows to things like Thunderbolt controllers.  I
+suspect that we have or will soon have issues where resource
+assignment starts failing after a few hotplugs, e.g., dock/undock
+events.
+
+There have been patches posted to rebalance resources (quiesce
+drivers, reassign, restart drivers), but they haven't gone anywhere
+yet for lack of interest and momentum.  I do feel like we're the
+tracks and the train is coming, though ;)
+
+Bjorn

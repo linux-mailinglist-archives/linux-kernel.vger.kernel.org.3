@@ -2,107 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3572651396E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5703F513974
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349797AbiD1QNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S1349806AbiD1QQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiD1QNn (ORCPT
+        with ESMTP id S1349603AbiD1QQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:13:43 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0317B11C03;
-        Thu, 28 Apr 2022 09:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Lg8SqQYCcNFGIKioQXjUK2uICLPTc1JMobWkPo+n0W8=; b=QQjuN2cWLD2QjLNCxlFpCNSYOl
-        YgRRXme+rrRbihUv5AuBfn2TfzHJpmudJquvxC9wp5DQY5QDZQHKbkPIfonWw0z87lTFSmXRdWC8G
-        bkZT9F5/eR7ZPuf1TEFCOkDAXUIItjikmTOyUkrUPPMzP9A5Lf7e2jR6pMb4G6LoIGv1+cSvGBQRJ
-        dzsIyjuSiQH6/mwgYkbuuNHfDTTbkiPgHkXbMZ/HoHrPHumFj7hx1S9jlN/Cybv9c5cguOGbxGzWs
-        8Ewx4M5gL3u7LRkeMltPCf2/4nLnDNUrqA7h18kF/NAW/6AWB9h5pPsT3wRbV2+Na0gfBJ2XRxDjc
-        C+RNX82Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nk6iK-009Muv-UM; Thu, 28 Apr 2022 16:09:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0AB7D30031D;
-        Thu, 28 Apr 2022 18:09:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DF3592029F886; Thu, 28 Apr 2022 18:09:53 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 18:09:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
- ptrace_check_attach
-Message-ID: <Ymq8UafDbJEjSoB0@hirez.programming.kicks-ass.net>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-7-ebiederm@xmission.com>
- <20220427151455.GE17421@redhat.com>
- <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
- <20220428111911.GA3804@redhat.com>
- <YmqckaB+xB6azP1d@hirez.programming.kicks-ass.net>
- <20220428145750.GA15485@redhat.com>
+        Thu, 28 Apr 2022 12:16:20 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE71813D3E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651162381; x=1682698381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FrfyPGyrRql3+c1AJp/BIgQHA9i1fgkYU3oOQT+9KWw=;
+  b=XQayxy73JjwEUoreQ9TJ2Fs6djX5nEbPSZf4LU0pZ/RERDMy6VUSAm6B
+   kZq3jI1GPuCrK8DaY7vJd6WfrylnYs0WDydbgM7qsQhfpUr5aGDc+He/g
+   qptMnA8Qdc0Q9enyUaqFcior31198nQfvMi0XcFv7363u/VJrXAoeinAc
+   Q=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 09:13:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 09:13:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 09:13:00 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
+ 2022 09:12:57 -0700
+Date:   Thu, 28 Apr 2022 12:12:54 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+CC:     <andrey.konovalov@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH v6 00/39] kasan, vmalloc, arm64: add vmalloc tagging
+ support for SW/HW_TAGS
+Message-ID: <20220428161254.GA182@qian>
+References: <cover.1643047180.git.andreyknvl@google.com>
+ <20220428141356.GB71@qian>
+ <CA+fCnZesRG_WLi2fEHtG=oNLt2oJ7RrZuwuCm_rQDPZLoZr-3g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220428145750.GA15485@redhat.com>
+In-Reply-To: <CA+fCnZesRG_WLi2fEHtG=oNLt2oJ7RrZuwuCm_rQDPZLoZr-3g@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 04:57:50PM +0200, Oleg Nesterov wrote:
-
-> > Shouldn't we then switch wait_task_inactive() so have & matching instead
-> > of the current ==.
+On Thu, Apr 28, 2022 at 05:28:12PM +0200, Andrey Konovalov wrote:
+> No ideas so far.
 > 
-> Sorry, I don't understand the context...
+> Looks like the page has reserved tag set when it's being freed.
+> 
+> Does this crash only happen with the SW_TAGS mode?
 
-This.. I've always found it strange to have wti use a different matching
-scheme from ttwu.
+No, the system is running exclusively with CONFIG_KASAN_GENERIC=y
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index f259621f4c93..c039aef4c8fe 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3304,7 +3304,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
- 		 * is actually now running somewhere else!
- 		 */
- 		while (task_running(rq, p)) {
--			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
-+			if (match_state && unlikely(!(READ_ONCE(p->__state) & match_state)))
- 				return 0;
- 			cpu_relax();
- 		}
-@@ -3319,7 +3319,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
- 		running = task_running(rq, p);
- 		queued = task_on_rq_queued(p);
- 		ncsw = 0;
--		if (!match_state || READ_ONCE(p->__state) == match_state)
-+		if (!match_state || (READ_ONCE(p->__state) & match_state))
- 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
- 		task_rq_unlock(rq, p, &rf);
- 
+> Does this crash only happen when loading modules?
+
+Yes. Here is another sligtly different path at the bottom.
+
+> Does your system have any hot-plugged memory?
+
+No.
+
+ BUG: Bad page state in process systemd-udevd  pfn:403fc007c
+ page:fffffd00fd001f00 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x403fc007c
+ flags: 0x1bfffc0000001000(reserved|node=1|zone=2|lastcpupid=0xffff)
+ raw: 1bfffc0000001000 fffffd00fd001f08 fffffd00fd001f08 0000000000000000
+ raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+ page dumped because: PAGE_FLAGS_CHECK_AT_FREE flag(s) set
+ CPU: 101 PID: 2004 Comm: systemd-udevd Not tainted 5.17.0-rc8-next-20220317-dirty #39
+ Call trace:
+  dump_backtrace
+  show_stack
+  dump_stack_lvl
+  dump_stack
+  bad_page
+  free_pcp_prepare
+  free_pages_prepare at mm/page_alloc.c:1348
+  (inlined by) free_pcp_prepare at mm/page_alloc.c:1403
+  free_unref_page
+  __free_pages
+  free_pages.part.0
+  free_pages
+  kasan_depopulate_vmalloc_pte
+  (inlined by) kasan_depopulate_vmalloc_pte at mm/kasan/shadow.c:359
+  apply_to_pte_range
+  apply_to_pte_range at mm/memory.c:2547
+  apply_to_pmd_range
+  apply_to_pud_range
+  __apply_to_page_range
+  apply_to_existing_page_range
+  kasan_release_vmalloc
+  (inlined by) kasan_release_vmalloc at mm/kasan/shadow.c:469
+  __purge_vmap_area_lazy
+  _vm_unmap_aliases.part.0
+  __vunmap
+  __vfree
+  vfree
+  module_memfree
+  free_module
+  do_init_module
+  load_module
+  __do_sys_finit_module
+  __arm64_sys_finit_module
+  invoke_syscall
+  el0_svc_common.constprop.0
+  do_el0_svc
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync
+ Disabling lock debugging due to kernel taint
+ BUG: Bad page state in process systemd-udevd  pfn:403fc007b
+ page:fffffd00fd001ec0 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x403fc007b
+ flags: 0x1bfffc0000001000(reserved|node=1|zone=2|lastcpupid=0xffff)
+ raw: 1bfffc0000001000 fffffd00fd001ec8 fffffd00fd001ec8 0000000000000000
+ raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+ page dumped because: PAGE_FLAGS_CHECK_AT_FREE flag(s) set
+ CPU: 101 PID: 2004 Comm: systemd-udevd Tainted: G    B             5.17.0-rc8-next-20220317-dirty #39
+ Call trace:
+  dump_backtrace
+  show_stack
+  dump_stack_lvl
+  dump_stack
+  bad_page
+  free_pcp_prepare
+  free_unref_page
+  __free_pages
+  free_pages.part.0
+  free_pages
+  kasan_depopulate_vmalloc_pte
+  apply_to_pte_range
+  apply_to_pmd_range
+  apply_to_pud_range
+  __apply_to_page_range
+  apply_to_existing_page_range
+  kasan_release_vmalloc
+  __purge_vmap_area_lazy
+  _vm_unmap_aliases.part.0
+  __vunmap
+  __vfree
+  vfree
+  module_memfree
+  free_module
+  do_init_module
+  load_module
+  __do_sys_finit_module
+  __arm64_sys_finit_module
+  invoke_syscall
+  el0_svc_common.constprop.0
+  do_el0_svc
+  el0_svc
+  el0t_64_sync_handler
+  el0t_64_sync

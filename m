@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284295132EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53D15132ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345784AbiD1L6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S1345799AbiD1L7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240712AbiD1L6e (ORCPT
+        with ESMTP id S240712AbiD1L7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:58:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0B5887A6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:55:19 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id x17so8141733lfa.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:55:19 -0700 (PDT)
+        Thu, 28 Apr 2022 07:59:08 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBB4888D8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:55:54 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id k14so3829782pga.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:55:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=2Yz3tOWHL+ez8i8Sa2barju/WRxAdVvNy5VEOJkJajY=;
-        b=gxIilcxAmzFhXZuf3sqFfqGSlb+pC+SZeBrFa9J3KQ4qzpreZHMOU5qzgUbCa/3Ds/
-         95hfRTDAbS/qQqUD3Urd8ew5OZ/q7EGIXcyF1TEkvFodXvqyLL9Lg1f6E9wZF6eXS4fe
-         kMu5N4Pnc/nLglhf1Fij5nwbzBI5jGAQSVi2zblzAIGsYomGO57yATkNEdq6YLWzODQf
-         uWGOPEUBO048HDXACmSGOxZho2P+FyRQ10P12PSTBjYN4ChqU66+VyfWfANKyQXMsFBt
-         hkPlSCPF5e5zu+BFo8+ctrBZ69vLf6s8ZNv2iCYQEBiTLQDpd53sp5R9+h3GYQpc5HXQ
-         c+Hg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nNaL4oWbSaoZkugEaXO//WHohZesy6t6T5egzcvNBJU=;
+        b=UE5paQOXIHvF+isxo/nkvMlIFVMoOhZoeSphPe2amLG90ZyGcyfxpF4r3SAfjM3I3l
+         FSYZoVv6EmF4O+hzZ60QiNtYcspZ6TeKJAQsXgKt7PBF7yzn9IpVuWAbQ4TKvgAlrRRR
+         tJHf/NwVNB+it9VNHHhpIpA99ZfIfetWmM6au/TMlwiZizoHaLGf5eQOwUwViLrN7vpN
+         yR8tqWZCedbNBJt5wGh+Zw2Rg35LZgIpwIArw3gZtoARF0DZlPZHGyLrIaQLJAwqM0PK
+         AHUPTFgemhWKs6bzsmiZi0rIG9eshdOgu0rbj+uJFTxf6sA5ZTFLNPC1L74aSxUB6D3U
+         r7Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=2Yz3tOWHL+ez8i8Sa2barju/WRxAdVvNy5VEOJkJajY=;
-        b=gwgPNfXBlkuYdcNQr8HE5N4Mrs0yNaqhCIuAsOjCqgFcpjc9/aCx6t6G87SK/cOTiR
-         9NF7G5dB06gfMYD60AuXQ2H99YGJ+n7et5MBfS/XAI4iKo6DH7p5/FbCvNYEU75Yiy2H
-         eFH2WUaSuienQZd/VyRL+TmrEHGi7iJWKPr61m6/mAhPKxnrzOEK4a0Jat22vlfMQ5Q7
-         2Lu8gXYkkRE27KDtgAR6bocsPUVoxC3YgMuim7Tdo5lL1rIcl9OeY0dsZewtxE0y7i0W
-         CmFLyE8zwmrEYyOffOFU9fDrwj9fmlrT6q3Cei11zBfS9nN7SM/RkSvfvyGXdk4rlxP+
-         5jMQ==
-X-Gm-Message-State: AOAM532epWka+yHgG4cMEMQJ4/i+Gk+xVwa2dw412l93u93Y5W0M2Bg/
-        h51oc70E4cDRpgInRfZW59n7d8kdAXLB41pedxg=
-X-Google-Smtp-Source: ABdhPJy961kAxggOIO+ZTh0LS7gqVCMdSfuYt0nOHUFCD9G1gkfjPCwdA+9BQvSSyCBoxkVt4Y0lqvHnZqSroVZ4MV0=
-X-Received: by 2002:a19:8c1a:0:b0:472:315:48db with SMTP id
- o26-20020a198c1a000000b00472031548dbmr15447607lfd.235.1651146917650; Thu, 28
- Apr 2022 04:55:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nNaL4oWbSaoZkugEaXO//WHohZesy6t6T5egzcvNBJU=;
+        b=pHfKW7YxaxjQzmfc5tt77T926v0rPhBbuEnazSRM9nBpNImKP915EfqZg9OEsf0pWr
+         yHz81dlbw3IfUSSFD0ToyZ0XLI7LC98x2fKa+3wtZYnCUI1v2bMyPusQCtojopcHLlc7
+         q1EBaZ8qXHwiXsR80W1twuEeQ7vUegwfzCGUjW8FnoeBiaWA0pm9KPDru/OhJg2jN1//
+         zjBCLkAPQXvwKYfqAITAuqvGv4yCZn2gbvtxCA43s8yPJqI8UgPMBPHmjUvAvBZ6y0iF
+         ayxvSNapC0CBF9ovyT/bfOlsSXH0iKL8wxOhIa76xkrPvA8JplWDCYKrjTWN5xrF6NSC
+         FzPw==
+X-Gm-Message-State: AOAM530AuHNC1pWzEpsszBIAeR9buvJFI0dV4+/QTfzfEa4VOQ2u+ZcD
+        OKuCw76S16Iohsv6kMlzQcKBhMXN85U=
+X-Google-Smtp-Source: ABdhPJxM4TdmZDJGCeZu3o4bX2/jcid6E3rTBlyeeKlcZ3F9o6XszzHtsfq7fRTAYiVk6TSn/Uvebg==
+X-Received: by 2002:a62:5ec6:0:b0:50d:a467:3cb7 with SMTP id s189-20020a625ec6000000b0050da4673cb7mr569675pfb.85.1651146953687;
+        Thu, 28 Apr 2022 04:55:53 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id q2-20020a17090a064200b001cd498dc152sm12244744pje.2.2022.04.28.04.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 04:55:53 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 20:55:51 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     openrisc@lists.librecores.org, linux-kernel@vger.kernel.org,
+        Peter Maydell <peter.maydell@linaro.org>
+Subject: Re: [PATCH] openrisc: define nop command for simulator reboot
+Message-ID: <YmqAx31dtXCaNn7R@antec>
+References: <20220428111139.1330966-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:181:b0:1be:92ad:cad9 with HTTP; Thu, 28 Apr 2022
- 04:55:17 -0700 (PDT)
-Reply-To: ahmdkalifaz@gmail.com
-From:   Ahmed kalifa <hwbkbq@gmail.com>
-Date:   Thu, 28 Apr 2022 04:55:17 -0700
-Message-ID: <CAH_uxJEqj4bvzrG=sHpqc3DPU7KKo_QsH=EscqSmFsqambvDnw@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  1.0 HK_RANDOM_FROM From username looks random
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [hwbkbq[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428111139.1330966-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
+On Thu, Apr 28, 2022 at 01:11:39PM +0200, Jason A. Donenfeld wrote:
+> The simulator defines `l.nop 1` for shutdown, but doesn't have anything
+> for reboot. Use 13 for this, which is currently unused, dubbed
+> `NOP_REBOOT`.
+> 
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: Peter Maydell <peter.maydell@linaro.org>
+> Link: https://lore.kernel.org/all/YmnaDUpVI5ihgvg6@zx2c4.com/
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/openrisc/kernel/process.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
+> index 3c0c91bcdcba..4cce95fa6eb5 100644
+> --- a/arch/openrisc/kernel/process.c
+> +++ b/arch/openrisc/kernel/process.c
+> @@ -52,6 +52,8 @@ void machine_restart(char *cmd)
+>  {
+>  	do_kernel_restart(cmd);
+>  
+> +	__asm__("l.nop 13");
+> +
+>  	/* Give a grace period for failure to restart of 1s */
+>  	mdelay(1000);
+>  
+> -- 
+> 2.35.1
 
-Attention Please,
+This seems fair, probably it would be good to have a comment mentioninmg what
+the nop is for, fyi for context these are the nop numbers used to control
+simulations.
 
-My name is Mr.Ahmed Kalifa, Branch Manager Dubai Islamic Bank United
-Arab Emirate
-Are you the real owner of this email address? I have important information
-to the owner of this email address.
-Due to the sensitivity of the information, I want to be sure I am
-communicating with the rightful owner of this email
-address to avoid making a mistake.
-write to me so that i can give you the important information for your own good.
-Congratulations if you are the real owner of this email address.
-I am waiting for your speedy response
-Thank you for your understanding
-warm regards from
-Mr.Ahmed kalifa
+    #define NOP_NOP          0x0000      /* Normal nop instruction */
+    #define NOP_EXIT         0x0001      /* End of simulation */
+    #define NOP_REPORT       0x0002      /* Simple report */
+    /*#define NOP_PRINTF       0x0003       Simprintf instruction (obsolete)*/
+    #define NOP_PUTC         0x0004      /* JPB: Simputc instruction */
+    #define NOP_CNT_RESET    0x0005      /* Reset statistics counters */
+    #define NOP_GET_TICKS    0x0006      /* JPB: Get # ticks running */
+    #define NOP_GET_PS       0x0007      /* JPB: Get picosecs/cycle */
+    #define NOP_TRACE_ON     0x0008      /* Turn on tracing */
+    #define NOP_TRACE_OFF    0x0009      /* Turn off tracing */
+    #define NOP_RANDOM       0x000a      /* Return 4 random bytes */
+    #define NOP_OR1KSIM      0x000b      /* Return non-zero if this is Or1ksim */
+    #define NOP_EXIT_SILENT  0x000c      /* End of simulation, quiet version */
+    /* New! */
+    #define NOP_RESET        0x000d      /* Reset the cpu */
+
+I will queue this once we update the spec to define some of these, I am thinking
+if qemu should allow for the shutdown to work in user mode.
+
+BTW, are you working specifically on openrisc? Or just setting up test
+environments for all architectures?
+
+Acked-by: Stafford Horne <shorne@gmail.com>
+

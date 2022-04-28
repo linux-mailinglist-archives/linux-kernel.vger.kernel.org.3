@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB1B513BCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF8E513BCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351232AbiD1StV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S1351246AbiD1Svq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbiD1StS (ORCPT
+        with ESMTP id S233258AbiD1Svl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:49:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDBF7893A;
-        Thu, 28 Apr 2022 11:46:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27C2E61C9C;
-        Thu, 28 Apr 2022 18:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A280C385B2;
-        Thu, 28 Apr 2022 18:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651171561;
-        bh=W8f7fDe36f4f+Eym6CMYV+jfkS0Qx3jHXxH9asFg4vc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jdAyFQOJDF9rwjgLlTOYxJfRcvhjskJT4OsMiwRI9nKf3eDbCeiT2XPq5XDO0y+5e
-         TdycQjji4IK2tU9MCqIV+b7ri4IN0lz+6WC9rLv60g365aJL6stisYuRi6CRDmO14i
-         xoMkRAJmdBNNWlf4VxIkWQWlL2Ba33e5YZWhT1lSyrtOKphWd2FvU1v6HLovbW2DkI
-         T24+ctCML/jVBTEPFJ+g8rITrT6dA64oqBY2v70nMfP+4ypnhWxCgi7WaqJ8fXVghI
-         WAGgZHspGFvhfjyoJTQsJ42ifDQU5WiXJHTLUyAO8+n6oKXaSYGUlXcaSSKnONUxiM
-         hhpOVE21BpILg==
-Received: by mail-pj1-f49.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so5201328pjf.3;
-        Thu, 28 Apr 2022 11:46:01 -0700 (PDT)
-X-Gm-Message-State: AOAM530cFLSl3FUfDDchAlFBWIv0MEzsFD7xqaDNe0M3Qr6b8ZEMropD
-        mXot6qKstkGQKx+h0mTUB6Kml/txN5D56XOb0g==
-X-Google-Smtp-Source: ABdhPJxmdsC0BMphKfk6yRxPeHZONR7yfWAe7UKYtouukIIEoW+HJaG2vJEzGYNWAi5NxIAy4BbGAWutgditCSWB0hY=
-X-Received: by 2002:a17:902:b694:b0:153:1d9a:11a5 with SMTP id
- c20-20020a170902b69400b001531d9a11a5mr34601834pls.151.1651171560862; Thu, 28
- Apr 2022 11:46:00 -0700 (PDT)
+        Thu, 28 Apr 2022 14:51:41 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1407C7BC;
+        Thu, 28 Apr 2022 11:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651171705; x=1682707705;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=2+AjbD7jqLLejH2LIwYZzfLa2wTbFMTWJ4g7CUb1Q6A=;
+  b=kiIDLYIprQ3fnULc2kIRrGw64Lo9lAY33ir4jsrujOYL90B8Qoi1//tK
+   mw3xv1KYUACmXllyRtwMI/mTgXDKuQB9ETRWvtVBOvfdaCWcbJtFiP9D3
+   Zwt4+y3wuwKVmt7VSMSfIHfQyuCj9kE597vgEMYB92VkmK93gbOJBehWy
+   Q=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 11:48:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 11:48:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 11:48:24 -0700
+Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 11:48:24 -0700
+From:   Mayank Rana <quic_mrana@quicinc.com>
+To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Mayank Rana <quic_mrana@quicinc.com>
+Subject: [PATCH] xhci: Use xhci_get_virt_ep() to validate ep_index
+Date:   Thu, 28 Apr 2022 11:47:52 -0700
+Message-ID: <1651171672-9774-1-git-send-email-quic_mrana@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220423085319.483524-1-markuss.broks@gmail.com>
- <20220423085319.483524-3-markuss.broks@gmail.com> <CAL_Jsq+hBtuet-WShvvLA7vfdFdpGRSmv45bcqQhoediq7a7xQ@mail.gmail.com>
- <5b2c429b-11ad-0d14-a106-d4b1d29d69e1@gmail.com>
-In-Reply-To: <5b2c429b-11ad-0d14-a106-d4b1d29d69e1@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 28 Apr 2022 13:45:49 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+Cb335=sb1aOM0TDT+7LMKFYbc-diW0V1PRkA-ASJHuw@mail.gmail.com>
-Message-ID: <CAL_Jsq+Cb335=sb1aOM0TDT+7LMKFYbc-diW0V1PRkA-ASJHuw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/5] dt-bindings: regulator: Add bindings for Silicon
- Mitus SM5703 regulators
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        phone-devel@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS
-        <devicetree@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>, Andy
-        Shevchenko <andy.shevchenko@gmail.com>," 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 12:04 PM Markuss Broks <markuss.broks@gmail.com> wrote:
->
-> Hi Rob,
->
-> On 4/28/22 19:36, Rob Herring wrote:
-> > On Sat, Apr 23, 2022 at 3:54 AM Markuss Broks <markuss.broks@gmail.com> wrote:
-> >> This patch adds device-tree bindings for regulators on Silicon Mitus
-> >> SM5703 MFD.
-> >>
-> >> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> >> ---
-> >>   .../siliconmitus,sm5703-regulator.yaml        | 49 +++++++++++++++++++
-> >>   1 file changed, 49 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml b/Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> >> new file mode 100644
-> >> index 000000000000..75ff16b58000
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> >> @@ -0,0 +1,49 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/regulator/siliconmitus,sm5703-regulator.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Silicon Mitus SM5703 multi function device regulators
-> >> +
-> >> +maintainers:
-> >> +  - Markuss Broks <markuss.broks@gmail.com>
-> >> +
-> >> +description: |
-> >> +  SM5703 regulators node should be a sub node of the SM5703 MFD node. See SM5703 MFD
-> >> +  bindings at Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-> >> +  Regulator nodes should be named as USBLDO_<number>, BUCK, VBUS, LDO_<number>.
-> >> +  The definition for each of these nodes is defined using the standard
-> >> +  binding for regulators at Documentation/devicetree/bindings/regulator/regulator.txt.
-> >> +
-> >> +properties:
-> >> +  buck:
-> >> +    type: object
-> >> +    $ref: regulators.yaml#
-> > The correct file is regulator.yaml.
-> I was applying all the suggestions, and I thought I had somehow made a
-> typo referring to a wrong file.
->
-> Do I re-send the whole series with just the s/regulators/regulator/g? A
-> part of series has already been merged, do I not re-send the already
-> merged patches then?
+ring_doorbell_for_active_rings() API is being called from
+multiple context. This specific API tries to get virt_dev
+based endpoint using passed slot_id and ep_index. Some caller
+API is having check against slot_id and ep_index using
+xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
+only check ep_index against -1 value but not upper bound i.e.
+EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
+based endpoint which checks both slot_id and ep_index to get
+valid endpoint.
 
-Just send an incremental patch fixing the file name. If there are then
-errors in the example, then you need to resend the MFD binding with
-the errors fixed. Unless Lee applies v5 before you do that, then you
-need an incremental fix for example.
+Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
+---
+ drivers/usb/host/xhci-ring.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Rob
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index d0b6806..3bab4f3 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -62,6 +62,9 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 			 u32 field1, u32 field2,
+ 			 u32 field3, u32 field4, bool command_must_succeed);
+ 
++static struct xhci_virt_ep *xhci_get_virt_ep(struct xhci_hcd *xhci,
++			unsigned int slot_id, unsigned int ep_index);
++
+ /*
+  * Returns zero if the TRB isn't in this segment, otherwise it returns the DMA
+  * address of the TRB.
+@@ -457,7 +460,9 @@ static void ring_doorbell_for_active_rings(struct xhci_hcd *xhci,
+ 	unsigned int stream_id;
+ 	struct xhci_virt_ep *ep;
+ 
+-	ep = &xhci->devs[slot_id]->eps[ep_index];
++	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
++	if (!ep)
++		return;
+ 
+ 	/* A ring has pending URBs if its TD list is not empty */
+ 	if (!(ep->ep_state & EP_HAS_STREAMS)) {
+-- 
+2.7.4
+

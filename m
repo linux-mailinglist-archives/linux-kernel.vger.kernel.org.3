@@ -2,128 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB50513EA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E89B513EA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352994AbiD1Wsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S1353006AbiD1Wsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352965AbiD1Wsj (ORCPT
+        with ESMTP id S1353002AbiD1Wsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:48:39 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1FC48E7D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:45:23 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y38so5433979pfa.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:45:23 -0700 (PDT)
+        Thu, 28 Apr 2022 18:48:51 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DA76D959
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:45:35 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2f7bb893309so68307447b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AqP7wSbo7WSzSy4l6HYEqupzMjO7gFTkhIq2MzyNb0A=;
-        b=JqDgqAkqxRfNNLmqV0twQnowQWIPaTFVuaA6ZtSE2/W9+7fCBmVrEfYajEb2YLBSLl
-         FLK4CRbHHZ7Adr96TTRTSNLbqFpTqCm7lDaCsi+ReAeevvlfLijXIIlJHigrlO3hAWxH
-         9EpDd9RGsANOfddzRbR+hpqBrPEqHTT7QYWnYEaqkBdZ10YQaukl3uZrWNJqv34AEams
-         bj+/Y7gd5kuuqZ9mbAxfsdfhb7PnR7I84PbvfJeEF0ZN22JHRTnofBOZ6YxtLY+84DS8
-         wm8xYzPO7IECkoYW9eMr9CEEIgSONOgWiY8dURFPl9tPSea7arRJiDHQU09dGvY3WFnz
-         ivIw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XkmOscz6Mc+5H3+Udfs/NfG990JbZUB2dYQyp2GJrN4=;
+        b=vz7NRauf0EG54juKPujkkZltzo2l0Om4ePkuCtqObvhSgW9DzlI01iuA+iEA87Cnk2
+         5UROHJCTf5USpL8Q5U9qYPiMMTNYC6BedG8sZWKavsjbyETCYhOpufuSMx5bNzazCwHz
+         2ICG2PszXuo2lNUkraa/BDHrxyaHhUQQCsSB32YVCTLqqVEenn4PDqreNDAdZnIjNocr
+         iLg/2Xa1KrqS0oLofQ/xMGYj3VdTF1VNbr4XwVLqtY+W7U2x30S0DSrm+48AQjLahUv2
+         COgiq/fC43iEO1o6hiR6VTYCqIcPlbRJ7QpKd2CZsdiToW9Uf+bPTxIKdwBuYuiTcafY
+         izrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AqP7wSbo7WSzSy4l6HYEqupzMjO7gFTkhIq2MzyNb0A=;
-        b=0e7oMPk5oSqc2WWY/D2XJqbipbJbKwMJnYrpzTD6E5TxnNefvpxP+3PT6GQ8D+Ab2g
-         /S9jfUEsOGNuMrMw7Kax5drfZ2QR7BzS+kgr7e7uK4v8YjcGmBQ/MIpW4kQbGh+qejHU
-         nr4yIXro4OIO9CXgiOlJlCk27oYkZEU+LEWBUYJLO9WZlAvVy+CV6y7sff5fi8vTM43M
-         Ux0BVWuEJV66qLLsGi+5MBwApPg9/f9V7GfUr7jaQO6+3DNGGfc+csv9cXmPZ25Srjzl
-         RG0oEhbyTHeUwBVqLw+Z3AnejZBaAtwotiPEQjEx5gluzWyasstDRZBkK0iugK5JWIaL
-         sqfQ==
-X-Gm-Message-State: AOAM530tJbe9Dv1SPJjDe4D51U15UCWcaWzw9Un8c+iNA2/UvhAr69y+
-        jrRuFCUQ7Q88jnXBU7PVCNhkMA==
-X-Google-Smtp-Source: ABdhPJwsExo1O7NKf8dvwXFhJjc/mnTP4ZYbb9E59TysQme5AwpU/tMHJ2sr1oRhM5YRyDB3LjC4pg==
-X-Received: by 2002:a05:6a00:190f:b0:50d:8b82:cb90 with SMTP id y15-20020a056a00190f00b0050d8b82cb90mr8179971pfi.65.1651185922372;
-        Thu, 28 Apr 2022 15:45:22 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id n14-20020a17090a394e00b001d5f22845bdsm11955505pjf.1.2022.04.28.15.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 15:45:21 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 22:45:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, Sasha Levin <sashal@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH AUTOSEL 13/14] mm/thp: ClearPageDoubleMap in first
- page_add_file_rmap()
-Message-ID: <YmsY/n+yXkoEaqqr@google.com>
-References: <20220428154222.1230793-1-gregkh@linuxfoundation.org>
- <20220428154222.1230793-13-gregkh@linuxfoundation.org>
- <c2ed1fe1-247e-e644-c367-87d32eb92cf5@google.com>
- <YmrHsVZTEzqIDiKd@kroah.com>
- <bec6e6cf-daa7-d632-7f81-471acba69c9d@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XkmOscz6Mc+5H3+Udfs/NfG990JbZUB2dYQyp2GJrN4=;
+        b=jdjJo70v1M7aAa73oo2xidFtqCgRlqKRSo9YX5U8Ppb8ApFXtEjm0O0q4QpUPT7Isi
+         gO/xMMCEu1sT4kyztdwWZ96wJPAkJzy7g/5G/hn/x4qnfuj8oeFFxpIYQBXB7l7xALQ4
+         fKezwbc268MCrvFhKga6ow+uSe3OMyS4NefcNnUNDtrFheAnVbLwTQGG20WdOwEw1QQk
+         ry5f3eJp8/gFlApB3V0m2MhcXvQ1G/wCpi9GGLnrDIwIvi2ZRjNwFttduXEw986UdvD8
+         xuKXotLYzGb+4dIeG4SKy+LTAcnUcpsvPnOWCkjgoeGUCHcAQbIexcsPXBv2XaIFwKRB
+         UMzw==
+X-Gm-Message-State: AOAM531aT+rRW/eEnzoEcBFDn7AeORnvgEbaoc7he2KJnECKCgTPFofN
+        O4eo/UJYW7Ie//uW14hKl8JR+ecHChp4+j2gjaVbc6lXi9A=
+X-Google-Smtp-Source: ABdhPJzw7XuraGWrI21FSLFrmhDpjLx/u33zjKNE4bsiu3MkHN+XYiH7I2lzcvIBcLkrw+Eb1CwHBmXQ9wAHjKMlL/M=
+X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
+ d69-20020a811d48000000b002f18ebf25f3mr34394977ywd.118.1651185935049; Thu, 28
+ Apr 2022 15:45:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bec6e6cf-daa7-d632-7f81-471acba69c9d@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220401131534.241205-1-chenzhongjin@huawei.com>
+In-Reply-To: <20220401131534.241205-1-chenzhongjin@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 29 Apr 2022 00:45:24 +0200
+Message-ID: <CACRpkdbxDyasZxNeJXa9-AniTbgrzsuoLcu9CBJmzOLDg3hy5w@mail.gmail.com>
+Subject: Re: [PATCH v4] ARM: module: Add all unwind tables when load module
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux@armlinux.org.uk, alexander.sverdlin@nokia.com,
+        ardb@kernel.org, nico@fluxnic.net,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Sasha and Paolo
+On Fri, Apr 1, 2022 at 3:16 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 
-On Thu, Apr 28, 2022, Hugh Dickins wrote:
-> On Thu, 28 Apr 2022, Greg Kroah-Hartman wrote:
-> > On Thu, Apr 28, 2022 at 09:51:58AM -0700, Hugh Dickins wrote:
-> > > On Thu, 28 Apr 2022, Greg Kroah-Hartman wrote:
-> > > 
-> > > > From: Hugh Dickins <hughd@google.com>
-> > > > 
-> > > > commit bd55b0c2d64e84a75575f548a33a3dfecc135b65 upstream.
-> > > > 
-> > > > PageDoubleMap is maintained differently for anon and for shmem+file: the
-> > > > shmem+file one was never cleared, because a safe place to do so could
-> > > > not be found; so it would blight future use of the cached hugepage until
-> > > > evicted.
-> > > > 
-> > > > See https://lore.kernel.org/lkml/1571938066-29031-1-git-send-email-yang.shi@linux.alibaba.com/
-> > > > 
-> > > > But page_add_file_rmap() does provide a safe place to do so (though later
-> > > > than one might wish): allowing testing to return to an initial state
-> > > > without a damaging drop_caches.
-> > > > 
-> > > > Link: https://lkml.kernel.org/r/61c5cf99-a962-9a25-597a-53ab1bd8fbc0@google.com
-> > > > Fixes: 9a73f61bdb8a ("thp, mlock: do not mlock PTE-mapped file huge pages")
-> > > > Signed-off-by: Hugh Dickins <hughd@google.com>
-> > > > Reviewed-by: Yang Shi <shy828301@gmail.com>
-> > > > Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > > > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> > > > Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > 
-> > > NAK.
-> > > 
-> > > I thought we had a long-standing agreement that AUTOSEL does not try
-> > > to add patches from akpm's tree which had not been marked for stable.
-> > 
-> > True, this was my attempt at saying "hey these all look like they should
-> > go to stable trees, why not?"
-> 
-> Okay, it seems I should have read "AUTOSEL" as "Hey, GregKH here,
-> these all look like they should go to stable trees, why not?",
-> which would have drawn a friendlier response.
+> For EABI stack unwinding, when loading .ko module
+> the EXIDX sections will be added to a unwind_table list.
+>
+> However not all EXIDX sections are added because EXIDX
+> sections are searched by hardcoded section names.
+>
+> For functions in other sections such as .ref.text
+> or .kprobes.text, gcc generates seprated EXIDX sections
+> (such as .ARM.exidx.ref.text or .ARM.exidx.kprobes.text).
+>
+> These extra EXIDX sections are not loaded, so when unwinding
+> functions in these sections, we will failed with:
+>
+>         unwind: Index not found xxx
+>
+> To fix that, I refactor the code for searching and adding
+> EXIDX sections:
+>
+> - Check section type to search EXIDX tables (0x70000001)
+> instead of strcmp() the hardcoded names. Then find the
+> corresponding text sections by their section names.
+>
+> - Add a unwind_table list in module->arch to save their own
+> unwind_table instead of the fixed-lenth array.
+>
+> - Save .ARM.exidx.init.text section ptr, because it should
+> be cleaned after module init.
+>
+> Now all EXIDX sections of .ko can be added correctly.
+>
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 
-FWIW, Sasha has been using MANUALSEL for the KVM tree to solicit an explicit ACK
-from Paolo for these types of patches.  AFAICT, it has been working quite well.
+This looks reasonable to me:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+If no one else comments I would say you should put this
+into Russell's patch tracker for consideration.
+
+Yours,
+Linus Walleij

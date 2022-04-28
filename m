@@ -2,142 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55004512FA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1C3512FDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiD1JtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S231317AbiD1JtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347895AbiD1Jfe (ORCPT
+        with ESMTP id S1347959AbiD1Jfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:35:34 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15BF95486;
-        Thu, 28 Apr 2022 02:32:20 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id s4so3195791qkh.0;
-        Thu, 28 Apr 2022 02:32:20 -0700 (PDT)
+        Thu, 28 Apr 2022 05:35:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18BC19548B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:32:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651138359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OG6hUPY6sAUTqTJViKJ1E1LWjNyEwooQAig3aG1iSlg=;
+        b=cdoei2hJcSbHuHkYZQ3MvgS8axm0jut80Hqzf014rP13NYK2DibnzS+WZwyUSUWh+ODxEc
+        o7onngKKqisVXVVI8w7dfaBqYGc5CQU80N+R3Zn60/Mh03JYd2kL6neHZLRNmTmElkawc4
+        NuBRgM6eEICO7jQAST6tKQuCxF/kbgE=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-CzAHaEGHOGeH_Iyu-boiIA-1; Thu, 28 Apr 2022 05:32:37 -0400
+X-MC-Unique: CzAHaEGHOGeH_Iyu-boiIA-1
+Received: by mail-qk1-f199.google.com with SMTP id u7-20020ae9d807000000b00680a8111ef6so2830502qkf.17
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:32:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XxrucvC/NAbMhAGxWgmP+P246fNaW3Hi7ZrfYXkN5TU=;
-        b=JUOn690e8hRPPVUa5vhEFKjj719h6ekxjI8U1Z3FWaiCTeTTRNgJaJUSXRSfjd801W
-         ZqUv3kzdBFk0Bpw0DWYz5XGfDSr5LaL3UqYNyU0qfp7F2FAG5M75OqWV/nnV1INIbCQ+
-         S1rdpqOhPbn7LwUejCGhKOhDAVyLyIWIx5eO6fKTEsnffubW6rXvkjP7R7+WgHWXeFxS
-         9unMT/kSvhSDccsPHudCWzoAtqI1fvkftoViIJrRqlUGEHi97+wMSfvMmYMkVNPALJyH
-         tQEXKX43khIrYspHEFXTSu30OdgeV/EYyuCJgH52v6+AN1Z8R+JKcjJvQm+3YbwEnGIa
-         Nv7Q==
-X-Gm-Message-State: AOAM5320tCIZu9PcPtp7VnIKaCuJIRgDAPoLnqRGNZq0XKaNcnJCwuRu
-        d1TkKKJLF3PuPkQgUp+aU0Gn3NFG8wklcg==
-X-Google-Smtp-Source: ABdhPJx4S8vUCcoVz/XiyfC23GM4Dmtj+/2Xg4SoVTsz2XZbbLg1QFb+OXVM2p5ZXg9xRJBla5oynQ==
-X-Received: by 2002:a05:620a:404e:b0:69e:a5db:22cb with SMTP id i14-20020a05620a404e00b0069ea5db22cbmr18894611qko.735.1651138339897;
-        Thu, 28 Apr 2022 02:32:19 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id i198-20020a379fcf000000b0069f869bcd49sm3039513qke.75.2022.04.28.02.32.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 02:32:18 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id w17so7923266ybh.9;
-        Thu, 28 Apr 2022 02:32:18 -0700 (PDT)
-X-Received: by 2002:a25:d393:0:b0:648:4871:3b91 with SMTP id
- e141-20020a25d393000000b0064848713b91mr20880320ybf.506.1651138338366; Thu, 28
- Apr 2022 02:32:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421221159.31729-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220421221159.31729-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220421221159.31729-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 28 Apr 2022 11:32:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVrcT5iHUZUiCYmD12sS4F66BETBih36G7BzLTLuoQ9eQ@mail.gmail.com>
-Message-ID: <CAMuHMdVrcT5iHUZUiCYmD12sS4F66BETBih36G7BzLTLuoQ9eQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: Add Renesas RZ/G2L
- Interrupt Controller
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=OG6hUPY6sAUTqTJViKJ1E1LWjNyEwooQAig3aG1iSlg=;
+        b=XFs3SvfkbnhKEjvww/xH13I6Fe++3rrsiJKRoZcNEPdPHqZ+sPgVw049PUO599v/Y9
+         NmhozVnkSEGzqDFdIOaiGu0cAN+4Bu/Jl3J3IkfpXa7S/KZ26vhXfZnr508AP0UNtS31
+         9kyWGL1CXLeGOPbxy+6plE90jczvc2ybvQIWVOplcRKO1pr7tTgqqippR/OEgG/iZ874
+         YaZXO3m4xnDJWLAHNBMpNCcEePVh2tPPi6eqLWJvL28pVNf3BWZjd+eR8FJCCfrjG7A1
+         izM/usUy776BtuIvhiLZ+nXcCaBIPkVuz22Q4I3yki7UIJtAQr+TtE0bBgcr/YbpoZwx
+         +dmA==
+X-Gm-Message-State: AOAM532D3qa7bqt91eDUD0AGRrnVNAVtVfqxcamGHbJUkfGQLAHAM8Dg
+        zFoUhi63jGp1a22NodtPZKRLXLo9k9T2pQ2Wx5aYKofaQ1iLTbGzSxqdr9NdeaLCfAhXFtG0uyL
+        BZpTJN2kwd2teB0v+sNccoa9m
+X-Received: by 2002:a05:622a:2cb:b0:2f3:646b:54b6 with SMTP id a11-20020a05622a02cb00b002f3646b54b6mr15456758qtx.380.1651138356462;
+        Thu, 28 Apr 2022 02:32:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyJ3J0ImF+LM/cJTr/TdEmv6YBtIqlv1bBiDK6w9j0coe0CvNV+LL3YO5hh7fcCBb3x5O7y0w==
+X-Received: by 2002:a05:622a:2cb:b0:2f3:646b:54b6 with SMTP id a11-20020a05622a02cb00b002f3646b54b6mr15456733qtx.380.1651138356147;
+        Thu, 28 Apr 2022 02:32:36 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-117-160.dyn.eolo.it. [146.241.117.160])
+        by smtp.gmail.com with ESMTPSA id k66-20020a37ba45000000b0069c5adb2f2fsm9620433qkf.6.2022.04.28.02.32.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 02:32:35 -0700 (PDT)
+Message-ID: <c499d01d51095ae338cbc63179bdc0e1606cbfef.camel@redhat.com>
+Subject: Re: [PATCH net-next v5 08/18] net: sparx5: Replace usage of found
+ with dedicated list iterator variable
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Colin Ian King <colin.king@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Date:   Thu, 28 Apr 2022 11:32:28 +0200
+In-Reply-To: <20220427160635.420492-9-jakobkoschel@gmail.com>
+References: <20220427160635.420492-1-jakobkoschel@gmail.com>
+         <20220427160635.420492-9-jakobkoschel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hello,
 
-On Fri, Apr 22, 2022 at 12:12 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Wed, 2022-04-27 at 18:06 +0200, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
+> 
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+>  .../microchip/sparx5/sparx5_mactable.c        | 25 +++++++++----------
+>  1 file changed, 12 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c b/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
+> index a5837dbe0c7e..bb8d9ce79ac2 100644
+> --- a/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
+> +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
+> @@ -362,8 +362,7 @@ static void sparx5_mact_handle_entry(struct sparx5 *sparx5,
+>  				     unsigned char mac[ETH_ALEN],
+>  				     u16 vid, u32 cfg2)
+>  {
+> -	struct sparx5_mact_entry *mact_entry;
+> -	bool found = false;
+> +	struct sparx5_mact_entry *mact_entry = NULL, *iter;
+>  	u16 port;
+>  
+>  	if (LRN_MAC_ACCESS_CFG_2_MAC_ENTRY_ADDR_TYPE_GET(cfg2) !=
+> @@ -378,28 +377,28 @@ static void sparx5_mact_handle_entry(struct sparx5 *sparx5,
+>  		return;
+>  
+>  	mutex_lock(&sparx5->mact_lock);
+> -	list_for_each_entry(mact_entry, &sparx5->mact_entries, list) {
+> -		if (mact_entry->vid == vid &&
+> -		    ether_addr_equal(mac, mact_entry->mac)) {
+> -			found = true;
+> -			mact_entry->flags |= MAC_ENT_ALIVE;
+> -			if (mact_entry->port != port) {
+> +	list_for_each_entry(iter, &sparx5->mact_entries, list) {
+> +		if (iter->vid == vid &&
+> +		    ether_addr_equal(mac, iter->mac)) {
 
-Thanks for your patch!
+I'm sorry for the late feedback.
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-> @@ -0,0 +1,131 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/renesas,rzg2l-irqc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/G2L (and alike SoC's) Interrupt Controller (IA55)
-> +
-> +maintainers:
-> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> +  - Geert Uytterhoeven <geert+renesas@glider.be>
-> +
-> +description: |
-> +  IA55 performs various interrupt controls including synchronization for the external
-> +  interrupts of NMI, IRQ, and GPIOINT and the interrupts of the built-in peripheral
-> +  interrupts output by each IP. And it notifies the interrupt to the GIC
-> +    - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
-> +    - GPIO pins used as external interrupt input pins, mapped to 32 GIC SPI interrupts
-> +    - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
-> +      stand-up edge detection interrupts)
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a07g044-irqc    # RZ/G2L
-> +      - const: renesas,rzg2l-irqc
-> +
-> +  '#interrupt-cells':
-> +    const: 2
+If you move the 'mact_entry = iter;' statement here, the diffstat will
+be slightly smaller and the patch more readable, IMHO.
 
-What is the meaning of the cells? IRQ number + flags, I assume?
-How are the numbers mapped, do you need a DT bindings header?
-Perhaps it would make sense to increase to 3 cells, so you can use
-one cell for the type (cfr. e.g. GIC_SPI), and the second for the
-plain index within the type?
+There is similar situation in the next patch.
 
-The rest LGTM, but I'm not an interrupt expert, so I'm curious in
-hearing Marc's opinion.
+Cheers,
 
-Gr{oetje,eeting}s,
+Paolo
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

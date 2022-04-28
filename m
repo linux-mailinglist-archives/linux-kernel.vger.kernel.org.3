@@ -2,120 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F5A5135D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A805135D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347815AbiD1N62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S1347834AbiD1N7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347769AbiD1N61 (ORCPT
+        with ESMTP id S1347817AbiD1N7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:58:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C1B22253F
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:55:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA19F1474;
-        Thu, 28 Apr 2022 06:55:10 -0700 (PDT)
-Received: from bogus (unknown [10.57.11.83])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36F683F5A1;
-        Thu, 28 Apr 2022 06:55:09 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 14:55:04 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH 04/22] firmware: arm_scmi: Validate
- BASE_DISCOVER_LIST_PROTOCOLS reply
-Message-ID: <20220428135504.lt3bjq4sz7uktca6@bogus>
-References: <20220330150551.2573938-1-cristian.marussi@arm.com>
- <20220330150551.2573938-5-cristian.marussi@arm.com>
- <20220428100729.qlzl5lkkn2r5u3ra@bogus>
- <YmqaSZJlPF2qX5Ta@e120937-lin>
+        Thu, 28 Apr 2022 09:59:07 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3C4286ED;
+        Thu, 28 Apr 2022 06:55:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 2D4CB1F458DD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651154151;
+        bh=0A+3aw2UPkQ8ovDESnexGar9sBmgEXSnygPWIGyxILc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nP7QpFEAFCOP+N4FdZxDN2KGBkwFF/v4xNXBA6znhP0b3ZBBJbI5sl3Ka1sI4Tn4K
+         5moJIeiZC5i16HqKUa53+PYARBHMysSewDEUK4lW/ABsY2PDko+rIH+K4FGmkPWHH6
+         s+gfOSnQVvRNnkxxgDtw6X3QDjcsMT6JtBi6io9xfynNpgAiODWURcVpdm99PCLOrC
+         9cAajG+1YdXYMUgynsuXy0aGUAlJCK4LPzJIPFdu+c/jfcL1MCQOqQuCY7GDoGlND3
+         gpJFmEC521+3Vqfgt/jJizjyLgiHxTsd8FFmMq7pwV4d89OjH3GnDh6IopGSRVwlyI
+         31Na9C0j+LiyA==
+Message-ID: <2e967249-2735-6bc6-6add-2feeecf6a613@collabora.com>
+Date:   Thu, 28 Apr 2022 15:55:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmqaSZJlPF2qX5Ta@e120937-lin>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] clk: mediatek: Delete MT8192 msdc gate
+Content-Language: en-US
+To:     matthias.bgg@kernel.org, mturquette@baylibre.com, sboyd@kernel.org
+Cc:     weiyi.lu@mediatek.com, chun-jie.chen@mediatek.com,
+        ikjn@chromium.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allen-kh.cheng@mediatek.com,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <20220422143756.14806-1-matthias.bgg@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220422143756.14806-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 02:45:07PM +0100, Cristian Marussi wrote:
-> On Thu, Apr 28, 2022 at 11:07:29AM +0100, Sudeep Holla wrote:
-> > On Wed, Mar 30, 2022 at 04:05:33PM +0100, Cristian Marussi wrote:
-> > > Do not blindly trust SCMI backend server reply about list of implemented
-> > > protocols, instead validate the reported length of the list of protocols
-> > > against the real payload size of the message reply.
-> > >
-> > > Fixes: b6f20ff8bd9 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
-> > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > > ---
-> > >  drivers/firmware/arm_scmi/base.c | 21 +++++++++++++++++++++
-> > >  1 file changed, 21 insertions(+)
-> > >
-> > > diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
-> > > index f279146f8110..c1165d1282ef 100644
-> > > --- a/drivers/firmware/arm_scmi/base.c
-> > > +++ b/drivers/firmware/arm_scmi/base.c
-> > > @@ -189,6 +189,9 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
-> > >  	list = t->rx.buf + sizeof(*num_ret);
-> > >
-> > >  	do {
-> > > +		size_t real_list_sz;
-> > > +		u32 calc_list_sz;
-> > > +
-> > >  		/* Set the number of protocols to be skipped/already read */
-> > >  		*num_skip = cpu_to_le32(tot_num_ret);
-> > >
-> > > @@ -202,6 +205,24 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
-> > >  			break;
-> > >  		}
-> > >
-> > > +		if (t->rx.len < (sizeof(u32) * 2)) {
-> > > +			dev_err(dev, "Truncated reply - rx.len:%zd\n",
-> > > +				t->rx.len);
-> > > +			ret = -EPROTO;
-> > > +			break;
-> > > +		}
-> > > +
-> > > +		real_list_sz = t->rx.len - sizeof(u32);
-> > > +		calc_list_sz = ((loop_num_ret / sizeof(u32)) +
-> > > +				!!(loop_num_ret % sizeof(u32))) * sizeof(u32);
-> > 
-> > Any reason this can't be (loop_num_ret - 1) / sizeof(u32) + 1 ?
-> > 
+Il 22/04/22 16:37, matthias.bgg@kernel.org ha scritto:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
 > 
-> At first sight could be fine with your easier version BUT what if loop_num_ret
-> is returned as zero ?
+> The msdc gate is part of the MMC driver. Delete the not used code.
 > 
-> real_list_sz should be ZERO length and calc_list_sz
-> 
-> im my version:
-> 
-> calc_list_sz = ((0/4) +!!(0%4)) * 4   ===>> 0
-> 
-> while in the simplified one gets calculated wrong:
-> 
-> calc_list_sz = (0-1)/4 + 1 ====> 1
-> 
-> ...moreover being both loop_num_ret and calc_list_sz unsigned I am even
-> not so sure about implicit casting messing things up evenm more :D
-> 
-> So I sticked to the more convoluted approach :D
-> 
-> ....Have I missed something else ?
->
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Right, but shouldn't we break if it 0 much earlier. It must not happen with
-your new logic and even if it does, wouldn't it be better to break earlier ?
+This code will never *ever* be used. I agree with removing it for good.
 
--- 
-Regards,
-Sudeep
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

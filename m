@@ -2,162 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61305136D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8CD5136D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348339AbiD1O3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S1348330AbiD1O3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347045AbiD1O3w (ORCPT
+        with ESMTP id S1347045AbiD1O3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:29:52 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF373EF38
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:26:36 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id j9so3736340qkg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k2xk0VfPUZZR4PgPEBFE7KbYEWH+FmFopnCFIlm7PdU=;
-        b=BV94KuxAotFnCW2rpxR5ikP/WxESDoIazAhKPFkO1eGzDxo7hawOoKkHC0UbhoIeQy
-         kZg8jfkxgeybcxSbVkPKyf/R8j319H1hEEjldKPErEBwufuhSw5mT4aclDQzGTGmOQ4z
-         vfMoivqIpG4ELDuBcZ0Lo3UjNSF9EOuclEjFk4kMkAuHZnXHnZGbiU71bRjNAWpZoXdE
-         OVtUxqBbeYfV85GYLzG9DEZSYCi7JYWgpRIAP4TxPtab35D28kaePo90gYcCyWnoTDSJ
-         nh0zCTTwNRYmmxH3C3h+6DAcalHEbjnTNIOcg75fSF6dIHkflMcrL1mdWIN+kjqV2eZ+
-         euow==
+        Thu, 28 Apr 2022 10:29:21 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0883B57C;
+        Thu, 28 Apr 2022 07:26:06 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id m11so5471697oib.11;
+        Thu, 28 Apr 2022 07:26:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=k2xk0VfPUZZR4PgPEBFE7KbYEWH+FmFopnCFIlm7PdU=;
-        b=po7guxZyGOQcfBjnb9LYEZzYozD7X5FFL/uZvipGHZg0l7L0m8HrSzHmVSp/D2UKjT
-         0AUoG4t4uRI0P7uv8LBOFGQQcmZ3jWM2nwNsZoXYd288mfyzy/Kv8Hc03IEA1AnaNars
-         6zRJX+MPpW0MWgWEcix0xqrpWr/kF2fmxFGnpGd0SVOotDl0cA3DfKjV9z4ZKvEQfavi
-         BWge4rH1fqaofF/MrdcwG/nYtPlu5ylU1xBEP32K7GY/xZP7gkpdvx31VqLL1HzMyHmk
-         WePxnFq9XG3r56q8YkIwJ6irlsGaZFTML4w6cAGhEc3PLZ0nicEyZqg8oK6d1YEKWtH7
-         u5LA==
-X-Gm-Message-State: AOAM5325udXzXTEzTNpX2PElxKB3RKrfid3mh0BkqMiDxFcZih2B12mC
-        BzOQ4bHoIgBTE3qfYMIJjcRiYA==
-X-Google-Smtp-Source: ABdhPJxHZfOb9UMTvMfY0TOYnsyNy3pAynw8UhikG/kgqUZQDoSwCT+rqvbeUsQFKMN84pGDPsTDfQ==
-X-Received: by 2002:a05:620a:d85:b0:67b:a4:2036 with SMTP id q5-20020a05620a0d8500b0067b00a42036mr19369088qkl.112.1651155995814;
-        Thu, 28 Apr 2022 07:26:35 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:d588])
-        by smtp.gmail.com with ESMTPSA id 21-20020ac85755000000b002f390bd8ac0sm84027qtx.53.2022.04.28.07.26.35
+        bh=zXubuPjx2pjAm7hx5cD02wC66amPUE4R4gLIeK6MStk=;
+        b=Hgi6UFYBOnfLbtFt3RVphkX7kyVyE0dWBeCF9+GFZIrwHTU07TyDVoycqB4ZceuCeC
+         /ITKNTjYNtQyhXdbWynMaYs1aExYGEF1YL37IPS/1XnsjYSSVuluPw6nB2MW2F2i7Oi9
+         l5bQYkYWY2erPfQ34x1MSGLoZ8eFIenJimtyHuUt6juNlAF3KRix/Lz/2a0FFM1tqBHC
+         BmUyMFkq2VJupPtVN07orIB2CErgPBitg3IsW0+ftJRa7s0hCN/Mv5COsV0EPkB8jC8O
+         QMrvdYwgDWwQKPgq10XLhwBxZ6AY3FYUDflhxjaBT7Wbl9bGg1Bkhyvofk/jGMofwFCI
+         JO8Q==
+X-Gm-Message-State: AOAM5332D4ayo57SKa5zR2EpXsFV4lR5oKJ1mRHQi41NBMIaso38Wxtw
+        FkWdKA1kATkpy7lVdLjY+w==
+X-Google-Smtp-Source: ABdhPJyGuPF0HOA0tIXbE2tN+YPk6d3A782bnuVeS4IVfJscr45WQBcONamKAO4aNHjqSxXj6dJ9ww==
+X-Received: by 2002:aca:1811:0:b0:2ef:3c0f:f169 with SMTP id h17-20020aca1811000000b002ef3c0ff169mr15678035oih.61.1651155965318;
+        Thu, 28 Apr 2022 07:26:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x21-20020a4aea15000000b0035e9a8d6e58sm68641ood.26.2022.04.28.07.26.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 07:26:35 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 10:25:59 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
-Message-ID: <Ymqj93gEEzu2Gb3U@cmpxchg.org>
-References: <20220427160016.144237-1-hannes@cmpxchg.org>
- <20220427160016.144237-5-hannes@cmpxchg.org>
- <Ymmnrkn0mSWcuvmH@google.com>
- <YmmznQ8AO5RLxicA@cmpxchg.org>
- <YmnA0Da90IURbxrM@google.com>
+        Thu, 28 Apr 2022 07:26:04 -0700 (PDT)
+Received: (nullmailer pid 2177702 invoked by uid 1000);
+        Thu, 28 Apr 2022 14:26:03 -0000
+Date:   Thu, 28 Apr 2022 09:26:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Detlev Casanova <detlev.casanova@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        arm-soc <soc@kernel.org>, Stefan Wahren <stefan.wahren@i2se.com>
+Subject: Re: [RFC PATCH v2 3/3] ARM: dto: Add bcm2711-rpi-7-inches-ts.dts
+ overlay
+Message-ID: <Ymqj+2xBuHCmGUd/@robh.at.kernel.org>
+References: <20220427185243.173594-1-detlev.casanova@collabora.com>
+ <20220427185243.173594-4-detlev.casanova@collabora.com>
+ <YmmyvdjiG7s/Qil4@robh.at.kernel.org>
+ <CAMuHMdXHRQOOrmUO1AyDXye+nnRtpzx7WHiC__whcg0aBtzAmw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmnA0Da90IURbxrM@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdXHRQOOrmUO1AyDXye+nnRtpzx7WHiC__whcg0aBtzAmw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 03:16:48PM -0700, Minchan Kim wrote:
-> On Wed, Apr 27, 2022 at 05:20:29PM -0400, Johannes Weiner wrote:
-> > On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
-> > > Hi Johannes,
-> > > 
-> > > On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
-> > > > Currently it requires poking at debugfs to figure out the size and
-> > > > population of the zswap cache on a host. There are no counters for
-> > > > reads and writes against the cache. As a result, it's difficult to
-> > > > understand zswap behavior on production systems.
-> > > > 
-> > > > Print zswap memory consumption and how many pages are zswapped out in
-> > > > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
-> > > > 
-> > > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > > > ---
-> > > >  fs/proc/meminfo.c             |  7 +++++++
-> > > >  include/linux/swap.h          |  5 +++++
-> > > >  include/linux/vm_event_item.h |  4 ++++
-> > > >  mm/vmstat.c                   |  4 ++++
-> > > >  mm/zswap.c                    | 13 ++++++-------
-> > > >  5 files changed, 26 insertions(+), 7 deletions(-)
-> > > > 
-> > > > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
-> > > > index 6fa761c9cc78..6e89f0e2fd20 100644
-> > > > --- a/fs/proc/meminfo.c
-> > > > +++ b/fs/proc/meminfo.c
-> > > > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
-> > > >  
-> > > >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
-> > > >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
-> > > > +#ifdef CONFIG_ZSWAP
-> > > > +	seq_printf(m,  "Zswap:          %8lu kB\n",
-> > > > +		   (unsigned long)(zswap_pool_total_size >> 10));
-> > > > +	seq_printf(m,  "Zswapped:       %8lu kB\n",
-> > > > +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
-> > > > +		   (PAGE_SHIFT - 10));
-> > > > +#endif
-> > > 
-> > > I agree it would be very handy to have the memory consumption in meminfo
-> > > 
-> > > https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
-> > > 
-> > > If we really go this Zswap only metric instead of general term
-> > > "Compressed", I'd like to post maybe "Zram:" with same reason
-> > > in this patchset. Do you think that's better idea instead of
-> > > introducing general term like "Compressed:" or something else?
-> > 
-> > I'm fine with changing it to Compressed. If somebody cares about a
-> > more detailed breakdown, we can add Zswap, Zram subsets as needed.
+On Thu, Apr 28, 2022 at 08:44:17AM +0200, Geert Uytterhoeven wrote:
+> Hi Rob,
 > 
-> Thanks! Please consider ZSWPIN to rename more general term, too.
+> On Wed, Apr 27, 2022 at 11:23 PM Rob Herring <robh@kernel.org> wrote:
+> > On Wed, Apr 27, 2022 at 02:52:43PM -0400, Detlev Casanova wrote:
+> > > Add a device tree overlay to support the official Raspberrypi 7" touchscreen for
+> > > the bcm2711 devices.
+> > >
+> > > The panel is connected on the DSI 1 port and uses the simple-panel
+> > > driver.
+> > >
+> > > The device tree also makes sure to activate the pixelvalve[0-4] CRTC modules
+> > >
+> > > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> > > ---
+> > >  arch/arm/boot/dts/Makefile                    |   4 +
+> > >  arch/arm/boot/dts/overlays/Makefile           |   3 +
+> > >  .../dts/overlays/bcm2711-rpi-7-inches-ts.dts  | 125 ++++++++++++++++++
+> >
+> > .dtso is preferred. I think... It was discussed, but I never got an
+> > updated patch to switch.
+> 
+> Unfortunately that switch indeed hasn't happened yet.
+> My main gripe with .dts for overlays is that you cannot know whether
+> it's an overlay or not without reading the file's contents.
+> Hence tools like make also cannot know, and you need to e.g. list
+> all files explicitly in a Makefile.
 
-That doesn't make sense to me.
+See my reply in the other thread for that.
 
-Zram is a swap backend, its traffic is accounted in PSWPIN/OUT. Zswap
-is a writeback cache on top of the swap backend. It has pages
-entering, refaulting, and being written back to the swap backend
-(PSWPOUT). A zswpout and a zramout are different things.
+> > >  arch/arm64/boot/dts/broadcom/Makefile         |   4 +
+> > >  .../arm64/boot/dts/broadcom/overlays/Makefile |   3 +
+> > >  .../overlays/bcm2711-rpi-7-inches-ts.dts      |   2 +
+> > >  6 files changed, 141 insertions(+)
+> > >  create mode 100644 arch/arm/boot/dts/overlays/Makefile
+> > >  create mode 100644 arch/arm/boot/dts/overlays/bcm2711-rpi-7-inches-ts.dts
+> >
+> > A global (to arm) 'overlays' directory will create the same mess that we
+> > have in arch/arm/boot/dts/. IMO, first you should move all the Broadcom
+> > dts files to a 'broadcom' subdirectory like we have for arm64.
+> 
+> As I believe this display is not only used with real Raspberry Pi
+> devices, it makes sense to not have it a broadcom directory.
 
-> > From 8e9e2d6490b7082c41743fbdb9ffd2db4e3ce962 Mon Sep 17 00:00:00 2001
-> > From: Johannes Weiner <hannes@cmpxchg.org>
-> > Date: Wed, 27 Apr 2022 17:15:15 -0400
-> > Subject: [PATCH] mm: zswap: add basic meminfo and vmstat coverage fix fix
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Then at a minimum 'bcm2711' in the name is not appropriate.
 
-Just for completeness,
+I'm doubtful that as-is the overlay would apply to boards outside of 
+RPi's. For this to work (well), there needs to be a connector node to 
+translate between connector resources and the base board resources. See 
+the recent mikrobus thread[2].
 
-Nacked-by: Johannes Weiner <hannes@cmxpchg.org>
+> In fact it may be used on other architectures than arm, too, so I
+> think we need an arch-agnostic directory for overlays[1]?
 
-> > @@ -87,7 +87,7 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
-> >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
-> >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
-> >  #ifdef CONFIG_ZSWAP
-> > -	seq_printf(m,  "Zswap:          %8lu kB\n",
-> > +	seq_printf(m,  "Compressed:     %8lu kB\n",
-> >  		   (unsigned long)(zswap_pool_total_size >> 10));
-> >  	seq_printf(m,  "Zswapped:       %8lu kB\n",
-> >  		   (unsigned long)atomic_read(&zswap_stored_pages) <<
-> > -- 
-> > 2.35.3
-> > 
+Probably so.
+
+Personally, I would prefer no DTs under /arch.
+
+> This may need remapping of labels. I'm aware the rpi infrastructure has
+> support for remapping labels when applying overlays during boot, but
+> AFAIK this is not yet supported by fdtoverlay (or perhaps by a fork?)?
+> Note that the remapping is also needed if you want to apply two
+> instances of the same overlay.
+
+First I've heard of label remapping... I have a lot of concerns about 
+using labels for overlays. For starters, with a flip of a switch (-@), 
+they all become an ABI when they were not previously. I think at a 
+minimum, we need an annotation so that a subset can be exported. 
+Anything that's an ABI, we should be documenting and reviewing.
+
+The requirement for overlays upstream is that they are applied at build 
+time to a base DT. Otherwise, we can't validate them completely. So if 
+there's a label remapping dependency on these, sounds like there is some 
+more work to do. The first being getting agreement that label remapping 
+is the right approach.
+
+Common label names or some remapping for targets kind of works, but 
+easily falls apart. For example, GPIO (or any provider with identifier 
+cells) numbering or SPI CS numbering would be different. 
+
+Rob
+
+[2] https://lore.kernel.org/all/YmFo+EntwxIsco%2Ft@robh.at.kernel.org/

@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771C951309E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC1B51309A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiD1KGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S233486AbiD1KG2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 28 Apr 2022 06:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiD1KFu (ORCPT
+        with ESMTP id S230284AbiD1KFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:05:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A77022FFCB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651139504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HE3ta4HpBI6INhoQobpRyVvmn/Cv0Jx2r+Mpva9zKrg=;
-        b=RDy6gvmNGAWTBQt7HUCMiIb/fZQOTIVnWIhf8W/RtGptZNKEBgi66hE7i3NtmrthvHBkCR
-        Y152MR6i61zPOfZj2+0wpCg75hfyVhwRxYJZ3Bb+mWCtUAVJH0VrMLwkxbicDNwnmKbwl3
-        9+j18fLMwepjmuyzKy+ZgDBEoqQ8m/I=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-36-3rk3EHpdPE63CMQPNFcr1w-1; Thu, 28 Apr 2022 05:51:43 -0400
-X-MC-Unique: 3rk3EHpdPE63CMQPNFcr1w-1
-Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso4143039wma.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:51:43 -0700 (PDT)
+        Thu, 28 Apr 2022 06:05:51 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A00632EE4;
+        Thu, 28 Apr 2022 02:51:59 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id t16so3012391qtr.9;
+        Thu, 28 Apr 2022 02:51:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=HE3ta4HpBI6INhoQobpRyVvmn/Cv0Jx2r+Mpva9zKrg=;
-        b=J44NySsVB9cJ6qoCPchZ3T4+/W89ZbB2dj1aDqyb+yVANz5Q4t0pin2ZumnW41VHQg
-         /5rMTsTtucIhFI3X8jfFDAoIq0UsFN+PzNuU/sGqJThT4vLeNODoIJ4U8WHgqpx6aCCp
-         fllL88X3Ek4ucgKffnD0kc9d1MHsJZPuV2cKAW2YQFqamxeCqpRKj/c4Fw2AYduD7wmE
-         9Qdaiir/EeQSCRc31RlRXI6++ZnVO6yqLT4FK09Hqz51zXBZnY/wT3Vw20lE7h+N5HAd
-         9NvkYjaiN5g648LZ7hwsEkYJT+Lr1y7ttbH2NfjelvfamB6DuylHj7YgAEfK1O8XcOfy
-         8Whw==
-X-Gm-Message-State: AOAM532QOe50sUF4dMK/7SvFxhiYXQphmwNe6Rh4us6EfYuIMqSWuoVy
-        5StjMi1RUEDxEbTcB4L88EdUtK4VayXn6L4PDfX6VMi+oIfN+iXN/vPZYlIYIj2w++bc5iPe6QE
-        0YlvKaj1XZbtVUlcsitN7ECNJ
-X-Received: by 2002:a5d:4744:0:b0:20a:ea5a:dc39 with SMTP id o4-20020a5d4744000000b0020aea5adc39mr8250810wrs.236.1651139502542;
-        Thu, 28 Apr 2022 02:51:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzlt0WIxWYGUM3TXXA+zF5EJSKUPgDy28wndaEJHSCE7Dd7DqM6ReTuGFqvoCetntmepG+mHQ==
-X-Received: by 2002:a5d:4744:0:b0:20a:ea5a:dc39 with SMTP id o4-20020a5d4744000000b0020aea5adc39mr8250795wrs.236.1651139502237;
-        Thu, 28 Apr 2022 02:51:42 -0700 (PDT)
-Received: from smtpclient.apple ([2a01:e0a:834:5aa0:80d7:8022:3692:b311])
-        by smtp.gmail.com with ESMTPSA id n5-20020adf8b05000000b00207a4fd0185sm15653955wra.7.2022.04.28.02.51.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 Apr 2022 02:51:41 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH] virtio-pci: Remove wrong address verification in
- vp_del_vqs()
-From:   Christophe Marie Francois Dupont de Dinechin <cdupontd@redhat.com>
-In-Reply-To: <A5CD1C91-F5D0-4109-9894-824184362B5C@redhat.com>
-Date:   Thu, 28 Apr 2022 11:51:40 +0200
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, mopsfelder@gmail.com,
-        Christophe de Dinechin <dinechin@redhat.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B954A683-EE43-4469-B57A-EB8C6B671BEC@redhat.com>
-References: <20220415023002.49805-1-muriloo@linux.ibm.com>
- <e8620e70-16bb-639c-9446-68dcd199253f@linux.ibm.com>
- <A5CD1C91-F5D0-4109-9894-824184362B5C@redhat.com>
-To:     muriloo@linux.ibm.com
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9+oGTlNW4Rw+j1mI5ZQn++S2sjGJsMH7CZqZR09nnas=;
+        b=272MmZ+IWIIMGwEaQugGpTQz9bx9Z2XNiwTEUH3PGt4IdAkx+AVcHd7a6piDDFuRPy
+         g1NoTpXuN5clQcxqIbpUsP2Xpqb1/uVTcrWmHLjfyRZFatAuPuWr60xeNt1i/g0UcZpF
+         A5fBizH9o5XWJLH8dQTqNojFG8u6u0LPSsvw0aZu1ENW92gsCaVy1fx1XlUBP5dGA06m
+         SPoSJ6ydkq+tiCN3Z2HqXZwRU8BlgcO/syZXX9ZXTSN/f8oRrfpC41VNyXVougcTuNIT
+         993am5ZXNoAHvJBazKfdHgp0NlSB5D4ekLFvuHztC4AbLyQiBz+EMAJZDdJpp+MWPsSF
+         iMIQ==
+X-Gm-Message-State: AOAM531/N9w2NJjrVHGUxSL7adR906Oj0v3zdnSGIRHjTKVtwmEX0YYc
+        nVLuQQ+lFL4CEBBjVSa0fjxxpIB8D2IERA==
+X-Google-Smtp-Source: ABdhPJxVXkMHhpF3fypTOy50zuuV7otuYHr90zFMTy1nhYNw1tFzhlVXH2Xn6u0nGB5wjbuGZZsZ3Q==
+X-Received: by 2002:a05:622a:588:b0:2f3:64ef:5566 with SMTP id c8-20020a05622a058800b002f364ef5566mr14664016qtb.327.1651139518120;
+        Thu, 28 Apr 2022 02:51:58 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id u11-20020a05622a14cb00b002e1fd9dce3dsm11236434qtx.60.2022.04.28.02.51.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 02:51:57 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f16645872fso46693137b3.4;
+        Thu, 28 Apr 2022 02:51:56 -0700 (PDT)
+X-Received: by 2002:a81:4782:0:b0:2eb:1cb1:5441 with SMTP id
+ u124-20020a814782000000b002eb1cb15441mr29976415ywa.479.1651139516383; Thu, 28
+ Apr 2022 02:51:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220422120850.769480-1-herve.codina@bootlin.com> <20220422120850.769480-8-herve.codina@bootlin.com>
+In-Reply-To: <20220422120850.769480-8-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 28 Apr 2022 11:51:44 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXYpntR6QpJTRMPtE_RjNq+vwfCVRViXCc8DhNRMMjqJQ@mail.gmail.com>
+Message-ID: <CAMuHMdXYpntR6QpJTRMPtE_RjNq+vwfCVRViXCc8DhNRMMjqJQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] ARM: dts: r9a06g032: Add USB PHY DT support
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Hervé,
 
+On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> Define the r9a06g032 generic part of the USB PHY device node.
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-> On 28 Apr 2022, at 11:46, Christophe Marie Francois Dupont de Dinechin =
-<cdupontd@redhat.com> wrote:
->=20
->=20
->=20
->> On 15 Apr 2022, at 05:51, Murilo Opsfelder Ara=C3=BAjo =
-<muriloo@linux.ibm.com> wrote:
->>=20
->> On 4/14/22 23:30, Murilo Opsfelder Araujo wrote:
->>> GCC 12 enhanced -Waddress when comparing array address to null [0],
->>> which warns:
->>> drivers/virtio/virtio_pci_common.c: In function =E2=80=98vp_del_vqs=E2=
-=80=99:
->>> drivers/virtio/virtio_pci_common.c:257:29: warning: the comparison =
-will always evaluate as =E2=80=98true=E2=80=99 for the pointer operand =
-in =E2=80=98vp_dev->msix_affinity_masks + (sizetype)((long unsigned =
-int)i * 256)=E2=80=99 must not be NULL [-Waddress]
->>> 257 | if (vp_dev->msix_affinity_masks[i])
->>> | ^~~~~~
->>> In fact, the verification is comparing the result of a pointer
->>> arithmetic, the address "msix_affinity_masks + i", which will always
->>> evaluate to true.
->>> Under the hood, free_cpumask_var() calls kfree(), which is safe to =
-pass
->>> NULL, not requiring non-null verification. So remove the =
-verification
->>> to make compiler happy (happy compiler, happy life).
->>> [0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D102103
->>> Signed-off-by: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
->>> ---
->>> drivers/virtio/virtio_pci_common.c | 3 +--
->>> 1 file changed, 1 insertion(+), 2 deletions(-)
->>> diff --git a/drivers/virtio/virtio_pci_common.c =
-b/drivers/virtio/virtio_pci_common.c
->>> index d724f676608b..5046efcffb4c 100644
->>> --- a/drivers/virtio/virtio_pci_common.c
->>> +++ b/drivers/virtio/virtio_pci_common.c
->>> @@ -254,8 +254,7 @@ void vp_del_vqs(struct virtio_device *vdev)
->>> 	if (vp_dev->msix_affinity_masks) {
->>> 		for (i =3D 0; i < vp_dev->msix_vectors; i++)
->>> -			if (vp_dev->msix_affinity_masks[i])
->>> -				=
-free_cpumask_var(vp_dev->msix_affinity_masks[i]);
->>> +			=
-free_cpumask_var(vp_dev->msix_affinity_masks[i]);
->>> 	}
->>> 	if (vp_dev->msix_enabled) {
->>=20
->> After I sent this message, I realized that Christophe (copied here)
->> had already proposed a fix:
->>=20
->> =
-https://lore.kernel.org/lkml/20220414150855.2407137-4-dinechin@redhat.com/=
+Thanks for your patch!
 
->>=20
->> Christophe,
->>=20
->> Since free_cpumask_var() calls kfree() and kfree() is null-safe,
->> can we just drop this null verification and call free_cpumask_var() =
-right away?
->=20
-> Apologies for the delay in responding, broken laptop=E2=80=A6
->=20
-> In the case where CONFIG_CPUMASK_OFFSTACK is not defined, we have:
->=20
-> 	typedef struct cpumask cpumask_var_t[1];
->=20
-> So that vp_dev->msix_affinity_masks[i] is statically not null =
-(that=E2=80=99s the warning)
-> but also a static pointer, so not kfree-safe IMO.
+> --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> @@ -59,6 +59,12 @@ ext_rtc_clk: extrtcclk {
+>                 clock-frequency = <0>;
+>         };
+>
+> +       usbphy: usbphy {
 
-=E2=80=A6 which also renders my own patch invalid :-/
+Please preserve sort order (by node name).
 
-Compiler warnings are good. Clearly not sufficient.
+> +               #phy-cells = <0>;
+> +               compatible = "usb-nop-xceiv";
+> +               status = "disabled";
+> +       };
+> +
+>         soc {
+>                 compatible = "simple-bus";
+>                 #address-cells = <1>;
 
+The rest LGTM, so with the above fixed:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

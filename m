@@ -2,84 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7B2512950
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F35512954
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241248AbiD1CH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
+        id S241264AbiD1CIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiD1CHZ (ORCPT
+        with ESMTP id S229493AbiD1CIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:07:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A4298F6C;
-        Wed, 27 Apr 2022 19:04:12 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S0frbN028127;
-        Thu, 28 Apr 2022 02:04:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=CuPlyKAxT2uex1+xJwaBMsG/ehh6GyV6KiEz5N16G6s=;
- b=H7AJmCX+oSFuqawBkKJDCJKql3Mgdm42+ZpM0v2l14wAKunSwFUaKgofrFP7VLkWTzc9
- Ukua+f1uoa+TcLhDQrYGdUefEmz404cnKkQ+B2Z1tuMlfCgOAvCff9p4ktwZSR+ZHxsv
- 8RsRHjsbqYQaPB3URdh88tGkKZlk6jZSo6zZDUDXCmlPndq9vPd96Lrk9wyDEOCyiHj8
- iF3LrjOzfMMXgkYGV4+WQWrk8dOiacZDwGUDXwxPfBBMpucfV/ULyL49yuuXuAxODTfj
- dqcjF1q0Uk71qQuKSLFz7I95skNtIGAETZgWxPFkjCHpMCO4OLROhgJSzPS5xA5bBV67 Tw== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqgkw93u6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 02:04:04 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S23gpM024856;
-        Thu, 28 Apr 2022 02:04:02 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3fm8qhnack-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 02:04:02 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S1oseh48234782
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 01:50:54 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A787AA4054;
-        Thu, 28 Apr 2022 02:03:59 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ECB8AA405C;
-        Thu, 28 Apr 2022 02:03:58 +0000 (GMT)
-Received: from sig-9-65-70-226.ibm.com (unknown [9.65.70.226])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Apr 2022 02:03:58 +0000 (GMT)
-Message-ID: <4e9eecd01d1cb51dd3e8e92783742df0b66921ab.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 3/5] ima: permit fsverity's file digests in the IMA
- measurement list
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 27 Apr 2022 22:03:58 -0400
-In-Reply-To: <YkyYUzEK9Tw4TgL2@gmail.com>
-References: <20220325223824.310119-1-zohar@linux.ibm.com>
-         <20220325223824.310119-4-zohar@linux.ibm.com> <YkyYUzEK9Tw4TgL2@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 27 Apr 2022 22:08:24 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C637F1AD
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:05:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VBXLPLZ_1651111500;
+Received: from 30.240.98.54(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VBXLPLZ_1651111500)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 28 Apr 2022 10:05:02 +0800
+Message-ID: <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
+Date:   Thu, 28 Apr 2022 10:04:54 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0)
+ Gecko/20100101 Thunderbird/100.0
+Subject: Re: DAMON VA regions don't split on an large Android APP
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
+        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
+        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
+        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        xhao@linux.alibaba.com
+References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
+ <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
+ <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+ <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _qcFZ9wAE2VmYHHq0SWIehbeUnXWaPaa
-X-Proofpoint-ORIG-GUID: _qcFZ9wAE2VmYHHq0SWIehbeUnXWaPaa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0 adultscore=0
- impostorscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204280010
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,143 +56,296 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-05 at 19:28 +0000, Eric Biggers wrote:
-> On Fri, Mar 25, 2022 at 06:38:22PM -0400, Mimi Zohar wrote:
-> > Permit fsverity's file digest (a hash of struct fsverity_digest) to be
-> > included in the IMA measurement list, based on the new measurement
-> > policy rule 'digest_type=verity' option.
+
+
+On 4/27/22 5:22 PM, Barry Song wrote:
+> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
+>>
+>> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
+>> <rongwei.wang@linux.alibaba.com> wrote:
+>>>
+>>>
+>>>
+>>> On 4/27/22 7:19 AM, Barry Song wrote:
+>>>> Hi SeongJae & Andrew,
+>>>> (also Cc-ed main damon developers)
+>>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
+>>>> that vaddr regions don't split well on large Android Apps though
+>>>> everything works well on native Apps.
+>>>>
+>>>> I have tried the below two cases on an Android phone with 12GB memory
+>>>> and snapdragon 888 CPU.
+>>>> 1. a native program with small memory working set  as below,
+>>>> #define size (1024*1024*100)
+>>>> main()
+>>>> {
+>>>>           volatile int *p = malloc(size);
+>>>>           memset(p, 0x55, size);
+>>>>
+>>>>           while(1) {
+>>>>                   int i;
+>>>>                   for (i = 0; i < size / 4; i++)
+>>>>                           (void)*(p + i);
+>>>>                   usleep(1000);
+>>>>
+>>>>                   for (i = 0; i < size / 16; i++)
+>>>>                           (void)*(p + i);
+>>>>                   usleep(1000);
+>>>>
+>>>>           }
+>>>> }
+>>>> For this application, the Damon vaddr monitor works very well.
+>>>> I have modified monitor.py in the damo userspace tool a little bit to
+>>>> show the raw data getting from the kernel.
+>>>> Regions can split decently on this kind of applications, a typical raw
+>>>> data is as below,
+>>>>
+>>>> monitoring_start:             2.224 s
+>>>> monitoring_end:               2.329 s
+>>>> monitoring_duration:       104.336 ms
+>>>> target_id: 0
+>>>> nr_regions: 24
+>>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
+>>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
+>>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
+>>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
+>>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
+>>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
+>>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
+>>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
+>>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
+>>>> 007661c59000-007661ee4000(   2.543 MiB): 2
+>>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
+>>>> 0076623e4000-007662837000(   4.324 MiB): 2
+>>>> 007662837000-0076630f1000(   8.727 MiB): 3
+>>>> 0076630f1000-007663494000(   3.637 MiB): 2
+>>>> 007663494000-007663753000(   2.746 MiB): 1
+>>>> 007663753000-007664251000(  10.992 MiB): 3
+>>>> 007664251000-0076666fd000(  36.672 MiB): 2
+>>>> 0076666fd000-007666e73000(   7.461 MiB): 1
+>>>> 007666e73000-007667c89000(  14.086 MiB): 2
+>>>> 007667c89000-007667f97000(   3.055 MiB): 0
+>>>> 007667f97000-007668112000(   1.480 MiB): 1
+>>>> 007668112000-00766820f000(1012.000 KiB): 0
+>>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
+>>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
+>>>>
+>>>> 2. a large Android app like Asphalt 9
+>>>> For this case, basically regions can't split very well, but monitor
+>>>> works on small vma:
+>>>>
+>>>> monitoring_start:             2.220 s
+>>>> monitoring_end:               2.318 s
+>>>> monitoring_duration:        98.576 ms
+>>>> target_id: 0
+>>>> nr_regions: 15
+>>>> 000012c00000-0001c301e000(   6.754 GiB): 0
+>>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
+>>>> 000371b6c000-000400000000(   2.223 GiB): 0
+>>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
+>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+>>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
+>>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
+>>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
+>>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
+>>>> 0077e863e000-00798e214000(   6.590 GiB): 0
+>>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
+>>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
+>>>> 007c62f00000-007defb19000(   6.199 GiB): 0
+>>>> 007defb19000-007f794ef000(   6.150 GiB): 0
+>>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
+>>>>
+>>>> As you can see, we have some regions which are very very big and they
+>>>> are losing the chance to be splitted. But
+>>>> Damon can still monitor memory access for those small VMA areas very well like:
+>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+>>> Hi, Barry
+>>>
+>>> Actually, we also had found the same problem in redis by ourselves
+>>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
+>>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
+>>> hot areas to been monitored or found by DAMON, likes one or more address
+>>> choose by DAMON not been accessed during sample period.
+>>
+>> Hi Rongwei,
+>> Thanks  for your comments and thanks for sharing your tools.
+>>
+>> I guess the cause might be:
+>> in case a region is very big like 10GiB, we have only 1MiB hot pages
+>> in this large region.
+>> damon will randomly pick one page to sample, but the page has only
+>> 1MiB/10GiB, thus
+>> less than 1/10000 chance to hit the hot 1MiB. so probably we need
+>> 10000 sample periods
+>> to hit the hot 1MiB in order to split this large region?
+>>
+>> @SeongJae, please correct me if I am wrong.
+>>
+>>>
+>>> I'm not sure whether sets init_regions can deal with the above problem,
+>>> or dynamic choose one or limited number VMA to monitor.
+>>>
+>>
+>> I won't set a limited number of VMA as this will make the damon too hard to use
+>> as nobody wants to make such complex operations, especially an Android
+>> app might have more than 8000 VMAs.
+>>
+>> I agree init_regions might be the right place to enhance the situation.
+>>
+>>> I'm not sure, just share my idea.
+>>>
+>>> [1] https://github.com/aliyun/data-profile-tools.git
+>>
+>> I suppose this tool is based on damon? How do you finally resolve the problem
+>> that large anon VMAs can't be splitted?
+>> Anyway, I will give your tool a try.
 > 
-> "fsverity's file digest" *is* 'struct fsverity_digest', not a hash of it.
-> Did you mean to write 'struct fsverity_descriptor'?
-
-Fixed.
-
+> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
+> though autogen.sh
+> runs successfully.
 > 
-> > diff --git a/Documentation/security/IMA-templates.rst b/Documentation/security/IMA-templates.rst
-> > index 1a91d92950a7..2d4789dc7750 100644
-> > --- a/Documentation/security/IMA-templates.rst
-> > +++ b/Documentation/security/IMA-templates.rst
-> > @@ -68,6 +68,9 @@ descriptors by adding their identifier to the format string
-> >   - 'd-ng': the digest of the event, calculated with an arbitrary hash
-> >     algorithm (field format: [<hash algo>:]digest, where the digest
-> >     prefix is shown only if the hash algorithm is not SHA1 or MD5);
-> > + - 'd-ngv2': same as d-ng, but prefixed with the digest type.
-> > +    field format: [<digest type>:<hash algo>:]digest,
-> > +        where the digest type is either "ima" or "verity".
+> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
+> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+> reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+> reference to `wgetch'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
+> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+> reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+> reference to `subwin'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
+> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
+> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
+> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
+> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
+> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
+> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
+> reference to `wattr_off'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
+> reference to `wattr_on'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
+> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+> reference to `wattr_off'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
+> reference to `mvwprintw'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+> reference to `wattr_off'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
+> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+> reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+> reference to `wclear'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
+> reference to `wrefresh'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
+> reference to `endwin'
+> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
+> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
+> reference to `initscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+> reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+> reference to `wrefresh'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
+> reference to `use_default_colors'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
+> reference to `start_color'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
+> reference to `keypad'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
+> reference to `nonl'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
+> reference to `cbreak'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
+> reference to `noecho'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
+> reference to `curs_set'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+> reference to `stdscr'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+> reference to `mvwprintw'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
+> reference to `mvwprintw'
+> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
+> reference to `wrefresh'
+> collect2: error: ld returned 1 exit status
+> make[1]: *** [Makefile:592: datop] Error 1
+> make[1]: Leaving directory '/root/data-profile-tools'
+> make: *** [Makefile:438: all] Error 2
+Hi, Barry
+
+Now, the question made me realize that the compatibility of this tool is 
+very poor. I built a ubuntu environment at yesterday, and fixed above 
+errors by:
+
+diff --git a/configure.ac b/configure.ac
+index 7922f27..1ed823c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -21,13 +21,9 @@ AC_PROG_INSTALL
+  AC_CHECK_LIB([numa], [numa_free])
+  AC_CHECK_LIB([pthread], [pthread_create])
+
+-PKG_CHECK_MODULES([CHECK], [check])
+-
+-PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS 
+$ncurses_LIBS"], [
+-       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
+-               AC_MSG_ERROR([ncurses is required but was not found])
+-       ], [])
+-])
++AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
++       AC_MSG_ERROR([required library libncurses or ncurses not found])
++       ])
+
+It works. But I found an another thing will hinder you using this tool. 
+We had developed other patches about DAMON base on upstream. This tool 
+only works well in ourselves kernel(anolis kernel, already open source).
+Of course, I think it's unnecessary for you to change kernel, just let 
+you know this tool still has this problem.
+
+Anyway, the question that you reported was valuable, made me realize 
+what we need to improve next.
+
+Thanks,
+Rongwei Wang
 > 
-> As in patch 2, it is not clear what the square brackets mean here.  Maybe they
-> mean that "<digest type>:<hash algo>:" is optional, but it is not explained when
-> they will be present and when they will not be present.
-
-Agreed, removed.
-
-> 
-> >   - 'd-modsig': the digest of the event without the appended modsig;
-> >   - 'n-ng': the name of the event, without size limitations;
-> >   - 'sig': the file signature, or the EVM portable signature if the file
-> > @@ -106,3 +109,8 @@ currently the following methods are supported:
-> >     the ``ima_template=`` parameter;
-> >   - register a new template descriptor with custom format through the kernel
-> >     command line parameter ``ima_template_fmt=``.
-> > +
-> > +
-> > +References
-> > +==========
-> > +[1] Documentation/filesystems/fsverity.rst
-> 
-> Is this meant to be a footnote?  There are no references to it above.
-> 
-> > @@ -242,14 +267,29 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
-> >  	 */
-> >  	i_version = inode_query_iversion(inode);
-> >  	hash.hdr.algo = algo;
-> > +	hash.hdr.length = hash_digest_size[algo];
-> >  
-> >  	/* Initialize hash digest to 0's in case of failure */
-> >  	memset(&hash.digest, 0, sizeof(hash.digest));
-> >  
-> > -	if (buf)
-> > +	if (buf) {
-> >  		result = ima_calc_buffer_hash(buf, size, &hash.hdr);
-> > -	else
-> > +	} else if (iint->flags & IMA_VERITY_REQUIRED) {
-> > +		result = ima_get_verity_digest(iint, &hash);
-> > +		switch (result) {
-> > +		case 0:
-> > +			break;
-> > +		case -ENODATA:
-> > +			audit_cause = "no-verity-digest";
-> > +			result = -EINVAL;
-> > +			break;
-> > +		default:
-> > +			audit_cause = "invalid-verity-digest";
-> > +			break;
-> > +		}
-> > +	} else {
-> >  		result = ima_calc_file_hash(file, &hash.hdr);
-> > +	}
-> >  
-> >  	if (result && result != -EBADF && result != -EINVAL)
-> >  		goto out;
-> 
-> The above code only calls ima_get_verity_digest() if 'buf' is non-NULL,
-> otherwise it calls ima_calc_buffer_hash().  Under what circumstances is 'buf'
-> non-NULL?  Does this imply that 'digest_type=verity' does not always use verity
-> digests, and if not, when are they used and when are they not used?
-
-Agreed, it should always be based on policy.
-
-FYI, instead of IMA pre-reading and calculating the file hash, there
-are instances where the kernel reads the entire file into memory.   For
-example, kernel_read_file() calls security_kernel_post_read_file(),
-which calls ima_post_read_file().
-
-> 
-> > +/*
-> > + * Make sure the policy rule and template format are in sync.
-> > + */
-> > +static void check_template_field(const struct ima_template_desc *template,
-> > +				 const char *field, const char *msg)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < template->num_fields; i++)
-> > +		if (!strcmp(template->fields[i]->field_id, field))
-> > +			return;
-> > +
-> > +	pr_notice_once("%s", msg);
-> > +}
-> 
-> A better description for this function would be something like "Warn if the
-> template does not contain the given field."
-
-Ok
-> 
-> > index daf49894fd7d..d42a01903f08 100644
-> > --- a/security/integrity/integrity.h
-> > +++ b/security/integrity/integrity.h
-> > @@ -32,7 +32,7 @@
-> >  #define IMA_HASHED		0x00000200
-> >  
-> >  /* iint policy rule cache flags */
-> > -#define IMA_NONACTION_FLAGS	0xff000000
-> > +#define IMA_NONACTION_FLAGS	0xff800000
-> >  #define IMA_DIGSIG_REQUIRED	0x01000000
-> >  #define IMA_PERMIT_DIRECTIO	0x02000000
-> >  #define IMA_NEW_FILE		0x04000000
-> > @@ -40,6 +40,7 @@
-> >  #define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
-> >  #define IMA_MODSIG_ALLOWED	0x20000000
-> >  #define IMA_CHECK_BLACKLIST	0x40000000
-> > +#define IMA_VERITY_REQUIRED	0x80000000
-> 
-> It is intentional that the new bit added to IMA_NONACTION_FLAGS is not the same
-> as IMA_VERITY_REQUIRED?
-
-Thanks for catching this.  Previous versions required an additional
-bit, but that isn't the case now.
-
-thanks,
-
-Mimi
-
+>>
+>>>>
+>>>> Typical characteristics of a large Android app is that it has
+>>>> thousands of vma and very large virtual address spaces:
+>>>> ~/damo # pmap 2550 | wc -l
+>>>> 8522
+>>>>
+>>>> ~/damo # pmap 2550
+>>>> ...
+>>>> 0000007992bbe000      4K r----   [ anon ]
+>>>> 0000007992bbf000     24K rw---   [ anon ]
+>>>> 0000007fe8753000      4K -----   [ anon ]
+>>>> 0000007fe8754000   8188K rw---   [ stack ]
+>>>>    total         36742112K
+>>>>
+>>>> Because the whole vma list is too long, I have put the list here for
+>>>> you to download:
+>>>> wget http://www.linuxep.com/patches/android-app-vmas
+>>>>
+>>>> I can reproduce this problem on other Apps like youtube as well.
+>>>> I suppose we need to boost the algorithm of splitting regions for this
+>>>> kind of application.
+>>>> Any thoughts?
+>>>>
+>>
+>> Thanks
+>> Barry

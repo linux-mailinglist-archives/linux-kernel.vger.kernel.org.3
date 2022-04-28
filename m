@@ -2,97 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A70512C7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C2D512C83
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244976AbiD1HT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S245086AbiD1HTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244936AbiD1HTX (ORCPT
+        with ESMTP id S245098AbiD1HTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:19:23 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EBA972C6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:16:07 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kpn051JdrzGpN9;
-        Thu, 28 Apr 2022 15:13:25 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 15:16:02 +0800
-Subject: Re: [RFC PATCH v1 4/4] mm, memory_hotplug: fix inconsistent
- num_poisoned_pages on memory hotremove
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220427042841.678351-1-naoya.horiguchi@linux.dev>
- <20220427042841.678351-5-naoya.horiguchi@linux.dev>
- <828cc111-40e8-88ed-bb50-fb185e5f0304@huawei.com>
- <20220428040556.GA3945421@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4cae9c00-a048-2c0a-9a45-d7abb956fde7@huawei.com>
-Date:   Thu, 28 Apr 2022 15:16:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 28 Apr 2022 03:19:45 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD939A98F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:16:30 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id p18so4446340edr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qK/yNrchERZZb5WKsXnjQKVBWPRpxhxKirZegeYDkkY=;
+        b=vJtMFaDNzaFtW99IRYyFTdk1Q8rYW6IgWzug6j118ma2yzmHBEoZiIvjA+nqqYpWTQ
+         Jn8F9zn8piDuH+HVvvDNy9n1snQ3Zs+xiBydHljNiaIbnqk8kbFOE0jRdRmK/FE35t8E
+         FwMLiIdpJsgd6pblclSuZNN8qA/zm0bLgh3FI8opcF/fbId2RbGSF/AZhU+Y01/1Kqkj
+         8V7lXoleyRtSyGVds/TB01VyhRAALqiMR4zPJ06+KXwLXXWgClKJKlvHm/ahNu2qXB5t
+         B4+IvMdt7au54atFCYPkxViu6/L/e/tVm+btfCw+jvW12VGe5M7Cz3wa/8D2RaJ5SqI9
+         EYnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qK/yNrchERZZb5WKsXnjQKVBWPRpxhxKirZegeYDkkY=;
+        b=LcMIaamcomHlDSvd6SKfOzYbO9otU1lOiqI7zbwsgeuAmMYVPFsjmM8ESff1ZPum7Y
+         Nkqhs+CaDM3pVXERkUta+R1kVhqsNob0mqkoQTVZBDJru/4PtqxCngyNKoIlcQkEmmH+
+         mFrfkYzgluzR7USDOhr9FcUsS5xj38iXS/o0OFYA+YomsT4dVAIfegwtPmnzx5MTMgMX
+         6zhsjNaogKQuKDdgiYHbBAH8x5fBF37ROUWGfmh92hXimxphWbazkYZl4zjhO1ghhJu7
+         dn/26GFRecCqvm32WDA9XyE3Svlvx55Hgv1xaJ8/zkC7AyDpVfBjlWrb86XbDPdgjE4d
+         b1cg==
+X-Gm-Message-State: AOAM530dpnJ+kv8cBI2ahg0QpNuFhCtrXBtgnKwOMSQGHWv07/hqlm3X
+        o1GIVFJAuo08G9uBL+Z40sdLGQ==
+X-Google-Smtp-Source: ABdhPJwRIlMZ/N3CaLiouXW/V1Nu5fEPPg34JRXTySZPqf2rTLSJUyAHmbmbfn25DsZhtMrqpgtQAw==
+X-Received: by 2002:a05:6402:2985:b0:425:d51f:ae4 with SMTP id eq5-20020a056402298500b00425d51f0ae4mr26454621edb.379.1651130189275;
+        Thu, 28 Apr 2022 00:16:29 -0700 (PDT)
+Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z14-20020a170906944e00b006f38c33b6e3sm6086651ejx.68.2022.04.28.00.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 00:16:27 -0700 (PDT)
+Message-ID: <b7bb228f-751c-e7ad-a695-3dc40d889a72@linaro.org>
+Date:   Thu, 28 Apr 2022 09:16:26 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220428040556.GA3945421@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: arm: mediatek: mmsys: refine power and gce
+ properties
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, CK Hu <ck.hu@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220428012715.2619-1-jason-jh.lin@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220428012715.2619-1-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/28 12:05, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Thu, Apr 28, 2022 at 11:20:16AM +0800, Miaohe Lin wrote:
->> On 2022/4/27 12:28, Naoya Horiguchi wrote:
->>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
->>>
->>> When offlining memory section with hwpoisoned pages, the hwpoisons are
->>> canceled. But num_poisoned_pages is not updated for that event, so the
->>> counter becomes inconsistent.
->>
->> IIUC, this work is already done via clear_hwpoisoned_pages when __remove_pages.
->> Or am I miss something?
+On 28/04/2022 03:27, jason-jh.lin wrote:
+> From: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>
 > 
-> Actually I had the same question when writing this patch, and found that
-> __remove_pages() seems to be called from device memory or HMM, but not from
-
-It seems remove_memory (which calls __remove_pages) will be called as .detach callback of
-memory_device_handler in drivers/acpi/acpi_memhotplug.c. So the hwpoison info will also be
-clear for that memory ?
-
-> offline_pages().  If you mean that we could make offline_pages() call
-> clear_hwpoisoned_pages(), that seems possible and I'll consider it.
+> Power:
+>   Refine description and add item number for power-domains property.
 > 
-> But as David and Oscar pointed out for 0/4, removing PageHWPoison flags
-> in offlining seems not to be right thing, so I'd like to have some consensus
-> on what way to go first.
-
-Agree. We should have some consensus first.
-
-Thanks!
-
+> GCE:
+>   Refine description and add item number for mboxes property and
+>   mediatek,gce-client-reg property.
 > 
-> Thanks,
-> Naoya Horiguchi
+> Fixes: 1da90b8a7bae ("dt-bindings: arm: mediatek: mmsys: add power and gce properties")
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> ---
+>  .../bindings/arm/mediatek/mediatek,mmsys.yaml | 29 +++++++++----------
+>  1 file changed, 14 insertions(+), 15 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> index 6ad023eec193..6722f1b724ef 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+> @@ -43,28 +43,27 @@ properties:
+>      maxItems: 1
+>  
+>    power-domains:
+> +    maxItems: 1
+>      description:
+> -      A phandle and PM domain specifier as defined by bindings
+> -      of the power controller specified by phandle. See
+> -      Documentation/devicetree/bindings/power/power-domain.yaml for details.
+> +      Each mmsys belongs to a power-domains. If mmsys wants to use PM
+> +      interface to control the power controller of mmsys, it should have
+> +      this property.
+>  
+>    mboxes:
+> +    minItems: 1
 
+maxItems, surely you cannot have infinite number of mailboxes to talk with?
+
+>      description:
+> -      Using mailbox to communicate with GCE, it should have this
+> -      property and list of phandle, mailbox specifiers. See
+> -      Documentation/devicetree/bindings/mailbox/mtk-gce.txt for details.
+> -    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +      If using mailbox to communicate with GCE, it should have this
+> +      property. GCE will help configure the hardware settings for the
+> +      current mmsys data pipeline.
+>  
+>    mediatek,gce-client-reg:
+> -    description:
+> -      The register of client driver can be configured by gce with 4 arguments
+> -      defined in this property, such as phandle of gce, subsys id,
+> -      register offset and size.
+> -      Each subsys id is mapping to a base address of display function blocks
+> -      register which is defined in the gce header
+> -      include/dt-bindings/gce/<chip>-gce.h.
+> -    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+Why removing ref? Does your binding work after such change?
+
+>      maxItems: 1
+> +    items:
+> +      - items:
+> +          - description: phandle to GCE
+> +          - description: subsys id
+> +          - description: register offset
+> +          - description: register size
+>  
+>    "#clock-cells":
+>      const: 1
+
+
+Best regards,
+Krzysztof

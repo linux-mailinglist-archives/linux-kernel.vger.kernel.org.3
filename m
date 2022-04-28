@@ -2,48 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9293551354F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D269513559
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347341AbiD1Nk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S1347419AbiD1Nkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235714AbiD1NkZ (ORCPT
+        with ESMTP id S235759AbiD1Nk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:40:25 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964F095A3B;
-        Thu, 28 Apr 2022 06:37:09 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1nk4KJ-0004TN-Vj; Thu, 28 Apr 2022 15:37:00 +0200
-Message-ID: <9553b164-67a6-3634-34c5-f7319ce2dc60@maciej.szmigiero.name>
-Date:   Thu, 28 Apr 2022 15:36:53 +0200
+        Thu, 28 Apr 2022 09:40:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9B972C0;
+        Thu, 28 Apr 2022 06:37:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72D77B82D13;
+        Thu, 28 Apr 2022 13:37:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD444C385A0;
+        Thu, 28 Apr 2022 13:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651153029;
+        bh=j8aQI14XIEgswr7w1bn7LZ21u3HZPMe7XhOS1IK4t1E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1Ej7qvEr99F8mKrSJJv3VejrqNgv64Ui+b3yB7Fc+h74A4kvWN14um8eEPoCBjQdp
+         oP7Qo9IutHjy23rO6jOMWbc/CubxyxP7IMvUKvtqszfy2b5OCIiyy0rhOKxC+zwe1u
+         MK8cDg4o/SP1XkwmLeO3jlLu252ChcIgm07BQYEI=
+Date:   Thu, 28 Apr 2022 15:37:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lin Ma <linma@zju.edu.cn>
+Cc:     Duoming Zhou <duoming@zju.edu.cn>, krzysztof.kozlowski@linaro.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, alexander.deucher@amd.com,
+        akpm@linux-foundation.org, broonie@kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data race-able
+Message-ID: <YmqYgu++0OuhfFxy@kroah.com>
+References: <20220427011438.110582-1-duoming@zju.edu.cn>
+ <20220427174548.2ae53b84@kernel.org>
+ <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
+ <YmpEZQ7EnOIWlsy8@kroah.com>
+ <2d7c9164.2b1f.1806f2a8ed9.Coremail.linma@zju.edu.cn>
+ <YmpNZOaJ1+vWdccK@kroah.com>
+ <15d09db2.2f76.1806f5c4187.Coremail.linma@zju.edu.cn>
+ <YmpcUNf7O+OK6/Ax@kroah.com>
+ <20220428060628.713479b2@kernel.org>
+ <f51aa1.41ae.180705614b5.Coremail.linma@zju.edu.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220423021411.784383-1-seanjc@google.com>
- <20220423021411.784383-6-seanjc@google.com>
- <051f508121bcf47d8cbc79ee2c0817aafbe5af48.camel@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH v2 05/11] KVM: SVM: Re-inject INT3/INTO instead of
- retrying the instruction
-In-Reply-To: <051f508121bcf47d8cbc79ee2c0817aafbe5af48.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f51aa1.41ae.180705614b5.Coremail.linma@zju.edu.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,114 +62,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.04.2022 11:37, Maxim Levitsky wrote:
-> On Sat, 2022-04-23 at 02:14 +0000, Sean Christopherson wrote:
->> Re-inject INT3/INTO instead of retrying the instruction if the CPU
->> encountered an intercepted exception while vectoring the software
->> exception, e.g. if vectoring INT3 encounters a #PF and KVM is using
->> shadow paging.  Retrying the instruction is architecturally wrong, e.g.
->> will result in a spurious #DB if there's a code breakpoint on the INT3/O,
->> and lack of re-injection also breaks nested virtualization, e.g. if L1
->> injects a software exception and vectoring the injected exception
->> encounters an exception that is intercepted by L0 but not L1.
->>
->> Due to, ahem, deficiencies in the SVM architecture, acquiring the next
->> RIP may require flowing through the emulator even if NRIPS is supported,
->> as the CPU clears next_rip if the VM-Exit is due to an exception other
->> than "exceptions caused by the INT3, INTO, and BOUND instructions".  To
->> deal with this, "skip" the instruction to calculate next_rip (if it's
->> not already known), and then unwind the RIP write and any side effects
->> (RFLAGS updates).
->>
->> Save the computed next_rip and use it to re-stuff next_rip if injection
->> doesn't complete.  This allows KVM to do the right thing if next_rip was
->> known prior to injection, e.g. if L1 injects a soft event into L2, and
->> there is no backing INTn instruction, e.g. if L1 is injecting an
->> arbitrary event.
->>
->> Note, it's impossible to guarantee architectural correctness given SVM's
->> architectural flaws.  E.g. if the guest executes INTn (no KVM injection),
->> an exit occurs while vectoring the INTn, and the guest modifies the code
->> stream while the exit is being handled, KVM will compute the incorrect
->> next_rip due to "skipping" the wrong instruction.  A future enhancement
->> to make this less awful would be for KVM to detect that the decoded
->> instruction is not the correct INTn and drop the to-be-injected soft
->> event (retrying is a lesser evil compared to shoving the wrong RIP on the
->> exception stack).
->>
->> Reported-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
->> Signed-off-by: Sean Christopherson <seanjc@google.com>
->> ---
->>   arch/x86/kvm/svm/nested.c |  28 +++++++-
->>   arch/x86/kvm/svm/svm.c    | 140 +++++++++++++++++++++++++++-----------
->>   arch/x86/kvm/svm/svm.h    |   6 +-
->>   3 files changed, 130 insertions(+), 44 deletions(-)
->>
->> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
->> index 461c5f247801..0163238aa198 100644
->> --- a/arch/x86/kvm/svm/nested.c
->> +++ b/arch/x86/kvm/svm/nested.c
->> @@ -609,6 +609,21 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
->>   	}
->>   }
->>   
->> +static inline bool is_evtinj_soft(u32 evtinj)
->> +{
->> +	u32 type = evtinj & SVM_EVTINJ_TYPE_MASK;
->> +	u8 vector = evtinj & SVM_EVTINJ_VEC_MASK;
->> +
->> +	if (!(evtinj & SVM_EVTINJ_VALID))
->> +		return false;
->> +
->> +	/*
->> +	 * Intentionally return false for SOFT events, SVM doesn't yet support
->> +	 * re-injecting soft interrupts.
->> +	 */
->> +	return type == SVM_EVTINJ_TYPE_EXEPT && kvm_exception_is_soft(vector);
->> +}
->> +
->>   static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->>   					  unsigned long vmcb12_rip)
->>   {
->> @@ -677,6 +692,16 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->>   	else if (boot_cpu_has(X86_FEATURE_NRIPS))
->>   		vmcb02->control.next_rip    = vmcb12_rip;
->>   
->> +	if (is_evtinj_soft(vmcb02->control.event_inj)) {
->> +		svm->soft_int_injected = true;
->> +		svm->soft_int_csbase = svm->vmcb->save.cs.base;
->> +		svm->soft_int_old_rip = vmcb12_rip;
->> +		if (svm->nrips_enabled)
->> +			svm->soft_int_next_rip = svm->nested.ctl.next_rip;
->> +		else
->> +			svm->soft_int_next_rip = vmcb12_rip;
->> +	}
->> +
->>   	vmcb02->control.virt_ext            = vmcb01->control.virt_ext &
->>   					      LBR_CTL_ENABLE_MASK;
->>   	if (svm->lbrv_enabled)
->> @@ -849,6 +874,7 @@ int nested_svm_vmrun(struct kvm_vcpu *vcpu)
->>   
->>   out_exit_err:
->>   	svm->nested.nested_run_pending = 0;
->> +	svm->soft_int_injected = false;
->>   
->>   	svm->vmcb->control.exit_code    = SVM_EXIT_ERR;
->>   	svm->vmcb->control.exit_code_hi = 0;
->> @@ -1618,7 +1644,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->>   	nested_copy_vmcb_control_to_cache(svm, ctl);
->>   
->>   	svm_switch_vmcb(svm, &svm->nested.vmcb02);
->> -	nested_vmcb02_prepare_control(svm, save->rip);
->> +	nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip);
+On Thu, Apr 28, 2022 at 09:22:11PM +0800, Lin Ma wrote:
+> Hello there,
 > 
-> Is this change intentional?
+> > 
+> > Yes, that looks better, 
+> 
+> Cool, thanks again for giving comments. :)
+> 
+> > but what is the root problem here that you are
+> > trying to solve?  Why does NFC need this when no other subsystem does?
+> > 
+> 
+> Well, in fact, me and Duoming are keep finding concurrency bugs that happen 
+> between the device cleanup/detach routine and other undergoing routines.
+> 
+> That is to say, when a device, no matter real or virtual, is detached from 
+> the machine, the kernel awake cleanup routine to reclaim the resource. 
+> In current case, the cleanup routine will call nfc_unregister_device().
+> 
+> Other routines, mainly from user-space system calls, need to be careful of 
+> the cleanup event. In another word, the kernel need to synchronize these 
+> routines to avoid race bugs.
+> 
+> In our practice, we find that many subsystems are prone to this type of bug.
+> 
+> For example, in bluetooth we fix
+> 
+> BT subsystem
+> * e2cb6b891ad2 ("bluetooth: eliminate the potential race condition when removing
+> the HCI controller")
+> * fa78d2d1d64f ("Bluetooth: fix data races in smp_unregister(), smp_del_chan()")
+> ..
+> 
+> AX25 subsystem
+> * 1ade48d0c27d ("ax25: NPD bug when detaching AX25 device")
+> ..
+> 
+> we currently focus on the net relevant subsystems and we now is auditing the NFC 
+> code.
+> 
+> In another word, all subsystems need to take care of the synchronization issues.
+> But seems that the solutions are varied between different subsystem. 
+> 
+> Empirically speaking, most of them use specific flags + specific locks to prevent
+> the race. 
+> 
+> In such cases, if the cleanup routine first hold the lock, the other routines will
+> wait on the locks. Since the cleanup routine write the specific flag, the other
+> routine, after check the specific flag, will be aware of the cleanup stuff and just
+> abort their tasks.
+> If the other routines first hold the lock, the cleanup routine just wait them to 
+> finish.
+> 
+> NFC here is special because it uses device_is_registered. I thought the author may
+> believe this macro is race free. However, it is not. So we need to replace this check
+> to make sure the netlink functions will 100 percent be aware of the cleanup routine
+> and abort the task if they grab the device_lock lately. Otherwise, the nelink routine
+> will call sub-layer code and possilby dereference resources that already freed.
+> 
+> For example, one of my recent fix 3e3b5dfcd16a ("NFC: reorder the logic in 
+> nfc_{un,}register_device") takes the suggestion from maintainer as he thought the 
+> device_is_registered is enough. And for now we find out this device_is_registered
+> is not enough.
 
-It looks to me the final code is correct since "svm->vmcb->save"
-contains L2 register save, while "save" has L1 register save.
+How do you physically remove a NFC device from a system?  What types of
+busses are they on?  If non-removable one, then odds are there's not
+going to be many races so this is a low-priority thing.  If they can be
+on removable busses (USB, PCI, etc.), then that's a bigger thing.
 
-It was the patch 1 from this series that was incorrect in
-using "save->rip" here instead.
+But again, the NFC bus code should handle all of this for the drivers,
+there's nothing special about NFC that should warrant a special need for
+this type of thing.
 
-Thanks,
-Maciej
+thanks,
+
+greg k-h

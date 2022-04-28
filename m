@@ -2,87 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECB75130F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AE15130EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234406AbiD1KMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S233821AbiD1KMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 06:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiD1KLo (ORCPT
+        with ESMTP id S233749AbiD1KLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:11:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B4E2CC8E;
-        Thu, 28 Apr 2022 03:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651140147;
-        bh=5RkR0AnFX7vQTXrSZOyaEfFUYVNtE06t7X96bNHnpAk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=EVZb7nTx/v4hqEQf/0UL39mQpzEJu4VuF3dvdrAbo9fT0Iy7igpqwmPyfEMJBQtY+
-         Pn2PmbzUQek4kJ1q1UIKaX7rOPl7Nf+Z9+fZ7S5dVF162uhqw3qb51QsEG+6vdrbcR
-         mhe7sT9dEFYcunjyIuD3Du0g/9QZgJK5vWxpSLEo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTqW-1nOTRM3hrC-00WUrz; Thu, 28
- Apr 2022 12:02:26 +0200
-Date:   Thu, 28 Apr 2022 12:02:24 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Zev Weiss <zweiss@equinix.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Patrick Venture <venture@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thu, 28 Apr 2022 06:11:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A0876007E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 03:02:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AD2D1474;
+        Thu, 28 Apr 2022 03:02:41 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.76.183])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7134C3F774;
+        Thu, 28 Apr 2022 03:02:37 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 11:02:35 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: Re: [PATCH 2/7] clocksource: timer-npcm7xx: Enable timer 1 clock
- before use
-Message-ID: <YmpmMGsI2GLrvMg5@latitude>
-References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
- <20220422183012.444674-3-j.neuschaefer@gmx.net>
- <20220428091158.GD11809@packtop>
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "legion@kernel.org" <legion@kernel.org>,
+        "adharmap@quicinc.com" <adharmap@quicinc.com>,
+        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
+        "ed.tsai@mediatek.com" <ed.tsai@mediatek.com>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
+Subject: Re: [PATCH] sched/tracing: append prev_state to tp args instead
+Message-ID: <20220428100235.sqoxunbylqk2surk@wubuntu>
+References: <20220120162520.570782-1-valentin.schneider@arm.com>
+ <93a20759600c05b6d9e4359a1517c88e06b44834.camel@fb.com>
+ <20220422110903.GW2731@worktop.programming.kicks-ass.net>
+ <056e9bb0d0e3fc20572d42db7386face1d0665d6.camel@fb.com>
+ <CAADnVQKsah4aka-LJ+X+5XHHESKbbw36D8fXTLqcYp2io3PN_w@mail.gmail.com>
+ <YmflVPQlwpiBuxRc@hirez.programming.kicks-ass.net>
+ <20220426140959.op6u5m7id57aq7yc@wubuntu>
+ <CAEf4BzaoL5HVc8U16kz7m--RiPhBwuLt8ZGZppwfxV85AXXrcw@mail.gmail.com>
+ <20220427103458.ecnqtaj3af63625h@wubuntu>
+ <CAEf4BzYc3f2-9hvuGL_mTO8qNxZjdQn8AabEb-N6Q7XjmEQQ1A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yOapqzkiMt8+dk0+"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220428091158.GD11809@packtop>
-X-Provags-ID: V03:K1:z2GOvnE2pOoTKqPS2YNCdWH3PNgLZoY46dfHyKNgxU1cCV0GDMV
- CD5eXdswQsXQqcWJUlISm7/TxvKACGZ4FJS9IDAcStlPoqFOQYnAZI7jcX3dsNtIq+i3Uai
- bV9ZDeHO2mpbW/oJIk5KYUBSGI1btTH9/yVMpNt9Z3sK8JIRqdkp0d4QnB1agCrftN6tB+z
- hl6MQKVaa1728yKtcJiBA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:I6+m8IwNZtM=:6UfzdwNcOAsy6GnUAtfJdl
- 6wW0Ip1MRPMbRrjB6AtLBRlzFqB1TJGg49uanx9G2aDNNU5pL8oveu/t/XhdSZajLVc5avdGp
- NexHpCpVrfm9P39HdsWE+Ys0gF5QOD5VLm3XEWSI5IdTpZsFl7rQ94GZjPGUpWOS5M76yKJQO
- HeWPP47IHdCOxj/g+3/yoa0SYC27v2lijBV9F7FWfqcucbNme9MQT/UxwHB2BLrKQLGcgtP0z
- 5rStsWFJ54Iq9YDnP8b8tVrx/Sc//6o3MXvyIh/OkHoTLP4lYouNjmscUocxJtxtH4CKDs8qB
- cdEK434ilq2GkCAN3j5DoTJi2f2UfvZ9vB5TIiogM1+pA7qjknwRhqo/RIEowtMKxS/PNemy7
- t/aweHpEDnlavP/XMBrSilu1mvq9/MexyqSaj14pLowIvu8DzJCMmo30/9pMkK869u/52W25Q
- ZqZ/AhaY5EgRs+XOFnj08nwmP4HGhxJB8bIkqKo4w40TNY1TIdYEqzuRdH+MlUIulHi6rXNJb
- TGUDj7BY57On5x8ng2FbF2MW5O5fd0dvWacwKvHpXWuzIdm9DIAqi+yxIcVlEvEcKpj+qPxrD
- SBJblxieQUAoPKOQtX8gWNEohdd1rHRawppM1/Z+FI7k/Uon7jxgZC31gGr/Jlqfs6PMHMu+6
- dkAnnrMfloM04cXPGgRYSj2VSeqVByrtPwPz4pk1B7KKU0VCv9a2xIt040qiByoAHM/DaRM58
- 8jzU8vbzjdXK//fpWL3sgAOuwHczM9ehyQmebFImrgk8TS04eqHqLPzFemNgdEFNE4TJSL8Ty
- cPIrK7irweN9tan58XCt1MY5okntg1dfih6GoblOwfDQx15BfNZHr6Wsq7eOWqkBdoCtl71cf
- PmUjzBsd7Biv33otqAby6iBMcSagwzXRKkat4/SDggUsVTbB2j6CM8AGH263eL15nFSXjuLdK
- Qrm32UaVAEYWCUxxY2hQnRutwHuYpvl5gCn65xUAmw3wX7JsNdEk02CsFWSKJ3zVEDIg2pSlj
- 1wEn2oH1yI6FqC7f+fn0la/L81NfleUMxBBcscy6H2UGlh57PD2dm7zmQ7rt/a0GA/1M0avLy
- oo+FpSSyPXgUvQ=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <CAEf4BzYc3f2-9hvuGL_mTO8qNxZjdQn8AabEb-N6Q7XjmEQQ1A@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,89 +75,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---yOapqzkiMt8+dk0+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 28, 2022 at 09:11:58AM +0000, Zev Weiss wrote:
-> On Fri, Apr 22, 2022 at 11:30:07AM PDT, Jonathan Neusch=C3=A4fer wrote:
-> >In the WPCM450 SoC, the clocks for each timer can be gated individually.
-> >To prevent the timer 1 clock from being gated, enable it explicitly.
+On 04/27/22 11:17, Andrii Nakryiko wrote:
+> On Wed, Apr 27, 2022 at 3:35 AM Qais Yousef <qais.yousef@arm.com> wrote:
 > >
-> >Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> >---
-> > drivers/clocksource/timer-npcm7xx.c | 14 +++++++++++++-
-> > 1 file changed, 13 insertions(+), 1 deletion(-)
+> > On 04/26/22 08:54, Andrii Nakryiko wrote:
+> > > On Tue, Apr 26, 2022 at 7:10 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> > > >
+> > > > On 04/26/22 14:28, Peter Zijlstra wrote:
+> > > > > On Fri, Apr 22, 2022 at 11:30:12AM -0700, Alexei Starovoitov wrote:
+> > > > > > On Fri, Apr 22, 2022 at 10:22 AM Delyan Kratunov <delyank@fb.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, 2022-04-22 at 13:09 +0200, Peter Zijlstra wrote:
+> > > > > > > > And on the other hand; those users need to be fixed anyway, right?
+> > > > > > > > Accessing prev->__state is equally broken.
+> > > > > > >
+> > > > > > > The users that access prev->__state would most likely have to be fixed, for sure.
+> > > > > > >
+> > > > > > > However, not all users access prev->__state. `offcputime` for example just takes a
+> > > > > > > stack trace and associates it with the switched out task. This kind of user
+> > > > > > > would continue working with the proposed patch.
+> > > > > > >
+> > > > > > > > If bpf wants to ride on them, it needs to suffer the pain of doing so.
+> > > > > > >
+> > > > > > > Sure, I'm just advocating for a fairly trivial patch to avoid some of the suffering,
+> > > > > > > hopefully without being a burden to development. If that's not the case, then it's a
+> > > > > > > clear no-go.
+> > > > > >
+> > > > > >
+> > > > > > Namhyung just sent this patch set:
+> > > > > > https://patchwork.kernel.org/project/netdevbpf/patch/20220422053401.208207-3-namhyung@kernel.org/
+> > > > >
+> > > > > That has:
+> > > > >
+> > > > > + * recently task_struct->state renamed to __state so it made an incompatible
+> > > > > + * change.
+> > > > >
+> > > > > git tells me:
+> > > > >
+> > > > >   2f064a59a11f ("sched: Change task_struct::state")
+> > > > >
+> > > > > is almost a year old by now. That don't qualify as recently in my book.
+> > > > > That says that 'old kernels used to call this...'.
+> > > > >
+> > > > > > to add off-cpu profiling to perf.
+> > > > > > It also hooks into sched_switch tracepoint.
+> > > > > > Notice it deals with state->__state rename just fine.
+> > > > >
+> > > > > So I don't speak BPF much; it always takes me more time to make bpf work
+> > > > > than to just hack up the kernel, which makes it hard to get motivated.
+> > > > >
+> > > > > However, it was not just a rename, state changed type too, which is why I
+> > > > > did the rename, to make sure all users would get a compile fail and
+> > > > > could adjust.
+> > > > >
+> > > > > If you're silently making it work by frobbing the name, you loose that.
+> > > > >
+> > > > > Specifically, task_struct::state used to be 'volatile long', while
+> > > > > task_struct::__state is 'unsigned int'. As such, any user must now be
+> > > > > very careful to use READ_ONCE(). I don't see that happening with just
+> > > > > frobbing the name.
+> > > > >
+> > > > > Additinoally, by shrinking the field, I suppose BE systems get to keep
+> > > > > the pieces?
+> > > > >
+> > > > > > But it will have a hard time without this patch
+> > > > > > until we add all the extra CO-RE features to detect
+> > > > > > and automatically adjust bpf progs when tracepoint
+> > > > > > arguments order changed.
+> > > > >
+> > > > > Could be me, but silently making it work sounds like fail :/ There's a
+> > > > > reason code changes, users need to adapt, not silently pretend stuff is
+> > > > > as before.
+> > > > >
+> > > > > How will you know you need to fix your tool?
+> > > >
+> > > > If libbpf doesn't fail, then yeah it's a big problem. I wonder how users of
+> > > > kprobe who I suppose are more prone to this kind of problems have been coping.
+> > >
+> > > See my reply to Peter. libbpf can't know user's intent to fail this
+> > > automatically, in general. In some cases when it can it does
+> > > accommodate this automatically. In other cases it provides instruments
+> > > for user to handle this (bpf_core_field_size(),
+> > > BPF_CORE_READ_BITFIELD(), etc).
 > >
-> >diff --git a/drivers/clocksource/timer-npcm7xx.c b/drivers/clocksource/t=
-imer-npcm7xx.c
-> >index a00520cbb660a..974269b6b0c36 100644
-> >--- a/drivers/clocksource/timer-npcm7xx.c
-> >+++ b/drivers/clocksource/timer-npcm7xx.c
-> >@@ -188,17 +188,29 @@ static void __init npcm7xx_clocksource_init(void)
+> > My naiive thinking is that the function signature has changed (there's 1 extra
+> > arg not just a subtle swap of args of the same type) - so I thought that can be
+> > detected. But maybe it is harder said than done.
+> 
+> It is. We don't have number of arguments either:
+> 
+> struct bpf_raw_tracepoint_args {
+>         __u64 args[0];
+> };
+> 
+> What BPF program is getting is just an array of u64s.
+> 
 > >
-> > static int __init npcm7xx_timer_init(struct device_node *np)
-> > {
-> >+	struct clk *clk;
-> > 	int ret;
+> > I am trying to remember as I've used this before; I think you get the arg list
+> > as part of ctx when you attach to a function?
 > >
-> > 	ret =3D timer_of_init(np, &npcm7xx_to);
-> >-	if (ret)
-> >+	if (ret) {
-> >+		pr_warn("timer_of_init failed: %d\n", ret);
->=20
-> This seems like a somewhat opaque message to emit, especially given this
-> file's lack of a pr_fmt() definition -- maybe add a %pOF so it's
-> slightly easier to trace back to the device it stems from?
-
-Now that I look at this code again, I think I should just drop the
-pr_warn entirely, since I didn't mention it in the description, and it's
-unrelated to enabling the clock.
-
-> > 		return ret;
-> >+	}
+> > I wonder if it'd be hard to provide a macro for the user to provide the
+> > signature of the function they expect; this macro can try then to verify/assert
+> > the number, type and order is the same. Not bullet proof and requires opt-in,
+> > but could be useful?
 > >
-> > 	/* Clock input is divided by PRESCALE + 1 before it is fed */
-> > 	/* to the counter */
-> > 	npcm7xx_to.of_clk.rate =3D npcm7xx_to.of_clk.rate /
-> > 		(NPCM7XX_Tx_MIN_PRESCALE + 1);
 > >
-> >+	/* Enable the clock for timer1, if it exists */
-> >+	clk =3D of_clk_get(np, 1);
-> >+	if (clk) {
-> >+		if (!IS_ERR(clk))
-> >+			clk_prepare_enable(clk);
-> >+		else
-> >+			pr_warn("Failed to get clock for timer1: %pe", clk);
->=20
-> Likewise here (though to a slightly lesser extent).
+> > // dummy pseudo-code
+> >
+> >         BPF_CORE_ASSERT_SIG(sched_switch, NR_ARGS, ARG0, ARG1, ...)
+> >                 if (ctx->nr_args != NR_ARGS)
+> >                         assert()
+> >                 if (type_of(ctx->args[0]) != type_of(ARG0))
+> >                         assert()
+> >                 ...
+> >
+> > I'm not sure if you have any info about the type though..
+> 
+> What we have now under discussion is more generic way for user to
+> check signature of function prototype, struct/union, etc. But all that
+> will take some time to implement and finalize. So this patch is a way
+> to stop/prevent the bleeding until we have that available to users.
 
-I'll add %pOF here.
+Okay good to know. Alexei mentioned a plan, but I didn't get that it included
+signature verification.
 
+Cheers
 
-Thanks,
-Jonathan
-
---yOapqzkiMt8+dk0+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJqZg4ACgkQCDBEmo7z
-X9v7UA//XinB73NhiIWuAgNkGTSfPjaFxOvIHuRuFLsnTcJHlorK0w1BmfZHecD+
-ZdHnpqPtkXz3gnReMqx8qJcO/0lHmJTkgvddzHqEu4wcWFROMTNs8Tbrd7TUvaxx
-9jmxWWOE5f9P5EXHCLUlo0c03r6Iq8R7BlMUVSh0wZz6RtPujFoHjw6A8uhE9tbt
-ZzoD4XhdNl4BkUpC/NUNIHSxbb/VYZYy7GxqP4N9yQ0QSYGIJm7ESR3RRGhMFoEO
-BZziQtQiH/zJSj71FbG3q8vnXJF4mVozFqnTk4UHngq5nJrM7ZFmE6tVRBf5EPzY
-aaBOk7Y7gcYdPDFMHszp+TtlxcGk7IuTs3I4lVA1JjCX7YPBfxA6AVt6Haf15YkL
-TmosKy8EOB+QqfwKLwddQafB9FXSkRSWr0fn3WboeAolBa+omi+5NMVfq4X1kbHL
-FNO1MlBA0IdDIuMwgRAm5aVTFiIuDoyYIm7qytMFvve4nSlLS3sL3F7qzT783Dvm
-jbSSOUGrQa4XrQoO/N0HRiYj6FkZGE00Deg7e2qY6mqVi7PT9AIzWakASES0LqSd
-kRiHXIqXlsjp65wuJ6xL/hj0PUg9ziUTurX31k1BXomattaHbz5ZSq+bGBD9vuvI
-muA9b/srdaA7jEkkLs6AqWGSsFl8CXAEwI1Rh5VRZ+MStwIBicg=
-=8ywP
------END PGP SIGNATURE-----
-
---yOapqzkiMt8+dk0+--
+--
+Qais Yousef

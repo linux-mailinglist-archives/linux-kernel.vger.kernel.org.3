@@ -2,134 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EEF8513DD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9521513DDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352402AbiD1Vvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 17:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S1352427AbiD1Vvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 17:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiD1Vva (ORCPT
+        with ESMTP id S232756AbiD1Vvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 17:51:30 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D34BB0A8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:48:14 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c23so5539240plo.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6aiXY/c63MQElXVJZh4bp/etzqtyXVUX7hMM9mMLHGU=;
-        b=CDsBib5aq7IfrlvyLb8w8JRjnuqiDUws2JBZNYWpIl+AzVDEcfcTizafbjhpqg0ZLx
-         I7GTVsj6m9m6GY+fweX99+VGrsy2+dXb87n+3GxlYaXfih9dCeTEP4/5cJpUSeAI57mz
-         u8/hiPJbx1G8a5A12C3DNrTZ6wtLaE90WGWuzrKwRplGHAQPknvu0oDde4DP7bj4WwJK
-         Ng7pi649QKwig8o4B4iAOTrzskyaaU7F/P6lmynpCBcLZ2Z1RUkgQnhCDZ5UBnCSNcvF
-         RKnZpRZmScCTudvfxfBPgjg3myOhVFe1BHRzg2DGkNXHdN0YOrg+HqCGCGLpL1Gv4EVh
-         W6Ug==
+        Thu, 28 Apr 2022 17:51:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1E89BB0A8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651182498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1SdrNUtS00bHB3h5RBXA34wN9KxMmUCAGBI0InI/QLI=;
+        b=FATzLtVFlYKpQTEKq7sAbnozsl3K42vhFSAVUW+27EbLxDG4Laf1153YmAE+p86vW+kJ4i
+        BKkCbxnZCoAT6pbftTzBQ+0vYdsbuXTPJbLMnx4ybDd03dnAY6cjgcbF0NL+xmYIzcW0ml
+        EJpMu3NZirJ2AodF9KAGK8FoJpcSt+w=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-159-xAH0Jw54OIevqb7Etyypyg-1; Thu, 28 Apr 2022 17:48:17 -0400
+X-MC-Unique: xAH0Jw54OIevqb7Etyypyg-1
+Received: by mail-io1-f72.google.com with SMTP id j6-20020a5d93c6000000b0064fbbf9566bso5372709ioo.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:48:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=6aiXY/c63MQElXVJZh4bp/etzqtyXVUX7hMM9mMLHGU=;
-        b=5Z+4CSrv0zvST6VyzXH+GD8MkCbsNzMjqqnoFSGADnoUbiZyovbaefpEWL8WIOrm4M
-         zEZ4yp323p4qyiTapLIpgXaI3n8/lFGvDu11AKHPMhvob5TLvvXGZ1Oh9o2RBTk/FJCP
-         NP77bSuuLDnKV2FyBcJ5HjzECv0LY6nJVEVc0VDbUEdhZ1NCX1apfnw80yMKbh+M4rVo
-         5jehoVSHumKvYX1bYve/o66+m8oAkYLS8X+4xYxgPWDUlNs5bKSUGojwrDtkiKQ0morD
-         wa+zxUuPy4/rfV2Ti0qOtbaJHx/1NTo1yPsLynTY84jw1hq2NllLz68CrbeIgrAM8Kio
-         haPQ==
-X-Gm-Message-State: AOAM531hK7/2FU+bwDG1U0QtBx251mVFmxVoQgJUtQenPv/FU19MRU4/
-        bFXRbORJ372LAVJrrq3cyJSoUytDnwGBAg==
-X-Google-Smtp-Source: ABdhPJy8Q8A0jLt1ox9LopY9ts+S70U0VlX1tlbLstodvaNMSxFJhocQiO6iKxVYqE0ssmlm72i2vA==
-X-Received: by 2002:a17:902:dac1:b0:15d:356:887c with SMTP id q1-20020a170902dac100b0015d0356887cmr24921840plx.78.1651182493502;
-        Thu, 28 Apr 2022 14:48:13 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id a8-20020a17090a6d8800b001cd4c118b07sm8048593pjk.16.2022.04.28.14.48.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=1SdrNUtS00bHB3h5RBXA34wN9KxMmUCAGBI0InI/QLI=;
+        b=r40u39Jk8X8zyckL1vklAGI8OUk8CnQvh8QWY4xIFXQm1Hv+M0i1g3BPTrAXXejBFU
+         otuRk63Iys1r50SNPqJyOB1tzfyv/o8tt9ELOo+5XEVqR4HF8+8ImKYA0l7OHym07csl
+         VqvtH2+wh2P5j8EMj8e6Etj7gAMLXeBwspIprAy0KuEQ2OAITMdta0x18ZI47bLQ/u5q
+         LB3+zUo/IIdLySbLsPnYZsu4xyleGW/A62A5L/D0Uj11m9h+Ge9iyZWlRWWEkvyvxqbF
+         O1oLv+Nwwp6jdmOCyVgH8w7z1buW+CRh0KUQzbrEsAlypPm6ePT2KZ4DWMsjAc/j70uy
+         8X5Q==
+X-Gm-Message-State: AOAM531Q/m13j6Vpu2TD7bnIxANN+eYWINu9w2fgGLoVSh2AUcxc8AK9
+        PdrMNaetL173GWyT/4msdGlIBIDzhT1VJKKHUry6pSSuoQKX6dxIY0G5zbHsH391Y6KYw9yDaPB
+        l07Z/3l3ObLZjRwgvD7jiFD2f
+X-Received: by 2002:a05:6638:345b:b0:32b:171c:e98a with SMTP id q27-20020a056638345b00b0032b171ce98amr4549689jav.157.1651182495331;
+        Thu, 28 Apr 2022 14:48:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyjWEjABWS84Q9IEOknOfcwKa7uQkrtX6It6lUsltV6rvcUb5+kUzsUYdaq615uXDOqxRj+Dg==
+X-Received: by 2002:a05:6638:345b:b0:32b:171c:e98a with SMTP id q27-20020a056638345b00b0032b171ce98amr4549684jav.157.1651182495127;
+        Thu, 28 Apr 2022 14:48:15 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id v18-20020a056e0213d200b002cbed258dcfsm42754ilj.0.2022.04.28.14.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 14:48:12 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 14:48:12 -0700 (PDT)
-X-Google-Original-Date: Thu, 28 Apr 2022 13:25:03 PDT (-0700)
-Subject:     Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
-In-Reply-To: <ebaa9b4e-9e37-e2f4-2bee-37d324e7302b@microchip.com>
-CC:     mick@ics.forth.gr, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor.Dooley@microchip.com
-Message-ID: <mhng-525e0b77-f9af-4cba-a985-f8872835574e@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 14:48:14 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 15:48:13 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: Re: [PULL] gvt-next
+Message-ID: <20220428154813.7cef50d0.alex.williamson@redhat.com>
+In-Reply-To: <20220428153558.4b13fa27.alex.williamson@redhat.com>
+References: <c5cf6773-e7a2-8ba8-4cde-0bb14007bc6b@intel.com>
+        <87zgk8tf3l.fsf@intel.com>
+        <a0800c9b-71da-1cad-1dd4-78c0910ac266@intel.com>
+        <20220426115258.GJ2125828@nvidia.com>
+        <20220428153558.4b13fa27.alex.williamson@redhat.com>
+Organization: Red Hat
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 02:37:29 PDT (-0700), Conor.Dooley@microchip.com wrote:
-> 
-> On 22/03/2022 13:28, Nick Kossifidis wrote:
->> In case the DTB provided by the bootloader/BootROM is before the kernel
->> image or outside /memory, we won't be able to access it through the
->> linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
->> relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
->> is not specified), and it's also not the most portable approach since
->> the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
->> at a specific offset that may not be available. To avoid this situation
->> copy DTB so that it's visible through the linear mapping.
->> 
->> Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
-> 
-> Albeit in a backport, I tested this on a PolarFire SoC based board.
-> So I guess, Tested-by: Conor Dooley <conor.dooley@microchip.com>
+On Thu, 28 Apr 2022 15:35:58 -0600
+Alex Williamson <alex.williamson@redhat.com> wrote:
 
-My scripts don't pick these up unless they're on their own line, not 
-sure if that's too conservative but it's on purpose.  I just sort of 
-stumbled into this one so it's in.
+> On Tue, 26 Apr 2022 08:52:58 -0300
+> Jason Gunthorpe <jgg@nvidia.com> wrote:
+> 
+> > On Tue, Apr 26, 2022 at 08:42:25AM +0000, Wang, Zhi A wrote:  
+> > > On 4/26/22 8:37 AM, Jani Nikula wrote:    
+> > > > On Tue, 26 Apr 2022, "Wang, Zhi A" <zhi.a.wang@intel.com> wrote:    
+> > > >> Hi folks:
+> > > >>
+> > > >> Here is the pull of gvt-next which fixs the compilation error when i915 debug
+> > > >> is open after the GVT-g refactor patches.
+> > > >>
+> > > >> Thanks so much for the efforts.    
+> > > > 
+> > > > Pulled, thanks.
+> > > > 
+> > > > BR,
+> > > > Jani.
+> > > >     
+> > > Thanks, looks good now. :)    
+> > 
+> > Great! Thanks everyone!
+> > 
+> > Alex, can you pull this to VFIO now too? The top commit should be:  
+> 
+> I see a gvt-next-2022-04-29 tag adding the following fixes:
+> 
+> 419f8299ddad i915/gvt: Fix NULL pointer dereference in init_mmio_block_handlers
+> 5b95b9d58fb0 drm/i915/gvt: Fix the compiling error when CONFIG_DRM_I915_DEBUG_RUNTIME_PM=n
+> fa630c304b93 drm/i915/gvt: Make intel_gvt_match_device() static
+> 
+> I'm expecting that's my new merge target once a pull request is
+> completed for that.  Please keep me cc'd.  Thanks,
 
+Oops, I see the new pull request for this tag came in while I was
+writing this.  I'll keep an eye for it to be merged.  Thanks,
+
+Alex
+
+> > commit 5e9ae5c47052e28a31fb4f55a6e735c28d4c3948
+> > Author: Zhi Wang <zhi.wang.linux@gmail.com>
+> > Date:   Mon Apr 25 18:03:31 2022 -0400
+> > 
+> >     drm/i915/gvt: Add missing symbol export.
+> >     
+> >     When CONFIG_DRM_I915_DEBUG_RUNTIME and CONFIG_DRM_I915_DEBUG_PM
+> >     are enabled, two more extra symols in i915 are required to be
+> >     exported.
+> >     
+> >     Cc: Jani Nikula <jani.nikula@intel.com>
+> >     Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
+> >     Link: http://patchwork.freedesktop.org/patch/msgid/20220425220331.24865-1-zhi.a.wang@intel.com
+> >     Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+> > 
+> > Which was picked up here:
+> > 
+> > https://cgit.freedesktop.org/drm-intel/commit/?h=drm-intel-next&id=f08699ec5bd924be4c9572e21fd0a806d3fb34c2
+> > 
+> > It will have these commits:
+> > 
+> > 5e9ae5c47052e2 drm/i915/gvt: Add missing symbol export.
+> > 2917f53113be3b vfio/mdev: Remove mdev drvdata
+> > 2aa72ec97ce9eb vfio/mdev: Use the driver core to create the 'remove' file
+> > 6b42f491e17ce1 vfio/mdev: Remove mdev_parent_ops
+> > e6486939d8ea22 vfio/mdev: Remove mdev_parent_ops dev_attr_groups
+> > 6c7f98b334a32d vfio/mdev: Remove vfio_mdev.c
+> > cba619cb0d4d66 drm/i915/gvt: merge gvt.c into kvmgvt.c
+> > 978cf586ac35f3 drm/i915/gvt: convert to use vfio_register_emulated_iommu_dev
+> > 0e09f4066ad11b drm/i915/gvt: remove kvmgt_guest_{init,exit}
+> > 7f11e6893ff01b drm/i915/gvt: pass a struct intel_vgpu to the vfio read/write helpers
+> > 4456641232e2c1 drm/i915/gvt: streamline intel_vgpu_create
+> > 37e4bdbd5bad71 drm/i915/gvt: remove the extra vfio_device refcounting for dmabufs
+> > 5f8f3fe67cd908 drm/i915/gvt: remove struct intel_gvt_mpt
+> > 91879bbaf8890f drm/i915/gvt: devirtualize dma_pin_guest_page
+> > 8398eee85fd009 drm/i915/gvt: devirtualize ->dma_{,un}map_guest_page
+> > 4c2baaaf764bfb drm/i915/gvt: devirtualize ->{enable,disable}_page_track
+> > 4050dab5981cd4 drm/i915/gvt: devirtualize ->gfn_to_mfn
+> > bd73b4b193d450 drm/i915/gvt: devirtualize ->is_valid_gfn
+> > b3bece34956f86 drm/i915/gvt: devirtualize ->inject_msi
+> > 4c705ad0d784fd drm/i915/gvt: devirtualize ->detach_vgpu
+> > f9399b0e4a9555 drm/i915/gvt: devirtualize ->set_edid and ->set_opregion
+> > fe902f0ce686e8 drm/i915/gvt: devirtualize ->{get,put}_vfio_device
+> > e3d7640eeeb306 drm/i915/gvt: devirtualize ->{read,write}_gpa
+> > 3c340d05868d98 drm/i915/gvt: remove vgpu->handle
+> > 10ddb96295f3bd drm/i915/gvt: merge struct kvmgt_guest_info into strut intel_vgpu
+> > 62980cacc37f58 drm/i915/gvt: merge struct kvmgt_vdev into struct intel_vgpu
+> > 3cbac24c2cdbfe drm/i915/gvt: remove the unused from_virt_to_mfn op
+> > c977092a997708 drm/i915/gvt: remove the map_gfn_to_mfn and set_trap_area ops
+> > 675e5c4a33e20c drm/i915/gvt: remove intel_gvt_ops
+> > 8b750bf744181c drm/i915/gvt: move the gvt code into kvmgt.ko
+> > f49fc35799fa63 drm/i915/gvt: rename intel_vgpu_ops to intel_vgpu_mdev_ops
+> > 367748066eeb37 drm/i915/gvt: remove enum hypervisor_type
+> > a85749e12d66c2 drm/i915/gvt: remove module refcounting in intel_gvt_{,un}register_hypervisor
+> > 7f0cf30187cdb1 drm/i915/gvt: better align the Makefile with i915 Makefile
+> > de5d437ae8696a drm/i915/gvt: fix trace TRACE_INCLUDE_PATH
+> > 1672991412dfef i915/gvt: Use the initial HW state snapshot saved in i915
+> > 66e7a8063381cb i915/gvt: Save the initial HW state snapshot in i915
+> > e0f74ed4634d6d i915/gvt: Separate the MMIO tracking table from GVT-g
+> > 
+> > Thanks,
+> > Jason
+> >   
 > 
-> And a lot cleaner than using create_pgd_mapping in setup_vm_final to do it :)
-> 
-> Thanks,
-> Conor.
-> 
->> ---
->>   arch/riscv/mm/init.c | 21 +++++++++++++++++++--
->>   1 file changed, 19 insertions(+), 2 deletions(-)
->> 
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 0d588032d..697a9aed4 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -206,8 +206,25 @@ static void __init setup_bootmem(void)
->>   	 * early_init_fdt_reserve_self() since __pa() does
->>   	 * not work for DTB pointers that are fixmap addresses
->>   	 */
->> -	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
->> -		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
->> +	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
->> +		/*
->> +		 * In case the DTB is not located in a memory region we won't
->> +		 * be able to locate it later on via the linear mapping and
->> +		 * get a segfault when accessing it via __va(dtb_early_pa).
->> +		 * To avoid this situation copy DTB to a memory region.
->> +		 * Note that memblock_phys_alloc will also reserve DTB region.
->> +		 */
->> +		if (!memblock_is_memory(dtb_early_pa)) {
->> +			size_t fdt_size = fdt_totalsize(dtb_early_va);
->> +			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
->> +			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
->> +
->> +			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
->> +			early_memunmap(new_dtb_early_va, fdt_size);
->> +			_dtb_early_pa = new_dtb_early_pa;
->> +		} else
->> +			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
->> +	}
->>   
->>   	early_init_fdt_scan_reserved_mem();
->>   	dma_contiguous_reserve(dma32_phys_limit);
+

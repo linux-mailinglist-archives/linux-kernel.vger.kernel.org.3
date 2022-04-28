@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72875134FC
+	by mail.lfdr.de (Postfix) with ESMTP id 08E4E5134FA
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbiD1NZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S235708AbiD1NZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiD1NZI (ORCPT
+        with ESMTP id S235653AbiD1NZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:25:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DAAABF5C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651152113; x=1682688113;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uy8zSGdRbmu9x6oWV3PwTp0oEkokUG8PpRwrZP5QiPc=;
-  b=Lf18CP0tCW5h7vfsY1loFzINNxoOqdYSZhO6YrVWt9xSiG7Oa9p+ouH7
-   myc8f+PNRD0LMh+K5hr89S/jzmBlxdJmqL6HroHR5FJf/Xf2QXL9LLJ1l
-   wzNC2V7f0NdWpYpogapD670MzRocl6YCeukrRpZYd2U5iBL0SscWB1ODX
-   mMuGp9wXIlVZM/LjpFURwxBMZCvWiyu63iRyTn8OL9Abwqs51EvqKA3P/
-   bSC6H0UU+lei6Q4WW0ysQhY5PXne2vcKOgO6yzO2va4cnXiWwTG2Yd7ql
-   yH/J6BBKBiBtPvGkOVE/43obchqUEkjdpuzK2Tomz3Bb+DJpypk9bja6V
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266101894"
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="266101894"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 06:21:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="541279049"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2022 06:21:51 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nk45f-0005OQ-1H;
-        Thu, 28 Apr 2022 13:21:51 +0000
-Date:   Thu, 28 Apr 2022 21:21:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/stringop-overflow 1/1]
- drivers/gpu/drm/i915/intel_pm.c:3106:9: error: 'intel_read_wm_latency'
- accessing 16 bytes in a region of size 10
-Message-ID: <202204282134.8kzHtDU9-lkp@intel.com>
+        Thu, 28 Apr 2022 09:25:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65AE9AC90A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651152130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1cpZ1xgascUOYLsGfspUdEEjFzPcacJad6qU8kZAaSk=;
+        b=brGjntIC47r1V/XHG/aVvgms2bhLVyFKPPi9dTCazEo4K92om6js6mD0iNlyGa2nyvEjFc
+        dpk2JBImwUMlnA/CLwQm6p9JJCCXRF3TriUr7YBjsQ1k2/SkV2eCi3/J+D45pstNfP3ve9
+        n5gD/zRF4KpJwmcPKowd5C3wOipyIQY=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-478-lxH0JixeNsS-yXPTbgLqfQ-1; Thu, 28 Apr 2022 09:22:08 -0400
+X-MC-Unique: lxH0JixeNsS-yXPTbgLqfQ-1
+Received: by mail-ej1-f72.google.com with SMTP id qb2-20020a1709077e8200b006f3dd7d3fc5so1251265ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:22:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=1cpZ1xgascUOYLsGfspUdEEjFzPcacJad6qU8kZAaSk=;
+        b=dOca8u5BtN2DZtwvqw4V9SWP1Ni8Wv1iaqWb4S1UGSCxL2jyrMaEN5JPY6sWQbvGgl
+         V/wXLT4fD2TjP13bOlUb2dWhKy3iEroSSGaGBz6PQthyP/4FDfiBCGoqwKeJDHWLgcyS
+         /6ZZMfgBscGvTYt7Zg3Ehr4/vXvMtNTfPTQSs5pTJ01Yxi8KbPKt896s1J0tRZXD7gR6
+         t/0j3brThOwsKy0fSh2o4vQKAKTeKGmWBoDIkAFIKE0uhvrmN/70HFeBF8OFMGbzF/AY
+         TQAy5z60Ek1r9ijt3CYKeZYm0Asfp3R00LELJL5iHMmz4ZQSLcbQtHlZxLefZsqHAPe2
+         Bjvg==
+X-Gm-Message-State: AOAM5305bYb0SalMsV9Wwh5aZkkaLkIcshkcwJhUycdNOj1B/fd6dTQk
+        BeIT6P3wexRIwKGlJI+WxJ7bpRndpckG7nAo7ohtsIBNuRSSC3dkfgeMRLgVDrndiIXbDg+8csD
+        SozMiuhlygT9MGb+h67ECkkY0
+X-Received: by 2002:a17:907:7287:b0:6f3:8414:74f1 with SMTP id dt7-20020a170907728700b006f3841474f1mr23685446ejc.123.1651152127076;
+        Thu, 28 Apr 2022 06:22:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwGk1cJw5aGoIsTO0w7oT+T4JksqnriBA4J7QNSfj97lfUvKKiqr6njoNbuZoBq+Nes7aHiKw==
+X-Received: by 2002:a17:907:7287:b0:6f3:8414:74f1 with SMTP id dt7-20020a170907728700b006f3841474f1mr23685372ejc.123.1651152126157;
+        Thu, 28 Apr 2022 06:22:06 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id lz12-20020a170906fb0c00b006f3a36a9807sm5210784ejb.19.2022.04.28.06.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 06:22:05 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id C131D2F596C; Thu, 28 Apr 2022 15:22:04 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     menglong8.dong@gmail.com, edumazet@google.com
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, benbjiang@tencent.com, flyingpeng@tencent.com,
+        imagedong@tencent.com, kafai@fb.com, talalahmad@google.com,
+        keescook@chromium.org, mengensun@tencent.com,
+        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/2] net: tcp: add skb drop reasons to
+ route_req()
+In-Reply-To: <20220428073340.224391-3-imagedong@tencent.com>
+References: <20220428073340.224391-1-imagedong@tencent.com>
+ <20220428073340.224391-3-imagedong@tencent.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 28 Apr 2022 15:22:04 +0200
+Message-ID: <87fslxgx6r.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,68 +84,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/stringop-overflow
-head:   841e98dddf647582547543eba0a1e3e8c8f8db9c
-commit: 841e98dddf647582547543eba0a1e3e8c8f8db9c [1/1] Makefile: Enable -Wstringop-overflow
-config: x86_64-randconfig-c002 (https://download.01.org/0day-ci/archive/20220428/202204282134.8kzHtDU9-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=841e98dddf647582547543eba0a1e3e8c8f8db9c
-        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
-        git fetch --no-tags gustavoars testing/stringop-overflow
-        git checkout 841e98dddf647582547543eba0a1e3e8c8f8db9c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+menglong8.dong@gmail.com writes:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> Add skb drop reasons to the route_req() in struct tcp_request_sock_ops.
+> Following functions are involved:
+>
+>   tcp_v4_route_req()
+>   tcp_v6_route_req()
+>   subflow_v4_route_req()
+>   subflow_v6_route_req()
+>
+> And the new reason SKB_DROP_REASON_SECURITY is added, which is used when
+> skb is dropped by LSM.
 
-All errors (new ones prefixed by >>):
+Could we maybe pick a slightly less generic name? If I saw
+"SKB_DROP_REASON_SECURITY" my first thought would be something related
+to *network* security, like a firewall. Maybe just SKB_DROP_REASON_LSM?
 
-   drivers/gpu/drm/i915/intel_pm.c: In function 'ilk_setup_wm_latency':
->> drivers/gpu/drm/i915/intel_pm.c:3106:9: error: 'intel_read_wm_latency' accessing 16 bytes in a region of size 10 [-Werror=stringop-overflow=]
-    3106 |         intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_pm.c:3106:9: note: referencing argument 2 of type 'u16 *' {aka 'short unsigned int *'}
-   drivers/gpu/drm/i915/intel_pm.c:2861:13: note: in a call to function 'intel_read_wm_latency'
-    2861 | static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
-         |             ^~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+-Toke
 
-
-vim +/intel_read_wm_latency +3106 drivers/gpu/drm/i915/intel_pm.c
-
-03981c6ebec4fc7 Ville Syrjälä   2018-11-14  3103  
-bb7265197a86bd6 Ville Syrjälä   2016-10-31  3104  static void ilk_setup_wm_latency(struct drm_i915_private *dev_priv)
-53615a5e129534f Ville Syrjälä   2013-08-01  3105  {
-bb7265197a86bd6 Ville Syrjälä   2016-10-31 @3106  	intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
-53615a5e129534f Ville Syrjälä   2013-08-01  3107  
-53615a5e129534f Ville Syrjälä   2013-08-01  3108  	memcpy(dev_priv->wm.spr_latency, dev_priv->wm.pri_latency,
-53615a5e129534f Ville Syrjälä   2013-08-01  3109  	       sizeof(dev_priv->wm.pri_latency));
-53615a5e129534f Ville Syrjälä   2013-08-01  3110  	memcpy(dev_priv->wm.cur_latency, dev_priv->wm.pri_latency,
-53615a5e129534f Ville Syrjälä   2013-08-01  3111  	       sizeof(dev_priv->wm.pri_latency));
-53615a5e129534f Ville Syrjälä   2013-08-01  3112  
-5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3113  	intel_fixup_spr_wm_latency(dev_priv, dev_priv->wm.spr_latency);
-fd6b8f43c9e9a3a Tvrtko Ursulin  2016-10-14  3114  	intel_fixup_cur_wm_latency(dev_priv, dev_priv->wm.cur_latency);
-26ec971e302c53b Ville Syrjälä   2013-08-01  3115  
-5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3116  	intel_print_wm_latency(dev_priv, "Primary", dev_priv->wm.pri_latency);
-5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3117  	intel_print_wm_latency(dev_priv, "Sprite", dev_priv->wm.spr_latency);
-5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3118  	intel_print_wm_latency(dev_priv, "Cursor", dev_priv->wm.cur_latency);
-e95a2f7509f5219 Ville Syrjälä   2014-05-08  3119  
-93e7e61eb448318 Lucas De Marchi 2021-04-12  3120  	if (DISPLAY_VER(dev_priv) == 6) {
-bb7265197a86bd6 Ville Syrjälä   2016-10-31  3121  		snb_wm_latency_quirk(dev_priv);
-03981c6ebec4fc7 Ville Syrjälä   2018-11-14  3122  		snb_wm_lp3_irq_quirk(dev_priv);
-03981c6ebec4fc7 Ville Syrjälä   2018-11-14  3123  	}
-53615a5e129534f Ville Syrjälä   2013-08-01  3124  }
-53615a5e129534f Ville Syrjälä   2013-08-01  3125  
-
-:::::: The code at line 3106 was first introduced by commit
-:::::: bb7265197a86bd68078825723b572599fcc60d2b drm/i915: Pass dev_priv to ilk_setup_wm_latency() & co.
-
-:::::: TO: Ville Syrjälä <ville.syrjala@linux.intel.com>
-:::::: CC: Ville Syrjälä <ville.syrjala@linux.intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

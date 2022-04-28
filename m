@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CE2512CE9
+	by mail.lfdr.de (Postfix) with ESMTP id 99D91512CE8
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245366AbiD1HfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S245374AbiD1Hf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244304AbiD1HfT (ORCPT
+        with ESMTP id S245367AbiD1HfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:35:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8095737B1;
-        Thu, 28 Apr 2022 00:32:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B513B82BA4;
-        Thu, 28 Apr 2022 07:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD42C385A9;
-        Thu, 28 Apr 2022 07:31:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651131123;
-        bh=XLtOpv4/Sq+8xO6mEwHDHtd/e3eoMaYDFgGPCnxXZik=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ptaDwG49gImhjARf3ApqvC9GLBPNvMKTtXJchzByR5gtugmQ5RtaG4+wkY9yjZqmV
-         s2F3r1z1whNISkFKnuVd8YnRSaeSzUHgvrUwMX+yu/hJHLgMO2cbaLjZK/w0RpbAFU
-         WweJ4L1so4Oyvir2A3uD0QxM1K3/1vWyCwG2L3I6qq4UDUkevb/25RtG6YEtNO6GGG
-         fNhnSO2hTvHHD8b1J3oFbTamiZfDcg3zPMWFtP1nRALhJQgeGspI45PnFtyuxPBxDI
-         /h3wVQ4d9AoUhhLsIGEwY18GQJsMBqe+h09sh/XNssXX6a+LQ08VaUhePQE9PIGgt6
-         5nssVoPHASBYQ==
-Message-ID: <fa113ba0-1221-de93-a18f-e4e942cdb261@kernel.org>
-Date:   Thu, 28 Apr 2022 09:31:56 +0200
+        Thu, 28 Apr 2022 03:35:23 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D149BAD1;
+        Thu, 28 Apr 2022 00:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651131129; x=1682667129;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TtTEDOKV+7lqUt5tmJpa+arLx7nlS1Q6ti+9N5cH9lE=;
+  b=grs91oUZ/aYPOpNWtZL2AXdx1N7fy3xdL1v3DF1Yr1mZ5N2Ul/Cr+ItS
+   0UzUM8KETJFu/qiZrb1MN1Uu/t6y2otsZCkD6ngGiHmhsGk7HbhSFzdFC
+   t8SwxBGPz6eQ5f+ZNrhQVnJ+SxpiKC5j9NQTvHcDlETi+vW+3JdFpc2ie
+   8=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 28 Apr 2022 00:32:09 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:32:09 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 00:32:08 -0700
+Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
+ 2022 00:32:04 -0700
+Message-ID: <b935102a-3f4b-2b45-b4d3-03b489404b44@quicinc.com>
+Date:   Thu, 28 Apr 2022 13:02:01 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv11 6/6] asm-generic/io: Add logging support for MMIO
+ accessors
 Content-Language: en-US
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
- <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
- <a9438aef-78a3-e8ab-2b78-cc872447df08@kernel.org>
- <20220428012941.GF145620@ubuntu>
- <01ec9962-e210-ce47-57cd-8849cca0a9df@kernel.org>
- <20220428063634.GF151827@ubuntu>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220428063634.GF151827@ubuntu>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <will@kernel.org>
+References: <cover.1645772606.git.quic_saipraka@quicinc.com>
+ <3de35c9f4a3a070d197bab499acefc709a6f5336.1645772606.git.quic_saipraka@quicinc.com>
+ <YmorwEGw/SATMUKt@kroah.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <YmorwEGw/SATMUKt@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 08:36, Jung Daehwan wrote:
->>
->> Since you called everything here as "exynos" it is specific to one
->> hardware and not-reusable on anything else. How can then you use some
->> other compatible? It would be a misuse of Devicetree bindings.
->>
-> 
-> I got it. Let me add them. Is it still necessary if it is only used by
-> other module on runtime as I said above?
+On 4/28/2022 11:23 AM, Greg KH wrote:
+> On Thu, Apr 28, 2022 at 09:00:13AM +0530, Sai Prakash Ranjan wrote:
+>> Add logging support for MMIO high level accessors such as read{b,w,l,q}
+>> and their relaxed versions to aid in debugging unexpected crashes/hangs
+>> caused by the corresponding MMIO operation. Also add a generic flag
+>> (__DISABLE_TRACE_MMIO__) which is used to disable MMIO tracing in nVHE KVM
+>> and if required can be used to disable MMIO tracing for specific drivers.
+> Also, this should be split up into 2 patches, one to add the "disable
+> the feature" flag, and one to enable it for the specific driver(s) you
+> want.
+>
+> Hint, when you say "also" in a changelog text, that's a huge sign that
+> it perhaps should be split up into smaller pieces.
+>
 
-Except what Greg wrote, if by "other module" you mean out-of-tree, then
-the patchset will not be accepted as it is unusable for Linux users.
-Basically it would be a dead code in Linux kernel.
+Right, will split them.
 
-Best regards,
-Krzysztof
+Thanks,
+Sai

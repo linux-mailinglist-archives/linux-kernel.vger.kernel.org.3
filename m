@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3AE51325A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A28513258
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241465AbiD1LXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S234994AbiD1LYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245064AbiD1LXT (ORCPT
+        with ESMTP id S1345588AbiD1LX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:23:19 -0400
-Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EA2A94F5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:19:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VBaQgGw_1651144790;
-Received: from 30.240.98.54(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VBaQgGw_1651144790)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 28 Apr 2022 19:19:52 +0800
-Message-ID: <069b8778-f2b3-fd1d-a197-2d0614fca6b3@linux.alibaba.com>
-Date:   Thu, 28 Apr 2022 19:19:49 +0800
+        Thu, 28 Apr 2022 07:23:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD5A55371;
+        Thu, 28 Apr 2022 04:20:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A2B61F41;
+        Thu, 28 Apr 2022 11:20:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176E4C385A9;
+        Thu, 28 Apr 2022 11:20:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651144841;
+        bh=TY47/0/sbw4f9kkF8QnQ8nbEpKwxiWT9PmOLyB2eupo=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=evVFGsSgkLC0lENLdtt85BsdKLf2gH3q08LxuD8/MfP6HK2L4V/1egXXfyB+cLbDx
+         OJ/z9JzWW087ZqQV9V15lxzkj0XT78enOk5292msRqO1h1F8VwUAxL3DTTMO1iq/ah
+         9A6JGeyrneYBCcMNIOyAGpoO0fiNSI2AQLIQdgPVoQUhqh4xDtemM21Ej1AwsXTUl4
+         Y1LQMNiHXnL7UsXLsAlX2MH9vpQi/lSMOrmdg0hjrkfB8e89dYuJjtzaiZGlbCkP6u
+         hLycJ5XdnOxJcRB1zbZF7a8B9jlS4hrZmwqnw47dB1lA3p4vPsiLtTNp28/+hPk55P
+         kywp9Z8wSxG2g==
+Message-ID: <837facd5-2b8e-2bad-6b62-9550656a2dad@kernel.org>
+Date:   Thu, 28 Apr 2022 14:20:36 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0)
- Gecko/20100101 Thunderbird/100.0
-Subject: Re: DAMON VA regions don't split on an large Android APP
+Subject: Re: [PATCH] interconnect: qcom: use icc_sync_state
 Content-Language: en-US
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
-        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
-        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
-        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        xhao@linux.alibaba.com
-References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
- <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
- <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
- <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
- <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
- <CAGsJ_4wKqPEnFGdijwjKeCvfRwfdxkk-263EZt2Y21GMyn1_uA@mail.gmail.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <CAGsJ_4wKqPEnFGdijwjKeCvfRwfdxkk-263EZt2Y21GMyn1_uA@mail.gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220427145616.523557-1-krzysztof.kozlowski@linaro.org>
+ <4769c796-6edd-c23a-ee2a-ce54495548f7@kernel.org>
+ <e77d9ff9-67a5-e0f3-8ad8-848342ed4dfb@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <e77d9ff9-67a5-e0f3-8ad8-848342ed4dfb@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,323 +59,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 28.04.22 13:23, Krzysztof Kozlowski wrote:
+> On 27/04/2022 17:34, Georgi Djakov wrote:
+>> On 27.04.22 17:56, Krzysztof Kozlowski wrote:
+>>> Use icc_sync_state for interconnect providers, so that the bandwidth
+>>> request doesn't need to stay on maximum value.
+>>
+>> Did you test this? In general, we should not enable this on boards that
+>> do not have full interconnect scaling support in consumer drivers yet.
+>> Some of the interconnects could be enabled by default by the bootloader
+>> and usually later during boot the consumer drivers request the bandwidth
+>> that they need. But if the requests are missing, the interconnects
+>> without bandwidth users will be disabled when we reach sync state. So
+>> this may (or not) cause issues...
+> 
+> I understand, thanks for bringing this up. It does not look like an
+> issue of interconnect provider but instead consumers and DTS. It's not
+> the job of provider driver to know all possible uses and DTS files. The
+> driver should expose itself and if platform is not ready, should not use
+> it by not enabling the interconnect. It's a job for DTS, not for the
+> interconnect provider.
 
-On 4/28/22 3:37 PM, Barry Song wrote:
-> On Thu, Apr 28, 2022 at 2:05 PM Rongwei Wang
-> <rongwei.wang@linux.alibaba.com> wrote:
->>
->>
->>
->> On 4/27/22 5:22 PM, Barry Song wrote:
->>> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
->>>>
->>>> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
->>>> <rongwei.wang@linux.alibaba.com> wrote:
->>>>>
->>>>>
->>>>>
->>>>> On 4/27/22 7:19 AM, Barry Song wrote:
->>>>>> Hi SeongJae & Andrew,
->>>>>> (also Cc-ed main damon developers)
->>>>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
->>>>>> that vaddr regions don't split well on large Android Apps though
->>>>>> everything works well on native Apps.
->>>>>>
->>>>>> I have tried the below two cases on an Android phone with 12GB memory
->>>>>> and snapdragon 888 CPU.
->>>>>> 1. a native program with small memory working set  as below,
->>>>>> #define size (1024*1024*100)
->>>>>> main()
->>>>>> {
->>>>>>            volatile int *p = malloc(size);
->>>>>>            memset(p, 0x55, size);
->>>>>>
->>>>>>            while(1) {
->>>>>>                    int i;
->>>>>>                    for (i = 0; i < size / 4; i++)
->>>>>>                            (void)*(p + i);
->>>>>>                    usleep(1000);
->>>>>>
->>>>>>                    for (i = 0; i < size / 16; i++)
->>>>>>                            (void)*(p + i);
->>>>>>                    usleep(1000);
->>>>>>
->>>>>>            }
->>>>>> }
->>>>>> For this application, the Damon vaddr monitor works very well.
->>>>>> I have modified monitor.py in the damo userspace tool a little bit to
->>>>>> show the raw data getting from the kernel.
->>>>>> Regions can split decently on this kind of applications, a typical raw
->>>>>> data is as below,
->>>>>>
->>>>>> monitoring_start:             2.224 s
->>>>>> monitoring_end:               2.329 s
->>>>>> monitoring_duration:       104.336 ms
->>>>>> target_id: 0
->>>>>> nr_regions: 24
->>>>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
->>>>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
->>>>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
->>>>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
->>>>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
->>>>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
->>>>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
->>>>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
->>>>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
->>>>>> 007661c59000-007661ee4000(   2.543 MiB): 2
->>>>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
->>>>>> 0076623e4000-007662837000(   4.324 MiB): 2
->>>>>> 007662837000-0076630f1000(   8.727 MiB): 3
->>>>>> 0076630f1000-007663494000(   3.637 MiB): 2
->>>>>> 007663494000-007663753000(   2.746 MiB): 1
->>>>>> 007663753000-007664251000(  10.992 MiB): 3
->>>>>> 007664251000-0076666fd000(  36.672 MiB): 2
->>>>>> 0076666fd000-007666e73000(   7.461 MiB): 1
->>>>>> 007666e73000-007667c89000(  14.086 MiB): 2
->>>>>> 007667c89000-007667f97000(   3.055 MiB): 0
->>>>>> 007667f97000-007668112000(   1.480 MiB): 1
->>>>>> 007668112000-00766820f000(1012.000 KiB): 0
->>>>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
->>>>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
->>>>>>
->>>>>> 2. a large Android app like Asphalt 9
->>>>>> For this case, basically regions can't split very well, but monitor
->>>>>> works on small vma:
->>>>>>
->>>>>> monitoring_start:             2.220 s
->>>>>> monitoring_end:               2.318 s
->>>>>> monitoring_duration:        98.576 ms
->>>>>> target_id: 0
->>>>>> nr_regions: 15
->>>>>> 000012c00000-0001c301e000(   6.754 GiB): 0
->>>>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
->>>>>> 000371b6c000-000400000000(   2.223 GiB): 0
->>>>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
->>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>>>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
->>>>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
->>>>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
->>>>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
->>>>>> 0077e863e000-00798e214000(   6.590 GiB): 0
->>>>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
->>>>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
->>>>>> 007c62f00000-007defb19000(   6.199 GiB): 0
->>>>>> 007defb19000-007f794ef000(   6.150 GiB): 0
->>>>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
->>>>>>
->>>>>> As you can see, we have some regions which are very very big and they
->>>>>> are losing the chance to be splitted. But
->>>>>> Damon can still monitor memory access for those small VMA areas very well like:
->>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>>>> Hi, Barry
->>>>>
->>>>> Actually, we also had found the same problem in redis by ourselves
->>>>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
->>>>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
->>>>> hot areas to been monitored or found by DAMON, likes one or more address
->>>>> choose by DAMON not been accessed during sample period.
->>>>
->>>> Hi Rongwei,
->>>> Thanks  for your comments and thanks for sharing your tools.
->>>>
->>>> I guess the cause might be:
->>>> in case a region is very big like 10GiB, we have only 1MiB hot pages
->>>> in this large region.
->>>> damon will randomly pick one page to sample, but the page has only
->>>> 1MiB/10GiB, thus
->>>> less than 1/10000 chance to hit the hot 1MiB. so probably we need
->>>> 10000 sample periods
->>>> to hit the hot 1MiB in order to split this large region?
->>>>
->>>> @SeongJae, please correct me if I am wrong.
->>>>
->>>>>
->>>>> I'm not sure whether sets init_regions can deal with the above problem,
->>>>> or dynamic choose one or limited number VMA to monitor.
->>>>>
->>>>
->>>> I won't set a limited number of VMA as this will make the damon too hard to use
->>>> as nobody wants to make such complex operations, especially an Android
->>>> app might have more than 8000 VMAs.
->>>>
->>>> I agree init_regions might be the right place to enhance the situation.
->>>>
->>>>> I'm not sure, just share my idea.
->>>>>
->>>>> [1] https://github.com/aliyun/data-profile-tools.git
->>>>
->>>> I suppose this tool is based on damon? How do you finally resolve the problem
->>>> that large anon VMAs can't be splitted?
->>>> Anyway, I will give your tool a try.
->>>
->>> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
->>> though autogen.sh
->>> runs successfully.
->>>
->>> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
->>> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
->>> reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
->>> reference to `wgetch'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
->>> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
->>> reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
->>> reference to `subwin'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
->>> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
->>> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
->>> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
->>> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
->>> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
->>> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
->>> reference to `wattr_off'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
->>> reference to `wattr_on'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
->>> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
->>> reference to `wattr_off'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
->>> reference to `mvwprintw'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
->>> reference to `wattr_off'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
->>> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
->>> reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
->>> reference to `wclear'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
->>> reference to `wrefresh'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
->>> reference to `endwin'
->>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
->>> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
->>> reference to `initscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
->>> reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
->>> reference to `wrefresh'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
->>> reference to `use_default_colors'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
->>> reference to `start_color'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
->>> reference to `keypad'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
->>> reference to `nonl'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
->>> reference to `cbreak'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
->>> reference to `noecho'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
->>> reference to `curs_set'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
->>> reference to `stdscr'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
->>> reference to `mvwprintw'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
->>> reference to `mvwprintw'
->>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
->>> reference to `wrefresh'
->>> collect2: error: ld returned 1 exit status
->>> make[1]: *** [Makefile:592: datop] Error 1
->>> make[1]: Leaving directory '/root/data-profile-tools'
->>> make: *** [Makefile:438: all] Error 2
->> Hi, Barry
->>
->> Now, the question made me realize that the compatibility of this tool is
->> very poor. I built a ubuntu environment at yesterday, and fixed above
->> errors by:
->>
->> diff --git a/configure.ac b/configure.ac
->> index 7922f27..1ed823c 100644
->> --- a/configure.ac
->> +++ b/configure.ac
->> @@ -21,13 +21,9 @@ AC_PROG_INSTALL
->>    AC_CHECK_LIB([numa], [numa_free])
->>    AC_CHECK_LIB([pthread], [pthread_create])
->>
->> -PKG_CHECK_MODULES([CHECK], [check])
->> -
->> -PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS
->> $ncurses_LIBS"], [
->> -       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
->> -               AC_MSG_ERROR([ncurses is required but was not found])
->> -       ], [])
->> -])
->> +AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
->> +       AC_MSG_ERROR([required library libncurses or ncurses not found])
->> +       ])
->>
-> 
-> I can confirm the patch fixed the issue I reported yesterday, thanks!
-> 
->> It works. But I found an another thing will hinder you using this tool.
->> We had developed other patches about DAMON base on upstream. This tool
->> only works well in ourselves kernel(anolis kernel, already open source).
->> Of course, I think it's unnecessary for you to change kernel, just let
->> you know this tool still has this problem.
->>
-> 
-> Although I can't use this tool directly as I am not a NUMA right now,
-> ~/data-profile-tools # ./datop --help
-> Not support NUMA fault stat (DAMON)!
-> 
-> I am still quite interested in your design and the purpose of this project.
-> Unfortunately the project seems to be lacking some design doc.
-Thanks for your feedback. I am planning to write these design doc.
-> 
-> And would you like to send patches to lkml regarding what you
-> have changed atop DAMON?
-Actually, Hao Xin had tried to submit these relevant patchset[1]. you 
-can find them in the following link. It seems the latest DAMON has 
-changed too much, makes these patchset can not merge directly. We will 
-send next version for reviewing after adjusting base on latest upstream.
+Agree, but we still need to make sure this is tested and does not
+introduce any regressions at least with the DT that is upstream.
 
-[1] https://lore.kernel.org/lkml/20220217082939.2850-1-sj@kernel.org/T/
-> 
->> Anyway, the question that you reported was valuable, made me realize
->> what we need to improve next.
->>
->> Thanks,
->> Rongwei Wang
->>>
->>>>
->>>>>>
->>>>>> Typical characteristics of a large Android app is that it has
->>>>>> thousands of vma and very large virtual address spaces:
->>>>>> ~/damo # pmap 2550 | wc -l
->>>>>> 8522
->>>>>>
->>>>>> ~/damo # pmap 2550
->>>>>> ...
->>>>>> 0000007992bbe000      4K r----   [ anon ]
->>>>>> 0000007992bbf000     24K rw---   [ anon ]
->>>>>> 0000007fe8753000      4K -----   [ anon ]
->>>>>> 0000007fe8754000   8188K rw---   [ stack ]
->>>>>>     total         36742112K
->>>>>>
->>>>>> Because the whole vma list is too long, I have put the list here for
->>>>>> you to download:
->>>>>> wget http://www.linuxep.com/patches/android-app-vmas
->>>>>>
->>>>>> I can reproduce this problem on other Apps like youtube as well.
->>>>>> I suppose we need to boost the algorithm of splitting regions for this
->>>>>> kind of application.
->>>>>> Any thoughts?
->>>>>>
->>>>
-> 
-> Thanks
-> Barry
+> Imagine some out of tree DTS which cannot use interconnects because we
+> assume that all users of that provider are missing bandwidth requests.
+> No, instead provider should allow anyone to use it.
+
+I have an idea to introduce a kernel parameter like clk_ignore_unused,
+but for interconnects.
+
+> I understand my change might cause unexpected issues, but it is still
+> technically correct, just maybe should be followed with disabling in DTS
+> the providers without proper consumers?
+
+Not sure that enabling/disabling stuff in DT is a good option. DT should
+be just a description of the hardware and it might not be updated as often
+as the kernel.
+
+Thanks,
+Georgi

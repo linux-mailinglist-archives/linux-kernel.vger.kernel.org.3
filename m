@@ -2,82 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB9951321A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BB8513252
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345355AbiD1LIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S1345519AbiD1LWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344622AbiD1LIm (ORCPT
+        with ESMTP id S230231AbiD1LWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:08:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C563BA47;
-        Thu, 28 Apr 2022 04:05:23 -0700 (PDT)
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kpt6C0pfczfbDB;
-        Thu, 28 Apr 2022 19:04:03 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 19:04:58 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
- 2022 19:04:57 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <jack@suse.cz>, <tj@kernel.org>, <axboe@kernel.dk>,
-        <paolo.valente@linaro.org>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v4 3/3] block, bfq: do not idle if only one group is activated
-Date:   Thu, 28 Apr 2022 19:19:07 +0800
-Message-ID: <20220428111907.3635820-4-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220428111907.3635820-1-yukuai3@huawei.com>
-References: <20220428111907.3635820-1-yukuai3@huawei.com>
+        Thu, 28 Apr 2022 07:22:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A755EA94F2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651144769;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qr2DOGB0z6K0qePNKw8JJPlRt9jZnLNpgbFm3MJ8HzE=;
+        b=eNKVgpbvjOSnx86OScTqbuZpid+U+vejq4zFJTjH0smxRRL+mTTkBGmqPkfl77+KfMAvI9
+        VFKhWaLgnZicHcYoaC9/SlNuqNMB0kfmNExnHU6M/q9dWl5AhH3/TiMpTw0aqfAT2PZLS/
+        hjqts5K8zKjZNx30sP3KAJtsUfREpN8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-416-PeK0j-6rMlibt-Yq8wehuw-1; Thu, 28 Apr 2022 07:19:24 -0400
+X-MC-Unique: PeK0j-6rMlibt-Yq8wehuw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD7BE1815CFC;
+        Thu, 28 Apr 2022 11:19:17 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.96])
+        by smtp.corp.redhat.com (Postfix) with SMTP id C6B052166B18;
+        Thu, 28 Apr 2022 11:19:12 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 28 Apr 2022 13:19:17 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 13:19:11 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
+ ptrace_check_attach
+Message-ID: <20220428111911.GA3804@redhat.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <20220426225211.308418-7-ebiederm@xmission.com>
+ <20220427151455.GE17421@redhat.com>
+ <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that root group is counted into 'num_groups_with_busy_queues',
-'num_groups_with_busy_queues > 0' is always true in
-bfq_asymmetric_scenario(). Thus change the condition to '> 1'.
+On 04/28, Peter Zijlstra wrote:
+>
+> On Wed, Apr 27, 2022 at 05:14:57PM +0200, Oleg Nesterov wrote:
+> > On 04/26, Eric W. Biederman wrote:
+> > >
+> > > Asking wait_task_inactive to verify that tsk->__state == __TASK_TRACED
+> > > was needed to detect the when ptrace_stop would decide not to stop
+> > > after calling "set_special_state(TASK_TRACED)".  With the recent
+> > > cleanups ptrace_stop will always stop after calling set_special_state.
+> > >
+> > > Take advatnage of this by no longer asking wait_task_inactive to
+> > > verify the state.  If a bug is hit and wait_task_inactive does not
+> > > succeed warn and return -ESRCH.
+> >
+> > ACK, but I think that the changelog is wrong.
+> >
+> > We could do this right after may_ptrace_stop() has gone. This doesn't
+> > depend on the previous changes in this series.
+>
+> It very much does rely on there not being any blocking between
+> set_special_state() and schedule() tho. So all those PREEMPT_RT
+> spinlock->rt_mutex things need to be gone.
 
-On the other hand, this change can enable concurrent sync io if only
-one group is activated.
+Yes sure. But this patch doesn't add the new problems, imo.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/bfq-iosched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes we can hit the WARN_ON_ONCE(!wait_task_inactive()), but this is
+correct in that it should not fail, and this is what we need to fix.
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 609b4e894684..aeba9001da0b 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -844,7 +844,7 @@ static bool bfq_asymmetric_scenario(struct bfq_data *bfqd,
- 
- 	return varied_queue_weights || multiple_classes_busy
- #ifdef CONFIG_BFQ_GROUP_IOSCHED
--	       || bfqd->num_groups_with_busy_queues > 0
-+	       || bfqd->num_groups_with_busy_queues > 1
- #endif
- 		;
- }
--- 
-2.31.1
+> That is also the reason I couldn't do wait_task_inactive(task, 0)
+
+Ah, I din't notice this patch uses wait_task_inactive(child, 0),
+I think it should do wait_task_inactive(child, __TASK_TRACED).
+
+Oleg.
 

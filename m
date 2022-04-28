@@ -2,174 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAF0513C0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D720E513C04
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351378AbiD1TPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 15:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S1351364AbiD1TOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 15:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238779AbiD1TPf (ORCPT
+        with ESMTP id S1347415AbiD1TOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:15:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE269B3C75;
-        Thu, 28 Apr 2022 12:12:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CA64B82F6E;
-        Thu, 28 Apr 2022 19:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93EE0C385A0;
-        Thu, 28 Apr 2022 19:12:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651173137;
-        bh=Z5QrtyPoKtr4EXTz5f8XYaD44MEJLtU/UpYiIT1zJhQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=InTqMwimwY/xTFEieuVIfeswQ0EoYsWCrDONLYTJLJQe3xAd7iMGaEPYN1qBRZS7q
-         i1b7F7wFSFfr5pW+k1pHsP2+K1rGEWUXsgiifuLmsk1Z/yLnZ/NIWHfYlEznZCBqwd
-         GYgkjGQ9NTzNa2yswmEWoaqy5eX5LBMFHMxw//ePSz5Ip0HfgGYJhaC6VM5d7e8Xk7
-         eb/K72NLbZkTquWmEGRMzYUfcwgDQJS5dj4EzMDo41mYbbOyRHjE7KLxKTWj3KPhMb
-         rXXg2VEMGBY97I+7LzkyhwJwMk/6/ysxPAJE8cx/YfUwG9mmLZ0itIViS62avreQDf
-         75qKdG9k7Dz4w==
-Date:   Thu, 28 Apr 2022 14:12:13 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jake Oshins <jakeo@microsoft.com>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: Re: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
- time
-Message-ID: <20220428191213.GA36573@bhelgaas>
+        Thu, 28 Apr 2022 15:14:15 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76CA8A32A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:10:57 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id l9-20020a4abe09000000b0035eb3d4a2aeso174801oop.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2aXsqerjLXA91XKgmdLKkKAKVBORFuGPtPebXTdU8DQ=;
+        b=R0JEfLOaP4DoFmErPMfFEbjdIK/j5w9Qwzk61+EjAjK9AjUFPngr64Y9NwSK6B9o5z
+         +w0R15px/1QmEpmkiCODYb3/BtPhdR0yxF1jgyCK+ACBHR2LddwOiKo2h8n0uvyhIA3j
+         7Z3bzdXIE3Go0L9hSvwt750vWlyNZPRNGlj8ZHDAKDEqGxevy8wWanRsmTU2FKngaRaU
+         eiTqyY5FgX/sye7F0A84crd7lsi5LwzCqCivl5Z6UD+wHNWrzylum+G2DlBiqwtADZXz
+         nRr8mj18Mw5R/Pu66rTPU+nmus1nyJjbyAzF0HKDrpZ+qVoTLXODhsvDu/Shpiq0JcCU
+         brfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2aXsqerjLXA91XKgmdLKkKAKVBORFuGPtPebXTdU8DQ=;
+        b=PGXNAtcZqQj61fLNRKiRxQqpsDH6o7SIP4vPEE9JOYNQuUF0rdLe28VTmrwfeK6Lp7
+         jtSlStTF3bXW+y9OGbyyv/XsMsHvLG9f0a6hPUpNh3nwKtmO+gq17vFVBy1Ujt//hcWM
+         Vb9s9YKAy9ndO1p1LjmuSMNvCEJbOxbPMR5fPz6RONXEpUKqeE8DrNV8QO59+vqZQEGX
+         54lN2Hc0tyJzdL9kiNoHxbI+DZzzYFgdSM4tddAVLzAQRYPtSShX9mPyTwn5gIdxkCD3
+         rGZsNRxnS+IFRVShDAdZiXXkHe2XmsDA7o3ttTw7p6JgudFVj9zg2SoItHQKOxltBYXX
+         3ptQ==
+X-Gm-Message-State: AOAM533nJrvzg+YcM47uZIGhUCW6s0lwMKBoZdd9PM/RyYSVDbhrfJUi
+        jNJBto5hQvl/ybgOUXBN6WvHFA==
+X-Google-Smtp-Source: ABdhPJzKBeopn16KqsmMbcXih08Js7rj7ornldsvddmz5pJjeqIV8lREl+AUtyHtmoRWFGSKZ4Ux3w==
+X-Received: by 2002:a4a:942b:0:b0:33a:39e0:b908 with SMTP id h40-20020a4a942b000000b0033a39e0b908mr12379358ooi.62.1651173056919;
+        Thu, 28 Apr 2022 12:10:56 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id ds10-20020a0568705b0a00b000e686d1387bsm2142927oab.21.2022.04.28.12.10.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 12:10:56 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 12:12:49 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC
+ bindings
+Message-ID: <YmrnMQwIR9wOeoKE@ripper>
+References: <20220422230013.1332993-1-bjorn.andersson@linaro.org>
+ <20220423014824.912ACC385A0@smtp.kernel.org>
+ <YmNsYSxLtwLpw98t@ripper>
+ <20220423031350.01299C385A0@smtp.kernel.org>
+ <YmN11qt/PqogYruQ@ripper>
+ <20220425223426.BE973C385A4@smtp.kernel.org>
+ <3fb043e6-2748-24f8-0115-b5372c747a12@linaro.org>
+ <Ymq6UOjrYgFlzl/W@ripper>
+ <CAA8EJpqBMzTNjTSWN1UMXM61-DmW22RKQJyWoMw3Rds=xEVQaQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SN4PR2101MB0878E466880C047D3A0D0C92ABFB9@SN4PR2101MB0878.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAA8EJpqBMzTNjTSWN1UMXM61-DmW22RKQJyWoMw3Rds=xEVQaQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 07:25:43PM +0000, Jake Oshins wrote:
-> > -----Original Message-----
-> > From: Dexuan Cui <decui@microsoft.com>
-> > Sent: Tuesday, April 26, 2022 11:32 AM
-> > To: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Cc: Jake Oshins <jakeo@microsoft.com>; Bjorn Helgaas <helgaas@kernel.org>;
-> > bhelgaas@google.com; Alex Williamson <alex.williamson@redhat.com>;
-> > wei.liu@kernel.org; KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> > <haiyangz@microsoft.com>; Stephen Hemminger <sthemmin@microsoft.com>;
-> > linux-hyperv@vger.kernel.org; linux-pci@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; Michael Kelley (LINUX) <mikelley@microsoft.com>;
-> > robh@kernel.org; kw@linux.com; kvm@vger.kernel.org
-> > Subject: RE: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce
-> > VM boot time
-> > 
-> > > From: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > Sent: Tuesday, April 26, 2022 9:45 AM
-> > > > ...
-> > > > Sorry I don't quite follow. pci-hyperv allocates MMIO for the bridge
-> > > > window in hv_pci_allocate_bridge_windows() and registers the MMIO
-> > > > ranges to the core PCI driver via pci_add_resource(), and later the
-> > > > core PCI driver probes the bus/device(s), validates the BAR sizes
-> > > > and the pre-initialized BAR values, and uses the BAR configuration.
-> > > > IMO the whole process doesn't require the bit PCI_COMMAND_MEMORY to
-> > > > be pre-set, and there should be no issue to delay setting the bit to
-> > > > a PCI device device's .probe() -> pci_enable_device().
+On Thu 28 Apr 09:24 PDT 2022, Dmitry Baryshkov wrote:
+
+> On Thu, 28 Apr 2022 at 18:59, Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Thu 28 Apr 08:44 PDT 2022, Dmitry Baryshkov wrote:
+> >
+> > > On 26/04/2022 01:34, Stephen Boyd wrote:
+> > > > Quoting Bjorn Andersson (2022-04-22 20:43:18)
+> > > > > On Fri 22 Apr 20:13 PDT 2022, Stephen Boyd wrote:
+> > > > > >
+> > > > > > I'd really rather not have clock-names at all because we spend a bunch
+> > > > > > of time comparing strings with them when we could just as easily use
+> > > > > > a number.
+> > > > >
+> > > > > I know that you would like to get rid of the clock-names for the clock
+> > > > > controllers. I've looked at it since and while it will be faster to
+> > > > > execute I still feel that it's going to be harder to write and maintain.
+> > > > >
+> > > > > E.g. look at gcc_pcie_4_pipe_clk_src, its parents today are
+> > > > > pcie_4_pipe_clk and bi_tcxo. Something I can reason about being correct
+> > > > > or not.
+> > > > >
+> > > > > If we ditch the clock-names I will have:
+> > > > >
+> > > > > static const struct clk_parent_data gcc_parent_data_14[] = {
+> > > > >          { .index = 30 },
+> > > > >          { .index = 0 },
+> > > >
+> > > > Those numbers could have some #define.
+> > > >
+> > > >     { .index = PCIE_4_PIPE_CLK_DT }
+> > > >     { .index = BI_TCXO_DT }
+> > > >
+> > > > > };
+> > > > >
+> > > > > Generally we would perhaps use some compile time constant, but that
+> > > > > won't work here because we're talking about the index in the clocks
+> > > > > array in the yaml.
+> > > > >
+> > > > >
+> > > > > But perhaps I'm missing something that would make this manageable?
+> > > >
+> > > > I dunno. Maybe a macro in the dt-binding header could be used to specify
+> > > > the 'clocks' property of the DT node that is providing the other side?
+> > > > The idea is to make a bunch of macros that insert the arguments of the
+> > > > macro in the right place for the clocks property and then define the
+> > > > order of arguments otherwise. It would be similar to how
+> > > > CREATE_TRACE_POINTS is used in include/trace/define_trace.h
+> > > >
+> > > > In the dt-bindings/qcom,gcc-soc.h file:
+> > > >
+> > > >     #ifdef IN_DTSI
+> > > >
+> > > >     #undef GCC_DT_NODE_CLOCKS
+> > > >     #define GCC_DT_NODE_CLOCKS
+> > > >             clocks = <BI_TCXO_DT>,
+> > > >                      <SLEEP_CLK_DT>;
+> > > >
+> > > >     #endif /* IN_DTSI */
+> > > >
+> > > >     #define BI_TCXO_DT 0
+> > > >     #define SLEEP_CLK_DT 1
+> >
+> > BI_TCXO_DT is not the value, its the index of the entry in the clocks
+> > array. And the actual values of the clock controller's clocks
+> > property is not a property of the clock controller, but the system
+> > definition.
+> >
+> > I.e. that should be clear and explicitly expressed in the dts.
+> >
 > > >
-> > > IIUC you want to bootstrap devices with PCI_COMMAND_MEMORY clear
-> > > (otherwise PCI core would toggle it on and off for eg BAR sizing).
+> > > Isn't this being an overkill, to define exact properties in the bindings
+> > > header? Also this would mean that we'd have to add dt-binding headers for
+> > > all _consumers_ of clocks. And to make things more complex, e.g. for PCIe
+> > > devices different instances of the device would use different amount of
+> > > clocks. This would mean that we'd have to define SM8250_PCI0_CLOCKS,
+> > > SM8250_PCIE1_CLOCKS and SM8250_PCIE2_CLOCKS.
 > > >
-> > > Is that correct ?
-> > 
-> > Yes, that's the exact purpose of this patch.
-> > 
-> > Do you see any potential architectural issue with the patch?
-> > From my reading of the core PCI code, it looks like this should be safe.
+> > >
+> > > If we were to switch to this fragile path of using indices (yes I consider
+> > > it to be very fragile), I'd consider something like the following to work in
+> > > the platform dtsi file:
+> > >
+> > > clocks =
+> > > BEGIN_CLOCK
+> > > CLOCK(BI_TCXO_DT, &bi_tcxo)
+> > > CLOCK(SLEEP_CLK_DT, &sleep_clk)
+> > > END_CLOCK;
+> > >
+> > > While the following should give an error:
+> > > clocks =
+> > > BEGIN_CLOCK
+> > > CLOCK(SLEEP_CLK_DT, &sleep_clk)
+> > > CLOCK(BI_TCXO_DT, &bi_tcxo)
+> > > END_CLOCK;
+> > >
+> > > I think we can make this error out by using some additional tool (or
+> > > additional preprocessor pass over the sources)
+> > >
+> >
+> > Let's not invent some magical syntax for describing the clocks in the
+> > DT.
+> >
+> > These macros can't expand to sparse arrays anyways, so iiuc this would
+> > give a sense that the ordering might not be significant, when it really
+> > is.
+> >
+> > > > And then in the SoC.dtsi file have
+> > > >
+> > > >     #define IN_DTSI
+> > > >     #include <dt-bindings/qcom,gcc-soc.h>
+> > > >
+> > > >     #define BI_TCXO_DT      &xo_board
+> > > >     #define SLEEP_CLK_DT    &sleep_clk
+> > > >
+> > > >     ...
+> > > >
+> > > >     clock-controller@a000000 {
+> > > >             compatible = "qcom,gcc-soc";
+> > > >             reg = <0xa000000 0x10000>;
+> > > >             GCC_DT_NODE_CLOCKS
+> > > >     };
+> > > >
+> > > >
+> > > > and then in drivers/clk/qcom/gcc-soc.c file:
+> > > >
+> > > >     #include <dt-bindings/qcom,gcc-soc.h>
+> > > >
+> > > >     static const struct clk_parent_data gcc_parent_data_14[] = {
+> > > >             { .index = PCIE_4_PIPE_CLK_DT },
+> > > >             { .index = BI_TCXO_DT },
+> > > >     };
+> > > >
+> > > > The benefit I see to this is that the index for each clock is in the
+> > > > header file (BI_TCXO_DT is 0) and it's next to the clocks property.
+> > > > Someone could still mess up the index based on where the macro is used
+> > > > in the clocks property though.
+> > >
+> > > And actually might I suggest an alternative approach to manually using
+> > > indices everywhere? What about spending the time once during the boot to
+> > > convert .fw_name and clock_names to parent indices during clock registration
+> > > and then using them for all the further operations?
+> > >
+> >
+> > I'm pretty sure that's what clk_core_fill_parent_index() already does.
+> 
+> In this case I think we should go for clock-name in the DT and
+> auto-flled indices inside. Stephen, WDYT? Would that fix your concern
+> for comparing strings each and every time?
+> 
 
-I don't know much about Hyper-V, but in general I don't think the PCI
-core should turn on PCI_COMMAND_MEMORY at all unless a driver requests
-it.  I assume that if a guest OS depends on PCI_COMMAND_MEMORY being
-set, guest firmware would take care of setting it.
+You mean, just continue doing what we've been doing lately with fw_name
+etc?
 
-> > Jake has some concerns that I don't quite follow.
-> > @Jake, could you please explain the concerns with more details?
-> 
-> First, let me say that I really don't know whether this is an issue.
-> I know it's an issue with other operating system kernels.  I'm
-> curious whether the Linux kernel / Linux PCI driver would behave in
-> a way that has an issue here.
-> 
-> The VM has a window of address space into which it chooses to put
-> PCI device's BARs.  The guest OS will generally pick the value that
-> is within the BAR, by default, but it can theoretically place the
-> device in any free address space.  The subset of the VM's memory
-> address space which can be populated by devices' BARs is finite, and
-> generally not particularly large.
-> 
-> Imagine a VM that is configured with 25 NVMe controllers, each of
-> which requires 64KiB of address space.  (This is just an example.)
-> At first boot, all of these NVMe controllers are packed into address
-> space, one after the other.
-> 
-> While that VM is running, one of the 25 NVMe controllers fails and
-> is replaced with an NVMe controller from a separate manufacturer,
-> but this one requires 128KiB of memory, for some reason.  Perhaps it
-> implements the "controller buffer" feature of NVMe.  It doesn't fit
-> in the hole that was vacated by the failed NVMe controller, so it
-> needs to be placed somewhere else in address space.  This process
-> continues over months, with several more failures and replacements.
-> Eventually, the address space is very fragmented.
-> 
-> At some point, there is an attempt to place an NVMe controller into
-> the VM but there is no contiguous block of address space free which
-> would allow that NVMe controller to operate.  There is, however,
-> enough total address space if the other, currently functioning, NVMe
-> controllers are moved from the address space that they are using to
-> other ranges, consolidating their usage and reducing fragmentation.
-> Let's call this a rebalancing of memory resources.
-> 
-> When the NVMe controllers are moved, a new value is written into
-> their BAR.  In general, the PCI spec would require that you clear
-> the memory enable bit in the command register (PCI_COMMAND_MEMORY)
-> during this move operation, both so that there's never a moment when
-> two devices are occupying the same address space and because writing
-> a 64-bit BAR atomically isn't possible.  This is the reason that I
-> originally wrote the code in this driver to unmap the device from
-> the VM's address space when the memory enable bit is cleared.
-> 
-> What I don't know is whether this sequence of operations can ever
-> happen in Linux, or perhaps in a VM running Linux.  Will it
-> rebalance resources in order to consolidate address space?  If it
-> will, will this involve clearing the memory enable bit to ensure
-> that two devices never overlap?
+That lookup is the one that Stephen wants to avoid.
 
-This sequence definitely can occur in Linux, but it hasn't yet become
-a real priority.  But we do already have issues with assigning space
-for hot-added devices in general, especially if firmware hasn't
-assigned large windows to things like Thunderbolt controllers.  I
-suspect that we have or will soon have issues where resource
-assignment starts failing after a few hotplugs, e.g., dock/undock
-events.
-
-There have been patches posted to rebalance resources (quiesce
-drivers, reassign, restart drivers), but they haven't gone anywhere
-yet for lack of interest and momentum.  I do feel like we're the
-tracks and the train is coming, though ;)
-
+Regards,
 Bjorn

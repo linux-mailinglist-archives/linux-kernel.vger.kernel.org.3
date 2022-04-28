@@ -2,130 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B743B513B9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC7D513BC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351095AbiD1Sgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+        id S1351224AbiD1Sqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351025AbiD1Sgh (ORCPT
+        with ESMTP id S1348158AbiD1Sq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:36:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBBCBC857;
-        Thu, 28 Apr 2022 11:33:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AA76B82F54;
-        Thu, 28 Apr 2022 18:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5DDC385A0;
-        Thu, 28 Apr 2022 18:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651170799;
-        bh=dM6SoIhKU87s7JyFiu8ZaRPnKv0+Vb1zN0hW0z5OG5U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kBe2CEqMcaaLxZcAjYt6vzZWMJD+jUyZPbBKlES+nEdUFKobJonRu4HypAsL/Tt8h
-         4iWPDrRlh/zcEIttBC8kAdR91hyTxH61nHkw1asz5tA9OsMuTW1fiFTWXSkIqVYSjY
-         j0MB3+LuXlxmAQa+teNK532AqlqUWSHb00p6Bq94kNSCEB50i4vToMcgi9WIuc4NeV
-         I9yzYD+YSAcl7JU0F/hLUqf1ZXsMdtHH24Cv/aNhFBlvfF6g4I/qOD6JGrwOq+UYvi
-         dD+u993ZT3OOJR4ICzWlr2/9HU7fVSkq4X6UjwinMGwO/tDl4U3rYnI5Dsl/HnEbGN
-         B6iT8jqh7bPQg==
-Date:   Thu, 28 Apr 2022 19:41:32 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3] iio: gp2ap020a00f: Fix signedness bug
-Message-ID: <20220428194132.5a02555c@jic23-huawei>
-In-Reply-To: <1650248375-6334-1-git-send-email-baihaowen@meizu.com>
-References: <20220415185205.26a3d352@jic23-huawei>
-        <1650248375-6334-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 28 Apr 2022 14:46:28 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1187ABF511;
+        Thu, 28 Apr 2022 11:43:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id y21so6549194edo.2;
+        Thu, 28 Apr 2022 11:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zI+9j94q19l63yFihh0+ZsjTI2C5NOx2hP5jr2k4x9k=;
+        b=WK6kihR8b3wSbEull4x65571g240iY3fBAfiTXsaZDlpj/xdgiElV/P43tUu9yXSVX
+         hWkKZvrStyCqJIayhO18QI89R8AHdCsLMnVVefiMboCPUg9jwW8UI371XTLloEYzpnBa
+         B0GUhQiLmGId/z5djVFsZ7AFAUgOKJDiPHULAklgepOzju10xb0RTX4BA1BeUnJ/S377
+         TjafnXdVqpgpA3pC8zc1MJup7/P2VeO9LxoimierGf1yWwgM8XqY65KnT+hRZSeagjyb
+         oxpyI9c1YV+pNkCdzr9uu3mIs5PfLCToQJgYckJ8Hywf72cLHHacgZsutwe5E7PxhHXF
+         hUSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=zI+9j94q19l63yFihh0+ZsjTI2C5NOx2hP5jr2k4x9k=;
+        b=6rwKrNuSL0XXu0nYcWhXHUxkiJdS2bOd1jVGDf3qfKXkJZAt1lr0w5qDT1PZgbv8M2
+         z5nwnb92MWy6YKsBRTRFUgit321njLjbuC4dIX+ae9rCQM0jMvzlqJKMi7t1PeTayKwr
+         O5pRZHw+PObWpVMNA3M+9A79AVUoIMs6ffCtCaNsAhaRMJ6J/pXcyu19RBc5FOROfCPX
+         Ivg2olImHdHjHoMnYxXK9mllPBsZ2ukYuoIzklOLR6xIbUIPbRHoJ/IiOLCIrzcR6YpY
+         TCLKTz/EkaR0+vb9jRLIjeTcByibZsIez7LeSMOUplorU2uEHrEaZL6AJmWijEIvm6D3
+         RCTg==
+X-Gm-Message-State: AOAM533e7emqyzaBYTne6YYBnvz2WYPjTaC41HrEeAK2VNkYaBhr5D2I
+        Jo5VXboGAbfeCWf36SRCMoY=
+X-Google-Smtp-Source: ABdhPJx/YPYe4JPKWoxoRcaMVgX4E0nnzI2Yu9Okc03Ig2cnSUmTTSqOuZdSRJVF91tk7qq1rWWdDg==
+X-Received: by 2002:aa7:d954:0:b0:425:f621:f77f with SMTP id l20-20020aa7d954000000b00425f621f77fmr18775972eds.363.1651171390413;
+        Thu, 28 Apr 2022 11:43:10 -0700 (PDT)
+Received: from eldamar (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id v17-20020a1709060b5100b006f38cf075cbsm273241ejg.104.2022.04.28.11.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 11:43:09 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Thu, 28 Apr 2022 20:43:07 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Dusty Mabe <dustymabe@redhat.com>, Stefan Roese <sr@denx.de>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Marek Vasut <marex@denx.de>, x86@kernel.org, maz@kernel.org,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Juergen Gross <jgross@suse.com>,
+        Noah Meyerhans <noahm@debian.org>
+Subject: Re: [tip: irq/urgent] PCI/MSI: Mask MSI-X vectors only on success
+Message-ID: <YmrgO09bqePgiJJd@eldamar.lan>
+References: <20211210161025.3287927-1-sr@denx.de>
+ <163948488617.23020.3934435568065766936.tip-bot2@tip-bot2>
+ <Yi9vH2F2OBDprwd8@jpiotrowski-Surface-Book-3>
+ <43418c23-5efd-4d14-706f-f536c504b75a@denx.de>
+ <c4a65b9a-d1e2-bf0d-2519-aac7185931d5@redhat.com>
+ <Yi+lwVRTu8xxi9Gy@jpiotrowski-Surface-Book-3>
+ <Ymj3zzjQ9PwYaX/p@eldamar.lan>
+ <87v8uuwhs4.ffs@tglx>
+ <87wnf9uxnw.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wnf9uxnw.ffs@tglx>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 10:19:35 +0800
-Haowen Bai <baihaowen@meizu.com> wrote:
+Hi Thomas,
 
-> function gp2ap020a00f_get_thresh_reg() is unsigned but returning -EINVAL
-> errcode, and thresh_reg_l is unsigned but receiving -EINVAL errcode. so
-> we have to change u8 -> int. Also we need to do index bound check at
-> gp2ap020a00f_read_event_val().
+On Thu, Apr 28, 2022 at 03:48:03PM +0200, Thomas Gleixner wrote:
+> On Wed, Apr 27 2022 at 19:35, Thomas Gleixner wrote:
+> > On Wed, Apr 27 2022 at 09:59, Salvatore Bonaccorso wrote:
+> > XEN guests do not use the common PCI mask/unmask machinery which would
+> > unmask the interrupt on request_irq().
+> >
+> > So I assume that the following happens:
+> >
+> > Guest                     Hypervisor
+> >
+> > msix_capabilities_init()
+> >         ....
+> >         alloc_irq()
+> >            xen_magic()  -> alloc_msix_interrupt()
+> >                            request_irq()
+> >
+> >         msix_mask_all() -> trap
+> >                              do_magic()
+> > request_irq()
+> >    unmask()
+> >      xen_magic()
+> >        unmask_evtchn()  -> do_more_magic()
+> >
+> > So I assume further that msix_mask_all() actually is able to mask the
+> > interrupts in the hardware (ctrl word of the vector table) despite the
+> > hypervisor having allocated and requested the interrupt already.
+> >
+> > Nothing in XEN_HVM handles PCI/MSI[-X] mask/unmask in the guest, so I
+> > really have to ask why XEN_HVM does not disable PCI/MSI[-X] masking like
+> > XEN_PV does. I can only assume the answer is voodoo...
+> >
+> > Maybe the XEN people have some more enlightened answers to that.
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-
-Please add a Fixes tag if possible.
-
-> ---
-> V1->V2: s8 is not enough to hold an (arbitrary) error code. To be on the safe
-> side we need to use int.
-> V2->V3: add bound check at gp2ap020a00f_read_event_val().
+> So I was talking to Juergen about this and he agrees, that for the case
+> where a XEN HVM guest uses the PIRQ/Eventchannel mechanism PCI/MSI[-X]
+> masking should be disabled like it is done for XEN PV.
 > 
+> Why the hypervisor grants the mask write is still mysterious, but I
+> leave that to the folks who can master the XEN voodoo.
 > 
->  drivers/iio/light/gp2ap020a00f.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/light/gp2ap020a00f.c b/drivers/iio/light/gp2ap020a00f.c
-> index b820041159f7..f80d30786035 100644
-> --- a/drivers/iio/light/gp2ap020a00f.c
-> +++ b/drivers/iio/light/gp2ap020a00f.c
-> @@ -994,7 +994,7 @@ static irqreturn_t gp2ap020a00f_trigger_handler(int irq, void *data)
->  	return IRQ_HANDLED;
->  }
->  
-> -static u8 gp2ap020a00f_get_thresh_reg(const struct iio_chan_spec *chan,
-> +static int gp2ap020a00f_get_thresh_reg(const struct iio_chan_spec *chan,
->  					     enum iio_event_direction event_dir)
->  {
->  	switch (chan->type) {
-> @@ -1025,7 +1025,7 @@ static int gp2ap020a00f_write_event_val(struct iio_dev *indio_dev,
->  	struct gp2ap020a00f_data *data = iio_priv(indio_dev);
->  	bool event_en = false;
->  	u8 thresh_val_id;
-> -	u8 thresh_reg_l;
-> +	int thresh_reg_l;
+> I'll send out a patch in minute.
 
-You need to check this val after the function call, but before it is used.
+Thank you. We are having Noah Meyerhans now testing the patch and he
+will report back if it works (Cc'ed here now).
 
-
->  	int err = 0;
->  
->  	mutex_lock(&data->lock);
-> @@ -1082,14 +1082,14 @@ static int gp2ap020a00f_read_event_val(struct iio_dev *indio_dev,
->  				       int *val, int *val2)
->  {
->  	struct gp2ap020a00f_data *data = iio_priv(indio_dev);
-> -	u8 thresh_reg_l;
-> +	int thresh_reg_l;
->  	int err = IIO_VAL_INT;
->  
->  	mutex_lock(&data->lock);
->  
->  	thresh_reg_l = gp2ap020a00f_get_thresh_reg(chan, dir);
->  
-> -	if (thresh_reg_l > GP2AP020A00F_PH_L_REG) {
-> +	if (thresh_reg_l < 0 || thresh_reg_l > GP2AP020A00F_PH_L_REG) {
->  		err = -EINVAL;
-If a function returns an error we should pass that on unchanged 
-Here the value is the same, but none the less we should have this look something
-like.
-
-	if (thresh_reg_l < 0)
-		return thresh_reg_l;
-	if (thresh_reg_l > GP2AP020A00F_PH_L_REG)
-	...
-
->  		goto error_unlock;
->  	}
-
+Regards,
+Salvatore

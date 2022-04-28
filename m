@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5BE512875
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255B8512877
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240187AbiD1BHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S240126AbiD1BHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbiD1BHe (ORCPT
+        with ESMTP id S233930AbiD1BHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 27 Apr 2022 21:07:34 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7F113DEF;
-        Wed, 27 Apr 2022 18:04:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55C53DA48;
+        Wed, 27 Apr 2022 18:04:20 -0700 (PDT)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3FE065C0216;
-        Wed, 27 Apr 2022 21:04:18 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 5534B5C010B;
+        Wed, 27 Apr 2022 21:04:20 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 27 Apr 2022 21:04:18 -0400
+  by compute4.internal (MEProxy); Wed, 27 Apr 2022 21:04:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1651107858; x=1651194258; bh=EW
-        QuBrshtflaBYZQbOQftY716qHgPAQrgs5xYJD0PZQ=; b=B27RA3E11tPFjhXoZl
-        BCXngJ4YKleJDrSbx28eZHU8/vEasIR/rNzdX+0YfcwNkYs22yPGBbBjNktJtMOe
-        np3rp6oQ3OLLc5xXlLifCZV4CkCux2q0f0al1x1odNlZniJGqSzPV0YYSEf5Cz39
-        a963ajqTtRnxiCeQh2vBRYypvbH0RCUaljLvXP9YoeHUDk3YG40CqnCyYGJikvuj
-        AwQbtuMTLbrp7Nmq9PgSb50Dka2xAM6P1CLCurp5QzUpx7AGrq1mM/0LZXnDuW4d
-        Y+KhLbeCOBWMMD8spVkuwdyfcAliYIpfwz68yOpsZyOCxuRFGecIyImrHLCoJoC2
-        mo2A==
+        :subject:subject:to:to; s=fm2; t=1651107860; x=1651194260; bh=7k
+        KZKeaIzmswO5xe/sMVvmN10M9qpUiXUxMfopwBhII=; b=FzcqGCmKSCcG1573ws
+        wjrHZ9MgBOtt7+W3nlCZwNSbIvNB9iJgBz0Xw71GL//FMsajq+J5lJPUD/Iynl+h
+        hW0vgX+42ZsPjIG/gWQnuTc2M3rWXN3GwxFfBSwq56Jft1QpxeeEhtsboM7s1UAU
+        X/WfpXOQEDvZn3tnmJozIpJTiDmvRl3aq4br1AlXMrwX6H9geeWBLqQN7RDmXZmr
+        aTTGzNHKb7lV+IGskzD4kNYnUJDmZ/M0QlwpJyTJqK6dPj1RPvFYHHR1fGga0Lj6
+        wITbOUkxxwmsGES05YpEHgPzTv4BjfS2O18AdEEuGtk0XcKKDsQ38O+WPos/Jlnx
+        jKwQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1651107858; x=1651194258; bh=EWQuBrshtflaBYZQbOQftY716qHgPAQrgs5
-        xYJD0PZQ=; b=HN2J6N7ELnQR3Gy9fUmDvuEk9YlYKp9j7GPM2wWJGOlfvoLRYro
-        qPxAJxQXaPAiCFUANedSSSTw6H7d23TRSskiqrtJ+sEsSBq3+a8XHJDBOcJoHFd7
-        QUc0TV3p1g7bdK2v9lyV5qA9FcsV+xn8syFJQo8RdXd8iHf/C59/sp5DLVrRmomL
-        RebZWUBp3uuLATt8lGTZRx4HRMUI5Fq9kxiLOcZ1BzlkB34tsPzHuND4M9OCPqEX
-        gurem5f3Z/74dn2SHEMHIDVkSuqkdCTQJCTZYy8LRl3EV7SVB9z+2aXBkfyGcOtV
-        Ve5zqxdiy/bGIjDnOBKmfMTMllDYbEaYB0A==
-X-ME-Sender: <xms:EuhpYiffe1DAaWEuU_68hMUOBvbCoui-fcIL1RS2YG0nVIiGRlauZA>
-    <xme:EuhpYsMpJWFJo0J0ehGz_Ii_rQr8oLWQsgQk9ozuccLjyIapi2z0cLOKXiFzGlszg
-    eADy8XQY9N25tVVZg>
-X-ME-Received: <xmr:EuhpYjhSfFHsGZ9OUA-7tBa6NWIdm7Icl5arTlUJOxHwV-VGhyRF1QzLUyiCCB8FIcTcUZrp5pCukFkB1F4bWpzEGG9_osOF49FghfEr2aP-_ZdGdojfqyBwn3eS2Uek5Q0Fag>
+        1651107860; x=1651194260; bh=7kKZKeaIzmswO5xe/sMVvmN10M9qpUiXUxM
+        fopwBhII=; b=LZzqWHfYD2Efj2hch/HZzY2OvSwjH1J+3lKdQ08JNew6snKaNh+
+        5V66l6Mxn1bsYtau1gcZu70zX5rtW3VvFxvUEqzW69uVJ+p3T/ecKd+0gdnRmhjf
+        ARUWeWI0nu4DgjI87rvqrvtqTY7RZA0wc9u34PU1n3qF0dMjPkuHfQ2zakoUWxWM
+        GeJgfJwfhHaCkVIVFgTJU+lcIV2JnMRduBXwvFJfEQWTXXtjRiz5eEChAtYx2wJ8
+        WRQAG4xnnE/vtEDthrO0lnZdfswjl3xwy/yDp8IC5GbPTpITGb8eNkakwcfsSYED
+        WzE3IPZXkCLefZN2mpBX326hUGLOARqj5FQ==
+X-ME-Sender: <xms:FOhpYryLbjZs5NNFdW38MfOrDz3CuY_wPdQ5ITkz-YhY-M_c9bXd_Q>
+    <xme:FOhpYjSD4p-r5lhDu8Wf45NH1YZCkMOaTV8u4YCgBSGdAE1BzscWsj2SSr-jKNGKv
+    5pmSFUXdwbEbNld4A>
+X-ME-Received: <xmr:FOhpYlXtophLVL2t1r6XI4wDoUOD2yIbE65kLIWuU20R2xfC9FtFUb1gKLZa45SlonQCmPj2uj9vzzdfJmWpz2natVK8as1fC3JcPM0CID6mdLmP-9mqt93S97Dv1uR0ZIULAA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeigdegfecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
     lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
     frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    feeitdevteenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:EuhpYv-9UAS85yEzxjAya6_MNmWfVVLGaDvoLZeI8-PENgg-cMupMg>
-    <xmx:EuhpYuvDa-YXf4W-vmvlhT17qVRPnqantOu7Lb8H9GlVebkFWL3ilw>
-    <xmx:EuhpYmEpctWVjsxcZdxljjMhExeISxNIc93WvPZSXSBMRyosXrkFWQ>
-    <xmx:EuhpYqOvI53ClkFNLgbr8waNRaIs9DQ4WmvEDlRQaI5dyEhshxRHlQ>
+X-ME-Proxy: <xmx:FOhpYljX2COH74lmwoWE0UqfU8ajmbY6N2JjMmqobNnE0GKKekSBaQ>
+    <xmx:FOhpYtCEMCbftEQes56J1ZWFDyTbUA4srfwCxDaCBcTA-rD_dlgnxw>
+    <xmx:FOhpYuIIoiqLX_lD8F0mdIJQjXz8sA_iYcdRU2k_dP97nqO9unVQVw>
+    <xmx:FOhpYnQsPWyDjWUqZu2pBEbDnLXlxe2Cb7h5dC56uRH4ogO4gmhuzw>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 27 Apr 2022 21:04:17 -0400 (EDT)
+ 27 Apr 2022 21:04:19 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         iommu@lists.linux-foundation.org
@@ -76,9 +76,9 @@ Cc:     Heiko Stuebner <heiko@sntech.de>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH 2/5] iommu/sun50i: Support variants without an external reset
-Date:   Wed, 27 Apr 2022 20:03:57 -0500
-Message-Id: <20220428010401.11323-3-samuel@sholland.org>
+Subject: [PATCH 3/5] iommu/sun50i: Ensure bypass is disabled
+Date:   Wed, 27 Apr 2022 20:03:58 -0500
+Message-Id: <20220428010401.11323-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220428010401.11323-1-samuel@sholland.org>
 References: <20220428010401.11323-1-samuel@sholland.org>
@@ -93,72 +93,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IOMMU in the Allwinner D1 SoC does not have an external reset line.
+The H6 variant of the hardware disables bypass by default. The D1
+variant of the hardware enables bypass for all masters by default.
 
-Only attempt to get the reset on hardware variants which should have one
-according to the binding. And switch from the deprecated function to the
-explicit "exclusive" variant.
+Since the driver expects bypass to be disabled, ensure that is the case.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/iommu/sun50i-iommu.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/iommu/sun50i-iommu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
-index c54ab477b8fd..ec07b60016d3 100644
+index ec07b60016d3..b9e644b93637 100644
 --- a/drivers/iommu/sun50i-iommu.c
 +++ b/drivers/iommu/sun50i-iommu.c
-@@ -92,6 +92,10 @@
- #define NUM_PT_ENTRIES			256
- #define PT_SIZE				(NUM_PT_ENTRIES * PT_ENTRY_SIZE)
+@@ -374,6 +374,8 @@ static int sun50i_iommu_enable(struct sun50i_iommu *iommu)
  
-+struct sun50i_iommu_variant {
-+	bool has_reset;
-+};
+ 	spin_lock_irqsave(&iommu->iommu_lock, flags);
+ 
++	iommu_write(iommu, IOMMU_BYPASS_REG, 0);
 +
- struct sun50i_iommu {
- 	struct iommu_device iommu;
- 
-@@ -905,9 +909,14 @@ static irqreturn_t sun50i_iommu_irq(int irq, void *dev_id)
- 
- static int sun50i_iommu_probe(struct platform_device *pdev)
- {
-+	const struct sun50i_iommu_variant *variant;
- 	struct sun50i_iommu *iommu;
- 	int ret, irq;
- 
-+	variant = of_device_get_match_data(&pdev->dev);
-+	if (!variant)
-+		return -EINVAL;
-+
- 	iommu = devm_kzalloc(&pdev->dev, sizeof(*iommu), GFP_KERNEL);
- 	if (!iommu)
- 		return -ENOMEM;
-@@ -947,7 +956,8 @@ static int sun50i_iommu_probe(struct platform_device *pdev)
- 		goto err_free_group;
- 	}
- 
--	iommu->reset = devm_reset_control_get(&pdev->dev, NULL);
-+	if (variant->has_reset)
-+		iommu->reset = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 	if (IS_ERR(iommu->reset)) {
- 		dev_err(&pdev->dev, "Couldn't get our reset line.\n");
- 		ret = PTR_ERR(iommu->reset);
-@@ -987,8 +997,12 @@ static int sun50i_iommu_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static const struct sun50i_iommu_variant sun50i_h6_iommu = {
-+	.has_reset = true,
-+};
-+
- static const struct of_device_id sun50i_iommu_dt[] = {
--	{ .compatible = "allwinner,sun50i-h6-iommu", },
-+	{ .compatible = "allwinner,sun50i-h6-iommu", .data = &sun50i_h6_iommu },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, sun50i_iommu_dt);
+ 	iommu_write(iommu, IOMMU_TTB_REG, sun50i_domain->dt_dma);
+ 	iommu_write(iommu, IOMMU_TLB_PREFETCH_REG,
+ 		    IOMMU_TLB_PREFETCH_MASTER_ENABLE(0) |
 -- 
 2.35.1
 

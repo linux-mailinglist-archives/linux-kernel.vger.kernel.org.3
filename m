@@ -2,104 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8122513EA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B7E513EAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353010AbiD1Wto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S1353038AbiD1Wux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242342AbiD1Wtl (ORCPT
+        with ESMTP id S1353018AbiD1Wut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:49:41 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5383649278;
-        Thu, 28 Apr 2022 15:46:25 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id k25-20020a056830169900b00605f215e55dso727677otr.13;
-        Thu, 28 Apr 2022 15:46:25 -0700 (PDT)
+        Thu, 28 Apr 2022 18:50:49 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5A7C1C8B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:47:31 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id r189so11595991ybr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rNIaKSd9HIOo++vQl55ronwO6gWeoBJTBYDBf9qgIGc=;
+        b=xDEiqUW0WSk4+uzwF0xl2Of3qEC5D1FWLYE5HSp6i6QWdKwKWokbTmpRaSJEmFkQeA
+         rr1smsrUCQokqpRT1zKrUjWADVBVnxFg6L7QhmQV8Zu7tgFSIUx3FxdPzNpFEPk+Ti2B
+         v/Q/t5AwR86jyOqaWihswIPNkAkKFZA4yqgwm3qCv0ROPVz24RdHdvG7PYJi++D8Zbba
+         0R9dXFBQmxW+2Im+ACPlloNLaLfHR2d1N/MY2HEEHn1cDf7LbKRXKWf9Wu+dtvdgvGG9
+         VbkhbKrfVxve/AN3KksU/BPi7ZPHAh1hGFAaNJ8M/7hFZUBRavohA6D+do98WsK9sxkC
+         TzCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HfLClO0c3m5ysOvoYs15acVm9FGrl4E52LtituaKB/c=;
-        b=1wkRm/S33yGS4iQzb6QVWGU2RWtXKFMoc6lid64yXANfjjyE3NglZu0khPLAGtlmO/
-         YI1m8g3LENfeL8x1IBUFQ2t7PXdbXujs8SwVRKqMiIk8UiGKVwYkzz6Pqyj0zEEmoczR
-         nKCwcfGI34n80MBXFP00NZFno3XDuzCCzAqrBd5Xcg45StvxyXJsorzg6S8K8dOb4REh
-         fyeeTRxw7jNlWg1vnQpUBjGwwayBL3w/tgYxYaU11r9fJUOm5e9keK0PsSKOrIZSuxO2
-         CNMBBvbDmq+rMqnqthgDs4a4bYen7GK6ZrOgGCxqm4yhFst0jGqwpkKjxZDSUn/Mjlg5
-         LChw==
-X-Gm-Message-State: AOAM532L3KSKG8E/22kImGUAM0fPT+1LZvDs+g4N4B1/EhuCPbcL0Z1G
-        +KI8ZN9vZ96fNLJUa9xOzg==
-X-Google-Smtp-Source: ABdhPJxlsAp0UyeRenAWEeWlFhn6JRT0WWSoTOr8ogVulmNOLZlOLjQYwvcFF6qzcEDtDrXI6maGPg==
-X-Received: by 2002:a05:6830:4104:b0:605:b481:610e with SMTP id w4-20020a056830410400b00605b481610emr7799417ott.268.1651185984606;
-        Thu, 28 Apr 2022 15:46:24 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a8-20020a4ad5c8000000b0035eb4e5a6c6sm112724oot.28.2022.04.28.15.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 15:46:23 -0700 (PDT)
-Received: (nullmailer pid 486861 invoked by uid 1000);
-        Thu, 28 Apr 2022 22:46:23 -0000
-Date:   Thu, 28 Apr 2022 17:46:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: interrupt-controller: fsl,ls-extirq:
- convert to YAML
-Message-ID: <YmsZP41lvje+pBna@robh.at.kernel.org>
-References: <20220427075338.1156449-1-michael@walle.cc>
- <20220427075338.1156449-4-michael@walle.cc>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rNIaKSd9HIOo++vQl55ronwO6gWeoBJTBYDBf9qgIGc=;
+        b=ohMjvefNRgCVjRGWkxur7Glni6NllhQZArS4rr6cgG8GUmivBxSeFrNztEhdcJZz4F
+         1k6uvm3gwtij6IFE0txjO6ICR+v0ICj2vpT7NBr+9gZNrtQSmu67i5ltG+lzbiNigFZy
+         pvRsGw0TTlXWDtj3Pf5lFCfGYPC8r2ox7k/epPBejaAV5mbWYhT1kOytSD7c4GGqP75w
+         NoBBq51YJErnKih+qEHhyF1GpQIOJRzJPh7z/AZ6OrJIMfe4pgbAue2wQNZfoTjEWJhW
+         J3RyPoqkPZ5tBWSylvJV8BXk4tJ8mL1v6fkreuC99xgbmqm8dBxxKotFJhgfjUB4UbfF
+         YCOQ==
+X-Gm-Message-State: AOAM531j7tvSR0qqU7q4KsnPYIBpcEE6TGR6BaA3tKrNZVkcrTDn1C3x
+        0CBcPF2gLqQUsFhz2oEHJl27wHkwx53jhE2V2oc9gg==
+X-Google-Smtp-Source: ABdhPJyq3RnHxpIs1eT7rZa7x+L1tgpqQQaWbIkCGc6vz4lOgunasyHNBZt/HD3SsyvhMQZY25MrO/JWCpjUd8WpaCE=
+X-Received: by 2002:a25:a12a:0:b0:644:e94e:5844 with SMTP id
+ z39-20020a25a12a000000b00644e94e5844mr32540771ybh.492.1651186050515; Thu, 28
+ Apr 2022 15:47:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427075338.1156449-4-michael@walle.cc>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220413192918.3777234-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220413192918.3777234-1-horatiu.vultur@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 29 Apr 2022 00:47:19 +0200
+Message-ID: <CACRpkdbMxK=w4DDsPUrdzkJcjHRhZfuY585gUR8j0HP88m19dQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: ocelot: Fix for lan966x
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kavyasree.kotagiri@microchip.com, alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 09:53:37 +0200, Michael Walle wrote:
-> Convert the fsl,ls-extirq binding to the new YAML format.
-> 
-> In contrast to the original binding documentation, there are three
-> compatibles which are used in their corresponding device trees which
-> have a specific compatible and the (already documented) fallback
-> compatible:
->  - "fsl,ls1046a-extirq", "fsl,ls1043a-extirq"
->  - "fsl,ls2080a-extirq", "fsl,ls1088a-extirq"
->  - "fsl,lx2160a-extirq", "fsl,ls1088a-extirq"
-> 
-> Depending on the number of the number of the external IRQs which is
-> usually 12 except for the LS1021A where there are only 6, the
-> interrupt-map-mask was reduced from 0xffffffff to 0xf and 0x7
-> respectively and the number of interrupt-map entries have to
-> match.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> changes since v2:
->  - drop $ref to interrupt-controller.yaml
->  - use a more strict interrupt-map-mask and make it conditional on SoC
-> 
-> changes since v1:
->  - new patch
-> 
->  .../interrupt-controller/fsl,ls-extirq.txt    |  53 --------
->  .../interrupt-controller/fsl,ls-extirq.yaml   | 118 ++++++++++++++++++
->  2 files changed, 118 insertions(+), 53 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/fsl,ls-extirq.yaml
-> 
+On Wed, Apr 13, 2022 at 9:26 PM Horatiu Vultur
+<horatiu.vultur@microchip.com> wrote:
 
-Applied, thanks!
+> For lan966x, the GPIO 35 has the wrong function for alternate mode 2.
+> The mode is not none but is PTP sync.
+>
+> Fixes: 531d6ab36571c2 ("pinctrl: ocelot: Extend support for lan966x")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+
+Patch applied for fixes.
+
+Yours,
+Linus Walleij

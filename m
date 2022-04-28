@@ -2,104 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D431512BFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4ABF512C0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244601AbiD1G5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S244638AbiD1G6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244569AbiD1G5E (ORCPT
+        with ESMTP id S235345AbiD1G62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:57:04 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D69C986CD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:53:49 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i19so7571190eja.11
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2VtYpl+AopG0sr9SMMb9GWmnfMrojG66n7RjufImm50=;
-        b=lwaaQoJPHunxuYnucsJqsKlb/ZFMAcQ+0k8j6mvSEbAo+tDnwkfLRmrWMus5ro/udm
-         FOHnvHIg+Od8zeBv9pcz/+cSrUdxgqQjP7LUfO5NpvqYDQmijdUhOcA1fi34Aq+v38MX
-         LhJVz0OpmKIEFVZr1zh0LqshKffrL5kTQmEbOHNw8+fdZsutWv+daA9N/88TA6yG2Me+
-         IP84bUWImyT7N4KoEfs6JcgGo0jE3XVl0Y+aXu9Uo8Eujf8kUR0SMvaMN82ptr0AJudN
-         A4IHMQF5otBDYl5yva1nkfVg+FjDmhen4fiFXu/kXW6txMcdM5evUL/uXw7KbIfuXHKO
-         /PVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2VtYpl+AopG0sr9SMMb9GWmnfMrojG66n7RjufImm50=;
-        b=GDEYXcsluqHFVwWBTGatYZv9ZoXqiXYE4N5rBYehAdBQqXrW/dfbHNGmsG2t88Cxoi
-         bOIlfbDRTOhPdLUoe2YgQykELSIlIJEyHgKOnN2yQ27rlqn4XpGJQ17kpDlTPa3RLtFM
-         gSOMj0Jg7/pZwaF6R25x6sOX5gTcaoC8EBzauOKFbGM3T01o8VRL4bmMOb1Y+GBPGs2+
-         l2MreAXzG53KzXfLOE8ZRB7Dq2RLS98QECeOaJcgmXQw6J4qK+Ixw2IW7W/lqLiYHHjv
-         qbws1jup350Xy4rjYzNTF/G5Z9fM1xzqDLv31+6K85jhRY1sPQE5+A66xmlFFsEGSoSR
-         kFSg==
-X-Gm-Message-State: AOAM5306zWaYN16IRvBrtCnvF0M7BIUoXsUL9nP8GEJTZVWQzeGpooB/
-        WCJ9A5sgCorC5QMUghraUqhdVQ==
-X-Google-Smtp-Source: ABdhPJzso+XpXZx+m3nRJuf0ndPiYOfzhdXdRErjmKATg8VtTt/Cvcsd1y1NHq262yirrd9t4vNvdQ==
-X-Received: by 2002:a17:907:6090:b0:6f0:2a64:2ef7 with SMTP id ht16-20020a170907609000b006f02a642ef7mr29814689ejc.476.1651128828187;
-        Wed, 27 Apr 2022 23:53:48 -0700 (PDT)
-Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o22-20020a170906289600b006e44a0c1105sm7920189ejd.46.2022.04.27.23.53.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 23:53:47 -0700 (PDT)
-Message-ID: <7f435547-35f5-7885-3b1d-159199ca201a@linaro.org>
-Date:   Thu, 28 Apr 2022 08:53:46 +0200
+        Thu, 28 Apr 2022 02:58:28 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4581CB86A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:55:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651128914; x=1682664914;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GkXzFjSl4GwWQShXem59TPCXJDcVdFutR1uAC1+s/7w=;
+  b=b28dpmDhh9sjZB1WklqhZG63ZiWem1pDInVwedmdHAKhF581mX1rH5yN
+   tnJoyjwU9gxHaeAZelfEYWErYWceC554MHPYOas3/soyS0DNSoW84ffot
+   bgtIXDozETFO/hqTuga/VxvUbaiCEDJ6S0t4JdmnS4MY7hmRgZ2soKseS
+   cngjAPcDOWAlfTb+40GR+Lt26rM/47JW5E3t22qSphRDSJP4vFWKvLvL4
+   OG2mKcC3/mRdJsp4iaVEElijBaObUbIvHdfhaVlGVdeQt3L4/xY4M1GYj
+   0EFwfyYY0c8OftSOk5d0x2XTp/uO2Ad7ysmNC5aoR0O2cH6WrT2k7Q4ZU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352615366"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="352615366"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 23:55:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="731247367"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Apr 2022 23:55:11 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njy3S-00058w-NF;
+        Thu, 28 Apr 2022 06:55:10 +0000
+Date:   Thu, 28 Apr 2022 14:54:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [hnaz-mm:master 214/410] mm/madvise.c:632:8: error: call to
+ undeclared function 'is_swapin_error_entry'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202204281452.cEOGcf4p-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: pinctrl: aspeed: Drop referenced nodes in
- examples
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>, Rob Herring <robh@kernel.org>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220422192139.2592632-1-robh@kernel.org>
- <CACPK8XcQNJNyzqdjMQuCP+z-L-A9mcMqs-HJJrh9MscasV+D=A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACPK8XcQNJNyzqdjMQuCP+z-L-A9mcMqs-HJJrh9MscasV+D=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 10:40, Joel Stanley wrote:
-> On Fri, 22 Apr 2022 at 19:21, Rob Herring <robh@kernel.org> wrote:
->>
->> The additional nodes in the example referenced from the pinctrl node
->> 'aspeed,external-nodes' properties are either incorrect (aspeed,ast2500-lpc)
->> or not documented with a schema (aspeed,ast2500-gfx). There's no need to
->> show these nodes as part of the pinctrl example, so just remove them.
->>
->> Signed-off-by: Rob Herring <robh@kernel.org>
-> 
-> Nak.
-> 
-> This removes the information on how to use the bindings. Surely we
-> prefer to over document rather than under document?
+tree:   https://github.com/hnaz/linux-mm master
+head:   bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66
+commit: fe343091405131f91dcb9230ae7649bb1ee7fe9a [214/410] mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_range
+config: i386-randconfig-a005-20220425 (https://download.01.org/0day-ci/archive/20220428/202204281452.cEOGcf4p-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/hnaz/linux-mm/commit/fe343091405131f91dcb9230ae7649bb1ee7fe9a
+        git remote add hnaz-mm https://github.com/hnaz/linux-mm
+        git fetch --no-tags hnaz-mm master
+        git checkout fe343091405131f91dcb9230ae7649bb1ee7fe9a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-There is no need to document consumers of generic providers, like
-syscon, clock or pinctrl. These are already well documented. The
-examples of consumers here do not bring any additional value.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Krzysztof
+Note: the hnaz-mm/master HEAD bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+>> mm/madvise.c:632:8: error: call to undeclared function 'is_swapin_error_entry'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                      is_swapin_error_entry(entry)) {
+                                      ^
+   1 error generated.
+
+
+vim +/is_swapin_error_entry +632 mm/madvise.c
+
+   587	
+   588	static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+   589					unsigned long end, struct mm_walk *walk)
+   590	
+   591	{
+   592		struct mmu_gather *tlb = walk->private;
+   593		struct mm_struct *mm = tlb->mm;
+   594		struct vm_area_struct *vma = walk->vma;
+   595		spinlock_t *ptl;
+   596		pte_t *orig_pte, *pte, ptent;
+   597		struct page *page;
+   598		int nr_swap = 0;
+   599		unsigned long next;
+   600	
+   601		next = pmd_addr_end(addr, end);
+   602		if (pmd_trans_huge(*pmd))
+   603			if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+   604				goto next;
+   605	
+   606		if (pmd_trans_unstable(pmd))
+   607			return 0;
+   608	
+   609		tlb_change_page_size(tlb, PAGE_SIZE);
+   610		orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+   611		flush_tlb_batched_pending(mm);
+   612		arch_enter_lazy_mmu_mode();
+   613		for (; addr != end; pte++, addr += PAGE_SIZE) {
+   614			ptent = *pte;
+   615	
+   616			if (pte_none(ptent))
+   617				continue;
+   618			/*
+   619			 * If the pte has swp_entry, just clear page table to
+   620			 * prevent swap-in which is more expensive rather than
+   621			 * (page allocation + zeroing).
+   622			 */
+   623			if (!pte_present(ptent)) {
+   624				swp_entry_t entry;
+   625	
+   626				entry = pte_to_swp_entry(ptent);
+   627				if (!non_swap_entry(entry)) {
+   628					nr_swap--;
+   629					free_swap_and_cache(entry);
+   630					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+   631				} else if (is_hwpoison_entry(entry) ||
+ > 632					   is_swapin_error_entry(entry)) {
+   633					pte_clear_not_present_full(mm, addr, pte, tlb->fullmm);
+   634				}
+   635				continue;
+   636			}
+   637	
+   638			page = vm_normal_page(vma, addr, ptent);
+   639			if (!page)
+   640				continue;
+   641	
+   642			/*
+   643			 * If pmd isn't transhuge but the page is THP and
+   644			 * is owned by only this process, split it and
+   645			 * deactivate all pages.
+   646			 */
+   647			if (PageTransCompound(page)) {
+   648				if (page_mapcount(page) != 1)
+   649					goto out;
+   650				get_page(page);
+   651				if (!trylock_page(page)) {
+   652					put_page(page);
+   653					goto out;
+   654				}
+   655				pte_unmap_unlock(orig_pte, ptl);
+   656				if (split_huge_page(page)) {
+   657					unlock_page(page);
+   658					put_page(page);
+   659					orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+   660					goto out;
+   661				}
+   662				unlock_page(page);
+   663				put_page(page);
+   664				orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+   665				pte--;
+   666				addr -= PAGE_SIZE;
+   667				continue;
+   668			}
+   669	
+   670			VM_BUG_ON_PAGE(PageTransCompound(page), page);
+   671	
+   672			if (PageSwapCache(page) || PageDirty(page)) {
+   673				if (!trylock_page(page))
+   674					continue;
+   675				/*
+   676				 * If page is shared with others, we couldn't clear
+   677				 * PG_dirty of the page.
+   678				 */
+   679				if (page_mapcount(page) != 1) {
+   680					unlock_page(page);
+   681					continue;
+   682				}
+   683	
+   684				if (PageSwapCache(page) && !try_to_free_swap(page)) {
+   685					unlock_page(page);
+   686					continue;
+   687				}
+   688	
+   689				ClearPageDirty(page);
+   690				unlock_page(page);
+   691			}
+   692	
+   693			if (pte_young(ptent) || pte_dirty(ptent)) {
+   694				/*
+   695				 * Some of architecture(ex, PPC) don't update TLB
+   696				 * with set_pte_at and tlb_remove_tlb_entry so for
+   697				 * the portability, remap the pte with old|clean
+   698				 * after pte clearing.
+   699				 */
+   700				ptent = ptep_get_and_clear_full(mm, addr, pte,
+   701								tlb->fullmm);
+   702	
+   703				ptent = pte_mkold(ptent);
+   704				ptent = pte_mkclean(ptent);
+   705				set_pte_at(mm, addr, pte, ptent);
+   706				tlb_remove_tlb_entry(tlb, pte, addr);
+   707			}
+   708			mark_page_lazyfree(page);
+   709		}
+   710	out:
+   711		if (nr_swap) {
+   712			if (current->mm == mm)
+   713				sync_mm_rss(mm);
+   714	
+   715			add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+   716		}
+   717		arch_leave_lazy_mmu_mode();
+   718		pte_unmap_unlock(orig_pte, ptl);
+   719		cond_resched();
+   720	next:
+   721		return 0;
+   722	}
+   723	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

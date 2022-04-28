@@ -2,101 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC76512E09
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69058512E0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343978AbiD1IT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S1343986AbiD1IUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235364AbiD1ITy (ORCPT
+        with ESMTP id S239889AbiD1IUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:19:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B00C13CED;
-        Thu, 28 Apr 2022 01:16:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4DF761F49;
-        Thu, 28 Apr 2022 08:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614B5C385A9;
-        Thu, 28 Apr 2022 08:16:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651133800;
-        bh=uyaBsEuphXYiLhzlz1YbrzEAdzSDc6RcP79zk/xCzZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zliC0CRx9pxFc1IgS706nqaw5DQ2lD6VWxky2vE0ZwcKEns0jPOwg7PWn3l0ljN9A
-         h9i1h78elkEKXX0vfZYJUK5OJeH9LP5GbgwJ/VD0n67bYyprgLXTaHmJsuY1jLU011
-         Oamp4pIcvzeVdXlZIiPNQZbBZVG5PrO0IuvivIQg=
-Date:   Thu, 28 Apr 2022 10:16:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lin Ma <linma@zju.edu.cn>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        krzysztof.kozlowski@linaro.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        alexander.deucher@amd.com, akpm@linux-foundation.org,
-        broonie@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data race-able
-Message-ID: <YmpNZOaJ1+vWdccK@kroah.com>
-References: <20220427011438.110582-1-duoming@zju.edu.cn>
- <20220427174548.2ae53b84@kernel.org>
- <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
- <YmpEZQ7EnOIWlsy8@kroah.com>
- <2d7c9164.2b1f.1806f2a8ed9.Coremail.linma@zju.edu.cn>
+        Thu, 28 Apr 2022 04:20:15 -0400
+Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40E613CED
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:17:01 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 01A4C2FB; Thu, 28 Apr 2022 10:16:59 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 10:16:58 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Alex Deucher <alexander.deucher@amd.com>, corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, hpa@zytor.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
+        tglx@linutronix.de, Suravee.Suthikulpanit@amd.com, will@kernel.org,
+        iommu@lists.linux-foundation.org, robin.murphy@arm.com,
+        Vasant.Hegde@amd.com
+Subject: Re: [PATCH] Documentation: x86: rework IOMMU documentation
+Message-ID: <YmpNevdJFec0+9Mn@8bytes.org>
+References: <20220422200607.627754-1-alexander.deucher@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d7c9164.2b1f.1806f2a8ed9.Coremail.linma@zju.edu.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220422200607.627754-1-alexander.deucher@amd.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 03:55:01PM +0800, Lin Ma wrote:
-> Hello Greg,
+On Fri, Apr 22, 2022 at 04:06:07PM -0400, Alex Deucher wrote:
+> Add preliminary documentation for AMD IOMMU and combine
+> with the existing Intel IOMMU documentation and clean
+> up and modernize some of the existing documentation to
+> align with the current state of the kernel.
 > 
+> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+> ---
 > 
-> > 
-> > You should not be making these types of checks outside of the driver
-> > core.
-> > 
-> > > This is by no means matching our expectations as one of our previous patch relies on the device_is_registered code.
-> > 
-> > Please do not do that.
-> > 
-> > > 
-> > > -> the patch: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-> > > 
-> > <...>
-> > > 
-> > > In another word, the device_del -> kobject_del -> __kobject_del is not protected by the device_lock.
-> > 
-> > Nor should it be.
-> > 
+> V2: Incorporate feedback from Robin to clarify IOMMU vs DMA engine (e.g.,
+>     a device) and document proper DMA API.  Also correct the fact that
+>     the AMD IOMMU is not limited to managing PCI devices.
+> v3: Fix spelling and rework text as suggested by Vasant
+> v4: Combine Intel and AMD documents into a single document as suggested
+>     by Dave Hansen
+> v5: Clarify that keywords are related to ACPI, grammatical fixes
+> v6: Make more stuff common based on feedback from Robin
 > 
-> I may have mistakenly presented my point. In fact, there is nothing wrong with the device core, nothing to do with the internal of device_del and device_is_registered implementation. And, of course, we will not add any code or do any modification to the device/driver base code.
-> 
-> The point is the combination of device_is_registered + device_del, which is used in NFC core, is not safe.
+>  Documentation/x86/index.rst       |   2 +-
+>  Documentation/x86/intel-iommu.rst | 115 ------------------------
+>  Documentation/x86/iommu.rst       | 143 ++++++++++++++++++++++++++++++
+>  3 files changed, 144 insertions(+), 116 deletions(-)
+>  delete mode 100644 Documentation/x86/intel-iommu.rst
+>  create mode 100644 Documentation/x86/iommu.rst
 
-It shouldn't be, if you are using it properly :)
+Acked-by: Joerg Roedel <jroedel@suse.de>
 
-> That is to say, even the device_is_registered can return True even the device_del is executing in another thread.
-
-Yes, you should almost never use that call.  Seems the nfc subsystem is
-the most common user of it for some reason :(
-
-> (By debugging we think this is true, correct me if it is not)
-> 
-> Hence we want to add additional state in nfc_dev object to fix that, not going to add any state in device/driver core.
-
-What state are you trying to track here exactly?
-
-thanks,
-
-greg k-h
+Jonathan, will you merge that through the documentation tree?

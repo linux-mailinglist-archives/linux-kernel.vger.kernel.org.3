@@ -2,208 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582F6512C3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7CB512C2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244758AbiD1HIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
+        id S244727AbiD1HH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244796AbiD1HIR (ORCPT
+        with ESMTP id S243043AbiD1HH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:08:17 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E5DDF80;
-        Thu, 28 Apr 2022 00:05:01 -0700 (PDT)
-X-UUID: 4ed0c71f141b4b10be7e01444a57e674-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:5f51269b-0e32-4805-9432-1135a3552920,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:6fe4c9c6-85ee-4ac1-ac05-bd3f1e72e732,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 4ed0c71f141b4b10be7e01444a57e674-20220428
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <yongqiang.niu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 108586444; Thu, 28 Apr 2022 15:04:54 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 28 Apr 2022 15:04:53 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 28 Apr 2022 15:04:30 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 15:04:28 +0800
-From:   Yongqiang Niu <yongqiang.niu@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
-Subject: [PATCH v3, 1/1] drm/mediatek: add lut diff flag for new gamma hardware support
-Date:   Thu, 28 Apr 2022 15:04:03 +0800
-Message-ID: <20220428070403.12968-2-yongqiang.niu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220428070403.12968-1-yongqiang.niu@mediatek.com>
-References: <20220428070403.12968-1-yongqiang.niu@mediatek.com>
+        Thu, 28 Apr 2022 03:07:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743A98F50;
+        Thu, 28 Apr 2022 00:04:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 535C0B82BC4;
+        Thu, 28 Apr 2022 07:04:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B788C385A0;
+        Thu, 28 Apr 2022 07:04:07 +0000 (UTC)
+Message-ID: <fd81ba16-9772-3f45-dca6-50a0284abd86@xs4all.nl>
+Date:   Thu, 28 Apr 2022 09:04:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] Documentation/media: Try to make enum usage clearer
+Content-Language: en-US
+To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+References: <20220422092542.1333177-1-dorota.czaplejewicz@puri.sm>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220422092542.1333177-1-dorota.czaplejewicz@puri.sm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
+Hi Dorota,
 
-mt8183 gamma module usage is different with before soc,
-gamma odd(index start from 0) lut value set to hardware
-register should be
-the difference of current lut value with last lut value.
+On 22/04/2022 11:30, Dorota Czaplejewicz wrote:
+> Fixed: typo "format" -> "frame size" in enum-frame-size
+> Added: mbus codes must not repeat
+> Added: no holes in the array
+> Added: arrays per what?
+> Added: who fills in what (questionable naming: caller/driver. caller/callee could be confusing for beginners, they look similar)
+> Changed: "zero" -> "0"
+> Changed: "given" -> "selected". "given to me by the driver?" dunno feels like "selected" or "chosen" are the words to indicate agency to the consumer
 
-for example, chrome os user space set lut
-like this(only r chanel for example):
-2 4 6 8 10 12.
-1) mt8183 gamma driver should set the gamma lut to hardware
-register like this:
-2 [2] 6 [8] 10 [2]
-the value with [] is the difference value
-2)gamma hardware process display data with original lut
+I'm missing a 'Signed-off-by' here, please add this in a v2.
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_disp_aal.c   |  2 +-
- drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 +-
- drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 34 +++++++++++++++++++----
- 3 files changed, 30 insertions(+), 8 deletions(-)
+> 
+> ---
+> Hello,
+> 
+> I encountered some difficulties trying to implement a media-api driver, and I traced the problems to not understanding the documentation. Here I try to make the API usage clearer, after consulting with libcamera authors.
+> 
+> Still unclear how it works so I didn't touch it: "which". What is a "try format" vs "active format"?
+> 
+> Cheers,
+> Dorota Czaplejewicz
+> 
+> 
+>  .../v4l/vidioc-subdev-enum-frame-size.rst     | 44 ++++++++++++-------
+>  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 39 +++++++++++-----
+>  2 files changed, 55 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-index f46d4ab73d6a..0f9d7efb61d7 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
-@@ -66,7 +66,7 @@ void mtk_aal_gamma_set(struct device *dev, struct drm_crtc_state *state)
- 	struct mtk_disp_aal *aal = dev_get_drvdata(dev);
- 
- 	if (aal->data && aal->data->has_gamma)
--		mtk_gamma_set_common(aal->regs, state);
-+		mtk_gamma_set_common(aal->regs, state, false);
- }
- 
- void mtk_aal_start(struct device *dev)
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-index 86c3068894b1..3380651c6707 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-@@ -51,7 +51,7 @@ void mtk_gamma_config(struct device *dev, unsigned int w,
- 		      unsigned int h, unsigned int vrefresh,
- 		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
- void mtk_gamma_set(struct device *dev, struct drm_crtc_state *state);
--void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state *state);
-+void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state *state, bool lut_diff);
- void mtk_gamma_start(struct device *dev);
- void mtk_gamma_stop(struct device *dev);
- 
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-index 3a5815ab4079..bbd558a036ec 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-@@ -27,6 +27,7 @@
- 
- struct mtk_disp_gamma_data {
- 	bool has_dither;
-+	bool lut_diff;
- };
- 
- /*
-@@ -53,12 +54,13 @@ void mtk_gamma_clk_disable(struct device *dev)
- 	clk_disable_unprepare(gamma->clk);
- }
- 
--void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state *state)
-+void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state *state, bool lut_diff)
- {
- 	unsigned int i, reg;
- 	struct drm_color_lut *lut;
- 	void __iomem *lut_base;
- 	u32 word;
-+	u32 diff[3] = {0};
- 
- 	if (state->gamma_lut) {
- 		reg = readl(regs + DISP_GAMMA_CFG);
-@@ -67,9 +69,20 @@ void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state *state)
- 		lut_base = regs + DISP_GAMMA_LUT;
- 		lut = (struct drm_color_lut *)state->gamma_lut->data;
- 		for (i = 0; i < MTK_LUT_SIZE; i++) {
--			word = (((lut[i].red >> 6) & LUT_10BIT_MASK) << 20) +
--				(((lut[i].green >> 6) & LUT_10BIT_MASK) << 10) +
--				((lut[i].blue >> 6) & LUT_10BIT_MASK);
-+
-+			if (!lut_diff || (i % 2 == 0)) {
-+				word = (((lut[i].red >> 6) & LUT_10BIT_MASK) << 20) +
-+					(((lut[i].green >> 6) & LUT_10BIT_MASK) << 10) +
-+					((lut[i].blue >> 6) & LUT_10BIT_MASK);
-+			} else {
-+				diff[0] = (lut[i].red >> 6) - (lut[i - 1].red >> 6);
-+				diff[1] = (lut[i].green >> 6) - (lut[i - 1].green >> 6);
-+				diff[2] = (lut[i].blue >> 6) - (lut[i - 1].blue >> 6);
-+
-+				word = ((diff[0] & LUT_10BIT_MASK) << 20) +
-+					((diff[1] & LUT_10BIT_MASK) << 10) +
-+					(diff[2] & LUT_10BIT_MASK);
-+			}
- 			writel(word, (lut_base + i * 4));
- 		}
- 	}
-@@ -78,8 +91,12 @@ void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state *state)
- void mtk_gamma_set(struct device *dev, struct drm_crtc_state *state)
- {
- 	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
-+	bool lut_diff = false;
-+
-+	if (gamma->data)
-+		lut_diff = gamma->data->lut_diff;
- 
--	mtk_gamma_set_common(gamma->regs, state);
-+	mtk_gamma_set_common(gamma->regs, state, lut_diff);
- }
- 
- void mtk_gamma_config(struct device *dev, unsigned int w,
-@@ -176,10 +193,15 @@ static const struct mtk_disp_gamma_data mt8173_gamma_driver_data = {
- 	.has_dither = true,
- };
- 
-+static const struct mtk_disp_gamma_data mt8183_gamma_driver_data = {
-+	.lut_diff = true,
-+};
-+
- static const struct of_device_id mtk_disp_gamma_driver_dt_match[] = {
- 	{ .compatible = "mediatek,mt8173-disp-gamma",
- 	  .data = &mt8173_gamma_driver_data},
--	{ .compatible = "mediatek,mt8183-disp-gamma"},
-+	{ .compatible = "mediatek,mt8183-disp-gamma",
-+	  .data = &mt8183_gamma_driver_data},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_disp_gamma_driver_dt_match);
--- 
-2.25.1
+Split this patch up into two separate patches, one for each .rst file.
 
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
+> index c25a9896df0e..c7afeffb6269 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
+> @@ -31,18 +31,29 @@ Arguments
+>  Description
+>  ===========
+>  
+> -This ioctl allows applications to enumerate all frame sizes supported by
+> -a sub-device on the given pad for the given media bus format. Supported
+> -formats can be retrieved with the
+> +This ioctl allows applications to access the array of frame sizes supported by
+
+As I mentioned on, I think, irc, I disagree with calling this an array.
+I prefer the original phrase 'enumerate all frame sizes'. This is consistent
+as well with other ENUM ioctls. This applies to the other 'array' references
+below as well. Just keep the original text.
+
+> +a sub-device on the selected pad for the selected media bus format.
+
+I'd use 'specified' instead of 'selected' or 'given' since the application
+specifies this information.
+
+> +Supported formats can be retrieved with the
+>  :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE`
+>  ioctl.
+>  
+> -To enumerate frame sizes applications initialize the ``pad``, ``which``
+> -, ``code`` and ``index`` fields of the struct
+> -:c:type:`v4l2_subdev_mbus_code_enum` and
+> -call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
+> -structure. Drivers fill the minimum and maximum frame sizes or return an
+> -EINVAL error code if one of the input parameters is invalid.
+> +The arrays are defined by the driver, and indexed using the ``index`` field
+> +of the struct :c:type:`v4l2_subdev_mbus_code_enum`.
+> +Each pair of ``pad`` and ``code`` correspond to a separate array.
+> +Each array starts with the ``index`` of 0, and
+> +the first invalid index marks the end of array.
+> +
+> +Therefore, to enumerate frame sizes allowed on the selected pad
+> +and using the selected mbus format, initialize the
+> +``pad``, ``which``, and ``code`` fields to desired values,
+> +and set ``index`` to 0.
+> +Then call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
+> +structure.
+> +
+> +A successful call will return with minimum and maximum frame sizes filled in.
+> +Repeat with increasing ``index`` until ``EINVAL`` is received.
+> +``EINVAL`` means that either no more entries are available in the array,
+> +or that an input parameter was invalid.
+>  
+>  Sub-devices that only support discrete frame sizes (such as most
+>  sensors) will return one or more frame sizes with identical minimum and
+> @@ -72,26 +83,27 @@ information about try formats.
+>  
+>      * - __u32
+>        - ``index``
+> -      - Number of the format in the enumeration, set by the application.
+> +      - Index of the frame size in the enumeration
+> +    belonging to the given pad and format. Filled in by the caller.
+
+Stick to 'application' instead of 'caller'. That's the terminology used elsewhere
+in the documentation as well, changing what it is called is just more confusing.
+
+>      * - __u32
+>        - ``pad``
+> -      - Pad number as reported by the media controller API.
+> +      - Pad number as reported by the media controller API. Filled in by the caller.
+>      * - __u32
+>        - ``code``
+>        - The media bus format code, as defined in
+> -	:ref:`v4l2-mbus-format`.
+> +	:ref:`v4l2-mbus-format`. Filled in by the caller.
+>      * - __u32
+>        - ``min_width``
+> -      - Minimum frame width, in pixels.
+> +      - Minimum frame width, in pixels. Filled in by the driver.
+>      * - __u32
+>        - ``max_width``
+> -      - Maximum frame width, in pixels.
+> +      - Maximum frame width, in pixels. Filled in by the driver.
+>      * - __u32
+>        - ``min_height``
+> -      - Minimum frame height, in pixels.
+> +      - Minimum frame height, in pixels. Filled in by the driver.
+>      * - __u32
+>        - ``max_height``
+> -      - Maximum frame height, in pixels.
+> +      - Maximum frame height, in pixels. Filled in by the driver.
+>      * - __u32
+>        - ``which``
+>        - Frame sizes to be enumerated, from enum
+> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+> index 417f1a19bcc4..22d046dd09c2 100644
+> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+> @@ -31,15 +31,29 @@ Arguments
+>  Description
+>  ===========
+>  
+> -To enumerate media bus formats available at a given sub-device pad
+> -applications initialize the ``pad``, ``which`` and ``index`` fields of
+> -struct
+> -:c:type:`v4l2_subdev_mbus_code_enum` and
+> -call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this
+> -structure. Drivers fill the rest of the structure or return an ``EINVAL``
+> -error code if either the ``pad`` or ``index`` are invalid. All media bus
+> -formats are enumerable by beginning at index zero and incrementing by
+> -one until ``EINVAL`` is returned.
+> +This call is used by the application to access the array of bus formats
+> +for the selected pad.
+> +
+> +The arrays are defined by the driver, and indexed using the ``index`` field
+> +of struct :c:type:`v4l2_subdev_mbus_code_enum`.
+> +Each value of ``pad`` corresponds to a separate array.
+> +Each array starts with the ``index`` of 0, and
+> +the first invalid index marks the end of array.
+> +
+> +Therefore, to enumerate media bus formats available at a given sub-device pad,
+> +initialize the ``pad``, and ``which`` fields to desired values,
+> +and set ``index`` to 0.
+> +Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
+> +with a pointer to this structure.
+> +
+> +A successful call will return with the ``code`` field filled in
+> +with a mbus format value.
+> +Repeat with increasing ``index`` until ``EINVAL`` is received.
+> +``EINVAL`` means that either ``pad`` is invalid,
+> +or that there are no more codes available at this pad.
+> +
+> +The driver must not return the same value of ``code`` for different indices
+> +at the same pad.
+>  
+>  Available media bus formats may depend on the current 'try' formats at
+>  other pads of the sub-device, as well as on the current active links.
+> @@ -57,14 +71,15 @@ information about the try formats.
+>  
+>      * - __u32
+>        - ``pad``
+> -      - Pad number as reported by the media controller API.
+> +      - Pad number as reported by the media controller API. Filled in by the caller.
+>      * - __u32
+>        - ``index``
+> -      - Number of the format in the enumeration, set by the application.
+> +      - Index of the mbus code in the enumeration belonging to the given pad.
+> +    Filled in by the caller.
+>      * - __u32
+>        - ``code``
+>        - The media bus format code, as defined in
+> -	:ref:`v4l2-mbus-format`.
+> +	:ref:`v4l2-mbus-format`. Filled in by the driver.
+>      * - __u32
+>        - ``which``
+>        - Media bus format codes to be enumerated, from enum
+
+I'll take another, closer look at this once v2 is posted. The documentation certainly
+can be better, but changing terminology inconsistent with what is used elsewhere in
+the media documentation is not helping.
+
+You should also consider changing vidioc-subdev-enum-frame-interval.rst which is
+closely related to these two documentation files. If changes are made, then it
+should probably be done to all three.
+
+Regards,
+
+	Hans

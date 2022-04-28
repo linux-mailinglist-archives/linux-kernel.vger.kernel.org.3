@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD26513511
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D3851356C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347361AbiD1N3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S1347508AbiD1Nom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiD1N3o (ORCPT
+        with ESMTP id S241572AbiD1Noi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:29:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4506BB0D24;
-        Thu, 28 Apr 2022 06:26:25 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpxFM45kjzfZkJ;
-        Thu, 28 Apr 2022 21:25:27 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
- 2022 21:26:22 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>,
-        <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH v3] ext4: fix race condition between ext4_write and ext4_convert_inline_data
-Date:   Thu, 28 Apr 2022 21:40:31 +0800
-Message-ID: <20220428134031.4153381-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 28 Apr 2022 09:44:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465225BE5E;
+        Thu, 28 Apr 2022 06:41:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E50A9B82D5F;
+        Thu, 28 Apr 2022 13:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD67C385A9;
+        Thu, 28 Apr 2022 13:41:20 +0000 (UTC)
+Message-ID: <99adb257-bf94-a291-b5a9-d22e97ce967a@linux-m68k.org>
+Date:   Thu, 28 Apr 2022 23:41:17 +1000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/4] m68knommu: allow elf_fdpic loader to be selected
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rich Felker <dalias@libc.org>
+References: <20220428033319.239341-1-gerg@linux-m68k.org>
+ <20220428033319.239341-5-gerg@linux-m68k.org>
+ <CAMuHMdXtj+ncYOhc3GcNdBuWxMe+0rP1aYCEKMP0yL3aJ_WH3w@mail.gmail.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <CAMuHMdXtj+ncYOhc3GcNdBuWxMe+0rP1aYCEKMP0yL3aJ_WH3w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,135 +50,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hulk Robot reported a BUG_ON:
- ==================================================================
- EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
- block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
- kernel BUG at fs/ext4/ext4_jbd2.c:53!
- invalid opcode: 0000 [#1] SMP KASAN PTI
- CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
- RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
- RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
- [...]
- Call Trace:
-  ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
-  generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
-  ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
-  ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
-  do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
-  do_iter_write+0x107/0x430 fs/read_write.c:861
-  vfs_writev fs/read_write.c:934 [inline]
-  do_pwritev+0x1e5/0x380 fs/read_write.c:1031
- [...]
- ==================================================================
+Hi Geert,
 
-Above issue may happen as follows:
-           cpu1                     cpu2
-__________________________|__________________________
-do_pwritev
- vfs_writev
-  do_iter_write
-   ext4_file_write_iter
-    ext4_buffered_write_iter
-     generic_perform_write
-      ext4_da_write_begin
-                           vfs_fallocate
-                            ext4_fallocate
-                             ext4_convert_inline_data
-                              ext4_convert_inline_data_nolock
-                               ext4_destroy_inline_data_nolock
-                                clear EXT4_STATE_MAY_INLINE_DATA
-                               ext4_map_blocks
-                                ext4_ext_map_blocks
-                                 ext4_mb_new_blocks
-                                  ext4_mb_regular_allocator
-                                   ext4_mb_good_group_nolock
-                                    ext4_mb_init_group
-                                     ext4_mb_init_cache
-                                      ext4_mb_generate_buddy  --> error
-       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
-                                ext4_restore_inline_data
-                                 set EXT4_STATE_MAY_INLINE_DATA
-       ext4_block_write_begin
-      ext4_da_write_end
-       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
-       ext4_write_inline_data_end
-        handle=NULL
-        ext4_journal_stop(handle)
-         __ext4_journal_stop
-          ext4_put_nojournal(handle)
-           ref_cnt = (unsigned long)handle
-           BUG_ON(ref_cnt == 0)  ---> BUG_ON
+On 28/4/22 17:20, Geert Uytterhoeven wrote:
+> Hi Greg,
+> 
+> On Thu, Apr 28, 2022 at 7:05 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
+>> The m68k architecture code is capable of supporting the binfmt_elf_fdpic
+>> loader, so allow it to be configured. It is restricted to nommu
+>> configurations at this time due to the MMU context structures/code not
+>> supporting everything elf_fdpic needs when MMU is enabled.
+>>
+>> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+> 
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> 
+>> --- a/fs/Kconfig.binfmt
+>> +++ b/fs/Kconfig.binfmt
+>> @@ -58,7 +58,7 @@ config ARCH_USE_GNU_PROPERTY
+>>   config BINFMT_ELF_FDPIC
+>>          bool "Kernel support for FDPIC ELF binaries"
+>>          default y if !BINFMT_ELF
+>> -       depends on (ARM || (SUPERH && !MMU))
+>> +       depends on (ARM || ((M68K || SUPERH) && !MMU))
+> 
+> While at it, you may want to drop the unneeded outer parentheses,
+> as they make the expression harder to round, IMHO.
 
-The lock held by ext4_convert_inline_data is xattr_sem, but the lock
-held by generic_perform_write is i_rwsem. Therefore, the two locks can
-be concurrent.
+Sure thing, will do,
 
-To solve above issue, we add inode_lock() for ext4_convert_inline_data().
-At the same time, move ext4_convert_inline_data() in front of
-ext4_punch_hole(), remove similar handling from ext4_punch_hole().
+Regards
+Greg
 
-Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
-Cc: stable@vger.kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
-V1->V2:
-	Increase the range of the inode_lock.
-V2->V3:
-	Move the lock outside the ext4_convert_inline_data().
-	And reorganize ext4_fallocate().
 
- fs/ext4/extents.c | 10 ++++++----
- fs/ext4/inode.c   |  9 ---------
- 2 files changed, 6 insertions(+), 13 deletions(-)
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index e473fde6b64b..474479ce76e0 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -4693,15 +4693,17 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
- 		     FALLOC_FL_INSERT_RANGE))
- 		return -EOPNOTSUPP;
- 
-+	inode_lock(inode);
-+	ret = ext4_convert_inline_data(inode);
-+	inode_unlock(inode);
-+	if (ret)
-+		goto exit;
-+
- 	if (mode & FALLOC_FL_PUNCH_HOLE) {
- 		ret = ext4_punch_hole(file, offset, len);
- 		goto exit;
- 	}
- 
--	ret = ext4_convert_inline_data(inode);
--	if (ret)
--		goto exit;
--
- 	if (mode & FALLOC_FL_COLLAPSE_RANGE) {
- 		ret = ext4_collapse_range(file, offset, len);
- 		goto exit;
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 646ece9b3455..4779673d733e 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -3967,15 +3967,6 @@ int ext4_punch_hole(struct file *file, loff_t offset, loff_t length)
- 
- 	trace_ext4_punch_hole(inode, offset, length, 0);
- 
--	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
--	if (ext4_has_inline_data(inode)) {
--		filemap_invalidate_lock(mapping);
--		ret = ext4_convert_inline_data(inode);
--		filemap_invalidate_unlock(mapping);
--		if (ret)
--			return ret;
--	}
--
- 	/*
- 	 * Write out all dirty pages to avoid race conditions
- 	 * Then release them.
--- 
-2.31.1
-
+>>          select ELFCORE
+>>          help
+>>            ELF FDPIC binaries are based on ELF, but allow the individual load
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds

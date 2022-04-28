@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A36513489
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB85851348B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235602AbiD1NJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S241958AbiD1NLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiD1NJq (ORCPT
+        with ESMTP id S229846AbiD1NLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:09:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF85B0A69;
-        Thu, 28 Apr 2022 06:06:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E753962060;
-        Thu, 28 Apr 2022 13:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D01CEC385A9;
-        Thu, 28 Apr 2022 13:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651151190;
-        bh=Y2mgIYqiJCbEdpTzl4SkhzveN8LLuSbvl2n9IvPySbQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X9otxRXFG2oqra98rIV0acvFsPgxXPMi7z+0a9DIrKpwjipjnYCXRSVI1HOg4xlc7
-         1I2aM6P7GizExQz4gtNYAJhv3+JP/EoLNs86HCrvwgmcvahMRv9k8UuTACJrGWDYf5
-         5lMsN5c2fYZ8GWIq911R2idB/vc14ekuvwo7mvVBRziU4UzH+Vx9SLW57J9vBYpX/x
-         MtAPCcjo7OXz1mAKyHqR5uLhEFswCSOuIKFInnhOXXzEpF2GWb71siUmiuqXS3+Yn3
-         OHLfvinMRnkosL+JgpA5o87sdWee+dwIjEYKceRv2JYbfs4zEtZSl5WK5gES3xvrCj
-         qyHhgK65+7YvQ==
-Date:   Thu, 28 Apr 2022 06:06:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Lin Ma <linma@zju.edu.cn>, Duoming Zhou <duoming@zju.edu.cn>,
-        krzysztof.kozlowski@linaro.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        alexander.deucher@amd.com, akpm@linux-foundation.org,
-        broonie@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data
- race-able
-Message-ID: <20220428060628.713479b2@kernel.org>
-In-Reply-To: <YmpcUNf7O+OK6/Ax@kroah.com>
-References: <20220427011438.110582-1-duoming@zju.edu.cn>
-        <20220427174548.2ae53b84@kernel.org>
-        <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
-        <YmpEZQ7EnOIWlsy8@kroah.com>
-        <2d7c9164.2b1f.1806f2a8ed9.Coremail.linma@zju.edu.cn>
-        <YmpNZOaJ1+vWdccK@kroah.com>
-        <15d09db2.2f76.1806f5c4187.Coremail.linma@zju.edu.cn>
-        <YmpcUNf7O+OK6/Ax@kroah.com>
+        Thu, 28 Apr 2022 09:11:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB75B0A6C;
+        Thu, 28 Apr 2022 06:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651151271; x=1682687271;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SJ2/jLDGpB14X2V0z6/tb8tFxo8ClzdlQrUjJQrpJ6k=;
+  b=dMmArZomIsnfHGj0vxuj/BVmrX61FoefIJ/miEZwb8hUI+XNWOKFq65H
+   fcWT1mRo9e1l8YeKZGgzC2tP0F0o7tq4I+R+uGJSWQYj7VpOOcwEHWr4J
+   8bJblhrZ3sLzJKv2lbaVBkeSs0xRQY501jQQHxH8+RtOw+9NxhCp9kTKK
+   b+ywFXWhkI/YkZZOj0zUmGDKojgc2PGyl1vnU/IwoYc+Fbsv+c8Zh1ePx
+   EPKhWb7zbVq/zxrIW+C5cMrouuP7MBkIlRwG8CxjUX5w11vMG6+/dT7zW
+   CPg49sQ0oBph3CzLN4CwYJnvsASBJpNTXCjZ8qZSfISYgfK7Os8ORptsi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266097474"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="266097474"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 06:07:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="618124881"
+Received: from mylly.fi.intel.com (HELO [10.237.72.151]) ([10.237.72.151])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Apr 2022 06:07:48 -0700
+Message-ID: <60218a3b-9b56-d9c1-a0f4-97c171a050ba@linux.intel.com>
+Date:   Thu, 28 Apr 2022 16:07:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.0
+Subject: Re: [PATCH] i2c: designware: Modify timing parameters for amdpsp
+ mailbox
+Content-Language: en-US
+To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, andriy.shevchenko@linux.intel.com
+Cc:     mika.westerberg@linux.intel.com, rrangel@chromium.org,
+        Nimesh.Easow@amd.com, upstream@semihalf.com
+References: <20220428122651.208575-1-jsd@semihalf.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20220428122651.208575-1-jsd@semihalf.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 11:20:16 +0200 Greg KH wrote:
-> > The added dev_register variable can function like the original
-> > device_is_registered and does not race-able because of the
-> > protection of device_lock.  
+On 4/28/22 15:26, Jan Dabros wrote:
+> Adjust retry period and timeout values for x86-PSP mailbox based on the
+> typical I2C traffic generated by PSP. In order to limit the possibility
+> of timeouts, x86 should reduce the interval between retries as well as
+> increase overall time after which it gives up.
 > 
-> Yes, that looks better, but what is the root problem here that you are
-> trying to solve?  Why does NFC need this when no other subsystem does?
+> Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index 9b37f2b95abc..b624356c945f 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -16,8 +16,8 @@
+>   #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
+>   
+>   #define PSP_I2C_REQ_BUS_CMD		0x64
+> -#define PSP_I2C_REQ_RETRY_CNT		10
+> -#define PSP_I2C_REQ_RETRY_DELAY_US	(50 * USEC_PER_MSEC)
+> +#define PSP_I2C_REQ_RETRY_CNT		400
+> +#define PSP_I2C_REQ_RETRY_DELAY_US	(25 * USEC_PER_MSEC)
+>   #define PSP_I2C_REQ_STS_OK		0x0
+>   #define PSP_I2C_REQ_STS_BUS_BUSY	0x1
+>   #define PSP_I2C_REQ_STS_INV_PARAM	0x3
 
-Yeah :( The NFC and NCI locking is shaky at best, grounds-up redesign
-with clear rules would be great... but then again I'm not sure if anyone
-is actually using this code IRL, so the motivation to invest time is
-rather weak.
+Out of curiosity, can it be up to 400 * 25 ms = 10 s?
+
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>

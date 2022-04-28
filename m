@@ -2,167 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35582513660
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA6751366D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347996AbiD1OKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S1348009AbiD1OM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348141AbiD1OJw (ORCPT
+        with ESMTP id S230047AbiD1OM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:09:52 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD2E286EF;
-        Thu, 28 Apr 2022 07:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651154798; x=1682690798;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iu+rc0+JdwazCgqT5q1CfpFbh0ggfQOpl3l/mKEVveo=;
-  b=VDwdo7B+Hq7QUc4GrAxdo7o2ycv4cZ/Sw4Kp5cD7nKr/lLNSjHAXjaYk
-   UzjA8pkGmVdfNyJEkj10ofMI/wU+D6nuJd9Pg8Mid55PIKg9LO6dQqYc6
-   8DYNSDD/fpa7N48/bV3iw7uR0ntYsxqv1LDNpiJcpQ6o4ZURm8n+I7g7z
-   5RGpKuaOFF9JvdEPJlwQCA4Z6dPHaLEyC2nyrCl7oPSNOvtHR4egryeZE
-   7MieoerhnnRabBIV/M+NJmZmubT/fpch0JuLn2lEEm5HiaPnLi5a/sQqZ
-   HtU0eGzCwRhmhHdx3dYCY1JPHA5EL8M1HUYTepR3DXe8mPC8l2xcegODo
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352732658"
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="352732658"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:06:37 -0700
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="559685466"
-Received: from mpoursae-mobl2.amr.corp.intel.com (HELO [10.212.0.84]) ([10.212.0.84])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:06:36 -0700
-Message-ID: <98f81eed-e532-75bc-d2d8-4e020517b634@intel.com>
-Date:   Thu, 28 Apr 2022 07:06:52 -0700
+        Thu, 28 Apr 2022 10:12:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70EEF27CCD
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651154981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VU/g/6adn+3HZiPBUlaLXpCnn/ytwolQHw+K+XFjUgY=;
+        b=BZ4UWh0oGkwUTHDk6qcj1TJFqnhNmK2BhlGxgnTi36xVLg1YCxB7l1ZMD3zlaiu+1TK/Vw
+        V63osOU3X20cAxlhDpMlwfscoEHvJ9rIgBeXl6kXGyjzRt2UVWaFr4hFcNlNvQssHwBNgb
+        a/+ZL/cz13EiZti9HZSe9m4uHoPvlUg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-5eaKoKVXPliRlAHaUGjScw-1; Thu, 28 Apr 2022 10:09:40 -0400
+X-MC-Unique: 5eaKoKVXPliRlAHaUGjScw-1
+Received: by mail-wm1-f69.google.com with SMTP id l33-20020a05600c1d2100b00394059572d6so1537211wms.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:09:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=VU/g/6adn+3HZiPBUlaLXpCnn/ytwolQHw+K+XFjUgY=;
+        b=RIFURED9pSHvgVFrNioEkAoUhiPKWZZb6A20fsANoMfoMv7ZaMoP/v8QqxwbpGIRg7
+         MCzpvILc3syOE/gL8dSJBAtpk2i0FzhawPt6119tYkQdev0vLq1WpIgplYxqta0eXyKK
+         CfyylEuSVXsSdY5uSR9TfWS7EW4rZMC7w5td5rAybyiF6gUyun2+MLg9qsP+j08/h84f
+         cZvREnzEgu4A+lAJUzn2czL0dWzpZbXRVBEzEnberIiqqQ5Jbkxl7QRxnFEQkHiiMM3S
+         NPnvLlVGSsxrLLG7NxFMgYZYQjndrN+um24t1IvzKuFWeJFyd2B7YODnpEhCCi33U001
+         JV7A==
+X-Gm-Message-State: AOAM533+okPNr4kSyFied8nVH5EQpg4S8FRzVDToNPbatgmxRs709uAv
+        wtHqpfBfdXP0J3mvo9VpmUe+fnH5LUrSb22ARkeUul2ZWzk7pAAasdrzSOKjO3SnzoNUq/UcJvI
+        KBhAgsd+00lOV8kR/YB2j/zaF
+X-Received: by 2002:adf:ee4c:0:b0:20a:e668:b939 with SMTP id w12-20020adfee4c000000b0020ae668b939mr10770717wro.523.1651154978799;
+        Thu, 28 Apr 2022 07:09:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwYEXrCDh17OVyVJrMHReMDh2nx5QQA/qJmvMcJgS06lVB9a+h1o00gnmRaDcGh7EL9Au5MCg==
+X-Received: by 2002:adf:ee4c:0:b0:20a:e668:b939 with SMTP id w12-20020adfee4c000000b0020ae668b939mr10770703wro.523.1651154978621;
+        Thu, 28 Apr 2022 07:09:38 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-96-13.dyn.eolo.it. [146.241.96.13])
+        by smtp.gmail.com with ESMTPSA id v6-20020adfa1c6000000b0020add25571bsm9855395wrv.42.2022.04.28.07.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 07:09:38 -0700 (PDT)
+Message-ID: <229c169ccf8fdbf7fc826901982f1f15e86f3d17.camel@redhat.com>
+Subject: Re: [PATCH net-next 02/11] udp/ipv6: refactor udpv6_sendmsg udplite
+ checks
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 28 Apr 2022 16:09:37 +0200
+In-Reply-To: <33dfdf2119c86e35062f783d405bedec2fde2b4c.1651071843.git.asml.silence@gmail.com>
+References: <cover.1651071843.git.asml.silence@gmail.com>
+         <33dfdf2119c86e35062f783d405bedec2fde2b4c.1651071843.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
- and convertible memory
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
- <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
- <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 17:15, Kai Huang wrote:
-> On Wed, 2022-04-27 at 15:15 -0700, Dave Hansen wrote:
->> On 4/5/22 21:49, Kai Huang wrote:
->>> TDX provides increased levels of memory confidentiality and integrity.
->>> This requires special hardware support for features like memory
->>> encryption and storage of memory integrity checksums.  Not all memory
->>> satisfies these requirements.
->>>
->>> As a result, TDX introduced the concept of a "Convertible Memory Region"
->>> (CMR).  During boot, the firmware builds a list of all of the memory
->>> ranges which can provide the TDX security guarantees.  The list of these
->>> ranges, along with TDX module information, is available to the kernel by
->>> querying the TDX module via TDH.SYS.INFO SEAMCALL.
->>>
->>> Host kernel can choose whether or not to use all convertible memory
->>> regions as TDX memory.  Before TDX module is ready to create any TD
->>> guests, all TDX memory regions that host kernel intends to use must be
->>> configured to the TDX module, using specific data structures defined by
->>> TDX architecture.  Constructing those structures requires information of
->>> both TDX module and the Convertible Memory Regions.  Call TDH.SYS.INFO
->>> to get this information as preparation to construct those structures.
->>>
->>> Signed-off-by: Kai Huang <kai.huang@intel.com>
->>> ---
->>>  arch/x86/virt/vmx/tdx/tdx.c | 131 ++++++++++++++++++++++++++++++++++++
->>>  arch/x86/virt/vmx/tdx/tdx.h |  61 +++++++++++++++++
->>>  2 files changed, 192 insertions(+)
->>>
->>> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
->>> index ef2718423f0f..482e6d858181 100644
->>> --- a/arch/x86/virt/vmx/tdx/tdx.c
->>> +++ b/arch/x86/virt/vmx/tdx/tdx.c
->>> @@ -80,6 +80,11 @@ static DEFINE_MUTEX(tdx_module_lock);
->>>  
->>>  static struct p_seamldr_info p_seamldr_info;
->>>  
->>> +/* Base address of CMR array needs to be 512 bytes aligned. */
->>> +static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
->>> +static int tdx_cmr_num;
->>> +static struct tdsysinfo_struct tdx_sysinfo;
->>
->> I really dislike mixing hardware and software structures.  Please make
->> it clear which of these are fully software-defined and which are part of
->> the hardware ABI.
-> 
-> Both 'struct tdsysinfo_struct' and 'struct cmr_info' are hardware structures. 
-> They are defined in tdx.h which has a comment saying the data structures below
-> this comment is hardware structures:
-> 
-> 	+/*
-> 	+ * TDX architectural data structures
-> 	+ */
-> 
-> It is introduced in the P-SEAMLDR patch.
-> 
-> Should I explicitly add comments around the variables saying they are used by
-> hardware, something like:
-> 
-> 	/*
-> 	 * Data structures used by TDH.SYS.INFO SEAMCALL to return CMRs and
-> 	 * TDX module system information.
-> 	 */
+On Thu, 2022-04-28 at 11:56 +0100, Pavel Begunkov wrote:
+> Don't save a IS_UDPLITE() result in advance but do when it's really
+> needed, so it doesn't store/load it from the stack. Same for resolving
+> the getfrag callback pointer.
 
-I think we know they are data structures. :)
+It's quite unclear to me if this change brings really any performance
+benefit. The end results will depend a lot on the optimization
+performed by the compiler, and IMHO the code looks better before this
+modifications.
 
-But, saying:
+Paolo
 
-	/* Used in TDH.SYS.INFO SEAMCALL ABI: */
-
-*is* actually helpful.  It (probably) tells us where in the spec we can
-find the definition and tells how it gets used.  Plus, it tells us this
-isn't a software data structure.
-
->>> +	/* Get TDX module information and CMRs */
->>> +	ret = tdx_get_sysinfo();
->>> +	if (ret)
->>> +		goto out;
->>
->> Couldn't we get rid of that comment if you did something like:
->>
->> 	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
-> 
-> Yes will do.
-> 
->> and preferably make the variables function-local.
-> 
-> 'tdx_sysinfo' will be used by KVM too.
-
-In other words, it's not a part of this series so I can't review whether
-this statement is correct or whether there's a better way to hand this
-information over to KVM.
-
-This (minor) nugget influencing the design also isn't even commented or
-addressed in the changelog.

@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F00D513CFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40004513CE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352000AbiD1VEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 17:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S1351936AbiD1Uyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241199AbiD1VEp (ORCPT
+        with ESMTP id S236992AbiD1Uyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 17:04:45 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8A066ACA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:01:28 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id E97536C1D43;
-        Thu, 28 Apr 2022 21:01:27 +0000 (UTC)
-Received: from pdx1-sub0-mail-a237.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 451296C09F0;
-        Thu, 28 Apr 2022 21:01:27 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651179687; a=rsa-sha256;
-        cv=none;
-        b=IhAyp+fDD0Ymfj6ckD7piAjibXf69cktlIiO+D3XRP5ahs6iYx8aKPlbiRzLgdmv0dXXin
-        1190HyxrxzTPhqy4S9065x9Kq6lUWgiPi5pbQJLUECyg/3pyQpswTWA6dhOgXeqYvT3EID
-        Qu2XDPCWEBj2GskTdr97DE8VLZNlRapCsz6RMOMTRSXZSpz88K1STS3uauWhZ9NpbkU0jW
-        XQHdvY44LTWBXnDGpcYHhgKRapZvh18uuRS1abgka8LvwF3ruekxkqiGgjfx5LWcASEfEY
-        V+iibYs/fSN357gORvmGvy7SEHsWKHVgtbyuz/xcGuS+rO4Dpk0Goc/SSfur7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651179687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=/X2yWkGBPdmS9II6ZQ63eP0hzSBbs6CX/Rh+Gl/UVqY=;
-        b=sidYiefsnP6I+9fwCpGvVXe9IUwQwTktkng9lGQ3ZF7UKcp6tCpURL6Hy4OXx743tMtuqO
-        fLVirA34xQhtyx/6+0cAxBy73Nz399kGr8aQ58+06U6IsUtH1Ysb+WegKb/oLkT0CzwP5s
-        uesToOTzSX7CA+5hTKA2p2AMg1C98rIiSDKUAuMfrqPXVKwEnRo9UV4IuiFoMuYWq/roDd
-        80/TwqkpRiQLBA0pMZpGmlCKTeoJyPZKcDYbTzcd6du2o11QBP7ZODc2ZDk6BHtyvW56jn
-        aKPVJh0tAOpSOTquxg5xvydPMuaGcsgWheMsiOaRUgNjlCzRJCe0kpF+uhLKnA==
-ARC-Authentication-Results: i=1;
-        rspamd-847dd8955c-chk46;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from pdx1-sub0-mail-a237.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.127.95.124 (trex/6.7.1);
-        Thu, 28 Apr 2022 21:01:27 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Inform-Desert: 3fe819401b1ebf62_1651179687590_356988341
-X-MC-Loop-Signature: 1651179687590:3622499748
-X-MC-Ingress-Time: 1651179687589
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a237.dreamhost.com (Postfix) with ESMTPSA id 4Kq7MT5Nwbz1fv;
-        Thu, 28 Apr 2022 14:01:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1651179686;
-        bh=/X2yWkGBPdmS9II6ZQ63eP0hzSBbs6CX/Rh+Gl/UVqY=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=ANAwz6BZg4g/YN37eGi2joJcDpRDNxX/BUrtbYAydlrB1SBL5voZKGR+ES50iL/DH
-         kCCQQW7yuTnwmVMvo8L+onlzyArEalE1ueSpfF2XOQ/iKie5iNJZ0rjOBHqDUA0H3m
-         D7zCKJc52q9so3hPDtF/9YRG6hMiR4sCb+tXn0SkOpxZoJAGp42cxTZqLQvH9qu+JG
-         lGnS4LlKymX7CxJwkOuB+XKLpMXolvibPECUwBUt7qYvjcw7JZNucMQIwVKi7+zzyf
-         P7OZ3YypdCdTsAZagfFmfe1Ev+2AOCcog3lAdHUwk+Gv0yGEb8dmkPkfJ7wUozZGgA
-         WY4lskAns0gyg==
-Date:   Thu, 28 Apr 2022 13:50:01 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Prakash Sangappa <prakash.sangappa@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        akpm@linux-foundation.org, peterz@infradead.org,
-        manfred@colorfullife.com
-Subject: Re: [PATCH v3] ipc: Update semtimedop() to use hrtimer
-Message-ID: <20220428205001.hiuzwpn5emxtrh4s@offworld>
-References: <1651178767-447-1-git-send-email-prakash.sangappa@oracle.com>
+        Thu, 28 Apr 2022 16:54:36 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FF06E8E3;
+        Thu, 28 Apr 2022 13:51:20 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id q13so4082157qvk.3;
+        Thu, 28 Apr 2022 13:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ahmsxGBp2MwMA3sj4/KBiWzEQEE2E96hzz7zFwhvNm4=;
+        b=pKRCBLEvIV/YU4iWHNl2rS1Hi8u1KdoWTBvrAVRycQcK/vh3cQWPCu6UTrv5B/GYR+
+         NcSMcHqO11hilkbx/1hvBoKD8/PUPIugLLb94v6yD5G+cUwUwqSssquIqmBwJKo7s+WT
+         ddeEPt0322Mk3W6Iw2e+MnCiMSMrhRlfSqjo+UTsz55/D30cc8D63RYUGmX/6khmC21s
+         VNdT4mStw2x2OEtWWPsM/ER+K2ceLXOg0XHukjHYNda1d64FXp4kzx9I06S1chJRaKHJ
+         6Otr4z4+5iBlx7Um0Jfwkg66jFUfJE4ly4J3bMpVeJ5W1Q4LOnbSdOcZ788D6OPtsCXs
+         A7Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ahmsxGBp2MwMA3sj4/KBiWzEQEE2E96hzz7zFwhvNm4=;
+        b=zQjkS79aiU94MrUkpdAVmFSz4FiMsAPto3oJgBwI2ZtATIg0gtmVmI+gKo7YIJfMQs
+         1u15v1KgibsTCjGuOTp4KGToKB6vQBKiUPbDjBClVF7QiisVYa1p7wuc3V53if7plvEc
+         SJoHwdWXF9mDohwlUYOCsACk7sDrenOUVsJMT27XW8kHQRSgyNF0fzqYNUUU5/F1LOQz
+         s823b5BkCDAK0tyhGOfDoAZ616A7iAVJH+zwSqwzojk3hWSGxEScAMmqUZhfJujNcS9x
+         m/x+qctBLQy82psZmWPIsvlV2nbSPdd7b0PJoWBSxfsYob+D0l0/K98GlrJ8MLPZP4ze
+         Rm6A==
+X-Gm-Message-State: AOAM533Eqp8jQel9M1qBt08Z9G/iVdPyXiNgYa4AfyVgMzryXaa6SLZ+
+        slxCV+D+5cW1kyAP4L1SBYZwf1G9A/o=
+X-Google-Smtp-Source: ABdhPJx9SvBAXEB+cBZ2RPR5ZBXM6yOkHdc/mxMtpdswhqNKwbO9JuqAEVH5BJmXbVkuksiqly/dmw==
+X-Received: by 2002:a05:6214:b6f:b0:450:a4ab:b409 with SMTP id ey15-20020a0562140b6f00b00450a4abb409mr25023773qvb.123.1651179079722;
+        Thu, 28 Apr 2022 13:51:19 -0700 (PDT)
+Received: from localhost ([2601:c4:c432:4da:fa85:340e:2244:1d8c])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05622a031100b002f1d478c218sm628994qtw.62.2022.04.28.13.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 13:51:19 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Yury Norov <yury.norov@gmail.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH v2 0/5] bitmap: fix conversion from/to fix-sized arrays
+Date:   Thu, 28 Apr 2022 13:51:11 -0700
+Message-Id: <20220428205116.861003-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1651178767-447-1-git-send-email-prakash.sangappa@oracle.com>
-User-Agent: NeoMutt/20220408
+X-Mailer: git-send-email 2.32.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022, Prakash Sangappa wrote:
+In the kernel codebase we have functions that call bitmap_copy()
+to convert bitmaps to and from fix-sized 32 or 64-bit arrays. It
+works well for LE architectures when size of long is equal to the
+size of fixed type.
 
->semtimedop() should be converted to use hrtimer like it has been done
->for most of the system calls with timeouts. This system call already
->takes a struct timespec as an argument and can therefore provide finer
->granularity timed wait.
->
->Signed-off-by: Prakash Sangappa <prakash.sangappa@oracle.com>
->Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
->---
->v1->v2:
->  - Use timespec64_valid() to validate timeout
->     and other changes as suggested by Thomas Gleixner
->v2-v3 Added Reviewed by tag
->---
+If the system is BE and/or size of long is not equal to the size of
+fixed type of the array, bitmap_copy() may produce wrong result either
+because of endianness issue, or because of out-of-bound access.
 
-The second '---' is not necesary, it's the first one that counts.
+To address this problem we have bitmap_{from,to}_arr32(). In recent
+discussion it was spotted that we also need 64-bit analogue:
 
->@@ -2166,10 +2167,8 @@ long __do_semtimedop(int semid, struct sembuf *sops,
->		sem_unlock(sma, locknum);
->		rcu_read_unlock();
->
->-		if (timeout)
->-			jiffies_left = schedule_timeout(jiffies_left);
->-		else
->-			schedule();
->+		timed_out = !schedule_hrtimeout_range(exp,
->+				current->timer_slack_ns, HRTIMER_MODE_ABS);
+https://lore.kernel.org/all/YiCWNdWd+AsLbDkp@smile.fi.intel.com/T/#m754da92acb0003e12b99293d07ddcd46dbe04ada
 
-I'm wondering if the slack parameter instead of passing the timer_slack_ns
-value immediately, we should do a rt_task() check and pass zero if so.
-And the opposite for the posix mqueue case: bit a little more lenient when
-!rt_task() and pass current->timer_slack_ns instead of zero. Of course mq
-is a lot more rt aware than sysv semaphores, but that doesn't mean both forms
-of ipc are not seen used with or without RT constraints.
+This series takes care of it.
 
-Thanks,
-Davidlohr
+v1: https://lore.kernel.org/lkml/20220420222530.910125-3-yury.norov@gmail.com/T/
+v2: - fix build warnings (patch 2)
+    - add test for bitmap_{from,to}_arr64
+
+Yury Norov (5):
+  lib/bitmap: extend comment for bitmap_(from,to)_arr32()
+  lib: add bitmap_{from,to}_arr64
+  lib/bitmap: add test for bitmap_{from,to}_arr64
+  KVM: s390: replace bitmap_copy with bitmap_{from,to}_arr64 where
+    appropriate
+  drm/amd/pm: use bitmap_{from,to}_arr32 where appropriate
+
+ arch/s390/kvm/kvm-s390.c                      | 10 ++--
+ .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    |  2 +-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |  2 +-
+ include/linux/bitmap.h                        | 31 +++++++++---
+ lib/bitmap.c                                  | 48 +++++++++++++++++++
+ lib/test_bitmap.c                             | 25 ++++++++++
+ 6 files changed, 103 insertions(+), 15 deletions(-)
+
+-- 
+2.32.0
+

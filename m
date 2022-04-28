@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59594512FF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622F8512FD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345085AbiD1JXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S1345407AbiD1JXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345715AbiD1JS7 (ORCPT
+        with ESMTP id S1345779AbiD1JTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:18:59 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31971260D;
-        Thu, 28 Apr 2022 02:15:40 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6C0E160009;
-        Thu, 28 Apr 2022 09:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651137339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=601hOmZZ+FfI38UJ5XOFnA3K1IMHPaxWsKoMipp8iH8=;
-        b=jUV/lrLJBVuq9ZQB/l/IXNc1u5fLXgsjkw6We9t7h9ghH1hr1PsCYjQBV6r20yG2bjj2tq
-        rnsm90AuBdguGeEa8kyjzPeATTX/s5WjE/XfmfnC6V3U3LZ9NF22tS+2t0kZO0S4oDHikc
-        c53S2dnJu+pFxcjpRyvel9eIdhcsTnSBNPc8SmNVd1Oi4llQNTZe3T2dOIQ3/KKQRlyqzD
-        FhdIVSsqZlSrXobw/rmBBlQiACrkNZhSaHMVVOpb3pHTbL6w5gj8a5RRdD3L201ipJ6lMV
-        TD5CnoYmzt26cTgO9/1JQMtJUun2wUq85q5GL0zpISRS7PF9XoPbNM1th3LaJg==
-Date:   Thu, 28 Apr 2022 11:15:35 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v3 4/8] soc: renesas: rzn1: Select PM and
- PM_GENERIC_DOMAINS configs
-Message-ID: <20220428111535.51833857@bootlin.com>
-In-Reply-To: <CAMuHMdWmcBXRxZ_SDLCnimh7GqzkR0_qz178s51EtXsMm39ddg@mail.gmail.com>
-References: <20220422120850.769480-1-herve.codina@bootlin.com>
-        <20220422120850.769480-5-herve.codina@bootlin.com>
-        <CAMuHMdWmcBXRxZ_SDLCnimh7GqzkR0_qz178s51EtXsMm39ddg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Thu, 28 Apr 2022 05:19:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52BC2AC5E;
+        Thu, 28 Apr 2022 02:16:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC24AB82C2E;
+        Thu, 28 Apr 2022 09:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503C0C385A9;
+        Thu, 28 Apr 2022 09:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651137382;
+        bh=EwqTDOFG4cur2yOUWY0eqlQeG96O0SBRWYEdM0HpvnM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YQWeMhhIYWkVP4QpudZiHEyFzRV7W+O8k3op2HEwj6pt4oqeJreaEcS5GNME8vZPT
+         DBo3LcroC01kZ+vPss5pM9mSOknFl/mBhOZj54a8tFq1mlKruzaOBfB08INCvSD5MM
+         YRoSbcZfOF9tjfhYSUJZ9oJwJFT+FBR9VIdKr+6wvIS/7nNZPzxMGSCYEzlJ5K70Tp
+         kk2pM0jintE8ylwfXCeOpHft5uJQ1FDV1x8fTumX+jPKJvS7Wboxj5mRYVVDu9HJAD
+         Xd6tsBXiJVgiUDwP8FbLuffVi8vijy1vi3JAgn8n5cZLfOsBR/V8OLEYlXDbYPUiRw
+         F2dexix1oWy5Q==
+Received: by pali.im (Postfix)
+        id 40A928A0; Thu, 28 Apr 2022 11:16:19 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: max63xx_wdt: Add support for specifying WDI logic via GPIO
+Date:   Thu, 28 Apr 2022 11:16:03 +0200
+Message-Id: <20220428091603.6838-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On some boards is WDI logic of max6370 chip connected via GPIO. So extend
+max63xx_wdt driver and DTS schema to allow specifying WDI logic via GPIO.
 
-On Wed, 27 Apr 2022 16:58:07 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ .../bindings/watchdog/maxim,max63xx.yaml      |  4 +++
+ drivers/watchdog/max63xx_wdt.c                | 28 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-> On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.com> w=
-rote:
-> > PM and PM_GENERIC_DOMAINS configs are required for RZ/N1 SOCs.
-> > Without these configs, the clocks used by the PCI bridge are not
-> > enabled and so accessing the devices leads to a kernel crash:
-> >   [    0.832958] Unhandled fault: external abort on non-linefetch (0x10=
-08) at 0x90b5f848
-> >
-> > Select PM and PM_GENERIC_DOMAINS for ARCH_RZN1
-> >
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
->=20
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> i.e. will queue in renesas-devel for v5.19.
->=20
+diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+index ab9641e845db..a97aa0135ef9 100644
+--- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
++++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+@@ -27,6 +27,10 @@ properties:
+     description: This is a 1-byte memory-mapped address
+     maxItems: 1
+ 
++  gpios:
++    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+index 9e1541cfae0d..eaf00c3f06a5 100644
+--- a/drivers/watchdog/max63xx_wdt.c
++++ b/drivers/watchdog/max63xx_wdt.c
+@@ -27,6 +27,7 @@
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ #include <linux/property.h>
++#include <linux/gpio/consumer.h>
+ 
+ #define DEFAULT_HEARTBEAT 60
+ #define MAX_HEARTBEAT     60
+@@ -53,6 +54,9 @@ struct max63xx_wdt {
+ 	void __iomem *base;
+ 	spinlock_t lock;
+ 
++	/* GPIOs */
++	struct gpio_desc *gpio_wdi;
++
+ 	/* WDI and WSET bits write access routines */
+ 	void (*ping)(struct max63xx_wdt *wdt);
+ 	void (*set)(struct max63xx_wdt *wdt, u8 set);
+@@ -158,6 +162,17 @@ static const struct watchdog_info max63xx_wdt_info = {
+ 	.identity = "max63xx Watchdog",
+ };
+ 
++static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
++{
++	spin_lock(&wdt->lock);
++
++	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
++	udelay(1);
++	gpiod_set_value_cansleep(wdt->gpio_wdi, 0);
++
++	spin_unlock(&wdt->lock);
++}
++
+ static void max63xx_mmap_ping(struct max63xx_wdt *wdt)
+ {
+ 	u8 val;
+@@ -225,6 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
++	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
++	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT) {
++		if (PTR_ERR(wdt->gpio_wdi) != -EPROBE_DEFER)
++			dev_err(dev, "unable to request gpio: %ld\n",
++				PTR_ERR(wdt->gpio_wdi));
++		return PTR_ERR(wdt->gpio_wdi);
++	}
++
++	if (!IS_ERR(wdt->gpio_wdi))
++		wdt->ping = max63xx_gpio_ping;
++	else
++		wdt->gpio_wdi = NULL;
++
+ 	err = max63xx_mmap_init(pdev, wdt);
+ 	if (err)
+ 		return err;
+-- 
+2.20.1
 
-I plan to send a v4 of this series.
-
-As this patch (4/8) and the following one (5/8) will be
-queued for v5.19, I plan to remove them from the v4 version
-of the series.
-
-Is that ok for you or do you prefer to still have them
-in v4 ?
-
-Regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com

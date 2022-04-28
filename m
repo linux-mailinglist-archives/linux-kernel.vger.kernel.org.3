@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92657512FE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B30513007
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345396AbiD1J1q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 28 Apr 2022 05:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S1346712AbiD1JaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346585AbiD1J0D (ORCPT
+        with ESMTP id S1346648AbiD1J0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:26:03 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EB87B55A;
-        Thu, 28 Apr 2022 02:22:49 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id a5so2816005qvx.1;
-        Thu, 28 Apr 2022 02:22:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XqlNbfP07/JFH01D+0otUBRM7EY77qBFCn/ld2fGXUk=;
-        b=oEZ+F4UIOxbggPbpUd+38Q5RcsS64KEBKvmzSIUP01hIQdxh4ftDWoIUbC7eYTPeDk
-         aMuMQy02J6QAJbFDC0BC8xeEfOJC4JRomGUKnYgx/jyAcv6jeNuEMGGMMsXRZFFmUl0s
-         ZA67KSd3Or34vRmR7dJvt8OP0Fb0SKHyLXLFQcHE23FEOkybjmueeuf0+eKGvzH5GBQo
-         XDBVl6glmg6YsMdwWxyejRC8yp/a4ccln6Z9dhT/ik8Q7K505wywuQ88vBvDIUBDXlCZ
-         N5N7rVE+JzIAuKPBm29EpHiM+7wZmYe0zXipPcl+DZ4x7GN/6WOQEoEcPQ25EsHDwMQk
-         IGaA==
-X-Gm-Message-State: AOAM532YwHdDSVzECnrVS+odxRarZpir6BtB3buK30VX0A4soO6Z7LCr
-        Ij4l0zWAo6reu2LQuvlgPXAOjkpqmv++LQ==
-X-Google-Smtp-Source: ABdhPJyZVJVTfXghprm+uK544vIooJPyHd/NqYJy555ifKHxac+s/bMU6ua9HBq+/o2o7618xwjcww==
-X-Received: by 2002:a05:6214:d86:b0:456:4ae4:d993 with SMTP id e6-20020a0562140d8600b004564ae4d993mr7911694qve.38.1651137768464;
-        Thu, 28 Apr 2022 02:22:48 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id n186-20020a37bdc3000000b0069c218173e8sm9372017qkf.112.2022.04.28.02.22.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 02:22:48 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id m128so7933688ybm.5;
-        Thu, 28 Apr 2022 02:22:47 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
- c4-20020a5b0984000000b0063f8c38676cmr30668590ybq.393.1651137767425; Thu, 28
- Apr 2022 02:22:47 -0700 (PDT)
+        Thu, 28 Apr 2022 05:26:19 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9487B553;
+        Thu, 28 Apr 2022 02:23:05 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23S9MnPD114566;
+        Thu, 28 Apr 2022 04:22:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651137769;
+        bh=SdGBrCh40gSHcFSouD8MdmXwgrI8So6iMxE64Wbkmjo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=jYhmyaZBksW8oYkDtNQYH7YjcC86TF2PZhmwwRmh/ergbHHKxI4ogKvXU6RV9POa4
+         x2J59slDd+rF+JIpZp32Qs5XV1+DCXiLOpJlQhemu8ozq+eeuLqNz+BkgqOWw5SPCl
+         0BkgpJ7E1Mvqw3uishVNWGLj08onV0xeryRaYZlA=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23S9MnpO126190
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 28 Apr 2022 04:22:49 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 28
+ Apr 2022 04:22:49 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 28 Apr 2022 04:22:49 -0500
+Received: from [10.0.2.15] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23S9Mjmb078389;
+        Thu, 28 Apr 2022 04:22:46 -0500
+Message-ID: <4d9da502-52b5-e5c1-7675-93c4341fb446@ti.com>
+Date:   Thu, 28 Apr 2022 14:52:43 +0530
 MIME-Version: 1.0
-References: <20220422120850.769480-1-herve.codina@bootlin.com>
- <20220422120850.769480-5-herve.codina@bootlin.com> <CAMuHMdWmcBXRxZ_SDLCnimh7GqzkR0_qz178s51EtXsMm39ddg@mail.gmail.com>
- <20220428111535.51833857@bootlin.com>
-In-Reply-To: <20220428111535.51833857@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 28 Apr 2022 11:22:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUf6M=ESvSnRoqYkBfvizW-tBzTwUX2Uka-FOGvLFzL=w@mail.gmail.com>
-Message-ID: <CAMuHMdUf6M=ESvSnRoqYkBfvizW-tBzTwUX2Uka-FOGvLFzL=w@mail.gmail.com>
-Subject: Re: [PATCH v3 4/8] soc: renesas: rzn1: Select PM and
- PM_GENERIC_DOMAINS configs
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND PATCH v3] arm64: dts: ti: k3-am642-sk: Enable WLAN
+ connected to SDHCI0
+Content-Language: en-US
+To:     Aparna M <a-m1@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <kishon@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <praneeth@ti.com>, <nikhil.nd@ti.com>
+References: <20220414133612.13365-1-a-m1@ti.com>
+From:   Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <20220414133612.13365-1-a-m1@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,44 +69,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hervé,
 
-On Thu, Apr 28, 2022 at 11:15 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> On Wed, 27 Apr 2022 16:58:07 +0200
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> > > PM and PM_GENERIC_DOMAINS configs are required for RZ/N1 SOCs.
-> > > Without these configs, the clocks used by the PCI bridge are not
-> > > enabled and so accessing the devices leads to a kernel crash:
-> > >   [    0.832958] Unhandled fault: external abort on non-linefetch (0x1008) at 0x90b5f848
-> > >
-> > > Select PM and PM_GENERIC_DOMAINS for ARCH_RZN1
-> > >
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > i.e. will queue in renesas-devel for v5.19.
+On 14/04/22 19:06, Aparna M wrote:
+> From: Kishon Vijay Abraham I <kishon@ti.com>
 >
-> I plan to send a v4 of this series.
+> WL1837 module is connected to SDHCI0 in AM642 SK. Enable it here.
+> This will enable the WiFi functionaliy on the board.
 >
-> As this patch (4/8) and the following one (5/8) will be
-> queued for v5.19, I plan to remove them from the v4 version
-> of the series.
+> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+> Signed-off-by: Aparna M <a-m1@ti.com>
+Tested-by: Devarsh Thakkar <devarsht@ti.com>
+> ---
 >
-> Is that ok for you or do you prefer to still have them
-> in v4 ?
-
-As these two patches are not strictly related to adding PCI support,
-but they are dependencies, I will queue them separately. Hence you
-do not need to include them in v5.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> v3 RESEND: rebased on top of v5.18-rc2
+> v2 -> v3: Use generic node names for the regulators as per DT Specs
+> v1 -> v2: Add "From" tag in commit message
+>
+>  arch/arm64/boot/dts/ti/k3-am642-sk.dts | 62 ++++++++++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+> index 1d7db8bf3a5c..59f506cbd275 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+> @@ -125,6 +125,31 @@
+>  		vin-supply = <&vcc_3v3_sys>;
+>  		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
+>  	};
+> +
+> +	com8_ls_en: regulator-1 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "com8_ls_en";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		pinctrl-0 = <&main_com8_ls_en_pins_default>;
+> +		pinctrl-names = "default";
+> +		gpio = <&main_gpio0 62 GPIO_ACTIVE_LOW>;
+> +	};
+> +
+> +	wlan_en: regulator-2 {
+> +		/* output of SN74AVC4T245RSVR */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "wlan_en";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		enable-active-high;
+> +		pinctrl-0 = <&main_wlan_en_pins_default>;
+> +		pinctrl-names = "default";
+> +		vin-supply = <&com8_ls_en>;
+> +		gpio = <&main_gpio0 48 GPIO_ACTIVE_HIGH>;
+> +	};
+>  };
+>  
+>  &main_pmx0 {
+> @@ -216,6 +241,23 @@
+>  			AM64X_IOPAD(0x0270, PIN_INPUT, 0) /* (D18) ECAP0_IN_APWM_OUT */
+>  		>;
+>  	};
+> +	main_wlan_en_pins_default: main-wlan-en-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM64X_IOPAD(0x00c4, PIN_OUTPUT_PULLUP, 7) /* (V8) GPIO0_48 */
+> +		>;
+> +	};
+> +
+> +	main_com8_ls_en_pins_default: main-com8-ls-en-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM64X_IOPAD(0x00fc, PIN_OUTPUT, 7) /* (U7) PRG1_PRU0_GPO17.GPIO0_62 */
+> +		>;
+> +	};
+> +
+> +	main_wlan_pins_default: main-wlan-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM64X_IOPAD(0x00bc, PIN_INPUT, 7) /* (U8) GPIO0_46 */
+> +		>;
+> +	};
+>  };
+>  
+>  &mcu_uart0 {
+> @@ -293,6 +335,26 @@
+>  	status = "reserved";
+>  };
+>  
+> +&sdhci0 {
+> +	vmmc-supply = <&wlan_en>;
+> +	bus-width = <4>;
+> +	non-removable;
+> +	cap-power-off-card;
+> +	keep-power-in-suspend;
+> +	ti,driver-strength-ohm = <50>;
+> +
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	wlcore: wlcore@2 {
+> +		compatible = "ti,wl1837";
+> +		reg = <2>;
+> +		pinctrl-0 = <&main_wlan_pins_default>;
+> +		pinctrl-names = "default";
+> +		interrupt-parent = <&main_gpio0>;
+> +		interrupts = <46 IRQ_TYPE_EDGE_FALLING>;
+> +	};
+> +};
+> +
+>  &sdhci1 {
+>  	/* SD/MMC */
+>  	vmmc-supply = <&vdd_mmc1>;

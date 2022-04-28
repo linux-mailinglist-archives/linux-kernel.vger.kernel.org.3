@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114A8512E86
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3AB512E85
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343923AbiD1Ibn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
+        id S233370AbiD1IcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344161AbiD1IbG (ORCPT
+        with ESMTP id S1344173AbiD1IbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:31:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D7DA0BE4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:27:51 -0700 (PDT)
+        Thu, 28 Apr 2022 04:31:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1942A0BC7;
+        Thu, 28 Apr 2022 01:27:51 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EE17421874;
-        Thu, 28 Apr 2022 08:27:49 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 464531F8AC;
+        Thu, 28 Apr 2022 08:27:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651134469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1651134470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=27ryrQ9/V3A+L0L1cMkzg+znNHks8+NEi42Ak1eCxTQ=;
-        b=OuTXoWvhfYYiK6CpG+Xj3URKFgDVAutPiSkezySiwcZy5fZN/9LUWyECUUdJYzu/QyFtIK
-        IlWEbdsvMavVm0S7cE2dMet6r3Ofm33wYWqZxXMaKMQ+q2ofTy2NzLxMYjglo8jdcdMQIn
-        Gfl9iKNb3w0tnJ62vhff94o8tpqp+WM=
+        bh=8veqePX7rdlWDFOqgS78jUbLrgjtOmHQWA4ds9ys4IE=;
+        b=rlIU5c4XpDDC7FrePn4vUJzKDyXHqwBA/KrdUbuegUL/GMk4CbeRxuLFKYzRcV4h6uEH0R
+        L0jIaXxjVS2Dr3TW9oriwnhhCWoUjTrAD4Ua6LmdjKnMAEecMlj3qMU8neAALFcwsCaTww
+        qTn2D9U/CoxHhFQs9ltdPwvn5qwcNqw=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFF4713491;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 038BE13491;
         Thu, 28 Apr 2022 08:27:49 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id mGl2LQVQamIBLgAAMHmgww
+        id kIMQOwVQamIBLgAAMHmgww
         (envelope-from <jgross@suse.com>); Thu, 28 Apr 2022 08:27:49 +0000
 From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Subject: [PATCH v2 08/19] xen/shbuf: switch xen-front-pgdir-shbuf to use INVALID_GRANT_REF
-Date:   Thu, 28 Apr 2022 10:27:32 +0200
-Message-Id: <20220428082743.16593-9-jgross@suse.com>
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH v2 09/19] xen: update ring.h
+Date:   Thu, 28 Apr 2022 10:27:33 +0200
+Message-Id: <20220428082743.16593-10-jgross@suse.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220428082743.16593-1-jgross@suse.com>
 References: <20220428082743.16593-1-jgross@suse.com>
@@ -62,70 +66,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of using a private macro for an invalid grant reference use
-the common one.
+Update include/xen/interface/io/ring.h to its newest version.
+
+Switch the two improper use cases of RING_HAS_UNCONSUMED_RESPONSES() to
+XEN_RING_NR_UNCONSUMED_RESPONSES() in order to avoid the nasty
+XEN_RING_HAS_UNCONSUMED_IS_BOOL #define.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- drivers/xen/xen-front-pgdir-shbuf.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+V2:
+- new patch
+---
+ drivers/net/xen-netfront.c      |  4 ++--
+ include/xen/interface/io/ring.h | 19 ++++++++++++++-----
+ 2 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/xen/xen-front-pgdir-shbuf.c b/drivers/xen/xen-front-pgdir-shbuf.c
-index a959dee21134..fa2921d4fbfc 100644
---- a/drivers/xen/xen-front-pgdir-shbuf.c
-+++ b/drivers/xen/xen-front-pgdir-shbuf.c
-@@ -21,15 +21,6 @@
+diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
+index af3d3de7d9fa..966bee2a6902 100644
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -866,7 +866,7 @@ static void xennet_set_rx_rsp_cons(struct netfront_queue *queue, RING_IDX val)
  
- #include <xen/xen-front-pgdir-shbuf.h>
- 
--#ifndef GRANT_INVALID_REF
--/*
-- * FIXME: usage of grant reference 0 as invalid grant reference:
-- * grant reference 0 is valid, but never exposed to a PV driver,
-- * because of the fact it is already in use/reserved by the PV console.
-- */
--#define GRANT_INVALID_REF	0
--#endif
--
- /**
-  * This structure represents the structure of a shared page
-  * that contains grant references to the pages of the shared
-@@ -83,7 +74,7 @@ grant_ref_t
- xen_front_pgdir_shbuf_get_dir_start(struct xen_front_pgdir_shbuf *buf)
- {
- 	if (!buf->grefs)
--		return GRANT_INVALID_REF;
-+		return INVALID_GRANT_REF;
- 
- 	return buf->grefs[0];
- }
-@@ -142,7 +133,7 @@ void xen_front_pgdir_shbuf_free(struct xen_front_pgdir_shbuf *buf)
- 		int i;
- 
- 		for (i = 0; i < buf->num_grefs; i++)
--			if (buf->grefs[i] != GRANT_INVALID_REF)
-+			if (buf->grefs[i] != INVALID_GRANT_REF)
- 				gnttab_end_foreign_access(buf->grefs[i], 0UL);
- 	}
- 	kfree(buf->grefs);
-@@ -355,7 +346,7 @@ static void backend_fill_page_dir(struct xen_front_pgdir_shbuf *buf)
- 	}
- 	/* Last page must say there is no more pages. */
- 	page_dir = (struct xen_page_directory *)ptr;
--	page_dir->gref_dir_next_page = GRANT_INVALID_REF;
-+	page_dir->gref_dir_next_page = INVALID_GRANT_REF;
+ 	spin_lock_irqsave(&queue->rx_cons_lock, flags);
+ 	queue->rx.rsp_cons = val;
+-	queue->rx_rsp_unconsumed = RING_HAS_UNCONSUMED_RESPONSES(&queue->rx);
++	queue->rx_rsp_unconsumed = XEN_RING_NR_UNCONSUMED_RESPONSES(&queue->rx);
+ 	spin_unlock_irqrestore(&queue->rx_cons_lock, flags);
  }
  
- /**
-@@ -384,7 +375,7 @@ static void guest_fill_page_dir(struct xen_front_pgdir_shbuf *buf)
+@@ -1498,7 +1498,7 @@ static bool xennet_handle_rx(struct netfront_queue *queue, unsigned int *eoi)
+ 		return false;
  
- 		if (grefs_left <= XEN_NUM_GREFS_PER_PAGE) {
- 			to_copy = grefs_left;
--			page_dir->gref_dir_next_page = GRANT_INVALID_REF;
-+			page_dir->gref_dir_next_page = INVALID_GRANT_REF;
- 		} else {
- 			to_copy = XEN_NUM_GREFS_PER_PAGE;
- 			page_dir->gref_dir_next_page = buf->grefs[i + 1];
+ 	spin_lock_irqsave(&queue->rx_cons_lock, flags);
+-	work_queued = RING_HAS_UNCONSUMED_RESPONSES(&queue->rx);
++	work_queued = XEN_RING_NR_UNCONSUMED_RESPONSES(&queue->rx);
+ 	if (work_queued > queue->rx_rsp_unconsumed) {
+ 		queue->rx_rsp_unconsumed = work_queued;
+ 		*eoi = 0;
+diff --git a/include/xen/interface/io/ring.h b/include/xen/interface/io/ring.h
+index 2470ec45ebb2..ba4c4274b714 100644
+--- a/include/xen/interface/io/ring.h
++++ b/include/xen/interface/io/ring.h
+@@ -72,9 +72,8 @@ typedef unsigned int RING_IDX;
+  * of the shared memory area (PAGE_SIZE, for instance). To initialise
+  * the front half:
+  *
+- *     mytag_front_ring_t front_ring;
+- *     SHARED_RING_INIT((mytag_sring_t *)shared_page);
+- *     FRONT_RING_INIT(&front_ring, (mytag_sring_t *)shared_page, PAGE_SIZE);
++ *     mytag_front_ring_t ring;
++ *     XEN_FRONT_RING_INIT(&ring, (mytag_sring_t *)shared_page, PAGE_SIZE);
+  *
+  * Initializing the back follows similarly (note that only the front
+  * initializes the shared ring):
+@@ -146,6 +145,11 @@ struct __name##_back_ring {                                             \
+ 
+ #define FRONT_RING_INIT(_r, _s, __size) FRONT_RING_ATTACH(_r, _s, 0, __size)
+ 
++#define XEN_FRONT_RING_INIT(r, s, size) do {                            \
++    SHARED_RING_INIT(s);                                                \
++    FRONT_RING_INIT(r, s, size);                                        \
++} while (0)
++
+ #define BACK_RING_ATTACH(_r, _s, _i, __size) do {                       \
+     (_r)->rsp_prod_pvt = (_i);                                          \
+     (_r)->req_cons = (_i);                                              \
+@@ -170,16 +174,21 @@ struct __name##_back_ring {                                             \
+     (RING_FREE_REQUESTS(_r) == 0)
+ 
+ /* Test if there are outstanding messages to be processed on a ring. */
+-#define RING_HAS_UNCONSUMED_RESPONSES(_r)                               \
++#define XEN_RING_NR_UNCONSUMED_RESPONSES(_r)                            \
+     ((_r)->sring->rsp_prod - (_r)->rsp_cons)
+ 
+-#define RING_HAS_UNCONSUMED_REQUESTS(_r) ({                             \
++#define XEN_RING_NR_UNCONSUMED_REQUESTS(_r) ({                          \
+     unsigned int req = (_r)->sring->req_prod - (_r)->req_cons;          \
+     unsigned int rsp = RING_SIZE(_r) -                                  \
+         ((_r)->req_cons - (_r)->rsp_prod_pvt);                          \
+     req < rsp ? req : rsp;                                              \
+ })
+ 
++#define RING_HAS_UNCONSUMED_RESPONSES(_r) \
++    (!!XEN_RING_NR_UNCONSUMED_RESPONSES(_r))
++#define RING_HAS_UNCONSUMED_REQUESTS(_r)  \
++    (!!XEN_RING_NR_UNCONSUMED_REQUESTS(_r))
++
+ /* Direct access to individual ring elements, by index. */
+ #define RING_GET_REQUEST(_r, _idx)                                      \
+     (&((_r)->sring->ring[((_idx) & (RING_SIZE(_r) - 1))].req))
 -- 
 2.34.1
 

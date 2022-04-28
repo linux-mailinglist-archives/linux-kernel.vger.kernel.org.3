@@ -2,153 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE9D5128B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69835128BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240444AbiD1BZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S240506AbiD1Bas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbiD1BZC (ORCPT
+        with ESMTP id S229493AbiD1Bao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:25:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD68BF02;
-        Wed, 27 Apr 2022 18:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651108910; x=1682644910;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=r5hrV7mZOtCpu7DBMAczG1A8dnsdM0A81gJCQHLw+9c=;
-  b=MIKPzHJqS99px1iAAQ6m2CBgaWw+mZFkFMSmMWPUT9/gKhGgrbBrFLtV
-   Z4qlry7Bka7CkEtXEAOH8BGZrvFZuM91rMS3SqKuxwVqIjCHVfqSAhvN8
-   3biOgn7jaBdC+ZFOSHMrsrczWiXAoK3qRhltFzNbUZdn7phJV4pPpFQzi
-   M99Bz/t0MS5G+bGVa0WdtmAguB2JNIMFebdkYvEhe0sY6LzHqE7VVIOnI
-   rwr+VSywGTJKwQfm1VsVpc8WIqXknXpQFSvnhTXcuaTw9RrrptYNQ79Lu
-   0vrKOZtX44fxMPdt1oMF5nLv2WZaRRqLlGWklLFdcn5DR3/O8F5CK+yEP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="265936800"
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="265936800"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:21:48 -0700
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="559328068"
-Received: from rrnambia-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:21:44 -0700
-Message-ID: <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Date:   Thu, 28 Apr 2022 13:21:42 +1200
-In-Reply-To: <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
-         <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 27 Apr 2022 21:30:44 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D556D1B9;
+        Wed, 27 Apr 2022 18:27:30 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id EFB171B3;
+        Wed, 27 Apr 2022 18:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1651109250;
+        bh=A1Z73Wico87e026F2N4Y7a2Kb+H2CHDRz2kb7e46jU4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DPXv6L82Dify6oPeSv02IxzMqu3IqbenHRyjyVcaV8L/a1rJktzBHDxbX1V+D42yw
+         bkTvGM5X57skuUnxpVeE8H8C0AtQiKOmzHNrRTUITsuw1bYQXiwhublcc59H+FyFNc
+         J98XX6PXdFNtdMRh8h2As4wApB9RN7RoRlCUuDsI=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Cc:     Zev Weiss <zev@bewilderbeest.net>, Renze Nicolai <renze@rnplus.nl>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v5 0/2] hwmon: (nct6775) Add i2c driver
+Date:   Wed, 27 Apr 2022 18:27:05 -0700
+Message-Id: <20220428012707.24921-1-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-27 at 18:01 -0700, Dan Williams wrote:
-> On Tue, Apr 26, 2022 at 1:10 PM Dave Hansen <dave.hansen@intel.com> wrote:
-> [..]
-> > > 3. Memory hotplug
-> > > 
-> > > The first generation of TDX architecturally doesn't support memory
-> > > hotplug.  And the first generation of TDX-capable platforms don't support
-> > > physical memory hotplug.  Since it physically cannot happen, this series
-> > > doesn't add any check in ACPI memory hotplug code path to disable it.
-> > > 
-> > > A special case of memory hotplug is adding NVDIMM as system RAM using
-> 
-> Saw "NVDIMM" mentioned while browsing this, so stopped to make a comment...
-> 
-> > > kmem driver.  However the first generation of TDX-capable platforms
-> > > cannot enable TDX and NVDIMM simultaneously, so in practice this cannot
-> > > happen either.
-> > 
-> > What prevents this code from today's code being run on tomorrow's
-> > platforms and breaking these assumptions?
-> 
-> The assumption is already broken today with NVDIMM-N. The lack of
-> DDR-T support on TDX enabled platforms has zero effect on DDR-based
-> persistent memory solutions. In other words, please describe the
-> actual software and hardware conflicts at play here, and do not make
-> the mistake of assuming that "no DDR-T support on TDX platforms" ==
-> "no NVDIMM support".
+Hello,
 
-Sorry I got this information from planning team or execution team I guess. I was
-told NVDIMM and TDX cannot "co-exist" on the first generation of TDX capable
-machine.  "co-exist" means they cannot be turned on simultaneously on the same
-platform.  I am also not aware NVDIMM-N, nor the difference between DDR based
-and DDR-T based persistent memory.  Could you give some more background here so
-I can take a look?
+This series contains the remaining two outstanding patches adding i2c
+support to the nct6775 hwmon driver.
 
-> 
-> > > Another case is admin can use 'memmap' kernel command line to create
-> > > legacy PMEMs and use them as TD guest memory, or theoretically, can use
-> > > kmem driver to add them as system RAM.  To avoid having to change memory
-> > > hotplug code to prevent this from happening, this series always include
-> > > legacy PMEMs when constructing TDMRs so they are also TDX memory.
-> 
-> I am not sure what you are trying to say here?
+Changes since v4 [0]:
+ - Added missing type $ref to nuvoton,tsi-channel-mask property in DT
+   binding [Krzysztof, Rob's bot]
+ - Added 'F:' line for nuvoton,nct6775.yaml DT binding file to
+   MAINTAINERS
 
-We want to always make sure the memory managed by page allocator is TDX memory.
-So if the legacy PMEMs are unconditionally configured as TDX memory, then we
-don't need to prevent them from being added as system memory via kmem driver.
+The first patch adds a DT binding for the Nuvoton Super I/O chips
+supported by the nct6775 driver; the second adds an i2c hwmon driver
+wrapped around the new nct6775-core module.
 
-> 
-> > > 4. CPU hotplug
-> > > 
-> > > The first generation of TDX architecturally doesn't support ACPI CPU
-> > > hotplug.  All logical cpus are enabled by BIOS in MADT table.  Also, the
-> > > first generation of TDX-capable platforms don't support ACPI CPU hotplug
-> > > either.  Since this physically cannot happen, this series doesn't add any
-> > > check in ACPI CPU hotplug code path to disable it.
-> 
-> What are the actual challenges posed to TDX with respect to CPU hotplug?
+(Since the preparatory work for this that comprised the bulk of the
+previous iterations of the series is now in Guenter's hwmon-next tree
+this is a somewhat abridged cover letter; see [0] for additional
+background info if needed.)
 
-During the TDX module initialization, there is a step to call SEAMCALL on all
-logical cpus to initialize per-cpu TDX staff.  TDX doesn't support initializing
-the new hot-added CPUs after the initialization.  There are MCHECK/BIOS changes
-to enforce this check too I guess but I don't know details about this.
+[0] https://lore.kernel.org/linux-hwmon/20220427010154.29749-1-zev@bewilderbeest.net/
 
-> 
-> > > Also, only TDX module initialization requires all BIOS-enabled cpus are
-> 
-> Please define "BIOS-enabled" cpus. There is no "BIOS-enabled" line in
-> /proc/cpuinfo for example.
+Zev Weiss (2):
+  dt-bindings: hwmon: Add nuvoton,nct6775
+  hwmon: (nct6775) Add i2c driver
 
-It means the CPUs with "enable" bit set in the MADT table.
-
+ .../bindings/hwmon/nuvoton,nct6775.yaml       |  57 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/Kconfig                         |  17 ++
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/nct6775-i2c.c                   | 195 ++++++++++++++++++
+ 5 files changed, 277 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/nuvoton,nct6775.yaml
+ create mode 100644 drivers/hwmon/nct6775-i2c.c
 
 -- 
-Thanks,
--Kai
-
+2.36.0
 

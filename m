@@ -2,375 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05E0513825
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A55513830
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240431AbiD1PXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S1345655AbiD1PY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiD1PXJ (ORCPT
+        with ESMTP id S229543AbiD1PYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:23:09 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABDCAFB2F;
-        Thu, 28 Apr 2022 08:19:54 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id j6so10198634ejc.13;
-        Thu, 28 Apr 2022 08:19:54 -0700 (PDT)
+        Thu, 28 Apr 2022 11:24:53 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2887B139;
+        Thu, 28 Apr 2022 08:21:38 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e93ff05b23so5453971fac.9;
+        Thu, 28 Apr 2022 08:21:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qS0RYEubj/WEr+tBfiyT1mscJrdXnWl5GKBmmuMBcCc=;
-        b=o7gGmN1K53qTHzZPZiZUP82W+AEVP8i01imwcRltNcX5PTXUy++fSzThNEJUwIWH+t
-         nO5IPCD40xJtBMIxfrH0LZ1ToxqMW3mQVx/Wbua1/udsEiyRxifK0A48RSBjZbxGi80y
-         TIQ2fWQOMRJV64I0ymp1EzgFylizXkv7TW8c0YINfkY5AW2/57TLmq36GzPLQwgaIFfG
-         HbOZ+Jv98cYZ7i7vFBmz/GnzMGfM2LAM7HzBF0Icto7SxE4M8aUaSK2O979dc5A7SqJ+
-         dpjmB3V/gQ0YDTonel66eIWmjAUHCPX1UIsljRbkPLqRiyRr85npkuhG0H7jn66uIf9+
-         LG0w==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OFFg5eQqMiGW3c0oPod8aaqpn3LpIrDy41kx5aDk/iM=;
+        b=XwfsYLOt9M7yYw4ztazXclSKi1ouBEXvSMbufVSaLQBkIHGKYkpTsVw4yqk2x3Kve8
+         NHcKUZXW0OX7hh1MsUxRiXTS6bLXw9sRWBcUMhB7c0tNOBoD9NmFgX8S7hqn6Y1CKWAz
+         XnZoikQBNU4emKbJAbHmSQz7NS3acXKncIfoZmUWUP2LML70i43a2pltBww5aC9CogRQ
+         2gotXAU9wdwrLTHMude+Od4IzngpqmHVw7a3Pffha1XzWVYVDmgmwhUq3P5yg/SDA7cc
+         Lsd0yw+aTZF5mg4cjF6Bei1TYtlSBc+3TfFlqulEueIOcpsCvHrAx5Gsgau1hAAdXCiD
+         h22A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qS0RYEubj/WEr+tBfiyT1mscJrdXnWl5GKBmmuMBcCc=;
-        b=kpclssOIdCMdjYSp8/I4ktErNU7cRXZ2he/rXEunsLKXgkE1NziQ8Mq5hmN/THZ1xx
-         voo008xG48Wo8fdCke7+ugI1gfgX4LFTGqjGLE+i2T04J4N6aePY4JLkDMLLR5stJ8/P
-         HIHZkBIxg/OtKzhZCS/GnerKGKlJ5AFkuQbmJQkf+mdcNcL+ag8qHPqAEKloRIVMiFyx
-         0J6shu7bGXZ/T3HsXW/lqdVfw89fBfl5bTBbTT/aSNjwIMwZk4+GQx73L9zaCnZ8hydb
-         Myc43luyQijjkH9ReYWZOWocHUuH8hlp4hyHrbPM6ivpIFUg6shJ3NtsqBe9H0/iaSxt
-         laoQ==
-X-Gm-Message-State: AOAM5307t+1JpbXh4CCTNlL+kJqo6l974nHNLZBojg4yN9buYJOvGAtz
-        yYIpNjd1YhmUwHL6WVGzFps=
-X-Google-Smtp-Source: ABdhPJy107+0PxRUcY57JeQXLnVh3ZgSwQ9hDo5Ig9/OMcKPwYWANWxK0XlKKHqHHr2jEYKdy/mFZw==
-X-Received: by 2002:a17:907:6284:b0:6e0:f895:15a with SMTP id nd4-20020a170907628400b006e0f895015amr32459790ejc.713.1651159192359;
-        Thu, 28 Apr 2022 08:19:52 -0700 (PDT)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id ao9-20020a170907358900b006f3995f0fe0sm107256ejc.6.2022.04.28.08.19.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 08:19:51 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 17:19:49 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] drm/nvdla: Add driver support for NVDLA
-Message-ID: <YmqwlbLcFgTDUpkX@orome>
-References: <20220426060808.78225-1-cai.huoqing@linux.dev>
- <20220426060808.78225-3-cai.huoqing@linux.dev>
- <YmqwNVoTZZFaIM9S@orome>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OFFg5eQqMiGW3c0oPod8aaqpn3LpIrDy41kx5aDk/iM=;
+        b=K7AMvZnsqzIaVtT9jhnEn0eoopR8iCvzAZCZlqyV+YmhnT14GQ+mwfS9dGBBe18F4P
+         tmBm8IpU2VsSWMGezUc5GJSeOmdZMTN5HHSjuCF2rTGdXWgwqKyRPaY/3a7RgPZaqNUR
+         CP0ve4XDfo+kvfrv/IUFNgmVJgkvPTeyUxQSd2QVTZc2XLIYf97YSd1T+x9PcS1CwQuF
+         uzCWqidDjPM2lKliOSzYHzKHC+bLM6ROdRUNwIUAEMCinL0qY0lrg9kzOygUoCZ9RArY
+         TNkkkMtsbJc0U5LKwr3xnV5XjhPie2VGTlbKOIG1drJKGk2NyXZ191QZ3gj41hma6jyg
+         /p0g==
+X-Gm-Message-State: AOAM5329jdc23L5tlTDVlXsy27pCzRQgz4xBUJb+N4e3hv9sFq/n18cP
+        Ckv/w7mW6MbTY4oUmGlsxX5G83fpWoU=
+X-Google-Smtp-Source: ABdhPJzb3heSphbt/uXkPz4blBLGiN7RNpjXSnFoCcbu3Mj1Y+8AnOa/qQUmko54oggyD4Hahc1VgA==
+X-Received: by 2002:a05:6870:538f:b0:e1:def7:7640 with SMTP id h15-20020a056870538f00b000e1def77640mr13552356oan.34.1651159298273;
+        Thu, 28 Apr 2022 08:21:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e4-20020a0568301e4400b006054dca5442sm82443otj.28.2022.04.28.08.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 08:21:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f8ba6a46-bbdb-b8ba-7b27-d43f2e05426d@roeck-us.net>
+Date:   Thu, 28 Apr 2022 08:21:35 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xJwzd/BOTwcSuCe5"
-Content-Disposition: inline
-In-Reply-To: <YmqwNVoTZZFaIM9S@orome>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] hwmon: (pmbus) add missing definitions of pmbus registers
+Content-Language: en-US
+To:     Adam Wujek <dev_public@wujek.eu>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220428134634.1610241-1-dev_public@wujek.eu>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220428134634.1610241-1-dev_public@wujek.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/28/22 06:46, Adam Wujek wrote:
+> Definitions are taken from the table 31 of the PMBUS specification
+> revision 1.3.1, 13 March 2015.
+> 
 
---xJwzd/BOTwcSuCe5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do you plan to do anything with those registers, or a subset of it ?
 
-On Thu, Apr 28, 2022 at 05:18:13PM +0200, Thierry Reding wrote:
-> On Tue, Apr 26, 2022 at 02:07:59PM +0800, Cai Huoqing wrote:
-> [...]
-> > diff --git a/drivers/gpu/drm/nvdla/nvdla_drv.c b/drivers/gpu/drm/nvdla/=
-nvdla_drv.c
->=20
-> I'll look at this from an architectural level and leave it to other
-> experts to review the more technical things.
->=20
-> [...]
-> > +static struct nvdla_config nvdla_config_os_initial =3D {
-> > +	.atom_size =3D 32,
-> > +	.bdma_enable =3D true,
-> > +	.rubik_enable =3D true,
-> > +	.weight_compress_support =3D true,
-> > +};
-> > +
-> > +static struct nvdla_config nvdla_config_small =3D {
-> > +	//.atom_size =3D 8,
-> > +	.atom_size =3D 32,  // nv_large config
-> > +	.bdma_enable =3D false,
-> > +	.rubik_enable =3D false,
-> > +	.weight_compress_support =3D false,
-> > +};
-> > +
-> [...]
-> > +static union nvdla_operation_container operation_desc[NVDLA_OP_NUM][NV=
-DLA_NUM_GROUPS];
-> > +static union nvdla_surface_container surface_desc[NVDLA_OP_NUM][NVDLA_=
-NUM_GROUPS];
-> > +
-> > +static struct nvdla_task_desc global_task;
-> > +
-> > +static struct nvdla_engine engine =3D {
-> > +	.processors[NVDLA_OP_BDMA] =3D {
-> > +		.name =3D "BDMA",
-> > +		.op_type =3D NVDLA_OP_BDMA,
-> > +		.program =3D nvdla_bdma_program,
-> > +		.enable =3D nvdla_bdma_enable,
-> > +		.set_producer =3D nvdla_bdma_set_producer,
-> > +		.is_ready =3D nvdla_bdma_is_ready,
-> > +		.dump_config =3D nvdla_bdma_dump_config,
-> > +		.rdma_check =3D nvdla_bdma_rdma_check,
-> > +		.consumer_ptr =3D 0,
-> > +		.roi_index =3D 0,
-> > +		.group_status =3D 0,
-> > +		.rdma_status =3D 0,
-> > +		.last_group =3D 1,
-> > +		.groups[0] =3D {
-> > +			.id =3D 0,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_BDMA][0],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_BDMA][0],
-> > +		},
-> > +		.groups[1] =3D {
-> > +			.id =3D 1,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_BDMA][1],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_BDMA][1],
-> > +		},
-> > +	},
-> > +	.processors[NVDLA_OP_CONV] =3D {
-> > +		.name =3D "Convolution",
-> > +		.op_type =3D NVDLA_OP_CONV,
-> > +		.program =3D nvdla_conv_program,
-> > +		.enable =3D nvdla_conv_enable,
-> > +		.set_producer =3D nvdla_conv_set_producer,
-> > +		.is_ready =3D nvdla_conv_is_ready,
-> > +		.dump_config =3D nvdla_conv_dump_config,
-> > +		.rdma_check =3D nvdla_conv_rdma_check,
-> > +		.consumer_ptr =3D 0,
-> > +		.roi_index =3D 0,
-> > +		.group_status =3D 0,
-> > +		.rdma_status =3D 0,
-> > +		.last_group =3D 1,
-> > +		.groups[0] =3D {
-> > +			.id =3D 0,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_CONV][0],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_CONV][0],
-> > +		},
-> > +		.groups[1] =3D {
-> > +			.id =3D 1,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_CONV][1],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_CONV][1],
-> > +		},
-> > +	},
-> > +	.processors[NVDLA_OP_SDP] =3D {
-> > +		.name =3D "SDP",
-> > +		.op_type =3D NVDLA_OP_SDP,
-> > +		.program =3D nvdla_sdp_program,
-> > +		.enable =3D nvdla_sdp_enable,
-> > +		.set_producer =3D nvdla_sdp_set_producer,
-> > +		.is_ready =3D nvdla_sdp_is_ready,
-> > +		.dump_config =3D nvdla_sdp_dump_config,
-> > +		.rdma_check =3D nvdla_sdp_rdma_check,
-> > +		.consumer_ptr =3D 0,
-> > +		.roi_index =3D 0,
-> > +		.group_status =3D 0,
-> > +		.rdma_status =3D 0,
-> > +		.last_group =3D 1,
-> > +		.groups[0] =3D {
-> > +			.id =3D 0,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_SDP][0],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_SDP][0],
-> > +		},
-> > +		.groups[1] =3D {
-> > +			.id =3D 1,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_SDP][1],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_SDP][1],
-> > +		},
-> > +	},
-> > +	.processors[NVDLA_OP_PDP] =3D {
-> > +		.name =3D "PDP",
-> > +		.op_type =3D NVDLA_OP_PDP,
-> > +		.program =3D nvdla_pdp_program,
-> > +		.enable =3D nvdla_pdp_enable,
-> > +		.set_producer =3D nvdla_pdp_set_producer,
-> > +		.is_ready =3D nvdla_pdp_is_ready,
-> > +		.dump_config =3D nvdla_pdp_dump_config,
-> > +		.rdma_check =3D nvdla_pdp_rdma_check,
-> > +		.consumer_ptr =3D 0,
-> > +		.roi_index =3D 0,
-> > +		.group_status =3D 0,
-> > +		.rdma_status =3D 0,
-> > +		.last_group =3D 1,
-> > +		.groups[0] =3D {
-> > +			.id =3D 0,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_PDP][0],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_PDP][0],
-> > +		},
-> > +		.groups[1] =3D {
-> > +			.id =3D 1,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_PDP][1],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_PDP][1],
-> > +		},
-> > +	},
-> > +	.processors[NVDLA_OP_CDP] =3D {
-> > +		.name =3D "CDP",
-> > +		.op_type =3D NVDLA_OP_CDP,
-> > +		.program =3D nvdla_cdp_program,
-> > +		.enable =3D nvdla_cdp_enable,
-> > +		.set_producer =3D nvdla_cdp_set_producer,
-> > +		.is_ready =3D nvdla_cdp_is_ready,
-> > +		.dump_config =3D nvdla_cdp_dump_config,
-> > +		.rdma_check =3D nvdla_cdp_rdma_check,
-> > +		.consumer_ptr =3D 0,
-> > +		.roi_index =3D 0,
-> > +		.group_status =3D 0,
-> > +		.rdma_status =3D 0,
-> > +		.last_group =3D 1,
-> > +		.groups[0] =3D {
-> > +			.id =3D 0,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_CDP][0],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_CDP][0],
-> > +		},
-> > +		.groups[1] =3D {
-> > +			.id =3D 1,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_CDP][1],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_CDP][1],
-> > +		},
-> > +	},
-> > +
-> > +	.processors[NVDLA_OP_RUBIK] =3D {
-> > +		.name =3D "RUBIK",
-> > +		.op_type =3D NVDLA_OP_RUBIK,
-> > +		.program =3D nvdla_rubik_program,
-> > +		.enable =3D nvdla_rubik_enable,
-> > +		.set_producer =3D nvdla_rubik_set_producer,
-> > +		.is_ready =3D nvdla_rubik_is_ready,
-> > +		.dump_config =3D nvdla_rubik_dump_config,
-> > +		.rdma_check =3D nvdla_rubik_rdma_check,
-> > +		.consumer_ptr =3D 0,
-> > +		.roi_index =3D 0,
-> > +		.group_status =3D 0,
-> > +		.rdma_status =3D 0,
-> > +		.last_group =3D 1,
-> > +		.groups[0] =3D {
-> > +			.id =3D 0,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_RUBIK][0],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_RUBIK][0],
-> > +		},
-> > +		.groups[1] =3D {
-> > +			.id =3D 1,
-> > +			.rdma_id =3D 0,
-> > +			.active =3D 0,
-> > +			.events =3D 0,
-> > +			.roi_index =3D 0,
-> > +			.is_rdma_needed =3D 0,
-> > +			.lut_index =3D -1,
-> > +			.operation_desc =3D &operation_desc[NVDLA_OP_RUBIK][1],
-> > +			.surface_desc =3D &surface_desc[NVDLA_OP_RUBIK][1],
-> > +		},
-> > +	},
-> > +
-> > +};
->=20
-> These global variables aren't going to work because Tegra234 (Tegra194's
-> successor) has two instances of NVDLA.
+Guenter
 
-Small correction: I just recalled that even Tegra194 has two DLA
-instances, so if we want both supported we'll need to get rid of those
-global variables for that chip already.
+> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+> ---
+>   drivers/hwmon/pmbus/pmbus.h | 145 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 145 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index e74b6ef070f3..902bb9cce950 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -21,11 +21,29 @@ enum pmbus_regs {
+>   	PMBUS_ON_OFF_CONFIG		= 0x02,
+>   	PMBUS_CLEAR_FAULTS		= 0x03,
+>   	PMBUS_PHASE			= 0x04,
+> +	PMBUS_PAGE_PLUS_WRITE		= 0x05,
+> +	PMBUS_PAGE_PLUS_READ		= 0x06,
+> +	PMBUS_ZONE_CONFIG		= 0x07,
+> +	PMBUS_ZONE_ACTIVE		= 0x08,
+> +
+> +	/* 0x09 - 0x0F are reserved */
+> 
+>   	PMBUS_WRITE_PROTECT		= 0x10,
+> +	PMBUS_STORE_DEFAULT_ALL		= 0x11,
+> +	PMBUS_RESTORE_DEFAULT_ALL	= 0x12,
+> +	PMBUS_STORE_DEFAULT_CODE	= 0x13,
+> +	PMBUS_RESTORE_DEFAULT_CODE	= 0x14,
+> +	PMBUS_STORE_USER_ALL		= 0x15,
+> +	PMBUS_RESTORE_USER_ALL		= 0x16,
+> +	PMBUS_STORE_USER_CODE		= 0x17,
+> +	PMBUS_RESTORE_USER_CODE		= 0x18,
+> 
+>   	PMBUS_CAPABILITY		= 0x19,
+> +
+>   	PMBUS_QUERY			= 0x1A,
+> +	PMBUS_SMBALERT_MASK		= 0x1B,
+> +
+> +	/* 0x1C - 0x1F are reserved */
+> 
+>   	PMBUS_VOUT_MODE			= 0x20,
+>   	PMBUS_VOUT_COMMAND		= 0x21,
+> @@ -38,10 +56,22 @@ enum pmbus_regs {
+>   	PMBUS_VOUT_DROOP		= 0x28,
+>   	PMBUS_VOUT_SCALE_LOOP		= 0x29,
+>   	PMBUS_VOUT_SCALE_MONITOR	= 0x2A,
+> +	PMBUS_VOUT_MIN			= 0x2B,
+> +
+> +	/* 0x2C - 0x2F are reserved */
+> 
+>   	PMBUS_COEFFICIENTS		= 0x30,
+>   	PMBUS_POUT_MAX			= 0x31,
+> 
+> +	PMBUS_MAX_DUTY			= 0x32,
+> +	PMBUS_FREQUENCY_SWITCH		= 0x33,
+> +	PMBUS_POWER_MODE		= 0x34,
+> +	PMBUS_VIN_ON			= 0x35,
+> +	PMBUS_VIN_OFF			= 0x36,
+> +	PMBUS_INTERLEAVE		= 0x37,
+> +	PMBUS_IOUT_CAL_GAIN		= 0x38,
+> +	PMBUS_IOUT_CAL_OFFSET		= 0x39,
+> +
+>   	PMBUS_FAN_CONFIG_12		= 0x3A,
+>   	PMBUS_FAN_COMMAND_1		= 0x3B,
+>   	PMBUS_FAN_COMMAND_2		= 0x3C,
+> @@ -63,6 +93,9 @@ enum pmbus_regs {
+>   	PMBUS_IOUT_UC_FAULT_LIMIT	= 0x4B,
+>   	PMBUS_IOUT_UC_FAULT_RESPONSE	= 0x4C,
+> 
+> +	/* 0x4D is reserved */
+> +	/* 0x4E is reserved */
+> +
+>   	PMBUS_OT_FAULT_LIMIT		= 0x4F,
+>   	PMBUS_OT_FAULT_RESPONSE		= 0x50,
+>   	PMBUS_OT_WARN_LIMIT		= 0x51,
+> @@ -74,14 +107,28 @@ enum pmbus_regs {
+>   	PMBUS_VIN_OV_WARN_LIMIT		= 0x57,
+>   	PMBUS_VIN_UV_WARN_LIMIT		= 0x58,
+>   	PMBUS_VIN_UV_FAULT_LIMIT	= 0x59,
+> +	PMBUS_VIN_UV_FAULT_RESPONSE	= 0x5A,
+> 
+>   	PMBUS_IIN_OC_FAULT_LIMIT	= 0x5B,
+>   	PMBUS_IIN_OC_WARN_LIMIT		= 0x5D,
+> 
+> +	PMBUS_POWER_GOOD_ON		= 0x5E,
+> +	PMBUS_POWER_GOOD_OFF		= 0x5F,
+> +	PMBUS_TON_DELAY			= 0x60,
+> +	PMBUS_TON_RISE			= 0x61,
+> +	PMBUS_TON_MAX_FAULT_LIMIT	= 0x62,
+> +	PMBUS_TON_MAX_FAULT_RESPONSE	= 0x63,
+> +	PMBUS_TOFF_DELAY		= 0x64,
+> +	PMBUS_TOFF_FALL			= 0x65,
+> +	PMBUS_TOFF_MAX_WARN_LIMIT	= 0x66,
+> +	/* 0x67 is reserved (Was Used In PMBUS Revision 1.0) */
+>   	PMBUS_POUT_OP_FAULT_LIMIT	= 0x68,
+> +	PMBUS_POUT_OP_FAULT_RESPONSE	= 0x69,
+>   	PMBUS_POUT_OP_WARN_LIMIT	= 0x6A,
+>   	PMBUS_PIN_OP_WARN_LIMIT		= 0x6B,
+> 
+> +	/* 0x6C - 0x77 are reserved */
+> +
+>   	PMBUS_STATUS_BYTE		= 0x78,
+>   	PMBUS_STATUS_WORD		= 0x79,
+>   	PMBUS_STATUS_VOUT		= 0x7A,
+> @@ -94,6 +141,11 @@ enum pmbus_regs {
+>   	PMBUS_STATUS_FAN_12		= 0x81,
+>   	PMBUS_STATUS_FAN_34		= 0x82,
+> 
+> +	PMBUS_READ_KWH_IN		= 0x83,
+> +	PMBUS_READ_KWH_OUT		= 0x84,
+> +	PMBUS_READ_KWH_CONFIG		= 0x85,
+> +	PMBUS_READ_EIN			= 0x86,
+> +	PMBUS_READ_EOUT			= 0x87,
+>   	PMBUS_READ_VIN			= 0x88,
+>   	PMBUS_READ_IIN			= 0x89,
+>   	PMBUS_READ_VCAP			= 0x8A,
+> @@ -118,6 +170,7 @@ enum pmbus_regs {
+>   	PMBUS_MFR_LOCATION		= 0x9C,
+>   	PMBUS_MFR_DATE			= 0x9D,
+>   	PMBUS_MFR_SERIAL		= 0x9E,
+> +	PMBUS_APP_PROFILE_SUPPORT	= 0x9F,
+> 
+>   	PMBUS_MFR_VIN_MIN		= 0xA0,
+>   	PMBUS_MFR_VIN_MAX		= 0xA1,
+> @@ -128,13 +181,105 @@ enum pmbus_regs {
+>   	PMBUS_MFR_IOUT_MAX		= 0xA6,
+>   	PMBUS_MFR_POUT_MAX		= 0xA7,
+> 
+> +	PMBUS_MFR_TAMBIENT_MAX		= 0xA8,
+> +	PMBUS_MFR_TAMBIENT_MIN		= 0xA9,
+> +	PMBUS_MFR_EFFICIENCY_LL		= 0xAA,
+> +	PMBUS_MFR_EFFICIENCY_HL		= 0xAB,
+> +	PMBUS_MFR_PIN_ACCURACY		= 0xAC,
+> +
+>   	PMBUS_IC_DEVICE_ID		= 0xAD,
+>   	PMBUS_IC_DEVICE_REV		= 0xAE,
+> 
+> +	/* 0xAF is reserved */
+> +
+> +	PMBUS_USER_DATA_00		= 0xB0,
+> +	PMBUS_USER_DATA_01		= 0xB1,
+> +	PMBUS_USER_DATA_02		= 0xB2,
+> +	PMBUS_USER_DATA_03		= 0xB3,
+> +	PMBUS_USER_DATA_04		= 0xB4,
+> +	PMBUS_USER_DATA_05		= 0xB5,
+> +	PMBUS_USER_DATA_06		= 0xB6,
+> +	PMBUS_USER_DATA_07		= 0xB7,
+> +	PMBUS_USER_DATA_08		= 0xB8,
+> +	PMBUS_USER_DATA_09		= 0xB9,
+> +	PMBUS_USER_DATA_10		= 0xBA,
+> +	PMBUS_USER_DATA_11		= 0xBB,
+> +	PMBUS_USER_DATA_12		= 0xBC,
+> +	PMBUS_USER_DATA_13		= 0xBD,
+> +	PMBUS_USER_DATA_14		= 0xBE,
+> +	PMBUS_USER_DATA_15		= 0xBF,
+> +
+>   	PMBUS_MFR_MAX_TEMP_1		= 0xC0,
+>   	PMBUS_MFR_MAX_TEMP_2		= 0xC1,
+>   	PMBUS_MFR_MAX_TEMP_3		= 0xC2,
+> 
+> +	/* 0xC3 is reserved */
+> +
+> +	PMBUS_MFR_SPECIFIC_C4		= 0xC4,
+> +	PMBUS_MFR_SPECIFIC_C5		= 0xC5,
+> +	PMBUS_MFR_SPECIFIC_C6		= 0xC6,
+> +	PMBUS_MFR_SPECIFIC_C7		= 0xC7,
+> +	PMBUS_MFR_SPECIFIC_C8		= 0xC8,
+> +	PMBUS_MFR_SPECIFIC_C9		= 0xC9,
+> +	PMBUS_MFR_SPECIFIC_CA		= 0xCA,
+> +	PMBUS_MFR_SPECIFIC_CB		= 0xCB,
+> +	PMBUS_MFR_SPECIFIC_CC		= 0xCC,
+> +	PMBUS_MFR_SPECIFIC_CD		= 0xCD,
+> +	PMBUS_MFR_SPECIFIC_CE		= 0xCE,
+> +	PMBUS_MFR_SPECIFIC_CF		= 0xCF,
+> +
+> +	PMBUS_MFR_SPECIFIC_D0		= 0xD0,
+> +	PMBUS_MFR_SPECIFIC_D1		= 0xD1,
+> +	PMBUS_MFR_SPECIFIC_D2		= 0xD2,
+> +	PMBUS_MFR_SPECIFIC_D3		= 0xD3,
+> +	PMBUS_MFR_SPECIFIC_D4		= 0xD4,
+> +	PMBUS_MFR_SPECIFIC_D5		= 0xD5,
+> +	PMBUS_MFR_SPECIFIC_D6		= 0xD6,
+> +	PMBUS_MFR_SPECIFIC_D7		= 0xD7,
+> +	PMBUS_MFR_SPECIFIC_D8		= 0xD8,
+> +	PMBUS_MFR_SPECIFIC_D9		= 0xD9,
+> +	PMBUS_MFR_SPECIFIC_DA		= 0xDA,
+> +	PMBUS_MFR_SPECIFIC_DB		= 0xDB,
+> +	PMBUS_MFR_SPECIFIC_DC		= 0xDC,
+> +	PMBUS_MFR_SPECIFIC_DD		= 0xDD,
+> +	PMBUS_MFR_SPECIFIC_DE		= 0xDE,
+> +	PMBUS_MFR_SPECIFIC_DF		= 0xDF,
+> +
+> +	PMBUS_MFR_SPECIFIC_E0		= 0xE0,
+> +	PMBUS_MFR_SPECIFIC_E1		= 0xE1,
+> +	PMBUS_MFR_SPECIFIC_E2		= 0xE2,
+> +	PMBUS_MFR_SPECIFIC_E3		= 0xE3,
+> +	PMBUS_MFR_SPECIFIC_E4		= 0xE4,
+> +	PMBUS_MFR_SPECIFIC_E5		= 0xE5,
+> +	PMBUS_MFR_SPECIFIC_E6		= 0xE6,
+> +	PMBUS_MFR_SPECIFIC_E7		= 0xE7,
+> +	PMBUS_MFR_SPECIFIC_E8		= 0xE8,
+> +	PMBUS_MFR_SPECIFIC_E9		= 0xE9,
+> +	PMBUS_MFR_SPECIFIC_EA		= 0xEA,
+> +	PMBUS_MFR_SPECIFIC_EB		= 0xEB,
+> +	PMBUS_MFR_SPECIFIC_EC		= 0xEC,
+> +	PMBUS_MFR_SPECIFIC_ED		= 0xED,
+> +	PMBUS_MFR_SPECIFIC_EE		= 0xEE,
+> +	PMBUS_MFR_SPECIFIC_EF		= 0xEF,
+> +
+> +	PMBUS_MFR_SPECIFIC_F0		= 0xF0,
+> +	PMBUS_MFR_SPECIFIC_F1		= 0xF1,
+> +	PMBUS_MFR_SPECIFIC_F2		= 0xF2,
+> +	PMBUS_MFR_SPECIFIC_F3		= 0xF3,
+> +	PMBUS_MFR_SPECIFIC_F4		= 0xF4,
+> +	PMBUS_MFR_SPECIFIC_F5		= 0xF5,
+> +	PMBUS_MFR_SPECIFIC_F6		= 0xF6,
+> +	PMBUS_MFR_SPECIFIC_F7		= 0xF7,
+> +	PMBUS_MFR_SPECIFIC_F8		= 0xF8,
+> +	PMBUS_MFR_SPECIFIC_F9		= 0xF9,
+> +	PMBUS_MFR_SPECIFIC_FA		= 0xFA,
+> +	PMBUS_MFR_SPECIFIC_FB		= 0xFB,
+> +	PMBUS_MFR_SPECIFIC_FC		= 0xFC,
+> +	PMBUS_MFR_SPECIFIC_FD		= 0xFD,
+> +
+> +	PMBUS_MFR_SPECIFIC_COMMAND_EXT	= 0xFE,
+> +	PMBUS_COMMAND_EXT		= 0xFF,
+> +
+>   /*
+>    * Virtual registers.
+>    * Useful to support attributes which are not supported by standard PMBus
+> --
+> 2.25.1
+> 
+> 
 
-Thierry
-
---xJwzd/BOTwcSuCe5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmJqsJUACgkQ3SOs138+
-s6Gpgg/9H+U035AscZ+rM3Mw++AKhE951GQ8tIbJxV6LwTW1JahCazVsrOZ/fTPL
-GHMAq5XhOcoyQuolcfAyMu4F9Rb+5TiVVJTfHq0TuA3rVdYeP8czuiY6Bsch0HHM
-ZU4TjTyZL2VMvECeXZfRHWQvU7FCMQ+ms8uKs6cWs5CQNSFF10Ve/FjpistPRv82
-VBDJzD2UUfPA7D41OdMuaQy8z0MrTnksI+H3v50AS8PBaenF7yk0BmK5/km88X+b
-dXrElDAJ1ntH8HrQyntNq+fBPoWiExdz8gXiM0PWMnW1UZRoFKraLrW3FCzl28Uy
-SK5ezIatixWLdpdWfA49LxpBlKPGLoWzHGyQCrTdpFxP8rfRIpuMUtbvFfhYEkNU
-N94Pb28CKyG7eWo+pg5Umc3AlWjsg8LtgC44zDYLnXymVicKHzKFs/RP0Mo6Fj6m
-z+pAYZtgQnSjLqAeIUVTdrJUYgnpQ00MA3Zl1U2nJjBHZgWGyXj71fBOf4v6Ar/c
-o/WoMwSbME87hEtyFzEmQGk95ed2ZlCeNACykyF9ZEPBDv1CprEzZQeDg21tM3Z1
-HaZrHL1U0VFJwLnIkyFYp023OwCPQqQoXgHd3zCyOL4gp1boROMmCQYzxHxBGxeH
-KJ519K56LvO/S0VRWiASqmAK2kDkfWZ15M/tR0BtDImCz4lDJ7Q=
-=KfCd
------END PGP SIGNATURE-----
-
---xJwzd/BOTwcSuCe5--

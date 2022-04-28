@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E17512A1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7036E512A0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242507AbiD1Dow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
+        id S242419AbiD1DnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241797AbiD1Dot (ORCPT
+        with ESMTP id S231929AbiD1DnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:44:49 -0400
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1CE9483B1B;
-        Wed, 27 Apr 2022 20:41:28 -0700 (PDT)
+        Wed, 27 Apr 2022 23:43:00 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFB36FF49;
+        Wed, 27 Apr 2022 20:39:47 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2f7c424c66cso39701947b3.1;
+        Wed, 27 Apr 2022 20:39:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=TkdTGRGgDnMX8EaddtL3uKayHDJt8/TLy89laRtXYrQ=; b=Bs50JvXElikc8
-        7LmlIXOE0aU/NqN9yLGnQ7AyQbt+K2NN295V1n12wk+whZrxyTZmGCSyvpYbUA+J
-        EpGVSO8EL2gioZXhd9aIUOmNF5RKblRXuWkia1AUjYm4UO6JgDTvUbfLFVax2jyd
-        DgaIxXcp0eeL49A+etI6rCR8xIgzs0=
-Received: from localhost.localdomain (unknown [10.102.183.96])
-        by app1 (Coremail) with SMTP id XAUFCgAHsrnPDGpi9qRkEQ--.26115S4;
-        Thu, 28 Apr 2022 11:41:08 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Seth Arnold <seth.arnold@canonical.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] apparmor: fix reference count leak in aa_pivotroot()
-Date:   Thu, 28 Apr 2022 11:39:08 +0800
-Message-Id: <20220428033907.1658-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mihABchek1Eixq9pTsDEvJD+Zdo5A9r3WorbFfIZpzE=;
+        b=diTUXy8/eVt0YaxdFzg9kwj1y5VW3ZYyIAG1VcXLNwlNPGJISgVE10tKvWxYEWuhk2
+         vi1EPHKpghMO6o7uuxgxptKqbBG0EGFz1Psijc+IDqg5IkL48Ri8NSPXOvrobrKtokZx
+         hui3skwT7H99rLlyfEunD6715gz3CiVWjxVlhNeJQcGgxyfbMe6q80utgN/ElepuTkHs
+         R5JbVYXeknk+2GILtar3Z+2a+YVwj/6EOVlqquxwO3yXFoe9eoPV1BYHRvUZxJ3FN92A
+         ciAImVCI51fJAeUxQO2VVn1Q/K1HwIwHU3YE1WM/UY3ts2p1zKj6UDLmRl6Nf/cNEvLT
+         j7+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mihABchek1Eixq9pTsDEvJD+Zdo5A9r3WorbFfIZpzE=;
+        b=1oavkV0Mq5aSOPXB7zb1DXmpPOPQx4hZapucrLTcyjiKM/DzGAyZNDAyYplHn3qiyG
+         j6nMqUvwVyCtwnsRj2jlpQXDth29sxcDF5MRQAEOgdm+0aiI0RCouirk/hEX53jlsLKq
+         AH6iKbPEkcyUOipqtDzTq5mcrbrN4sLct9CdUxFmdtqa3KTIptJAaVit4tLxNfFFpVYQ
+         21JGp2MrDsxWrD1ELAs0bCupvEkBF86ZQAqeHh6FWQ05rISYr1swboGktGyhaMkzzsGo
+         M9zkldUGA9LT2U4f5xbQTo1mbpPBsymz1OWvPoVkbrS1IfyAgzOvnlvDTfAooQ5n/YPv
+         eoQg==
+X-Gm-Message-State: AOAM53178izP0QYXVDdmrnv7cyjP9xYvkLHnxR+n9nYRd8kpLPD24xuX
+        oVDky2JbcikvTvMNpq2a+4On7V6/8Mi+JgTLHAs=
+X-Google-Smtp-Source: ABdhPJz7I6GB+kHu8lN1fpQm1FvM9jKqX1BOGg+joAovqHyJBAjwgZQ/qLAOx3Kk1/UBgKVS9VNdthzKFFV217hUiSo=
+X-Received: by 2002:a0d:cb41:0:b0:2f7:d205:9c99 with SMTP id
+ n62-20020a0dcb41000000b002f7d2059c99mr22457299ywd.417.1651117186852; Wed, 27
+ Apr 2022 20:39:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XAUFCgAHsrnPDGpi9qRkEQ--.26115S4
-X-Coremail-Antispam: 1UD129KBjvdXoWruryruFW5tr4kCFWfGry3Arb_yoWkurc_GF
-        1kZwn5urWUZF1qqF4qkay0gF92934kJr4qga4FkrsrG34Y9a1ayrZxJw1fZry2qw47JF15
-        AFZ3Cr9Iy34xZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbT8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
-        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        WUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUo-BMDUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAQ0KEFKp4-Oj6wAAs1
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220427014004.1992589-1-seanjc@google.com> <20220427014004.1992589-7-seanjc@google.com>
+In-Reply-To: <20220427014004.1992589-7-seanjc@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 28 Apr 2022 11:39:35 +0800
+Message-ID: <CAJhGHyB4RwNekpKNQu_KsGTZCyz2EoZMt0V9+PF=p43EksD_6Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] KVM: Fix multiple races in gfn=>pfn cache refresh
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Mingwei Zhang <mizhang@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aa_pivotroot() function has a reference counting bug in a specific
-path. When aa_replace_current_label() returns on success, the function
-forgets to decrement the reference count of “target”, which is
-increased earlier by build_pivotroot(), causing a reference leak.
+On Wed, Apr 27, 2022 at 7:16 PM Sean Christopherson <seanjc@google.com> wrote:
 
-Fix it by decreasing the refcount of “target” in that path.
+> @@ -159,10 +249,23 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+>
 
-Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
-Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
----
- security/apparmor/mount.c | 1 +
- 1 file changed, 1 insertion(+)
+The following code of refresh_in_progress is somewhat like mutex.
 
-diff --git a/security/apparmor/mount.c b/security/apparmor/mount.c
-index aa6fcfde3051..d0b19ab9137d 100644
---- a/security/apparmor/mount.c
-+++ b/security/apparmor/mount.c
-@@ -718,6 +718,7 @@ int aa_pivotroot(struct aa_label *label, const struct path *old_path,
- 			aa_put_label(target);
- 			goto out;
- 		}
-+		aa_put_label(target);
- 	} else
- 		/* already audited error */
- 		error = PTR_ERR(target);
--- 
-2.25.1
++ mutex_lock(&gpc->refresh_in_progress); // before write_lock_irq(&gpc->lock);
 
+Is it fit for the intention?
+
+Thanks
+Lai
+
+>         write_lock_irq(&gpc->lock);
+>
+> +       /*
+> +        * If another task is refreshing the cache, wait for it to complete.
+> +        * There is no guarantee that concurrent refreshes will see the same
+> +        * gpa, memslots generation, etc..., so they must be fully serialized.
+> +        */
+> +       while (gpc->refresh_in_progress) {
+> +               write_unlock_irq(&gpc->lock);
+> +
+> +               cond_resched();
+> +
+> +               write_lock_irq(&gpc->lock);
+> +       }
+> +       gpc->refresh_in_progress = true;
+> +
+>         old_pfn = gpc->pfn;
+>         old_khva = gpc->khva - offset_in_page(gpc->khva);
+>         old_uhva = gpc->uhva;
+> -       old_valid = gpc->valid;
+>

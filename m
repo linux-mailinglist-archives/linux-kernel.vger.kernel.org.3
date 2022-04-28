@@ -2,284 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89CB5135A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76C75135A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346806AbiD1Nu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S1347666AbiD1Nv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347637AbiD1NuY (ORCPT
+        with ESMTP id S1344676AbiD1NvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:50:24 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F8DB36A7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:47:07 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 13:46:59 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1651153625;
-        bh=WbWcWSbajPELJJ26C0ykUMp/WD4f90MXYySJa76ro14=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
-         Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=FdnbF1rgbWKJHEihIjQBem4OGqHTKtElQ1i49VlwDfBUyxTlrrfbljYl9jAOac0my
-         qXehCNhL9xw/rk0nXyU0oMneUbqp5D7gkZDX8XVk6PvgHwgK2tClr5hdHkkuYj0XtG
-         JibTXlh0rbcZG4fPX+Pb98XSOl5Omv2VWxCkE5bemMB5wrPjknvarlluGSwwTH+PwW
-         ib2eZXVL+GmZcULyF6XtuOKAfeW7NXkxJ8dkTaDctek5zhJ11fiPKDjWpa8dU9u4aF
-         +vtpjJTSY8oSBvHahSlGJmgNQo4a3VQI25Ehp65t/XCULPMJGwMdKz5mlx4Q400RUS
-         t/nJG/BineQ0g==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH] hwmon: (pmbus) add missing definitions of pmbus registers
-Message-ID: <20220428134634.1610241-1-dev_public@wujek.eu>
-Feedback-ID: 23425257:user:proton
+        Thu, 28 Apr 2022 09:51:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C41F49C87;
+        Thu, 28 Apr 2022 06:48:07 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651153684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BRKdot5ttusBTKgjdBbqkbA/kf9Xlr83fTRIj0wkH84=;
+        b=TDVC34fSnSPxzYcINftwPpx5/duIBp2zqhZ+Np9mWNUL0oYWvhRdoBf/AVJSgjszCnJAKk
+        JtpIG2eGXh/BwJUdms03bJ3whjcZbsDcYN2eBeZY3OK2dOE5+DfZe7JezcpDL02cJsylP/
+        XREMKrt+eKlYFQ7HDhiYz41wRLWtQUanqgtU6N1RYVOCu6epwNlfRYvUYCseb0bJIe6p0U
+        uBqhjBhwWauqzZTyd5a7ZAFXdWimCnd67tZxj36aixFyahABpZxiytU2fc7ngNCxlCmiP0
+        HbtJe41fB/HMZx6AlVlRgyREuJ2Ge7F5gZXpzOPwKADXmTTPVjAnu06Kj7JkOg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651153684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BRKdot5ttusBTKgjdBbqkbA/kf9Xlr83fTRIj0wkH84=;
+        b=iSex9BtdxA9VVKGTdcZeKTKYsnoSP0JqXGxVekCncx0EzMDri3nZItgkjhutaLCMDFCwLr
+        BfAMf7EIz+w2j8Aw==
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     Dusty Mabe <dustymabe@redhat.com>, Stefan Roese <sr@denx.de>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Marek Vasut <marex@denx.de>, x86@kernel.org, maz@kernel.org,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: Re: [tip: irq/urgent] PCI/MSI: Mask MSI-X vectors only on success
+In-Reply-To: <87v8uuwhs4.ffs@tglx>
+References: <20211210161025.3287927-1-sr@denx.de>
+ <163948488617.23020.3934435568065766936.tip-bot2@tip-bot2>
+ <Yi9vH2F2OBDprwd8@jpiotrowski-Surface-Book-3>
+ <43418c23-5efd-4d14-706f-f536c504b75a@denx.de>
+ <c4a65b9a-d1e2-bf0d-2519-aac7185931d5@redhat.com>
+ <Yi+lwVRTu8xxi9Gy@jpiotrowski-Surface-Book-3>
+ <Ymj3zzjQ9PwYaX/p@eldamar.lan> <87v8uuwhs4.ffs@tglx>
+Date:   Thu, 28 Apr 2022 15:48:03 +0200
+Message-ID: <87wnf9uxnw.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Definitions are taken from the table 31 of the PMBUS specification
-revision 1.3.1, 13 March 2015.
+On Wed, Apr 27 2022 at 19:35, Thomas Gleixner wrote:
+> On Wed, Apr 27 2022 at 09:59, Salvatore Bonaccorso wrote:
+> XEN guests do not use the common PCI mask/unmask machinery which would
+> unmask the interrupt on request_irq().
+>
+> So I assume that the following happens:
+>
+> Guest                     Hypervisor
+>
+> msix_capabilities_init()
+>         ....
+>         alloc_irq()
+>            xen_magic()  -> alloc_msix_interrupt()
+>                            request_irq()
+>
+>         msix_mask_all() -> trap
+>                              do_magic()
+> request_irq()
+>    unmask()
+>      xen_magic()
+>        unmask_evtchn()  -> do_more_magic()
+>
+> So I assume further that msix_mask_all() actually is able to mask the
+> interrupts in the hardware (ctrl word of the vector table) despite the
+> hypervisor having allocated and requested the interrupt already.
+>
+> Nothing in XEN_HVM handles PCI/MSI[-X] mask/unmask in the guest, so I
+> really have to ask why XEN_HVM does not disable PCI/MSI[-X] masking like
+> XEN_PV does. I can only assume the answer is voodoo...
+>
+> Maybe the XEN people have some more enlightened answers to that.
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
----
- drivers/hwmon/pmbus/pmbus.h | 145 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 145 insertions(+)
+So I was talking to Juergen about this and he agrees, that for the case
+where a XEN HVM guest uses the PIRQ/Eventchannel mechanism PCI/MSI[-X]
+masking should be disabled like it is done for XEN PV.
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index e74b6ef070f3..902bb9cce950 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -21,11 +21,29 @@ enum pmbus_regs {
- =09PMBUS_ON_OFF_CONFIG=09=09=3D 0x02,
- =09PMBUS_CLEAR_FAULTS=09=09=3D 0x03,
- =09PMBUS_PHASE=09=09=09=3D 0x04,
-+=09PMBUS_PAGE_PLUS_WRITE=09=09=3D 0x05,
-+=09PMBUS_PAGE_PLUS_READ=09=09=3D 0x06,
-+=09PMBUS_ZONE_CONFIG=09=09=3D 0x07,
-+=09PMBUS_ZONE_ACTIVE=09=09=3D 0x08,
-+
-+=09/* 0x09 - 0x0F are reserved */
+Why the hypervisor grants the mask write is still mysterious, but I
+leave that to the folks who can master the XEN voodoo.
 
- =09PMBUS_WRITE_PROTECT=09=09=3D 0x10,
-+=09PMBUS_STORE_DEFAULT_ALL=09=09=3D 0x11,
-+=09PMBUS_RESTORE_DEFAULT_ALL=09=3D 0x12,
-+=09PMBUS_STORE_DEFAULT_CODE=09=3D 0x13,
-+=09PMBUS_RESTORE_DEFAULT_CODE=09=3D 0x14,
-+=09PMBUS_STORE_USER_ALL=09=09=3D 0x15,
-+=09PMBUS_RESTORE_USER_ALL=09=09=3D 0x16,
-+=09PMBUS_STORE_USER_CODE=09=09=3D 0x17,
-+=09PMBUS_RESTORE_USER_CODE=09=09=3D 0x18,
+I'll send out a patch in minute.
 
- =09PMBUS_CAPABILITY=09=09=3D 0x19,
-+
- =09PMBUS_QUERY=09=09=09=3D 0x1A,
-+=09PMBUS_SMBALERT_MASK=09=09=3D 0x1B,
-+
-+=09/* 0x1C - 0x1F are reserved */
+Thanks,
 
- =09PMBUS_VOUT_MODE=09=09=09=3D 0x20,
- =09PMBUS_VOUT_COMMAND=09=09=3D 0x21,
-@@ -38,10 +56,22 @@ enum pmbus_regs {
- =09PMBUS_VOUT_DROOP=09=09=3D 0x28,
- =09PMBUS_VOUT_SCALE_LOOP=09=09=3D 0x29,
- =09PMBUS_VOUT_SCALE_MONITOR=09=3D 0x2A,
-+=09PMBUS_VOUT_MIN=09=09=09=3D 0x2B,
-+
-+=09/* 0x2C - 0x2F are reserved */
-
- =09PMBUS_COEFFICIENTS=09=09=3D 0x30,
- =09PMBUS_POUT_MAX=09=09=09=3D 0x31,
-
-+=09PMBUS_MAX_DUTY=09=09=09=3D 0x32,
-+=09PMBUS_FREQUENCY_SWITCH=09=09=3D 0x33,
-+=09PMBUS_POWER_MODE=09=09=3D 0x34,
-+=09PMBUS_VIN_ON=09=09=09=3D 0x35,
-+=09PMBUS_VIN_OFF=09=09=09=3D 0x36,
-+=09PMBUS_INTERLEAVE=09=09=3D 0x37,
-+=09PMBUS_IOUT_CAL_GAIN=09=09=3D 0x38,
-+=09PMBUS_IOUT_CAL_OFFSET=09=09=3D 0x39,
-+
- =09PMBUS_FAN_CONFIG_12=09=09=3D 0x3A,
- =09PMBUS_FAN_COMMAND_1=09=09=3D 0x3B,
- =09PMBUS_FAN_COMMAND_2=09=09=3D 0x3C,
-@@ -63,6 +93,9 @@ enum pmbus_regs {
- =09PMBUS_IOUT_UC_FAULT_LIMIT=09=3D 0x4B,
- =09PMBUS_IOUT_UC_FAULT_RESPONSE=09=3D 0x4C,
-
-+=09/* 0x4D is reserved */
-+=09/* 0x4E is reserved */
-+
- =09PMBUS_OT_FAULT_LIMIT=09=09=3D 0x4F,
- =09PMBUS_OT_FAULT_RESPONSE=09=09=3D 0x50,
- =09PMBUS_OT_WARN_LIMIT=09=09=3D 0x51,
-@@ -74,14 +107,28 @@ enum pmbus_regs {
- =09PMBUS_VIN_OV_WARN_LIMIT=09=09=3D 0x57,
- =09PMBUS_VIN_UV_WARN_LIMIT=09=09=3D 0x58,
- =09PMBUS_VIN_UV_FAULT_LIMIT=09=3D 0x59,
-+=09PMBUS_VIN_UV_FAULT_RESPONSE=09=3D 0x5A,
-
- =09PMBUS_IIN_OC_FAULT_LIMIT=09=3D 0x5B,
- =09PMBUS_IIN_OC_WARN_LIMIT=09=09=3D 0x5D,
-
-+=09PMBUS_POWER_GOOD_ON=09=09=3D 0x5E,
-+=09PMBUS_POWER_GOOD_OFF=09=09=3D 0x5F,
-+=09PMBUS_TON_DELAY=09=09=09=3D 0x60,
-+=09PMBUS_TON_RISE=09=09=09=3D 0x61,
-+=09PMBUS_TON_MAX_FAULT_LIMIT=09=3D 0x62,
-+=09PMBUS_TON_MAX_FAULT_RESPONSE=09=3D 0x63,
-+=09PMBUS_TOFF_DELAY=09=09=3D 0x64,
-+=09PMBUS_TOFF_FALL=09=09=09=3D 0x65,
-+=09PMBUS_TOFF_MAX_WARN_LIMIT=09=3D 0x66,
-+=09/* 0x67 is reserved (Was Used In PMBUS Revision 1.0) */
- =09PMBUS_POUT_OP_FAULT_LIMIT=09=3D 0x68,
-+=09PMBUS_POUT_OP_FAULT_RESPONSE=09=3D 0x69,
- =09PMBUS_POUT_OP_WARN_LIMIT=09=3D 0x6A,
- =09PMBUS_PIN_OP_WARN_LIMIT=09=09=3D 0x6B,
-
-+=09/* 0x6C - 0x77 are reserved */
-+
- =09PMBUS_STATUS_BYTE=09=09=3D 0x78,
- =09PMBUS_STATUS_WORD=09=09=3D 0x79,
- =09PMBUS_STATUS_VOUT=09=09=3D 0x7A,
-@@ -94,6 +141,11 @@ enum pmbus_regs {
- =09PMBUS_STATUS_FAN_12=09=09=3D 0x81,
- =09PMBUS_STATUS_FAN_34=09=09=3D 0x82,
-
-+=09PMBUS_READ_KWH_IN=09=09=3D 0x83,
-+=09PMBUS_READ_KWH_OUT=09=09=3D 0x84,
-+=09PMBUS_READ_KWH_CONFIG=09=09=3D 0x85,
-+=09PMBUS_READ_EIN=09=09=09=3D 0x86,
-+=09PMBUS_READ_EOUT=09=09=09=3D 0x87,
- =09PMBUS_READ_VIN=09=09=09=3D 0x88,
- =09PMBUS_READ_IIN=09=09=09=3D 0x89,
- =09PMBUS_READ_VCAP=09=09=09=3D 0x8A,
-@@ -118,6 +170,7 @@ enum pmbus_regs {
- =09PMBUS_MFR_LOCATION=09=09=3D 0x9C,
- =09PMBUS_MFR_DATE=09=09=09=3D 0x9D,
- =09PMBUS_MFR_SERIAL=09=09=3D 0x9E,
-+=09PMBUS_APP_PROFILE_SUPPORT=09=3D 0x9F,
-
- =09PMBUS_MFR_VIN_MIN=09=09=3D 0xA0,
- =09PMBUS_MFR_VIN_MAX=09=09=3D 0xA1,
-@@ -128,13 +181,105 @@ enum pmbus_regs {
- =09PMBUS_MFR_IOUT_MAX=09=09=3D 0xA6,
- =09PMBUS_MFR_POUT_MAX=09=09=3D 0xA7,
-
-+=09PMBUS_MFR_TAMBIENT_MAX=09=09=3D 0xA8,
-+=09PMBUS_MFR_TAMBIENT_MIN=09=09=3D 0xA9,
-+=09PMBUS_MFR_EFFICIENCY_LL=09=09=3D 0xAA,
-+=09PMBUS_MFR_EFFICIENCY_HL=09=09=3D 0xAB,
-+=09PMBUS_MFR_PIN_ACCURACY=09=09=3D 0xAC,
-+
- =09PMBUS_IC_DEVICE_ID=09=09=3D 0xAD,
- =09PMBUS_IC_DEVICE_REV=09=09=3D 0xAE,
-
-+=09/* 0xAF is reserved */
-+
-+=09PMBUS_USER_DATA_00=09=09=3D 0xB0,
-+=09PMBUS_USER_DATA_01=09=09=3D 0xB1,
-+=09PMBUS_USER_DATA_02=09=09=3D 0xB2,
-+=09PMBUS_USER_DATA_03=09=09=3D 0xB3,
-+=09PMBUS_USER_DATA_04=09=09=3D 0xB4,
-+=09PMBUS_USER_DATA_05=09=09=3D 0xB5,
-+=09PMBUS_USER_DATA_06=09=09=3D 0xB6,
-+=09PMBUS_USER_DATA_07=09=09=3D 0xB7,
-+=09PMBUS_USER_DATA_08=09=09=3D 0xB8,
-+=09PMBUS_USER_DATA_09=09=09=3D 0xB9,
-+=09PMBUS_USER_DATA_10=09=09=3D 0xBA,
-+=09PMBUS_USER_DATA_11=09=09=3D 0xBB,
-+=09PMBUS_USER_DATA_12=09=09=3D 0xBC,
-+=09PMBUS_USER_DATA_13=09=09=3D 0xBD,
-+=09PMBUS_USER_DATA_14=09=09=3D 0xBE,
-+=09PMBUS_USER_DATA_15=09=09=3D 0xBF,
-+
- =09PMBUS_MFR_MAX_TEMP_1=09=09=3D 0xC0,
- =09PMBUS_MFR_MAX_TEMP_2=09=09=3D 0xC1,
- =09PMBUS_MFR_MAX_TEMP_3=09=09=3D 0xC2,
-
-+=09/* 0xC3 is reserved */
-+
-+=09PMBUS_MFR_SPECIFIC_C4=09=09=3D 0xC4,
-+=09PMBUS_MFR_SPECIFIC_C5=09=09=3D 0xC5,
-+=09PMBUS_MFR_SPECIFIC_C6=09=09=3D 0xC6,
-+=09PMBUS_MFR_SPECIFIC_C7=09=09=3D 0xC7,
-+=09PMBUS_MFR_SPECIFIC_C8=09=09=3D 0xC8,
-+=09PMBUS_MFR_SPECIFIC_C9=09=09=3D 0xC9,
-+=09PMBUS_MFR_SPECIFIC_CA=09=09=3D 0xCA,
-+=09PMBUS_MFR_SPECIFIC_CB=09=09=3D 0xCB,
-+=09PMBUS_MFR_SPECIFIC_CC=09=09=3D 0xCC,
-+=09PMBUS_MFR_SPECIFIC_CD=09=09=3D 0xCD,
-+=09PMBUS_MFR_SPECIFIC_CE=09=09=3D 0xCE,
-+=09PMBUS_MFR_SPECIFIC_CF=09=09=3D 0xCF,
-+
-+=09PMBUS_MFR_SPECIFIC_D0=09=09=3D 0xD0,
-+=09PMBUS_MFR_SPECIFIC_D1=09=09=3D 0xD1,
-+=09PMBUS_MFR_SPECIFIC_D2=09=09=3D 0xD2,
-+=09PMBUS_MFR_SPECIFIC_D3=09=09=3D 0xD3,
-+=09PMBUS_MFR_SPECIFIC_D4=09=09=3D 0xD4,
-+=09PMBUS_MFR_SPECIFIC_D5=09=09=3D 0xD5,
-+=09PMBUS_MFR_SPECIFIC_D6=09=09=3D 0xD6,
-+=09PMBUS_MFR_SPECIFIC_D7=09=09=3D 0xD7,
-+=09PMBUS_MFR_SPECIFIC_D8=09=09=3D 0xD8,
-+=09PMBUS_MFR_SPECIFIC_D9=09=09=3D 0xD9,
-+=09PMBUS_MFR_SPECIFIC_DA=09=09=3D 0xDA,
-+=09PMBUS_MFR_SPECIFIC_DB=09=09=3D 0xDB,
-+=09PMBUS_MFR_SPECIFIC_DC=09=09=3D 0xDC,
-+=09PMBUS_MFR_SPECIFIC_DD=09=09=3D 0xDD,
-+=09PMBUS_MFR_SPECIFIC_DE=09=09=3D 0xDE,
-+=09PMBUS_MFR_SPECIFIC_DF=09=09=3D 0xDF,
-+
-+=09PMBUS_MFR_SPECIFIC_E0=09=09=3D 0xE0,
-+=09PMBUS_MFR_SPECIFIC_E1=09=09=3D 0xE1,
-+=09PMBUS_MFR_SPECIFIC_E2=09=09=3D 0xE2,
-+=09PMBUS_MFR_SPECIFIC_E3=09=09=3D 0xE3,
-+=09PMBUS_MFR_SPECIFIC_E4=09=09=3D 0xE4,
-+=09PMBUS_MFR_SPECIFIC_E5=09=09=3D 0xE5,
-+=09PMBUS_MFR_SPECIFIC_E6=09=09=3D 0xE6,
-+=09PMBUS_MFR_SPECIFIC_E7=09=09=3D 0xE7,
-+=09PMBUS_MFR_SPECIFIC_E8=09=09=3D 0xE8,
-+=09PMBUS_MFR_SPECIFIC_E9=09=09=3D 0xE9,
-+=09PMBUS_MFR_SPECIFIC_EA=09=09=3D 0xEA,
-+=09PMBUS_MFR_SPECIFIC_EB=09=09=3D 0xEB,
-+=09PMBUS_MFR_SPECIFIC_EC=09=09=3D 0xEC,
-+=09PMBUS_MFR_SPECIFIC_ED=09=09=3D 0xED,
-+=09PMBUS_MFR_SPECIFIC_EE=09=09=3D 0xEE,
-+=09PMBUS_MFR_SPECIFIC_EF=09=09=3D 0xEF,
-+
-+=09PMBUS_MFR_SPECIFIC_F0=09=09=3D 0xF0,
-+=09PMBUS_MFR_SPECIFIC_F1=09=09=3D 0xF1,
-+=09PMBUS_MFR_SPECIFIC_F2=09=09=3D 0xF2,
-+=09PMBUS_MFR_SPECIFIC_F3=09=09=3D 0xF3,
-+=09PMBUS_MFR_SPECIFIC_F4=09=09=3D 0xF4,
-+=09PMBUS_MFR_SPECIFIC_F5=09=09=3D 0xF5,
-+=09PMBUS_MFR_SPECIFIC_F6=09=09=3D 0xF6,
-+=09PMBUS_MFR_SPECIFIC_F7=09=09=3D 0xF7,
-+=09PMBUS_MFR_SPECIFIC_F8=09=09=3D 0xF8,
-+=09PMBUS_MFR_SPECIFIC_F9=09=09=3D 0xF9,
-+=09PMBUS_MFR_SPECIFIC_FA=09=09=3D 0xFA,
-+=09PMBUS_MFR_SPECIFIC_FB=09=09=3D 0xFB,
-+=09PMBUS_MFR_SPECIFIC_FC=09=09=3D 0xFC,
-+=09PMBUS_MFR_SPECIFIC_FD=09=09=3D 0xFD,
-+
-+=09PMBUS_MFR_SPECIFIC_COMMAND_EXT=09=3D 0xFE,
-+=09PMBUS_COMMAND_EXT=09=09=3D 0xFF,
-+
- /*
-  * Virtual registers.
-  * Useful to support attributes which are not supported by standard PMBus
---
-2.25.1
-
-
+        tglx

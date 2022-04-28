@@ -2,165 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71478513E08
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63698513E15
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352676AbiD1VxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 17:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S1352922AbiD1VyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 17:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352703AbiD1Vww (ORCPT
+        with ESMTP id S1352489AbiD1Vxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 17:52:52 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D5DC42D0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:49:18 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id g16so2877842lja.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+PxAAmkjgu5tODqXDwsgtMxyhrqsec+04FO6jxzyCcc=;
-        b=EgMf4wGlKR2P4qmTIR+eqAHCPohzmdgt/qhnbyKZ4lDdOt7a2A7KkIvmRUYj3ORv/2
-         ctRYHxbEdH2bVz9z7jidHdTMqxGWNNbHKkOcq1JPkBTDkr2KywCmhFn1VIhFj07TRW0J
-         tO44QxZ/hvGFifP6BvM1SsRBXK/Wpt80VuD+LYMULc1NK5J4u7qRHmwTQNRCnIocu6oc
-         2gc0M+ITg74EzCn09TOpQVb2U+Eg/vp0XIn+OY99YAqNaTSkV7FhpYDzkZpuRwvbIak7
-         cDYVACnvJB9wBAtQ/uz0O8N7txvXwNncqCpkJsJ7hXYhVonAw0nwosMtUU0Un9iCH/TS
-         8wDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+PxAAmkjgu5tODqXDwsgtMxyhrqsec+04FO6jxzyCcc=;
-        b=GLh/Z8VlI4N+lOCk2Decn8ny82HJGJZyqpvTaQDjzE2dYAdtHVCclF1QJtAWGrpcVI
-         xU4iiadPKE/QW3l6LGnbclUEwF6SgKoRHjbRPJ86XJ52vPK16zdi0Gv1LirRVzRLE+kh
-         FP1WSP4u1rSmClSbtrNm1PMEmPO/3pAcq082r3uyAf0yeHbA6G0HkQYeSkTG1A5r3D5T
-         1ASoTG3U+lvQfiRDfx1vt5Hnz7+fCPYP07Lhn4K04pVSXf7B8VKaywfhND5ecvkm6XAV
-         lCTcW47W649veflN5a9PkI+RPHZi9fTxemmuRh+x0G2fiR80NMSqBR9xU7hFT++uWCB8
-         N0dA==
-X-Gm-Message-State: AOAM53242uAaTEQjj0rU6g6CUq9JPf4VOUCojARdEUdNSZ1Y1hwGEENB
-        a0gUCqNoSx+shGvV+NhT7/SZqXVdUv6T192LYahPrxffCVE=
-X-Google-Smtp-Source: ABdhPJxeDVaq0Pvja4JeHCOk2oQ2ZlUxjPVKsJFApZLIQJQHRDw1GXu/scJSktw+wQosBxZQ2bpqpujznJscwVBecOQ=
-X-Received: by 2002:a2e:854b:0:b0:24f:b98:e2d2 with SMTP id
- u11-20020a2e854b000000b0024f0b98e2d2mr17407442ljj.165.1651182556685; Thu, 28
- Apr 2022 14:49:16 -0700 (PDT)
+        Thu, 28 Apr 2022 17:53:32 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4472D261
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1651182605; x=1682718605;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cyLVSk6BbZwyGjjwD1EPGCFpNeRSIZ2G598CAEec1yg=;
+  b=M1xb3O8GAJlXui8/87w44VDIPMunyX4ij9YIvgCbTB8X56LAtOnB4z4K
+   /tgBrYJgaIYq0c1ETln7O75bBIURfpelE+GvoQHVfMTJrSUMFYTFFvbgM
+   LUc4cVg/BuQBvyjUyZ79KUG0vqGwAaBlQ5Pg14ABUuPi+6Ud1JRgaVHMg
+   dr0Dkm7u4jf35/c9GE/Slc0UI2XF6GDXBAYMYGWc6Wz1NubXF/Y26rhwt
+   +RKsPSYIgNYA1MEVTKyDcHoF3yvBTGfTeqgtHbfsOsKWUCaC9LoxxLGlO
+   uaT62TmUvP8EcKhnpJJLkr6HeYVMPvb2M1z7khYF6SJpC17Q9ItzHTm+3
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,296,1647273600"; 
+   d="scan'208";a="203971442"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Apr 2022 05:49:38 +0800
+IronPort-SDR: P+tqUCUlZ8sKBTrnJkt+FNGldhEUYnDn9jDBo2Chor/7YMmwuMejb4Pkw2V9hkj/m/v3bf7gbs
+ oCGzlBxiBQ/m0+zwlZh9ivb5/oKkQlvFslNWYfmszbdiWre36K6wvebI1MAGR/CU9az4Q9N+As
+ eQ8dDcPXUDvz8uiu7AG+DmfhEMSkHltkuZ1YTt57kVnBqfbsVQY2gOvFifbVZBWyaBl4GqJSfW
+ XWlxUQHycuHB6ZyZrWs/M1C2JvlBeWOMb3Ea6UdTyvH1AdRH6kxfL5rryn/DteOqy0BRpe1aJT
+ U8uhRMmuaQfyUAgK7vvhMEb+
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Apr 2022 14:19:48 -0700
+IronPort-SDR: 8NpgWwhAT84AXx+aP0JX3krEqnaL+qDyTmW6CdQ2QD42srG+3GB/m8wockfjhnNWUHmH4BrHQP
+ 1g3wet/PnhPQurh6WXOPTLkcjTVnnIm8CPdqgpFfXrXstyeKD9L5IpxXM21FhwOZMn5O44XXZz
+ OKDNDHMDtu/P10+SnMmsAFs/Uiwe7ww4/NoVGX15Rb7rIJRL8Q1rA2XWuTM6kFwjcRgIi1RyCy
+ 2iv9ClPlcQHolx0ex84lWdBdfWFKZn8iTJjmGgphSopRHrz17Rz5zwzL7eroChZCLh7JggX4oi
+ ymY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Apr 2022 14:49:40 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kq8R75W12z1Rvlx
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:49:39 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1651182578; x=1653774579; bh=cyLVSk6BbZwyGjjwD1EPGCFpNeRSIZ2G598
+        CAEec1yg=; b=WwDx6zjd5KL3eBUwwa0frNLPJfE5RvQ5zQDMlt1v+brK+CSfEOM
+        AwrfKkAoj2MBEg6wPs2KU3cJ8RSuEjUUfxJA/SnSSyFA0auCwS8BShF8Rbde2kZt
+        F/4slST/ipXIa+YYgpBZD6WGrhaVTjjKv0mIiW+HQG2XMJl7BpdYBUrEDvL2VHLv
+        OVhzsmUWCuQAL8m1VmKZeCeUWiXVI61R1ZfdjxD4e1pIAEdOCsLHVPrXFurRHvrK
+        IsiOGhM4lfUwCPBepH8wbdpUuGAD3BpaImFC+lb69DkA3rJxyldi/EA6SbDqlURe
+        uqC0i0yoxJWPS5tpYnGwaGc29HA02pISISQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZLUQy2nylIqD for <linux-kernel@vger.kernel.org>;
+        Thu, 28 Apr 2022 14:49:38 -0700 (PDT)
+Received: from [10.225.163.27] (unknown [10.225.163.27])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kq8R21lmLz1Rvlc;
+        Thu, 28 Apr 2022 14:49:34 -0700 (PDT)
+Message-ID: <a68a2d40-dff4-bac6-bb05-57c5c88af66e@opensource.wdc.com>
+Date:   Fri, 29 Apr 2022 06:49:32 +0900
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org> <20220424190811.1678416-25-masahiroy@kernel.org>
-In-Reply-To: <20220424190811.1678416-25-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 28 Apr 2022 14:49:04 -0700
-Message-ID: <CAKwvOdkJJnJt_jj_1n6QP31UoTqcS5aVUYAExdR8wY61EmRDFQ@mail.gmail.com>
-Subject: Re: [PATCH 24/27] modpost: generate linker script to collect symbol versions
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 12/16] zonefs: allow non power of 2 zoned devices
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, jaegeuk@kernel.org,
+        axboe@kernel.dk, snitzer@kernel.org, hch@lst.de, mcgrof@kernel.org,
+        naohiro.aota@wdc.com, sagi@grimberg.me, dsterba@suse.com,
+        johannes.thumshirn@wdc.com
+Cc:     linux-kernel@vger.kernel.org, clm@fb.com, gost.dev@samsung.com,
+        chao@kernel.org, josef@toxicpanda.com, jonathan.derrick@linux.dev,
+        agk@redhat.com, kbusch@kernel.org, kch@nvidia.com,
+        linux-nvme@lists.infradead.org, bvanassche@acm.org,
+        jiangbo.365@bytedance.com, linux-fsdevel@vger.kernel.org,
+        matias.bjorling@wdc.com, linux-block@vger.kernel.org
+References: <20220427160255.300418-1-p.raghav@samsung.com>
+ <CGME20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44@eucas1p2.samsung.com>
+ <20220427160255.300418-13-p.raghav@samsung.com>
+ <bfc1ddc3-5db3-6879-b6ab-210a00b82c6b@opensource.wdc.com>
+ <c490bd45-deab-8c2b-151c-c8db9f97e10c@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <c490bd45-deab-8c2b-151c-c8db9f97e10c@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Merge version CRCs per vmlinux or per module.
->
-> These linker scripts will be fed to the final link stage.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  .gitignore            |  1 +
->  Makefile              |  1 +
->  scripts/mod/modpost.c | 27 +++++++++++++++++++++++++++
->  3 files changed, 29 insertions(+)
->
-> diff --git a/.gitignore b/.gitignore
-> index 265959544978..f9dad6b917e6 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -42,6 +42,7 @@
->  *.so.dbg
->  *.su
->  *.symtypes
-> +*.symver.lds
->  *.symversions
->  *.tab.[ch]
->  *.tar
-> diff --git a/Makefile b/Makefile
-> index 235d68fa1470..0779db3d1c0c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1859,6 +1859,7 @@ clean: $(clean-dirs)
->                 -o -name '*.c.[012]*.*' \
->                 -o -name '*.ll' \
->                 -o -name '*.gcno' \
-> +               -o -name '*.symver.lds' \
->                 -o -name '*.*.symversions' \) -type f -print | xargs rm -f
->
->  # Generate tags for editors
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 43ab4f000ae3..ef779ada04c6 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2577,6 +2577,30 @@ static void write_dump(const char *fname)
->         free(buf.p);
->  }
->
-> +static void write_symversions_lds(struct module *mod)
-> +{
-> +       struct buffer buf = { };
-> +       struct symbol *sym;
-> +       char lds_file[PATH_MAX];
-> +       int ret;
-> +
-> +       ret = snprintf(lds_file, sizeof(lds_file), "%s.symver.lds", mod->name);
-> +       if (ret >= sizeof(lds_file)) {
-> +               error("%s: too long path was truncated\n", lds_file);
-> +               return;
+On 4/29/22 00:54, Pankaj Raghav wrote:
+> On 2022-04-28 01:39, Damien Le Moal wrote:
+>> On 4/28/22 01:02, Pankaj Raghav wrote:
+>>> The zone size shift variable is useful only if the zone sizes are known
+>>> to be power of 2. Remove that variable and use generic helpers from
+>>> block layer to calculate zone index in zonefs
+>>
+>> Period missing at the end of the sentence.
+>>
+> Ack
+>> What about zonefs-tools and its test suite ? Is everything still OK on
+>> that front ? I suspect not...
+>>
+> I don't know why you assume that :). Zonefs had only one place that had
+> the assumption of po2 zsze sectors:
+> if (nr_zones < dev.nr_zones) {
+> 	size_t runt_sectors = dev.capacity & (dev.zone_nr_sectors - 1);
+> 
+> In my local tree I changed it and I was able to run zonefs tests for non
+> po2 zone device. I have also mentioned it in my cover letter:
+> ```
+> ZoneFS:
+> zonefs-tests.sh from zonefs-tools were run with no failures.
+> ```
 
-If this exceptional case occurs, we should probably halt or return an
-error code to main?
+This is still not convincing given the code I saw. Additional test cases
+need to be added with data verification & concurrent regular writes also
+sent while doing copy to verify locking.
 
-> +       }
-> +
-> +       list_for_each_entry(sym, &mod->exported_symbols, list) {
-> +               if (!sym->crc_valid)
-> +                       continue;
-> +
-> +               buf_printf(&buf, "__crc_%s = 0x%08x;\n", sym->name, sym->crc);
-> +       }
-> +
-> +       write_if_changed(&buf, lds_file);
-> +       free(buf.p);
-> +}
-> +
->  static void write_namespace_deps_files(const char *fname)
->  {
->         struct module *mod;
-> @@ -2673,6 +2697,9 @@ int main(int argc, char **argv)
->                 char fname[PATH_MAX];
->                 int ret;
->
-> +               if (modversions && !mod->from_dump)
-> +                       write_symversions_lds(mod);
-> +
->                 if (mod->is_vmlinux || mod->from_dump)
->                         continue;
->
-> --
-> 2.32.0
->
+Which also reminds me that I have not seen any change to mq-deadline zone
+write locking for this series. What is the assumption ? That users should
+not be issuing writes when a copy is on-going ? What a bout the reverse
+case ? at the very least, it seems that blk_issue_copy() should be taking
+the zone write lock.
+
+> I will make sure to add my private tree for zonefs in my cover letter in
+> the next rev. But even without that change, a typical emulated npo2
+> device should work fine because the changes are applicable only for
+> "runt" zones.
 
 
 -- 
-Thanks,
-~Nick Desaulniers
+Damien Le Moal
+Western Digital Research

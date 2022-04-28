@@ -2,65 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D95513001
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4254D513014
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344970AbiD1JbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S1347179AbiD1JaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346967AbiD1J2P (ORCPT
+        with ESMTP id S1347018AbiD1J2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:28:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658BE7C148
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pAUQNOu/Xvx7sFYGMIzT4ewYo8Q7kV8gZxOmlw0y+YM=; b=jqnHwtfwPzIMOxRJieRwoVN/LW
-        /DxvM9UQ768YHGbiJBLdVw9xqqWNmPGGbOcxAgDHztVX04XSnvNkIhMBzhxEzVn5XBaLXtbcE4toA
-        05ALgAGxnAIh4J0a37Q2e+i3/wF6PFpmt0GPpUPtb5t56uL4XEg2BhC5lrS9f3Ot1gCnlPooNreNv
-        v36cre5Gr3G2xyncU0RmtlhIlIuEDsnrjstUTxcQJfnJuwBPo5jdDc3kUzTFz4OL8wjB/8M1G2MJr
-        V8fKp5e7NNXwKN0Efbbru9omO9wpAitwKm6jEiKHaR6HfhFaCg7ws6DZMYhxObotHq9+3nwDgd2E4
-        qh7gWbuQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nk0OF-009JKd-N5; Thu, 28 Apr 2022 09:24:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D7B51300C88;
-        Thu, 28 Apr 2022 11:24:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B93B22029F872; Thu, 28 Apr 2022 11:24:45 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 11:24:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jun Miao <jun.miao@intel.com>
-Cc:     elver@google.com, dvyukov@google.com, ryabinin.a.a@gmail.com,
-        bigeasy@linutronix.de, qiang1.zhang@intel.com,
-        andreyknvl@gmail.com, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [PATCH v2] irq_work: Make irq_work_queue_on() NMI-safe again
-Message-ID: <YmpdXfJswI9rlG3w@hirez.programming.kicks-ass.net>
-References: <20220427135549.20901-1-jun.miao@intel.com>
+        Thu, 28 Apr 2022 05:28:46 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAD67C795;
+        Thu, 28 Apr 2022 02:25:30 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0CAC7240008;
+        Thu, 28 Apr 2022 09:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651137929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HMLva4/g7+wAMx0LKhwNxH51lXYsvGGHAJATfjO0pGs=;
+        b=YPR4woGd2LbLPt23lAH82e2KSKHFmuR/RTpRojKTgNtF6wKuUygUbjYuS1XrGiaflxm9uc
+        JqhnwEiKfOLQERiERPTe+1//P5XkUcVgAPMfGLe/XO65agC9qinxS1MjW7i0jhYnbKpq1i
+        OpQ+VZRDpBnqLKyzY6iW7qdNVD1xaLQ0eOSwSXzJ8ufZFrL0eh69DNdIVZnIyk5XjbgmO0
+        K4hsoMazXZDhiruoFoQvpLvWWIiBHUmMbhk7M0iAehbFw+89OrK+zdZwYDNTM5VkQ9KBr2
+        L1tLpfgombKHZ1Q+/bEmGbmWT3hMaGmog8dBREZomFQvwOl55m58BEwh0imf3Q==
+Date:   Thu, 28 Apr 2022 11:25:26 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v3 4/8] soc: renesas: rzn1: Select PM and
+ PM_GENERIC_DOMAINS configs
+Message-ID: <20220428112526.3b55555b@bootlin.com>
+In-Reply-To: <CAMuHMdUf6M=ESvSnRoqYkBfvizW-tBzTwUX2Uka-FOGvLFzL=w@mail.gmail.com>
+References: <20220422120850.769480-1-herve.codina@bootlin.com>
+        <20220422120850.769480-5-herve.codina@bootlin.com>
+        <CAMuHMdWmcBXRxZ_SDLCnimh7GqzkR0_qz178s51EtXsMm39ddg@mail.gmail.com>
+        <20220428111535.51833857@bootlin.com>
+        <CAMuHMdUf6M=ESvSnRoqYkBfvizW-tBzTwUX2Uka-FOGvLFzL=w@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427135549.20901-1-jun.miao@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:55:49PM +0800, Jun Miao wrote:
-> We should not put NMI unsafe code in irq_work_queue_on().
+Hi Geert,
+On Thu, 28 Apr 2022 11:22:35 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-Why not, irq_work_queue_on() is not NMI safe. Only irq_work_queue() is.
+> Hi Herv=C3=A9,
+>=20
+> On Thu, Apr 28, 2022 at 11:15 AM Herve Codina <herve.codina@bootlin.com> =
+wrote:
+> > On Wed, 27 Apr 2022 16:58:07 +0200
+> > Geert Uytterhoeven <geert@linux-m68k.org> wrote: =20
+> > > On Fri, Apr 22, 2022 at 2:09 PM Herve Codina <herve.codina@bootlin.co=
+m> wrote: =20
+> > > > PM and PM_GENERIC_DOMAINS configs are required for RZ/N1 SOCs.
+> > > > Without these configs, the clocks used by the PCI bridge are not
+> > > > enabled and so accessing the devices leads to a kernel crash:
+> > > >   [    0.832958] Unhandled fault: external abort on non-linefetch (=
+0x1008) at 0x90b5f848
+> > > >
+> > > > Select PM and PM_GENERIC_DOMAINS for ARCH_RZN1
+> > > >
+> > > > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+> > >
+> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > i.e. will queue in renesas-devel for v5.19. =20
+> >
+> > I plan to send a v4 of this series.
+> >
+> > As this patch (4/8) and the following one (5/8) will be
+> > queued for v5.19, I plan to remove them from the v4 version
+> > of the series.
+> >
+> > Is that ok for you or do you prefer to still have them
+> > in v4 ? =20
+>=20
+> As these two patches are not strictly related to adding PCI support,
+> but they are dependencies, I will queue them separately. Hence you
+> do not need to include them in v5.
 
+Perfect.
+
+Thanks,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

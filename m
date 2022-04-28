@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B20C513C52
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFDD513C54
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351627AbiD1UIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 16:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S1351640AbiD1UIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351417AbiD1UIL (ORCPT
+        with ESMTP id S1349810AbiD1UIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 16:08:11 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37A4BF949
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:04:54 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c15so8090591ljr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e5qmgQrDnLOtncZ3275YmjeZwKcNo9SSdnjrjUy1pJA=;
-        b=KvOxfE7bSF0qLmFgJXMr8pvaHcnvILpnzZmoVuGpiZZqrPs/kqyqRPpWxOQ+YqUul4
-         9IUgQhjWtFc7FP87uRkOwOLJM8Oa5iY/v9kA4uBcqtjrpCuSW6QMt7WwBGqAV3jdX3mC
-         1FQ/VCEfH6H4+EGcvAlentzQ3soQ5rMe/36gs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e5qmgQrDnLOtncZ3275YmjeZwKcNo9SSdnjrjUy1pJA=;
-        b=ICIVNh5ghnpe8iPE/gN0cQwgmfIv47ZM4x/8VV2jN2c/hxjxljYp4DyCnG9w8oavGY
-         0aldiUDtxzUG1S0U+H7xuZE8a8I358dK3qg60Oi6Ga127GSMdcBVgR7NcgmNNPKyKn+X
-         Bo4kxoiXBp1PmeQzhbhWVdwuIeiz/NbTZBG+rE+6eYcJA9wUJof0FZo9njRHUDGY1nKU
-         TJRuHrMi0z63ncPbUGqaK8G9i7lvpxz27rqp3jIUhJJ6+AHPYM/73mRkpWFk3yfwrQWu
-         FjYwbBQw+R8E6BshDsN5qXlX3RlHx/XFSSA9ol/FC2iSsjrWF3zJTseyWGeSC1odhoQg
-         nwpA==
-X-Gm-Message-State: AOAM533Jy1tH645c91qlkikui9oae/1+VBojcY2DX9H+GSeunA85Jyci
-        Bo4FM9S75Us+t+MFM4iSp9AMVoay1dKRPAPQUYg=
-X-Google-Smtp-Source: ABdhPJwu8WSsPbWjYcd8aFjyvdGpS20dkCtF5bXsIFZdo97LxVbu3FeLwcNbVuF5VnOafXsx2EAqxw==
-X-Received: by 2002:a2e:bc03:0:b0:24f:3b39:e805 with SMTP id b3-20020a2ebc03000000b0024f3b39e805mr1031939ljf.432.1651176293004;
-        Thu, 28 Apr 2022 13:04:53 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id a10-20020a19ca0a000000b00472172909fasm83918lfg.20.2022.04.28.13.04.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 13:04:52 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id p10so10509387lfa.12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:04:52 -0700 (PDT)
-X-Received: by 2002:a05:6512:690:b0:472:4430:8f8 with SMTP id
- t16-20020a056512069000b00472443008f8mr256487lfe.531.1651176291646; Thu, 28
- Apr 2022 13:04:51 -0700 (PDT)
+        Thu, 28 Apr 2022 16:08:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C21284EF7;
+        Thu, 28 Apr 2022 13:05:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBC5661D2B;
+        Thu, 28 Apr 2022 20:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8908C385A9;
+        Thu, 28 Apr 2022 20:05:21 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 16:05:19 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+Message-ID: <20220428160519.04cc40c0@gandalf.local.home>
+In-Reply-To: <CAADnVQKi+4oBt2C__qz7QoHqTtXYLUjaqwTNFoSE=up9c9k4cA@mail.gmail.com>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+        <20220407125224.310255-5-jolsa@kernel.org>
+        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+        <20220412094923.0abe90955e5db486b7bca279@kernel.org>
+        <CAEf4BzaQRcZGMqq5wqHo3wSHZAAVvY6AhizDk_dV_GtnwHuxLQ@mail.gmail.com>
+        <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org>
+        <20220428095803.66c17c32@gandalf.local.home>
+        <CAADnVQKi+4oBt2C__qz7QoHqTtXYLUjaqwTNFoSE=up9c9k4cA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <CAJZ5v0hHYRsWkRsJj+_Wa=jTS5cHasajYeh14yxEDvxu7gWWRQ@mail.gmail.com>
- <CAHk-=wit9xfwAf=z6YqkZerH28qFYeTnhr3GtBqCYBnsTsSYXw@mail.gmail.com> <CAJZ5v0jpaAwq0Ad-ZA60bA5AU8JG1Y2muYtXy-bA4LapX8_dJQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jpaAwq0Ad-ZA60bA5AU8JG1Y2muYtXy-bA4LapX8_dJQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Apr 2022 13:04:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiABQnUatiSozcckyK+NLaUZ=PZZqgTxbN0d6wsBKzarA@mail.gmail.com>
-Message-ID: <CAHk-=wiABQnUatiSozcckyK+NLaUZ=PZZqgTxbN0d6wsBKzarA@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v5.18-rc5
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 12:50 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> The bug was that if acpi_idle_bm_check() returned 1, it would "fall
-> back"  to the same state via safe_state_index.
+On Thu, 28 Apr 2022 11:59:55 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-That's actually quite hard to see in the source code.
+> > The weak function gets a call to ftrace, but it still gets compiled into
+> > vmlinux but its symbol is dropped due to it being overridden. Thus, the
+> > mcount_loc finds this call to fentry, and maps it to the symbol that is
+> > before it, which just happened to be __bpf_tramp_exit.  
+> 
+> Ouch. That _is_ a bug in recordmocount.
 
-Looking closer, the code calls "acpi_idle_enter_bm()" only when
-"cx->type == ACPI_STATE_C3", but that is very non-obvious in the
-context of that function (other than the comment).
+Exactly HOW is it a bug in recordmcount?
 
-It might be clearer if the function was actually called "enter_c3()"
-rather than "enter_bm()". Particularly since it will continue to do
-that "c3_cpu_count" stuff even if the actual power state it goes into
-_isn't_ C3.
+The job of recordmcount is to create a section of all the locations that
+call fentry. That is EXACTLY what it did. No bug there! It did its job.
 
-And the the C3 case doesn't seem to take that "demote C2 to C1" rule
-into account, so now that code will go into "safe" C2 mode even if
-ACPI_FADT_C2_MP_SUPPORTED isn't set.
+In fact, recordmcount probably didn't even get called. If you see this on
+x86 with gcc version greater than 8 (which I do), recordmcount is not even
+used. gcc creates this section internally instead.
 
-It's all very confusing.
+> 
+> > I made that weak function "notrace" and the __bpf_tramp_exit disappeared
+> > from the available_filter_functions list.  
+> 
+> That's a hack. We cannot rely on such hacks for all weak functions.
 
-But whatever. I obviously already pulled the changes.
+Then don't do anything. The only thing this bug causes is perhaps some
+confusion, because functions before weak functions that are overridden will
+be listed incorrectly in the available_filter_functions file. And that's
+because of the way it is created with respect to kallsyms.
 
-                Linus
+If you enable __bpf_tramp_exit, it will not do anything to that function.
+What it will do is enable the location inside of the weak function that no
+longer has its symbol shown.
+
+One solution is to simply get the end of the function that is provided by
+kallsyms to make sure the fentry call location is inside the function, and
+if it is not, then not show that function in available_filter_functions but
+instead show something like "** unnamed function **" or whatever.
+
+I could write a patch to do that when I get the time. But because the only
+issue that this causes is some confusion among the users and does not cause
+any issue with functionality, then it is low priority.
+
+-- Steve

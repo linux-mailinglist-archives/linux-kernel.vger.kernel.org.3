@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A943F512F16
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B82512F0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344653AbiD1I4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        id S1344327AbiD1Izs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344512AbiD1I4A (ORCPT
+        with ESMTP id S244019AbiD1Izj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:56:00 -0400
+        Thu, 28 Apr 2022 04:55:39 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BED723165;
-        Thu, 28 Apr 2022 01:52:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3E713D28;
+        Thu, 28 Apr 2022 01:52:25 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 44DADDF75A;
-        Thu, 28 Apr 2022 01:52:16 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id B6F65DF75F;
+        Thu, 28 Apr 2022 01:52:24 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6X5VlkxIGCtY; Thu, 28 Apr 2022 01:52:15 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 10:52:11 +0200
+        with ESMTP id oin1w0UicEvp; Thu, 28 Apr 2022 01:52:24 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 10:52:19 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1651135935; bh=ohE/IebwBN77RT1W4hsybc9tmsQEIEDdP++Soon6lDM=;
-        h=Date:From:To:Subject:From;
-        b=ssm+Caqw19pEA+VIsRGzYk2wLUCbQo5MRYZIHPy1rv6p6INwzTyr43rnTISXq3iOA
-         bKTgUZrZEaw19MXRid5CqDKqK24IM/8iljdafA1wo68VKm3dkLIBbWsOkDqmTWGhuF
-         uGGoeCtmN9t5gLN72dmBtmDBCIY90uC4HfnXYEB2sAtyeAB/uPAB3XanpIGJucXx6X
-         5Syo4nYGCu1Y06t1OBpMGNarkRiAEyjhbnQXHYBhtT4vUQHYpMwVYq+xOeixJOjAWT
-         DrxJKseVSeOUBZnEl60XjfnKHjjMdVlfjHB7N8F8lL3DnLlOCjwFU0nhjUftDvDfh/
-         CFUKy3tVqnNPQ==
+        t=1651135944; bh=7GvTiudrSeP0yh5rJkP4MPtvGvfvDnupAezm3TDBDt4=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=Gb9VNMTeIbJt88M70P2ChZEpLzARsNZPKnW5P1YEvAYAATR1enA3hQDZgB6LB4I3F
+         tvlBKy3Ym2FewMFg7y0vtIPvuYwCrRvjbXAHNmsNzeLJBfjxJU6Udgc7ANH3lKbJQl
+         sq/Ib7WMWWTmqIZVMV/brvdm4sPOkPN0ljnsZqGz9rGhLS6fTiybnNb7DoPp96i/jv
+         NcL+f35HjDsjSfYTrz8hXBAt9d9kOnpyb8pgU65UGAz7n1X+6zyFrkpXlwlh0q9BpV
+         mg9tH3Hz/ibhQpQiyRjaesmQrwhLdDS3hts0KWJJAW0vv3hlSM3qoggwkZ6ZPbyMNp
+         1C80QL0xwe4Ng==
 From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@puri.sm
-Subject: [PATCHv2 1/2] doc/media api: Try to make enum usage clearer
-Message-ID: <20220428105211.7106ce6a.dorota.czaplejewicz@puri.sm>
+Subject: [PATCHv2 2/2] media api: Try to make enum usage clearer
+Message-ID: <20220428105219.4b068b1f.dorota.czaplejewicz@puri.sm>
+In-Reply-To: <20220428083715.75997-1-dorota.czaplejewicz@puri.sm>
+References: <20220428083715.75997-1-dorota.czaplejewicz@puri.sm>
 Organization: Purism
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e.DoWQfsDpUUtXTZemZU8Pq";
+Content-Type: multipart/signed; boundary="Sig_/QP/6qVA55yp1tf5Be2CwjWZ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
@@ -50,128 +52,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/e.DoWQfsDpUUtXTZemZU8Pq
+--Sig_/QP/6qVA55yp1tf5Be2CwjWZ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Added: mbus codes must not repeat
+Fixed: typo "format" -> "frame size" in enum-frame-size
 Added: no holes in the enumeration
 Added: enumerations per what?
 Added: who fills in what in calls
 Changed: "zero" -> "0"
 Changed: "given" -> "specified"
-
 Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 ---
-Hello,
+ .../v4l/vidioc-subdev-enum-frame-size.rst     | 44 ++++++++++++-------
+ 1 file changed, 28 insertions(+), 16 deletions(-)
 
-this is the second attempt at updating the media documentation.
-
-Differences from previous: "selected" is now "specified", "array" is now "e=
-numeration", and "caller" is now "application".
-
-No differences: I haven't used the frame intervals calls and haven't gather=
-ed practical knowledge about where docs may be insufficient, so I didn't to=
-uch its documentation.
-
-Regards,
-Dorota
-
- .../v4l/vidioc-subdev-enum-mbus-code.rst      | 39 +++++++++++++------
- 1 file changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-=
-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-co=
-de.rst
-index 417f1a19bcc4..87572de0fd26 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-@@ -31,15 +31,29 @@ Arguments
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame=
+-size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-=
+size.rst
+index c25a9896df0e..2c6fd291dc44 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.r=
+st
++++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.r=
+st
+@@ -31,18 +31,29 @@ Arguments
  Description
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 =20
--To enumerate media bus formats available at a given sub-device pad
--applications initialize the ``pad``, ``which`` and ``index`` fields of
--struct
+-This ioctl allows applications to enumerate all frame sizes supported by
+-a sub-device on the given pad for the given media bus format. Supported
+-formats can be retrieved with the
++This ioctl allows applications to access the enumeration of frame sizes su=
+pported by
++a sub-device on the specified pad for the specified media bus format.
++Supported formats can be retrieved with the
+ :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE`
+ ioctl.
+=20
+-To enumerate frame sizes applications initialize the ``pad``, ``which``
+-, ``code`` and ``index`` fields of the struct
 -:c:type:`v4l2_subdev_mbus_code_enum` and
--call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this
--structure. Drivers fill the rest of the structure or return an ``EINVAL``
--error code if either the ``pad`` or ``index`` are invalid. All media bus
--formats are enumerable by beginning at index zero and incrementing by
--one until ``EINVAL`` is returned.
-+This call is used by the application to access the enumeration of bus form=
-ats
-+for the selected pad.
-+
+-call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
+-structure. Drivers fill the minimum and maximum frame sizes or return an
+-EINVAL error code if one of the input parameters is invalid.
 +The enumerations are defined by the driver, and indexed using the ``index`=
 ` field
-+of struct :c:type:`v4l2_subdev_mbus_code_enum`.
-+Each value of ``pad`` corresponds to a separate enumeration.
-+Each enumeration starts with the ``index`` of 0, and
-+the lowest invalid index marks the end of enumeration.
++of the struct :c:type:`v4l2_subdev_mbus_code_enum`.
++Each pair of ``pad`` and ``code`` correspond to a separate enumeration.
++Each enumeeration starts with the ``index`` of 0, and
++the lowest invalid index marks the end of the enumeration.
 +
-+Therefore, to enumerate media bus formats available at a given sub-device =
-pad,
-+initialize the ``pad``, and ``which`` fields to desired values,
++Therefore, to enumerate frame sizes allowed on the specified pad
++and using the specified mbus format, initialize the
++``pad``, ``which``, and ``code`` fields to desired values,
 +and set ``index`` to 0.
-+Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
-+with a pointer to this structure.
++Then call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to=
+ the
++structure.
 +
-+A successful call will return with the ``code`` field filled in
-+with a mbus format value.
++A successful call will return with minimum and maximum frame sizes filled =
+in.
 +Repeat with increasing ``index`` until ``EINVAL`` is received.
-+``EINVAL`` means that either ``pad`` is invalid,
-+or that there are no more codes available at this pad.
-+
-+The driver must not return the same value of ``code`` for different indices
-+at the same pad.
++``EINVAL`` means that either no more entries are available in the enumerat=
+ion,
++or that an input parameter was invalid.
 =20
- Available media bus formats may depend on the current 'try' formats at
- other pads of the sub-device, as well as on the current active links.
-@@ -57,14 +71,15 @@ information about the try formats.
+ Sub-devices that only support discrete frame sizes (such as most
+ sensors) will return one or more frame sizes with identical minimum and
+@@ -72,26 +83,27 @@ information about try formats.
 =20
+     * - __u32
+       - ``index``
+-      - Number of the format in the enumeration, set by the application.
++      - Index of the frame size in the enumeration
++    belonging to the given pad and format. Filled in by the application.
      * - __u32
        - ``pad``
 -      - Pad number as reported by the media controller API.
 +      - Pad number as reported by the media controller API. Filled in by t=
 he application.
      * - __u32
-       - ``index``
--      - Number of the format in the enumeration, set by the application.
-+      - Index of the mbus code in the enumeration belonging to the given p=
-ad.
-+    Filled in by the application.
-     * - __u32
        - ``code``
        - The media bus format code, as defined in
 -	:ref:`v4l2-mbus-format`.
-+	:ref:`v4l2-mbus-format`. Filled in by the driver.
++	:ref:`v4l2-mbus-format`. Filled in by the application.
+     * - __u32
+       - ``min_width``
+-      - Minimum frame width, in pixels.
++      - Minimum frame width, in pixels. Filled in by the driver.
+     * - __u32
+       - ``max_width``
+-      - Maximum frame width, in pixels.
++      - Maximum frame width, in pixels. Filled in by the driver.
+     * - __u32
+       - ``min_height``
+-      - Minimum frame height, in pixels.
++      - Minimum frame height, in pixels. Filled in by the driver.
+     * - __u32
+       - ``max_height``
+-      - Maximum frame height, in pixels.
++      - Maximum frame height, in pixels. Filled in by the driver.
      * - __u32
        - ``which``
-       - Media bus format codes to be enumerated, from enum
+       - Frame sizes to be enumerated, from enum
 --=20
 2.35.1
 
 
---Sig_/e.DoWQfsDpUUtXTZemZU8Pq
+--Sig_/QP/6qVA55yp1tf5Be2CwjWZ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmJqVbsACgkQADBpX4S8
-ZncNnQ/7BWFK+LkIIBRQefdCUmp2vcmXBtC+DohmJgX6hHPbZtO0BGhssjuSS6Cy
-b81Z7ujEyT9Lv2zOqEa+tHFR/zAjaqo5NxbiGhMdsFgDLEg7A5T+UZcRqNeruBNM
-zKU2SGvFauukf2+wTwctBni0mLUAnpQA9cxzKEww+XNMGIftnjR1eX4APZylBX+D
-ET5tR5iw8prcHzzuEQEM1cSNmzUhR49XcvJQXVSS+6kjjFViUeEaImxlfPbVvmvY
-nf3JwcvRpJkNrJyVHFkVaul/ezzG4Pq0l6A/swlmUXErgHrBoado1bhtDoZpy7Ez
-CuFRUioNk5yI7QrIX5tq+7bWMaVVxd9gbPqN1lvZU1MJ2V2PyqxbpmC+umXSTg1v
-cuXLDSkHqO6p9Gdum2bsPkEhOIpgzzirYaEyDpxLhxMrHXuatt+2v2GxkeK4xuw+
-Ghc6JczAYDcFYLjJpiZqMPr7oXBSGdIU6D8zlGX2jOfHTRVotzKEHT2tiCh17Hcq
-RA22RlXEjWAg92YWfz/Qv+r/5VW9EvG3lQ5Tr17m0RIaXo0N5ygK5CKvBxFvpDuT
-3fDs4J0wKnCjQ+00B4yzh2xF45JcHdOQ+T4IGgM0Mew61r8UCnJAlKzBWJsYLuap
-0CY+n4obCRZJTHm6GJr/0Qj04nDuWhBgPWLmFfMu8iT1ZZp3k7g=
-=AivM
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmJqVcMACgkQADBpX4S8
+ZndMLw/+M5xYgoggZzFPYiXC9mDlflEUHKjZ1pRt+vhi22i5O2+FEqT7W4jku7h7
+88vEUg5W8RI9kSeanCa4nFSlVdedu54uW77MIPA7Y6c3uHWZox8HEaotOSEPoz4+
+pV91GXSFdF4jimO55fWIY4oCv2IpP8/X0PtveLt+xFi2bvDApTXKOQ5mkCzccSFc
+iIIj7NLvoP5T1oK3EVFixlm+ggFpiRLyfkE5ktzmBtIF8wGTWifIu0mLuNMCXkDP
+mQ0D+8Dw4sYHxf9742IICBV0TJGCdk87eeRSU+QwCiGzaHffX3MwmbWkoNNhVfku
+Gk7p6LZxw+KKInFplRdl3TNxjNWiMGFX0+PpKFsftKZmzV/f1EtJoov7IjIVowlR
+NzN102hzv7PISaYlSeh1JEwnd3C1fSwHg+Dmolg74lfeW74c0cJXFwIhNLuol6/S
+2SM+f2L5TqNxEgWWDArtrrGJjuCsVfDFzgkJhukDJ2ApYte4AjbNck//BW1rRxk5
+ExY/NOG0QXGz1kdxnw9rSDfBkIyiyXiii143N0tsR02KdhbnPRGpEIrJikrjm3tp
+DLEfObsrLgZtbK3sZ+KrioQZhDkapR0UZ9PBeDNGMyuUNjmQPWMNlLAGkbhLoce6
+4Dec4AYe49/UN0l/KqeAFh5+zyJUDelm6NrncgndGasCTtTay0k=
+=OT3L
 -----END PGP SIGNATURE-----
 
---Sig_/e.DoWQfsDpUUtXTZemZU8Pq--
+--Sig_/QP/6qVA55yp1tf5Be2CwjWZ--

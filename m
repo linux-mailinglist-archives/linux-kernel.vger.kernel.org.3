@@ -2,71 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A825133DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263DB5133F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346360AbiD1MnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S1346440AbiD1MoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiD1MnD (ORCPT
+        with ESMTP id S1346431AbiD1MoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:43:03 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160DDAD121
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:39:49 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id y32so8386938lfa.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=VfwjyPbBfFqO7CvMvoZLf+wxpfLiKn0LTDd54jeVGXw=;
-        b=oBMGlpTC4R864+6cJYNiCygI9icaV1nx+ayPgJ0wpuP23dgcbNDaOIraUrMco1Ll+1
-         4bENeXI1+VxUPBauIBbYdE3vOPc9+zN1jDoLrprQ2K+C6qBrA13gcgy7+gP3lU0CIIqZ
-         Z/6CSXxrJ1xcJ6sXsGGc2hNPGsozJ/cvCFW8WtkttMO3prQrbFwXbX5xQwPeHBXX0tho
-         NllCv+vbGCpz+Lhog+DoK7CUXhe2S9Q9bzdRNTo3TF2B61hPBAq09pNsKXmE/cGvxFew
-         8lRV/7zcX//SBBzLhqHJWieu9p9BvsVLGyiTaBiAZg6XwstkP4/yhpm+tjdqykzpiE4K
-         nNCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=VfwjyPbBfFqO7CvMvoZLf+wxpfLiKn0LTDd54jeVGXw=;
-        b=wyl2SGRpNwBXFSS6m+ZP/cKd2m6db7sGJQhSXq8eb3l9LmpKCc2AaInEenfm37dZKB
-         Jwk4FjqoOeAlX7ujdaxacGTlf4fagxXS8VvPbV0l5DLg+q/K4XnbwybAOAKW63bb3QGC
-         AYAoWwlCc1vihO2AGnFJ7l2l1rIw6r+Tq7Ay6emhmp5shU8UvAL9HykaAEjfGyCgCN8+
-         PTmYEry2jhDBi5YffGz8GzwQAjy8pqVj9yIer6YsSRV4S3KiHnoyylFplf3KMcPadfsB
-         +C62kQy8Pny3oI92XhYrxGE41rHL3Ij9zWEHLnv5eKBoexHN07jaePjUk+2V9mNAFI11
-         Mhrw==
-X-Gm-Message-State: AOAM5316KWonTbuPm6CnY9EK5a+b5H/dE98crNmqh5IhMpyyEBW8aYBx
-        AsTQ0EiYMiPBEXUR+MzoH4ciu32X9R4/5/JI1Dc=
-X-Google-Smtp-Source: ABdhPJzev38OC8LoxcPaXSa1nocIEqgNQ4YwvBchUhdE+nWL4EmMyVgHQKR9nFtfdNNN8alTM18bdKSTCvxq2uIiQ4I=
-X-Received: by 2002:a19:ca06:0:b0:472:3b31:1ade with SMTP id
- a6-20020a19ca06000000b004723b311ademr1759344lfg.162.1651149587379; Thu, 28
- Apr 2022 05:39:47 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab2:26c3:0:b0:126:bae1:1038 with HTTP; Thu, 28 Apr 2022
- 05:39:46 -0700 (PDT)
-Reply-To: bellwoodo@yahoo.com
-From:   Olivia Bellwood <fatgando01@gmail.com>
-Date:   Thu, 28 Apr 2022 14:39:46 +0200
-Message-ID: <CAFAqxBbrB41_QNbGx_HVh-s2Kt5d5PPyD4fd8f=E6LkWsK6C=g@mail.gmail.com>
-Subject: A Call to Humanitarian Service
-To:     fatgando01 <fatgando01@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Thu, 28 Apr 2022 08:44:06 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1038DE010;
+        Thu, 28 Apr 2022 05:40:50 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 23SCeDHb007479;
+        Thu, 28 Apr 2022 14:40:13 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     netdev@vger.kernel.org
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
+Subject: [PATCH v2 net 0/7] insufficient TCP source port randomness
+Date:   Thu, 28 Apr 2022 14:39:54 +0200
+Message-Id: <20220428124001.7428-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings from the United States,
-I will like to engage your honourable person for the service of
-humanitarian. If this interests you kindly reply me for more
-information.
-Olivia Bellwood
+Hi,
+
+In a not-yet published paper, Moshe Kol, Amit Klein, and Yossi Gilad
+report being able to accurately identify a client by forcing it to emit
+only 40 times more connections than the number of entries in the
+table_perturb[] table, which is indexed by hashing the connection tuple.
+The current 2^8 setting allows them to perform that attack with only 10k
+connections, which is not hard to achieve in a few seconds.
+
+Eric, Amit and I have been working on this for a few weeks now imagining,
+testing and eliminating a number of approaches that Amit and his team were
+still able to break or that were found to be too risky or too expensive,
+and ended up with the simple improvements in this series that resists to
+the attack, doesn't degrade the performance, and preserves a reliable port
+selection algorithm to avoid connection failures, including the odd/even
+port selection preference that allows bind() to always find a port quickly
+even under strong connect() stress.
+
+The approach relies on several factors:
+  - resalting the hash secret that's used to choose the table_perturb[]
+    entry every 10 seconds to eliminate slow attacks and force the
+    attacker to forget everything that was learned after this delay.
+    This already eliminates most of the problem because if a client
+    stays silent for more than 10 seconds there's no link between the
+    previous and the next patterns, and 10s isn't yet frequent enough
+    to cause too frequent repetition of a same port that may induce a
+    connection failure ;
+
+  - adding small random increments to the source port. Previously, a
+    random 0 or 1 was added every 16 ports. Now a random 0 to 7 is
+    added after each port. This means that with the default 32768-60999
+    range, a worst case rollover happens after 1764 connections, and
+    an average of 3137. This doesn't stop statistical attacks but
+    requires significantly more iterations of the same attack to
+    confirm a guess.
+
+  - increasing the table_perturb[] size from 2^8 to 2^16, which Amit
+    says will require 2.6 million connections to be attacked with the
+    changes above, making it pointless to get a fingerprint that will
+    only last 10 seconds. Due to the size, the table was made dynamic.
+
+  - a few minor improvements on the bits used from the hash, to eliminate
+    some unfortunate correlations that may possibly have been exploited
+    to design future attack models.
+
+These changes were tested under the most extreme conditions, up to
+1.1 million connections per second to one and a few targets, showing no
+performance regression, and only 2 connection failures within 13 billion,
+which is less than 2^-32 and perfectly within usual values.
+
+The series is split into small reviewable changes and was already reviewed
+by Amit and Eric.
+
+Regards,
+Willy
+
+---
+v2:
+  - fixed build issue reported by lkp@intel.com on 32-bit archs due
+    to the 64-by-32 divide; it's now correctly 32-by-32 as suggested
+    by Eric
+  - addressed the IPv6 hash size as well that was overlooked, as
+    reported by Jason
+
+This version was built for i386, armv7, x86_64, and was stress-tested on
+x86_64 under both IPv4 and IPv6. I'm reasonably confident that this time
+nothing else is missing.
+
+---
+
+Eric Dumazet (1):
+  tcp: resalt the secret every 10 seconds
+
+Willy Tarreau (6):
+  secure_seq: use the 64 bits of the siphash for port offset calculation
+  tcp: use different parts of the port_offset for index and offset
+  tcp: add small random increments to the source port
+  tcp: dynamically allocate the perturb table used by source ports
+  tcp: increase source port perturb table to 2^16
+  tcp: drop the hash_32() part from the index calculation
+
+ include/net/inet_hashtables.h |  2 +-
+ include/net/secure_seq.h      |  4 ++--
+ net/core/secure_seq.c         | 16 ++++++++-----
+ net/ipv4/inet_hashtables.c    | 42 ++++++++++++++++++++++-------------
+ net/ipv6/inet6_hashtables.c   |  4 ++--
+ 5 files changed, 43 insertions(+), 25 deletions(-)
+
+-- 
+2.17.5
+

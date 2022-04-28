@@ -2,127 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65472513E4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EFA513E6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352782AbiD1WL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S1352817AbiD1WUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347530AbiD1WL5 (ORCPT
+        with ESMTP id S237230AbiD1WUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:11:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D72ABCB5E;
-        Thu, 28 Apr 2022 15:08:39 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SKf2bt003777;
-        Thu, 28 Apr 2022 22:08:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=kCWBkV9EBURXMYT9kDz54RHvpVE/FsInuBtEK/b+Bg4=;
- b=CzK9bOB6HYT2CMnz65Rmgq5Ex9Ni07yj09ysM8kdMosoxiTsBYwyRjkPIgbGx0Jyv36I
- yeF5/Sv2YVbZBnc992PsKUkkMzAhbjES3qxr2DcsC38DtVZZ1HikWS1TLNhYvxG7QoBx
- ROb7kN04jkLsB/J81wiuFuJ6vJOea/SoR/koeZnu6GYLZE+CXaBfJ+8vFdnnBZWvyWOQ
- 00niJ4yiDXztcyNSfLiyemnaqHk+k4Z8f+BX9cIU50NiuLX7EO3LLaU6QzfazUQcYLwB
- NgcFOfeTWeTRLYrZ2jsGYVUc5vMoMYQFah/LvAolXSDtV1kQlIcGCGOaSV2JDCddiPrR 0Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9dwp3e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:08:22 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SLn3eF005352;
-        Thu, 28 Apr 2022 22:08:21 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9dwp3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:08:21 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SLgXlH032529;
-        Thu, 28 Apr 2022 22:08:20 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma04dal.us.ibm.com with ESMTP id 3fm93aq30c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 22:08:20 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SM8Jj436438418
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 22:08:19 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA3E26E054;
-        Thu, 28 Apr 2022 22:08:19 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A7106E04E;
-        Thu, 28 Apr 2022 22:08:19 +0000 (GMT)
-Received: from [9.211.77.121] (unknown [9.211.77.121])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Apr 2022 22:08:19 +0000 (GMT)
-Message-ID: <0c6442db-7e97-58dd-f39c-b22a37398715@linux.vnet.ibm.com>
-Date:   Thu, 28 Apr 2022 18:08:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] integrity: Allow ima_appraise bootparam to be set when SB
- is enabled
-Content-Language: en-US
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com
-References: <20220425222120.1998888-1-eric.snowberg@oracle.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <20220425222120.1998888-1-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rimEikXrGxHYx5taUsRDOxhOxtqdH1iw
-X-Proofpoint-ORIG-GUID: mAlKens8YqIG3yS2DPKRj9XhK_OYTk1h
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 28 Apr 2022 18:20:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24CCBF31B;
+        Thu, 28 Apr 2022 15:16:48 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 22:16:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651184206;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6XUAGNI2/DJ8fzMzq4AB/zY+bre+PBrgDH1qfXscxwI=;
+        b=f7dsZ3GrfRUVfRu882jogb00ijfgvQfB0PKy7agxd885QocKyeEyMs3cXhzQ/CD7LM763q
+        arD4HbhdxbAZco3Pnxa0USUGxS2+KMzZ/G8xnRbTLvpfxXCm0rLZAP9CGxB0w7EF0VQEIo
+        wpw0EzM8ozW9ddeLaZ+Z6lTTZr4ROMchphW9G9g7cN0xGU1uVUpMecxzDHnlogVbCdi3Wh
+        jfYRVTJs1e4XHV4rZixnwkiOd+yafs2qxvtlkACMNXl2u0foceqMGloYMuH7MxMuqsUcDB
+        Z3ULDpmAz9qAjaG0bRvuDES+6iBXk9D4BwXby+Y/G6mRWgrfHHYzlrylina7aA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651184206;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6XUAGNI2/DJ8fzMzq4AB/zY+bre+PBrgDH1qfXscxwI=;
+        b=A93aJha1ZsQRQzQs7MGwQkUmiolBAtNyp0jA1p4+xwo85HG4anNV+AIrY55H005HXfSoDQ
+        +NPQxzD5NuFOwBCw==
+From:   "tip-bot2 for Kurt Kanzenbach" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/urgent] timekeeping: Mark NMI safe time accessors as notrace
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220428062432.61063-1-kurt@linutronix.de>
+References: <20220428062432.61063-1-kurt@linutronix.de>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_05,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1011 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204280129
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165118420512.4207.5310310414914439031.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the timers/urgent branch of tip:
 
-On 4/25/22 18:21, Eric Snowberg wrote:
-> The IMA_APPRAISE_BOOTPARM config allows enabling different "ima_appraise="
-> modes (log, fix, enforce) to be configured at boot time.  When booting
-> with Secure Boot enabled, all modes are ignored except enforce.  To use
-> log or fix, Secure Boot must be disabled.
->
-> With a policy such as:
->
-> appraise func=BPRM_CHECK appraise_type=imasig
->
-> A user may just want to audit signature validation. Not all users
-> are interested in full enforcement and find the audit log appropriate
-> for their use case.
->
-> Add a new IMA_APPRAISE_SB_BOOTPARAM config allowing "ima_appraise="
-> to work when Secure Boot is enabled.
+Commit-ID:     2c33d775ef4c25c0e1e1cc0fd5496d02f76bfa20
+Gitweb:        https://git.kernel.org/tip/2c33d775ef4c25c0e1e1cc0fd5496d02f76bfa20
+Author:        Kurt Kanzenbach <kurt@linutronix.de>
+AuthorDate:    Thu, 28 Apr 2022 08:24:32 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 29 Apr 2022 00:07:53 +02:00
 
-Tianocore(UEFI Reference Implementation) defines four secure boot modes, 
-one of which is Audit Mode. Refer to last few lines of Feature Summary 
-section in Readme.MD 
-(https://github.com/tianocore/edk2-staging/blob/Customized-Secure-Boot/Readme.MD#3-feature-summary). 
-Based on the reference, IMA appraise_mode="log" should probably work in 
-coordination with AuditMode.
+timekeeping: Mark NMI safe time accessors as notrace
 
-Thanks & Regards,
+Mark the CLOCK_MONOTONIC fast time accessors as notrace. These functions are
+used in tracing to retrieve timestamps, so they should not recurse.
 
-     - Nayna
+Fixes: 4498e7467e9e ("time: Parametrize all tk_fast_mono users")
+Fixes: f09cb9a1808e ("time: Introduce tk_fast_raw")
+Reported-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220426175338.3807ca4f@gandalf.local.home/
+Link: https://lore.kernel.org/r/20220428062432.61063-1-kurt@linutronix.de
+---
+ kernel/time/timekeeping.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index dcdcb85..3b1398f 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -482,7 +482,7 @@ static __always_inline u64 __ktime_get_fast_ns(struct tk_fast *tkf)
+  * of the following timestamps. Callers need to be aware of that and
+  * deal with it.
+  */
+-u64 ktime_get_mono_fast_ns(void)
++u64 notrace ktime_get_mono_fast_ns(void)
+ {
+ 	return __ktime_get_fast_ns(&tk_fast_mono);
+ }
+@@ -494,7 +494,7 @@ EXPORT_SYMBOL_GPL(ktime_get_mono_fast_ns);
+  * Contrary to ktime_get_mono_fast_ns() this is always correct because the
+  * conversion factor is not affected by NTP/PTP correction.
+  */
+-u64 ktime_get_raw_fast_ns(void)
++u64 notrace ktime_get_raw_fast_ns(void)
+ {
+ 	return __ktime_get_fast_ns(&tk_fast_raw);
+ }

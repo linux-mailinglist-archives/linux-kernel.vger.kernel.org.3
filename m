@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EE1512A0C
+	by mail.lfdr.de (Postfix) with ESMTP id C5C3D512A0D
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242353AbiD1Di0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S242327AbiD1Die (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242309AbiD1DiQ (ORCPT
+        with ESMTP id S241736AbiD1DiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:38:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F032AE24;
-        Wed, 27 Apr 2022 20:35:02 -0700 (PDT)
+        Wed, 27 Apr 2022 23:38:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980DA267;
+        Wed, 27 Apr 2022 20:35:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17C8BB82AEB;
-        Thu, 28 Apr 2022 03:35:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E55C385A9;
-        Thu, 28 Apr 2022 03:34:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C6361A94;
+        Thu, 28 Apr 2022 03:35:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D2BC385AE;
+        Thu, 28 Apr 2022 03:35:00 +0000 (UTC)
 From:   Greg Ungerer <gerg@linux-m68k.org>
 To:     linux-m68k@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, dalias@libc.org,
         Greg Ungerer <gerg@linux-m68k.org>
-Subject: [PATCH 2/4] m68knommu: implement minimal regset support
-Date:   Thu, 28 Apr 2022 13:33:17 +1000
-Message-Id: <20220428033319.239341-3-gerg@linux-m68k.org>
+Subject: [PATCH 3/4] m68knommu: add definitions to support elf_fdpic program loader
+Date:   Thu, 28 Apr 2022 13:33:18 +1000
+Message-Id: <20220428033319.239341-4-gerg@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220428033319.239341-1-gerg@linux-m68k.org>
 References: <20220428033319.239341-1-gerg@linux-m68k.org>
@@ -43,91 +43,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add code support to the m68k architecture for regsets.
+Add a few required defines to support using the binfmt_elf_fdpic
+loader on the m68k architecture. The values are defined to be consistent
+with those used on arm and sh which support this too.
 
-Currently the only thing that will need to use regsets for m68k will be
-coredump support of the elf_fdpic loader. So the changes are conditional
-on that. The added support is the minimum definitions required to support
-just that.
+The most important m68k specific change is the register initialization.
+The pt_reg structure only contains a subset of the architecture general
+registers, so we are more limited than to be expected on what can be used.
 
 Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 ---
- arch/m68k/kernel/ptrace.c | 58 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ arch/m68k/include/asm/elf.h         | 9 +++++++++
+ arch/m68k/include/uapi/asm/ptrace.h | 5 +++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/arch/m68k/kernel/ptrace.c b/arch/m68k/kernel/ptrace.c
-index 6342ff4d2073..4349b9c4dd68 100644
---- a/arch/m68k/kernel/ptrace.c
-+++ b/arch/m68k/kernel/ptrace.c
-@@ -19,6 +19,8 @@
- #include <linux/ptrace.h>
- #include <linux/user.h>
- #include <linux/signal.h>
-+#include <linux/regset.h>
-+#include <linux/elf.h>
+diff --git a/arch/m68k/include/asm/elf.h b/arch/m68k/include/asm/elf.h
+index 3d387ceaea3f..2def06a99b08 100644
+--- a/arch/m68k/include/asm/elf.h
++++ b/arch/m68k/include/asm/elf.h
+@@ -60,6 +60,13 @@ typedef struct user_m68kfp_struct elf_fpregset_t;
+    is actually used on ASV.  */
+ #define ELF_PLAT_INIT(_r, load_addr)	_r->a1 = 0
  
- #include <linux/uaccess.h>
- #include <asm/page.h>
-@@ -291,3 +293,59 @@ asmlinkage void syscall_trace_leave(void)
- 		ptrace_report_syscall_exit(task_pt_regs(current), 0);
- }
- #endif /* CONFIG_COLDFIRE */
++#define ELF_FDPIC_PLAT_INIT(_r, _exec_map_addr, _interp_map_addr, dynamic_addr) \
++        do { \
++                (_r)->d3 = _exec_map_addr; \
++                (_r)->d4 = _interp_map_addr; \
++                (_r)->d5 = dynamic_addr; \
++        } while(0)
 +
-+#if defined(CONFIG_BINFMT_ELF_FDPIC) && defined(CONFIG_ELF_CORE)
-+/*
-+ * Currently the only thing that needs to use regsets for m68k is the
-+ * coredump support of the elf_fdpic loader. Implement the minimum
-+ * definitions required for that.
-+ */
-+static int m68k_regset_get(struct task_struct *target,
-+			   const struct user_regset *regset,
-+			   struct membuf to)
-+{
-+	struct pt_regs *ptregs = task_pt_regs(target);
-+	u32 uregs[ELF_NGREG];
+ #if defined(CONFIG_SUN3) || defined(CONFIG_COLDFIRE)
+ #define ELF_EXEC_PAGESIZE	8192
+ #else
+@@ -114,4 +121,6 @@ typedef struct user_m68kfp_struct elf_fpregset_t;
+ 
+ #define ELF_PLATFORM  (NULL)
+ 
++#define ELF_FDPIC_CORE_EFLAGS  0
 +
-+	ELF_CORE_COPY_REGS(uregs, ptregs);
-+	return membuf_write(&to, uregs, sizeof(uregs));
-+}
+ #endif
+diff --git a/arch/m68k/include/uapi/asm/ptrace.h b/arch/m68k/include/uapi/asm/ptrace.h
+index 19a1b9d0d858..5b50ea592e00 100644
+--- a/arch/m68k/include/uapi/asm/ptrace.h
++++ b/arch/m68k/include/uapi/asm/ptrace.h
+@@ -74,7 +74,12 @@ struct switch_stack {
+ 
+ #define PTRACE_GET_THREAD_AREA    25
+ 
++#define PTRACE_GETFDPIC	31
 +
-+enum m68k_regset {
-+	REGSET_GPR,
-+#ifdef CONFIG_FPU
-+	REGSET_FPU,
-+#endif
-+};
+ #define PTRACE_SINGLEBLOCK	33	/* resume execution until next branch */
+ 
++#define PTRACE_GETFDPIC_EXEC	0
++#define PTRACE_GETFDPIC_INTERP	1
 +
-+static const struct user_regset m68k_user_regsets[] = {
-+	[REGSET_GPR] = {
-+		.core_note_type = NT_PRSTATUS,
-+		.n = ELF_NGREG,
-+		.size = sizeof(u32),
-+		.align = sizeof(u16),
-+		.regset_get = m68k_regset_get,
-+	},
-+#ifdef CONFIG_FPU
-+	[REGSET_FPU] = {
-+		.core_note_type = NT_PRFPREG,
-+		.n = sizeof(struct user_m68kfp_struct) / sizeof(u32),
-+		.size = sizeof(u32),
-+		.align = sizeof(u32),
-+	}
-+#endif /* CONFIG_FPU */
-+};
-+
-+static const struct user_regset_view user_m68k_view = {
-+	.name = "m68k",
-+	.e_machine = EM_68K,
-+	.ei_osabi = ELF_OSABI,
-+	.regsets = m68k_user_regsets,
-+	.n = ARRAY_SIZE(m68k_user_regsets)
-+};
-+
-+const struct user_regset_view *task_user_regset_view(struct task_struct *task)
-+{
-+	return &user_m68k_view;
-+}
-+#endif /* CONFIG_BINFMT_ELF_FDPIC && CONFIG_ELF_CORE */
+ #endif /* __ASSEMBLY__ */
+ #endif /* _UAPI_M68K_PTRACE_H */
 -- 
 2.25.1
 

@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737F8513E2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3A6513E2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352627AbiD1Vzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 17:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S1350252AbiD1VzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 17:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352564AbiD1Vy7 (ORCPT
+        with ESMTP id S1344429AbiD1Vy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 17:54:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E9E33886
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:51:43 -0700 (PDT)
+        Thu, 28 Apr 2022 17:54:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDB01C131
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 14:51:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4916AB83035
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:51:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FABDC385B1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE20561F14
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438C3C385AE;
         Thu, 28 Apr 2022 21:51:41 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nkC32-003MYb-1x;
+        id 1nkC32-003MZA-7q;
         Thu, 28 Apr 2022 17:51:40 -0400
-Message-ID: <20220428215139.888187334@goodmis.org>
+Message-ID: <20220428215140.077110408@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 28 Apr 2022 17:51:03 -0400
+Date:   Thu, 28 Apr 2022 17:51:04 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kurt Kanzenbach <kurt@linutronix.de>
-Subject: [for-next][PATCH 1/8] ring-buffer: Have absolute time stamps handle large numbers
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [for-next][PATCH 2/8] ring-buffer: Have 32 bit time stamps use all 64 bits
 References: <20220428215102.260147624@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,160 +48,143 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-There's an absolute timestamp event in the ring buffer, but this only
-saves 59 bits of the timestamp, as the 5 MSB is used for meta data
-(stating it is an absolute time stamp). This was never an issue as all the
-clocks currently in use never used those 5 MSB. But now there's a new
-clock (TAI) that does.
+When the new logic was made to handle deltas of events from interrupts
+that interrupted other events, it required 64 bit local atomics.
+Unfortunately, 64 bit local atomics are expensive on 32 bit architectures.
+Thus, commit 10464b4aa605e ("ring-buffer: Add rb_time_t 64 bit operations
+for speeding up 32 bit") created a type of seq lock timer for 32 bits.
+It used two 32 bit local atomics, but required 2 bits from them each for
+synchronization, making it only 60 bits.
 
-To handle this case, when reading an absolute timestamp, a previous full
-timestamp is passed in, and the 5 MSB of that timestamp is OR'd to the
-absolute timestamp (if any of the 5 MSB are set), and then to test for
-overflow, if the new result is smaller than the passed in previous
-timestamp, then 1 << 59 is added to it.
-
-All the extra processing is done on the reader "slow" path, with the
-exception of the "too big delta" check, and the reading of timestamps
-for histograms.
-
-Note, libtraceevent will need to be updated to handle this case as well.
-But this is not a user space regression, as user space was never able to
-handle any timestamps that used more than 59 bits.
+Add a new "msb" field to hold the extra 4 bits that are cut off.
 
 Link: https://lore.kernel.org/all/20220426175338.3807ca4f@gandalf.local.home/
-Link: https://lkml.kernel.org/r/20220427153339.16c33f75@gandalf.local.home
+Link: https://lkml.kernel.org/r/20220427170812.53cc7139@gandalf.local.home
 
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Kurt Kanzenbach <kurt@linutronix.de>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/ring_buffer.c | 49 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 44 insertions(+), 5 deletions(-)
+ kernel/trace/ring_buffer.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 655d6db3e3c3..3a0c7ed0e93f 100644
+index 3a0c7ed0e93f..d59b6a328b7f 100644
 --- a/kernel/trace/ring_buffer.c
 +++ b/kernel/trace/ring_buffer.c
-@@ -29,6 +29,14 @@
+@@ -476,6 +476,7 @@ struct rb_time_struct {
+ 	local_t		cnt;
+ 	local_t		top;
+ 	local_t		bottom;
++	local_t		msb;
+ };
+ #else
+ #include <asm/local64.h>
+@@ -577,7 +578,6 @@ struct ring_buffer_iter {
+  * For the ring buffer, 64 bit required operations for the time is
+  * the following:
+  *
+- *  - Only need 59 bits (uses 60 to make it even).
+  *  - Reads may fail if it interrupted a modification of the time stamp.
+  *      It will succeed if it did not interrupt another write even if
+  *      the read itself is interrupted by a write.
+@@ -602,6 +602,7 @@ struct ring_buffer_iter {
+  */
+ #define RB_TIME_SHIFT	30
+ #define RB_TIME_VAL_MASK ((1 << RB_TIME_SHIFT) - 1)
++#define RB_TIME_MSB_SHIFT	 60
  
- #include <asm/local.h>
+ static inline int rb_time_cnt(unsigned long val)
+ {
+@@ -621,7 +622,7 @@ static inline u64 rb_time_val(unsigned long top, unsigned long bottom)
  
-+/*
-+ * The "absolute" timestamp in the buffer is only 59 bits.
-+ * If a clock has the 5 MSBs set, it needs to be saved and
-+ * reinserted.
-+ */
-+#define TS_MSB		(0xf8ULL << 56)
-+#define ABS_TS_MASK	(~TS_MSB)
-+
- static void update_pages_handler(struct work_struct *work);
+ static inline bool __rb_time_read(rb_time_t *t, u64 *ret, unsigned long *cnt)
+ {
+-	unsigned long top, bottom;
++	unsigned long top, bottom, msb;
+ 	unsigned long c;
  
- /*
-@@ -783,6 +791,24 @@ static inline void verify_event(struct ring_buffer_per_cpu *cpu_buffer,
+ 	/*
+@@ -633,6 +634,7 @@ static inline bool __rb_time_read(rb_time_t *t, u64 *ret, unsigned long *cnt)
+ 		c = local_read(&t->cnt);
+ 		top = local_read(&t->top);
+ 		bottom = local_read(&t->bottom);
++		msb = local_read(&t->msb);
+ 	} while (c != local_read(&t->cnt));
+ 
+ 	*cnt = rb_time_cnt(top);
+@@ -641,7 +643,8 @@ static inline bool __rb_time_read(rb_time_t *t, u64 *ret, unsigned long *cnt)
+ 	if (*cnt != rb_time_cnt(bottom))
+ 		return false;
+ 
+-	*ret = rb_time_val(top, bottom);
++	/* The shift to msb will lose its cnt bits */
++	*ret = rb_time_val(top, bottom) | ((u64)msb << RB_TIME_MSB_SHIFT);
+ 	return true;
  }
- #endif
  
-+/*
-+ * The absolute time stamp drops the 5 MSBs and some clocks may
-+ * require them. The rb_fix_abs_ts() will take a previous full
-+ * time stamp, and add the 5 MSB of that time stamp on to the
-+ * saved absolute time stamp. Then they are compared in case of
-+ * the unlikely event that the latest time stamp incremented
-+ * the 5 MSB.
-+ */
-+static inline u64 rb_fix_abs_ts(u64 abs, u64 save_ts)
-+{
-+	if (save_ts & TS_MSB) {
-+		abs |= save_ts & TS_MSB;
-+		/* Check for overflow */
-+		if (unlikely(abs < save_ts))
-+			abs += 1ULL << 59;
-+	}
-+	return abs;
-+}
+@@ -657,10 +660,12 @@ static inline unsigned long rb_time_val_cnt(unsigned long val, unsigned long cnt
+ 	return (val & RB_TIME_VAL_MASK) | ((cnt & 3) << RB_TIME_SHIFT);
+ }
  
- static inline u64 rb_time_stamp(struct trace_buffer *buffer);
+-static inline void rb_time_split(u64 val, unsigned long *top, unsigned long *bottom)
++static inline void rb_time_split(u64 val, unsigned long *top, unsigned long *bottom,
++				 unsigned long *msb)
+ {
+ 	*top = (unsigned long)((val >> RB_TIME_SHIFT) & RB_TIME_VAL_MASK);
+ 	*bottom = (unsigned long)(val & RB_TIME_VAL_MASK);
++	*msb = (unsigned long)(val >> RB_TIME_MSB_SHIFT);
+ }
  
-@@ -811,8 +837,10 @@ u64 ring_buffer_event_time_stamp(struct trace_buffer *buffer,
- 	u64 ts;
+ static inline void rb_time_val_set(local_t *t, unsigned long val, unsigned long cnt)
+@@ -671,15 +676,16 @@ static inline void rb_time_val_set(local_t *t, unsigned long val, unsigned long
  
- 	/* If the event includes an absolute time, then just use that */
--	if (event->type_len == RINGBUF_TYPE_TIME_STAMP)
--		return rb_event_time_stamp(event);
-+	if (event->type_len == RINGBUF_TYPE_TIME_STAMP) {
-+		ts = rb_event_time_stamp(event);
-+		return rb_fix_abs_ts(ts, cpu_buffer->tail_page->page->time_stamp);
-+	}
+ static void rb_time_set(rb_time_t *t, u64 val)
+ {
+-	unsigned long cnt, top, bottom;
++	unsigned long cnt, top, bottom, msb;
  
- 	nest = local_read(&cpu_buffer->committing);
- 	verify_event(cpu_buffer, event);
-@@ -2754,8 +2782,15 @@ static void rb_add_timestamp(struct ring_buffer_per_cpu *cpu_buffer,
- 		(RB_ADD_STAMP_FORCE | RB_ADD_STAMP_ABSOLUTE);
+-	rb_time_split(val, &top, &bottom);
++	rb_time_split(val, &top, &bottom, &msb);
  
- 	if (unlikely(info->delta > (1ULL << 59))) {
-+		/*
-+		 * Some timers can use more than 59 bits, and when a timestamp
-+		 * is added to the buffer, it will lose those bits.
-+		 */
-+		if (abs && (info->ts & TS_MSB)) {
-+			info->delta &= ABS_TS_MASK;
-+
- 		/* did the clock go backwards */
--		if (info->before == info->after && info->before > info->ts) {
-+		} else if (info->before == info->after && info->before > info->ts) {
- 			/* not interrupted */
- 			static int once;
+ 	/* Writes always succeed with a valid number even if it gets interrupted. */
+ 	do {
+ 		cnt = local_inc_return(&t->cnt);
+ 		rb_time_val_set(&t->top, top, cnt);
+ 		rb_time_val_set(&t->bottom, bottom, cnt);
++		rb_time_val_set(&t->msb, val >> RB_TIME_MSB_SHIFT, cnt);
+ 	} while (cnt != local_read(&t->cnt));
+ }
  
-@@ -3304,7 +3339,7 @@ static void dump_buffer_page(struct buffer_data_page *bpage,
+@@ -694,8 +700,8 @@ rb_time_read_cmpxchg(local_t *l, unsigned long expect, unsigned long set)
  
- 		case RINGBUF_TYPE_TIME_STAMP:
- 			delta = rb_event_time_stamp(event);
--			ts = delta;
-+			ts = rb_fix_abs_ts(delta, ts);
- 			pr_warn("  [%lld] absolute:%lld TIME STAMP\n", ts, delta);
- 			break;
+ static int rb_time_cmpxchg(rb_time_t *t, u64 expect, u64 set)
+ {
+-	unsigned long cnt, top, bottom;
+-	unsigned long cnt2, top2, bottom2;
++	unsigned long cnt, top, bottom, msb;
++	unsigned long cnt2, top2, bottom2, msb2;
+ 	u64 val;
  
-@@ -3380,7 +3415,7 @@ static void check_buffer(struct ring_buffer_per_cpu *cpu_buffer,
+ 	/* The cmpxchg always fails if it interrupted an update */
+@@ -711,16 +717,18 @@ static int rb_time_cmpxchg(rb_time_t *t, u64 expect, u64 set)
  
- 		case RINGBUF_TYPE_TIME_STAMP:
- 			delta = rb_event_time_stamp(event);
--			ts = delta;
-+			ts = rb_fix_abs_ts(delta, ts);
- 			break;
+ 	 cnt2 = cnt + 1;
  
- 		case RINGBUF_TYPE_PADDING:
-@@ -4367,6 +4402,7 @@ rb_update_read_stamp(struct ring_buffer_per_cpu *cpu_buffer,
+-	 rb_time_split(val, &top, &bottom);
++	 rb_time_split(val, &top, &bottom, &msb);
+ 	 top = rb_time_val_cnt(top, cnt);
+ 	 bottom = rb_time_val_cnt(bottom, cnt);
  
- 	case RINGBUF_TYPE_TIME_STAMP:
- 		delta = rb_event_time_stamp(event);
-+		delta = rb_fix_abs_ts(delta, cpu_buffer->read_stamp);
- 		cpu_buffer->read_stamp = delta;
- 		return;
+-	 rb_time_split(set, &top2, &bottom2);
++	 rb_time_split(set, &top2, &bottom2, &msb2);
+ 	 top2 = rb_time_val_cnt(top2, cnt2);
+ 	 bottom2 = rb_time_val_cnt(bottom2, cnt2);
  
-@@ -4397,6 +4433,7 @@ rb_update_iter_read_stamp(struct ring_buffer_iter *iter,
- 
- 	case RINGBUF_TYPE_TIME_STAMP:
- 		delta = rb_event_time_stamp(event);
-+		delta = rb_fix_abs_ts(delta, iter->read_stamp);
- 		iter->read_stamp = delta;
- 		return;
- 
-@@ -4650,6 +4687,7 @@ rb_buffer_peek(struct ring_buffer_per_cpu *cpu_buffer, u64 *ts,
- 	case RINGBUF_TYPE_TIME_STAMP:
- 		if (ts) {
- 			*ts = rb_event_time_stamp(event);
-+			*ts = rb_fix_abs_ts(*ts, reader->page->time_stamp);
- 			ring_buffer_normalize_time_stamp(cpu_buffer->buffer,
- 							 cpu_buffer->cpu, ts);
- 		}
-@@ -4741,6 +4779,7 @@ rb_iter_peek(struct ring_buffer_iter *iter, u64 *ts)
- 	case RINGBUF_TYPE_TIME_STAMP:
- 		if (ts) {
- 			*ts = rb_event_time_stamp(event);
-+			*ts = rb_fix_abs_ts(*ts, iter->head_page->page->time_stamp);
- 			ring_buffer_normalize_time_stamp(cpu_buffer->buffer,
- 							 cpu_buffer->cpu, ts);
- 		}
+ 	if (!rb_time_read_cmpxchg(&t->cnt, cnt, cnt2))
+ 		return false;
++	if (!rb_time_read_cmpxchg(&t->msb, msb, msb2))
++		return false;
+ 	if (!rb_time_read_cmpxchg(&t->top, top, top2))
+ 		return false;
+ 	if (!rb_time_read_cmpxchg(&t->bottom, bottom, bottom2))
 -- 
 2.35.1

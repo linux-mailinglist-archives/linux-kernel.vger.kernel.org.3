@@ -2,142 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F0B512B60
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB6B512B5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243603AbiD1GUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S243256AbiD1GVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243605AbiD1GUp (ORCPT
+        with ESMTP id S243605AbiD1GU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:20:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06345532F6
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651126648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQhGtA47NR84b2kaV85amh4Sebyf9NryuvTIfdPeXpA=;
-        b=K5bDmTSnZ2E7/XoLjkYPUmvrHp26LDs6R9AhgQLl0RtKnWBF//b8TvJL1CH3tGjIk0AVZD
-        Rms3e2W+f2nbyz3lVCHlreXSVaK1nqxDfmdwPk93XrFq2CD2JU5uvvoVVSNgT60M17MlQa
-        tmFJlTjqHN7Godo9EYWpQLmg2mu6XyM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-XkX60JfoPbq7ZWGKLkHP3w-1; Thu, 28 Apr 2022 02:17:26 -0400
-X-MC-Unique: XkX60JfoPbq7ZWGKLkHP3w-1
-Received: by mail-wm1-f71.google.com with SMTP id h65-20020a1c2144000000b0038e9ce3b29cso3912528wmh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:17:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qQhGtA47NR84b2kaV85amh4Sebyf9NryuvTIfdPeXpA=;
-        b=Et1B4BrukHVXi8TRl+ACbjNxx9k4PO+ihT6Ps/cd+E15qL+ccSR1ONRNi9EWV6daQx
-         3IuCAThS6AyJ3CTyirqDZxTOm+LdLM3nfcjNgPki4egHOE8MpFPjdxVIvtnN4aVYUf7M
-         14duMB7fUNph1KhLgqCUZuSrnshP6wn4zQwSlxXmaHSF9nESoLvsHy312aApuPt0kCV/
-         l1iq71nUNtRilaXVCALndSJjkfnxqAZpZeHH4ZY8LCMAqt5By45ib2QvdGGxtOaojdMb
-         VmqEVclIQ+SVuLDjWn1LonHtWnMmOwsON3cYNad6qwtgbTdzBxUUnd1bT99Kj7XQWjZN
-         rylg==
-X-Gm-Message-State: AOAM5333NErQm/wcZ0iJXAc+BDX74MG6CVEyaVTzi1xzOyO+NZJGs4G9
-        6Mu30PdKewxhUcEkh1RQn2uKGRnBDBhA0lEo+0n2v3yagpLDmocA9lx4Sj40QWL75E7P+KeKeFy
-        MGEnKH9u2b+eEFqhEH89IjLsO
-X-Received: by 2002:a05:600c:1d9b:b0:393:ffc8:a09b with SMTP id p27-20020a05600c1d9b00b00393ffc8a09bmr6976969wms.40.1651126645654;
-        Wed, 27 Apr 2022 23:17:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJySt1PmpZpkFkGjb2r3Cu8qgqSGEsGjgTv5m05qjUwHnRW5foby32blg2uMdYADJxt6WCMk5A==
-X-Received: by 2002:a05:600c:1d9b:b0:393:ffc8:a09b with SMTP id p27-20020a05600c1d9b00b00393ffc8a09bmr6976935wms.40.1651126645390;
-        Wed, 27 Apr 2022 23:17:25 -0700 (PDT)
-Received: from redhat.com ([2.53.18.16])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d6482000000b0020a96536fcdsm16391780wri.57.2022.04.27.23.17.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 23:17:24 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 02:17:19 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-Message-ID: <20220428021658-mutt-send-email-mst@kernel.org>
-References: <20220425235415-mutt-send-email-mst@kernel.org>
- <87o80n7soq.fsf@redhat.com>
- <20220426124243-mutt-send-email-mst@kernel.org>
- <87ilqu7u6w.fsf@redhat.com>
- <20220428044315.3945e660.pasic@linux.ibm.com>
- <CACGkMEudDf=XXhV2tV+xZ586AnDyrQEotGAiSQZ4k1CTAWHZJQ@mail.gmail.com>
- <20220428012156-mutt-send-email-mst@kernel.org>
- <CACGkMEsd+WHp=LN0BnnDKfzv+nbS2hjgVC-tdemZWuPTc60HBQ@mail.gmail.com>
- <20220428015318-mutt-send-email-mst@kernel.org>
- <CACGkMEutdd=9c-2h5ijMkgUzEqNPtUCXAum7bm8W7a6m62i_Mg@mail.gmail.com>
+        Thu, 28 Apr 2022 02:20:57 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4BF56438
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:17:40 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220428061734euoutp0118c214555922acaf5bccc7c9d0f45ab8~p_vHCaFRH2867628676euoutp01X
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:17:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220428061734euoutp0118c214555922acaf5bccc7c9d0f45ab8~p_vHCaFRH2867628676euoutp01X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651126654;
+        bh=wykqAZ/UFervqxVBBSSAX9W2b/GJHkcFhGNRgON940U=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=VdNl5m/+KBOsz6zc0R9TUCo4yq52eHRfG2aDBxWGto2gRoWW34ZuEb4QDDekPtO+A
+         vsbh64sjCIj3xm9u7Pozpn/aiYveSjZXaFwZDkqUbraN3bsUKaRbMe/nI7teJPnMMo
+         OrUJczd6/iNnReVbtTfmwkwe0bojijLWJfkAcWiE=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220428061734eucas1p2423cc33810d043bd717eacc23adf2350~p_vGybbbI1723517235eucas1p2P;
+        Thu, 28 Apr 2022 06:17:34 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id EF.8F.10260.E713A626; Thu, 28
+        Apr 2022 07:17:34 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220428061733eucas1p19ef9f0a6023c9f275480f5e2cb3ea647~p_vGVDJon1079310793eucas1p1B;
+        Thu, 28 Apr 2022 06:17:33 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220428061733eusmtrp27eebdf26092c1c9c314609925e4f5ad8~p_vGReLtj0938709387eusmtrp2x;
+        Thu, 28 Apr 2022 06:17:33 +0000 (GMT)
+X-AuditID: cbfec7f5-bf3ff70000002814-51-626a317ebaa8
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 48.62.09522.D713A626; Thu, 28
+        Apr 2022 07:17:33 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220428061733eusmtip22ef0ed22f08dcae97814168398878bef~p_vFhaob71636416364eusmtip2x;
+        Thu, 28 Apr 2022 06:17:32 +0000 (GMT)
+Message-ID: <8cc97a1b-f03a-3303-4357-fc26abe58fcd@samsung.com>
+Date:   Thu, 28 Apr 2022 08:17:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEutdd=9c-2h5ijMkgUzEqNPtUCXAum7bm8W7a6m62i_Mg@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] Revert
+ "drm: of: Lookup if child node has panel or bridge"
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Robert Foss <robert.foss@linaro.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220427143410.bectqumq62qmlv5x@houat>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMKsWRmVeSWpSXmKPExsWy7djPc7p1hllJBt2bhS16z51ksji9/x2L
+        xf9tE5ktrnx9z2bxZdMENovOiUvYLab8Wc5kcXnXHDaLhR+3sljM+PGP0eLy1z5Gi+cLfzBb
+        fJr1kNni5655LBZb3kxkdeD3WPvxPqvHvDXVHnfOnWfz2PttAYvHzll32T1md8xk9bhzbQ+b
+        x/ZvD4AqTgZ63O8+zuSx+XS1x+dNcgE8UVw2Kak5mWWpRfp2CVwZL/rWsxSsFK/4tmwfcwPj
+        V6EuRk4OCQETiQWnPrOB2EICKxglpk2X6GLkArK/MErc2DOJBcL5zChx9tVFFpiO+atnMEEk
+        ljNKtF/5wQbhfGSUuHJ2K1gVr4CdxNIP38DmsgioSjw8t44NIi4ocXLmE7AaUYEkibn77jGD
+        2MICoRJ7n+9jArGZBcQlbj2ZD2aLCARINGy5CraNWWAZi0TPgh/sIAk2AUOJrrddYEM5gU76
+        uPA7C0SzvMT2t3OYIU49xSlx7L0GhO0i0fDoITuELSzx6vgWKFtG4v9OkGUcQHa+xN8ZxhDh
+        Colrr9dAjbGWuHPuFxtICbOApsT6XfoQYUeJDyf72CE6+SRuvBWEOIBPYtK26cwQYV6JjjZo
+        QKtJzDq+Dm7nwQuXmCcwKs1CCpNZSH6fheSVWQh7FzCyrGIUTy0tzk1PLTbOSy3XK07MLS7N
+        S9dLzs/dxAhMh6f/Hf+6g3HFq496hxiZOBgPMUpwMCuJ8H7ZnZEkxJuSWFmVWpQfX1Sak1p8
+        iFGag0VJnDc5c0OikEB6YklqdmpqQWoRTJaJg1OqgalYh6PSbPrMnwt/XvaqLt/ZdWdeXfTm
+        G9M4vP028FVsUbZ1aLnfnaJsci13tsHZ6Ex5/9WF+09N8i5cftXLykLlzf7K2YFFlqwBQZ8n
+        8exSdioxXTp/lfb6w7ctanqrLWMEy2PNCi+tn5+/sbvueva7XtfD/EFPwrXiz3q1WF6Y37tH
+        ZmKGqvL9PWLXw3I4b6+YUlh07fGvkC83r/xblv/l6cesFXtEfh9jTXhvYZwYFB4QqL/XRatU
+        3e1k8vQlWVdKxd0O+Ujuee29In3Os9AHz1J2xczRzv5c9UtJ6ffz/gksJiLzL9Wa/c/XCmQ9
+        9ujbKpOljx5u7zo/KfHIXWkb1SthG18x7onl7jv77qISS3FGoqEWc1FxIgCeM88I9gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFIsWRmVeSWpSXmKPExsVy+t/xe7q1hllJBvM/61v0njvJZHF6/zsW
+        i//bJjJbXPn6ns3iy6YJbBadE5ewW0z5s5zJ4vKuOWwWCz9uZbGY8eMfo8Xlr32MFs8X/mC2
+        +DTrIbPFz13zWCy2vJnI6sDvsfbjfVaPeWuqPe6cO8/msffbAhaPnbPusnvM7pjJ6nHn2h42
+        j+3fHgBVnAz0uN99nMlj8+lqj8+b5AJ4ovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyN
+        zWOtjEyV9O1sUlJzMstSi/TtEvQyXvStZylYKV7xbdk+5gbGr0JdjJwcEgImEvNXz2DqYuTi
+        EBJYyigxo/EbM0RCRuLktAZWCFtY4s+1LjaIoveMEtOuNzGBJHgF7CSWfvjGBmKzCKhKPDy3
+        jg0iLihxcuYTFhBbVCBJ4sW254wgtrBAqMSmK1PAFjALiEvcejIfbI6IgJ/ExQf3wK5gFljG
+        IjFx9myok14zS1zqWgjWzSZgKNH1tgtsAyfQ3R8XfmeBmGQm0bW1ixHClpfY/nYO8wRGoVlI
+        DpmFZOEsJC2zkLQsYGRZxSiSWlqcm55bbKhXnJhbXJqXrpecn7uJEZgIth37uXkH47xXH/UO
+        MTJxMB5ilOBgVhLh/bI7I0mINyWxsiq1KD++qDQntfgQoykwNCYyS4km5wNTUV5JvKGZgamh
+        iZmlgamlmbGSOK9nQUeikEB6YklqdmpqQWoRTB8TB6dUA9NOr4wTUVtbfpfN3G5zN/PpgtWt
+        5054Bz/OtHAVmKX0kS2inuHuPT3vXTK12ZW3DtRYlqf0z7rKxuoa9GrmK5k7KX7VNx84JYSc
+        OnpW9uhaP8+ev7MPRbOkfQrk27cgxWnFBc6ddbefLa6Y9ke7+pqdoKKPwt0KqRenOdd//fL/
+        zL6V8587hEwJZ51+4pEc9wb/9//v72G4kBqsxj2/Q/brNUejrov+xZ0TPtXw1q/71mnRpCi/
+        6r/xrJlJRqaTlk+qf8WxY6vwi9boR3GngpPenlbhLVntpH1X6bfBQ8Hp7XpsGgynla/Hr8ws
+        e5Z0sspxj4fqY7G7Pb3K7AJqfxlbL3b3T9e9X6p/cGLDhXolluKMREMt5qLiRAAC3F3xjQMA
+        AA==
+X-CMS-MailID: 20220428061733eucas1p19ef9f0a6023c9f275480f5e2cb3ea647
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220427143420eucas1p1aa7dff284512e1c48c3db414633237ea
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220427143420eucas1p1aa7dff284512e1c48c3db414633237ea
+References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
+        <20220420231230.58499-2-bjorn.andersson@linaro.org>
+        <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+        <20220421082358.ivpmtak3ednvddrc@houat> <YmEdAVwZuA7Wo1Ch@aptenodytes>
+        <YmelPCcWCCjALtRU@aptenodytes>
+        <CAMty3ZBwguzvC8A9xA5c0enfoFRGS=4wWCzpfakTUXrsRS9GyA@mail.gmail.com>
+        <CGME20220427143420eucas1p1aa7dff284512e1c48c3db414633237ea@eucas1p1.samsung.com>
+        <20220427143410.bectqumq62qmlv5x@houat>
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 02:02:16PM +0800, Jason Wang wrote:
-> On Thu, Apr 28, 2022 at 1:55 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Thu, Apr 28, 2022 at 01:51:59PM +0800, Jason Wang wrote:
-> > > On Thu, Apr 28, 2022 at 1:24 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Thu, Apr 28, 2022 at 11:04:41AM +0800, Jason Wang wrote:
-> > > > > > But my guess is that rwlock + some testing for the legacy indicator case
-> > > > > > just to double check if there is a heavy regression despite of our
-> > > > > > expectations to see none should do the trick.
-> > > > >
-> > > > > I suggest this, rwlock (for not airq) seems better than spinlock, but
-> > > > > at worst case it will cause cache line bouncing. But I wonder if it's
-> > > > > noticeable (anyhow it has been used for airq).
-> > > > >
-> > > > > Thanks
-> > > >
-> > > > Which existing rwlock does airq use right now? Can we take it to sync?
-> > >
-> > > It's the rwlock in airq_info, it has already been used in this patch.
-> > >
-> > >                 write_lock(&info->lock);
-> > >                 write_unlock(&info->lock);
-> > >
-> > > But the problem is, it looks to me there could be a case that airq is
-> > > not used, (virtio_ccw_int_hander()). That's why the patch use a
-> > > spinlock, it could be optimized with using a rwlock as well.
-> > >
-> > > Thanks
-> >
-> > Ah, right. So let's take that on the legacy path too and Halil promises
-> > to test to make sure performance isn't impacted too badly?
-> 
-> I think what you meant is using a dedicated rwlock instead of trying
-> to reuse one of the airq_info locks.
-> 
-> If this is true, it should be fine.
-> 
-> Thanks
+Hi Maxime,
 
-yes
+On 27.04.2022 16:34, Maxime Ripard wrote:
+> On Tue, Apr 26, 2022 at 01:40:31PM +0530, Jagan Teki wrote:
+>> On Tue, Apr 26, 2022 at 1:24 PM Paul Kocialkowski
+>> <paul.kocialkowski@bootlin.com> wrote:
+>>> On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
+>>>> On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
+>>>>> On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
+>>>>>> + Linus
+>>>>>> + Marek
+>>>>>> + Laurent
+>>>>>> + Robert
+>>>>>>
+>>>>>> On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson
+>>>>>> <bjorn.andersson@linaro.org> wrote:
+>>>>>>> Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
+>>>>>>> bridge")' attempted to simplify the case of expressing a simple panel
+>>>>>>> under a DSI controller, by assuming that the first non-graph child node
+>>>>>>> was a panel or bridge.
+>>>>>>>
+>>>>>>> Unfortunately for non-trivial cases the first child node might not be a
+>>>>>>> panel or bridge.  Examples of this can be a aux-bus in the case of
+>>>>>>> DisplayPort, or an opp-table represented before the panel node.
+>>>>>>>
+>>>>>>> In these cases the reverted commit prevents the caller from ever finding
+>>>>>>> a reference to the panel.
+>>>>>>>
+>>>>>>> This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
+>>>>>>> panel or bridge")', in favor of using an explicit graph reference to the
+>>>>>>> panel in the trivial case as well.
+>>>>>> This eventually breaks many child-based devm_drm_of_get_bridge
+>>>>>> switched drivers.  Do you have any suggestions on how to proceed to
+>>>>>> succeed in those use cases as well?
+>>>>> I guess we could create a new helper for those, like
+>>>>> devm_drm_of_get_bridge_with_panel, or something.
+>>>> Oh wow I feel stupid for not thinking about that.
+>>>>
+>>>> Yeah I agree that it seems like the best option.
+>>> Should I prepare a patch with such a new helper?
+>>>
+>>> The idea would be to keep drm_of_find_panel_or_bridge only for the of graph
+>>> case and add one for the child node case, maybe:
+>>> drm_of_find_child_panel_or_bridge.
+>>>
+>>> I really don't have a clear idea of which driver would need to be switched
+>>> over though. Could someone (Jagan?) let me know where it would be needed?
+>> sun6i_mipi_dsi
+> It doesn't look like sun6i_mipi_dsi is using devm_drm_of_get_bridge at all?
+>
+>> exynos_drm_dsi
+> If you reference 711c7adc4687, I don't see why we would need to switch
+> it back to the old behaviour. It wasn't iterating over its child node
+> before, so what does the switch to drm_of_get_bridge broke exactly?
 
-> >
-> > > >
-> > > > --
-> > > > MST
-> > > >
-> >
+It broke getting the panel if it is a direct child of the DSI device 
+node. It worked before because it used following code:
+
+dsi->panel = of_drm_find_panel(device->dev.of_node);
+
+which got replaced by devm_drm_of_get_bridge().
+
+>> mcde_dsi (as of now)
+> Yeah, we do need to revert 3730bc6147b0 and 3d7039e1e649
+>
+> Maxime
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

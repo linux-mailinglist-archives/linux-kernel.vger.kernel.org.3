@@ -2,106 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495D251390A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B30513916
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349649AbiD1Pyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S1349653AbiD1P5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349338AbiD1Pyl (ORCPT
+        with ESMTP id S1348580AbiD1P5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:54:41 -0400
-Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AA23B82CE;
-        Thu, 28 Apr 2022 08:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=+e7JZ
-        FWImB/gYWPb56BE8Z6CjV8zZZto66kxquF1544=; b=jn5dK5tSBLkHFi4I6rFPz
-        M8B6ivLS6y9bAG45SqnezsFdKLe3i90GDFnTwL9d53ihibzHAARm2FDGS8r7+o2o
-        McGDph9zhhjqhRK5VvmjzcLvPzIwXVhOkm1eaSrs8VecYC+Xbx9RAyxV2oH6nkEj
-        TAiJggSynkhLGcrZUYxCG8=
-Received: from carlis (unknown [120.229.64.124])
-        by smtp10 (Coremail) with SMTP id DsCowACX01rxt2pi8R3GDQ--.41376S2;
-        Thu, 28 Apr 2022 23:51:14 +0800 (CST)
-From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Subject: [PATCH v3] scsi: pmcraid: convert sysfs snprintf to sysfs_emit
-Date:   Thu, 28 Apr 2022 15:51:11 +0000
-Message-Id: <20220428155111.257880-1-zhangxuezhi1@coolpad.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 28 Apr 2022 11:57:49 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F5DB8986
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:54:34 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220428155431euoutp017f6180f9c056ecc62e26d71f6e7c05c2~qGm2Y3vMi1958719587euoutp01G
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:54:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220428155431euoutp017f6180f9c056ecc62e26d71f6e7c05c2~qGm2Y3vMi1958719587euoutp01G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651161271;
+        bh=mSww8MNcP9LQau6omtTYAJnuYJvatHm4P/3v9FrFuEQ=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=jX2mVvFSVhV+1u6Dfhpw1ePk0ekW0o6bIDhBkl0cs93PHfA0RNjCvczdJESBLMvmZ
+         3QrHyJ6AMVWa9T7Ttoa+2sV0+6JEeCBq7qsfkmz/JuBmT9X5m/AQu4Ozkxz4lzmxsS
+         uLrXbc6Oj+Gj296oBFsAmHn1yU8xlXftBVxJTOzo=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220428155430eucas1p264e9d46e67a3b87a5f04612884dcf590~qGm195CMC1962619626eucas1p2j;
+        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 8E.9C.09887.6B8BA626; Thu, 28
+        Apr 2022 16:54:30 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220428155430eucas1p19843a8820764ea2bff4c8e828ab4c77d~qGm1ejomq0861808618eucas1p1v;
+        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220428155430eusmtrp1084ab273f286eb108908e2488bc3d4b6~qGm1dczfx2007420074eusmtrp18;
+        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
+X-AuditID: cbfec7f4-471ff7000000269f-d8-626ab8b6a3f7
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id C5.E6.09404.6B8BA626; Thu, 28
+        Apr 2022 16:54:30 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220428155430eusmtip2101d0f2ab9ec7ad016c58052efc89d15~qGm1ROzsV0803308033eusmtip2k;
+        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.162) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 28 Apr 2022 16:54:27 +0100
+Message-ID: <c490bd45-deab-8c2b-151c-c8db9f97e10c@samsung.com>
+Date:   Thu, 28 Apr 2022 17:54:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsCowACX01rxt2pi8R3GDQ--.41376S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CF48CF18tr47Zr45tFy3CFg_yoW8Ar4Dpa
-        yrGryUAr4kJr1UZrWjgay0va4FvayxJa4DtFWkZ3savF9ayrWkGa9rAayagFs5Gr4kZr9x
-        Zr4qyr1Y9a1jyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-5rcUUUUU=
-X-Originating-IP: [120.229.64.124]
-Sender: llyz108@163.com
-X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiMhLwhVWBy9fKWgAAsN
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.8.1
+Subject: Re: [PATCH 12/16] zonefs: allow non power of 2 zoned devices
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jaegeuk@kernel.org>, <axboe@kernel.dk>, <snitzer@kernel.org>,
+        <hch@lst.de>, <mcgrof@kernel.org>, <naohiro.aota@wdc.com>,
+        <sagi@grimberg.me>, <dsterba@suse.com>,
+        <johannes.thumshirn@wdc.com>
+CC:     <linux-kernel@vger.kernel.org>, <clm@fb.com>,
+        <gost.dev@samsung.com>, <chao@kernel.org>, <josef@toxicpanda.com>,
+        <jonathan.derrick@linux.dev>, <agk@redhat.com>,
+        <kbusch@kernel.org>, <kch@nvidia.com>,
+        <linux-nvme@lists.infradead.org>, <bvanassche@acm.org>,
+        <jiangbo.365@bytedance.com>, <linux-fsdevel@vger.kernel.org>,
+        <matias.bjorling@wdc.com>, <linux-block@vger.kernel.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <bfc1ddc3-5db3-6879-b6ab-210a00b82c6b@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.162]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxTVxzd7Xt977Wj5IE1XHFhC34kgwz8Ct4wwuY25GW6SefC5v5Qi7xR
+        GCBrxW2KrkodUtxaC6I2RGSiTBQZpcNKrWM1FKEtIF2XDgMOA6JMvgKbZUW3ltcl/HfO+Z3z
+        u/fcXAoLv0hEUtn5+1h5vjQ3mhDiLba5ntdaTDkZa7p716DGLhuGrgxoCFQ5NYch+yknD+k0
+        Z0jkc/ZgqNd7hIcuX2nnoeFGPYZOtE3h6Jl60K+phjA0P7QW6ay/ATTi1vOQpT8W3bR04sjV
+        WkWg6ksjJNJ+8xeGPNoRgE52NPPRtT8ncXSnf/mbkHH9uoV5fucqwZwsniCZnsEmnHE5CxlD
+        fSnB1ChPYUxz7deM+XclwXxbPEEwN47d5zOTt9wE02h044y2uYnPzBiimJK2Ml4a/YkwKZPN
+        zd7PyuOTdwtlpuIZssBNfelWPiSV4AmhBhQF6Q3wshGpgZAKp38A0NPeSXBkFsA+azFQA4Gf
+        zADo+wkFcCAwVz6OcaY6ANUNuiDxm2qrS4LEDGDXExUeiIjoZOj6Rb9wHk6vgi7HIU4Og51n
+        hxcsS+mPYaXeQQTwEjoFmhv+XdAxOgL2D1fzAjvFtA9AV/cEP0AwWoXByYd9ZGApQcfAI6Vk
+        ICCgN8PRyu8JLvwqPHbdR3L4ZXh9vArjKqzwVygjOXwINtgcZGAnpNuFsLrJyOcG78C5f+YB
+        h5fAsQ5jMPAStJefwDl8EI54fBgXVgGoudEYfNXX4XeOXM6zCU6XKINyKPSMh3H3CYW6ltOY
+        FqzSL3oL/aLO+kUV9IsqnAd4PYhgCxV5WaxiXT77RZxCmqcozM+K27M3zwD8P9n+vGPWBOrG
+        puOsgEcBK4AUFi0WzZplGeGiTOlXB1j53l3ywlxWYQXLKTw6QrQn+0dpOJ0l3cd+xrIFrPz/
+        KY8SRCp5NbOPRnVFpab6gZ0f+AzX9u/wmjZ0H+9kvA9uG34u2/p5snbbffKcSjQUn2B9V+eM
+        FVfsiDrcJji68XF3yr1RVCNJ3HjQdsuxuq/lLedxiRO23ux6O7XBm6GRvaIXxZ7bLPFWuZ7u
+        tFjOgNWPPxSTu1SD5W9clFhyps/LJMs+zevVrchYv2xwxi5KeNZVZU9MEx8m7SG1Iakhho8y
+        c0JWpsevn5c/2n02rHnL1UhBW+rSqfRNUwNRp0Pv2orqkkKN91qn4yIvwa3SbFSRuP12vMlb
+        diE24X3sPerFdZOaAekff08kDPU9KCiKSbdse2HefPTpWKrmrj7JWKFJW5mSdMATjStk0rUx
+        mFwh/Q9mQStiOAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsVy+t/xe7rbdmQlGXz9KWSx/tQxZovVd/vZ
+        LKZ9+MlscXrqWSaLSf0z2C1+nz3PbHHhRyOTxcrVR5ksnqyfxWzRc+ADi8XfrntAsZaHzBZ/
+        HhpaTDp0jdHi6dVZTBZ7b2lb7Nl7ksXi8q45bBbzlz1lt5jQ9pXZ4saEp4wWE49vZrVY9/o9
+        i8WJW9IOEh6Xr3h7/Duxhs1jYvM7do/z9zayeFw+W+qxaVUnm8fChqnMHpuX1HvsvtnA5tHb
+        /I7NY2frfVaP9/uusnms33KVxWPC5o2sHp83yXm0H+hmChCI0rMpyi8tSVXIyC8usVWKNrQw
+        0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0MvY0fyZveAqR8XVhmfsDYxv2LoYOTkk
+        BEwkfk5+y9zFyMUhJLCUUWLWvwdQCRmJT1c+skPYwhJ/rnWxQRR9ZJRYNf8TI4Szm1HiyKyv
+        rCBVvAJ2EpcPzgKq4uBgEVCVuHymFiIsKHFy5hMWEFtUIELiwe6zYOXCAq4Su9f+B4szC4hL
+        3HoynwlkpojAb0aJy+fesYI4zAItzBLvn11ih9j2h1Fix8KZYBvYBLQkGjvBzuMUcJN4Pm0R
+        G8QkTYnW7b/ZIWx5ie1v5zBDvKAM9Gc31Du1Eq/u72acwCg6C8mBs5AcMgvJqFlIRi1gZFnF
+        KJJaWpybnltspFecmFtcmpeul5yfu4kRmMy2Hfu5ZQfjylcf9Q4xMnEwHmKU4GBWEuH9sjsj
+        SYg3JbGyKrUoP76oNCe1+BCjKTCQJjJLiSbnA9NpXkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQ
+        QHpiSWp2ampBahFMHxMHp1QDU42HXeK/o26lG6Z6tqRGbriU98GmXD43Ut1WbO5O8+d2l1N/
+        nYnedqp67033uQyv56otsIuLUlV9Oe+mjmZHRffF36xPy+S3n9y1Z1rXAv5wtqqIzJfCs+rn
+        sovPLOG5aXRqoUoqg87fxa+6Tj+JYer5yZp67WDedsvwfyFbcpk2zOlcrTXN2Yzj4fdVrpbp
+        e//rpbGZlllIbprv9exjX3mK2Przq/iesizNiIgyZhHfuU9HzjZMsnehh5N6j+Ln1yzxU8+p
+        n9Z682zPkhBXi5LrSgvai7bddLq6XaWv56nd1MmpH278PRP791bV8Z28Gv9Ltj8//enfe/0D
+        wXOvlDfPlqtZ8qtD2OGTmT1DrhJLcUaioRZzUXEiAIHUKb3vAwAA
+X-CMS-MailID: 20220428155430eucas1p19843a8820764ea2bff4c8e828ab4c77d
+X-Msg-Generator: CA
+X-RootMTR: 20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44
+References: <20220427160255.300418-1-p.raghav@samsung.com>
+        <CGME20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44@eucas1p2.samsung.com>
+        <20220427160255.300418-13-p.raghav@samsung.com>
+        <bfc1ddc3-5db3-6879-b6ab-210a00b82c6b@opensource.wdc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warnings:
-drivers/scsi/pmcraid.c:3591:8-16:
-WARNING: use scnprintf or sprintf
-drivers/scsi/pmcraid.c:3557:8-16:
-WARNING: use scnprintf or sprintf
-drivers/scsi/pmcraid.c:3496:8-16:
-WARNING: use scnprintf or sprintf
+On 2022-04-28 01:39, Damien Le Moal wrote:
+> On 4/28/22 01:02, Pankaj Raghav wrote:
+>> The zone size shift variable is useful only if the zone sizes are known
+>> to be power of 2. Remove that variable and use generic helpers from
+>> block layer to calculate zone index in zonefs
+> 
+> Period missing at the end of the sentence.
+> 
+Ack
+> What about zonefs-tools and its test suite ? Is everything still OK on
+> that front ? I suspect not...
+> 
+I don't know why you assume that :). Zonefs had only one place that had
+the assumption of po2 zsze sectors:
+if (nr_zones < dev.nr_zones) {
+	size_t runt_sectors = dev.capacity & (dev.zone_nr_sectors - 1);
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
-v2: fix the sysfs_emt error.
-v3: delete the added config changes in v2.
----
- drivers/scsi/pmcraid.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 3d5cd337a2a6..57a6fe8aaf70 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -3493,7 +3493,7 @@ static ssize_t pmcraid_show_log_level(
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct pmcraid_instance *pinstance =
- 		(struct pmcraid_instance *)shost->hostdata;
--	return snprintf(buf, PAGE_SIZE, "%d\n", pinstance->current_log_level);
-+	return sysfs_emit(buf, "%d\n", pinstance->current_log_level);
- }
- 
- /**
-@@ -3554,8 +3554,7 @@ static ssize_t pmcraid_show_drv_version(
- 	char *buf
- )
- {
--	return snprintf(buf, PAGE_SIZE, "version: %s\n",
--			PMCRAID_DRIVER_VERSION);
-+	return sysfs_emit(buf, "version: %s\n", PMCRAID_DRIVER_VERSION);
- }
- 
- static struct device_attribute pmcraid_driver_version_attr = {
-@@ -3588,8 +3587,7 @@ static ssize_t pmcraid_show_adapter_id(
- 		pinstance->pdev->devfn;
- 	u32 aen_group = pmcraid_event_family.id;
- 
--	return snprintf(buf, PAGE_SIZE,
--			"adapter id: %d\nminor: %d\naen group: %d\n",
-+	return sysfs_emit(buf, "adapter id: %d\nminor: %d\naen group: %d\n",
- 			adapter_id, MINOR(pinstance->cdev.dev), aen_group);
- }
- 
--- 
-2.25.1
-
+In my local tree I changed it and I was able to run zonefs tests for non
+po2 zone device. I have also mentioned it in my cover letter:
+```
+ZoneFS:
+zonefs-tests.sh from zonefs-tools were run with no failures.
+```
+I will make sure to add my private tree for zonefs in my cover letter in
+the next rev. But even without that change, a typical emulated npo2
+device should work fine because the changes are applicable only for
+"runt" zones.

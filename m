@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ED3513AC5
+	by mail.lfdr.de (Postfix) with ESMTP id 07569513AC4
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344074AbiD1RZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S1345611AbiD1RZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343684AbiD1RZW (ORCPT
+        with ESMTP id S1343575AbiD1RZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Apr 2022 13:25:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B341D5BD39
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B34685BE7B
         for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1651166526;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5zUbyOsP3xAYJ4at2YNe/KyTjVNVtkCIzWhlQOjPf5A=;
-        b=MPlLuheoUQccDAODuh4E7ykCMUSGI+QfQuXz1W4S8UzRva2EapiV2UrUAg9Nbx5syG4Z1o
-        87ULHvoewA06xAJUWjgXO7W+Jun2C4OqiZp6f6bGEXCQ2WlQDb4yzGsA9aawVXjiJD7y1U
-        /ngdHjGgpceCT5YNZFtzP0z/nOpwDtc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+3LdEdkdoLKwdyJRw9U/ij8FGS03kA2dkuIR6qlHtPI=;
+        b=SyvShgxkITSkUYtLop193a253A3m7PHLPqw5dZ9AS+PSH4bQDWSx5G68WNAmv2xqyOmcjt
+        hcheFYFX0ddGbYZiEfcOBumrezUiBd5o081A5JpyLrXQg5wuajIomotaMVxC101Of/I5oJ
+        C/tX507ssDrab6/CGlmyMGnPhRj4XdE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-Z9aZ-t-uNSerjpPNlvIeHQ-1; Thu, 28 Apr 2022 13:22:04 -0400
-X-MC-Unique: Z9aZ-t-uNSerjpPNlvIeHQ-1
-Received: by mail-wm1-f70.google.com with SMTP id m124-20020a1c2682000000b00393fcd2722dso1786163wmm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:22:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5zUbyOsP3xAYJ4at2YNe/KyTjVNVtkCIzWhlQOjPf5A=;
-        b=cI4N4cIfMosAomLRiheBvqciDXpSVsAykJnSdExIBvczOurDbqG0kU7xnBbfGWHECk
-         N2LV6inxMAqGgt6OopCxuszUpEbM9PGxJWxevxE6yjrJ7+Keuc5nJXU7VvE7X8HbZBcb
-         +iaVutlj+ZH1LrMkHrm3ytt38s2kJzg75JTHgLOckg0MMNfnZFl/oy7WrxErrlfzcqGT
-         inl6IwQ3yNNhk2d64jjj+62L6uN/3unk0H/Aqxrmj4Jnewa2kX7T162LNhRd0QLc0s6x
-         CDaojoiPfDJvbM9aaD+9Sp9qM4i1NoDViC4jj4WOrbTOhht38lVsQG09k8DSntMmgWLE
-         gRjg==
-X-Gm-Message-State: AOAM5336gwglg4j48AguasnFum55M4a0VAw2OO4wN8qMC39ls80zuaLt
-        /Z5/ieUhcEpjqOL0dy44kjoAjEg/XwmAgUY854Ka+8CnLQdAue9qGEVvyKxHCkuPh6RyLrd7I5Q
-        pCAJFiW3nnl0W2tv/Fx+yXbyzhGCfJ4WMQGhy5eZE
-X-Received: by 2002:a7b:cbc1:0:b0:38e:7c42:fe38 with SMTP id n1-20020a7bcbc1000000b0038e7c42fe38mr42293404wmi.51.1651166523723;
-        Thu, 28 Apr 2022 10:22:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy1WHHnyNchm0evBJjli2hIERYWmATR8AuMBS2O4OAvhOhqFZ1txvtVXuGj6QuHPITPFTOhS7Tb7HCQXbPNXho=
-X-Received: by 2002:a7b:cbc1:0:b0:38e:7c42:fe38 with SMTP id
- n1-20020a7bcbc1000000b0038e7c42fe38mr42293394wmi.51.1651166523551; Thu, 28
- Apr 2022 10:22:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
- <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com> <CAHk-=wiF8D6Bs2m8y85XpHU__c4XD1yFV9JXx9FuTqoge+-yhg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiF8D6Bs2m8y85XpHU__c4XD1yFV9JXx9FuTqoge+-yhg@mail.gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Thu, 28 Apr 2022 19:21:52 +0200
-Message-ID: <CAHc6FU5Et7bh7zOQTSqBjmRAdB3Hibk8xwXG_YVs_VRXVh8iFA@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+ us-mta-615-RaGUCpt0NaGLulKogK1Acw-1; Thu, 28 Apr 2022 13:22:01 -0400
+X-MC-Unique: RaGUCpt0NaGLulKogK1Acw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE6C8101AA45;
+        Thu, 28 Apr 2022 17:22:00 +0000 (UTC)
+Received: from starship (unknown [10.40.192.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 82500C15D40;
+        Thu, 28 Apr 2022 17:21:57 +0000 (UTC)
+Message-ID: <cfa024924eb3be66f94a2c59e164b9a1fa16653e.camel@redhat.com>
+Subject: Re: [syzbot] WARNING in kvm_mmu_uninit_tdp_mmu (2)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     syzbot <syzbot+a8ad3ee1525a0c4b40ec@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Date:   Thu, 28 Apr 2022 20:21:56 +0300
+In-Reply-To: <8f21a9d4b4ceb7c515f776b1a981c801e439c5f0.camel@redhat.com>
+References: <00000000000082452505dd503126@google.com>
+         <13b3235ef66f22475fd4059df95ad0144548ccd1.camel@redhat.com>
+         <YmqzoFqdmH1WuPv0@google.com>
+         <8f21a9d4b4ceb7c515f776b1a981c801e439c5f0.camel@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 7:17 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Thu, Apr 28, 2022 at 10:09 AM Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> >
-> > I'll look at that copy_page_to_iter_iovec() some more regardless, but
-> > doing that "let's double-check it's not somethign else" would be good.
->
-> Oh, and as I do that, it strikes me: What platform do you see the problem on?
->
-> Because the code for that function is very different if HIGHMEM is
-> enabled, so if you see this on x86-32 but not x86-64, for example,
-> that is relevant.
->
-> I *assume* nobody uses x86-32 any more, but just checking...
+On Thu, 2022-04-28 at 20:16 +0300, Maxim Levitsky wrote:
+> On Thu, 2022-04-28 at 15:32 +0000, Sean Christopherson wrote:
+> > On Tue, Apr 26, 2022, Maxim Levitsky wrote:
+> > > I can reproduce this in a VM, by running and CTRL+C'in my ipi_stress test,
+> > 
+> > Can you post your ipi_stress test?  I'm curious to see if I can repro, and also
+> > very curious as to what might be unique about your test.  I haven't been able to
+> > repro the syzbot test, nor have I been able to repro by killing VMs/tests.
+> > 
+> 
+> This is the patch series (mostly attempt to turn svm to mini library,
+> but I don't know if this is worth it.
+> It was done so that ipi_stress could use  nesting itself to wait for IPI
+> from within a nested guest. I usually don't use it.
+> 
+> This is more or less how I was running it lately (I have a wrapper script)
+> 
+> 
+> ./x86/run x86/ipi_stress.flat \
+>         -global kvm-pit.lost_tick_policy=discard \
+> 	        -machine kernel-irqchip=on -name debug-threads=on  \
+> 	        \
+> 	        -smp 8 \
+> 	        -cpu host,x2apic=off,svm=off,-hypervisor \
+> 	        -overcommit cpu-pm=on \
+> 	        -m 4g -append "0 10000"
 
-This is on x86_64.
+I forgot to mention: this should be run in a loop.
 
-Andreas
+Best regards,
+	Maxim Levitsky
+
+> 
+> 
+> Its not fully finised for upstream, I will get to it soon.
+> 
+> 'cpu-pm=on' won't work for you as this fails due to non atomic memslot
+> update bug for which I have a small hack in qemu, and it is on my
+> backlog to fix it correctly.
+> 
+> Mostly likely cpu_pm=off will also reproduce it.
+> 
+> 
+> Test was run in a guest, natively this doesn't seem to reproduce.
+> tdp mmu was used for both L0 and L1.
+> 
+> Best regards,
+> 	Maxim levitsky
+
 

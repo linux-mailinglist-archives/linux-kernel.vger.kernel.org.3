@@ -2,127 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615D1512F15
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDE4512F12
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344721AbiD1I4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S1344802AbiD1I5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344512AbiD1I4M (ORCPT
+        with ESMTP id S229612AbiD1I5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:56:12 -0400
-Received: from out203-205-251-53.mail.qq.com (out203-205-251-53.mail.qq.com [203.205.251.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF482F3BC;
-        Thu, 28 Apr 2022 01:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651135973;
-        bh=1YZv1zOYWKRjF1huRVXlo6mKgvTSjTUBeoIV4b4PtvQ=;
-        h=From:To:Cc:Subject:Date;
-        b=URXeEyQ169qjK2AVCYY0d/XzLz74WxA4OADySh5wJfWFL1b7tsqRJErCRLMGRWa3i
-         urZmdiwpEhOhm/SHyR2IqwA6zQXjFBat9JVh2BUT100b1ySEbThnPX8iygzwzkqZkN
-         1d9XcPbjR5etSyLzQwk2DSlUoHqXS9/I+4Ntrqkg=
-Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrszb6.qq.com (NewEsmtp) with SMTP
-        id D3137827; Thu, 28 Apr 2022 16:52:49 +0800
-X-QQ-mid: xmsmtpt1651135969t5qiwrf7v
-Message-ID: <tencent_EDB94B1C7E14B4E1974A66FF4D2029CC6D08@qq.com>
-X-QQ-XMAILINFO: MQ+wLuVvI2LQULY0Prs9k+SYrCIJ25n+J1FFbPzFDaLOs58lBVFosbs9muNjZO
-         UkC5FRYale8I0tJQhZMnD/nNF1Vz++RhAUQPQYY1kxbAC/i3UeS57nhtQHjiGPTEXUIC9sgQ/vj0
-         6pFCBZeTgpBCCwyN7nfohxjPOPs2KV5S66KuGJph61XB3D47DQudC+wkfULr7i7INNE1IbcAKsF7
-         z5mQdiC1fpWt4ABJnM+UP82qL80FsyftAmZ4GzSIodBKxV0foXSoPbQM8pbdEXNXOj4y/nEUyNAk
-         gMXE8OR5f1XLUHxCwUC9fBFx9L94N1ar7g8mycekJj5CMpYwWzHTuWcEFfHw17iXC6+hDfWz/dzn
-         dVx/DsqNegIxEh8UznNw1NhxOVfm/tSYfGwpLNvFg24xszvB3N1Q7xVOtw/lsjitmm2Zn14N14x9
-         T0ovUmfrXcIKQwKIwjyRpU5lGFJeMu0frDtVaojrqzm1skPkmY14BSyoHwxqwbxT6GpBZZMu9rrc
-         1kSs5rUXHTxQvP2yS1cJFFrXpcMDc4Qay6bI3xKaKeVctigZKhyAwM60O5vK5rZiQYDE4yjf0KTo
-         dzfYRbMZe1T9N14lsta04Vxpl9f0TrT/Uok5hjGXJ4xhL/AYMJnUkiFyfWREVPx61+pAgwXCznmu
-         ySklUpDQultSP6YmOh+BOek5XzN8wG4JDpZCBf0iiP3QkEjOuJ/V8YumjfNpkkPczzZIBDDK+lZz
-         TBlxIecqwwT+V0thIWg8ec/eWoFmS4qJAIoBfcOvDKIdLbrYkghw3Mgw+qWt3m2hp7tRcfnq73x4
-         A1MjnJcoE2I92Gvp644tKRuTuSPpWZmLqSU3EsV9mbuuV86BnQoTjTi3s6Hh07u0XuqjUXV59qen
-         oL8kyD/o20G2Wfyn3GwLAjoH3TG7ROERDv+4RVGjWclqoPXrqlia0oNmgr5+yysKzNm0REgkYUxP
-         y0L3KWasBRa46yrBaytg==
-From:   xkernel.wang@foxmail.com
-To:     agross@kernel.org, bjorn.andersson@linaro.org, joro@8bytes.org,
-        will@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v2] iommu/msm: add a check for the return of kzalloc()
-Date:   Thu, 28 Apr 2022 16:52:39 +0800
-X-OQ-MSGID: <20220428085239.1287-1-xkernel.wang@foxmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 04:57:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084C336E09;
+        Thu, 28 Apr 2022 01:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651136036; x=1682672036;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=X3OOmtCe+RtZnYz/y8LBsTsqOgyRUd+KMRuagy9DkO4=;
+  b=lgn5rF3k70JaiYep7LUW0LVTtLm4cmapSaMsYhNeZsObmWQ/lZkyXTw4
+   mQCcv69K56EAiT+xBHat1MNbxmlUQ6FDMjAMMlfhtf3/8F0yg75uaBaSg
+   6QWsz5gUAF5Dl3TGujXLbS8S8NKY+ycc4GEC9GIwsfGxBVXKhRNxkwsJ+
+   7OpFjW7QFG8qsFQxL7kfDIiYUnt/O1fJbN/ncDwD+RkFDOHHpfzljeO8+
+   BlZvz1viBEGnOIEHak080tmEsPN2XBNmDrH0TyhDbYHF7kkeTA7W3Lre0
+   aJU+4RiwoLStKaEZmOYNQURiSOhn7j1PigaEow7wloLsF04ZvexKwgeHR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="265061725"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="265061725"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 01:53:55 -0700
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="541008605"
+Received: from yingyuqu-mobl1.ccr.corp.intel.com ([10.249.171.194])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 01:53:53 -0700
+Message-ID: <d4c9337e369d2bd0a3a8c0bf9fffcc18937a08e8.camel@intel.com>
+Subject: Re: linux-next: build failure after merge of the pm tree
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Date:   Thu, 28 Apr 2022 16:53:50 +0800
+In-Reply-To: <20220428110030.7090a45b@canb.auug.org.au>
+References: <20220428110030.7090a45b@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Thu, 2022-04-28 at 11:00 +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the pm tree, today's linux-next build (x86_64
+> allmodconfig)
+> failed like this:
+> 
+> drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
+> drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e'
+> undeclared (first use in this function)
+>  1701 |                 disable_promotion_to_c1e = true;
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier
+> is reported only once for each function it appears in
+> drivers/idle/intel_idle.c:1706:9: error: implicit declaration of
+> function 'c1e_promotion_enable' [-Werror=implicit-function-
+> declaration]
+>  1706 |         c1e_promotion_enable();
+>       |         ^~~~~~~~~~~~~~~~~~~~
+> drivers/idle/intel_idle.c: At top level:
+> drivers/idle/intel_idle.c:1854:13: error: conflicting types for
+> 'c1e_promotion_enable'; have 'void(void)' [-Werror]
+>  1854 | static void c1e_promotion_enable(void)
+>       |             ^~~~~~~~~~~~~~~~~~~~
+> drivers/idle/intel_idle.c:1854:13: error: static declaration of
+> 'c1e_promotion_enable' follows non-static declaration
+> drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration
+> of 'c1e_promotion_enable' with type 'void(void)'
+>  1706 |         c1e_promotion_enable();
+>       |         ^~~~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
+> parameter")
+> 
+> interacting with commit
+> 
+>   cc6e234b8264 ("intel_idle: Add AlderLake support")
+> 
+> Presumably this should have been fixed up in commit
+> 
+>   55ecda6f25ef ("Merge branch 'intel-idle' into linux-next")
+> 
+> I have used the pm tree from next-20220427 for today.
+> 
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it to
-prevent potential wrong memory access.
+TBH, I'm not quite sure about the Fixes tag below.
 
-Besides, to propagate the error to the caller, the type of
-insert_iommu_master() is changed to `int`. Several instructions related
-to it are also updated.
+Although commit 39c184a6a9a7 is merged later and breaks commit
+cc6e234b8264, but given that commit 39c184a6a9a7 is for -rc material
+and commit cc6e234b8264 and this patch are for next merge window, so I
+still use the orginal ADL intel_idle commit for Fixes tag.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+thanks,
+rui
+
+From 9b784d7f9ea5593a92eb6d616523b5f47464e981 Mon Sep 17 00:00:00 2001
+From: Zhang Rui <rui.zhang@intel.com>
+Date: Thu, 28 Apr 2022 09:37:10 +0800
+Subject: [PATCH] intel_idle: fix C1E handling for AlderLake
+
+commit cc6e234b8264 ("intel_idle: Add AlderLake support") disables the C1E
+promotion using the 'disable_promotion_to_c1e' variable, but enables the
+the C1E promotion by invoking c1e_promotion_enable() directly.
+
+Then, commit 39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
+parameter") removes the 'disable_promotion_to_c1e' variable and introduces
+a new tri-state 'c1e_promotion' variable that can be used for both
+enabling and disabling C1E promotion, on a per CPU basis.
+
+Switch to use the new 'c1e_promotion' variable to fix the build failure,
+and also to do C1E promotion bit update on all CPUs.
+
+Fixes: commit cc6e234b8264 ("intel_idle: Add AlderLake support")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
-ChangeLog:
-v1->v2 propagate the error to the caller.
- drivers/iommu/msm_iommu.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/idle/intel_idle.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index 3a38352..e3d109b 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -588,7 +588,7 @@ static void print_ctx_regs(void __iomem *base, int ctx)
- 	       GET_SCTLR(base, ctx), GET_ACTLR(base, ctx));
- }
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 7c081ed26b64..2de6e0a2d9a1 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1698,12 +1698,12 @@ static void __init adl_idle_state_table_update(void)
+ 		cpuidle_state_table[1].flags |= CPUIDLE_FLAG_UNUSABLE;
  
--static void insert_iommu_master(struct device *dev,
-+static int insert_iommu_master(struct device *dev,
- 				struct msm_iommu_dev **iommu,
- 				struct of_phandle_args *spec)
- {
-@@ -597,6 +597,10 @@ static void insert_iommu_master(struct device *dev,
- 
- 	if (list_empty(&(*iommu)->ctx_list)) {
- 		master = kzalloc(sizeof(*master), GFP_ATOMIC);
-+		if (!master) {
-+			dev_err(dev, "Failed to allocate iommu_master\n");
-+			return -ENOMEM;
-+		}
- 		master->of_node = dev->of_node;
- 		list_add(&master->list, &(*iommu)->ctx_list);
- 		dev_iommu_priv_set(dev, master);
-@@ -606,10 +610,11 @@ static void insert_iommu_master(struct device *dev,
- 		if (master->mids[sid] == spec->args[0]) {
- 			dev_warn(dev, "Stream ID 0x%hx repeated; ignoring\n",
- 				 sid);
--			return;
-+			return 0;
- 		}
- 
- 	master->mids[master->num_mids++] = spec->args[0];
-+	return 0;
- }
- 
- static int qcom_iommu_of_xlate(struct device *dev,
-@@ -629,7 +634,7 @@ static int qcom_iommu_of_xlate(struct device *dev,
- 		goto fail;
+ 		/* Disable C1E by clearing the "C1E promotion" bit. */
+-		disable_promotion_to_c1e = true;
++		c1e_promotion = C1E_PROMOTION_DISABLE;
+ 		return;
  	}
+ end:
+ 	/* Make sure C1E is enabled by default */
+-	c1e_promotion_enable();
++	c1e_promotion = C1E_PROMOTION_ENABLE;
+ }
  
--	insert_iommu_master(dev, &iommu, spec);
-+	ret = insert_iommu_master(dev, &iommu, spec);
- fail:
- 	spin_unlock_irqrestore(&msm_iommu_lock, flags);
- 
+ /**
 -- 
+2.17.1
+
+
+

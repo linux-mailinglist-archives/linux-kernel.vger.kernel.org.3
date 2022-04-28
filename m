@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A28513258
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21BE51325D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiD1LYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S1344983AbiD1LZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345588AbiD1LX4 (ORCPT
+        with ESMTP id S232908AbiD1LZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:23:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD5A55371;
-        Thu, 28 Apr 2022 04:20:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A2B61F41;
-        Thu, 28 Apr 2022 11:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176E4C385A9;
-        Thu, 28 Apr 2022 11:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651144841;
-        bh=TY47/0/sbw4f9kkF8QnQ8nbEpKwxiWT9PmOLyB2eupo=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=evVFGsSgkLC0lENLdtt85BsdKLf2gH3q08LxuD8/MfP6HK2L4V/1egXXfyB+cLbDx
-         OJ/z9JzWW087ZqQV9V15lxzkj0XT78enOk5292msRqO1h1F8VwUAxL3DTTMO1iq/ah
-         9A6JGeyrneYBCcMNIOyAGpoO0fiNSI2AQLIQdgPVoQUhqh4xDtemM21Ej1AwsXTUl4
-         Y1LQMNiHXnL7UsXLsAlX2MH9vpQi/lSMOrmdg0hjrkfB8e89dYuJjtzaiZGlbCkP6u
-         hLycJ5XdnOxJcRB1zbZF7a8B9jlS4hrZmwqnw47dB1lA3p4vPsiLtTNp28/+hPk55P
-         kywp9Z8wSxG2g==
-Message-ID: <837facd5-2b8e-2bad-6b62-9550656a2dad@kernel.org>
-Date:   Thu, 28 Apr 2022 14:20:36 +0300
+        Thu, 28 Apr 2022 07:25:12 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341565DA47;
+        Thu, 28 Apr 2022 04:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651144918; x=1682680918;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cnVnPLkUb/9RB2RNgHsF1idbtO2poGHZos9rPqsiSh4=;
+  b=uUyl90htNIsh4rxHuNGsix5t3LHOmC7F+ZOCv07spZ7hZzF2pRTJFACq
+   Mj5Ec5RMHyCUrL+hgAwKEsXd+zhqEqVv+dLvpIS8ujc5OAaPi/X9wuZcU
+   WCN1m9K/2ZWauvAvGHr3CetyWJthicGP6y16xNS1VFj5jtudia92uJV9c
+   8=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 04:21:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:21:57 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 04:21:57 -0700
+Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
+ 2022 04:21:53 -0700
+Message-ID: <6688ffa2-ec14-9126-1296-6180bab3e1d6@quicinc.com>
+Date:   Thu, 28 Apr 2022 16:51:49 +0530
 MIME-Version: 1.0
-Subject: Re: [PATCH] interconnect: qcom: use icc_sync_state
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv12 7/9] asm-generic/io: Add logging support for MMIO
+ accessors
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220427145616.523557-1-krzysztof.kozlowski@linaro.org>
- <4769c796-6edd-c23a-ee2a-ce54495548f7@kernel.org>
- <e77d9ff9-67a5-e0f3-8ad8-848342ed4dfb@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <e77d9ff9-67a5-e0f3-8ad8-848342ed4dfb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <will@kernel.org>
+References: <cover.1651139070.git.quic_saipraka@quicinc.com>
+ <6673a2e73d3dd4c7aa01fee9b26cc4a52176ba7a.1651139070.git.quic_saipraka@quicinc.com>
+ <YmpxxW5CZjMVrzF0@kroah.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <YmpxxW5CZjMVrzF0@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,45 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 28.04.22 13:23, Krzysztof Kozlowski wrote:
-> On 27/04/2022 17:34, Georgi Djakov wrote:
->> On 27.04.22 17:56, Krzysztof Kozlowski wrote:
->>> Use icc_sync_state for interconnect providers, so that the bandwidth
->>> request doesn't need to stay on maximum value.
+On 4/28/2022 4:21 PM, Greg KH wrote:
+> On Thu, Apr 28, 2022 at 03:25:30PM +0530, Sai Prakash Ranjan wrote:
+>> Add logging support for MMIO high level accessors such as read{b,w,l,q}
+>> and their relaxed versions to aid in debugging unexpected crashes/hangs
+>> caused by the corresponding MMIO operation.
 >>
->> Did you test this? In general, we should not enable this on boards that
->> do not have full interconnect scaling support in consumer drivers yet.
->> Some of the interconnects could be enabled by default by the bootloader
->> and usually later during boot the consumer drivers request the bandwidth
->> that they need. But if the requests are missing, the interconnects
->> without bandwidth users will be disabled when we reach sync state. So
->> this may (or not) cause issues...
-> 
-> I understand, thanks for bringing this up. It does not look like an
-> issue of interconnect provider but instead consumers and DTS. It's not
-> the job of provider driver to know all possible uses and DTS files. The
-> driver should expose itself and if platform is not ready, should not use
-> it by not enabling the interconnect. It's a job for DTS, not for the
-> interconnect provider.
+>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>> ---
+>>   include/asm-generic/io.h | 82 ++++++++++++++++++++++++++++++++++++++--
+>>   1 file changed, 78 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+>> index 7ce93aaf69f8..99090722cb4b 100644
+>> --- a/include/asm-generic/io.h
+>> +++ b/include/asm-generic/io.h
+>> @@ -10,6 +10,7 @@
+>>   #include <asm/page.h> /* I/O is all done through memory accesses */
+>>   #include <linux/string.h> /* for memset() and memcpy() */
+>>   #include <linux/types.h>
+>> +#include <linux/instruction_pointer.h>
+>>   
+>>   #ifdef CONFIG_GENERIC_IOMAP
+>>   #include <asm-generic/iomap.h>
+>> @@ -61,6 +62,35 @@
+>>   #define __io_par(v)     __io_ar(v)
+>>   #endif
+>>   
+>> +#if IS_ENABLED(CONFIG_TRACE_MMIO_ACCESS) && !(defined(__DISABLE_TRACE_MMIO__))
+> Shouldn't you document __DISABLE_TRACE_MMIO__ somewhere?  It's not even
+> in the changelog.  Put a big comment above this for what is is for and
+> how to use it.  Otherwise you will forget all about this in 6 months :)
+>
+> thanks,
+>
+> greg k-h
 
-Agree, but we still need to make sure this is tested and does not
-introduce any regressions at least with the DT that is upstream.
-
-> Imagine some out of tree DTS which cannot use interconnects because we
-> assume that all users of that provider are missing bandwidth requests.
-> No, instead provider should allow anyone to use it.
-
-I have an idea to introduce a kernel parameter like clk_ignore_unused,
-but for interconnects.
-
-> I understand my change might cause unexpected issues, but it is still
-> technically correct, just maybe should be followed with disabling in DTS
-> the providers without proper consumers?
-
-Not sure that enabling/disabling stuff in DT is a good option. DT should
-be just a description of the hardware and it might not be updated as often
-as the kernel.
+Didn't you ask me to split the patch to the one actually adding the flag and the one using it.
+So I have added the description in that patch which adds the flag since we can't add description
+everywhere we use the flag right :)
 
 Thanks,
-Georgi
+Sai

@@ -2,115 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED69A513009
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F2E513017
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345197AbiD1JRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S243280AbiD1JXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345389AbiD1JPD (ORCPT
+        with ESMTP id S1345485AbiD1JQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:15:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7225DE40;
-        Thu, 28 Apr 2022 02:11:49 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 11:11:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651137108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nNOLzMN4GCAqBBfW+r8eqm5hDs3n5cjsSXnK/5QFPds=;
-        b=q9fWvipxeyuuIhq4+NB4f0zZUeNRO9fKzRYos5WIhZ2FTHy8dYPMHVGR9bzNa3ITWgsq2J
-        GqMGra6y+XiQ2aQl1i6HqvOofzVtblPQQe/dj5SbfpGTubLf0kTNg2rqcXkHFtoGFjfYah
-        FOdw4duodfVpezANBfBJdprbLmZSXtsN77r9ambMrOqTOOcDrN/PBd8qGZjPyFsYKWU+Lu
-        F9otqnAOa3RCZUVVm+f7geBY8fqswq1YvvsEZv0EipvwvgCwnY9ASCte0o0X80KAVIYABr
-        u3P705AiBQ9FpbhbcZLHkPoiHWPDp5q61rGw597YAjo3wgVEOMtpqIwweRWW6A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651137108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nNOLzMN4GCAqBBfW+r8eqm5hDs3n5cjsSXnK/5QFPds=;
-        b=7dCD8xWto1maJxrNTxYG+xqLePiWvXHnBLrZmkaeDiRqei49ZmGnJxR9LO7zRcSbHpPRjy
-        ep9UlPjhOTH1ebCQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH v3 1/4] mm/highmem: Fix kernel-doc warnings in highmem*.h
-Message-ID: <YmpaUgxIk0rrwt2G@linutronix.de>
-References: <20220427183821.1979-1-fmdefrancesco@gmail.com>
- <20220427183821.1979-2-fmdefrancesco@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 28 Apr 2022 05:16:13 -0400
+Received: from mx0a-00268f01.pphosted.com (mx0a-00268f01.pphosted.com [148.163.148.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476FA5DE40;
+        Thu, 28 Apr 2022 02:12:57 -0700 (PDT)
+Received: from pps.filterd (m0165119.ppops.net [127.0.0.1])
+        by mx0a-00268f01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23S4QkpC030006;
+        Thu, 28 Apr 2022 09:12:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equinix.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pps202002;
+ bh=lReBFmaYwkckjvsophyW8RStQLs6RtU97zzDYXHCOVk=;
+ b=VbHkWg7lVuPtdtkpLXGQN6K/a0xksdg9OtrLsYY0cK+YUYpGV8rI1srqi3HE4iryEi6h
+ 0pFp4dIpnyjWDXLsoL8Vr91rWK5V8ZrmMQhKKUvEiMpH+1OZ7zyUaUBER96mVLHPymNO
+ 6wJ1dr5xs8wT9THtvvTl6gq2e8B4I0xHTnFlUQM5FHspaRDmrR5E29XkDh9N1cRVwDXQ
+ 8a4LDtQuaP9Sw11OYSVfFYYt5MJ5EvzccjuaZuFtvTRhx4q0/M8CiSzVqWJxrzWBm/01
+ vvA3tbpcbmkz2jLJxTUQCJ+1NPNhk4nb9X+I6d0mN3Vz7iqp3HCh1QGzNDJLGOVbR15G RQ== 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+        by mx0a-00268f01.pphosted.com (PPS) with ESMTPS id 3fqkwcgraw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 09:12:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O5vG+2RAMTtN4M6AIQV/i6vOaDBIpD0NMkFKdwdKxWwQSIZ8LKoE3RY9TtRW0MGZBANTLp+o0Zlh7Albh62PgaEelxVw3QlvD0MpHIhXBbGEgMsXf6lSCbFNLsU5hu0cICggEHqdQgD4IIShUH/eZMW/LwPPw35HIfQPCWb6jcJM/TjSp/jpGER40irpmockYXy1WyZbATz008n1ZCIVlt6pOfP8cOA7aquQReN5MGpKvy8XaQtWLGrA3z0yENOGbno3IHKlQj/NNNh1f0fPIbhxzz3g+21TfvqGTYd90e0m56hQy1mUzBzwXrWD7HM+UPNLD33D/e6b3+yzmIp7Ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lReBFmaYwkckjvsophyW8RStQLs6RtU97zzDYXHCOVk=;
+ b=W+y8AXPHF3MDc7KbZWo4ExeznjU7K9XfgsfYHwPFjmC88nYlS0NHtXbGehQEVY8jEF7iSChXtme3qm+Y/pgEON6XNC7T2OLtG4W91YOWKaU8rrr2aeyqr1uYFO9x+bBUjARVl3w7j7OmX70SaJ4qGgopEPItMM2xcarz6lPxb4S7iZzwnDmDFxVQ15LEZRmKlLizjQepWZ8BzgbgR00zQ+hHCk6LNhxEYKZ/uahJSDPNrzxZz8GbcWkf/yxLct0fwuAVlecqqPYa0wP39p52sJhUmzpgWhbg/4Tx0+9G61TCZMsjM9+Gdz+VCJGBJQwXkXDIIeC+Hm8Hu6xZrB+b3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=equinix.com; dmarc=pass action=none header.from=equinix.com;
+ dkim=pass header.d=equinix.com; arc=none
+Received: from DM8PR04MB8007.namprd04.prod.outlook.com (2603:10b6:5:314::20)
+ by SA2PR04MB7596.namprd04.prod.outlook.com (2603:10b6:806:140::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Thu, 28 Apr
+ 2022 09:11:59 +0000
+Received: from DM8PR04MB8007.namprd04.prod.outlook.com
+ ([fe80::8d01:c5c:c8cd:7c56]) by DM8PR04MB8007.namprd04.prod.outlook.com
+ ([fe80::8d01:c5c:c8cd:7c56%4]) with mapi id 15.20.5186.021; Thu, 28 Apr 2022
+ 09:11:58 +0000
+From:   Zev Weiss <zweiss@equinix.com>
+To:     =?iso-8859-1?Q?Jonathan_Neusch=E4fer?= <j.neuschaefer@gmx.net>
+CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Patrick Venture <venture@google.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: Re: [PATCH 2/7] clocksource: timer-npcm7xx: Enable timer 1 clock
+ before use
+Thread-Topic: [PATCH 2/7] clocksource: timer-npcm7xx: Enable timer 1 clock
+ before use
+Thread-Index: AQHYWuADPVV+VjUAMkmBJ0XdE73Mwg==
+Date:   Thu, 28 Apr 2022 09:11:58 +0000
+Message-ID: <20220428091158.GD11809@packtop>
+References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
+ <20220422183012.444674-3-j.neuschaefer@gmx.net>
+In-Reply-To: <20220422183012.444674-3-j.neuschaefer@gmx.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a345b9a0-602f-4601-3c8d-08da28f725ec
+x-ms-traffictypediagnostic: SA2PR04MB7596:EE_
+x-microsoft-antispam-prvs: <SA2PR04MB7596DFA046B14584EB7E1A09C3FD9@SA2PR04MB7596.namprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HhrEjlocKQdlUhiNL/c0PogdSghNgAgXS+7Hm/26tTDV0pzqsEx+9PbcVFbgeg9UNgeKvH/twe4NiJIG7+aoppEpKyl8EKlig2NgVr5uegi6z8bSFS0tU5/zAxhkNANEme/gBb1Q/O7iuiy15gtOD2qLuroxZT71xH577aOW5DtfsilEUiIkNZnR8LkrxW/JnSe/OZuPLsyQLzSsl4ZG10vSV+7CqvTGw91Bs5aFLmpxCc18FIKCM+AhuejMrzhG5VHrYIjo5j4d49z/WcU1JZHaLvxrVFf7UQKpx+HlphETwmqsMR8/KSejUJUudGPtOd1uQYp8dlCpa8o2QreyPawOn91bSp85C5ghnNKVNKBIFdFQnRw/sLx9OK8slIDiz1CLO2YYravIvIGTaeEwpOwjCEQ0abNNO7QkVh1fZMsxRGdo9b1lIySqjrGItk5iI44seL+vyj8bUwK21/xBqjxjIg9mAkIFZPGTrbhhgZf59ccQnViV2YTpwxg1w7xFuwA7hqUo+Y2nbHeOc7SWwfCTeNQLDIfFeNDIN2vvr6sgPJ4L4q93ATyIcC/NamRRB/OcjORIgdGTHr0iAikmDwHiTPKTf1OsbquIng7fgBqF1EwAFafOLE0f2BdAf8YrE0rIYnLb9qlQ/xh7JDXjJDgOttzQqBy7dbtNTpSAMadWULLYwXZgBa5cJdho6kZyIRB6PMp5wfccZlSfgTEdkw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8007.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(186003)(26005)(54906003)(6916009)(71200400001)(1076003)(66574015)(6506007)(6512007)(9686003)(33716001)(33656002)(508600001)(6486002)(38070700005)(8676002)(8936002)(86362001)(5660300002)(7416002)(66946007)(91956017)(64756008)(66446008)(66476007)(66556008)(76116006)(316002)(38100700002)(83380400001)(2906002)(4326008)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?5Qoo5Ap0gLFjQ2Ph29tOSrQEkNfzUJcIPS0cOS5uTF7+XnJDUbm1hxD9wG?=
+ =?iso-8859-1?Q?1wPJcI7rLS74+2LTpowKvPEfoASHtFCLQ7ld1VNmaHwqF5dNhoJfRvGOfR?=
+ =?iso-8859-1?Q?H+RGWIwGEHxjIyQ5uQOB6F1Tccivq8no+e7wYITMn6sOb/QH0ZQb2osd7Z?=
+ =?iso-8859-1?Q?8eOgEGvXlDA3yalapa2le+uXe1jTa5oQMfYv36RFV10POrEKd+1ilTT8xJ?=
+ =?iso-8859-1?Q?QsBZF691Yt4FeZ3Ll2T0xuQfLBZeXKHPl1c/B9rmYo1qmrt4X/YR0kmY9V?=
+ =?iso-8859-1?Q?DiYu0p9gM5W31tnCxabwF0Q2UANwBWXLHGzcXjBY7k94TMUP0pftaD5Lr5?=
+ =?iso-8859-1?Q?NKDfLtQFG7vPBxlQfjdeE+dJlwDILlWkHNuOtZ4wfemr1XxJMOlasJRkVZ?=
+ =?iso-8859-1?Q?xrYwvtHBvo9EL2ChMWhXB0S5B9TD9D/gcsvn1mnh334y0jgj0L6j8qxmt1?=
+ =?iso-8859-1?Q?j5JCMgESyEX0mkqeUPPcACz5KksHd5W+BA9ahYbZpCtKv0O36i9tQ0y1OD?=
+ =?iso-8859-1?Q?BrNb4zla4aWTmecbLA78zytefUXXCWOjzQhf2okFe1w8A9dwDxublci+zb?=
+ =?iso-8859-1?Q?KHrzuVtYj3Y7nafWM9CzBo3pfgGPK69YylT9ZRN+OX0aD624Ib//f7eYPT?=
+ =?iso-8859-1?Q?rvdaBzjaiCTBjdFTc8dra+fEoHfC5xLewM6MaF1aiYEfL9oIJhtWX4Faea?=
+ =?iso-8859-1?Q?9AWqvUnxbDzEnztcGYDKAR4guiJ7WkoWMPaz4LVlkDpyyd7XqYRDGEbz22?=
+ =?iso-8859-1?Q?kCY0C7Ausb3dSFR+LwBeOV/4KPNgXQNCkL6G+Xj7AslMSaiZuI3DG7vZ91?=
+ =?iso-8859-1?Q?eyQdoyRzW6Q2O4XAGVcdOij/y8neqn+cACWsSSnL8D9duQti2qTBkND2Ft?=
+ =?iso-8859-1?Q?ssF18etaeOsWrAxRKqSCeyiS5VP6d5kGXAuvJ46srmb0vBBrqyNUbw62vO?=
+ =?iso-8859-1?Q?SofUDVsoIlUnuCvIJcJojXwBR4sQM3H0B04diy9rmMtYeMwShSNJGey5NA?=
+ =?iso-8859-1?Q?dzPscJ5e/l3N/2i8Cb/f9GBnhT2ANvu85PQN/be0Xgehu3u4F4AFG1UXki?=
+ =?iso-8859-1?Q?VfLgaA+kP8UkgPr2ySXzZYqHsuF02YTUCG/ce/sr9cit4GcyKIlud8+9my?=
+ =?iso-8859-1?Q?hqwN0Tl3kLitOVlTnkL/adzL5/kj1UDnyvBdkvuV1BATJcx249Tcm/0HgN?=
+ =?iso-8859-1?Q?ZKALE5g/xD6Sj+cqw+IN+71NFh22ruri+WtRGZshAFaqqgemTNwINYvUpR?=
+ =?iso-8859-1?Q?zbAvALDO2UnyjeRYnXWpgu4ATHzV1XX/OiGQuZZU4h0OI07vily4uHBhPL?=
+ =?iso-8859-1?Q?ImLv9CMaUMD9wvpezBY7JIaRjx7YBQPsR5n57pruaTpzxblZeZGXuxmwYb?=
+ =?iso-8859-1?Q?dAPmRazoWr31BmIS+/Q+nsr14mvBYEHWitowxb0HUtU1gGAXhIbm0sud7c?=
+ =?iso-8859-1?Q?HJv+c8At5KAstTj/Yer4DOgM5ihqlLA1S345wzr06PbdDPNmxYizdax+Fv?=
+ =?iso-8859-1?Q?Ix8qYn+9xLS28ZumUMBo0V8TFJ3ly9aCF+W80A4uzGTIFC16+C/oLPunbN?=
+ =?iso-8859-1?Q?Anp4Kf344uwnN7mAUv2fed9bYabaPWYJljANUo2c7snOvYV9I60EkPatoW?=
+ =?iso-8859-1?Q?fVeGcJ6umBNazElelk14dewESOrK3FXSJl3UL4nnwGsa0EaDYTVw5aytK0?=
+ =?iso-8859-1?Q?402pOIzt0byZPA64MD2n9IDBXvoWz13vm0CppjmKCx8jb+/N6Om3CoBiAF?=
+ =?iso-8859-1?Q?15MES5ju8qj9VP7lszWQeNOWLWKRaX6Ntt7sZuO3ysr2jtaNNtiY9aEFrE?=
+ =?iso-8859-1?Q?KunTA2VOUA=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <3B5D4AD7F1F6484CA96856400AEC7674@namprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220427183821.1979-2-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: equinix.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8007.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a345b9a0-602f-4601-3c8d-08da28f725ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Apr 2022 09:11:58.4149
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72adb271-2fc7-4afe-a5ee-9de6a59f6bfb
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qRV2yBC/tXeAkwdthgbXBMoF2HJRk8A6zN0ezqUYwMnsAQebfclM8M4AS2oMtNy3m50NBdfo1FVCEOjB/Ne3fA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR04MB7596
+X-Proofpoint-ORIG-GUID: I9dJz4s1ktKy-WH-Q6L6wY7Q2aEoMQ7B
+X-Proofpoint-GUID: I9dJz4s1ktKy-WH-Q6L6wY7Q2aEoMQ7B
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_01,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ phishscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0 clxscore=1011
+ mlxscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280056
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-27 20:38:18 [+0200], Fabio M. De Francesco wrote:
-> --- a/include/linux/highmem-internal.h
-> +++ b/include/linux/highmem-internal.h
-> @@ -236,9 +236,18 @@ static inline unsigned long totalhigh_pages(void) { =
-return 0UL; }
-> =20
->  #endif /* CONFIG_HIGHMEM */
-> =20
-> -/*
-> - * Prevent people trying to call kunmap_atomic() as if it were kunmap()
-> - * kunmap_atomic() should get the return value of kmap_atomic, not the p=
-age.
-> +/**
-> + * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic() - d=
-eprecated!
-> + * @__addr:       Virtual address to be unmapped
-> + *
-> + * Unmaps an address previously mapped by kmap_atomic() and re-enables
-> + * pagefaults, migration, preemption (the latter was disabled only for
-> + * !PREEMP_RT configurations). Mappings should be unmapped in the reverse
+On Fri, Apr 22, 2022 at 11:30:07AM PDT, Jonathan Neusch=E4fer wrote:
+>In the WPCM450 SoC, the clocks for each timer can be gated individually.
+>To prevent the timer 1 clock from being gated, enable it explicitly.
+>
+>Signed-off-by: Jonathan Neusch=E4fer <j.neuschaefer@gmx.net>
+>---
+> drivers/clocksource/timer-npcm7xx.c | 14 +++++++++++++-
+> 1 file changed, 13 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/clocksource/timer-npcm7xx.c b/drivers/clocksource/tim=
+er-npcm7xx.c
+>index a00520cbb660a..974269b6b0c36 100644
+>--- a/drivers/clocksource/timer-npcm7xx.c
+>+++ b/drivers/clocksource/timer-npcm7xx.c
+>@@ -188,17 +188,29 @@ static void __init npcm7xx_clocksource_init(void)
+>
+> static int __init npcm7xx_timer_init(struct device_node *np)
+> {
+>+	struct clk *clk;
+> 	int ret;
+>
+> 	ret =3D timer_of_init(np, &npcm7xx_to);
+>-	if (ret)
+>+	if (ret) {
+>+		pr_warn("timer_of_init failed: %d\n", ret);
 
-Not sure how detailed you want to put it here as "reverses kmap_atomic()
-doing." might be okay ;) This indicates the "migration" is disabled for
-!PREEMPT_RT which is not the case. So maybe something like
+This seems like a somewhat opaque message to emit, especially given this
+file's lack of a pr_fmt() definition -- maybe add a %pOF so it's
+slightly easier to trace back to the device it stems from?
 
- * Unmaps an address previously mapped by kmap_atomic() and re-enables
- * pagefaults, CPU migration (CONFIG_PREEMPT_RT) or preemption
- * (!CONFIG_PREEMPT_RT). Mappings should be unmapped in the reverse
+> 		return ret;
+>+	}
+>
+> 	/* Clock input is divided by PRESCALE + 1 before it is fed */
+> 	/* to the counter */
+> 	npcm7xx_to.of_clk.rate =3D npcm7xx_to.of_clk.rate /
+> 		(NPCM7XX_Tx_MIN_PRESCALE + 1);
+>
+>+	/* Enable the clock for timer1, if it exists */
+>+	clk =3D of_clk_get(np, 1);
+>+	if (clk) {
+>+		if (!IS_ERR(clk))
+>+			clk_prepare_enable(clk);
+>+		else
+>+			pr_warn("Failed to get clock for timer1: %pe", clk);
 
-will make it clear.
-=E2=80=A6
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -138,24 +138,14 @@ static inline void *kmap_local_folio(struct folio *=
-folio, size_t offset);
->   *
->   * Returns: The virtual address of the mapping
->   *
-> - * Effectively a wrapper around kmap_local_page() which disables pagefau=
-lts
-> - * and preemption.
-> + * In fact a wrapper around kmap_local_page() which disables pagefaults,
-> + * migration, preemption (the latter disabled only for !PREEMP_RT
-> + * configurations).
+Likewise here (though to a slightly lesser extent).
 
-and here.
-
-Sebastian
+>+	}
+>+
+> 	npcm7xx_clocksource_init();
+> 	npcm7xx_clockevents_init();
+>
+>--
+>2.35.1
+>=

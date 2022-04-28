@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623275134A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5FF5134C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346839AbiD1NRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S1346905AbiD1NUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiD1NRS (ORCPT
+        with ESMTP id S235700AbiD1NTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:17:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A5DC1BEA2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:14:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA2E21474;
-        Thu, 28 Apr 2022 06:14:03 -0700 (PDT)
-Received: from bogus (unknown [10.57.11.83])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0FA3F3F73B;
-        Thu, 28 Apr 2022 06:14:01 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 14:13:57 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH 22/22] firmware: arm_scmi: Add SCMIv3.1
- PERFORMANCE_LIMITS_SET checks
-Message-ID: <20220428131357.mbj5pksrnt5auotb@bogus>
-References: <20220330150551.2573938-1-cristian.marussi@arm.com>
- <20220330150551.2573938-23-cristian.marussi@arm.com>
+        Thu, 28 Apr 2022 09:19:25 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545753B57C;
+        Thu, 28 Apr 2022 06:15:56 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id D93E35C0107;
+        Thu, 28 Apr 2022 09:15:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 28 Apr 2022 09:15:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651151753; x=1651238153; bh=zddeKWyxC/
+        TAt6LDXLxofwc+G7l0sx6z+g7NouKJEpY=; b=XmJyvgZYy9VnIeFSXqe6ON9sGj
+        SUWWb886ONya30ixz9byMgApEglKBPm2RzI4wRIyyDHRJAYzRvTgayuzQAikeQCT
+        3ngIKtsePx99rDKawU9bPkVOboVNdQNJTBaiqgWWQPeGGd5oPXjIQVakIL1qf8Zd
+        HM4lc180HPJZZWGNfYOZTjt4+TBYo/OjaESZ83VDsk9gVQyBSGinuX/cJsraKsmo
+        YkeWN4JBjq2M6/5TkGgipNb1+Y83lL7ljqsWGNIvA/6C+Z6bBqkxp0/dT11+OKyI
+        6ur7nL0NOTdvYHB7e0R30wB4b5PjzDUoriYY920qZOMwaBNPlGfWDM/ec+Bg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651151753; x=
+        1651238153; bh=zddeKWyxC/TAt6LDXLxofwc+G7l0sx6z+g7NouKJEpY=; b=I
+        gEBqwoihU7BZ0GC2y1S+qih7WZL4iySYd6Qg+QEPbyCiHymKVZekKQQDwAk20QtU
+        046UCTfKSLM+cQIsoqrK8Ui2iJQFe1w8C3/K6nL+uaim8aedz+4as+vr5HnnzXSE
+        v9VgNFYbfSxtHgyoO4KNXbL5jOcJQ+QMt/j7qr944pDVZOKFgN4kUpQ5cJL5laKV
+        cf/epzYtpQ4Tuf+K/GcGcPgGBvqFXd2DEs2dPX0eo3qhq0zt6Fk0+cviLS1yhxni
+        p+uFOrhzJU0Gsy2tzXwsrybH8RIUVF6tWC9gb5K+a8BuZ1VhfIkiFemZRKHL+aLz
+        tIPzHJlHPvol9KoKkOGjw==
+X-ME-Sender: <xms:iZNqYnsck8djimQ7q0MpPtrNAoRB8IpWlTOiEe4qOxeimnetk-8P_w>
+    <xme:iZNqYoe-k1ifv5EkVkFRlfE9kq0iO_mEmYO9revuXfscWL9Ej8Cb4kvTdTGKViE7c
+    tXBeEq3BnWRW29VvxE>
+X-ME-Received: <xmr:iZNqYqzB6SFiJmfaaiK3uhvNMGNZNKpKrYQPkiyBZyQSFZ_NcS-SlP2WQZSyzxALHwjrnNI3aKDRfgFHaBi72hOR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejgdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvhigthhho
+    ucetnhguvghrshgvnhcuoehthigthhhosehthigthhhordhpihiiiigrqeenucggtffrrg
+    htthgvrhhnpeeutedttefgjeefffehffffkeejueevieefudelgeejuddtfeffteeklefh
+    leelteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hthigthhhosehthigthhhordhpihiiiigr
+X-ME-Proxy: <xmx:iZNqYmNq-2vE8UUCLTpL2OvGwnubSLvczaJDzmvQgnovSyqNE7mdHA>
+    <xmx:iZNqYn8CKQWBEdncV90Wbp_-ggI3LgvYZxn1axOkzEOHODlgp2o3wg>
+    <xmx:iZNqYmXGrvrSPfFMI93d2y5R3_rkmurLi2QYM_GT2dS-R5zpMCixRg>
+    <xmx:iZNqYjZBvEBluG1458zOcDPFysaGXOZa-9fD53_-ZPqcquyg-jfG8g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 28 Apr 2022 09:15:52 -0400 (EDT)
+Date:   Thu, 28 Apr 2022 07:15:51 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Sargun Dhillon <sargun@sargun.me>
+Cc:     Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/seccomp: Ensure that notifications come in
+ FIFO order
+Message-ID: <YmqTh68UkjVsTnUX@cisco>
+References: <20220428015447.13661-1-sargun@sargun.me>
+ <20220428015447.13661-2-sargun@sargun.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330150551.2573938-23-cristian.marussi@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220428015447.13661-2-sargun@sargun.me>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 04:05:51PM +0100, Cristian Marussi wrote:
-> Starting with SCMIv3.1, the PERFORMANCE_LIMITS_SET command allows a user
-> to request only one between max and min ranges to be changed, while leaving
-> the other untouched if set to zero in the request; anyway SCMIv3.1 states
-> also explicitly that you cannot leave both of those unchanged (zeroed) when
-> issuing such command: add a proper check for this condition.
-> 
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
->  drivers/firmware/arm_scmi/perf.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-> index 65ffda5495d6..8f4051aca220 100644
-> --- a/drivers/firmware/arm_scmi/perf.c
-> +++ b/drivers/firmware/arm_scmi/perf.c
-> @@ -423,6 +423,9 @@ static int scmi_perf_limits_set(const struct scmi_protocol_handle *ph,
->  	struct scmi_perf_info *pi = ph->get_priv(ph);
->  	struct perf_dom_info *dom = pi->dom_info + domain;
->  
-> +	if (PROTOCOL_REV_MAJOR(pi->version) >= 0x3 && !max_perf && !min_perf)
-> +		return -EINVAL;
+On Wed, Apr 27, 2022 at 06:54:47PM -0700, Sargun Dhillon wrote:
+> +	/* Start children, and them generate notifications */
+                           ^^ - they maybe?
+
+> +	for (i = 0; i < ARRAY_SIZE(pids); i++) {
+> +		pid = fork();
+> +		if (pid == 0) {
+> +			ret = syscall(__NR_getppid);
+> +			exit(ret != USER_NOTIF_MAGIC);
+> +		}
+> +		pids[i] = pid;
+> +	}
 > +
+> +	/* This spins until all of the children are sleeping */
+> +restart_wait:
+> +	for (i = 0; i < ARRAY_SIZE(pids); i++) {
+> +		if (get_proc_stat(pids[i]) != 'S') {
+> +			nanosleep(&delay, NULL);
+> +			goto restart_wait;
+> +		}
+> +	}
 
-Do we really need the version check here ? I agree it was explicitly added
-in v3.1, but it makes sense on any version really. No ?
+I wonder if we should/can combine this loop with the previous one, and
+wait for the child to sleep in getppid() before we fork the next one.
+Otherwise isn't racy in the case that your loop continues to the next
+iteration before the child processes are scheduled, so things might be
+out of order? Maybe I'm missing something.
 
--- 
-Regards,
-Sudeep
+In any case, this change seems reasonable to me.
+
+Tycho

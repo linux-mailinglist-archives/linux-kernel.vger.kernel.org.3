@@ -2,133 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6BF512B31
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0314E512B34
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiD1F70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 01:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
+        id S243376AbiD1GBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243415AbiD1F7L (ORCPT
+        with ESMTP id S233470AbiD1GBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 01:59:11 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007E134B9C
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:55:54 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id bg9so3139171pgb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OmWboORltJDtK22Ml4YLWVJ4IYLqmhFFeju3DQyJN9k=;
-        b=7wEby7WZpYLiIm29N1XA/YqtYC0pLS1v428ehj5J4t8iB3tIf5AVgTpuwo3tOoK0Qp
-         RAO+mhuAo53l0Z+XoDOgvgVPw6y1Qay/TaRM3aDggZxnW9lNOhKKzp2+L6TlJSt40cRM
-         OX6eHh4XBy/8ms8Hvvxa2yjZJBRhBLEZRqbkIEYDbeMMGf/DkTV0cY08oQr0txjRS/Dr
-         7nRb5jSHGfYuy6PQseVOzK0NKrmkCAoelFuEx+fegs0qt+KDrCFhwbcWdrd05BFXYexL
-         x2exmG6PEXaC2bo2KPGUbR6lsFBAb3W+01mrOus+zBTyyY+8en+GtaHJjrA+hxbg7CQ6
-         Ba/Q==
+        Thu, 28 Apr 2022 02:01:35 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A616B37028
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:58:21 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id t1-20020a056602140100b0065393cc1dc3so3879230iov.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:58:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=OmWboORltJDtK22Ml4YLWVJ4IYLqmhFFeju3DQyJN9k=;
-        b=yG3gcCIcdmoXzi7mo7AhN8WT3PfN3SXdtkCru/VstAYA33vjuiJeyezmIA3UYlgc6J
-         d9m4rdZQbpeVTYu4/AhMvQYXk64qFgAeeekeCELbtcSr94XleVJccc/HrXnbmD4N7ZQ8
-         P7jlodnDubvPzphTmuKJi/15tIO6Tu8NV6b0e4xJe50qJGTmeuvddfrfEPQeaMlph5jv
-         QLAL1Ki8GEnpLIO/P5IeHHc+RKQHupXmg8Tg7j9YAR+DONV0TDJJ0xVWLJar01iWeEQc
-         Hjp/poHjGfrTXZgXMAgTwYi2EGlEdWMZ1LiMqXUE0VcMU33NQxspSDI0Xig1Spfj+5Cu
-         CNzA==
-X-Gm-Message-State: AOAM532mA2EadlgKmepzunhGibBhNI/dAYTTqEuH/hc7myYiU7uCnfdy
-        87Drf43MeeikMaizj5xJNJWP8A==
-X-Google-Smtp-Source: ABdhPJxmxbtMOA2ZNFO2CETwLqP2cOouytBK7GT6+vU44mwGy5qDzo/+nItIBe+ck/HYuOo/Zz1wmQ==
-X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr33588283pfm.41.1651125354465;
-        Wed, 27 Apr 2022 22:55:54 -0700 (PDT)
-Received: from localhost ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004f0f9696578sm23424519pfl.141.2022.04.27.22.55.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 22:55:54 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 13:55:50 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        almasrymina@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] mm: rmap: Move the cache flushing to the correct
- place for hugetlb PMD sharing
-Message-ID: <YmosZpGwSoB8TlnK@FVFYT0MHHV2J.usts.net>
-References: <cover.1651056365.git.baolin.wang@linux.alibaba.com>
- <4f7ae6dfdc838ab71e1655188b657c032ff1f28f.1651056365.git.baolin.wang@linux.alibaba.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=c1CjGBVY8lidPMWVx3e/63feK8jYuLHcDjXbYqW87i8=;
+        b=orUwZ8YTWvdS9Pm8F6NthzgujNZ+4W1u5aULPWu5OByiQgXN3rI9d+Lc+rEVWsHCnW
+         1cKeeqm+DFL9+Ai4aM9wrw/Xr020xLedoK2gtEUk/HVT+3k5AsApGGJRXuKH6tnEpA3E
+         gq3tqDAHqhHo5JDQeAbBy125ivnvhhW5G7QcLbYnrvEQMloZYQZZ6wIBsdf3+Sm2Mhyg
+         z9/CKz10Edj7dzo7jTEuo5TIWImEJ/3pu9XWdsTPevl3zRtc4VkPkuMBCUDHgtJLyMmy
+         Apn9bSKnqevzjXj0U2H3itpaWKomOHlOmAke3T4TP/+fPFGrz857zI6URoPtrckGLK4c
+         6Keg==
+X-Gm-Message-State: AOAM532p3XlcAV0TbEOImuvqB9fxkJffrKW3Av9fNIOql3bf7PPwQXS6
+        EyFaBAUJzr5Kl/RGzwRuEDuR5pJ7IUzuTzfsXSypQsRSUzAR
+X-Google-Smtp-Source: ABdhPJywSqjwVHGts4Eo5ddkrTkIpeDLFCzHjOkS7qrhqtCdClWJQZUaiAh2rCJtc4A9vyjWGL6UtBERKtdYwPR3ndD7KPcgE5qG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4f7ae6dfdc838ab71e1655188b657c032ff1f28f.1651056365.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:271d:0:b0:307:ea12:ff8b with SMTP id
+ g29-20020a02271d000000b00307ea12ff8bmr14865021jaa.274.1651125501067; Wed, 27
+ Apr 2022 22:58:21 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 22:58:21 -0700
+In-Reply-To: <000000000000af7f9905da904400@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f8869805ddb09c27@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dst_destroy
+From:   syzbot <syzbot+736f4a4f98b21dba48f0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        yajun.deng@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 06:52:06PM +0800, Baolin Wang wrote:
-> The cache level flush will always be first when changing an existing
-> virtual–>physical mapping to a new value, since this allows us to
-> properly handle systems whose caches are strict and require a
-> virtual–>physical translation to exist for a virtual address. So we
-> should move the cache flushing before huge_pmd_unshare().
->
+syzbot has found a reproducer for the following issue on:
 
-Right.
+HEAD commit:    03fa8fc93e44 Merge branch 'remove-virt_to_bus-drivers'
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13db7c44f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6e95eee1a1aa4fb4
+dashboard link: https://syzkaller.appspot.com/bug?extid=736f4a4f98b21dba48f0
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1239a4e4f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13a4b3b8f00000
 
-> As Muchun pointed out[1], now the architectures whose supporting hugetlb
-> PMD sharing have no cache flush issues in practice. But I think we
-> should still follow the cache/TLB flushing rules when changing a valid
-> virtual address mapping in case of potential issues in future.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+736f4a4f98b21dba48f0@syzkaller.appspotmail.com
 
-Right. One point i need to clarify. I do not object this change but
-want you to clarify this (not an issue in practice) in commit log
-to let others know they do not need to bp this.
+==================================================================
+BUG: KASAN: use-after-free in dst_destroy+0x3c7/0x400 net/core/dst.c:118
+Read of size 8 at addr ffff88801ebb8870 by task ksoftirqd/0/15
 
-> 
-> [1] https://lore.kernel.org/all/YmT%2F%2FhuUbFX+KHcy@FVFYT0MHHV2J.usts.net/
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  mm/rmap.c | 40 ++++++++++++++++++++++------------------
->  1 file changed, 22 insertions(+), 18 deletions(-)
-> 
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 61e63db..4f0d115 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1535,15 +1535,16 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->  			 * do this outside rmap routines.
->  			 */
->  			VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
-> +			/*
-> +			 * huge_pmd_unshare may unmap an entire PMD page.
-> +			 * There is no way of knowing exactly which PMDs may
-> +			 * be cached for this mm, so we must flush them all.
-> +			 * start/end were already adjusted above to cover this
-> +			 * range.
-> +			 */
-> +			flush_cache_range(vma, range.start, range.end);
-> +
+CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 5.18.0-rc3-syzkaller-01429-g03fa8fc93e44 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ dst_destroy+0x3c7/0x400 net/core/dst.c:118
+ rcu_do_batch kernel/rcu/tree.c:2535 [inline]
+ rcu_core+0x7b1/0x1880 kernel/rcu/tree.c:2786
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ run_ksoftirqd kernel/softirq.c:921 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
 
-flush_cache_range() is always called even if we do not need to flush.
-How about introducing a new helper like hugetlb_pmd_shared() which
-returns true for shared PMD? Then:
+Allocated by task 3623:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:749 [inline]
+ slab_alloc_node mm/slub.c:3217 [inline]
+ slab_alloc mm/slub.c:3225 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3232 [inline]
+ kmem_cache_alloc+0x204/0x3b0 mm/slub.c:3242
+ kmem_cache_zalloc include/linux/slab.h:704 [inline]
+ net_alloc net/core/net_namespace.c:403 [inline]
+ copy_net_ns+0x125/0x760 net/core/net_namespace.c:458
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc1/0x1f0 kernel/nsproxy.c:226
+ ksys_unshare+0x445/0x920 kernel/fork.c:3132
+ __do_sys_unshare kernel/fork.c:3203 [inline]
+ __se_sys_unshare kernel/fork.c:3201 [inline]
+ __x64_sys_unshare+0x2d/0x40 kernel/fork.c:3201
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-	if (hugetlb_pmd_shared(mm, vma, pvmw.pte)) {
-		flush_cache_range(vma, range.start, range.end);
-		huge_pmd_unshare(mm, vma, &address, pvmw.pte);
-		flush_tlb_range(vma, range.start, range.end);
-	}
+The buggy address belongs to the object at ffff88801ebb8000
+ which belongs to the cache net_namespace of size 6784
+The buggy address is located 2160 bytes inside of
+ 6784-byte region [ffff88801ebb8000, ffff88801ebb9a80)
 
-The code could be a little simpler. Right?
+The buggy address belongs to the physical page:
+page:ffffea00007aee00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ebb8
+head:ffffea00007aee00 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888010dcd3c0
+raw: 0000000000000000 0000000080040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3623, tgid 3623 (syz-executor323), ts 317565134167, free_ts 317561201837
+ prep_new_page mm/page_alloc.c:2441 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1944
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
+ slab_alloc_node mm/slub.c:3183 [inline]
+ slab_alloc mm/slub.c:3225 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3232 [inline]
+ kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3242
+ kmem_cache_zalloc include/linux/slab.h:704 [inline]
+ net_alloc net/core/net_namespace.c:403 [inline]
+ copy_net_ns+0x125/0x760 net/core/net_namespace.c:458
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc1/0x1f0 kernel/nsproxy.c:226
+ ksys_unshare+0x445/0x920 kernel/fork.c:3132
+ __do_sys_unshare kernel/fork.c:3203 [inline]
+ __se_sys_unshare kernel/fork.c:3201 [inline]
+ __x64_sys_unshare+0x2d/0x40 kernel/fork.c:3201
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1356 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
+ free_unref_page_prepare mm/page_alloc.c:3328 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
+ skb_free_head+0xac/0x110 net/core/skbuff.c:655
+ skb_release_data+0x67a/0x810 net/core/skbuff.c:677
+ skb_release_all net/core/skbuff.c:742 [inline]
+ __kfree_skb net/core/skbuff.c:756 [inline]
+ consume_skb net/core/skbuff.c:915 [inline]
+ consume_skb+0xc2/0x160 net/core/skbuff.c:909
+ skb_free_datagram+0x1b/0x1f0 net/core/datagram.c:324
+ netlink_recvmsg+0x61a/0xea0 net/netlink/af_netlink.c:1999
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ ____sys_recvmsg+0x2be/0x5f0 net/socket.c:2632
+ ___sys_recvmsg+0x127/0x200 net/socket.c:2674
+ __sys_recvmsg+0xe2/0x1a0 net/socket.c:2704
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Thanks.
+Memory state around the buggy address:
+ ffff88801ebb8700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801ebb8780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88801ebb8800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                             ^
+ ffff88801ebb8880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801ebb8900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 

@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D3E513598
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F26C51359F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347639AbiD1Ntn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S1347645AbiD1NuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiD1Ntg (ORCPT
+        with ESMTP id S1346806AbiD1NuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:49:36 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DBB443F4;
-        Thu, 28 Apr 2022 06:46:22 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D04EC1EC0535;
-        Thu, 28 Apr 2022 15:46:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651153576;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=B1N//0VjX+LuzCM370MMHHTQD8wP/75xtQyHF1CH7v0=;
-        b=XlYUyElz/R1ZCGLFXvBYvnOSGQGppRNt/yV9SL2lRWqbZ5HNPv4ME2TnNNxRJkzdXpNGZv
-        jpyLGCi6i9W0czQf4n+GhAUCvte3HxxkkUwmSzIj6YXt7XzTbA9ARXzQIBiJqd2NUuHrBP
-        dWVRwKspjMeO3zihsIsVbykbIHnU1uo=
-Date:   Thu, 28 Apr 2022 15:46:13 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     michal.simek@xilinx.com, Shubhrajyoti.datta@xilinx.com,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH V2] EDAC/synopsys: Add edac driver support for i.MX
- platforms
-Message-ID: <Ymqapaw8hznHy996@zn.tnic>
-References: <20220428023209.18087-1-sherry.sun@nxp.com>
+        Thu, 28 Apr 2022 09:50:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97EB3B368C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:46:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B1061474;
+        Thu, 28 Apr 2022 06:46:48 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67ED33F5A1;
+        Thu, 28 Apr 2022 06:46:46 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 14:46:42 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 00/22] SCMIv3.1 Miscellaneous changes
+Message-ID: <20220428134642.zkxfs64i3wfsfhlk@bogus>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220428023209.18087-1-sherry.sun@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220330150551.2573938-1-cristian.marussi@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:32:09AM +0800, Sherry Sun wrote:
-> i.MX8MP use synopsys v3.70a ddr controller IP, so add edac support
-> for i.MX8MP based on the EDAC_SYNOPSYS driver.
+On Wed, Mar 30, 2022 at 04:05:29PM +0100, Cristian Marussi wrote:
+> Hi all,
 > 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
-> Changes in V2:
-> 1. Improve the patch title and the commit message.
-> ---
->  drivers/edac/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> this series introduces a bunch of SCMIv3.1 miscellaneous changes to support
+> basically all the SCMIv3.1 specification [1] addition with the exclusion of
+> the Powercap protocol and driver which will be introduced later on in
+> another series.
 > 
-> diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-> index 23f11554f400..d3e2477948c8 100644
-> --- a/drivers/edac/Kconfig
-> +++ b/drivers/edac/Kconfig
-> @@ -485,7 +485,7 @@ config EDAC_ARMADA_XP
->  
->  config EDAC_SYNOPSYS
->  	tristate "Synopsys DDR Memory Controller"
-> -	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA
-> +	depends on ARCH_ZYNQ || ARCH_ZYNQMP || ARCH_INTEL_SOCFPGA || ARCH_MXC
->  	help
->  	  Support for error detection and correction on the Synopsys DDR
->  	  memory controller.
-> -- 
+> Most notably the series adds:
+> 
+>  - supports across all protocols for long resources naming using *_NAME_GET
+>    dedicated new commands
+>  - Clock protocol Rate change pre and post notifications
+>  - Voltage protocol asynchronous voltage level set command
+>    (VOLTAGE_LEVEL_SET_COMPLETE delayed response)
+>  - Perf protocol power-cost in micro-watts (only internal support)
+>  - Perf protocol PERFORMANCE_LIMITS_SET	new checks
+> 
 
-Applied, thanks.
+Apart from minor comments I have, this looks good and I have queued it
+provisionally with the changes I have mentioned in the thread.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Sudeep

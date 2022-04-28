@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D645129C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035275129D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241801AbiD1DIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S242014AbiD1DKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240958AbiD1DIK (ORCPT
+        with ESMTP id S232847AbiD1DKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:08:10 -0400
+        Wed, 27 Apr 2022 23:10:40 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08939255A9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:04:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8C1E50E07
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:07:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651115096;
+        s=mimecast20190719; t=1651115246;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OgA3nNFGu0ZJlClNUFtGsmDCNPSPF05lYQrtZKmYE0Q=;
-        b=d4P73TqPPzDtbjDdkUz0tCIfnHXlEC8Y+WREoR237kFz6PiwvLJI1Iij4w2GroCUyFzfFE
-        a0YuZcEEO+LqTKM6qByc7mPfAHwF7qvM+G6/w0e8MrglMdKgIaKBhNBxZ6GLfcV5jfV2eb
-        YvD6EcOcrMB3E9ga0b7xZWwqbj6fCHk=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TvU+ADphMHmXkpmACAoIK7qVjhSn7tp2TJRJg05m6I4=;
+        b=MlDmM5Wn9fa+RyKhZNmu/gJy3tnBjhVabsz/1mfRjZ/ogr7c7pgYMg+pQuT4MV2GHbdkyp
+        cRxuM8ppnekcu/c/GbYlZAM/MiCzh2RqUjn7bAMxoJY5F6cpcAC/D7v6E57ByuUxmj3Vm2
+        He0chOL3B7Xf0lkkRq+UUoIuK29Ge3U=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-471-VtATe6wYNGeDFMNTAqVESg-1; Wed, 27 Apr 2022 23:04:54 -0400
-X-MC-Unique: VtATe6wYNGeDFMNTAqVESg-1
-Received: by mail-lj1-f200.google.com with SMTP id v1-20020a2e2f01000000b0024da499933dso1370068ljv.19
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:04:54 -0700 (PDT)
+ us-mta-207-9ZiOPzWMO26xUE3XzlijSA-1; Wed, 27 Apr 2022 23:07:24 -0400
+X-MC-Unique: 9ZiOPzWMO26xUE3XzlijSA-1
+Received: by mail-lf1-f70.google.com with SMTP id bq38-20020a056512152600b0047214ad540dso1427998lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:07:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OgA3nNFGu0ZJlClNUFtGsmDCNPSPF05lYQrtZKmYE0Q=;
-        b=RRAM2xzV/3Hag5WC0l7hhOFYZxGCqQim4KPBZasJPkG7oNtV1fwhm/i2n7OFn6vt+9
-         bWL/gL4HgiAHR1eoKBJ9ng/fQT4PdEDP8/sYoaDBI6m/ZHseu53aWtoXPxpJScF2fx1I
-         1YSmhxN0m67JyQU4NNmy3nswhZZUXng9cJEUrSZ7alA+eulXVublVFA/ps8AqE16zkhv
-         Cfj08UwzL6gNMDAV/Y1R+k30hUm6odU7kTk+S3gaFbgplfKhCq+XapZL9LIbA1NyC2SJ
-         j5J6CyOhD2QYbWpNbsmbPNnLw0VcQFMIdqVXv50ncA7dgIdhrxYIgwLCYWtnW7YW+tOc
-         LjdQ==
-X-Gm-Message-State: AOAM533hcxb1ueX2bqlCoqBlCRsqdB+xLN5lE8re93IYsg+MRlay7P9K
-        0HNIkfsnZxcUQv8uUYxb8qJ5r2oElZch2r0m0kuC46LXBmG4pA50Hxvf9+6eIzRzPFjGBGvaUYB
-        zcQOTZgK+6X5q1lcHvUxHMBvWDtDybxVj25/fQZfz
-X-Received: by 2002:a05:6512:a8f:b0:471:948b:9b6b with SMTP id m15-20020a0565120a8f00b00471948b9b6bmr22939934lfu.471.1651115092948;
-        Wed, 27 Apr 2022 20:04:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxv318AyjnLP/y/hcTzOsn3aF+A+3WOw3SOPem9I7/1/ocqp0MGXggZvWaraT4bzvOsaKf2zYT8nNekp2BCIew=
-X-Received: by 2002:a05:6512:a8f:b0:471:948b:9b6b with SMTP id
- m15-20020a0565120a8f00b00471948b9b6bmr22939923lfu.471.1651115092770; Wed, 27
- Apr 2022 20:04:52 -0700 (PDT)
+        bh=TvU+ADphMHmXkpmACAoIK7qVjhSn7tp2TJRJg05m6I4=;
+        b=ENG4Zi2ksN5dNeEDKFerGWs8JmkC8gaFLuZ3wVakq+/14/vmdx1i938RM1VVHfeHqt
+         8Dw8E2cvZa45dEgs66GnEN8eftfW5Um+xp3Ic/7XEj9WqpRcx2sAI/1C3q3YNcSbfg1r
+         prRz7C+h976Xjk8zrpeFbuee9hscck7ue8ezvCmpz/UFBhyshOl1TciUhYuCvriP5h78
+         UQO+Jts2lFAZlfpBa784fQYo2KqAmfnC3KLho7CvxFY73NjX/Qg3K94CaeovfdOIUZNl
+         XPLNa+3xZ/i6C9XptBWCIF5dDdTC9s1jKox0IHr6rJyqbPhyRH/HYH4Z9FJQYhP/7eAS
+         rkPQ==
+X-Gm-Message-State: AOAM530/eX+bf6RfKqbwTpIhgJtT7G49w332wmBAot81phuztsCr7w89
+        FoZHkjpVPZCQILLWf19TaJFBWwfy3BUMEgK0UaIDxxLFQAdHVjo3Fos3hTrpEM28M+wM9c3zH2H
+        59E8tsLVx6jNqTk94ZuNutNgV4Q/e3w2f0Y7Zyt5F
+X-Received: by 2002:a05:6512:33c2:b0:472:33dd:9f46 with SMTP id d2-20020a05651233c200b0047233dd9f46mr2359739lfg.98.1651115242950;
+        Wed, 27 Apr 2022 20:07:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw8yMqQeXm0E0kg5h+lxPojpYyv2bDl4nXCwoI/TLwDC/R/01jvRHOvf69oY3waWTTt+1EpXJ4YjqEow7KB2bM=
+X-Received: by 2002:a05:6512:33c2:b0:472:33dd:9f46 with SMTP id
+ d2-20020a05651233c200b0047233dd9f46mr2359731lfg.98.1651115242769; Wed, 27 Apr
+ 2022 20:07:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220425040512-mutt-send-email-mst@kernel.org>
- <87a6c98rwf.fsf@redhat.com> <20220425095742-mutt-send-email-mst@kernel.org>
- <20220426042911.544477f9.pasic@linux.ibm.com> <20220425233434-mutt-send-email-mst@kernel.org>
- <20220425233604-mutt-send-email-mst@kernel.org> <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
- <20220425235134-mutt-send-email-mst@kernel.org> <20220425235415-mutt-send-email-mst@kernel.org>
- <87o80n7soq.fsf@redhat.com> <20220426124243-mutt-send-email-mst@kernel.org>
- <87ilqu7u6w.fsf@redhat.com> <20220428044315.3945e660.pasic@linux.ibm.com>
-In-Reply-To: <20220428044315.3945e660.pasic@linux.ibm.com>
+References: <20220425062735.172576-1-lulu@redhat.com> <CACGkMEuMZJRw1TBfY5pTkSAD5MnGvUCu5Eqi=bWD5yc1-hc9YQ@mail.gmail.com>
+ <CACLfguUOoeiWrq_2s6NrNB4HwaAbeBYy2TGo0mhO-xswy9G7yw@mail.gmail.com>
+ <46c9f96a-8fcf-fae8-5fd7-53557d59c324@redhat.com> <CACLfguW+9OMPMUpehp+Zut7JosFtg2gzr7t7gZ6U-AdtV89S3g@mail.gmail.com>
+In-Reply-To: <CACLfguW+9OMPMUpehp+Zut7JosFtg2gzr7t7gZ6U-AdtV89S3g@mail.gmail.com>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 28 Apr 2022 11:04:41 +0800
-Message-ID: <CACGkMEudDf=XXhV2tV+xZ586AnDyrQEotGAiSQZ4k1CTAWHZJQ@mail.gmail.com>
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+Date:   Thu, 28 Apr 2022 11:07:11 +0800
+Message-ID: <CACGkMEuJhrSxNc3v7hijSpBdA4X6aC-gA2Ogwed4oODUT_DJ6w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] vdpa: add the check for id_table in struct vdpa_mgmt_dev
+To:     Cindy Lu <lulu@redhat.com>
+Cc:     mst <mst@redhat.com>,
         virtualization <virtualization@lists.linux-foundation.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -87,146 +76,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:43 AM Halil Pasic <pasic@linux.ibm.com> wrote:
+On Thu, Apr 28, 2022 at 9:56 AM Cindy Lu <lulu@redhat.com> wrote:
 >
-> On Wed, 27 Apr 2022 11:27:03 +0200
-> Cornelia Huck <cohuck@redhat.com> wrote:
->
-> > On Tue, Apr 26 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> On Wed, Apr 27, 2022 at 12:04 PM Jason Wang <jasowang@redhat.com> wrote:
 > >
-> > > On Tue, Apr 26, 2022 at 05:47:17PM +0200, Cornelia Huck wrote:
-> > >> On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> >
+> > =E5=9C=A8 2022/4/27 10:01, Cindy Lu =E5=86=99=E9=81=93:
+> > > On Mon, Apr 25, 2022 at 5:00 PM Jason Wang <jasowang@redhat.com> wrot=
+e:
+> > >> On Mon, Apr 25, 2022 at 2:27 PM Cindy Lu <lulu@redhat.com> wrote:
+> > >>> To support the dynamic ids in vp_vdpa, we need to add the check for
+> > >>> id table. If the id table is NULL, will not set the device type
+> > >>>
+> > >>> Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > >>> ---
+> > >>>   drivers/vdpa/vdpa.c | 11 +++++++----
+> > >>>   1 file changed, 7 insertions(+), 4 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> > >>> index 1ea525433a5c..09edd92cede0 100644
+> > >>> --- a/drivers/vdpa/vdpa.c
+> > >>> +++ b/drivers/vdpa/vdpa.c
+> > >>> @@ -492,10 +492,13 @@ static int vdpa_mgmtdev_fill(const struct vdp=
+a_mgmt_dev *mdev, struct sk_buff *m
+> > >>>          if (err)
+> > >>>                  goto msg_err;
+> > >>>
+> > >>> -       while (mdev->id_table[i].device) {
+> > >>> -               if (mdev->id_table[i].device <=3D 63)
+> > >>> -                       supported_classes |=3D BIT_ULL(mdev->id_tab=
+le[i].device);
+> > >>> -               i++;
+> > >>> +       if (mdev->id_table !=3D NULL) {
+> > >>> +               while (mdev->id_table[i].device) {
+> > >>> +                       if (mdev->id_table[i].device <=3D 63)
+> > >>> +                               supported_classes |=3D
+> > >>> +                                       BIT_ULL(mdev->id_table[i].d=
+evice);
+> > >>> +                       i++;
+> > >>> +               }
+> > >>>          }
+> > >> This will cause 0 to be advertised as the supported classes.
 > > >>
-> > >> > On Mon, Apr 25, 2022 at 11:53:24PM -0400, Michael S. Tsirkin wrote=
-:
-> > >> >> On Tue, Apr 26, 2022 at 11:42:45AM +0800, Jason Wang wrote:
-> > >> >> >
-> > >> >> > =E5=9C=A8 2022/4/26 11:38, Michael S. Tsirkin =E5=86=99=E9=81=
-=93:
-> > >> >> > > On Mon, Apr 25, 2022 at 11:35:41PM -0400, Michael S. Tsirkin =
-wrote:
-> > >> >> > > > On Tue, Apr 26, 2022 at 04:29:11AM +0200, Halil Pasic wrote=
-:
-> > >> >> > > > > On Mon, 25 Apr 2022 09:59:55 -0400
-> > >> >> > > > > "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > >> >> > > > >
-> > >> >> > > > > > On Mon, Apr 25, 2022 at 10:54:24AM +0200, Cornelia Huck=
- wrote:
-> > >> >> > > > > > > On Mon, Apr 25 2022, "Michael S. Tsirkin" <mst@redhat=
-.com> wrote:
-> > >> >> > > > > > > > On Mon, Apr 25, 2022 at 10:44:15AM +0800, Jason Wan=
-g wrote:
-> > >> >> > > > > > > > > This patch tries to implement the synchronize_cbs=
-() for ccw. For the
-> > >> >> > > > > > > > > vring_interrupt() that is called via virtio_airq_=
-handler(), the
-> > >> >> > > > > > > > > synchronization is simply done via the airq_info'=
-s lock. For the
-> > >> >> > > > > > > > > vring_interrupt() that is called via virtio_ccw_i=
-nt_handler(), a per
-> > >> >> > > > > > > > > device spinlock for irq is introduced ans used in=
- the synchronization
-> > >> >> > > > > > > > > method.
-> > >> >> > > > > > > > >
-> > >> >> > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > >> >> > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > >> >> > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > >> >> > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
-> > >> >> > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
-> > >> >> > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
-> > >> >> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > >> >> > > > > > > >
-> > >> >> > > > > > > > This is the only one that is giving me pause. Halil=
-, Cornelia,
-> > >> >> > > > > > > > should we be concerned about the performance impact=
- here?
-> > >> >> > > > > > > > Any chance it can be tested?
-> > >> >> > > > > > > We can have a bunch of devices using the same airq st=
-ructure, and the
-> > >> >> > > > > > > sync cb creates a choke point, same as registering/un=
-registering.
-> > >> >> > > > > > BTW can callbacks for multiple VQs run on multiple CPUs=
- at the moment?
-> > >> >> > > > > I'm not sure I understand the question.
-> > >> >> > > > >
-> > >> >> > > > > I do think we can have multiple CPUs that are executing s=
-ome portion of
-> > >> >> > > > > virtio_ccw_int_handler(). So I guess the answer is yes. C=
-onnie what do you think?
-> > >> >> > > > >
-> > >> >> > > > > On the other hand we could also end up serializing synchr=
-onize_cbs()
-> > >> >> > > > > calls for different devices if they happen to use the sam=
-e airq_info. But
-> > >> >> > > > > this probably was not your question
-> > >> >> > > >
-> > >> >> > > > I am less concerned about  synchronize_cbs being slow and m=
-ore about
-> > >> >> > > > the slowdown in interrupt processing itself.
-> > >> >> > > >
-> > >> >> > > > > > this patch serializes them on a spinlock.
-> > >> >> > > > > >
-> > >> >> > > > > Those could then pile up on the newly introduced spinlock=
-.
+> > >> I wonder if we can simply use VIRTIO_DEV_ANY_ID here (and need to
+> > >> export it to via uAPI probably).
 > > >>
-> > >> How bad would that be in practice? IIUC, we hit on the spinlock when
-> > >> - doing synchronize_cbs (should be rare)
-> > >> - processing queue interrupts for devices using per-device indicator=
-s
-> > >>   (which is the non-preferred path, which I would basically only exp=
-ect
-> > >>   when running on an ancient or non-standard hypervisor)
-> > >
-> > > this one is my concern. I am worried serializing everything on a sing=
-le lock
-> > > will drastically regress performance here.
+> > >> Thanks
+> > >>
+> > > like the below one? not sure if this ok to use like this?
+> > > static struct virtio_device_id vp_vdpa_id_table[] =3D {
+> > > { VIRTIO_DEV_ANY_ID, VIRTIO_DEV_ANY_ID },
+> > > { 0 },
+> > > };
 > >
-> > Yeah, that case could get much worse. OTOH, how likely is it that any
-> > setup that runs a recent kernel will actually end up with devices using
-> > per-device indicators? Anything running under a QEMU released in the
-> > last couple of years is unlikely to not use airqs, I think. Halil, do
-> > you think that the classic indicator setup would be more common on any
-> > non-QEMU hypervisors?
 > >
->
-> I really don't know. My opinion is that, two stages indicators are kind
-> of recommended for anybody who cares about notifications performance.
->
-> > IOW, how much effort is it worth spending on optimizing this case? We
-> > certainly should explore any simple solutions, but I don't think we nee=
-d
-> > to twist ourselves into pretzels to solve it.
+> > Something like this.
 > >
+> > Thanks
+> >
+> >
+> I have checked the code, this maybe can not work, because the
+> #define VIRTIO_DEV_ANY_ID 0xffffffff
+>  it want't work in
+>                 supported_classes |=3D BIT_ULL(mdev->id_table[i].device);
+> if we chane to
+>             supported_classes |=3D VIRTIO_DEV_ANY_ID;
+> the vdpa dev show will be
+> pci/0000:00:04.0:
+>   supported_classes net block < unknown class > < unknown class > <
+> unknown class > < unknown class > < unknown class > < unknow>
+>   max_supported_vqs 3
+
+That's why I suggest exporting the ANY_ID via uAPI and then we can fix
+the userspace.
+
+>   dev_features CSUM GUEST_CSUM CTRL_GUEST_OFFLOADS MAC GUEST_TSO4
+> GUEST_TSO6 GUEST_ECN GUEST_UFO HOST_TSO4 HOST_TSO6 HOST_
+>  I think we can use
+> static struct virtio_device_id id_table[] =3D {
+> { VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+> { 0 },
+> };
+>  if we need to add another type of device, we can add the device id at th=
+at type
 >
-> Frankly, I would be fine with an rwlock based solution as proposed by
-> Jason. My rationale is: we recommend two stage indicators, and the two
-> stage indicators are already encumbered by an rwlock on the interrupt
-> path. Yes, the coalescence of adapter interrupts is architecturally
-> different, and so it is with GISA (without GISA, I'm not even sure), so
-> this rwlock end up being worse than the one for 2 stage. But my feeling
-> is, that it should be fine. On the other hand, I don't feel comfortable
-> with plain spinlock, and I am curious about a more advanced solution.
 
-Yes, I'm trying to use (S)RCU, let's see if it works.
+My point is that, we have supported any virtio devices before. But
+after this change, we only support virtio-net.
 
-> But my guess is that rwlock + some testing for the legacy indicator case
-> just to double check if there is a heavy regression despite of our
-> expectations to see none should do the trick.
-
-I suggest this, rwlock (for not airq) seems better than spinlock, but
-at worst case it will cause cache line bouncing. But I wonder if it's
-noticeable (anyhow it has been used for airq).
+So if we choose to use id arrays, let's just add all possible virtio
+devices that are supported by the kernel here.
 
 Thanks
 
+> Thanks
+> cindy
 >
-> Regards,
-> Halil
+>
 >
 > > >
 > > >
-> > >> - configuration change interrupts (should be rare)
-> > >> - during setup, reset, etc. (should not be a concern)
+> > >>>          if (nla_put_u64_64bit(msg, VDPA_ATTR_MGMTDEV_SUPPORTED_CLA=
+SSES,
+> > >>> --
+> > >>> 2.34.1
+> > >>>
 > >
 >
 

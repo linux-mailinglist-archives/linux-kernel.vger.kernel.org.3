@@ -2,75 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB59C512CDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8F4512CE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245340AbiD1Hd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S245279AbiD1Hem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245304AbiD1Hd4 (ORCPT
+        with ESMTP id S231146AbiD1Hei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:33:56 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B9BE694B3;
-        Thu, 28 Apr 2022 00:30:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 4022F80C1;
-        Thu, 28 Apr 2022 07:27:35 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 10:30:39 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] ARM: dts: am33xx: use new 'dma-channels/requests'
- properties
-Message-ID: <YmpCn+g7oN+1HWSY@atomide.com>
-References: <20220427161126.647073-1-krzysztof.kozlowski@linaro.org>
- <20220427161126.647073-5-krzysztof.kozlowski@linaro.org>
- <YmmJfInA0hNQOhDN@robh.at.kernel.org>
- <CAGE=qrp1GAVxDF4b1iBigdvbONwsF0jhfcLG-Xt3pjm8VAEdiQ@mail.gmail.com>
+        Thu, 28 Apr 2022 03:34:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35481737B1;
+        Thu, 28 Apr 2022 00:31:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A83B2CE290F;
+        Thu, 28 Apr 2022 07:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390FAC385A9;
+        Thu, 28 Apr 2022 07:31:17 +0000 (UTC)
+Message-ID: <e46146ad-7aa8-8b39-536b-0525de9140cc@xs4all.nl>
+Date:   Thu, 28 Apr 2022 09:31:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGE=qrp1GAVxDF4b1iBigdvbONwsF0jhfcLG-Xt3pjm8VAEdiQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 34/49] media: tegra-video: replace bitmap_weight with
+ bitmap_weight_le
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-35-yury.norov@gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220210224933.379149-35-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> [220427 19:23]:
-> On Wed, 27 Apr 2022 at 20:20, Rob Herring <robh@kernel.org> wrote:
-> > > diff --git a/arch/arm/boot/dts/am33xx.dtsi b/arch/arm/boot/dts/am33xx.dtsi
-> > > index f6ec85d58dd1..55ffb0813ded 100644
-> > > --- a/arch/arm/boot/dts/am33xx.dtsi
-> > > +++ b/arch/arm/boot/dts/am33xx.dtsi
-> > > @@ -461,8 +461,8 @@ cppi41dma: dma-controller@2000 {
-> > >                               interrupts = <17>;
-> > >                               interrupt-names = "glue";
-> > >                               #dma-cells = <2>;
-> > > -                             #dma-channels = <30>;
-> > > -                             #dma-requests = <256>;
-> > > +                             dma-channels = <30>;
-> > > +                             dma-requests = <256>;
-> >
-> > You could keep the old properties for compatibility and to apply
-> > immediately.
+On 10/02/2022 23:49, Yury Norov wrote:
+> tegra_channel_enum_format() calls bitmap_weight() to compare the weight
+> of bitmap with a given number. We can do it more efficiently with
+> bitmap_weight_le() because conditional bitmap_weight may stop traversing
+> the bitmap earlier, as soon as condition is (or can't be) met.
 > 
-> Indeed, that's a nice solution. Any preference from TI SoC maintainers?
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
-Makes sense to me to avoid dependencies.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
 Regards,
 
-Tony
+	Hans
+
+> ---
+>  drivers/staging/media/tegra-video/vi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+> index d1f43f465c22..4e79a80e9307 100644
+> --- a/drivers/staging/media/tegra-video/vi.c
+> +++ b/drivers/staging/media/tegra-video/vi.c
+> @@ -436,7 +436,7 @@ static int tegra_channel_enum_format(struct file *file, void *fh,
+>  	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+>  		fmts_bitmap = chan->fmts_bitmap;
+>  
+> -	if (f->index >= bitmap_weight(fmts_bitmap, MAX_FORMAT_NUM))
+> +	if (bitmap_weight_le(fmts_bitmap, MAX_FORMAT_NUM, f->index))
+>  		return -EINVAL;
+>  
+>  	for (i = 0; i < f->index + 1; i++, index++)
+

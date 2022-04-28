@@ -2,164 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB3D512D2B
+	by mail.lfdr.de (Postfix) with ESMTP id 3700B512D2A
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245592AbiD1Hlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S245629AbiD1Hlv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 28 Apr 2022 03:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245380AbiD1Hld (ORCPT
+        with ESMTP id S245623AbiD1Hlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:41:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136679D053;
-        Thu, 28 Apr 2022 00:38:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DB0761F0E;
-        Thu, 28 Apr 2022 07:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA67FC385A9;
-        Thu, 28 Apr 2022 07:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651131497;
-        bh=HBavIu4za5pQy6Uyy5w7OIPHjiIyH/SYuPHJyzAYvLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F8vQK1kjB/QmpADb/h80QR+4V8/SMOWEHptv5pgrh/Qoj8PkCVi2emP4WETnj9W9r
-         HmwDh3Rl7oLCeb6Yfm9NLCcObfwVoMtM7U0N3XKUS5l+VQvbDkvnHeJ5YGs9rXwp1s
-         50DwWTTiDOIc2TqP74plQ0s101iklf+6n43u9Jyg=
+        Thu, 28 Apr 2022 03:41:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6F49D05D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:38:36 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1njyjA-0002DT-UD; Thu, 28 Apr 2022 09:38:16 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1njyjA-005iCB-4B; Thu, 28 Apr 2022 09:38:14 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1njyj7-0002Na-Pf; Thu, 28 Apr 2022 09:38:13 +0200
+Message-ID: <b0bc0d0a4c1b7b19e0c6c30802fb2f622bae65de.camel@pengutronix.de>
+Subject: Re: [RFC/RFT v2 04/11] phy: rockchip: Support PCIe v3
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
 Date:   Thu, 28 Apr 2022 09:38:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lin Ma <linma@zju.edu.cn>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        krzysztof.kozlowski@linaro.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        alexander.deucher@amd.com, akpm@linux-foundation.org,
-        broonie@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data race-able
-Message-ID: <YmpEZQ7EnOIWlsy8@kroah.com>
-References: <20220427011438.110582-1-duoming@zju.edu.cn>
- <20220427174548.2ae53b84@kernel.org>
- <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
+In-Reply-To: <20220426132139.26761-5-linux@fw-web.de>
+References: <20220426132139.26761-1-linux@fw-web.de>
+         <20220426132139.26761-5-linux@fw-web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 03:15:02PM +0800, Lin Ma wrote:
-> Hello Jakub,
-> 
-> and hello there maintainers, when we tried to fix this race problem, we found another very weird issue as below
-> 
-> > 
-> > You can't use a single global variable, there can be many devices 
-> > each with their own lock.
-> > 
-> > Paolo suggested adding a lock, if spin lock doesn't fit the bill
-> > why not add a mutex?
-> 
-> The lock patch can be added to nfcmrvl code but we prefer to fix this in the NFC core layer hence every other driver that supports the firmware downloading task will be free of such a problem.
-> 
-> But when we analyze the race between the netlink tasks and the cleanup routine, we find some *condition checks* fail to fulfill their responsibility.
-> 
-> For example, we once though that the device_lock + device_is_registered check can help to fix the race as below.
-> 
->   netlink task              |  cleanup routine
->                             |
-> nfc_genl_fw_download        | nfc_unregister_device 
->   nfc_fw_download           |   device_del 
->     device_lock             |     device_lock
->     // wait lock            |       kobject_del
->     // ...                  |         ...
->     device_is_registered    |     device_unlock    
->       rc = -ENODEV          |
-> 
-> However, by dynamic debugging this issue, we find out that **even after the device_del**, the device_is_registered check still returns TRUE!
+Hi Frank,
 
-You should not be making these types of checks outside of the driver
-core.
+On Di, 2022-04-26 at 15:21 +0200, Frank Wunderlich wrote:
+> +	priv->p30phy = devm_reset_control_get_exclusive(dev, "phy");
+> +	if (IS_ERR(priv->p30phy)) {
+> +		dev_warn(dev, "no phy reset control specified\n");
+> +		priv->p30phy = NULL;
+> +	}
 
-> This is by no means matching our expectations as one of our previous patch relies on the device_is_registered code.
+Please use devm_reset_control_get_optional_exclusive() [1] instead,
+which already returns NULL if no reset control is specified, and return
+on errors.
 
-Please do not do that.
+[1] https://docs.kernel.org/driver-api/reset.html#c.devm_reset_control_get_optional_exclusive
 
-> 
-> -> the patch: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-> 
-> To find out why, we find out the device_is_registered is implemented like below:
-> 
-> static inline int device_is_registered(struct device *dev)
-> {
-> 	return dev->kobj.state_in_sysfs;
-> }
-> 
-> By debugging, we find out in normal case, this kobj.state_in_sysfs will be clear out like below
-> 
-> [#0] 0xffffffff81f0743a → __kobject_del(kobj=0xffff888009ca7018)
-> [#1] 0xffffffff81f07882 → kobject_del(kobj=0xffff888009ca7018)
-> [#2] 0xffffffff81f07882 → kobject_del(kobj=0xffff888009ca7018)
-> [#3] 0xffffffff827708db → device_del(dev=0xffff888009ca7018)
-> [#4] 0xffffffff8396496f → nfc_unregister_device(dev=0xffff888009ca7000)
-> [#5] 0xffffffff839850a9 → nci_unregister_device(ndev=0xffff888009ca3000)
-> [#6] 0xffffffff82811308 → nfcmrvl_nci_unregister_dev(priv=0xffff88800c805c00)
-> [#7] 0xffffffff83990c4f → nci_uart_tty_close(tty=0xffff88800b450000)
-> [#8] 0xffffffff820f6bd3 → tty_ldisc_kill(tty=0xffff88800b450000)
-> [#9] 0xffffffff820f7fb1 → tty_ldisc_hangup(tty=0xffff88800b450000, reinit=0x0)
-> 
-> The clear out is in function __kobject_del
-> 
-> static void __kobject_del(struct kobject *kobj)
-> {
->    // ...
-> 
-> 	kobj->state_in_sysfs = 0;
-> 	kobj_kset_leave(kobj);
-> 	kobj->parent = NULL;
-> }
-> 
-> The structure of device_del is like below
-> 
-> void device_del(struct device *dev)
-> {
-> 	struct device *parent = dev->parent;
-> 	struct kobject *glue_dir = NULL;
-> 	struct class_interface *class_intf;
-> 	unsigned int noio_flag;
-> 
-> 	device_lock(dev);
-> 	kill_device(dev);
-> 	device_unlock(dev);
->         
->         // ...
->         kobject_del(&dev->kobj);
-> 	cleanup_glue_dir(dev, glue_dir);
-> 	memalloc_noio_restore(noio_flag);
-> 	put_device(parent);
-> }
-> 
-> In another word, the device_del -> kobject_del -> __kobject_del is not protected by the device_lock.
-
-Nor should it be.
-
-> This means the device_lock + device_is_registered is still prone to the data race. And this is not just the problem with firmware downloading. The all relevant netlink tasks that use the device_lock + device_is_registered is possible to be raced.
-> 
-> To this end, we will come out with two patches, one for fixing this device_is_registered by using another status variable instead. The other is the patch that reorders the code in nci_unregister_device.
-
-Why is this somehow unique to these devices?  Why do no other buses have
-this issue?  Are you somehow allowing a code path that should not be
-happening?
-
-thanks,
-
-greg k-h
+regards
+Philipp

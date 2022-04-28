@@ -2,133 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE66513C21
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C7A513C2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351425AbiD1Tih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 15:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S1351466AbiD1TlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 15:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbiD1TiA (ORCPT
+        with ESMTP id S1351454AbiD1TlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:38:00 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BBB5AECF;
-        Thu, 28 Apr 2022 12:34:33 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 41C745C00BC;
-        Thu, 28 Apr 2022 15:34:30 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 28 Apr 2022 15:34:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651174470; x=1651260870; bh=FZ2ZMuL/Lp
-        bRzXpzd8eL6QW8bLX6uuX0IBW3S/wms2M=; b=jqe3D6dszG+9pWsC+SEYq8CVEQ
-        EvJGYVJMmm/o58el8L7aYmMBI2QUtUHdS5QGXCxZrizvOvTARRBrZkiN2BeqCTov
-        wpJhhOjtniEt0WvceN88+2kIyxln86q1Odu3FmrWNvKqk95NTzCLFoF336WrF10l
-        opZ7vPsD2N91mRzZvr2sVmObZ46OdmmyPofjYRorOYiOO3GnLorP12UZ8sZyXaqX
-        kVUclyH+SgpZf5P8USKv5b1yNziuyjUFP+JiWzxu1W1T610euiFxSczWuNwnXher
-        6lVFHWNDNc9T6opcwnfCyQcbiPQ06H/HKTuGfaEfD/kBtIcB8dkE5kQFF73w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651174470; x=
-        1651260870; bh=FZ2ZMuL/LpbRzXpzd8eL6QW8bLX6uuX0IBW3S/wms2M=; b=q
-        QdEQuyzyn1jVuUGKX5SbRZz/tDb9ry79I1j/VzxrfxtIdeuc0ksgMVpu/ByCSVJP
-        kUE+cCXUuuzB6HmfBJQtgOxYl4kjTw1vD40ZVJY1aA4p0VYtTymFVnmCeBBhtcc7
-        A67PoeeG+ntgVumeLfOEBxARM2/DYAJolKQOME2xgghSqygC5JmRc/Nx7dKEK92k
-        MDf00JDHyqP1tOjUVhqV8iXOJletxQynmKRjepZZu7D6yQ2SRFKOvqhXp/1uflzh
-        gmSLHd1X9qyxJf0z0lRyFB+K+9nXOTxEFptgB4Rd+BRs/+svg9j2h2VqLaI4M0th
-        va6swbQRv+TgpjxKGu9Bw==
-X-ME-Sender: <xms:RexqYtBq6PMfZvY18peTJTWFzgaOj6L3hmeboHxSFAe4VeCJ74JwbA>
-    <xme:RexqYrh2osn09kcC279wbfUjWAwH6fXzc1UDZ8Yp3Tz3ZIhJf38Fts3C2a4Iggy1j
-    ynif_n-0YmXAi3HhBc>
-X-ME-Received: <xmr:RexqYok01slwbmnSGw0XP5-OkUBnEZTHiraTpoR0NdMlMesVybCR0LjM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejgddugedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
-    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epthihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:RexqYnzgluTg-4s794mKFe6IPl_7CkLpiG6qn1e_EEThFDRBTIqMYw>
-    <xmx:RexqYiTBgJiWBqysDJv79T2w5lAzJNZU3xJXXAcT97kuw5IlNqeC-Q>
-    <xmx:RexqYqYwb2LLQp_Q51y-_ECQ5K2KW7T53RJXc9Xk654T41jI5sIWHA>
-    <xmx:RuxqYoPNqfqCOU-GCve-Wy9cS7kDCs0JQSjIoKwVPhkqJAsuinTixA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 28 Apr 2022 15:34:28 -0400 (EDT)
-Date:   Thu, 28 Apr 2022 13:34:25 -0600
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Sargun Dhillon <sargun@sargun.me>
-Cc:     Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/seccomp: Ensure that notifications come in
- FIFO order
-Message-ID: <YmrsQZ2lNGHjGK6i@cisco>
-References: <20220428015447.13661-1-sargun@sargun.me>
- <20220428015447.13661-2-sargun@sargun.me>
- <YmqTh68UkjVsTnUX@cisco>
- <CAMp4zn-725wHy2su_Dz8pEdzUv7tG=gQ+9=7hj5PXfZpQeOLjQ@mail.gmail.com>
+        Thu, 28 Apr 2022 15:41:17 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA11AFB37
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:38:00 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id m23so8079403ljc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PviecKSNBQ9rvt14y/CLlsqQGaNe4zDSNifKgF5FE5c=;
+        b=Mk/ZjIgpPO7ZjCxNJRE5W4RfcBcM9U03fLAGiHpSCx9OJwTUlKZlQFlhx+wLCTDfvD
+         n4Pe7ckjUJ9CJogJ2um0a73RMV3NqhLe0fs6B+hSn1dc7FUEAtYSuVxnqaDMDdOOkmNV
+         MfsNo4pco1mgdD+H5I5Vudi9U/F1WunaiWSOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PviecKSNBQ9rvt14y/CLlsqQGaNe4zDSNifKgF5FE5c=;
+        b=c2ZaP/0cunhZliVrCu/Nbls7+jhURaK8dnC+Kyuf8wsDByFR4T3vTLGQSIbYMXYaiE
+         Skfe6MI7BowOQA5eCLGshxiw8wtg1QP5HTevh4rWXvIixos8cyrn6ctGpdP5V23C37xA
+         6zBdN9hF+V6aQXZqehYVHxirwSCWk09r8ToRMifZMg3tgidl42yYtcZDK0uZS8xLiuy+
+         ZGV35/vQ5LACQ8/pp/479oSkkKo0gZ4NlNW2x/OjeKHrlmuG0WQ9pEZxf3Isbiozy8vk
+         /sdx+fYVekJ0W29hZGPxLa8jmOESQCGq9tUqYm+DnCtxlZX6KjWWgZwPTeMrw4ueDVb+
+         BWvg==
+X-Gm-Message-State: AOAM531Cl3uOqR3zAG/CUh5DfAOL4Oq9x73ZeFvD5JelE56mO96G0j//
+        NoomP5/nmuGG/F4pTPPbqXw4Cyl9JmQKTqK16aU=
+X-Google-Smtp-Source: ABdhPJziK7tyOqOGcdBpY4b6ce/9SE7BVVuej6aWBd2yz0/ogU9nk4TMZDAL9O4nUbNfGozTCa5TYg==
+X-Received: by 2002:a2e:6f12:0:b0:24f:2109:f038 with SMTP id k18-20020a2e6f12000000b0024f2109f038mr10066814ljc.311.1651174678544;
+        Thu, 28 Apr 2022 12:37:58 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id d14-20020a19f24e000000b00471a405963asm75519lfk.304.2022.04.28.12.37.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 12:37:57 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id x17so10402922lfa.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:37:57 -0700 (PDT)
+X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
+ y3-20020ac24203000000b004488053d402mr24901401lfh.687.1651174677085; Thu, 28
+ Apr 2022 12:37:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMp4zn-725wHy2su_Dz8pEdzUv7tG=gQ+9=7hj5PXfZpQeOLjQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220428182554.2138218-1-kuba@kernel.org>
+In-Reply-To: <20220428182554.2138218-1-kuba@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 28 Apr 2022 12:37:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wivb9faQ6Xuwfiqr6r1uHaR4a-i2oi6u142tWDppS-+gg@mail.gmail.com>
+Message-ID: <CAHk-=wivb9faQ6Xuwfiqr6r1uHaR4a-i2oi6u142tWDppS-+gg@mail.gmail.com>
+Subject: Re: [GIT PULL] Networking for 5.18-rc5
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 09:38:10AM -0700, Sargun Dhillon wrote:
-> On Thu, Apr 28, 2022 at 6:15 AM Tycho Andersen <tycho@tycho.pizza> wrote:
-> > > +     for (i = 0; i < ARRAY_SIZE(pids); i++) {
-> > > +             pid = fork();
-> > > +             if (pid == 0) {
-> > > +                     ret = syscall(__NR_getppid);
-> > > +                     exit(ret != USER_NOTIF_MAGIC);
-> > > +             }
-> > > +             pids[i] = pid;
-> > > +     }
-> > > +
-> > > +     /* This spins until all of the children are sleeping */
-> > > +restart_wait:
-> > > +     for (i = 0; i < ARRAY_SIZE(pids); i++) {
-> > > +             if (get_proc_stat(pids[i]) != 'S') {
-> > > +                     nanosleep(&delay, NULL);
-> > > +                     goto restart_wait;
-> > > +             }
-> > > +     }
-> >
-> > I wonder if we should/can combine this loop with the previous one, and
-> > wait for the child to sleep in getppid() before we fork the next one.
-> > Otherwise isn't racy in the case that your loop continues to the next
-> > iteration before the child processes are scheduled, so things might be
-> > out of order? Maybe I'm missing something.
-> >
-> > In any case, this change seems reasonable to me.
-> >
-> > Tycho
-> It's okay if the child processes are started out of order. The test just
-> verifies that the calls are delivered in FIFO order according to when
-> the syscall was called (not when the process was started), and we do
-> this by just looking at the notification ID. It doesn't care about which
-> process generated the notification.
+On Thu, Apr 28, 2022 at 11:26 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> Misc:
+>
+>  - add Eric Dumazet to networking maintainers
 
-I totally missed that you don't this, I just assumed you did. Thanks.
+He wasn't already? Strange.
 
-Anyway, you can add:
-
-Acked-by: Tycho Andersen <tycho@tycho.pizza>
-
-to both patches.
-
-Tycho
+            Linus

@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8F35129B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629145129BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241668AbiD1C7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S241704AbiD1DF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241634AbiD1C7Q (ORCPT
+        with ESMTP id S241784AbiD1DFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:59:16 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44225986F8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:56:03 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so5143647pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:56:03 -0700 (PDT)
+        Wed, 27 Apr 2022 23:05:52 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8BE99695;
+        Wed, 27 Apr 2022 20:02:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IvwH9xbsu6FeuNLim9woHWyD9ldcfxEbIcF/eG8AgJw=;
-        b=P2vJUR2qlxWOLpkcSYZd+hHtix4PhqAD8cPpOe1GZUsDrWejpdCJqLq6253y0W/c6y
-         CO7ZAQH/Kxad7GkOY41UiVo3bOCYQ+VnBNeTRk18ZMjx6bzwiJNzUTfOK1KXgi8K3XF/
-         VNiXmoLsEdrPKIY0TvEJWDVDu0G7LBJh1BMSPxX0ZeTG+LixGXrW2pgvLo2Jh5CU8tBY
-         4SrVSVLPxy85LskI7qAZkuXtyAG+vAPb6OPfV/aa6Nvq6tpFegpoDK75XMqqUE6j/osV
-         t0NVdb3KjKJaVbkGJ98KigDHRRIMCdkPqkhaY7Icr+7GaOY0FX/a4BEhGBv1CvyBhPLn
-         On9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IvwH9xbsu6FeuNLim9woHWyD9ldcfxEbIcF/eG8AgJw=;
-        b=b27NRE6ot/onZhlObkuquHO5/hm+oB456QCBcERVudwsOFafoCgrc3jp7XXDYj/Y5d
-         n6MQUdONQya45KwMBZZL41npxJtRAYIKy0yUgQd4Ke6eMRmhYZOdBHNHYQrAbQZ1WeuK
-         hyQ+CH0qspkrzAJvrcsf2z5yjpUwksEdRgMCSuAPjQ4shsS3YIfLfIoP08oTJdohq6k8
-         g1jNDWOQSGniEX/ffUYfBE3cvRw+2RRTvkliT+VzCLip9aUsObHKXmdA1qeo/NAeuVpm
-         Gqaqsrx6/1bnkL5ZJMsXYdSkKBKchUHsT18rYPrbJhn9MrP4EoMFks5uUcu3qWzyDbYE
-         AddQ==
-X-Gm-Message-State: AOAM531eDjMjZaiMWNM5o0/7sS8noRYZ7lIvczM+kie4XxthWLhtBzGs
-        ymRB0i3XE24bz4BDUWuBFnPKGw==
-X-Google-Smtp-Source: ABdhPJy1ESR8MK5eh/CTeJwke24+N9wQZVarAEzXV+tdbYLw16YrJcUNcoHvMx8HVxPNgTxxTtbXvg==
-X-Received: by 2002:a17:90b:1d85:b0:1d9:c22a:e8c with SMTP id pf5-20020a17090b1d8500b001d9c22a0e8cmr10934560pjb.211.1651114562750;
-        Wed, 27 Apr 2022 19:56:02 -0700 (PDT)
-Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id p27-20020a056a000a1b00b004f3f63e3cf2sm23472856pfh.58.2022.04.27.19.56.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 19:56:02 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 10:55:59 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        almasrymina@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] mm: hugetlb: Considering PMD sharing when
- flushing cache/TLBs
-Message-ID: <YmoCP4PoFbMVZ0AK@FVFYT0MHHV2J.usts.net>
-References: <cover.1651056365.git.baolin.wang@linux.alibaba.com>
- <0443c8cf20db554d3ff4b439b30e0ff26c0181dd.1651056365.git.baolin.wang@linux.alibaba.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651114957; x=1682650957;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SIYCB3bexhua9iFQzXZUTU9dplIjEghTancCIHJwJog=;
+  b=Ewpu2M7NyoPLRzZJzISU0lTVPeoW41aAZpBs31QDgsCHfO2OGweOSzlI
+   rAvyAETNMvQ83zjq5UDWFZKqLYcfnF1Z+zYHPPsIITaQpDTXj3PooiRQn
+   oD5xgB8Yw2DtUSUfzLuFQCxwM2YhEGlAEH7peCYYvcJQB8XO8WKqPpwR2
+   Y=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Apr 2022 20:02:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 20:02:35 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 20:02:35 -0700
+Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
+ 2022 20:02:31 -0700
+Message-ID: <6b8b7969-56f0-d8d5-91b3-7accf066ea14@quicinc.com>
+Date:   Thu, 28 Apr 2022 08:32:28 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0443c8cf20db554d3ff4b439b30e0ff26c0181dd.1651056365.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv10 0/6] lib/rwmmio/arm64: Add support to trace register
+ reads/writes
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>
+References: <cover.1644824638.git.quic_saipraka@quicinc.com>
+ <20220408111707.2488-1-quic_saipraka@quicinc.com>
+ <bb99b615-cc76-9591-a610-fb4841d41d62@quicinc.com>
+ <CAK8P3a1b0K4hJC9esuznqDdcBoX6+QqD74nVh91-iYbkZxiqbQ@mail.gmail.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <CAK8P3a1b0K4hJC9esuznqDdcBoX6+QqD74nVh91-iYbkZxiqbQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 06:52:05PM +0800, Baolin Wang wrote:
-> When moving hugetlb page tables, the cache flushing is called in
-> move_page_tables() without considering the shared PMDs, which may
-> be cause cache issues on some architectures.
-> 
-> Thus we should move the hugetlb cache flushing into
-> move_hugetlb_page_tables() with considering the shared PMDs ranges,
-> calculated by adjust_range_if_pmd_sharing_possible(). Meanwhile also
-> expanding the TLBs flushing range in case of shared PMDs.
-> 
-> Note this is discovered via code inspection, and did not meet a real
-> problem in practice so far.
-> 
-> Fixes: 550a7d60bd5e ("mm, hugepages: add mremap() support for hugepage backed vma")
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+On 4/27/2022 9:20 PM, Arnd Bergmann wrote:
+> On Thu, Apr 21, 2022 at 4:00 AM Sai Prakash Ranjan
+> <quic_saipraka@quicinc.com> wrote:
+>> On 4/8/2022 4:47 PM, Sai Prakash Ranjan wrote:
+>>> Gentle ping, could you please take a look at this, would appreciate your reviews.
+>>>
+>> Gentle Ping !!
+>>
+> Sorry for dropping the ball on this. I'll go through the patches again
+> now. From a new
+> look, this all seems fine, but I'll need to take a little extra time
+> to understand why we
+> are getting the warnings that you are fixing, and how one will use the
+> tracepoints
+> in the end.
+>
+>         Arnd
 
-LGTM.
+Thanks Arnd, I saw in other thread that you figured out the reasons for warnings.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
+Thanks,
+Sai

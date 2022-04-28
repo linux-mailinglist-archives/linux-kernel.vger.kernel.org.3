@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29F3512EC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B598D512EB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344644AbiD1ImB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S239639AbiD1ImH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344394AbiD1IlX (ORCPT
+        with ESMTP id S1344534AbiD1IlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:41:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4998033888
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:35:49 -0700 (PDT)
+        Thu, 28 Apr 2022 04:41:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC60B33E29
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651134948;
+        s=mimecast20190719; t=1651134960;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gLuKinorq4rlkUK0NOgUu05gyraDrJ+IHjcbSgfMRoI=;
-        b=ggbZwUGnlV0hfxSpOGOZaoMEqPlMt7xP5dtl4WyxBfV7WVqpcHTwMXuvvO9FTQcK10d8Hw
-        020RrHun4i4VZDHflVpZaJ8ePbJptu7EEE8T2798PbJIFTs4o9/Nlj3aMB9rbxDQkJzGFN
-        /mIUFomeFeb8EUqju0E+PJR5Pb6MtLM=
+        bh=v822+pslh1KbevnoZOKSzpfD4OCwDeeTa9Xkok8HSu4=;
+        b=KJppoeBLBGelatLtnt14CQQGSLXxg+CJMU54bUR0Xbc3x5h3ryuh36MHqz7vHTUq+up8D5
+        se+Wn4BiLHYYHG15yQNyrPzdbK1yQl+cnEWbU/toPQ57nd3DkuAiCO/vatzIpjWjxwCnfw
+        XYwkAoXiBYGLf7dTTDNK/syPAvDhaSk=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-VmxHT_nLOiKIKmPa4DnC6Q-1; Thu, 28 Apr 2022 04:35:44 -0400
-X-MC-Unique: VmxHT_nLOiKIKmPa4DnC6Q-1
+ us-mta-38-qeJH1XxgPGKnMYatyjfFOQ-1; Thu, 28 Apr 2022 04:35:54 -0400
+X-MC-Unique: qeJH1XxgPGKnMYatyjfFOQ-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF32C8058F6;
-        Thu, 28 Apr 2022 08:35:40 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AEB1080419F;
+        Thu, 28 Apr 2022 08:35:47 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 45114566A27;
-        Thu, 28 Apr 2022 08:35:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 480D9566A27;
+        Thu, 28 Apr 2022 08:35:41 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -65,9 +65,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Pedro Gomes <pedrodemargomes@gmail.com>,
         Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v4 09/17] mm/rmap: use page_move_anon_rmap() when reusing a mapped PageAnon() page exclusively
-Date:   Thu, 28 Apr 2022 10:34:33 +0200
-Message-Id: <20220428083441.37290-10-david@redhat.com>
+Subject: [PATCH v4 10/17] mm/huge_memory: remove outdated VM_WARN_ON_ONCE_PAGE from unmap_page()
+Date:   Thu, 28 Apr 2022 10:34:34 +0200
+Message-Id: <20220428083441.37290-11-david@redhat.com>
 In-Reply-To: <20220428083441.37290-1-david@redhat.com>
 References: <20220428083441.37290-1-david@redhat.com>
 MIME-Version: 1.0
@@ -82,52 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to mark anonymous pages exclusive, and when using
-page_move_anon_rmap() we know that we are the exclusive user, as
-properly documented. This is a preparation for marking anonymous pages
-exclusive in page_move_anon_rmap().
+We can already theoretically fail to unmap (still having page_mapped()) in
+case arch_unmap_one() fails, which can happen on sparc. Failures to
+unmap are handled gracefully, just as if there are other references on
+the target page: freezing the refcount in split_huge_page_to_list()
+will fail if still mapped and we'll simply remap.
 
-In both instances, we're holding page lock and are sure that we're the
-exclusive owner (page_count() == 1). hugetlb already properly uses
-page_move_anon_rmap() in the write fault handler.
+In commit 504e070dc08f ("mm: thp: replace DEBUG_VM BUG with VM_WARN when
+unmap fails for split") we already converted to VM_WARN_ON_ONCE_PAGE,
+let's get rid of it completely now.
 
-Note that in case of a PTE-mapped THP, we'll only end up calling this
-function if the whole THP is only referenced by the single PTE mapping
-a single subpage (page_count() == 1); consequently, it's fine to modify
-the compound page mapping inside page_move_anon_rmap().
+This is a preparation for making try_to_migrate() fail on anonymous pages
+with GUP pins, which will make this VM_WARN_ON_ONCE_PAGE trigger more
+frequently.
 
+Reported-by: Yang Shi <shy828301@gmail.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/huge_memory.c | 2 ++
- mm/memory.c      | 1 +
- 2 files changed, 3 insertions(+)
+ mm/huge_memory.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index c0365280b481..04c9446b87a8 100644
+index 04c9446b87a8..cb5bcd833d9e 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -1317,6 +1317,8 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 		try_to_free_swap(page);
- 	if (page_count(page) == 1) {
- 		pmd_t entry;
-+
-+		page_move_anon_rmap(page, vma);
- 		entry = pmd_mkyoung(orig_pmd);
- 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
- 		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry, 1))
-diff --git a/mm/memory.c b/mm/memory.c
-index 22e732c266dd..e12f75e8617c 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3303,6 +3303,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 		 * and the page is locked, it's dark out, and we're wearing
- 		 * sunglasses. Hit it.
- 		 */
-+		page_move_anon_rmap(page, vma);
- 		unlock_page(page);
- 		wp_page_reuse(vmf);
- 		return VM_FAULT_WRITE;
+@@ -2240,8 +2240,6 @@ static void unmap_page(struct page *page)
+ 		try_to_migrate(folio, ttu_flags);
+ 	else
+ 		try_to_unmap(folio, ttu_flags | TTU_IGNORE_MLOCK);
+-
+-	VM_WARN_ON_ONCE_PAGE(page_mapped(page), page);
+ }
+ 
+ static void remap_page(struct folio *folio, unsigned long nr)
 -- 
 2.35.1
 

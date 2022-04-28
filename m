@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA23512DF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3416A512DFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbiD1IQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S238530AbiD1IRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343821AbiD1IQs (ORCPT
+        with ESMTP id S232726AbiD1IRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:16:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 876C8771CD
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651133612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lWQrFegs4y+/AqjpDTmKtLV6ErynfS4+Zm1sxeLo25E=;
-        b=DSV8vJXeribrJ4CcPlXxoTgiqMcV+qydo6CvcpLtqSBTx8HqyVub9GIeNc7I0rjlni/6T3
-        Plq2IJ6idLeECoKUMNuzM/8wqMDPV6hZDAKiVN3yAIO+fz97ZMdLTzKMGF4hJ/NDQ/wjeA
-        KjJjy+gO/ArjMsokHthL3WgHZkXyhn4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-NCOD99D3N8GF5yYtIrnzJg-1; Thu, 28 Apr 2022 04:13:31 -0400
-X-MC-Unique: NCOD99D3N8GF5yYtIrnzJg-1
-Received: by mail-wr1-f71.google.com with SMTP id g7-20020adfbc87000000b0020ac76d254bso1636245wrh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:13:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lWQrFegs4y+/AqjpDTmKtLV6ErynfS4+Zm1sxeLo25E=;
-        b=wQ1jLSDqeSTKUDraAtjOmx9NL03YlAs2488+qy+Unt5SXr0vDVhKJ7jlMqyLPgPzJd
-         t/YBuzVK07dUE+zGu3kzNFOIS0qcI8kaT6RTCo6u9TsHmvwu1tY1hEEIIYCgWSMxwV3m
-         meXPW1+sbFheAqS+jD9baYMenCLd+Y8rQSdEiUsKFll1mNlNPBRG6DGhRPArizNuyfF9
-         MuKN1SPTue2Fd+bCkcM3Jy0hZ7dx4OGsE5/+B4CnNkjIRGGFXNsYlZKVVTMjR9R26T4A
-         +8cVWU+lFsTmvlL553Mm7lRSR/mP4jCjESXM+IJQIy1cH5BqDtKxnDmHALXSuYn0iARr
-         J8Rw==
-X-Gm-Message-State: AOAM531GtQFTYrH93/XlRFBdMLLB8mEVRvNix2cPzv10CSziWQJIDYIn
-        xvmVtsppKOqCkOTs5rHRjpb4oMWT98XjeYRQCQJAatK8TsUBvkve5qsfOG9UwwYgTtiaelGAic0
-        P1n0k8nC2+5mGZA/0SASVPw6F
-X-Received: by 2002:a5d:6b0e:0:b0:20a:dd17:e452 with SMTP id v14-20020a5d6b0e000000b0020add17e452mr14573005wrw.501.1651133610066;
-        Thu, 28 Apr 2022 01:13:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxgeL9zqCpTQRUUwTrQ96T14Z4BV1IgTzEd+WfFAxKG95THdyAPR/GzuQnbUbjUr0bb123U6A==
-X-Received: by 2002:a5d:6b0e:0:b0:20a:dd17:e452 with SMTP id v14-20020a5d6b0e000000b0020add17e452mr14572993wrw.501.1651133609861;
-        Thu, 28 Apr 2022 01:13:29 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05600c358600b00393eaf94077sm4124458wmq.8.2022.04.28.01.13.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 01:13:29 -0700 (PDT)
-Message-ID: <262043e4-feee-5540-9a43-8871cb51764a@redhat.com>
-Date:   Thu, 28 Apr 2022 10:13:28 +0200
+        Thu, 28 Apr 2022 04:17:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BCF0771CD;
+        Thu, 28 Apr 2022 01:14:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB9C31474;
+        Thu, 28 Apr 2022 01:14:23 -0700 (PDT)
+Received: from [10.57.12.231] (unknown [10.57.12.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 801DE3F774;
+        Thu, 28 Apr 2022 01:14:12 -0700 (PDT)
+Message-ID: <7956ab00-66b6-bd89-dcc0-f10cf2741e4d@arm.com>
+Date:   Thu, 28 Apr 2022 09:14:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
- and DRM_DP_CEC
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-References: <20220427215528.237861-1-javierm@redhat.com>
- <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
- <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
- <af31d343-202b-ffaa-c6a9-b20247938dfd@suse.de>
- <1d456654-6d06-ef35-b9a0-519db7d5b35e@redhat.com>
- <cdad47d0-939d-9eda-feae-78cf204a0ae6@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <cdad47d0-939d-9eda-feae-78cf204a0ae6@suse.de>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH 20/30] panic: Add the panic informational notifier list
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Leach <mike.leach@linaro.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-21-gpiccoli@igalia.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220427224924.592546-21-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,36 +90,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 10:04, Thomas Zimmermann wrote:
-
-[snip]
-
->>
->> Right. So giving even more thought to this, now I think that we should just include
->> drm_dp_aux_dev.o, drm_dp_cec.o (and probably drm_dp_aux_bus.o?) unconditionally to
->> drm_display_helper-$(CONFIG_DRM_DISPLAY_DP_HELPER).
->>
->> After all, these are not big objects and drm_display_helper can now be built as module.
->>
->> I don't see that much value to have separate user-configurable config options...
->>
+On 27/04/2022 23:49, Guilherme G. Piccoli wrote:
+> The goal of this new panic notifier is to allow its users to
+> register callbacks to run earlier in the panic path than they
+> currently do. This aims at informational mechanisms, like dumping
+> kernel offsets and showing device error data (in case it's simple
+> registers reading, for example) as well as mechanisms to disable
+> log flooding (like hung_task detector / RCU warnings) and the
+> tracing dump_on_oops (when enabled).
 > 
-> I don't know the side effects of this. We're exporting another device 
-> file after all.
+> Any (non-invasive) information that should be provided before
+> kmsg_dump() as well as log flooding preventing code should fit
+> here, as long it offers relatively low risk for kdump.
 > 
-> For know I'd make them depend on DRM_DISPLAY_DP_HELPER. If someone 
-> complains we can revert and fix the linker error by adding stub 
-> functions for the missing symbols.
->
+> For now, the patch is almost a no-op, although it changes a bit
+> the ordering in which some panic notifiers are executed - specially
+> affected by this are the notifiers responsible for disabling the
+> hung_task detector / RCU warnings, which now run first. In a
+> subsequent patch, the panic path will be refactored, then the
+> panic informational notifiers will effectively run earlier,
+> before ksmg_dump() (and usually before kdump as well).
+> 
+> We also defer documenting it all properly in the subsequent
+> refactor patch. Finally, while at it, we removed some useless
+> header inclusions too.
+> 
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Hari Bathini <hbathini@linux.ibm.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Mikko Perttunen <mperttunen@nvidia.com>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>   arch/arm64/kernel/setup.c                         | 2 +-
+>   arch/mips/kernel/relocate.c                       | 2 +-
+>   arch/powerpc/kernel/setup-common.c                | 2 +-
+>   arch/x86/kernel/setup.c                           | 2 +-
+>   drivers/bus/brcmstb_gisb.c                        | 2 +-
+>   drivers/hwtracing/coresight/coresight-cpu-debug.c | 4 ++--
+>   drivers/soc/tegra/ari-tegra186.c                  | 3 ++-
+>   include/linux/panic_notifier.h                    | 1 +
+>   kernel/hung_task.c                                | 3 ++-
+>   kernel/panic.c                                    | 4 ++++
+>   kernel/rcu/tree.c                                 | 1 -
+>   kernel/rcu/tree_stall.h                           | 3 ++-
+>   kernel/trace/trace.c                              | 2 +-
+>   13 files changed, 19 insertions(+), 12 deletions(-)
+> 
 
-Ok, I'll just add the depends on then to fix the linking errors and then either
-adding the stubs when disabled or just making it part of the DP_HELPER can be
-done as a follow-up.
+...
 
--- 
-Best regards,
+> diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+> index 1874df7c6a73..7b1012454525 100644
+> --- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
+> +++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+> @@ -535,7 +535,7 @@ static int debug_func_init(void)
+>   			    &debug_func_knob_fops);
+>   
+>   	/* Register function to be called for panic */
+> -	ret = atomic_notifier_chain_register(&panic_notifier_list,
+> +	ret = atomic_notifier_chain_register(&panic_info_list,
+>   					     &debug_notifier);
+>   	if (ret) {
+>   		pr_err("%s: unable to register notifier: %d\n",
+> @@ -552,7 +552,7 @@ static int debug_func_init(void)
+>   
+>   static void debug_func_exit(void)
+>   {
+> -	atomic_notifier_chain_unregister(&panic_notifier_list,
+> +	atomic_notifier_chain_unregister(&panic_info_list,
+>   					 &debug_notifier);
+>   	debugfs_remove_recursive(debug_debugfs_dir);
+>   }
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 

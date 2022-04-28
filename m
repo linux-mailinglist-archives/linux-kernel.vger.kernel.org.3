@@ -2,143 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9835132CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4235132D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345677AbiD1Lux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S1345707AbiD1LwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiD1Luv (ORCPT
+        with ESMTP id S1345691AbiD1Lv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:50:51 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AF968983;
-        Thu, 28 Apr 2022 04:47:36 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o69so2712427pjo.3;
-        Thu, 28 Apr 2022 04:47:36 -0700 (PDT)
+        Thu, 28 Apr 2022 07:51:58 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EB0689AE
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:48:38 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id e24so4092285pjt.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=N6IBRFyqHzyovjymn28OuFX1kLvXKvlfEABFpAl56Ps=;
-        b=VrP78e9NkPWgsFtyhw6+WX9d2tl4k+ckSvK5CUUUJJGoeEtm74AsIk849tLFxF0CC2
-         bj425Kjif46MeiiUyhkqigysawm3UqxemI6zA2UDPC9+LwjKca46Sz86KtR/nNNU+Egj
-         Gyb8ckVVkYoMuL5A/fuacx/asgWgUiJuwGUyLZ4tuRev+r1nDvIeDhLg0ihio55ShX5F
-         tUCrp3L2k2+NocbZaEFeT3/rkkT/o/MMvuSA7/lbTPSCS+iyMrvBFRpfJHqRVRTL0BAH
-         JOD+KUXWIvMBKI8IYvpMwk5tazgZWUs9HF9w35Rd8uCFiOVXXNSw2pe6fdqmAhKUA9mW
-         9CZQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lKWQTGV4dh9PrDo1ht1APvD79N4/klGUKA1N6RBf/GQ=;
+        b=G3X+tE3No3MGFynBoTKdGdMfqY90HrjssPASkzvSVM3xa3pYXi6L5rl4CkSVGOR+z+
+         ro3lt+PwqdLf+fM7ZKxmcThJNKbQML0/enxTqS50zC4K2hTQcvOt5pxHARNiLVnp9go6
+         bL9CKShiWf9WpdXYz4FEgwYeQuM3jLB5igxWwvUMTRop1jMp7JKES0USBPgplpvHCD5B
+         WKJZlv0BZVL/6km57R0RivFmVwL+azaU9mWB+VXd92FVWxDUu4qoQzjXk+Kn6xj2ujXS
+         fktKKtimTGWrvth41l0ji77mmg+KgJDLWuaxWxQGc1mNEKUqApeJtr8jCBy1bqKY6L1k
+         Injw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N6IBRFyqHzyovjymn28OuFX1kLvXKvlfEABFpAl56Ps=;
-        b=cJ/r7rOFuNQRKEjpVL7HgIjfp8cb/NdTCpNcXxOR9ykleWyUpO3PnuczoTatj2GWp3
-         FiWgeYCWRnBScil+AtjF/howBQWSyO7wEXl5VG6owuSoyF8qKN00RKY6NNjw9DL994II
-         uu+sCcIq/5mYY/y5qUjEIiFDVidvXCY/Fub4d6UzpxfiEQyI5cguKWBwQ6MWmnF7Lyov
-         yr9nGhpUdnrJBqQk14UHvk467q0AbrouCWztNJ9w6aguAsAUdLawyXeTCzZ01NssXp2n
-         aBo9yb9b9zCYuuYmyMmzaFiHg5/2NmyH/5yf2i93ZDL7o5p0/Wsh3B63xNItxd9KMMJ3
-         IgeA==
-X-Gm-Message-State: AOAM53301iV56+Vmm1c/UfuymoIbdrc5Is/10aDp7s/r4ww1NBQG5Mka
-        YWmnbvikBIomQLn4AvsKw1YtqYQsNFw=
-X-Google-Smtp-Source: ABdhPJygekZSmJALXd+BjpZZ3XSqug8GWwU+/IAOngNvyJ/8cGw9aReDJenijONtLuqbTOW2DbKG4g==
-X-Received: by 2002:a17:903:2309:b0:15c:e766:994e with SMTP id d9-20020a170903230900b0015ce766994emr26601005plh.29.1651146456459;
-        Thu, 28 Apr 2022 04:47:36 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 1-20020a631541000000b003c14af50646sm2608695pgv.94.2022.04.28.04.47.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 04:47:35 -0700 (PDT)
-Message-ID: <a332cd81-c234-7bff-ac2b-f19a4368210a@gmail.com>
-Date:   Thu, 28 Apr 2022 20:47:30 +0900
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lKWQTGV4dh9PrDo1ht1APvD79N4/klGUKA1N6RBf/GQ=;
+        b=LTU8w43YZAToBwsUZMqBGeWn8sXFcPkkSElZJLvRDIKdO+PEjBUXcRFVR3vHwIhS/3
+         gHk6zuQ3UthXfI7IrSK4awZ/fXOukoKyIHsh1NO9BYlxntXp4aP23R/o8ym0ItlE3V+9
+         OddIvw3Q+bQ1ib08Geeec7W3OsYDmRgCgz/ZgEjgfw5qTqdAb4+OhF0fpj5/Y/5YyDF2
+         MKtj4Jb/KY5jzavmZ4ie38hwP9cVKI1dG6cfWUHeNbiXZm+qswMWrE5AHMI9ML7AI3tP
+         vs+8ZsqV1fK3IxIl41Moi+Jr5ao6rh+H7mLZEaJzJJ8qnXmTkSaJxElv7e9WL8nPZi5H
+         5OTA==
+X-Gm-Message-State: AOAM531Sym2yixKs+4UdxksyEISEPDG5vW8BG4By0zLfH+qokmDkz5T9
+        TjJE8xHDeCZdWRPvpfpqhi4TFw==
+X-Google-Smtp-Source: ABdhPJwfNlUrhObS4CNeZo5g5yFfXpFAPhyzjjlLtni25rafO48eOSIBrFIVd2rGxVJZL+uDhGhNbQ==
+X-Received: by 2002:a17:90b:3442:b0:1d9:8af8:2913 with SMTP id lj2-20020a17090b344200b001d98af82913mr20231216pjb.199.1651146518157;
+        Thu, 28 Apr 2022 04:48:38 -0700 (PDT)
+Received: from localhost ([122.162.207.161])
+        by smtp.gmail.com with ESMTPSA id k21-20020a63d855000000b003c14af5063fsm2654765pgj.87.2022.04.28.04.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 04:48:37 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 17:18:35 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
+Message-ID: <20220428114835.3ktimyz2tzzqdcbg@vireshk-i7>
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+ <20220422075239.16437-8-rex-bc.chen@mediatek.com>
+ <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
+ <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
+ <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
+ <078b1f9b39690da98cbd3c4528ba28374a097083.camel@mediatek.com>
+ <20220427031141.or2owu5wrh2cadfo@vireshk-i7>
+ <346736a339bed576817179ded3795d61f71fa06a.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] docs/ja_JP/howto: Don't mention specific kernel
- versions
-Content-Language: en-US
-To:     Tsugikazu Shibata <shibata@linuxfoundation.org>,
-        Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Cc:     corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-References: <20220424122745.15386-1-fujimotokosuke0@gmail.com>
- <CAO+cJp0adp9W22zBbOnUvaLxa2fbsTky431NE_K+MbwyOLpZYQ@mail.gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <CAO+cJp0adp9W22zBbOnUvaLxa2fbsTky431NE_K+MbwyOLpZYQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <346736a339bed576817179ded3795d61f71fa06a.camel@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyOCBBcHIgMjAyMiAxNzo0MDoyNyArMDkwMCwNClRzdWdpa2F6dSBTaGliYXRh
-IHdyb3RlOg0KPiBGaXJzdCBvZiBhbGwsIFRoYW5rcyB0byBGdWppbW90by1zYW4gYW5kIFlv
-a29zYXdhLXNhbiBmb3Igd2FraW5nIG1lIHVwLg0KPiBOb3cgSSBnZXQgYmFjayB0byBoZXJl
-IGJ5IG5ldyBlbWFpbCBhZGRyZXNzLg0KDQpXZWxjb21lIGJhY2ssIFNoaWJhdGEtc2FuIQ0K
-DQo+IA0KPiBJIGhhdmUgYSBmZXcgY29tbWVudHMgYXMgYmVsb3c6DQo+IA0KPiBPbiBTdW4s
-IEFwciAyNCwgMjAyMiBhdCA5OjI4IFBNIEtvc3VrZSBGdWppbW90bw0KPiA8ZnVqaW1vdG9r
-b3N1a2UwQGdtYWlsLmNvbT4gd3JvdGU6DQo+Pg0KPj4gVGhpcyBjaGFuZ2UgaXMgYmFzZWQg
-b24gY29tbWl0IGQyYjAwOGYxMzRiNw0KPj4gKCJEb2N1bWVudGF0aW9uL3Byb2Nlc3MvaG93
-dG86IFVwZGF0ZSBmb3IgNC54IC0+IDUueCB2ZXJzaW9uaW5nIikuDQo+Pg0KPj4gUmVwbGFj
-ZSAiNC54IGtlcm5lbCB2ZXJzaW9uIiB3aXRoIGdlbmVyaWMgdGVybSBzdWNoIGFzICJtYWlu
-bGluZSB0cmVlIg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEtvc3VrZSBGdWppbW90byA8ZnVq
-aW1vdG9rb3N1a2UwQGdtYWlsLmNvbT4NCj4+IFJldmlld2VkLWJ5OiBBa2lyYSBZb2tvc2F3
-YSA8YWtpeWtzQGdtYWlsLmNvbT4NCj4+IENjOiBKb25hdGhhbiBDb3JiZXQgPGNvcmJldEBs
-d24ubmV0Pg0KPj4gQ2M6IFRzdWdpa2F6dSBTaGliYXRhIDxzaGliYXRhQGxpbnV4Zm91bmRh
-dGlvbi5vcmc+DQo+PiBDYzogQWtpcmEgWW9rb3Nhd2EgPGFraXlrc0BnbWFpbC5jb20+DQo+
-PiBDYzogbGludXgtZG9jQHZnZXIua2VybmVsLm9yZw0KPj4gLS0tDQo+PiBWMjogUmVmb3Jt
-YXR0ZWQgY29tbWl0IGxvZyBtZXNzYWdlDQo+PiAtLS0NCj4+ICBEb2N1bWVudGF0aW9uL3Ry
-YW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QgfCA0MyArKysrKysrKysrLS0tLS0tLS0tLS0t
-DQo+PiAgMSBmaWxlIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKyksIDIzIGRlbGV0aW9ucygt
-KQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9K
-UC9ob3d0by5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5y
-c3QNCj4+IGluZGV4IGQ2NjdmOWQ4YTAyYS4uOWI3MTE5MzJhZTZkIDEwMDY0NA0KPj4gLS0t
-IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvamFfSlAvaG93dG8ucnN0DQo+PiArKysg
-Yi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy9qYV9KUC9ob3d0by5yc3QNClsuLi5dDQo+
-PiAtNC54LnkgLXN0YWJsZSDjgqvjg7zjg43jg6vjg4Tjg6rjg7wNCj4+IC1+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+DQo+PiAr44Oh44K444Oj44O855Wq5Y+344KS44G+44Gf44GQ
-5pWw5pys44Gu5a6J5a6a54mI44OE44Oq44O8DQo+PiArfn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+DQo+Pg0KPj4gIOODkOODvOOCuOODp+ODs+eVquWPt+OBjDPj
-gaTjga7mlbDlrZfjgavliIbjgYvjgozjgabjgYTjgovjgqvjg7zjg43jg6vjga8gLXN0YWJs
-ZSDjgqvjg7zjg43jg6vjgafjgZnjgIINCj4+IC3jgZPjgozjgavjga/jgIE0Lngg44Kr44O8
-44ON44Or44Gn6KaL44Gk44GL44Gj44Gf44K744Kt44Ol44Oq44OG44Kj5ZWP6aGM44KE6YeN
-5aSn44Gq5b6M5oi744KK44Gr5a++44GZDQo+PiAt44KL5q+U6LyD55qE5bCP44GV44GE6YeN
-6KaB44Gq5L+u5q2j44GM5ZCr44G+44KM44G+44GZ44CCDQo+PiAr44GT44KM44Gr44Gv5pyA
-5Yid44GuMuOBpOOBruaVsOWtl+OBq+WvvuW/nOOBl+OBn+OAgeODoeOCpOODs+ODqeOCpOOD
-s+ODquODquODvOOCueOBp+imi+OBpOOBi+OBo+OBn+OCu+OCreODpeODquODhuOCo+WVj+mh
-jOOChA0KPiANCj4gQWJvdmUgbGluZSBjb21lcyBmcm9tOg0KPiAuLi5zZWN1cml0eSBwcm9i
-bGVtcyBvciBzaWduaWZpY2FudCByZWdyZXNzaW9ucyBkaXNjb3ZlcmVkIGluIGEgZ2l2ZW4N
-Cj4gbWFqb3IgbWFpbmxpbmUgcmVsZWFzZSwNCj4gd2l0aCB0aGUgZmlyc3QgMi1wYXJ0IG9m
-IHZlcnNpb24gbnVtYmVyIGFyZSB0aGUgc2FtZSBjb3JyZXNwb25kaW5nbHkuDQo+IA0KPiBJ
-dCBtYXkgYmV0dGVyIHRvIGJlOg0KPiDjgZPjgozjgavjga/mnIDliJ3jga4y44Gk44Gu44OQ
-44O844K444On44Oz55Wq5Y+344Gu5pWw5a2X44Gr5a++5b+c44GX44Gf44CB44Oh44Kk44Oz
-44Op44Kk44Oz44Oq44Oq44O844K544Gn6KaL44Gk44GL44Gj44Gf44K744Kt44Ol44Oq44OG
-44Kj5ZWP6aGM44KEDQoNClRoaXMgbG9va3MgbW9yZSBmYWl0aGZ1bC4NCg0KPiANCj4+ICvp
-h43lpKfjgarlvozmiLvjgorjgavlr77jgZnjgovmr5TovIPnmoTlsI/jgZXjgYTph43opoHj
-garkv67mraPjgYzlkKvjgb7jgozjgb7jgZnjgIINCj4+DQo+PiAg44GT44KM44Gv44CB6ZaL
-55m6L+Wun+mok+eahOODkOODvOOCuOODp+ODs+OBruODhuOCueODiOOBq+WNlOWKm+OBmeOC
-i+OBk+OBqOOBq+iIiOWRs+OBjOeEoeOBj+OAgeacgOaWsA0KPj4gIOOBruWuieWumuOBl+OB
-n+OCq+ODvOODjeODq+OCkuS9v+OBhOOBn+OBhOODpuODvOOCtuOBq+aOqOWlqOOBmeOCi+OD
-luODqeODs+ODgeOBp+OBmeOAgg0KPj4NCj4+IC3jgoLjgZfjgIE0LngueSDjgqvjg7zjg43j
-g6vjgYzlrZjlnKjjgZfjgarjgYTloLTlkIjjgavjga/jgIHnlarlj7fjgYzkuIDnlarlpKfj
-gY3jgYQgNC54IOOBjOacgOaWsA0KPj4gLeOBruWuieWumueJiOOCq+ODvOODjeODq+OBp+OB
-meOAgg0KPj4gLQ0KPj4gLTQueC55IOOBryAic3RhYmxlIiDjg4Hjg7zjg6AgPHN0YWJsZUB2
-Z2VyLmtlcm5lbC5vcmc+IOOBp+ODoeODs+ODhuOBleOCjOOBpuOBiuOCiuOAgQ0KPj4gK+Wu
-ieWumueJiOOCq+ODvOODjeODqyDjga8gInN0YWJsZSIg44OB44O844OgIDxzdGFibGVAdmdl
-ci5rZXJuZWwub3JnPiDjgafjg6Hjg7Pjg4bjgZXjgozjgabjgYrjgorjgIENCj4gDQo+IFRo
-aXMgbGluZSBjb21lcyBmcm9tOg0KPiBTdGFibGUgdHJlZXMgYXJlIG1haW50YWluZWQgYnkg
-dGhlICJzdGFibGUiIHRlYW0gPHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmc+LCAuLi4NCj4gDQo+
-IFNvLCBJdCBtYXkgYWxzbyBiZXR0ZXIgdG8gYmU6DQo+IOWuieWumueJiOODhOODquODvOOB
-ryJzdGFibGUiIOODgeODvOODoCA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4g44Gn44Oh44Oz
-44OG44GV44KM44Gm44GK44KK44CBDQoNCkRpdHRvLg0KDQpGdWppbW90by1zYW4sIHBsZWFz
-ZSBrZWVwIG15IFJldmlld2VkLWJ5OiB0YWcgaW4gdGhlIG5leHQgc3Bpbi4NCg0KICAgICAg
-ICBUaGFua3MsIEFraXJhDQoNCj4gDQo+IEZvciBvdGhlciBwYXJ0cyBpdCBsb29rcyBnb29k
-IHRvIG1lLiBJIGhvcGUgeW91IHdpbGwgZml4IGFuZCBzdWJtaXQNCj4geW91ciBwYXRjaCBh
-Z2Fpbi4NCj4gVGhhbmsgeW91IGZvciB5b3VyIHBhdGNoLg0KPiANCj4gVHN1Z2lrYXp1IFNo
-aWJhdGENCg==
+On 28-04-22, 19:16, Rex-BC Chen wrote:
+> Yes, the call stack will eventually go to __cpufreq_driver_target.
+> However, we can observe the mismatch between target_freq and policy-cur 
+> with a tiny difference.
+> e.g.
+> [ 553.065356] cpufreq: target for CPU 0: 500000 kHz, relation 0,
+> requested 500000 kHz
+> [ 553.066366] cpufreq: target_freq/policy->cur: 500000/499999 kHz
+
+So you are trying to set the frequency to 500 MHz now, but policy->cur says it
+is 499 MHz.
+
+> We check the assignment of policy->cur could be either from
+> cpufreq_driver->get_intermediate or from cpufreq_driver->get.
+
+policy->cur is set only at two places, in your case:
+- CPUFREQ_POSTCHANGE
+- cpufreq_online()
+
+From what I understand, it is possible that cpufreq_online() is setting your
+frequency to 499999 (once at boot), but as soon as a frequency change has
+happened after that, policy->cur should be set to 500 MHz and you should see
+this problem only once.
+
+From CPUFREQ_POSTCHANGE notifier, we always set policy->cur from the table
+itself, which should be 500000 MHz.
+
+I wonder how you see policy->cur to be 499999 here. Does this happen only once ?
+Or repeatedly ?
+
+> But it is strange to have the frequency value like 499999 kHz.
+> Is the result of tiny frequency difference expected from your point of
+> view?
+
+Clock driver can give this value, that is fine.
+
+> > What do you mean by "voltage pulse" here? What actually happens which
+> > you want to avoid.
+> > 
+> 
+> When cpufreq is fixed to lowest opp, "voltage pulse" is a quick voltage
+> rising and falling phenomenon which can be observed if 'cpufreq_get' is
+> invoked.
+
+Do check if the call is reaching your driver's ->target_index(), it should be
+which it should not, ideally.
+
+> Thank you for sharing the correct information.
+> Is it possible to get frequency (API) a simple way, like get current
+> opp frequency?
+
+Lets dig/debug a bit further and fix this if a real problem exists.
+
+-- 
+viresh

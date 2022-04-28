@@ -2,120 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4FB513BDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F00513BE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiD1S4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S1351160AbiD1S7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbiD1S4h (ORCPT
+        with ESMTP id S234496AbiD1S7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:56:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24225B53F8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651172000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rSgLveFDCQt97fdY0v/KXXdMC87h+iGQQ3KjG9Dmh38=;
-        b=GsiFS9lxDa7nP2CQfk5FxrBp061Bu0lowO7Y4vXiqkNf7nIdKruCjo5XGhwngvXj1OvBM8
-        QLSlsDgJOVbe2y/8y5eywfBd6sEcJs4dF93lmumxrEQGVZnrNjEbD0Ya1VWew9UvAcB+Ql
-        i1FyIYmhnqT2iv/YqQ4y/UAHxUOYC40=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-_yFZ8gkLNFqQdtiQkAf15A-1; Thu, 28 Apr 2022 14:53:18 -0400
-X-MC-Unique: _yFZ8gkLNFqQdtiQkAf15A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 28 Apr 2022 14:59:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE9AB1AA9;
+        Thu, 28 Apr 2022 11:55:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9D633C0CD50;
-        Thu, 28 Apr 2022 18:53:17 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.151])
-        by smtp.corp.redhat.com (Postfix) with SMTP id DAEE314A5060;
-        Thu, 28 Apr 2022 18:53:12 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 28 Apr 2022 20:53:17 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 20:53:11 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 9/9] ptrace: Don't change __state
-Message-ID: <20220428185311.GF15485@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-9-ebiederm@xmission.com>
- <87czh2160k.fsf@email.froward.int.ebiederm.org>
- <20220428151110.GB15485@redhat.com>
- <875ymtywxg.fsf@email.froward.int.ebiederm.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5920561903;
+        Thu, 28 Apr 2022 18:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 639D4C385A9;
+        Thu, 28 Apr 2022 18:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651172158;
+        bh=QbMp+TVcUkgGvq0RzONOxoY8dbfDmVzl1OJIP43ws7M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=HpeeN7zKaZ0TLJoF6hwVPx/0W0Mq4blWXgdROsyvZui/gM3LRKwgPNFhaB2vhBFx8
+         0OhmdsQgBYaBC9g+o4XR69PyLi9UETTgL7pSWrFDn6X/bpcBXFKCMMxd3aVmA3ZLJa
+         Iy0Gkpe02uROBT0FkyRemJn334rVgOjjQNuPwg5GaUt4rSZvoo7aw6n9dOhSbegmxL
+         6qtAKRbvAZqusgSk6qpuT9Ir9Ar4E2wZQaAhVISHw+t+O7DzXM8AUGL3KDYMcvu+UE
+         yuTurea2T/flvU0+ZUC6bFmVZNB3FWl6Bde/Xj+rW1YFuFdFbnwHIEkmM7o2yk1Kw5
+         RxA7kfdNEOlEA==
+Date:   Thu, 28 Apr 2022 13:55:56 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: Avoid handing out address 0 to devices
+Message-ID: <20220428185556.GA35255@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <875ymtywxg.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2204192214310.9383@angie.orcam.me.uk>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/28, Eric W. Biederman wrote:
->
-> Oleg Nesterov <oleg@redhat.com> writes:
->
-> >> The bug appears when the TRACEE makes it to schedule().  Inside
-> >> schedule there is a call to signal_pending_state() which notices
-> >> a SIGKILL is pending and refuses to sleep.
-> >
-> > And I think this is fine. This doesn't really differ from the case
-> > when the tracee was killed before it takes siglock.
->
-> Hmm.  Maybe.
+On Wed, Apr 27, 2022 at 11:18:12PM +0100, Maciej W. Rozycki wrote:
+> On Mon, 18 Apr 2022, Bjorn Helgaas wrote:
+> ...
 
-I hope ;)
+> > Sparc uses the MMIO I/O port address directly in the struct resource,
+> > so it will never try to allocate [io 0x0000], and there's no problem
+> > with using PCI I/O port 0:
+> > 
+> >   pci_bus 0000:00: root bus resource [io  0x804000000000-0x80400fffffff] (bus address [0x0000-0xfffffff])
+> >   mpt2sas0: ioport(0x0000804000001000), size(256)
+> > 
+> > The sparc ioport interfaces are basically:
+> > 
+> >   ioport_map(port)  { return port; }
+> >   ioread8(addr)     { return readb(addr); }
+> >   inb(addr)         { return readb(addr); }
+> > 
+> > RISC-V uses the generic ones, i.e.,
+> > 
+> >   ioport_map(port)  { return PIO_OFFSET + port; }
+> >   ioread8(addr)     { if (addr) >= PIO_RESERVED)
+> >                         return readb(addr);
+> >                       else
+> >                         return inb(addr & PIO_MASK); }
+> >   inb(addr)         { return __raw_readb(PCI_IOBASE + addr); }
+> > 
+> > Obviously RISC-V gives you prettier I/O port addresses, but at the
+> > cost of having PCI I/O port 0 be 0 in the struct resource as well,
+> > which makes it basically unusable.  Is it worth it?
+> 
+>  Well, the SPARC port may be able to get away with that, but overall I 
+> think using PCI bus addresses for port I/O resources is the only sane 
+> thing to do.
 
-> Previously we were actually guaranteed in ptrace_check_attach that after
-> ptrace_freeze_traced would succeed as any pending fatal signal would
-> cause ptrace_freeze_traced to fail.  Any incoming fatal signal would not
-> stop schedule from sleeping.
+That only works if you have a single host bridge where you care about
+I/O ports, or if you're willing to split up the single space across
+the multiple host bridges, e.g., [io 0x0000-0x7fff] to one host
+bridge, [0x8000-0xffff] to another.
 
-Yes.
+> In fact I think for MMIO resources we probably ought to do 
+> the same, though it may be actually more difficult to implement, because 
+> it's more likely there are systems out there with multiple per-bus MMIO 
+> address spaces.
 
-So let me repeat, 7/9 "ptrace: Simplify the wait_task_inactive call in
-ptrace_check_attach" looks good to me (except it should use
-wait_task_inactive(__TASK_TRACED)), but it should come before other
-meaningfull changes and the changelog should be updated.
+I might be missing your point here, but multiple host bridges are
+common on ia64, sparc, and (I think) powerpc.  It probably would be
+feasible to make the struct resource address identical to the PCI bus
+address for 64-bit MMIO space because they're both constrained to the
+same-sized space.
 
-And then we will probably need to reconsider this wait_task_inactive()
-and WARN_ON() around it, but depends on what will we finally do.
+But doing it for the PCI 32-bit non-prefetchable space would be an
+issue because there's usually RAM in that area of CPU address space,
+so we'd have to reserve a hole for PCI, put the MMIO in the hole, then
+split the MMIO space across all the host bridges.  This sparc system
+has 16 host bridges, so even if we had no hole, each one could only
+have 256MB of identity-mapped non-prefetchable space:
 
-> I think in my tired mind yesterday
+  pci_bus 0000:00: root bus resource [mem 0x800000000000-0x80007effffff] (bus address [0x00000000-0x7effffff])
+  pci_bus 0001:00: root bus resource [mem 0x801000000000-0x80107effffff] (bus address [0x00000000-0x7effffff])
+  ...
+  pci_bus 000f:00: root bus resource [mem 0x839000000000-0x83907effffff] (bus address [0x00000000-0x7effffff])
 
-I got lost too ;)
+(This is from https://bugzilla.kernel.org/show_bug.cgi?id=96241)
 
-> Still I would like to be able to
-> let wait_task_inactive not care about the state of the process it is
-> going to sleep for.
+>  The reason why I think using bus addresses here is the right thing to do 
+> is that systems may have multiple decode windows exposed to the CPU(s) 
+> mapping to the same I/O bus addresses, often for specific purposes. E.g. 
+> Alpha has the sparse and the dense address space and some systems (I have 
+> one with a MIPS CPU) have spaces with different endianness swap policies 
+> (for matching either bit or byte lanes) wired in the bus logic hardware.  
+> So the same port I/O location can be mapped at different MMIO addresses 
+> simultaneously in one system.
 
-Not sure... but to be honest I didn't really pay attention to the
-wait_task_inactive(match_state => 0) part...
+Is this feature used by Linux?  I guess it would require some generic
+mechanism drivers could use to get the desired endianness?  I don't
+know whether such a thing exists.
 
-Oleg.
-
+Bjorn

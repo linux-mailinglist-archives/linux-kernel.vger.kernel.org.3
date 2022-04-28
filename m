@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7E75136AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA815136B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348128AbiD1OVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
+        id S1348256AbiD1OWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiD1OVV (ORCPT
+        with ESMTP id S230128AbiD1OWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:21:21 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0507B53D9;
-        Thu, 28 Apr 2022 07:18:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id e24so6975095wrc.9;
-        Thu, 28 Apr 2022 07:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5XdPKzrNuCW9Uls4djg9CnJPr0HfyWEzzX13gHvuT9s=;
-        b=WYm5siW9NgsC3mcU0a3rvvmjzgshlYltbHF/8MkclQWoK+UeqblajvhIEXxxYve1Hw
-         ArzFVVgI0LhX+EQQMKgsLRnxr1l6oRxDxasL6i16yusWP0qQO05kK2pUFQ9rwO2PU7CV
-         g/I+91SHjrw6N2nVnNSpIvSq/6Q2axMNSjt8G+cn8jFEaCbdNXqLDCTe+qYh+tyImRcs
-         2C2UQopBi/UqDb8Z7mJP93le0PX8NtFtxYQqKo5iDqjqEk8jhUY5Mz9CaPTNwW+JgW6O
-         iYGgtDnGkNWHOvHntQd/+h4c+Y7dY/FegmQSsb4AbzllTJvmfkKOktoV7v9L5Gg3S71D
-         XaEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5XdPKzrNuCW9Uls4djg9CnJPr0HfyWEzzX13gHvuT9s=;
-        b=WBnbpbbgU4m8Xg3MzWHEPRsnH32R/MZXNrcwGQp9YqJCxAWJiIQETfLmgQD0PbfZQx
-         18qjNxWE/tpBx3thYZDL9SzjKtwH7IMT85DbhOAc3OC4v9L5ew3rAGMGqTW7b1J7hq8I
-         jbJ0pkBDPV39kJ8fhGaDbSCnlE6Ym9++dKagOloFIszDOQxxG7igVtZF0CM0y9GMnzLh
-         9FhNx1+nabqKNrKvo78eIpL0gF2dHaNn+ucSSM8MsUKeYheP+xpx3kJfae0rbkis77oU
-         wd2F6lw8LUSdvzUQIRKWAaAOlE4GDTX9vOXNT3818cdXzw6Hx1xIxRdFae7JHCUPsV7u
-         rKTA==
-X-Gm-Message-State: AOAM531j6k/IEZ8EM/AYjYmp0//pCrxg36NDuIyHGHbUfnOgnYgVSH4S
-        x3mRSiHWsXo9srXh0skpP50=
-X-Google-Smtp-Source: ABdhPJx0D91qDY3rAHXrUKYpJ6EndFNu0vi5Ze7REIXxyW9yTMg00OwkJnpjgHzk30D5LZMqwVL8fA==
-X-Received: by 2002:a5d:47ab:0:b0:20a:7f8a:ec69 with SMTP id 11-20020a5d47ab000000b0020a7f8aec69mr26826607wrb.504.1651155485199;
-        Thu, 28 Apr 2022 07:18:05 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id s10-20020adf978a000000b0020ae0154f1esm12625wrb.5.2022.04.28.07.17.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 07:18:03 -0700 (PDT)
-Message-ID: <661261a7-45be-230b-b0b2-5837d2139030@gmail.com>
-Date:   Thu, 28 Apr 2022 16:17:58 +0200
+        Thu, 28 Apr 2022 10:22:11 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7828B6D21;
+        Thu, 28 Apr 2022 07:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651155536; x=1682691536;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=aPhTz0JDV2h95i9ZtlBz+qDBbAxlRKmeFPSbHaSb/XI=;
+  b=LaUUVc0heYeUGsfhr/b7P5QeJo/hM3mLnjtpgdn0buavNVDD2w3YFTwd
+   gFODOy/EIdQX4BPNmleIhZrO8pxl8zOke+1109gJ7+X6YmbZ9PZy5BQDP
+   Z2XrFIdhlAuxRNIQN/70kh8VKeEyh6NvgBMoVUK15VgZxbEOahRccGrvs
+   U9ZcPtjszScTKG7tzYlFhe/R3Y4VsJqpRqnRpg6ABbrvf7IY7VhOk1pq1
+   ePhkOmxnb++raaWytY8S6Ad8LtAS69wfUFvm7kTvv8YQ154cJ+77rc8Ax
+   DHm5c3oqBNNvwjchDwScAg9Sg1sngf8HXWay6BiDe3xzEXSVyrTtVpV1I
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="329247916"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="329247916"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:18:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="533905895"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 28 Apr 2022 07:18:56 -0700
+Received: from [10.209.10.70] (kliang2-MOBL.ccr.corp.intel.com [10.209.10.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 60C09580279;
+        Thu, 28 Apr 2022 07:18:55 -0700 (PDT)
+Message-ID: <4ad3bbff-8577-8e84-6ed9-b6f90e018224@linux.intel.com>
+Date:   Thu, 28 Apr 2022 10:18:54 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 15/34] iommu/mediatek: Add IOMMU_TYPE flag
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v10 08/16] KVM: x86/pmu: Refactor code to support guest
+ Arch LBR
 Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>, Will Deacon <will@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
-        yen-chang.chen@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com
-References: <20220407075726.17771-1-yong.wu@mediatek.com>
- <20220407075726.17771-16-yong.wu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220407075726.17771-16-yong.wu@mediatek.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>, pbonzini@redhat.com,
+        jmattson@google.com, seanjc@google.com, like.xu.linux@gmail.com,
+        vkuznets@redhat.com, wei.w.wang@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220422075509.353942-1-weijiang.yang@intel.com>
+ <20220422075509.353942-9-weijiang.yang@intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220422075509.353942-9-weijiang.yang@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,43 +72,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 07/04/2022 09:57, Yong Wu wrote:
-> Add IOMMU_TYPE definition. In the mt8195, we have another IOMMU_TYPE:
-> infra iommu, also there will be another APU_IOMMU, thus, use 2bits for the
-> IOMMU_TYPE.
+On 4/22/2022 3:55 AM, Yang Weijiang wrote:
+> Take account of Arch LBR when do sanity checks before program
+> vPMU for guest. Pass through Arch LBR recording MSRs to guest
+> to gain better performance. Note, Arch LBR and Legacy LBR support
+> are mutually exclusive, i.e., they're not both available on one
+> platform.
 > 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Co-developed-by: Like Xu <like.xu@linux.intel.com>
+> Signed-off-by: Like Xu <like.xu@linux.intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
 > ---
->   drivers/iommu/mtk_iommu.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
+>   arch/x86/kvm/vmx/pmu_intel.c | 37 +++++++++++++++++++++++++++++-------
+>   arch/x86/kvm/vmx/vmx.c       |  3 +++
+>   2 files changed, 33 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 84d661e0b371..642949aad47e 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -126,9 +126,17 @@
->   #define SHARE_PGTABLE			BIT(10) /* 2 HW share pgtable */
->   #define DCM_DISABLE			BIT(11)
->   #define NOT_STD_AXI_MODE		BIT(12)
-> +/* 2 bits: iommu type */
-> +#define MTK_IOMMU_TYPE_MM		(0x0 << 13)
-> +#define MTK_IOMMU_TYPE_INFRA		(0x1 << 13)
-> +#define MTK_IOMMU_TYPE_MASK		(0x3 << 13)
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 7dc8a5783df7..cb28888e9f4f 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -170,12 +170,16 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct kvm_pmu *pmu, u32 msr)
 >   
-> -#define MTK_IOMMU_HAS_FLAG(pdata, _x) \
-> -		((((pdata)->flags) & (_x)) == (_x))
-> +#define MTK_IOMMU_HAS_FLAG(pdata, _x)	(!!(((pdata)->flags) & (_x)))
-
-That could be:
-MTK_IOMMU_HAS_FLAG(pdata, _x) \
-                 MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, _x)
-
+>   bool intel_pmu_lbr_is_compatible(struct kvm_vcpu *vcpu)
+>   {
+> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+> +		return guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
 > +
-> +#define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
-> +				((((pdata)->flags) & (mask)) == (_x))
-> +#define MTK_IOMMU_IS_TYPE(pdata, _x)	MTK_IOMMU_HAS_FLAG_MASK(pdata, _x,\
-> +							MTK_IOMMU_TYPE_MASK)
+>   	/*
+>   	 * As a first step, a guest could only enable LBR feature if its
+>   	 * cpu model is the same as the host because the LBR registers
+>   	 * would be pass-through to the guest and they're model specific.
+>   	 */
+> -	return boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
+> +	return !boot_cpu_has(X86_FEATURE_ARCH_LBR) &&
+> +		boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
+>   }
 >   
->   struct mtk_iommu_domain {
->   	struct io_pgtable_cfg		cfg;
+>   bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
+> @@ -193,12 +197,19 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+
+I think we should move MSR_ARCH_LBR_DEPTH and MSR_ARCH_LBR_CTL to this 
+function as well, since they are LBR related MSRs.
+
+>   	if (!intel_pmu_lbr_is_enabled(vcpu))
+>   		return ret;
+>   
+> -	ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
+> -		(index >= records->from && index < records->from + records->nr) ||
+> -		(index >= records->to && index < records->to + records->nr);
+> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +		ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS);
+> +
+> +	if (!ret) {
+> +		ret = (index >= records->from &&
+> +		       index < records->from + records->nr) ||
+> +		      (index >= records->to &&
+> +		       index < records->to + records->nr);
+> +	}
+>   
+>   	if (!ret && records->info)
+> -		ret = (index >= records->info && index < records->info + records->nr);
+> +		ret = (index >= records->info &&
+> +		       index < records->info + records->nr);
+
+Please use "{}" since you split it to two lines.
+
+Thanks,
+Kan
+>   
+>   	return ret;
+>   }
+> @@ -747,6 +758,9 @@ static void vmx_update_intercept_for_lbr_msrs(struct kvm_vcpu *vcpu, bool set)
+>   			vmx_set_intercept_for_msr(vcpu, lbr->info + i, MSR_TYPE_RW, set);
+>   	}
+>   
+> +	if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +		return;
+> +
+>   	vmx_set_intercept_for_msr(vcpu, MSR_LBR_SELECT, MSR_TYPE_RW, set);
+>   	vmx_set_intercept_for_msr(vcpu, MSR_LBR_TOS, MSR_TYPE_RW, set);
+>   }
+> @@ -787,10 +801,13 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+>   {
+>   	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+>   	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
+> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
+> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
+> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+>   
+>   	if (!lbr_desc->event) {
+>   		vmx_disable_lbr_msrs_passthrough(vcpu);
+> -		if (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR)
+> +		if (lbr_enable)
+>   			goto warn;
+>   		if (test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use))
+>   			goto warn;
+> @@ -807,13 +824,19 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
+>   	return;
+>   
+>   warn:
+> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+> +		wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
+>   	pr_warn_ratelimited("kvm: vcpu-%d: fail to passthrough LBR.\n",
+>   		vcpu->vcpu_id);
+>   }
+>   
+>   static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
+>   {
+> -	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR))
+> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
+> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
+> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
+> +
+> +	if (!lbr_enable)
+>   		intel_pmu_release_guest_lbr_event(vcpu);
+>   }
+>   
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 73961fcfb62d..a1816c6597f5 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -573,6 +573,9 @@ static bool is_valid_passthrough_msr(u32 msr)
+>   	case MSR_LBR_NHM_TO ... MSR_LBR_NHM_TO + 31:
+>   	case MSR_LBR_CORE_FROM ... MSR_LBR_CORE_FROM + 8:
+>   	case MSR_LBR_CORE_TO ... MSR_LBR_CORE_TO + 8:
+> +	case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
+> +	case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
+> +	case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
+>   		/* LBR MSRs. These are handled in vmx_update_intercept_for_lbr_msrs() */
+>   		return true;
+>   	}

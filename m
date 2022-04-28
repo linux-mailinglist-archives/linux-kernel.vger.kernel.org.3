@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D6B512B14
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C90512B18
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243195AbiD1FuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 01:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S243216AbiD1Fut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 01:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbiD1FuA (ORCPT
+        with ESMTP id S233367AbiD1Fun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 01:50:00 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F682AC5E
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:46:47 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id f38so7159493ybi.3
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=acCmiAFeUKSb3f8UtEoB0zywf8yA7MpHB3Qa5wbIUz8=;
-        b=mnuuKuGElQavxBj7lser61CbewlQVKMabIOG3mpBZHBFpIp6VhAnILfSQbs1NIAiOo
-         HUdQLw0Dg+jZw9qp72ww+HThNqqglc3yw6Q/YBr/wJ9vSgA/MTxe63kaP5x7BkAuxov/
-         33BFaNrufrwrtlttgVMpnwzOoJAX6EhdOYIQoZtbcFtntEPNt8qMi4OKBeR9515FRtnS
-         e8G9Uro+3ItpJtO5UVxCRFi8xN8iIOHLOlVxUQQ8ac1KL7LtZZzA0DzStHv9KlLa5+r+
-         BzozPUZX6x/YRkCoG9XbM7eAGLS7y+CL+r4nwQfxiUkaZHMgaylouPSkXQT+Yhuj5XBU
-         FSJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=acCmiAFeUKSb3f8UtEoB0zywf8yA7MpHB3Qa5wbIUz8=;
-        b=5/PwZ+PIR/ZeGZUnYKsHhkMkt3Q/h1YW9qNtKmclBkN3dQtXKG3zk11qa3A3HKHxsP
-         /TKAFFKIxe+/ZuuI49kj9Oe87jbg8hykMn46cYkpOL+PBFV+y/diJmIvm2Vor65YxXwi
-         ydw046Bxksa7vr8RpLWq3N0t52aVgeYLlG2IZH9yEcpmb/9n8YbdFH6MDtGeczRaKnP8
-         GTGBF35Wcpo6gWGw4Vxf667VMVO1XuVQrfVCYvEgBd1FxyxNeVwyEC4RIrYVpuZ9SHp1
-         +5Ans25p7nVMz8RSRF3UsNkxTw7AzrFeZQ5xRhiTZY7QqOv4ZCAX5I2S5ipCF+TbWoU6
-         Pu5w==
-X-Gm-Message-State: AOAM530mkOl7ZkSILjdL3HsKWo7KkPhvd5ddifs2yQyxTDxheKkVE35X
-        cSBZDA6/IvWl6AgnvSCP4UoOHCIUu1IM838BejWZWA==
-X-Google-Smtp-Source: ABdhPJwyJpRLrfcLW7+hjh/Wrn7475LqPrZ0d6/AHSn1ri3HAWeWqm5KfdQzi7bz2ndEZbLxU4A5EQkir2dn5nofCJ0=
-X-Received: by 2002:a5b:a4c:0:b0:628:b143:5bd with SMTP id z12-20020a5b0a4c000000b00628b14305bdmr30117306ybq.212.1651124806342;
- Wed, 27 Apr 2022 22:46:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220422013215.2301793-1-tweek@google.com> <20220427135823.GD71@qian>
- <YmlQy7jnIY6Wh7/2@kroah.com>
-In-Reply-To: <YmlQy7jnIY6Wh7/2@kroah.com>
-From:   =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
-Date:   Thu, 28 Apr 2022 15:46:29 +1000
-Message-ID: <CA+zpnLd7EJzutxcfFEoCjnG0_JhCFeyxYDtiEzaYL19rwtjBwA@mail.gmail.com>
-Subject: Re: [PATCH v2] firmware_loader: use kernel credentials when reading firmware
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Alistair Delva <adelva@google.com>,
-        Adam Shih <adamshih@google.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Thu, 28 Apr 2022 01:50:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 663FB60D8F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651124847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DG+ZWTYM+2N3N8ie381woeSNrk5TKMnxDxFcPW5T2gU=;
+        b=ANwMoVLoAPNn52nzcbabSYPK29Jup2CneEKztpm5MJ8wWbnMN/Qh0TNALykpONhXTVgOun
+        DC+kHDQ0lbzWAivtd6O72H7/FAUn677Y0i9gW2UouYaQtbVg+Trm+tJnJ5ZPDaoTjG7Cfj
+        SUJz6CqkU21+xhii2z2t1SMs/Whx8iE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-6NkoKukGOtaavdgTVDpqmw-1; Thu, 28 Apr 2022 01:47:23 -0400
+X-MC-Unique: 6NkoKukGOtaavdgTVDpqmw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C903885A5BE;
+        Thu, 28 Apr 2022 05:47:22 +0000 (UTC)
+Received: from starship (unknown [10.40.192.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2536C2024CBB;
+        Thu, 28 Apr 2022 05:47:14 +0000 (UTC)
+Message-ID: <68707ba71f3e03d9d9a7bc5b0f592fb3cef2f776.camel@redhat.com>
+Subject: Re: [PATCH 1/8] KVM: x86: avoid loading a vCPU after .vm_destroy
+ was called
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org
+Date:   Thu, 28 Apr 2022 08:47:13 +0300
+In-Reply-To: <27670a35-c67e-726f-f03f-9cf2eae83523@redhat.com>
+References: <20220322172449.235575-1-mlevitsk@redhat.com>
+         <20220322172449.235575-2-mlevitsk@redhat.com> <YkOkCwUgMD1SVfaD@google.com>
+         <27670a35-c67e-726f-f03f-9cf2eae83523@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Ugh, yeah, a put_cred() is not called after this.
+On Wed, 2022-03-30 at 14:07 +0200, Paolo Bonzini wrote:
+> On 3/30/22 02:27, Sean Christopherson wrote:
+> > Rather than split kvm_free_vcpus(), can we instead move the call to svm_vm_destroy()
+> > by adding a second hook, .vm_teardown(), which is needed for TDX?  I.e. keep VMX
+> > where it is by using vm_teardown, but effectively move SVM?
+> > 
+> > https://lore.kernel.org/all/1fa2d0db387a99352d44247728c5b8ae5f5cab4d.1637799475.git.isaku.yamahata@intel.com
+> 
+> I'd rather do that only for the TDX patches.
+> 
+> Paolo
+> 
+Any update on this patch? Looks like it is not upstream nor in kvm/queue.
 
-Good catch, I wasn't aware that an extra call to put_cred was required here.
+Best regards,
+	Maxim Levitsky
 
-I'll send a new version for the patch. I'll update the commit log as
-well, with the recommendation from Luis. Thanks.

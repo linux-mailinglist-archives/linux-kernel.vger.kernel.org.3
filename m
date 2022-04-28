@@ -2,181 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A65512FEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBFC512FB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347139AbiD1JaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S1346898AbiD1J14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346747AbiD1J04 (ORCPT
+        with ESMTP id S1346712AbiD1J0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:26:56 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEF97B556;
-        Thu, 28 Apr 2022 02:23:42 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id p6so3795741pjm.1;
-        Thu, 28 Apr 2022 02:23:42 -0700 (PDT)
+        Thu, 28 Apr 2022 05:26:45 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14447B556
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:23:29 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a1so4802670edt.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:23:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4R456a2EKx3/Cjhoycmuudv2QP7/h6tZBuPXNUpi9fk=;
-        b=I+lUa/of4zMx/MbE0mRhv6Lk3HLDIsjTKSRtN47KbE4VORjOEUzVMjpx7JVYN11vYq
-         AfpM4QSpe0Ik/dIP4mDt0EaSADIoqtFhYF43sGbGCo3rt1/IhmtHifBK9CuZpTPHJFCI
-         AW686YkIXIB9N2V0pRQGkWIGkuMtmuKksSRk8/+ufkn7drQ4VeJZA1N4HAzREAPhojIE
-         VgQeCdc4/jspzPgBu1zWwC91ngQEG3JL99e2KPuYz7tOm7MEhiUqXB3eovWZo8v9GfwR
-         5RHYuj60FOLwCCA7qt6MKNsR+0ldk3HmvNK042XMJeG+rPK86qQBtnJPv80pBdWeyGA0
-         J5Ww==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jB9oC3xjpoFxUS9LFdQlfVxwFGaXRBq5QGeiE+tRIqM=;
+        b=nwxJLpJvy+wRjL/DDaJ/04bHNsQKwmjHqfcQlgcfGg7zgRkGsl425sj0PSAkzSP1TT
+         C649QghEbY76G7BX+E0MRj4p9vlpn0jgvkYBfx5YyWJjNndEb5EiXl3T6C6vex6rSWoQ
+         l0w2z18kT2npM8rjj6JSz/HVAUY68Of+WRZswANlJOuaWLFIIg+3Sgw4Y4uZft3p3Cw0
+         pcI4xRrsw/bn8Y3pLl5hq7/TC0nwv3o6fOCx1gEMMHVhiXRENcCxYkJPyuwi5y0sD0mf
+         DuFHmMNI58YCgdoRqQ72JwIzRu7T8+yoyv0kHDPOKuNKjKB3efxoPbVYkBlu8Jyk6ejt
+         TZzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4R456a2EKx3/Cjhoycmuudv2QP7/h6tZBuPXNUpi9fk=;
-        b=zDsFRmz2nDD5OLEtAu1iTUJIUIVS7WVN8weqLp3qtAwXFHXTJ6R1rsTsZpOI74ayBK
-         3YahiyVezX0weDSV1bQwdEIY2uWPdr1JaaG2KHO8NWtDg2+B/aJS7Y0VGBZKdwPNb9hg
-         z3bOBdTNNmic2lcszRCe5BRUp9oD1mbT1MfcozdKwaQis0Kh2AgaP0GVjpHtUOEDc6mQ
-         47JAtLjGiniZnb2D/9bc2o6xPoOa5Wp/qH48f9WPC+UZBWuGfPcYXYr74EzdooT766Ej
-         itg1E5ybuZPvUt107Bc6wGQ5RjL6lveqjIYYC3lPJORCFqjBUjZNHi4YzG8Patt4KEpc
-         Roqg==
-X-Gm-Message-State: AOAM533GGP0EK+R28UKmfD5C7PrULNVvlktO2EgPKPI29NYjshFt+kdR
-        jT6EIDAZpXnlSRbVlhidxTE=
-X-Google-Smtp-Source: ABdhPJxDGLtFG2tk8d7m9YtfFxcyKP2ifBm7uCBtAeOK056rRBExu2Z4vCN3ZgZGlvlePmI57yzjiQ==
-X-Received: by 2002:a17:90b:1b4d:b0:1d9:bc90:f7ea with SMTP id nv13-20020a17090b1b4d00b001d9bc90f7eamr13052241pjb.223.1651137821789;
-        Thu, 28 Apr 2022 02:23:41 -0700 (PDT)
-Received: from localhost ([166.111.139.106])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056a00114700b004f7be3231d6sm22189732pfm.7.2022.04.28.02.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 02:23:41 -0700 (PDT)
-From:   Zixuan Fu <r33s3n6@gmail.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [PATCH v2 resend] drivers: usb: host: fix NULL pointer dereferences triggered by unhandled errors in xhci_create_rhub_port_array()
-Date:   Thu, 28 Apr 2022 17:23:21 +0800
-Message-Id: <20220428092321.3011983-1-r33s3n6@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=jB9oC3xjpoFxUS9LFdQlfVxwFGaXRBq5QGeiE+tRIqM=;
+        b=VkXbTgDxthRFN27VjfYe1X41MSuSqNhsqX2ElEE28xSQ6cZ4Lk6YiJW8qobfaXzGyF
+         yvYHt6Vynr2hMt3IqNjTjyBMShkkhMMFpbvOiIIVR8NhQnoGFOsS+OgEbWCNWX0UI2J+
+         hv4sWdeSfynSxO+agVESZ+v24AxYXiMA7wc5fN+d3HjGgV2O8ARkSa91v1CVZ4kNnHTV
+         Wx461quQH4C+1EA/SqjntM+esFsmf0ThyAP3M6SqhYfj1iAQ+6jXsAeXL2N74HDflU86
+         k3ZL1Ri1ZNJhvX3A4MO5T8hgXhUXBl26DfoDY8fTfx56Gt0c0oCWNtM81PbvJH0e0ZOr
+         dEUA==
+X-Gm-Message-State: AOAM530v7X7+c7T+0XwFZFund0SJ1pS1LgvEwStc5N213lfcHRDciIVO
+        1IIA5Ri+goy2q+f7tud6U9E9Tg==
+X-Google-Smtp-Source: ABdhPJxqQB4FhB1qwQB/ovi3BQShEh8+1kJBd2RzhXx0hDKyJJUUMioSgGqZTIvWf08I0UyrdgaiKQ==
+X-Received: by 2002:a05:6402:3584:b0:423:e4d0:34f with SMTP id y4-20020a056402358400b00423e4d0034fmr34874477edc.72.1651137808445;
+        Thu, 28 Apr 2022 02:23:28 -0700 (PDT)
+Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ew15-20020a170907950f00b006f3a3d60b9csm4725483ejc.63.2022.04.28.02.23.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 02:23:27 -0700 (PDT)
+Message-ID: <8d919dc0-80a2-106f-9397-49263cf4ed5a@linaro.org>
+Date:   Thu, 28 Apr 2022 11:23:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/7] dt-bindings: clock: Add Nuvoton WPCM450 clock/reset
+ controller
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Joel Stanley <joel@jms.id.au>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-clk@vger.kernel.org,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
+ <20220422183012.444674-5-j.neuschaefer@gmx.net>
+ <31cb9af1-173d-bef5-64da-ccf5a01f2485@linaro.org>
+ <CACPK8XdRYvike9Z98JzfO1r0W2jfkESr8xMGSH4kkigwZ_MkyQ@mail.gmail.com>
+ <YmpWeOb3oetvqyvl@latitude>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YmpWeOb3oetvqyvl@latitude>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xhci_create_rhub_port_array(), when rhub->num_ports is zero, 
-rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
-would be set to NULL. In these two cases, xhci_create_rhub_port_array()
-just returns void, and thus its callers are unaware of the error.
+On 28/04/2022 10:55, Jonathan Neuschäfer wrote:
+>>>
+>>> All these defines should be in second header in dt-bindings/reset/...
+>>
+>> I disagree. It makes more sense to keep the definitions together, and
+>> it's all for the same hardware and driver.
 
-Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or 
-xhci_usb2_hub_descriptor().
+These are bindings so the usage by same driver (Linux implementation)
+matters less or even does not matter.
 
-To fix the bug, xhci_setup_port_arrays() should return an integer to 
-indicate a possible error, and its callers should handle the error.
+Driver can be split from one to several and you would need to include
+clocks in your just-split-reset driver. Such driver split should not
+affect bindings, therefore having the binding headers separate is
+actually the most flexible.
 
-In the driver, xhci_create_rhub_port_array() is only used in 
-xhci_setup_port_arrays(), and only xhci_mem_init() calls
-xhci_setup_port_arrays() and does all cleanup work when it fails.
-Specifically, xhci_mem_init() calls xhci_mem_cleanup(), which eventually
-calls kfree(xhci->usb2_rhub.ports) and kfree(xhci->usb3_rhub.ports). For
-this reason, when xhci_create_rhub_port_array() fails, 
-xhci_setup_port_arrays() should return the error code directly, without
-freeing the memory allocated in this function.
+> 
+> It's for the same hardware, DT node, and driver.
+> 
+> I could imagine splitting it into
+> 
+> 	include/dt-bindings/clock/nuvoton,wpcm450-clk.h  and
+> 	include/dt-bindings/reset/nuvoton,wpcm450-clk.h
+> 
+> if someone insists on it.
+> 
+> For convenience (being able to see all relevant definitions for
+> nuvoton,wpcm450-clk at once), I'd prefer to keep the definitions together.
 
-The error log in our fault-injection testing is shown as follows:
+I don't insist. For some of the devices we split it, for some not.
 
-[   24.001309] BUG: kernel NULL pointer dereference, address: 0000000000000000
-...
-[   24.003992] RIP: 0010:xhci_hub_control+0x3f5/0x60d0 [xhci_hcd]
-...
-[   24.009803] Call Trace:
-[   24.010014]  <TASK>
-[   24.011310]  usb_hcd_submit_urb+0x1233/0x1fd0
-[   24.017071]  usb_start_wait_urb+0x115/0x310
-[   24.017641]  usb_control_msg+0x28a/0x450
-[   24.019046]  hub_probe+0xb16/0x2320
-[   24.019757]  usb_probe_interface+0x4f1/0x930
-[   24.019765]  really_probe+0x33d/0x970
-[   24.019768]  __driver_probe_device+0x157/0x210
-[   24.019772]  driver_probe_device+0x4f/0x340
-[   24.019775]  __device_attach_driver+0x2ee/0x3a0
-...
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
----
-v2:
-* Explain the reason why xhci_setup_port_arrays() returns without freeing the memory in error handling code.
-  Thank Greg KH for helpful advice.
----
- drivers/usb/host/xhci-mem.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index bbb27ee2c6a3..024515346c39 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2235,7 +2235,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
- 	/* FIXME: Should we disable ports not in the Extended Capabilities? */
- }
- 
--static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
-+static int xhci_create_rhub_port_array(struct xhci_hcd *xhci,
- 					struct xhci_hub *rhub, gfp_t flags)
- {
- 	int port_index = 0;
-@@ -2243,11 +2243,11 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
- 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
- 
- 	if (!rhub->num_ports)
--		return;
-+		return -EINVAL;
- 	rhub->ports = kcalloc_node(rhub->num_ports, sizeof(*rhub->ports),
- 			flags, dev_to_node(dev));
- 	if (!rhub->ports)
--		return;
-+		return -ENOMEM;
- 
- 	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
- 		if (xhci->hw_ports[i].rhub != rhub ||
-@@ -2259,6 +2259,7 @@ static void xhci_create_rhub_port_array(struct xhci_hcd *xhci,
- 		if (port_index == rhub->num_ports)
- 			break;
- 	}
-+	return 0;
- }
- 
- /*
-@@ -2277,6 +2278,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
- 	int cap_count = 0;
- 	u32 cap_start;
- 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-+	int ret;
- 
- 	num_ports = HCS_MAX_PORTS(xhci->hcs_params1);
- 	xhci->hw_ports = kcalloc_node(num_ports, sizeof(*xhci->hw_ports),
-@@ -2367,8 +2369,13 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
- 	 * Not sure how the USB core will handle a hub with no ports...
- 	 */
- 
--	xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
--	xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
-+	ret = xhci_create_rhub_port_array(xhci, &xhci->usb2_rhub, flags);
-+	if (ret)
-+		return ret;
-+
-+	ret = xhci_create_rhub_port_array(xhci, &xhci->usb3_rhub, flags);
-+	if (ret)
-+		return ret;
- 
- 	return 0;
- }
--- 
-2.25.1
-
+Best regards,
+Krzysztof

@@ -2,93 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12000512DA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB9B512E24
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343746AbiD1IEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S1344046AbiD1IWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343515AbiD1IEk (ORCPT
+        with ESMTP id S1344047AbiD1IWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:04:40 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E29245B5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:01:26 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id m20so7880467ejj.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=N3zGC1wvB/nv29USBZmgr41Ud8zfxazlWsebIt8ip4Q=;
-        b=alOVobKdRyJlxqUq5m4tQ+rLDAJA7KXpBB2ytou6HHFpDfB3f5kv+zQalrik8copss
-         r1LItmgyw22vCY2WbxQviTHxqrVO9zGDeP19mxvGGOWSsViC039ZIJtfWuSpK7+ntt7j
-         sCYwOm0atELLB7BV1Q+c3DVfueRMW+41ISUWXROy+lTX0VvobJoYCMKKpXveTJxFSJxk
-         /RWoLfVl9SGr2M8IG1erfZzq/fQSxN40+x10Ch7IpqCdSSQFPWIHJPhmiHekkHot3W4w
-         Uo6Rgxm9orwY9a6EpcUK6k+8DH7yXc2/6vgWLzV481iPLPuPR8A7dmZXJrBUoUvAloZR
-         ybXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N3zGC1wvB/nv29USBZmgr41Ud8zfxazlWsebIt8ip4Q=;
-        b=Ck8K8tDcQevKK/ZCUdgyiMs8Nxkxufz67eJCyaOLRFqFCwmuMNBV6hE6B6yzYwrXkU
-         /lwbEuSBFt+ur39fWtUVKZBiIqtt3S8Iucp0beyGqzSu4dZCHVCbUoUESocikMeQ9NwY
-         FPo2oitH7esF32SvsWigb+FmP7zCMfMZbGrcIFbXj3o4TJefTANs630s8wtS7squldCX
-         kAsMrbfaZTJkNnMw5r2rI+08W50Oz4wh064WLEMpk3EM8xVuXXw7II6xaRvbsbeHU9VR
-         TBHgohMtTsM7bzWkQBsRzXWdUBs0PlXGRdkh5LMiNcOXNBQa5x5KOKT8YtnS/R9+v7Ww
-         +5Sw==
-X-Gm-Message-State: AOAM532ByiaGQctgzBNchtQut2a6sz+bFXCI9vVvHUDYD7txoykT0KAn
-        Ol2WNxKBVwBfzzfhFj1f7DnKHg==
-X-Google-Smtp-Source: ABdhPJworzFD0TJcsIvHlg66JrAELoo4MwLAYTdDemevzuTQhZHWIqepHbmVFR5ZuQxbvYQj2P1hnw==
-X-Received: by 2002:a17:907:97d3:b0:6ef:f445:dd96 with SMTP id js19-20020a17090797d300b006eff445dd96mr30238068ejc.416.1651132884946;
-        Thu, 28 Apr 2022 01:01:24 -0700 (PDT)
-Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v4-20020a17090690c400b006f3c15eefb9sm2784318ejw.17.2022.04.28.01.01.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 01:01:24 -0700 (PDT)
-Message-ID: <6a2917b8-90a7-55dd-d814-5f4dd515c908@linaro.org>
-Date:   Thu, 28 Apr 2022 10:01:23 +0200
+        Thu, 28 Apr 2022 04:22:18 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FEB9F384
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:19:03 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220428081901epoutp03881ea192b55f260ae701c7d6c4292096~qAZJDBprb1409314093epoutp03r
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:19:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220428081901epoutp03881ea192b55f260ae701c7d6c4292096~qAZJDBprb1409314093epoutp03r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651133941;
+        bh=wOXierUafvtxBlcmLM8miKLDWIrpcRM3NRzL9LIllCI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RRs2Pf/NQ1HxorjPRILWRRPuW8wd9+yspJN2nnu1mZZXHKUDrAsGgC6+MAH96KKzW
+         WRxujTUxwPrAWVlHgogHsRoPifVjfdMD6wMEgBeHZL4yhYSzUlRkXcsnLF9PuwM6//
+         Sf3X9a27uWVRH9AAyq72K3sK8C+2T32ob2v1PC20=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220428081859epcas5p19880ba6dfa6389f18098ac62ca74e360~qAZIA-u-l0467704677epcas5p1x;
+        Thu, 28 Apr 2022 08:18:59 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KppRg2W7Dz4x9QB; Thu, 28 Apr
+        2022 08:18:55 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E2.07.09827.EED4A626; Thu, 28 Apr 2022 17:18:54 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220428075435epcas5p285a70634102f71440a283361657f4d9b~qAD0bnrr92164321643epcas5p2Q;
+        Thu, 28 Apr 2022 07:54:35 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220428075435epsmtrp1a9ee8d4d92953b0ff2d7f9b7559998a2~qAD0asRh-1575615756epsmtrp1S;
+        Thu, 28 Apr 2022 07:54:35 +0000 (GMT)
+X-AuditID: b6c32a4a-b3bff70000002663-dd-626a4deee6d4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.BF.08924.B384A626; Thu, 28 Apr 2022 16:54:35 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220428075434epsmtip13f509946fb1170bf6e1ff8e4df1f4948~qADzDll5X1873018730epsmtip1z;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+Date:   Thu, 28 Apr 2022 13:19:26 +0530
+From:   Nitesh Shetty <nj.shetty@samsung.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/10] Add Copy offload support
+Message-ID: <20220428074926.GG9558@test-zns>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/4] dt-bindings: display: simple: Add DataImage
- FG1001L0DSSWMG01 compatible string
-Content-Language: en-US
-To:     Philip Oberfichtner <pro@denx.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, matthias.winker@de.bosch.com
-References: <20220427135229.2339865-1-pro@denx.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220427135229.2339865-1-pro@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c285f0da-ab1d-2b24-e5a4-21193ef93155@opensource.wdc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmpu5736wkgz+5Fr/Pnme22PtuNqvF
+        3lvaFnv2nmSxuLxrDpvF/GVP2S26r+9gs9jxpJHRgcNj56y77B6bl9R77Gy9z+rxft9VNo/P
+        m+QCWKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA
+        DlFSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZ
+        AhUmZGfcv7eFtaCfu+Lm7busDYztnF2MnBwSAiYSXe+2sYLYQgK7GSXmLI3uYuQCsj8xSsx/
+        8IIVwvnMKHF8/Uk2mI75d6ayQyR2MUqcOz0XquoZo0TT/HnsIFUsAqoSD6Z2MXYxcnCwCWhL
+        nP7PARIWETCVeNvTygJSzyxwhlGi/f0usHphATOJ1Z2tYBt4BXQkFs/fzQ5hC0qcnPmEBcTm
+        FHCTmL3xG5gtKqAscWDbcSaIiyZySMyYmwqyS0LARaL5dTREWFji1fEt7BC2lMTL/jYou1xi
+        e9sCJpAbJARaGCW6Tp1igUjYS1zc8xdsJrNAhsTsb2uhPpaVmHpqHVScT6L39xOovbwSO+bB
+        2MoSa9YvgKqXlLj2vRHK9pDY+XElNIBWMkm8PH2IfQKj/Cwkv81Csm8W0A/MApoS63fpQ4Tl
+        JZq3zmaGCEtLLP/HgaRiASPbKkbJ1ILi3PTUYtMCo7zUcnjcJ+fnbmIEJ1ktrx2MDx980DvE
+        yMTBeIhRgoNZSYT3y+6MJCHelMTKqtSi/Pii0pzU4kOMpsBom8gsJZqcD0zzeSXxhiaWBiZm
+        ZmYmlsZmhkrivKfTNyQKCaQnlqRmp6YWpBbB9DFxcEo1MHmYxBi3KS/r+5xXoHh/5e5/mpOK
+        OLaz1QUJJm5LlWV+dGCy2qfIDR1bPTv4Cv8o7cuz5K+7k+o17+LTf7WP9Hb0x/PP1u849K1e
+        9ECS25U/X77MfXHhdDCf6CKtxUE1cj17vjAr/U6ZkKPatTBKKu23yc1t05J0TR/EblD+sWFx
+        0DPf6Q7i++QYDghltRZyCmdZbpQ0mbLf//CW7BVyO3Mj78a3hghMUJNqNAp1337257kTdWFK
+        F5WF48I+LnzLVaHz1Wvq/N+HWwX5lVy6/OQDdXwTmyQOHOF9+P5ORO+1sxMfmJVUr1snvTy8
+        Kfb+1bVvxTqdU/dcnR/13vrQ+u4M04X3O3s98v0vTXLvVmIpzkg01GIuKk4EAG3bN+s7BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOLMWRmVeSWpSXmKPExsWy7bCSnK61R1aSQcdnPYvfZ88zW+x9N5vV
+        Yu8tbYs9e0+yWFzeNYfNYv6yp+wW3dd3sFnseNLI6MDhsXPWXXaPzUvqPXa23mf1eL/vKpvH
+        501yAaxRXDYpqTmZZalF+nYJXBkrtjkWbOSo2PbVroHxKFsXIyeHhICJxPw7U9m7GLk4hAR2
+        MEp8aTrHApGQlFj29wgzhC0ssfLfc6iiJ4wSs+6vBetmEVCVeDC1i7GLkYODTUBb4vR/DpCw
+        iICpxNueVhaQemaBM4wS7e93sYMkhAXMJFZ3toL18groSCyevxtq6Eomiff7V7JDJAQlTs58
+        AnYFs4C6xJ95l5hBFjALSEss/8cBEZaXaN46G+w4TgE3idkbv4GViwooSxzYdpxpAqPQLCST
+        ZiGZNAth0iwkkxYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOGy2tHYx7Vn3Q
+        O8TIxMF4iFGCg1lJhPfL7owkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqem
+        FqQWwWSZODilGphmNkSeu+/Zy/AzdJGv3sPXJ3sNLl4t7nK+dN/kX+8ctbV/eb6LrRTa9s+k
+        YDWbSN7z4NI5On1n5fnNvWRuVogfPnn2Q/QKI/2ZvLOWpR5raFxyxPrm3G/zt/3jSAwIVNEV
+        vlGj9r15qkzKnZTAabfNrOunnG56dvDkm55ZLamR00U/P9HWbLHer/0vbFnmhkXlsVeflx5I
+        PvfhVElgVdO7F6tL4/72aE+82pMt+Icv6rLBBfXuw+1eMw7u+cD1b3uQ34IF52+4Sfkp/Ulg
+        1VRZN3Ghe9+N0/Z2JkkWB4s/O9acPB8mtemFG6OJ8TmFi3pr5/kn6pxVuj8j33YeF+MJ4zdn
+        HZjXyDM/fquzxWWKEktxRqKhFnNRcSIAWXgw9goDAAA=
+X-CMS-MailID: 20220428075435epcas5p285a70634102f71440a283361657f4d9b
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15
+References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
+        <20220426101241.30100-1-nj.shetty@samsung.com>
+        <6a85e8c8-d9d1-f192-f10d-09052703c99a@opensource.wdc.com>
+        <20220427124951.GA9558@test-zns>
+        <c285f0da-ab1d-2b24-e5a4-21193ef93155@opensource.wdc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 15:52, Philip Oberfichtner wrote:
-> Add DataImage FG1001L0DSSWMG01 10.1" 1280x800 TFT LCD panel compatible
-> string.
+------MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+
+On Thu, Apr 28, 2022 at 07:05:32AM +0900, Damien Le Moal wrote:
+> On 4/27/22 21:49, Nitesh Shetty wrote:
+> > O Wed, Apr 27, 2022 at 11:19:48AM +0900, Damien Le Moal wrote:
+> >> On 4/26/22 19:12, Nitesh Shetty wrote:
+> >>> The patch series covers the points discussed in November 2021 virtual call
+> >>> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
+> >>> We have covered the Initial agreed requirements in this patchset.
+> >>> Patchset borrows Mikulas's token based approach for 2 bdev
+> >>> implementation.
+> >>>
+> >>> Overall series supports –
+> >>>
+> >>> 1. Driver
+> >>> - NVMe Copy command (single NS), including support in nvme-target (for
+> >>>     block and file backend)
+> >>
+> >> It would also be nice to have copy offload emulation in null_blk for testing.
+> >>
+> > 
+> > We can plan this in next phase of copy support, once this series settles down.
 > 
-> Signed-off-by: Philip Oberfichtner <pro@denx.de>
+> So how can people test your series ? Not a lot of drives out there with
+> copy support.
+>
+
+Yeah not many drives at present, Qemu can be used to test NVMe copy.
+
+--
+Nitesh Shetty
+
+------MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_
+Content-Type: text/plain; charset="utf-8"
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+------MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_--

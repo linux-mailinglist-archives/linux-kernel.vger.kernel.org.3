@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADAA512E2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F50A512E37
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344047AbiD1I12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S1344095AbiD1I3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiD1I11 (ORCPT
+        with ESMTP id S1344122AbiD1I27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:27:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68C59D4DE;
-        Thu, 28 Apr 2022 01:24:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74A0D61F97;
-        Thu, 28 Apr 2022 08:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA10C385A0;
-        Thu, 28 Apr 2022 08:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651134252;
-        bh=7Qn4QH+TeAmEKVEjCdFVC71kSPqcGYshxtlJcIsHtmo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wWlT5w0nDXoBbWDRSYmJ9MTt/Ykz36DoTHIWkhyeVDYGkurfe27rq23L+lpr+3Hlc
-         eKeGyJoTE0gLRmJuA3nUNCYtaBGmRI4j87gJa27jrO6FlijfGQEO43Y0nsMbsIGWJl
-         DrN9OKf25kTv6t3fdxmZGFQ6AqrrnmkfIVkFaxyk=
-Date:   Thu, 28 Apr 2022 10:24:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>, quic_psodagud@quicinc.com,
-        quic_tsoni@quicinc.com, Will Deacon <will@kernel.org>
-Subject: Re: [PATCHv11 6/6] asm-generic/io: Add logging support for MMIO
- accessors
-Message-ID: <YmpPKRB6FS/5pKjK@kroah.com>
-References: <cover.1645772606.git.quic_saipraka@quicinc.com>
- <3de35c9f4a3a070d197bab499acefc709a6f5336.1645772606.git.quic_saipraka@quicinc.com>
- <YmorayBozWWRlTpP@kroah.com>
- <96dc5e2e-5d88-52ce-c295-779603e668f2@quicinc.com>
- <YmpD3tIQK2iiqt46@kroah.com>
- <CAK8P3a3o7BacAo1fWOLvVxyMrfNV95P1-wUB1t5deLah=nZOwg@mail.gmail.com>
+        Thu, 28 Apr 2022 04:28:59 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECD6972DC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:25:42 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S85KIx014079;
+        Thu, 28 Apr 2022 03:24:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=Pm7r4W1Cm//VcduQTiTK26jaLSZ7r2ZK0U6VdwqHIWA=;
+ b=JHmoA1J4Uuq1Ef7gUpLGXwMVvmgOEVlK+pNeFhphAOhoHQ5abU/AgcnXFwHHhVSqtnrN
+ xrO4FsZeAka+u1k4Ih6L8gsqOs/LBfk8tjmPpyxtT+AlFsu4AMGD+SSMGidnbZMPdpbp
+ tj8BgLo/fgRXxEniXerGvObmR1mhzfBoQKOieQhds58/zs0Z1uS7TvAlgdQ4Mmlt08mr
+ nMMvfa366girDwbc6fA2LdXC1VjpoegKVG/mA/5dFQWLaSvjOEDoy//8v1yb1vO+q0aQ
+ bWdaJbTtKvgyI5rkrivN381EQv0D2Rd1fItidKO2CznKb+c70LAPDGgU2BdhzcHysW6k zg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3fprt61uw4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 28 Apr 2022 03:24:57 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
+ 2022 09:24:56 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Thu, 28 Apr 2022 09:24:56 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 06E5446C;
+        Thu, 28 Apr 2022 08:24:56 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 08:24:56 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Nicola Lunghi <nick83ola@gmail.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: wm8960: Add ACPI support
+Message-ID: <20220428082456.GJ38351@ediswmail.ad.cirrus.com>
+References: <20220427212916.40145-1-nick83ola@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a3o7BacAo1fWOLvVxyMrfNV95P1-wUB1t5deLah=nZOwg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427212916.40145-1-nick83ola@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: 48N1y2DSeMR1C6Z9PycqBZyN_VANppph
+X-Proofpoint-ORIG-GUID: 48N1y2DSeMR1C6Z9PycqBZyN_VANppph
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:18:36AM +0200, Arnd Bergmann wrote:
-> On Thu, Apr 28, 2022 at 9:35 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Apr 28, 2022 at 12:59:13PM +0530, Sai Prakash Ranjan wrote:
-> > > On 4/28/2022 11:21 AM, Greg KH wrote:
-> > > > On Thu, Apr 28, 2022 at 09:00:13AM +0530, Sai Prakash Ranjan wrote:
-> >
-> > > -D__NO_FORTIFY, -D__DISABLE_EXPORTS, -DDISABLE_BRANCH_PROFILING".
-> >
-> > Those are compiler flags that affect gcc, not kernel code functionality.
+On Wed, Apr 27, 2022 at 10:29:16PM +0100, Nicola Lunghi wrote:
+> HID made of either Wolfson/CirrusLogic PCI ID + 8960 identifier
 > 
-> It's normal for invasive instrumentation to need flags to disable them. If you
-> look at mm/kasan/Makefile, you see
+> This helps enumerate the Waveshare WM8960 WM8960 Hi-Fi Sound
+> Card HAT on the Up2 platform.
 > 
-> KASAN_SANITIZE := n
-> UBSAN_SANITIZE := n
-> KCOV_INSTRUMENT := n
-> CC_FLAGS_KASAN_RUNTIME += -DDISABLE_BRANCH_PROFILING
-> CFLAGS_REMOVE_common.o = $(CC_FLAGS_FTRACE)
+> The scripts at https://github.com/thesofproject/acpi-scripts
+> can be used to add the ACPI initrd overlay.
 > 
-> all of which disable one of the instrumentation options, either per file
-> or per directory, in order to break recursion.
+> This commit is similar to the commit:
+> 960cdd50ca9f ("ASoC: wm8804: Add ACPI support")
+> 
+> Signed-off-by: Nicola Lunghi <nick83ola@gmail.com>
+> ---
 
-That's not for logging stuff (which seems to change the functionality of
-the driver), it's for system-wide profiling/code-coverage/checking/etc
-type of stuff.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Let's keep a #define at the top of the driver for the drivers that
-absolutely need this feature disabled as it is much easier to track that
-and to see how it affects things.  If you put it in a Makefile,
-reviewers will miss it and wonder what is going on.
-
-thanks,
-
-greg k-h
+Thanks,
+Charles

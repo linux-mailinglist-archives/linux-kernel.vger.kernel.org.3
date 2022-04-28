@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605A9512D02
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD08B512D17
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245469AbiD1Hiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S245566AbiD1Hjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245416AbiD1Hif (ORCPT
+        with ESMTP id S245671AbiD1HjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:38:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711B93BF92
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:35:19 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i19so7756019eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=5c6uwqXlBRU9bpJ9pSPHIXx5eNprORPrld9pozTs8Tw=;
-        b=H75j/3VRi9fqMtQbn+w04QsT6K235C5ROMHuhSVSFmFZ/koa2PILvH3Ept+2Sr0mYO
-         WSOqyZXTv2PlXVd3TVxfSGINFtTlQic8/pEjyg8PSWB9elu9fPZV1grj2ULvGOXndrZX
-         C9jJxsSXlWkhLIGVEqHfye8ciAa4iIuahGDIvYsa3ersPJ+sACW2zT14sAKrhyEwgZ5a
-         nDqxMaGXDvxTvbcBKuOqaQKsmGt8JHV1XOv7Zi/8Wlf+gOnA/37yWHKfRL69pktHOX8s
-         uK0plqWDOlwXYG1uzhfDSiTs1GShXhFLCm9QGVWSQ9sBHhqFQA05pE5maHX4pcy0NtGU
-         xYfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5c6uwqXlBRU9bpJ9pSPHIXx5eNprORPrld9pozTs8Tw=;
-        b=WnYPUYL7+FXWry6X6TL2uN+2TogZ1wxQwY+36Fyt5nvqlSGR0AdlF32sXNiQ2QOxqX
-         diZ4OkWX3xMCjO0OhCdX+9Z0/eTRh2yMUM+cN/BOtkEQsH+/CxPU+anyII10CBTsb4jJ
-         ZFYPR6bHYi3bsJP3emj5YZxNeRLARNR6fjepnPXEKsx7mwdKbNnDXvxebphCTtbNGXfH
-         Z2555dXmBoOvgce/Y/AeNUJxfEAIW+je5zTRlsmvQX7/2T8igOgNJA+1C4WP3nWWGZqi
-         Orj7d2/I5gGpmeG3TA3pM3aiHFXx0/AfgHFN8QOy/Pdq4La+RNz04Djz3KQkWts8XJaw
-         L+ag==
-X-Gm-Message-State: AOAM5305ImIAQ7Vpr3kOzWFkELeLzwkVEjXGNqz6OxtCQuejlgnVUfaU
-        F+J0xKBKgkgvtixWu/K+W/E76xl1i+1Lww==
-X-Google-Smtp-Source: ABdhPJxQABhDMXxKQC9B69m+aqrtRZFN3sKdbOUkg4a5i6dj/makIccAEAbNy2MqAD8h+bIFQVIExQ==
-X-Received: by 2002:a17:906:c113:b0:6e8:89f7:56da with SMTP id do19-20020a170906c11300b006e889f756damr30833813ejc.174.1651131318027;
-        Thu, 28 Apr 2022 00:35:18 -0700 (PDT)
-Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n10-20020a170906378a00b006f3cd3e7b94sm2127377ejc.213.2022.04.28.00.35.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 00:35:17 -0700 (PDT)
-Message-ID: <703d4811-e46a-202e-c4ca-578ecdbd3e35@linaro.org>
-Date:   Thu, 28 Apr 2022 09:35:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] arm64: dts: sprd: use new 'dma-channels' property
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220427161423.647534-1-krzysztof.kozlowski@linaro.org>
- <20220427161423.647534-4-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220427161423.647534-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 03:39:10 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19386109F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:35:56 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax+tjMQ2pip1EBAA--.6487S2;
+        Thu, 28 Apr 2022 15:35:51 +0800 (CST)
+From:   Hongchen Zhang <zhanghongchen@loongson.cn>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org,
+        Hongchen Zhang <zhanghongchen@loongson.cn>
+Subject: [PATCH] mm/swapops: make is_pmd_migration_entry more strict
+Date:   Thu, 28 Apr 2022 15:35:33 +0800
+Message-Id: <1651131333-6386-1-git-send-email-zhanghongchen@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Ax+tjMQ2pip1EBAA--.6487S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JrykXw1DKr47ZFWkXr1rtFb_yoWftrXEy3
+        y7AayIkF48Jw4j93y0gr4DJry3KryrJ3Z8Wrn3AwsrZa48Kan5t398XFn5Xw47Gws7uryf
+        C3WDXryIyr13XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 18:14, Krzysztof Kozlowski wrote:
-> The '#dma-channels' property was deprecated in favor of one defined by
-> generic dma-common DT bindings.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/sprd/whale2.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/sprd/whale2.dtsi b/arch/arm64/boot/dts/sprd/whale2.dtsi
-> index 79b9591c37aa..945f0e02d364 100644
-> --- a/arch/arm64/boot/dts/sprd/whale2.dtsi
-> +++ b/arch/arm64/boot/dts/sprd/whale2.dtsi
-> @@ -126,7 +126,7 @@ ap_dma: dma-controller@20100000 {
->  				reg = <0 0x20100000 0 0x4000>;
->  				interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
->  				#dma-cells = <1>;
-> -				#dma-channels = <32>;
-> +				dma-channels = <32>;
+a pmd migration entry should first be a swap pmd,so
+use is_swap_pmd(pmd) instead of !pmd_present(pmd).
 
+On the other hand, some architecture (MIPS for example)
+may misjudge a pmd_none entry as a pmd migration entry.
 
-As Rob proposed, the removal of old property does not have to happen in
-this patch (but much later). This would allow merging DTS change
-immediately.
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+---
+ include/linux/swapops.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I will resend in that spirit, unless SoC maintainers prefer the original
-approach (where DTS has to wait for next release)?
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index d356ab4..1d16569 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -304,7 +304,7 @@ static inline pmd_t swp_entry_to_pmd(swp_entry_t entry)
+ 
+ static inline int is_pmd_migration_entry(pmd_t pmd)
+ {
+-	return !pmd_present(pmd) && is_migration_entry(pmd_to_swp_entry(pmd));
++	return is_swap_pmd(pmd) && is_migration_entry(pmd_to_swp_entry(pmd));
+ }
+ #else
+ static inline void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+-- 
+1.8.3.1
 
-
-Best regards,
-Krzysztof

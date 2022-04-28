@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976CD513ED3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E599E513EB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353144AbiD1XEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 19:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S1353049AbiD1Wxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352801AbiD1XEr (ORCPT
+        with ESMTP id S1353040AbiD1Wxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 19:04:47 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1934C4036
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:01:29 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id C55C42100A;
-        Thu, 28 Apr 2022 23:01:28 +0000 (UTC)
-Received: from pdx1-sub0-mail-a237.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 51D3620F98;
-        Thu, 28 Apr 2022 23:01:28 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651186888; a=rsa-sha256;
-        cv=none;
-        b=BO4NqlqCSaiXtx9c2q/wUqfXdwnatqmHnatbWdwxqls/4l9b3/ycqXVaJ7lVOEOyXOlD4K
-        TtzQDldvFadzsyjFbWjgFG95v0S8yrEdbLjMvtMRaRmtaaiFvdYu7Sg+wwSFAQq0Gu63jW
-        T+Ya/qHDKraENZCyvoBNo1H3xE99FQkRe+H1i0O5unHtQoc+TJFZ4xVUW4qxApcT/0xiNs
-        k3rI0AOkKFgZqW18FnRmOSa5FVmrqS478QAknn1tt8Lw4yuE2fOA/vSD36zTYK0vcBRiQv
-        W1oNiZXrdfP7kpCR8eZBZ20RJ7iIHaZzKMTqylGryU68nasYu0WFj56dn5Fqkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651186888;
+        Thu, 28 Apr 2022 18:53:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFEEBE0C6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651186223;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=vjYAnQTOe68YPTsKIi7cssU+yeRHQZhrNLp1AuuSurI=;
-        b=fd6oj+vbxsTPW51Oefvq4AUnzWj4tR8plYEUAcZTkEmfi42gizwXzWVjNsd7Syc7SvW38f
-        00up5ko8NcVoVCbCFRH6Wy+VTxbsejQ+2OFMmQtdYwWD8JU/agWiNqJ4KKaD0Jtcfd58Ev
-        5sCZ9x2UxkfaqbVcrhy0gfLRF90+YrXPWcniahlyAUZbnXManDN/PhV9z4too6R51hnnev
-        SWZ7ymjC/iXq8d+/Nb5GVscEth3XoAuidLw7mRexTsPcYKbZiOijzJv2Dj5LloAlHYy535
-        GgnbK+A3lVQCdNFlPA6mSlggFJ93HL8DN1yB5gi6J2ghH0RVCE1VDixrMHVQbQ==
-ARC-Authentication-Results: i=1;
-        rspamd-fdd564cbf-868r5;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Bored-Hysterical: 4188524533974da8_1651186888661_174020957
-X-MC-Loop-Signature: 1651186888660:2618623120
-X-MC-Ingress-Time: 1651186888660
-Received: from pdx1-sub0-mail-a237.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.113.195.69 (trex/6.7.1);
-        Thu, 28 Apr 2022 23:01:28 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         in-reply-to:in-reply-to:references:references;
+        bh=21r3A+a97qIjMQ0EcHn0xJlRdWWTFjCaN7Ewqfu8RvI=;
+        b=GXgboNJ6g4n8LkG4lW0b1aNWqgcVxcrB5n4N3mVxn4Ws9zwOsMe/Q+3VgLNjosrgqqhXCc
+        mlxD9Ovv+Fag4/vHunZi/m3Q8FO/mWB51T0n2dtVNeufJY0uueMt8zTh8xCG8guwvjZV0R
+        dLJMcleDNn4UooA+Ro9RIcpa/izCtXg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-Yga_bl7UMtGVW5CD2aBAng-1; Thu, 28 Apr 2022 18:50:14 -0400
+X-MC-Unique: Yga_bl7UMtGVW5CD2aBAng-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a237.dreamhost.com (Postfix) with ESMTPSA id 4KqB1z34sKz1ff;
-        Thu, 28 Apr 2022 16:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1651186887;
-        bh=vjYAnQTOe68YPTsKIi7cssU+yeRHQZhrNLp1AuuSurI=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=l0sJoKwgxfAEiAXAbE8JM7cLVjDCa6HEK1W/qeP9oJlaYxN0pl9ng7bdFYaHhztaw
-         B1jLcK5CnOum+F3pu/qG/mv5IzrGLwmlkEraIz6Of6HQHDXgXddcd7RfSRvlzJaW61
-         NWvGo0cuF1p+aCwqFExq6taVRr/0viNIR/y0FNNDnuB2c2kWA217bBOajVtoPoejGt
-         P3zaucHAxjueICScmtjidZbhG7tYpmRqFzUh3jyxSL6RADsiv8CvPxuiiHPEnA4ctG
-         n3h3FQ5yV1Y3K8kwdrYR8iK7r5TltSHfj6umVLA/UvGq/XVttziy55vYihhw05VF5y
-         a8Jc4mY1gTLKg==
-Date:   Thu, 28 Apr 2022 15:50:03 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Prakash Sangappa <prakash.sangappa@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        akpm@linux-foundation.org, peterz@infradead.org,
-        manfred@colorfullife.com
-Subject: Re: [PATCH v3] ipc: Update semtimedop() to use hrtimer
-Message-ID: <20220428225003.pszk3cbcp55kzhfi@offworld>
-References: <1651178767-447-1-git-send-email-prakash.sangappa@oracle.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 902ED86B8A3;
+        Thu, 28 Apr 2022 22:50:13 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.40])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 783765E1A38;
+        Thu, 28 Apr 2022 22:50:10 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Fri, 29 Apr 2022 00:50:13 +0200 (CEST)
+Date:   Fri, 29 Apr 2022 00:50:09 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+Message-ID: <20220428225008.GH15485@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <20220425174719.GB12412@redhat.com>
+ <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+ <Ymr5Ga3gcqG4ZAMt@hirez.programming.kicks-ass.net>
+ <20220428205956.GG15485@redhat.com>
+ <YmsTd4FiAXjsFegE@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1651178767-447-1-git-send-email-prakash.sangappa@oracle.com>
-User-Agent: NeoMutt/20220408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmsTd4FiAXjsFegE@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022, Prakash Sangappa wrote:
+Peter, you know, it is very difficult to me to discuss the changes
+in the 2 unfinished series and not loose the context ;) Plus I am
+already sleeping. But I'll try to reply anyway.
 
->semtimedop() should be converted to use hrtimer like it has been done
->for most of the system calls with timeouts. This system call already
->takes a struct timespec as an argument and can therefore provide finer
->granularity timed wait.
+On 04/29, Peter Zijlstra wrote:
 >
->Signed-off-by: Prakash Sangappa <prakash.sangappa@oracle.com>
->Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> On Thu, Apr 28, 2022 at 10:59:57PM +0200, Oleg Nesterov wrote:
+> > If it is on top of JOBCTL_TRACED/DELAY_WAKEKILL changes (yours or Eric's),
+> > then it can't help - SIGKILL can come right after the tracee drops siglock
+> > and calls schedule().
+>
+> But by that time it will already have set TRACED and signal_wake_up()
+> wil clear it, no?
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+No. JOBCTL_DELAY_WAKEKILL is already set, this means that signal_wake_up()
+will remove TASK_WAKEKILL from the "state" passed to signal_wake_up_state()
+and this is fine and correct, this mean thats ttwu() won't change ->__state.
+
+But this also mean that wake_up_state() will return false, and in this case
+
+	signal_wake_up_state:
+
+		if (wake_up_state(t, state | TASK_INTERRUPTIBLE))
+			t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED | JOBCTL_TRACED_QUIESCE);
+
+won't clear these flags. And this is nice too.
+
+But. fatal_signal_pending() is true! And once we change freeze_traced()
+to not abuse p->__state, schedule() won't block because it will check
+signal_pending_state(TASK_TRACED == TASK_WAKEKILL | __TASK_TRACED) and
+__fatal_signal_pending() == T.
+
+In this case ptrace_stop() will leak JOBCTL_TRACED, so we simply need
+to clear it before return along with LISTENING | DELAY_WAKEKILL.
+
+> I'll go
+> over it all again in the morning, perhaps I'll reach a different
+> conclusion :-)
+
+Same here ;)
+
+Oleg.
+

@@ -2,126 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FC0513AF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA66513AF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350343AbiD1Rer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S1350548AbiD1RfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348393AbiD1Reo (ORCPT
+        with ESMTP id S1346684AbiD1RfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 13:34:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488A56543C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:31:28 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGwn2g036539;
-        Thu, 28 Apr 2022 17:31:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=UOJdp1TCQXMGKaap1xfqCqRJHtLXn6tqJXwjCeVYGO8=;
- b=amizwVNmUHiCyAox1AE/m9UvocObZnZcei+1XD4AzG1xgMBnFnmPeAWx4xQpz7rvPtLA
- GIhR9fIc6kB82PiJrQU/sZ7pahoXw89ODmM8NyijjHHlrZbrxaJqZAygK6wtq7CWPpMV
- tq0WQDeX1+J6tS+UKbJppenwx0vcWRDffzQ9i8wKAfDAnm+oEDB3ePgmtL+PQEVu+lcK
- 6gqe5vhQBPgJiJeXfQg2m8yVCGGyk5Nubmfto5q0pdKQTeDg7M2IC5f1NWi/Y9U1nIBn
- XAQWRZSFcwQLGjhG/NQfTxD1QFno5L+FO00eJotsf9Nt74FI9OT9XYEET1qDzqEKB2m/ YA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqvapd74u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 17:31:18 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SHRUXN017159;
-        Thu, 28 Apr 2022 17:31:17 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqvapd745-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 17:31:17 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SHCmXU015445;
-        Thu, 28 Apr 2022 17:31:15 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938yu9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 17:31:15 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SHI6NG41091346
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 17:18:06 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E64FAE051;
-        Thu, 28 Apr 2022 17:31:13 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A2DCAE045;
-        Thu, 28 Apr 2022 17:31:12 +0000 (GMT)
-Received: from localhost (unknown [9.43.8.21])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Apr 2022 17:31:12 +0000 (GMT)
-Date:   Thu, 28 Apr 2022 23:01:09 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220427095415.594e5120@gandalf.local.home>
-        <1651129169.fpixr00hgx.naveen@linux.ibm.com>
-        <20220428100602.7b215e52@gandalf.local.home>
-In-Reply-To: <20220428100602.7b215e52@gandalf.local.home>
+        Thu, 28 Apr 2022 13:35:04 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F02A66F89;
+        Thu, 28 Apr 2022 10:31:49 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id h1so4810810pfv.12;
+        Thu, 28 Apr 2022 10:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O5rgxxNLcUoozxHrIfe6C8PWavZ3F1iuN11i5Agtycw=;
+        b=KMkykjjprAhd2Vr1vJN0LmzavMT/mYNHAeeP6qnDg/LDjvFS1l7VaFA1jIBQzfV5qL
+         wvsUvg+GNSRoEivJ5V+jCqOqpoXT1LIgwKb0WGg6a7blsMb9xbx6tDxcd+Eah050FzO4
+         X5iswbbw4P9MbdCL7Dc7qsi/g1f5VgUYCcEBjoZX0V8fAHyGbtgz7qU+JNmOp4D5Ed6a
+         kNOJ/4wYxG/2NksSGYuDSHdye5mUCZmpx3YYyqfrav20k6V3hRiyJWozrNNRLX6o03VG
+         stGCIaQzY94lwV991u5G3Bx3xzsQMgT6h5R0XoJT55V7uOEKw8YqQhVIOv5/QfHoyhDD
+         hmoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=O5rgxxNLcUoozxHrIfe6C8PWavZ3F1iuN11i5Agtycw=;
+        b=S1AsG/gD4voMdKzy74+NN5GZbn3TePsTWlpQYrxgEyqfgrtSDg91Ef/FDdkh0825en
+         ho9w1jDZUQiy3skYENik3n9pvY9CTIoDd2T7sh4H60GI9k4O3vOahD85vhxcimXj2gJL
+         r0b+D+IyQs48FrwxebGgx115otMntGucO7mJS6g3znRS2ALxt3XgxdEVFlyrATmLGUqb
+         sv5ma2RTWdDYPi+wf4gE/ermM8hLqwZCvrZ9lmQTIVuKYcTSZj99nSLdq/MV0CAEQCI2
+         LH+yc0upzUDZtKXvhH2dFsiHtQAjLPPy+VxWzDAkz5Xvw58dIKmh3MJxrWGJja39QklX
+         9l2w==
+X-Gm-Message-State: AOAM531KgEXWy7nAL3VdbDK6HAx+Gf/uFoUsXszmJhKEx9xA+70XX85j
+        upIYHx7FuZ4U+SalSeV0axc=
+X-Google-Smtp-Source: ABdhPJxq0c+k6KVhZYOQptiZKD/wqkp6LW7t+ndte7xfGjJjErK73Be3Hq6U1Twa0p/aoUgr8eRGzA==
+X-Received: by 2002:a65:4848:0:b0:39c:c393:688c with SMTP id i8-20020a654848000000b0039cc393688cmr28566847pgs.376.1651167108932;
+        Thu, 28 Apr 2022 10:31:48 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:dc95:713b:f72c:4ad4])
+        by smtp.gmail.com with ESMTPSA id b29-20020a62a11d000000b0050d8d39892bsm429362pff.166.2022.04.28.10.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 10:31:47 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 28 Apr 2022 10:31:45 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
+Message-ID: <YmrPgWs5WPabIBQk@google.com>
+References: <20220427160016.144237-1-hannes@cmpxchg.org>
+ <20220427160016.144237-5-hannes@cmpxchg.org>
+ <Ymmnrkn0mSWcuvmH@google.com>
+ <YmmznQ8AO5RLxicA@cmpxchg.org>
+ <YmnA0Da90IURbxrM@google.com>
+ <Ymqj93gEEzu2Gb3U@cmpxchg.org>
+ <YmrICbP6bDJqDv5R@google.com>
+ <YmrNiY3VhdMbfTq1@cmpxchg.org>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1651166901.se7n53e6x9.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _vVoo22SHJ60vhyVlx5kYl9ko3bWX2gi
-X-Proofpoint-GUID: i3xUn0t9kbsH7PTUXToGLXIlrphwetHx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxlogscore=497 clxscore=1015
- impostorscore=0 priorityscore=1501 suspectscore=0 mlxscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204280105
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmrNiY3VhdMbfTq1@cmpxchg.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt wrote:
-> On Thu, 28 Apr 2022 13:15:22 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> Indeed, plain old -pg will be a problem. I'm not sure there is a generic=
-=20
->> way to address this. I suppose architectures will have to validate the=20
->> mcount locations, something like this?
->=20
-> Perhaps another solution is to make the mcount locations after the linkin=
-g
-> is done. The main downside to that is that it takes time to go over the
-> entire vmlinux, and will slow down a compile that only modified a couple =
-of
-> files.
+On Thu, Apr 28, 2022 at 01:23:21PM -0400, Johannes Weiner wrote:
+> On Thu, Apr 28, 2022 at 09:59:53AM -0700, Minchan Kim wrote:
+> > On Thu, Apr 28, 2022 at 10:25:59AM -0400, Johannes Weiner wrote:
+> > > On Wed, Apr 27, 2022 at 03:16:48PM -0700, Minchan Kim wrote:
+> > > > On Wed, Apr 27, 2022 at 05:20:29PM -0400, Johannes Weiner wrote:
+> > > > > On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
+> > > > > > Hi Johannes,
+> > > > > > 
+> > > > > > On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
+> > > > > > > Currently it requires poking at debugfs to figure out the size and
+> > > > > > > population of the zswap cache on a host. There are no counters for
+> > > > > > > reads and writes against the cache. As a result, it's difficult to
+> > > > > > > understand zswap behavior on production systems.
+> > > > > > > 
+> > > > > > > Print zswap memory consumption and how many pages are zswapped out in
+> > > > > > > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
+> > > > > > > 
+> > > > > > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > > > > > > ---
+> > > > > > >  fs/proc/meminfo.c             |  7 +++++++
+> > > > > > >  include/linux/swap.h          |  5 +++++
+> > > > > > >  include/linux/vm_event_item.h |  4 ++++
+> > > > > > >  mm/vmstat.c                   |  4 ++++
+> > > > > > >  mm/zswap.c                    | 13 ++++++-------
+> > > > > > >  5 files changed, 26 insertions(+), 7 deletions(-)
+> > > > > > > 
+> > > > > > > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+> > > > > > > index 6fa761c9cc78..6e89f0e2fd20 100644
+> > > > > > > --- a/fs/proc/meminfo.c
+> > > > > > > +++ b/fs/proc/meminfo.c
+> > > > > > > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+> > > > > > >  
+> > > > > > >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
+> > > > > > >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
+> > > > > > > +#ifdef CONFIG_ZSWAP
+> > > > > > > +	seq_printf(m,  "Zswap:          %8lu kB\n",
+> > > > > > > +		   (unsigned long)(zswap_pool_total_size >> 10));
+> > > > > > > +	seq_printf(m,  "Zswapped:       %8lu kB\n",
+> > > > > > > +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
+> > > > > > > +		   (PAGE_SHIFT - 10));
+> > > > > > > +#endif
+> > > > > > 
+> > > > > > I agree it would be very handy to have the memory consumption in meminfo
+> > > > > > 
+> > > > > > https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
+> > > > > > 
+> > > > > > If we really go this Zswap only metric instead of general term
+> > > > > > "Compressed", I'd like to post maybe "Zram:" with same reason
+> > > > > > in this patchset. Do you think that's better idea instead of
+> > > > > > introducing general term like "Compressed:" or something else?
+> > > > > 
+> > > > > I'm fine with changing it to Compressed. If somebody cares about a
+> > > > > more detailed breakdown, we can add Zswap, Zram subsets as needed.
+> > > > 
+> > > > Thanks! Please consider ZSWPIN to rename more general term, too.
+> > > 
+> > > That doesn't make sense to me.
+> > > 
+> > > Zram is a swap backend, its traffic is accounted in PSWPIN/OUT. Zswap
+> > > is a writeback cache on top of the swap backend. It has pages
+> > > entering, refaulting, and being written back to the swap backend
+> > > (PSWPOUT). A zswpout and a zramout are different things.
+> > 
+> > Think about that system has two swap devices (storage + zram).
+> > I think it's useful to know how many swap IO comes from zram
+> > and rest of them are storage.
+> 
+> Hm, isn't this comparable to having one swap on flash and one swap on
+> a rotating disk? /sys/block/*/stat should be able to tell you how
+> traffic is distributed, no?
 
-Yes, and I think that is also very useful with LTO. So, that would be=20
-good to consider in the longer term.
+That raises me a same question. Could you also look at the zswap stat
+instead of adding it into vmstat? (If zswap doesn't have the counter,
+couldn't we simply add new stat in sysfs?)
 
-For now, I have posted a v2 of this series with your comments addressed. =20
-It is working well in my tests on powerpc in the different=20
-configurations, including the older elf v1 abi with -pg. If it looks ok=20
-to you, we can go with this approach for now.
+I thought the patch aims for exposting statistics to grab easier
+using popular meminfo and vmstat and wanted to leverage it for
+zram, too.
 
-
-Thanks,
-Naveen
+> 
+> What I'm more worried about is the fact that in theory you can stack
+> zswap on top of zram. Consider a fast compression cache on top of a
+> higher compression backend. Is somebody doing this now? I doubt
+> it. But as people look into memory tiering more and more, this doesn't
+> sound entirely implausible. If the stacked layers then share the same
+> in/out events, it would be quite confusing.
+> 
+> If you think PSWPIN/OUT and per-device stats aren't enough, I'm not
+> opposed to adding zramin/out to /proc/vmstat as well. I think we're
+> less worried there than with /proc/meminfo. I'd just prefer to keep
+> them separate from the zswap events.
+> 
+> Does that sound reasonable?
+> 

@@ -2,221 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5CC512AC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 06:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79AD512AC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242836AbiD1FCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 01:02:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
+        id S242845AbiD1FIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 01:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238853AbiD1FCm (ORCPT
+        with ESMTP id S238161AbiD1FI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 01:02:42 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3607398F60;
-        Wed, 27 Apr 2022 21:59:23 -0700 (PDT)
-X-UUID: 41f69475db6241fc87c8fcc89c3886a4-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:05d974db-9775-4f64-b046-f987e440036f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:05d974db-9775-4f64-b046-f987e440036f,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:724afd2e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: 41f69475db6241fc87c8fcc89c3886a4-20220428
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 692952606; Thu, 28 Apr 2022 12:59:20 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 28 Apr 2022 12:59:19 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 28 Apr 2022 12:59:19 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 12:59:19 +0800
-Message-ID: <3e6bed63ed817381eb9d4d65d60c90172bef0440.camel@mediatek.com>
-Subject: Re: [PATCH v14 3/3] media: platform: mtk-mdp3: add Mediatek MDP3
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 28 Apr 2022 12:59:19 +0800
-In-Reply-To: <20220427070514.10355-4-moudy.ho@mediatek.com>
-References: <20220427070514.10355-1-moudy.ho@mediatek.com>
-         <20220427070514.10355-4-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 28 Apr 2022 01:08:29 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BCB109F
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:05:14 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l15-20020a056e0212ef00b002cd8f1a8cffso1166885iln.13
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:05:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=NELWs5E3d7hrbPccO9GIG4nHqgSZ2xPQFrfhxPBBI5U=;
+        b=v4Tcjoto9y7oySQAON5pGsz6773G9gl9ORA7g8Y0z2Iz/BkPf1/A1WjKLqTSyHkIyF
+         7/fArtWP+BSDffB0OGKB21VfAiPcwvjWvvRzZpjrNi7UKeRJF/bu/1WihIwKZ17gYg/e
+         bxXNJodSjROEQHsptxl1ylIawzWc7Zq9fjAgZKduTxt3LXmFzH1Uo54CQbQclGSSlmrz
+         XySrZfA8L7gPxW0N1ZT3Qshjp0SV56m+BRHki8exoUY3TtV/oSHcY20Q0oIRjdfoO0Pt
+         07ouR7SQS4JW8qdVz3srGr8bWjJPTATCR2Zgx+kf80LOebf5RQrlesBqtUYt7jQ/dX/U
+         /AzQ==
+X-Gm-Message-State: AOAM530OM8pJygUO7r7nV6Ln6T1CvTAQmaw22a8rz/UQXJ3pob96bW1c
+        F2tTQAjUP3rxCFyf+s+6LHygJMZPkyra60r0+DTKvQSo6LjC
+X-Google-Smtp-Source: ABdhPJwutBsiNFEqI0xG69qDeOD5jbbkDATr8/nzlp6Y/yl8JYFyWZWlDNQ7AKh2cGsfMelBkFyR9D2gvmAcOa80/TTAuD0d6ZIw
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1af:b0:32b:26b6:3a47 with SMTP id
+ b15-20020a05663801af00b0032b26b63a47mr1993510jaq.233.1651122313718; Wed, 27
+ Apr 2022 22:05:13 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 22:05:13 -0700
+In-Reply-To: <20220427230210.GA6837@lst.de>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fd713505ddafde13@google.com>
+Subject: Re: [syzbot] general protection fault in btrfs_stop_all_workers
+From:   syzbot <syzbot+a2c720e0f056114ea7c6@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, hch@lst.de, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wqu@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Moudy:
+Hello,
 
-On Wed, 2022-04-27 at 15:05 +0800, Moudy Ho wrote:
-> 
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-[snip]
+Reported-and-tested-by: syzbot+a2c720e0f056114ea7c6@syzkaller.appspotmail.com
 
-> +
-> +int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
-> +{
-> +	struct mdp_cmdq_cmd cmd;
-> +	struct mdp_path *path = NULL;
-> +	struct mdp_cmdq_cb_param *cb_param = NULL;
-> +	struct mdp_comp *comps = NULL;
-> +	struct device *dev = &mdp->pdev->dev;
-> +	int i, ret;
-> +
-> +	atomic_inc(&mdp->job_count);
-> +
-> +	if (atomic_read(&mdp->suspended)) {
-> +		atomic_dec(&mdp->job_count);
-> +		return -ECANCELED;
-> +	}
-> +
-> +	cmd.pkt = cmdq_pkt_create(mdp->cmdq_clt, SZ_16K);
-> +	if (IS_ERR(cmd.pkt)) {
-> +		atomic_dec(&mdp->job_count);
-> +		wake_up(&mdp->callback_wq);
-> +		return PTR_ERR(cmd.pkt);
-> +	}
-> +	cmd.event = &mdp->event[0];
-> +
-> +	path = kzalloc(sizeof(*path), GFP_KERNEL);
-> +	if (!path) {
-> +		ret = -ENOMEM;
-> +		goto err_destroy_pkt;
-> +	}
-> +
-> +	path->mdp_dev = mdp;
-> +	path->config = param->config;
-> +	path->param = param->param;
-> +	for (i = 0; i < param->param->num_outputs; i++) {
-> +		path->bounds[i].left = 0;
-> +		path->bounds[i].top = 0;
-> +		path->bounds[i].width =
-> +			param->param->outputs[i].buffer.format.width;
-> +		path->bounds[i].height =
-> +			param->param->outputs[i].buffer.format.height;
-> +		path->composes[i] = param->composes[i] ?
-> +			param->composes[i] : &path->bounds[i];
-> +	}
-> +
-> +	ret = mdp_path_ctx_init(mdp, path);
-> +	if (ret) {
-> +		dev_err(dev, "mdp_path_ctx_init error\n");
-> +		goto err_destroy_pkt;
-> +	}
-> +
-> +	mtk_mutex_prepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
-> +	for (i = 0; i < param->config->num_components; i++)
-> +		mdp_comp_clock_on(&mdp->pdev->dev, path-
-> >comps[i].comp);
-> +
-> +	ret = mdp_path_config(mdp, &cmd, path);
-> +	if (ret) {
-> +		dev_err(dev, "mdp_path_config error\n");
-> +		goto err_destroy_pkt;
-> +	}
-> +
-> +	cb_param = kzalloc(sizeof(*cb_param), GFP_KERNEL);
-> +	if (!cb_param) {
-> +		ret = -ENOMEM;
-> +		goto err_destroy_pkt;
-> +	}
-> +
-> +	comps = kcalloc(param->config->num_components, sizeof(*comps),
-> +			GFP_KERNEL);
-> +	if (!comps) {
-> +		ret = -ENOMEM;
-> +		goto err_destroy_pkt;
-> +	}
-> +
-> +	for (i = 0; i < param->config->num_components; i++)
-> +		memcpy(&comps[i], path->comps[i].comp,
-> +		       sizeof(struct mdp_comp));
-> +	cb_param->mdp = mdp;
-> +	cb_param->user_cmdq_cb = param->cmdq_cb;
-> +	cb_param->user_cb_data = param->cb_data;
-> +	cb_param->pkt = cmd.pkt;
-> +	cb_param->comps = comps;
-> +	cb_param->num_comps = param->config->num_components;
-> +	cb_param->mdp_ctx = param->mdp_ctx;
-> +
-> +	cmdq_pkt_finalize(cmd.pkt);
-> +	ret = cmdq_pkt_flush_async(cmd.pkt,
-> +				   mdp_handle_cmdq_callback,
-> +				   (void *)cb_param);
+Tested on:
 
-Matthias has applied patch [1], so I think you have better to base on
-patch [1] to send patch.
+commit:         ade4dbbb btrfs: don't call destroy_workqueue on NULL w..
+git tree:       git://git.infradead.org/users/hch/misc.git btrfs-workqueue-fix
+kernel config:  https://syzkaller.appspot.com/x/.config?x=17dad21e0facb5e6
+dashboard link: https://syzkaller.appspot.com/bug?extid=a2c720e0f056114ea7c6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.18-next/soc&id=5252c1c5a08e583ab1363f809002cd8a59272b35
-
-Regards,
-CK
-
-> +	if (ret) {
-> +		dev_err(dev, "cmdq_pkt_flush_async fail!\n");
-> +		goto err_clock_off;
-> +	}
-> +	kfree(path);
-> +	return 0;
-> +
-> +err_clock_off:
-> +	mtk_mutex_unprepare(mdp->mdp_mutex[MDP_PIPE_RDMA0]);
-> +	mdp_comp_clocks_off(&mdp->pdev->dev, cb_param->comps,
-> +			    cb_param->num_comps);
-> +err_destroy_pkt:
-> +	cmdq_pkt_destroy(cmd.pkt);
-> +	atomic_dec(&mdp->job_count);
-> +	wake_up(&mdp->callback_wq);
-> +	kfree(comps);
-> +	kfree(cb_param);
-> +	kfree(path);
-> +
-> +	return ret;
-> +}
-> 
-
-
-
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

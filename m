@@ -2,235 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CC1513B3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96556513B40
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350777AbiD1SPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S1350796AbiD1SR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350785AbiD1SPR (ORCPT
+        with ESMTP id S243635AbiD1SRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:15:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A69B8205
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651169519; x=1682705519;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YN8ESn/HRWKtJH/jwZ9GPFxcpNmP9Vxhgsndj/11SCA=;
-  b=BVYYKOaTADyQ/u2r2YcOlrdcFQqSxKCtQqzMyLBQDysawszSbSw34lwu
-   1HGz7ARP2MGMmyZzjdGsC34BS4iJLkq9ZMZsoFov+fg9sJZP2g9TWsaem
-   Dp8VtuYAbP88ARdpmrVUGioEqSodyw6pV8NlljJ2BUUzebr+JPjah8nlA
-   LVMves9Zhu0ap3H48GAq/u5BIfqHvjZUYvly8rkVMptwBFtH4G7a4KpvA
-   0aqL2jN3dUcPWta8YmbPErxoezL50PpgYfr2jiXjX2PKAx7Ezfl4kYo5U
-   Zglq0z3hxZIA8brOBCYOImh/Y14u3fqnSUltfVRsBXHNuntiL53DcOyzP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="246931487"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="246931487"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 11:11:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="661915488"
-Received: from rbopardi-mobl.amr.corp.intel.com (HELO [10.251.19.231]) ([10.251.19.231])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 11:11:58 -0700
-Message-ID: <1f2ec95a-f7ac-5a89-09bc-2c5a7fdc2f3c@linux.intel.com>
-Date:   Thu, 28 Apr 2022 11:11:57 -0700
+        Thu, 28 Apr 2022 14:17:24 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2828BB0AC
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:14:09 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id y2so10482092ybi.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:cc;
+        bh=jcv14XD1FEIAH5YEbByn5Xomdekt/dYfYEZFWkwU5FU=;
+        b=gbsM6vlDaLwoBlkuciQ/cpPiZhcYl8M3ZfvVTq8SmXxnAEUdkygAm9kKjwfItUMhT1
+         MA3+um8BbJ30OHZMTkO24+elO2g+xv2wlDKXFzaRms9Mx+2/TcX6x2UqEzyYuA6QN6OX
+         NtLlWgst7jANzrKb6LedsJzC43Owxvcpk/A8nBIF4czbHl4fLtWeRVqwwzNLle9wG1vN
+         V2AnK2FRSC/h/BYBNywV818tCHeLyIQj70NbDsSMkHi1gzzvDK2ZiPO552769dy637X6
+         89aY9ukEi9zWSt1R871Cp0z2nZ5pYmCM5rsqB34T9CD/gpOMz1qfjXwWZHy0N9dwQaxq
+         hpgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:cc;
+        bh=jcv14XD1FEIAH5YEbByn5Xomdekt/dYfYEZFWkwU5FU=;
+        b=Zz73l+GmLeUC7qJf1oWDJ1PIUqh1LqbJKDgb11avoltFXroLYssMzy0dOpGv6l1YeY
+         qD4yqtSldd92vaMn0q4s7Z04ImXk42/V00+3Np0iiQn471DBgmJpQQH2S1kmFnvUIGB7
+         febAw7l/fYZxVOx1B6yWDUo0KOLAgTWaqcf1tatK8JFTade9wIaNpdRa9Qk0EZ5YSHWI
+         qF2Td8l9aESZNzdnDzsousYLyvMZOwmmTqzEC0fG9jsc2zH0IUot0MgHVA1UYfaNAIWu
+         ZdJT5ojGHFiuLH2hyguQBytRy37hOiJ6g3G1mbKWV4X49yUWcQ/n2+gb3Kc+HpKiRqRI
+         RabA==
+X-Gm-Message-State: AOAM533Mi6lQf1iW0XZ2QbuiNgcy2Z7GKB6iIsORtEBg2zpd603mOHNG
+        MrYNQv+cvNf423uZRg96n2tq9Ieyhf8GqI90Wuc=
+X-Received: by 2002:a25:bbcd:0:b0:648:d58d:ed4e with SMTP id
+ c13-20020a25bbcd000000b00648d58ded4emt9006682ybk.646.1651169649100; Thu, 28
+ Apr 2022 11:14:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v4 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org
-References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220422233418.1203092-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <YmrV0uYMBCSq7xNK@fedora>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <YmrV0uYMBCSq7xNK@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a81:61c5:0:0:0:0:0 with HTTP; Thu, 28 Apr 2022 11:14:08
+ -0700 (PDT)
+Reply-To: israelbarney287@gmail.com
+In-Reply-To: <CAB+02OF8uUaEENbtu3oTZjtB_pHp9Kd_mzJ2JyeEHSkaxWzRkg@mail.gmail.com>
+References: <CAB+02OEf2d=2V6VH=n9vhwKq=KuTdgPJ4dLc6MMhbcrC7eJ4dg@mail.gmail.com>
+ <CAB+02OF2vuwGc6ob8VJCbhc21ZhxJSOzjO2BtAg29wrE4CVgzA@mail.gmail.com>
+ <CAB+02OFDkWAkC45L=DU+KH6cFYkKqwzxMyjWPZoCdKq-c5i9zw@mail.gmail.com>
+ <CAB+02OHKM6tqv_yzPMm81bPOEj=prFwEs8YJOmO9Miv_Ot1vZQ@mail.gmail.com>
+ <CAB+02OHrFeERDHoZVB9upxki4p3Akrd56bwqmQ1VZy4Qnu-D_g@mail.gmail.com>
+ <CAB+02OF74q2LVoq=ax+fzAgqWob9ofBBUaxsdsysv-q2Q4Q4oA@mail.gmail.com>
+ <CAB+02OH_7xFE-hfaPLg7Jn_9PYKiURFtciK+zCWCKwfaABkhUA@mail.gmail.com>
+ <CAB+02OEQNXwbX1i0PFTQXTbqQBYBVyhMsiw9hebgD5M9Zjf-=A@mail.gmail.com>
+ <CAB+02OEMGMM7dX=KdFDKGqRQv3b9TiLxiwjM=qGua6LJRZvXeA@mail.gmail.com>
+ <CAB+02OE7RNEhW5Upc+xY24yfiCGiuRMfbnry_UsFptxU66O5SQ@mail.gmail.com>
+ <CAB+02OGj_c4Hv-R3E6UEWLyqWSdzi6jpSDmTUsyRwMbfMXeriA@mail.gmail.com>
+ <CAB+02OFKxJfjHK7nYrGfxOd-harso-9tOT=Rv2NniXoNpC2tHg@mail.gmail.com>
+ <CAB+02OGpU=8JYVHHActhQ4CHURnoUXO=ufcxbrV=1d4-7yTy6w@mail.gmail.com>
+ <CAB+02OFG3+PFDH=C33+yA6pUps--FDNMfWsSOF3Ak6SAhetOGQ@mail.gmail.com>
+ <CAB+02OHkNOxKWG7+Nm25eJWE6V5MKxgiDA_GFmDNXfOVL7nG4A@mail.gmail.com>
+ <CAB+02OE4tc=Q2Ku2WQ=h2QD-NLjeU-Y+YHRsCwMRmCGgB0WUCQ@mail.gmail.com>
+ <CAB+02OF4s5rNJk5B_1LiiFNXDGt2znZ+1F4qtM9UTpEp_FDA7A@mail.gmail.com>
+ <CAB+02OEWqX9gabbs6eOd77hWYKWztU_MmWpPUEH+t0GX897W0Q@mail.gmail.com>
+ <CAB+02OHyCyOzngWCfPXiScKHsTCJLN4Vvne2Vr7wyWx-yt3rmw@mail.gmail.com>
+ <CAB+02OGDwDKoWk7F_BOuc0s73WYzgPCZp3PLJrxVzFr_Szcqgg@mail.gmail.com>
+ <CAB+02OHTFDtXHnxsywDKmEG5c+pzWO-x_ocUwGHd2-gjbRsHNQ@mail.gmail.com>
+ <CAB+02OFVTTD2CPDjzw40Gw-h9NmLTFM5rKJ4-8yioqCNauhkew@mail.gmail.com>
+ <CAB+02OE32bfjUiKMSZpK2pduCE6uYRH_iQcn8qF9ojjjcnRzEg@mail.gmail.com>
+ <CAB+02OF9qzYvyg7Xy0h=CvDEsfOirMbbvz+5jdG5ehM=baoS5g@mail.gmail.com>
+ <CAB+02OE4GuPFhboqz7dVOVvi64frWiSKZsjeR8pXQqLDKuS6ZA@mail.gmail.com>
+ <CAB+02OEJeMW_2_jyfqZumyj6WzEtRGx6hH6shH5+P24pVgJ3zg@mail.gmail.com>
+ <CAB+02OHfgVNHYMC_ww6e1R0iQrccQ=Q684Lv-ZqtzD7g49A_=Q@mail.gmail.com>
+ <CAB+02OH3r54arAAvmR+=NU4=tMUmm3xqpmCe-O2oN=naPKpg6A@mail.gmail.com>
+ <CAB+02OGHPanhuZe3A=SDMX7Wy8oHMss7jB_xnR-m_6n21fkx+Q@mail.gmail.com>
+ <CAB+02OEyjrq07P6KQrqcMjYQVDh6KAAtV872Cs3Yt=tCOQmhmg@mail.gmail.com>
+ <CAB+02OHJ-WffAisOFyJUJ4DWgLn+_4Wjsa_=HVfQb01zniqhkw@mail.gmail.com> <CAB+02OF8uUaEENbtu3oTZjtB_pHp9Kd_mzJ2JyeEHSkaxWzRkg@mail.gmail.com>
+From:   israel barney <abasszakari0@gmail.com>
+Date:   Thu, 28 Apr 2022 18:14:08 +0000
+Message-ID: <CAB+02OH9Deh9YwNrehvbf8vAKcacxm0Dduae-ovb_cX70Qe=HA@mail.gmail.com>
+Subject: HELLO
+Cc:     israelbarney287@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        MISSING_HEADERS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greetings to you! Please did you receive my previous message? I need
+your urgent response.
 
-
-On 4/28/22 10:58 AM, Wander Lairson Costa wrote:
-> On Fri, Apr 22, 2022 at 04:34:18PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> 
-> [snip]
-> 
->> +static long tdx_get_tdquote(void __user *argp)
->> +{
->> +	struct tdx_quote_hdr *quote_hdr;
->> +	struct tdx_quote_req quote_req;
->> +	void *quote_buf = NULL;
->> +	dma_addr_t handle;
->> +	long ret = 0, err;
->> +	u64 quote_buf_len;
->> +
->> +	mutex_lock(&quote_lock);
->> +
->> +	reinit_completion(&req_compl);
->> +
->> +	/* Copy Quote request struct from user buffer */
->> +	if (copy_from_user(&quote_req, argp, sizeof(struct tdx_quote_req)))
->> +		return -EFAULT;
->> +
->> +	/* Make sure the length & timeout is valid */
->> +	if (quote_req.len <= 0 || quote_req.timeout <= 0)
-> 
-> len and timeout are unsigned values, so they will never be negative.
-
-Yes. I will change it to non-zero check.
-
-> 
->> +		return -EINVAL;
->> +
->> +	/* Align with page size to meet 4K alignment */
->> +	quote_buf_len = PAGE_ALIGN(quote_req.len);
->> +
->> +	/*
->> +	 * Allocate DMA buffer to get TDQUOTE data from the VMM.
->> +	 * dma_alloc_coherent() API internally marks allocated
->> +	 * memory as shared with VMM. So explicit shared mapping is
->> +	 * not required.
->> +	 */
->> +	quote_buf = dma_alloc_coherent(&pdev->dev, quote_buf_len, &handle,
->> +					GFP_KERNEL | __GFP_ZERO);
->> +	if (!quote_buf) {
->> +		ret = -ENOMEM;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Copy TDREPORT from user Quote data buffer to kernel Quote buffer */
->> +	if (copy_from_user(quote_buf, (void __user *)quote_req.buf, quote_req.len)) {
->> +		ret = -EFAULT;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Submit GetQuote Request */
->> +	err = tdx_hcall_get_quote(quote_buf, quote_buf_len);
->> +	if (err) {
->> +		/* if failed, copy hypercall error code to user buffer */
->> +		ret = put_user(err, (long __user *)argp);
-> 
-> The assigment to ret is unused.
-
-Since we are already in error path and setting ret to -EIO I did not
-handle the pur_user() error case.
-
-> 
->> +		ret = -EIO;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Wait for attestation completion */
->> +	ret = wait_for_completion_interruptible_timeout(
->> +			&req_compl,
->> +			msecs_to_jiffies(quote_req.timeout));
->> +	if (ret <= 0) {
->> +		ret = -EIO;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Copy generated Quote data back to user buffer */
->> +	if (copy_to_user((void __user *)quote_req.buf, quote_buf, quote_buf_len)) {
-> 
-> Shouldn't we use quote_req.len instead of quote_buf_len here?
-
-Good catch. I will fix it in next version.
-
-> 
->> +		ret = -EFAULT;
->> +		goto quote_failed;
->> +	}
->> +
->> +	quote_hdr = (struct tdx_quote_hdr *)quote_buf;
->> +
->> +	/* Make sure quote generation is successful */
->> +	if (!quote_hdr->status)
->> +		ret = 0;
->> +	else
->> +		ret = -EIO;
->> +
-> 
-> Shouldn't copy_to_user be called after checking the status?
-
-IMO, since GetQuote TDVMCALL is successful, we can copy the buffer
-back to the user. My idea is to let the attestation agent handle the
-error in GetQuote header (like IN_FLIGHT scenario).
-
-Maybe I should remove quote_hdr->status check in kernel and let user
-agent handle it.
-
-Isaku/Kai, any comments?
-
-> 
->> +quote_failed:
->> +	if (quote_buf)
->> +		dma_free_coherent(&pdev->dev, quote_buf_len, quote_buf, handle);
->> +
->> +	mutex_unlock(&quote_lock);
->> +
->> +	return ret;
->> +}
->> +
->> +static void attestation_callback_handler(void)
->> +{
->> +	complete(&req_compl);
->> +}
->> +
->>   static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
->>   			     unsigned long arg)
->>   {
->> @@ -89,6 +183,9 @@ static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
->>   	case TDX_CMD_GET_TDREPORT:
->>   		ret = tdx_get_tdreport(argp);
->>   		break;
->> +	case TDX_CMD_GEN_QUOTE:
->> +		ret = tdx_get_tdquote(argp);
->> +		break;
->>   	default:
->>   		pr_err("cmd %d not supported\n", cmd);
->>   		break;
->> @@ -103,6 +200,14 @@ static const struct file_operations tdx_attest_fops = {
->>   	.llseek		= no_llseek,
->>   };
->>   
->> +/* Helper function to cleanup attestation related allocations */
->> +static void _tdx_attest_remove(void)
->> +{
->> +	misc_deregister(&miscdev);
-> 
-> Won't misc_deregister be called even if misc_register fails?
-
-Yes. I will fix this in next version.
-
-> 
->> +
->> +	tdx_remove_ev_notify_handler();
->> +}
->> +
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+My regards,
+Mr. Israel Barney.

@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB3E513E9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C11513E9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352942AbiD1Wmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S1352953AbiD1Wnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351569AbiD1Wmq (ORCPT
+        with ESMTP id S1352944AbiD1Wne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:42:46 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B1CC12EF
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:39:30 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ebf4b91212so68460567b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E+3J8Tg1YKkO3lpTvYwXtrtSHWXSrNo91D9D4uubgfM=;
-        b=V4XCWq+mmBEcJp2rd+FHj5x6PNMIWT8HPTMQAxnaI7951ksolZFoZlQx5xw2qhxxun
-         3wrv9A+A1/uDRZxkAklPtdGFsTmIJzUm66fE+az8c8Gax6q/hs23FY+pEZC8O4aZUO3S
-         uMmSpr23BPt1V4z9OSeskzAu1ySy4g+zOkCcm8hX+D27zAqd/vyzE4h5gddupLogEuyd
-         fOXUvcQ+fFMJq3BV5SnS4BOv6O3Tsmh5FSjAtNXr7gltT+iSAkQTfLrR+hjxX9tQYq04
-         aoWOUJlz7SPODt6wkBWOR5Bnac01p/Mbc2IGhBY1iD5s8ZkU7PSPCjH1Qn27aI3Yncv5
-         oKuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E+3J8Tg1YKkO3lpTvYwXtrtSHWXSrNo91D9D4uubgfM=;
-        b=suFlwhogjHc3eiKCkX+incMRA0LSG+Wn+Ji7IUY+JsEOS/jk56HzkWMvKOtlEg9RIc
-         Nt2uCq9Bp2fDmnh0Vn3tcoTY88Q0yl0UXNQo8xJu6qfH4pquXbW1q1QfqpKdAW4vhOGv
-         logXgEZPERzF47AI4cdQFMiZ/ftdvz4ia88eyirthdhi+sVRckv1eNCTeD6BDn9Mqvhv
-         uOYM0qHFh4v/tMqtyZKdIubBMzhmN2m1/FMVLsEtYEPZ+xcngtrBuQktKnFxOtFCQYdp
-         Zn+b1g9+SaVwBwEs2b3lD+7X7eWGfOr35FRLAW1hv/x5kQChrRj7/Tg+XWUzy2k80+oq
-         AdzA==
-X-Gm-Message-State: AOAM530VDEK6irL+VlzUPK0TfUbLrwnEoh4pIhAwrCVVqWpp+b90u50b
-        KBbFJ9RYKAd+yH9EWHjQw/XEVXx9QS7LY6JvQ6F0LNkyJHg=
-X-Google-Smtp-Source: ABdhPJxvhml9HFXPCwUVI0CwtNK5IaJmoBNDiEfCirpoYCazdVjbv6nJ3rx/3iOjPRgLySfwlGlZlM+lkxFFFgGvH8U=
-X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
- d69-20020a811d48000000b002f18ebf25f3mr34374108ywd.118.1651185569522; Thu, 28
- Apr 2022 15:39:29 -0700 (PDT)
+        Thu, 28 Apr 2022 18:43:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7121E692A1;
+        Thu, 28 Apr 2022 15:40:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 247F1B82FE1;
+        Thu, 28 Apr 2022 22:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E9C8C385AD;
+        Thu, 28 Apr 2022 22:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651185615;
+        bh=wXxogfL874XcDPPyxkQBPeMveMhFBfE8bS1aLYuh9GY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jpbCawBL6V4AJTyN9/txG1j79d8EmUpVaVhRPiqbk0PE53D68QWRi2kw8ZRj57+RU
+         o+OfxlbvZ7OuBoZLvBK2odjxQZBBzraEeyamVGnyAd4diF/BeR0OgNnXCCIQONUEEN
+         fzX/odth6/PHdPe+phUrxxBFSJCrnKowm+xnVh/ZM/PuiOAwO6UdliGZ79O7ui9dLf
+         4KDBio2ZuNqq+ltee7PbBh8ZXCg1RnDBWx81AIWeXRWot8XTV7VtlRQLu3hTLovMDV
+         5UTvpwHs0ksgdlMf4MEEx1i3nu92OTGvAcY6m5IaYXeeVBsQTL72sK892xdwkE3CBe
+         vs70ib3iW/dSg==
+Date:   Thu, 28 Apr 2022 15:40:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jianqun Xu <jay.xu@rock-chips.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@st.com,
+        joabreu@synopsys.com, davem@davemloft.net,
+        mcoquelin.stm32@gmail.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] ethernet: stmmac: fix for none child queue node
+ for tx node
+Message-ID: <20220428154014.590f6655@kernel.org>
+In-Reply-To: <20220428010927.526310-1-jay.xu@rock-chips.com>
+References: <20220428010927.526310-1-jay.xu@rock-chips.com>
 MIME-Version: 1.0
-References: <20220420191926.3411830-1-michael@walle.cc>
-In-Reply-To: <20220420191926.3411830-1-michael@walle.cc>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 29 Apr 2022 00:39:18 +0200
-Message-ID: <CACRpkdb2zuXpTkiXNtC6KKRO55Ks-yep-TBq9YD_x9yegZ-iyA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] pinctrl: ocelot: add shared reset
-To:     Michael Walle <michael@walle.cc>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,17 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 9:19 PM Michael Walle <michael@walle.cc> wrote:
+On Thu, 28 Apr 2022 09:09:27 +0800 Jianqun Xu wrote:
+> In case of nothing to be set for tx node result in no child queue node
+> for the tx node, this patch init the queue to tx_queues_to_use instead
+> of 0 to support dt file set no queue node for tx node.
+> 
+> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
 
-> On LAN966x SoCs, there is an internal reset which is used to reset the
-> switch core. But this will also reset the GPIO and the SGPIO. Thus add
-> support for this shared reset line.
->
-> changes since v2:
->  - use dev_err_probe(), thanks Horatiu
+Something needs to initialize the settings
+(plat->tx_queues_cfg[queue].#) to the defaults, no? 
+Just ignoring the error may not be enough.
 
-Picked this v3 version rather than v2.
+Also has this ever worked? If you're trying to make the driver work for
+DTs that never worked (and are arguably invalid) -- please change the
+subject from "fix..." to "support...".
 
-Thanks!
-Yours,
-Linus Walleij
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> index 2d8c095f3856..4f01a41c485c 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> @@ -279,7 +279,7 @@ static int stmmac_mtl_setup(struct platform_device *pdev,
+>  
+>  		queue++;
+>  	}
+> -	if (queue != plat->tx_queues_to_use) {
+> +	if (queue != plat->tx_queues_to_use && of_get_child_count(tx_node)) {
+>  		ret = -EINVAL;
+>  		dev_err(&pdev->dev, "Not all TX queues were configured\n");
+>  		goto out;
+

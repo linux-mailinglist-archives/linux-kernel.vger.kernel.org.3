@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FED6513AD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7486513ADA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346922AbiD1R2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S1350341AbiD1R3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239066AbiD1R2J (ORCPT
+        with ESMTP id S1350474AbiD1R3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 13:28:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FBC5BD2C
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:24:54 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SGwoFh036587;
-        Thu, 28 Apr 2022 17:24:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=uSwQIHRIiwhAO3MWMtPEQIyFeai8otwA3g0TJnXvjlg=;
- b=HPsWK9We42Hwd5zTyKM15HWb4J/lLE/DpPKQXnLwguHzR4L8LHCYFg6b5bNdbdpGo1M6
- EgapZNqCuzOPywKBw6KpPT3bXWnqS3qR6dLRSPHLf+S5jyd2rWz1UCE35s4cUQ8zYQ1m
- 6BS/03X+BI1kq/CzB/EdApBqnE1X+TCcZ8sfFFjgNDPGrwtbQxf302lNKi+XH0FvrAQO
- o57IlmGgrriCZ3KbYuRBJltTzr+fIOheBRe04PClgjJkJ1vlKh/TGfXcDominjJ1Jft9
- htfWty7IYg4gIxFp+LTK4ILB93FDt+Pa74P6hwfdC5FYq4oW3z5KrIqPe+lc6Kf8q2n6 mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqvapd1xn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 17:24:46 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SHHuTB022416;
-        Thu, 28 Apr 2022 17:24:46 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqvapd1w5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 17:24:46 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SHCiW5015440;
-        Thu, 28 Apr 2022 17:24:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm938yu3m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Apr 2022 17:24:43 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SHOfh850725256
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 28 Apr 2022 17:24:41 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 284ECA4060;
-        Thu, 28 Apr 2022 17:24:41 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84672A405C;
-        Thu, 28 Apr 2022 17:24:40 +0000 (GMT)
-Received: from localhost (unknown [9.43.8.21])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 28 Apr 2022 17:24:40 +0000 (GMT)
-Date:   Thu, 28 Apr 2022 22:54:38 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220427095415.594e5120@gandalf.local.home>
-        <1651129169.fpixr00hgx.naveen@linux.ibm.com>
-        <20220428100602.7b215e52@gandalf.local.home>
-In-Reply-To: <20220428100602.7b215e52@gandalf.local.home>
+        Thu, 28 Apr 2022 13:29:01 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C28220C4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:25:46 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id e24so4922451pjt.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VCwam7UiUNOXhElbv2jko1D22lHmNSK/U551dYCHJBk=;
+        b=kb2gXGO0dOiHelquCwPSsvA81OokVqaYnDdu+PCdW9ZS0DatM5QQUDG0tmfeaQmLzo
+         4CJS+I78m6sSb3rqc15C4CJpW2lQp40Cpec+y1RhaGZCBz9izEaUCWIt8S4Lw1ZjOsrD
+         46UMZnHk/jDIwkEIWMmBS6cSAo5Vz5iqQ7RyBUr0ZjXjbBmHCERFX0NjjvMvBmcSlihu
+         iX+ttzi3Z8eLHazNtGWX7lX1ai7smZXZg9JBSjDzJIUUbJezyAR6Qfi9ZCU+7kVRPzx2
+         3HNwguIMh1tbxiEnJAwiuc3M1jnQR566x2JDe8I+hp5rp3OdFSKMTN9lSdEavqnco0i0
+         fvzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VCwam7UiUNOXhElbv2jko1D22lHmNSK/U551dYCHJBk=;
+        b=d03roFe1c+Bm79nNCzYVxyTtxiEhMOD81JJvP3IitNBsftaHgiEc4zE99hRWxQWpYs
+         tCvkVzYKsreWwcI6AIZE0naHp24zpZ6oh7kihSf+swnzMLafkQU2fRYLH3ojFcrv7zWu
+         +8XYB7Lu4qASWPfnRkLNf7oRSHgJvaLf5kepyTlGCTSfAfPPOhaWRt8PcBVWjxWpgMGl
+         5Q7YcEdQxAkTnBW/bXemRhUQIGsPkm1yRjg2szq1T2IJLfNGgLudfkvJhlxIIw1leCKh
+         fUOyk+MWSpx0K1oZTatQTr3Q+ia9GgJyzlohLDBOX9uoqAsp03lgEkz4lPwkD/WLFMXh
+         wmsA==
+X-Gm-Message-State: AOAM532J0Ww930BlEa9LR2Z3A4k+T/wF0Znz6pDueRVOSK/ZivK2aHgm
+        s1fdkoWtDUlQZoKaBDvEFkWTORppC/0LXMvbUNB5CKQw
+X-Google-Smtp-Source: ABdhPJx/6Wrux0hAoIpHbzr0izmaFGDh3pXpcrD2VvY0Ekjt5BdumhW+HSUTcUf/+427d9ui4qoZtrF+a9c0tOAKRCg=
+X-Received: by 2002:a17:902:d5c3:b0:154:c472:de80 with SMTP id
+ g3-20020a170902d5c300b00154c472de80mr34345864plh.87.1651166745857; Thu, 28
+ Apr 2022 10:25:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1651166416.afl3n7tts7.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: V_3oPaqbt0Lmd6t9nEDoUpTU-Us_FpBk
-X-Proofpoint-GUID: px6PpEwvTf_aBfqjrNlCpkEXQo8w50Kq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-28_02,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxlogscore=495 clxscore=1015
- impostorscore=0 priorityscore=1501 suspectscore=0 mlxscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204280103
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220427053220.719866-1-naoya.horiguchi@linux.dev>
+In-Reply-To: <20220427053220.719866-1-naoya.horiguchi@linux.dev>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 28 Apr 2022 10:25:33 -0700
+Message-ID: <CAHbLzko3=bHrsWNGdb0QZijN9oPg3pchbC2F9=_6Td+2xDczhA@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/hwpoison: use pr_err() instead of dump_page() in get_any_page()
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,30 +74,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt wrote:
-> On Thu, 28 Apr 2022 13:15:22 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> Indeed, plain old -pg will be a problem. I'm not sure there is a generic=
-=20
->> way to address this. I suppose architectures will have to validate the=20
->> mcount locations, something like this?
->=20
-> Perhaps another solution is to make the mcount locations after the linkin=
-g
-> is done. The main downside to that is that it takes time to go over the
-> entire vmlinux, and will slow down a compile that only modified a couple =
-of
-> files.
+On Tue, Apr 26, 2022 at 10:32 PM Naoya Horiguchi
+<naoya.horiguchi@linux.dev> wrote:
+>
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>
+> The following VM_BUG_ON_FOLIO() is triggered when memory error event
+> happens on the (thp/folio) pages which are about to be freed:
+>
+>   [ 1160.232771] page:00000000b36a8a0f refcount:1 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
+>   [ 1160.236916] page:00000000b36a8a0f refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x16a000
+>   [ 1160.240684] flags: 0x57ffffc0800000(hwpoison|node=1|zone=2|lastcpupid=0x1fffff)
+>   [ 1160.243458] raw: 0057ffffc0800000 dead000000000100 dead000000000122 0000000000000000
+>   [ 1160.246268] raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+>   [ 1160.249197] page dumped because: VM_BUG_ON_FOLIO(!folio_test_large(folio))
+>   [ 1160.251815] ------------[ cut here ]------------
+>   [ 1160.253438] kernel BUG at include/linux/mm.h:788!
+>   [ 1160.256162] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+>   [ 1160.258172] CPU: 2 PID: 115368 Comm: mceinj.sh Tainted: G            E     5.18.0-rc1-v5.18-rc1-220404-2353-005-g83111+ #3
+>   [ 1160.262049] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
+>   [ 1160.265103] RIP: 0010:dump_page.cold+0x27e/0x2bd
+>   [ 1160.266757] Code: fe ff ff 48 c7 c6 81 f1 5a 98 e9 4c fe ff ff 48 c7 c6 a1 95 59 98 e9 40 fe ff ff 48 c7 c6 50 bf 5a 98 48 89 ef e8 9d 04 6d ff <0f> 0b 41 f7 c4 ff 0f 00 00 0f 85 9f fd ff ff 49 8b 04 24 a9 00 00
+>   [ 1160.273180] RSP: 0018:ffffaa2c4d59fd18 EFLAGS: 00010292
+>   [ 1160.274969] RAX: 000000000000003e RBX: 0000000000000001 RCX: 0000000000000000
+>   [ 1160.277263] RDX: 0000000000000001 RSI: ffffffff985995a1 RDI: 00000000ffffffff
+>   [ 1160.279571] RBP: ffffdc9c45a80000 R08: 0000000000000000 R09: 00000000ffffdfff
+>   [ 1160.281794] R10: ffffaa2c4d59fb08 R11: ffffffff98940d08 R12: ffffdc9c45a80000
+>   [ 1160.283920] R13: ffffffff985b6f94 R14: 0000000000000000 R15: ffffdc9c45a80000
+>   [ 1160.286641] FS:  00007eff54ce1740(0000) GS:ffff99c67bd00000(0000) knlGS:0000000000000000
+>   [ 1160.289498] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   [ 1160.291106] CR2: 00005628381a5f68 CR3: 0000000104712003 CR4: 0000000000170ee0
+>   [ 1160.293031] Call Trace:
+>   [ 1160.293724]  <TASK>
+>   [ 1160.294334]  get_hwpoison_page+0x47d/0x570
+>   [ 1160.295474]  memory_failure+0x106/0xaa0
+>   [ 1160.296474]  ? security_capable+0x36/0x50
+>   [ 1160.297524]  hard_offline_page_store+0x43/0x80
+>   [ 1160.298684]  kernfs_fop_write_iter+0x11c/0x1b0
+>   [ 1160.299829]  new_sync_write+0xf9/0x160
+>   [ 1160.300810]  vfs_write+0x209/0x290
+>   [ 1160.301835]  ksys_write+0x4f/0xc0
+>   [ 1160.302718]  do_syscall_64+0x3b/0x90
+>   [ 1160.303664]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>   [ 1160.304981] RIP: 0033:0x7eff54b018b7
+>
+> As shown in the RIP address, this VM_BUG_ON in folio_entire_mapcount() is
+> called from dump_page("hwpoison: unhandlable page") in get_any_page().
+> The below explains the mechanism of the race:
+>
+>   CPU 0                                       CPU 1
+>
+>     memory_failure
+>       get_hwpoison_page
+>         get_any_page
+>           dump_page
+>             compound = PageCompound
+>                                                 free_pages_prepare
+>                                                   page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP
+>             folio_entire_mapcount
+>               VM_BUG_ON_FOLIO(!folio_test_large(folio))
+>
+> So replace dump_page() with safer one, pr_err().
+>
+> Fixes: 74e8ee4708a8 ("mm: Turn head_compound_mapcount() into folio_entire_mapcount()")
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+> ChangeLog v1 -> v2:
+> - v1: https://lore.kernel.org/linux-mm/20220414235950.840409-1-naoya.horiguchi@linux.dev/T/#u
+> - update caller side instead of changing dump_page().
+> ---
+>  mm/memory-failure.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 35e11d6bea4a..0e1453514a2b 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1270,7 +1270,7 @@ static int get_any_page(struct page *p, unsigned long flags)
+>         }
+>  out:
+>         if (ret == -EIO)
+> -               dump_page(p, "hwpoison: unhandlable page");
+> +               pr_err("Memory failure: %#lx: unhandlable page.\n", page_to_pfn(p));
 
-Yes, and I think that is also very useful with LTO. So, that would be a=20
-good one to consider in the longer term.
+I think dump_page() is helpful to tell the users more information
+about the unhandlable page, I'm ok with this fix for now, but should
+we consider having a memory failure safe dump_page() in the future?
 
-For now, I have posted a v2 of this series with your comments addressed. =20
-It is working well in my tests on powerpc in the different=20
-configurations, including the older elf abi v1 that uses -pg. If it=20
-looks ok to you, we can use this approach for now.
-
-
-Thanks,
-Naveen
+>
+>         return ret;
+>  }
+> --
+> 2.25.1
+>
+>

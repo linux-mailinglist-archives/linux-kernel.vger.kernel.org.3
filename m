@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5214551308D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32F751308B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbiD1KD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S233015AbiD1KEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 06:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiD1KDL (ORCPT
+        with ESMTP id S231293AbiD1KDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:03:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E847B53F8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:49:45 -0700 (PDT)
+        Thu, 28 Apr 2022 06:03:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59614B646D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651139384;
+        s=mimecast20190719; t=1651139391;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jgkRF61wIuvSMOhgVZ5X8ahGDAKVGL68WuFaxWkhlhA=;
-        b=aNxRLdrd9+jDWjLr/rJGsch86jZwaJO9CMSaHz81VQrSZTXCDLe1tLwhWsZ5SazyJeF7qT
-        i2gpPkIprikyaTjJIB8A9SbO1ZFpz+zSdxuOZS5EwUmPKi0T/yDCD4rLSpPpXqGE4oHl0p
-        U2V3xI70AGeFtD45raLda+qMDj6WsWo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=J/tFn7zfKbOP49Zn7udrRkKElxW0ATnp0QB1hw1Lcmc=;
+        b=ChJcR8mDTAwGDq0l/U3u3Hs84dsmhdIhJC3QxfMZa+aJNpK6w7yh+k3SG59wZRzcA+JMkT
+        ejyiSGClc+WVZZe54n+WeuZtdAy1jal/cCUTkDAzc/Imuc0iLbrAwNPy5p7ACdT10Kg+QR
+        waNjoLR8g1jI8jbbxhbL97D0r7h8xwk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-kkDnFZJJOKufPWGDTyOTbg-1; Thu, 28 Apr 2022 05:49:43 -0400
-X-MC-Unique: kkDnFZJJOKufPWGDTyOTbg-1
-Received: by mail-wm1-f69.google.com with SMTP id bh7-20020a05600c3d0700b003940829b48dso1673192wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:49:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=jgkRF61wIuvSMOhgVZ5X8ahGDAKVGL68WuFaxWkhlhA=;
-        b=NSW96xVjIeOHHd5jOUnwk1SR9jHfkOO2zWCx+1tmGJ4oE/0A3bvzRzEe81//ul1LX0
-         yeDlvFcrm189hvAPNMfnTXUnNNrD87J63FDZC1gUrEcTRd+AlFvcS1x/JxIK4mtYhHHb
-         xvtk6MY25kPXftZaFeGhu/a1SVgek1Zdl6s03UXyXqiUzGsigNgf8d0vcJ9Ks25RJwpp
-         bnT6srqivkFpTQJJ56/K5wXV5U45YKwP9qUdQvDuQVzB4Xed11ZtV15tYvJWkIofsAgF
-         TQ4jD1mJv4S/j6ENVdP7GhKFmgeXRk3l6Rmnd7OTe+5HyyWCLZo1cdvwBivRSwHpiX4z
-         gw4Q==
-X-Gm-Message-State: AOAM533uQw3rOKKhymrZ0DbesARgja3toQZQ+HPyO6lJuP6kknfUH0f3
-        rusXETaT+YuWcWLs1YopvXTziO6I1KjuOGPbZlqzWmFvFmfqzV4DBapCkIbv8jDI2SZ6aVeaXTq
-        1Z33QGk1NYBKDalBCixI8VqnT
-X-Received: by 2002:a05:600c:3785:b0:38e:bca8:f0c1 with SMTP id o5-20020a05600c378500b0038ebca8f0c1mr38370067wmr.56.1651139381487;
-        Thu, 28 Apr 2022 02:49:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxo3BJ8TK15hKBdUBzkju/9wd6KFXyCwXPgPHm9uxcSwg6sT+cbKtpZSGfx9bkszO1hbJcfYw==
-X-Received: by 2002:a05:600c:3785:b0:38e:bca8:f0c1 with SMTP id o5-20020a05600c378500b0038ebca8f0c1mr38370050wmr.56.1651139381249;
-        Thu, 28 Apr 2022 02:49:41 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
-        by smtp.gmail.com with ESMTPSA id e30-20020adf9bde000000b0020aeafa418dsm4410144wrc.14.2022.04.28.02.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 02:49:40 -0700 (PDT)
-Message-ID: <6369fd69-5b59-1aa4-461e-237b3f128925@redhat.com>
-Date:   Thu, 28 Apr 2022 11:49:39 +0200
+ us-mta-470-tk-d7XwQNoyX_swQ9pv9Aw-1; Thu, 28 Apr 2022 05:49:47 -0400
+X-MC-Unique: tk-d7XwQNoyX_swQ9pv9Aw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 670BA3C0E188;
+        Thu, 28 Apr 2022 09:49:47 +0000 (UTC)
+Received: from starship (unknown [10.40.192.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 67BFA567628;
+        Thu, 28 Apr 2022 09:49:45 +0000 (UTC)
+Message-ID: <79a0c1205b646ead0b2128147cb7df4198646b99.camel@redhat.com>
+Subject: Re: [PATCH v2 08/11] KVM: x86: Print error code in exception
+ injection tracepoint iff valid
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Date:   Thu, 28 Apr 2022 12:49:44 +0300
+In-Reply-To: <20220423021411.784383-9-seanjc@google.com>
+References: <20220423021411.784383-1-seanjc@google.com>
+         <20220423021411.784383-9-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v7 1/8] x86/crash: fix minor typo/bug in debug message
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220413164237.20845-1-eric.devolder@oracle.com>
- <20220413164237.20845-2-eric.devolder@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220413164237.20845-2-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.04.22 18:42, Eric DeVolder wrote:
-> The pr_debug() intends to display the memsz member, but the
-> parameter is actually the bufsz member (which is already
-> displayed). Correct this to display memsz value.
+On Sat, 2022-04-23 at 02:14 +0000, Sean Christopherson wrote:
+> Print the error code in the exception injection tracepoint if and only if
+> the exception has an error code.  Define the entire error code sequence
+> as a set of formatted strings, print empty strings if there's no error
+> code, and abuse __print_symbolic() by passing it an empty array to coerce
+> it into printing the error code as a hex string.
 > 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
+>  arch/x86/kvm/trace.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+> index d07428e660e3..385436d12024 100644
+> --- a/arch/x86/kvm/trace.h
+> +++ b/arch/x86/kvm/trace.h
+> @@ -376,10 +376,11 @@ TRACE_EVENT(kvm_inj_exception,
+>  		__entry->reinjected	= reinjected;
+>  	),
+>  
+> -	TP_printk("%s (0x%x)%s",
+> +	TP_printk("%s%s%s%s%s",
+>  		  __print_symbolic(__entry->exception, kvm_trace_sym_exc),
+> -		  /* FIXME: don't print error_code if not present */
+> -		  __entry->has_error ? __entry->error_code : 0,
+> +		  !__entry->has_error ? "" : " (",
+> +		  !__entry->has_error ? "" : __print_symbolic(__entry->error_code, { }),
+> +		  !__entry->has_error ? "" : ")",
+>  		  __entry->reinjected ? " [reinjected]" : "")
+>  );
+>  
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
 
 
--- 
-Thanks,
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-David / dhildenb
+Good idea to do it in few more places, I'll keep that in mind.
+
+Best regards,
+	Maxim Levitsky
 

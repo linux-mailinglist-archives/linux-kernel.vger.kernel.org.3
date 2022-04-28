@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53D15132ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1733513312
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345799AbiD1L7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S1345894AbiD1L74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240712AbiD1L7I (ORCPT
+        with ESMTP id S1345818AbiD1L7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:59:08 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBB4888D8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:55:54 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id k14so3829782pga.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nNaL4oWbSaoZkugEaXO//WHohZesy6t6T5egzcvNBJU=;
-        b=UE5paQOXIHvF+isxo/nkvMlIFVMoOhZoeSphPe2amLG90ZyGcyfxpF4r3SAfjM3I3l
-         FSYZoVv6EmF4O+hzZ60QiNtYcspZ6TeKJAQsXgKt7PBF7yzn9IpVuWAbQ4TKvgAlrRRR
-         tJHf/NwVNB+it9VNHHhpIpA99ZfIfetWmM6au/TMlwiZizoHaLGf5eQOwUwViLrN7vpN
-         yR8tqWZCedbNBJt5wGh+Zw2Rg35LZgIpwIArw3gZtoARF0DZlPZHGyLrIaQLJAwqM0PK
-         AHUPTFgemhWKs6bzsmiZi0rIG9eshdOgu0rbj+uJFTxf6sA5ZTFLNPC1L74aSxUB6D3U
-         r7Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nNaL4oWbSaoZkugEaXO//WHohZesy6t6T5egzcvNBJU=;
-        b=pHfKW7YxaxjQzmfc5tt77T926v0rPhBbuEnazSRM9nBpNImKP915EfqZg9OEsf0pWr
-         yHz81dlbw3IfUSSFD0ToyZ0XLI7LC98x2fKa+3wtZYnCUI1v2bMyPusQCtojopcHLlc7
-         q1EBaZ8qXHwiXsR80W1twuEeQ7vUegwfzCGUjW8FnoeBiaWA0pm9KPDru/OhJg2jN1//
-         zjBCLkAPQXvwKYfqAITAuqvGv4yCZn2gbvtxCA43s8yPJqI8UgPMBPHmjUvAvBZ6y0iF
-         ayxvSNapC0CBF9ovyT/bfOlsSXH0iKL8wxOhIa76xkrPvA8JplWDCYKrjTWN5xrF6NSC
-         FzPw==
-X-Gm-Message-State: AOAM530AuHNC1pWzEpsszBIAeR9buvJFI0dV4+/QTfzfEa4VOQ2u+ZcD
-        OKuCw76S16Iohsv6kMlzQcKBhMXN85U=
-X-Google-Smtp-Source: ABdhPJxM4TdmZDJGCeZu3o4bX2/jcid6E3rTBlyeeKlcZ3F9o6XszzHtsfq7fRTAYiVk6TSn/Uvebg==
-X-Received: by 2002:a62:5ec6:0:b0:50d:a467:3cb7 with SMTP id s189-20020a625ec6000000b0050da4673cb7mr569675pfb.85.1651146953687;
-        Thu, 28 Apr 2022 04:55:53 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id q2-20020a17090a064200b001cd498dc152sm12244744pje.2.2022.04.28.04.55.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 04:55:53 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 20:55:51 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     openrisc@lists.librecores.org, linux-kernel@vger.kernel.org,
-        Peter Maydell <peter.maydell@linaro.org>
-Subject: Re: [PATCH] openrisc: define nop command for simulator reboot
-Message-ID: <YmqAx31dtXCaNn7R@antec>
-References: <20220428111139.1330966-1-Jason@zx2c4.com>
+        Thu, 28 Apr 2022 07:59:44 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD8188B0A;
+        Thu, 28 Apr 2022 04:56:29 -0700 (PDT)
+X-UUID: 04ac1cfa536d41f2a8db36c268c09267-20220428
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4789b727-6664-4b2b-bce4-c797dc9d9db8,OB:20,L
+        OB:40,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham
+        ,ACTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:4789b727-6664-4b2b-bce4-c797dc9d9db8,OB:20,LOB
+        :40,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D
+        ,ACTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:d5590c2f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:d7c54ea7e6a2,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 04ac1cfa536d41f2a8db36c268c09267-20220428
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1427020110; Thu, 28 Apr 2022 19:56:23 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 28 Apr 2022 19:56:22 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 28 Apr 2022 19:56:21 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Apr 2022 19:56:21 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <p.zabel@pengutronix.de>,
+        <angelogioacchino.delregno@collabora.com>,
+        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
+        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V5 00/16] Cleanup MediaTek clk reset drivers and support MT8192/MT8195
+Date:   Thu, 28 Apr 2022 19:56:03 +0800
+Message-ID: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428111139.1330966-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 01:11:39PM +0200, Jason A. Donenfeld wrote:
-> The simulator defines `l.nop 1` for shutdown, but doesn't have anything
-> for reboot. Use 13 for this, which is currently unused, dubbed
-> `NOP_REBOOT`.
-> 
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Peter Maydell <peter.maydell@linaro.org>
-> Link: https://lore.kernel.org/all/YmnaDUpVI5ihgvg6@zx2c4.com/
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  arch/openrisc/kernel/process.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
-> index 3c0c91bcdcba..4cce95fa6eb5 100644
-> --- a/arch/openrisc/kernel/process.c
-> +++ b/arch/openrisc/kernel/process.c
-> @@ -52,6 +52,8 @@ void machine_restart(char *cmd)
->  {
->  	do_kernel_restart(cmd);
->  
-> +	__asm__("l.nop 13");
-> +
->  	/* Give a grace period for failure to restart of 1s */
->  	mdelay(1000);
->  
-> -- 
-> 2.35.1
+In this series, we cleanup MediaTek clock reset drivers in clk/mediatek
+folder. MediaTek clock reset driver is used to provide reset control
+of modules controlled in clk, like infra_ao.
 
-This seems fair, probably it would be good to have a comment mentioninmg what
-the nop is for, fyi for context these are the nop numbers used to control
-simulations.
+Changes for V5:
+1. Add all infra reset bits for MT8192 and MT8195.
+2. Fix reviewers' comments.
 
-    #define NOP_NOP          0x0000      /* Normal nop instruction */
-    #define NOP_EXIT         0x0001      /* End of simulation */
-    #define NOP_REPORT       0x0002      /* Simple report */
-    /*#define NOP_PRINTF       0x0003       Simprintf instruction (obsolete)*/
-    #define NOP_PUTC         0x0004      /* JPB: Simputc instruction */
-    #define NOP_CNT_RESET    0x0005      /* Reset statistics counters */
-    #define NOP_GET_TICKS    0x0006      /* JPB: Get # ticks running */
-    #define NOP_GET_PS       0x0007      /* JPB: Get picosecs/cycle */
-    #define NOP_TRACE_ON     0x0008      /* Turn on tracing */
-    #define NOP_TRACE_OFF    0x0009      /* Turn off tracing */
-    #define NOP_RANDOM       0x000a      /* Return 4 random bytes */
-    #define NOP_OR1KSIM      0x000b      /* Return non-zero if this is Or1ksim */
-    #define NOP_EXIT_SILENT  0x000c      /* End of simulation, quiet version */
-    /* New! */
-    #define NOP_RESET        0x000d      /* Reset the cpu */
+Changes for V4:
+1. Abandon the implementation of reset-cell = 2, and use reset index to
+   determine which reset bit is used.
+2. Add documentation for enum/structure/function in reset.h.
+3. Combine binding/drvier support patch for MT8192 and MT8195.
+4. The MT8195 DTS is accepted by Matthias, and I add new DTS patch to
+   support infracfg_ao reset for MT8195. The DTS of MT8195 is still
+   not merged into mainline. Please refer to [1].
 
-I will queue this once we update the spec to define some of these, I am thinking
-if qemu should allow for the shutdown to work in user mode.
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=for-next&id=37f2582883be7218dc69f9af135959a8e93de223
 
-BTW, are you working specifically on openrisc? Or just setting up test
-environments for all architectures?
+Changes for V3:
+1. Modify drivers for reviewers' comments.
+2. Add dt-binding patch for MT8192/MT8195 infra.
+3. Add reset property of infra node for MT8192.
+4. Use original function for simple operation.
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+Changes for V2:
+1. Modify drivers for reviewers' comments.
+2. Use simple reset to replace v1.
+3. Recover v2 to set_clr.
+4. Separate error handling to another patch.
+5. Add support for input offset and bit from DT.
+6. Add support for MT8192 and MT8195.
+
+Rex-BC Chen (16):
+  clk: mediatek: reset: Add reset.h
+  clk: mediatek: reset: Fix written reset bit offset
+  clk: mediatek: reset: Refine and reorder functions in reset.c
+  clk: mediatek: reset: Extract common drivers to update function
+  clk: mediatek: reset: Merge and revise reset register function
+  clk: mediatek: reset: Revise structure to control reset register
+  clk: mediatek: reset: Support nonsequence base offsets of reset registers
+  clk: mediatek: reset: Change return type for clock reset register function
+  clk: mediatek: reset: Add new register reset function with device
+  clk: mediatek: reset: Add reset support for simple probe
+  dt-bindings: arm: mediatek: Add #reset-cells property for MT8192/MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset bit for MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset bit for MT8192
+  clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8192
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8195
+
+ .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
+ .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701.c             |  22 ++-
+ drivers/clk/mediatek/clk-mt2712.c             |  22 ++-
+ drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt7622.c             |  22 ++-
+ drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt8135.c             |  22 ++-
+ drivers/clk/mediatek/clk-mt8173.c             |  22 ++-
+ drivers/clk/mediatek/clk-mt8183.c             |  18 +-
+ drivers/clk/mediatek/clk-mt8192.c             |  18 ++
+ drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  15 ++
+ drivers/clk/mediatek/clk-mtk.c                |   7 +
+ drivers/clk/mediatek/clk-mtk.h                |   9 +-
+ drivers/clk/mediatek/reset.c                  | 172 ++++++++++++------
+ drivers/clk/mediatek/reset.h                  |  77 ++++++++
+ include/dt-bindings/reset/mt8192-resets.h     | 163 +++++++++++++++++
+ include/dt-bindings/reset/mt8195-resets.h     | 170 +++++++++++++++++
+ 25 files changed, 759 insertions(+), 94 deletions(-)
+ create mode 100644 drivers/clk/mediatek/reset.h
+
+-- 
+2.18.0
 

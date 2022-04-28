@@ -2,219 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A6B513999
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2C25139A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349909AbiD1QXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S236342AbiD1QZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349894AbiD1QXC (ORCPT
+        with ESMTP id S235036AbiD1QZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:23:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390F35D1AA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651162786;
+        Thu, 28 Apr 2022 12:25:15 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5A269718
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:21:59 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1651162915;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vq8RC9NK7ljExipax9OnZpDPFBAwe7JTpMhljndmQRY=;
-        b=cM0oEUH8AtVPBpQ2kISTpmcxqOc9F2y8HTVj3jHYEcu6l+pXCbELA4HvLu/Azmwzq2aH1H
-        XQJcY1YhdE1aVlDA0acSKvUmWcP4OoxAAXiPO3puxpJNErjM3h7imsO0QMV/XHJImGeZ0g
-        it6096EDUV4H2KRkTcmW48rQbfSj3zA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-mbQBnuSlOcSLVpjC3O-Z2A-1; Thu, 28 Apr 2022 12:19:44 -0400
-X-MC-Unique: mbQBnuSlOcSLVpjC3O-Z2A-1
-Received: by mail-qv1-f70.google.com with SMTP id 33-20020a0c8024000000b0043d17ffb0bdso4057072qva.18
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 09:19:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vq8RC9NK7ljExipax9OnZpDPFBAwe7JTpMhljndmQRY=;
-        b=O44PWe5Vu3sm6Y35DlWA7HRnTgVhJhWcYnEJGmUDummLVk45yyXaqjXDnv1ZTMGAcj
-         /TgT3ok0vq0nzi11kqZn9ZL37G+DqQQMZvQHIyLMeFzMY2c5U4phBnQFtpY+LOQhQMwO
-         zTU6/t6KHbIcVC/6QDLE2cBdcn5fGBo25tOlI3OpNsWWUSJG+IxttpuSLwXSA+1BO8vy
-         jCuukD/y8pOZmAxDMF8ilJleBgSjAYpzf6Iv37+BWppvWTfl6N5XARMnVWEYzV+kb3h6
-         vRDuF5OtvjCMwjt2qSH71TP/5gwaQYL1Zq2+scIbfUW9Hu49QIWBiZIPqx+7YmarQlnt
-         XhbA==
-X-Gm-Message-State: AOAM532R/lzrpqDgMBHjND49k/vh4Cbn+UqREU5kHPdDuZyyjk6woLjp
-        WetewNVHZaiRaBT4kEbVgxxhfshhTge7b+8/MAmAVSm0txcr/HHPjrzT0sziReRfhtSFsmtLkcF
-        iNCogcQORfVSkKF0iphrjGVp8
-X-Received: by 2002:a05:620a:2697:b0:699:cca7:f8b2 with SMTP id c23-20020a05620a269700b00699cca7f8b2mr20439364qkp.738.1651162784400;
-        Thu, 28 Apr 2022 09:19:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz89Zo8kITvvA07ZT8XsQZFb2wfFp3rudks9OXnYWZ3EAYrQs+0vm9GqeZHvObJXgK9VgXxMg==
-X-Received: by 2002:a05:620a:2697:b0:699:cca7:f8b2 with SMTP id c23-20020a05620a269700b00699cca7f8b2mr20439351qkp.738.1651162784135;
-        Thu, 28 Apr 2022 09:19:44 -0700 (PDT)
-Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05622a138e00b002f335c3dbf2sm197795qtk.37.2022.04.28.09.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 09:19:43 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 11:19:41 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] soc: qcom: rpmhpd: add sc8280xp & sa8540p rpmh
- power-domains
-Message-ID: <20220428161941.mp53l4puglpei6kt@halaneylaptop>
-References: <20220426233508.1762345-1-bjorn.andersson@linaro.org>
- <20220426233508.1762345-4-bjorn.andersson@linaro.org>
- <20220427123835.hmfdu66ut3uvvtjp@halaneylaptop>
- <Ymq3QfFnSplnEBRK@ripper>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cbOwwdKzIP/GSDsAkRZ0QuBwdx3oi7IvMcPM3Ptuuw8=;
+        b=scASAs6/0AqVLS6ziYbW4E0ln5SrqzL6noGVkbxyUMmvJ4S75halbnS0PTPlF3MgXQb38h
+        M5FWvrAShH0gZSsCp3y5pfjG08KzArs/uKNEJ+CGpxxuFuvqNLsegIUI9pGSFVVr8F7hvz
+        jzXqJELhG1/eTXzUrcwBtvuJ5xyM/OM=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH 1/3] kasan: clean up comments in internal kasan.h
+Date:   Thu, 28 Apr 2022 18:21:50 +0200
+Message-Id: <3167cbec7a82704c1ed2c6bfe85b77534a836fdc.1651162840.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ymq3QfFnSplnEBRK@ripper>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 08:48:17AM -0700, Bjorn Andersson wrote:
-> On Wed 27 Apr 05:38 PDT 2022, Andrew Halaney wrote:
-> 
-> > On Tue, Apr 26, 2022 at 04:35:08PM -0700, Bjorn Andersson wrote:
-> > > The Qualcomm sc8280xp platform has 13 and the sa8540p platform has 11
-> > > power-domains. Add compatibles, the typically used ones power-domains
-> > > and their relevant active-only variants, to the RPMh power-domain
-> > > driver.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > > 
-> > > Changes since v1:
-> > > - Added QPHY
-> > > - Split out sa8540
-> > > - Sorted the entries alphabetically
-> > > 
-> > >  drivers/soc/qcom/rpmhpd.c | 53 +++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 53 insertions(+)
-> > > 
-> > > diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-> > > index f8d28e902942..05fff8691ee3 100644
-> > > --- a/drivers/soc/qcom/rpmhpd.c
-> > > +++ b/drivers/soc/qcom/rpmhpd.c
-> > > @@ -180,6 +180,36 @@ static struct rpmhpd mxc_ao = {
-> > >  	.res_name = "mxc.lvl",
-> > >  };
-> > >  
-> > > +static struct rpmhpd nsp = {
-> > > +	.pd = { .name = "nsp", },
-> > > +	.res_name = "nsp.lvl",
-> > > +};
-> > > +
-> > > +static struct rpmhpd qphy = {
-> > > +	.pd = { .name = "qphy", },
-> > > +	.res_name = "qphy.lvl",
-> > > +};
-> > > +
-> > > +/* SA8540P RPMH powerdomains */
-> > > +static struct rpmhpd *sa8540p_rpmhpds[] = {
-> > > +	[SC8280XP_CX] = &cx,
-> > > +	[SC8280XP_CX_AO] = &cx_ao,
-> > > +	[SC8280XP_EBI] = &ebi,
-> > > +	[SC8280XP_GFX] = &gfx,
-> > > +	[SC8280XP_LCX] = &lcx,
-> > > +	[SC8280XP_LMX] = &lmx,
-> > > +	[SC8280XP_MMCX] = &mmcx,
-> > > +	[SC8280XP_MMCX_AO] = &mmcx_ao,
-> > > +	[SC8280XP_MX] = &mx,
-> > > +	[SC8280XP_MX_AO] = &mx_ao,
-> > > +	[SC8280XP_NSP] = &nsp,
-> > > +};
-> > > +
-> > > +static const struct rpmhpd_desc sa8540p_desc = {
-> > > +	.rpmhpds = sa8540p_rpmhpds,
-> > > +	.num_pds = ARRAY_SIZE(sa8540p_rpmhpds),
-> > > +};
-> > > +
-> > >  /* SDM845 RPMH powerdomains */
-> > >  static struct rpmhpd *sdm845_rpmhpds[] = {
-> > >  	[SDM845_CX] = &cx_w_mx_parent,
-> > > @@ -378,10 +408,33 @@ static const struct rpmhpd_desc sc8180x_desc = {
-> > >  	.num_pds = ARRAY_SIZE(sc8180x_rpmhpds),
-> > >  };
-> > >  
-> > > +/* SC8280xp RPMH powerdomains */
-> > > +static struct rpmhpd *sc8280xp_rpmhpds[] = {
-> > > +	[SC8280XP_CX] = &cx,
-> > > +	[SC8280XP_CX_AO] = &cx_ao,
-> > > +	[SC8280XP_EBI] = &ebi,
-> > > +	[SC8280XP_GFX] = &gfx,
-> > > +	[SC8280XP_LCX] = &lcx,
-> > > +	[SC8280XP_LMX] = &lmx,
-> > > +	[SC8280XP_MMCX] = &mmcx,
-> > > +	[SC8280XP_MMCX_AO] = &mmcx_ao,
-> > > +	[SC8280XP_MX] = &mx,
-> > > +	[SC8280XP_MX_AO] = &mx_ao,
-> > > +	[SC8280XP_NSP] = &nsp,
-> > > +	[SC8280XP_QPHY] = &qphy,
-> > > +};
-> > 
-> > The commit messages mention sc8280xp having 13 power domains, but here I
-> > only count 12. Good chance I'm just missing something obvious (not
-> > familiar with using power domains or rpmh) but I thought I should
-> > highlight it in case that was an error.
-> > 
-> 
-> The "typically used ones" in the commit message "captures" that. Further
-> more _AO is just a variant of the non-_AO resources, referring to votes
-> that should only apply when the CPU subsystem is not power collapsed.
-> 
-> So what you have in this list is 10 power domains.
-> 
-> I added defines for all 13 in the DT binding, so comparing with that
-> you'll see that the missing ones are DDR, MSS and XO. I don't see how we
-> would use these from Linux today. So let's postpone adding them until we
-> have a use case.
-> 
-> > I attempted to find where this sort of thing is defined downstream, but
-> > failed :(
-> > 
-> 
-> In direwolf-regulators.dtsi you'll find entries with qcom,resource-name
-> of "*.lvl". These resource names are matches against the Command DB
-> registry, which you can dump using the cmd-db file in debugfs.
-> 
-> Regards,
-> Bjorn
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Thanks, I really appreciate the explanation. This makes sense to me.
+Clean up comments in mm/kasan/kasan.h: clarify, unify styles, fix
+punctuation, etc.
 
-> 
-> > Thanks,
-> > Andrew
-> > 
-> > > +
-> > > +static const struct rpmhpd_desc sc8280xp_desc = {
-> > > +	.rpmhpds = sc8280xp_rpmhpds,
-> > > +	.num_pds = ARRAY_SIZE(sc8280xp_rpmhpds),
-> > > +};
-> > > +
-> > >  static const struct of_device_id rpmhpd_match_table[] = {
-> > > +	{ .compatible = "qcom,sa8540p-rpmhpd", .data = &sa8540p_desc },
-> > >  	{ .compatible = "qcom,sc7180-rpmhpd", .data = &sc7180_desc },
-> > >  	{ .compatible = "qcom,sc7280-rpmhpd", .data = &sc7280_desc },
-> > >  	{ .compatible = "qcom,sc8180x-rpmhpd", .data = &sc8180x_desc },
-> > > +	{ .compatible = "qcom,sc8280xp-rpmhpd", .data = &sc8280xp_desc },
-> > >  	{ .compatible = "qcom,sdm845-rpmhpd", .data = &sdm845_desc },
-> > >  	{ .compatible = "qcom,sdx55-rpmhpd", .data = &sdx55_desc},
-> > >  	{ .compatible = "qcom,sdx65-rpmhpd", .data = &sdx65_desc},
-> > > -- 
-> > > 2.35.1
-> > > 
-> > 
-> 
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ mm/kasan/kasan.h | 71 +++++++++++++++++++++---------------------------
+ 1 file changed, 31 insertions(+), 40 deletions(-)
+
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index b01b4bbe0409..13681516dc08 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -42,6 +42,7 @@ static inline bool kasan_sync_fault_possible(void)
+ {
+ 	return kasan_mode == KASAN_MODE_SYNC || kasan_mode == KASAN_MODE_ASYMM;
+ }
++
+ #else
+ 
+ static inline bool kasan_stack_collection_enabled(void)
+@@ -73,47 +74,41 @@ static inline bool kasan_sync_fault_possible(void)
+ #define KASAN_MEMORY_PER_SHADOW_PAGE	(KASAN_GRANULE_SIZE << PAGE_SHIFT)
+ 
+ #ifdef CONFIG_KASAN_GENERIC
+-#define KASAN_FREE_PAGE         0xFF  /* page was freed */
+-#define KASAN_PAGE_REDZONE      0xFE  /* redzone for kmalloc_large allocations */
+-#define KASAN_KMALLOC_REDZONE   0xFC  /* redzone inside slub object */
+-#define KASAN_KMALLOC_FREE      0xFB  /* object was freed (kmem_cache_free/kfree) */
+-#define KASAN_VMALLOC_INVALID   0xF8  /* unallocated space in vmapped page */
++#define KASAN_FREE_PAGE         0xFF  /* freed page */
++#define KASAN_PAGE_REDZONE      0xFE  /* redzone for kmalloc_large allocation */
++#define KASAN_KMALLOC_REDZONE   0xFC  /* redzone for slab object */
++#define KASAN_KMALLOC_FREE      0xFB  /* freed slab object */
++#define KASAN_VMALLOC_INVALID   0xF8  /* inaccessible space in vmap area */
+ #else
+ #define KASAN_FREE_PAGE         KASAN_TAG_INVALID
+ #define KASAN_PAGE_REDZONE      KASAN_TAG_INVALID
+ #define KASAN_KMALLOC_REDZONE   KASAN_TAG_INVALID
+ #define KASAN_KMALLOC_FREE      KASAN_TAG_INVALID
+-#define KASAN_VMALLOC_INVALID   KASAN_TAG_INVALID /* only for SW_TAGS */
++#define KASAN_VMALLOC_INVALID   KASAN_TAG_INVALID /* only used for SW_TAGS */
+ #endif
+ 
+ #ifdef CONFIG_KASAN_GENERIC
+ 
+-#define KASAN_KMALLOC_FREETRACK 0xFA  /* object was freed and has free track set */
++#define KASAN_KMALLOC_FREETRACK 0xFA  /* freed slab object with free track */
+ #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
+ 
+-/*
+- * Stack redzone shadow values
+- * (Those are compiler's ABI, don't change them)
+- */
++/* Stack redzone shadow values. Compiler's ABI, do not change. */
+ #define KASAN_STACK_LEFT        0xF1
+ #define KASAN_STACK_MID         0xF2
+ #define KASAN_STACK_RIGHT       0xF3
+ #define KASAN_STACK_PARTIAL     0xF4
+ 
+-/*
+- * alloca redzone shadow values
+- */
++/* alloca redzone shadow values. */
+ #define KASAN_ALLOCA_LEFT	0xCA
+ #define KASAN_ALLOCA_RIGHT	0xCB
+ 
++/* alloca redzone size. Compiler's ABI, do not change. */
+ #define KASAN_ALLOCA_REDZONE_SIZE	32
+ 
+-/*
+- * Stack frame marker (compiler ABI).
+- */
++/* Stack frame marker. Compiler's ABI, do not change. */
+ #define KASAN_CURRENT_STACK_FRAME_MAGIC 0x41B58AB3
+ 
+-/* Don't break randconfig/all*config builds */
++/* Dummy value to avoid breaking randconfig/all*config builds. */
+ #ifndef KASAN_ABI_VERSION
+ #define KASAN_ABI_VERSION 1
+ #endif
+@@ -141,21 +136,21 @@ struct kasan_report_info {
+ 	unsigned long ip;
+ };
+ 
+-/* The layout of struct dictated by compiler */
++/* Do not change the struct layout: compiler's ABI. */
+ struct kasan_source_location {
+ 	const char *filename;
+ 	int line_no;
+ 	int column_no;
+ };
+ 
+-/* The layout of struct dictated by compiler */
++/* Do not change the struct layout: compiler's ABI. */
+ struct kasan_global {
+ 	const void *beg;		/* Address of the beginning of the global variable. */
+ 	size_t size;			/* Size of the global variable. */
+-	size_t size_with_redzone;	/* Size of the variable + size of the red zone. 32 bytes aligned */
++	size_t size_with_redzone;	/* Size of the variable + size of the redzone. 32 bytes aligned. */
+ 	const void *name;
+ 	const void *module_name;	/* Name of the module where the global variable is declared. */
+-	unsigned long has_dynamic_init;	/* This needed for C++ */
++	unsigned long has_dynamic_init;	/* This needed for C++. */
+ #if KASAN_ABI_VERSION >= 4
+ 	struct kasan_source_location *location;
+ #endif
+@@ -164,9 +159,7 @@ struct kasan_global {
+ #endif
+ };
+ 
+-/**
+- * Structures to keep alloc and free tracks *
+- */
++/* Structures for keeping alloc and free tracks. */
+ 
+ #define KASAN_STACK_DEPTH 64
+ 
+@@ -183,11 +176,8 @@ struct kasan_track {
+ 
+ struct kasan_alloc_meta {
+ 	struct kasan_track alloc_track;
++	/* Generic mode stores free track in kasan_free_meta. */
+ #ifdef CONFIG_KASAN_GENERIC
+-	/*
+-	 * The auxiliary stack is stored into struct kasan_alloc_meta.
+-	 * The free stack is stored into struct kasan_free_meta.
+-	 */
+ 	depot_stack_handle_t aux_stack[2];
+ #else
+ 	struct kasan_track free_track[KASAN_NR_FREE_STACKS];
+@@ -203,18 +193,18 @@ struct qlist_node {
+ };
+ 
+ /*
+- * Generic mode either stores free meta in the object itself or in the redzone
+- * after the object. In the former case free meta offset is 0, in the latter
+- * case it has some sane value smaller than INT_MAX. Use INT_MAX as free meta
+- * offset when free meta isn't present.
++ * Free meta is stored either in the object itself or in the redzone after the
++ * object. In the former case, free meta offset is 0. In the latter case, the
++ * offset is between 0 and INT_MAX. INT_MAX marks that free meta is not present.
+  */
+ #define KASAN_NO_FREE_META INT_MAX
+ 
++/*
++ * Free meta is only used by Generic mode while the object is in quarantine.
++ * After that, slab allocator stores the freelist pointer in the object.
++ */
+ struct kasan_free_meta {
+ #ifdef CONFIG_KASAN_GENERIC
+-	/* This field is used while the object is in the quarantine.
+-	 * Otherwise it might be used for the allocator freelist.
+-	 */
+ 	struct qlist_node quarantine_link;
+ 	struct kasan_track free_track;
+ #endif
+@@ -417,9 +407,9 @@ static inline void kasan_unpoison(const void *addr, size_t size, bool init)
+ 		return;
+ 	/*
+ 	 * Explicitly initialize the memory with the precise object size to
+-	 * avoid overwriting the SLAB redzone. This disables initialization in
++	 * avoid overwriting the slab redzone. This disables initialization in
+ 	 * the arch code and may thus lead to performance penalty. The penalty
+-	 * is accepted since SLAB redzones aren't enabled in production builds.
++	 * is accepted since slab redzones aren't enabled in production builds.
+ 	 */
+ 	if (__slub_debug_enabled() &&
+ 	    init && ((unsigned long)size & KASAN_GRANULE_MASK)) {
+@@ -503,8 +493,9 @@ void kasan_restore_multi_shot(bool enabled);
+ 
+ /*
+  * Exported functions for interfaces called from assembly or from generated
+- * code. Declarations here to avoid warning about missing declarations.
++ * code. Declared here to avoid warnings about missing declarations.
+  */
++
+ asmlinkage void kasan_unpoison_task_stack_below(const void *watermark);
+ void __asan_register_globals(struct kasan_global *globals, size_t size);
+ void __asan_unregister_globals(struct kasan_global *globals, size_t size);
+@@ -573,4 +564,4 @@ void __hwasan_storeN_noabort(unsigned long addr, size_t size);
+ 
+ void __hwasan_tag_memory(unsigned long addr, u8 tag, unsigned long size);
+ 
+-#endif
++#endif /* __MM_KASAN_KASAN_H */
+-- 
+2.25.1
 

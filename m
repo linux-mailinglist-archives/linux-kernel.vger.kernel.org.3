@@ -2,161 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C024512F25
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C877512F1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344830AbiD1I7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S1344801AbiD1I7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344891AbiD1I7C (ORCPT
+        with ESMTP id S229612AbiD1I7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:59:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D542A729;
-        Thu, 28 Apr 2022 01:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651136123;
-        bh=/SVF4atjZnUZPZ6or4RTo2SDRpctHhG+DQ/FLVQqUBg=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=iwGwqXjh5Fbm6UEpQaRmnfup9aDxA8ACV6lpYhKJ+iXp/rSdUXgGUV08nKyAPzO8j
-         Vy112wAE9UObX/iKQ4mf8Tj0Nm8y57gn1rdPK1bhkmkZAtuview18+44xcNLj+kojF
-         aRfLKgeGdGQo+fphwPYy9nAyNHZjvvdpSZNyEbhU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MgvrL-1oMteB48q5-00hNta; Thu, 28
- Apr 2022 10:55:23 +0200
-Date:   Thu, 28 Apr 2022 10:55:20 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Thu, 28 Apr 2022 04:59:33 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F045AC5;
+        Thu, 28 Apr 2022 01:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651136178; x=1682672178;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=l/WzdLFbsObxbXmelhQFktEuoohOGfS3+/TJ1fodRAo=;
+  b=dUbbpUdeWpJLMsRGqqzYjOorKkGkK09060oC+ltApb0r4kY11aEKisQw
+   FEBY3yMiJfeLBGVFKeBaO4aQwkeBECbbN/zyfUM2zTgacPRs/KP1XN6jz
+   eK7QvDXQY8IfAoYh5ndxK2azhtXqN1o3gKB1Y5j+fbSbjd83XDC1hiJ02
+   l65aD3ZLCFyoNfyNZRfYWGnGHJvbQ6jBhRkbjtXHi3Mz3z1+am8e20Kj0
+   YnjnB922G344ZMmfKsoHzY2es22hUHr5oCL+8GY41NtATatXeafXjxEop
+   TLKWEO43txBlGTHieE5rC6dSgIWZ183Fg7BZKvmJNzUuTs/79+sFjXiUp
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="291373147"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="291373147"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 01:56:18 -0700
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="514167355"
+Received: from yingyuqu-mobl1.ccr.corp.intel.com ([10.249.171.194])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 01:56:16 -0700
+Message-ID: <78577b67126a3f63424059f414702a799d6baf3e.camel@intel.com>
+Subject: Re: linux-next: build failure after merge of the pm tree
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 4/7] dt-bindings: clock: Add Nuvoton WPCM450 clock/reset
- controller
-Message-ID: <YmpWeOb3oetvqyvl@latitude>
-References: <20220422183012.444674-1-j.neuschaefer@gmx.net>
- <20220422183012.444674-5-j.neuschaefer@gmx.net>
- <31cb9af1-173d-bef5-64da-ccf5a01f2485@linaro.org>
- <CACPK8XdRYvike9Z98JzfO1r0W2jfkESr8xMGSH4kkigwZ_MkyQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GfjnlrXCmbggFVO5"
-Content-Disposition: inline
-In-Reply-To: <CACPK8XdRYvike9Z98JzfO1r0W2jfkESr8xMGSH4kkigwZ_MkyQ@mail.gmail.com>
-X-Provags-ID: V03:K1:vDtCw1Xqk5WwFlslQt86xYSwXrubTIv3D0/ZX8XF0n41y4TsV/g
- vdzerk1EQZUuborMZpzy7oVBQ6hWJwjTkRzK+ITa/ze+Md6ns9/+gTmPLyk9ITEx7XAR+L3
- WsWvnGsjqHoF1as+Uy/rtQQ0yssil32ujMeDmsKBlxmHl6ek8pWVcDHND44cTNRQQomIKrs
- jAYXRVtG5Qxg/6fCWeDCg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BByf02oW4YI=:u4M/RLZzldBz6Nn+6AuIJg
- XFSyqh6DA1pJWizob4aPCGfNK0mzAiDQAXfnSK0MnzE2Fh3+h0TuyopeZD3m/CjfWsqcLmkc4
- S0wKl4YASO5JUNIgdPoqrZulRMGjfrFM5buM84mwOZT3cA68s/4hX6o/kVNBPVDnsWKeUZqki
- sLkXgxisM59qeABrwqpLJ9JS18cwYzmDe5NKJuXPLKLw7aH0Xo3abnxSAjf836c6zeNgpiuLY
- lR4iVUbC23Q5luTONAoWGwpRk++LE0fNozCMFFshxaR2XfESLCpsdd2SBaAuA98LhnIpDb2OT
- /7+LW+mjIJzgxmqgqrHTqggW0cgtSx0RyUBRdY93f40apKuNzQlDmJcqJKDU0E5wlAAVlAqtO
- 0AfVx7ZtiEyvMPun0rVT+Q9a1UD9HmqevComkc3nxB8zAFrqpsRV/cBSw42BPFLLmss0Htloy
- 76r7jLXSH3zsjFjyJWZiin7C7f688Qgnzyw4NluetTLAPZfBy5cb8R5UdjE1wd5UejdKBRgJh
- ZZNqIDXFzko5WAkN7KgpHqBm5GHLvHt6GkPUHUiKH9YBzF8lZ4q4VUkyCAhbx63XVDwB4QTLO
- u6MT8ejEJH8aqOQsbJch7RTAGyKSzCxU2TwARmBQau5oDrfWKTOv/UcGOAyiuq0fwb/+wPPnG
- r/1RkaUFOh06MLuRlQDv0QfKwnhBnzmZ3JECGAVCbj6gJF5YjTnAofKkNxvUEhDEUAkBZCbtN
- s36fjUUI5Jss5OwQTqSdWUaQBxaGsl5TQVsWSszb61+QF4JWF7tavG4De5LCzTZ89gF/zwoOV
- cU/NlEpn+3IDyzmfK1+ntCKu6RmACZar/wCOJqxOWmz7uGFanSaFwUXXW6gIbPOVfjzVCGrMc
- 855EZoF7wFoJlXu06Co3A4eMIDHk+zWyvqT2ec+h4l3Np6l7l1Q1RGtuFlt6aoh64smk1u6Ro
- W/h6v3T4E3MDVhREix+bQTUHYvO456H1ximnFgRuHhHFJu3uTn3zDbpPcR5jf0dqXMa+UcVS4
- TjOTtZG8Cf5Bpik0xJopRuHGQV1WMiBjyym36xdc9wHx+B0opgBHpdONINRw1Z8X9oWuGDPWx
- sCI7F7ptieIBdA=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Thu, 28 Apr 2022 16:56:13 +0800
+In-Reply-To: <20220428110030.7090a45b@canb.auug.org.au>
+References: <20220428110030.7090a45b@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Resend with linux-pm mailing list CCed.
 
---GfjnlrXCmbggFVO5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2022-04-28 at 11:00 +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the pm tree, today's linux-next build (x86_64
+> allmodconfig)
+> failed like this:
+> 
+> drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
+> drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e'
+> undeclared (first use in this function)
+>  1701 |                 disable_promotion_to_c1e = true;
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier
+> is reported only once for each function it appears in
+> drivers/idle/intel_idle.c:1706:9: error: implicit declaration of
+> function 'c1e_promotion_enable' [-Werror=implicit-function-
+> declaration]
+>  1706 |         c1e_promotion_enable();
+>       |         ^~~~~~~~~~~~~~~~~~~~
+> drivers/idle/intel_idle.c: At top level:
+> drivers/idle/intel_idle.c:1854:13: error: conflicting types for
+> 'c1e_promotion_enable'; have 'void(void)' [-Werror]
+>  1854 | static void c1e_promotion_enable(void)
+>       |             ^~~~~~~~~~~~~~~~~~~~
+> drivers/idle/intel_idle.c:1854:13: error: static declaration of
+> 'c1e_promotion_enable' follows non-static declaration
+> drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration
+> of 'c1e_promotion_enable' with type 'void(void)'
+>  1706 |         c1e_promotion_enable();
+>       |         ^~~~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
+> parameter")
+> 
+> interacting with commit
+> 
+>   cc6e234b8264 ("intel_idle: Add AlderLake support")
+> 
+> Presumably this should have been fixed up in commit
+> 
+>   55ecda6f25ef ("Merge branch 'intel-idle' into linux-next")
+> 
+> I have used the pm tree from next-20220427 for today.
+> 
+TBH, I'm not quite sure about the Fixes tag below.
 
-On Tue, Apr 26, 2022 at 08:35:43AM +0000, Joel Stanley wrote:
-> On Mon, 25 Apr 2022 at 07:59, Krzysztof Kozlowski <krzysztof.kozlowski@li=
-naro.org> wrote:
-> >
-> > On 22/04/2022 20:30, Jonathan Neusch=C3=A4fer wrote:
-> > > The Nuvoton WPCM450 SoC has a combined clock and reset controller.
-> > > Add a devicetree binding for it, as well as definitions for the bit
-> > > numbers used by it.
-> > >
-> > > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > > ---
-[...]
-> > > +/* Other clocks */
-> > > +#define WPCM450_CLK_USBPHY        32
-> > > +
-> > > +#define WPCM450_NUM_CLKS          33
-> > > +
-> > > +/* Resets based on IPSRST bits */
-> >
-> > All these defines should be in second header in dt-bindings/reset/...
->=20
-> I disagree. It makes more sense to keep the definitions together, and
-> it's all for the same hardware and driver.
+Although commit 39c184a6a9a7 is merged later and breaks commit
+cc6e234b8264, but given that commit 39c184a6a9a7 is for -rc material
+and commit cc6e234b8264 and this patch are for next merge window, so I
+still use the orginal ADL intel_idle commit for Fixes tag.
 
-It's for the same hardware, DT node, and driver.
+thanks,
+rui
 
-I could imagine splitting it into
+From 9b784d7f9ea5593a92eb6d616523b5f47464e981 Mon Sep 17 00:00:00 2001
+From: Zhang Rui <rui.zhang@intel.com>
+Date: Thu, 28 Apr 2022 09:37:10 +0800
+Subject: [PATCH] intel_idle: fix C1E handling for AlderLake
 
-	include/dt-bindings/clock/nuvoton,wpcm450-clk.h  and
-	include/dt-bindings/reset/nuvoton,wpcm450-clk.h
+commit cc6e234b8264 ("intel_idle: Add AlderLake support") disables the C1E
+promotion using the 'disable_promotion_to_c1e' variable, but enables the
+the C1E promotion by invoking c1e_promotion_enable() directly.
 
-if someone insists on it.
+Then, commit 39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
+parameter") removes the 'disable_promotion_to_c1e' variable and introduces
+a new tri-state 'c1e_promotion' variable that can be used for both
+enabling and disabling C1E promotion, on a per CPU basis.
 
-For convenience (being able to see all relevant definitions for
-nuvoton,wpcm450-clk at once), I'd prefer to keep the definitions together.
+Switch to use the new 'c1e_promotion' variable to fix the build failure,
+and also to do C1E promotion bit update on all CPUs.
+
+Fixes: commit cc6e234b8264 ("intel_idle: Add AlderLake support")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/idle/intel_idle.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 7c081ed26b64..2de6e0a2d9a1 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1698,12 +1698,12 @@ static void __init adl_idle_state_table_update(void)
+ 		cpuidle_state_table[1].flags |= CPUIDLE_FLAG_UNUSABLE;
+ 
+ 		/* Disable C1E by clearing the "C1E promotion" bit. */
+-		disable_promotion_to_c1e = true;
++		c1e_promotion = C1E_PROMOTION_DISABLE;
+ 		return;
+ 	}
+ end:
+ 	/* Make sure C1E is enabled by default */
+-	c1e_promotion_enable();
++	c1e_promotion = C1E_PROMOTION_ENABLE;
+ }
+ 
+ /**
+-- 
+2.17.1
 
 
-Thanks,
-Jonathan
-
---GfjnlrXCmbggFVO5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmJqVngACgkQCDBEmo7z
-X9ue9g/+P4ECjYmwtgmxnY8aEuQIf5yQn622vliBjNoRr4EraBUuEfits2QCcitI
-R2Y34KdwIryYwTuA1iTKPY7jxY4pMEXU/OhhnJ92yYz7KspcVyQDrxeGsY01PYgw
-x5YWib5keVy22f76rbuTd0LROzC2tP/ubLBvu9+4hVU3HDp3WsVhAeLEVf3gcavU
-fmS502AAHFtbWgMDHutulyeWwJmmVfYmAvxbC6BoNuitSSzuQZDbNi86hrLh2ytv
-tXmup5bVOmiXx9oakQuoNBE3f50tQPwYTdQLRX1yxzfiRhpY+UvybdRpUZvzGgvn
-qyJEqgWWcpTsbLtHK+65LMbBhO3EwYxzPsrtSDmc/rwPcgrT2A1y7GwNbBQhNvJm
-PRhJtrZ/w4fgzGhkfzidXHlpsMR3BcieWZEUaRx861KDOT6ilzCHf1/7CWDel5u5
-M8aNJggId/aycnjWYSUjdAZjpME090eKku2pbD1HUu9ks5rUZhhTWX+5FYYbufAK
-wi2W5jxUOfroRwHdQF2XQXU97LhcZC3afA3u4UAGR9yWZzfasFDDg/Z0S7sZIJ9q
-evrCyV6VT0WaqlKBPpCLf3Zav7Kic9cdDGbGbKCL7yTBB1kCsD7klQa16/dHCcYE
-ZrzJBoMgpZ8oEuGNBvTUnSr4bL8aKfS141ZhZiZ3xtaTXWZxYYo=
-=lG9e
------END PGP SIGNATURE-----
-
---GfjnlrXCmbggFVO5--

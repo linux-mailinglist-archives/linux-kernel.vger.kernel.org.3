@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AD0512DBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E59512DC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237120AbiD1IK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S1343901AbiD1ILK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiD1IKV (ORCPT
+        with ESMTP id S233984AbiD1IKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:10:21 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFEE54F9D;
-        Thu, 28 Apr 2022 01:07:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id C5D1A1F45034
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651133225;
-        bh=gkofCbla6q/11zKU00zv0OsLH0Kg1dBauD7EEXXr8w4=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=nIeU3RHTyPGIbfsEWhwWP2fVMUQQGuJtXlVD9kFzxnPfRWMhllRUjI6u8vypNIVN1
-         eu5cHaG3n9ZXhp5V0x+Jf73SMqKL3ceJeaWwg/m5gnjeiUO1Lk3UuaB20pLNZryoDz
-         XfhHxrUIAcPO/NxiDtUFBcV+SeCuArS5mWrsQTaxFQAEHs6+4Xak2qTkB/r9e3xVLF
-         zirWf7yQjIrqAO3iiIzePtDqizqzGS0G3clZvhCHmq6HKa5jxswEmgUjt7W0zgvuzt
-         5PZlEXA7u9a/1YAtHxNSnPF/XdiH0rnqPh8pD3XCcSFKgJQTOXdSu5tF19o5iqJ2Cx
-         dY4T1R3CTKPVw==
-Message-ID: <8acef982-0aec-aaf0-7e26-b02cf024cdf8@collabora.com>
-Date:   Thu, 28 Apr 2022 13:06:48 +0500
+        Thu, 28 Apr 2022 04:10:47 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A245F8F2;
+        Thu, 28 Apr 2022 01:07:29 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S7jBE9002377;
+        Thu, 28 Apr 2022 08:07:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=P5GSW7S1bGcTV0o4nVQux7Wo07UtirM3gAsmxixkw3o=;
+ b=sHRv7KOIs8uZcsib4SMqQi8jz+8RcDagMGlbGb/d8PqjOlpd9ScIAhDsl12yjPB/UCI9
+ Hv3WU5HbNkRpYBEtf4xaNK4OgJTUwUfVD8oT9ZylTnfEuAKBVJscwj/vBaS0XC+aEnDh
+ N4i4g+QgfrsccHR9L6kKHfGDl4cxzC0CVTTeho8O/NhtRggCj6/SJhS64uypy4zYGXck
+ GOmI5BK9HFdB1BiIr0uN89mJlWgASvDEqZTERM49ZAiGxfQnhyipg+5HS2UQYC75DbpM
+ ve9tECCXqQhE2ayCTrUsZ7ufA44daQ72QOPgfz4ft4zs7r2XLHKmWxWqrLKvYRJiYph/ /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqmk7u4y0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 08:07:24 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23S7ehAa028779;
+        Thu, 28 Apr 2022 08:07:24 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqmk7u4x9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 08:07:23 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S7ueke006684;
+        Thu, 28 Apr 2022 08:07:22 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3fpuyg9k91-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 08:07:22 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S87IDa49545654
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 08:07:18 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CAC2C4C044;
+        Thu, 28 Apr 2022 08:07:18 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 899C44C040;
+        Thu, 28 Apr 2022 08:07:18 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 08:07:18 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH v5 0/4]  PCI: Rework pci_scan_slot() and isolated PCI functions
+Date:   Thu, 28 Apr 2022 10:07:14 +0200
+Message-Id: <20220428080718.3094464-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
-        gwendal@chromium.org, vbendeb@chromium.org, andy@infradead.org,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v8] platform: x86: Add ChromeOS ACPI device driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <Ylmmf03fewXEjRr0@debian-BULLSEYE-live-builder-AMD64>
- <YmUNnq5tH8mykNOF@kroah.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <YmUNnq5tH8mykNOF@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Amv0XS3eBV8LnTTqsNza-I_OCTb8tSZF
+X-Proofpoint-ORIG-GUID: OV4Ct2rHkptg9YL5dprTnuiiEJnWYj0M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=762 phishscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204280049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/22 1:43 PM, Greg Kroah-Hartman wrote:
-> On Fri, Apr 15, 2022 at 10:08:15PM +0500, Muhammad Usama Anjum wrote:
->> +	i = 0;
->> +	list_for_each_entry(aag, &chromeos_acpi.groups, list) {
->> +		chromeos_acpi.dev_groups[i] = &aag->group;
->> +		i++;
->> +	}
->> +
->> +	ret = sysfs_create_groups(&dev->kobj, chromeos_acpi.dev_groups);
-> 
-> You have raced with userspace and lost here :(
-> 
-> Use the default groups pointer in the platform driver for this, and use
-> the is_visible() callback to know to show, or not show, the attribute
-> instead of building up dynamic lists of attributes at runtime.  That
-> will save you lots of crazy logic and housekeeping _AND_ userspace tools
-> will work properly as well.
-> 
-Yeah, using dev_group pointer in platform driver makes it simple. We
-need to define the attributes at compile time. At run time, we can only
-make decision to show or not to show the attribute. This simplifies
-logic for the static attributes which will always be there. But there
-are some set of attributes which may be 1 to N depending upon the
-platform such as GPIO.0, GPIO.2 .... and GPIO.N. I'm working on
-overcoming this. Once this is done, the driver is going to be very simple.
+Hi Bjorn, Hi Jan,
 
-> thanks,
-> 
-> greg k-h
+In an earlier version[0], I sought to apply the existing jailhouse special case
+for isolated PCI functions to s390. As Bjorn noted in[1] there appears to be
+some potential for cleaning things up and removing duplication though.
+
+This series attempts to do this cleanup (Patches 1 and 2) followed by enabling
+isolated PCI functions for s390 (Patches 3 and 4). If need be I can of course
+split the cleanup off but for now I kept it as one as that's what I have
+been testing.
+
+Testing:
+- On s390 with SR-IOV and a ConnectX NIC with PF 1 but not PF 0 passed throug
+  i.e. the isolated function case. Also of course with just VFs and an NVMe.
+- On x86_64 on a desktop system where ARI is disabled and with an SR-IOV NIC
+  with non-contiguous VFs as well as the usual other PCI devices.
+
+Thanks,
+Niklas
+
+Changes v4 -> v5:
+- Remove unintended whitespace change in patch 1
+Changes v3 -> v4:
+- Use a do {} while loop in pci_scan_slot() as it is simpler (Bjorn)
+- Explicitly check "fn == 0" as it is not a pointer or bool (Bjorn)
+- Keep the "!dev" check in the ARI branch of next_fn() (Bjorn)
+- Moved the "fn == 0 && !dev" condition out of next_fn() into pci_scan_slot().
+  This allows us to keep the "!dev" case in the ARI branch and means there are
+  no new conditions in next_fn() making it easier to verify that its behavior
+  is equivalent to the existing code.
+- Guard the assignment of dev->multifunction with "fn > 0"
+  instead of "nr > 0". This matches the existing logic more closely and works
+  for the jailhouse case which unconditionally sets dev->multifunction for
+  "fn > 0". This also means fn == 0 is the single "first iteration" test.
+- Remove some unneeded whitespace in patch 2
+
+Changes v2 -> v3:
+- Removed now unused nr_devs variable (kernel test robot)
+
+Niklas Schnelle (4):
+  PCI: Clean up pci_scan_slot()
+  PCI: Move jailhouse's isolated function handling to pci_scan_slot()
+  PCI: Extend isolated function probing to s390
+  s390/pci: allow zPCI zbus without a function zero
+
+ arch/s390/pci/pci_bus.c    | 82 ++++++++++----------------------------
+ drivers/pci/probe.c        | 64 +++++++++++++----------------
+ include/linux/hypervisor.h |  8 ++++
+ 3 files changed, 55 insertions(+), 99 deletions(-)
 
 -- 
-Muhammad Usama Anjum
+2.32.0
+

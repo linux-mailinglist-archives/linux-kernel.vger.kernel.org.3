@@ -2,174 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C634D513B06
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F206513B0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236622AbiD1RmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S1350568AbiD1Rqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbiD1RmW (ORCPT
+        with ESMTP id S235363AbiD1Rqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 13:42:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BF37A7744
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651167545;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qTa1PiQlC3U5vo163YBGzHkGqCZn98XvdYZbCYWOy88=;
-        b=a1t84GEAzJboCxyYEDy4u5Z3AeZs1FkEYE2iKlhI+PmOfnx6yB8RVKA3pOPAKX+JgnJkDi
-        c/uottDPHVwbVewhXKkyOPFB4ZNK7iFCfKslLpv7smDcATeQWUG2uFD3j0f4loVKzUHfqr
-        WJ8yv+Ouc3ZkfGs7SoW4EP4DkNOJh+c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-kjdml4-vNFOuInCUdFyjiQ-1; Thu, 28 Apr 2022 13:39:04 -0400
-X-MC-Unique: kjdml4-vNFOuInCUdFyjiQ-1
-Received: by mail-wm1-f69.google.com with SMTP id ay39-20020a05600c1e2700b0038ff4f1014fso2212521wmb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:39:04 -0700 (PDT)
+        Thu, 28 Apr 2022 13:46:37 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0133B9F32
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:43:21 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r83so4574491pgr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ULrmvXorhF3cY5GO7cnoA9I6iqq/Ra5FdhJ8iDTEuCo=;
+        b=tASfAHylTnQAEFgGkHvPXmf/5ep74SGvwpRhqfCrDYNXFpSQwkDXB+pHd35rcdEwzg
+         jXMWzSGkBXAgnHn1plmoTIH6tNP9HKJwaEP3UO+NkAT4BHkOC6SyDl9w7B2rzFtt+Nrm
+         RIDaX3iSS1xNQwpQQo6j+Dy2mTfO9l/CDB9yH1EkakIBRXG5h3BYSlsmKhURBKZ2sITA
+         5DjPoBFOqLH/9laJ3rzTowL09sxsOZiFrEv5ZfbB4ml1UpZ5/jyDK+qHo9OqxElcmVoU
+         oKsiG3xnwOMxujGx1r4YCP1ltTCRBDupgyWiWYRenWIuguX7haVHBwz9UE4LAf6CIavA
+         SBYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qTa1PiQlC3U5vo163YBGzHkGqCZn98XvdYZbCYWOy88=;
-        b=iQqIWVv+3yULWk7HWoPbWU05Y3ZhIR53D6XWxWsmyICrCiD5GUVSePQV7qoEwYGz/S
-         LnAY2R7VrhLYs82tJru/sxb5bTbM6UcHZdei3YSQV2DFqNKTl6n0lmd1wx3GrRcjZpPd
-         B6oW16nE230TfSWBMo7PrRLQBhEAC8ErcA+N47S9m5AWnllNSAMnf9DfGjrVzrFL2GId
-         FAMkJMHIorrddheI14ZTN9dM8m4xy9CgawnkTBse526uaz5bTbOgPWeqbIW7heHINpq4
-         xFkF/VnPqvGnV5jyWd8Gkk9kr2+K+0JpRSI4QFSBj/IQmdoxfMtWmKc3ERwblvD3+y4Y
-         FK3w==
-X-Gm-Message-State: AOAM532a3WJy3aWYwe23VtyDdTAJ49MxLk73nSs2qoei+VnBf9BHJfr7
-        4t182/MZZDeL5rJ50aLCiBmx7r5t1M1POsCa3HEauaC/s5sEtBmROF+KahrKFBDdD7TAMmpDsuj
-        SceIuEfk0bRiASSeXZZHA8fggb2frvjLQAdBLiKOy
-X-Received: by 2002:a5d:45c5:0:b0:20a:be8f:aca6 with SMTP id b5-20020a5d45c5000000b0020abe8faca6mr28021814wrs.493.1651167542694;
-        Thu, 28 Apr 2022 10:39:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFgPQF4/R5LGWhNlocQWdfRiUJJVYdeWRr/A3EDvyI1rG3nLaEx5lvJoNRnFD6xybZRBNnf10z8gXvVl22EIc=
-X-Received: by 2002:a5d:45c5:0:b0:20a:be8f:aca6 with SMTP id
- b5-20020a5d45c5000000b0020abe8faca6mr28021795wrs.493.1651167542429; Thu, 28
- Apr 2022 10:39:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ULrmvXorhF3cY5GO7cnoA9I6iqq/Ra5FdhJ8iDTEuCo=;
+        b=yvWL/zR82ThYlrDV53P9ZqIMi0Rw1T2GZ0AlsWLr09br9TabwU59iQlzFehzsAU6gT
+         VTch6zc/a8v1KP6j19l8Nq2RlctqeNlQLzImvuTmXX7zNuBR3mjcyWTonq+vUai1Z5CA
+         eLQ6g6xsbjRXnK9pCmZ52y4/242sso5woqC9hN2ZfrHct5l251YstcCRSB7Qm/tIn33j
+         OvLZvXnc96yzMTOPBnTCR+n2yRTlCD9URD0O7GX8gE5TEllolVlYBCqgterpqw7I+EeR
+         po9j6Too46/0VHtASUMLpL4UxjCY2TUUicq9OGtfiJz54PtvlK+7u+W/yiuf7s4v5seE
+         eqvw==
+X-Gm-Message-State: AOAM533twPNMQjwkly3+3Qbi1E3NvMujCxBrwGXOokLsRDX4PB66j4sc
+        Wp60gJ/oT5LMuHFd6gS2byiR1g==
+X-Google-Smtp-Source: ABdhPJxwIojrIGKDQ+C6+iuYLgmV54t2ugrEy4aRWi9wdd2k+bXFXpBRSyhdEt03jrbglriUV5mM4w==
+X-Received: by 2002:a63:2c0c:0:b0:3c1:a611:7ac1 with SMTP id s12-20020a632c0c000000b003c1a6117ac1mr146215pgs.485.1651167801061;
+        Thu, 28 Apr 2022 10:43:21 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p1-20020a62b801000000b0050d5fc2cb7esm452741pfe.1.2022.04.28.10.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 10:43:20 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 17:43:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        syzbot <syzbot+a8ad3ee1525a0c4b40ec@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [syzbot] WARNING in kvm_mmu_uninit_tdp_mmu (2)
+Message-ID: <YmrSNB83b5sKLocw@google.com>
+References: <00000000000082452505dd503126@google.com>
+ <13b3235ef66f22475fd4059df95ad0144548ccd1.camel@redhat.com>
+ <YmqzoFqdmH1WuPv0@google.com>
+ <d1e4eaba-2dcd-ec08-4e23-98ab8ea6c37b@redhat.com>
+ <47eb853424ef6c7dd6439ac33dfeb64a29f49c44.camel@redhat.com>
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com> <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
-In-Reply-To: <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Thu, 28 Apr 2022 19:38:51 +0200
-Message-ID: <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47eb853424ef6c7dd6439ac33dfeb64a29f49c44.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 7:09 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Thu, Apr 28, 2022 at 6:27 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
-> >
-> > The data corruption we've been getting unfortunately didn't have to do
-> > with lock contention (we already knew that); it still occurs. I'm
-> > running out of ideas on what to try there.
->
-> Hmm.
->
-> I don't see the bug, but I do have a suggestion on something to try.
->
-> In particular, you said the problem started with commit 00bfe02f4796
-> ("gfs2: Fix mmap + page fault deadlocks for buffered I/O").
+On Thu, Apr 28, 2022, Maxim Levitsky wrote:
+> On Thu, 2022-04-28 at 19:22 +0200, Paolo Bonzini wrote:
+> > On 4/28/22 17:32, Sean Christopherson wrote:
+> > > On Tue, Apr 26, 2022, Maxim Levitsky wrote:
+> > > > I can reproduce this in a VM, by running and CTRL+C'in my ipi_stress test,
+> > > 
+> > > Can you post your ipi_stress test?  I'm curious to see if I can repro, and also
+> > > very curious as to what might be unique about your test.  I haven't been able to
+> > > repro the syzbot test, nor have I been able to repro by killing VMs/tests.
+> > 
+> > Did you test with CONFIG_PREEMPT=y?
+> 
+> yes, I test with CONFIG_PREEMPT but I only enabled it a day ago,
+> I think I had seen this warning before, but could bit, I'll check
+> if that fails without CONFIG_PREEMPT as well.
 
-Yes, but note that it's gfs2_file_buffered_write() that fails. When
-the pagefault_disable/enable() around iomap_file_buffered_write() is
-removed, the corruption goes away.
-
-> And to me, I see two main things that are going on
->
->  (a) the obvious "calling generic IO functions with pagefault disabled" thing
->
->  (b) the "allow demotion" thing
->
-> And I wonder if you could at least pinpoint which of the  cases it is
-> that triggers it.
->
-> So I'd love to see you try three things:
->
->  (1) just remove the "allow demotion" cases.
->
->      This will re-introduce the deadlock the commit is trying to fix,
-> but that's such a special case that I assume you can run your
-> test-suite that shows the problem even without that fix in place?
->
->      This would just pinpoint whether it's due to some odd locking issue or not.
->
-> Honestly, from how you describe the symptoms, I don't think (1) is the
-> cause, but I think making sure is good.
->
-> It sounds much more likely that it's one of those generic vfs
-> functions that screws up when a page fault happens and it gets a
-> partial result instead of handling the fault.
-
-The test should run just fine without allowing demotion. I'll try (1),
-but I don't expect the outcome to change.
-
-> Which gets us to
->
->  (2) remove the pagefault_disable/enable() around just the
-> generic_file_read_iter() case in gfs2_file_read_iter().
->
-> and
->
->  (3) finally, remove the pagefault_disable/enable() around the
-> iomap_file_buffered_write() case in gfs2_file_buffered_write()
->
-> Yeah, yeah, you say it's just the read that fails, but humor me on
-> (3), just in case it's an earlier write in your test-suite and the
-> read just then uncovered it.
->
-> But I put it as (3) so that you'd do the obvious (2) case first, and
-> narrow it down (ie if (1) still shows the bug, then do (2), and if
-> that fixes the bug it will be fairly well pinpointed to
-> generic_file_read_iter().
-
-As mentioned above, we already did (3) and it didn't help. I'll do (1)
-now, and then (2).
-
-> Looking around, gfs2 is the only thing that obviously calls
-> generic_file_read_iter() with pagefaults disabled, so it does smell
-> like filemap_read() might have some issue, but the only thing that
-> does is basically that
->
->                 copied = copy_folio_to_iter(folio, offset, bytes, iter);
->
-> which should just become copy_page_to_iter_iovec(), which you'd hope
-> would get things right.
->
-> But it would be good to just narrow things down a bit.
->
-> I'll look at that copy_page_to_iter_iovec() some more regardless, but
-> doing that "let's double-check it's not somethign else" would be good.
-
-We've actually been running most of our experiments on a 5.14-based
-kernel with a plethora of backports, so pre-folio. Sorry I forgot to
-mention that. I'll reproduce with mainline as well.
-
-Thanks,
-Andreas
-
+I have not tested with CONFIG_PREEMPT.  For some unknown reason the syzbot configs
+don't play nice with my VM setup and so I never use them verbatim.  I didn't think
+to pull over CONFIG_PREEMPTY.  I'll give that a shot.

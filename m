@@ -2,105 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D26513A55
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F493513A58
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350350AbiD1Qwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S233777AbiD1Qw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233777AbiD1Qwq (ORCPT
+        with ESMTP id S1344849AbiD1Qw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:52:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B126DB42D3;
-        Thu, 28 Apr 2022 09:49:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B1E9B82EF7;
-        Thu, 28 Apr 2022 16:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C73CC385A0;
-        Thu, 28 Apr 2022 16:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651164569;
-        bh=0tomC2DKcOPuXKFy6eaQw+vsGVGrm4Gq16CTFSUFEpA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VWiy/lqTK107yNPXbJuYdP7kbSF7lXtyB/ON0fsJ3nkxp0J91o4cmgygvYzR831oh
-         uHy4BlOqYb13KY+QudkguElAsiiVuRgP/FbQnkZjdxOqBkPhhKK5JLEokn9Nv6UplH
-         L8FEl1dcRQ5JFd9PHr03AEAtTZbxLyWpPrrNBuwU=
-Date:   Thu, 28 Apr 2022 18:49:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Trilok Soni <quic_tsoni@quicinc.com>
-Cc:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>, arnd@arndb.de,
-        catalin.marinas@arm.com, rostedt@goodmis.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, quic_psodagud@quicinc.com, will@kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCHv12 8/9] serial: qcom_geni_serial: Disable MMIO tracing
- for geni serial
-Message-ID: <YmrFlce26p2uvtDZ@kroah.com>
-References: <cover.1651139070.git.quic_saipraka@quicinc.com>
- <3fef68a94e4947d58a199709929d30e0e2bf2e44.1651139070.git.quic_saipraka@quicinc.com>
- <Ympxa0ZY0VxZGEjA@kroah.com>
- <e11455d8-78c2-68e8-215e-a4e3587f3e4a@quicinc.com>
+        Thu, 28 Apr 2022 12:52:56 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B05B53E6;
+        Thu, 28 Apr 2022 09:49:41 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e5e433d66dso5707062fac.5;
+        Thu, 28 Apr 2022 09:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=XISky4EfFFruGvnkmI6B4SFkxFQ52ohN9Fu2cRfYJfw=;
+        b=OkCy3r1S0ZpJd0xw0VfvdODlVptYGtGD/s68vjFfu+cv5VfksDwVTELspFMjzyqn2l
+         o3HoJm03XsZQdwbEbRWjI+Lb63jSRMQLNDN7FFeOkhyetGmz/gAbkEhkV3TcaKgGRG82
+         vuwvRZEQI4XV6kVyb9AK1+aJWoE9PIAQbe2raaE3M+WY6coymTsE71a+p721Tp/oJ1tu
+         En+rQbHzGa1KawncckJtHDkTWA14zP+YTiLHoNAAclpt3pPZZQzCVaSg0pgbdjB43usw
+         AxIfxdOHjkKVb6pAsbdhR1cE59eZyAmq6cI4Gd58mfC+2jQzc1Zta0D378ut2yf8lfbd
+         NqrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=XISky4EfFFruGvnkmI6B4SFkxFQ52ohN9Fu2cRfYJfw=;
+        b=dOwkGtw9dzdMd240ouokfJ4dl8tjhaloPKw1nqE++5hoRiCFTpENqlsfi1mg3Ls4wI
+         xNnEZM1iKXU53rnxp3MocydBbnoFRWtpSI0zT45CGCsgJhQwFQQtfIADkMfUemDBG8DU
+         pscUPvNhybZQ2ZqjUTFqi201/nbeOLGbjKP0IFH6JwbBmX+LOCb31UFAgn9JPHJ9bDRp
+         7bbHsthT0/ioa6oB7tDeBKTR6U/rZaMZjpk803fdXhybT2D5ZmpkmPQdqjAzPAKLvhkO
+         tOeIpK7DHaG5QmPgvwEAFlBAKlEHsd0+SxqzEwZBitZ8AUMcFZi0DgmkVooUr8TdPkpE
+         ZPZA==
+X-Gm-Message-State: AOAM533GaflZGPmbY4D3fPd7Q2nhlECfkZgiV8DzhzGR90HRc0jbmLDc
+        5K+CiJ64HwZsPVWUYcNN5OQ=
+X-Google-Smtp-Source: ABdhPJzrsKYpUtqCt/iZ06NVVnsLxq83abuM+0rz/PmqCRR+0Jas/OQpo6w5mfl9KOVI8b7KjTk3bw==
+X-Received: by 2002:a05:6870:3289:b0:e9:1a82:c010 with SMTP id q9-20020a056870328900b000e91a82c010mr11417956oac.25.1651164580861;
+        Thu, 28 Apr 2022 09:49:40 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p17-20020a4a3651000000b0035d9b838f21sm205539ooe.10.2022.04.28.09.49.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 09:49:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dd3ac1fa-67c2-8bdf-f275-9210a9e23054@roeck-us.net>
+Date:   Thu, 28 Apr 2022 09:49:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e11455d8-78c2-68e8-215e-a4e3587f3e4a@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+ <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+In-Reply-To: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 09:31:43AM -0700, Trilok Soni wrote:
-> On 4/28/2022 3:50 AM, Greg KH wrote:
-> > On Thu, Apr 28, 2022 at 03:25:31PM +0530, Sai Prakash Ranjan wrote:
-> > > Disable MMIO tracing for geni serial driver as it is a high
-> > > frequency operation for serial driver with many register reads/
-> > > writes and not very useful to log all MMIO traces and prevent
-> > > excessive logging.
-> > > 
-> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> > > ---
-> > >   drivers/tty/serial/qcom_geni_serial.c | 8 +++++++-
-> > >   1 file changed, 7 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> > > index 1543a6028856..5b48e6c2bf3c 100644
-> > > --- a/drivers/tty/serial/qcom_geni_serial.c
-> > > +++ b/drivers/tty/serial/qcom_geni_serial.c
-> > > @@ -1,5 +1,11 @@
-> > >   // SPDX-License-Identifier: GPL-2.0
-> > > -// Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
-> > > +/*
-> > > + * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
-> > > + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> > > + */
-> > 
-> > I strongly disagree that adding a single line here warrants a copyright
-> > update.  If your lawyers will sign off on this change, I am willing to
-> > reconsider.
+On 4/28/22 06:44, Arnd Bergmann wrote:
+> On Sun, Apr 24, 2022 at 8:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>> On Sun, Apr 24, 2022 at 5:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On 4/24/22 01:52, Arnd Bergmann wrote:
+>>>> On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> into the defconfig file, otherwise the multiplatform target defaults to
+>>>> an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
+>>>> you also need to enable CONFIG_ARCH_MULTI_V4T.
+>>>>
+>>>> This is slightly unfortunate, but I don't see any way to avoid it, and the
+>>>> modified defconfig will still work fine with older kernel trees.
+>>>>
+>>>
+>>> Yes, that works. I changed it in my configuration.
+>>
+>> Ok, great!. I managed to boot the z2 machine with PCMCIA support
+>> and it gets around the issue with my patch, correctly detecting the
+>> CF card.
 > 
-> I am not a lawyer, we can skip adding QuIC copyright here since it is just
-> one line change, but at the same time we can't add 2022 year in the existing
-> copyright.
+> Hi Guenter,
+> 
+> I have now sent out a fix that I'm happy with, and applied it to the
+> pxa-multiplatform-5.18 branch of the soc tree as well as the
+> combined arm/multiplatform tree.
+> 
+> I have not merged this new version into the for-next branch
+> since I would like to see if there are any other regressions first.
+> 
+> Can you run your boot tests on the arm/multiplatform branch
+> and let me know if that fixes everything you found? If that
+> takes a lot of manual steps on your side, I'd just wait for the
+> build bots and merge it after all there are no new compile-time
+> issues.
+> 
 
-That is correct, because you are not making a copyrightable change,
-otherwise the single line addition would be ok.
+-next is pretty badly broken right now due to a series of less than
+perfect mm patches, so testing there won't do any good.
 
-Talk to your lawyers about this :)
+I'll see if I can dig up the multiplatform branch and push it into
+my 'testing' branch.
 
-> If that is fine, we can skip the copyright year update entirely.
-
-Please do.
-
-thanks,
-
-greg k-h
+Guenter

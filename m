@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55166512EBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11723512EC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344089AbiD1Imr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S1344713AbiD1Imx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiD1Iln (ORCPT
+        with ESMTP id S1344305AbiD1Ilt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:41:43 -0400
+        Thu, 28 Apr 2022 04:41:49 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3232D34B99
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:36:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFA5D366B4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651134988;
+        s=mimecast20190719; t=1651134995;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PSiRaw/QfRytOKTnTzvY9sqF5YM85yMEE/UtjWA5SFw=;
-        b=SF0Xx6pj+VgoOtVozfYhnb3EXe/fBvTjEOHmHSNnp9rh0EEZap+DDazwdRotsXGb56lVsL
-        kPyY6TFIJ+X8WXzz152N2GbjaUakaYBxWT1NsC5e9J0Db4J5JOea6+76wm92U6jCBqOyld
-        DaTlc1WYu+CeGBmdd8d7t0Iwv09XRIU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=zIvoNwFsgnLDv8ForvNvi/2NrWA9Bt7wLjc4srMLAbI=;
+        b=CUM4Qr2GcIQyf0EUr1Ymka+1gPzROg+H+2AJhnTIftF4xvzFwvUrfIgDbK3E9/WNEHGyPk
+        blg6+Z24Cf9bN/s9bBAq5l77O7qYseVjVB3hpkLqf9rWxijLsSRaL+GRbcRPkkxNiEbBF4
+        yGfujFFvJ7bibN3eOt8rimihuyIzo7U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-clFzKb41ONC_EFnaw2g4ZA-1; Thu, 28 Apr 2022 04:36:26 -0400
-X-MC-Unique: clFzKb41ONC_EFnaw2g4ZA-1
+ us-mta-449-t0I35uw0MPm7ij8sn47SaA-1; Thu, 28 Apr 2022 04:36:32 -0400
+X-MC-Unique: t0I35uw0MPm7ij8sn47SaA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5AFFC296A606;
-        Thu, 28 Apr 2022 08:36:25 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3941C8E91EF;
+        Thu, 28 Apr 2022 08:36:31 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D56B566A40;
-        Thu, 28 Apr 2022 08:36:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A3429566A32;
+        Thu, 28 Apr 2022 08:36:25 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -65,9 +65,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Pedro Gomes <pedrodemargomes@gmail.com>,
         Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v4 16/17] mm/gup: trigger FAULT_FLAG_UNSHARE when R/O-pinning a possibly shared anonymous page
-Date:   Thu, 28 Apr 2022 10:34:40 +0200
-Message-Id: <20220428083441.37290-17-david@redhat.com>
+Subject: [PATCH v4 17/17] mm/gup: sanity-check with CONFIG_DEBUG_VM that anonymous pages are exclusive when (un)pinning
+Date:   Thu, 28 Apr 2022 10:34:41 +0200
+Message-Id: <20220428083441.37290-18-david@redhat.com>
 In-Reply-To: <20220428083441.37290-1-david@redhat.com>
 References: <20220428083441.37290-1-david@redhat.com>
 MIME-Version: 1.0
@@ -82,284 +82,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whenever GUP currently ends up taking a R/O pin on an anonymous page that
-might be shared -- mapped R/O and !PageAnonExclusive() -- any write fault
-on the page table entry will end up replacing the mapped anonymous page
-due to COW, resulting in the GUP pin no longer being consistent with the
-page actually mapped into the page table.
+Let's verify when (un)pinning anonymous pages that we always deal with
+exclusive anonymous pages, which guarantees that we'll have a reliable
+PIN, meaning that we cannot end up with the GUP pin being inconsistent
+with he pages mapped into the page tables due to a COW triggered
+by a write fault.
 
-The possible ways to deal with this situation are:
- (1) Ignore and pin -- what we do right now.
- (2) Fail to pin -- which would be rather surprising to callers and
-     could break user space.
- (3) Trigger unsharing and pin the now exclusive page -- reliable R/O
-     pins.
+When pinning pages, after conditionally triggering GUP unsharing of
+possibly shared anonymous pages, we should always only see exclusive
+anonymous pages. Note that anonymous pages that are mapped writable
+must be marked exclusive, otherwise we'd have a BUG.
 
-Let's implement 3) because it provides the clearest semantics and
-allows for checking in unpin_user_pages() and friends for possible BUGs:
-when trying to unpin a page that's no longer exclusive, clearly
-something went very wrong and might result in memory corruptions that
-might be hard to debug. So we better have a nice way to spot such
-issues.
+When pinning during ordinary GUP, simply add a check after our
+conditional GUP-triggered unsharing checks. As we know exactly how the
+page is mapped, we know exactly in which page we have to check for
+PageAnonExclusive().
 
-This change implies that whenever user space *wrote* to a private
-mapping (IOW, we have an anonymous page mapped), that GUP pins will
-always remain consistent: reliable R/O GUP pins of anonymous pages.
+When pinning via GUP-fast we have to be careful, because we can race with
+fork(): verify only after we made sure via the seqcount that we didn't
+race with concurrent fork() that we didn't end up pinning a possibly
+shared anonymous page.
 
-As a side note, this commit fixes the COW security issue for hugetlb with
-FOLL_PIN as documented in:
-  https://lore.kernel.org/r/3ae33b08-d9ef-f846-56fb-645e3b9b4c66@redhat.com
-The vmsplice reproducer still applies, because vmsplice uses FOLL_GET
-instead of FOLL_PIN.
+Similarly, when unpinning, verify that the pages are still marked as
+exclusive: otherwise something turned the pages possibly shared, which
+can result in random memory corruptions, which we really want to catch.
 
-Note that follow_huge_pmd() doesn't apply because we cannot end up in
-there with FOLL_PIN.
+With only the pinned pages at hand and not the actual page table entries
+we have to be a bit careful: hugetlb pages are always mapped via a
+single logical page table entry referencing the head page and
+PG_anon_exclusive of the head page applies. Anon THP are a bit more
+complicated, because we might have obtained the page reference either via
+a PMD or a PTE -- depending on the mapping type we either have to check
+PageAnonExclusive of the head page (PMD-mapped THP) or the tail page
+(PTE-mapped THP) applies: as we don't know and to make our life easier,
+check that either is set.
 
-This commit is heavily based on prototype patches by Andrea.
+Take care to not verify in case we're unpinning during GUP-fast because
+we detected concurrent fork(): we might stumble over an anonymous page
+that is now shared.
 
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Co-developed-by: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/mm.h | 39 +++++++++++++++++++++++++++++++++++++++
- mm/gup.c           | 42 +++++++++++++++++++++++++++++++++++++++---
- mm/huge_memory.c   |  3 +++
- mm/hugetlb.c       | 27 ++++++++++++++++++++++++---
- 4 files changed, 105 insertions(+), 6 deletions(-)
+ mm/gup.c         | 61 +++++++++++++++++++++++++++++++++++++++++++++++-
+ mm/huge_memory.c |  3 +++
+ mm/hugetlb.c     |  3 +++
+ 3 files changed, 66 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index c7b82d078969..4f5fb75aa221 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3005,6 +3005,45 @@ static inline int vm_fault_to_errno(vm_fault_t vm_fault, int foll_flags)
- 	return 0;
- }
- 
-+/*
-+ * Indicates for which pages that are write-protected in the page table,
-+ * whether GUP has to trigger unsharing via FAULT_FLAG_UNSHARE such that the
-+ * GUP pin will remain consistent with the pages mapped into the page tables
-+ * of the MM.
-+ *
-+ * Temporary unmapping of PageAnonExclusive() pages or clearing of
-+ * PageAnonExclusive() has to protect against concurrent GUP:
-+ * * Ordinary GUP: Using the PT lock
-+ * * GUP-fast and fork(): mm->write_protect_seq
-+ * * GUP-fast and KSM or temporary unmapping (swap, migration):
-+ *   clear/invalidate+flush of the page table entry
-+ *
-+ * Must be called with the (sub)page that's actually referenced via the
-+ * page table entry, which might not necessarily be the head page for a
-+ * PTE-mapped THP.
-+ */
-+static inline bool gup_must_unshare(unsigned int flags, struct page *page)
-+{
-+	/*
-+	 * FOLL_WRITE is implicitly handled correctly as the page table entry
-+	 * has to be writable -- and if it references (part of) an anonymous
-+	 * folio, that part is required to be marked exclusive.
-+	 */
-+	if ((flags & (FOLL_WRITE | FOLL_PIN)) != FOLL_PIN)
-+		return false;
-+	/*
-+	 * Note: PageAnon(page) is stable until the page is actually getting
-+	 * freed.
-+	 */
-+	if (!PageAnon(page))
-+		return false;
-+	/*
-+	 * Note that PageKsm() pages cannot be exclusive, and consequently,
-+	 * cannot get pinned.
-+	 */
-+	return !PageAnonExclusive(page);
-+}
-+
- typedef int (*pte_fn_t)(pte_t *pte, unsigned long addr, void *data);
- extern int apply_to_page_range(struct mm_struct *mm, unsigned long address,
- 			       unsigned long size, pte_fn_t fn, void *data);
 diff --git a/mm/gup.c b/mm/gup.c
-index f424abf5e792..4d089d467e58 100644
+index 4d089d467e58..46ffd8c51c6e 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -506,6 +506,10 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 		}
+@@ -29,6 +29,39 @@ struct follow_page_context {
+ 	unsigned int page_mask;
+ };
+ 
++static inline void sanity_check_pinned_pages(struct page **pages,
++					     unsigned long npages)
++{
++	if (!IS_ENABLED(CONFIG_DEBUG_VM))
++		return;
++
++	/*
++	 * We only pin anonymous pages if they are exclusive. Once pinned, we
++	 * can no longer turn them possibly shared and PageAnonExclusive() will
++	 * stick around until the page is freed.
++	 *
++	 * We'd like to verify that our pinned anonymous pages are still mapped
++	 * exclusively. The issue with anon THP is that we don't know how
++	 * they are/were mapped when pinning them. However, for anon
++	 * THP we can assume that either the given page (PTE-mapped THP) or
++	 * the head page (PMD-mapped THP) should be PageAnonExclusive(). If
++	 * neither is the case, there is certainly something wrong.
++	 */
++	for (; npages; npages--, pages++) {
++		struct page *page = *pages;
++		struct folio *folio = page_folio(page);
++
++		if (!folio_test_anon(folio))
++			continue;
++		if (!folio_test_large(folio) || folio_test_hugetlb(folio))
++			VM_BUG_ON_PAGE(!PageAnonExclusive(&folio->page), page);
++		else
++			/* Either a PTE-mapped or a PMD-mapped THP. */
++			VM_BUG_ON_PAGE(!PageAnonExclusive(&folio->page) &&
++				       !PageAnonExclusive(page), page);
++	}
++}
++
+ /*
+  * Return the folio with ref appropriately incremented,
+  * or NULL if that failed.
+@@ -204,6 +237,7 @@ bool __must_check try_grab_page(struct page *page, unsigned int flags)
+  */
+ void unpin_user_page(struct page *page)
+ {
++	sanity_check_pinned_pages(&page, 1);
+ 	gup_put_folio(page_folio(page), 1, FOLL_PIN);
+ }
+ EXPORT_SYMBOL(unpin_user_page);
+@@ -272,6 +306,7 @@ void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
+ 		return;
  	}
  
-+	if (!pte_write(pte) && gup_must_unshare(flags, page)) {
-+		page = ERR_PTR(-EMLINK);
-+		goto out;
++	sanity_check_pinned_pages(pages, npages);
+ 	for (i = 0; i < npages; i += nr) {
+ 		folio = gup_folio_next(pages, npages, i, &nr);
+ 		/*
+@@ -344,6 +379,23 @@ void unpin_user_page_range_dirty_lock(struct page *page, unsigned long npages,
+ }
+ EXPORT_SYMBOL(unpin_user_page_range_dirty_lock);
+ 
++static void unpin_user_pages_lockless(struct page **pages, unsigned long npages)
++{
++	unsigned long i;
++	struct folio *folio;
++	unsigned int nr;
++
++	/*
++	 * Don't perform any sanity checks because we might have raced with
++	 * fork() and some anonymous pages might now actually be shared --
++	 * which is why we're unpinning after all.
++	 */
++	for (i = 0; i < npages; i += nr) {
++		folio = gup_folio_next(pages, npages, i, &nr);
++		gup_put_folio(folio, nr, FOLL_PIN);
 +	}
++}
++
+ /**
+  * unpin_user_pages() - release an array of gup-pinned pages.
+  * @pages:  array of pages to be marked dirty and released.
+@@ -367,6 +419,7 @@ void unpin_user_pages(struct page **pages, unsigned long npages)
+ 	if (WARN_ON(IS_ERR_VALUE(npages)))
+ 		return;
+ 
++	sanity_check_pinned_pages(pages, npages);
+ 	for (i = 0; i < npages; i += nr) {
+ 		folio = gup_folio_next(pages, npages, i, &nr);
+ 		gup_put_folio(folio, nr, FOLL_PIN);
+@@ -510,6 +563,10 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 		page = ERR_PTR(-EMLINK);
+ 		goto out;
+ 	}
++
++	VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
++		       !PageAnonExclusive(page), page);
++
  	/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
  	if (unlikely(!try_grab_page(page, flags))) {
  		page = ERR_PTR(-ENOMEM);
-@@ -732,6 +736,11 @@ static struct page *follow_p4d_mask(struct vm_area_struct *vma,
-  * When getting pages from ZONE_DEVICE memory, the @ctx->pgmap caches
-  * the device's dev_pagemap metadata to avoid repeating expensive lookups.
-  *
-+ * When getting an anonymous page and the caller has to trigger unsharing
-+ * of a shared anonymous page first, -EMLINK is returned. The caller should
-+ * trigger a fault with FAULT_FLAG_UNSHARE set. Note that unsharing is only
-+ * relevant with FOLL_PIN and !FOLL_WRITE.
-+ *
-  * On output, the @ctx->page_mask is set according to the size of the page.
-  *
-  * Return: the mapped (struct page *), %NULL if no mapping exists, or
-@@ -855,7 +864,8 @@ static int get_gate_page(struct mm_struct *mm, unsigned long address,
-  * is, *@locked will be set to 0 and -EBUSY returned.
-  */
- static int faultin_page(struct vm_area_struct *vma,
--		unsigned long address, unsigned int *flags, int *locked)
-+		unsigned long address, unsigned int *flags, bool unshare,
-+		int *locked)
- {
- 	unsigned int fault_flags = 0;
- 	vm_fault_t ret;
-@@ -877,6 +887,11 @@ static int faultin_page(struct vm_area_struct *vma,
- 		 */
- 		fault_flags |= FAULT_FLAG_TRIED;
- 	}
-+	if (unshare) {
-+		fault_flags |= FAULT_FLAG_UNSHARE;
-+		/* FAULT_FLAG_WRITE and FAULT_FLAG_UNSHARE are incompatible */
-+		VM_BUG_ON(fault_flags & FAULT_FLAG_WRITE);
-+	}
- 
- 	ret = handle_mm_fault(vma, address, fault_flags, NULL);
- 	if (ret & VM_FAULT_ERROR) {
-@@ -1098,8 +1113,9 @@ static long __get_user_pages(struct mm_struct *mm,
- 		cond_resched();
- 
- 		page = follow_page_mask(vma, start, foll_flags, &ctx);
--		if (!page) {
--			ret = faultin_page(vma, start, &foll_flags, locked);
-+		if (!page || PTR_ERR(page) == -EMLINK) {
-+			ret = faultin_page(vma, start, &foll_flags,
-+					   PTR_ERR(page) == -EMLINK, locked);
- 			switch (ret) {
- 			case 0:
- 				goto retry;
-@@ -2201,6 +2217,11 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
- 			goto pte_unmap;
+@@ -2750,8 +2807,10 @@ static unsigned long lockless_pages_from_mm(unsigned long start,
+ 	 */
+ 	if (gup_flags & FOLL_PIN) {
+ 		if (read_seqcount_retry(&current->mm->write_protect_seq, seq)) {
+-			unpin_user_pages(pages, nr_pinned);
++			unpin_user_pages_lockless(pages, nr_pinned);
+ 			return 0;
++		} else {
++			sanity_check_pinned_pages(pages, nr_pinned);
  		}
- 
-+		if (!pte_write(pte) && gup_must_unshare(flags, page)) {
-+			gup_put_folio(folio, 1, flags);
-+			goto pte_unmap;
-+		}
-+
- 		/*
- 		 * We need to make the page accessible if and only if we are
- 		 * going to access its content (the FOLL_PIN case).  Please
-@@ -2381,6 +2402,11 @@ static int gup_hugepte(pte_t *ptep, unsigned long sz, unsigned long addr,
- 		return 0;
  	}
- 
-+	if (!pte_write(pte) && gup_must_unshare(flags, &folio->page)) {
-+		gup_put_folio(folio, refs, flags);
-+		return 0;
-+	}
-+
- 	*nr += refs;
- 	folio_set_referenced(folio);
- 	return 1;
-@@ -2442,6 +2468,11 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
- 		return 0;
- 	}
- 
-+	if (!pmd_write(orig) && gup_must_unshare(flags, &folio->page)) {
-+		gup_put_folio(folio, refs, flags);
-+		return 0;
-+	}
-+
- 	*nr += refs;
- 	folio_set_referenced(folio);
- 	return 1;
-@@ -2477,6 +2508,11 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
- 		return 0;
- 	}
- 
-+	if (!pud_write(orig) && gup_must_unshare(flags, &folio->page)) {
-+		gup_put_folio(folio, refs, flags);
-+		return 0;
-+	}
-+
- 	*nr += refs;
- 	folio_set_referenced(folio);
- 	return 1;
+ 	return nr_pinned;
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 17ec6c939e7f..4414111998df 100644
+index 4414111998df..a2f44d8d3d47 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -1389,6 +1389,9 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
- 	page = pmd_page(*pmd);
- 	VM_BUG_ON_PAGE(!PageHead(page) && !is_zone_device_page(page), page);
+@@ -1392,6 +1392,9 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
+ 	if (!pmd_write(*pmd) && gup_must_unshare(flags, page))
+ 		return ERR_PTR(-EMLINK);
  
-+	if (!pmd_write(*pmd) && gup_must_unshare(flags, page))
-+		return ERR_PTR(-EMLINK);
++	VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
++			!PageAnonExclusive(page), page);
 +
  	if (!try_grab_page(page, flags))
  		return ERR_PTR(-ENOMEM);
  
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index b8898c38f2ce..bbf0ce8cd33d 100644
+index bbf0ce8cd33d..534747d661dd 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -5964,6 +5964,25 @@ static void record_subpages_vmas(struct page *page, struct vm_area_struct *vma,
- 	}
- }
+@@ -6100,6 +6100,9 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		pfn_offset = (vaddr & ~huge_page_mask(h)) >> PAGE_SHIFT;
+ 		page = pte_page(huge_ptep_get(pte));
  
-+static inline bool __follow_hugetlb_must_fault(unsigned int flags, pte_t *pte,
-+					       bool *unshare)
-+{
-+	pte_t pteval = huge_ptep_get(pte);
++		VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
++			       !PageAnonExclusive(page), page);
 +
-+	*unshare = false;
-+	if (is_swap_pte(pteval))
-+		return true;
-+	if (huge_pte_write(pteval))
-+		return false;
-+	if (flags & FOLL_WRITE)
-+		return true;
-+	if (gup_must_unshare(flags, pte_page(pteval))) {
-+		*unshare = true;
-+		return true;
-+	}
-+	return false;
-+}
-+
- long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 			 struct page **pages, struct vm_area_struct **vmas,
- 			 unsigned long *position, unsigned long *nr_pages,
-@@ -5978,6 +5997,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 	while (vaddr < vma->vm_end && remainder) {
- 		pte_t *pte;
- 		spinlock_t *ptl = NULL;
-+		bool unshare = false;
- 		int absent;
- 		struct page *page;
- 
-@@ -6028,9 +6048,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 		 * both cases, and because we can't follow correct pages
- 		 * directly from any kind of swap entries.
- 		 */
--		if (absent || is_swap_pte(huge_ptep_get(pte)) ||
--		    ((flags & FOLL_WRITE) &&
--		      !huge_pte_write(huge_ptep_get(pte)))) {
-+		if (absent ||
-+		    __follow_hugetlb_must_fault(flags, pte, &unshare)) {
- 			vm_fault_t ret;
- 			unsigned int fault_flags = 0;
- 
-@@ -6038,6 +6057,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 				spin_unlock(ptl);
- 			if (flags & FOLL_WRITE)
- 				fault_flags |= FAULT_FLAG_WRITE;
-+			else if (unshare)
-+				fault_flags |= FAULT_FLAG_UNSHARE;
- 			if (locked)
- 				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
- 					FAULT_FLAG_KILLABLE;
+ 		/*
+ 		 * If subpage information not requested, update counters
+ 		 * and skip the same_page loop below.
 -- 
 2.35.1
 

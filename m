@@ -2,188 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFDD5133AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC215133AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346258AbiD1McF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S1346233AbiD1MaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344818AbiD1McC (ORCPT
+        with ESMTP id S1346227AbiD1MaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:32:02 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F81AF1DE;
-        Thu, 28 Apr 2022 05:28:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d1gc9SM9SWuPoxxURHpXE5aRdE4dcY7tc9WU3p3zmgRvHrBwzuX7hUVnCcwRYO7TAxgVZpYklS61mMk2CHgUy4/b7rDh8fMP89XyZhQUfK9A71XCgwJ4m2zaDNyoMFK/lZKIQy+ohsqdz4wDiwBzdGUBrk9ERCM/ofWClqKiE80Y9rF5VjG0W9udfnu7UYpT+/GLozhu+O2sGlFJdaQpgT9fAcFg4G/mpkPYzf3WPAcwAxMcH5NuE1KIrmitDzgwkUMmWzc+pJLxUcnpSEfbdDR/V+MhT9OnL+ihV7zdgId7nh6H8z9B7ucOFKr9/sMkXYeBv8w//elh18IalkueBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nXdLk7+Ybyay59j04Lb9oGkSSsCcBaQiRn6Bihnil1s=;
- b=EzJSxDwVQ4lwFpL0fWbUxF6ju4nzr+gwm1BQ6VCZhbO3eqvsa8dI6ZJh9pWxaAJl40D6FIi8Uufc6sRnCRiqPxNmIbWupROVwxtrq27xmQJSxIXeWCRzjPuqWNZeCROIeT4KlOoGIWVniUdg+CIUlABWIB6zgdkjI8Wf/6LsPebaf0ahRzZPlkHit/F8Fc7SB8Vprt3U7GWUuPsDsAekIZPCovDZRfAA+EvaluX0MxeL+h2mKxCHICzuc+XSc+PUJGQYIVhhSBNvLDBBwLQ5wCgrphYv1Lv/Jw2nhp/bClZAInWFhXQRfmH/YXdQ/vKgNybKataC42e9e4VYrERYnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nXdLk7+Ybyay59j04Lb9oGkSSsCcBaQiRn6Bihnil1s=;
- b=WhrXoskqtzIgxVHShOWPL2lsX/0qgYmF16Db8FMQQrZZL3XEWFDLhsiqEvMB7ZcN9oiWoRfgEWoS9iwnVTrnizclSItBTWw5Poiz/23Cp359q4sDuaFWSZsCb4lhVXVP0t0LcObtvW742I6EG/RmNJgLkp0Wd5qct/leIYztwQlVlDTYgOH9hFXzDhY2UxTIifB3sDj4ifRGj3uYx8dD/X+oXkLhgc9X0Ib1Lm+ha7n4e5RuqIM7bJCLdIJ77k6Fj1QJcx/599TUeQQIyDmLUjD49b9Pulv9Es1wVXAwfiV0cWLl7PonAP9vtq7KAqDguopS3t3yHfJoBCOnAX8N0Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by IA1PR12MB6068.namprd12.prod.outlook.com (2603:10b6:208:3ec::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.20; Thu, 28 Apr
- 2022 12:28:47 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%6]) with mapi id 15.20.5186.023; Thu, 28 Apr 2022
- 12:28:46 +0000
-Date:   Thu, 28 Apr 2022 09:28:45 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 15/21] KVM: s390: pci: add routines to start/stop
- interpretive execution
-Message-ID: <20220428122845.GC8364@nvidia.com>
-References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
- <20220426200842.98655-16-mjrosato@linux.ibm.com>
- <20220427151400.GY2125828@nvidia.com>
- <b9575614-a234-0c36-7601-9c09d159c3b0@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b9575614-a234-0c36-7601-9c09d159c3b0@linux.ibm.com>
-X-ClientProxiedBy: BL1PR13CA0432.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::17) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 28 Apr 2022 08:30:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13F17CB0B;
+        Thu, 28 Apr 2022 05:26:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651148817; x=1682684817;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=uWpsrfMCGcdP4sBCZpdV/K9nXsH6L4kQovbP/bC7oiM=;
+  b=EtEZL6LXBy5f+wWZaMasunOM0ZkDPJVe26PdJxpW6Ke7x3KrOo/fQdiP
+   U1vUnm+KSUGocnqZP71JDY7K0P+xvsZa8tpLJvxKh5SxNwmNJLAlSMPsl
+   aYr7ng9e4jBJEXn57YGdKeb6vlQwk4b/OWBcvjWIn22+nPIwAnqIkEONq
+   gDJ2MsiqLlzHZ3FVA3OPs1onbt8UStmtYVBm5x1MfCrzuo54IHJXHom0O
+   GM0ABBMYmDZvlZFgdMR/pY0jjiCYba8mLDFDZE9/j26PMu1EtsZqv0/tS
+   dwUuKMJYJ3jdJcb9kSkUAYhDXdwjjGopxayR701qVKrGeS9bcj460Azjg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="246832536"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="246832536"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 05:26:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="878583949"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Apr 2022 05:26:49 -0700
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
+ <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
+ <b9fcc518-cc0d-d346-774e-3a9472e664bc@linux.intel.com>
+ <20220428030319.GA139938@ubuntu>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
+Message-ID: <0f84e8d4-451f-693a-d098-517dc6235a0f@linux.intel.com>
+Date:   Thu, 28 Apr 2022 15:28:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 07789a3c-2a5b-4203-2c4f-08da2912a3fd
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6068:EE_
-X-Microsoft-Antispam-PRVS: <IA1PR12MB606849786B017DAB6300C06AC2FD9@IA1PR12MB6068.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8kM5uLCW+8ue53JR7wdNbQCxQpB5ZbSNuCAr2AWzVqCSuaEQkbzyDLeC2hmUY8qIUkj/GfdL0CIeS0DgvpdjsVmUneQYw7lfRCFOMoieIGky7hbD2AjbldehRNnw07mIQGMSxQnw+6tgDKfsM3LxcQ/MSxho8Zqj/PPP2e4ge70llZ9VwvOd8Xjekyw/fRE1IuTJpc+tpY0qlDdVCUSbAsJwYPJUSaCyiXb/x2Ze/NDMzCffToCUMAI+ahBWsayjrW0PKmlfltP6D1bts4ELFSBYVnN+DhreQPtqD1UDpBWJYaujdFPmhBaNbNWftPri64Gz2Dve2ZzsbzZz1kr0Mc11OICq+SDWBKpTq5qKo+EGh0TBLdoG51yHOiyCoA3sUjtY7bNtiC7TNxSrKGXRva5eFO9dgRFEpfg6L3BTamYnF9qF5Y3ONmtRiVH32VgDfdDiV4pJIOTcCCEH0fFQs2P5lUO7kBS368BNbLf8ECvMVCi5cXkk82Bakva8UEFTT/0z/xzSAu6bP2euOuNnrljnwQZojBfz2HB9kjA06G5lkHRgW8uCzOAKfXl8n0JpjS+GWVKpcLjtKBhbzgFXbEw2GUJWxSNZQ0tm8wzxTjVsdwEf3SuJr0+XhFBoVoHq2IvnNB8JakV6hJmdP/Y61g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(8676002)(2616005)(66946007)(316002)(5660300002)(6916009)(7416002)(8936002)(33656002)(6506007)(508600001)(66476007)(66556008)(2906002)(83380400001)(36756003)(1076003)(26005)(186003)(6512007)(6486002)(86362001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/sZVQ50Qs1XMAuHOpj8cKOl4MqzhhE3KmNhKTQQTAEiaVdzAOFNe6j+i8uiP?=
- =?us-ascii?Q?YuUPI9bSXRl1F4Sv3YnOlElYkaTaf3iGvQg2B1pytCdGK4fLStLRE/nvR3e/?=
- =?us-ascii?Q?qbjav+6IZDYDzK9YgJsEholfae5jw9xT8PP5rVNcoRjcK1jsHP7Lk9VuVbF5?=
- =?us-ascii?Q?/NldSBCDS6P6xQLuYti/g55isVsBD9vj+/Rcmmk3BUGLFg0crK2+fx9S9u6F?=
- =?us-ascii?Q?hHMdWKeWMO/KevS0GSngS5fZYnNoM3Ap4xy2mxCi+nlLZQK0JpAQRfOT1UQj?=
- =?us-ascii?Q?9BaOIkPd8HEj3CQf2f6OnrCq1g5PvnqFQhIrfBFhKhjq6+nnwBU/F9rX9r1p?=
- =?us-ascii?Q?k/PkpCT5IYGPk+IZuD/D2K//ZJFXU+IgTLo61lGG6Jo3DI/deG+aJwQ1juoS?=
- =?us-ascii?Q?Xc4+0nD+msttgpE5C9C1fnxKUXyV0jkNk7FLENeE8Te1PduYWBC4RlAr6XoB?=
- =?us-ascii?Q?Te59N8edGzCfyJfBvExNAx02Z6LSUgex+WaZIKWIhCSpHsxoIgtRnYh+x8tg?=
- =?us-ascii?Q?VY4fLTNZ+2xXVAvkLxk5XTqc3lh8oFQ0iaTYCUAerJCY+rmf+gIynOjiU0IN?=
- =?us-ascii?Q?3J21lEdzb6vlDrOXJfTlYRvmX9k/K9yrNE/90mkfsduzSAEXJHe79pTc0Bj1?=
- =?us-ascii?Q?A9tqsLle5ynbU3Lw73OxzARtJa/HXpRP/n6rI3VM1ZpzEX7UWC4SO8Sr0aMD?=
- =?us-ascii?Q?MyKBDfvI6VBzXtuve3/yRwItz+JrMvCYRK7nE9Cfr7jNuwm/8x6u+samyP7T?=
- =?us-ascii?Q?mak6GG16DlPWno9SNhz9v0C3ppPaQeDlMXo496UULMDD92bEfmTJFrlh+6Uv?=
- =?us-ascii?Q?gjjmk3hdbqwW98ZxxPUVuwE+Fvvajqn/5Yq7iWD0z26t904eyVkSBXX3Y3XE?=
- =?us-ascii?Q?//XX0iwA3Fsm06SVhlkeUE9e6T6XXdorU9PJHmRuK+9WoHfGlbKUalSttZNw?=
- =?us-ascii?Q?knaMEYELb7S9jIkVYJieDgBCzn26Pyk5+nPc5ovwSZij/sC/qGzZoNP3SlmE?=
- =?us-ascii?Q?KWvMs7jCD3hBIHQCkkMe8DlwQCU/ySeYmpSqjRoEQjWAyu9FRb1L2iXfUcaf?=
- =?us-ascii?Q?ioCv1eFqMDWP776RNoZk6GTzEjNx6TFlcz+8C3T2DgkovfvU3QHW8DTvr6Ok?=
- =?us-ascii?Q?Po7t8DZrL/6ponig4Jphf0B1iS43nsSIQWVoZZ87SMTDe6+vo8Btir3G5JaA?=
- =?us-ascii?Q?OzBXYFSl1HiOba6NVne+MX/WPuKd2JH40LGvT8OTtit7wt/z2hyG8uBAvOi9?=
- =?us-ascii?Q?l+jNx60KGNoBfvPLAZmBsODZZto1HpRlbNu54kj1HUmRRW/nlYLbfj7BZT+F?=
- =?us-ascii?Q?9+L2W9g6n/cEpL5NSOWhVU3pcT5CvJFgmxq4UKVVW0qP/MopH+FBtaM7Q/NN?=
- =?us-ascii?Q?8PXV+B/Zlq86gO82KbGnSoV3mJz47d0nXDQA8Mrutw3tMzR2OACkmPifkbS0?=
- =?us-ascii?Q?21SAc+NR2reEejWCui5AssQ74L6SwsFlidvAv9Qh7x6KcwUsOeJDj4NJp4Sv?=
- =?us-ascii?Q?tjnuBlo3Xd0GAGBcpVZSF7jVYcR0P+SBVh2zCTRuVxEDFgQeKPfQX7vq6Qb3?=
- =?us-ascii?Q?lPo2djPIji4pCDEOX6PAJp1Ah/J7da5gs88Kk0aBLHus5T/2fHmXFK6nw/gE?=
- =?us-ascii?Q?/RxiN/EArdSZ4ZBKaeBUHDVIiVK42yqouwrrgMR166EbefRKYrSfqcZ52s1v?=
- =?us-ascii?Q?LBYdc0EBbzC+vwKVKhSUqGtJFj6RI0Yq/g+BFreP22I+HniwP+kIDLRQ7UFy?=
- =?us-ascii?Q?HE6SaeVNvA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07789a3c-2a5b-4203-2c4f-08da2912a3fd
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 12:28:46.6586
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O43qztaJo4VguTV639NGBVmfCIP9W0MQYWDmr2z5y58VnqKFnXWnNZlKk/7YurQi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6068
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220428030319.GA139938@ubuntu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 04:20:10PM -0400, Matthew Rosato wrote:
-> > > +void kvm_s390_pci_clear_list(struct kvm *kvm)
-> > > +{
-> > > +	struct kvm_zdev *tmp, *kzdev;
-> > > +	LIST_HEAD(remove);
-> > > +
-> > > +	spin_lock(&kvm->arch.kzdev_list_lock);
-> > > +	list_for_each_entry_safe(kzdev, tmp, &kvm->arch.kzdev_list, entry)
-> > > +		list_move_tail(&kzdev->entry, &remove);
-> > > +	spin_unlock(&kvm->arch.kzdev_list_lock);
-> > > +
-> > > +	list_for_each_entry_safe(kzdev, tmp, &remove, entry)
-> > > +		unregister_kvm(kzdev->zdev);
-> > 
-> > Hum, I wonder if this is a mistake in kvm:
-> > 
-> > static void kvm_destroy_vm(struct kvm *kvm)
-> > {
-> > [..]
-> > 	kvm_arch_destroy_vm(kvm);
-> > 	kvm_destroy_devices(kvm);
-> > 
-> > kvm_destroy_devices() triggers the VFIO notifier with NULL. Indeed for
-> > correctness I would expect the VFIO users to have been notified to
-> > release the kvm before the kvm object becomes partially destroyed?
-> > 
-> > Maybe you should investigate re-ordering this at the KVM side and just
-> > WARN_ON(!list_empty) in the arch code?
-> > 
-> > (vfio has this odd usage model where it should use the kvm pointer
-> > without taking a ref on it so long as the unregister hasn't been
-> > called)
-> > 
+On 28.4.2022 6.03, Jung Daehwan wrote:
+> On Wed, Apr 27, 2022 at 07:25:21PM +0300, Mathias Nyman wrote:
+>> On 26.4.2022 12.18, Daehwan Jung wrote:
+>>> This driver is for Samsung Exynos xhci host conroller. It uses xhci-plat
+>>> driver mainly and extends some functions by xhci hooks and overrides.
+>>>
+>>> It supports USB Audio offload with Co-processor. It only cares DCBAA,
+>>> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
+>>> on specific address with xhci hooks. Co-processor could use them directly
+>>> without xhci driver after then.
+>>>
+>>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+>>
+>> I have to agree with Krzysztof's comments, this is an odd driver stub.
+>>
+>> Perhaps open up a bit how the Exynos offloading works so we can figure out
+>> in more detail what the hardware needs from software.  
+>>
+>> (...)
 > 
-> The issue there is that I am unregistering the notifier during close_device
-> for each zPCI dev, which will have already happened
+>>> +static int xhci_alloc_segments_for_ring_uram(struct xhci_hcd *xhci,
+>>> +		struct xhci_segment **first, struct xhci_segment **last,
+>>> +		unsigned int num_segs, unsigned int cycle_state,
+>>> +		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags,
+>>> +		u32 endpoint_type)
+>>> +{
+>>> +	struct xhci_segment *prev;
+>>> +	bool chain_links = false;
+>>> +
+>>> +	while (num_segs > 0) {
+>>> +		struct xhci_segment *next = NULL;
+>>> +
+>>> +		if (!next) {
+>>> +			prev = *first;
+>>> +			while (prev) {
+>>> +				next = prev->next;
+>>> +				xhci_segment_free(xhci, prev);
+>>> +				prev = next;
+>>> +			}
+>>> +			return -ENOMEM;
+>>
+>> This always return -ENOMEM
+> 
+> Yes. it's right to return error here.
+> 
 
-And at that moment you have to clean up the arch stuff too, it
-shouldn't be left floating around once the driver that installed it
-looses access to the kvm.
+Still don't think that is the case.
 
-> -- so by the time we get to kvm_destroy_devices(), whether it's
-> before or after kvm_arch_destroy_vm, there are no longer any zPCI
-> notifiers registered that will trigger.
+So if the num_segs value passed to a function named
+xhci_alloc_segments_for_ring_uram() is anything else than 0, it will 
+automatically return -ENOMEM?
 
-I don't think that is strictly true, there is no enforced linkage
-between the lifetime of the kvm FD and the lifetime of the VFIO device
-FD. qemu probably orders them the way you say.
+>>
+>> Also this whole function never allocates or remaps any memory.
+> 
+> This fuctions is for link segments. Right below function(xhci_ring_alloc_uram)
+> allocates.
 
-> One way to solve this is to have the zpci close_device hook also trigger the
-> work that a KVM_DEV_VFIO_GROUP_DEL would (if the device is being closed, the
-> KVM association for that device isn't applicable anymore so go ahead and
-> clean up).
+Still doesn't allocate any ring segments.
+Below function only allocates memory for the
+ring structure that contains pointers to segments.
 
-That makes the most sense - but think about what happens if the KVM fd
-is closed while the device FD is still open..
+> 
+>>
+>>> +		}
+>>> +		xhci_link_segments(prev, next, type, chain_links);
+>>> +
+>>> +		prev = next;
+>>> +		num_segs--;
+>>> +	}
+>>> +	xhci_link_segments(prev, *first, type, chain_links);
+>>> +	*last = prev;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static struct xhci_ring *xhci_ring_alloc_uram(struct xhci_hcd *xhci,
+>>> +		unsigned int num_segs, unsigned int cycle_state,
+>>> +		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags,
+>>> +		u32 endpoint_type)
+>>> +{
+>>> +	struct xhci_ring	*ring;
+>>> +	int ret;
+>>> +	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+>>> +
+>>> +	ring = kzalloc_node(sizeof(*ring), flags, dev_to_node(dev));
+>>> +	if (!ring)
+>>> +		return NULL;
+>>> +
+>>> +	ring->num_segs = num_segs;
+>>> +	ring->bounce_buf_len = max_packet;
+>>> +	INIT_LIST_HEAD(&ring->td_list);
+>>> +	ring->type = type;
+>>> +	if (num_segs == 0)
+>>> +		return ring;
+>>> +
+>>> +	ret = xhci_alloc_segments_for_ring_uram(xhci, &ring->first_seg,
+>>> +			&ring->last_seg, num_segs, cycle_state, type,
+>>> +			max_packet, flags, endpoint_type);
+>>> +	if (ret)
+>>> +		goto fail;
+>>> +
+>>> +	/* Only event ring does not use link TRB */
+>>> +	if (type != TYPE_EVENT) {
+>>> +		/* See section 4.9.2.1 and 6.4.4.1 */
+>>> +		ring->last_seg->trbs[TRBS_PER_SEGMENT - 1].link.control |=
+>>> +			cpu_to_le32(LINK_TOGGLE);
+>>
+>> No memory was allocated for trbs
+> 
+> Allcation function for trbs are missed. It's done by ioremap.
+> I will add it on next submission. Thanks for the comment.
+> 
+>>
+>> A lot of this code seems to exists just to avoid xhci driver from allocating
+>> dma capable memory, we can refactor the existing xhci_mem_init() and move
+>> dcbaa and event ring allocation and other code to their own overridable
+>> functions.
+>>
+>> This way we can probably get rid of a lot of the code in this series.
+> 
+> Yes right. I think it's proper. Do you agree with it or have better way
+> to do it?
 
-Jason
+Could be, but I don't have a good picture of how this Exynos audio offloading
+works, so it's hard to guess.
+
+Thanks
+-Mathias

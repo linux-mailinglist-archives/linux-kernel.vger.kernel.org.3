@@ -2,163 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFDA5136DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D985136DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348349AbiD1OaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S1348359AbiD1ObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347045AbiD1OaR (ORCPT
+        with ESMTP id S1343852AbiD1ObI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:30:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851F5427C6;
-        Thu, 28 Apr 2022 07:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651156022; x=1682692022;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1TTI2/iHO5RXgsAytHz7L5iHVv4ElQrAH3SAtwKGs0o=;
-  b=IwMqB1ujI9TkrGwbFJDdsnlUZWOJdzznK6ICINWrIXIKyx8LuV/CFy9s
-   Bk3YCZpMnNOj5xpqd2ikgD8NBIByZDfG+L3UYTL2GfV/uTwIXnC9f62fn
-   FznL7V1yYuq2h1ZtEYx24V3FSY0Qs0ZD48HpbCMyO1xEnAqfCJGGd9+Vq
-   f8ceVwQEPxc2DoWX+lBYRkHu9gLXqGtnBlU/TrpyOLw1O1w/mhbdTdzXe
-   i5ZP56ZK8Us7U3lP3DsqFed/3fDssXcYUEFsVLqIJoOyoyE/1xr12D/B5
-   j3uYy4slFbmNNjtS2gX5BQySrwK3k9v6piuem5v+YHLikteIKp1Sm6cRD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="263893606"
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="263893606"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:26:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="559692964"
-Received: from mpoursae-mobl2.amr.corp.intel.com (HELO [10.212.0.84]) ([10.212.0.84])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 07:26:45 -0700
-Message-ID: <3731a852-71b8-b081-2426-3b0a650e174c@intel.com>
-Date:   Thu, 28 Apr 2022 07:27:01 -0700
+        Thu, 28 Apr 2022 10:31:08 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9496953E08;
+        Thu, 28 Apr 2022 07:27:51 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id C97BAFF80C;
+        Thu, 28 Apr 2022 14:27:49 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 16:27:48 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCHv2 1/2] doc/media api: Try to make enum usage clearer
+Message-ID: <20220428142748.hsxudwkpsmalltd2@uno.localdomain>
+References: <20220428105211.7106ce6a.dorota.czaplejewicz@puri.sm>
+ <20220428130448.bfht2nf23n6lidsk@uno.localdomain>
+ <20220428155723.456b7ff0.dorota.czaplejewicz@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 04/21] x86/virt/tdx: Add skeleton for detecting and
- initializing TDX on demand
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
- <ac482f2b-d2d1-0643-faa4-1b36340268c5@intel.com>
- <22e3adf42b8ea2cae3aabc26f762acb983133fea.camel@intel.com>
- <c833aff2-b459-a1d7-431f-bce5c5f29182@intel.com>
- <37efe2074eba47c51bf5c1a2369a05ddf9082885.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <37efe2074eba47c51bf5c1a2369a05ddf9082885.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="y3rvmn3f2oodlhlk"
+Content-Disposition: inline
+In-Reply-To: <20220428155723.456b7ff0.dorota.czaplejewicz@puri.sm>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 17:00, Kai Huang wrote:
-> On Wed, 2022-04-27 at 07:49 -0700, Dave Hansen wrote:
-> I think we can use pr_info_once() when all_cpus_booted() returns false, and get
-> rid of printing "SEAMRR not enabled" in seamrr_enabled().  How about below?
-> 
-> static bool seamrr_enabled(void)
-> {
-> 	if (!all_cpus_booted())
-> 		pr_info_once("Not all present CPUs have been booted.  Report
-> SEAMRR as not enabled");
-> 
-> 	return __seamrr_enabled();
-> }
-> 
-> And we don't print "SEAMRR not enabled".
 
-That's better, but even better than that would be removing all that
-SEAMRR gunk in the first place.
+--y3rvmn3f2oodlhlk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
->>>>> +	/*
->>>>> +	 * TDX requires at least two KeyIDs: one global KeyID to
->>>>> +	 * protect the metadata of the TDX module and one or more
->>>>> +	 * KeyIDs to run TD guests.
->>>>> +	 */
->>>>> +	return tdx_keyid_num >= 2;
->>>>> +}
->>>>> +
->>>>> +static int __tdx_detect(void)
->>>>> +{
->>>>> +	/* The TDX module is not loaded if SEAMRR is disabled */
->>>>> +	if (!seamrr_enabled()) {
->>>>> +		pr_info("SEAMRR not enabled.\n");
->>>>> +		goto no_tdx_module;
->>>>> +	}
->>>>
->>>> Why even bother with the SEAMRR stuff?  It sounded like you can "ping"
->>>> the module with SEAMCALL.  Why not just use that directly?
->>>
->>> SEAMCALL will cause #GP if SEAMRR is not enabled.  We should check whether
->>> SEAMRR is enabled before making SEAMCALL.
->>
->> So...  You could actually get rid of all this code.  if SEAMCALL #GP's,
->> then you say, "Whoops, the firmware didn't load the TDX module
->> correctly, sorry."
-> 
-> Yes we can just use the first SEAMCALL (TDH.SYS.INIT) to detect whether TDX
-> module is loaded.  If SEAMCALL is successful, the module is loaded.
-> 
-> One problem is currently the patch to flush cache for kexec() uses
-> seamrr_enabled() and tdx_keyid_sufficient() to determine whether we need to
-> flush the cache.  The reason is, similar to SME, the flush is done in
-> stop_this_cpu(), but the status of TDX module initialization is protected by
-> mutex, so we cannot use TDX module status in stop_this_cpu() to determine
-> whether to flush.
-> 
-> If that patch makes sense, I think we still need to detect SEAMRR?
+On Thu, Apr 28, 2022 at 03:57:23PM +0200, Dorota Czaplejewicz wrote:
+> Hello,
+>
+> On Thu, 28 Apr 2022 15:04:48 +0200
+> Jacopo Mondi <jacopo@jmondi.org> wrote:
+>
+> > Hi Dorota,
+> >
+> >
+> > On Thu, Apr 28, 2022 at 10:52:11AM +0200, Dorota Czaplejewicz wrote:
+> > > Added: mbus codes must not repeat
+> > > Added: no holes in the enumeration
+> > > Added: enumerations per what?
+> > > Added: who fills in what in calls
+> > > Changed: "zero" -> "0"
+> > > Changed: "given" -> "specified"
+> > >
+> > A more discoursive commit message would be appreciated. Just a few lines
+> > before the crude list of changes:
+> >
+> > Something like
+> >
+> > "Update the documentation of ... in order to clarify etc etc"
+> >
+> > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > ---
+> > > Hello,
+> > >
+> > > this is the second attempt at updating the media documentation.
+> > >
+> > > Differences from previous: "selected" is now "specified", "array" is now "enumeration", and "caller" is now "application".
+> >
+> > Please stay in 80 cols even for parts that won't end up in the commit
+> > message, it's hard to read this if you have multiple terminal windows
+> > open.
+>
+> I can try to comply with this, but I generally don't do it
+> because hard breaks are difficult to read
+> on a phone or if I have multiple messages open.
+> My line widths vary between 40 and 80 characters,
+> and hard breaks can only cover one width, at the cost of all others.
 
-Please go look at stop_this_cpu() closely.  What are the AMD folks doing
-for SME exactly?  Do they, for instance, do the WBINVD when the kernel
-used SME?  No, they just use a pretty low-level check if the processor
-supports SME.
-
-Doing the same kind of thing for TDX is fine.  You could check the MTRR
-MSR bits that tell you if SEAMRR is supported and then read the MSR
-directly.  You could check the CPUID enumeration for MKTME or
-CPUID.B.0.EDX (I'm not even sure what this is but the SEAMCALL spec says
-it is part of SEAMCALL operation).
-
-Just like the SME test, it doesn't even need to be precise.  It just
-needs to be 100% accurate in that it is *ALWAYS* set for any system that
-might have dirtied cache aliases.
-
-I'm not sure why you are so fixated on SEAMRR specifically for this.
+Ok then. It seems a bit more likely for people to read patches from a
+terminal rather than a phone, but.. ok.
 
 
-...
-> "During initializing the TDX module, one step requires some SEAMCALL must be
-> done on all logical cpus enabled by BIOS, otherwise a later step will fail. 
-> Disable CPU hotplug during the initialization process to prevent any CPU going
-> offline during initializing the TDX module.  Note it is caller's responsibility
-> to guarantee all BIOS-enabled CPUs are in cpu_present_mask and all present CPUs
-> are online."
+> >
+> > >
+> > > No differences: I haven't used the frame intervals calls and haven't gathered practical knowledge about where docs may be insufficient, so I didn't touch its documentation.
+> >
+> > I think Hans required to change the documentation of that ioctl to
+> > match the style of the changes you have made here, not because
+> > something is missing there.
+> >
+> > >
+> > > Regards,
+> > > Dorota
+> > >
+> > >  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 39 +++++++++++++------
+> > >  1 file changed, 27 insertions(+), 12 deletions(-)
+> > >
+> > > diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+> > > index 417f1a19bcc4..87572de0fd26 100644
+> > > --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+> > > +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
+> > > @@ -31,15 +31,29 @@ Arguments
+> > >  Description
+> > >  ===========
+> > >
+> > > -To enumerate media bus formats available at a given sub-device pad
+> > > -applications initialize the ``pad``, ``which`` and ``index`` fields of
+> > > -struct
+> > > -:c:type:`v4l2_subdev_mbus_code_enum` and
+> > > -call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this
+> > > -structure. Drivers fill the rest of the structure or return an ``EINVAL``
+> > > -error code if either the ``pad`` or ``index`` are invalid. All media bus
+> > > -formats are enumerable by beginning at index zero and incrementing by
+> > > -one until ``EINVAL`` is returned.
+> > > +This call is used by the application to access the enumeration of bus formats
+> > > +for the selected pad.
+> >
+> > This is a good introductory phrase.
+> >
+> > > +
+> > > +The enumerations are defined by the driver, and indexed using the ``index`` field
+> > > +of struct :c:type:`v4l2_subdev_mbus_code_enum`.
+> > > +Each value of ``pad`` corresponds to a separate enumeration.
+> >
+> > Isn't this a repetition of the above "enumeration of bus formats for
+> > the selected pad" ? Also, the fact different mbus codes are available
+> > at different pads is an intrinsic characteristics of the device
+> > capabilities and of what a pad represents. Put it in this way it seems
+> > it's an API requirement.
+> >
+> > > +Each enumeration starts with the ``index`` of 0, and
+> > > +the lowest invalid index marks the end of enumeration.
+> > > +
+> > > +Therefore, to enumerate media bus formats available at a given sub-device pad,
+> > > +initialize the ``pad``, and ``which`` fields to desired values,
+> > > +and set ``index`` to 0.
+> > > +Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
+> > > +with a pointer to this structure.
+> >
+> > Could these two paragraphs be just:
+> >
+> > To enumerate all the media bus codes available at a give sub-device pad,
+> > an application set the ``index`` field to 0 and then call the
+> > :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this structure,
+> > incrementing ``index`` by one until ``EINVAL`` is returned.
+> >
+> What I found difficult with this documentation is that it described an algorithm,
+> and did not describe the basic assumption about the shape of the data.
+> Here, I tried to give a quick overview of the data structure in the first paragraph.
+> The second paragraph is just a description of details,
+> not needed to get a high level idea of the API.
+>
+> > > +
+> > > +A successful call will return with the ``code`` field filled in
+> > > +with a mbus format value.
+> >
+> > Generally, I see "mbus code", not "mbus format" as far as
+> > I'm aware..
+> I was generally confused about the "mbus" thing the whole time I used the API.
+> That's why I came up with the idea to describe what it's useful for (format),
+> instead of using an abstract "code" which could mean anything.
+> "mbus code" is not even searchable online much, so it's difficult to make the connection
 
-But, what if a CPU went offline just before this lock was taken?  What
-if the caller make sure all present CPUs are online, makes the call,
-then a CPU is taken offline.  The lock wouldn't do any good.
+First result searching "mbus code" in kernel.org/doc/html/latest
+https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/subdev-formats.html
 
-What purpose does the lock serve?
+Also:
+https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/subdev-formats.html?highlight=media%20bus%20codes#v4l2-mbus-pixelcode
+
+My understanding is that an mbus (media bus) format represents the
+whole frame format (code, sizes, colorspace etc) while the media bus code
+is the numerical value that identifies the pixel format as sent on the
+bus.
+
+Sorry was not clear from my previous comment.
+
+> >
+> > > +Repeat with increasing ``index`` until ``EINVAL`` is received.
+> > > +``EINVAL`` means that either ``pad`` is invalid,
+> > > +or that there are no more codes available at this pad.
+> >
+> > Is it necessary to add this last paragraph. Isn't it specified in the
+> > error code description below ?
+> >
+> > EINVAL
+> >     The struct
+> >     :c:type:`v4l2_subdev_mbus_code_enum`
+> >     ``pad`` references a non-existing pad, or the ``index`` field is out
+> >     of bounds.
+> >
+> >
+> "Out of bounds" does not say what the bounds are.
+> What I wrote is in the context of the incrementing algorithm,
+> which implies that hitting it means hitting the bound ("no more codes").
+> > > +
+> > > +The driver must not return the same value of ``code`` for different indices
+> > > +at the same pad.
+> >
+> > This might be a good thing to specify, a little obvious maybe but it
+> > doesn't hurt.
+> >
+> Given that I ran head first into a bug involving repeats (prompting this patch),
+> I testify that nothing about it is obvious :)
+> > >
+> > >  Available media bus formats may depend on the current 'try' formats at
+> > >  other pads of the sub-device, as well as on the current active links.
+> > > @@ -57,14 +71,15 @@ information about the try formats.
+> > >
+> > >      * - __u32
+> > >        - ``pad``
+> > > -      - Pad number as reported by the media controller API.
+> > > +      - Pad number as reported by the media controller API. Filled in by the application.
+> > >      * - __u32
+> > >        - ``index``
+> > > -      - Number of the format in the enumeration, set by the application.
+> > > +      - Index of the mbus code in the enumeration belonging to the given pad.
+> > > +    Filled in by the application.
+> >
+> > These last changes are good, provided this phrase still renders correctly
+> > now that you added a line break.
+> >
+> > >      * - __u32
+> > >        - ``code``
+> > >        - The media bus format code, as defined in
+> > > -	:ref:`v4l2-mbus-format`.
+> > > +	:ref:`v4l2-mbus-format`. Filled in by the driver.
+> > >      * - __u32
+> > >        - ``which``
+> > >        - Media bus format codes to be enumerated, from enum
+> >
+> > In general there are a few good additions, but to be honest I would
+> > keep the changes small for sake of consistency with the existing
+> > documentation of other enumeration-related ioctls
+> >
+> > Thanks
+> >    j
+> >
+> > > --
+> > > 2.35.1
+> > >
+> >
+> >
+> Thanks for reviewing.
+>
+> --Dorota
+
+
+
+--y3rvmn3f2oodlhlk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAmJqpGQACgkQcjQGjxah
+Vjx3tA//bXCokVwCSMURyQnXN5p4aYMDuLoKwmPUuhpDu5kBYGOrjt/sGJcUhjIy
+Pp7P+C/ETLnc6YYja+TJE9s0Ob27DjRjQah6ndEFAv6yEVTnn3HODHVePsoJeuCc
+QHQzeLK2nBapz9TfE0H8EgO8hEqhv5IxrmVNgPpGyzNQohiyCMPSP0VnIO/+Qryz
+4WarcX+HXjoijrhlqu4zA2bCELH8kuGZK4E9Y/NA8ElLpRFG6JPtnYPlkTqXtZky
+NxpTlsdxO6orSDZQ9cJ9vkLK9x+UdWQV9jblxw4/xKO9DGTmIymE60DoolMJfK6B
+nbY5WyfXEmEplarh55Sq0TT+7B+qYjI7Exajq/0xZwFvAfg98S1gZTs9fvE/bMWP
+ILKrKsNm0FAiVgVWTPF+/sVWY0YTSrWLjV6rkPqVoMrGWRuDbSs1WE3+NPLC4/jw
+IbpcaJcKjHTg7JU6WtVw11TsHjW0KN74zSIrU95W0solHoOrqqPj43P9OazTREzo
+R3ZfCvF2CMCRItYHtHWZhhIyK9Cxd0CdsLaMiE95VHvOzQ7QX3XY9EI0cCYR5Hvn
+UBpBl/qJXw1A+ebPCrgqSu9TLTFmLt4gNKTEcZQXhNQj1yd6F7JEHHHnc1rSJ8Fz
+j1q+ZlIFXCP8VVkAZ+4rp20L/OWS4UPshBvjwhDgS2ID+/j7wz0=
+=ZYO+
+-----END PGP SIGNATURE-----
+
+--y3rvmn3f2oodlhlk--

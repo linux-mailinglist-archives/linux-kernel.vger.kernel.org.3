@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BF7512B9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A890B512BA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244067AbiD1GgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S244099AbiD1Ggp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243955AbiD1GgX (ORCPT
+        with ESMTP id S237486AbiD1Ggn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:36:23 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8306973A
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:33:09 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id p4so4400653edx.0
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:33:09 -0700 (PDT)
+        Thu, 28 Apr 2022 02:36:43 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A076973A
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:33:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r13so7537691ejd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZGNUaKvmhdWADegA9+35rNWReEdvm/VLEsDmu8SXlcI=;
-        b=uxezT5LnyHKSBkq6AQW89pc3qDtfxZHYMAix0t8fNa7iN8SiPU1Ilsl1nM1G37M5R+
-         +iu92f1x/5vR1NTnqi8ROX0/LwJwdGKQmoBkn8pixlB6fKZyo7GpO6a7YYkK1pW1jNQT
-         wNHmkFGVSfRqXb8sEShA2W6HoHm5NLbFl5Spems7FPFI6zXPRgGCACekKLjBWUJQMl4E
-         73ek80xKQJ1KRfH67Egat8mV375c+FUSf/cJw5OVhhrlizX0esnpjiAi8Erb1aORY0vE
-         o3rPGR9G86LWNf4VY5otQY/Gm6CzHNWFv8J3C1ofMgFmk3ptIhJGQ5VBAyLp82amwWr1
-         6tbA==
+        bh=rozerKyB/C5qipfTZh/u0vAMNYveH4wCpbPpnEpmk5I=;
+        b=jID8SkbjZdvNaCihTEHL+AMMFHP8eC2RUy+QYH0Cg2l71tQhaM/iWrNs7C5o3qDqxn
+         bTv0i80aWbxxhIhvo6sNhYWidErZNyr0Bl/0H3H3TrZU28SyaXVryV8u/yrRMoz2f1iU
+         O+WdtZPfP1+TyhT74jiQXnp8JZ1SQiklm9FxMG4QOoFPLPYoDBWtJ72jj9V+PormGVKK
+         22OZ/GCpaIrPvsQFU6ORR2C5qmbnmsDRkTPfYDmdhXKnzVpx30c+TMcFv8mxeNvQ6xqe
+         FGR9qcp8WNEBl9yAS7LyYOGBXZoQVziny4iH/LB/EpP0ut8Z+PNGfSYBVmUhSAcctIri
+         SYPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ZGNUaKvmhdWADegA9+35rNWReEdvm/VLEsDmu8SXlcI=;
-        b=MpusQUdGJGUg2G1I0mau2zSFgMXoQ7hArddhunNuM7ls8CXSvQxyj7x/ju1h3nyYbi
-         UcST89yVwPcXMgDfJdFktl+VaP3b5/vRz5a/nXnuOMVJW1dqVq/ZB3CZrI+FNgRme/58
-         eq9YVu6HiV9T7vCyNG1efbWJ0z9zYFdr+o7IHcO20HoFLQRY+WJ8yrO6EWBoD59vLpjl
-         QOJTZUNJrS5qAFIFkrvBNDtnGrj1qGmmBTmxrDycT1ZGH+GhAQZU3D2HbOXPc/sQH0kn
-         PBj4gihmTB3niS8O1dcXcXoxfLmTopjufL0MpD1u743U/95CbUoH6W4mxL/EXE1YA+WW
-         GZwg==
-X-Gm-Message-State: AOAM533q4ifwJ2SsVGHss3JWgIV3an+axkdRfBMjR3CGZZd0uCc/WNFX
-        nzVj+zFLD7Cf51W780FKzRGOaA==
-X-Google-Smtp-Source: ABdhPJw0+ayf81Ms9n+w6fNeDibHnLry7oeKKqMj4gZt2cgaTDG/qOgtHFpuAxQnWZ5n0HmQ9WFJHA==
-X-Received: by 2002:a05:6402:43cc:b0:425:fda3:ac3a with SMTP id p12-20020a05640243cc00b00425fda3ac3amr12162862edc.70.1651127587742;
-        Wed, 27 Apr 2022 23:33:07 -0700 (PDT)
+        bh=rozerKyB/C5qipfTZh/u0vAMNYveH4wCpbPpnEpmk5I=;
+        b=s7cLJXeVZPjRCCptL0N9zjulGordZmVc4z6NEnKfWwdPE1MyASIQ5V7Wj6Mutj06Jh
+         5sTUNhJ6us1bZ+lKyuAqOLAE9pbg0i0Wk+SLRKkLHH5RsHtvaTgbg5YlUoKJQcn3fMHI
+         T+54ecOV263Swwg8cDzz12ZxyGZd5/aqQQA7pu9z6KBua4YlYuS3klLOgkYQJSvAPqLH
+         Oa7HY8VNyXJhQlL8B25ai3m1l/eNpP8w5EUjF1YIKFXID56qzvlz09bv1rW5qrPmH9KS
+         GuYS6ISuaGRuBPmoB9S4S3aW0JhRo+nPIaio1QnS4VdO+VAoM1UaLorahnoeR8OAxqGw
+         qNqQ==
+X-Gm-Message-State: AOAM530L4jamCxudSfmaHTCn391bdn9hr4DUsVSlQrjb4p8lZlK7s1le
+        EmS+RFftH4y34WdSk6e9EtaeHg==
+X-Google-Smtp-Source: ABdhPJx80NdRMCudydCbEj21NDTT0qWVklkeluJPZzk7stNXaL45hh7VHzsiVKCWV2mZ3JL3lXSYaA==
+X-Received: by 2002:a17:907:6d83:b0:6f3:adf4:9817 with SMTP id sb3-20020a1709076d8300b006f3adf49817mr12821838ejc.491.1651127607580;
+        Wed, 27 Apr 2022 23:33:27 -0700 (PDT)
 Received: from [192.168.0.159] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i23-20020a0564020f1700b0042617ba6382sm943988eda.12.2022.04.27.23.33.06
+        by smtp.gmail.com with ESMTPSA id s8-20020aa7cb08000000b0042617ba638csm966354edt.22.2022.04.27.23.33.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 23:33:06 -0700 (PDT)
-Message-ID: <f002b635-75c5-b7ba-72c4-70f0e20369e7@linaro.org>
-Date:   Thu, 28 Apr 2022 08:33:05 +0200
+        Wed, 27 Apr 2022 23:33:26 -0700 (PDT)
+Message-ID: <fc26c920-2eb1-3324-227d-d347304002d2@linaro.org>
+Date:   Thu, 28 Apr 2022 08:33:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC/RFT v2 01/11] dt-bindings: phy: rockchip: add PCIe v3 phy
+Subject: Re: [RFC/RFT v2 02/11] dt-bindings: soc: grf: add
+ pcie30-{phy,pipe}-grf
 Content-Language: en-US
 To:     Frank Wunderlich <linux@fw-web.de>,
         linux-rockchip@lists.infradead.org
@@ -75,15 +76,14 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org
 References: <20220426132139.26761-1-linux@fw-web.de>
- <20220426132139.26761-2-linux@fw-web.de>
+ <20220426132139.26761-3-linux@fw-web.de>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220426132139.26761-2-linux@fw-web.de>
+In-Reply-To: <20220426132139.26761-3-linux@fw-web.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,130 +93,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 26/04/2022 15:21, Frank Wunderlich wrote:
 > From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Add a new binding file for Rockchip PCIe v3 phy driver.
+> Add compatibles for PCIe v3 General Register Files.
 > 
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > 
 > ---
-> v2:
-> dt-bindings: rename yaml for PCIe v3
-> rockchip-pcie3-phy.yaml => rockchip,pcie3-phy.yaml
-> 
-> changes in pcie3 phy yaml
-> - change clock names to ordered const list
-> - extend pcie30-phymode description
-> - add phy-cells to required properties
-> - drop unevaluatedProperties
-> - example with 1 clock each line
-> - use default property instead of text describing it
-> - update license
+> changes in v2:
+> - add soc-part to pcie3-phy-grf
 > ---
->  .../bindings/phy/rockchip,pcie3-phy.yaml      | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+>  Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
-> new file mode 100644
-> index 000000000000..3592888b5ee2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/rockchip,pcie3-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Rockchip PCIe v3 phy
-> +
-> +maintainers:
-> +  - Heiko Stuebner <heiko@sntech.de>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - rockchip,rk3568-pcie3-phy
-> +      - rockchip,rk3588-pcie3-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: "refclk_m"
-> +      - const: "refclk_n"
-> +      - const: "pclk"
+> diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> index 3be3cfd52f7b..4564ff0bfd7a 100644
+> --- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> +++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+> @@ -14,6 +14,9 @@ properties:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - rockchip,rk3568-pcie3-phy-grf
+> +              - rockchip,rk3588-pcie3-phy-grf
+> +              - rockchip,rk3588-pcie3-pipe-grf
 
-Drop quotes.
+Order is now messed up.
 
-> +
-> +    minItems: 1
-
-I think we agreed to skip rk3588 or make the number of clocks strict?
-
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: phy
-> +
-> +  rockchip,phy-grf:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the syscon managing the phy "general register files"
-> +
-> +  rockchip,pipe-grf:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the syscon managing the pipe "general register files"
-> +
-> +  rockchip,pcie30-phymode:
-> +    $ref: '/schemas/types.yaml#/definitions/uint32'
-
-No need for quotes. You don't use it in other places.
-
-> +    description: |
-> +      set the phy-mode for enabling bifurcation
-> +      bit0: bifurcation for port 0
-> +      bit1: bifurcation for port 1
-> +      bit2: aggregation
-> +      constants are defined in the dt-bindings/phy/phy-rockchip-pcie3.h
-
-Full path. It should also follow vendor,device naming convention.
-
-> +    minimum: 0x0
-> +    maximum: 0x4
-> +    default: 0x4
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - rockchip,phy-grf
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/rk3568-cru.h>
-> +    pcie30phy: phy@fe8c0000 {
-> +      compatible = "rockchip,rk3568-pcie3-phy";
-> +      reg = <0x0 0xfe8c0000 0x0 0x20000>;
-> +      #phy-cells = <0>;
-> +      clocks = <&pmucru CLK_PCIE30PHY_REF_M>,
-> +               <&pmucru CLK_PCIE30PHY_REF_N>,
-> +               <&cru PCLK_PCIE30PHY>;
-> +      clock-names = "refclk_m", "refclk_n", "pclk";
-> +      resets = <&cru SRST_PCIE30PHY>;
-> +      reset-names = "phy";
-> +      rockchip,phy-grf = <&pcie30_phy_grf>;
-> +    };
+>                - rockchip,rk3288-sgrf
+>                - rockchip,rk3566-pipe-grf
+>                - rockchip,rk3568-usb2phy-grf
 
 
 Best regards,

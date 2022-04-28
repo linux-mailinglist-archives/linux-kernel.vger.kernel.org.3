@@ -2,178 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFFD512BD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9518512BDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244291AbiD1GtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S244364AbiD1Gui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244417AbiD1GtI (ORCPT
+        with ESMTP id S230198AbiD1Gug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:49:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B725398592;
-        Wed, 27 Apr 2022 23:45:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4479E61E02;
-        Thu, 28 Apr 2022 06:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C9FC385AA;
-        Thu, 28 Apr 2022 06:45:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651128353;
-        bh=8+ZKwK/7gDCAxT4CKwYWQoI/MxKpLryRN0epLfeidYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PVbBTRkgLTIM+g7YOh5yxGhjyVk2RIwCwZ06WDYXbXFvnTnTMAu/bABGWVI2qKGQY
-         isVpuEc7IZ20SsO5ibyop+UXYclsqNqdSkIAM0m4qAD48FfduCG5T7UFCuncCJwa+F
-         oKMi6QppVhNdIYNwqOYaqWcq4Wox0RdhGsIz4XHI=
-Date:   Thu, 28 Apr 2022 08:45:49 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jung Daehwan <dh10.jung@samsung.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
-Message-ID: <Ymo4Hdi9fuBT7im7@kroah.com>
-References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
- <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
- <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
- <a9438aef-78a3-e8ab-2b78-cc872447df08@kernel.org>
- <20220428012941.GF145620@ubuntu>
- <01ec9962-e210-ce47-57cd-8849cca0a9df@kernel.org>
- <20220428063634.GF151827@ubuntu>
+        Thu, 28 Apr 2022 02:50:36 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486FC9859E;
+        Wed, 27 Apr 2022 23:47:14 -0700 (PDT)
+X-UUID: 2018c38d8ae0418c9ce394f8873697d5-20220428
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:75ac2102-b10c-4912-adc4-89d1e6cc4be5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:d034012f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 2018c38d8ae0418c9ce394f8873697d5-20220428
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2094936608; Thu, 28 Apr 2022 14:47:07 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 28 Apr 2022 14:47:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 28 Apr 2022 14:46:39 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Apr 2022 14:46:39 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] dt-bindings: rtc: mediatek: add mt6358 and mt6366 compatible
+Date:   Thu, 28 Apr 2022 14:46:37 +0800
+Message-ID: <20220428064637.28288-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428063634.GF151827@ubuntu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 03:36:34PM +0900, Jung Daehwan wrote:
-> On Thu, Apr 28, 2022 at 07:19:04AM +0200, Krzysztof Kozlowski wrote:
-> > On 28/04/2022 03:29, Jung Daehwan wrote:
-> > > On Tue, Apr 26, 2022 at 02:59:57PM +0200, Krzysztof Kozlowski wrote:
-> > >> On 26/04/2022 11:18, Daehwan Jung wrote:
-> > >>> This driver is for Samsung Exynos xhci host conroller. It uses xhci-plat
-> > >>> driver mainly and extends some functions by xhci hooks and overrides.
-> > >>>
-> > >>> It supports USB Audio offload with Co-processor. It only cares DCBAA,
-> > >>> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
-> > >>> on specific address with xhci hooks. Co-processor could use them directly
-> > >>> without xhci driver after then.
-> > >>
-> > >> This does not look like developed in current Linux kernel, but something
-> > >> out-of-tree, with some other unknown modifications. This is not how the
-> > >> code should be developed. Please rebase on linux-next and drop any
-> > >> unrelated modifications (these which are not sent with this patchset).
-> > >>
-> > > 
-> > > I've been developing on linux-next and I rebase before submitting.
-> > > Could you tell me one of dropped modifications or patches?
-> > > 
-> > >> (...)
-> > >>
-> > >>> +
-> > >>> +static int xhci_exynos_suspend(struct device *dev)
-> > >>> +{
-> > >>> +	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-> > >>> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> > >>> +
-> > >>> +	/* TODO: AP sleep scenario*/
-> > >>
-> > >> Shall the patchset be called RFC?
-> > >>
-> > > OK. I will add RFC for this patch on next submission.
-> > > 
-> > >>> +
-> > >>> +	return xhci_suspend(xhci, device_may_wakeup(dev));
-> > >>> +}
-> > >>> +
-> > >>> +static int xhci_exynos_resume(struct device *dev)
-> > >>> +{
-> > >>> +	struct usb_hcd	*hcd = dev_get_drvdata(dev);
-> > >>> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> > >>> +	int ret;
-> > >>> +
-> > >>> +	/* TODO: AP resume scenario*/
-> > >>> +
-> > >>> +	ret = xhci_resume(xhci, 0);
-> > >>> +	if (ret)
-> > >>> +		return ret;
-> > >>> +
-> > >>> +	pm_runtime_disable(dev);
-> > >>> +	pm_runtime_set_active(dev);
-> > >>> +	pm_runtime_enable(dev);
-> > >>> +
-> > >>> +	return 0;
-> > >>> +}
-> > >>> +
-> > >>> +static const struct dev_pm_ops xhci_exynos_pm_ops = {
-> > >>> +	SET_SYSTEM_SLEEP_PM_OPS(xhci_exynos_suspend, xhci_exynos_resume)
-> > >>> +};
-> > >>> +
-> > >>> +MODULE_DESCRIPTION("xHCI Exynos Host Controller Driver");
-> > >>> +MODULE_LICENSE("GPL");
-> > >>
-> > >> You don't have list of compatibles (and missing bindings), driver
-> > >> definition, driver registration. Entire solution is not used - nothing
-> > >> calls xhci_exynos_vendor_init(), because nothign uses "ops".
-> > >>
-> > > 
-> > > xhci_exynos_vendor_init is called in xhci-plat.c (xhci_vendor_init)
-> > > [v4,2/5] usb: host: add xhci hooks for xhci-exynos
-> > > ops are used in some files(xhci-mem.c, xhci.c ..) and the body of ops is in
-> > > all xhci-exynos.
-> > 
-> > 
-> > Nothing uses the "ops" except xhci_exynos_register_vendor_ops() which is
-> > not called anywhere, so the xhci_vendor_init() does not call
-> > xhci_exynos_vendor_init().
-> > 
-> 
-> You are right. xhci_exynos_register_vendor_ops should be called by other
-> module. It's only thing not called anywhere in this patchset. I don't uses
-> xhci-exynos alone in my scenario. Other module loads this on runtime.
-> 
-> > > 
-> > > xhci-exynos is not a standalone driver. It could be enabled when other module
-> > > makes xhci platform driver probed as it uses xhci platform mainly.
-> > 
-> > It "could be" or "will be"? We do not talk here about theoretical usage
-> > of the driver, but a real one.
-> > 
-> > > I thought I just used existing compltible not adding new one.
-> > > I will add them if needed.
-> > 
-> > Since you called everything here as "exynos" it is specific to one
-> > hardware and not-reusable on anything else. How can then you use some
-> > other compatible? It would be a misuse of Devicetree bindings.
-> > 
-> 
-> I got it. Let me add them. Is it still necessary if it is only used by
-> other module on runtime as I said above?
+Add mt6358 and mt6366 compatible in devicetree-binding document for
+MediaTek PMIC based RTC. mt6358 and mt6366 use same compatible data
+to store RTC_WRTGR address offset.
 
-Please submit a full, working driver so these changes can be able to be
-properly reviewed.  Otherwise it is just a waste of time for us to even
-read them, right?
+mt6366-rtc will use mt6358-rts as fallback.
 
-We do not add changes to the kernel that do not work or do anything,
-that would be pointless, and cause us extra work and maintenance.
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+ Documentation/devicetree/bindings/rtc/rtc-mt6397.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-thanks,
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+index 55a0c8874c03..5b012d222f5b 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
++++ b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+@@ -14,6 +14,8 @@ For MediaTek PMIC wrapper bus bindings, see:
+ Required properties:
+ - compatible: Should be one of follows
+        "mediatek,mt6323-rtc": for MT6323 PMIC
++       "mediatek,mt6358-rtc": for MT6358 PMIC
++       "mediatek,mt6358-rtc","mediatek,mt6366-rtc": for MT6366 PMIC
+        "mediatek,mt6397-rtc": for MT6397 PMIC
+ 
+ Example:
+-- 
+2.18.0
 
-greg k-h

@@ -2,204 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142D85129EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197E45129E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbiD1DY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S241745AbiD1DTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbiD1DYY (ORCPT
+        with ESMTP id S233318AbiD1DTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:24:24 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BA16AA63;
-        Wed, 27 Apr 2022 20:21:03 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.32]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N1x6X-1nr2Kj3Je5-012Dp4; Thu, 28 Apr 2022 05:15:08 +0200
-Received: from bergen.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 5E5083C01C;
-        Thu, 28 Apr 2022 05:15:07 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Date:   Thu, 28 Apr 2022 05:15:05 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 26/27] kbuild: stop generating *.symversions
-Message-ID: <YmoGuY82c/gGI/sU@bergen.fjasle.eu>
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-27-masahiroy@kernel.org>
+        Wed, 27 Apr 2022 23:19:38 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF03189;
+        Wed, 27 Apr 2022 20:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651115784; x=1682651784;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OzLHedGGs0p8Rkynak6Kv3mvYKpyq/SCmi4nw9hwu+U=;
+  b=ayglFXADbyBsMoLPXTsZHxrSqDqrYrcZ0Tl/xUz8X8JkLBhalW6oxOPp
+   RdwY8auoxX9du1CBrR4PsDt/maSjPVIg13w/F48VR7RmJEdWdcA2O3nwF
+   qj//kpTdJeUymxPscWd28i0AJVMq+9mMK+ZJKFo6/psEnUT4mqB72B2xb
+   E=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 27 Apr 2022 20:16:23 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 20:16:23 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 20:16:23 -0700
+Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 27 Apr
+ 2022 20:16:19 -0700
+Message-ID: <2cb26bc2-704b-86df-15ed-8c18f81addaf@quicinc.com>
+Date:   Thu, 28 Apr 2022 08:46:15 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220424190811.1678416-27-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:gbHouD07L/PQUpTRm4orTLoT+o2OS/usSaPG2jhdtKV8sV7qETK
- 9BfS/o5MzfNuuQc/BllWsHldXuTWCCDhW5cTPQpiiOGx/bjigUCXGTZ6fihetoDlczKHs2q
- Kx9nFh16eeBhmOUkZr15LBaDWLP6iGr3Ykhfu+6Rr7i0tk0tX29eA2RegKIFSh9Dx22vYV+
- biqB67Muvia256YiieAbQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:p+yQQ+jwB00=:pnfBz+gG1Ny95WMEQBA6K2
- Mt2Wm7T9s4cB4AxS55ybu6zCLqauWxf2v9i9xPs422LUIb66LfLWGuEeBumwexXv0zap04dZP
- OECEoV2CAXVFtrYigKxQVzsZRcVwZWOJwk+70Dh+y13UvcZDtV1bAyLHv7LUP69ng6PQUCEAZ
- kwkkpGELmYuhHm26xaNvANEDKxUVvv4MWyKI+SHddRigJdBGejKehBHv9XRq1kP708t1CdZtt
- FE/Uhh289nUMJy17HO1F2VbKxfSTWjCjEmHy+ctBvGO45yxNVl4lQH6qSKzPogp2udHYj4LrD
- n22LWWMmR0nFit1Z/DQ/WJM1CULpjVCqVIjHeO9zH1Lgz/eHw40HjtF0LVgKz583R5cu4KjRE
- aVL2NI4DhPqEeG4r3s8Pwli4uyrqhM/8JioG9iE1GPvH6UrB0iBr6snHZFI7PaFAkBoc3cp7z
- ZFPtDoJS6qKtQap2nYfF/O65lRNVxhXzqn7jFxbPXD/ZrYKlZgKkDE5XzriE0BWqUYHSo4OMN
- fZ7LbayX4LbXGdjqTK0Z644FyilmnmYXeYFgifRipIYbGI/AGT6ci6hHcfERhkp5MsK/ehAt1
- 1sfBvEx4NusP/eGa0dGpJ+x1Fu2UOKqxF8tcYD4EDWwv/Mbt/cKrTkmsIqIE7ltwb/xmvVHe3
- hsGV+VHduQjq26076m5Onyq0ru91q3/h/lqc/qct4i05gHlTgVRy2374yGOmrvOz4FkU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv10 5/6] lib: Add register read/write tracing support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, gregkh <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+References: <cover.1644824638.git.quic_saipraka@quicinc.com>
+ <8cf9304d9941c25d920c4835cbc624ff5c2ac2cb.1644824638.git.quic_saipraka@quicinc.com>
+ <CAK8P3a1WwghVToFBNZMpG7Wcji_k3CebK3--LL8YNJs_Wu3rBQ@mail.gmail.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <CAK8P3a1WwghVToFBNZMpG7Wcji_k3CebK3--LL8YNJs_Wu3rBQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 25 Apr 2022 04:08:10 GMT Masahiro Yamada wrote:
-> Now *.symversions is unneeded. Clean up the Makefile and script.
-> 
-> I will keep *.symversions in .gitignore and 'make clean' for a while
-> to avoid flooding the output from 'git status'.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  scripts/Makefile.build  | 28 ++++------------------------
->  scripts/link-vmlinux.sh | 19 -------------------
->  2 files changed, 4 insertions(+), 43 deletions(-)
-> 
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index aadc16e04632..7f199b0a5170 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -170,12 +170,9 @@ ifdef CONFIG_MODVERSIONS
->  # to the kernel and/or modules at the end.
->  gen_symversions =								\
->  	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
-> -		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
-> -		    > $@.symversions;						\
->  		echo >> $(dot-target).cmd ;					\
-> -		sed 's/\(.*\) = \(.*\);/$(pound)\1=\2/' $@.symversions >> $(dot-target).cmd ; \
-> -	else									\
-> -		rm -f $@.symversions;						\
-> +		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) | \
-> +		sed 's/\(.*\) = \(.*\);/$(pound)\1=\2/' >> $(dot-target).cmd ; \
+Hi Arnd,
 
-I was wondering, whether we should integrate the 'sed' part into 
-genksyms and make it output the lines as we need them.
-If genksyms fails, we now don't see any error code and make will 
-silently continue as the pipe hides genksyms' exit code, right?
+On 4/27/2022 9:44 PM, Arnd Bergmann wrote:
+> On Thu, Feb 24, 2022 at 7:07 AM Sai Prakash Ranjan
+> <quic_saipraka@quicinc.com> wrote:
+>> From: Prasad Sodagudi <psodagud@codeaurora.org>
+>>
+>> Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+>> are typically used to read/write from/to memory mapped registers
+>> and can cause hangs or some undefined behaviour in following few
+>> cases,
+>>
+>> * If the access to the register space is unclocked, for example: if
+>>    there is an access to multimedia(MM) block registers without MM
+>>    clocks.
+>>
+>> * If the register space is protected and not set to be accessible from
+>>    non-secure world, for example: only EL3 (EL: Exception level) access
+>>    is allowed and any EL2/EL1 access is forbidden.
+>>
+>> * If xPU(memory/register protection units) is controlling access to
+>>    certain memory/register space for specific clients.
+>>
+>> and more...
+>>
+>> Such cases usually results in instant reboot/SErrors/NOC or interconnect
+>> hangs and tracing these register accesses can be very helpful to debug
+>> such issues during initial development stages and also in later stages.
+>>
+>> So use ftrace trace events to log such MMIO register accesses which
+>> provides rich feature set such as early enablement of trace events,
+>> filtering capability, dumping ftrace logs on console and many more.
+>>
+>> Sample output:
+>>
+>> rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+>> rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+>> rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+>> rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
+>>
+>> Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
+>> Co-developed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> I think this is ok in general. I saw that Steve had a minor comment, and
+> I suppose you could have just resent the same patches with a fixup in order
+> to have me pick it up into the asm-generic tree for 5.19.
 
->  	fi
->  
->  cmd_gen_symversions_c =	$(call gen_symversions,c)
-> @@ -391,17 +388,6 @@ $(obj)/%.asn1.c $(obj)/%.asn1.h: $(src)/%.asn1 $(objtree)/scripts/asn1_compiler
->  $(subdir-builtin): $(obj)/%/built-in.a: $(obj)/% ;
->  $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
->  
-> -# combine symversions for later processing
-> -ifeq ($(CONFIG_LTO_CLANG) $(CONFIG_MODVERSIONS),y y)
-> -      cmd_update_lto_symversions =					\
-> -	rm -f $@.symversions						\
-> -	$(foreach n, $(filter-out FORCE,$^),				\
-> -		$(if $(shell test -s $(n).symversions && echo y),	\
-> -			; cat $(n).symversions >> $@.symversions))
-> -else
-> -      cmd_update_lto_symversions = echo >/dev/null
-> -endif
-> -
->  #
->  # Rule to compile a set of .o files into one .a file (without symbol table)
->  #
-> @@ -409,11 +395,8 @@ endif
->  quiet_cmd_ar_builtin = AR      $@
->        cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
->  
-> -quiet_cmd_ar_and_symver = AR      $@
-> -      cmd_ar_and_symver = $(cmd_update_lto_symversions); $(cmd_ar_builtin)
-> -
->  $(obj)/built-in.a: $(real-obj-y) FORCE
-> -	$(call if_changed,ar_and_symver)
-> +	$(call if_changed,ar_builtin)
->  
->  #
->  # Rule to create modules.order file
-> @@ -433,16 +416,13 @@ $(obj)/modules.order: $(obj-m) FORCE
->  #
->  # Rule to compile a set of .o files into one .a file (with symbol table)
->  #
-> -quiet_cmd_ar_lib = AR      $@
-> -      cmd_ar_lib = $(cmd_update_lto_symversions); $(cmd_ar)
->  
->  $(obj)/lib.a: $(lib-y) FORCE
-> -	$(call if_changed,ar_lib)
-> +	$(call if_changed,ar)
->  
->  ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
->  quiet_cmd_link_multi-m = AR [M]  $@
->  cmd_link_multi-m =						\
-> -	$(cmd_update_lto_symversions);				\
->  	rm -f $@; 						\
->  	$(AR) cDPrsT $@ @$(patsubst %.o,%.mod,$@)
->  else
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 66a115f204eb..e2900d3bd215 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -56,20 +56,6 @@ gen_initcalls()
->  		> .tmp_initcalls.lds
->  }
->  
-> -# If CONFIG_LTO_CLANG is selected, collect generated symbol versions into
-> -# .tmp_symversions.lds
-> -gen_symversions()
-> -{
-> -	info GEN .tmp_symversions.lds
-> -	rm -f .tmp_symversions.lds
-> -
-> -	for o in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
-> -		if [ -f ${o}.symversions ]; then
-> -			cat ${o}.symversions >> .tmp_symversions.lds
-> -		fi
-> -	done
-> -}
-> -
->  # Link of vmlinux.o used for section mismatch analysis
->  # ${1} output file
->  modpost_link()
-> @@ -88,10 +74,6 @@ modpost_link()
->  		gen_initcalls
->  		lds="-T .tmp_initcalls.lds"
->  
-> -		if is_enabled CONFIG_MODVERSIONS; then
-> -			gen_symversions
-> -		fi
-> -
->  		# This might take a while, so indicate that we're doing
->  		# an LTO link
->  		info LTO ${1}
-> @@ -306,7 +288,6 @@ cleanup()
->  	rm -f .btf.*
->  	rm -f .tmp_System.map
->  	rm -f .tmp_initcalls.lds
-> -	rm -f .tmp_symversions.lds
->  	rm -f .tmp_vmlinux*
->  	rm -f System.map
->  	rm -f vmlinux
-> -- 
-> 2.32.0
+I had it ready the same day Steve gave the comment :) but given there was no further
+reviews on other patches, I thought of slowing down the posting of new versions.
+I will send v11 now.
 
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+> There is one more thing that I saw looking through this patch again: the
+> address you print is the virtual __iomem token, but it might be more
+> valuable to have the physical address instead, which can be looked up
+> in the devicetree to know which register is affected.
+>
+> There is a small extra cost to walk the page table, and I'm not sure
+> if we actually have an interface for it (vmalloc_to_page is almost
+> what we want, but it returns an invalid page pointer). Any suggestions
+> on this?
+>
+>
+
+Right, it would be useful but currently we rely on the caller information (the function name and
+the offset) to identify who writes to the location and then post process to identify the register
+written based on it. I am also not aware of the interface for page table walk and the walk on this
+hot trace path (note that we are capturing every register read/write) would slow down the system
+further.
+
+Even in the internal versions, we get the physical address postmortem from the parser tool [1].
+
+[1] https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/tools/tree/linux-ramdump-parser-v2/parsers/rtb.py#n72
+
+Given that we can add fields to this tracepoint without breaking ABI, we can probably add this addon
+at a later point.
+
+Thanks,
+Sai

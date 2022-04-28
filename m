@@ -2,53 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F35512954
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78F4512958
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241264AbiD1CIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 22:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S241382AbiD1CIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiD1CIY (ORCPT
+        with ESMTP id S241269AbiD1CIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:08:24 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C637F1AD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 19:05:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0VBXLPLZ_1651111500;
-Received: from 30.240.98.54(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VBXLPLZ_1651111500)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 28 Apr 2022 10:05:02 +0800
-Message-ID: <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
-Date:   Thu, 28 Apr 2022 10:04:54 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0)
- Gecko/20100101 Thunderbird/100.0
-Subject: Re: DAMON VA regions don't split on an large Android APP
-Content-Language: en-US
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
-        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
-        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
-        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        xhao@linux.alibaba.com
-References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
- <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com>
- <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
- <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Wed, 27 Apr 2022 22:08:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBAA2FFE6;
+        Wed, 27 Apr 2022 19:05:16 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S01otC023562;
+        Thu, 28 Apr 2022 02:05:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=78jiddQfNiso/uaWBxV6XXDGmOTg/ITHI9LdFP5hnmU=;
+ b=kBbnUDRn99J+2VOpBYrERPwc6o5fVGg52cIiJf7Q4ytQsQCJPGkZ2wHyON73bIVZhDo8
+ siRLiTO6AmCkP47fSXePqScQT2Eb2ooIbc5ahrdwh3oTCYWwKjE21RU1WJXPpZXYwquz
+ SoKLjqS5U97csHKIpTowxjgMyDQEyro3BpbMnt9AQYYSZatzXihjFBjq98b4YeIJBVFt
+ dunjNjQPJIBZbS17Ii83UveUSQhweSUZ5vM6rDC9z4Dc+QwPqWSseqrBzxVuK9ZRha/c
+ iMaaXlwCTXz7/ezhH4m4LDXweC/fn/k7tE2YGh0nb6NtoCntw6AxYKn+UY5tSwowsgYS 9Q== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqg1a1reg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 02:05:13 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S22b8m030119;
+        Thu, 28 Apr 2022 02:05:11 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm938xqks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 02:05:11 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S259IE36045218
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 02:05:09 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C159A405B;
+        Thu, 28 Apr 2022 02:05:09 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E6D2A4040;
+        Thu, 28 Apr 2022 02:05:08 +0000 (GMT)
+Received: from sig-9-65-70-226.ibm.com (unknown [9.65.70.226])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 02:05:08 +0000 (GMT)
+Message-ID: <8b2763120ce3d20a00347aed40c3c190ddbf98a8.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 4/5] ima: support fs-verity file digest based version
+ 3 signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 27 Apr 2022 22:05:07 -0400
+In-Reply-To: <YkynLz5ZuI3pnBk9@gmail.com>
+References: <20220325223824.310119-1-zohar@linux.ibm.com>
+         <20220325223824.310119-5-zohar@linux.ibm.com> <YkynLz5ZuI3pnBk9@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FKnoGPSauXZ3bXHkJqRyNtOxdnOkDnq1
+X-Proofpoint-ORIG-GUID: FKnoGPSauXZ3bXHkJqRyNtOxdnOkDnq1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280010
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,296 +87,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/27/22 5:22 PM, Barry Song wrote:
-> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
->>
->> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
->> <rongwei.wang@linux.alibaba.com> wrote:
->>>
->>>
->>>
->>> On 4/27/22 7:19 AM, Barry Song wrote:
->>>> Hi SeongJae & Andrew,
->>>> (also Cc-ed main damon developers)
->>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
->>>> that vaddr regions don't split well on large Android Apps though
->>>> everything works well on native Apps.
->>>>
->>>> I have tried the below two cases on an Android phone with 12GB memory
->>>> and snapdragon 888 CPU.
->>>> 1. a native program with small memory working set  as below,
->>>> #define size (1024*1024*100)
->>>> main()
->>>> {
->>>>           volatile int *p = malloc(size);
->>>>           memset(p, 0x55, size);
->>>>
->>>>           while(1) {
->>>>                   int i;
->>>>                   for (i = 0; i < size / 4; i++)
->>>>                           (void)*(p + i);
->>>>                   usleep(1000);
->>>>
->>>>                   for (i = 0; i < size / 16; i++)
->>>>                           (void)*(p + i);
->>>>                   usleep(1000);
->>>>
->>>>           }
->>>> }
->>>> For this application, the Damon vaddr monitor works very well.
->>>> I have modified monitor.py in the damo userspace tool a little bit to
->>>> show the raw data getting from the kernel.
->>>> Regions can split decently on this kind of applications, a typical raw
->>>> data is as below,
->>>>
->>>> monitoring_start:             2.224 s
->>>> monitoring_end:               2.329 s
->>>> monitoring_duration:       104.336 ms
->>>> target_id: 0
->>>> nr_regions: 24
->>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
->>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
->>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
->>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
->>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
->>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
->>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
->>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
->>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
->>>> 007661c59000-007661ee4000(   2.543 MiB): 2
->>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
->>>> 0076623e4000-007662837000(   4.324 MiB): 2
->>>> 007662837000-0076630f1000(   8.727 MiB): 3
->>>> 0076630f1000-007663494000(   3.637 MiB): 2
->>>> 007663494000-007663753000(   2.746 MiB): 1
->>>> 007663753000-007664251000(  10.992 MiB): 3
->>>> 007664251000-0076666fd000(  36.672 MiB): 2
->>>> 0076666fd000-007666e73000(   7.461 MiB): 1
->>>> 007666e73000-007667c89000(  14.086 MiB): 2
->>>> 007667c89000-007667f97000(   3.055 MiB): 0
->>>> 007667f97000-007668112000(   1.480 MiB): 1
->>>> 007668112000-00766820f000(1012.000 KiB): 0
->>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
->>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
->>>>
->>>> 2. a large Android app like Asphalt 9
->>>> For this case, basically regions can't split very well, but monitor
->>>> works on small vma:
->>>>
->>>> monitoring_start:             2.220 s
->>>> monitoring_end:               2.318 s
->>>> monitoring_duration:        98.576 ms
->>>> target_id: 0
->>>> nr_regions: 15
->>>> 000012c00000-0001c301e000(   6.754 GiB): 0
->>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
->>>> 000371b6c000-000400000000(   2.223 GiB): 0
->>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
->>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
->>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
->>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
->>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
->>>> 0077e863e000-00798e214000(   6.590 GiB): 0
->>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
->>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
->>>> 007c62f00000-007defb19000(   6.199 GiB): 0
->>>> 007defb19000-007f794ef000(   6.150 GiB): 0
->>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
->>>>
->>>> As you can see, we have some regions which are very very big and they
->>>> are losing the chance to be splitted. But
->>>> Damon can still monitor memory access for those small VMA areas very well like:
->>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
->>> Hi, Barry
->>>
->>> Actually, we also had found the same problem in redis by ourselves
->>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
->>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
->>> hot areas to been monitored or found by DAMON, likes one or more address
->>> choose by DAMON not been accessed during sample period.
->>
->> Hi Rongwei,
->> Thanks  for your comments and thanks for sharing your tools.
->>
->> I guess the cause might be:
->> in case a region is very big like 10GiB, we have only 1MiB hot pages
->> in this large region.
->> damon will randomly pick one page to sample, but the page has only
->> 1MiB/10GiB, thus
->> less than 1/10000 chance to hit the hot 1MiB. so probably we need
->> 10000 sample periods
->> to hit the hot 1MiB in order to split this large region?
->>
->> @SeongJae, please correct me if I am wrong.
->>
->>>
->>> I'm not sure whether sets init_regions can deal with the above problem,
->>> or dynamic choose one or limited number VMA to monitor.
->>>
->>
->> I won't set a limited number of VMA as this will make the damon too hard to use
->> as nobody wants to make such complex operations, especially an Android
->> app might have more than 8000 VMAs.
->>
->> I agree init_regions might be the right place to enhance the situation.
->>
->>> I'm not sure, just share my idea.
->>>
->>> [1] https://github.com/aliyun/data-profile-tools.git
->>
->> I suppose this tool is based on damon? How do you finally resolve the problem
->> that large anon VMAs can't be splitted?
->> Anyway, I will give your tool a try.
+On Tue, 2022-04-05 at 20:31 +0000, Eric Biggers wrote:
+> > The IMA policy defines "which" files are to be measured, verified, and/or
+> > audited.  For those files being verified, the policy rules indicate "how"
+> > the file should be verified.  For example to require a file be signed,
+> > the appraise policy rule must include the 'appraise_type' option.
+> > 
+> > 	appraise_type:= [imasig] | [imasig|modsig] | [sigv3]
+> >            where 'imasig' is the original or v2 signature (default),
+> >            where 'modsig' is an appended signature,
+> >            where 'sigv3' is the signature v3 format.
+> > 
+> > The policy rule must also indicate the type of signature, if not the IMA
+> > default, by specifying the digest type:
+> > 
+> > 	digest_type:= [verity]
 > 
-> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
-> though autogen.sh
-> runs successfully.
+> I don't understand the above paragraph.  Should it say "type of digest" instead
+> of "type of signature"?  And what does specifying the digest type do, exactly?
+
+Yes, the "type of digest".
+
+Based on the type of digest, IMA either reads and calculates the file
+hash or reads the fs-verity file hash.  Based on policy, the hash is
+then included in the IMA measurement list, used to verify the file
+signature, and/or added to the audit log.
+
 > 
-> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
-> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
-> reference to `wgetch'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
-> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
-> reference to `subwin'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
-> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
-> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
-> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
-> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
-> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
-> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
-> reference to `wattr_off'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
-> reference to `wattr_on'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
-> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
-> reference to `wattr_off'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
-> reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
-> reference to `wattr_off'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
-> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
-> reference to `wclear'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
-> reference to `wrefresh'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
-> reference to `endwin'
-> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
-> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
-> reference to `initscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
-> reference to `wrefresh'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
-> reference to `use_default_colors'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
-> reference to `start_color'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
-> reference to `keypad'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
-> reference to `nonl'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
-> reference to `cbreak'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
-> reference to `noecho'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
-> reference to `curs_set'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
-> reference to `stdscr'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
-> reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
-> reference to `mvwprintw'
-> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
-> reference to `wrefresh'
-> collect2: error: ld returned 1 exit status
-> make[1]: *** [Makefile:592: datop] Error 1
-> make[1]: Leaving directory '/root/data-profile-tools'
-> make: *** [Makefile:438: all] Error 2
-Hi, Barry
-
-Now, the question made me realize that the compatibility of this tool is 
-very poor. I built a ubuntu environment at yesterday, and fixed above 
-errors by:
-
-diff --git a/configure.ac b/configure.ac
-index 7922f27..1ed823c 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -21,13 +21,9 @@ AC_PROG_INSTALL
-  AC_CHECK_LIB([numa], [numa_free])
-  AC_CHECK_LIB([pthread], [pthread_create])
-
--PKG_CHECK_MODULES([CHECK], [check])
--
--PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS 
-$ncurses_LIBS"], [
--       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
--               AC_MSG_ERROR([ncurses is required but was not found])
--       ], [])
--])
-+AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
-+       AC_MSG_ERROR([required library libncurses or ncurses not found])
-+       ])
-
-It works. But I found an another thing will hinder you using this tool. 
-We had developed other patches about DAMON base on upstream. This tool 
-only works well in ourselves kernel(anolis kernel, already open source).
-Of course, I think it's unnecessary for you to change kernel, just let 
-you know this tool still has this problem.
-
-Anyway, the question that you reported was valuable, made me realize 
-what we need to improve next.
-
-Thanks,
-Rongwei Wang
+> > diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
+> > index 2e0c501ce9c8..acd17183ad8c 100644
+> > --- a/Documentation/ABI/testing/ima_policy
+> > +++ b/Documentation/ABI/testing/ima_policy
+> > @@ -47,7 +47,11 @@ Description:
+> >  			fgroup:= decimal value
+> >  		  lsm:  are LSM specific
+> >  		  option:
+> > -			appraise_type:= [imasig] [imasig|modsig]
+> > +			appraise_type:= [imasig] | [imasig|modsig] | [sigv3]
+> > +			    where 'imasig' is the original or v2 signature,
+> > +			    where 'modsig' is an appended signature,
+> > +			    where 'sigv3' is the IMA v3 signature.
+> > +
 > 
->>
->>>>
->>>> Typical characteristics of a large Android app is that it has
->>>> thousands of vma and very large virtual address spaces:
->>>> ~/damo # pmap 2550 | wc -l
->>>> 8522
->>>>
->>>> ~/damo # pmap 2550
->>>> ...
->>>> 0000007992bbe000      4K r----   [ anon ]
->>>> 0000007992bbf000     24K rw---   [ anon ]
->>>> 0000007fe8753000      4K -----   [ anon ]
->>>> 0000007fe8754000   8188K rw---   [ stack ]
->>>>    total         36742112K
->>>>
->>>> Because the whole vma list is too long, I have put the list here for
->>>> you to download:
->>>> wget http://www.linuxep.com/patches/android-app-vmas
->>>>
->>>> I can reproduce this problem on other Apps like youtube as well.
->>>> I suppose we need to boost the algorithm of splitting regions for this
->>>> kind of application.
->>>> Any thoughts?
->>>>
->>
->> Thanks
->> Barry
+> The documentation should explain the differences between the different signature
+> types, especially when a user would need to choose one or another.
+
+Agreed, it's confusing.  The source of that confusion is a result of
+struct signature_v2_hdr name and the field named "version" in the
+structure.  Here the signature_v2_hdr isn't changing, but a new field
+"version" number is defined.
+> 
+> > +
+> > +		Example of 'measure' and 'appraise' rules requiring fs-verity
+> > +		signatures (version 3) stored in security.ima xattr.
+> > +
+> > +		The 'measure' rule specifies the 'ima-sigv2' template option,
+> > +		which includes the indication of type of digest and the file
+> > +		signature in the measurement list.
+> > +
+> > +			measure func=BPRM_CHECK digest_type=verity \
+> > +				template=ima-sigv2
+> 
+> This says it requires version 3 signatures, however it then uses "ima-sigv2".
+
+Agreed, it would make more sense to name the template "ima-sigv3" to
+refer to the "version" field.
+
+> 
+> > @@ -183,13 +185,18 @@ enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
+> >  		return ima_hash_algo;
+> >  
+> >  	switch (xattr_value->type) {
+> > +	case IMA_VERITY_DIGSIG:
+> > +		sig = (typeof(sig))xattr_value;
+> > +		if (sig->version != 3 || xattr_len <= sizeof(*sig) ||
+> > +		    sig->hash_algo >= HASH_ALGO__LAST)
+> > +			return ima_hash_algo;
+> > +		return sig->hash_algo;
+> 
+> It looks like this is falling back to SHA-1 if the xattr is invalid:
+> 
+> 	int __ro_after_init ima_hash_algo = HASH_ALGO_SHA1;
+> 
+> How about falling back to a more secure hash algorithm, or returning an error?
+
+ima_hash_algo is set to the configured default IMA hash algorithm in
+init_ima().
+
+> 
+> > +/*
+> > + * calc_file_id_hash - calculate the hash of the ima_file_id struct data
+> > + * @type: xattr type [enum evm_ima_xattr_type]
+> > + * @algo: hash algorithm [enum hash_algo]
+> > + * @digest: pointer to the digest to be hashed
+> > + * @hash: (out) pointer to the hash
+> > + *
+> > + * IMA signature version 3 disambiguates the data that is signed by
+> > + * indirectly signing the hash of the ima_file_id structure data.
+> > + *
+> > + * Signing the ima_file_id struct is currently only supported for
+> > + * IMA_VERITY_DIGSIG type xattrs.
+> > + *
+> > + * Return 0 on success, error code otherwise.
+> > + */
+> > +static int calc_file_id_hash(enum evm_ima_xattr_type type,
+> > +			     enum hash_algo algo, const u8 *digest,
+> > +			     struct ima_digest_data *hash)
+> > +{
+> > +	struct ima_file_id file_id = {
+> > +		.hash_type = IMA_VERITY_DIGSIG, .hash_algorithm = algo};
+> > +	uint unused = HASH_MAX_DIGESTSIZE - hash_digest_size[algo];
+> 
+> 'uint' is unusual in kernel code; please use 'unsigned int' instead.
+
+Ok
+> 
+> > @@ -1735,14 +1745,24 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+> >  			break;
+> >  		case Opt_appraise_type:
+> >  			ima_log_string(ab, "appraise_type", args[0].from);
+> > -			if ((strcmp(args[0].from, "imasig")) == 0)
+> > +			if ((strcmp(args[0].from, "imasig")) == 0) {
+> >  				entry->flags |= IMA_DIGSIG_REQUIRED;
+> > -			else if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
+> > -				 strcmp(args[0].from, "imasig|modsig") == 0)
+> > +			} else if (strcmp(args[0].from, "sigv3") == 0) {
+> > +				/*
+> > +				 * Only fsverity supports sigv3 for now.
+> > +				 * No need to define a new flag.
+> > +				 */
+> > +				if (entry->flags & IMA_VERITY_REQUIRED)
+> > +					entry->flags |= IMA_DIGSIG_REQUIRED;
+> > +				else
+> > +					result = -EINVAL;
+> > +			} else if (IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG) &&
+> > +				 strcmp(args[0].from, "imasig|modsig") == 0) {
+> >  				entry->flags |= IMA_DIGSIG_REQUIRED |
+> >  						IMA_MODSIG_ALLOWED;
+> > -			else
+> > +			} else {
+> >  				result = -EINVAL;
+> > +			}
+> 
+> This appears to be assuming that the appraise_type option is given after
+> digest_type rather than befoore, as digest_type is what sets the
+> IMA_VERITY_REQUIRED flag.  Is this intentional?  Does the order of options
+> matter in IMA rules, and if so where are the ordering requirements documented?
+> 
+> Also, it looks like this is allowing appraise_type=imasig or
+> appraise_type=imasig|modsig in combination with digest_type=verity.  Is that
+> intentional?  What is the use case for these combinations?
+> 
+
+All of your comments will be addressed in the next version, including
+the ordering issue of "digest_type=verity" and "appraise_type=sigv3".
+
+> >  /*
+> > - * signature format v2 - for using with asymmetric keys
+> > + * signature header format v2 - for using with asymmetric keys
+> > + *
+> > + * signature format:
+> > + * version 2: regular file data hash based signature
+> > + * version 3: struct ima_file_id data based signature
+> >   */
+> >  struct signature_v2_hdr {
+> 
+> Is this struct also used with version 3, despite having v2 in its name?
+> The comment is not clear.
+
+Agreed, it's confusing.  Too many versions.  This v2 refers to the
+header format, while "version" in the signature_v2_hdr refers to the
+signature format.
+
+Mimi
+

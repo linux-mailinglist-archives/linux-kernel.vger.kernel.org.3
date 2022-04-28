@@ -2,332 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1915127F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 02:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C4F5127FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 02:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiD1AS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 20:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S230241AbiD1A2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 20:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbiD1ASy (ORCPT
+        with ESMTP id S229587AbiD1A2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 20:18:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D9622B38;
-        Wed, 27 Apr 2022 17:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651104941; x=1682640941;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hAKuRjHNr9yLfpAW60dj3hws84dhaDPrOBkrdjgC0GI=;
-  b=D1yTnmZt8HetHLobkPQsiInWbh0XScDrDoNHasWr859xRo88lgEIikNW
-   sLXS317ge04NddOLOUDuS8g1+xU732TZUyDgX3yp3gG6umil1YqsloVNu
-   DAkJKjcFBc4nzUTMpMZdI2JxTG+llTBOra1I7DoQJ+MO1lYHUiEXj8yG6
-   rzPexIBJcEZRv9AzXW6eA8zolwSBb+XYHed9x2/Nn9RZuvQckNOvMNb/i
-   Pv7SLJ5Tsx7Dw3xrDdJIzWOvhvI4OS56kd01BznddxylPoHOLd8cHZCd+
-   epNagz5H2PxvIbt4Z1tygCciLcnnaUCB31AjYkLIRsSfiNBd9+xao5bwu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="263699511"
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="263699511"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 17:15:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="533516325"
-Received: from rrnambia-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.78])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 17:15:17 -0700
-Message-ID: <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
-Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
- and convertible memory
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Thu, 28 Apr 2022 12:15:14 +1200
-In-Reply-To: <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
-         <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 27 Apr 2022 20:28:40 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827C15D18D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 17:25:25 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 17:25:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1651105523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Pm4XrPDDu3/pHy6817BFFDAkWHD9YST6CisfBpK9OM=;
+        b=awylVQzqR1tHTFsw9QqqmT7Tqx9CedX2bZefrOBoh3iFq76HUk5uateMmNJQkhWx34JY6p
+        yqIsxY1vpWY3tsxKnHHIAQ/rM6Vl1rCbFiLFoma3ialbJye1lr9a7qx7j1cjhHhYSmZNgc
+        Dk3aeJ707PsdTzlfmdax89EL0wOs6ps=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v2 5/7] mm: provide shrinkers with names
+Message-ID: <Ymne7kO27PUxa5eL@carbon>
+References: <20220422202644.799732-1-roman.gushchin@linux.dev>
+ <20220422202644.799732-6-roman.gushchin@linux.dev>
+ <5272f8f0-7624-141b-076c-e8de08e595f5@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5272f8f0-7624-141b-076c-e8de08e595f5@wanadoo.fr>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-27 at 15:15 -0700, Dave Hansen wrote:
-> On 4/5/22 21:49, Kai Huang wrote:
-> > TDX provides increased levels of memory confidentiality and integrity.
-> > This requires special hardware support for features like memory
-> > encryption and storage of memory integrity checksums.  Not all memory
-> > satisfies these requirements.
+On Sat, Apr 23, 2022 at 09:46:25AM +0200, Christophe JAILLET wrote:
+> Hi,
+> 
+> Le 22/04/2022 à 22:26, Roman Gushchin a écrit :
+> > Currently shrinkers are anonymous objects. For debugging purposes they
+> > can be identified by count/scan function names, but it's not always
+> > useful: e.g. for superblock's shrinkers it's nice to have at least
+> > an idea of to which superblock the shrinker belongs.
 > > 
-> > As a result, TDX introduced the concept of a "Convertible Memory Region"
-> > (CMR).  During boot, the firmware builds a list of all of the memory
-> > ranges which can provide the TDX security guarantees.  The list of these
-> > ranges, along with TDX module information, is available to the kernel by
-> > querying the TDX module via TDH.SYS.INFO SEAMCALL.
+> > This commit adds names to shrinkers. register_shrinker() and
+> > prealloc_shrinker() functions are extended to take a format and
+> > arguments to master a name. If CONFIG_SHRINKER_DEBUG is on,
+> > the name is saved until the corresponding debugfs object is created,
+> > otherwise it's simple ignored.
 > > 
-> > Host kernel can choose whether or not to use all convertible memory
-> > regions as TDX memory.  Before TDX module is ready to create any TD
-> > guests, all TDX memory regions that host kernel intends to use must be
-> > configured to the TDX module, using specific data structures defined by
-> > TDX architecture.  Constructing those structures requires information of
-> > both TDX module and the Convertible Memory Regions.  Call TDH.SYS.INFO
-> > to get this information as preparation to construct those structures.
+> > After this change the shrinker debugfs directory looks like:
+> >    $ cd /sys/kernel/debug/shrinker/
+> >    $ ls
+> >      dqcache-16          sb-cgroup2-30    sb-hugetlbfs-33  sb-proc-41       sb-selinuxfs-22  sb-tmpfs-40    sb-zsmalloc-19
+> >      kfree_rcu-0         sb-configfs-23   sb-iomem-12      sb-proc-44       sb-sockfs-8      sb-tmpfs-42    shadow-18
+> >      sb-aio-20           sb-dax-11        sb-mqueue-21     sb-proc-45       sb-sysfs-26      sb-tmpfs-43    thp_deferred_split-10
+> >      sb-anon_inodefs-15  sb-debugfs-7     sb-nsfs-4        sb-proc-47       sb-tmpfs-1       sb-tmpfs-46    thp_zero-9
+> >      sb-bdev-3           sb-devpts-28     sb-pipefs-14     sb-pstore-31     sb-tmpfs-27      sb-tmpfs-49    xfs_buf-37
+> >      sb-bpf-32           sb-devtmpfs-5    sb-proc-25       sb-rootfs-2      sb-tmpfs-29      sb-tracefs-13  xfs_inodegc-38
+> >      sb-btrfs-24         sb-hugetlbfs-17  sb-proc-39       sb-securityfs-6  sb-tmpfs-35      sb-xfs-36      zspool-34
 > > 
-> > Signed-off-by: Kai Huang <kai.huang@intel.com>
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 > > ---
-> >  arch/x86/virt/vmx/tdx/tdx.c | 131 ++++++++++++++++++++++++++++++++++++
-> >  arch/x86/virt/vmx/tdx/tdx.h |  61 +++++++++++++++++
-> >  2 files changed, 192 insertions(+)
-> > 
-> > diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> > index ef2718423f0f..482e6d858181 100644
-> > --- a/arch/x86/virt/vmx/tdx/tdx.c
-> > +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> > @@ -80,6 +80,11 @@ static DEFINE_MUTEX(tdx_module_lock);
-> >  
-> >  static struct p_seamldr_info p_seamldr_info;
-> >  
-> > +/* Base address of CMR array needs to be 512 bytes aligned. */
-> > +static struct cmr_info tdx_cmr_array[MAX_CMRS] __aligned(CMR_INFO_ARRAY_ALIGNMENT);
-> > +static int tdx_cmr_num;
-> > +static struct tdsysinfo_struct tdx_sysinfo;
 > 
-> I really dislike mixing hardware and software structures.  Please make
-> it clear which of these are fully software-defined and which are part of
-> the hardware ABI.
-
-Both 'struct tdsysinfo_struct' and 'struct cmr_info' are hardware structures. 
-They are defined in tdx.h which has a comment saying the data structures below
-this comment is hardware structures:
-
-	+/*
-	+ * TDX architectural data structures
-	+ */
-
-It is introduced in the P-SEAMLDR patch.
-
-Should I explicitly add comments around the variables saying they are used by
-hardware, something like:
-
-	/*
-	 * Data structures used by TDH.SYS.INFO SEAMCALL to return CMRs and
-	 * TDX module system information.
-	 */
-
-?
- 
+> [...]
 > 
-> >  static bool __seamrr_enabled(void)
-> >  {
-> >  	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
-> > @@ -468,6 +473,127 @@ static int tdx_module_init_cpus(void)
-> >  	return seamcall_on_each_cpu(&sc);
-> >  }
-> >  
-> > +static inline bool cmr_valid(struct cmr_info *cmr)
+> > diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> > index 59f91e392a2a..1b326b93155c 100644
+> > --- a/drivers/md/raid5.c
+> > +++ b/drivers/md/raid5.c
+> > @@ -7383,7 +7383,7 @@ static struct r5conf *setup_conf(struct mddev *mddev)
+> >   	conf->shrinker.count_objects = raid5_cache_count;
+> >   	conf->shrinker.batch = 128;
+> >   	conf->shrinker.flags = 0;
+> > -	if (register_shrinker(&conf->shrinker)) {
+> > +	if (register_shrinker(&conf->shrinker, "md")) {
+> 
+> Based on pr_warn below, does it make sense to have something like:
+>   register_shrinker(&conf->shrinker, "md-%s", mdname(mddev))
+> 
+> >   		pr_warn("md/raid:%s: couldn't register shrinker.\n",
+> >   			mdname(mddev));
+> >   		goto abort;
+
+Good idea, will do, thanks!
+
+> 
+> [...]
+> 
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 121a54a1602b..6025cfda4932 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -613,7 +613,7 @@ static unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
+> >   /*
+> >    * Add a shrinker callback to be called from the vm.
+> >    */
+> > -int prealloc_shrinker(struct shrinker *shrinker)
+> > +static int __prealloc_shrinker(struct shrinker *shrinker)
+> >   {
+> >   	unsigned int size;
+> >   	int err;
+> > @@ -637,6 +637,34 @@ int prealloc_shrinker(struct shrinker *shrinker)
+> >   	return 0;
+> >   }
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
 > > +{
-> > +	return !!cmr->size;
-> > +}
+> > +	int err;
+> > +	char buf[64];
+> > +	va_list ap;
 > > +
-> > +static void print_cmrs(struct cmr_info *cmr_array, int cmr_num,
-> > +		       const char *name)
+> > +	va_start(ap, fmt);
+> > +	vscnprintf(buf, sizeof(buf), fmt, ap);
+> > +	va_end(ap);
+> > +
+> > +	shrinker->name = kstrdup(buf, GFP_KERNEL);
+> > +	if (!shrinker->name)
+> > +		return -ENOMEM;
+> 
+> use kvasprintf_const() (and kfree_const() elsewhere) to simplify code and
+> take advantage of kstrdup_const() in most cases?
+
+Sure, good point.
+
+> 
+> > +
+> > +	err = __prealloc_shrinker(shrinker);
+> > +	if (err)
+> > +		kfree(shrinker->name);
+> > +
+> > +	return err;
+> > +}
+> > +#else
+> > +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
 > > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < cmr_num; i++) {
-> > +		struct cmr_info *cmr = &cmr_array[i];
-> > +
-> > +		pr_info("%s : [0x%llx, 0x%llx)\n", name,
-> > +				cmr->base, cmr->base + cmr->size);
-> > +	}
+> > +	return __prealloc_shrinker(shrinker);
 > > +}
+> > +#endif
 > > +
-> > +static int sanitize_cmrs(struct cmr_info *cmr_array, int cmr_num)
+> >   void free_prealloced_shrinker(struct shrinker *shrinker)
+> >   {
+> >   	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+> > @@ -648,6 +676,9 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+> >   	kfree(shrinker->nr_deferred);
+> >   	shrinker->nr_deferred = NULL;
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +	kfree(shrinker->name);
+> > +#endif
+> >   }
+> >   void register_shrinker_prepared(struct shrinker *shrinker)
+> > @@ -659,15 +690,38 @@ void register_shrinker_prepared(struct shrinker *shrinker)
+> >   	up_write(&shrinker_rwsem);
+> >   }
+> > -int register_shrinker(struct shrinker *shrinker)
+> > +static int __register_shrinker(struct shrinker *shrinker)
+> >   {
+> > -	int err = prealloc_shrinker(shrinker);
+> > +	int err = __prealloc_shrinker(shrinker);
+> >   	if (err)
+> >   		return err;
+> >   	register_shrinker_prepared(shrinker);
+> >   	return 0;
+> >   }
+> > +
+> > +#ifdef CONFIG_SHRINKER_DEBUG
+> > +int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
 > > +{
-> > +	int i, j;
+> > +	char buf[64];
+> > +	va_list ap;
 > > +
-> > +	/*
-> > +	 * Intel TDX module spec, 20.7.3 CMR_INFO:
-> > +	 *
-> > +	 *   TDH.SYS.INFO leaf function returns a MAX_CMRS (32) entry
-> > +	 *   array of CMR_INFO entries. The CMRs are sorted from the
-> > +	 *   lowest base address to the highest base address, and they
-> > +	 *   are non-overlapping.
-> > +	 *
-> > +	 * This implies that BIOS may generate invalid empty entries
-> > +	 * if total CMRs are less than 32.  Skip them manually.
-> > +	 */
-> > +	for (i = 0; i < cmr_num; i++) {
-> > +		struct cmr_info *cmr = &cmr_array[i];
-> > +		struct cmr_info *prev_cmr = NULL;
+> > +	va_start(ap, fmt);
+> > +	vscnprintf(buf, sizeof(buf), fmt, ap);
+> > +	va_end(ap);
 > > +
-> > +		/* Skip further invalid CMRs */
-> > +		if (!cmr_valid(cmr))
-> > +			break;
+> > +	shrinker->name = kstrdup(buf, GFP_KERNEL);
+> > +	if (!shrinker->name)
+> > +		return -ENOMEM;
 > > +
-> > +		if (i > 0)
-> > +			prev_cmr = &cmr_array[i - 1];
-> > +
-> > +		/*
-> > +		 * It is a TDX firmware bug if CMRs are not
-> > +		 * in address ascending order.
-> > +		 */
-> > +		if (prev_cmr && ((prev_cmr->base + prev_cmr->size) >
-> > +					cmr->base)) {
-> > +			pr_err("Firmware bug: CMRs not in address ascending order.\n");
-> > +			return -EFAULT;
 > 
-> -EFAULT is a really weird return code to use for this.  I'd use -EINVAL.
-
-OK thanks.
-
+> same as above.
 > 
-> > +		}
-> > +	}
-> > +
-> > +	/*
-> > +	 * Also a sane BIOS should never generate invalid CMR(s) between
-> > +	 * two valid CMRs.  Sanity check this and simply return error in
-> > +	 * this case.
-> > +	 *
-> > +	 * By reaching here @i is the index of the first invalid CMR (or
-> > +	 * cmr_num).  Starting with next entry of @i since it has already
-> > +	 * been checked.
-> > +	 */
-> > +	for (j = i + 1; j < cmr_num; j++)
-> > +		if (cmr_valid(&cmr_array[j])) {
-> > +			pr_err("Firmware bug: invalid CMR(s) among valid CMRs.\n");
-> > +			return -EFAULT;
-> > +		}
+> > +	return __register_shrinker(shrinker);
 > 
-> Please add brackets for the for().
+> Missing error handling and freeing of shrinker->name as done in
+> prealloc_shrinker()?
 
-OK.
+Will check in the next version.
 
-> 
-> > +	/*
-> > +	 * Trim all tail invalid empty CMRs.  BIOS should generate at
-> > +	 * least one valid CMR, otherwise it's a TDX firmware bug.
-> > +	 */
-> > +	tdx_cmr_num = i;
-> > +	if (!tdx_cmr_num) {
-> > +		pr_err("Firmware bug: No valid CMR.\n");
-> > +		return -EFAULT;
-> > +	}
-> > +
-> > +	/* Print kernel sanitized CMRs */
-> > +	print_cmrs(tdx_cmr_array, tdx_cmr_num, "Kernel-sanitized-CMR");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int tdx_get_sysinfo(void)
-> > +{
-> > +	struct tdx_module_output out;
-> > +	u64 tdsysinfo_sz, cmr_num;
-> > +	int ret;
-> > +
-> > +	BUILD_BUG_ON(sizeof(struct tdsysinfo_struct) != TDSYSINFO_STRUCT_SIZE);
-> > +
-> > +	ret = seamcall(TDH_SYS_INFO, __pa(&tdx_sysinfo), TDSYSINFO_STRUCT_SIZE,
-> > +			__pa(tdx_cmr_array), MAX_CMRS, NULL, &out);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * If TDH.SYS.CONFIG succeeds, RDX contains the actual bytes
-> > +	 * written to @tdx_sysinfo and R9 contains the actual entries
-> > +	 * written to @tdx_cmr_array.  Sanity check them.
-> > +	 */
-> > +	tdsysinfo_sz = out.rdx;
-> > +	cmr_num = out.r9;
-> 
-> Please vertically align things like this:
-> 
-> 	tdsysinfo_sz = out.rdx;
-> 	cmr_num	     = out.r9;
+Thank you for taking a look!
 
-OK.
-
-> 
-> > +	if (WARN_ON_ONCE((tdsysinfo_sz > sizeof(tdx_sysinfo)) || !tdsysinfo_sz ||
-> > +				(cmr_num > MAX_CMRS) || !cmr_num))
-> > +		return -EFAULT;
-> 
-> Sanity checking is good, but this makes me wonder how much is too much.
->  I don't see a lot of code for instance checking if sys_write() writes
-> more than how much it was supposed to.
-> 
-> Why are these sanity checks necessary here?  Is the TDX module expected
-> to be *THAT* buggy?  The thing that's providing, oh, basically all of
-> the security guarantees of this architecture.  It's overflowing the
-> buffers you hand it?
-
-I think this check can be removed.  Will remove.
-
-> 
-> > +	pr_info("TDX module: vendor_id 0x%x, major_version %u, minor_version %u, build_date %u, build_num %u",
-> > +		tdx_sysinfo.vendor_id, tdx_sysinfo.major_version,
-> > +		tdx_sysinfo.minor_version, tdx_sysinfo.build_date,
-> > +		tdx_sysinfo.build_num);
-> > +
-> > +	/* Print BIOS provided CMRs */
-> > +	print_cmrs(tdx_cmr_array, cmr_num, "BIOS-CMR");
-> > +
-> > +	return sanitize_cmrs(tdx_cmr_array, cmr_num);
-> > +}
-> 
-> Does sanitize_cmrs() sanitize anything?  It looks to me like it *checks*
-> the CMRs.  But, sanitizing is an active operation that writes to the
-> data being sanitized.  This looks read-only to me.  check_cmrs() would
-> be a better name for a passive check.
-
-Sure will change to check_cmrs().
-
-> 
-> >  static int init_tdx_module(void)
-> >  {
-> >  	int ret;
-> > @@ -482,6 +608,11 @@ static int init_tdx_module(void)
-> >  	if (ret)
-> >  		goto out;
-> >  
-> > +	/* Get TDX module information and CMRs */
-> > +	ret = tdx_get_sysinfo();
-> > +	if (ret)
-> > +		goto out;
-> 
-> Couldn't we get rid of that comment if you did something like:
-> 
-> 	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
-
-Yes will do.
-
-> 
-> and preferably make the variables function-local.
-
-'tdx_sysinfo' will be used by KVM too.
-
-
-
--- 
-Thanks,
--Kai
-
-
+Roman

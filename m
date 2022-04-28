@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2107151386C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCDA51386B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349206AbiD1PgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S1349227AbiD1PgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242076AbiD1PgD (ORCPT
+        with ESMTP id S242076AbiD1PgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:36:03 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769291581D;
-        Thu, 28 Apr 2022 08:32:48 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id w17so9661431ybh.9;
-        Thu, 28 Apr 2022 08:32:48 -0700 (PDT)
+        Thu, 28 Apr 2022 11:36:08 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A55D19C37
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:32:53 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id q13so800948plr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kuwwuf3KdHolggB4QynNZDU01tz6frvfCx6pko4ErLU=;
+        b=mdwwawlT3tK+Sad2l7xPaMAmRf8hcbRiIG24rR+r+5XncpqBaAxD+T9Mc8kweL87tt
+         7pxC+hDyHTBI1YA0Y8DpenlSOkkzIXdCrExhIVhEEgir265KjS8iLSnDs3lj0Ska4MNt
+         CYCojUx/Edu90VQg7mscBAD8yWxyWZCNOa4KnIh7qz/YGkxUxg2hEtZzlfmhg/qwpTUf
+         YZN448EfVQ2vpfH3C3+z7/LFFAbL0vzJZ7hTBnawYBhjVSImLTk2+0+myqPp9sua/I6s
+         nKgB5dV7fOOx7gRflnP/GNah1zxnuZnYBmPjq0FnFAEAH9vt150YxPct9oZMuf2KdNcz
+         QZIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=mMNUjnjGG7SrMlJQo1Ic0BhZHfgvVdrNAaWUcA3R734=;
-        b=R6HFZHpnnj36hYbBVQp7YrQfj3npRMysGDB6qMPM3YQgq/61ri4iewjbRbBLHWD1BX
-         +8jxOKib9wa23SfOhoFIW5CpwO55vkUxmOfFowJYgr8OrRodvOexYHhY/zATa1aHHMo9
-         exEFy301Cg/xwUnct4VpsKmgoAZ6RpBey6DxYxdliiMJzITWBGi/i6sXurjlksdgUbkj
-         h4/zZMIA/pohPN2WFZsbkEw2lTtm2n+Vf9y7RujThy5DC86pLdp9LQEEIGksW7eZRsWV
-         N14FDCjdlClcYjC5Tg/ecKKxbvXL8yuPfqZgLpVOwpQvyunJn2zylBYjaxe2ijQhfBoP
-         b6wQ==
-X-Gm-Message-State: AOAM532x1YNQ2OYrWRWtgwx7Nq+i8EFsfCddkt8n/dY2p+IwEMIv9hZR
-        /hj7HokS9Xo3NI3w/g0Cm0efcHZmgMWlXhLrjfuVo7+cSzM=
-X-Google-Smtp-Source: ABdhPJy5IgU/m4oXH2zS6SAs5w14hm7kmIxgu4stYNMijsd4nD+qDfQOs47Y18LdyMBX5WCKzx8hfg7bArn/HwwOIVI=
-X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
- e140-20020a25e792000000b006457ddbb5ebmr31497076ybh.482.1651159967717; Thu, 28
- Apr 2022 08:32:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kuwwuf3KdHolggB4QynNZDU01tz6frvfCx6pko4ErLU=;
+        b=1n4cHkqOOlYRf7xoyFwjlGXx3y7PBltC+0dDMex1LLtQ8Au7tAFdnf1Rl6el01px6w
+         ZEKOKi42x/VeGhKxNc+ROCXAqXNwKcKY0ATeDY0L2WM5AGfdnNfndqDfelyo/SNUJveF
+         /t6ZLuXrjg77HkrAzgzNgIf3/PVpEzd/n/UbTAEBu2H0W6zBOP4fMjAi/jaqCjk0oono
+         4hi/+QM17R3nxqguMznVcD1Sc3elMesqwaV+CxX9I1NnQCnNFS0myn0T/n0y5x2MOqmi
+         SwaeTz6F/gAKG235XAe2zZDfTsiTlKNKAZMkBzWnL4gOGihuLvPZkuddkgefkVLgeVWC
+         wmtA==
+X-Gm-Message-State: AOAM532dM2ocKxiYQIAEODmPSXv7Sm00VDc0pjzeuqIcijImhuel4w24
+        ZAakmo+aVJZayOV6U9hyVgHNfQ==
+X-Google-Smtp-Source: ABdhPJxZUpJsK6m9XBCnUejJDo99DTeh1DPLe4DudO9Tr9g5JrpDs9QvZ+cvhBkp9xEF5WGlS4O2vw==
+X-Received: by 2002:a17:90b:180f:b0:1d9:91db:2976 with SMTP id lw15-20020a17090b180f00b001d991db2976mr20544174pjb.84.1651159972679;
+        Thu, 28 Apr 2022 08:32:52 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h132-20020a62838a000000b0050d3d6ad020sm192323pfe.205.2022.04.28.08.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 08:32:51 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 15:32:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     syzbot <syzbot+a8ad3ee1525a0c4b40ec@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: Re: [syzbot] WARNING in kvm_mmu_uninit_tdp_mmu (2)
+Message-ID: <YmqzoFqdmH1WuPv0@google.com>
+References: <00000000000082452505dd503126@google.com>
+ <13b3235ef66f22475fd4059df95ad0144548ccd1.camel@redhat.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Apr 2022 17:32:36 +0200
-Message-ID: <CAJZ5v0jaMoSXJ-Q7w8Pduk9=3NyaWakdvQU2mBOPMM2vE9dTjQ@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.18-rc5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13b3235ef66f22475fd4059df95ad0144548ccd1.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Apr 26, 2022, Maxim Levitsky wrote:
+> I can reproduce this in a VM, by running and CTRL+C'in my ipi_stress test,
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.18-rc5
-
-with top-most commit edbd9772cc9d8af6c136d01d8b9402f6ab767e9b
-
- Merge branch 'pm-cpuidle'
-
-on top of commit af2d861d4cd2a4da5137f795ee3509e6f944a25b
-
- Linux 5.18-rc4
-
-to receive power management fixes for 5.18-rc5.
-
-These fix up recent intel_idle driver changes and fix some ARM
-cpufreq driver issues.
-
-Specifics:
-
- - Fix issues with the Qualcomm's cpufreq driver (Dmitry Baryshkov,
-   Vladimir Zapolskiy).
-
- - Fix memory leak in the Sun501 driver (Xiaobing Luo).
-
- - Make intel_idle enable C1E promotion on all CPUs when C1E is
-   preferred to C1 (Artem Bityutskiy).
-
- - Make C6 optimization on Sapphire Rapids added recently work as
-   expected if both C1E and C1 are "preferred" (Artem Bityutskiy).
-
-Thanks!
-
-
----------------
-
-Artem Bityutskiy (2):
-      intel_idle: Fix the 'preferred_cstates' module parameter
-      intel_idle: Fix SPR C6 optimization
-
-Dmitry Baryshkov (4):
-      cpufreq: qcom-hw: drop affinity hint before freeing the IRQ
-      cpufreq: qcom-hw: fix the race between LMH worker and cpuhp
-      cpufreq: qcom-hw: fix the opp entries refcounting
-      cpufreq: qcom-hw: provide online/offline operations
-
-Vladimir Zapolskiy (2):
-      cpufreq: qcom-cpufreq-hw: Fix throttle frequency value on EPSS platforms
-      cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
-
-Xiaobing Luo (1):
-      cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
-
----------------
-
- drivers/cpufreq/qcom-cpufreq-hw.c      | 70 +++++++++++++++++++++++++++-------
- drivers/cpufreq/sun50i-cpufreq-nvmem.c |  4 +-
- drivers/idle/intel_idle.c              | 27 +++++++------
- 3 files changed, 75 insertions(+), 26 deletions(-)
+Can you post your ipi_stress test?  I'm curious to see if I can repro, and also
+very curious as to what might be unique about your test.  I haven't been able to
+repro the syzbot test, nor have I been able to repro by killing VMs/tests.

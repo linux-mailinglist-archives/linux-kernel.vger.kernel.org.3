@@ -2,68 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF805135C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E8E5135C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347680AbiD1Nzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S1347783AbiD1Nz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235821AbiD1Nzs (ORCPT
+        with ESMTP id S1347725AbiD1Nz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:55:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE03694A2;
-        Thu, 28 Apr 2022 06:52:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C17B0B82D0B;
-        Thu, 28 Apr 2022 13:52:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5544CC385A9;
-        Thu, 28 Apr 2022 13:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651153951;
-        bh=ODsMq+Ft6dlX/IlXg4fQJ5/+B9MFbJhJJW4Q4ktgLxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eAQ2tkW+noTloQZoa3bawPAwbQnElGK0hQb/COxBVytIy6TX2Ejj95XwXO+nGKI4V
-         a35LPeQNI3AIi+uz4Y2X02zHmwACwr/q+20eHNrLBfNE34fNxJ2KeHgsln3ygah9pt
-         vhlJAX11NIXY1yVt0UyfYUE9G4vJ9G1RSxC1sCkzDZuGtWCJji9+r52pOdC0Mijy9S
-         dzOH2OrF9bf3tm5tZARzRxaFs1rhiUgKa5f2T/po64gaLVpRdYVu+nYCGECuapIQbR
-         M8KBuFnmaSCBXBMpURObGEofM5FOAzBsH3evsgzBAR7rnlFndWKvQOtFKy9+0mykuQ
-         Lq6lRBWsKXJFA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D0F09400B1; Thu, 28 Apr 2022 10:52:28 -0300 (-03)
-Date:   Thu, 28 Apr 2022 10:52:28 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>,
-        Song Liu <songliubraving@fb.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH 0/3] perf tools: Tidy up symbol end fixup (v3)
-Message-ID: <YmqcHFtVTfvCCbTW@kernel.org>
-References: <20220416004048.1514900-1-namhyung@kernel.org>
- <CAP-5=fUUeqimTKoO9PQbm4yDWXZtTqxWm9ZAsNt1=K5N1Rq_Lg@mail.gmail.com>
+        Thu, 28 Apr 2022 09:55:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8CF2B42D9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:52:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AAAD1474;
+        Thu, 28 Apr 2022 06:52:40 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 637AF3F5A1;
+        Thu, 28 Apr 2022 06:52:38 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 14:52:33 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 22/22] firmware: arm_scmi: Add SCMIv3.1
+ PERFORMANCE_LIMITS_SET checks
+Message-ID: <20220428135233.r2yzwgr5uxex7vox@bogus>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-23-cristian.marussi@arm.com>
+ <20220428131357.mbj5pksrnt5auotb@bogus>
+ <Ymqba5DZqELVRulS@e120937-lin>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fUUeqimTKoO9PQbm4yDWXZtTqxWm9ZAsNt1=K5N1Rq_Lg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ymqba5DZqELVRulS@e120937-lin>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,62 +49,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Apr 25, 2022 at 01:59:03PM -0700, Ian Rogers escreveu:
-> On Fri, Apr 15, 2022 at 5:40 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Hello,
-> >
-> > This work is a follow-up of Ian's previous one at
-> >   https://lore.kernel.org/all/20220412154817.2728324-1-irogers@google.com/
-> >
-> > Fixing up more symbol ends as introduced in:
-> >   https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
-> >
-> > it caused perf annotate to run into memory limits - every symbol holds
-> > all the disassembled code in the annotation, and so making symbols
-> > ends further away dramatically increased memory usage (40MB to >1GB).
-> >
-> > Modify the symbol end fixup logic so that special kernel cases aren't
-> > applied in the common case.
-> >
-> > v3 changes)
-> >  * rename is_kernel to is_kallsyms
-> >  * move the logic to generic function
-> >  * remove arch-specific functions
-> >
-> > Thanks,
-> > Namhyung
+On Thu, Apr 28, 2022 at 02:49:48PM +0100, Cristian Marussi wrote:
+> On Thu, Apr 28, 2022 at 02:13:57PM +0100, Sudeep Holla wrote:
+> > On Wed, Mar 30, 2022 at 04:05:51PM +0100, Cristian Marussi wrote:
+> > > Starting with SCMIv3.1, the PERFORMANCE_LIMITS_SET command allows a user
+> > > to request only one between max and min ranges to be changed, while leaving
+> > > the other untouched if set to zero in the request; anyway SCMIv3.1 states
+> > > also explicitly that you cannot leave both of those unchanged (zeroed) when
+> > > issuing such command: add a proper check for this condition.
+> > > 
+> > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > > ---
+> > >  drivers/firmware/arm_scmi/perf.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+> > > index 65ffda5495d6..8f4051aca220 100644
+> > > --- a/drivers/firmware/arm_scmi/perf.c
+> > > +++ b/drivers/firmware/arm_scmi/perf.c
+> > > @@ -423,6 +423,9 @@ static int scmi_perf_limits_set(const struct scmi_protocol_handle *ph,
+> > >  	struct scmi_perf_info *pi = ph->get_priv(ph);
+> > >  	struct perf_dom_info *dom = pi->dom_info + domain;
+> > >  
+> > > +	if (PROTOCOL_REV_MAJOR(pi->version) >= 0x3 && !max_perf && !min_perf)
+> > > +		return -EINVAL;
+> > > +
+> > 
+> > Do we really need the version check here ? I agree it was explicitly added
+> > in v3.1, but it makes sense on any version really. No ?
 > 
-> Thanks Namhyung! The series:
+> Indeed seemed a silly patch also to me but given that only in v3.1 it is
+> explicitly stated that you cannot issue this command with both min and
+> max ZEROED I though this could have broken older fw that allowed
+> setting PERF_LIMITS_SET max=0 min=0
 > 
-> Acked-by: Ian Rogers <irogers@google.com>
+> ....maybe overthought ...
 
-Thanks, applied to perf/urgent.
-
-- Arnaldo
-
- 
-> > Namhyung Kim (3):
-> >   perf symbol: Pass is_kallsyms to symbols__fixup_end()
-> >   perf symbol: Update symbols__fixup_end()
-> >   perf symbol: Remove arch__symbols__fixup_end()
-> >
-> >  tools/perf/arch/arm64/util/machine.c   | 21 ---------------
-> >  tools/perf/arch/powerpc/util/Build     |  1 -
-> >  tools/perf/arch/powerpc/util/machine.c | 25 -----------------
-> >  tools/perf/arch/s390/util/machine.c    | 16 -----------
-> >  tools/perf/util/symbol-elf.c           |  2 +-
-> >  tools/perf/util/symbol.c               | 37 +++++++++++++++++++-------
-> >  tools/perf/util/symbol.h               |  3 +--
-> >  7 files changed, 29 insertions(+), 76 deletions(-)
-> >  delete mode 100644 tools/perf/arch/powerpc/util/machine.c
-> >
-> >
-> > base-commit: 41204da4c16071be9090940b18f566832d46becc
-> > --
-> > 2.36.0.rc0.470.gd361397f0d-goog
-> >
+Hmm, let's keep it unconditional for now. We can add if someone reports
+broken firmware. BTW there are no users in the kernel 😄.
 
 -- 
-
-- Arnaldo
+Regards,
+Sudeep

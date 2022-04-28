@@ -2,64 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F41D5136D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A3B5136D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348304AbiD1O1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S1348317AbiD1O2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239271AbiD1O1b (ORCPT
+        with ESMTP id S1348309AbiD1O22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:27:31 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C440BAFB22;
-        Thu, 28 Apr 2022 07:24:16 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id A118E68AFE; Thu, 28 Apr 2022 16:24:12 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 16:24:12 +0200
-From:   "hch@lst.de" <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>, Janne Grunau <j@jannau.net>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH v3 0/6] Apple M1 (Pro/Max) NVMe driver
-Message-ID: <20220428142412.GA19708@lst.de>
-References: <20220426201539.12829-1-sven@svenpeter.dev> <CAK8P3a1yJkegvgvzHemBd_dowvpyDmxtUnrpiHob8+hiNeO4sw@mail.gmail.com> <0f6ea2c3-586d-4f5a-9cee-688cd73b96b3@www.fastmail.com> <CAK8P3a3pPxpoOZ0hm9htBRyYc7L38F6egi-0=41tMtcLRGJ_jw@mail.gmail.com>
+        Thu, 28 Apr 2022 10:28:28 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139211FA7E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:25:12 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r83so4126366pgr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TlawIu8gUQdtMxZhaj9GVkTl4M/PnXrCnZW+L5pZKe0=;
+        b=tKZ1Q2krSUMLYZ6CSInNA0TRI1pjrsEg7+OqZ8ze8ewZGs+I86Z0NhYlnUsFJ9/lEI
+         TNURtOJoogb52Y7Kwpiyz6Jb+YTfNOc0mBQWEFsiBYDrd+P9/qiUvCybpaXHtnKxID8c
+         Id315fHpOrKcHEh8Q1ZcImwdC0G396PPk8cRO1Pbi08i0ITda+o2d7EzUjpf6q59Kabu
+         0qeUkMSPq8p5kX33jjNK1DQvo56WWZ/22LDg/zUOAFlPE9oEYsdWwDy6soUlvHtuWQD5
+         EquFgQgQXuSC3M+C5DdmMvUHPH4IeyhMbRZaZmzBlauiBPL5OKEdhWwIKBpFWYRwOWrr
+         H4HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TlawIu8gUQdtMxZhaj9GVkTl4M/PnXrCnZW+L5pZKe0=;
+        b=uDAwJW5wxpNz/8/bayuo6Oo7CnOfJcyHdk40wQovUue6OptJnkkkiuGJFYa3O4eo8t
+         I90DnvZGjKbjMWXQfxzD+REnMvnU+ElbCXLdc1VeKTD2mITKY2aP1R/J/oKslw57UOdg
+         G4g9k7RBYyvgPrJcniQRpVa7KaRGEfJHu3mJZ6GkBhtl6ZoLZAYq8zipt0XoU7OYgtxD
+         J61yqS3Em24vHa4R0PPjS7R00gSCcjZ8nUxlAyxDCyxOerEIwLC62wMNmuXGfCo3pO9b
+         Njn8Mg5xZeo2uNLLsEbKpvJvSV6AIAdXP5VG4ZvHza10k7Zwp/BlVd4lFTgeb7yXAeRc
+         JFGA==
+X-Gm-Message-State: AOAM532T5dWGnUVBSI1yfWbGjb3NZOOZuKURdwhC/pUZMpebB3S00HAr
+        kgPNWRLYaYR0AvGuiHQpgAf7ew==
+X-Google-Smtp-Source: ABdhPJyF9oLJ1Bh5rjVR522O+z3xuw2GtfFl9NHA0CBZ6FswvOiHNlk9DB1Jx8TyNlFm/XGsktvEbg==
+X-Received: by 2002:a65:6946:0:b0:39d:a0c3:71f with SMTP id w6-20020a656946000000b0039da0c3071fmr28007435pgq.160.1651155912175;
+        Thu, 28 Apr 2022 07:25:12 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v21-20020a631515000000b003c14af50603sm3147541pgl.27.2022.04.28.07.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 07:25:11 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 14:25:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 05/11] KVM: SVM: Re-inject INT3/INTO instead of
+ retrying the instruction
+Message-ID: <YmqjxNQiMABl+tX7@google.com>
+References: <20220423021411.784383-1-seanjc@google.com>
+ <20220423021411.784383-6-seanjc@google.com>
+ <051f508121bcf47d8cbc79ee2c0817aafbe5af48.camel@redhat.com>
+ <9553b164-67a6-3634-34c5-f7319ce2dc60@maciej.szmigiero.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a3pPxpoOZ0hm9htBRyYc7L38F6egi-0=41tMtcLRGJ_jw@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9553b164-67a6-3634-34c5-f7319ce2dc60@maciej.szmigiero.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 07:39:49PM +0200, Arnd Bergmann wrote:
-> The usual trick is to have a branch with the shared patches and have
-> that pulled into every other tree that needs these, but make sure you never
-> rebase. In this case, you could have something like
+On Thu, Apr 28, 2022, Maciej S. Szmigiero wrote:
+> On 28.04.2022 11:37, Maxim Levitsky wrote:
+> > On Sat, 2022-04-23 at 02:14 +0000, Sean Christopherson wrote:
+> > > @@ -1618,7 +1644,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+> > >   	nested_copy_vmcb_control_to_cache(svm, ctl);
+> > >   	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> > > -	nested_vmcb02_prepare_control(svm, save->rip);
+> > > +	nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip);
+> > 
+> > Is this change intentional?
 > 
-> a) rtkit driver in a shared branch (private only)
-> b) thunderbolt driver based on branch a), merged through
->      thunderbolt/usb/pci tree (I don't know who is responsible here)
-> c) sart driver based on branch a), merged through soc tree
-> d) nvme driver based on branch c), merged through nvme tree
+> It looks to me the final code is correct since "svm->vmcb->save"
+> contains L2 register save, while "save" has L1 register save.
 > 
-> since the commit hashes are all identical, each patch only shows up in
-> the git tree once, but you get a somewhat funny history.
+> It was the patch 1 from this series that was incorrect in
+> using "save->rip" here instead.
 
-Given that the nvme driver is just addition of new code I'm perfectly
-fine with sending it through whatever tree is most convenient.
+Yeah, I botched the fixup.

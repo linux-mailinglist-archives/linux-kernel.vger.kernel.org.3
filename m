@@ -2,172 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1C3512FDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2AE512F9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiD1JtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S231483AbiD1JtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347959AbiD1Jfx (ORCPT
+        with ESMTP id S1348037AbiD1JgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:35:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18BC19548B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651138359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OG6hUPY6sAUTqTJViKJ1E1LWjNyEwooQAig3aG1iSlg=;
-        b=cdoei2hJcSbHuHkYZQ3MvgS8axm0jut80Hqzf014rP13NYK2DibnzS+WZwyUSUWh+ODxEc
-        o7onngKKqisVXVVI8w7dfaBqYGc5CQU80N+R3Zn60/Mh03JYd2kL6neHZLRNmTmElkawc4
-        NuBRgM6eEICO7jQAST6tKQuCxF/kbgE=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-CzAHaEGHOGeH_Iyu-boiIA-1; Thu, 28 Apr 2022 05:32:37 -0400
-X-MC-Unique: CzAHaEGHOGeH_Iyu-boiIA-1
-Received: by mail-qk1-f199.google.com with SMTP id u7-20020ae9d807000000b00680a8111ef6so2830502qkf.17
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 02:32:36 -0700 (PDT)
+        Thu, 28 Apr 2022 05:36:23 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C6B95486;
+        Thu, 28 Apr 2022 02:33:09 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id k4so3847748plk.7;
+        Thu, 28 Apr 2022 02:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kWZe+4U90sxTKToEseK0+oAihI7ZBnHaalcQvB+4Uuo=;
+        b=E7jjJrp33n0Qj5If3vLLYwfakVJG/T4INawvqftLhNW9eEe+YbX0OSrjv6IS0PtyMe
+         diT0FntjAzNAvTpLcC8J54wT9I008ZvsoEbauH0HMYGKJW1JMoIyJ5M04Fk3A6/RhB06
+         QzKacey6Y3Ri7k7+gX+bab14OldiWlQcuVcXNRLmnccATw/D1AXIGcIODkY5Q1Sy/FkP
+         Fc6NQb8b1fjEjRDZlYsU3KHgoaXk22AXFIApM81ss9XL5KltYVelBJFUP+hQmz9gTAlZ
+         ZUUwyQjtPh8Vopq7OGLBmQqsindaYGYKiCfjyPLYHdWTW6j92UzfeovurHhagnenCpK4
+         9X9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=OG6hUPY6sAUTqTJViKJ1E1LWjNyEwooQAig3aG1iSlg=;
-        b=XFs3SvfkbnhKEjvww/xH13I6Fe++3rrsiJKRoZcNEPdPHqZ+sPgVw049PUO599v/Y9
-         NmhozVnkSEGzqDFdIOaiGu0cAN+4Bu/Jl3J3IkfpXa7S/KZ26vhXfZnr508AP0UNtS31
-         9kyWGL1CXLeGOPbxy+6plE90jczvc2ybvQIWVOplcRKO1pr7tTgqqippR/OEgG/iZ874
-         YaZXO3m4xnDJWLAHNBMpNCcEePVh2tPPi6eqLWJvL28pVNf3BWZjd+eR8FJCCfrjG7A1
-         izM/usUy776BtuIvhiLZ+nXcCaBIPkVuz22Q4I3yki7UIJtAQr+TtE0bBgcr/YbpoZwx
-         +dmA==
-X-Gm-Message-State: AOAM532D3qa7bqt91eDUD0AGRrnVNAVtVfqxcamGHbJUkfGQLAHAM8Dg
-        zFoUhi63jGp1a22NodtPZKRLXLo9k9T2pQ2Wx5aYKofaQ1iLTbGzSxqdr9NdeaLCfAhXFtG0uyL
-        BZpTJN2kwd2teB0v+sNccoa9m
-X-Received: by 2002:a05:622a:2cb:b0:2f3:646b:54b6 with SMTP id a11-20020a05622a02cb00b002f3646b54b6mr15456758qtx.380.1651138356462;
-        Thu, 28 Apr 2022 02:32:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyJ3J0ImF+LM/cJTr/TdEmv6YBtIqlv1bBiDK6w9j0coe0CvNV+LL3YO5hh7fcCBb3x5O7y0w==
-X-Received: by 2002:a05:622a:2cb:b0:2f3:646b:54b6 with SMTP id a11-20020a05622a02cb00b002f3646b54b6mr15456733qtx.380.1651138356147;
-        Thu, 28 Apr 2022 02:32:36 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-117-160.dyn.eolo.it. [146.241.117.160])
-        by smtp.gmail.com with ESMTPSA id k66-20020a37ba45000000b0069c5adb2f2fsm9620433qkf.6.2022.04.28.02.32.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 02:32:35 -0700 (PDT)
-Message-ID: <c499d01d51095ae338cbc63179bdc0e1606cbfef.camel@redhat.com>
-Subject: Re: [PATCH net-next v5 08/18] net: sparx5: Replace usage of found
- with dedicated list iterator variable
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Date:   Thu, 28 Apr 2022 11:32:28 +0200
-In-Reply-To: <20220427160635.420492-9-jakobkoschel@gmail.com>
-References: <20220427160635.420492-1-jakobkoschel@gmail.com>
-         <20220427160635.420492-9-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kWZe+4U90sxTKToEseK0+oAihI7ZBnHaalcQvB+4Uuo=;
+        b=2nNvyMI2XoERuecGOoUjOV2iow8vJl63qesFouYbfZazCQsvZfRaGM8RLNf2yTZsvx
+         TjIlshHoRl2405i9vS6rm4vui99R3qGzWglynCLzGXLzvd2/83I+qHNqiK7vr/jW7kfp
+         Za0F+NCDaVgJMwTnVQXZ2LOMkjbDWrQjRrColRTD1v3YolULE7K4ckaVmcRI4vvpVGOp
+         fxuTv5jodEebM7H3qHQ28YwbDj91N1to7lrLy+wqGcJFmk5ZHKck72AJkCW/VL3t7F3i
+         h8GGpvj6gv3ZIBLMc23ETxyOPGHxwl2E+/0dI/wGHmCOYXuyDKgBrdHJ4Kt/TKCcN32e
+         K8xw==
+X-Gm-Message-State: AOAM5323vw2H4zRnC5137a/xtZZH11fDyA1QleGrlkgC5ZXz2Ou3A2Lf
+        rifFxop8WRGT7H0Wtcs2judIWw3hL20=
+X-Google-Smtp-Source: ABdhPJwNXGBHj42NXx7t+qclCk9irVzgFj4UXrWz3vDqXdZOADcX0g9YJUbTB3xz2kMM91Xt+Vf7NA==
+X-Received: by 2002:a17:90a:c402:b0:1d9:a003:3f8a with SMTP id i2-20020a17090ac40200b001d9a0033f8amr17168273pjt.18.1651138388661;
+        Thu, 28 Apr 2022 02:33:08 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:569:2b1f:d169:337e:6359:8ff7])
+        by smtp.gmail.com with ESMTPSA id i66-20020a628745000000b0050d36a5fe70sm15457932pfe.127.2022.04.28.02.33.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Apr 2022 02:33:07 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     pavel@ucw.cz, matthias.bgg@gmail.com
+Cc:     cy_huang@richtek.com, jacek.anaszewski@gmail.com,
+        gene_chen@richtek.com, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] leds: flash: mt6360: Apply the fixes and hardware features
+Date:   Thu, 28 Apr 2022 17:32:41 +0800
+Message-Id: <1651138365-17362-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-On Wed, 2022-04-27 at 18:06 +0200, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  .../microchip/sparx5/sparx5_mactable.c        | 25 +++++++++----------
->  1 file changed, 12 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c b/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
-> index a5837dbe0c7e..bb8d9ce79ac2 100644
-> --- a/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
-> +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
-> @@ -362,8 +362,7 @@ static void sparx5_mact_handle_entry(struct sparx5 *sparx5,
->  				     unsigned char mac[ETH_ALEN],
->  				     u16 vid, u32 cfg2)
->  {
-> -	struct sparx5_mact_entry *mact_entry;
-> -	bool found = false;
-> +	struct sparx5_mact_entry *mact_entry = NULL, *iter;
->  	u16 port;
->  
->  	if (LRN_MAC_ACCESS_CFG_2_MAC_ENTRY_ADDR_TYPE_GET(cfg2) !=
-> @@ -378,28 +377,28 @@ static void sparx5_mact_handle_entry(struct sparx5 *sparx5,
->  		return;
->  
->  	mutex_lock(&sparx5->mact_lock);
-> -	list_for_each_entry(mact_entry, &sparx5->mact_entries, list) {
-> -		if (mact_entry->vid == vid &&
-> -		    ether_addr_equal(mac, mact_entry->mac)) {
-> -			found = true;
-> -			mact_entry->flags |= MAC_ENT_ALIVE;
-> -			if (mact_entry->port != port) {
-> +	list_for_each_entry(iter, &sparx5->mact_entries, list) {
-> +		if (iter->vid == vid &&
-> +		    ether_addr_equal(mac, iter->mac)) {
+This patch series includes some fixes and add supproted ISNK hardware features.
+From MT6360, ISNK can support three modes (CC, PWM, and Breath). The previous
+one can only support CC mode.
 
-I'm sorry for the late feedback.
+ChiYuan Huang (4):
+  leds: flash: mt6360: Fix the wrong enable_reg in multicolor brightness
+    set
+  leds: flash: mt6360: Remove unused dependency in Kconfig
+  leds: flash: mt6360: Add mt6360 isnk channel hardware timer dimming
+    mode support
+  leds: flash: mt6360: Add mt6360 isnk channel hardwre breath mode
+    support
 
-If you move the 'mact_entry = iter;' statement here, the diffstat will
-be slightly smaller and the patch more readable, IMHO.
+ drivers/leds/flash/Kconfig       |   4 +-
+ drivers/leds/flash/leds-mt6360.c | 413 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 410 insertions(+), 7 deletions(-)
 
-There is similar situation in the next patch.
-
-Cheers,
-
-Paolo
+-- 
+2.7.4
 

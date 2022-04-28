@@ -2,402 +2,3411 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B023C513369
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083E151336C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346068AbiD1MRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
+        id S1346098AbiD1MSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346081AbiD1MRh (ORCPT
+        with ESMTP id S1345689AbiD1MST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:17:37 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100AEADD48
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:14:21 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id bq30so8275233lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vF8quroWBS1aNHWNM618E8C/nWN6W2L8nuy7Qa0nJT8=;
-        b=PK34mHim5DQoI5p8wG+AU2SlUZmwDDIgTywklL5X9Ev45wb+rkQ9Fpk4pxTQK77/nx
-         6aLCkIOyPPVv7GyzGTmQD6av44p3HpCO/Pgf6sT11GdybLzQzNyVWoZtPpjRoirYV/fw
-         P8rRY67rql9wl89CZ6zezD3AYHwuIQdrNNzwQpF/aUYQEOjnNSbbiNNc2Is066okwuiC
-         E7nve2CEZP2O2/ExQmZqH3S6WYqRLMYwdkwVnYTHJMYoXsb3WWISRRXZ679Z9cYMJcGW
-         i7czFhPizxOKJN8cKq3g+FW9Gm+GA9NSDFPSdryGx9ap91cBvWv5C63/Ib3GLbtyIYGa
-         ws4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vF8quroWBS1aNHWNM618E8C/nWN6W2L8nuy7Qa0nJT8=;
-        b=Xlkxdz8qBPfGv9U9BsL2rzlgUyN2IM8knPt+2Drw8yMeERJkQw3D5Kh9O7p5H4IiCB
-         myrIAJtGzIrBKv695plNhS2z3RIj7GmsobXXYZugmmy1hhygXEdTgBdvJfO8PH483Twp
-         w22jFcDyKBafEnoHAf36Np2G2qVgfrpTpbPrn/h7Za7OYj6IvoDOTm6SCKKbRZ9TbHfF
-         2TtitbXcPIK1b3KYBqJvsigK690m9q7kVdtGArdsmZuWhqYBtu4Q3BBNuxKWE2GXSOgh
-         e5bdWEwzCB880QjySYOxdhXzmdJ4JwmtzPok34kSzYRBD7XNDjceXyHhLJhYDuNE4vTa
-         9akw==
-X-Gm-Message-State: AOAM530c7wMf6DmPqZXRngEtkBuN1GsPYykRaW1QyuEQwU9pHlgeQTFI
-        IrWtB+wfuV0W649nT6XKwy0GpLZxicw=
-X-Google-Smtp-Source: ABdhPJwMm4cD1PMIvMABtggMATN2J7t6s6Ms9vPKedpJPeDZbnN6yUWHL9GaKDUNqHKE/Jo6Pd/Rbw==
-X-Received: by 2002:a05:6512:3d0e:b0:472:f72:a0a9 with SMTP id d14-20020a0565123d0e00b004720f72a0a9mr12351118lfv.484.1651148059848;
-        Thu, 28 Apr 2022 05:14:19 -0700 (PDT)
-Received: from crux (185-113-96-245.cust.bredband2.com. [185.113.96.245])
-        by smtp.gmail.com with ESMTPSA id b12-20020a19670c000000b0047206d91806sm1360256lfc.296.2022.04.28.05.14.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 05:14:19 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 14:14:17 +0200
-From:   Artur Bujdoso <artur.bujdoso@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: octeon-usb: remove unnecessary parentheses
-Message-ID: <YmqFGS2e45SEUbe/@crux>
-References: <Yk/knRtaujd/PzK7@crux>
- <Yk/uxoi4VUaR9OpO@kroah.com>
+        Thu, 28 Apr 2022 08:18:19 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382F2ADD41;
+        Thu, 28 Apr 2022 05:15:01 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (89-27-103-169.bb.dnainternet.fi [89.27.103.169])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id C4ED81B00120;
+        Thu, 28 Apr 2022 15:14:57 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1651148098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WeREuCUes7ii3M/3vM7UoZY7itvHyzV4HjnFqgyGyHA=;
+        b=JTDnq06AI/FIDANftExxc0EtsFo4a/Rac+oyXxiVYzaB9glUNV+kNkLP6oA6LtrwKZJFuD
+        7QfeF4FDeM4dyEoDRfC9Fo+PH6iA490j7g78rg6Iipz1erlAC2R7julFQ5RXNchPuI7nIF
+        EZN9PPCbXGz4HeP90cClPzxxnb8xOB8tjLG38rNMn1U1h6e/aC1/3VnZ1eDn05h+ZJaUKY
+        HeEw3ewzyHF0RQWkq9az3zCfK0YSp98tvcZ4sTJaFmirHI6ZzHuaqQdhF1Gx9zp8HVPAAQ
+        TsUOXnvH3D2vNlwhFxGOvA4b8lQQEJakmpeWR+SszEQ0vrpvkQc0TD3B5xricw==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 3EA09634C91;
+        Thu, 28 Apr 2022 15:14:57 +0300 (EEST)
+Date:   Thu, 28 Apr 2022 15:14:57 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 3/4] staging: media: Add support for the Allwinner A31
+ ISP
+Message-ID: <YmqFQSRBsqs4ghNQ@valkosipuli.retiisi.eu>
+References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
+ <20220415153708.637804-4-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yk/uxoi4VUaR9OpO@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220415153708.637804-4-paul.kocialkowski@bootlin.com>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1651148098; a=rsa-sha256;
+        cv=none;
+        b=Jdi9R50tjQBQa2ZjmKZMZL5H54CkP7naw6GSFpacDLkSzmJYBtM64eOyOe9iRXW6FFa8s2
+        QxVj05uc74lbbGQP0qPLbTLcE8ktz0A6RmX/NS6WiNprQA4nivrm37svf+B66d+an1A4dd
+        amVbiptrKraQB6vizEsykzqbGi57qbIdQEggb8Ejv1pML8G7CGHjbPXq9mw2caZGBLMM49
+        DcBj7Hn0q8JMhR8FQKQF4+nm6GnD7X0N9PlwY7HUaXnobgB9Qiqvnl0lBB8+aWmWHo7q7n
+        rNq0EcpxvfoiYLEV9clI+SMWIpgLkwHRSO6NLety9iYgXu5qR/8vY2hnZ+0S2A==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1651148098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WeREuCUes7ii3M/3vM7UoZY7itvHyzV4HjnFqgyGyHA=;
+        b=Rigrv9K7yuYGJjHevwYpH3rBEJJj3GPt8VgIqH/nBo5AOGbWQ/U3BIWmWYS6xRiWIHIUdv
+        3KPzmaP3kVhqSrO1LfaLV8ub6XJ4VVsq5MdxBxoVeyCdKZLyFdh1OIXpiXZrTiNt27l4Mj
+        RbC6WEBTNzXAdc2jKB7xiTN9DFUe6hC2daLErSOM9kxikZ/NFFpVeQbT6YpLuSdObqGgFy
+        OUElmT8xM6GJLzes8/2szdl2ludjSL3IQHSa9RcBBovYuR5GNBsj4n/Bvucveo6diQ5b6B
+        CiCumtlHUiBPGNzQSDvnaKMypsdClL5Rir6VW/jMkqOpIZOCkXtNr7JiNcVl+Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 10:13:58AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Apr 08, 2022 at 09:30:37AM +0200, Artur Bujdoso wrote:
-> > Adhere to Linux kernel coding style.
-> > 
-> > Reported by checkpatch:
-> > 
-> > CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses
-> > 
-> > Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
-> > ---
-> >  drivers/staging/octeon-usb/octeon-hcd.c | 62 ++++++++++++-------------
-> >  1 file changed, 31 insertions(+), 31 deletions(-)
-> > 
-> > diff --git a/drivers/staging/octeon-usb/octeon-hcd.c b/drivers/staging/octeon-usb/octeon-hcd.c
-> > index a1cd81d4a114..32bcd6c582f5 100644
-> > --- a/drivers/staging/octeon-usb/octeon-hcd.c
-> > +++ b/drivers/staging/octeon-usb/octeon-hcd.c
-> > @@ -1101,9 +1101,9 @@ static struct cvmx_usb_pipe *cvmx_usb_open_pipe(struct octeon_hcd *usb,
-> >  	pipe = kzalloc(sizeof(*pipe), GFP_ATOMIC);
-> >  	if (!pipe)
-> >  		return NULL;
-> > -	if ((device_speed == CVMX_USB_SPEED_HIGH) &&
-> > -	    (transfer_dir == CVMX_USB_DIRECTION_OUT) &&
-> > -	    (transfer_type == CVMX_USB_TRANSFER_BULK))
-> > +	if (device_speed == CVMX_USB_SPEED_HIGH &&
-> > +	    transfer_dir == CVMX_USB_DIRECTION_OUT &&
-> > +	    transfer_type == CVMX_USB_TRANSFER_BULK)
-> >  		pipe->flags |= CVMX_USB_PIPE_FLAGS_NEED_PING;
+Hi Paul,
+
+Thanks for the set.
+
+A few comments below.
+
+On Fri, Apr 15, 2022 at 05:37:07PM +0200, Paul Kocialkowski wrote:
+> Some Allwinner platforms come with an Image Signal Processor, which
+> supports various features in order to enhance and transform data
+> received by image sensors into good-looking pictures. In most cases,
+> the data is raw bayer, which gets internally converted to RGB and
+> finally YUV, which is what the hardware produces.
 > 
-> Nah, the original is fine, no need to change this.
+> This driver supports ISPs that are similar to the A31 ISP, which was
+> the first standalone ISP found in Allwinner platforms. Simpler ISP
+> blocks were found in the A10 and A20, where they are tied to a CSI
+> controller. Newer generations of Allwinner SoCs (starting with the
+> H6, H616, etc) come with a new camera subsystem and revised ISP.
+> Even though these previous and next-generation ISPs are somewhat
+> similar to the A31 ISP, they have enough significant differences to
+> be out of the scope of this driver.
 > 
-> Unless, do you have this hardware?  If so, getting this out of staging
-> would be nice to have happen one day.
+> While the ISP supports many features, including 3A and many
+> enhancement blocks, this implementation is limited to the following:
+> - V3s (V3/S3) platform support;
+> - Bayer media bus formats as input;
+> - Semi-planar YUV (NV12/NV21) as output;
+> - Debayering with per-component gain and offset configuration;
+> - 2D noise filtering with configurable coefficients.
 > 
-> thanks,
+> Since many features are missing from the associated uAPI, the driver
+> is aimed to integrate staging until all features are properly
+> described.
 > 
-> greg k-h
+> On the technical side, it uses the v4l2 and media controller APIs,
+> with a video node for capture, a processor subdev and a video node
+> for parameters submission. A specific uAPI structure and associated
+> v4l2 meta format are used to configure parameters of the supported
+> modules.
+> 
+> One particular thing about the hardware is that configuration for
+> module registers needs to be stored in a DMA buffer and gets copied
+> to actual registers by the hardware at the next vsync, when instructed
+> by a flag. This is handled by the "state" mechanism in the driver.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/staging/media/sunxi/Kconfig           |   1 +
+>  drivers/staging/media/sunxi/Makefile          |   1 +
+>  drivers/staging/media/sunxi/sun6i-isp/Kconfig |  15 +
+>  .../staging/media/sunxi/sun6i-isp/Makefile    |   4 +
+>  .../staging/media/sunxi/sun6i-isp/TODO.txt    |   6 +
 
-Hi,
+This should be called TODO (without .txt).
 
-So I do have the hardware, an Ubiquiti Edgerouter POE. This has a Cavium Octeon+ SoC and a single USB port.
-This is used for booting and for rootfs (in a form of a squasfs image) and configuration.
+I understand this is an online ISP. How do you schedule the video buffer
+queues? Say, what happens if it's time to set up buffers for a frame and
+there's a buffer queued in the parameter queue but not in the image data
+queue? Or the other way around?
 
-I cross-compiled an unmodified kernel with a sufficient configuration - with the octeon-usb driver added - to get to user space.
-I am not sure how should I present it - sorry in advance if it's not the right way - so here is the boot log as it happened. 
+>  .../staging/media/sunxi/sun6i-isp/sun6i_isp.c | 556 +++++++++++++
+>  .../staging/media/sunxi/sun6i-isp/sun6i_isp.h |  85 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_capture.c | 749 ++++++++++++++++++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_capture.h |  78 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_params.c  | 573 ++++++++++++++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_params.h  |  52 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 578 ++++++++++++++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_proc.h    |  66 ++
+>  .../media/sunxi/sun6i-isp/sun6i_isp_reg.h     | 275 +++++++
+>  .../sunxi/sun6i-isp/uapi/sun6i-isp-config.h   |  43 +
+>  15 files changed, 3082 insertions(+)
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Kconfig
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/Makefile
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/TODO.txt
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
+>  create mode 100644 drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+> 
+> diff --git a/drivers/staging/media/sunxi/Kconfig b/drivers/staging/media/sunxi/Kconfig
+> index 4549a135741f..62a486aba88b 100644
+> --- a/drivers/staging/media/sunxi/Kconfig
+> +++ b/drivers/staging/media/sunxi/Kconfig
+> @@ -12,5 +12,6 @@ config VIDEO_SUNXI
+>  if VIDEO_SUNXI
+>  
+>  source "drivers/staging/media/sunxi/cedrus/Kconfig"
+> +source "drivers/staging/media/sunxi/sun6i-isp/Kconfig"
+>  
+>  endif
+> diff --git a/drivers/staging/media/sunxi/Makefile b/drivers/staging/media/sunxi/Makefile
+> index b87140b0e15f..3d20b2f0e644 100644
+> --- a/drivers/staging/media/sunxi/Makefile
+> +++ b/drivers/staging/media/sunxi/Makefile
+> @@ -1,2 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_VIDEO_SUNXI_CEDRUS)	+= cedrus/
+> +obj-$(CONFIG_VIDEO_SUN6I_ISP)		+= sun6i-isp/
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/Kconfig b/drivers/staging/media/sunxi/sun6i-isp/Kconfig
+> new file mode 100644
+> index 000000000000..68dcae9cd7d7
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/Kconfig
+> @@ -0,0 +1,15 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config VIDEO_SUN6I_ISP
+> +	tristate "Allwinner A31 Image Signal Processor (ISP) Driver"
+> +	depends on V4L_PLATFORM_DRIVERS && VIDEO_DEV
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on PM && COMMON_CLK && HAS_DMA
+> +	select MEDIA_CONTROLLER
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	select VIDEOBUF2_VMALLOC
+> +	select V4L2_FWNODE
+> +	select REGMAP_MMIO
+> +	help
+> +	   Support for the Allwinner A31 Image Signal Processor (ISP), also
+> +	   found on other platforms such as the A80, A83T or V3/V3s.
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/Makefile b/drivers/staging/media/sunxi/sun6i-isp/Makefile
+> new file mode 100644
+> index 000000000000..da1034785144
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +sun6i-isp-y += sun6i_isp.o sun6i_isp_proc.o sun6i_isp_capture.o sun6i_isp_params.o
+> +
+> +obj-$(CONFIG_VIDEO_SUN6I_ISP) += sun6i-isp.o
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/TODO.txt b/drivers/staging/media/sunxi/sun6i-isp/TODO.txt
+> new file mode 100644
+> index 000000000000..1e3236edc1ab
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/TODO.txt
+> @@ -0,0 +1,6 @@
+> +Unstaging requirements:
+> +- Add uAPI support and documentation for the configuration of all the hardware
+> +  modules and description of the statistics data structures;
+> +- Add support for statistics reporting;
+> +- Add userspace support in libcamera which demonstrates the ability to receive
+> +  statistics and adapt hardware modules configuration accordingly;
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+> new file mode 100644
+> index 000000000000..118eee625eba
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+> @@ -0,0 +1,556 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset.h>
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-mc.h>
+> +
+> +#include "sun6i_isp.h"
+> +#include "sun6i_isp_capture.h"
+> +#include "sun6i_isp_params.h"
+> +#include "sun6i_isp_proc.h"
+> +#include "sun6i_isp_reg.h"
+> +
+> +/* Helpers */
+> +
+> +u32 sun6i_isp_load_read(struct sun6i_isp_device *isp_dev, u32 offset)
+> +{
+> +	u32 *data = (u32 *)(isp_dev->tables.load.data + offset);
+> +
+> +	return *data;
+> +}
+> +
+> +void sun6i_isp_load_write(struct sun6i_isp_device *isp_dev, u32 offset,
+> +			  u32 value)
+> +{
+> +	u32 *data = (u32 *)(isp_dev->tables.load.data + offset);
+> +
+> +	*data = value;
+> +}
+> +
+> +/* State */
+> +
+> +/*
+> + * The ISP works with a load buffer, which gets copied to the actual registers
+> + * by the hardware before processing a frame when a specific flag is set.
+> + * This is represented by tracking the ISP state in the different parts of
+> + * the code with explicit sync points:
+> + * - state update: to update the load buffer for the next frame if necessary;
+> + * - state complete: to indicate that the state update was applied.
+> + */
+> +
+> +static void sun6i_isp_state_ready(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct regmap *regmap = isp_dev->regmap;
+> +	u32 value;
+> +
+> +	regmap_read(regmap, SUN6I_ISP_FE_CTRL_REG, &value);
+> +	value |= SUN6I_ISP_FE_CTRL_PARA_READY;
+> +	regmap_write(regmap, SUN6I_ISP_FE_CTRL_REG, value);
+> +}
+> +
+> +static void sun6i_isp_state_complete(struct sun6i_isp_device *isp_dev)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&isp_dev->state_lock, flags);
+> +
+> +	sun6i_isp_capture_state_complete(isp_dev);
+> +	sun6i_isp_params_state_complete(isp_dev);
+> +
+> +	spin_unlock_irqrestore(&isp_dev->state_lock, flags);
+> +}
+> +
+> +void sun6i_isp_state_update(struct sun6i_isp_device *isp_dev, bool ready_hold)
+> +{
+> +	bool update = false;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&isp_dev->state_lock, flags);
+> +
+> +	sun6i_isp_capture_state_update(isp_dev, &update);
+> +	sun6i_isp_params_state_update(isp_dev, &update);
+> +
+> +	if (update && !ready_hold)
+> +		sun6i_isp_state_ready(isp_dev);
+> +
+> +	spin_unlock_irqrestore(&isp_dev->state_lock, flags);
+> +}
+> +
+> +/* Tables */
+> +
+> +static int sun6i_isp_table_setup(struct sun6i_isp_device *isp_dev,
+> +				 struct sun6i_isp_table *table)
+> +{
+> +	table->data = dma_alloc_coherent(isp_dev->dev, table->size,
+> +					 &table->address, GFP_KERNEL);
+> +	if (!table->data)
+> +		return -ENOMEM;
+> +
+> +	return 0;
+> +}
+> +
+> +static void sun6i_isp_table_cleanup(struct sun6i_isp_device *isp_dev,
+> +				    struct sun6i_isp_table *table)
+> +{
+> +	dma_free_coherent(isp_dev->dev, table->size, table->data,
+> +			  table->address);
+> +}
+> +
+> +void sun6i_isp_tables_configure(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct regmap *regmap = isp_dev->regmap;
+> +
+> +	regmap_write(regmap, SUN6I_ISP_REG_LOAD_ADDR_REG,
+> +		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.load.address));
+> +
+> +	regmap_write(regmap, SUN6I_ISP_REG_SAVE_ADDR_REG,
+> +		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.save.address));
+> +
+> +	regmap_write(regmap, SUN6I_ISP_LUT_TABLE_ADDR_REG,
+> +		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.lut.address));
+> +
+> +	regmap_write(regmap, SUN6I_ISP_DRC_TABLE_ADDR_REG,
+> +		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.drc.address));
+> +
+> +	regmap_write(regmap, SUN6I_ISP_STATS_ADDR_REG,
+> +		     SUN6I_ISP_ADDR_VALUE(isp_dev->tables.stats.address));
+> +}
+> +
+> +static int sun6i_isp_tables_setup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_tables *tables = &isp_dev->tables;
+> +	int ret;
+> +
+> +	/* Sizes are hardcoded for now but actually depend on the platform. */
 
-I should note that I tried to plug in other devices such as usb pendrives, wifi dongles, a hub and even an Elgato card, all showed up.
-Partitions were also detected on all usb drives, all of them had some sort of FAT partitions with MBR.
+Would it be cleaner to have them defined in a platform-specific way, e.g.
+in a struct you obtain using device_get_match_data()?
 
-What else can I help with to get this driver out of staging?
+> +
+> +	tables->load.size = 0x1000;
+> +	ret = sun6i_isp_table_setup(isp_dev, &tables->load);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tables->save.size = 0x1000;
+> +	ret = sun6i_isp_table_setup(isp_dev, &tables->save);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tables->lut.size = 0xe00;
+> +	ret = sun6i_isp_table_setup(isp_dev, &tables->lut);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tables->drc.size = 0x600;
+> +	ret = sun6i_isp_table_setup(isp_dev, &tables->drc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tables->stats.size = 0x2100;
+> +	ret = sun6i_isp_table_setup(isp_dev, &tables->stats);
 
-Thanks,
-Artur Bujdoso
+You can return already here.
 
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static void sun6i_isp_tables_cleanup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_tables *tables = &isp_dev->tables;
+> +
+> +	sun6i_isp_table_cleanup(isp_dev, &tables->stats);
+> +	sun6i_isp_table_cleanup(isp_dev, &tables->drc);
+> +	sun6i_isp_table_cleanup(isp_dev, &tables->lut);
+> +	sun6i_isp_table_cleanup(isp_dev, &tables->save);
+> +	sun6i_isp_table_cleanup(isp_dev, &tables->load);
+> +}
+> +
+> +/* Media */
+> +
+> +static const struct media_device_ops sun6i_isp_media_ops = {
+> +	.link_notify = v4l2_pipeline_link_notify,
+> +};
+> +
+> +/* V4L2 */
+> +
+> +static int sun6i_isp_v4l2_setup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_v4l2 *v4l2 = &isp_dev->v4l2;
+> +	struct v4l2_device *v4l2_dev = &v4l2->v4l2_dev;
+> +	struct media_device *media_dev = &v4l2->media_dev;
+> +	struct device *dev = isp_dev->dev;
+> +	int ret;
+> +
+> +	/* Media Device */
+> +
+> +	strscpy(media_dev->model, SUN6I_ISP_DESCRIPTION,
+> +		sizeof(media_dev->model));
+> +	snprintf(media_dev->bus_info, sizeof(media_dev->bus_info),
+> +		 "platform:%s", dev_name(dev));
 
--------------------------------------------------------------------------------------------------------------
+This is no longer needed, see commit b0e38610f40a0f89e34939d2c7420590d67d86a3
+.
 
-Looking for valid bootloader image....
-Jumping to start of image at address 0xbfc80000
+> +	media_dev->ops = &sun6i_isp_media_ops;
+> +	media_dev->hw_revision = 0;
+> +	media_dev->dev = dev;
+> +
+> +	media_device_init(media_dev);
+> +
+> +	ret = media_device_register(media_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register media device\n");
+> +		return ret;
+> +	}
+> +
+> +	/* V4L2 Control Handler */
+> +
+> +	ret = v4l2_ctrl_handler_init(&v4l2->ctrl_handler, 0);
 
+I suppose you intend to add controls later on?
 
-U-Boot 1.1.1 (UBNT Build ID: 4670715-gbd7e2d7) (Build time: May 27 2014 - 11:15:15)
+> +	if (ret) {
+> +		dev_err(dev, "failed to init v4l2 control handler\n");
+> +		goto error_media;
+> +	}
+> +
+> +	/* V4L2 Device */
+> +
+> +	v4l2_dev->mdev = media_dev;
+> +	v4l2_dev->ctrl_handler = &v4l2->ctrl_handler;
+> +
+> +	ret = v4l2_device_register(dev, v4l2_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register v4l2 device\n");
+> +		goto error_v4l2_ctrl;
+> +	}
+> +
+> +	return 0;
+> +
+> +error_v4l2_ctrl:
+> +	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+> +
+> +error_media:
+> +	media_device_unregister(media_dev);
+> +	media_device_cleanup(media_dev);
+> +
+> +	return ret;
+> +}
 
-BIST check passed.
-UBNT_E100 r1:1, r2:27, f:8/135, serial #: B4FBE424B134
-MPR 13-00290-27
-Core clock: 500 MHz, DDR clock: 266 MHz (532 Mhz data rate)
-DRAM:  512 MB
-Clearing DRAM....... done
-Flash:  8 MB
-Net:   octeth0, octeth1, octeth2
+> +static void sun6i_isp_v4l2_cleanup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_v4l2 *v4l2 = &isp_dev->v4l2;
+> +
+> +	media_device_unregister(&v4l2->media_dev);
+> +	v4l2_device_unregister(&v4l2->v4l2_dev);
+> +	v4l2_ctrl_handler_free(&v4l2->ctrl_handler);
+> +	media_device_cleanup(&v4l2->media_dev);
+> +}
+> +
+> +/* Platform */
+> +
+> +static irqreturn_t sun6i_isp_interrupt(int irq, void *private)
+> +{
+> +	struct sun6i_isp_device *isp_dev = private;
+> +	struct regmap *regmap = isp_dev->regmap;
+> +	u32 status = 0, enable = 0;
+> +
+> +	regmap_read(regmap, SUN6I_ISP_FE_INT_STA_REG, &status);
+> +	regmap_read(regmap, SUN6I_ISP_FE_INT_EN_REG, &enable);
+> +
+> +	if (!status)
+> +		return IRQ_NONE;
+> +	else if (!(status & enable))
+> +		goto complete;
+> +
+> +	/*
+> +	 * The ISP working cycle starts with a params-load, which makes the
+> +	 * state from the load buffer active. Then it starts processing the
+> +	 * frame and gives a finish interrupt. Soon after that, the next state
+> +	 * coming from the load buffer will be applied for the next frame,
+> +	 * giving a params-load as well.
+> +	 *
+> +	 * Because both frame finish and params-load are received almost
+> +	 * at the same time (one ISR call), handle them in chronology order.
+> +	 */
+> +
+> +	if (status & SUN6I_ISP_FE_INT_STA_FINISH)
+> +		sun6i_isp_capture_finish(isp_dev);
+> +
+> +	if (status & SUN6I_ISP_FE_INT_STA_PARA_LOAD) {
+> +		sun6i_isp_state_complete(isp_dev);
+> +		sun6i_isp_state_update(isp_dev, false);
+> +	}
+> +
+> +complete:
+> +	regmap_write(regmap, SUN6I_ISP_FE_INT_STA_REG, status);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int sun6i_isp_suspend(struct device *dev)
+> +{
+> +	struct sun6i_isp_device *isp_dev = dev_get_drvdata(dev);
+> +
+> +	reset_control_assert(isp_dev->reset);
+> +	clk_disable_unprepare(isp_dev->clock_ram);
+> +	clk_disable_unprepare(isp_dev->clock_mod);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_resume(struct device *dev)
+> +{
+> +	struct sun6i_isp_device *isp_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = reset_control_deassert(isp_dev->reset);
+> +	if (ret) {
+> +		dev_err(dev, "failed to deassert reset\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(isp_dev->clock_mod);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable module clock\n");
+> +		goto error_reset;
+> +	}
+> +
+> +	ret = clk_prepare_enable(isp_dev->clock_ram);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable ram clock\n");
+> +		goto error_clock_mod;
+> +	}
+> +
+> +	return 0;
+> +
+> +error_clock_mod:
+> +	clk_disable_unprepare(isp_dev->clock_mod);
+> +
+> +error_reset:
+> +	reset_control_assert(isp_dev->reset);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct dev_pm_ops sun6i_isp_pm_ops = {
+> +	.runtime_suspend	= sun6i_isp_suspend,
+> +	.runtime_resume		= sun6i_isp_resume,
+> +};
+> +
+> +static const struct regmap_config sun6i_isp_regmap_config = {
+> +	.reg_bits       = 32,
+> +	.reg_stride     = 4,
+> +	.val_bits       = 32,
+> +	.max_register	= 0x400,
+> +};
+> +
+> +static int sun6i_isp_resources_setup(struct sun6i_isp_device *isp_dev,
+> +				     struct platform_device *platform_dev)
+> +{
+> +	struct device *dev = isp_dev->dev;
+> +	void __iomem *io_base;
+> +	int irq;
+> +	int ret;
+> +
+> +	/* Registers */
+> +
+> +	io_base = devm_platform_ioremap_resource(platform_dev, 0);
+> +	if (IS_ERR(io_base))
+> +		return PTR_ERR(io_base);
+> +
+> +	isp_dev->regmap = devm_regmap_init_mmio_clk(dev, "bus", io_base,
+> +						    &sun6i_isp_regmap_config);
+> +	if (IS_ERR(isp_dev->regmap)) {
+> +		dev_err(dev, "failed to init register map\n");
+> +		return PTR_ERR(isp_dev->regmap);
+> +	}
+> +
+> +	/* Clocks */
+> +
+> +	isp_dev->clock_mod = devm_clk_get(dev, "mod");
+> +	if (IS_ERR(isp_dev->clock_mod)) {
+> +		dev_err(dev, "failed to acquire module clock\n");
+> +		return PTR_ERR(isp_dev->clock_mod);
+> +	}
+> +
+> +	isp_dev->clock_ram = devm_clk_get(dev, "ram");
+> +	if (IS_ERR(isp_dev->clock_ram)) {
+> +		dev_err(dev, "failed to acquire ram clock\n");
+> +		return PTR_ERR(isp_dev->clock_ram);
+> +	}
+> +
+> +	ret = clk_set_rate_exclusive(isp_dev->clock_mod, 297000000);
 
-USB:   (port 0) scanning bus for devices... 1 USB Devices found
-       scanning bus for storage devices...
-  Device 0: Vendor:          Prod.: UDinfo UF2 4GB   Rev: PMAP
-            Type: Removable Hard Disk
-            Capacity: 3824.0 MB = 3.7 GB (7831552 x 512)                                                                                                                                                         0
-Octeon ubnt_e100# printenv
-Unknown command 'printenv' - try 'help'
-Octeon ubnt_e100# printenv
-bootcmd=fatload usb 0 $loadaddr vmlinux.64;bootoctlinux $loadaddr coremask=0x3 root=/dev/sda2 rootdelay=15 rw rootsqimg=squashfs.img rootsqwdir=w mtdparts=phys_mapped_flash:512k(boot0),512k(boot1),64k@1024k(eeprom)
-bootdelay=0
-baudrate=115200
-download_baudrate=115200
-nuke_env=protect off $(env_addr) +$(env_size);erase $(env_addr) +$(env_size)
-autoload=n
-ethact=octeth0
-loadaddr=0x9f00000
-numcores=2
-stdin=serial
-stdout=serial
-stderr=serial
-env_addr=0x1fbfe000
-env_size=0x2000
-flash_base_addr=0x1f400000
-flash_size=0x800000
-uboot_flash_addr=0x1f480000
-uboot_flash_size=0x70000
-flash_unused_addr=0x1f4f0000
-flash_unused_size=0x710000
-bootloader_flash_update=bootloaderupdate
+Is this also specific to the model?
 
-Environment size: 675/8188 bytes
-Octeon ubnt_e100# $bootcmd init=/bin/bash
-Unknown command '$bootcmd' - try 'help'
-Octeon ubnt_e100# fatload usb 0 $loadaddr vmlinux.64;bootoctlinux $loadaddr coremask=0x3 root=/dev/sda2 rootdelay=15 rw rootsqimg=squashfs.img rootsqwdir=w mtdparts=phys_mapped_flash:512k(boot0),512k(boot1),64k@1024k(eeprom) init=/bin/bash
-reading vmlinux.64
-................................................................................
-..........
+> +	if (ret) {
+> +		dev_err(dev, "failed to set mod clock rate\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Reset */
+> +
+> +	isp_dev->reset = devm_reset_control_get_shared(dev, NULL);
+> +	if (IS_ERR(isp_dev->reset)) {
+> +		dev_err(dev, "failed to acquire reset\n");
+> +		ret = PTR_ERR(isp_dev->reset);
+> +		goto error_clock_rate_exclusive;
+> +	}
+> +
+> +	/* Interrupt */
+> +
+> +	irq = platform_get_irq(platform_dev, 0);
+> +	if (irq < 0) {
+> +		dev_err(dev, "failed to get interrupt\n");
+> +		ret = -ENXIO;
+> +		goto error_clock_rate_exclusive;
+> +	}
+> +
+> +	ret = devm_request_irq(dev, irq, sun6i_isp_interrupt, IRQF_SHARED,
+> +			       SUN6I_ISP_NAME, isp_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to request interrupt\n");
+> +		goto error_clock_rate_exclusive;
+> +	}
+> +
+> +	/* Runtime PM */
+> +
+> +	pm_runtime_enable(dev);
+> +
+> +	return 0;
+> +
+> +error_clock_rate_exclusive:
+> +	clk_rate_exclusive_put(isp_dev->clock_mod);
+> +
+> +	return ret;
+> +}
+> +
+> +static void sun6i_isp_resources_cleanup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct device *dev = isp_dev->dev;
+> +
+> +	pm_runtime_disable(dev);
+> +	clk_rate_exclusive_put(isp_dev->clock_mod);
+> +}
+> +
+> +static int sun6i_isp_probe(struct platform_device *platform_dev)
+> +{
+> +	struct sun6i_isp_device *isp_dev;
+> +	struct device *dev = &platform_dev->dev;
+> +	int ret;
+> +
+> +	isp_dev = devm_kzalloc(dev, sizeof(*isp_dev), GFP_KERNEL);
+> +	if (!isp_dev)
+> +		return -ENOMEM;
+> +
+> +	isp_dev->dev = dev;
+> +	platform_set_drvdata(platform_dev, isp_dev);
+> +
+> +	spin_lock_init(&isp_dev->state_lock);
+> +
+> +	ret = sun6i_isp_resources_setup(isp_dev, platform_dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sun6i_isp_tables_setup(isp_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to setup tables\n");
+> +		goto error_resources;
+> +	}
+> +
+> +	ret = sun6i_isp_v4l2_setup(isp_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to setup v4l2\n");
+> +		goto error_tables;
+> +	}
+> +
+> +	ret = sun6i_isp_proc_setup(isp_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to setup proc\n");
+> +		goto error_v4l2;
+> +	}
+> +
+> +	ret = sun6i_isp_capture_setup(isp_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to setup capture\n");
+> +		goto error_proc;
+> +	}
+> +
+> +	ret = sun6i_isp_params_setup(isp_dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to setup params\n");
+> +		goto error_capture;
+> +	}
+> +
+> +	return 0;
+> +
+> +error_capture:
+> +	sun6i_isp_capture_cleanup(isp_dev);
+> +
+> +error_proc:
+> +	sun6i_isp_proc_cleanup(isp_dev);
+> +
+> +error_v4l2:
+> +	sun6i_isp_v4l2_cleanup(isp_dev);
+> +
+> +error_tables:
+> +	sun6i_isp_tables_cleanup(isp_dev);
+> +
+> +error_resources:
+> +	sun6i_isp_resources_cleanup(isp_dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sun6i_isp_remove(struct platform_device *platform_dev)
+> +{
+> +	struct sun6i_isp_device *isp_dev = platform_get_drvdata(platform_dev);
+> +
+> +	sun6i_isp_params_cleanup(isp_dev);
+> +	sun6i_isp_capture_cleanup(isp_dev);
+> +	sun6i_isp_proc_cleanup(isp_dev);
+> +	sun6i_isp_v4l2_cleanup(isp_dev);
+> +	sun6i_isp_tables_cleanup(isp_dev);
+> +	sun6i_isp_resources_cleanup(isp_dev);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * History of sun6i-isp:
+> + * - sun4i-a10-isp: initial ISP tied to the CSI0 controller,
+> + *   apparently unused in software implementations;
+> + * - sun6i-a31-isp: separate ISP loosely based on sun4i-a10-isp,
+> + *   adding extra modules and features;
+> + * - sun9i-a80-isp: based on sun6i-a31-isp with some register offset changes
+> + *   and new modules like saturation and cnr;
+> + * - sun8i-a23-isp/sun8i-h3-isp: based on sun9i-a80-isp with most modules
+> + *   related to raw removed;
+> + * - sun8i-a83t-isp: based on sun9i-a80-isp with some register offset changes
+> + * - sun8i-v3s-isp: based on sun8i-a83t-isp with a new disc module;
+> + */
+> +
+> +static const struct of_device_id sun6i_isp_of_match[] = {
+> +	{ .compatible	= "allwinner,sun8i-v3s-isp" },
+> +	{},
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, sun6i_isp_of_match);
+> +
+> +static struct platform_driver sun6i_isp_platform_driver = {
+> +	.probe	= sun6i_isp_probe,
+> +	.remove	= sun6i_isp_remove,
+> +	.driver	= {
+> +		.name		= SUN6I_ISP_NAME,
+> +		.of_match_table	= of_match_ptr(sun6i_isp_of_match),
+> +		.pm		= &sun6i_isp_pm_ops,
+> +	},
+> +};
+> +
+> +module_platform_driver(sun6i_isp_platform_driver);
+> +
+> +MODULE_DESCRIPTION("Allwinner A31 Image Signal Processor driver");
+> +MODULE_AUTHOR("Paul Kocialkowski <paul.kocialkowski@bootlin.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
+> new file mode 100644
+> index 000000000000..60017606babe
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.h
+> @@ -0,0 +1,85 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#ifndef _SUN6I_ISP_H_
+> +#define _SUN6I_ISP_H_
+> +
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/videobuf2-v4l2.h>
+> +
+> +#include "sun6i_isp_capture.h"
+> +#include "sun6i_isp_params.h"
+> +#include "sun6i_isp_proc.h"
+> +
+> +#define SUN6I_ISP_NAME			"sun6i-isp"
+> +#define SUN6I_ISP_DESCRIPTION		"Allwinner A31 ISP Device"
+> +
+> +enum sun6i_isp_port {
+> +	SUN6I_ISP_PORT_CSI0	= 0,
+> +	SUN6I_ISP_PORT_CSI1	= 1,
+> +};
+> +
+> +struct sun6i_isp_buffer {
+> +	struct vb2_v4l2_buffer	v4l2_buffer;
+> +	struct list_head	list;
+> +};
+> +
+> +struct sun6i_isp_v4l2 {
+> +	struct v4l2_device		v4l2_dev;
+> +	struct v4l2_ctrl_handler	ctrl_handler;
+> +	struct media_device		media_dev;
+> +};
+> +
+> +struct sun6i_isp_table {
+> +	void		*data;
+> +	dma_addr_t	address;
+> +	unsigned int	size;
+> +};
+> +
+> +struct sun6i_isp_tables {
+> +	struct sun6i_isp_table	load;
+> +	struct sun6i_isp_table	save;
+> +
+> +	struct sun6i_isp_table	lut;
+> +	struct sun6i_isp_table	drc;
+> +	struct sun6i_isp_table	stats;
+> +};
+> +
+> +struct sun6i_isp_device {
+> +	struct device			*dev;
+> +
+> +	struct sun6i_isp_tables		tables;
+> +
+> +	struct sun6i_isp_v4l2		v4l2;
+> +	struct sun6i_isp_proc		proc;
+> +	struct sun6i_isp_capture	capture;
+> +	struct sun6i_isp_params		params;
+> +
+> +	struct regmap			*regmap;
+> +	struct clk			*clock_mod;
+> +	struct clk			*clock_ram;
+> +	struct reset_control		*reset;
+> +
+> +	spinlock_t			state_lock; /* State helpers lock. */
+> +};
+> +
+> +/* Helpers */
+> +
+> +u32 sun6i_isp_load_read(struct sun6i_isp_device *isp_dev, u32 offset);
+> +void sun6i_isp_load_write(struct sun6i_isp_device *isp_dev, u32 offset,
+> +			  u32 value);
+> +u32 sun6i_isp_address_value(dma_addr_t address);
+> +
+> +/* State */
+> +
+> +void sun6i_isp_state_update(struct sun6i_isp_device *isp_dev, bool ready_hold);
+> +
+> +/* Tables */
+> +
+> +void sun6i_isp_tables_configure(struct sun6i_isp_device *isp_dev);
+> +
+> +#endif
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
+> new file mode 100644
+> index 000000000000..5cd069891461
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c
+> @@ -0,0 +1,749 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-event.h>
+> +#include <media/v4l2-ioctl.h>
+> +#include <media/v4l2-mc.h>
+> +#include <media/videobuf2-dma-contig.h>
+> +#include <media/videobuf2-v4l2.h>
+> +
+> +#include "sun6i_isp.h"
+> +#include "sun6i_isp_capture.h"
+> +#include "sun6i_isp_proc.h"
+> +#include "sun6i_isp_reg.h"
+> +
+> +/* Helpers */
+> +
+> +void sun6i_isp_capture_dimensions(struct sun6i_isp_device *isp_dev,
+> +				  unsigned int *width, unsigned int *height)
+> +{
+> +	if (width)
+> +		*width = isp_dev->capture.format.fmt.pix.width;
+> +	if (height)
+> +		*height = isp_dev->capture.format.fmt.pix.height;
+> +}
+> +
+> +void sun6i_isp_capture_format(struct sun6i_isp_device *isp_dev,
+> +			      u32 *pixelformat)
+> +{
+> +	if (pixelformat)
+> +		*pixelformat = isp_dev->capture.format.fmt.pix.pixelformat;
+> +}
+> +
+> +/* Format */
+> +
+> +static const struct sun6i_isp_capture_format sun6i_isp_capture_formats[] = {
+> +	{
+> +		.pixelformat		= V4L2_PIX_FMT_NV12,
+> +		.output_format		= SUN6I_ISP_OUTPUT_FMT_YUV420SP,
+> +	},
+> +	{
+> +		.pixelformat		= V4L2_PIX_FMT_NV21,
+> +		.output_format		= SUN6I_ISP_OUTPUT_FMT_YVU420SP,
+> +	},
+> +};
+> +
+> +const struct sun6i_isp_capture_format *
+> +sun6i_isp_capture_format_find(u32 pixelformat)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sun6i_isp_capture_formats); i++)
+> +		if (sun6i_isp_capture_formats[i].pixelformat == pixelformat)
+> +			return &sun6i_isp_capture_formats[i];
+> +
+> +	return NULL;
+> +}
+> +
+> +/* Capture */
+> +
+> +static void
+> +sun6i_isp_capture_buffer_configure(struct sun6i_isp_device *isp_dev,
+> +				   struct sun6i_isp_buffer *isp_buffer)
+> +{
+> +	const struct v4l2_format_info *info;
+> +	struct vb2_buffer *vb2_buffer;
+> +	unsigned int width, height;
+> +	unsigned int width_aligned;
+> +	dma_addr_t address;
+> +	u32 pixelformat;
+> +
+> +	vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
+> +	address = vb2_dma_contig_plane_dma_addr(vb2_buffer, 0);
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_Y_ADDR0_REG,
+> +			     SUN6I_ISP_ADDR_VALUE(address));
+> +
+> +	sun6i_isp_capture_dimensions(isp_dev, &width, &height);
+> +	sun6i_isp_capture_format(isp_dev, &pixelformat);
+> +
+> +	info = v4l2_format_info(pixelformat);
+> +	if (WARN_ON(!info))
+> +		return;
+> +
+> +	/* Stride needs to be aligned to 4. */
+> +	width_aligned = ALIGN(width, 2);
+> +
+> +	if (info->comp_planes > 1) {
+> +		address += info->bpp[0] * width_aligned * height;
+> +
+> +		sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_U_ADDR0_REG,
+> +				     SUN6I_ISP_ADDR_VALUE(address));
+> +	}
+> +
+> +	if (info->comp_planes > 2) {
+> +		address += info->bpp[1] *
+> +			   DIV_ROUND_UP(width_aligned, info->hdiv) *
+> +			   DIV_ROUND_UP(height, info->vdiv);
+> +
+> +		sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_V_ADDR0_REG,
+> +				     SUN6I_ISP_ADDR_VALUE(address));
+> +	}
+> +}
+> +
+> +void sun6i_isp_capture_configure(struct sun6i_isp_device *isp_dev)
+> +{
+> +	unsigned int width, height;
+> +	unsigned int stride_luma, stride_chroma = 0;
+> +	unsigned int stride_luma_div4, stride_chroma_div4;
+> +	const struct sun6i_isp_capture_format *format;
+> +	const struct v4l2_format_info *info;
+> +	u32 pixelformat;
+> +
+> +	sun6i_isp_capture_dimensions(isp_dev, &width, &height);
+> +	sun6i_isp_capture_format(isp_dev, &pixelformat);
+> +
+> +	format = sun6i_isp_capture_format_find(pixelformat);
+> +	if (WARN_ON(!format))
+> +		return;
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_SIZE_CFG_REG,
+> +			     SUN6I_ISP_MCH_SIZE_CFG_WIDTH(width) |
+> +			     SUN6I_ISP_MCH_SIZE_CFG_HEIGHT(height));
+> +
+> +	info = v4l2_format_info(pixelformat);
+> +	if (WARN_ON(!info))
+> +		return;
+> +
+> +	stride_luma = width * info->bpp[0];
+> +	stride_luma_div4 = DIV_ROUND_UP(stride_luma, 4);
+> +
+> +	if (info->comp_planes > 1) {
+> +		stride_chroma = width * info->bpp[1] / info->hdiv;
+> +		stride_chroma_div4 = DIV_ROUND_UP(stride_chroma, 4);
+> +	}
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MCH_CFG_REG,
+> +			     SUN6I_ISP_MCH_CFG_EN |
+> +			     SUN6I_ISP_MCH_CFG_OUTPUT_FMT(format->output_format) |
+> +			     SUN6I_ISP_MCH_CFG_STRIDE_Y_DIV4(stride_luma_div4) |
+> +			     SUN6I_ISP_MCH_CFG_STRIDE_UV_DIV4(stride_chroma_div4));
+> +}
+> +
+> +/* State */
+> +
+> +static void sun6i_isp_capture_state_cleanup(struct sun6i_isp_device *isp_dev,
+> +					    bool error)
+> +{
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	struct sun6i_isp_buffer **isp_buffer_states[] = {
+> +		&state->pending, &state->current, &state->complete,
+> +	};
+> +	struct sun6i_isp_buffer *isp_buffer;
+> +	struct vb2_buffer *vb2_buffer;
+> +	unsigned long flags;
+> +	unsigned int i;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(isp_buffer_states); i++) {
+> +		isp_buffer = *isp_buffer_states[i];
+> +		if (!isp_buffer)
+> +			continue;
+> +
+> +		vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
+> +		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
+> +				VB2_BUF_STATE_QUEUED);
+> +
+> +		*isp_buffer_states[i] = NULL;
+> +	}
+> +
+> +	list_for_each_entry(isp_buffer, &state->queue, list) {
+> +		vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
+> +		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
+> +				VB2_BUF_STATE_QUEUED);
+> +	}
+> +
+> +	INIT_LIST_HEAD(&state->queue);
+> +
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +void sun6i_isp_capture_state_update(struct sun6i_isp_device *isp_dev,
+> +				    bool *update)
+> +{
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	struct sun6i_isp_buffer *isp_buffer;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	if (list_empty(&state->queue))
+> +		goto complete;
+> +
+> +	if (state->pending)
+> +		goto complete;
+> +
+> +	isp_buffer = list_first_entry(&state->queue, struct sun6i_isp_buffer,
+> +				      list);
+> +
+> +	sun6i_isp_capture_buffer_configure(isp_dev, isp_buffer);
+> +
+> +	list_del(&isp_buffer->list);
+> +
+> +	state->pending = isp_buffer;
+> +
+> +	if (update)
+> +		*update = true;
+> +
+> +complete:
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +void sun6i_isp_capture_state_complete(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	if (!state->pending)
+> +		goto complete;
+> +
+> +	state->complete = state->current;
+> +	state->current = state->pending;
+> +	state->pending = NULL;
+> +
+> +	if (state->complete) {
+> +		struct sun6i_isp_buffer *isp_buffer = state->complete;
+> +		struct vb2_buffer *vb2_buffer =
+> +			&isp_buffer->v4l2_buffer.vb2_buf;
+> +
+> +		vb2_buffer->timestamp = ktime_get_ns();
+> +		isp_buffer->v4l2_buffer.sequence = state->sequence;
+> +
+> +		vb2_buffer_done(vb2_buffer, VB2_BUF_STATE_DONE);
+> +
+> +		state->complete = NULL;
+> +	}
+> +
+> +complete:
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +void sun6i_isp_capture_finish(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +	state->sequence++;
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +/* Queue */
+> +
+> +static int sun6i_isp_capture_queue_setup(struct vb2_queue *queue,
+> +					 unsigned int *buffers_count,
+> +					 unsigned int *planes_count,
+> +					 unsigned int sizes[],
+> +					 struct device *alloc_devs[])
+> +{
+> +	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
+> +	unsigned int size = isp_dev->capture.format.fmt.pix.sizeimage;
+> +
+> +	if (*planes_count)
+> +		return sizes[0] < size ? -EINVAL : 0;
+> +
+> +	*planes_count = 1;
+> +	sizes[0] = size;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_buffer_prepare(struct vb2_buffer *vb2_buffer)
+> +{
+> +	struct sun6i_isp_device *isp_dev =
+> +		vb2_get_drv_priv(vb2_buffer->vb2_queue);
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	unsigned int size = isp_dev->capture.format.fmt.pix.sizeimage;
+> +
+> +	if (vb2_plane_size(vb2_buffer, 0) < size) {
+> +		v4l2_err(v4l2_dev, "buffer too small (%lu < %u)\n",
+> +			 vb2_plane_size(vb2_buffer, 0), size);
+> +		return -EINVAL;
+> +	}
+> +
+> +	vb2_set_plane_payload(vb2_buffer, 0, size);
+> +
+> +	return 0;
+> +}
+> +
+> +static void sun6i_isp_capture_buffer_queue(struct vb2_buffer *vb2_buffer)
+> +{
+> +	struct sun6i_isp_device *isp_dev =
+> +		vb2_get_drv_priv(vb2_buffer->vb2_queue);
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	struct vb2_v4l2_buffer *v4l2_buffer = to_vb2_v4l2_buffer(vb2_buffer);
+> +	struct sun6i_isp_buffer *isp_buffer =
+> +		container_of(v4l2_buffer, struct sun6i_isp_buffer, v4l2_buffer);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +	list_add_tail(&isp_buffer->list, &state->queue);
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +
+> +	/* Update the state to schedule our buffer as soon as possible. */
+> +	if (state->streaming)
+> +		sun6i_isp_state_update(isp_dev, false);
+> +}
+> +
+> +static int sun6i_isp_capture_start_streaming(struct vb2_queue *queue,
+> +					     unsigned int count)
+> +{
+> +	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	struct video_device *video_dev = &isp_dev->capture.video_dev;
+> +	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
+> +	int ret;
+> +
+> +	state->sequence = 0;
+> +
+> +	ret = media_pipeline_start(&video_dev->entity, &video_dev->pipe);
+> +	if (ret < 0)
+> +		goto error_state;
+> +
+> +	state->streaming = true;
+> +
+> +	ret = v4l2_subdev_call(subdev, video, s_stream, 1);
+> +	if (ret && ret != -ENOIOCTLCMD)
+> +		goto error_streaming;
+> +
+> +	return 0;
+> +
+> +error_streaming:
+> +	state->streaming = false;
+> +
+> +	media_pipeline_stop(&video_dev->entity);
+> +
+> +error_state:
+> +	sun6i_isp_capture_state_cleanup(isp_dev, false);
+> +
+> +	return ret;
+> +}
+> +
+> +static void sun6i_isp_capture_stop_streaming(struct vb2_queue *queue)
+> +{
+> +	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
+> +	struct sun6i_isp_capture_state *state = &isp_dev->capture.state;
+> +	struct video_device *video_dev = &isp_dev->capture.video_dev;
+> +	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
+> +
+> +	v4l2_subdev_call(subdev, video, s_stream, 0);
+> +
+> +	state->streaming = false;
+> +
+> +	media_pipeline_stop(&video_dev->entity);
+> +
+> +	sun6i_isp_capture_state_cleanup(isp_dev, true);
+> +}
+> +
+> +static const struct vb2_ops sun6i_isp_capture_queue_ops = {
+> +	.queue_setup		= sun6i_isp_capture_queue_setup,
+> +	.buf_prepare		= sun6i_isp_capture_buffer_prepare,
+> +	.buf_queue		= sun6i_isp_capture_buffer_queue,
+> +	.start_streaming	= sun6i_isp_capture_start_streaming,
+> +	.stop_streaming		= sun6i_isp_capture_stop_streaming,
+> +	.wait_prepare		= vb2_ops_wait_prepare,
+> +	.wait_finish		= vb2_ops_wait_finish,
+> +};
+> +
+> +/* Video Device */
+> +
+> +static void sun6i_isp_capture_format_prepare(struct v4l2_format *format)
+> +{
+> +	struct v4l2_pix_format *pix_format = &format->fmt.pix;
+> +	const struct v4l2_format_info *info;
+> +	unsigned int width, height;
+> +	unsigned int width_aligned;
+> +	unsigned int i;
+> +
+> +	v4l_bound_align_image(&pix_format->width, SUN6I_ISP_CAPTURE_WIDTH_MIN,
+> +			      SUN6I_ISP_CAPTURE_WIDTH_MAX, 1,
+> +			      &pix_format->height, SUN6I_ISP_CAPTURE_HEIGHT_MIN,
+> +			      SUN6I_ISP_CAPTURE_HEIGHT_MAX, 1, 0);
+> +
+> +	if (!sun6i_isp_capture_format_find(pix_format->pixelformat))
+> +		pix_format->pixelformat =
+> +			sun6i_isp_capture_formats[0].pixelformat;
+> +
+> +	info = v4l2_format_info(pix_format->pixelformat);
+> +	if (WARN_ON(!info))
+> +		return;
+> +
+> +	width = pix_format->width;
+> +	height = pix_format->height;
+> +
+> +	/* Stride needs to be aligned to 4. */
+> +	width_aligned = ALIGN(width, 2);
+> +
+> +	pix_format->bytesperline = width_aligned * info->bpp[0];
+> +	pix_format->sizeimage = 0;
+> +
+> +	for (i = 0; i < info->comp_planes; i++) {
+> +		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
+> +		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
+> +
+> +		pix_format->sizeimage += info->bpp[i] *
+> +					 DIV_ROUND_UP(width_aligned, hdiv) *
+> +					 DIV_ROUND_UP(height, vdiv);
+> +	}
+> +
+> +	pix_format->field = V4L2_FIELD_NONE;
+> +
+> +	pix_format->colorspace = V4L2_COLORSPACE_RAW;
+> +	pix_format->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> +	pix_format->quantization = V4L2_QUANTIZATION_DEFAULT;
+> +	pix_format->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+> +}
+> +
+> +static int sun6i_isp_capture_querycap(struct file *file, void *private,
+> +				      struct v4l2_capability *capability)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +	struct video_device *video_dev = &isp_dev->capture.video_dev;
+> +
+> +	strscpy(capability->driver, SUN6I_ISP_NAME, sizeof(capability->driver));
+> +	strscpy(capability->card, video_dev->name, sizeof(capability->card));
+> +	snprintf(capability->bus_info, sizeof(capability->bus_info),
+> +		 "platform:%s", dev_name(isp_dev->dev));
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_enum_fmt(struct file *file, void *private,
+> +				      struct v4l2_fmtdesc *fmtdesc)
+> +{
+> +	u32 index = fmtdesc->index;
+> +
+> +	if (index >= ARRAY_SIZE(sun6i_isp_capture_formats))
+> +		return -EINVAL;
+> +
+> +	fmtdesc->pixelformat = sun6i_isp_capture_formats[index].pixelformat;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_g_fmt(struct file *file, void *private,
+> +				   struct v4l2_format *format)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +
+> +	*format = isp_dev->capture.format;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_s_fmt(struct file *file, void *private,
+> +				   struct v4l2_format *format)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +
+> +	if (vb2_is_busy(&isp_dev->capture.queue))
+> +		return -EBUSY;
+> +
+> +	sun6i_isp_capture_format_prepare(format);
+> +
+> +	isp_dev->capture.format = *format;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_try_fmt(struct file *file, void *private,
+> +				     struct v4l2_format *format)
+> +{
+> +	sun6i_isp_capture_format_prepare(format);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_enum_input(struct file *file, void *private,
+> +					struct v4l2_input *input)
+> +{
+> +	if (input->index != 0)
+> +		return -EINVAL;
+> +
+> +	input->type = V4L2_INPUT_TYPE_CAMERA;
+> +	strscpy(input->name, "Camera", sizeof(input->name));
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_g_input(struct file *file, void *private,
+> +				     unsigned int *index)
+> +{
+> +	*index = 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_capture_s_input(struct file *file, void *private,
+> +				     unsigned int index)
+> +{
+> +	if (index != 0)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_ioctl_ops sun6i_isp_capture_ioctl_ops = {
+> +	.vidioc_querycap		= sun6i_isp_capture_querycap,
+> +
+> +	.vidioc_enum_fmt_vid_cap	= sun6i_isp_capture_enum_fmt,
+> +	.vidioc_g_fmt_vid_cap		= sun6i_isp_capture_g_fmt,
+> +	.vidioc_s_fmt_vid_cap		= sun6i_isp_capture_s_fmt,
+> +	.vidioc_try_fmt_vid_cap		= sun6i_isp_capture_try_fmt,
+> +
+> +	.vidioc_enum_input		= sun6i_isp_capture_enum_input,
+> +	.vidioc_g_input			= sun6i_isp_capture_g_input,
+> +	.vidioc_s_input			= sun6i_isp_capture_s_input,
+> +
+> +	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
+> +	.vidioc_prepare_buf		= vb2_ioctl_prepare_buf,
+> +	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
+> +	.vidioc_querybuf		= vb2_ioctl_querybuf,
+> +	.vidioc_expbuf			= vb2_ioctl_expbuf,
+> +	.vidioc_qbuf			= vb2_ioctl_qbuf,
+> +	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
+> +	.vidioc_streamon		= vb2_ioctl_streamon,
+> +	.vidioc_streamoff		= vb2_ioctl_streamoff,
+> +
+> +	.vidioc_log_status		= v4l2_ctrl_log_status,
+> +	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
+> +	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+> +};
+> +
+> +static int sun6i_isp_capture_open(struct file *file)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +	struct video_device *video_dev = &isp_dev->capture.video_dev;
+> +	struct mutex *lock = &isp_dev->capture.lock;
+> +	int ret;
+> +
+> +	if (mutex_lock_interruptible(lock))
+> +		return -ERESTARTSYS;
+> +
+> +	ret = v4l2_pipeline_pm_get(&video_dev->entity);
 
-18288088 bytes read
-argv[2]: coremask=0x3
-argv[3]: root=/dev/sda2
-argv[4]: rootdelay=15
-argv[5]: rw
-argv[6]: rootsqimg=squashfs.img
-argv[7]: rootsqwdir=w
-argv[8]: mtdparts=phys_mapped_flash:512k(boot0),512k(boot1),64k@1024k(eeprom)
-argv[9]: init=/bin/bash
-ELF file is 64 bit
-Allocating memory for ELF segment: addr: 0xffffffff81100000 (adjusted to: 0x1100000), size 0x29b0240
-Allocated memory for ELF segment: addr: 0xffffffff81100000, size 0x29b0240
-Processing PHDR 0
-  Loading 91dc80 bytes at ffffffff81100000
-  Clearing 20925c0 bytes at ffffffff81a1dc80
-## Loading Linux kernel with entry point: 0xffffffff815ce150 ...
-Bootloader: Done loading app on coremask: 0x3
-[    0.000000] Linux version 5.18.0-rc1+ (artur@crux) (mips64-linux-gnuabi64-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #17 SMP Thu Apr 28 11:59:05 CEST 2022
-[    0.000000] CVMSEG size: 1 cache lines (128 bytes)
-[    0.000000] printk: bootconsole [early0] enabled
-[    0.000000] CPU0 revision is: 000d0601 (Cavium Octeon+)
-[    0.000000] Kernel sections are not in the memory maps
-[    0.000000] Wasting 278528 bytes for tracking 4352 unused pages
-[    0.000000] Using internal Device Tree.
-[    0.000000] software IO TLB: mapped [mem 0x0000000003b0a000-0x0000000003b4a000] (0MB)
-[    0.000000] Primary instruction cache 32kB, virtually tagged, 4 way, 64 sets, linesize 128 bytes.
-[    0.000000] Primary data cache 16kB, 64-way, 2 sets, linesize 128 bytes.
-[    0.000000] Zone ranges:
-[    0.000000]   DMA32    [mem 0x0000000001100000-0x00000000efffffff]
-[    0.000000]   Normal   [mem 0x00000000f0000000-0x000000041fbfffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000001100000-0x0000000003aaffff]
-[    0.000000]   node   0: [mem 0x0000000003b00000-0x0000000007efffff]
-[    0.000000]   node   0: [mem 0x0000000008200000-0x000000000fdfffff]
-[    0.000000]   node   0: [mem 0x0000000410000000-0x000000041fbfffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000001100000-0x000000041fbfffff]
-[    0.000000] On node 0, zone DMA32: 4352 pages in unavailable ranges
-[    0.000000] On node 0, zone DMA32: 80 pages in unavailable ranges
-[    0.000000] On node 0, zone DMA32: 768 pages in unavailable ranges
-[    0.000000] On node 0, zone Normal: 512 pages in unavailable ranges
-[    0.000000] On node 0, zone Normal: 1024 pages in unavailable ranges
-[    0.000000] percpu: Embedded 17 pages/cpu s31872 r8192 d29568 u69632
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 122393
-[    0.000000] Kernel command line:  bootoctlinux $loadaddr coremask=0x3 root=/dev/sda2 rootdelay=15 rw rootsqimg=squashfs.img rootsqwdir=w mtdparts=phys_mapped_flash:512k(boot0),512k(boot1),64k@1024k(eeprom) init=/bin/bash console=ttyS0,115200
-[    0.000000] Unknown kernel command line parameters "coremask=0x3 rootsqimg=squashfs.img rootsqwdir=w", will be passed to user space.
-[    0.000000] Dentry cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 32768 (order: 6, 262144 bytes, linear)
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Memory: 445240K/497344K available (4947K kernel code, 837K rwdata, 1988K rodata, 1556K init, 33344K bss, 52104K reserved, 0K cma-reserved)
-[    0.000000] random: get_random_u64 called from __kmem_cache_create+0x34/0x3c0 with crng_init=0
-[    0.000000] SLUB: HWalign=128, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
-[    0.000000] rcu: Hierarchical RCU implementation.
-[    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=64 to nr_cpu_ids=2.
-[    0.000000]  Tracing variant of Tasks RCU enabled.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
-[    0.000000] NR_IRQS: 127
-[  274.661885] clocksource: OCTEON_CVMCOUNT: mask: 0xffffffffffffffff max_cycles: 0xe6a171a037, max_idle_ns: 881590485102 ns
-[  274.673018] Console: colour dummy device 80x25
-[  274.677429] Calibrating delay loop (skipped) preset value.. 1000.00 BogoMIPS (lpj=2000000)
-[  274.685578] pid_max: default: 32768 minimum: 301
-[  274.690653] Mount-cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
-[  274.697874] Mountpoint-cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
-[  274.709475] cblist_init_generic: Setting adjustable number of callback queues.
-[  274.716624] cblist_init_generic: Setting shift to 1 and lim to 1.
-[  274.723273] rcu: Hierarchical SRCU implementation.
-[  274.729991] smp: Bringing up secondary CPUs ...
-[  274.735942] SMP: Booting CPU01 (CoreId  1)...
-[  274.740340] CPU1 revision is: 000d0601 (Cavium Octeon+)
-[  274.740638] smp: Brought up 1 node, 2 CPUs
-[  274.751615] devtmpfs: initialized
-[  274.760022] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-[  274.769689] futex hash table entries: 512 (order: 4, 65536 bytes, linear)
-[  274.777355] NET: Registered PF_NETLINK/PF_ROUTE protocol family
-[  274.784531] cpuidle: using governor ladder
-[  274.788719] cpuidle: using governor menu
-[  274.846514] SCSI subsystem initialized
-[  274.850462] usbcore: registered new interface driver usbfs
-[  274.856023] usbcore: registered new interface driver hub
-[  274.861348] usbcore: registered new device driver usb
-[  274.868368] clocksource: Switched to clocksource OCTEON_CVMCOUNT
-[  274.875446] FS-Cache: Loaded
-[  274.878744] CacheFiles: Loaded
-[  274.906005] random: fast init done
-[  274.912902] NET: Registered PF_UNIX/PF_LOCAL protocol family
-[  274.921077] workingset: timestamp_bits=46 max_order=17 bucket_order=0
-[  274.941101] zbud: loaded
-[  274.948526] squashfs: version 4.0 (2009/01/31) Phillip Lougher
-[  274.955512] xor: measuring software checksum speed
-[  274.973767]    8regs           :   729 MB/sec
-[  274.991897]    8regs_prefetch  :   709 MB/sec
-[  275.005357]    32regs          :  1070 MB/sec
-[  275.019108]    32regs_prefetch :  1042 MB/sec
-[  275.023345] xor: using function: 32regs (1070 MB/sec)
-[  275.028886] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 252)
-[  275.036221] io scheduler mq-deadline registered
-[  275.040672] io scheduler kyber registered
-[  275.045191] io scheduler bfq registered
-[  275.293455] octeon_gpio 1070000000800.gpio-controller: OCTEON GPIO driver probed.
-[  275.301575] Serial: 8250/16550 driver, 6 ports, IRQ sharing disabled
-[  275.312262] printk: console [ttyS0] disabled
-[  275.316625] 1180000000800.serial: ttyS0 at MMIO 0x1180000000800 (irq = 41, base_baud = 31250000) is a OCTEON
-[  275.326438] printk: console [ttyS0] enabled
-[  275.326438] printk: console [ttyS0] enabled
-[  275.334704] printk: bootconsole [early0] disabled
-[  275.334704] printk: bootconsole [early0] disabled
-[  275.345900] 1180000000c00.serial: ttyS1 at MMIO 0x1180000000c00 (irq = 42, base_baud = 31250000) is a OCTEON
-[  275.381533] brd: module loaded
-[  275.395957] loop: module loaded
-[  275.400668] zram: Added device: zram0
-[  275.406309] null_blk: module loaded
-[  275.410530] slram: not enough parameters.
-[  275.414719] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-[  275.421399] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
-[  275.427680] ohci-platform: OHCI generic platform driver
-[  275.433261] usbcore: registered new interface driver cdc_wdm
-[  275.439161] usbcore: registered new interface driver usb-storage
-[  275.445928] mousedev: PS/2 mouse device common for all mice
-[  275.451641] i2c_dev: i2c /dev entries driver
-[  275.457297] i2c-octeon 1180000001000.i2c: probed
-[  275.462443] hid: raw HID events driver (C) Jiri Kosina
-[  275.468275] usbcore: registered new interface driver usbhid
-[  275.473966] usbhid: USB HID core driver
-[  275.479091] octeon-hcd 16f0010000000.usbc: Octeon Host Controller
-[  275.485371] octeon-hcd 16f0010000000.usbc: new USB bus registered, assigned bus number 1
-[  275.493638] octeon-hcd 16f0010000000.usbc: irq 56, io mem 0x00000000
-[  275.500632] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 5.18
-[  275.509006] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
-[  275.516284] usb usb1: Product: Octeon Host Controller
-[  275.521387] usb usb1: Manufacturer: Linux 5.18.0-rc1+ Octeon USB
-[  275.527446] usb usb1: SerialNumber: 16f0010000000.usbc
-[  275.533902] hub 1-0:1.0: USB hub found
-[  275.537917] hub 1-0:1.0: 1 port detected
-[  275.542746] octeon-hcd 16f0010000000.usbc: Registered HCD for port 0 on irq 56
-[  275.551208] Bootbus flash: Setting flash for 8MB flash at 0x1f400000
-[  275.557938] phys_mapped_flash: Found 1 x16 devices at 0x0 in 8-bit bank. Manufacturer ID 0x0000c2 Chip ID 0x0000c9
-[  275.568410] Amd/Fujitsu Extended Query Table at 0x0040
-[  275.573645]   Amd/Fujitsu Extended Query version 1.1.
-[  275.578760] phys_mapped_flash: Swapping erase regions for top-boot CFI table.
-[  275.585943] number of CFI chips: 1
-[  275.589449] 3 cmdlinepart partitions found on MTD device phys_mapped_flash
-[  275.596397] Creating 3 MTD partitions on "phys_mapped_flash":
-[  275.602197] 0x000000000000-0x000000080000 : "boot0"
-[  275.609371] 0x000000080000-0x000000100000 : "boot1"
-[  275.616036] 0x000000100000-0x000000110000 : "eeprom"
-[  275.624874] zswap: loaded using pool lzo/zbud
-[  275.630230] OF: fdt: not creating '/sys/firmware/fdt': CRC check failed
-[  275.637452] Waiting 15 sec before mounting root device...
-[  275.832435] usb 1-1: new high-speed USB device number 2 using octeon-hcd
-[  276.296220] usb 1-1: New USB device found, idVendor=13fe, idProduct=4200, bcdDevice= 1.00
-[  276.304525] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[  276.311728] usb 1-1: Product: UDinfo UF2 4GB
-[  276.316056] usb 1-1: Manufacturer:
-[  276.320295] usb 1-1: SerialNumber: 07088431F9BD1264
-[  276.326298] usb-storage 1-1:1.0: USB Mass Storage device detected
-[  276.333826] scsi host0: usb-storage 1-1:1.0
-[  277.345867] scsi 0:0:0:0: Direct-Access              UDinfo UF2 4GB   PMAP PQ: 0 ANSI: 6
-[  277.356697] sd 0:0:0:0: Attached scsi generic sg0 type 0
-[  277.362381] sd 0:0:0:0: [sda] 7831552 512-byte logical blocks: (4.01 GB/3.73 GiB)
-[  277.371122] sd 0:0:0:0: [sda] Write Protect is off
-[  277.377292] sd 0:0:0:0: [sda] No Caching mode page found
-[  277.382742] sd 0:0:0:0: [sda] Assuming drive cache: write through
-[  277.395888]  sda: sda1 sda2
-[  277.403803] sd 0:0:0:0: [sda] Attached SCSI removable disk
-[  290.174397] random: crng init done
-[  290.818331] EXT4-fs (sda2): mounting ext3 file system using the ext4 subsystem
-[  291.634675] EXT4-fs (sda2): recovery complete
-[  291.644540] EXT4-fs (sda2): mounted filesystem with ordered data mode. Quota mode: disabled.
-[  291.653214] VFS: Mounted root (ext3 filesystem) on device 8:2.
-[  291.660563] Freeing unused kernel image (initmem) memory: 1556K
-[  291.666609] This architecture does not have kernel memory protection.
-[  291.673138] Run /bin/bash as init process
-bash: cannot set terminal process group (-1): Inappropriate ioctl for device
-bash: no job control in this shell
-root@(none):/# uname -a
-Linux (none) 5.18.0-rc1+ #17 SMP Thu Apr 28 11:59:05 CEST 2022 mips64 GNU/Linux
-root@(none):/# lsusb
-root@(none):/# mount -t sysfs /sys
-root@(none):/# mount -t proc /proc
-root@(none):/# lsusb
-Bus 001 Device 002: ID 13fe:4200 Kingston Technology Company Inc.
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-root@(none):/# ls -l /
-total 158656
-drwxr-xr-x    2 root     root          4096 May  2  2019 bin
-drwxr-xr-x    2 root     root          4096 Mar 28  2019 boot
-drwxrwsr-x    8 root     vyattacf      4096 May  2  2019 config
-drwxr-xr-x    5 root     root          4096 Jan  1 02:05 dev
-drwxr-xr-x   92 root     root          4096 Nov  3  2016 etc
-drwxr-xr-x    2 root     root          4096 Mar 28  2019 home
-drwxr-xr-x   15 root     root          4096 Jan 29  2017 lib
-lrwxrwxrwx    1 root     root             5 May  2  2019 lib64 -> ./lib
-drwx------    2 root     root         16384 Jan  1 02:00 lost+found
-drwxr-xr-x    2 root     root          4096 May  2  2019 media
-drwxr-xr-x    3 root     root          4096 Jan  1 02:05 mnt
-drwxr-xr-x    3 root     root          4096 Aug 29  2012 opt
-dr-xr-xr-x   93 root     root             0 Jan  1 02:00 proc
-drwxr-xr-x    2 root     root          4096 May  2  2019 root
-drwxr-xr-x    2 root     root          4096 May  2  2019 root.dev
-drwxr-xr-x    6 root     root          4096 Jan  1 02:01 run
-drwxr-xr-x    2 root     root          4096 May  2  2019 sbin
--rw-r--r--    1 root     root      81121280 May  2  2019 squashfs.img
--rw-r--r--    1 root     root            33 May  2  2019 squashfs.img.md5
--rw-r--r--    1 root     root      81039360 Oct  1  2018 squashfs.o
--rw-r--r--    1 root     root            33 Oct  1  2018 squashfs.o.md5
-drwxr-xr-x    2 root     root          4096 May  2  2019 srv
-dr-xr-xr-x   11 root     root             0 Jan  1 02:00 sys
-drwxrwxrwt    2 root     root          4096 May  2  2019 tmp
-drwxr-xr-x    9 root     root          4096 May  2  2019 usr
-drwxr-xr-x   13 root     root          4096 May  2  2019 var
--rw-r--r--    1 root     root            41 May  2  2019 version
--rw-r--r--    1 root     root            42 Oct  1  2018 version.o
-drwxr-xr-x   10 root     root          4096 Jan  1 02:00 w
-drwxr-xr-x    8 root     root          4096 Jun  8  2019 w.d599e2d5
-drwxr-xr-x   11 root     root          4096 Apr 22  2019 w.o
-drwxr-xr-x    8 root     root          4096 Jun  8  2019 w.r
-drwxr-xr-x    3 root     root          4096 Jan  1 02:00 work
-drwxr-xr-x    2 www-data root          4096 Jun  1  2011 www
-root@(none):/#
+Do you need this?
 
+Drivers should primarily depend on runtime PM, this is only needed for
+compatibility reasons. Instead I'd like to see sensor drivers being moved
+to runtime PM.
+
+> +	if (ret)
+> +		goto error_mutex;
+> +
+> +	ret = v4l2_fh_open(file);
+> +	if (ret)
+> +		goto error_pipeline;
+> +
+> +	mutex_unlock(lock);
+> +
+> +	return 0;
+> +
+> +error_pipeline:
+> +	v4l2_pipeline_pm_put(&video_dev->entity);
+> +
+> +error_mutex:
+> +	mutex_unlock(lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sun6i_isp_capture_release(struct file *file)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +	struct video_device *video_dev = &isp_dev->capture.video_dev;
+> +	struct mutex *lock = &isp_dev->capture.lock;
+> +
+> +	mutex_lock(lock);
+> +
+> +	_vb2_fop_release(file, NULL);
+> +	v4l2_pipeline_pm_put(&video_dev->entity);
+> +
+> +	mutex_unlock(lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_file_operations sun6i_isp_capture_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.open		= sun6i_isp_capture_open,
+> +	.release	= sun6i_isp_capture_release,
+> +	.unlocked_ioctl	= video_ioctl2,
+> +	.poll		= vb2_fop_poll,
+> +	.mmap		= vb2_fop_mmap,
+> +};
+> +
+> +/* Media Entity */
+> +
+> +static int sun6i_isp_capture_link_validate(struct media_link *link)
+> +{
+> +	struct video_device *video_dev =
+> +		media_entity_to_video_device(link->sink->entity);
+> +	struct sun6i_isp_device *isp_dev = video_get_drvdata(video_dev);
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	unsigned int capture_width, capture_height;
+> +	unsigned int proc_width, proc_height;
+> +
+> +	sun6i_isp_capture_dimensions(isp_dev, &capture_width, &capture_height);
+> +	sun6i_isp_proc_dimensions(isp_dev, &proc_width, &proc_height);
+> +
+> +	/* No cropping/scaling is supported (yet). */
+> +	if (capture_width != proc_width || capture_height != proc_height) {
+> +		v4l2_err(v4l2_dev,
+> +			 "invalid input/output dimensions: %ux%u/%ux%u\n",
+> +			 proc_width, proc_height, capture_width,
+> +			 capture_height);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct media_entity_operations sun6i_isp_capture_entity_ops = {
+> +	.link_validate	= sun6i_isp_capture_link_validate,
+> +};
+> +
+> +/* Capture */
+> +
+> +int sun6i_isp_capture_setup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_capture *capture = &isp_dev->capture;
+> +	struct sun6i_isp_capture_state *state = &capture->state;
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	struct v4l2_subdev *proc_subdev = &isp_dev->proc.subdev;
+> +	struct video_device *video_dev = &capture->video_dev;
+> +	struct vb2_queue *queue = &capture->queue;
+> +	struct media_pad *pad = &capture->pad;
+> +	struct v4l2_format *format = &capture->format;
+> +	struct v4l2_pix_format *pix_format = &format->fmt.pix;
+> +	int ret;
+> +
+> +	/* State */
+> +
+> +	INIT_LIST_HEAD(&state->queue);
+> +	spin_lock_init(&state->lock);
+> +
+> +	/* Media Entity */
+> +
+> +	video_dev->entity.ops = &sun6i_isp_capture_entity_ops;
+> +
+> +	/* Media Pads */
+> +
+> +	pad->flags = MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_MUST_CONNECT;
+> +
+> +	ret = media_entity_pads_init(&video_dev->entity, 1, pad);
+> +	if (ret)
+> +		goto error_mutex;
+
+return ret;
+
+> +
+> +	/* Queue */
+> +
+> +	mutex_init(&capture->lock);
+> +
+> +	queue->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+> +	queue->io_modes = VB2_MMAP | VB2_DMABUF;
+> +	queue->buf_struct_size = sizeof(struct sun6i_isp_buffer);
+> +	queue->ops = &sun6i_isp_capture_queue_ops;
+> +	queue->mem_ops = &vb2_dma_contig_memops;
+> +	queue->min_buffers_needed = 2;
+> +	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+> +	queue->lock = &capture->lock;
+> +	queue->dev = isp_dev->dev;
+> +	queue->drv_priv = isp_dev;
+> +
+> +	ret = vb2_queue_init(queue);
+> +	if (ret) {
+> +		v4l2_err(v4l2_dev, "failed to initialize vb2 queue: %d\n", ret);
+> +		goto error_media_entity;
+> +	}
+> +
+> +	/* V4L2 Format */
+> +
+> +	format->type = queue->type;
+> +	pix_format->pixelformat = sun6i_isp_capture_formats[0].pixelformat;
+> +	pix_format->width = 1280;
+> +	pix_format->height = 720;
+> +
+> +	sun6i_isp_capture_format_prepare(format);
+> +
+> +	/* Video Device */
+> +
+> +	strscpy(video_dev->name, SUN6I_ISP_CAPTURE_NAME,
+> +		sizeof(video_dev->name));
+> +	video_dev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+> +	video_dev->vfl_dir = VFL_DIR_RX;
+> +	video_dev->release = video_device_release_empty;
+> +	video_dev->fops = &sun6i_isp_capture_fops;
+> +	video_dev->ioctl_ops = &sun6i_isp_capture_ioctl_ops;
+> +	video_dev->v4l2_dev = v4l2_dev;
+> +	video_dev->queue = queue;
+> +	video_dev->lock = &capture->lock;
+> +
+> +	video_set_drvdata(video_dev, isp_dev);
+> +
+> +	ret = video_register_device(video_dev, VFL_TYPE_VIDEO, -1);
+> +	if (ret) {
+> +		v4l2_err(v4l2_dev, "failed to register video device: %d\n",
+> +			 ret);
+> +		goto error_media_entity;
+> +	}
+> +
+> +	v4l2_info(v4l2_dev, "device %s registered as %s\n", video_dev->name,
+> +		  video_device_node_name(video_dev));
+
+This isn't really driver specific. I'd drop it.
+
+> +
+> +	/* Media Pad Link */
+> +
+> +	ret = media_create_pad_link(&proc_subdev->entity,
+> +				    SUN6I_ISP_PROC_PAD_SOURCE,
+> +				    &video_dev->entity, 0,
+> +				    MEDIA_LNK_FL_ENABLED |
+> +				    MEDIA_LNK_FL_IMMUTABLE);
+> +	if (ret < 0) {
+> +		v4l2_err(v4l2_dev, "failed to create %s:%u -> %s:%u link\n",
+> +			 proc_subdev->entity.name, SUN6I_ISP_PROC_PAD_SOURCE,
+> +			 video_dev->entity.name, 0);
+
+This error message printing would be better to be added to
+media_create_pad_link().
+
+> +		goto error_video_device;
+> +	}
+> +
+> +	return 0;
+> +
+> +error_video_device:
+> +	vb2_video_unregister_device(video_dev);
+> +
+> +error_media_entity:
+> +	media_entity_cleanup(&video_dev->entity);
+> +
+> +error_mutex:
+> +	mutex_destroy(&capture->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +void sun6i_isp_capture_cleanup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_capture *capture = &isp_dev->capture;
+> +	struct video_device *video_dev = &capture->video_dev;
+> +
+> +	vb2_video_unregister_device(video_dev);
+> +	media_entity_cleanup(&video_dev->entity);
+> +	mutex_destroy(&capture->lock);
+> +}
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
+> new file mode 100644
+> index 000000000000..0e3e4fa7a0f4
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.h
+> @@ -0,0 +1,78 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#ifndef _SUN6I_ISP_CAPTURE_H_
+> +#define _SUN6I_ISP_CAPTURE_H_
+> +
+> +#include <media/v4l2-device.h>
+> +
+> +#define SUN6I_ISP_CAPTURE_NAME		"sun6i-isp-capture"
+> +
+> +#define SUN6I_ISP_CAPTURE_WIDTH_MIN	16
+> +#define SUN6I_ISP_CAPTURE_WIDTH_MAX	3264
+> +#define SUN6I_ISP_CAPTURE_HEIGHT_MIN	16
+> +#define SUN6I_ISP_CAPTURE_HEIGHT_MAX	2448
+> +
+> +struct sun6i_isp_device;
+> +
+> +struct sun6i_isp_capture_format {
+> +	u32	pixelformat;
+> +	u8	output_format;
+> +};
+> +
+> +#undef current
+> +struct sun6i_isp_capture_state {
+> +	struct list_head		queue;
+> +	spinlock_t			lock; /* Queue and buffers lock. */
+> +
+> +	struct sun6i_isp_buffer		*pending;
+> +	struct sun6i_isp_buffer		*current;
+> +	struct sun6i_isp_buffer		*complete;
+> +
+> +	unsigned int			sequence;
+> +	bool				streaming;
+> +};
+> +
+> +struct sun6i_isp_capture {
+> +	struct sun6i_isp_capture_state	state;
+> +
+> +	struct video_device		video_dev;
+> +	struct vb2_queue		queue;
+> +	struct mutex			lock; /* Queue lock. */
+> +	struct media_pad		pad;
+> +
+> +	struct v4l2_format		format;
+> +};
+> +
+> +/* Helpers */
+> +
+> +void sun6i_isp_capture_dimensions(struct sun6i_isp_device *isp_dev,
+> +				  unsigned int *width, unsigned int *height);
+> +void sun6i_isp_capture_format(struct sun6i_isp_device *isp_dev,
+> +			      u32 *pixelformat);
+> +
+> +/* Format */
+> +
+> +const struct sun6i_isp_capture_format *
+> +sun6i_isp_capture_format_find(u32 pixelformat);
+> +
+> +/* Capture */
+> +
+> +void sun6i_isp_capture_configure(struct sun6i_isp_device *isp_dev);
+> +
+> +/* State */
+> +
+> +void sun6i_isp_capture_state_update(struct sun6i_isp_device *isp_dev,
+> +				    bool *update);
+> +void sun6i_isp_capture_state_complete(struct sun6i_isp_device *isp_dev);
+> +void sun6i_isp_capture_finish(struct sun6i_isp_device *isp_dev);
+> +
+> +/* Capture */
+> +
+> +int sun6i_isp_capture_setup(struct sun6i_isp_device *isp_dev);
+> +void sun6i_isp_capture_cleanup(struct sun6i_isp_device *isp_dev);
+> +
+> +#endif
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
+> new file mode 100644
+> index 000000000000..8f6ee73b3bdc
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
+> @@ -0,0 +1,573 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-event.h>
+> +#include <media/v4l2-ioctl.h>
+> +#include <media/v4l2-mc.h>
+> +#include <media/videobuf2-vmalloc.h>
+> +#include <media/videobuf2-v4l2.h>
+> +
+> +#include "sun6i_isp.h"
+> +#include "sun6i_isp_params.h"
+> +#include "sun6i_isp_reg.h"
+> +#include "uapi/sun6i-isp-config.h"
+> +
+> +/* Params */
+> +
+> +static const struct sun6i_isp_params_config sun6i_isp_params_config_default = {
+> +	.modules_used = SUN6I_ISP_MODULE_BAYER,
+> +
+> +	.bayer = {
+> +		.offset_r	= 32,
+> +		.offset_gr	= 32,
+> +		.offset_gb	= 32,
+> +		.offset_b	= 32,
+> +
+> +		.gain_r		= 256,
+> +		.gain_gr	= 256,
+> +		.gain_gb	= 256,
+> +		.gain_b		= 256,
+> +
+> +	},
+> +
+> +	.bdnf = {
+> +		.in_dis_min		= 8,
+> +		.in_dis_max		= 16,
+> +
+> +		.coefficients_g		= { 15, 4, 1 },
+> +		.coefficients_rb	= { 15, 4 },
+> +	},
+> +};
+> +
+> +static void sun6i_isp_params_configure_ob(struct sun6i_isp_device *isp_dev)
+> +{
+> +	unsigned int width, height;
+> +
+> +	sun6i_isp_proc_dimensions(isp_dev, &width, &height);
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_OB_SIZE_REG,
+> +			     SUN6I_ISP_OB_SIZE_WIDTH(width) |
+> +			     SUN6I_ISP_OB_SIZE_HEIGHT(height));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_OB_VALID_REG,
+> +			     SUN6I_ISP_OB_VALID_WIDTH(width) |
+> +			     SUN6I_ISP_OB_VALID_HEIGHT(height));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_OB_SRC0_VALID_START_REG,
+> +			     SUN6I_ISP_OB_SRC0_VALID_START_HORZ(0) |
+> +			     SUN6I_ISP_OB_SRC0_VALID_START_VERT(0));
+> +}
+> +
+> +static void sun6i_isp_params_configure_ae(struct sun6i_isp_device *isp_dev)
+> +{
+> +	/* These are default values that need to be set to get an output. */
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_AE_CFG_REG,
+> +			     SUN6I_ISP_AE_CFG_LOW_BRI_TH(0xff) |
+> +			     SUN6I_ISP_AE_CFG_HORZ_NUM(8) |
+> +			     SUN6I_ISP_AE_CFG_HIGH_BRI_TH(0xf00) |
+> +			     SUN6I_ISP_AE_CFG_VERT_NUM(8));
+> +}
+> +
+> +static void
+> +sun6i_isp_params_configure_bayer(struct sun6i_isp_device *isp_dev,
+> +				 const struct sun6i_isp_params_config *config)
+> +{
+> +	const struct sun6i_isp_params_config_bayer *bayer = &config->bayer;
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_OFFSET0_REG,
+> +			     SUN6I_ISP_BAYER_OFFSET0_R(bayer->offset_r) |
+> +			     SUN6I_ISP_BAYER_OFFSET0_GR(bayer->offset_gr));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_OFFSET1_REG,
+> +			     SUN6I_ISP_BAYER_OFFSET1_GB(bayer->offset_gb) |
+> +			     SUN6I_ISP_BAYER_OFFSET1_B(bayer->offset_b));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_GAIN0_REG,
+> +			     SUN6I_ISP_BAYER_GAIN0_R(bayer->gain_r) |
+> +			     SUN6I_ISP_BAYER_GAIN0_GR(bayer->gain_gr));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BAYER_GAIN1_REG,
+> +			     SUN6I_ISP_BAYER_GAIN1_GB(bayer->gain_gb) |
+> +			     SUN6I_ISP_BAYER_GAIN1_B(bayer->gain_b));
+> +}
+> +
+> +static void sun6i_isp_params_configure_wb(struct sun6i_isp_device *isp_dev)
+> +{
+> +	/* These are default values that need to be set to get an output. */
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_WB_GAIN0_REG,
+> +			     SUN6I_ISP_WB_GAIN0_R(256) |
+> +			     SUN6I_ISP_WB_GAIN0_GR(256));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_WB_GAIN1_REG,
+> +			     SUN6I_ISP_WB_GAIN1_GB(256) |
+> +			     SUN6I_ISP_WB_GAIN1_B(256));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_WB_CFG_REG,
+> +			     SUN6I_ISP_WB_CFG_CLIP(0xfff));
+> +}
+> +
+> +static void sun6i_isp_params_configure_base(struct sun6i_isp_device *isp_dev)
+> +{
+> +	sun6i_isp_params_configure_ae(isp_dev);
+> +	sun6i_isp_params_configure_ob(isp_dev);
+> +	sun6i_isp_params_configure_wb(isp_dev);
+> +}
+> +
+> +static void
+> +sun6i_isp_params_configure_bdnf(struct sun6i_isp_device *isp_dev,
+> +				const struct sun6i_isp_params_config *config)
+> +{
+> +	const struct sun6i_isp_params_config_bdnf *bdnf = &config->bdnf;
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BDNF_CFG_REG,
+> +			     SUN6I_ISP_BDNF_CFG_IN_DIS_MIN(bdnf->in_dis_min) |
+> +			     SUN6I_ISP_BDNF_CFG_IN_DIS_MAX(bdnf->in_dis_max));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BDNF_COEF_RB_REG,
+> +			     SUN6I_ISP_BDNF_COEF_RB(0, bdnf->coefficients_rb[0]) |
+> +			     SUN6I_ISP_BDNF_COEF_RB(1, bdnf->coefficients_rb[1]) |
+> +			     SUN6I_ISP_BDNF_COEF_RB(2, bdnf->coefficients_rb[2]) |
+> +			     SUN6I_ISP_BDNF_COEF_RB(3, bdnf->coefficients_rb[3]) |
+> +			     SUN6I_ISP_BDNF_COEF_RB(4, bdnf->coefficients_rb[4]));
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_BDNF_COEF_G_REG,
+> +			     SUN6I_ISP_BDNF_COEF_G(0, bdnf->coefficients_g[0]) |
+> +			     SUN6I_ISP_BDNF_COEF_G(1, bdnf->coefficients_g[1]) |
+> +			     SUN6I_ISP_BDNF_COEF_G(2, bdnf->coefficients_g[2]) |
+> +			     SUN6I_ISP_BDNF_COEF_G(3, bdnf->coefficients_g[3]) |
+> +			     SUN6I_ISP_BDNF_COEF_G(4, bdnf->coefficients_g[4]) |
+> +			     SUN6I_ISP_BDNF_COEF_G(5, bdnf->coefficients_g[5]) |
+> +			     SUN6I_ISP_BDNF_COEF_G(6, bdnf->coefficients_g[6]));
+> +}
+> +
+> +static void
+> +sun6i_isp_params_configure_modules(struct sun6i_isp_device *isp_dev,
+> +				   const struct sun6i_isp_params_config *config)
+> +{
+> +	u32 value;
+> +
+> +	if (config->modules_used & SUN6I_ISP_MODULE_BDNF)
+> +		sun6i_isp_params_configure_bdnf(isp_dev, config);
+> +
+> +	if (config->modules_used & SUN6I_ISP_MODULE_BAYER)
+> +		sun6i_isp_params_configure_bayer(isp_dev, config);
+> +
+> +	value = sun6i_isp_load_read(isp_dev, SUN6I_ISP_MODULE_EN_REG);
+> +	/* Clear all modules but keep input configuration. */
+> +	value &= SUN6I_ISP_MODULE_EN_SRC0 | SUN6I_ISP_MODULE_EN_SRC1;
+> +
+> +	if (config->modules_used & SUN6I_ISP_MODULE_BDNF)
+> +		value |= SUN6I_ISP_MODULE_EN_BDNF;
+> +
+> +	/* Bayer stage is always enabled. */
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MODULE_EN_REG, value);
+> +}
+> +
+> +void sun6i_isp_params_configure(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	sun6i_isp_params_configure_base(isp_dev);
+> +
+> +	/* Default config is only applied at the very first stream start. */
+> +	if (state->configured)
+> +		goto complete;
+> +
+> +	 sun6i_isp_params_configure_modules(isp_dev,
+
+Indentation. Doesn't checkpatch.pl complain?
+
+> +					    &sun6i_isp_params_config_default);
+> +
+> +	state->configured = true;
+> +
+> +complete:
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +/* State */
+> +
+> +static void sun6i_isp_params_state_cleanup(struct sun6i_isp_device *isp_dev,
+> +					   bool error)
+> +{
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +	struct sun6i_isp_buffer *isp_buffer;
+> +	struct vb2_buffer *vb2_buffer;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	if (state->pending) {
+> +		vb2_buffer = &state->pending->v4l2_buffer.vb2_buf;
+> +		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
+> +				VB2_BUF_STATE_QUEUED);
+> +	}
+> +
+> +	list_for_each_entry(isp_buffer, &state->queue, list) {
+> +		vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
+> +		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
+> +				VB2_BUF_STATE_QUEUED);
+> +	}
+> +
+> +	INIT_LIST_HEAD(&state->queue);
+> +
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +void sun6i_isp_params_state_update(struct sun6i_isp_device *isp_dev,
+> +				   bool *update)
+> +{
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +	struct sun6i_isp_buffer *isp_buffer;
+> +	struct vb2_buffer *vb2_buffer;
+> +	const struct sun6i_isp_params_config *config;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	if (list_empty(&state->queue))
+> +		goto complete;
+> +
+> +	if (state->pending)
+> +		goto complete;
+> +
+> +	isp_buffer = list_first_entry(&state->queue, struct sun6i_isp_buffer,
+> +				      list);
+> +
+> +	vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
+> +	config = vb2_plane_vaddr(vb2_buffer, 0);
+> +
+> +	sun6i_isp_params_configure_modules(isp_dev, config);
+> +
+> +	list_del(&isp_buffer->list);
+> +
+> +	state->pending = isp_buffer;
+> +
+> +	if (update)
+> +		*update = true;
+> +
+> +complete:
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +void sun6i_isp_params_state_complete(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +	struct sun6i_isp_buffer *isp_buffer;
+> +	struct vb2_buffer *vb2_buffer;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +
+> +	if (!state->pending)
+> +		goto complete;
+> +
+> +	isp_buffer = state->pending;
+> +	vb2_buffer = &isp_buffer->v4l2_buffer.vb2_buf;
+> +
+> +	vb2_buffer->timestamp = ktime_get_ns();
+> +
+> +	/* Parameters will be applied starting from the next frame. */
+> +	isp_buffer->v4l2_buffer.sequence = isp_dev->capture.state.sequence + 1;
+> +
+> +	vb2_buffer_done(vb2_buffer, VB2_BUF_STATE_DONE);
+> +
+> +	state->pending = NULL;
+> +
+> +complete:
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +}
+> +
+> +/* Queue */
+> +
+> +static int sun6i_isp_params_queue_setup(struct vb2_queue *queue,
+> +					unsigned int *buffers_count,
+> +					unsigned int *planes_count,
+> +					unsigned int sizes[],
+> +					struct device *alloc_devs[])
+> +{
+> +	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
+> +	unsigned int size = isp_dev->params.format.fmt.meta.buffersize;
+> +
+> +	if (*planes_count)
+> +		return sizes[0] < size ? -EINVAL : 0;
+> +
+> +	*planes_count = 1;
+> +	sizes[0] = size;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_params_buffer_prepare(struct vb2_buffer *vb2_buffer)
+> +{
+> +	struct sun6i_isp_device *isp_dev =
+> +		vb2_get_drv_priv(vb2_buffer->vb2_queue);
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	unsigned int size = isp_dev->params.format.fmt.meta.buffersize;
+> +
+> +	if (vb2_plane_size(vb2_buffer, 0) < size) {
+> +		v4l2_err(v4l2_dev, "buffer too small (%lu < %u)\n",
+> +			 vb2_plane_size(vb2_buffer, 0), size);
+> +		return -EINVAL;
+> +	}
+> +
+> +	vb2_set_plane_payload(vb2_buffer, 0, size);
+> +
+> +	return 0;
+> +}
+> +
+> +static void sun6i_isp_params_buffer_queue(struct vb2_buffer *vb2_buffer)
+> +{
+> +	struct sun6i_isp_device *isp_dev =
+> +		vb2_get_drv_priv(vb2_buffer->vb2_queue);
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +	struct vb2_v4l2_buffer *v4l2_buffer = to_vb2_v4l2_buffer(vb2_buffer);
+> +	struct sun6i_isp_buffer *isp_buffer =
+> +		container_of(v4l2_buffer, struct sun6i_isp_buffer, v4l2_buffer);
+> +	bool capture_streaming = isp_dev->capture.state.streaming;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&state->lock, flags);
+> +	list_add_tail(&isp_buffer->list, &state->queue);
+> +	spin_unlock_irqrestore(&state->lock, flags);
+> +
+> +	if (state->streaming && capture_streaming)
+> +		sun6i_isp_state_update(isp_dev, false);
+> +}
+> +
+> +static int sun6i_isp_params_start_streaming(struct vb2_queue *queue,
+> +					    unsigned int count)
+> +{
+> +	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +	bool capture_streaming = isp_dev->capture.state.streaming;
+> +
+> +	state->streaming = true;
+> +
+> +	/*
+> +	 * Update the state as soon as possible if capture is streaming,
+> +	 * otherwise it will be applied when capture starts streaming.
+> +	 */
+> +
+> +	if (capture_streaming)
+> +		sun6i_isp_state_update(isp_dev, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static void sun6i_isp_params_stop_streaming(struct vb2_queue *queue)
+> +{
+> +	struct sun6i_isp_device *isp_dev = vb2_get_drv_priv(queue);
+> +	struct sun6i_isp_params_state *state = &isp_dev->params.state;
+> +
+> +	state->streaming = false;
+> +	sun6i_isp_params_state_cleanup(isp_dev, true);
+> +}
+> +
+> +static const struct vb2_ops sun6i_isp_params_queue_ops = {
+> +	.queue_setup		= sun6i_isp_params_queue_setup,
+> +	.buf_prepare		= sun6i_isp_params_buffer_prepare,
+> +	.buf_queue		= sun6i_isp_params_buffer_queue,
+> +	.start_streaming	= sun6i_isp_params_start_streaming,
+> +	.stop_streaming		= sun6i_isp_params_stop_streaming,
+> +	.wait_prepare		= vb2_ops_wait_prepare,
+> +	.wait_finish		= vb2_ops_wait_finish,
+> +};
+> +
+> +/* Video Device */
+> +
+> +static int sun6i_isp_params_querycap(struct file *file, void *private,
+> +				     struct v4l2_capability *capability)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +	struct video_device *video_dev = &isp_dev->params.video_dev;
+> +
+> +	strscpy(capability->driver, SUN6I_ISP_NAME, sizeof(capability->driver));
+> +	strscpy(capability->card, video_dev->name, sizeof(capability->card));
+> +	snprintf(capability->bus_info, sizeof(capability->bus_info),
+> +		 "platform:%s", dev_name(isp_dev->dev));
+
+This is no longer needed with commit
+2a792fd5cf669d379d82354a99998d9ae9ff7d14 .
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_params_enum_fmt(struct file *file, void *private,
+> +				     struct v4l2_fmtdesc *fmtdesc)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +	struct v4l2_meta_format *params_format =
+> +		&isp_dev->params.format.fmt.meta;
+> +
+> +	if (fmtdesc->index > 0)
+> +		return -EINVAL;
+> +
+> +	fmtdesc->pixelformat = params_format->dataformat;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_params_g_fmt(struct file *file, void *private,
+> +				  struct v4l2_format *format)
+> +{
+> +	struct sun6i_isp_device *isp_dev = video_drvdata(file);
+> +
+> +	*format = isp_dev->params.format;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_ioctl_ops sun6i_isp_params_ioctl_ops = {
+> +	.vidioc_querycap		= sun6i_isp_params_querycap,
+> +
+> +	.vidioc_enum_fmt_meta_out	= sun6i_isp_params_enum_fmt,
+> +	.vidioc_g_fmt_meta_out		= sun6i_isp_params_g_fmt,
+> +	.vidioc_s_fmt_meta_out		= sun6i_isp_params_g_fmt,
+> +	.vidioc_try_fmt_meta_out	= sun6i_isp_params_g_fmt,
+> +
+> +	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
+> +	.vidioc_prepare_buf		= vb2_ioctl_prepare_buf,
+> +	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
+> +	.vidioc_querybuf		= vb2_ioctl_querybuf,
+> +	.vidioc_expbuf			= vb2_ioctl_expbuf,
+> +	.vidioc_qbuf			= vb2_ioctl_qbuf,
+> +	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
+> +	.vidioc_streamon		= vb2_ioctl_streamon,
+> +	.vidioc_streamoff		= vb2_ioctl_streamoff,
+> +
+> +	.vidioc_log_status		= v4l2_ctrl_log_status,
+> +	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
+> +	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+> +};
+> +
+> +static const struct v4l2_file_operations sun6i_isp_params_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.unlocked_ioctl	= video_ioctl2,
+> +	.open		= v4l2_fh_open,
+> +	.release	= vb2_fop_release,
+> +	.mmap		= vb2_fop_mmap,
+> +	.poll		= vb2_fop_poll,
+> +};
+> +
+> +/* Params */
+> +
+> +int sun6i_isp_params_setup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_params *params = &isp_dev->params;
+> +	struct sun6i_isp_params_state *state = &params->state;
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	struct v4l2_subdev *proc_subdev = &isp_dev->proc.subdev;
+> +	struct video_device *video_dev = &params->video_dev;
+> +	struct vb2_queue *queue = &isp_dev->params.queue;
+> +	struct media_pad *pad = &isp_dev->params.pad;
+> +	struct v4l2_format *format = &isp_dev->params.format;
+> +	struct v4l2_meta_format *params_format = &format->fmt.meta;
+> +	int ret;
+> +
+> +	/* State */
+> +
+> +	INIT_LIST_HEAD(&state->queue);
+> +	spin_lock_init(&state->lock);
+> +
+> +	/* Media Pads */
+> +
+> +	pad->flags = MEDIA_PAD_FL_SOURCE | MEDIA_PAD_FL_MUST_CONNECT;
+> +
+> +	ret = media_entity_pads_init(&video_dev->entity, 1, pad);
+> +	if (ret)
+> +		goto error_mutex;
+> +
+> +	/* Queue */
+> +
+> +	mutex_init(&params->lock);
+> +
+> +	queue->type = V4L2_BUF_TYPE_META_OUTPUT;
+> +	queue->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
+> +	queue->buf_struct_size = sizeof(struct sun6i_isp_buffer);
+> +	queue->ops = &sun6i_isp_params_queue_ops;
+> +	queue->mem_ops = &vb2_vmalloc_memops;
+> +	queue->min_buffers_needed = 1;
+> +	queue->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+> +	queue->lock = &params->lock;
+> +	queue->dev = isp_dev->dev;
+> +	queue->drv_priv = isp_dev;
+> +
+> +	ret = vb2_queue_init(queue);
+> +	if (ret) {
+> +		v4l2_err(v4l2_dev, "failed to initialize vb2 queue: %d\n", ret);
+> +		goto error_media_entity;
+> +	}
+> +
+> +	/* V4L2 Format */
+> +
+> +	format->type = queue->type;
+> +	params_format->dataformat = V4L2_META_FMT_SUN6I_ISP_PARAMS;
+> +	params_format->buffersize = sizeof(struct sun6i_isp_params_config);
+> +
+> +	/* Video Device */
+> +
+> +	strscpy(video_dev->name, SUN6I_ISP_PARAMS_NAME,
+> +		sizeof(video_dev->name));
+> +	video_dev->device_caps = V4L2_CAP_META_OUTPUT | V4L2_CAP_STREAMING;
+> +	video_dev->vfl_dir = VFL_DIR_TX;
+> +	video_dev->release = video_device_release_empty;
+> +	video_dev->fops = &sun6i_isp_params_fops;
+> +	video_dev->ioctl_ops = &sun6i_isp_params_ioctl_ops;
+> +	video_dev->v4l2_dev = v4l2_dev;
+> +	video_dev->queue = queue;
+> +	video_dev->lock = &params->lock;
+> +
+> +	video_set_drvdata(video_dev, isp_dev);
+> +
+> +	ret = video_register_device(video_dev, VFL_TYPE_VIDEO, -1);
+> +	if (ret) {
+> +		v4l2_err(v4l2_dev, "failed to register video device: %d\n",
+> +			 ret);
+> +		goto error_media_entity;
+> +	}
+> +
+> +	v4l2_info(v4l2_dev, "device %s registered as %s\n", video_dev->name,
+> +		  video_device_node_name(video_dev));
+> +
+> +	/* Media Pad Link */
+> +
+> +	ret = media_create_pad_link(&video_dev->entity, 0,
+> +				    &proc_subdev->entity,
+> +				    SUN6I_ISP_PROC_PAD_SINK_PARAMS,
+> +				    MEDIA_LNK_FL_ENABLED |
+> +				    MEDIA_LNK_FL_IMMUTABLE);
+> +	if (ret < 0) {
+> +		v4l2_err(v4l2_dev, "failed to create %s:%u -> %s:%u link\n",
+> +			 video_dev->entity.name, 0, proc_subdev->entity.name,
+> +			 SUN6I_ISP_PROC_PAD_SINK_PARAMS);
+> +		goto error_video_device;
+> +	}
+> +
+> +	return 0;
+> +
+> +error_video_device:
+> +	vb2_video_unregister_device(video_dev);
+> +
+> +error_media_entity:
+> +	media_entity_cleanup(&video_dev->entity);
+> +
+> +error_mutex:
+> +	mutex_destroy(&params->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +void sun6i_isp_params_cleanup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct sun6i_isp_params *params = &isp_dev->params;
+> +	struct video_device *video_dev = &params->video_dev;
+> +
+> +	vb2_video_unregister_device(video_dev);
+> +	media_entity_cleanup(&video_dev->entity);
+> +	mutex_destroy(&params->lock);
+> +}
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
+> new file mode 100644
+> index 000000000000..50f10f879c42
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.h
+> @@ -0,0 +1,52 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#ifndef _SUN6I_ISP_PARAMS_H_
+> +#define _SUN6I_ISP_PARAMS_H_
+> +
+> +#include <media/v4l2-device.h>
+> +
+> +#define SUN6I_ISP_PARAMS_NAME		"sun6i-isp-params"
+> +
+> +struct sun6i_isp_device;
+> +
+> +struct sun6i_isp_params_state {
+> +	struct list_head		queue; /* Queue and buffers lock. */
+> +	spinlock_t			lock;
+> +
+> +	struct sun6i_isp_buffer		*pending;
+> +
+> +	bool				configured;
+> +	bool				streaming;
+> +};
+> +
+> +struct sun6i_isp_params {
+> +	struct sun6i_isp_params_state	state;
+> +
+> +	struct video_device		video_dev;
+> +	struct vb2_queue		queue;
+> +	struct mutex			lock; /* Queue lock. */
+> +	struct media_pad		pad;
+> +
+> +	struct v4l2_format		format;
+> +};
+> +
+> +/* Params */
+> +
+> +void sun6i_isp_params_configure(struct sun6i_isp_device *isp_dev);
+> +
+> +/* State */
+> +
+> +void sun6i_isp_params_state_update(struct sun6i_isp_device *isp_dev,
+> +				   bool *update);
+> +void sun6i_isp_params_state_complete(struct sun6i_isp_device *isp_dev);
+> +
+> +/* Params */
+> +
+> +int sun6i_isp_params_setup(struct sun6i_isp_device *isp_dev);
+> +void sun6i_isp_params_cleanup(struct sun6i_isp_device *isp_dev);
+> +
+> +#endif
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
+> new file mode 100644
+> index 000000000000..edaf5ee8b61c
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c
+> @@ -0,0 +1,578 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-fwnode.h>
+> +
+> +#include "sun6i_isp.h"
+> +#include "sun6i_isp_capture.h"
+> +#include "sun6i_isp_params.h"
+> +#include "sun6i_isp_proc.h"
+> +#include "sun6i_isp_reg.h"
+> +
+> +/* Helpers */
+> +
+> +void sun6i_isp_proc_dimensions(struct sun6i_isp_device *isp_dev,
+> +			       unsigned int *width, unsigned int *height)
+> +{
+> +	if (width)
+> +		*width = isp_dev->proc.mbus_format.width;
+> +	if (height)
+> +		*height = isp_dev->proc.mbus_format.height;
+> +}
+> +
+> +/* Format */
+> +
+> +static const struct sun6i_isp_proc_format sun6i_isp_proc_formats[] = {
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SBGGR8_1X8,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_BGGR,
+> +	},
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SGBRG8_1X8,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GBRG,
+> +	},
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SGRBG8_1X8,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GRBG,
+> +	},
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SRGGB8_1X8,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_RGGB,
+> +	},
+> +
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SBGGR10_1X10,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_BGGR,
+> +	},
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SGBRG10_1X10,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GBRG,
+> +	},
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SGRBG10_1X10,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_GRBG,
+> +	},
+> +	{
+> +		.mbus_code	= MEDIA_BUS_FMT_SRGGB10_1X10,
+> +		.input_format	= SUN6I_ISP_INPUT_FMT_RAW_RGGB,
+> +	},
+> +};
+> +
+> +const struct sun6i_isp_proc_format *sun6i_isp_proc_format_find(u32 mbus_code)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sun6i_isp_proc_formats); i++)
+> +		if (sun6i_isp_proc_formats[i].mbus_code == mbus_code)
+> +			return &sun6i_isp_proc_formats[i];
+> +
+> +	return NULL;
+> +}
+> +
+> +/* Processor */
+> +
+> +static void sun6i_isp_proc_irq_enable(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct regmap *regmap = isp_dev->regmap;
+> +
+> +	regmap_write(regmap, SUN6I_ISP_FE_INT_EN_REG,
+> +		     SUN6I_ISP_FE_INT_EN_FINISH |
+> +		     SUN6I_ISP_FE_INT_EN_START |
+> +		     SUN6I_ISP_FE_INT_EN_PARA_SAVE |
+> +		     SUN6I_ISP_FE_INT_EN_PARA_LOAD |
+> +		     SUN6I_ISP_FE_INT_EN_SRC0_FIFO |
+> +		     SUN6I_ISP_FE_INT_EN_ROT_FINISH);
+> +}
+> +
+> +static void sun6i_isp_proc_irq_disable(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct regmap *regmap = isp_dev->regmap;
+> +
+> +	regmap_write(regmap, SUN6I_ISP_FE_INT_EN_REG, 0);
+> +}
+> +
+> +static void sun6i_isp_proc_irq_clear(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct regmap *regmap = isp_dev->regmap;
+> +
+> +	regmap_write(regmap, SUN6I_ISP_FE_INT_EN_REG, 0);
+> +	regmap_write(regmap, SUN6I_ISP_FE_INT_STA_REG,
+> +		     SUN6I_ISP_FE_INT_STA_CLEAR);
+> +}
+> +
+> +static void sun6i_isp_proc_enable(struct sun6i_isp_device *isp_dev,
+> +				  struct sun6i_isp_proc_source *source)
+> +{
+> +	struct sun6i_isp_proc *proc = &isp_dev->proc;
+> +	struct regmap *regmap = isp_dev->regmap;
+> +	u8 mode;
+> +
+> +	/* Frontend */
+> +
+> +	if (source == &proc->source_csi0)
+> +		mode = SUN6I_ISP_SRC_MODE_CSI(0);
+> +	else
+> +		mode = SUN6I_ISP_SRC_MODE_CSI(1);
+> +
+> +	regmap_write(regmap, SUN6I_ISP_FE_CFG_REG,
+> +		     SUN6I_ISP_FE_CFG_EN | SUN6I_ISP_FE_CFG_SRC0_MODE(mode));
+> +
+> +	regmap_write(regmap, SUN6I_ISP_FE_CTRL_REG,
+> +		     SUN6I_ISP_FE_CTRL_VCAP_EN | SUN6I_ISP_FE_CTRL_PARA_READY);
+> +}
+> +
+> +static void sun6i_isp_proc_disable(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct regmap *regmap = isp_dev->regmap;
+> +
+> +	/* Frontend */
+> +
+> +	regmap_write(regmap, SUN6I_ISP_FE_CTRL_REG, 0);
+> +	regmap_write(regmap, SUN6I_ISP_FE_CFG_REG, 0);
+> +}
+> +
+> +static void sun6i_isp_proc_configure(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct v4l2_mbus_framefmt *mbus_format = &isp_dev->proc.mbus_format;
+> +	const struct sun6i_isp_proc_format *format;
+> +	u32 value;
+> +
+> +	/* Module */
+> +
+> +	value = sun6i_isp_load_read(isp_dev, SUN6I_ISP_MODULE_EN_REG);
+> +	value |= SUN6I_ISP_MODULE_EN_SRC0;
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MODULE_EN_REG, value);
+> +
+> +	/* Input */
+> +
+> +	format = sun6i_isp_proc_format_find(mbus_format->code);
+> +	if (WARN_ON(!format))
+> +		return;
+> +
+> +	sun6i_isp_load_write(isp_dev, SUN6I_ISP_MODE_REG,
+> +			     SUN6I_ISP_MODE_INPUT_FMT(format->input_format) |
+> +			     SUN6I_ISP_MODE_INPUT_YUV_SEQ(format->input_yuv_seq) |
+> +			     SUN6I_ISP_MODE_SHARP(1) |
+> +			     SUN6I_ISP_MODE_HIST(2));
+> +}
+> +
+> +/* V4L2 Subdev */
+> +
+> +static int sun6i_isp_proc_s_stream(struct v4l2_subdev *subdev, int on)
+> +{
+> +	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
+> +	struct sun6i_isp_proc *proc = &isp_dev->proc;
+> +	struct media_entity *proc_entity = &proc->subdev.entity;
+> +	struct device *dev = isp_dev->dev;
+> +	struct sun6i_isp_proc_source *source;
+> +	struct v4l2_subdev *source_subdev;
+> +	struct media_link *link;
+> +	/* Initialize to 0 to use both in disable label (ret != 0) and off. */
+> +	int ret = 0;
+> +
+> +	/* Source */
+> +
+> +	link = media_entity_get_single_enabled_link(proc_entity,
+> +						    SUN6I_ISP_PROC_PAD_SINK_CSI);
+> +	if (IS_ERR(link)) {
+> +		dev_err(dev,
+> +			"zero or more than a single source connected to the bridge\n");
+> +		return PTR_ERR(link);
+> +	}
+> +
+> +	source_subdev = media_entity_to_v4l2_subdev(link->source->entity);
+> +
+> +	if (source_subdev == proc->source_csi0.subdev)
+> +		source = &proc->source_csi0;
+> +	else
+> +		source = &proc->source_csi1;
+> +
+> +	if (!on) {
+> +		sun6i_isp_proc_irq_disable(isp_dev);
+> +		v4l2_subdev_call(source_subdev, video, s_stream, 0);
+> +		goto disable;
+> +	}
+> +
+> +	/* PM */
+> +
+> +	ret = pm_runtime_resume_and_get(dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Clear */
+> +
+> +	sun6i_isp_proc_irq_clear(isp_dev);
+> +
+> +	/* Configure */
+> +
+> +	sun6i_isp_tables_configure(isp_dev);
+> +	sun6i_isp_params_configure(isp_dev);
+> +	sun6i_isp_proc_configure(isp_dev);
+> +	sun6i_isp_capture_configure(isp_dev);
+> +
+> +	/* State Update */
+> +
+> +	sun6i_isp_state_update(isp_dev, true);
+> +
+> +	/* Enable */
+> +
+> +	sun6i_isp_proc_irq_enable(isp_dev);
+> +	sun6i_isp_proc_enable(isp_dev, source);
+> +
+> +	ret = v4l2_subdev_call(source_subdev, video, s_stream, 1);
+> +	if (ret && ret != -ENOIOCTLCMD) {
+> +		sun6i_isp_proc_irq_disable(isp_dev);
+> +		goto disable;
+> +	}
+> +
+> +	return 0;
+> +
+> +disable:
+> +	sun6i_isp_proc_disable(isp_dev);
+> +
+> +	pm_runtime_put(dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_subdev_video_ops sun6i_isp_proc_video_ops = {
+> +	.s_stream	= sun6i_isp_proc_s_stream,
+> +};
+> +
+> +static void
+> +sun6i_isp_proc_mbus_format_prepare(struct v4l2_mbus_framefmt *mbus_format)
+> +{
+> +	if (!sun6i_isp_proc_format_find(mbus_format->code))
+> +		mbus_format->code = sun6i_isp_proc_formats[0].mbus_code;
+> +
+> +	mbus_format->field = V4L2_FIELD_NONE;
+> +	mbus_format->colorspace = V4L2_COLORSPACE_RAW;
+> +	mbus_format->quantization = V4L2_QUANTIZATION_DEFAULT;
+> +	mbus_format->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+> +}
+> +
+> +static int sun6i_isp_proc_init_cfg(struct v4l2_subdev *subdev,
+> +				   struct v4l2_subdev_state *state)
+> +{
+> +	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
+> +	unsigned int pad = SUN6I_ISP_PROC_PAD_SINK_CSI;
+> +	struct v4l2_mbus_framefmt *mbus_format =
+> +		v4l2_subdev_get_try_format(subdev, state, pad);
+> +	struct mutex *lock = &isp_dev->proc.lock;
+> +
+> +	mutex_lock(lock);
+> +
+> +	mbus_format->code = sun6i_isp_proc_formats[0].mbus_code;
+> +	mbus_format->width = 1280;
+> +	mbus_format->height = 720;
+> +
+> +	sun6i_isp_proc_mbus_format_prepare(mbus_format);
+> +
+> +	mutex_unlock(lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +sun6i_isp_proc_enum_mbus_code(struct v4l2_subdev *subdev,
+> +			      struct v4l2_subdev_state *state,
+> +			      struct v4l2_subdev_mbus_code_enum *code_enum)
+> +{
+> +	if (code_enum->index >= ARRAY_SIZE(sun6i_isp_proc_formats))
+> +		return -EINVAL;
+> +
+> +	code_enum->code = sun6i_isp_proc_formats[code_enum->index].mbus_code;
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_proc_get_fmt(struct v4l2_subdev *subdev,
+> +				  struct v4l2_subdev_state *state,
+> +				  struct v4l2_subdev_format *format)
+> +{
+> +	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
+> +	struct v4l2_mbus_framefmt *mbus_format = &format->format;
+> +	struct mutex *lock = &isp_dev->proc.lock;
+> +
+> +	mutex_lock(lock);
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+> +		*mbus_format = *v4l2_subdev_get_try_format(subdev, state,
+> +							   format->pad);
+> +	else
+> +		*mbus_format = isp_dev->proc.mbus_format;
+> +
+> +	mutex_unlock(lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_proc_set_fmt(struct v4l2_subdev *subdev,
+> +				  struct v4l2_subdev_state *state,
+> +				  struct v4l2_subdev_format *format)
+> +{
+> +	struct sun6i_isp_device *isp_dev = v4l2_get_subdevdata(subdev);
+> +	struct v4l2_mbus_framefmt *mbus_format = &format->format;
+> +	struct mutex *lock = &isp_dev->proc.lock;
+> +
+> +	mutex_lock(lock);
+> +
+> +	sun6i_isp_proc_mbus_format_prepare(mbus_format);
+> +
+> +	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+> +		*v4l2_subdev_get_try_format(subdev, state, format->pad) =
+> +			*mbus_format;
+> +	else
+> +		isp_dev->proc.mbus_format = *mbus_format;
+> +
+> +	mutex_unlock(lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_subdev_pad_ops sun6i_isp_proc_pad_ops = {
+> +	.init_cfg	= sun6i_isp_proc_init_cfg,
+> +	.enum_mbus_code	= sun6i_isp_proc_enum_mbus_code,
+> +	.get_fmt	= sun6i_isp_proc_get_fmt,
+> +	.set_fmt	= sun6i_isp_proc_set_fmt,
+> +};
+> +
+> +const struct v4l2_subdev_ops sun6i_isp_proc_subdev_ops = {
+
+This can be static, can't it?
+
+> +	.video	= &sun6i_isp_proc_video_ops,
+> +	.pad	= &sun6i_isp_proc_pad_ops,
+> +};
+> +
+> +/* Media Entity */
+> +
+> +static const struct media_entity_operations sun6i_isp_proc_entity_ops = {
+> +	.link_validate	= v4l2_subdev_link_validate,
+> +};
+> +
+> +/* V4L2 Async */
+> +
+> +static int sun6i_isp_proc_link(struct sun6i_isp_device *isp_dev,
+> +			       int sink_pad_index,
+> +			       struct v4l2_subdev *remote_subdev, bool enabled)
+> +{
+> +	struct device *dev = isp_dev->dev;
+> +	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
+> +	struct media_entity *sink_entity = &subdev->entity;
+> +	struct media_entity *source_entity = &remote_subdev->entity;
+> +	int source_pad_index;
+> +	int ret;
+> +
+> +	/* Get the first remote source pad. */
+> +	ret = media_entity_get_fwnode_pad(source_entity, remote_subdev->fwnode,
+> +					  MEDIA_PAD_FL_SOURCE);
+> +	if (ret < 0) {
+> +		dev_err(dev, "missing source pad in external entity %s\n",
+> +			source_entity->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	source_pad_index = ret;
+> +
+> +	dev_dbg(dev, "creating %s:%u -> %s:%u link\n", source_entity->name,
+> +		source_pad_index, sink_entity->name, sink_pad_index);
+> +
+> +	ret = media_create_pad_link(source_entity, source_pad_index,
+> +				    sink_entity, sink_pad_index,
+> +				    enabled ? MEDIA_LNK_FL_ENABLED : 0);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to create %s:%u -> %s:%u link\n",
+> +			source_entity->name, source_pad_index,
+> +			sink_entity->name, sink_pad_index);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun6i_isp_proc_notifier_bound(struct v4l2_async_notifier *notifier,
+> +					 struct v4l2_subdev *remote_subdev,
+> +					 struct v4l2_async_subdev *async_subdev)
+> +{
+> +	struct sun6i_isp_device *isp_dev =
+> +		container_of(notifier, struct sun6i_isp_device, proc.notifier);
+> +	struct sun6i_isp_proc_async_subdev *proc_async_subdev =
+> +		container_of(async_subdev, struct sun6i_isp_proc_async_subdev,
+> +			     async_subdev);
+> +	struct sun6i_isp_proc *proc = &isp_dev->proc;
+> +	struct sun6i_isp_proc_source *source = proc_async_subdev->source;
+> +	bool enabled;
+> +
+> +	switch (source->endpoint.base.port) {
+> +	case SUN6I_ISP_PORT_CSI0:
+> +		source = &proc->source_csi0;
+> +		enabled = true;
+> +		break;
+> +	case SUN6I_ISP_PORT_CSI1:
+> +		source = &proc->source_csi1;
+> +		enabled = !proc->source_csi0.expected;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	source->subdev = remote_subdev;
+> +
+> +	return sun6i_isp_proc_link(isp_dev, SUN6I_ISP_PROC_PAD_SINK_CSI,
+> +				   remote_subdev, enabled);
+> +}
+> +
+> +static int
+> +sun6i_isp_proc_notifier_complete(struct v4l2_async_notifier *notifier)
+> +{
+> +	struct sun6i_isp_device *isp_dev =
+> +		container_of(notifier, struct sun6i_isp_device, proc.notifier);
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	int ret;
+> +
+> +	ret = v4l2_device_register_subdev_nodes(v4l2_dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_async_notifier_operations
+> +sun6i_isp_proc_notifier_ops = {
+> +	.bound		= sun6i_isp_proc_notifier_bound,
+> +	.complete	= sun6i_isp_proc_notifier_complete,
+> +};
+> +
+> +/* Processor */
+> +
+> +static int sun6i_isp_proc_source_setup(struct sun6i_isp_device *isp_dev,
+> +				       struct sun6i_isp_proc_source *source,
+> +				       u32 port)
+> +{
+> +	struct device *dev = isp_dev->dev;
+> +	struct v4l2_async_notifier *notifier = &isp_dev->proc.notifier;
+> +	struct v4l2_fwnode_endpoint *endpoint = &source->endpoint;
+> +	struct sun6i_isp_proc_async_subdev *proc_async_subdev;
+> +	struct fwnode_handle *handle = NULL;
+> +	int ret;
+> +
+> +	handle = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), port, 0, 0);
+> +	if (!handle)
+> +		return -ENODEV;
+> +
+> +	ret = v4l2_fwnode_endpoint_parse(handle, endpoint);
+> +	if (ret)
+> +		goto complete;
+> +
+> +	proc_async_subdev =
+> +		v4l2_async_nf_add_fwnode_remote(notifier, handle,
+> +						struct
+> +						sun6i_isp_proc_async_subdev);
+> +	if (IS_ERR(proc_async_subdev)) {
+> +		ret = PTR_ERR(proc_async_subdev);
+> +		goto complete;
+> +	}
+> +
+> +	proc_async_subdev->source = source;
+> +
+> +	source->expected = true;
+> +
+> +complete:
+> +	fwnode_handle_put(handle);
+> +
+> +	return ret;
+> +}
+> +
+> +int sun6i_isp_proc_setup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct device *dev = isp_dev->dev;
+> +	struct sun6i_isp_proc *proc = &isp_dev->proc;
+> +	struct v4l2_device *v4l2_dev = &isp_dev->v4l2.v4l2_dev;
+> +	struct v4l2_async_notifier *notifier = &proc->notifier;
+> +	struct v4l2_subdev *subdev = &proc->subdev;
+> +	struct media_pad *pads = proc->pads;
+> +	int ret;
+> +
+> +	mutex_init(&proc->lock);
+> +
+> +	/* V4L2 Subdev */
+> +
+> +	v4l2_subdev_init(subdev, &sun6i_isp_proc_subdev_ops);
+> +	strscpy(subdev->name, SUN6I_ISP_PROC_NAME, sizeof(subdev->name));
+> +	subdev->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	subdev->owner = THIS_MODULE;
+> +	subdev->dev = dev;
+> +
+> +	v4l2_set_subdevdata(subdev, isp_dev);
+> +
+> +	/* Media Entity */
+> +
+> +	subdev->entity.function = MEDIA_ENT_F_PROC_VIDEO_ISP;
+> +	subdev->entity.ops = &sun6i_isp_proc_entity_ops;
+> +
+> +	/* Media Pads */
+> +
+> +	pads[SUN6I_ISP_PROC_PAD_SINK_CSI].flags = MEDIA_PAD_FL_SINK |
+> +						  MEDIA_PAD_FL_MUST_CONNECT;
+> +	pads[SUN6I_ISP_PROC_PAD_SINK_PARAMS].flags = MEDIA_PAD_FL_SINK |
+> +						     MEDIA_PAD_FL_MUST_CONNECT;
+> +	pads[SUN6I_ISP_PROC_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+> +
+> +	ret = media_entity_pads_init(&subdev->entity, SUN6I_ISP_PROC_PAD_COUNT,
+> +				     pads);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* V4L2 Subdev */
+> +
+> +	ret = v4l2_device_register_subdev(v4l2_dev, subdev);
+> +	if (ret < 0) {
+> +		v4l2_err(v4l2_dev, "failed to register v4l2 subdev: %d\n", ret);
+> +		goto error_media_entity;
+> +	}
+> +
+> +	/* V4L2 Async */
+> +
+> +	v4l2_async_nf_init(notifier);
+> +	notifier->ops = &sun6i_isp_proc_notifier_ops;
+> +
+> +	sun6i_isp_proc_source_setup(isp_dev, &proc->source_csi0,
+> +				    SUN6I_ISP_PORT_CSI0);
+> +	sun6i_isp_proc_source_setup(isp_dev, &proc->source_csi1,
+> +				    SUN6I_ISP_PORT_CSI1);
+> +
+> +	ret = v4l2_async_nf_register(v4l2_dev, notifier);
+> +	if (ret) {
+> +		v4l2_err(v4l2_dev,
+> +			 "failed to register v4l2 async notifier: %d\n", ret);
+> +		goto error_v4l2_async_notifier;
+> +	}
+> +
+> +	return 0;
+> +
+> +error_v4l2_async_notifier:
+> +	v4l2_async_nf_cleanup(notifier);
+> +
+> +	v4l2_device_unregister_subdev(subdev);
+> +
+> +error_media_entity:
+> +	media_entity_cleanup(&subdev->entity);
+> +
+> +	return ret;
+> +}
+> +
+> +void sun6i_isp_proc_cleanup(struct sun6i_isp_device *isp_dev)
+> +{
+> +	struct v4l2_async_notifier *notifier = &isp_dev->proc.notifier;
+> +	struct v4l2_subdev *subdev = &isp_dev->proc.subdev;
+> +
+> +	v4l2_async_nf_unregister(notifier);
+> +	v4l2_async_nf_cleanup(notifier);
+> +
+> +	v4l2_device_unregister_subdev(subdev);
+> +	media_entity_cleanup(&subdev->entity);
+> +}
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
+> new file mode 100644
+> index 000000000000..c5c274e21ad5
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.h
+> @@ -0,0 +1,66 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#ifndef _SUN6I_ISP_PROC_H_
+> +#define _SUN6I_ISP_PROC_H_
+> +
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-fwnode.h>
+> +
+> +#define SUN6I_ISP_PROC_NAME		"sun6i-isp-proc"
+> +
+> +enum sun6i_isp_proc_pad {
+> +	SUN6I_ISP_PROC_PAD_SINK_CSI	= 0,
+> +	SUN6I_ISP_PROC_PAD_SINK_PARAMS	= 1,
+> +	SUN6I_ISP_PROC_PAD_SOURCE	= 2,
+> +	SUN6I_ISP_PROC_PAD_COUNT	= 3,
+> +};
+> +
+> +struct sun6i_isp_device;
+> +
+> +struct sun6i_isp_proc_format {
+> +	u32	mbus_code;
+> +	u8	input_format;
+> +	u8	input_yuv_seq;
+> +};
+> +
+> +struct sun6i_isp_proc_source {
+> +	struct v4l2_subdev		*subdev;
+> +	struct v4l2_fwnode_endpoint	endpoint;
+> +	bool				expected;
+> +};
+> +
+> +struct sun6i_isp_proc_async_subdev {
+> +	struct v4l2_async_subdev	async_subdev;
+> +	struct sun6i_isp_proc_source	*source;
+> +};
+> +
+> +struct sun6i_isp_proc {
+> +	struct v4l2_subdev		subdev;
+> +	struct media_pad		pads[3];
+> +	struct v4l2_async_notifier	notifier;
+> +	struct v4l2_mbus_framefmt	mbus_format;
+> +	struct mutex			lock; /* Mbus format lock. */
+> +
+> +	struct sun6i_isp_proc_source	source_csi0;
+> +	struct sun6i_isp_proc_source	source_csi1;
+> +};
+> +
+> +/* Helpers */
+> +
+> +void sun6i_isp_proc_dimensions(struct sun6i_isp_device *isp_dev,
+> +			       unsigned int *width, unsigned int *height);
+> +
+> +/* Format */
+> +
+> +const struct sun6i_isp_proc_format *sun6i_isp_proc_format_find(u32 mbus_code);
+> +
+> +/* Proc */
+> +
+> +int sun6i_isp_proc_setup(struct sun6i_isp_device *isp_dev);
+> +void sun6i_isp_proc_cleanup(struct sun6i_isp_device *isp_dev);
+> +
+> +#endif
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
+> new file mode 100644
+> index 000000000000..83b9cdab2134
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_reg.h
+> @@ -0,0 +1,275 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Copyright 2021-2022 Bootlin
+> + * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> + */
+> +
+> +#ifndef _SUN6I_ISP_REG_H_
+> +#define _SUN6I_ISP_REG_H_
+> +
+> +#include <linux/kernel.h>
+> +
+> +#define SUN6I_ISP_ADDR_VALUE(a)			((a) >> 2)
+> +
+> +/* Frontend */
+> +
+> +#define SUN6I_ISP_SRC_MODE_DRAM			0
+> +#define SUN6I_ISP_SRC_MODE_CSI(n)		(1 + (n))
+> +
+> +#define SUN6I_ISP_FE_CFG_REG			0x0
+> +#define SUN6I_ISP_FE_CFG_EN			BIT(0)
+> +#define SUN6I_ISP_FE_CFG_SRC0_MODE(v)		(((v) << 8) & GENMASK(9, 8))
+> +#define SUN6I_ISP_FE_CFG_SRC1_MODE(v)		(((v) << 16) & GENMASK(17, 16))
+> +
+> +#define SUN6I_ISP_FE_CTRL_REG			0x4
+> +#define SUN6I_ISP_FE_CTRL_SCAP_EN		BIT(0)
+> +#define SUN6I_ISP_FE_CTRL_VCAP_EN		BIT(1)
+> +#define SUN6I_ISP_FE_CTRL_PARA_READY		BIT(2)
+> +#define SUN6I_ISP_FE_CTRL_LUT_UPDATE		BIT(3)
+> +#define SUN6I_ISP_FE_CTRL_LENS_UPDATE		BIT(4)
+> +#define SUN6I_ISP_FE_CTRL_GAMMA_UPDATE		BIT(5)
+> +#define SUN6I_ISP_FE_CTRL_DRC_UPDATE		BIT(6)
+> +#define SUN6I_ISP_FE_CTRL_DISC_UPDATE		BIT(7)
+> +#define SUN6I_ISP_FE_CTRL_OUTPUT_SPEED_CTRL(v)	(((v) << 16) & GENMASK(17, 16))
+> +#define SUN6I_ISP_FE_CTRL_VCAP_READ_START	BIT(31)
+> +
+> +#define SUN6I_ISP_FE_INT_EN_REG			0x8
+> +#define SUN6I_ISP_FE_INT_EN_FINISH		BIT(0)
+> +#define SUN6I_ISP_FE_INT_EN_START		BIT(1)
+> +#define SUN6I_ISP_FE_INT_EN_PARA_SAVE		BIT(2)
+> +#define SUN6I_ISP_FE_INT_EN_PARA_LOAD		BIT(3)
+> +#define SUN6I_ISP_FE_INT_EN_SRC0_FIFO		BIT(4)
+> +#define SUN6I_ISP_FE_INT_EN_SRC1_FIFO		BIT(5)
+> +#define SUN6I_ISP_FE_INT_EN_ROT_FINISH		BIT(6)
+> +#define SUN6I_ISP_FE_INT_EN_LINE_NUM_START	BIT(7)
+> +
+> +#define SUN6I_ISP_FE_INT_STA_REG		0xc
+> +#define SUN6I_ISP_FE_INT_STA_CLEAR		0xff
+> +#define SUN6I_ISP_FE_INT_STA_FINISH		BIT(0)
+> +#define SUN6I_ISP_FE_INT_STA_START		BIT(1)
+> +#define SUN6I_ISP_FE_INT_STA_PARA_SAVE		BIT(2)
+> +#define SUN6I_ISP_FE_INT_STA_PARA_LOAD		BIT(3)
+> +#define SUN6I_ISP_FE_INT_STA_SRC0_FIFO		BIT(4)
+> +#define SUN6I_ISP_FE_INT_STA_SRC1_FIFO		BIT(5)
+> +#define SUN6I_ISP_FE_INT_STA_ROT_FINISH		BIT(6)
+> +#define SUN6I_ISP_FE_INT_STA_LINE_NUM_START	BIT(7)
+> +
+> +/* Only since sun9i-a80-isp. */
+> +#define SUN6I_ISP_FE_INT_LINE_NUM_REG		0x18
+> +#define SUN6I_ISP_FE_ROT_OF_CFG_REG		0x1c
+> +
+> +/* Buffers/tables */
+> +
+> +#define SUN6I_ISP_REG_LOAD_ADDR_REG		0x20
+> +#define SUN6I_ISP_REG_SAVE_ADDR_REG		0x24
+> +
+> +#define SUN6I_ISP_LUT_TABLE_ADDR_REG		0x28
+> +#define SUN6I_ISP_DRC_TABLE_ADDR_REG		0x2c
+> +#define SUN6I_ISP_STATS_ADDR_REG		0x30
+> +
+> +/* SRAM */
+> +
+> +#define SUN6I_ISP_SRAM_RW_OFFSET_REG		0x38
+> +#define SUN6I_ISP_SRAM_RW_DATA_REG		0x3c
+> +
+> +/* Global */
+> +
+> +#define SUN6I_ISP_MODULE_EN_REG			0x40
+> +#define SUN6I_ISP_MODULE_EN_AE			BIT(0)
+> +#define SUN6I_ISP_MODULE_EN_OBC			BIT(1)
+> +#define SUN6I_ISP_MODULE_EN_DPC_LUT		BIT(2)
+> +#define SUN6I_ISP_MODULE_EN_DPC_OTF		BIT(3)
+> +#define SUN6I_ISP_MODULE_EN_BDNF		BIT(4)
+> +#define SUN6I_ISP_MODULE_EN_AWB			BIT(6)
+> +#define SUN6I_ISP_MODULE_EN_WB			BIT(7)
+> +#define SUN6I_ISP_MODULE_EN_LSC			BIT(8)
+> +#define SUN6I_ISP_MODULE_EN_BGC			BIT(9)
+> +#define SUN6I_ISP_MODULE_EN_SAP			BIT(10)
+> +#define SUN6I_ISP_MODULE_EN_AF			BIT(11)
+> +#define SUN6I_ISP_MODULE_EN_RGB2RGB		BIT(12)
+> +#define SUN6I_ISP_MODULE_EN_RGB_DRC		BIT(13)
+> +#define SUN6I_ISP_MODULE_EN_TDNF		BIT(15)
+> +#define SUN6I_ISP_MODULE_EN_AFS			BIT(16)
+> +#define SUN6I_ISP_MODULE_EN_HIST		BIT(17)
+> +#define SUN6I_ISP_MODULE_EN_YUV_GAIN_OFFSET	BIT(18)
+> +#define SUN6I_ISP_MODULE_EN_YUV_DRC		BIT(19)
+> +#define SUN6I_ISP_MODULE_EN_TG			BIT(20)
+> +#define SUN6I_ISP_MODULE_EN_ROT			BIT(21)
+> +#define SUN6I_ISP_MODULE_EN_CONTRAST		BIT(22)
+> +#define SUN6I_ISP_MODULE_EN_SATU		BIT(24)
+> +#define SUN6I_ISP_MODULE_EN_SRC1		BIT(30)
+> +#define SUN6I_ISP_MODULE_EN_SRC0		BIT(31)
+> +
+> +#define SUN6I_ISP_MODE_REG			0x44
+> +#define SUN6I_ISP_MODE_INPUT_FMT(v)		((v) & GENMASK(2, 0))
+> +#define SUN6I_ISP_MODE_INPUT_YUV_SEQ(v)		(((v) << 3) & GENMASK(4, 3))
+> +#define SUN6I_ISP_MODE_OTF_DPC(v)		(((v) << 16) & BIT(16))
+> +#define SUN6I_ISP_MODE_SHARP(v)			(((v) << 17) & BIT(17))
+> +#define SUN6I_ISP_MODE_HIST(v)			(((v) << 20) & GENMASK(21, 20))
+> +
+> +#define SUN6I_ISP_INPUT_FMT_YUV420		0
+> +#define SUN6I_ISP_INPUT_FMT_YUV422		1
+> +#define SUN6I_ISP_INPUT_FMT_RAW_BGGR		4
+> +#define SUN6I_ISP_INPUT_FMT_RAW_RGGB		5
+> +#define SUN6I_ISP_INPUT_FMT_RAW_GBRG		6
+> +#define SUN6I_ISP_INPUT_FMT_RAW_GRBG		7
+> +
+> +#define SUN6I_ISP_INPUT_YUV_SEQ_YUYV		0
+> +#define SUN6I_ISP_INPUT_YUV_SEQ_YVYU		1
+> +#define SUN6I_ISP_INPUT_YUV_SEQ_UYVY		2
+> +#define SUN6I_ISP_INPUT_YUV_SEQ_VYUY		3
+> +
+> +#define SUN6I_ISP_IN_CFG_REG			0x48
+> +#define SUN6I_ISP_IN_CFG_STRIDE_DIV16(v)	((v) & GENMASK(10, 0))
+> +
+> +#define SUN6I_ISP_IN_LUMA_RGB_ADDR0_REG		0x4c
+> +#define SUN6I_ISP_IN_CHROMA_ADDR0_REG		0x50
+> +#define SUN6I_ISP_IN_LUMA_RGB_ADDR1_REG		0x54
+> +#define SUN6I_ISP_IN_CHROMA_ADDR1_REG		0x58
+> +
+> +/* AE */
+> +
+> +#define SUN6I_ISP_AE_CFG_REG			0x60
+> +#define SUN6I_ISP_AE_CFG_LOW_BRI_TH(v)		((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_AE_CFG_HORZ_NUM(v)		(((v) << 12) & GENMASK(15, 12))
+> +#define SUN6I_ISP_AE_CFG_HIGH_BRI_TH(v)		(((v) << 16) & GENMASK(27, 16))
+> +#define SUN6I_ISP_AE_CFG_VERT_NUM(v)		(((v) << 28) & GENMASK(31, 28))
+> +
+> +#define SUN6I_ISP_AE_SIZE_REG			0x64
+> +#define SUN6I_ISP_AE_SIZE_WIDTH(v)		((v) & GENMASK(10, 0))
+> +#define SUN6I_ISP_AE_SIZE_HEIGHT(v)		(((v) << 16) & GENMASK(26, 16))
+> +
+> +#define SUN6I_ISP_AE_POS_REG			0x68
+> +#define SUN6I_ISP_AE_POS_HORZ_START(v)		((v) & GENMASK(10, 0))
+> +#define SUN6I_ISP_AE_POS_VERT_START(v)		(((v) << 16) & GENMASK(26, 16))
+> +
+> +/* OB */
+> +
+> +#define SUN6I_ISP_OB_SIZE_REG			0x78
+> +#define SUN6I_ISP_OB_SIZE_WIDTH(v)		((v) & GENMASK(13, 0))
+> +#define SUN6I_ISP_OB_SIZE_HEIGHT(v)		(((v) << 16) & GENMASK(29, 16))
+> +
+> +#define SUN6I_ISP_OB_VALID_REG			0x7c
+> +#define SUN6I_ISP_OB_VALID_WIDTH(v)		((v) & GENMASK(12, 0))
+> +#define SUN6I_ISP_OB_VALID_HEIGHT(v)		(((v) << 16) & GENMASK(28, 16))
+> +
+> +#define SUN6I_ISP_OB_SRC0_VALID_START_REG	0x80
+> +#define SUN6I_ISP_OB_SRC0_VALID_START_HORZ(v)	((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_OB_SRC0_VALID_START_VERT(v)	(((v) << 16) & GENMASK(27, 16))
+> +
+> +#define SUN6I_ISP_OB_SRC1_VALID_START_REG	0x84
+> +#define SUN6I_ISP_OB_SRC1_VALID_START_HORZ(v)	((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_OB_SRC1_VALID_START_VERT(v)	(((v) << 16) & GENMASK(27, 16))
+> +
+> +#define SUN6I_ISP_OB_SPRITE_REG			0x88
+> +#define SUN6I_ISP_OB_SPRITE_WIDTH(v)		((v) & GENMASK(12, 0))
+> +#define SUN6I_ISP_OB_SPRITE_HEIGHT(v)		(((v) << 16) & GENMASK(28, 16))
+> +
+> +#define SUN6I_ISP_OB_SPRITE_START_REG		0x8c
+> +#define SUN6I_ISP_OB_SPRITE_START_HORZ(v)	((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_OB_SPRITE_START_VERT(v)	(((v) << 16) & GENMASK(27, 16))
+> +
+> +#define SUN6I_ISP_OB_CFG_REG			0x90
+> +#define SUN6I_ISP_OB_HORZ_POS_REG		0x94
+> +#define SUN6I_ISP_OB_VERT_PARA_REG		0x98
+> +#define SUN6I_ISP_OB_OFFSET_FIXED_REG		0x9c
+> +
+> +/* BDNF */
+> +
+> +#define SUN6I_ISP_BDNF_CFG_REG			0xcc
+> +#define SUN6I_ISP_BDNF_CFG_IN_DIS_MIN(v)	((v) & GENMASK(7, 0))
+> +#define SUN6I_ISP_BDNF_CFG_IN_DIS_MAX(v)	(((v) << 16) & GENMASK(23, 16))
+> +
+> +#define SUN6I_ISP_BDNF_COEF_RB_REG		0xd0
+> +#define SUN6I_ISP_BDNF_COEF_RB(i, v)		(((v) << (4 * (i))) & \
+> +						 GENMASK(4 * (i) + 3, 4 * (i)))
+> +
+> +#define SUN6I_ISP_BDNF_COEF_G_REG		0xd4
+> +#define SUN6I_ISP_BDNF_COEF_G(i, v)		(((v) << (4 * (i))) & \
+> +						 GENMASK(4 * (i) + 3, 4 * (i)))
+> +
+> +/* Bayer */
+> +
+> +#define SUN6I_ISP_BAYER_OFFSET0_REG		0xe0
+> +#define SUN6I_ISP_BAYER_OFFSET0_R(v)		((v) & GENMASK(12, 0))
+> +#define SUN6I_ISP_BAYER_OFFSET0_GR(v)		(((v) << 16) & GENMASK(28, 16))
+> +
+> +#define SUN6I_ISP_BAYER_OFFSET1_REG		0xe4
+> +#define SUN6I_ISP_BAYER_OFFSET1_GB(v)		((v) & GENMASK(12, 0))
+> +#define SUN6I_ISP_BAYER_OFFSET1_B(v)		(((v) << 16) & GENMASK(28, 16))
+> +
+> +#define SUN6I_ISP_BAYER_GAIN0_REG		0xe8
+> +#define SUN6I_ISP_BAYER_GAIN0_R(v)		((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_BAYER_GAIN0_GR(v)		(((v) << 16) & GENMASK(27, 16))
+> +
+> +#define SUN6I_ISP_BAYER_GAIN1_REG		0xec
+> +#define SUN6I_ISP_BAYER_GAIN1_GB(v)		((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_BAYER_GAIN1_B(v)		(((v) << 16) & GENMASK(27, 16))
+> +
+> +/* WB */
+> +
+> +#define SUN6I_ISP_WB_GAIN0_REG			0x140
+> +#define SUN6I_ISP_WB_GAIN0_R(v)			((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_WB_GAIN0_GR(v)		(((v) << 16) & GENMASK(27, 16))
+> +
+> +#define SUN6I_ISP_WB_GAIN1_REG			0x144
+> +#define SUN6I_ISP_WB_GAIN1_GB(v)		((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_WB_GAIN1_B(v)			(((v) << 16) & GENMASK(27, 16))
+> +
+> +#define SUN6I_ISP_WB_CFG_REG			0x148
+> +#define SUN6I_ISP_WB_CFG_CLIP(v)		((v) & GENMASK(11, 0))
+> +
+> +/* Global */
+> +
+> +#define SUN6I_ISP_MCH_SIZE_CFG_REG		0x1e0
+> +#define SUN6I_ISP_MCH_SIZE_CFG_WIDTH(v)		((v) & GENMASK(12, 0))
+> +#define SUN6I_ISP_MCH_SIZE_CFG_HEIGHT(v)	(((v) << 16) & GENMASK(28, 16))
+> +
+> +#define SUN6I_ISP_MCH_SCALE_CFG_REG		0x1e4
+> +#define SUN6I_ISP_MCH_SCALE_CFG_X_RATIO(v)	((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_MCH_SCALE_CFG_Y_RATIO(v)	(((v) << 16) & GENMASK(27, 16))
+> +#define SUN6I_ISP_MCH_SCALE_CFG_WEIGHT_SHIFT(v)	(((v) << 28) & GENMASK(31, 28))
+> +
+> +#define SUN6I_ISP_SCH_SIZE_CFG_REG		0x1e8
+> +#define SUN6I_ISP_SCH_SIZE_CFG_WIDTH(v)		((v) & GENMASK(12, 0))
+> +#define SUN6I_ISP_SCH_SIZE_CFG_HEIGHT(v)	(((v) << 16) & GENMASK(28, 16))
+> +
+> +#define SUN6I_ISP_SCH_SCALE_CFG_REG		0x1ec
+> +#define SUN6I_ISP_SCH_SCALE_CFG_X_RATIO(v)	((v) & GENMASK(11, 0))
+> +#define SUN6I_ISP_SCH_SCALE_CFG_Y_RATIO(v)	(((v) << 16) & GENMASK(27, 16))
+> +#define SUN6I_ISP_SCH_SCALE_CFG_WEIGHT_SHIFT(v)	(((v) << 28) & GENMASK(31, 28))
+> +
+> +#define SUN6I_ISP_MCH_CFG_REG			0x1f0
+> +#define SUN6I_ISP_MCH_CFG_EN			BIT(0)
+> +#define SUN6I_ISP_MCH_CFG_SCALE_EN		BIT(1)
+> +#define SUN6I_ISP_MCH_CFG_OUTPUT_FMT(v)		(((v) << 2) & GENMASK(4, 2))
+> +#define SUN6I_ISP_MCH_CFG_MIRROR_EN		BIT(5)
+> +#define SUN6I_ISP_MCH_CFG_FLIP_EN		BIT(6)
+> +#define SUN6I_ISP_MCH_CFG_STRIDE_Y_DIV4(v)	(((v) << 8) & GENMASK(18, 8))
+> +#define SUN6I_ISP_MCH_CFG_STRIDE_UV_DIV4(v)	(((v) << 20) & GENMASK(30, 20))
+> +
+> +#define SUN6I_ISP_OUTPUT_FMT_YUV420SP		0
+> +#define SUN6I_ISP_OUTPUT_FMT_YUV422SP		1
+> +#define SUN6I_ISP_OUTPUT_FMT_YVU420SP		2
+> +#define SUN6I_ISP_OUTPUT_FMT_YVU422SP		3
+> +#define SUN6I_ISP_OUTPUT_FMT_YUV420P		4
+> +#define SUN6I_ISP_OUTPUT_FMT_YUV422P		5
+> +#define SUN6I_ISP_OUTPUT_FMT_YVU420P		6
+> +#define SUN6I_ISP_OUTPUT_FMT_YVU422P		7
+> +
+> +#define SUN6I_ISP_SCH_CFG_REG			0x1f4
+> +
+> +#define SUN6I_ISP_MCH_Y_ADDR0_REG		0x1f8
+> +#define SUN6I_ISP_MCH_U_ADDR0_REG		0x1fc
+> +#define SUN6I_ISP_MCH_V_ADDR0_REG		0x200
+> +#define SUN6I_ISP_MCH_Y_ADDR1_REG		0x204
+> +#define SUN6I_ISP_MCH_U_ADDR1_REG		0x208
+> +#define SUN6I_ISP_MCH_V_ADDR1_REG		0x20c
+> +#define SUN6I_ISP_SCH_Y_ADDR0_REG		0x210
+> +#define SUN6I_ISP_SCH_U_ADDR0_REG		0x214
+> +#define SUN6I_ISP_SCH_V_ADDR0_REG		0x218
+> +#define SUN6I_ISP_SCH_Y_ADDR1_REG		0x21c
+> +#define SUN6I_ISP_SCH_U_ADDR1_REG		0x220
+> +#define SUN6I_ISP_SCH_V_ADDR1_REG		0x224
+> +
+> +#endif
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h b/drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+> new file mode 100644
+> index 000000000000..fd2a0820aa98
+> --- /dev/null
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/uapi/sun6i-isp-config.h
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: ((GPL-2.0+ WITH Linux-syscall-note) OR MIT) */
+> +/*
+> + * Allwinner A31 ISP Configuration
+> + */
+> +
+> +#ifndef _UAPI_SUN6I_ISP_CONFIG_H
+> +#define _UAPI_SUN6I_ISP_CONFIG_H
+> +
+> +#include <linux/types.h>
+> +
+> +#define V4L2_META_FMT_SUN6I_ISP_PARAMS v4l2_fourcc('S', '6', 'I', 'P') /* Allwinner A31 ISP Parameters */
+> +
+> +#define SUN6I_ISP_MODULE_BAYER			(1U << 0)
+> +#define SUN6I_ISP_MODULE_BDNF			(1U << 1)
+> +
+> +struct sun6i_isp_params_config_bayer {
+> +	__u16	offset_r;
+> +	__u16	offset_gr;
+> +	__u16	offset_gb;
+> +	__u16	offset_b;
+> +
+> +	__u16	gain_r;
+> +	__u16	gain_gr;
+> +	__u16	gain_gb;
+> +	__u16	gain_b;
+> +};
+> +
+> +struct sun6i_isp_params_config_bdnf {
+> +	__u8	in_dis_min; // 8
+> +	__u8	in_dis_max; // 10
+
+Are these default values or something else? Better documentation was in the
+TODO.txt file already.
+
+> +
+> +	__u8	coefficients_g[7];
+> +	__u8	coefficients_rb[5];
+> +};
+> +
+> +struct sun6i_isp_params_config {
+> +	__u32					modules_used;
+> +
+> +	struct sun6i_isp_params_config_bayer	bayer;
+> +	struct sun6i_isp_params_config_bdnf	bdnf;
+> +};
+> +
+> +#endif /* _UAPI_SUN6I_ISP_CONFIG_H */
+
+-- 
+Kind regards,
+
+Sakari Ailus

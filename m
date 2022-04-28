@@ -2,100 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B6A513387
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CD051338C
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346170AbiD1MYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        id S1346186AbiD1MZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346140AbiD1MYm (ORCPT
+        with ESMTP id S1346179AbiD1MZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:24:42 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDA922BD0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:21:28 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id u7so4177713plg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=FYZIx8jx1aR4gkAh2iYCCe3e4rrFimknaCGTXZU7TLQ=;
-        b=SGZ9G+mVx+3OeBOmcJVrBIPLpvhoEzYioP5xhDpHnyMYkaLHqDHkGXt2/9kAG7bohP
-         FVAw83Bks+bpNOWDCBtVKmPZ98d5g5+IJJwg7inGHVXMVAhBgQdONDasJj/H5+4dhv8u
-         SKHWu+jlPHn/qyM7etNkS1oRndnBnmsCVwlhQnzydEgJ2gvxUf2ynTwRtBRmj8nmemJT
-         Jp6lXbZpOyG/scO0NoP6+IRTpDMgTowIfxS9DhVx8WvRjyVygZHVutqC1dX05fP7e8lS
-         P7I6Lg76svCIWzaQtS62p+V1Z0If9mLSrLPcFmnuxxmOaqVgUi8691UNL8ku5jB1fu4U
-         mguQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FYZIx8jx1aR4gkAh2iYCCe3e4rrFimknaCGTXZU7TLQ=;
-        b=xOvInoQBbSMTr1nPVpv8u/bTvQUcTNqLfyOQmVSim1Ouh6Y/PsN88vSq3DQJUJZZ2N
-         JlQVU8yhTtjlMZD7LyIywoMzffr52RsCtJFHdCqhEGxJXd4mK3MCGACVCTMbr7nkAAgr
-         PNvSa2k/4WwWNdEjdzVltOWZPwMNaU56kYjCrjka+5880eQybHsS8Xlf5pW5eciOc1sc
-         f8Yta0hQIHklpcjo2TPxlbufSCv1KL+kBWUz88cmy8Vjdo5cIu7qWd2bJA9Ezix59YLv
-         oprp6g4SsiO1B4CPOb32I+y881Mr/yDi6vpfX8W75JGFLB0Hlzblt4H0qm/m0xdpTgvQ
-         a9tA==
-X-Gm-Message-State: AOAM531RM6MGQw+aRwtPFtBBHmMYZeJ4DnlOUz/h0uZr/b1IsDzio4Hg
-        GXdEUvHZ97zJaibzLkx592nseQ==
-X-Google-Smtp-Source: ABdhPJy9Gq80uE74g7KKn6dTwlEbtGnMILmES5WTq/CXby4Jo4kJEzUvxJwMEzXUEAPKjrbUKo6C0w==
-X-Received: by 2002:a17:90b:4a08:b0:1db:cbc5:d9b8 with SMTP id kk8-20020a17090b4a0800b001dbcbc5d9b8mr4356166pjb.176.1651148487462;
-        Thu, 28 Apr 2022 05:21:27 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id mj19-20020a17090b369300b001d29a04d665sm10282656pjb.11.2022.04.28.05.21.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 05:21:26 -0700 (PDT)
-Message-ID: <bf6cc541-4de7-3258-ebb8-caa3a8249bc7@kernel.dk>
-Date:   Thu, 28 Apr 2022 06:21:25 -0600
+        Thu, 28 Apr 2022 08:25:42 -0400
+Received: from vsp-unauthed02.binero.net (vsp-unauthed02.binero.net [195.74.38.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75AA23141
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:22:24 -0700 (PDT)
+X-Halon-ID: d7f92a51-c6ed-11ec-9627-0050569116f7
+Authorized-sender: andreas@gaisler.com
+Received: from [192.168.0.25] (h-98-128-223-123.na.cust.bahnhof.se [98.128.223.123])
+        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
+        id d7f92a51-c6ed-11ec-9627-0050569116f7;
+        Thu, 28 Apr 2022 14:22:19 +0200 (CEST)
+Message-ID: <3ab60c35-a207-287d-32fc-a958d0e33230@gaisler.com>
+Date:   Thu, 28 Apr 2022 14:22:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH] task_work: allow TWA_SIGNAL without a rescheduling IPI
+Subject: Re: [PATCH 0/3] can: grcan: Bug fixes
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, tglx@linutronix.de
-References: <543452ca-f82e-4f00-cd51-88bb9723a975@kernel.dk>
- <33a6de15-f487-b12b-8ffe-af978ebb03c3@kernel.dk>
- <20220428090836.GQ2731@worktop.programming.kicks-ass.net>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220428090836.GQ2731@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-kernel@vger.kernel.org, software@gaisler.com
+References: <20220427134307.22981-1-andreas@gaisler.com>
+ <20220428065058.mf76kmhamddsqsvk@pengutronix.de>
+From:   Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20220428065058.mf76kmhamddsqsvk@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 3:08 AM, Peter Zijlstra wrote:
-> On Mon, Apr 25, 2022 at 07:52:31PM -0600, Jens Axboe wrote:
->> On 4/22/22 8:34 AM, Jens Axboe wrote:
->>> Some use cases don't always need an IPI when sending a TWA_SIGNAL
->>> notification. Add TWA_SIGNAL_NO_IPI, which is just like TWA_SIGNAL,
->>> except it doesn't send an IPI to the target task. It merely sets
->>> TIF_NOTIFY_SIGNAL and wakes up the task.
+On 2022-04-28 08:50, Marc Kleine-Budde wrote:
+> On 27.04.2022 15:43:04, Andreas Larsson wrote:
+>> These patches
+>> * makes sure that DMA memory is allocated properly
+>> * avoids the tx errata workaround needlessly being applied
+>> * fixes a bug where the driver can be left hanging without interrupts enabled
+>>
+>> Andreas Larsson (2):
+>>    can: grcan: Fix broken system id check for errata workaround needs
+>>    can: grcan: Only use the napi poll budget for rx
+>>
+>> Daniel Hellstrom (1):
+>>    can: grcan: use ofdev->dev when allocating DMA memory
 > 
-> Could you perphaps elaborate on those use-cases? How do they guarantee
-> the task_work is ran before userspace?
+> Thanks for the patches. Can you please add a "Fixes:" tag to each patch.
+>  From the description it seems they should be backported to the stable
+> kernels, correct?
 
-The task is still marked as having task_work, so there should be no
-differences in how it's run before returning to userspace. That would
-not have delivered an IPI before, if it was in the kernel.
 
-The difference would be in the task currently running in userspace, and
-whether we force a reschedule to ensure the task_work gets run now.
-Without the forced reschedule, running of the task_work (from io_uring)
-becomes more cooperative - it'll happen when the task transitions to the
-kernel anyway (eg to wait for events).
+For patch 1 I can add a Fixes: that points to 53b7670e5735, which is the
+patch after which the patch is needed (even though that commit is not
+bad in itself, but merely exposes a wrongly used device pointer in the
+grcan driver).
 
--- 
-Jens Axboe
+For patch 2 though I am not sure. I don't think the problem has always
+been there, but I am not really sure what commit to point to. The fix is
+at least needed for 4.9 and onward and 4.9 is the oldest stable branch
+still under maintenance. Seems not to be worth the effort to find
+exactly from which commit the grcan driver's quirky use of the napi
+budget actually lead to problems just to make sure that it gets applied
+to all currently maintained stable branches. Suggestions?
 
+For patch 3 I can point to the driver's original commit for the grcan
+driver as the problem has been there all along.
+
+Cheers,
+Andreas

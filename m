@@ -2,108 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384B85130EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BCB5130F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiD1KMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S234637AbiD1KNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 06:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbiD1KLp (ORCPT
+        with ESMTP id S232186AbiD1KMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:11:45 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECA6674C1;
-        Thu, 28 Apr 2022 03:03:06 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 773C31EC0535;
-        Thu, 28 Apr 2022 12:03:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651140181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=PgBjqy9vQg0VYpTLuefpsdMFD4lNCA09smFUUhKxkbQ=;
-        b=o+/ay/k8tOLntCUuq4C/qtmunpu2Bol5mgc9WPOI2hN4GpvuDvxbJiHGAoCS300Qp1E2Rs
-        Ccp05mNGghaGTesy4iqY5q1AmS70B9H0Tf51+vF+MfJFGtjNew/44it8RJ8YmtKkimfogv
-        WTbY1Xg01IY/2tln7cK+ONkKq+PNJ8E=
-Date:   Thu, 28 Apr 2022 12:02:58 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 03/12] efi/x86: Get full memory map in allocate_e820()
-Message-ID: <YmpmUjXn7XYOhUpF@zn.tnic>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-4-kirill.shutemov@linux.intel.com>
- <YmmmpxVDyc3R5K2t@zn.tnic>
- <20220427234853.6kt67gjrwzrhgvoa@box.shutemov.name>
+        Thu, 28 Apr 2022 06:12:48 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D513D42483
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 03:04:31 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id e2so6039266wrh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 03:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SbMt1g6aoE0Bg5dwfqmFelsLQshOG2+YZf5M70rMj8Q=;
+        b=eDHxmC6WsUWOrWLtgePXgUyYSARbuIpxRXqT83D+MT5KWhvRUkaRmVEDHIEuZK6a6/
+         SgTx+6aOSj/uNyNwjy/w0C3vfP21G+btolT7n89mozDMEnkZh8KaR3J9AXZiiTGeDpff
+         fWPJ6oduu0twIwFmfkUv8PsBJskvta0iFptbM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SbMt1g6aoE0Bg5dwfqmFelsLQshOG2+YZf5M70rMj8Q=;
+        b=1ox3Dip5w8d5PNOumbxPHpyAE7aumD++SKQMCgKGv9Qiye5K1WPXuE5bPLi6DBcz1Q
+         iDPKpPSI0HLRApxVGyMN6XLNtjfRuv62uiR8YBkDY1HXTSlzjEQnyHDBhwLt/fzfXd8S
+         B1XHNRFPLtFZKj/9siPWrk0ehXsl54oVXvgbVFpRs07cf+L/vcqZdxxyHZ2Ow/xM4+Yl
+         fY1jDxR8ezNLn+HdOnxJEYIW0AX6ctN7LI7n7D+hKuCjC3giDA+se+roErUk/wnQSX4w
+         vbBLar0zTrwxl9pwcn2OLYszTMzMpaTp0/YFFbXDUctngaYkL+mF6qnpOR1jFDY373gd
+         XbTg==
+X-Gm-Message-State: AOAM531Q94hNllBJ1rKLmDu59/UQdXVAa9M7dV+Hkv/elqFrNnWffRon
+        ja2S7e+dFoMzwYKJJW4J3UZ/ew==
+X-Google-Smtp-Source: ABdhPJyqFzeu7gO4jIJIJSD11VQmMog/KOSnjjmdVpYp4MOAqrZyPlPZSH+cTzEL0sYYjh71p4fM7Q==
+X-Received: by 2002:a5d:4f08:0:b0:20a:ddfe:bd99 with SMTP id c8-20020a5d4f08000000b0020addfebd99mr15546448wru.339.1651140270334;
+        Thu, 28 Apr 2022 03:04:30 -0700 (PDT)
+Received: from fabiobaltieri-linux.lan ([37.228.205.1])
+        by smtp.gmail.com with ESMTPSA id v5-20020a5d6785000000b0020a792848eesm15080449wru.82.2022.04.28.03.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 03:04:29 -0700 (PDT)
+From:   Fabio Baltieri <fabiobaltieri@chromium.org>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fabio Baltieri <fabiobaltieri@chromium.org>
+Subject: [PATCH v6 0/4] Add channel type support to pwm-cros-ec
+Date:   Thu, 28 Apr 2022 10:04:17 +0000
+Message-Id: <20220428100421.247471-1-fabiobaltieri@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220427234853.6kt67gjrwzrhgvoa@box.shutemov.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 02:48:53AM +0300, Kirill A. Shutemov wrote:
-> Right. That's true. But having goto here makes patch 5/12 a bit cleaner.
+Hi,
 
-Ok, let's take our time machine and go into the future:
+The ChromiumOS EC PWM host command protocol supports specifying the
+requested PWM by type rather than channel. [1]
 
-This patch is in git, there's no concept of "next patch" anymore - and
-someone is staring at it for whatever reason.
+This series adds support for specifying PWM by type rather than channel
+number in the pwm-cros-ec driver, which abstracts the node definitions
+from the actual hardware configuration from the kernel perspective,
+aligns the API with the one used by the bootloader, and allows removing
+some dtsi overrides.
 
-Someone is wondering: why the hell was this done this way? And which
-is that "next patch"? Someone probably needs to sort them in the
-application order to figure out which next patch the author is talking
-about...
+Tested on a sc7180-trogdor board, build tested on x86.
 
-See what I mean?
+Changes from v5:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=633811)
+- reworded the binding patch commit subject
+- added one more review tag
 
-Also, if this hunk
+Changes from v4:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=632212)
+- fixed wrong indentation in the devietree file on patch 3
+- added review and ack tags from the previous run
 
-+
-+       if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
-+               status = allocate_unaccepted_memory(params, nr_desc, map);
-+
+Changes from v3:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=631131)
+- actually reworded patch 2 commit description
+- reworked patch 2 to use of_device_is_compatible() instead of compatible .data
 
-is what this is all about, then no, this confusion is not even worth it
-- please make sure your patches make sense on their own.
+Changes from v2:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=627837)
+- reworded patch 2 commit description
+- reworked the driver and dt documentation to use a new compatible rather than
+  boolean property
+- dropped the comment about build test only, tested on actual hardware
+  (trogdor), build test on x86 (with CONFIG_OF=n).
 
-Thx.
+Changes from v1:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=625182)
+- fixed the dt include file license
+- fixed the property name (s/_/-/)
+- rebased on current linus tree (few dts files changed from a soc tree
+  pull, so patch 4 needs a recent base to apply correctly)
+
+[1] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/pwm.c;l=24
+[2] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/depthcharge/src/drivers/ec/cros/ec.c;l=1271-1273
+
+Fabio Baltieri (4):
+  dt-bindings: add mfd/cros_ec definitions
+  pwm: pwm-cros-ec: add channel type support
+  dt-bindings: google,cros-ec-pwm: add the new -type compatible
+  arm64: dts: address cros-ec-pwm channels by type
+
+ .../bindings/pwm/google,cros-ec-pwm.yaml      |  9 +-
+ .../mt8183-kukui-jacuzzi-fennel-sku1.dts      |  4 +-
+ .../dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |  4 +-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  4 -
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  9 +-
+ .../qcom/sc7280-herobrine-herobrine-r0.dts    |  7 +-
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  7 +-
+ .../arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi |  4 +-
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    |  7 +-
+ .../boot/dts/rockchip/rk3399-gru-bob.dts      |  4 -
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  5 +-
+ .../boot/dts/rockchip/rk3399-gru-kevin.dts    |  4 -
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |  1 +
+ drivers/pwm/pwm-cros-ec.c                     | 82 +++++++++++++++----
+ include/dt-bindings/mfd/cros_ec.h             | 18 ++++
+ 16 files changed, 121 insertions(+), 49 deletions(-)
+ create mode 100644 include/dt-bindings/mfd/cros_ec.h
 
 -- 
-Regards/Gruss,
-    Boris.
+2.36.0.rc2.479.g8af0fa9b8e-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette

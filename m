@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414D35133B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F795133AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346269AbiD1McH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S1346283AbiD1McL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346251AbiD1McE (ORCPT
+        with ESMTP id S1344818AbiD1McF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:32:04 -0400
+        Thu, 28 Apr 2022 08:32:05 -0400
 Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C88AF1D3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A230AF1D7
         for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:28:50 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 23F8322238;
-        Thu, 28 Apr 2022 14:28:47 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E12A022248;
+        Thu, 28 Apr 2022 14:28:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651148928;
+        t=1651148929;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fLcOFqNhslXVtpzm0Sz5tnRKagmiAXJdwHt8alYGz5A=;
-        b=DMQz895hBHKKokU938aT6iEe6tjwoDZXqOKzBALGmHDVRznaKDqMzlwix1IjzDBs5a4ytP
-        fDqbGAjgQFtXFEtroYy/tvr52QiBz3H57/O5KStNrr21oMqNxDDnbGqdr4yEZYw3QaGJHu
-        t7ZNPqz7NP4lQhbpyzr9vYeb2JkD6O4=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GfihB1yHafuzorZZvCmEv07ZhDN5TfG6x5sdmpR5imw=;
+        b=Ql1VoEqIWgxcfRfe+LyTg3OMam5FdtB+9DodiMIEjhZHSqXeOschR3i8eEV3mlfSPDryYf
+        rvMJaoCUbAX1jAUOLzdbA/hd2JgL7pPNkDdttIedetiqDOLpHfvstl+SdhdZHYm/tKr/aA
+        XE0ueG0yOLKjdG3PGW2ZYuZ2nGBLguY=
 From:   Michael Walle <michael@walle.cc>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Pratyush Yadav <p.yadav@ti.com>,
@@ -38,10 +39,12 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Vignesh Raghavendra <vigneshr@ti.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 1/2] mtd: spi-nor: export spi_nor_hwcaps_pp2cmd()
-Date:   Thu, 28 Apr 2022 14:28:39 +0200
-Message-Id: <20220428122840.1496876-1-michael@walle.cc>
+Subject: [PATCH v2 2/2] mtd: spi-nor: expose internal parameters via debugfs
+Date:   Thu, 28 Apr 2022 14:28:40 +0200
+Message-Id: <20220428122840.1496876-2-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220428122840.1496876-1-michael@walle.cc>
+References: <20220428122840.1496876-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,42 +56,341 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function will also be used by the debugfs module.
+There is no way to gather all information to verify support for a new
+flash chip. Also if you want to convert an existing flash chip to the
+new SFDP parsing, there is not enough information to determine if the
+flash will work like before. To ease this development, expose internal
+parameters via the debugfs.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
 changes since rfc (v1):
- - none
+ - rebase onto latest next
+ - drop spi_nor_debugfs_unregister() and use devm_add_action() instead
+ - output style fixes, (0x prefix, whitespace around '|')
 
- drivers/mtd/spi-nor/core.c | 2 +-
- drivers/mtd/spi-nor/core.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/mtd/spi-nor/Makefile  |   1 +
+ drivers/mtd/spi-nor/core.c    |   2 +
+ drivers/mtd/spi-nor/core.h    |   6 +
+ drivers/mtd/spi-nor/debugfs.c | 248 ++++++++++++++++++++++++++++++++++
+ include/linux/mtd/spi-nor.h   |   2 +
+ 5 files changed, 259 insertions(+)
+ create mode 100644 drivers/mtd/spi-nor/debugfs.c
 
+diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
+index 6b904e439372..e347b435a038 100644
+--- a/drivers/mtd/spi-nor/Makefile
++++ b/drivers/mtd/spi-nor/Makefile
+@@ -17,6 +17,7 @@ spi-nor-objs			+= sst.o
+ spi-nor-objs			+= winbond.o
+ spi-nor-objs			+= xilinx.o
+ spi-nor-objs			+= xmc.o
++spi-nor-$(CONFIG_DEBUG_FS)	+= debugfs.o
+ obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
+ 
+ obj-$(CONFIG_MTD_SPI_NOR)	+= controllers/
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index d2b624b2c4cd..dd2ead5ebe9f 100644
+index dd2ead5ebe9f..9cf058d617a1 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -1880,7 +1880,7 @@ int spi_nor_hwcaps_read2cmd(u32 hwcaps)
- 				  ARRAY_SIZE(hwcaps_read2cmd));
- }
+@@ -3157,6 +3157,8 @@ static int spi_nor_probe(struct spi_mem *spimem)
+ 	if (ret)
+ 		return ret;
  
--static int spi_nor_hwcaps_pp2cmd(u32 hwcaps)
-+int spi_nor_hwcaps_pp2cmd(u32 hwcaps)
- {
- 	static const int hwcaps_pp2cmd[][2] = {
- 		{ SNOR_HWCAPS_PP,		SNOR_CMD_PP },
++	spi_nor_debugfs_register(nor);
++
+ 	/*
+ 	 * None of the existing parts have > 512B pages, but let's play safe
+ 	 * and add this logic so that if anyone ever adds support for such
 diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index d677a2053903..74fc32067a32 100644
+index 74fc32067a32..078645ffd987 100644
 --- a/drivers/mtd/spi-nor/core.h
 +++ b/drivers/mtd/spi-nor/core.h
-@@ -669,6 +669,7 @@ int spi_nor_otp_lock_sr2(struct spi_nor *nor, unsigned int region);
- int spi_nor_otp_is_locked_sr2(struct spi_nor *nor, unsigned int region);
+@@ -705,4 +705,10 @@ static inline struct spi_nor *mtd_to_spi_nor(struct mtd_info *mtd)
+ 	return container_of(mtd, struct spi_nor, mtd);
+ }
  
- int spi_nor_hwcaps_read2cmd(u32 hwcaps);
-+int spi_nor_hwcaps_pp2cmd(u32 hwcaps);
- u8 spi_nor_convert_3to4_read(u8 opcode);
- void spi_nor_set_read_settings(struct spi_nor_read_command *read,
- 			       u8 num_mode_clocks,
++#ifdef CONFIG_DEBUG_FS
++void spi_nor_debugfs_register(struct spi_nor *nor);
++#else
++static inline void spi_nor_debugfs_register(struct spi_nor *nor) {}
++#endif
++
+ #endif /* __LINUX_MTD_SPI_NOR_INTERNAL_H */
+diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
+new file mode 100644
+index 000000000000..2778733ed72c
+--- /dev/null
++++ b/drivers/mtd/spi-nor/debugfs.c
+@@ -0,0 +1,248 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/mtd/spi-nor.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/spi-mem.h>
++#include <linux/debugfs.h>
++
++#include "core.h"
++
++static struct dentry *rootdir;
++
++#define SNOR_F_NAME(name) [ilog2(SNOR_F_##name)] = #name
++static const char *const snor_f_names[] = {
++	SNOR_F_NAME(HAS_SR_TB),
++	SNOR_F_NAME(NO_OP_CHIP_ERASE),
++	SNOR_F_NAME(BROKEN_RESET),
++	SNOR_F_NAME(4B_OPCODES),
++	SNOR_F_NAME(HAS_4BAIT),
++	SNOR_F_NAME(HAS_LOCK),
++	SNOR_F_NAME(HAS_16BIT_SR),
++	SNOR_F_NAME(NO_READ_CR),
++	SNOR_F_NAME(HAS_SR_TB_BIT6),
++	SNOR_F_NAME(HAS_4BIT_BP),
++	SNOR_F_NAME(HAS_SR_BP3_BIT6),
++	SNOR_F_NAME(IO_MODE_EN_VOLATILE),
++	SNOR_F_NAME(SOFT_RESET),
++	SNOR_F_NAME(SWP_IS_VOLATILE),
++};
++#undef SNOR_F_NAME
++
++static const char *spi_nor_protocol_name(enum spi_nor_protocol proto)
++{
++	switch (proto) {
++	case SNOR_PROTO_1_1_1:     return "1S-1S-1S";
++	case SNOR_PROTO_1_1_2:     return "1S-1S-2S";
++	case SNOR_PROTO_1_1_4:     return "1S-1S-4S";
++	case SNOR_PROTO_1_1_8:     return "1S-1S-8S";
++	case SNOR_PROTO_1_2_2:     return "1S-2S-2S";
++	case SNOR_PROTO_1_4_4:     return "1S-4S-4S";
++	case SNOR_PROTO_1_8_8:     return "1S-8S-8S";
++	case SNOR_PROTO_2_2_2:     return "2S-2S-2S";
++	case SNOR_PROTO_4_4_4:     return "4S-4S-4S";
++	case SNOR_PROTO_8_8_8:     return "8S-8S-8S";
++	case SNOR_PROTO_1_1_1_DTR: return "1D-1D-1D";
++	case SNOR_PROTO_1_2_2_DTR: return "1D-2D-2D";
++	case SNOR_PROTO_1_4_4_DTR: return "1D-4D-4D";
++	case SNOR_PROTO_1_8_8_DTR: return "1D-8D-8D";
++	case SNOR_PROTO_8_8_8_DTR: return "8D-8D-8D";
++	}
++
++	return "<unknown>";
++}
++
++static void spi_nor_print_flags(struct seq_file *s, unsigned long flags,
++				const char *const *names, int names_len)
++{
++	bool sep = false;
++	int i;
++
++	for (i = 0; i < sizeof(flags) * BITS_PER_BYTE; i++) {
++		if (!(flags & BIT(i)))
++			continue;
++		if (sep)
++			seq_puts(s, " | ");
++		sep = true;
++		if (i < names_len && names[i])
++			seq_puts(s, names[i]);
++		else
++			seq_printf(s, "1<<%d", i);
++	}
++}
++
++static int spi_nor_params_show(struct seq_file *s, void *data)
++{
++	struct spi_nor *nor = s->private;
++	struct spi_nor_flash_parameter *params = nor->params;
++	struct spi_nor_erase_map *erase_map = &params->erase_map;
++	struct spi_nor_erase_region *region;
++	const struct flash_info *info = nor->info;
++	char buf[16], *str;
++	int i;
++
++	seq_printf(s, "name\t\t%s\n", info->name);
++	seq_printf(s, "id\t\t%*phn\n", info->id_len, info->id);
++	string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
++	seq_printf(s, "size\t\t%s\n", buf);
++	seq_printf(s, "write size\t%u\n", params->writesize);
++	seq_printf(s, "page size\t%u\n", params->page_size);
++	seq_printf(s, "address width\t%u\n", nor->addr_width);
++
++	seq_puts(s, "flags\t\t");
++	spi_nor_print_flags(s, nor->flags, snor_f_names, sizeof(snor_f_names));
++	seq_puts(s, "\n");
++
++	seq_puts(s, "\nopcodes\n");
++	seq_printf(s, " read\t\t0x%02x\n", nor->read_opcode);
++	seq_printf(s, "  dummy cycles\t%u\n", nor->read_dummy);
++	seq_printf(s, " erase\t\t0x%02x\n", nor->erase_opcode);
++	seq_printf(s, " program\t0x%02x\n", nor->program_opcode);
++
++	switch (nor->cmd_ext_type) {
++	case SPI_NOR_EXT_NONE:
++		str = "none";
++		break;
++	case SPI_NOR_EXT_REPEAT:
++		str = "repeat";
++		break;
++	case SPI_NOR_EXT_INVERT:
++		str = "invert";
++		break;
++	default:
++		str = "<unknown>";
++		break;
++	}
++	seq_printf(s, " 8D extension\t%s\n", str);
++
++	seq_puts(s, "\nprotocols\n");
++	seq_printf(s, " read\t\t%s\n",
++		   spi_nor_protocol_name(nor->read_proto));
++	seq_printf(s, " write\t\t%s\n",
++		   spi_nor_protocol_name(nor->write_proto));
++	seq_printf(s, " register\t%s\n",
++		   spi_nor_protocol_name(nor->reg_proto));
++
++	seq_puts(s, "\nerase commands\n");
++	for (i = 0; i < SNOR_ERASE_TYPE_MAX; i++) {
++		struct spi_nor_erase_type *et = &erase_map->erase_type[i];
++
++		if (et->size) {
++			string_get_size(et->size, 1, STRING_UNITS_2, buf,
++					sizeof(buf));
++			seq_printf(s, " %02x (%s) [%d]\n", et->opcode, buf, i);
++		}
++	}
++
++	if (!(nor->flags & SNOR_F_NO_OP_CHIP_ERASE)) {
++		string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
++		seq_printf(s, " %02x (%s)\n", SPINOR_OP_CHIP_ERASE, buf);
++	}
++
++	seq_puts(s, "\nsector map\n");
++	seq_puts(s, " region (in hex)   | erase mask | flags\n");
++	seq_puts(s, " ------------------+------------+----------\n");
++	for (region = erase_map->regions;
++	     region;
++	     region = spi_nor_region_next(region)) {
++		u64 start = region->offset & ~SNOR_ERASE_FLAGS_MASK;
++		u64 flags = region->offset & SNOR_ERASE_FLAGS_MASK;
++		u64 end = start + region->size - 1;
++
++		seq_printf(s, " %08llx-%08llx |     [%c%c%c%c] | %s\n",
++			   start, end,
++			   flags & BIT(0) ? '0' : ' ',
++			   flags & BIT(1) ? '1' : ' ',
++			   flags & BIT(2) ? '2' : ' ',
++			   flags & BIT(3) ? '3' : ' ',
++			   flags & SNOR_OVERLAID_REGION ? "overlaid" : "");
++	}
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(spi_nor_params);
++
++static void spi_nor_print_read_cmd(struct seq_file *s, u32 cap,
++				   struct spi_nor_read_command *cmd)
++{
++	seq_printf(s, " %s%s\n", spi_nor_protocol_name(cmd->proto),
++		   cap == SNOR_HWCAPS_READ_FAST ? " (fast read)" : "");
++	seq_printf(s, "  opcode\t0x%02x\n", cmd->opcode);
++	seq_printf(s, "  mode cycles\t%u\n", cmd->num_mode_clocks);
++	seq_printf(s, "  dummy cycles\t%u\n", cmd->num_wait_states);
++}
++
++static void spi_nor_print_pp_cmd(struct seq_file *s,
++				 struct spi_nor_pp_command *cmd)
++{
++	seq_printf(s, " %s\n", spi_nor_protocol_name(cmd->proto));
++	seq_printf(s, "  opcode\t0x%02x\n", cmd->opcode);
++}
++
++static int spi_nor_capabilities_show(struct seq_file *s, void *data)
++{
++	struct spi_nor *nor = s->private;
++	struct spi_nor_flash_parameter *params = nor->params;
++	u32 hwcaps = params->hwcaps.mask;
++	int i, cmd;
++
++	seq_puts(s, "Supported read modes by the flash\n");
++	for (i = 0; i < sizeof(hwcaps) * BITS_PER_BYTE; i++) {
++		if (!(hwcaps & BIT(i)))
++			continue;
++
++		cmd = spi_nor_hwcaps_read2cmd(BIT(i));
++		if (cmd < 0)
++			continue;
++
++		spi_nor_print_read_cmd(s, BIT(i), &params->reads[cmd]);
++		hwcaps &= ~BIT(i);
++	}
++
++	seq_puts(s, "\nSupported page program modes by the flash\n");
++	for (i = 0; i < sizeof(hwcaps) * BITS_PER_BYTE; i++) {
++		if (!(hwcaps & BIT(i)))
++			continue;
++
++		cmd = spi_nor_hwcaps_pp2cmd(BIT(i));
++		if (cmd < 0)
++			continue;
++
++		spi_nor_print_pp_cmd(s, &params->page_programs[cmd]);
++		hwcaps &= ~BIT(i);
++	}
++
++	if (hwcaps)
++		seq_printf(s, "\nunknown hwcaps 0x%x\n", hwcaps);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(spi_nor_capabilities);
++
++static void spi_nor_debugfs_unregister(void *data)
++{
++	struct spi_nor *nor = data;
++
++	debugfs_remove(nor->debugfs_root);
++	nor->debugfs_root = NULL;
++}
++
++void spi_nor_debugfs_register(struct spi_nor *nor)
++{
++	struct dentry *d;
++	int ret;
++
++	/* Create rootdir once. Will never be deleted again. */
++	if (!rootdir)
++		rootdir = debugfs_create_dir("spi-nor", NULL);
++
++	ret = devm_add_action(nor->dev, spi_nor_debugfs_unregister, nor);
++	if (ret)
++		return;
++
++	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
++	nor->debugfs_root = d;
++
++	debugfs_create_file("params", 0444, d, nor, &spi_nor_params_fops);
++	debugfs_create_file("capabilities", 0444, d, nor,
++			    &spi_nor_capabilities_fops);
++}
+diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+index 5e25a7b75ae2..7d43447768ee 100644
+--- a/include/linux/mtd/spi-nor.h
++++ b/include/linux/mtd/spi-nor.h
+@@ -365,6 +365,7 @@ struct spi_nor_flash_parameter;
+  * @write_proto:	the SPI protocol for write operations
+  * @reg_proto:		the SPI protocol for read_reg/write_reg/erase operations
+  * @sfdp:		the SFDP data of the flash
++ * @debugfs_root:	pointer to the debugfs directory
+  * @controller_ops:	SPI NOR controller driver specific operations.
+  * @params:		[FLASH-SPECIFIC] SPI NOR flash parameters and settings.
+  *                      The structure includes legacy flash parameters and
+@@ -394,6 +395,7 @@ struct spi_nor {
+ 	u32			flags;
+ 	enum spi_nor_cmd_ext	cmd_ext_type;
+ 	struct sfdp		*sfdp;
++	struct dentry		*debugfs_root;
+ 
+ 	const struct spi_nor_controller_ops *controller_ops;
+ 
 -- 
 2.30.2
 

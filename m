@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D2151334E
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05357513350
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345957AbiD1MGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S1346008AbiD1MHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345985AbiD1MGB (ORCPT
+        with ESMTP id S236286AbiD1MHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:06:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F87ADD70;
-        Thu, 28 Apr 2022 05:02:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB666B82C97;
-        Thu, 28 Apr 2022 12:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005D7C385A9;
-        Thu, 28 Apr 2022 12:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651147364;
-        bh=RuozuLWzG4C8Ggsyl8kWlvlvUawIVpr6zx6B7prgFZM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hs17iDXfGMIN4DA5xhkGxMW2hsXvLoHy/mlZ1h2K2QQfd0VADQNRs3bkj/+QY8s1J
-         lGiXtq7Lv7NaKJ391GPhoq5YSTaJsYdmAmrjO14yNnIIV9AdZQCuI8tmd9HdFitWgZ
-         ak385yipdDltz09gEM2Ei+tEQCYt8gDVj4JMV/tM=
-Date:   Thu, 28 Apr 2022 14:02:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     arnd@arndb.de, catalin.marinas@arm.com, rostedt@goodmis.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
-        will@kernel.org
-Subject: Re: [PATCHv12 7/9] asm-generic/io: Add logging support for MMIO
- accessors
-Message-ID: <YmqCYZwHoRuKtFSN@kroah.com>
-References: <cover.1651139070.git.quic_saipraka@quicinc.com>
- <6673a2e73d3dd4c7aa01fee9b26cc4a52176ba7a.1651139070.git.quic_saipraka@quicinc.com>
- <YmpxxW5CZjMVrzF0@kroah.com>
- <6688ffa2-ec14-9126-1296-6180bab3e1d6@quicinc.com>
+        Thu, 28 Apr 2022 08:07:07 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E753AADD6E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:03:52 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KpvQ76Klcz1JBXn;
+        Thu, 28 Apr 2022 20:02:55 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 20:03:51 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 28 Apr 2022 20:03:50 +0800
+Subject: Re: [PATCH v2] arm64: add the printing of tpidr_elx in __show_regs()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Will Deacon <will@kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, "James Morse" <james.morse@arm.com>
+References: <20220316062408.1113-1-thunder.leizhen@huawei.com>
+ <20220428102156.GA14123@willie-the-truck>
+ <4c956c17-6e13-37a1-7da3-b2c8243c2c01@huawei.com>
+Message-ID: <d3570761-1273-831f-dfbe-aefbadfa37f7@huawei.com>
+Date:   Thu, 28 Apr 2022 20:03:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6688ffa2-ec14-9126-1296-6180bab3e1d6@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4c956c17-6e13-37a1-7da3-b2c8243c2c01@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 04:51:49PM +0530, Sai Prakash Ranjan wrote:
-> On 4/28/2022 4:21 PM, Greg KH wrote:
-> > On Thu, Apr 28, 2022 at 03:25:30PM +0530, Sai Prakash Ranjan wrote:
-> > > Add logging support for MMIO high level accessors such as read{b,w,l,q}
-> > > and their relaxed versions to aid in debugging unexpected crashes/hangs
-> > > caused by the corresponding MMIO operation.
-> > > 
-> > > Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> > > ---
-> > >   include/asm-generic/io.h | 82 ++++++++++++++++++++++++++++++++++++++--
-> > >   1 file changed, 78 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> > > index 7ce93aaf69f8..99090722cb4b 100644
-> > > --- a/include/asm-generic/io.h
-> > > +++ b/include/asm-generic/io.h
-> > > @@ -10,6 +10,7 @@
-> > >   #include <asm/page.h> /* I/O is all done through memory accesses */
-> > >   #include <linux/string.h> /* for memset() and memcpy() */
-> > >   #include <linux/types.h>
-> > > +#include <linux/instruction_pointer.h>
-> > >   #ifdef CONFIG_GENERIC_IOMAP
-> > >   #include <asm-generic/iomap.h>
-> > > @@ -61,6 +62,35 @@
-> > >   #define __io_par(v)     __io_ar(v)
-> > >   #endif
-> > > +#if IS_ENABLED(CONFIG_TRACE_MMIO_ACCESS) && !(defined(__DISABLE_TRACE_MMIO__))
-> > Shouldn't you document __DISABLE_TRACE_MMIO__ somewhere?  It's not even
-> > in the changelog.  Put a big comment above this for what is is for and
-> > how to use it.  Otherwise you will forget all about this in 6 months :)
-> > 
-> > thanks,
-> > 
-> > greg k-h
+
+
+On 2022/4/28 19:07, Leizhen (ThunderTown) wrote:
 > 
-> Didn't you ask me to split the patch to the one actually adding the flag and the one using it.
+> 
+> On 2022/4/28 18:21, Will Deacon wrote:
+>> On Wed, Mar 16, 2022 at 02:24:08PM +0800, Zhen Lei wrote:
+>>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
+>>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
+>>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
+>>> pcpu access. However, when performing reverse execution based on the
+>>> registers and the memory contents in kdump, this information is sometimes
+>>> required if there is a pcpu access.
+>>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>>  arch/arm64/kernel/process.c | 11 +++++++++++
+>>>  1 file changed, 11 insertions(+)
+>>>
+>>> v1 --> v2:
+>>> Directly print the tpidr_elx register of the current exception level.
+>>> Avoid coupling with the implementation of 'my_cpu_offset'.
+>>>
+>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+>>> index 5369e649fa79ff8..738932e6fa4e947 100644
+>>> --- a/arch/arm64/kernel/process.c
+>>> +++ b/arch/arm64/kernel/process.c
+>>> @@ -216,6 +216,17 @@ void __show_regs(struct pt_regs *regs)
+>>>  	show_regs_print_info(KERN_DEFAULT);
+>>>  	print_pstate(regs);
+>>>  
+>>> +	switch (read_sysreg(CurrentEL)) {
+>>
+>> This should use is_kernel_in_hyp_mode() to detect if we're running at El2.
 
-Yes, and isn't this the commit that adds the flag?  Or was that on an
-earlier one that I missed?
+static inline bool is_kernel_in_hyp_mode(void)
+{
+        return read_sysreg(CurrentEL) == CurrentEL_EL2;
+}
 
-Ah, it's in patch 6/9
+I think it's more intuitive to use "switch (read_sysreg(CurrentEL))".
 
-But you should also document it here in the .h file, otherwise the only
-place it is described is in some random kvm Makefile that no one will
-ever notice :)
+>>
+>>> +	case CurrentEL_EL1:
+>>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(TPIDR_EL1));
+>>> +		break;
+>>> +	case CurrentEL_EL2:
+>>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(TPIDR_EL2));
+>>> +		break;
+>>> +	default:
+>>> +		break;
+>>> +	}
+>>
+>> I think this path can be triggered directly from usermode, so we really
+>> shouldn't be printing raw kernel virtual addresses here.
+> 
+> I run echo c > /proc/sysrq-trigger and didn't trigger this path, but maybe
+> there's another way. Analysis from the other side, except for the instruction
+> address, all generic registers r0-r31 is output as raw. There's also an
+> opportunity to contain the instruction address.
 
-thanks,
+On second thought, there seemed to be nothing wrong with it. The user need
+to have capable() first. Then the address of the perpcu memory is not static,
+the memory is dynamically allocated, exposing it is no different than exposing sp.
 
-greg k-h
+> 
+> So how about:
+> +       if (oops_in_progress)
+> +               printk("tpidr : %016lx\n", __my_cpu_offset);
+> 
+>>
+>> Will
+>> .
+>>
+> 
+
+-- 
+Regards,
+  Zhen Lei

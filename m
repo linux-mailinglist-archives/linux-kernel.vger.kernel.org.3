@@ -2,157 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B26513AA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A014513AA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 19:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbiD1RNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 13:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
+        id S234420AbiD1RMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 13:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiD1RNC (ORCPT
+        with ESMTP id S229507AbiD1RMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 13:13:02 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF90B82D4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:09:46 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id n14so9737670lfu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:09:46 -0700 (PDT)
+        Thu, 28 Apr 2022 13:12:51 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9115EBE3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:09:36 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id j17so4774923pfi.9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+iAkgH8cfwl83YyTEPgnjdt38nfCnmdRxiArvtIdv0w=;
-        b=cnCDL3Sb4OI6qHwFV6zlbIEJN+63KN3UoqPsYDo9nczU3quG5qdwvCRqiH1G8X7HqQ
-         LTi4G+F8c8TPJOC7AUb5NmfBE4PbHGX1Wqk9g6PkY9PCK1J7J9Z+G7yb9d4FsQV5a8sr
-         UygvSly3ibj/0sOk/Y+2RQxrTx0h0lBBaY6SQ=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fBDyiC8ejx38/XGCdInTXi7p0RF0GjbjfMkRMdvSGv0=;
+        b=PkwH6hgXz4MEQ6AJYKtgR6JdFn8khlfOomPptOtAb4gKvnZVbyITWFLj18HBDE/jVq
+         V52Y2WTHH+Mlon2KaabpIWE26PVgruOF7iMHzxKPxm04JREeCkFaFvsLGw8n02fmKDjZ
+         jBD/fLoL1Haf8fcxb2iA+AcqU3ztg6rPCAFvccJkcIfUESAAgOglJ8SSPGiyM9GwYclN
+         MVuJ9xQujbAgag0ghXdfMxWFU3vpQ5qXhSaQIz6A34VxadwhAlLt0ey9YQrTOyvsDkqT
+         e5ovy538EjH3oNSYBO35UeP82w4JaRIv/rUgEPPUkNpfXcOqGo4e8PbEFsMyVxtWrrOn
+         KPag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+iAkgH8cfwl83YyTEPgnjdt38nfCnmdRxiArvtIdv0w=;
-        b=fWTTphKxmbaPs8cIeDN7ziZg/jrTAhBZ8jk/Z4a++2yiRk4zD0MV37zLNj9Nnc7csX
-         9N2lklHjMtX+hFuHxEnPJWTE88c7FZMs9uYaZNsOm4aURts3xNv2QO8DOaLk3QgQxCnT
-         nO/Uo4OEIM+mixkoAc35SCPt6sAyyAahIDJ7mmBCaLNCpBhwqSOoXEFOd03OUNfr4BUD
-         tnILBhs3MoyfKkqHgwXGTNHL2McOYJhofh0WcpJlKTIBrMbxf2SF60B54ssK1Mcho1xK
-         oN5x8mkcxFd3NEZ0GxDjunUW+U/rM/tb9+bV/yX7bql7kV5ugZF7qeO8feEl+pIE5ity
-         My9Q==
-X-Gm-Message-State: AOAM531SLNEmitrpSzZ4YwPBQuh7baQU6afue8nHtNQnQDtgOWI52mJ5
-        J+8HmkTZYGXHNJtHFH3pZr7rTgLnJMk/bzFxj2A=
-X-Google-Smtp-Source: ABdhPJwLL8/PpEln4b4AR25piCT4b+F/81g3hX5qA4YhgwTFMW036I1x27BVJpRWTyEJDCzadCGVeg==
-X-Received: by 2002:a05:6512:1585:b0:448:3936:a5a0 with SMTP id bp5-20020a056512158500b004483936a5a0mr24662882lfb.108.1651165784352;
-        Thu, 28 Apr 2022 10:09:44 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id k10-20020a19560a000000b0046d1707fcbdsm47454lfb.215.2022.04.28.10.09.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 10:09:43 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id w19so9751179lfu.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 10:09:43 -0700 (PDT)
-X-Received: by 2002:a05:6512:118f:b0:472:2b35:8528 with SMTP id
- g15-20020a056512118f00b004722b358528mr6616819lfr.531.1651165782874; Thu, 28
- Apr 2022 10:09:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fBDyiC8ejx38/XGCdInTXi7p0RF0GjbjfMkRMdvSGv0=;
+        b=nsHufy9iF+2+NeThDd+7gQcOHIZtZRYSnWZ67rsULHLVyZMt4+jQGlnmFoD7KVeHzw
+         57kH4nWy6E/vlCyglbL5lHaGDDiGhPMTpXZ5Pl2c4ojTQJhL/KVG+TGsfUJ8YJfozCPR
+         lpGy3w4UrHJDumkzGQ51Eo9Cc6Zy4VG2Tfyz88W0YA92SEhhBEf4HygdkeH2cgbqau4N
+         ZswyCne0EauND4YIKaRvFa7SamoAXh4pOCFGnIVuLsa+y+85UBa9+pSgkJN7sBiCbekR
+         U6OcJNrNg9Ub5mb8lH2k+z/e6e36kB+rzVQSsHHRIrrF0jEdA+b2isMTm3KRoTV6213o
+         jrtw==
+X-Gm-Message-State: AOAM53359iNY+RlrhpPEANiIVYPLYAWvikYio/gIZjrbqorXl7e1D09c
+        SbCq7h1ZeFfDurysjQCuO16s
+X-Google-Smtp-Source: ABdhPJxJ1Bxs03N1VpCNGCBPDVOJJta4JTsZ6CuaLJFmn8qQJEEPihJ4pXGGAzycImcb+yUjHIiQZw==
+X-Received: by 2002:aa7:9085:0:b0:50d:35ae:271 with SMTP id i5-20020aa79085000000b0050d35ae0271mr24736247pfa.42.1651165775932;
+        Thu, 28 Apr 2022 10:09:35 -0700 (PDT)
+Received: from thinkpad ([220.158.158.235])
+        by smtp.gmail.com with ESMTPSA id b22-20020a63cf56000000b003c1a1f44736sm320918pgj.90.2022.04.28.10.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 10:09:35 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 22:39:29 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 25/25] PCI: dwc: Add DW eDMA engine support
+Message-ID: <20220428170929.GC81644@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-26-Sergey.Semin@baikalelectronics.ru>
+ <20220328141521.GA17663@thinkpad>
+ <20220419205403.hdtp67mwoyrl6b6q@mobilestation>
+ <20220423144055.GR374560@thinkpad>
+ <20220428140501.6geybgwvkevqaz7e@mobilestation.baikal.int>
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com> <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
-In-Reply-To: <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Apr 2022 10:09:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
-Message-ID: <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428140501.6geybgwvkevqaz7e@mobilestation.baikal.int>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 6:27 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
->
-> The data corruption we've been getting unfortunately didn't have to do
-> with lock contention (we already knew that); it still occurs. I'm
-> running out of ideas on what to try there.
+On Thu, Apr 28, 2022 at 05:05:23PM +0300, Serge Semin wrote:
 
-Hmm.
+[...]
 
-I don't see the bug, but I do have a suggestion on something to try.
+> > If iATU has unroll enabled then I think we can assume that edma will also be
+> > the same. So I was wondering if we could just depend on iatu_unroll_enabled
+> > here.
+> 
+> I thought about that, but then I decided it was easier to just define
+> a new flag. Anyway according to the hw manuals indeed the unroll
+> mapping is enabled either for both iATU and eDMA modules or for none
+> of them just because they are mapped over a single space. It's
+> determined by the internal VHL parameter CC_UNROLL_ENABLE.
+> On the second thought I agree with you then. I'll convert the
+> iatu_unroll_enabled flag into a more generic 'reg_unroll' and make
+> sure it's used for both modules.
+> 
 
-In particular, you said the problem started with commit 00bfe02f4796
-("gfs2: Fix mmap + page fault deadlocks for buffered I/O").
+Sounds good!
 
-And to me, I see two main things that are going on
+> > 
+> > > > 
+> > > > > +	if (pci->edma_unroll_enabled && pci->iatu_unroll_enabled) {
+> > > > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
+> > > > > +		if (pci->atu_base != pci->dbi_base + DEFAULT_DBI_ATU_OFFSET)
+> > > > > +			pci->edma.reg_base = pci->atu_base + PCIE_DMA_UNROLL_BASE;
+> > > > > +		else
+> > > > > +			pci->edma.reg_base = pci->dbi_base + DEFAULT_DBI_DMA_OFFSET;
+> > > > 
+> > > 
+> > > > This assumption won't work on all platforms. Atleast on our platform, the
+> > > > offsets vary. So I'd suggest to try getting the reg_base from DT first and use
+> > > > these offsets as a fallback as we do for iATU.
+> > > 
+> > > I don't know how the eDMA offset can vary at least concerning the
+> > > normal DW PCIe setup. In any case the DW eDMA controller CSRs are
+> > > mapped in the same way as the iATU space: CS2=1 CDM=1. They are either
+> > > created as an unrolled region mapped into the particular MMIO space
+> > > (as a separate MMIO space or as a part of the DBI space), or
+> > > accessible over the PL viewports (as a part of the Port Logic CSRs).
+> > > Nothing else is described in the hardware manuals. Based on that I
+> > > don't see a reason to add one more reg space binding.
+> > > 
+> > 
+> 
+> > This is not true. Vendors can customize the iATU location inside DBI region
+> > for unroll too. That's one of the reason why dw_pcie_iatu_detect() works on
+> > qcom platforms as it tries to get iatu address from DT first and then falls
+> > back to the default offset if not found.
+> > 
+> > So please define an additional DT region for edma.
+> 
+> It's obvious that iATU location can vary. I never said it didn't. We
+> are talking about eDMA here. In accordance with what the DW PCIe hw
+> manuals say eDMA always resides the same space as the iATU. The space
+> is enabled by setting the CS2=1 and CDM=1 wires in case of the Native
+> Controller DBI access. In this case eDMA is defined with the 0x80000
+> offset over the iATU base address while the iATU base can be placed at
+> whatever region platform engineer needs.
+> 
+> Alternatively the AXI Bridge-based DBI access can be enabled thus
+> having the DBI+iATU+eDMA mapped over the same MMIO space with
+> respective offsets 0x0;0x300000;0x380000. This case is handled in the
+> branch of the conditional statement above if it's found that iATU base
+> is having the default offset with respect to the DBI base address
+> (pci->atu_base == pci->dbi_base + DEFAULT_DBI_ATU_OFFSET).
+> 
+> To sum up seeing I couldn't find the eDMA region defined in the qcom
+> bindings and judging by what you say doesn't really contradict to what
+> is done in my code, I guess there must be some misunderstanding either in
+> what you see in the code above or what I understand from what you say.
+> So please be more specific what offsets and whether they are really
+> different from what I use in the code above.
+> 
 
- (a) the obvious "calling generic IO functions with pagefault disabled" thing
+You won't see any edma register offset because no one bothered to define it
+since it was not used until now. But the memory region should've been
+documented...
 
- (b) the "allow demotion" thing
+Anyway, here is the offset for the Qcom SoC I'm currently working on:
 
-And I wonder if you could at least pinpoint which of the  cases it is
-that triggers it.
+DBI  - 0x0
+iATU - 0x1000
+eDMA - 0x2000
 
-So I'd love to see you try three things:
+As you can see, these offsets doesn't really fit in both the cases you shared
+above.
 
- (1) just remove the "allow demotion" cases.
+I don't have the knowledge about the internal representation of the IP or what
+customization Qcom did apart from some high level information.
 
-     This will re-introduce the deadlock the commit is trying to fix,
-but that's such a special case that I assume you can run your
-test-suite that shows the problem even without that fix in place?
+Hope this clarifies!
 
-     This would just pinpoint whether it's due to some odd locking issue or not.
-
-Honestly, from how you describe the symptoms, I don't think (1) is the
-cause, but I think making sure is good.
-
-It sounds much more likely that it's one of those generic vfs
-functions that screws up when a page fault happens and it gets a
-partial result instead of handling the fault.
-
-Which gets us to
-
- (2) remove the pagefault_disable/enable() around just the
-generic_file_read_iter() case in gfs2_file_read_iter().
-
-and
-
- (3) finally, remove the pagefault_disable/enable() around the
-iomap_file_buffered_write() case in gfs2_file_buffered_write()
-
-Yeah, yeah, you say it's just the read that fails, but humor me on
-(3), just in case it's an earlier write in your test-suite and the
-read just then uncovered it.
-
-But I put it as (3) so that you'd do the obvious (2) case first, and
-narrow it down (ie if (1) still shows the bug, then do (2), and if
-that fixes the bug it will be fairly well pinpointed to
-generic_file_read_iter().
-
-Looking around, gfs2 is the only thing that obviously calls
-generic_file_read_iter() with pagefoaults disabled, so it does smell
-like filemap_read() might have some issue, but the only thing that
-does is basically that
-
-                copied = copy_folio_to_iter(folio, offset, bytes, iter);
-
-which should just become copy_page_to_iter_iovec(), which you'd hope
-would get things right.
-
-But it would be good to just narrow things down a bit.
-
-I'll look at that copy_page_to_iter_iovec() some more regardless, but
-doing that "let's double-check it's not somethign else" would be good.
-
-             Linus
+Thanks,
+Mani

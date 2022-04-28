@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF3751288A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB973512891
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240223AbiD1BMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S240147AbiD1BQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240191AbiD1BMw (ORCPT
+        with ESMTP id S231307AbiD1BQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:12:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C40728DA;
-        Wed, 27 Apr 2022 18:09:39 -0700 (PDT)
-Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpcvG4fm7zfb9q;
-        Thu, 28 Apr 2022 09:08:42 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 09:09:37 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 09:09:36 +0800
-Subject: Re: [PATCH -next v3 2/3] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-To:     Jan Kara <jack@suse.cz>
-CC:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220427124722.48465-1-yukuai3@huawei.com>
- <20220427124722.48465-3-yukuai3@huawei.com>
- <20220427124908.o3cl72h2uflmufso@quack3.lan>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <d36b4904-3db8-537c-5040-b496272ccf70@huawei.com>
-Date:   Thu, 28 Apr 2022 09:09:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 27 Apr 2022 21:16:13 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE04369F7;
+        Wed, 27 Apr 2022 18:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651108379; x=1682644379;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=yAjKArgG+UzEZta3g6kqWrjnT6A3ODfHAc9WTuI1vFk=;
+  b=iQ72SWuhdQ1z9lo/cgHUgE+vBaw5RrgJs2fwkTFmuC0elakDsAIEHuhD
+   nDT3qbBwov2zalRUWbTSF5Qf40RGRNgnmXM5RZYL2rY1x6+UzC4ZWZoPx
+   M3jEsfP6sQ0K8IPZzALFzCgm0QQVQUZ3dxTnh+tD6t5RHXrHDOR4e0ck4
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 27 Apr 2022 18:12:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:12:59 -0700
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 18:12:59 -0700
+Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 27 Apr 2022 18:12:56 -0700
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sboyd@kernel.org>
+CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
+Subject: [RESEND PATCH V6 00/10] A bunch of fix and optimization patches in spmi-pmic-arb.c
+Date:   Thu, 28 Apr 2022 09:12:39 +0800
+Message-ID: <1651108369-11059-1-git-send-email-quic_fenglinw@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20220427124908.o3cl72h2uflmufso@quack3.lan>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/04/27 20:49, Jan Kara Ð´µÀ:
-> On Wed 27-04-22 20:47:21, Yu Kuai wrote:
->> Currently, bfq can't handle sync io concurrently as long as they
->> are not issued from root group. This is because
->> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->> bfq_asymmetric_scenario().
->>
->> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>
->> Before this patch:
->>   1) root group will never be counted.
->>   2) Count if bfqg or it's child bfqgs have pending requests.
->>   3) Don't count if bfqg and it's child bfqgs complete all the requests.
->>
->> After this patch:
->>   1) root group is counted.
->>   2) Count if bfqg have at least one bfqq that is marked busy.
->>   3) Don't count if bfqg doesn't have any busy bfqqs.
->>
->> With this change, the occasion that only one group is activated can be
->> detected, and next patch will support concurrent sync io in the
->> occasion.
->>
->> This patch also rename 'num_groups_with_pending_reqs' to
->> 'num_groups_with_busy_queues'.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> Looks good. Just I think you forgot to remove in_groups_with_pending_reqs,
-> which is now unused, from bfq_entity.
+Changes in v6:
+  Rebased [v5 08/10] on
+    https://lore.kernel.org/linux-arm-msm/20211227170151.73116-1-david@ixit.cz/#t
 
-Will remove it in the next iteration.
+Changes in v5:
+  Drop [v4 11/11] because of a similar change is under review:
+    https://lore.kernel.org/linux-arm-msm/YdRJcv2kpp1vgUTb@robh.at.kernel.org/T/#t
 
-Thanks,
-Kuai
+Changes in v4:
+  In [v4 02/11], separated spurious interrupt handling.
+  In [v4 03/11], added Fixes tag for ("spmi: pmic-arb: do not ack and clear peripheral").
+  In [v4 11/11], updated the binding to address few warnings in "make dtbs_check"
+
+Changes in v3:
+  Drop [v2 07/10] as this is no longer needed after this change:
+                50fc4c8cd240 ("spmi: spmi-pmic-arb: fix irq_set_type race condition")
+  In [v3 07/10], updated the author email to match with Signed-off-by.
+  In [v3 10/10], added the binding change in this series, and addressed issues in "make dt_binding_check"
+
+Changes in v2:
+  In [v2 01/10], added code to handle spurious interrupt.
+  In [v2 03/10], adressed minor comments to update the code logic.
+  In [v2 04/10], minor update to detect spurious interrupt.
+  In [v2 05/10], added Fixes tag.
+  In [v2 07/10], added Fixes tag and updated commit text to explain the problem.
+  In [v2 08/10], added binding change to make interrupt properties as optional.
+  In [v2 09/10], updated to check presence of "interrupt-controller" property.
+
+
+Abhijeet Dharmapurikar (1):
+  spmi: pmic-arb: add a print in cleanup_irq
+
+Ashay Jaiswal (1):
+  spmi: pmic-arb: add support to dispatch interrupt based on IRQ status
+
+David Collins (6):
+  spmi: pmic-arb: check apid against limits before calling irq handler
+  spmi: pmic-arb: correct duplicate APID to PPID mapping logic
+  spmi: pmic-arb: block access for invalid PMIC arbiter v5 SPMI writes
+  dt-bindings: spmi: spmi-pmic-arb: make interrupt properties as
+    optional
+  spmi: pmic-arb: make interrupt support optional
+  spmi: pmic-arb: increase SPMI transaction timeout delay
+
+Fenglin Wu (1):
+  spmi: pmic-arb: handle spurious interrupt
+
+Subbaraman Narayanamurthy (1):
+  spmi: pmic-arb: do not ack and clear peripheral interrupts in
+    cleanup_irq
+
+ .../bindings/spmi/qcom,spmi-pmic-arb.yaml          |   3 -
+ drivers/spmi/spmi-pmic-arb.c                       | 136 +++++++++++++++------
+ 2 files changed, 96 insertions(+), 43 deletions(-)
+
+-- 
+2.7.4
+

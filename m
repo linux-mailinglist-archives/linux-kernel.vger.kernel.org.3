@@ -2,177 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACCB513426
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57D4513418
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346628AbiD1Ms6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
+        id S245604AbiD1Mtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346607AbiD1Msy (ORCPT
+        with ESMTP id S1346616AbiD1Mti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:48:54 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A33286E7;
-        Thu, 28 Apr 2022 05:45:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 50799210F3;
-        Thu, 28 Apr 2022 12:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651149938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1tER3DtXbQSLD/j7/Uc6zPjmyydRTQWyAvK011v6WQ=;
-        b=kyeLx/umgkcWp7Jye4+E/wli4Ow/64CCjDRg54IG697QSqk7Rw8tksQOhwQhuqMVZ0ZEBC
-        VSjoH4OYH80t/nZOGas/0XnPYKfxbWIlvUVfN8sUs8oEm9EB51wT2qX4byVfwrDcr5GF/C
-        XYXule2uzIGfdvJ7C1+bH4gQTI3B3/s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651149938;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1tER3DtXbQSLD/j7/Uc6zPjmyydRTQWyAvK011v6WQ=;
-        b=8uOH1k5ym649fa0VViH9DHTNG9RA9bhvgedB1TQqxU/6MEHo4XHi+B6v9gnBQ0bQWP9czQ
-        YCwB2rtjm8fOKfDA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3B2FF2C141;
-        Thu, 28 Apr 2022 12:45:38 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DBDE8A061A; Thu, 28 Apr 2022 14:45:37 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 14:45:37 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next v5 1/3] block, bfq: record how many queues are busy
- in bfq_group
-Message-ID: <20220428124537.c5ve4vs2jk5uzthy@quack3.lan>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <20220428120837.3737765-2-yukuai3@huawei.com>
+        Thu, 28 Apr 2022 08:49:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA272AE0E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:46:23 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nk3XG-0002Ri-G9; Thu, 28 Apr 2022 14:46:18 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-6c64-eec7-9c08-9d9e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6c64:eec7:9c08:9d9e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9BB016FB14;
+        Thu, 28 Apr 2022 12:46:17 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 14:46:17 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andreas Larsson <andreas@gaisler.com>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-kernel@vger.kernel.org, software@gaisler.com
+Subject: Re: [PATCH 0/3] can: grcan: Bug fixes
+Message-ID: <20220428124617.xj7fguwf3dg42wls@pengutronix.de>
+References: <20220427134307.22981-1-andreas@gaisler.com>
+ <20220428065058.mf76kmhamddsqsvk@pengutronix.de>
+ <3ab60c35-a207-287d-32fc-a958d0e33230@gaisler.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6zpuylmscbbwpcxd"
 Content-Disposition: inline
-In-Reply-To: <20220428120837.3737765-2-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3ab60c35-a207-287d-32fc-a958d0e33230@gaisler.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 28-04-22 20:08:35, Yu Kuai wrote:
-> Prepare to refactor the counting of 'num_groups_with_pending_reqs'.
-> 
-> Add a counter 'busy_queues' in bfq_group, and update it in
-> bfq_add/del_bfqq_busy().
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Looks good. Feel free to add:
+--6zpuylmscbbwpcxd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+On 28.04.2022 14:22:17, Andreas Larsson wrote:
+> On 2022-04-28 08:50, Marc Kleine-Budde wrote:
+> > On 27.04.2022 15:43:04, Andreas Larsson wrote:
+> > > These patches
+> > > * makes sure that DMA memory is allocated properly
+> > > * avoids the tx errata workaround needlessly being applied
+> > > * fixes a bug where the driver can be left hanging without interrupts=
+ enabled
+> > >=20
+> > > Andreas Larsson (2):
+> > >    can: grcan: Fix broken system id check for errata workaround needs
+> > >    can: grcan: Only use the napi poll budget for rx
+> > >=20
+> > > Daniel Hellstrom (1):
+> > >    can: grcan: use ofdev->dev when allocating DMA memory
+> >=20
+> > Thanks for the patches. Can you please add a "Fixes:" tag to each patch.
+> >  From the description it seems they should be backported to the stable
+> > kernels, correct?
+>=20
+> For patch 1 I can add a Fixes: that points to 53b7670e5735, which is the
+> patch after which the patch is needed (even though that commit is not
+> bad in itself, but merely exposes a wrongly used device pointer in the
+> grcan driver).
 
-								Honza
+The Fixes tag should point to the patch the introduced the problem, not
+the patch the exposes the problem :)
 
-> ---
->  block/bfq-cgroup.c  |  1 +
->  block/bfq-iosched.h |  2 ++
->  block/bfq-wf2q.c    | 20 ++++++++++++++++++++
->  3 files changed, 23 insertions(+)
-> 
-> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-> index 09574af83566..4d516879d9fa 100644
-> --- a/block/bfq-cgroup.c
-> +++ b/block/bfq-cgroup.c
-> @@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_policy_data *pd)
->  				   */
->  	bfqg->bfqd = bfqd;
->  	bfqg->active_entities = 0;
-> +	bfqg->busy_queues = 0;
->  	bfqg->online = true;
->  	bfqg->rq_pos_tree = RB_ROOT;
->  }
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 978ef5d6fe6a..3847f4ab77ac 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -906,6 +906,7 @@ struct bfq_group_data {
->   *                   are groups with more than one active @bfq_entity
->   *                   (see the comments to the function
->   *                   bfq_bfqq_may_idle()).
-> + * @busy_queues: number of busy bfqqs.
->   * @rq_pos_tree: rbtree sorted by next_request position, used when
->   *               determining if two or more queues have interleaving
->   *               requests (see bfq_find_close_cooperator()).
-> @@ -942,6 +943,7 @@ struct bfq_group {
->  	struct bfq_entity *my_entity;
->  
->  	int active_entities;
-> +	int busy_queues;
->  
->  	struct rb_root rq_pos_tree;
->  
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index f8eb340381cf..d9ff33e0be38 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -218,6 +218,16 @@ static bool bfq_no_longer_next_in_service(struct bfq_entity *entity)
->  	return false;
->  }
->  
-> +static void bfq_inc_busy_queues(struct bfq_queue *bfqq)
-> +{
-> +	bfqq_group(bfqq)->busy_queues++;
-> +}
-> +
-> +static void bfq_dec_busy_queues(struct bfq_queue *bfqq)
-> +{
-> +	bfqq_group(bfqq)->busy_queues--;
-> +}
-> +
->  #else /* CONFIG_BFQ_GROUP_IOSCHED */
->  
->  static bool bfq_update_parent_budget(struct bfq_entity *next_in_service)
-> @@ -230,6 +240,14 @@ static bool bfq_no_longer_next_in_service(struct bfq_entity *entity)
->  	return true;
->  }
->  
-> +static void bfq_inc_busy_queues(struct bfq_queue *bfqq)
-> +{
-> +}
-> +
-> +static void bfq_dec_busy_queues(struct bfq_queue *bfqq)
-> +{
-> +}
-> +
->  #endif /* CONFIG_BFQ_GROUP_IOSCHED */
->  
->  /*
-> @@ -1660,6 +1678,7 @@ void bfq_del_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  	bfq_clear_bfqq_busy(bfqq);
->  
->  	bfqd->busy_queues[bfqq->ioprio_class - 1]--;
-> +	bfq_inc_busy_queues(bfqq);
->  
->  	if (bfqq->wr_coeff > 1)
->  		bfqd->wr_busy_queues--;
-> @@ -1683,6 +1702,7 @@ void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  
->  	bfq_mark_bfqq_busy(bfqq);
->  	bfqd->busy_queues[bfqq->ioprio_class - 1]++;
-> +	bfq_dec_busy_queues(bfqq);
->  
->  	if (!bfqq->dispatched)
->  		if (bfqq->wr_coeff == 1)
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+| 53b7670e5735 sparc: factor the dma coherent mapping into helper
+
+> For patch 2 though I am not sure. I don't think the problem has always
+> been there, but I am not really sure what commit to point to.
+
+Point the Fixes tag to the commit that introduced the problem, if it was
+always there, use the commit where the patch was added.
+
+> The fix is at least needed for 4.9 and onward and 4.9 is the oldest
+> stable branch still under maintenance. Seems not to be worth the
+> effort to find exactly from which commit the grcan driver's quirky use
+> of the napi budget actually lead to problems just to make sure that it
+> gets applied to all currently maintained stable branches. Suggestions?
+
+See above.
+
+> For patch 3 I can point to the driver's original commit for the grcan
+> driver as the problem has been there all along.
+
+Fine.
+
+regards
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--6zpuylmscbbwpcxd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJqjJYACgkQrX5LkNig
+013digf/UJaIvBH4LP4Cg4DNBOYMwuZK0rNWnA2viAX93nkIRElKaINCVexNprRe
+7PD12V62iDHhV9P+GoMC77NG+OMpIWVeCXy6FmFqccsl8slxctvunlibuPcfd/ev
+kKsu8nB2mcGVeQtuC/q72Kfc/FjjG8e/bTXBbcegiskHPWXKrkohKYKUFWX4KbBk
+ovbv0hmHwb+MidQxpc7p5vzVcVRSQh6WXx2AaPehLBNNL1JBYv7Ss3/OzE+/ArI3
+QLVhXgn2QXT1+Rwb0w3Ly7xCvkKxoXe1ImprFBr8b878kUjq98CYIh7PSlYD3BDA
+3vqQWlLYhU+lkkvFSUIpkLgbsl9LgA==
+=pjF+
+-----END PGP SIGNATURE-----
+
+--6zpuylmscbbwpcxd--

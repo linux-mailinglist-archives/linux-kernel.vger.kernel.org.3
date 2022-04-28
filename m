@@ -2,177 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC605138E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D915138EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244529AbiD1PqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S1349548AbiD1Pqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349448AbiD1PqC (ORCPT
+        with ESMTP id S1349500AbiD1PqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:46:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A58B715C;
-        Thu, 28 Apr 2022 08:42:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF1FC61F95;
-        Thu, 28 Apr 2022 15:42:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F3DC385AA;
-        Thu, 28 Apr 2022 15:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651160566;
-        bh=4dKNV+ceiLtd6M4VTt7w+2x33yEvnPjHequM8WdzUY8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ndhhVA0zXP0WKVFtbkSbktkcOBNoTftoBdq4wF6SHbEtuWfWziLbWN05RUXoEPHMH
-         M3tiFUjiIFRjJ+c9hC+k8+BXuliPMVMvD9WfQMUep2NNI2htsWKKElWyw83RvnXrsU
-         gI6I8IePYVp65dcSW2vnN+8fk5VvW+sGOYm9VVg0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hugh Dickins <hughd@google.com>, Yang Shi <shy828301@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH AUTOSEL 14/14] mm/thp: fix NR_FILE_MAPPED accounting in page_*_file_rmap()
-Date:   Thu, 28 Apr 2022 17:42:22 +0200
-Message-Id: <20220428154222.1230793-14-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220428154222.1230793-1-gregkh@linuxfoundation.org>
-References: <20220428154222.1230793-1-gregkh@linuxfoundation.org>
+        Thu, 28 Apr 2022 11:46:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF289B1A9F;
+        Thu, 28 Apr 2022 08:42:57 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651160576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rnMkrEHxL7tcsjFuW+K1zq3QhquJH/R43AmLLdfMdcA=;
+        b=N03I2ddNLi7GD8ZRfz7/TYFT7DjtoZwLgZyUF99N6VXg67ZN0AMXE4ZuPZuM1vUlPde+xS
+        M+4bQyMFz1vMqXVzlGMBli7O1rAQ9XHqThXNEA9W/v/A6+cNyNQTzD0zJy3/x1VJy+v3dI
+        aOUr7hfJl5KZrnGQIT9+ArBjnjDRH7YDuqEPwnnT2NYdXUyNMUPbcGX3ofjOYWVUVM6AAj
+        nxMhiQR4W7d95fdreCxkPrnAMdyDRQ0/BNYNKcDl3Jecez4l7bg3EnhkVny2RTivqjJZeZ
+        nMimq+4Brfb76LsSY4p/ydMYnz3QqGVmAE4yG+inox8BzE9v8f7ZFprmLMkRDQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651160576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rnMkrEHxL7tcsjFuW+K1zq3QhquJH/R43AmLLdfMdcA=;
+        b=tN+6DcJDG5jxKhXmlZP3w7aojECgAsZzh5xQxkfjPkSG4DjF9uGLVyGP9vsl9e2NNZXzIi
+        v3BhvEsCActT/GAg==
+To:     Thomas Pfaff <tpfaff@pcs.com>, linux-kernel@vger.kernel.org
+Cc:     linux-rt-users@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH] irq: synchronize irq_thread startup
+In-Reply-To: <f18798-9e66-66e7-8c9d-cb8eeda364c4@pcs.com>
+References: <f18798-9e66-66e7-8c9d-cb8eeda364c4@pcs.com>
+Date:   Thu, 28 Apr 2022 17:42:55 +0200
+Message-ID: <87r15huscg.ffs@tglx>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4320; i=gregkh@linuxfoundation.org; h=from:subject; bh=DY9PobJ+iVCOW4dJoQet7IIvSJy1rG7kl8G4mbSfMDg=; b=owGbwMvMwCRo6H6F97bub03G02pJDElZW++tOOTj5W0tkVux6LONokf0tOCAnWxPfbl+8a1Ov5XE NO1tRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAExk8iGGBY0ME0XPNm/Ul1RreRU4ma ecd3JQJsOCS/NeH5qxYWqa+NofpXpXd8+MDfSfCAA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugh Dickins <hughd@google.com>
+Thomas,
 
-commit 5d543f13e2f5580828de885c751d68a35b6a493d upstream.
+On Thu, Apr 28 2022 at 12:49, Thomas Pfaff wrote:
 
-NR_FILE_MAPPED accounting in mm/rmap.c (for /proc/meminfo "Mapped" and
-/proc/vmstat "nr_mapped" and the memcg's memory.stat "mapped_file") is
-slightly flawed for file or shmem huge pages.
+please always Cc maintainers when sending patches and please also have a
+look at:
 
-It is well thought out, and looks convincing, but there's a racy case when
-the careful counting in page_remove_file_rmap() (without page lock) gets
-discarded.  So that in a workload like two "make -j20" kernel builds under
-memory pressure, with cc1 on hugepage text, "Mapped" can easily grow by a
-spurious 5MB or more on each iteration, ending up implausibly bigger than
-most other numbers in /proc/meminfo.  And, hypothetically, might grow to
-the point of seriously interfering in mm/vmscan.c's heuristics, which do
-take NR_FILE_MAPPED into some consideration.
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-submission-notes
 
-Fixed by moving the __mod_lruvec_page_state() down to where it will not be
-missed before return (and I've grown a bit tired of that oft-repeated
-but-not-everywhere comment on the __ness: it gets lost in the move here).
+> While running
+> "while /bin/true; do setserial /dev/ttyS0 uart none;
+> setserial /dev/ttyS0 uart 16550A; done"
+> on a kernel with threaded irqs, setserial is hung after some calls.
+>
+> setserial opens the device, this will install an irq handler if the uart is
+> not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
+> Then the device is closed. On close, synchronize_irq() is called by
+> serial_core.
+>
+> If the close comes too fast, the irq_thread does not really start,
+> it is terminated immediately without going into irq_thread().
+> But an interrupt might already been handled by
+> irq_default_primary_handler(), going to __irq_wake_thread() and
+> incrementing threads_active.
+> If this happens, synchronize_irq() will hang forever, because the
+> irq_thread is already dead, and threads_active will never be decremented.
+>
+> The fix is to make sure that the irq_thread is really started
+> during __setup_irq().
 
-Does page_add_file_rmap() need the same change?  I suspect not, because
-page lock is held in all relevant cases, and its skipping case looks safe;
-but it's much easier to be sure, if we do make the same change.
+Right. Nice detective work.
 
-Link: https://lkml.kernel.org/r/e02e52a1-8550-a57c-ed29-f51191ea2375@google.com
-Fixes: dd78fedde4b9 ("rmap: support file thp")
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Reviewed-by: Yang Shi <shy828301@gmail.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- mm/rmap.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+> @@ -127,6 +129,8 @@ struct irqaction {
+>  	unsigned int		flags;
+>  	unsigned long		thread_flags;
+>  	unsigned long		thread_mask;
+> +	atomic_t		thread_is_up;
+> +	wait_queue_head_t	wait_for_thread;
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 444d0d958aff..fa09b5eaff34 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1239,14 +1239,14 @@ void page_add_new_anon_rmap(struct page *page,
-  */
- void page_add_file_rmap(struct page *page, bool compound)
- {
--	int i, nr = 1;
-+	int i, nr = 0;
- 
- 	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
- 	lock_page_memcg(page);
- 	if (compound && PageTransHuge(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
--		for (i = 0, nr = 0; i < nr_pages; i++) {
-+		for (i = 0; i < nr_pages; i++) {
- 			if (atomic_inc_and_test(&page[i]._mapcount))
- 				nr++;
- 		}
-@@ -1279,17 +1279,18 @@ void page_add_file_rmap(struct page *page, bool compound)
- 			if (PageMlocked(page))
- 				clear_page_mlock(head);
- 		}
--		if (!atomic_inc_and_test(&page->_mapcount))
--			goto out;
-+		if (atomic_inc_and_test(&page->_mapcount))
-+			nr++;
- 	}
--	__mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
- out:
-+	if (nr)
-+		__mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
- 	unlock_page_memcg(page);
- }
- 
- static void page_remove_file_rmap(struct page *page, bool compound)
- {
--	int i, nr = 1;
-+	int i, nr = 0;
- 
- 	VM_BUG_ON_PAGE(compound && !PageHead(page), page);
- 
-@@ -1304,12 +1305,12 @@ static void page_remove_file_rmap(struct page *page, bool compound)
- 	if (compound && PageTransHuge(page)) {
- 		int nr_pages = thp_nr_pages(page);
- 
--		for (i = 0, nr = 0; i < nr_pages; i++) {
-+		for (i = 0; i < nr_pages; i++) {
- 			if (atomic_add_negative(-1, &page[i]._mapcount))
- 				nr++;
- 		}
- 		if (!atomic_add_negative(-1, compound_mapcount_ptr(page)))
--			return;
-+			goto out;
- 		if (PageSwapBacked(page))
- 			__mod_lruvec_page_state(page, NR_SHMEM_PMDMAPPED,
- 						-nr_pages);
-@@ -1317,16 +1318,13 @@ static void page_remove_file_rmap(struct page *page, bool compound)
- 			__mod_lruvec_page_state(page, NR_FILE_PMDMAPPED,
- 						-nr_pages);
- 	} else {
--		if (!atomic_add_negative(-1, &page->_mapcount))
--			return;
-+		if (atomic_add_negative(-1, &page->_mapcount))
-+			nr++;
- 	}
- 
--	/*
--	 * We use the irq-unsafe __{inc|mod}_lruvec_page_state because
--	 * these counters are not modified in interrupt context, and
--	 * pte lock(a spinlock) is held, which implies preemption disabled.
--	 */
--	__mod_lruvec_page_state(page, NR_FILE_MAPPED, -nr);
-+out:
-+	if (nr)
-+		__mod_lruvec_page_state(page, NR_FILE_MAPPED, -nr);
- 
- 	if (unlikely(PageMlocked(page)))
- 		clear_page_mlock(page);
--- 
-2.36.0
+I don't think we need any of this extra ballast per irqaction.
 
+irqaction::thread_flags is already there and can be used as indicator.
+There are enough bits left.
+
+irq_desc already has a wait queue, which is used for synchronize_irq()
+to wait for threads to complete. That wait queue is unused at the point
+where an interrupt is set up, so there is no reason to introduce a new
+one which is only used once.
+
+This is not a problem in the rare case that the interrupt fires and
+wakes the thread which then in consequence might wake the waiter via
+wake_threads_waitq().
+
+> -	if (new->thread)
+> +	if (new->thread) {
+>  		wake_up_process(new->thread);
+> -	if (new->secondary)
+> +		wait_event(new->wait_for_thread,
+> +			   atomic_read(&new->thread_is_up));
+
+Please stick this into a helper function.
+
+Thanks,
+
+        tglx

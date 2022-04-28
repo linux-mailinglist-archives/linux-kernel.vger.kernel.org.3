@@ -2,166 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BD2513CA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E37C513CAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351848AbiD1UeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 16:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S1351851AbiD1Ugf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349078AbiD1UeG (ORCPT
+        with ESMTP id S1350377AbiD1Ugc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 16:34:06 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB7FC0D3C;
-        Thu, 28 Apr 2022 13:30:50 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id y2so11075989ybi.7;
-        Thu, 28 Apr 2022 13:30:50 -0700 (PDT)
+        Thu, 28 Apr 2022 16:36:32 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1ADC0D3F;
+        Thu, 28 Apr 2022 13:33:15 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id o2-20020a4ad142000000b0035e6578a91dso1084695oor.7;
+        Thu, 28 Apr 2022 13:33:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gSGOnYTcc5ZEbyXrmCTwPn3swHJvidZ0wfFFy4W9DxE=;
-        b=JAZVq1yf4shuv61SA0wIQ8MymZvvQNl3J2Ku3VJNyBVK79/T2e0OVVK24awmHR3PFR
-         5NDZ2cUiOxWiXHca4xGSs70ka31dRmSttNkHY9hmC5q6EwQFc2thgwmzyPVWEC3RrGvC
-         Q686maKmbyDKx8CTisTQ179g2HoU22DRIDRL6dZibIa6HVoa5QjNAPutrA/qQRORD+TT
-         pf4XEbqdDlTSDk4qF4gKf7LnkUZl6LIEd35Y+QI2xYZMPvbCWLjEAoxv7iYv0STysJdo
-         c1QjzcRffdPKw7T3YWjcsbpDVeHbeH5KhFqh5H6IrgspZs+z0u57LuaR1fA6IqhVvdtM
-         MnWA==
-X-Gm-Message-State: AOAM533b83DmVf60f+Di8D9siZFkwuEqboLCGAHeMP7EgG8IjC7zJvdA
-        0cyImo/xUGMFzAaN5/lIBPrL/Otmj+cck856Zew=
-X-Google-Smtp-Source: ABdhPJyok7JCeyk4IsE+a/CFQvlzuPTnIbkp7HWU7XD1rXNrzQY+xxfTnnOuNS08Pt7JaVKHhYUurgYAfGWjq/2Tyt8=
-X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
- n126-20020a25da84000000b00648423e57b0mr24541320ybf.137.1651177849779; Thu, 28
- Apr 2022 13:30:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220428142854.1065953-1-gregkh@linuxfoundation.org>
- <20220428155858.GA14614@bhelgaas> <Ymq/W+KcWD9DKQr/@kroah.com> <CAJZ5v0hCiO6_deYnUK-5pfqE+fy1XLSUiBvkBgWw2nbqu9ggXA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hCiO6_deYnUK-5pfqE+fy1XLSUiBvkBgWw2nbqu9ggXA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Apr 2022 22:30:38 +0200
-Message-ID: <CAJZ5v0itRry98=7X=NOmituD3VH=GYdY3REtrhx3ubH0wf=ckw@mail.gmail.com>
-Subject: Re: [PATCH] PCI/ACPI: do not reference a pci device after it has been released
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        whitehat002 <hackyzh002@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=B9x15wnuwFtq/3VYQAzVD5Jvl0nQdR42CrutQYJJh2g=;
+        b=4MZq7ptmyWUU+K2Z6cl+8G1o1CF/r53S9jU3NRdJXoZDG+UEClvDK3fn3E/gh1QlpH
+         Ow5dx7Cwc/UVD23NJUexciMDrAy2UbagS35ttaGqizumbU0uX7ep+0O7j1XI2k50gUpq
+         CMys9RgHfnVqq/JAA62Vc6nCwEU5uiF3TMA9s4EKXG5M5ChZf/Jx2EDbBsRYerUYeFpl
+         xGc7sXvNxW+QyVSUD6MjvniHRGkPWNUjvWZoP03AsiUSvtarPLtI5gcTHItvMwZZSSfq
+         glxOvwfVMh7KIyLis9Qcrvr1hM4mp3o3tj+O99s086qDg49x94PoqTGUdkNwAQzuqnEg
+         11hQ==
+X-Gm-Message-State: AOAM533aocziUPkG8Hq+p7qAAMlYKzTFgiwG6MiaPA8obfDrQNUIXwzv
+        LtYShh4zZsTakwV6OmWL1Q==
+X-Google-Smtp-Source: ABdhPJx5fiCLEo8Nkxa3liF7wTlGPWAq3+bwWVA6vMmHt8EESLBE81C80gHKvonIz3kygiYb9WMqVg==
+X-Received: by 2002:a4a:bb0b:0:b0:338:e8bb:d5fc with SMTP id f11-20020a4abb0b000000b00338e8bbd5fcmr12524249oop.16.1651177994946;
+        Thu, 28 Apr 2022 13:33:14 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f60-20020a9d2c42000000b00605d61e3a16sm372946otb.35.2022.04.28.13.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 13:33:14 -0700 (PDT)
+Received: (nullmailer pid 220465 invoked by uid 1000);
+        Thu, 28 Apr 2022 20:33:13 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        chunkuang.hu@kernel.org, jitao.shi@mediatek.com,
+        linux-kernel@vger.kernel.org, airlied@linux.ie,
+        krzysztof.kozlowski+dt@linaro.org, daniel@ffwll.ch,
+        xinlei.lee@mediatek.com, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-mediatek@lists.infradead.org,
+        robh+dt@kernel.org, dri-devel@lists.freedesktop.org
+In-Reply-To: <20220428133753.8348-2-rex-bc.chen@mediatek.com>
+References: <20220428133753.8348-1-rex-bc.chen@mediatek.com> <20220428133753.8348-2-rex-bc.chen@mediatek.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
+Date:   Thu, 28 Apr 2022 15:33:13 -0500
+Message-Id: <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Apr 28, 2022 at 6:22 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Apr 28, 2022 at 10:58:58AM -0500, Bjorn Helgaas wrote:
-> > > On Thu, Apr 28, 2022 at 04:28:53PM +0200, Greg Kroah-Hartman wrote:
-> > > > In acpi_get_pci_dev(), the debugging message for when a PCI bridge is
-> > > > not found uses a pointer to a pci device whose reference has just been
-> > > > dropped.  The chance that this really is a device that is now been
-> > > > removed from the system is almost impossible to happen, but to be safe,
-> > > > let's print out the debugging message based on the acpi root device
-> > > > which we do have a valid reference to at the moment.
-> > >
-> > > This code was added by 497fb54f578e ("ACPI / PCI: Fix NULL pointer
-> > > dereference in acpi_get_pci_dev() (rev. 2)").  Not sure if it's worth
-> > > a Fixes: tag.
-> >
-> > Can't hurt, I'll add it for the v2 based on this review.
-> >
-> > >
-> > > acpi_get_pci_dev() is used by only five callers, three of which are
-> > > video/backlight related.  I'm always skeptical of one-off interfaces
-> > > like this, but I don't know enough to propose any refactoring or other
-> > > alternatives.
-> > >
-> > > I'll leave this for Rafael, but if I were applying I would silently
-> > > touch up the subject to match convention:
-> > >
-> > >   PCI/ACPI: Do not reference PCI device after it has been released
-> >
-> > Much simpler, thanks.
-> >
-> > >
-> > > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > > > Cc: Len Brown <lenb@kernel.org>
-> > > > Cc: linux-pci@vger.kernel.org
-> > > > Cc: linux-acpi@vger.kernel.org
-> > > > Reported-by: whitehat002 <hackyzh002@gmail.com>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > >  drivers/acpi/pci_root.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> > > > index 6f9e75d14808..ecda378dbc09 100644
-> > > > --- a/drivers/acpi/pci_root.c
-> > > > +++ b/drivers/acpi/pci_root.c
-> > > > @@ -303,7 +303,8 @@ struct pci_dev *acpi_get_pci_dev(acpi_handle handle)
-> > > >              * case pdev->subordinate will be NULL for the parent.
-> > > >              */
-> > > >             if (!pbus) {
-> > > > -                   dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
-> > > > +                   dev_dbg(&root->device->dev,
-> > > > +                           "dev %d, function %d is not a PCI-to-PCI bridge\n", dev, fn);
-> > >
-> > > This should use "%02x.%d" to be consistent with the dev_set_name() in
-> > > pci_setup_device().
-> >
-> > Ah, missed that, will change it and send out a new version tomorrow.
->
-> I would make the change below (modulo the gmail-induced wthite space
-> breakage), though.
-
-That said ->
-
+On Thu, 28 Apr 2022 21:37:50 +0800, Rex-BC Chen wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> 
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 > ---
->  drivers/acpi/pci_root.c |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> Index: linux-pm/drivers/acpi/pci_root.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/pci_root.c
-> +++ linux-pm/drivers/acpi/pci_root.c
-> @@ -295,8 +295,6 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
->              break;
->
->          pbus = pdev->subordinate;
-> -        pci_dev_put(pdev);
-> -
->          /*
->           * This function may be called for a non-PCI device that has a
->           * PCI parent (eg. a disk under a PCI SATA controller).  In that
-> @@ -304,9 +302,12 @@ struct pci_dev *acpi_get_pci_dev(acpi_ha
->           */
->          if (!pbus) {
->              dev_dbg(&pdev->dev, "Not a PCI-to-PCI bridge\n");
-> +            pci_dev_put(pdev);
->              pdev = NULL;
->              break;
->          }
-> +
-> +        pci_dev_put(pdev);
+>  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
+>  .../display/mediatek/mediatek,dsi.yaml        | 122 ++++++++++++++++++
+>  2 files changed, 122 insertions(+), 62 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yaml
+> 
 
--> we are going to use pbus after this and it is pdev->subordinate
-which cannot survive without pdev AFAICS.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Are we not concerned about this case?
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
->      }
->  out:
->      list_for_each_entry_safe(node, tmp, &device_list, node)
+Full log is available here: https://patchwork.ozlabs.org/patch/
+
+
+dsi@1400c000: compatible: ['mediatek,mt7623-dsi', 'mediatek,mt2701-dsi'] is too long
+	arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dtb
+	arch/arm/boot/dts/mt7623n-rfb-emmc.dtb
+
+dsi@14014000: #address-cells:0:0: 2 was expected
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+
+dsi@14014000: 'port' is a required property
+	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+
+dsi@14014000: #size-cells:0:0: 2 was expected
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+
+dsi@1401b000: 'port' is a required property
+	arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
+	arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
+	arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
+

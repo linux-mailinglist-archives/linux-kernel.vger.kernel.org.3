@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32385139E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E84C5139E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350069AbiD1QfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S1350075AbiD1QhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350065AbiD1QfD (ORCPT
+        with ESMTP id S1345895AbiD1QhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 12:35:03 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009257DE02;
-        Thu, 28 Apr 2022 09:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651163509; x=1682699509;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IWjeCxTCtHM7X/VtwHEV8uloK8O55Amxh8Nwcutg5+0=;
-  b=avzv8ta5vb2PbK3YUV+rTxCjSOEUZkVRclp8giAZflI+1QCtVw5DOII7
-   fQKIQdNEhmNOV6P1qere4lzBZrZ7yR9t3S2fY6xERp1ik1+JnZB9QDrmE
-   JdPiYXYI+CoEwOmQnN/VD62+CNI7M4Pg8SzI3eJiXbwE8eFMHsZRRfB5E
-   c=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 28 Apr 2022 09:31:48 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 09:31:45 -0700
-Received: from [10.110.12.199] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
- 2022 09:31:44 -0700
-Message-ID: <e11455d8-78c2-68e8-215e-a4e3587f3e4a@quicinc.com>
-Date:   Thu, 28 Apr 2022 09:31:43 -0700
+        Thu, 28 Apr 2022 12:37:01 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FA5B18A6;
+        Thu, 28 Apr 2022 09:33:45 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nk75B-0004vP-A0; Thu, 28 Apr 2022 18:33:33 +0200
+Message-ID: <6a017aa4-aebe-1b46-ddca-376fecdfba9f@maciej.szmigiero.name>
+Date:   Thu, 28 Apr 2022 18:33:27 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv12 8/9] serial: qcom_geni_serial: Disable MMIO tracing for
- geni serial
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>, <will@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <cover.1651139070.git.quic_saipraka@quicinc.com>
- <3fef68a94e4947d58a199709929d30e0e2bf2e44.1651139070.git.quic_saipraka@quicinc.com>
- <Ympxa0ZY0VxZGEjA@kroah.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <Ympxa0ZY0VxZGEjA@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+References: <20220423021411.784383-1-seanjc@google.com>
+ <20220423021411.784383-3-seanjc@google.com>
+ <61ad22d6de1f6a51148d2538f992700cac5540d4.camel@redhat.com>
+ <4baa5071-3fb6-64f3-bcd7-2ffc1181d811@maciej.szmigiero.name>
+ <b8a02f2eab780262c172cd4bbffd801ca8a37e98.camel@redhat.com>
+ <YmqtCNFxCSF2hENP@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH v2 02/11] KVM: SVM: Don't BUG if userspace injects a soft
+ interrupt with GIF=0
+In-Reply-To: <YmqtCNFxCSF2hENP@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,38 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/2022 3:50 AM, Greg KH wrote:
-> On Thu, Apr 28, 2022 at 03:25:31PM +0530, Sai Prakash Ranjan wrote:
->> Disable MMIO tracing for geni serial driver as it is a high
->> frequency operation for serial driver with many register reads/
->> writes and not very useful to log all MMIO traces and prevent
->> excessive logging.
+On 28.04.2022 17:04, Sean Christopherson wrote:
+> On Thu, Apr 28, 2022, Maxim Levitsky wrote:
+>> On Thu, 2022-04-28 at 15:27 +0200, Maciej S. Szmigiero wrote:
+>>> On 28.04.2022 09:35, Maxim Levitsky wrote:
+>>>> On Sat, 2022-04-23 at 02:14 +0000, Sean Christopherson wrote:
+>>>>> From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+>>>>>
+>>>>> Don't BUG/WARN on interrupt injection due to GIF being cleared if the
+>>>>> injected event is a soft interrupt, which are not actually IRQs and thus
+>>>>
+>>>> Are any injected events subject to GIF set? I think that EVENTINJ just injects
+>>>> unconditionaly whatever hypervisor puts in it.
+>>>
+>>> That's right, EVENTINJ will pretty much always inject, even when the CPU
+>>> is in a 'wrong' state (like for example, injecting a hardware interrupt
+>>> or a NMI with GIF masked).
+>>>
+>>> But KVM as a L0 is not supposed to inject a hardware interrupt into guest
+>>> with GIF unset since the guest is obviously not expecting it then.
+>>> Hence this WARN_ON().
 >>
->> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->> ---
->>   drivers/tty/serial/qcom_geni_serial.c | 8 +++++++-
->>   1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->> index 1543a6028856..5b48e6c2bf3c 100644
->> --- a/drivers/tty/serial/qcom_geni_serial.c
->> +++ b/drivers/tty/serial/qcom_geni_serial.c
->> @@ -1,5 +1,11 @@
->>   // SPDX-License-Identifier: GPL-2.0
->> -// Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->> +/*
->> + * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
+>> If you mean L0->L1 injection, that sure, but if L1 injects interrupt to L2,
+>> then it should always be allowed to do so.
 > 
-> I strongly disagree that adding a single line here warrants a copyright
-> update.  If your lawyers will sign off on this change, I am willing to
-> reconsider.
+> Yes, L1 can inject whatever it wants, whenever it wants.
+> 
+> I kept the WARN_ON() under the assumption that KVM would refuse to inject IRQs
+> stuffed by userspace if GIF is disabled, but looking at the code again, I have
+> no idea why I thought that.  KVM_SET_VCPU_EVENTS blindly takes whatever userspace
+> provides, I don't see anything that would prevent userspace from shoving in a
+> hardware IRQ.
 
-I am not a lawyer, we can skip adding QuIC copyright here since it is 
-just one line change, but at the same time we can't add 2022 year in the 
-existing copyright. If that is fine, we can skip the copyright year 
-update entirely.
+You both are right, while KVM itself would not inject IRQ with GIF masked and
+a nested VMRUN would enable GIF unconditionally, userspace via KVM_SET_VCPU_EVENTS
+does not have this restriction.
 
----Trilok Soni
+Will remove this WARN_ON() then.
+
+Thanks,
+Maciej

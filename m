@@ -2,112 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BFD513E91
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0554513E93
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352898AbiD1Whu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S1352915AbiD1WiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbiD1Whq (ORCPT
+        with ESMTP id S1352904AbiD1WiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:37:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0232BF945
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651185270; x=1682721270;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5Xaif9XTCLVj9HMqW7PV8obS8KjvJ3OUPUcIY2cWs4U=;
-  b=i0paNuGSZXnEfzWGGezoIgvFK4jR+G4i0YFGhZqus1JD0Bn9a8qR7wuL
-   krl9IpMNM0/eBKq4Ewo3wfq5W062BXURsASTPxijpNN58M70IWhQ6ediZ
-   imLLr4yAMrVAemeCwSc+b10hv+O8ok9F6YiGwat2K49ce7ht5rhMTm0Wi
-   kBOh5bUq0rQ8DKl/fOCCZ4l52mGwZVQAtAYU6mltV9nfNUDQaVXqhnZug
-   4ajLmw5hF2aZ47OMpTok8Bx9oVAVa6MvfbKMr3+Nol1PDGCVqoGUZpazM
-   5Rzo2qHncfvUP6+bKj9A0DsdqIb6lnD0ZZX7H+Tbu9gipRRwLykB/mNDM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329388635"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="329388635"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 15:34:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="597008914"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Apr 2022 15:34:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkCiR-0005k1-S9;
-        Thu, 28 Apr 2022 22:34:27 +0000
-Date:   Fri, 29 Apr 2022 06:33:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Kossifidis <mick@ics.forth.gr>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: fs/proc/vmcore.c:443:42: warning: unused variable 'vmcore_mmap_ops'
-Message-ID: <202204290642.I2dLZBgO-lkp@intel.com>
+        Thu, 28 Apr 2022 18:38:02 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B167C12EA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:34:46 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f16645872fso68382937b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0feeoMrcWszYCfSrxHSgx4H/3IveYcwWC4Cl4lgiGH4=;
+        b=ixUNmBFVgYwgdLVwJIRe4IdaB6TGEHx+HLHPTiwTPLr31WNdRttL2C/OZf+7ep2n0+
+         xl7MZ+kjlYuatydCbkMYlC4+wHU22lq919Bsie6bgrXCm3IG3dKJMWE+j/2TbnPshb46
+         EvbhV0mNdoyWW5GeFCMQpIoVM3ZAFEt/RM2xfLlXhGEC6X9NT5W0Bx6U+NJIEom2VSTZ
+         gu8ZrgVK4jtoOWRC+ZNthBvnpwUv9Dutk5AkoncraxV/DXT+IV813VWCa8IfcGDSLwLJ
+         Y+5LxbsY2CE49BKq+mz9LwBggwJgd8CEMvU5yluJrn/b8APR/E+AlqVHhXQuO5NV/0tH
+         5IHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0feeoMrcWszYCfSrxHSgx4H/3IveYcwWC4Cl4lgiGH4=;
+        b=yP2hO44oyOoKVzrIFGtRk8rXlybfF+kr2aZk0wudSnqPCmj4+XE5K1SnknEqG/z3ZI
+         oPhOpesZvFK+nWrXzs6HLgjWfng8X/zXEzn1MDy7zPK6tZ09QodlYnYuNCYg+JAY4Ne6
+         fE9Gh/cvXphugXU07x8NUfzWb4+91AhZilUc6aKZrgFrERdqY7prcJINj5UPZ2xYYx6F
+         t9YtrQuQ0aboW3i0tlDqe2nTELRToAy0aoyAa77zb78/oFbuRMqP0sZ4udmdvI/SN+4u
+         YNjBwR4EUeQVSgeviuq1lmtJ3dB/ppNR/GNOIqTwEfHTBmx0OaWoOp5V0yl34I9tKTbe
+         lWOw==
+X-Gm-Message-State: AOAM5317C+fNQToVzXVUrp4ZEEcEJQMghUj8nC5c2h81kNeuUCC+/6lJ
+        ezteieWr+ZW6dsIExeI0Sw46IvdkpJZV4oym9Ic7CQ==
+X-Google-Smtp-Source: ABdhPJwymsnQ4Q7gEKcXPpD/MbjbiQgK5FOvY/AhPhloOsoz4XMxyhZejE9yU1YUIvUX/6kvgt3ECRLKcKg0x91b3B8=
+X-Received: by 2002:a0d:f0c3:0:b0:2f4:d291:9dde with SMTP id
+ z186-20020a0df0c3000000b002f4d2919ddemr35531921ywe.437.1651185285368; Thu, 28
+ Apr 2022 15:34:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220428111622.1395831-1-michael@walle.cc>
+In-Reply-To: <20220428111622.1395831-1-michael@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 29 Apr 2022 00:34:34 +0200
+Message-ID: <CACRpkdZfTh9NeNtGHLavOz6HXjYqLwOcgi87E6k2rj9RjTZLfw@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: microchip-sgpio: make irq_chip immutable
+To:     Michael Walle <michael@walle.cc>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+On Thu, Apr 28, 2022 at 1:16 PM Michael Walle <michael@walle.cc> wrote:
 
-First bad commit (maybe != root cause):
+> Since recently, the kernel is nagging about mutable irq_chips:
+>
+> [    4.967050] gpio gpiochip1: (e2004190.gpio-input): not an immutable chip, please consider fixing it!
+>
+> Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> helper functions and call the appropriate gpiolib functions.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   249aca0d3d631660aa3583c6a3559b75b6e971b4
-commit: 5640975003d0234da08559677e22ec25b9cb3267 RISC-V: Add crash kernel support
-date:   1 year ago
-config: riscv-randconfig-c006-20220428 (https://download.01.org/0day-ci/archive/20220429/202204290642.I2dLZBgO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5640975003d0234da08559677e22ec25b9cb3267
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5640975003d0234da08559677e22ec25b9cb3267
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
+I'm still waiting to see if Bartosz pulls in the prerequisites
+to the GPIO tree, when/if he does I will pull it in too and
+apply this on top.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/proc/vmcore.c:443:42: warning: unused variable 'vmcore_mmap_ops' [-Wunused-const-variable]
-   static const struct vm_operations_struct vmcore_mmap_ops = {
-                                            ^
-   8 warnings generated.
-
-
-vim +/vmcore_mmap_ops +443 fs/proc/vmcore.c
-
-9cb218131de1c59 Michael Holzheu 2013-09-11  442  
-9cb218131de1c59 Michael Holzheu 2013-09-11 @443  static const struct vm_operations_struct vmcore_mmap_ops = {
-9cb218131de1c59 Michael Holzheu 2013-09-11  444  	.fault = mmap_vmcore_fault,
-9cb218131de1c59 Michael Holzheu 2013-09-11  445  };
-9cb218131de1c59 Michael Holzheu 2013-09-11  446  
-
-:::::: The code at line 443 was first introduced by commit
-:::::: 9cb218131de1c59dca9063b2efe876f053f316af vmcore: introduce remap_oldmem_pfn_range()
-
-:::::: TO: Michael Holzheu <holzheu@linux.vnet.ibm.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours,
+Linus Walleij

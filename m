@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCBC513371
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F67D51337A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346106AbiD1MVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S1346131AbiD1MXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiD1MVS (ORCPT
+        with ESMTP id S1346119AbiD1MXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:21:18 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED475ADD4A;
-        Thu, 28 Apr 2022 05:17:59 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id s131so5149337oie.1;
-        Thu, 28 Apr 2022 05:17:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=oqNXD0idBs6+FKIlnsEQo6osQwhhpCXlDbeX0RQIYO0=;
-        b=iu0rpz4Linyr/GsGO+6I/ZeaYm/Zp6CjayP+pdLq3C9IRYMVz/+kFPyfutCas+fGzO
-         G19mfXw67ioXhkItAwGuK87/p9C6lpyeLakKqmsSEiR132MmI6Q2r8S0qRXaf9pxTf00
-         2aoj+LnOX9aR6leQSh1nxL3R6uon7FfuDKPUMGLGH8qwQZ/RbVNOMl5x8Uy+FlrJrc+z
-         qI2/v7u1YUfBkuM1S0QuxFVABX8D1ZHgVbj7RMA9QzKBDik8QQ7N4fI5O4RJKDpJeLCe
-         WAqS+9qlWiUyJ5+2rQvUGVgwwlsh8cHQ8OIkt/rhPofomhoqGQmD+/7cXzXh0yz6jsGK
-         hFjw==
-X-Gm-Message-State: AOAM533JI4gUlI7szyARCkdUaw2WK6/ju5KpVXXaF27BLHNLOwiZbrEP
-        t17JjZPTa0TDcPkuI8ZGK3pexUDiQg==
-X-Google-Smtp-Source: ABdhPJz79Uyli5XuXZ/YbldCnIdSvSISWDE5Fl8O5kQTkx6KQr64F68etKJsVQXHaxzZGCB40WZDIg==
-X-Received: by 2002:a05:6808:1589:b0:322:9102:5503 with SMTP id t9-20020a056808158900b0032291025503mr15696224oiw.68.1651148279242;
-        Thu, 28 Apr 2022 05:17:59 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j17-20020a4a92d1000000b0035ea6671d8esm999857ooh.35.2022.04.28.05.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 05:17:58 -0700 (PDT)
-Received: (nullmailer pid 1999481 invoked by uid 1000);
-        Thu, 28 Apr 2022 12:17:57 -0000
-From:   Rob Herring <robh@kernel.org>
+        Thu, 28 Apr 2022 08:23:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450DC2BB26;
+        Thu, 28 Apr 2022 05:19:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D40B461FB8;
+        Thu, 28 Apr 2022 12:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EA2C385A0;
+        Thu, 28 Apr 2022 12:19:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651148387;
+        bh=0ZF7rbfOURu9fFQScLsiQBow2Dp0oWt4z38KgBEVbyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RqPNCacM155R73rT1xOj26j/PjnWU1BXlCCR+fgYHwmP6pAMyuA+qIPZhfNq50dbF
+         Hqi5elhl8jrh+4pjB1DaSTmiNMRnjVoz/zO6fLCu3R4HrPrtNNskRIltHnmVgCh71n
+         mLB27rM9gvH9guv4nsUV35OSWd2QV0993k1yu8A8SgrpHjaMdb35bDh1/7zF8eb76j
+         CopMvriSjfhzOzhzavCS63LS2g5Mh8uIL/X1yS8TctGAI5VnIBhVmuWwpl5WHmEwcS
+         3RIxqZnWcz1fAD66e6vhNGq01RmJpcHvLKpqMEn7/GwmhFMX5v01TIVcbbnl9k/CaF
+         mZYWEGTDD4+jQ==
+Date:   Thu, 28 Apr 2022 13:19:40 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        trevor.wu@mediatek.com, broonie@kernel.org, robh+dt@kernel.org,
-        aaronyu@google.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, julianbraha@gmail.com,
-        tzungbi@google.com
-In-Reply-To: <20220428093355.16172-17-jiaxin.yu@mediatek.com>
-References: <20220428093355.16172-1-jiaxin.yu@mediatek.com> <20220428093355.16172-17-jiaxin.yu@mediatek.com>
-Subject: Re: [v4 16/18] dt-bindings: mediatek: mt8186: add mt8186-mt6366-da7219-max98357 document
-Date:   Thu, 28 Apr 2022 07:17:57 -0500
-Message-Id: <1651148277.902080.1999480.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Cc:     robh+dt@kernel.org, angelogioacchino.delregno@collabora.com,
+        aaronyu@google.com, matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        tzungbi@google.com, julianbraha@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [v4 00/18] ASoC: mediatek: Add support for MT8186 SoC
+Message-ID: <YmqGXCg97X6Vqvs+@sirena.org.uk>
+References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="14HuojlumyrWt7WU"
+Content-Disposition: inline
+In-Reply-To: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
+X-Cookie: Bedfellows make strange politicians.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 17:33:53 +0800, Jiaxin Yu wrote:
-> Add document for mt8186 board with mt6366, da7219 and max98357.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> ---
->  .../sound/mt8186-mt6366-da7219-max98357.yaml  | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+--14HuojlumyrWt7WU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml:30:9: [warning] wrong indentation: expected 6 but found 8 (indentation)
-./Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml:40:9: [warning] wrong indentation: expected 6 but found 8 (indentation)
+On Thu, Apr 28, 2022 at 05:33:37PM +0800, Jiaxin Yu wrote:
+> This series of patches adds support for Mediatek AFE of MT8186 Soc.
+> Patches are based on broonie tree "for-next" branch.
 
-dtschema/dtc warnings/errors:
+This looks mostly good from a framework point of view - I did notice a
+few minor issues which I commented on (some of the control things are
+repeated in other patches) but the overwhelming bulk of the code looks
+good.
 
-doc reference errors (make refcheckdocs):
+--14HuojlumyrWt7WU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-See https://patchwork.ozlabs.org/patch/
+-----BEGIN PGP SIGNATURE-----
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJqhlwACgkQJNaLcl1U
+h9D9DggAg16/opdgBxLyrYeeiZua8OPPegaMglo/X8k1DiCR0BudGSgln13XMg5i
+gmLRcCIr6/gI69T9tIdarki2mOqMhdyZAjZtLsL8crocPPM5/pkuGF9lFg+dEyWa
+Hl3ipVQEKqxgtSSRelBtwZbT6N5tvVNjQkV1R0+376N/jbtS4gUa3wcs6weJhCGz
+7Zo6/8FogQaAG0S/RkqiBRAOfStCbJl+33rN1nASR7mZJHCsu6kefxdHsrtYJKq9
+VqQtzDPI8wfHaMhJ/cFidSWVssQD2Uoyea3/Fk3I5YmHvnM77gIB5taZPeAlKQxh
+9Ofv/WaTnH7gZHg389wqh3jxMnUJmQ==
+=bwgG
+-----END PGP SIGNATURE-----
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+--14HuojlumyrWt7WU--

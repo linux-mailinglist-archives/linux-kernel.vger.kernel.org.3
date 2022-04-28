@@ -2,245 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EDF513538
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D53513536
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347262AbiD1NgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S1347240AbiD1Ngc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347227AbiD1NgG (ORCPT
+        with ESMTP id S1347245AbiD1Nga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:36:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C5E21274;
-        Thu, 28 Apr 2022 06:32:51 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id BCEC41F458A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651152769;
-        bh=/U63ACeQUirihMwLAXg7hRsWkkxF4fnAOZcyYxhREIo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VAwCobX1tvMAfcq07elW+o6jf6vMrnFtj3SFVtm6XXgvep+Jcvdu3sRocW7vTpLIl
-         y6Z13jOY/Y6yOh/8ylDW3yvp1rtfxPYPZYmADILgl6ECGVx8WGD3fjQP3GoeuQEk0s
-         zywlw3BLloSE/4zj3xnwcLlwUchlvX4eMJTWMFYZQ5CJozsLWDtgMBHwoZyFMxIpHr
-         kytepd1Rf4A21PNrC1aZn1dm0uMFTq7bD8jO/HaGyv4kDy30ZqZnZPmTLqsTlgDEUU
-         medm6fH/o8RcYSUZ2HXQNAc08kj5GOCAj+lSNSsfxG2xGWNvEyJWr/MgpKYplfX9Qt
-         99vRaBNp3U+KA==
-Message-ID: <c60bf00a-340d-e1de-cabc-87535470c472@collabora.com>
-Date:   Thu, 28 Apr 2022 15:32:46 +0200
+        Thu, 28 Apr 2022 09:36:30 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B914C36322;
+        Thu, 28 Apr 2022 06:33:15 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-deb9295679so5152508fac.6;
+        Thu, 28 Apr 2022 06:33:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MkPYC4wT6c/VEzdCj0wFf0XUJgHVgHaxvf4ri5zul6g=;
+        b=RcZtELW2TcWDRKSRKXL4rsuZjl//w0sXHcz4x8N1xAf/r5Sgvl6vDlIWOYEUAA/A7e
+         EflF8wvwYREF9zLrFJDrsMWH4P105CviJsV6VhoRhneejW+z/f05PCZpWxfLlibiTz+k
+         vf26WpkgR4/Ij6XNZ69nZbxmy7Fhrq0O4q8DMcLdkieesv6t/wGSrsnq3D46pnHMENqg
+         c840KqJorlw7QHJaH5I4Q4E842DDgZFWI6kRBz1gn5U9CLP8tE4SbRlPZmToFDgKzdx6
+         e1D9bcRQMb7i+Eg9t0MB4Y2G/9yHBOS8aggQ7TDi7W/xKZltQ5L38KOGwX+lkFRRGaMA
+         Szsg==
+X-Gm-Message-State: AOAM533YFPEyRItYvcta+DxKasXsgWamtl46/IRjcbFzBhoZCxi8ew1E
+        iWdatBeSqBByqHffkLxzmQ==
+X-Google-Smtp-Source: ABdhPJyyg4xxehRJ6S6u/e8qGxKkazJCdf8F+SPH8Hd67CeOr+MmYpGdtq1tiHMic/2BoR0ZYp2jMQ==
+X-Received: by 2002:a05:6870:2187:b0:e9:7872:c7f6 with SMTP id l7-20020a056870218700b000e97872c7f6mr4563491oae.257.1651152795039;
+        Thu, 28 Apr 2022 06:33:15 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q22-20020a056870e89600b000e686d13895sm1819310oan.47.2022.04.28.06.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 06:33:14 -0700 (PDT)
+Received: (nullmailer pid 2104457 invoked by uid 1000);
+        Thu, 28 Apr 2022 13:33:13 -0000
+Date:   Thu, 28 Apr 2022 08:33:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        devicetree@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Liviu Dudau <liviu.dudau@arm.com>, Ray Jui <rjui@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 08/10] ARM: dts: exynos: use proper
+ 'dma-channels/requests' properties
+Message-ID: <YmqXmTau/YbZjrrn@robh.at.kernel.org>
+References: <20220427155840.596535-1-krzysztof.kozlowski@linaro.org>
+ <CGME20220427160347eucas1p23ce51e0fb49160d437961d98fd682c28@eucas1p2.samsung.com>
+ <20220427155840.596535-9-krzysztof.kozlowski@linaro.org>
+ <5eeac2a0-4293-675e-9dc2-25ed8ab3fb8f@samsung.com>
+ <6981f93a-ef01-6ba0-4451-26526372d666@linaro.org>
+ <05c908ce-217f-6938-6745-7405ac39d8ea@samsung.com>
+ <1399774c-f188-81f1-4d15-367b9d0e4a59@linaro.org>
+ <99c80fb6-c6cc-9370-b93d-ed736c7f2192@samsung.com>
+ <813bd5f2-38b6-9642-6993-94ad78f5c08a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v8 2/2] arm64: dts: Add MediaTek SoC MT8186 dts and
- evaluation board and Makefile
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>, hsinyi@chromium.org
-References: <20220428061717.11197-1-allen-kh.cheng@mediatek.com>
- <20220428061717.11197-3-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220428061717.11197-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <813bd5f2-38b6-9642-6993-94ad78f5c08a@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/04/22 08:17, Allen-KH Cheng ha scritto:
-> Add basic chip support for MediaTek MT8186.
+On Thu, Apr 28, 2022 at 12:09:02PM +0200, Krzysztof Kozlowski wrote:
+> On 28/04/2022 12:05, Marek Szyprowski wrote:
+> >>>>> I also don't see any code that would read those properties. IMHO they
+> >>>>> should be simply removed at all, at least for the PL330 related nodes.
+> >>>> In current Linux implementation they indeed are not used. Nothing parses
+> >>>> them. However:
+> >>>> 1. They describe (hopefully correct) the hardware.
+> >>>> 2. They might be used by other implementations of pl330 driver.
+> >>>>
+> >>>> I would not remove them from existing sources, but indeed maybe there is
+> >>>> no need to add for new files.
+> >>> What's the point in having dt properties duplicating data that might be
+> >>> read from the driver registers?
+> >> Hm, indeed, there is no point in this. Since they are read from
+> >> registers, what was the idea behind in commit 42cf20980cde?
+> > 
+> > #dma-cells is indeed required, but the rest seems to be the cargo-cult 
+> > of some kind.
 > 
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->   arch/arm64/boot/dts/mediatek/mt8186-evb.dts | 232 +++++
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi    | 949 ++++++++++++++++++++
->   3 files changed, 1182 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> Rob,
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index c7d4636a2cb7..50a2c58c5f56 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -37,6 +37,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-kodama-sku32.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8186-evb.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186-evb.dts b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
-> new file mode 100644
-> index 000000000000..6bf5b81e3e6b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
-> @@ -0,0 +1,232 @@
+> Any guidance from your side? Is there any benefit in describing the
+> hadrware (dma-channels/dma-requests) if the same value can be read from
+> registers?
 
-..snip..
+Drop the properties. They should only be an override if ever needed.
 
-> +
-> +&pio {
-> +	i2c0_pins: i2c0{
-> +		pins_bus {
-
-No underscores please!
-
-Either name this "pins-bus" or, more appropriately, I would give it a more
-descriptive name, like "pins-sda-scl".
-
-> +			pinmux = <PINMUX_GPIO128__FUNC_SDA0>,
-> +				 <PINMUX_GPIO127__FUNC_SCL0>;
-> +			bias-disable;
-> +			mediatek,drive-strength-adv =<0>;
-> +			drive-strength = <MTK_DRIVE_4mA>;
-> +			input-enable;
-> +		};
-> +	};
-
-..snip..
-
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> new file mode 100644
-> index 000000000000..9e3d45f3e5de
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-> @@ -0,0 +1,949 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Copyright (C) 2022 MediaTek Inc.
-> + * Author: Allen-KH Cheng <allenn-kh.cheng@mediatek.com>
-
-Uhm, you typoed your email address! :-)
-
-> + */
-> +/dts-v1/;
-> +#include <dt-bindings/clock/mt8186-clk.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/pinctrl/mt8186-pinfunc.h>
-> +#include <dt-bindings/power/mt8186-power.h>
-> +#include <dt-bindings/phy/phy.h>
-> +#include <dt-bindings/reset/mt8186-resets.h>
-> +
-> +/ {
-> +	compatible = "mediatek,mt8186";
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu0: cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a55";
-> +			reg = <0x000>;
-> +			enable-method = "psci";
-> +			clock-frequency = <2000000000>;
-
-No capacity-dmips-mhz for the CPUs?!
-
-> +			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-> +			next-level-cache = <&l2_0>;
-> +		};
-
-..snip..
-
-> +	soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		ranges;
-> +
-> +		gic: interrupt-controller@c000000 {
-> +			compatible = "arm,gic-v3";
-> +			#interrupt-cells = <3>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			#redistributor-regions = <1>;
-> +			interrupt-parent = <&gic>;
-> +			interrupt-controller;
-> +			reg = <0 0x0c000000 0 0x40000>,
-> +			      <0 0x0c040000 0 0x200000>;
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-
-Are there no ppi-partitions for this interrupt controller?
-
-> +		};
-> +
-
-..snip..
-
-> +
-> +		scpsys: syscon@10006000 {
-> +			compatible = "syscon", "simple-mfd";
-> +			reg = <0 0x10006000 0 0x1000>;
-> +			#power-domain-cells = <1>;
-> +
-> +			/* System Power Manager */
-> +			spm: power-controller {
-> +				compatible = "mediatek,mt8186-power-controller";
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				#power-domain-cells = <1>;
-> +
-> +				/* power domain of the SoC */
-> +				mfg0: mfg0@MT8186_POWER_DOMAIN_MFG0 {
-This should be, for consistency with other mtk devicetrees:
-     mfg0: power-domain@MT8186_POWER_DOMAIN_MFG0 {
-
-> +					reg = <MT8186_POWER_DOMAIN_MFG0>;
-> +					clocks = <&topckgen CLK_TOP_MFG>;
-> +					clock-names= "mfg00";
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					#power-domain-cells = <1>;
-> +
-> +					mfg1@MT8186_POWER_DOMAIN_MFG1 {
-
-power-domain@MT8186_POWER_DOMAIN_MFG1
-
-....and the same for all of the other occurrences.
-
-> +						reg = <MT8186_POWER_DOMAIN_MFG1>;
-> +						mediatek,infracfg = <&infracfg_ao>;
-> +						#address-cells = <1>;
-> +						#size-cells = <0>;
-> +						#power-domain-cells = <1>;
-
-..snip..
-
-> +
-> +		scp: scp@10500000 {
-> +			compatible = "mediatek,mt8186-scp";
-> +			reg = <0 0x10500000 0 0x40000>,
-> +			      <0 0x105c0000 0 0x19080>;
-> +			reg-names = "sram", "cfg";
-> +			interrupts = <GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "okay";
-
-`status = "okay"` can be omitted here: all the nodes are enabled by default.
-
-> +		};
-> +
-
-Cheers,
-Angelo
+Rob

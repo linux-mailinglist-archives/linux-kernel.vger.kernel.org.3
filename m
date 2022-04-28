@@ -2,208 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11912513235
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E90D51326B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345416AbiD1LRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S235189AbiD1L06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236798AbiD1LRu (ORCPT
+        with ESMTP id S235063AbiD1L0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:17:50 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9761A674E6;
-        Thu, 28 Apr 2022 04:14:35 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id a21so5129128edb.1;
-        Thu, 28 Apr 2022 04:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=klUaX5LsZlPXz+2S/Ecxx3wW7aKARbJJEWDUTbqH/Nk=;
-        b=brrOMsvJQTAEXAUQjWINO2YTgDMMd6eT5U+vBpVl+TwLUSly9kanTmCKFsI09W0NYl
-         e2Ud7VFpjHD7ZOv2rrFY7O6gb40X211j/T+lAMzWdcDdg+/x4sE7w3V01C/ArdKJBPJz
-         vuTtsgxZd6zj1COrgzj+xvPPXJiuOALYIsDnXML7iNhLfsS+DUWQfwvAPqa4bvyY1nHU
-         c3loYjBpS4xUd1QWlfW9IbGW4+8t0bYcdkNjSvvQMnWXCzxEmUWurGNy9qTw0pbxEce2
-         f2Vx+YZfi6PHYuvS02rI6+HxNxozLE36AWcEtACRlf1khulF/PFP4HVoED0thomwd1CU
-         vOog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=klUaX5LsZlPXz+2S/Ecxx3wW7aKARbJJEWDUTbqH/Nk=;
-        b=T13jf4JK+xtLLS/Tqvlbt+B4PzrDyeojNA1+VE6SPgWsI4qn4NZDeSWeIsVKd+aqfZ
-         oP/PhsHQqxBqMI+rhsFu2NrpZdgAhziCC9jdRkJc/SHiKnERgKC3yOMy0vSpc7HcUCke
-         VvC3ziuiX1Oyqv71sLgYpobdyDCGxVw52WhNkTHmBqU7BeZ64fOF98JVMal0mi0IWCrd
-         KSjJifpvGhaOpQGngiBXxgmCuk7B07fv+5gJE3ZswQAH22RVsB00cbuzP09TNxW7rYyG
-         8+cm/xO6r78+Ihz0L5L3DMA+FebQW01Ca21Grkv0yGnJQ1QnUJwhwbux8a3xjtOTRxDH
-         eg9Q==
-X-Gm-Message-State: AOAM532CJldxaLNgxpe1/LBzhsJJblsrLedHGqyAGkf7QGlCMWtPbaiX
-        +PZ9Z+9iwdo+H9arZu44tCfT6jlFRpo=
-X-Google-Smtp-Source: ABdhPJybBsv9UEF9BtIRVZX8Gyzc4N8+6vv3dS/0K6yu0WQ+zmqjfEAZA6iOX42oWlnaDdw3Aew4yQ==
-X-Received: by 2002:aa7:dd45:0:b0:425:8cea:8c76 with SMTP id o5-20020aa7dd45000000b004258cea8c76mr34965037edw.353.1651144474081;
-        Thu, 28 Apr 2022 04:14:34 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id p5-20020a1709066a8500b006f3bdf3a2f4sm3491952ejr.105.2022.04.28.04.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 04:14:32 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3 4/4] Documentation/vm: Rework "Temporary Virtual Mappings" section
-Date:   Thu, 28 Apr 2022 13:14:30 +0200
-Message-ID: <6442788.4vTCxPXJkl@leap>
-In-Reply-To: <YmpYEkvbJX2JBPvW@linutronix.de>
-References: <20220427183821.1979-1-fmdefrancesco@gmail.com> <20220427183821.1979-5-fmdefrancesco@gmail.com> <YmpYEkvbJX2JBPvW@linutronix.de>
+        Thu, 28 Apr 2022 07:26:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A505E16C;
+        Thu, 28 Apr 2022 04:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651145020; x=1682681020;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YSpDATXy/AEnQCqNpDDdMNwfxMpapZmzIYX8S6XiNuc=;
+  b=Meg06O/KeVEOvbcvwHOkss7GumVYJbLxc7P6jPEMBnqpwHb/QLaA6cgV
+   O5K1DarW7M96UkAn6pPR19Ajk+0uAjvYBE+PVtdj9vSTKsHgovLKg6yAM
+   7oVH33UaGpGYGUxDOtTES+uhH/5+t4OHzEGCkl+JSYYrbcmUujm3JMrs2
+   eqy6VWYmVRbak3YIZlcumeibMrbOyQk9bnwXIxIwjkvNwAss4JfeO9/JM
+   S40mPfl6MM5wYCcZYRhGFaARym7sxnII1RC10yfGnNXDt+N6/XUCuR1/u
+   A2/7x2saHMNYbo2IMD7qj7uTXSzzWxb0LZhiNnLIic3qhMOIUk8feNvzq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352692120"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="352692120"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:23:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="541152152"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2022 04:23:37 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23SBNZi8003960;
+        Thu, 28 Apr 2022 12:23:35 +0100
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: [PATCH RESEND bpf-next] bpftool: Use sysfs vmlinux when dumping BTF by ID
+Date:   Thu, 28 Apr 2022 13:14:42 +0200
+Message-Id: <20220428111442.111805-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 28 aprile 2022 11:02:10 CEST Sebastian Andrzej Siewior wrot=
-e:
-> On 2022-04-27 20:38:21 [+0200], Fabio M. De Francesco wrote:
-> > index e05bf5524174..c8aff448612b 100644
-> > --- a/Documentation/vm/highmem.rst
-> > +++ b/Documentation/vm/highmem.rst
-> > @@ -50,26 +50,78 @@ space when they use mm context tags.
-> =E2=80=A6
-> > =20
-> > -* kmap().  This permits a short duration mapping of a single page.  It=
-=20
-needs
-> > -  global synchronization, but is amortized somewhat.  It is also prone=
-=20
-to
-> > -  deadlocks when using in a nested fashion, and so it is not=20
-recommended for
-> > -  new code.
-> > +  These mappings are thread-local and CPU-local (i.e., migration from=
-=20
-one CPU
-> > +  to another is disabled - this is why they are called "local"), but=20
-they don't
-> > +  disable preemption.=20
->=20
-> So if you replace this block with
->=20
->    These mappings are thread-local and CPU-local meaning that the mapping
->    can only be accessed from within this thread and the thread is bound=20
-the
->    CPU while the mapping is active. Even if the thread is preempted=20
-(since
->    preemption is never disabled by the function) the CPU can not be
->    unplugged from the system via CPU-hotplug until the mapping is=20
-disposed.
+Currently, dumping almost all BTFs specified by id requires
+using the -B option to pass the base BTF. For most cases
+the vmlinux BTF sysfs path should work.
 
-OK, I'm too wordy here :(
+This patch simplifies dumping by ID usage by attempting to
+use vmlinux BTF from sysfs, if the first try of loading BTF by ID
+fails with certain conditions.
 
-> The you could drop the latter block
->=20
-> >                          It's valid to take pagefaults in a local kmap=
-=20
-region,
-> > +  unless the context in which the local mapping is acquired does not=20
-allow it
-> > +  for other reasons.
->=20
-> > +  kmap_local_page() always returns a valid virtual address and it is=20
-assumed
-> > +  that kunmap_local() will never fail.
->=20
-> from here
->=20
-> > +  If a task holding local kmaps is preempted, the maps are removed on=
-=20
-context
-> > +  switch and restored when the task comes back on the CPU. The maps=20
-are
-> > +  strictly thread-local and CPU-local, therefore it is guaranteed that=
-=20
-the
-> > +  task stays on the CPU and the CPU cannot be unplugged until the=20
-local kmaps
-> > +  are released.
->=20
-> to here since it mostly the same thing.
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+---
+ tools/bpf/bpftool/btf.c | 35 ++++++++++++++++++++++++++---------
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
-I agree, this is redundant.
-
->=20
-> > +  Nesting kmap_local_page() and kmap_atomic() mappings is allowed to a=
-=20
-certain
-> > +  extent (up to KMAP_TYPE_NR) but their invocations have to be=20
-strictly ordered
-> > +  because the map implementation is stack based. See kmap_local_page=20
-() kdocs
->=20
-> kmap_local_page () =3D> kmap_local_page()
-
-Sure, it's just a typo.
-
-> > +  (included in the "Functions" section) for details on how to manage=20
-nested
-> > +  mappings.
-> > =20
-> >  * kmap_atomic().  This permits a very short duration mapping of a=20
-single
-> >    page.  Since the mapping is restricted to the CPU that issued it, it
-> >    performs well, but the issuing task is therefore required to stay on=
-=20
-that
-> >    CPU until it has finished, lest some other task displace its=20
-mappings.
-> > =20
-> > -  kmap_atomic() may also be used by interrupt contexts, since it is=20
-does not
-> > -  sleep and the caller may not sleep until after kunmap_atomic() is=20
-called.
-> > +  kmap_atomic() may also be used by interrupt contexts, since it does=
-=20
-not
-> > +  sleep and the callers too may not sleep until after kunmap_atomic()=
-=20
-is
-> > +  called.
-> > +
-> > +  Each call of kmap_atomic() in the kernel creates a non-preemptible=20
-section
-> > +  and disable pagefaults. This could be a source of unwanted latency,=
-=20
-so it
-> > +  should be only used if it is absolutely required, otherwise=20
-kmap_local_page()
-> > +  should be used where it is feasible.
->=20
-> I'm not keen about the "absolutely required" wording and "feasible".
-> That said, the other pieces look good, thank you for the work.
-
-I'll rewrite the last part of this sentence as it follows:
-
-+ should be only used if it is required, otherwise kmap_local_page()
-+ should be preferred.
-
-Thank you so much for the time you have spent for reviewing and helping,
-
-=46abio
-
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index a2c665beda87..557f65e2de5c 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -459,6 +459,22 @@ static int dump_btf_c(const struct btf *btf,
+ 	return err;
+ }
+ 
++static const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
++
++static struct btf *get_vmlinux_btf_from_sysfs(void)
++{
++	struct btf *base;
++
++	base = btf__parse(sysfs_vmlinux, NULL);
++	if (libbpf_get_error(base)) {
++		p_err("failed to parse vmlinux BTF at '%s': %ld\n",
++		      sysfs_vmlinux, libbpf_get_error(base));
++		base = NULL;
++	}
++
++	return base;
++}
++
+ static int do_dump(int argc, char **argv)
+ {
+ 	struct btf *btf = NULL, *base = NULL;
+@@ -536,18 +552,11 @@ static int do_dump(int argc, char **argv)
+ 		NEXT_ARG();
+ 	} else if (is_prefix(src, "file")) {
+ 		const char sysfs_prefix[] = "/sys/kernel/btf/";
+-		const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
+ 
+ 		if (!base_btf &&
+ 		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
+-		    strcmp(*argv, sysfs_vmlinux) != 0) {
+-			base = btf__parse(sysfs_vmlinux, NULL);
+-			if (libbpf_get_error(base)) {
+-				p_err("failed to parse vmlinux BTF at '%s': %ld\n",
+-				      sysfs_vmlinux, libbpf_get_error(base));
+-				base = NULL;
+-			}
+-		}
++		    strcmp(*argv, sysfs_vmlinux))
++			base = get_vmlinux_btf_from_sysfs();
+ 
+ 		btf = btf__parse_split(*argv, base ?: base_btf);
+ 		err = libbpf_get_error(btf);
+@@ -593,6 +602,14 @@ static int do_dump(int argc, char **argv)
+ 	if (!btf) {
+ 		btf = btf__load_from_kernel_by_id_split(btf_id, base_btf);
+ 		err = libbpf_get_error(btf);
++		if (err == -EINVAL && !base_btf) {
++			btf__free(base);
++			base = get_vmlinux_btf_from_sysfs();
++			p_info("Warning: valid base BTF was not specified with -B option, falling back on standard base BTF (sysfs vmlinux)");
++			btf = btf__load_from_kernel_by_id_split(btf_id, base);
++			err = libbpf_get_error(btf);
++		}
++
+ 		if (err) {
+ 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
+ 			goto done;
+-- 
+2.35.1
 

@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BB8513252
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1862B513260
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345519AbiD1LWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S1345678AbiD1LYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiD1LWo (ORCPT
+        with ESMTP id S1345529AbiD1LXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:22:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A755EA94F2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651144769;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qr2DOGB0z6K0qePNKw8JJPlRt9jZnLNpgbFm3MJ8HzE=;
-        b=eNKVgpbvjOSnx86OScTqbuZpid+U+vejq4zFJTjH0smxRRL+mTTkBGmqPkfl77+KfMAvI9
-        VFKhWaLgnZicHcYoaC9/SlNuqNMB0kfmNExnHU6M/q9dWl5AhH3/TiMpTw0aqfAT2PZLS/
-        hjqts5K8zKjZNx30sP3KAJtsUfREpN8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-416-PeK0j-6rMlibt-Yq8wehuw-1; Thu, 28 Apr 2022 07:19:24 -0400
-X-MC-Unique: PeK0j-6rMlibt-Yq8wehuw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD7BE1815CFC;
-        Thu, 28 Apr 2022 11:19:17 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.96])
-        by smtp.corp.redhat.com (Postfix) with SMTP id C6B052166B18;
-        Thu, 28 Apr 2022 11:19:12 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 28 Apr 2022 13:19:17 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 13:19:11 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
- ptrace_check_attach
-Message-ID: <20220428111911.GA3804@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-7-ebiederm@xmission.com>
- <20220427151455.GE17421@redhat.com>
- <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
+        Thu, 28 Apr 2022 07:23:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A0724092
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651144825; x=1682680825;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZPrsh+0tNzPO483bOJM93YSxdd0XN/16xX0+69NhVQQ=;
+  b=JqB83HvWAvjcfE/qdRCj0Va5swAzF+WhFVIO9zDS0gnU7TUppZKPoGk1
+   lMk0IRZxqrsWKCY43rwUjdcHKfXwAnV2Vw7k1qpfMKBdYMVvb6DbxjZYi
+   khhYGt5VMJGtKFhEYHMYknxgImhpnEuPEfBI9r7xaGdDNgiUGJgidRoj9
+   N3+7pnSBFw41rrJMPJDXd72tSY6KcHvOI6yFlwwmpuGw/y072iPcb+8t7
+   NfZLU1LSzsjg5TNJ4LXRIl5WagnyXwZsVIPwa8TYuOJIAVPSNkPIhzFvi
+   B5n8p7FhRamrXuSJwkUl5trvxgQSruBTEM3Q9Mvl6tO2LKkBh67fmUze6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="263845737"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="263845737"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:20:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="706015599"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2022 04:20:22 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nk2C6-0005JH-8V;
+        Thu, 28 Apr 2022 11:20:22 +0000
+Date:   Thu, 28 Apr 2022 19:19:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 39/45]
+ fs/netfs/buffered_write.c:670 netfs_page_mkwrite() warn: unsigned 'ret' is
+ never less than zero.
+Message-ID: <202204281931.WsLfU7aL-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +63,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/28, Peter Zijlstra wrote:
->
-> On Wed, Apr 27, 2022 at 05:14:57PM +0200, Oleg Nesterov wrote:
-> > On 04/26, Eric W. Biederman wrote:
-> > >
-> > > Asking wait_task_inactive to verify that tsk->__state == __TASK_TRACED
-> > > was needed to detect the when ptrace_stop would decide not to stop
-> > > after calling "set_special_state(TASK_TRACED)".  With the recent
-> > > cleanups ptrace_stop will always stop after calling set_special_state.
-> > >
-> > > Take advatnage of this by no longer asking wait_task_inactive to
-> > > verify the state.  If a bug is hit and wait_task_inactive does not
-> > > succeed warn and return -ESRCH.
-> >
-> > ACK, but I think that the changelog is wrong.
-> >
-> > We could do this right after may_ptrace_stop() has gone. This doesn't
-> > depend on the previous changes in this series.
->
-> It very much does rely on there not being any blocking between
-> set_special_state() and schedule() tho. So all those PREEMPT_RT
-> spinlock->rt_mutex things need to be gone.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   a20ca5707a9b524115f5ded439fed1f8e552dd6b
+commit: 95f517db4cb2fbcfdabe76d0be06d75746958b0b [39/45] netfs: Allow buffered shared-writeable mmap through netfs_page_mkwrite()
+config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220428/202204281931.WsLfU7aL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
 
-Yes sure. But this patch doesn't add the new problems, imo.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yes we can hit the WARN_ON_ONCE(!wait_task_inactive()), but this is
-correct in that it should not fail, and this is what we need to fix.
+smatch warnings:
+fs/netfs/buffered_write.c:670 netfs_page_mkwrite() warn: unsigned 'ret' is never less than zero.
 
-> That is also the reason I couldn't do wait_task_inactive(task, 0)
+vim +/ret +670 fs/netfs/buffered_write.c
 
-Ah, I din't notice this patch uses wait_task_inactive(child, 0),
-I think it should do wait_task_inactive(child, __TASK_TRACED).
+   640	
+   641	/*
+   642	 * Notification that a previously read-only page is about to become writable.
+   643	 * Note that the caller indicates a single page of a multipage folio.
+   644	 */
+   645	vm_fault_t netfs_page_mkwrite(struct vm_fault *vmf)
+   646	{
+   647		struct netfs_dirty_region *region;
+   648		struct folio *folio = page_folio(vmf->page);
+   649		struct file *file = vmf->vma->vm_file;
+   650		struct inode *inode = file_inode(file);
+   651		struct netfs_i_context *ctx = netfs_i_context(inode);
+   652		vm_fault_t ret = VM_FAULT_RETRY;
+   653		int err;
+   654		LIST_HEAD(spare_regions);
+   655	
+   656		_enter("%lx", folio->index);
+   657	
+   658		if (ctx->ops->validate_for_write(inode, file) < 0)
+   659			return VM_FAULT_SIGBUS;
+   660	
+   661		sb_start_pagefault(inode->i_sb);
+   662	
+   663		if (folio_wait_writeback_killable(folio))
+   664			goto out;
+   665	
+   666		if (folio_lock_killable(folio) < 0)
+   667			goto out;
+   668	
+   669		ret = netfs_preallocate_regions(&spare_regions);
+ > 670		if (ret < 0) {
 
-Oleg.
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

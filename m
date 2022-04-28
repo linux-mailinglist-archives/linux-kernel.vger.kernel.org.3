@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C7A513C2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8131A513C30
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351466AbiD1TlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 15:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S1351509AbiD1Tow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 15:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351454AbiD1TlR (ORCPT
+        with ESMTP id S1351494AbiD1Tot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:41:17 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA11AFB37
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:38:00 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id m23so8079403ljc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PviecKSNBQ9rvt14y/CLlsqQGaNe4zDSNifKgF5FE5c=;
-        b=Mk/ZjIgpPO7ZjCxNJRE5W4RfcBcM9U03fLAGiHpSCx9OJwTUlKZlQFlhx+wLCTDfvD
-         n4Pe7ckjUJ9CJogJ2um0a73RMV3NqhLe0fs6B+hSn1dc7FUEAtYSuVxnqaDMDdOOkmNV
-         MfsNo4pco1mgdD+H5I5Vudi9U/F1WunaiWSOo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PviecKSNBQ9rvt14y/CLlsqQGaNe4zDSNifKgF5FE5c=;
-        b=c2ZaP/0cunhZliVrCu/Nbls7+jhURaK8dnC+Kyuf8wsDByFR4T3vTLGQSIbYMXYaiE
-         Skfe6MI7BowOQA5eCLGshxiw8wtg1QP5HTevh4rWXvIixos8cyrn6ctGpdP5V23C37xA
-         6zBdN9hF+V6aQXZqehYVHxirwSCWk09r8ToRMifZMg3tgidl42yYtcZDK0uZS8xLiuy+
-         ZGV35/vQ5LACQ8/pp/479oSkkKo0gZ4NlNW2x/OjeKHrlmuG0WQ9pEZxf3Isbiozy8vk
-         /sdx+fYVekJ0W29hZGPxLa8jmOESQCGq9tUqYm+DnCtxlZX6KjWWgZwPTeMrw4ueDVb+
-         BWvg==
-X-Gm-Message-State: AOAM531Cl3uOqR3zAG/CUh5DfAOL4Oq9x73ZeFvD5JelE56mO96G0j//
-        NoomP5/nmuGG/F4pTPPbqXw4Cyl9JmQKTqK16aU=
-X-Google-Smtp-Source: ABdhPJziK7tyOqOGcdBpY4b6ce/9SE7BVVuej6aWBd2yz0/ogU9nk4TMZDAL9O4nUbNfGozTCa5TYg==
-X-Received: by 2002:a2e:6f12:0:b0:24f:2109:f038 with SMTP id k18-20020a2e6f12000000b0024f2109f038mr10066814ljc.311.1651174678544;
-        Thu, 28 Apr 2022 12:37:58 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id d14-20020a19f24e000000b00471a405963asm75519lfk.304.2022.04.28.12.37.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 12:37:57 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id x17so10402922lfa.10
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:37:57 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr24901401lfh.687.1651174677085; Thu, 28
- Apr 2022 12:37:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220428182554.2138218-1-kuba@kernel.org>
-In-Reply-To: <20220428182554.2138218-1-kuba@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Apr 2022 12:37:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wivb9faQ6Xuwfiqr6r1uHaR4a-i2oi6u142tWDppS-+gg@mail.gmail.com>
-Message-ID: <CAHk-=wivb9faQ6Xuwfiqr6r1uHaR4a-i2oi6u142tWDppS-+gg@mail.gmail.com>
+        Thu, 28 Apr 2022 15:44:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C612E5A5BC;
+        Thu, 28 Apr 2022 12:41:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 871E3B82C97;
+        Thu, 28 Apr 2022 19:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38FF2C385A9;
+        Thu, 28 Apr 2022 19:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651174891;
+        bh=y4Cc6cqQY1HadzSDIcZayf/poMhf9TXDXmdbQJZkBlY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=B1xHv+HLghwO+VM6I1eMTiJPPDSXHmJgooDb6y8Hnuf+8oLAP/FqNZHuTHuvV0W4p
+         T26p5yZ6x04oGnXorKrBe48ds8XoT/NebZYP/EZhsnQP7I4FdC728bfcxoAU0N+PGj
+         WG3BMnn/hdZF9ogLNh9/u4Ocl/lsoDSWoe5BcY7vktZ5d0+8XVyiBU8zgqMf2wMlwc
+         DX5UoapLITjruVhxlBus7BRuuymH+iJ3qYKArnaxSr4A8KLQSnwHhaSB78e9hKctoE
+         1iB/1ACZ1GINv9hxoYv2z0er58JY4jXbRsoLf3YFdFIh23NgimkAdUtmX0CNCVQP73
+         FK3NBmoa+C+Lw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2635DE85D90;
+        Thu, 28 Apr 2022 19:41:31 +0000 (UTC)
 Subject: Re: [GIT PULL] Networking for 5.18-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220428182554.2138218-1-kuba@kernel.org>
+References: <20220428182554.2138218-1-kuba@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220428182554.2138218-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc5
+X-PR-Tracked-Commit-Id: d9157f6806d1499e173770df1f1b234763de5c79
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 249aca0d3d631660aa3583c6a3559b75b6e971b4
+Message-Id: <165117489114.1505.12951073752854060589.pr-tracker-bot@kernel.org>
+Date:   Thu, 28 Apr 2022 19:41:31 +0000
 To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 11:26 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Misc:
->
->  - add Eric Dumazet to networking maintainers
+The pull request you sent on Thu, 28 Apr 2022 11:25:54 -0700:
 
-He wasn't already? Strange.
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc5
 
-            Linus
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/249aca0d3d631660aa3583c6a3559b75b6e971b4
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

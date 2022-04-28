@@ -2,213 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C250512A4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 06:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9A9512A57
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 06:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242572AbiD1EPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 00:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
+        id S242620AbiD1ERC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 00:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbiD1EO6 (ORCPT
+        with ESMTP id S232239AbiD1EQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 00:14:58 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2720120BF9
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 21:11:45 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id f32so3556733vsv.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 21:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rPHxqBSJHjTyBBNkveNlu/+ImQludYrH8gxylsd2L5U=;
-        b=O4Nl7pqqsJE65cqguD/4cmcrVpUgkZGe+2BSVVxY6VkzL+o6Ksebcd8Slb/EKpTn09
-         NXw8kb2/lD7b4M8ivoBVpG8ftb353M1m5QBr1uOinHAAjfidMBAZMCnfuFG7lZYl2smM
-         xeNsh/GOaVBXstcbTEpd0JpyNFuI4NH93/EDh/XOi+bMD8RObE0LXeDXXV83BZCuvY31
-         tUWTi6hLa19LZ3LhP48ShyRHMmwCxbWARo5B5prR+bSjsuE/gAboYCWA/Yr6BaUEFuDr
-         eghY5J1nS73KamQajOQ5JWHcfYn6m9Blbu7AA7zgQu4StcKrM80/hMeT5bwDGtRN4LqV
-         KvFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rPHxqBSJHjTyBBNkveNlu/+ImQludYrH8gxylsd2L5U=;
-        b=SSYVTM2iXy/ymKwxOn0Z/ZFOpY0AeUJg42YAQLwmExeMwX7LH37QdXgJIEdBnZ2Jvl
-         STbC60A2oestq92G+wHQ7anX2k9FhxvivWRD8CneOBXQg0GHONVCQ83TuOBunkSYr49B
-         Km8lbAHKZMtk5LVCDaI5Ox5gsLDJSCXTTgs08ck8WFXaboAJVfC0Liw0xpa0RGT37GH6
-         r4PKcp8o/+VPWEob/3+/jkcWSROoJeOblt077sLHVqr4Z49L3NbxJKM6LCB97cT4wbKR
-         uzX4fvoKsV/TOGOC9JAc04jnrDuWlzm5F58V99x+4fafPfXg1Dw2XSpP4i206ZaL0cFz
-         9OEw==
-X-Gm-Message-State: AOAM530qrKBNnrwtiPKY9Eka+9SEk3en7TrRcM2l4NSV5gp3y+tc2MNd
-        SCv80BcufqzbibiaPropNmkzbwtOHzgzfheYzdFRKw==
-X-Google-Smtp-Source: ABdhPJwhHhVDXgZlnm6v5QaRfQFSBgYyHfAycGpQOqoNK0EmkTaf4aG90EBvcPNN6afAKH8nP9h1JQBWuXcy8TEycKs=
-X-Received: by 2002:a67:f343:0:b0:32c:c4b7:e238 with SMTP id
- p3-20020a67f343000000b0032cc4b7e238mr5905913vsm.77.1651119103832; Wed, 27 Apr
- 2022 21:11:43 -0700 (PDT)
+        Thu, 28 Apr 2022 00:16:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49957237E7
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 21:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651119225; x=1682655225;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=r20K8UmwazErhCOSE6GnVDpTvgM3044GfseREXweZN0=;
+  b=H1LjnPDR+qKzeueuO6hN0IstDs9u9KQLnMDd+UADCHjMBm6rob82BXUl
+   8FkyQKsLjOka1L0uL1udj4CrUxQqnCXng5hdvH8MsVp/m225QoXFnUjZQ
+   Upmu/IRHbNDR1rtjxsLtY4Lk3hyCV6yydhUM8ThrJT+RB+gnJXJMFX/LJ
+   mm2WMvRcDZS2p3SDNkM6e0WWExECFSpghYsniRwZuoGKezijlTuPKMpPW
+   l1u2MxwY9ax8Kaoy8R8z8phH/batEzBSbbO3J2EqxMUfqO48J/Y4daawF
+   7HN4lO0IVqjTuQWr3vNkj9V30g4oB85/Fi7wlTICyO6/U4jqFF6xCs1VC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="248084279"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="248084279"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 21:13:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="705862673"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Apr 2022 21:13:37 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njvX6-00052d-8w;
+        Thu, 28 Apr 2022 04:13:36 +0000
+Date:   Thu, 28 Apr 2022 12:12:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/stringop-overflow 1/1]
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: 'fcoe_wwn_from_mac'
+ accessing 32 bytes in a region of size 6
+Message-ID: <202204281235.5QhYdg1I-lkp@intel.com>
 MIME-Version: 1.0
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
- <ea73f6fda9cafdd0cb6ba8351139e6f4b47354a8.camel@intel.com>
- <CAAPL-u-aeceXFUNdok_GYb2aLhZa0zBBuSqHxFznQob3PbJt7Q@mail.gmail.com>
- <a80647053bba44623094995730e061f0e6129677.camel@intel.com>
- <CAAPL-u89Jxutu1VH0LnO5VGdMbkLvc2M9eapuwP-y9oG9QSsrA@mail.gmail.com>
- <610ccaad03f168440ce765ae5570634f3b77555e.camel@intel.com>
- <CAAPL-u9ktM82zAW_OVwqTmQsr-XC8XOPmAsjoiCLo18cxUWA=A@mail.gmail.com>
- <8e31c744a7712bb05dbf7ceb2accf1a35e60306a.camel@intel.com>
- <CAAPL-u9uP+FUh7Yn0ByOECo+EP32ZABnCvNPKQB9JCA68VHEqQ@mail.gmail.com>
- <78b5f4cfd86efda14c61d515e4db9424e811c5be.camel@intel.com>
- <YmKKwXa2XI/nwac0@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
- <200e95cf36c1642512d99431014db8943fed715d.camel@intel.com>
- <CAAPL-u94H9FLjVtYLhi_A2AqLTOCTMRh6=Sx9cX8A3WGNM-OdA@mail.gmail.com>
- <b1f58fd4-e23b-f617-b4a7-b80b1ffbe13f@linux.ibm.com> <CAAPL-u9ZDcM48-76+wJeP-HeJf92YdA8ad3qX65p5d+0A9Puuw@mail.gmail.com>
- <9d9ef67127b1e2cf0b6c72f60cb7304dc573c28b.camel@intel.com>
-In-Reply-To: <9d9ef67127b1e2cf0b6c72f60cb7304dc573c28b.camel@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Wed, 27 Apr 2022 21:11:32 -0700
-Message-ID: <CAAPL-u-sSg=p1n_Trm9TyrgdCCO1zZ-LbKM=tkp3M827gLv=CA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state N_DEMOTION_TARGETS
-To:     "ying.huang@intel.com" <ying.huang@intel.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>, feng.tang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 5:56 PM ying.huang@intel.com
-<ying.huang@intel.com> wrote:
->
-> On Wed, 2022-04-27 at 11:27 -0700, Wei Xu wrote:
-> > On Tue, Apr 26, 2022 at 10:06 PM Aneesh Kumar K V
-> > <aneesh.kumar@linux.ibm.com> wrote:
-> > >
-> > > On 4/25/22 10:26 PM, Wei Xu wrote:
-> > > > On Sat, Apr 23, 2022 at 8:02 PM ying.huang@intel.com
-> > > > <ying.huang@intel.com> wrote:
-> > > > >
-> > >
-> > > ....
-> > >
-> > > > > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
-> > > > >
-> > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> > > > > memory node near node 0,
-> > > > >
-> > > > > available: 3 nodes (0-2)
-> > > > > node 0 cpus: 0 1
-> > > > > node 0 size: n MB
-> > > > > node 0 free: n MB
-> > > > > node 1 cpus:
-> > > > > node 1 size: n MB
-> > > > > node 1 free: n MB
-> > > > > node 2 cpus: 2 3
-> > > > > node 2 size: n MB
-> > > > > node 2 free: n MB
-> > > > > node distances:
-> > > > > node   0   1   2
-> > > > >    0:  10  40  20
-> > > > >    1:  40  10  80
-> > > > >    2:  20  80  10
-> > > > >
-> > > > > We have 2 choices,
-> > > > >
-> > > > > a)
-> > > > > node    demotion targets
-> > > > > 0       1
-> > > > > 2       1
-> > > > >
-> > > > > b)
-> > > > > node    demotion targets
-> > > > > 0       1
-> > > > > 2       X
-> > > > >
-> > > > > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> > > > > traffic.  Both are OK as defualt configuration.  But some users may
-> > > > > prefer the other one.  So we need a user space ABI to override the
-> > > > > default configuration.
-> > > >
-> > > > I think 2(a) should be the system-wide configuration and 2(b) can be
-> > > > achieved with NUMA mempolicy (which needs to be added to demotion).
-> > > >
-> > > > In general, we can view the demotion order in a way similar to
-> > > > allocation fallback order (after all, if we don't demote or demotion
-> > > > lags behind, the allocations will go to these demotion target nodes
-> > > > according to the allocation fallback order anyway).  If we initialize
-> > > > the demotion order in that way (i.e. every node can demote to any node
-> > > > in the next tier, and the priority of the target nodes is sorted for
-> > > > each source node), we don't need per-node demotion order override from
-> > > > the userspace.  What we need is to specify what nodes should be in
-> > > > each tier and support NUMA mempolicy in demotion.
-> > > >
-> > >
-> > > I have been wondering how we would handle this. For ex: If an
-> > > application has specified an MPOL_BIND policy and restricted the
-> > > allocation to be from Node0 and Node1, should we demote pages allocated
-> > > by that application
-> > > to Node10? The other alternative for that demotion is swapping. So from
-> > > the page point of view, we either demote to a slow memory or pageout to
-> > > swap. But then if we demote we are also breaking the MPOL_BIND rule.
-> >
-> > IMHO, the MPOL_BIND policy should be respected and demotion should be
-> > skipped in such cases.  Such MPOL_BIND policies can be an important
-> > tool for applications to override and control their memory placement
-> > when transparent memory tiering is enabled.  If the application
-> > doesn't want swapping, there are other ways to achieve that (e.g.
-> > mlock, disabling swap globally, setting memcg parameters, etc).
-> >
-> >
-> > > The above says we would need some kind of mem policy interaction, but
-> > > what I am not sure about is how to find the memory policy in the
-> > > demotion path.
-> >
-> > This is indeed an important and challenging problem.  One possible
-> > approach is to retrieve the allowed demotion nodemask from
-> > page_referenced() similar to vm_flags.
->
-> This works for mempolicy in struct vm_area_struct, but not for that in
-> struct task_struct.  Mutiple threads in a process may have different
-> mempolicy.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/stringop-overflow
+head:   841e98dddf647582547543eba0a1e3e8c8f8db9c
+commit: 841e98dddf647582547543eba0a1e3e8c8f8db9c [1/1] Makefile: Enable -Wstringop-overflow
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220428/202204281235.5QhYdg1I-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=841e98dddf647582547543eba0a1e3e8c8f8db9c
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/stringop-overflow
+        git checkout 841e98dddf647582547543eba0a1e3e8c8f8db9c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/scsi/bnx2fc/ drivers/scsi/fcoe/ drivers/scsi/qedf/
 
-From vm_area_struct, we can get to mm_struct and then to the owner
-task_struct, which has the process mempolicy.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It is indeed a problem when a page is shared by different threads or
-different processes that have different thread default mempolicy
-values.
+All warnings (new ones prefixed by >>):
 
-On the other hand, it can already support most interesting use cases
-for demotion (e.g. selecting the demotion node, mbind to prevent
-demotion) by respecting cpuset and vma mempolicies.
+   drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function 'bnx2fc_net_config':
+>> drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+     833 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     834 |                                                  1, 0);
+         |                                                  ~~~~~
+   drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: note: referencing argument 1 of type 'unsigned char *'
+   In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+                    from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+   include/scsi/libfcoe.h:252:5: note: in a call to function 'fcoe_wwn_from_mac'
+     252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+         |     ^~~~~~~~~~~~~~~~~
+   drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+     839 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     840 |                                                  2, 0);
+         |                                                  ~~~~~
+   drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: note: referencing argument 1 of type 'unsigned char *'
+   In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+                    from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+   include/scsi/libfcoe.h:252:5: note: in a call to function 'fcoe_wwn_from_mac'
+     252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+         |     ^~~~~~~~~~~~~~~~~
+--
+   drivers/scsi/fcoe/fcoe.c: In function 'fcoe_netdev_config':
+>> drivers/scsi/fcoe/fcoe.c:744:32: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+     744 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr, 1, 0);
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/fcoe/fcoe.c:744:32: note: referencing argument 1 of type 'unsigned char *'
+   In file included from drivers/scsi/fcoe/fcoe.c:36:
+   include/scsi/libfcoe.h:252:5: note: in a call to function 'fcoe_wwn_from_mac'
+     252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+         |     ^~~~~~~~~~~~~~~~~
+   drivers/scsi/fcoe/fcoe.c:747:32: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+     747 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     748 |                                                  2, 0);
+         |                                                  ~~~~~
+   drivers/scsi/fcoe/fcoe.c:747:32: note: referencing argument 1 of type 'unsigned char *'
+   In file included from drivers/scsi/fcoe/fcoe.c:36:
+   include/scsi/libfcoe.h:252:5: note: in a call to function 'fcoe_wwn_from_mac'
+     252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+         |     ^~~~~~~~~~~~~~~~~
+--
+   drivers/scsi/qedf/qedf_main.c: In function '__qedf_probe':
+>> drivers/scsi/qedf/qedf_main.c:3520:30: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+    3520 |                 qedf->wwnn = fcoe_wwn_from_mac(qedf->mac, 1, 0);
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/qedf/qedf_main.c:3520:30: note: referencing argument 1 of type 'unsigned char *'
+   In file included from drivers/scsi/qedf/qedf.h:9,
+                    from drivers/scsi/qedf/qedf_main.c:23:
+   include/scsi/libfcoe.h:252:5: note: in a call to function 'fcoe_wwn_from_mac'
+     252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+         |     ^~~~~~~~~~~~~~~~~
+   drivers/scsi/qedf/qedf_main.c:3521:30: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+    3521 |                 qedf->wwpn = fcoe_wwn_from_mac(qedf->mac, 2, 0);
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/qedf/qedf_main.c:3521:30: note: referencing argument 1 of type 'unsigned char *'
+   In file included from drivers/scsi/qedf/qedf.h:9,
+                    from drivers/scsi/qedf/qedf_main.c:23:
+   include/scsi/libfcoe.h:252:5: note: in a call to function 'fcoe_wwn_from_mac'
+     252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+         |     ^~~~~~~~~~~~~~~~~
 
-> Best Regards,
-> Huang, Ying
->
-> > >
-> > > > Cross-socket demotion should not be too big a problem in practice
-> > > > because we can optimize the code to do the demotion from the local CPU
-> > > > node (i.e. local writes to the target node and remote read from the
-> > > > source node).  The bigger issue is cross-socket memory access onto the
-> > > > demoted pages from the applications, which is why NUMA mempolicy is
-> > > > important here.
-> > > >
-> > > >
-> > > -aneesh
->
->
+
+vim +/fcoe_wwn_from_mac +833 drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  803  
+5243960777a8d5f Bhanu Prakash Gollapudi 2011-08-04  804  static int bnx2fc_net_config(struct fc_lport *lport, struct net_device *netdev)
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  805  {
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  806  	struct bnx2fc_hba *hba;
+aea71a024914e8b Bhanu Prakash Gollapudi 2011-07-26  807  	struct bnx2fc_interface *interface;
+fd8f89027d816cb Robert Love             2012-05-22  808  	struct fcoe_ctlr *ctlr;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  809  	struct fcoe_port *port;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  810  	u64 wwnn, wwpn;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  811  
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  812  	port = lport_priv(lport);
+aea71a024914e8b Bhanu Prakash Gollapudi 2011-07-26  813  	interface = port->priv;
+fd8f89027d816cb Robert Love             2012-05-22  814  	ctlr = bnx2fc_to_ctlr(interface);
+aea71a024914e8b Bhanu Prakash Gollapudi 2011-07-26  815  	hba = interface->hba;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  816  
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  817  	/* require support for get_pauseparam ethtool op. */
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  818  	if (!hba->phys_dev->ethtool_ops ||
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  819  	    !hba->phys_dev->ethtool_ops->get_pauseparam)
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  820  		return -EOPNOTSUPP;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  821  
+1294bfe60960c89 Bhanu Gollapudi         2011-03-17  822  	if (fc_set_mfs(lport, BNX2FC_MFS))
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  823  		return -EINVAL;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  824  
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  825  	skb_queue_head_init(&port->fcoe_pending_queue);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  826  	port->fcoe_pending_queue_active = 0;
+13059106242bc96 Kees Cook               2017-09-21  827  	timer_setup(&port->timer, fcoe_queue_timer, 0);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  828  
+0e0f9cd6a80dc88 Yi Zou                  2012-12-06  829  	fcoe_link_speed_update(lport);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  830  
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  831  	if (!lport->vport) {
+5243960777a8d5f Bhanu Prakash Gollapudi 2011-08-04  832  		if (fcoe_get_wwn(netdev, &wwnn, NETDEV_FCOE_WWNN))
+fd8f89027d816cb Robert Love             2012-05-22 @833  			wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+5243960777a8d5f Bhanu Prakash Gollapudi 2011-08-04  834  						 1, 0);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  835  		BNX2FC_HBA_DBG(lport, "WWNN = 0x%llx\n", wwnn);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  836  		fc_set_wwnn(lport, wwnn);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  837  
+5243960777a8d5f Bhanu Prakash Gollapudi 2011-08-04  838  		if (fcoe_get_wwn(netdev, &wwpn, NETDEV_FCOE_WWPN))
+fd8f89027d816cb Robert Love             2012-05-22  839  			wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+5243960777a8d5f Bhanu Prakash Gollapudi 2011-08-04  840  						 2, 0);
+5243960777a8d5f Bhanu Prakash Gollapudi 2011-08-04  841  
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  842  		BNX2FC_HBA_DBG(lport, "WWPN = 0x%llx\n", wwpn);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  843  		fc_set_wwpn(lport, wwpn);
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  844  	}
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  845  
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  846  	return 0;
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  847  }
+853e2bd2103aaa9 Bhanu Gollapudi         2011-02-04  848  
+
+:::::: The code at line 833 was first introduced by commit
+:::::: fd8f89027d816cb023edf6bfd4c744f194150a05 [SCSI] bnx2fc: Allocate fcoe_ctlr with bnx2fc_interface, not as a member
+
+:::::: TO: Robert Love <robert.w.love@intel.com>
+:::::: CC: James Bottomley <JBottomley@Parallels.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

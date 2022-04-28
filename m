@@ -2,334 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B19551349B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFD051349E
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346446AbiD1NNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
+        id S1346857AbiD1NOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345973AbiD1NNq (ORCPT
+        with ESMTP id S232830AbiD1NOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:13:46 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730251AF32
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:10:23 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id k12so3152437qvc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=2TRrUwuxYePyCI3WXghga60BzOAcIaDjgJpPfXkF+MY=;
-        b=a2UsnP0tEGjVv5vDoh+2KICnjlE1cHILNpfrjSpLO+mcCP2kVAOGe54xwb6OY8jnqd
-         mFNuClZqmHN4USYrhRMvY+ES4R99OaGevo9Lg5FHkykLNuO9C5P8cxJdJXe39y+FEmfQ
-         OGV89R4UQqT4p9bRwgdS2w4R5b7zNkjai04rEhLOZ3Cnj+TmZ9+RVhrKXSZxeVp2joBH
-         e+RAZ7XyGNHH1eTIvR1vjDv2Az7Hf+zPU+r6UC2X0E7rkZ0hQux7xkaEg68N13mscXJ/
-         XK/Z4Z61SDw7M5HInJUmnIzOtQSc8fekjJaXCsGjHgW2Q/HqxbBYTbiQZc1Jxxz942Tt
-         ubWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=2TRrUwuxYePyCI3WXghga60BzOAcIaDjgJpPfXkF+MY=;
-        b=aNKwumVcSZFX6l0tkl7KLBmCRbUtRPkyC1v34ouuWCYWsDyLq8bVaMNsauovyvkRQc
-         CWlDfwavD920EdM73kfRj2V9Jf0HU8MHb5YzAH751KuMHVfiYXo0fsh7tUxUcjgv3DDg
-         a8DlcLCR/1b6V4eBlW7FtgMYHDu/oqiYKdiZ/gWybxNDaxdjsIPneBqE3qp84iNIQwqw
-         bDYKAv/snfKg0TdFu68WMIj4AnDJ0GB2xLoZV5TSVfeS4pMeJd0LLH/YLmOlcuFg8hz6
-         BCwf+ni0sbT0AgfC7yG+rEBKvQDQOXvDjPFPNzdVKbJkSQgGYCrghFWB/rM3nafahoT8
-         xV6Q==
-X-Gm-Message-State: AOAM531RRdo0wHezuN9hY5cCH385j7vgCToLjl+qLMy6evxC3bvkUmbU
-        lyXyRw2c5AxbOJSNxhofQpsD3g==
-X-Google-Smtp-Source: ABdhPJzyj6H4QGA1ydzFr7H+emnJ0ts6G9Rv/pqz78Z5Xf0TW0wtyqn2iGK4oxGCAkwIMXG6u+/HJg==
-X-Received: by 2002:a05:6214:1d09:b0:456:47c5:1db with SMTP id e9-20020a0562141d0900b0045647c501dbmr9214691qvd.73.1651151422600;
-        Thu, 28 Apr 2022 06:10:22 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05622a014300b002e1dcd4cfa9sm13158696qtw.64.2022.04.28.06.10.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 06:10:22 -0700 (PDT)
-Message-ID: <cf05c8031345341caf641d37aeeb58bd506b624a.camel@ndufresne.ca>
-Subject: Re: [PATCH v4 23/24] media: hantro: Add H.264 field decoding support
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-media@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 28 Apr 2022 09:10:20 -0400
-In-Reply-To: <5daa1dcd-a3a7-f508-e731-3a013ebc82ea@xs4all.nl>
-References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
-         <20220426125751.108293-24-nicolas.dufresne@collabora.com>
-         <5daa1dcd-a3a7-f508-e731-3a013ebc82ea@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Thu, 28 Apr 2022 09:14:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677681CFEF
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:11:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E304D62057
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554E3C385AA;
+        Thu, 28 Apr 2022 13:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651151489;
+        bh=3cUbLRj0AS6ThTYaeUINo9N9tQusNC2k+C55ygza17A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dLPGFXXC3Yg3hkBK39uWfjKON3Qop7xypGm1ULKIbLDZ9A1Chiv/w4uk0ZSAu70mD
+         gQa/AV08INc3p/iKF0mmw85FqX+hXUHiT/pRszFetIVfz5ROyNJb4VnpJIVWZec7oF
+         rOpaPSRLNfGlq4R7Inbo1MzcfTxMjA10OmLNucSTccs+FVERcoDBssqiuDP8JmKhpg
+         y9A+eSBDVeKZjzyEBM9Schpdx6ltyhMf+qGf0hSZh8bKHInw9oUgJtXwtTKCgtqPwn
+         8LdgFA4T2t6dF8tESudf7XadBNKjbRdv7bz/DRzGxxlpzQIGrzkMhotzZ3Jx2tDBJ0
+         Hp9FzZBDHTynw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: pxa/sa1100: move I/O space to PCI_IOBASE
+Date:   Thu, 28 Apr 2022 15:10:34 +0200
+Message-Id: <20220428131115.986812-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 28 avril 2022 =C3=A0 10:50 +0200, Hans Verkuil a =C3=A9crit=C2=A0:
-> On 26/04/2022 14:57, Nicolas Dufresne wrote:
-> > This adds the required code to support field decoding. While most of
-> > the code is derived from Rockchip and VSI reference code, the
-> > reduction of the reference list to 16 entries was found by
-> > trial and errors. The list consists of all the references with the
-> > opposite field parity.
-> >=20
-> > The strategy is to deduplicate the reference picture that points
-> > to the same storage (same index). The choice of opposite parity has
-> > been made to keep the other field of the current field pair in the
-> > list. This method may not be robust if a field was lost.
-> >=20
-> > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > ---
-> >  drivers/staging/media/hantro/hantro_h264.c | 122 ++++++++++++++++++---
-> >  drivers/staging/media/hantro/hantro_hw.h   |   1 +
-> >  2 files changed, 109 insertions(+), 14 deletions(-)
-> >=20
-> > diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/stagi=
-ng/media/hantro/hantro_h264.c
-> > index 7377fc26f780..7502dddb324c 100644
-> > --- a/drivers/staging/media/hantro/hantro_h264.c
-> > +++ b/drivers/staging/media/hantro/hantro_h264.c
-> > @@ -22,6 +22,12 @@
-> >  #define POC_BUFFER_SIZE			34
-> >  #define SCALING_LIST_SIZE		(6 * 16 + 2 * 64)
-> > =20
-> > +/*
-> > + * For valid and long term reference marking, index are reversed, so b=
-it 31
-> > + * indicates the status of the picture 0.
-> > + */
-> > +#define REF_BIT(i)			BIT(32 - 1 - (i))
-> > +
-> >  /* Data structure describing auxiliary buffer format. */
-> >  struct hantro_h264_dec_priv_tbl {
-> >  	u32 cabac_table[CABAC_INIT_BUFFER_SIZE];
-> > @@ -227,6 +233,7 @@ static void prepare_table(struct hantro_ctx *ctx)
-> >  {
-> >  	const struct hantro_h264_dec_ctrls *ctrls =3D &ctx->h264_dec.ctrls;
-> >  	const struct v4l2_ctrl_h264_decode_params *dec_param =3D ctrls->decod=
-e;
-> > +	const struct v4l2_ctrl_h264_sps *sps =3D ctrls->sps;
-> >  	struct hantro_h264_dec_priv_tbl *tbl =3D ctx->h264_dec.priv.cpu;
-> >  	const struct v4l2_h264_dpb_entry *dpb =3D ctx->h264_dec.dpb;
-> >  	u32 dpb_longterm =3D 0;
-> > @@ -237,20 +244,45 @@ static void prepare_table(struct hantro_ctx *ctx)
-> >  		tbl->poc[i * 2] =3D dpb[i].top_field_order_cnt;
-> >  		tbl->poc[i * 2 + 1] =3D dpb[i].bottom_field_order_cnt;
-> > =20
-> > +		if (!(dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_VALID))
-> > +			continue;
-> > +
-> >  		/*
-> >  		 * Set up bit maps of valid and long term DPBs.
-> > -		 * NOTE: The bits are reversed, i.e. MSb is DPB 0.
-> > +		 * NOTE: The bits are reversed, i.e. MSb is DPB 0. For frame
-> > +		 * decoding, bit 31 to 15 are used, while for field decoding,
-> > +		 * all bits are used, with bit 31 being a top field, 30 a bottom
-> > +		 * field and so on.
-> >  		 */
-> > -		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-> > -			dpb_valid |=3D BIT(HANTRO_H264_DPB_SIZE - 1 - i);
-> > -		if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-> > -			dpb_longterm |=3D BIT(HANTRO_H264_DPB_SIZE - 1 - i);
-> > +		if (dec_param->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) {
-> > +			if (dpb[i].fields & V4L2_H264_TOP_FIELD_REF)
-> > +				dpb_valid |=3D REF_BIT(i * 2);
-> > +
-> > +			if (dpb[i].fields & V4L2_H264_BOTTOM_FIELD_REF)
-> > +				dpb_valid |=3D REF_BIT(i * 2 + 1);
-> > +
-> > +			if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM) {
-> > +				dpb_longterm |=3D REF_BIT(i * 2);
-> > +				dpb_longterm |=3D REF_BIT(i * 2 + 1);
-> > +			}
-> > +		} else {
-> > +			dpb_valid |=3D REF_BIT(i);
-> > +
-> > +			if (dpb[i].flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-> > +				dpb_longterm |=3D REF_BIT(i);
-> > +		}
-> > +	}
-> > +	ctx->h264_dec.dpb_valid =3D dpb_valid;
-> > +	ctx->h264_dec.dpb_longterm =3D dpb_longterm;
-> > +
-> > +	if ((dec_param->flags & V4L2_H264_DECODE_PARAM_FLAG_FIELD_PIC) ||
-> > +	    !(sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD)) {
-> > +		tbl->poc[32] =3D ctx->h264_dec.cur_poc;
-> > +		tbl->poc[33] =3D 0;
-> > +	} else {
-> > +		tbl->poc[32] =3D dec_param->top_field_order_cnt;
-> > +		tbl->poc[33] =3D dec_param->bottom_field_order_cnt;
-> >  	}
-> > -	ctx->h264_dec.dpb_valid =3D dpb_valid << 16;
-> > -	ctx->h264_dec.dpb_longterm =3D dpb_longterm << 16;
-> > -
-> > -	tbl->poc[32] =3D dec_param->top_field_order_cnt;
-> > -	tbl->poc[33] =3D dec_param->bottom_field_order_cnt;
-> > =20
-> >  	assemble_scaling_list(ctx);
-> >  }
-> > @@ -326,6 +358,8 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_ct=
-x *ctx,
-> >  {
-> >  	struct v4l2_h264_dpb_entry *dpb =3D ctx->h264_dec.dpb;
-> >  	dma_addr_t dma_addr =3D 0;
-> > +	s32 cur_poc =3D ctx->h264_dec.cur_poc;
-> > +	u32 flags;
-> > =20
-> >  	if (dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE)
-> >  		dma_addr =3D hantro_get_ref(ctx, dpb[dpb_idx].reference_ts);
-> > @@ -343,7 +377,12 @@ dma_addr_t hantro_h264_get_ref_buf(struct hantro_c=
-tx *ctx,
-> >  		dma_addr =3D hantro_get_dec_buf_addr(ctx, buf);
-> >  	}
-> > =20
-> > -	return dma_addr;
-> > +	flags =3D dpb[dpb_idx].flags & V4L2_H264_DPB_ENTRY_FLAG_FIELD ? 0x2 :=
- 0;
-> > +	flags |=3D abs(dpb[dpb_idx].top_field_order_cnt - cur_poc) <
-> > +		 abs(dpb[dpb_idx].bottom_field_order_cnt - cur_poc) ?
-> > +		 0x1 : 0;
-> > +
-> > +	return dma_addr | flags;
-> >  }
-> > =20
-> >  u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_i=
-dx)
-> > @@ -355,6 +394,47 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx=
-, unsigned int dpb_idx)
-> >  	return dpb->frame_num;
-> >  }
-> > =20
-> > +/*
-> > + * Removes all references with he same parity as current picture from =
-the
-> > + * reference list. The remaining list will have references with the op=
-posite
-> > + * parity. This is effectively a deduplication of references since eac=
-h buffer
-> > + * stores two fields. For this eason, each buffer are found twice in t=
-he
-> > + * reference list.
-> > + *
-> > + * This technique has been chosen through trial and error. This simple=
- approach
-> > + * resulted in the highest conformance score. Note that this method ma=
-y suffer
-> > + * worse quality in the case an opposite reference frame has been lost=
-. If this
-> > + * becomes a problem in the future, it should be possible to add a pre=
-processing
-> > + * to identify un-paired fields and avoid removing them.
-> > + */
-> > +static void deduplicate_reflist(struct v4l2_h264_reflist_builder *b,
-> > +				struct v4l2_h264_reference *reflist)
-> > +{
-> > +	int write_idx =3D 0;
-> > +	int i;
-> > +
-> > +	if (b->cur_pic_fields =3D=3D V4L2_H264_FRAME_REF) {
-> > +		write_idx =3D b->num_valid;
-> > +		goto done;
-> > +	}
-> > +
-> > +	for (i =3D 0; i < b->num_valid; i++) {
-> > +		if (!(b->cur_pic_fields =3D=3D reflist[i].fields)) {
-> > +			reflist[write_idx++] =3D reflist[i];
-> > +			continue;
-> > +		}
-> > +	}
-> > +
-> > +done:
-> > +	/* Should not happen unless we have a bug in the reflist builder. */
-> > +	if (WARN_ON(write_idx > 16))
-> > +		write_idx =3D 16;
-> > +
-> > +	/* Clear the remaining, some streams fails otherwise */
-> > +	for (; write_idx < 16; write_idx++)
-> > +		reflist[write_idx].index =3D 15;
-> > +}
-> > +
-> >  int hantro_h264_dec_prepare_run(struct hantro_ctx *ctx)
-> >  {
-> >  	struct hantro_h264_dec_hw_ctx *h264_ctx =3D &ctx->h264_dec;
-> > @@ -386,15 +466,29 @@ int hantro_h264_dec_prepare_run(struct hantro_ctx=
- *ctx)
-> >  	/* Update the DPB with new refs. */
-> >  	update_dpb(ctx);
-> > =20
-> > -	/* Prepare data in memory. */
-> > -	prepare_table(ctx);
-> > -
-> >  	/* Build the P/B{0,1} ref lists. */
-> >  	v4l2_h264_init_reflist_builder(&reflist_builder, ctrls->decode,
-> >  				       ctrls->sps, ctx->h264_dec.dpb);
-> > +	h264_ctx->cur_poc =3D reflist_builder.cur_pic_order_count;
-> > +
-> > +	/* Prepare data in memory. */
-> > +	prepare_table(ctx);
-> > +
-> >  	v4l2_h264_build_p_ref_list(&reflist_builder, h264_ctx->reflists.p);
-> >  	v4l2_h264_build_b_ref_lists(&reflist_builder, h264_ctx->reflists.b0,
-> >  				    h264_ctx->reflists.b1);
-> > +
-> > +	/*
-> > +	 * Reduce ref lists to at most 16 entries, Hantro hardware will deduc=
-e
-> > +	 * the actual picture lists in field through the dpb_valid,
-> > +	 * dpb_longterm bitmap along with the current frame parity.
-> > +	 */
-> > +	if (reflist_builder.cur_pic_fields !=3D V4L2_H264_FRAME_REF) {
-> > +		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.p);
-> > +		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.b0);
-> > +		deduplicate_reflist(&reflist_builder, h264_ctx->reflists.b1);
-> > +	}
-> > +
-> >  	return 0;
-> >  }
-> > =20
-> > diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging=
-/media/hantro/hantro_hw.h
-> > index 292aaaabaf24..fd869369fb97 100644
-> > --- a/drivers/staging/media/hantro/hantro_hw.h
-> > +++ b/drivers/staging/media/hantro/hantro_hw.h
-> > @@ -91,6 +91,7 @@ struct hantro_h264_dec_hw_ctx {
-> >  	struct hantro_h264_dec_ctrls ctrls;
-> >  	u32 dpb_longterm;
-> >  	u32 dpb_valid;
-> > +	s32 cur_poc;
->=20
-> This field isn't documented in kerneldoc.
->=20
-> I've added this:
->=20
-> + * @cur_poc:   Current picture order count
->=20
-> Is that a correct description? If not, let me know what it should be.
->=20
-> I'll update the patch manually, no need to repost.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Yes, this is entirely correct, thanks for catching this.
+PXA and StrongARM1100 traditionally map their I/O space 1:1 into virtual
+memory, using a per-bus io_offset that matches the base address of the
+ioremap mapping.
 
->=20
-> Regards,
->=20
-> 	Hans
->=20
-> >  };
-> > =20
-> >  /**
->=20
+In order for PXA to work in a multiplatform config, this needs to
+change so I/O space starts at PCI_IOBASE (0xfee00000). Since the pcmcia
+soc_common support is shared with StrongARM1100, both have to change at
+the same time. The affected machines are:
+
+ - Anything with a PCMCIA slot now uses pci_remap_iospace, which
+   is made available to PCMCIA configurations as well, rather than
+   just PCI
+
+ - The Zeus and Viper platforms have PC/104-style ISA buses,
+   which have a static mapping for both I/O and memory space at
+   0xf1000000, which can no longer work. It does not appear to have
+   any in-tree users, so moving it to port number 0x2000 is unlikely to
+   break something.
+
+ - SA1100 does support ISA slots in theory, but all machines that
+   originally enabled this appear to have been removed from the tree
+   ages ago, and the I/O space is never mapped anywhere.
+
+ - The Nanoengine machine has support for PCI slots, but looks
+   like this never included I/O space, the resources only define the
+   location for memory and config space.
+
+With this, the definitions of __io() and IO_SPACE_LIMIT can be simplified,
+as the only remaining cases are the generic PCI_IOBASE and the custom
+inb()/outb() macros on RiscPC.  S3C24xx still has a custom inb()/outb()
+in this here, but this is already removed in another branch.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm/include/asm/io.h   | 25 +++----------------------
+ arch/arm/mach-pxa/viper.c   | 12 ++++++++++++
+ arch/arm/mach-pxa/zeus.c    | 12 ++++++++++++
+ arch/arm/mm/ioremap.c       |  2 +-
+ drivers/pcmcia/soc_common.c | 16 ++++++++--------
+ include/pcmcia/soc_common.h |  2 +-
+ 6 files changed, 37 insertions(+), 32 deletions(-)
+
+diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
+index 0c70eb688a00..3bdc54702baa 100644
+--- a/arch/arm/include/asm/io.h
++++ b/arch/arm/include/asm/io.h
+@@ -200,32 +200,13 @@ void __iomem *pci_remap_cfgspace(resource_size_t res_cookie, size_t size);
+  */
+ #ifdef CONFIG_NEED_MACH_IO_H
+ #include <mach/io.h>
+-#elif defined(CONFIG_PCI)
+-#define IO_SPACE_LIMIT	((resource_size_t)0xfffff)
+-#define __io(a)		__typesafe_io(PCI_IO_VIRT_BASE + ((a) & IO_SPACE_LIMIT))
+ #else
+-#define __io(a)		__typesafe_io((a) & IO_SPACE_LIMIT)
+-#endif
+-
+-/*
+- * This is the limit of PC card/PCI/ISA IO space, which is by default
+- * 64K if we have PC card, PCI or ISA support.  Otherwise, default to
+- * zero to prevent ISA/PCI drivers claiming IO space (and potentially
+- * oopsing.)
+- *
+- * Only set this larger if you really need inb() et.al. to operate over
+- * a larger address space.  Note that SOC_COMMON ioremaps each sockets
+- * IO space area, and so inb() et.al. must be defined to operate as per
+- * readb() et.al. on such platforms.
+- */
+-#ifndef IO_SPACE_LIMIT
+-#if defined(CONFIG_PCMCIA_SOC_COMMON) || defined(CONFIG_PCMCIA_SOC_COMMON_MODULE)
+-#define IO_SPACE_LIMIT ((resource_size_t)0xffffffff)
+-#elif defined(CONFIG_PCI) || defined(CONFIG_ISA) || defined(CONFIG_PCCARD)
+-#define IO_SPACE_LIMIT ((resource_size_t)0xffff)
++#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCI)
++#define IO_SPACE_LIMIT	((resource_size_t)0xfffff)
+ #else
+ #define IO_SPACE_LIMIT ((resource_size_t)0)
+ #endif
++#define __io(a)		__typesafe_io(PCI_IO_VIRT_BASE + ((a) & IO_SPACE_LIMIT))
+ #endif
+ 
+ /*
+diff --git a/arch/arm/mach-pxa/viper.c b/arch/arm/mach-pxa/viper.c
+index 0782f0ed5a6e..71e4d7ea77b8 100644
+--- a/arch/arm/mach-pxa/viper.c
++++ b/arch/arm/mach-pxa/viper.c
+@@ -998,6 +998,18 @@ static struct map_desc viper_io_desc[] __initdata = {
+ 		.length  = 0x00800000,
+ 		.type    = MT_DEVICE,
+ 	},
++	{
++		/*
++		 * ISA I/O space mapping:
++		 * -  ports 0x0000-0x0fff are PCMCIA slot 0
++		 * -  ports 0x1000-0x1fff are PCMCIA slot 1
++		 * -  ports 0x2000-0x2fff are PC/104
++		 */
++		.virtual = PCI_IOBASE + 0x2000,
++		.pfn     = __phys_to_pfn(0x30000000),
++		.length  = 0x1000,
++		.type    = MT_DEVICE,
++	},
+ };
+ 
+ static void __init viper_map_io(void)
+diff --git a/arch/arm/mach-pxa/zeus.c b/arch/arm/mach-pxa/zeus.c
+index 1fdef9426784..5ddb4223d1dc 100644
+--- a/arch/arm/mach-pxa/zeus.c
++++ b/arch/arm/mach-pxa/zeus.c
+@@ -929,6 +929,18 @@ static struct map_desc zeus_io_desc[] __initdata = {
+ 		.length  = 0x00800000,
+ 		.type    = MT_DEVICE,
+ 	},
++	{
++		/*
++		 * ISA I/O space mapping:
++		 * -  ports 0x0000-0x0fff are PCMCIA slot 0
++		 * -  ports 0x1000-0x1fff are PCMCIA slot 1
++		 * -  ports 0x2000-0x2fff are PC/104
++		 */
++		.virtual = PCI_IOBASE + 0x2000,
++		.pfn     = __phys_to_pfn(ZEUS_PC104IO_PHYS),
++		.length  = 0x1000,
++		.type    = MT_DEVICE,
++	},
+ };
+ 
+ static void __init zeus_map_io(void)
+diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
+index aa08bcb72db9..e6f5354ed1d7 100644
+--- a/arch/arm/mm/ioremap.c
++++ b/arch/arm/mm/ioremap.c
+@@ -455,7 +455,7 @@ void iounmap(volatile void __iomem *cookie)
+ }
+ EXPORT_SYMBOL(iounmap);
+ 
+-#ifdef CONFIG_PCI
++#if defined(CONFIG_PCI) || defined(CONFIG_PCMCIA)
+ static int pci_ioremap_mem_type = MT_DEVICE;
+ 
+ void pci_ioremap_set_mem_type(int mem_type)
+diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
+index 9276a628473d..fdeaefffd34a 100644
+--- a/drivers/pcmcia/soc_common.c
++++ b/drivers/pcmcia/soc_common.c
+@@ -46,6 +46,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/spinlock.h>
+ #include <linux/timer.h>
++#include <linux/pci.h>
+ 
+ #include "soc_common.h"
+ 
+@@ -782,8 +783,7 @@ void soc_pcmcia_remove_one(struct soc_pcmcia_socket *skt)
+ 	/* should not be required; violates some lowlevel drivers */
+ 	soc_common_pcmcia_config_skt(skt, &dead_socket);
+ 
+-	iounmap(skt->virt_io);
+-	skt->virt_io = NULL;
++	pci_unmap_iospace(&skt->res_io_io);
+ 	release_resource(&skt->res_attr);
+ 	release_resource(&skt->res_mem);
+ 	release_resource(&skt->res_io);
+@@ -816,11 +816,11 @@ int soc_pcmcia_add_one(struct soc_pcmcia_socket *skt)
+ 	if (ret)
+ 		goto out_err_4;
+ 
+-	skt->virt_io = ioremap(skt->res_io.start, 0x10000);
+-	if (skt->virt_io == NULL) {
+-		ret = -ENOMEM;
++	skt->res_io_io = (struct resource)
++		 DEFINE_RES_IO_NAMED(skt->nr * 0x1000, 0x1000, "PCMCIA I/O");
++	ret = pci_remap_iospace(&skt->res_io_io, skt->res_io.start);
++	if (ret)
+ 		goto out_err_5;
+-	}
+ 
+ 	/*
+ 	 * We initialize default socket timing here, because
+@@ -838,7 +838,7 @@ int soc_pcmcia_add_one(struct soc_pcmcia_socket *skt)
+ 	skt->socket.resource_ops = &pccard_static_ops;
+ 	skt->socket.irq_mask = 0;
+ 	skt->socket.map_size = PAGE_SIZE;
+-	skt->socket.io_offset = (unsigned long)skt->virt_io;
++	skt->socket.io_offset = (unsigned long)skt->res_io_io.start;
+ 
+ 	skt->status = soc_common_pcmcia_skt_state(skt);
+ 
+@@ -872,7 +872,7 @@ int soc_pcmcia_add_one(struct soc_pcmcia_socket *skt)
+  out_err_7:
+ 	soc_pcmcia_hw_shutdown(skt);
+  out_err_6:
+-	iounmap(skt->virt_io);
++	pci_unmap_iospace(&skt->res_io_io);
+  out_err_5:
+ 	release_resource(&skt->res_attr);
+  out_err_4:
+diff --git a/include/pcmcia/soc_common.h b/include/pcmcia/soc_common.h
+index 26f1473a06c5..d4f18f4679df 100644
+--- a/include/pcmcia/soc_common.h
++++ b/include/pcmcia/soc_common.h
+@@ -46,9 +46,9 @@ struct soc_pcmcia_socket {
+ 
+ 	struct resource		res_skt;
+ 	struct resource		res_io;
++	struct resource		res_io_io;
+ 	struct resource		res_mem;
+ 	struct resource		res_attr;
+-	void __iomem		*virt_io;
+ 
+ 	struct {
+ 		int		gpio;
+-- 
+2.29.2
 

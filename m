@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F11512EE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0BA512EE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344413AbiD1Itl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S1344590AbiD1Itp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344801AbiD1Is6 (ORCPT
+        with ESMTP id S1344889AbiD1ItM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:48:58 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9F0DED1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id fv2so3687113pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wIdqzQenp8zuRFBiUnNUkRO/mr/GSoN96MpP4RdC2Ks=;
-        b=xsSu5UkuQp97dr0n35uBtIUmJEnPrOq+7/Ht8m1e0fS41D6us0m0UdxZsuYoBM+4L/
-         qyYzrP9GeLa+6aX7dVwBoEiHpKMPqehEugWifRgV5H1Xq8/A/v21RTNfffson+PMEqdH
-         ejG15f5Yzg6nvPTTMcwiIaUHytZtm5yY+/LtxbPzw0uM76D3tVjrBOQScji6XW3+kpTL
-         vjfvAzqMjKj8Fa/q89vqNDEUWwEWUyLQUvoZATzyJi5sP5DWq6qEWzguM9rw0/74T0TB
-         iH8uoemrGokyoSu5V20+EEEyDMp9zy9aL9wwYjwcmevwmXTy6GdrMwzr6i10GIaKLoRl
-         RYgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wIdqzQenp8zuRFBiUnNUkRO/mr/GSoN96MpP4RdC2Ks=;
-        b=hFgdq/6qdzBzbnzHZ+Y/elBltq/NVmL9NTLZLpXxLAHPvkLFOeHqEM84JSAqZKh9NU
-         HO/9Vb/bWL9ztlTsgN0ZwaOojKDN4EnywjKuQw+CtZm5YS0iIBJE3GqP/CdSFT5okHji
-         LmHRb5b6fzce7L6IO24DTSYjFkbWdf2P3JhDWVG3zF7pUHVcFMFDLpk6kdkfj9gGJACj
-         4tLPSshlZ4a/hTSMBKSP1b4VD2+eEa5u5upyIxBpQT88UtX4j/8SlbCxZkIcEov58+96
-         WktkIMf7OQtrmk3JLAcvegmFe9kwVeQoj0jMKgOIi6k8hMPViri1EbNUAqPFh4ATWRy5
-         2AZA==
-X-Gm-Message-State: AOAM530ZhNBcYmV0QYSQEkQkpuaQLSYKWSR1mvbCipyGQmIkDJERV4t1
-        vKar78G/rFQxLKelMHcUxV+ejQ==
-X-Google-Smtp-Source: ABdhPJxaBqG4DFsYcLCWvno3bHaamg3EwGl6hR804mfzJo/rqlAlnFOKP86OTA2RJ3iySYw9TMbjvw==
-X-Received: by 2002:a17:90b:314a:b0:1d9:5ccf:baab with SMTP id ip10-20020a17090b314a00b001d95ccfbaabmr25208550pjb.110.1651135309119;
-        Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id d7-20020a62f807000000b0050d32c878f4sm15371198pfh.114.2022.04.28.01.41.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 01:41:48 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 16:41:43 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: qcom: msm8939: Use icc_sync_state
-Message-ID: <20220428084143.GB583115@leoy-ThinkPad-X240s>
-References: <20220416012634.479617-1-leo.yan@linaro.org>
- <05a7c1cc-c8f4-9303-2498-ba8709c72b4b@kernel.org>
+        Thu, 28 Apr 2022 04:49:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D57D33898
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:42:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1994E1F88A;
+        Thu, 28 Apr 2022 08:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651135344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QKyt3hzwOwKKk+NZpkV1st+qYwiK8MEXnBg8P2xnW8o=;
+        b=YyMFFQWJm/gFrFDoVKWr4lPpvvjHZ0AoHdymIIILQ2XigKVbXXV/3gRCEouj1ZvLA9+M/X
+        0pg6Wo6lgaPqfH3IZ40a+yrgyPG4psO8b1BmjGsnLsrjeFQkCgGIjED6xnC4m0vz7b6Tq2
+        VDRXLgBvLUUcOJOS7/nwsRxKpd1A6t0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651135344;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QKyt3hzwOwKKk+NZpkV1st+qYwiK8MEXnBg8P2xnW8o=;
+        b=b4WTeFAw6WfKJdbQndobrlWHHG3AiYNmUO+78YP1CtMrHvebSiC6kituXqvNTLmqcq3I9z
+        Y9eOFZRQsZo7htAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2DE313491;
+        Thu, 28 Apr 2022 08:42:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Uv9tNm9TamIaNQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 28 Apr 2022 08:42:23 +0000
+Message-ID: <c2ce3927-44ac-45cb-9ced-cfd3f9a184a6@suse.de>
+Date:   Thu, 28 Apr 2022 10:42:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05a7c1cc-c8f4-9303-2498-ba8709c72b4b@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
+ and DRM_DP_CEC
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+References: <20220428082244.390859-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220428082244.390859-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------sokI09Ycnnugt1q0yepDUP8e"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,52 +75,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:19:55AM +0300, Georgi Djakov wrote:
-> On 16.04.22 4:26, Leo Yan wrote:
-> > It's fashion to use the icc_sync_state callback to notify the framework
-> > when all consumers are probed, so that the bandwidth request doesn't
-> > need to stay on maximum value.
-> > 
-> > Do the same thing for msm8939 driver.
-> 
-> I assume that you tested this with some out of tree DT? Is it public?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------sokI09Ycnnugt1q0yepDUP8e
+Content-Type: multipart/mixed; boundary="------------n80VA0nqnQm7LsbIbIjcfTHz";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@linux.intel.com>,
+ Lyude Paul <lyude@redhat.com>
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org
+Message-ID: <c2ce3927-44ac-45cb-9ced-cfd3f9a184a6@suse.de>
+Subject: Re: [PATCH v3] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
+ and DRM_DP_CEC
+References: <20220428082244.390859-1-javierm@redhat.com>
+In-Reply-To: <20220428082244.390859-1-javierm@redhat.com>
 
-Yes, Bryan is upstreaming for DT binding patch, see:
-https://lore.kernel.org/all/20220419010903.3109514-3-bryan.odonoghue@linaro.org/
+--------------n80VA0nqnQm7LsbIbIjcfTHz
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> If the consumers are not described as such in DT and/or the support
-> in the client drivers is missing, paths might get disabled.
+SGkNCg0KQW0gMjguMDQuMjIgdW0gMTA6MjIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IFRoZSBEUk1fRFBfQVVYX0NIQVJERVYgYW5kIERSTV9EUF9DRUMgS2NvbmZp
+ZyBzeW1ib2xzIGVuYWJsZSBjb2RlIHRoYXQgdXNlDQo+IERQIGhlbHBlciBmdW5jdGlvbnMs
+IHRoYXQgYXJlIG9ubHkgcHJlc2VudCBpZiBDT05GSUdfRFJNX0RJU1BMQVlfRFBfSEVMUEVS
+DQo+IGlzIGFsc28gZW5hYmxlZC4NCj4gDQo+IEJ1dCB0aGVzZSBkb24ndCBzZWxlY3QgdGhl
+IERSTV9ESVNQTEFZX0RQX0hFTFBFUiBzeW1ib2wsIG1lYW5pbmcgdGhhdCBpdA0KPiBpcyBw
+b3NzaWJsZSB0byBlbmFibGUgYW55IG9mIHRoZW0gd2l0aG91dCBDT05GSUdfRFJNX0RJU1BM
+QVlfRFBfSEVMUEVSLg0KPiANCj4gVGhhdCB3aWxsIGxlYWQgdG8gdGhlIGZvbGxvd2luZyBs
+aW5raW5nIGVycm9ycyB3aXRoIHRoZSBtZW50aW9uZWQgY29uZmlnOg0KPiANCj4gICAgTEQg
+ICAgICB2bWxpbnV4Lm8NCj4gICAgTU9EUE9TVCB2bWxpbnV4LnN5bXZlcnMNCj4gICAgTU9E
+SU5GTyBtb2R1bGVzLmJ1aWx0aW4ubW9kaW5mbw0KPiAgICBHRU4gICAgIG1vZHVsZXMuYnVp
+bHRpbg0KPiAgICBMRCAgICAgIC50bXBfdm1saW51eC5rYWxsc3ltczENCj4gICAgS1NZTVMg
+ICAudG1wX3ZtbGludXgua2FsbHN5bXMxLlMNCj4gICAgQVMgICAgICAudG1wX3ZtbGludXgu
+a2FsbHN5bXMxLlMNCj4gICAgTEQgICAgICAudG1wX3ZtbGludXgua2FsbHN5bXMyDQo+ICAg
+IEtTWU1TICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMi5TDQo+ICAgIEFTICAgICAgLnRtcF92
+bWxpbnV4LmthbGxzeW1zMi5TDQo+ICAgIExEICAgICAgdm1saW51eA0KPiAgICBTWVNNQVAg
+IFN5c3RlbS5tYXANCj4gICAgU09SVFRBQiB2bWxpbnV4DQo+ICAgIE9CSkNPUFkgYXJjaC9h
+cm02NC9ib290L0ltYWdlDQo+ICAgIE1PRFBPU1QgbW9kdWxlcy1vbmx5LnN5bXZlcnMNCj4g
+RVJST1I6IG1vZHBvc3Q6ICJkcm1fZHBfZHBjZF93cml0ZSIgW2RyaXZlcnMvZ3B1L2RybS9k
+aXNwbGF5L2RybV9kaXNwbGF5X2hlbHBlci5rb10gdW5kZWZpbmVkIQ0KPiBFUlJPUjogbW9k
+cG9zdDogImRybV9kcF9yZWFkX2Rlc2MiIFtkcml2ZXJzL2dwdS9kcm0vZGlzcGxheS9kcm1f
+ZGlzcGxheV9oZWxwZXIua29dIHVuZGVmaW5lZCENCj4gRVJST1I6IG1vZHBvc3Q6ICJkcm1f
+ZHBfZHBjZF9yZWFkIiBbZHJpdmVycy9ncHUvZHJtL2Rpc3BsYXkvZHJtX2Rpc3BsYXlfaGVs
+cGVyLmtvXSB1bmRlZmluZWQhDQo+IG1ha2VbMV06ICoqKiBbc2NyaXB0cy9NYWtlZmlsZS5t
+b2Rwb3N0OjEzNDogbW9kdWxlcy1vbmx5LnN5bXZlcnNdIEVycm9yIDENCj4gbWFrZVsxXTog
+KioqIERlbGV0aW5nIGZpbGUgJ21vZHVsZXMtb25seS5zeW12ZXJzJw0KPiBtYWtlOiAqKiog
+W01ha2VmaWxlOjE3NDk6IG1vZHVsZXNdIEVycm9yIDINCj4gDQo+IEJlc2lkZXMgbWFraW5n
+IHRoZXNlIHN5bWJvbHMgdG8gc2VsZWN0IENPTkZJR19EUk1fRElTUExBWV9EUF9IRUxQRVIs
+IG1ha2UNCj4gdGhlbSB0byBkZXBlbmQgb24gRFJNX0RJU1BMQVlfSEVMUEVSLCBzaW5jZSBj
+YW4ndCBiZSBlbmFibGVkIHdpdGhvdXQgaXQuDQo+IA0KPiBOb3RlOiBJdCBzZWVtcyB0aGlz
+IGhhcyBiZWVuIGFuIGlzc3VlIGZvciBhIGxvbmcgdGltZSBidXQgd2FzIG1hZGUgZWFzaWVy
+DQo+IHRvIHJlcHJvZHVjZSBhZnRlciB0aGUgY29tbWl0IDFlMGY2NjQyMGIxMyAoImRybS9k
+aXNwbGF5OiBJbnRyb2R1Y2UgYSBEUk0NCj4gZGlzcGxheS1oZWxwZXIgbW9kdWxlIikuIEFk
+ZGluZyBhIEZpeGVzOiB0YWcganVzdCB0byBtYWtlIHN1cmUgdGhhdCB0aGlzDQo+IGZpeCB3
+aWxsIGJlIHBpY2tlZCBmb3Igc3RhYmxlIG9uY2UgdGhlIG1lbnRpb25lZCBjaGFuZ2UgYWxz
+byBsYW5kcyB0aGVyZS4NCj4gDQo+IEZpeGVzOiAxZTBmNjY0MjBiMTMgKCJkcm0vZGlzcGxh
+eTogSW50cm9kdWNlIGEgRFJNIGRpc3BsYXktaGVscGVyIG1vZHVsZSIpDQo+IFNpZ25lZC1v
+ZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQuY29tPg0K
+PiAtLS0NCj4gDQo+IENoYW5nZXMgaW4gdjM6DQo+IC0gQWxzbyBtYWtlIERSTV9EUF9BVVhf
+Q0hBUkRFViBhbmQgRFJNX0RQX0NFQyBkZXBlbmQgb24gRFJNX0RJU1BMQVlfSEVMUEVSDQo+
+ICAgIChUaG9tYXMgWmltbWVybWFubikuDQo+IA0KPiBDaGFuZ2VzIGluIHYyOg0KPiAtIEV4
+cGxhaW4gYmV0dGVyIHRoZSBpc3N1ZSBpbiB0aGUgY2hhbmdlIGRlc2NyaXB0aW9uLg0KPiAt
+IE9ubHkgc2VsZWN0IERSTV9ESVNQTEFZX0RQX0hFTFBFUiBhbmQgbm90IERSTV9ESVNQTEFZ
+X0hFTFBFUi4NCj4gDQo+ICAgZHJpdmVycy9ncHUvZHJtL2Rpc3BsYXkvS2NvbmZpZyB8IDYg
+KysrKy0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlv
+bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZGlzcGxheS9LY29u
+ZmlnIGIvZHJpdmVycy9ncHUvZHJtL2Rpc3BsYXkvS2NvbmZpZw0KPiBpbmRleCBmODRmMWIw
+Y2QyM2YuLjFiNmU2YWYzNzU0NiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2Rp
+c3BsYXkvS2NvbmZpZw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZGlzcGxheS9LY29uZmln
+DQo+IEBAIC0zMSw3ICszMSw4IEBAIGNvbmZpZyBEUk1fRElTUExBWV9IRE1JX0hFTFBFUg0K
+PiAgIA0KPiAgIGNvbmZpZyBEUk1fRFBfQVVYX0NIQVJERVYNCj4gICAJYm9vbCAiRFJNIERQ
+IEFVWCBJbnRlcmZhY2UiDQo+IC0JZGVwZW5kcyBvbiBEUk0NCj4gKwlkZXBlbmRzIG9uIERS
+TSAmJiBEUk1fRElTUExBWV9IRUxQRVINCj4gKwlzZWxlY3QgRFJNX0RJU1BMQVlfRFBfSEVM
+UEVSDQoNCkknZCBiZSBPSyB3aXRoIHRoYXQsIGJ1dCBJJ20gc3RpbGwgd29uZGVyaW5nIHdo
+eSB5b3UncmUgbm90IG1ha2luZyBpdCANCmRlcGVuZCBvbiBEUk1fRElTUExBWV9EUF9IRUxQ
+RVIuICBJZiBhIGNvbmZpZyBvbmx5IGVuYWJsZXMgSERNSSAod2l0aG91dCANCkRQKSwgdGhl
+c2Ugb3B0aW9ucyB3b3VsZCBzdGlsbCBzaG93IHVwLg0KDQoNCj4gICAJaGVscA0KPiAgIAkg
+IENob29zZSB0aGlzIG9wdGlvbiB0byBlbmFibGUgYSAvZGV2L2RybV9kcF9hdXhOIG5vZGUg
+dGhhdCBhbGxvd3MgdG8NCj4gICAJICByZWFkIGFuZCB3cml0ZSB2YWx1ZXMgdG8gYXJiaXRy
+YXJ5IERQQ0QgcmVnaXN0ZXJzIG9uIHRoZSBEUCBhdXgNCj4gQEAgLTM5LDcgKzQwLDggQEAg
+Y29uZmlnIERSTV9EUF9BVVhfQ0hBUkRFVg0KPiAgIA0KPiAgIGNvbmZpZyBEUk1fRFBfQ0VD
+DQo+ICAgCWJvb2wgIkVuYWJsZSBEaXNwbGF5UG9ydCBDRUMtVHVubmVsaW5nLW92ZXItQVVY
+IEhETUkgc3VwcG9ydCINCj4gLQlkZXBlbmRzIG9uIERSTQ0KPiArCWRlcGVuZHMgb24gRFJN
+ICYmIERSTV9ESVNQTEFZX0hFTFBFUg0KPiArCXNlbGVjdCBEUk1fRElTUExBWV9EUF9IRUxQ
+RVINCg0KU2FtZSBoZXJlLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICAgCXNlbGVj
+dCBDRUNfQ09SRQ0KPiAgIAloZWxwDQo+ICAgCSAgQ2hvb3NlIHRoaXMgb3B0aW9uIGlmIHlv
+dSB3YW50IHRvIGVuYWJsZSBIRE1JIENFQyBzdXBwb3J0IGZvcg0KDQotLSANClRob21hcyBa
+aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
+R2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6
+IEl2byBUb3Rldg0K
 
-Indeed, when tested the mainline kernel on msm8939 (with several
-offline patches for enabling msm8939), I observed that GPU and display
-drivers are not enabled yet, so some interconnect paths are failed.
-In this case, the interconnect clock stays on maximum frequency.
+--------------n80VA0nqnQm7LsbIbIjcfTHz--
 
-But I think this doesn't impact this patch; if without this patch,
-icc_sync_state() will never be called and the global variable
-'synced_state' is always false.
+--------------sokI09Ycnnugt1q0yepDUP8e
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-In other words, based on this patch and after initiailize all client
-drivers, the clients' bandwdith request will be respected.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Leo
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJqU28FAwAAAAAACgkQlh/E3EQov+Dn
+EBAAmv4y6RJTciNQYgXVi+eGypmEQ4q2s6tcEuhFtCtJZUJKxINMAk8xEvIKyEfBJjQLl9zAWmfW
+9oQEf7ujFtjBOefwkf36rvYlF2YZY9x0m8Ok9OiudwCAAgyeovXxlbaEz7/Iezx8ZOAnXQh1xtne
+uXkqfqN1pD2+uPmAymEELTU+04KGp8zZyElx+OWCSQ5BIegIZiUHspJJjKmn4dYx1k8nITZFYGUv
+TiEMOBMrYz7aQnwGjYjuDK9Nesi4UokGR3ZNo7oCjUTwPRaG6jc/3+Qc9uWP5mdC8nkOLJDAH7kR
+P7K7HXUbKsSpD2ehEl2n7031aRj8xWil755UOOGCQc0odSNP5jHVeih9ZK3yCFDuifJhomZDq+0Y
+9QQdXVdS3U2mBb+sUe2V0C2sj6Wf9R6KpnFLqlj+HJ00nNVfEjs8peUexjArvfv3q+nJ8xiUP/2g
+lmhgK3fTf29VZe4Tm8KZGOUwplx1isnuSZ6jA42/k0Kzw9r2teWO8JgfRIJGpS8KzqlAekNFCkc8
+wrEX0c6/VFM2mNTO67O4UqyGKOpKXFvE8rgD4c+cjlZ0M+DUT8qdDi+t1SBykdKdDeRnLnOZ8Rpw
+95ai6iE7a9B5BSP/NVkREJCXUwCI5rtlfw7jLs3dbOyNmHHCkAfJ5X+gLYeaKsOgT9CQRe4KMZV+
+pi0=
+=dkpi
+-----END PGP SIGNATURE-----
 
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > ---
-> >   drivers/interconnect/qcom/msm8939.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-> > index f9c2d7d3100d..ca5f611d33b0 100644
-> > --- a/drivers/interconnect/qcom/msm8939.c
-> > +++ b/drivers/interconnect/qcom/msm8939.c
-> > @@ -1423,6 +1423,7 @@ static struct platform_driver msm8939_noc_driver = {
-> >   	.driver = {
-> >   		.name = "qnoc-msm8939",
-> >   		.of_match_table = msm8939_noc_of_match,
-> > +		.sync_state = icc_sync_state,
-> >   	},
-> >   };
-> >   module_platform_driver(msm8939_noc_driver);
-> 
+--------------sokI09Ycnnugt1q0yepDUP8e--

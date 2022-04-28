@@ -2,142 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BF45133F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BD8513403
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346518AbiD1Mos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S1346408AbiD1Mpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346408AbiD1Moa (ORCPT
+        with ESMTP id S1346478AbiD1Mps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:44:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD4122508;
-        Thu, 28 Apr 2022 05:41:11 -0700 (PDT)
+        Thu, 28 Apr 2022 08:45:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C811AB0D0E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:42:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07C7262021;
-        Thu, 28 Apr 2022 12:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F75C385A0;
-        Thu, 28 Apr 2022 12:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651149670;
-        bh=H/3u/CcX1d8+DE8rBf/zqVY14MTJASBdkzizEGaA2gY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FOs9EWCWVLCEqaXtG5zXHSqfUuRcmK39Gie4feWGqoBCMY4fVcqunoM19Ioq6fRIc
-         byprs6MT8/Jv0cCj152QLuSmmdW2NKovaPcLqTSz0eljrwzmXO/Tu1YLeOZZcM+JLD
-         fYMjWMp6IbARFh8usL2icsBGfCEQOLuqwjToGTbg=
-Date:   Thu, 28 Apr 2022 14:41:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        groeck@chromium.org, bleung@chromium.org, dtor@chromium.org,
-        gwendal@chromium.org, vbendeb@chromium.org, andy@infradead.org,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>
-Subject: Re: [PATCH v8] platform: x86: Add ChromeOS ACPI device driver
-Message-ID: <YmqLYyUY3sutmMTI@kroah.com>
-References: <Ylmmf03fewXEjRr0@debian-BULLSEYE-live-builder-AMD64>
- <YmUNnq5tH8mykNOF@kroah.com>
- <c195573c-e7c7-a2dd-7f29-c6d4625fefdb@collabora.com>
- <YmqLKBVPMl4AFzCE@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58918B82CEB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFB2C385A0;
+        Thu, 28 Apr 2022 12:42:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hZmprpak"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651149742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2K05YkZhpOuMhgr/oncdSXk/GQQMhwmWcgULc5ceX9k=;
+        b=hZmprpak9Ywzz2wdBB6rNoLcdPOidG7yeoMlWxICXLsXO1SjNXFzJDPB8cawTsGS7t+V68
+        1NQ+l/BryRStpTiKym34Y3Xh6DP6sdoiDwE5n4I/sTftqrLWXDAdUGI/gd30LxXeIk+bV4
+        I0RzJy/xurTIn7WcuHcad4veUIXwh9k=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d25154e0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 28 Apr 2022 12:42:21 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 14:42:20 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     openrisc@lists.librecores.org, linux-kernel@vger.kernel.org,
+        Peter Maydell <peter.maydell@linaro.org>
+Subject: Re: [PATCH] openrisc: define nop command for simulator reboot
+Message-ID: <YmqLrDfbEGP659EO@zx2c4.com>
+References: <20220428111139.1330966-1-Jason@zx2c4.com>
+ <YmqAx31dtXCaNn7R@antec>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YmqLKBVPMl4AFzCE@kroah.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmqAx31dtXCaNn7R@antec>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 02:40:08PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 28, 2022 at 05:24:04PM +0500, Muhammad Usama Anjum wrote:
-> > On 4/24/22 1:43 PM, Greg Kroah-Hartman wrote:
-> > > On Fri, Apr 15, 2022 at 10:08:15PM +0500, Muhammad Usama Anjum wrote:
-> > >> +	i = 0;
-> > >> +	list_for_each_entry(aag, &chromeos_acpi.groups, list) {
-> > >> +		chromeos_acpi.dev_groups[i] = &aag->group;
-> > >> +		i++;
-> > >> +	}
-> > >> +
-> > >> +	ret = sysfs_create_groups(&dev->kobj, chromeos_acpi.dev_groups);
-> > > 
-> > > You have raced with userspace and lost here :(
-> > > 
-> > Sorry, What does it mean exactly?
-> 
-> Long old post that describes the issue in detail is here:
-> 	http://www.kroah.com/log/blog/2013/06/26/how-to-create-a-sysfs-file-correctly/
-> 
-> > > Use the default groups pointer in the platform driver for this, and use
-> > > the is_visible() callback to know to show, or not show, the attribute
-> > > instead of building up dynamic lists of attributes at runtime.  That
-> > > will save you lots of crazy logic and housekeeping _AND_ userspace tools
-> > > will work properly as well.
-> > > 
+On Thu, Apr 28, 2022 at 08:55:51PM +0900, Stafford Horne wrote:
+> On Thu, Apr 28, 2022 at 01:11:39PM +0200, Jason A. Donenfeld wrote:
+> > The simulator defines `l.nop 1` for shutdown, but doesn't have anything
+> > for reboot. Use 13 for this, which is currently unused, dubbed
+> > `NOP_REBOOT`.
 > > 
-> > Driver has the 2 kinds of attributes:
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: Peter Maydell <peter.maydell@linaro.org>
+> > Link: https://lore.kernel.org/all/YmnaDUpVI5ihgvg6@zx2c4.com/
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  arch/openrisc/kernel/process.c | 2 ++
+> >  1 file changed, 2 insertions(+)
 > > 
-> > A) Attributes which are always there. For example, CHSW and HWIDs etc.
-> > They can be easily shows via dev_groups pointer in platform driver.
+> > diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
+> > index 3c0c91bcdcba..4cce95fa6eb5 100644
+> > --- a/arch/openrisc/kernel/process.c
+> > +++ b/arch/openrisc/kernel/process.c
+> > @@ -52,6 +52,8 @@ void machine_restart(char *cmd)
+> >  {
+> >  	do_kernel_restart(cmd);
+> >  
+> > +	__asm__("l.nop 13");
+> > +
+> >  	/* Give a grace period for failure to restart of 1s */
+> >  	mdelay(1000);
+> >  
+> > -- 
+> > 2.35.1
 > 
-> Great.
+> This seems fair, probably it would be good to have a comment mentioninmg what
+> the nop is for, fyi for context these are the nop numbers used to control
+> simulations.
 > 
-> > B) Attribute groups which vary between 0 to N. N is platform dependent
-> > and can be determined at runtime. For example, GPIO attribute group
-> > which have 4 sub attributes in it:
-> > 
-> > Group GPIO.0 --> attributes GPIO.0, GPIO.1, GPIO.2 and GPIO.3
-> > Group GPIO.1 --> attributes GPIO.0, GPIO.1, GPIO.2 and GPIO.3
-> > ...
-> > Group GPIO.N --> attributes GPIO.0, GPIO.1, GPIO.2 and GPIO.3
-> > 
-> > My Chromebook has 2 GPIO attribute groups while I've found logs of a
-> > Chromebook which has 7 GPIO groups.
-> > 
-> > Why these groups cannot be defined at compile time (Shortcomings):
-> > 
-> > 1) We don't know the total GPIO groups.
-> > Possible solution: Determine GPIO groups' number at run time and define
-> > attributes at run time.
-> 
-> What is the max number of groups you can ever have?  10?  100?  1000?
-> Pick a high number, define them all (macros make this easy), and then
-> only enable the ones that you need at runtime.
-> 
-> > 2) We cannot determine from attribute name that this group will be
-> > visible or not as is_visible doesn't provide information about its group
-> > name.
-> > umode_t (*is_visible)(struct kobject *, struct attribute *, int);
-> 
-> Look at the attribute pointer.  That's all you care about.  Compare it
-> to a real pointer and away you go!
+>     #define NOP_NOP          0x0000      /* Normal nop instruction */
+>     #define NOP_EXIT         0x0001      /* End of simulation */
+>     #define NOP_REPORT       0x0002      /* Simple report */
+>     /*#define NOP_PRINTF       0x0003       Simprintf instruction (obsolete)*/
+>     #define NOP_PUTC         0x0004      /* JPB: Simputc instruction */
+>     #define NOP_CNT_RESET    0x0005      /* Reset statistics counters */
+>     #define NOP_GET_TICKS    0x0006      /* JPB: Get # ticks running */
+>     #define NOP_GET_PS       0x0007      /* JPB: Get picosecs/cycle */
+>     #define NOP_TRACE_ON     0x0008      /* Turn on tracing */
+>     #define NOP_TRACE_OFF    0x0009      /* Turn off tracing */
+>     #define NOP_RANDOM       0x000a      /* Return 4 random bytes */
+>     #define NOP_OR1KSIM      0x000b      /* Return non-zero if this is Or1ksim */
+>     #define NOP_EXIT_SILENT  0x000c      /* End of simulation, quiet version */
+>     /* New! */
+>     #define NOP_RESET        0x000d      /* Reset the cpu */
 
-Also remember, each group has a is_visible function, so you know what
-group this is implicitly.
+Right, that's where I got 13 from. By the way, the .tex file only
+mentions ones up to 11, so at first I chose 12, and then saw this file.
 
-thanks,
+> 
+> I will queue this once we update the spec to define some of these, I am thinking
+> if qemu should allow for the shutdown to work in user mode.
+> 
+> BTW, are you working specifically on openrisc? Or just setting up test
+> environments for all architectures?
 
-greg k-h
+Trying to get OpenRISC up on https://build.wireguard.com/ . The other
+architectures were simple, but OpenRISC is requiring some work...
+
+Jason

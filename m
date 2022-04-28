@@ -2,94 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE74C513BBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B743B513B9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351208AbiD1Sot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S1351095AbiD1Sgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351204AbiD1Soq (ORCPT
+        with ESMTP id S1351025AbiD1Sgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:44:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576F466F99
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:41:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 1DB581F45BA9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651171290;
-        bh=HSr1KCZ5LnslRjGdE29dDFgwDJWDw5RpI+XCM1ThDIE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bfLldcJ+mxw6WfTtItLTOjLcjf0DYyzsn4duwT4V65y2wh/auNP5VbaKcF1uLtb0B
-         iB/cky4I5BR35dO0sBsMH/IMcS2hQcrcukVUN2Se+PPS1Acf+cYw0aWDojUZPfuPr6
-         lry0gDJpMS6Znk7q4EgkKajPlWGFIbW3IQSsLO06kQYS5k5BW2+iwu3TyC1kW+eE2T
-         ltrTAD36FgqZAog2GI8KGWD5k8oX5TmtV/lGfBCUjyzIl3wf69EgFqlvTSr7MWV/Rl
-         O+vG2kloLrPb0rbCPCkO+207H8MSE6C8OYDbpOG/crx11Q8yVrBAc1ev3YHC1FTzVZ
-         Ke2HvHpsR9S0A==
-Message-ID: <9647245d-b0b5-12d1-fef2-7a5f759f908b@collabora.com>
-Date:   Thu, 28 Apr 2022 21:41:25 +0300
+        Thu, 28 Apr 2022 14:36:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBBCBC857;
+        Thu, 28 Apr 2022 11:33:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AA76B82F54;
+        Thu, 28 Apr 2022 18:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5DDC385A0;
+        Thu, 28 Apr 2022 18:33:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651170799;
+        bh=dM6SoIhKU87s7JyFiu8ZaRPnKv0+Vb1zN0hW0z5OG5U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kBe2CEqMcaaLxZcAjYt6vzZWMJD+jUyZPbBKlES+nEdUFKobJonRu4HypAsL/Tt8h
+         4iWPDrRlh/zcEIttBC8kAdR91hyTxH61nHkw1asz5tA9OsMuTW1fiFTWXSkIqVYSjY
+         j0MB3+LuXlxmAQa+teNK532AqlqUWSHb00p6Bq94kNSCEB50i4vToMcgi9WIuc4NeV
+         I9yzYD+YSAcl7JU0F/hLUqf1ZXsMdtHH24Cv/aNhFBlvfF6g4I/qOD6JGrwOq+UYvi
+         dD+u993ZT3OOJR4ICzWlr2/9HU7fVSkq4X6UjwinMGwO/tDl4U3rYnI5Dsl/HnEbGN
+         B6iT8jqh7bPQg==
+Date:   Thu, 28 Apr 2022 19:41:32 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3] iio: gp2ap020a00f: Fix signedness bug
+Message-ID: <20220428194132.5a02555c@jic23-huawei>
+In-Reply-To: <1650248375-6334-1-git-send-email-baihaowen@meizu.com>
+References: <20220415185205.26a3d352@jic23-huawei>
+        <1650248375-6334-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 01/17] drm/panfrost: Put mapping instead of shmem obj
- on panfrost_mmu_map_fault_addr() error
-Content-Language: en-US
-To:     Steven Price <steven.price@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220424190424.540501-1-dmitry.osipenko@collabora.com>
- <20220424190424.540501-2-dmitry.osipenko@collabora.com>
- <37dae9fa-dadf-4b80-fbea-689472fd7dce@arm.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <37dae9fa-dadf-4b80-fbea-689472fd7dce@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-28.04.2022 16:19, Steven Price пишет:
-> On 24/04/2022 20:04, Dmitry Osipenko wrote:
->> When panfrost_mmu_map_fault_addr() fails, the BO's mapping should be
->> unreferenced and not the shmem object that backs that mapping.
->>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> 
-> Fixes: bdefca2d8dc0 ("drm/panfrost: Add the panfrost_gem_mapping concept")
-> 
-> Reviewed-by: Steven Price <steven.price@arm.com>
+On Mon, 18 Apr 2022 10:19:35 +0800
+Haowen Bai <baihaowen@meizu.com> wrote:
 
-Thank you for the fixes tag. It appeared to me that this problem existed
-since the first addition of the srinker when I was looking up the
-offending commit, my bad :)
+> function gp2ap020a00f_get_thresh_reg() is unsigned but returning -EINVAL
+> errcode, and thresh_reg_l is unsigned but receiving -EINVAL errcode. so
+> we have to change u8 -> int. Also we need to do index bound check at
+> gp2ap020a00f_read_event_val().
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+
+Please add a Fixes tag if possible.
+
+> ---
+> V1->V2: s8 is not enough to hold an (arbitrary) error code. To be on the safe
+> side we need to use int.
+> V2->V3: add bound check at gp2ap020a00f_read_event_val().
+> 
+> 
+>  drivers/iio/light/gp2ap020a00f.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/light/gp2ap020a00f.c b/drivers/iio/light/gp2ap020a00f.c
+> index b820041159f7..f80d30786035 100644
+> --- a/drivers/iio/light/gp2ap020a00f.c
+> +++ b/drivers/iio/light/gp2ap020a00f.c
+> @@ -994,7 +994,7 @@ static irqreturn_t gp2ap020a00f_trigger_handler(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static u8 gp2ap020a00f_get_thresh_reg(const struct iio_chan_spec *chan,
+> +static int gp2ap020a00f_get_thresh_reg(const struct iio_chan_spec *chan,
+>  					     enum iio_event_direction event_dir)
+>  {
+>  	switch (chan->type) {
+> @@ -1025,7 +1025,7 @@ static int gp2ap020a00f_write_event_val(struct iio_dev *indio_dev,
+>  	struct gp2ap020a00f_data *data = iio_priv(indio_dev);
+>  	bool event_en = false;
+>  	u8 thresh_val_id;
+> -	u8 thresh_reg_l;
+> +	int thresh_reg_l;
+
+You need to check this val after the function call, but before it is used.
+
+
+>  	int err = 0;
+>  
+>  	mutex_lock(&data->lock);
+> @@ -1082,14 +1082,14 @@ static int gp2ap020a00f_read_event_val(struct iio_dev *indio_dev,
+>  				       int *val, int *val2)
+>  {
+>  	struct gp2ap020a00f_data *data = iio_priv(indio_dev);
+> -	u8 thresh_reg_l;
+> +	int thresh_reg_l;
+>  	int err = IIO_VAL_INT;
+>  
+>  	mutex_lock(&data->lock);
+>  
+>  	thresh_reg_l = gp2ap020a00f_get_thresh_reg(chan, dir);
+>  
+> -	if (thresh_reg_l > GP2AP020A00F_PH_L_REG) {
+> +	if (thresh_reg_l < 0 || thresh_reg_l > GP2AP020A00F_PH_L_REG) {
+>  		err = -EINVAL;
+If a function returns an error we should pass that on unchanged 
+Here the value is the same, but none the less we should have this look something
+like.
+
+	if (thresh_reg_l < 0)
+		return thresh_reg_l;
+	if (thresh_reg_l > GP2AP020A00F_PH_L_REG)
+	...
+
+>  		goto error_unlock;
+>  	}
 

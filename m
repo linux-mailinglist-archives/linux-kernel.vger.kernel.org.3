@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8C5513CA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F779513CA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 22:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351831AbiD1Uci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 16:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S1351838AbiD1Ucv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351821AbiD1Ucf (ORCPT
+        with ESMTP id S1351793AbiD1Ucu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 16:32:35 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F1DC0D30
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:29:20 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c322f770so56700107b3.20
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :content-transfer-encoding;
-        bh=bO37AFCpe1/E1wIgqlJlZti6Su6aZgapKCGNNQ0qvyY=;
-        b=YtNmFiAHUlm9kDuzzsMam1KjATnxi4mjsWWlVSXCASDjopMVUgmqOXfxYU3WqjrWuo
-         HJPp2c0g0UkuQK5RLYoBxkQhZWbFc1d0/8YPiQb7/JVzTCwUjqUXlMHcp7G36RNx/XUg
-         7epg9i5/xrzLJCoOGOd8srdk68bGJoAZIsVB8mJiIhGM4WXjS7xwM3WkXbklqhq6hyla
-         HcFyqNhMhTeuzinC0xn3CEgbCESJ54nDVn2SMzdYNtDzwzEnRe7g6y0yiC9WHbHpmUw+
-         Tr9uas6Fas17VppW9VSX9V/A6rDkc11sSFYzHpkuxw6wY1le+WXZzjg+JMjdA2QTcI8y
-         rqqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:content-transfer-encoding;
-        bh=bO37AFCpe1/E1wIgqlJlZti6Su6aZgapKCGNNQ0qvyY=;
-        b=dyesyJVsRfrI5n1Sk4zuB22l9KedYFDJPMdP9TkBbCTPHnRsm0sBvr0d2lV/JUqhPw
-         OClMkDY979r/ZZpqi4QmkriHkfbUsFNbVP7oz/smZVcnSNg9WRj26kbg/oTPQnEY6pT7
-         KWUkhWTOn3aQxI3wBXWef50kMMbP6LBW4qRz2MGQYU6hjSL0Qj9Twn4Xribjk6BTKOBy
-         JfrM21/aD17tp0bBWExMEzMAdmZkTMNVZQavbWdX4S8gfUuJ46+keB7LjyxQ7N/CkG87
-         tH579W79hN/dnCyjgqD9t0OQ7dDlu0D09pcbXKxmat51dS3P9yUaXO2ktVJjWYsdhlrk
-         oMXw==
-X-Gm-Message-State: AOAM530n1QfdWTtKFfuk6w9H//fqo7qBrUlBuBUzqd7a9id/FvbYkFdg
-        AtYyMCKAw82Hz1p9nVEWvQ7hngAb3lPH
-X-Google-Smtp-Source: ABdhPJyGVJ7PjGpPvXxm9zgkSvmK9qcOgX2lV9sz3ErQQnYDkU2b+aDsJqp6yFxFeq1vIJNtLvcm0BK8o9gQ
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:3c33:ed69:1770:973e])
- (user=irogers job=sendgmr) by 2002:a5b:cd:0:b0:63d:ab85:a6f7 with SMTP id
- d13-20020a5b00cd000000b0063dab85a6f7mr31688296ybp.290.1651177759300; Thu, 28
- Apr 2022 13:29:19 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 13:29:12 -0700
-In-Reply-To: <20220428202912.1056444-1-irogers@google.com>
-Message-Id: <20220428202912.1056444-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20220428202912.1056444-1-irogers@google.com>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH 2/2] perf vendor events intel: Add cpuid for sapphirerapids
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 16:32:50 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23D7C0D2C;
+        Thu, 28 Apr 2022 13:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8UxpUSIPFug1Y4nwjJyq8teHc+MOpvF2UGEYKEOV43Y=; b=TzP45iG3tZMjjelPcKDQ2a8+uf
+        OqoazTEfDEiG+dijLrUG9d85XImXNf8KX0/v/ygkBqAfZavGHhptl1uvOKRBjLoIzUcXPzsFg1lDR
+        8thWV0xvmSqlBGakqtRpU11LQprwQb91hxGQUTDoioYL2vDVWcVO6g/GTfQWL2GndVhe8KlERl6wL
+        Hs0snVz32/ORHthHjF9o8bWIi/Ykb6PzEDV6tWpK3nKeCQblw4TcOSWCWh3JNSYSHZ181Un5hdNpG
+        a72m6Cx/dvo08RDeB23r4SaIHPU+byd4VnMS/if0Q+4TOWeqxVoPjMyKJdOmvStPM7rcbJ8+LTAq3
+        M6w9O7Hg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nkAlI-009QA7-FQ; Thu, 28 Apr 2022 20:29:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6D80C3001F7;
+        Thu, 28 Apr 2022 22:29:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4FBBD2029F4C3; Thu, 28 Apr 2022 22:29:13 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 22:29:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+Message-ID: <Ymr5Ga3gcqG4ZAMt@hirez.programming.kicks-ass.net>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <20220425174719.GB12412@redhat.com>
+ <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes compile time warnings:
+On Tue, Apr 26, 2022 at 07:24:03PM -0500, Eric W. Biederman wrote:
+> But doing:
+> 
+> 	/* Don't stop if the task is dying */
+> 	if (unlikely(__fatal_signal_pending(current)))
+> 		return exit_code;
+> 
+> Should work.
 
-pmu-events/pmu-events.c:27238:31: error: =E2=80=98pme_sapphirerapids=E2=80=
-=99 defined but not used [-Werror=3Dunused-const-variable=3D]
-27238 | static const struct pmu_event pme_sapphirerapids[] =3D {
-      |                               ^~~~~~~~~~~~~~~~~~
+Something like so then...
 
-Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/arch/x86/mapfile.csv | 1 +
- 1 file changed, 1 insertion(+)
+Subject: signal,ptrace: Don't stop dying tasks
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Thu Apr 28 22:17:56 CEST 2022
 
-diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-ev=
-ents/arch/x86/mapfile.csv
-index 963a76fec277..4b47ac1b806d 100644
---- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-+++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-@@ -41,6 +41,7 @@ GenuineIntel-6-A7,v1,icelake,core
- GenuineIntel-6-6A,v1,icelakex,core
- GenuineIntel-6-6C,v1,icelakex,core
- GenuineIntel-6-86,v1,tremontx,core
-+GenuineIntel-6-8F,v1,sapphirerapids,core
- GenuineIntel-6-96,v1,elkhartlake,core
- GenuineIntel-6-97,v1,alderlake,core
- GenuineIntel-6-9A,v1,alderlake,core
---=20
-2.36.0.464.gb9c8b46e94-goog
+Oleg pointed out that the tracee can already be killed such that
+fatal_signal_pending() is true. In that case signal_wake_up_state()
+cannot be relied upon to be responsible for the wakeup -- something
+we're going to want to rely on.
 
+As such, explicitly handle this case.
+
+Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ kernel/signal.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -2226,6 +2226,10 @@ static int ptrace_stop(int exit_code, in
+ 		spin_lock_irq(&current->sighand->siglock);
+ 	}
+ 
++	/* Don't stop if the task is dying. */
++	if (unlikely(__fatal_signal_pending(current)))
++		return exit_code;
++
+ 	/*
+ 	 * schedule() will not sleep if there is a pending signal that
+ 	 * can awaken the task.

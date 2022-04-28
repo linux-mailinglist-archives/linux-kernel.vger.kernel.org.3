@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5339F513F17
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39066513F1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353300AbiD1Xfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 19:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
+        id S1353308AbiD1Xhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 19:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbiD1Xfs (ORCPT
+        with ESMTP id S1349993AbiD1Xhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 19:35:48 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8B283B2B;
-        Thu, 28 Apr 2022 16:32:32 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id z26so8125121iot.8;
-        Thu, 28 Apr 2022 16:32:32 -0700 (PDT)
+        Thu, 28 Apr 2022 19:37:39 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21A1AAB79
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:34:22 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id w3-20020a17090ac98300b001b8b914e91aso3338962pjt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=axhaogUMsaVTbqMILr1asPaWm5AAZG3aFzuxQbyVLus=;
-        b=KH4aDiPMLcKs+DMbKTNKY54Kz9SVKsyB0QMo8LCelG1mQUjJEp/6+G5l14nEq6kLlm
-         /XwW/4PBufj3NLw0aVA1fiAIC2sKYv9abSbybdbczMAEU83LduDp0nqkSOja8btSdLcn
-         Gh7Ox+d9yTfZM5CCDx+uRDYQkVjVoez5QxylmL7RTrjmL6dIeE0yyb4n6HUnpQ/fv7pw
-         OTzzUiR7IgfYELH9SD3Ah/UkBPjx2e3qyRqGTlPKdT0GV1KSpzECeiXml14G1e3p8mSu
-         jXbL1u8qgpEGyHN8JJ49xjPEurYjmZjMjap4yOb50dqd2u1+ktqc6VCsgxAc4o02/UbI
-         leIw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=5pHMEPma0oFr5+q1aO+yvgHhZ7a6IOyPSMScr6+UUVc=;
+        b=VdD/vwCpVCQmuzzeiGHOQjtnPQKhgTj8VnaCOizDpYuelZytsGrrdNBH/qNgJeNXoI
+         ErN9xys17CpClOm5qqyY0Po+S5wqgmwiN5KklpowCvQaV5zSsTC2pT3S6QZ9H9pTT+HS
+         mU+WB7BiVzVMUQnLJTBDPIJ4hLh7DSR2MGI0V74mb2UiRqzGllmy90uIiwwH84w/IUv7
+         IUCwODfZS3a7G43sn12Firxn1+02nNTw9cFIDSP3Q0IZSq9EpX0RklKp//snXiuafF1m
+         Yfw7JAp8+SAI3o83AWR+RUe4t24z7bXn/y9TH/GYlZazc5wsE9CmmY50du5RfczCNyZx
+         igww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=axhaogUMsaVTbqMILr1asPaWm5AAZG3aFzuxQbyVLus=;
-        b=Th/vdYMaldZV02d/rE5QMadv8VV5+450lxfbPSeByDtD9o9j6EnZH2zUnkjIvnytci
-         mbw6aKBINM3v/D69Dft5ZNtCYztbUd5BFmJOOcNdkqiglX6uv9BkHqdE9Hyx25URc2DD
-         0S+5n5WVDT8LG5VpgQsmsn9n22j7gKRNr+67tulvQM6pN+I56hTPusa0bQqgcodK4x7h
-         6OrzG/h8t6k9uMgOds9NtCSKAq4piwWEupqKVgxCbXSjQFXj4g/OyqCdnjti6BdRFTGz
-         ENty8Cb2nRDL885rTC44C0fASjaFNk6xeqXbgVvnAMjlAZk2vGUCASOyzi+1Bw7VFSP8
-         56DQ==
-X-Gm-Message-State: AOAM5330SAsBOssso07QWS6TBxZIpibXM2YAVFAXIxEnPKIxx1nRvXd4
-        Lod3HVHRG6lXHPV5vf83sIEdBeBUfcS34bx4xhM=
-X-Google-Smtp-Source: ABdhPJzfjpWAv0S/Zxx+OBbDvzr1/DchevZDrPWu+dDM5qDs/brJpBTqx9iJFlB+Fp6OSp+kj8pNYCY8hj6q7mdSzgs=
-X-Received: by 2002:a05:6638:16c9:b0:328:5569:fe94 with SMTP id
- g9-20020a05663816c900b003285569fe94mr15849694jat.145.1651188751476; Thu, 28
- Apr 2022 16:32:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407125224.310255-1-jolsa@kernel.org> <20220407125224.310255-5-jolsa@kernel.org>
- <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
- <20220412094923.0abe90955e5db486b7bca279@kernel.org> <CAEf4BzaQRcZGMqq5wqHo3wSHZAAVvY6AhizDk_dV_GtnwHuxLQ@mail.gmail.com>
- <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org> <20220428095803.66c17c32@gandalf.local.home>
- <CAADnVQKi+4oBt2C__qz7QoHqTtXYLUjaqwTNFoSE=up9c9k4cA@mail.gmail.com> <20220428160519.04cc40c0@gandalf.local.home>
-In-Reply-To: <20220428160519.04cc40c0@gandalf.local.home>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 28 Apr 2022 16:32:20 -0700
-Message-ID: <CAEf4Bzbu3zuDcPj3ue8D6VCdMTw2PEREJBU42CbR1Pe=5qOrTQ@mail.gmail.com>
-Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=5pHMEPma0oFr5+q1aO+yvgHhZ7a6IOyPSMScr6+UUVc=;
+        b=qv+xEQeEUsOe6tS7hQwoywZ50VDOR4ZpUEKW/DvVIJtCdQtmmlk4k8yiYxxzRmFJUP
+         HZTRptmoj1n79bdT5Uk0o+Wqxm26xU0w3q6crZULWVDSLB1L293ckxIrWK4gihvRFrW8
+         CCp5VPK3s6CKY7otMYnB+pf9hm/1wuMwsmTnxd/OL5JmDJyHEZIRyWT11nZ1scEpItDx
+         nhzegvBSQ9+0g5TbBaZrF0ZzbAkhCjZA5CoTbcCCuxh67Bw0Bl7YfsnLHLgI7Q1lRy5w
+         p5laye/CfGrDssgm0QRS1D8+8rrRIgwiJgx47bOgG6YA2QsFUzGh2zGlBF9KBjS0BBHH
+         hV4A==
+X-Gm-Message-State: AOAM5326/JCWSr5e9KAkNPnrS7oMqX9lzeJi+wIecBo4GjIQ829P2SeB
+        6NCE1/4dg4HAOaZDhWWkj3wPjB+Q+VA=
+X-Google-Smtp-Source: ABdhPJyP1oIGL2MjKOc17LUccRNWwj31R5OHG8G+bLaOk//awuStItppfdPfNFSZ77flropLhdrXvbEavjM=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:8304:b0:155:d594:5c04 with SMTP id
+ bd4-20020a170902830400b00155d5945c04mr35348308plb.105.1651188862437; Thu, 28
+ Apr 2022 16:34:22 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 28 Apr 2022 23:34:16 +0000
+Message-Id: <20220428233416.2446833-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed host.MAXPHYADDR
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,109 +72,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 1:05 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 28 Apr 2022 11:59:55 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > > The weak function gets a call to ftrace, but it still gets compiled into
-> > > vmlinux but its symbol is dropped due to it being overridden. Thus, the
-> > > mcount_loc finds this call to fentry, and maps it to the symbol that is
-> > > before it, which just happened to be __bpf_tramp_exit.
-> >
-> > Ouch. That _is_ a bug in recordmocount.
->
-> Exactly HOW is it a bug in recordmcount?
->
-> The job of recordmcount is to create a section of all the locations that
-> call fentry. That is EXACTLY what it did. No bug there! It did its job.
+Disallow memslots and MMIO SPTEs whose gpa range would exceed the host's
+MAXPHYADDR, i.e. don't create SPTEs for gfns that exceed host.MAXPHYADDR.
+The TDP MMU bounds its zapping based on host.MAXPHYADDR, and so if the
+guest, possibly with help from userspace, manages to coerce KVM into
+creating a SPTE for an "impossible" gfn, KVM will leak the associated
+shadow pages (page tables).
 
-But that __fentry__ call is not part of __bpf_tramp_exit, actually.
-Whether to call it a bug or limitation is secondary. It marks
-__bpf_tramp_exit as attachable through kprobe/ftrace while it really
-isn't.
+On bare metal, encountering an impossible gpa in the page fault path is
+well and truly impossible, barring CPU bugs, as the CPU will signal #PF
+during the gva=>gpa translation (or a similar failure when stuffing a
+physical address into e.g. the VMCS/VMCB).  But if KVM is running as a VM
+itself, the MAXPHYADDR enumerated to KVM may not be the actual MAXPHYADDR
+of the underlying hardware, in which case the hardware will not fault on
+the illegal-from-KVM's-perspective gpa.
 
-Below you are saying there is only user confusion. It's not just
-confusion. You'll get an error when you try to attach to
-__bpf_tramp_exit because __bpf_tramp_exit doesn't really have
-__fentry__ preamble and thus the kernel itself will reject it as a
-target. So when you build a generic tracing tool that fetches all the
-attachable kprobes, filters out all the blacklisted ones, you still
-end up with kprobe targets that are not attachable. It's definitely
-more than an inconvenience which I experienced first hand.
+Alternatively, KVM could continue allowing the dodgy behavior and simply
+zap the max possible range.  But, for hosts with MAXPHYADDR < 52, that's
+a (minor) waste of cycles, and more importantly, KVM can't reasonably
+support impossible memslots when running on bare metal (or with an
+accurate MAXPHYADDR as a VM).  Note, limiting the overhead by checking if
+KVM is running as a guest is not a safe option as the host isn't required
+to announce itself to the guest in any way, e.g. doesn't need to set the
+HYPERVISOR CPUID bit.
 
-Can recordmcount or whoever does this be taught to use proper FUNC
-symbol size to figure out boundaries of the function?
+A second alternative to disallowing the memslot behavior would be to
+disallow creating a VM with guest.MAXPHYADDR > host.MAXPHYADDR.  That
+restriction is undesirable as there are legitimate use cases for doing
+so, e.g. using the highest host.MAXPHYADDR out of a pool of heterogeneous
+systems so that VMs can be migrated between hosts with different
+MAXPHYADDRs without running afoul of the allow_smaller_maxphyaddr mess.
 
-$ readelf -s ~/linux-build/default/vmlinux | rg __bpf_tramp_exit
-129408: ffffffff811b2ba0    63 FUNC    GLOBAL DEFAULT    1 __bpf_tramp_exit
+Opportunistically make the now common kvm_mmu_max_gfn_host() inclusive
+instead of exclusive.  The inclusive approach is somewhat silly as the
+memslot and TDP MMU code want an exclusive value, but the name implies
+the returned value is inclusive, and the MMIO path needs an inclusive
+check.
 
-So only the first 63 bytes of instruction after __bpf_tramp_exit
-should be taken into account. Everything else doesn't belong to
-__bpf_tramp_exit. So even though objdump pretends that call __fentry__
-is part of __bpf_tramp_exit, it's not.
+  WARNING: CPU: 10 PID: 1122 at arch/x86/kvm/mmu/tdp_mmu.c:57
+                                kvm_mmu_uninit_tdp_mmu+0x4b/0x60 [kvm]
+  Modules linked in: kvm_intel kvm irqbypass
+  CPU: 10 PID: 1122 Comm: set_memory_regi Tainted: G        W         5.18.0-rc1+ #293
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  RIP: 0010:kvm_mmu_uninit_tdp_mmu+0x4b/0x60 [kvm]
+  Call Trace:
+   <TASK>
+   kvm_arch_destroy_vm+0x130/0x1b0 [kvm]
+   kvm_destroy_vm+0x162/0x2d0 [kvm]
+   kvm_vm_release+0x1d/0x30 [kvm]
+   __fput+0x82/0x240
+   task_work_run+0x5b/0x90
+   exit_to_user_mode_prepare+0xd2/0xe0
+   syscall_exit_to_user_mode+0x1d/0x40
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>
 
-ffffffff811b2ba0 <__bpf_tramp_exit>:
-ffffffff811b2ba0:       53                      push   %rbx
-ffffffff811b2ba1:       48 89 fb                mov    %rdi,%rbx
-ffffffff811b2ba4:       e8 97 d2 f2 ff          call
-ffffffff810dfe40 <__rcu_read_lock>
-ffffffff811b2ba9:       48 8b 83 e0 00 00 00    mov    0xe0(%rbx),%rax
-ffffffff811b2bb0:       a8 03                   test   $0x3,%al
-ffffffff811b2bb2:       75 0a                   jne
-ffffffff811b2bbe <__bpf_tramp_exit+0x1e>
-ffffffff811b2bb4:       65 48 ff 08             decq   %gs:(%rax)
-ffffffff811b2bb8:       5b                      pop    %rbx
-ffffffff811b2bb9:       e9 d2 0e f3 ff          jmp
-ffffffff810e3a90 <__rcu_read_unlock>
-ffffffff811b2bbe:       48 8b 83 e8 00 00 00    mov    0xe8(%rbx),%rax
-ffffffff811b2bc5:       f0 48 83 28 01          lock subq $0x1,(%rax)
-ffffffff811b2bca:       75 ec                   jne
-ffffffff811b2bb8 <__bpf_tramp_exit+0x18>
-ffffffff811b2bcc:       48 8b 83 e8 00 00 00    mov    0xe8(%rbx),%rax
-ffffffff811b2bd3:       48 8d bb e0 00 00 00    lea    0xe0(%rbx),%rdi
-ffffffff811b2bda:       ff 50 08                call   *0x8(%rax)
-ffffffff811b2bdd:       eb d9                   jmp
-ffffffff811b2bb8 <__bpf_tramp_exit+0x18>
-ffffffff811b2bdf:       90                      nop
+Fixes: faaf05b00aec ("kvm: x86/mmu: Support zapping SPTEs in the TDP MMU")
+Fixes: 524a1e4e381f ("KVM: x86/mmu: Don't leak non-leaf SPTEs when zapping all SPTEs")
+Cc: stable@vger.kernel.org
+Cc: Maxim Levitsky <mlevitsk@redhat.com>
+Cc: Ben Gardon <bgardon@google.com>
+Cc: David Matlack <dmatlack@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
 
-^^^ ffffffff811b2ba0 + 63 = ffffffff811b2bdf -- this is the end of
-__bpf_tramp_exit
+Maxim, I didn't add you as Reported-by because I'm not confident this is
+actually the cause of the bug you're hitting.  I wasn't able to reproduce
+using your ipi_stress test, I found this horror via inspection and proved
+it by hacking a selftest.
 
-ffffffff811b2be0:       e8 3b 9c e9 ff          call
-ffffffff8104c820 <__fentry__>
-ffffffff811b2be5:       b8 f4 fd ff ff          mov    $0xfffffdf4,%eax
-ffffffff811b2bea:       c3                      ret
-ffffffff811b2beb:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+That said, I'm holding out hope that this does fix your issue.  Your
+config doesn't specify host-phys-bits and IIUC you haven't been able to
+repro on bare metal, which fits the kvm.MAXPHYADDR < cpu.MAXPHYADDR
+scenario.  In theory if the test went rogue it could acccess a bad gfn and
+cause KVM to insert an MMIO SPTE.  Fingers crossed :-)
 
+If it does fix your case, a Reported-by for both you and Syzbot is
+definitely in order.
 
->
-> In fact, recordmcount probably didn't even get called. If you see this on
-> x86 with gcc version greater than 8 (which I do), recordmcount is not even
-> used. gcc creates this section internally instead.
->
-> >
-> > > I made that weak function "notrace" and the __bpf_tramp_exit disappeared
-> > > from the available_filter_functions list.
-> >
-> > That's a hack. We cannot rely on such hacks for all weak functions.
->
-> Then don't do anything. The only thing this bug causes is perhaps some
-> confusion, because functions before weak functions that are overridden will
-> be listed incorrectly in the available_filter_functions file. And that's
-> because of the way it is created with respect to kallsyms.
->
-> If you enable __bpf_tramp_exit, it will not do anything to that function.
-> What it will do is enable the location inside of the weak function that no
-> longer has its symbol shown.
->
-> One solution is to simply get the end of the function that is provided by
-> kallsyms to make sure the fentry call location is inside the function, and
-> if it is not, then not show that function in available_filter_functions but
-> instead show something like "** unnamed function **" or whatever.
->
-> I could write a patch to do that when I get the time. But because the only
-> issue that this causes is some confusion among the users and does not cause
-> any issue with functionality, then it is low priority.
->
-> -- Steve
+ arch/x86/kvm/mmu.h         | 21 +++++++++++++++++++++
+ arch/x86/kvm/mmu/mmu.c     | 10 ++++++++--
+ arch/x86/kvm/mmu/spte.h    |  6 ------
+ arch/x86/kvm/mmu/tdp_mmu.c | 15 ++++++++-------
+ arch/x86/kvm/x86.c         |  6 +++++-
+ 5 files changed, 42 insertions(+), 16 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+index 671cfeccf04e..d291ff3065dc 100644
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -65,6 +65,27 @@ static __always_inline u64 rsvd_bits(int s, int e)
+ 	return ((2ULL << (e - s)) - 1) << s;
+ }
+ 
++/*
++ * The number of non-reserved physical address bits irrespective of features
++ * that repurpose legal bits, e.g. MKTME.
++ */
++extern u8 __read_mostly shadow_phys_bits;
++
++static inline gfn_t kvm_mmu_max_gfn_host(void)
++{
++	/*
++	 * Disallow SPTEs (via memslots or cached MMIO) whose gfn would exceed
++	 * host.MAXPHYADDR.  Assuming KVM is running on bare metal, guest
++	 * accesses beyond host.MAXPHYADDR will hit a #PF(RSVD) and never hit
++	 * an EPT Violation/Misconfig / #NPF, and so KVM will never install a
++	 * SPTE for such addresses.  That doesn't hold true if KVM is running
++	 * as a VM itself, e.g. if the MAXPHYADDR KVM sees is less than
++	 * hardware's real MAXPHYADDR, but since KVM can't honor such behavior
++	 * on bare metal, disallow it entirely to simplify e.g. the TDP MMU.
++	 */
++	return (1ULL << (shadow_phys_bits - PAGE_SHIFT)) - 1;
++}
++
+ void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
+ void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
+ 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 904f0faff218..c10ae25135e3 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3010,9 +3010,15 @@ static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fa
+ 		/*
+ 		 * If MMIO caching is disabled, emulate immediately without
+ 		 * touching the shadow page tables as attempting to install an
+-		 * MMIO SPTE will just be an expensive nop.
++		 * MMIO SPTE will just be an expensive nop.  Do not cache MMIO
++		 * whose gfn is greater than host.MAXPHYADDR, any guest that
++		 * generates such gfns is either malicious or in the weeds.
++		 * Note, it's possible to observe a gfn > host.MAXPHYADDR if
++		 * and only if host.MAXPHYADDR is inaccurate with respect to
++		 * hardware behavior, e.g. if KVM itself is running as a VM.
+ 		 */
+-		if (unlikely(!enable_mmio_caching)) {
++		if (unlikely(!enable_mmio_caching) ||
++		    unlikely(fault->gfn > kvm_mmu_max_gfn_host())) {
+ 			*ret_val = RET_PF_EMULATE;
+ 			return true;
+ 		}
+diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+index ad8ce3c5d083..43eceb821b31 100644
+--- a/arch/x86/kvm/mmu/spte.h
++++ b/arch/x86/kvm/mmu/spte.h
+@@ -203,12 +203,6 @@ static inline bool is_removed_spte(u64 spte)
+  */
+ extern u64 __read_mostly shadow_nonpresent_or_rsvd_lower_gfn_mask;
+ 
+-/*
+- * The number of non-reserved physical address bits irrespective of features
+- * that repurpose legal bits, e.g. MKTME.
+- */
+-extern u8 __read_mostly shadow_phys_bits;
+-
+ static inline bool is_mmio_spte(u64 spte)
+ {
+ 	return (spte & shadow_mmio_mask) == shadow_mmio_value &&
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 566548a3efa7..a81994ad43de 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -815,14 +815,15 @@ static inline bool __must_check tdp_mmu_iter_cond_resched(struct kvm *kvm,
+ 	return iter->yielded;
+ }
+ 
+-static inline gfn_t tdp_mmu_max_gfn_host(void)
++static inline gfn_t tdp_mmu_max_exclusive_gfn_host(void)
+ {
+ 	/*
+-	 * Bound TDP MMU walks at host.MAXPHYADDR, guest accesses beyond that
+-	 * will hit a #PF(RSVD) and never hit an EPT Violation/Misconfig / #NPF,
+-	 * and so KVM will never install a SPTE for such addresses.
++	 * Bound TDP MMU walks at host.MAXPHYADDR.  KVM disallows memslots with
++	 * a gpa range that would exceed the max gfn, and KVM does not create
++	 * MMIO SPTEs for "impossible" gfns, instead sending such accesses down
++	 * the slow emulation path every time.
+ 	 */
+-	return 1ULL << (shadow_phys_bits - PAGE_SHIFT);
++	return kvm_mmu_max_gfn_host() + 1;
+ }
+ 
+ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
+@@ -830,7 +831,7 @@ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
+ {
+ 	struct tdp_iter iter;
+ 
+-	gfn_t end = tdp_mmu_max_gfn_host();
++	gfn_t end = tdp_mmu_max_exclusive_gfn_host();
+ 	gfn_t start = 0;
+ 
+ 	for_each_tdp_pte_min_level(iter, root, zap_level, start, end) {
+@@ -923,7 +924,7 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
+ {
+ 	struct tdp_iter iter;
+ 
+-	end = min(end, tdp_mmu_max_gfn_host());
++	end = min(end, tdp_mmu_max_exclusive_gfn_host());
+ 
+ 	lockdep_assert_held_write(&kvm->mmu_lock);
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 951d0a78ccda..26ea5999d72b 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -12078,8 +12078,12 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
+ 				   struct kvm_memory_slot *new,
+ 				   enum kvm_mr_change change)
+ {
+-	if (change == KVM_MR_CREATE || change == KVM_MR_MOVE)
++	if (change == KVM_MR_CREATE || change == KVM_MR_MOVE) {
++		if ((new->base_gfn + new->npages - 1) > kvm_mmu_max_gfn_host())
++			return -EINVAL;
++
+ 		return kvm_alloc_memslot_metadata(kvm, new);
++	}
+ 
+ 	if (change == KVM_MR_FLAGS_ONLY)
+ 		memcpy(&new->arch, &old->arch, sizeof(old->arch));
+
+base-commit: 2a39d8b39bffdaf1a4223d0d22f07baee154c8f3
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

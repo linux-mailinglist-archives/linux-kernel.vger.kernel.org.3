@@ -2,91 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D9B513E9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CFB513EA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352979AbiD1WoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        id S1352960AbiD1Wpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352944AbiD1WoW (ORCPT
+        with ESMTP id S1349982AbiD1Wpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:44:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340BB8C7FD
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:41:05 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651185663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tXbnnfydFtroMbNf34p+LMQVaGaqhjbOTNCg6WDSgTo=;
-        b=Jr8aBFOkezzGo3wUe/YArrBxSfTDbhAZxqyJN+hdWtYCak3cYpTU/1M17reSak2Ii7f76i
-        HTdOVqMYPmCjGsSfS7jm7jG+sbxVLsWxR3uAFYB1+30WrdARXO1LwMbhuRWNnLDm2gzfYn
-        rlGbZUVYwM1nJ0ZEWysUXhCQXoSU1qvPmtP199G9N2Fakf4d/qeuA/Qcs/m2BMjjmf/Yfx
-        sL+rHe4dFQAUGqfAHZNwaSIKrtf8r+iKVjguaQjJ80D38oLtfXCFJgP1kpOqCNkJf46DHv
-        YkoUyL2rcKEMHvwMgaI4+S3h+jw+DGFpyJGSQKlIj1yUI+77UDecXU+ayJVcBw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651185663;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tXbnnfydFtroMbNf34p+LMQVaGaqhjbOTNCg6WDSgTo=;
-        b=aIy4s3felbXbltF+ChdPl8SDAn2dEbGGbdXE5jlw5rSqbiPf4QoBcev3Wx3aboiTWNA16V
-        cqbPl/EkoVRon/DA==
-To:     Prakash Sangappa <prakash.sangappa@oracle.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "manfred@colorfullife.com" <manfred@colorfullife.com>
-Subject: Re: [PATCH v3] ipc: Update semtimedop() to use hrtimer
-In-Reply-To: <5FEE7AB6-7560-4998-A7A3-B60A4B32E1DE@oracle.com>
-References: <1651178767-447-1-git-send-email-prakash.sangappa@oracle.com>
- <20220428205001.hiuzwpn5emxtrh4s@offworld> <87zgk4ooi6.ffs@tglx>
- <5FEE7AB6-7560-4998-A7A3-B60A4B32E1DE@oracle.com>
-Date:   Fri, 29 Apr 2022 00:41:03 +0200
-Message-ID: <87tuacomps.ffs@tglx>
+        Thu, 28 Apr 2022 18:45:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8A5BABA9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:42:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9FC36207D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D0ECC385AD;
+        Thu, 28 Apr 2022 22:42:14 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 18:42:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
+ non-weak symbols
+Message-ID: <20220428184212.18fbf438@gandalf.local.home>
+In-Reply-To: <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+        <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28 2022 at 22:23, Prakash Sangappa wrote:
->> On Apr 28, 2022, at 3:02 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
->> On Thu, Apr 28 2022 at 13:50, Davidlohr Bueso wrote:
->>> On Thu, 28 Apr 2022, Prakash Sangappa wrote:
->>>> -		if (timeout)
->>>> -			jiffies_left = schedule_timeout(jiffies_left);
->>>> -		else
->>>> -			schedule();
->>>> +		timed_out = !schedule_hrtimeout_range(exp,
->>>> +				current->timer_slack_ns, HRTIMER_MODE_ABS);
->>> 
->>> I'm wondering if the slack parameter instead of passing the timer_slack_ns
->>> value immediately, we should do a rt_task() check and pass zero if so.
->> 
->> We should have a wrapper function which takes care of that instead of
->> having checks all over the place.
->
-> Ok  it can be an inline function in sched.h which returns appropriate 
-> slack time. Use that in  futex_wait() and sigtimedwait() also in addition to 
-> semtimedop() & mqueue codepath?
+On Thu, 28 Apr 2022 22:49:52 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
 
-No. What I meant is a function which handles this internally, not an inline
-function which has to be invoked on various call sites.
+> But, with ppc64 elf abi v1 which only supports the old -pg flag, mcount
+> location can differ between the weak and non-weak variants of a
+> function. In such scenarios, one of the two mcount entries will be
+> invalid. Such architectures need to validate mcount locations by
+> ensuring that the instruction(s) at those locations are as expected. On
+> powerpc, this can be a simple check to ensure that the instruction is a
+> 'bl'. This check can be further tightened as necessary.
 
-> Should that be a separate patch?
+I was thinking about this more, and I was thinking that we could create
+another section; Perhaps __mcount_loc_weak. And place these in that
+section. That way, we could check if these symbols to see if there's
+already a symbol for it, and if there is, then drop it.
 
-Definitely. That's an orthogonal problem.
-
-Thanks,
-
-        tglx
+-- Steve

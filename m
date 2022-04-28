@@ -2,40 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586325134A1
+	by mail.lfdr.de (Postfix) with ESMTP id EA72C5134A3
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346864AbiD1NPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S1346880AbiD1NP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238516AbiD1NPW (ORCPT
+        with ESMTP id S1346881AbiD1NPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:15:22 -0400
-X-Greylist: delayed 419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Apr 2022 06:11:51 PDT
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A25F1D306;
-        Thu, 28 Apr 2022 06:11:50 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6F4B01C0007;
-        Thu, 28 Apr 2022 13:11:48 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 15:11:46 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCHv2 2/2] media api: Try to make enum usage clearer
-Message-ID: <20220428131146.ofdn7tr5mkxya3ck@uno.localdomain>
-References: <20220428083715.75997-1-dorota.czaplejewicz@puri.sm>
- <20220428105219.4b068b1f.dorota.czaplejewicz@puri.sm>
+        Thu, 28 Apr 2022 09:15:55 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2113B1D0E1;
+        Thu, 28 Apr 2022 06:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651151550; x=1682687550;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=Vked9xxCpT7BEnneGBx9LX5/jjKxi3vv+2X+ThsLAtU=;
+  b=SNH7xCYWbHhCWoHQf7S2npdfCCCjG3ysslAp84UBxduVFSXtZmQgJgvn
+   n9SqA8yir+bW0ojuNVgRtEtZ1CKn77yXivoqTzQ0+06OEw/g9bZ+wn/Fw
+   /l+R0sLZuamDwIgZERjXqIFZx7qz7vNHyCjyMfFWqwA0DieQApwpKko29
+   wtRZOSLZHlwvl4aDgNebV/f2iJaBbyznY6IoiZNHn9ce6z3QIG6GzK3Id
+   XV3P9kB2RGO48Dv628iIpoaElgkDpfbEdkgdXkgKaMc7YmmdNn6VoJyVo
+   y27zdFWungiV6rjpMAKXTlpXoj81DoWVBcb+RJWvztIIeyJtXqh8hKWuT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="291446708"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="291446708"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 06:12:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="541267358"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2022 06:12:29 -0700
+Received: from [10.209.10.70] (kliang2-MOBL.ccr.corp.intel.com [10.209.10.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id DCE95580689;
+        Thu, 28 Apr 2022 06:12:27 -0700 (PDT)
+Message-ID: <96b5c9f4-f0a0-0019-8059-3e833c95b011@linux.intel.com>
+Date:   Thu, 28 Apr 2022 09:12:26 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mydpssort7jg2wxh"
-Content-Disposition: inline
-In-Reply-To: <20220428105219.4b068b1f.dorota.czaplejewicz@puri.sm>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/7] perf vendor events intel: Update CLX events to v1.15
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220428075730.797727-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220428075730.797727-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -43,150 +81,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---mydpssort7jg2wxh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 
-Hi Dorota
+On 4/28/2022 3:57 AM, Ian Rogers wrote:
+> Events are generated for CascadeLake Server v1.15 with
+> events from:
+> https://download.01.org/perfmon/CLX/
+> 
+> Using the scripts at:
+> https://github.com/intel/event-converter-for-linux-perf/
+> 
+> This change updates descriptions, adds INST_DECODED.DECODERS and
+> corrects a counter mask in UOPS_RETIRED.TOTAL_CYCLES.
+> 
+> Signed-off-by: Ian Rogers<irogers@google.com>
 
-On Thu, Apr 28, 2022 at 10:52:19AM +0200, Dorota Czaplejewicz wrote:
-> Fixed: typo "format" -> "frame size" in enum-frame-size
-> Added: no holes in the enumeration
-> Added: enumerations per what?
-> Added: who fills in what in calls
-> Changed: "zero" -> "0"
-> Changed: "given" -> "specified"
+Thanks Ian. For the whole series,
 
-Empty line here
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Thanks,
+Kan
+
 > ---
->  .../v4l/vidioc-subdev-enum-frame-size.rst     | 44 ++++++++++++-------
->  1 file changed, 28 insertions(+), 16 deletions(-)
->
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-> index c25a9896df0e..2c6fd291dc44 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-> @@ -31,18 +31,29 @@ Arguments
->  Description
->  ===========
->
-> -This ioctl allows applications to enumerate all frame sizes supported by
-> -a sub-device on the given pad for the given media bus format. Supported
-> -formats can be retrieved with the
-> +This ioctl allows applications to access the enumeration of frame sizes supported by
-
-over 80 cols
-
-> +a sub-device on the specified pad for the specified media bus format.
-> +Supported formats can be retrieved with the
-
-This seems quite an arbitrary change. What's wrong with the existing
-phrase ?
-
->  :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE`
->  ioctl.
->
-> -To enumerate frame sizes applications initialize the ``pad``, ``which``
-> -, ``code`` and ``index`` fields of the struct
-> -:c:type:`v4l2_subdev_mbus_code_enum` and
-> -call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
-> -structure. Drivers fill the minimum and maximum frame sizes or return an
-> -EINVAL error code if one of the input parameters is invalid.
-> +The enumerations are defined by the driver, and indexed using the ``index`` field
-> +of the struct :c:type:`v4l2_subdev_mbus_code_enum`.
-> +Each pair of ``pad`` and ``code`` correspond to a separate enumeration.
-> +Each enumeeration starts with the ``index`` of 0, and
-
-s/enumeeration/enumeration/
-
-> +the lowest invalid index marks the end of the enumeration.
-> +
-> +Therefore, to enumerate frame sizes allowed on the specified pad
-> +and using the specified mbus format, initialize the
-> +``pad``, ``which``, and ``code`` fields to desired values,
-> +and set ``index`` to 0.
-> +Then call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
-> +structure.
-> +
-> +A successful call will return with minimum and maximum frame sizes filled in.
-> +Repeat with increasing ``index`` until ``EINVAL`` is received.
-> +``EINVAL`` means that either no more entries are available in the enumeration,
-> +or that an input parameter was invalid.
->
->  Sub-devices that only support discrete frame sizes (such as most
->  sensors) will return one or more frame sizes with identical minimum and
-> @@ -72,26 +83,27 @@ information about try formats.
->
->      * - __u32
->        - ``index``
-> -      - Number of the format in the enumeration, set by the application.
-> +      - Index of the frame size in the enumeration
-
-Rougue line break
-
-> +    belonging to the given pad and format. Filled in by the application.
->      * - __u32
->        - ``pad``
-> -      - Pad number as reported by the media controller API.
-> +      - Pad number as reported by the media controller API. Filled in by the application.
-
-over 80 cols
-
->      * - __u32
->        - ``code``
->        - The media bus format code, as defined in
-> -	:ref:`v4l2-mbus-format`.
-> +	:ref:`v4l2-mbus-format`. Filled in by the application.
->      * - __u32
->        - ``min_width``
-> -      - Minimum frame width, in pixels.
-> +      - Minimum frame width, in pixels. Filled in by the driver.
->      * - __u32
->        - ``max_width``
-> -      - Maximum frame width, in pixels.
-> +      - Maximum frame width, in pixels. Filled in by the driver.
->      * - __u32
->        - ``min_height``
-> -      - Minimum frame height, in pixels.
-> +      - Minimum frame height, in pixels. Filled in by the driver.
->      * - __u32
->        - ``max_height``
-> -      - Maximum frame height, in pixels.
-> +      - Maximum frame height, in pixels. Filled in by the driver.
->      * - __u32
->        - ``which``
->        - Frame sizes to be enumerated, from enum
-
-Even more than 1/2, I am a bit failing to see what is missing in the
-existing doc. If it feels better to others who will have a look, I for sure
-won't oppose this change though :)
-
-> --
-> 2.35.1
->
-
-
-
---mydpssort7jg2wxh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAmJqkpIACgkQcjQGjxah
-VjwkRQ//XOof8zmTn52P5jTy7sxMrWz8z9pDTDsFi4ZouonRODL6WRssg7gMtXXq
-QO/haVRwKwgG/PRgwXFgJAZ7GAsWDpu3gcoLgzenX2DiAbYu8XPz8/Nr1rCmUOoZ
-roP7VK2COn+Y0KgdzArHI/W2Rpzw1cDqbbZVzQvJvqyP/WELYD7ddCJegLwKTqFD
-7KMlWAcg8FkX60yKEhoNf8je5tfC9fNQ0QJcAT7piazfXcfCvF/1EhjRSLiP046r
-mQgSbETN6L9GQ1NsAaR3Vn6b0j7/WAussYUBpQGNm05egS7SaI1ETP78sFWmncF9
-U0No76QwBm+ZPgvWEFMbHQpvQPwlioSUA9gBYqPP6tBBBsb/l6AQLWXJ4wuXC/G/
-87LBPdsjyyIHV5yCOjohMMQA4wdBIrhtsutUGIdS8iUiTi8X41AXACivM10qifuV
-jT/i9JoAWo9gkMpfw7SfQze7pJUwRhe0FBmm7WeXES/i3EwHinCUHLFs4quZYnVa
-YGxVuO63V6n/AT1QYdMFYKA2aBhJC7gwPZ/DQoVL2BaexVJVH7PMXQtAl/0YX6xC
-qEmvm/DT3Y9qJaginKAeuLeCFmtkO6ynHNkYsnVqcz+5MAHd8YavcTbTdnJNki9W
-PH6lbEkbaChsnbtDP09X4xBrW+HKWVCiCzZPAvLl6/88PtK3T4w=
-=DgoL
------END PGP SIGNATURE-----
-
---mydpssort7jg2wxh--
+>   .../arch/x86/cascadelakex/cache.json          | 1164 +----------------
+>   .../arch/x86/cascadelakex/memory.json         |  702 +---------
+>   .../arch/x86/cascadelakex/other.json          |  156 +--
+>   .../arch/x86/cascadelakex/pipeline.json       |   14 +-
+>   .../arch/x86/cascadelakex/uncore-other.json   |    4 +-
+>   5 files changed, 17 insertions(+), 2023 deletions(-)

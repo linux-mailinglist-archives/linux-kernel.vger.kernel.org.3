@@ -2,120 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E43F512C79
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A88E512C82
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244937AbiD1HSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S245088AbiD1HTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244936AbiD1HSb (ORCPT
+        with ESMTP id S245065AbiD1HTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:18:31 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E42C972B2;
-        Thu, 28 Apr 2022 00:15:15 -0700 (PDT)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Thu, 28 Apr 2022 15:15:02
- +0800 (GMT+08:00)
-X-Originating-IP: [10.181.234.41]
-Date:   Thu, 28 Apr 2022 15:15:02 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Lin Ma" <linma@zju.edu.cn>
-To:     "Jakub Kicinski" <kuba@kernel.org>
-Cc:     "Duoming Zhou" <duoming@zju.edu.cn>,
-        krzysztof.kozlowski@linaro.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        akpm@linux-foundation.org, broonie@kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data
- race-able
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20220427174548.2ae53b84@kernel.org>
-References: <20220427011438.110582-1-duoming@zju.edu.cn>
- <20220427174548.2ae53b84@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 28 Apr 2022 03:19:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F99972E1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651130179; x=1682666179;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6isfrYWtZlwpN1o+WfrvgHuYM1XSrDuAPO77smHhcok=;
+  b=AzGoKD8bwmouV7qctTT+USegro1sL3QBa+kYJsiLef3A6+RmqCNjJAYP
+   kR4F9Xvn1bVSfXpARdCxZiU9IhfCyjMKVombXpINiDyKgkcbkJdW2rRNX
+   P9NstErRiBbrG8yCLvxaWD9jYMFCWcHhZpBu7IeBm7U1Ig5WJfkQlglM2
+   iCSyqYkvGBuQ804Dl/SVcU/8EpZN+jgB5vG8ODjzOgJ8D+E3m66eXCp2r
+   kWQasm1vKip8DNbDRzrBCu6v2Rxdze27++xUIEL5Yx8W8Z4suCJD0Kw07
+   xuOl5rn/5QcKu3EvpeXHj0VxEH6FwzmQYfQjp98LjCX3KkzTELMJfwP99
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352621103"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="352621103"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:16:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="731255823"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Apr 2022 00:16:17 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njyNs-0005AF-LA;
+        Thu, 28 Apr 2022 07:16:16 +0000
+Date:   Thu, 28 Apr 2022 15:15:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [drm-msm:msm-next-staging 99/108]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:410:13: warning:
+ variable 'refcount' set but not used
+Message-ID: <202204281543.XFvZfER7-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: by_KCgC3pcX3PmpioM+tAg--.58464W
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwUOElNG3GhBaQAAsT
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gSmFrdWIsCgphbmQgaGVsbG8gdGhlcmUgbWFpbnRhaW5lcnMsIHdoZW4gd2UgdHJpZWQg
-dG8gZml4IHRoaXMgcmFjZSBwcm9ibGVtLCB3ZSBmb3VuZCBhbm90aGVyIHZlcnkgd2VpcmQgaXNz
-dWUgYXMgYmVsb3cKCj4gCj4gWW91IGNhbid0IHVzZSBhIHNpbmdsZSBnbG9iYWwgdmFyaWFibGUs
-IHRoZXJlIGNhbiBiZSBtYW55IGRldmljZXMgCj4gZWFjaCB3aXRoIHRoZWlyIG93biBsb2NrLgo+
-IAo+IFBhb2xvIHN1Z2dlc3RlZCBhZGRpbmcgYSBsb2NrLCBpZiBzcGluIGxvY2sgZG9lc24ndCBm
-aXQgdGhlIGJpbGwKPiB3aHkgbm90IGFkZCBhIG11dGV4PwoKVGhlIGxvY2sgcGF0Y2ggY2FuIGJl
-IGFkZGVkIHRvIG5mY21ydmwgY29kZSBidXQgd2UgcHJlZmVyIHRvIGZpeCB0aGlzIGluIHRoZSBO
-RkMgY29yZSBsYXllciBoZW5jZSBldmVyeSBvdGhlciBkcml2ZXIgdGhhdCBzdXBwb3J0cyB0aGUg
-ZmlybXdhcmUgZG93bmxvYWRpbmcgdGFzayB3aWxsIGJlIGZyZWUgb2Ygc3VjaCBhIHByb2JsZW0u
-CgpCdXQgd2hlbiB3ZSBhbmFseXplIHRoZSByYWNlIGJldHdlZW4gdGhlIG5ldGxpbmsgdGFza3Mg
-YW5kIHRoZSBjbGVhbnVwIHJvdXRpbmUsIHdlIGZpbmQgc29tZSAqY29uZGl0aW9uIGNoZWNrcyog
-ZmFpbCB0byBmdWxmaWxsIHRoZWlyIHJlc3BvbnNpYmlsaXR5LgoKRm9yIGV4YW1wbGUsIHdlIG9u
-Y2UgdGhvdWdoIHRoYXQgdGhlIGRldmljZV9sb2NrICsgZGV2aWNlX2lzX3JlZ2lzdGVyZWQgY2hl
-Y2sgY2FuIGhlbHAgdG8gZml4IHRoZSByYWNlIGFzIGJlbG93LgoKICBuZXRsaW5rIHRhc2sgICAg
-ICAgICAgICAgIHwgIGNsZWFudXAgcm91dGluZQogICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fApuZmNfZ2VubF9md19kb3dubG9hZCAgICAgICAgfCBuZmNfdW5yZWdpc3Rlcl9kZXZpY2UgCiAg
-bmZjX2Z3X2Rvd25sb2FkICAgICAgICAgICB8ICAgZGV2aWNlX2RlbCAKICAgIGRldmljZV9sb2Nr
-ICAgICAgICAgICAgIHwgICAgIGRldmljZV9sb2NrCiAgICAvLyB3YWl0IGxvY2sgICAgICAgICAg
-ICB8ICAgICAgIGtvYmplY3RfZGVsCiAgICAvLyAuLi4gICAgICAgICAgICAgICAgICB8ICAgICAg
-ICAgLi4uCiAgICBkZXZpY2VfaXNfcmVnaXN0ZXJlZCAgICB8ICAgICBkZXZpY2VfdW5sb2NrICAg
-IAogICAgICByYyA9IC1FTk9ERVYgICAgICAgICAgfAoKSG93ZXZlciwgYnkgZHluYW1pYyBkZWJ1
-Z2dpbmcgdGhpcyBpc3N1ZSwgd2UgZmluZCBvdXQgdGhhdCAqKmV2ZW4gYWZ0ZXIgdGhlIGRldmlj
-ZV9kZWwqKiwgdGhlIGRldmljZV9pc19yZWdpc3RlcmVkIGNoZWNrIHN0aWxsIHJldHVybnMgVFJV
-RSEKClRoaXMgaXMgYnkgbm8gbWVhbnMgbWF0Y2hpbmcgb3VyIGV4cGVjdGF0aW9ucyBhcyBvbmUg
-b2Ygb3VyIHByZXZpb3VzIHBhdGNoIHJlbGllcyBvbiB0aGUgZGV2aWNlX2lzX3JlZ2lzdGVyZWQg
-Y29kZS4KCi0+IHRoZSBwYXRjaDogM2UzYjVkZmNkMTZhICgiTkZDOiByZW9yZGVyIHRoZSBsb2dp
-YyBpbiBuZmNfe3VuLH1yZWdpc3Rlcl9kZXZpY2UiKQoKVG8gZmluZCBvdXQgd2h5LCB3ZSBmaW5k
-IG91dCB0aGUgZGV2aWNlX2lzX3JlZ2lzdGVyZWQgaXMgaW1wbGVtZW50ZWQgbGlrZSBiZWxvdzoK
-CnN0YXRpYyBpbmxpbmUgaW50IGRldmljZV9pc19yZWdpc3RlcmVkKHN0cnVjdCBkZXZpY2UgKmRl
-dikKewoJcmV0dXJuIGRldi0+a29iai5zdGF0ZV9pbl9zeXNmczsKfQoKQnkgZGVidWdnaW5nLCB3
-ZSBmaW5kIG91dCBpbiBub3JtYWwgY2FzZSwgdGhpcyBrb2JqLnN0YXRlX2luX3N5c2ZzIHdpbGwg
-YmUgY2xlYXIgb3V0IGxpa2UgYmVsb3cKClsjMF0gMHhmZmZmZmZmZjgxZjA3NDNhIOKGkiBfX2tv
-YmplY3RfZGVsKGtvYmo9MHhmZmZmODg4MDA5Y2E3MDE4KQpbIzFdIDB4ZmZmZmZmZmY4MWYwNzg4
-MiDihpIga29iamVjdF9kZWwoa29iaj0weGZmZmY4ODgwMDljYTcwMTgpClsjMl0gMHhmZmZmZmZm
-ZjgxZjA3ODgyIOKGkiBrb2JqZWN0X2RlbChrb2JqPTB4ZmZmZjg4ODAwOWNhNzAxOCkKWyMzXSAw
-eGZmZmZmZmZmODI3NzA4ZGIg4oaSIGRldmljZV9kZWwoZGV2PTB4ZmZmZjg4ODAwOWNhNzAxOCkK
-WyM0XSAweGZmZmZmZmZmODM5NjQ5NmYg4oaSIG5mY191bnJlZ2lzdGVyX2RldmljZShkZXY9MHhm
-ZmZmODg4MDA5Y2E3MDAwKQpbIzVdIDB4ZmZmZmZmZmY4Mzk4NTBhOSDihpIgbmNpX3VucmVnaXN0
-ZXJfZGV2aWNlKG5kZXY9MHhmZmZmODg4MDA5Y2EzMDAwKQpbIzZdIDB4ZmZmZmZmZmY4MjgxMTMw
-OCDihpIgbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYocHJpdj0weGZmZmY4ODgwMGM4MDVjMDAp
-ClsjN10gMHhmZmZmZmZmZjgzOTkwYzRmIOKGkiBuY2lfdWFydF90dHlfY2xvc2UodHR5PTB4ZmZm
-Zjg4ODAwYjQ1MDAwMCkKWyM4XSAweGZmZmZmZmZmODIwZjZiZDMg4oaSIHR0eV9sZGlzY19raWxs
-KHR0eT0weGZmZmY4ODgwMGI0NTAwMDApClsjOV0gMHhmZmZmZmZmZjgyMGY3ZmIxIOKGkiB0dHlf
-bGRpc2NfaGFuZ3VwKHR0eT0weGZmZmY4ODgwMGI0NTAwMDAsIHJlaW5pdD0weDApCgpUaGUgY2xl
-YXIgb3V0IGlzIGluIGZ1bmN0aW9uIF9fa29iamVjdF9kZWwKCnN0YXRpYyB2b2lkIF9fa29iamVj
-dF9kZWwoc3RydWN0IGtvYmplY3QgKmtvYmopCnsKICAgLy8gLi4uCgoJa29iai0+c3RhdGVfaW5f
-c3lzZnMgPSAwOwoJa29ial9rc2V0X2xlYXZlKGtvYmopOwoJa29iai0+cGFyZW50ID0gTlVMTDsK
-fQoKVGhlIHN0cnVjdHVyZSBvZiBkZXZpY2VfZGVsIGlzIGxpa2UgYmVsb3cKCnZvaWQgZGV2aWNl
-X2RlbChzdHJ1Y3QgZGV2aWNlICpkZXYpCnsKCXN0cnVjdCBkZXZpY2UgKnBhcmVudCA9IGRldi0+
-cGFyZW50OwoJc3RydWN0IGtvYmplY3QgKmdsdWVfZGlyID0gTlVMTDsKCXN0cnVjdCBjbGFzc19p
-bnRlcmZhY2UgKmNsYXNzX2ludGY7Cgl1bnNpZ25lZCBpbnQgbm9pb19mbGFnOwoKCWRldmljZV9s
-b2NrKGRldik7CglraWxsX2RldmljZShkZXYpOwoJZGV2aWNlX3VubG9jayhkZXYpOwogICAgICAg
-IAogICAgICAgIC8vIC4uLgogICAgICAgIGtvYmplY3RfZGVsKCZkZXYtPmtvYmopOwoJY2xlYW51
-cF9nbHVlX2RpcihkZXYsIGdsdWVfZGlyKTsKCW1lbWFsbG9jX25vaW9fcmVzdG9yZShub2lvX2Zs
-YWcpOwoJcHV0X2RldmljZShwYXJlbnQpOwp9CgpJbiBhbm90aGVyIHdvcmQsIHRoZSBkZXZpY2Vf
-ZGVsIC0+IGtvYmplY3RfZGVsIC0+IF9fa29iamVjdF9kZWwgaXMgbm90IHByb3RlY3RlZCBieSB0
-aGUgZGV2aWNlX2xvY2suCgpUaGlzIG1lYW5zIHRoZSBkZXZpY2VfbG9jayArIGRldmljZV9pc19y
-ZWdpc3RlcmVkIGlzIHN0aWxsIHByb25lIHRvIHRoZSBkYXRhIHJhY2UuIEFuZCB0aGlzIGlzIG5v
-dCBqdXN0IHRoZSBwcm9ibGVtIHdpdGggZmlybXdhcmUgZG93bmxvYWRpbmcuIFRoZSBhbGwgcmVs
-ZXZhbnQgbmV0bGluayB0YXNrcyB0aGF0IHVzZSB0aGUgZGV2aWNlX2xvY2sgKyBkZXZpY2VfaXNf
-cmVnaXN0ZXJlZCBpcyBwb3NzaWJsZSB0byBiZSByYWNlZC4KClRvIHRoaXMgZW5kLCB3ZSB3aWxs
-IGNvbWUgb3V0IHdpdGggdHdvIHBhdGNoZXMsIG9uZSBmb3IgZml4aW5nIHRoaXMgZGV2aWNlX2lz
-X3JlZ2lzdGVyZWQgYnkgdXNpbmcgYW5vdGhlciBzdGF0dXMgdmFyaWFibGUgaW5zdGVhZC4gVGhl
-IG90aGVyIGlzIHRoZSBwYXRjaCB0aGF0IHJlb3JkZXJzIHRoZSBjb2RlIGluIG5jaV91bnJlZ2lz
-dGVyX2RldmljZS4KClRoYW5rcwpMaW4gTWEKCg==
+tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-staging
+head:   d2dc68276133362f021bc8d429433b5818826c81
+commit: 0ce51f19453e2f901c6f6c0f725d1f397228970f [99/108] drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback
+config: arc-allmodconfig (https://download.01.org/0day-ci/archive/20220428/202204281543.XFvZfER7-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
+        git fetch --no-tags drm-msm msm-next-staging
+        git checkout 0ce51f19453e2f901c6f6c0f725d1f397228970f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/msm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c: In function 'dpu_encoder_phys_wb_irq_ctrl':
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:410:13: warning: variable 'refcount' set but not used [-Wunused-but-set-variable]
+     410 |         int refcount;
+         |             ^~~~~~~~
+
+
+vim +/refcount +410 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+
+   407	
+   408		struct dpu_encoder_phys_wb *wb_enc = to_dpu_encoder_phys_wb(phys);
+   409		int ret = 0;
+ > 410		int refcount;
+   411	
+   412		refcount = atomic_read(&wb_enc->wbirq_refcount);
+   413	
+   414		if (enable && atomic_inc_return(&wb_enc->wbirq_refcount) == 1) {
+   415			dpu_core_irq_register_callback(phys->dpu_kms,
+   416					phys->irq[INTR_IDX_WB_DONE], dpu_encoder_phys_wb_done_irq, phys);
+   417			if (ret)
+   418				atomic_dec_return(&wb_enc->wbirq_refcount);
+   419		} else if (!enable &&
+   420				atomic_dec_return(&wb_enc->wbirq_refcount) == 0) {
+   421			dpu_core_irq_unregister_callback(phys->dpu_kms, phys->irq[INTR_IDX_WB_DONE]);
+   422			if (ret)
+   423				atomic_inc_return(&wb_enc->wbirq_refcount);
+   424		}
+   425	}
+   426	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

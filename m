@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED5D5129B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3658551294D
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 04:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241682AbiD1DFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S240505AbiD1CHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 22:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiD1DFi (ORCPT
+        with ESMTP id S229493AbiD1CHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:05:38 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E5825587;
-        Wed, 27 Apr 2022 20:02:18 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.49.32]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1McY0J-1oIQrJ3lWf-00cumw; Thu, 28 Apr 2022 04:56:12 +0200
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 7D1C33C088;
-        Thu, 28 Apr 2022 04:56:11 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id D1CB9629; Wed, 27 Apr 2022 22:14:06 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 22:14:06 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 22/27] kbuild: generate a list of objects in vmlinux
-Message-ID: <YmmkDoPsE5pfSxbG@bergen.fjasle.eu>
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-23-masahiroy@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220424190811.1678416-23-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:zsQnuj5QPMduf9Z3utw/5/B4WqdrbKRtjktCwmitc2XZkk62u8q
- LpdWEqyOkLWcMqIRCQ7+JrSakoUJyzstD5TfkJmAe55nhDvUZu7zcnLvjWp8AINUmqs12v+
- Ge/ZVbpBV+87CxfVOKwDSNINol3XF61Mb0HjTdsFvHhkXrEke6ep9h7gl+JHX0UQ3PbUxvc
- ktOX6muIDH3NYCqrIuJ/A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GaNRZgc9xEo=:AxQoY+wyOs38HQF/iVPamf
- cvJ5mafdzNYXrJ6e0jyb8NaLrvB6LCPrVPUBk7E2S+uqPF9OH+1i1hiYRvTq4hqm/qBSf9//f
- 1dF3AT4ALFFEKSX8Y4XpQKC7uc8m62mV9PzWZe3HAYEGJx5gGLLHj4kumFVjVh0wB0UMaZhp0
- GkCZsQ3PuFc2MBP3QQRohJDCL3UuulLGK3xBoZL9FgmCp1t+rCLdEcEvIG5Ni2H0PD4YWXWvE
- XpkMjfvZtB1GoM1ACAk+Nzz3POVp8JSVSxXaVQWLQElNhxtEzYXzyMDD7zZAhIMyYbYZB18O7
- xlxKEA3MFra0p1ArahhmfCOk2sE4lN+rGue19A9hyoci1eAoqzP4aPOL+lzztoJjN5z38pGf2
- 78K05KdnWdeynvFycaimqO4sYfjg2hHvhpVERYjCPjNSzVqUo+0TmuYiMMWFOJTkhLNK6gWmI
- oL4G7yEPaMwdL5juNYRE3zB56CDZZ8zqPhlhvH8z+kWXaA6tB0rdKMBMz07oz2KRUp8ZMqCZ/
- EWTmGWfMFpPRwFRsEHtapXy9HWAVcGQSGPArMrO8qwWtJq3GaFCLKjR1LamJNQe2puGzpn1uF
- ozec0H2QXdsWv8A0XJthpPyR+CsJlxSQAj6G0om7AwPbO+85JiBUAtsq3EgKcxgz0T++nbvgc
- s5LvTH8694Gsaus/7d6KN1lGZKx218HjDYIMaFk2eqCJObWSxxYWijhJZZ+wnLGUnFOM=
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Wed, 27 Apr 2022 22:07:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE15FF3D;
+        Wed, 27 Apr 2022 19:04:03 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S01jW6023389;
+        Thu, 28 Apr 2022 02:03:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=v4DC5jk5MW0kmAL8NfEopkxW5+LAGdSMqLeMRUpLlxI=;
+ b=RmyWBgSEjEROXKWcQlgvAZayB37v8sswxxdRHZUeBCIsHXJsktryRPjAqKvGmNI+06iE
+ /TwFj9Nwych3tagggYm8satgE1IOiNSXRkjt/1czRs0Ek4Tqr/nroofW9YH7CuVLoPuW
+ qQQAMEO4o5tVDFFY+Eo/7tKCewWE7vmODtTUeR9aFKwvWJjN/mfyGkfu2Rw7SVtwWAny
+ /qUUBQ8F6P4vLYERNwdp+1r4V1wlEC1sXHWvyfEUzxvtd3HItxakbP6FOSfWqzojq/KX
+ ReZPta5+wVIVmAjg+m6KFnHQv6psJGnjsUszqhnLk6zRg+679ufRu/AsZsfv62WoVvNI 5Q== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqg1a1qsc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 02:03:56 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23S22aK4022680;
+        Thu, 28 Apr 2022 02:03:55 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fm938xpx8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 02:03:54 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23S23qnU36045126
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 02:03:52 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97EEBAE04D;
+        Thu, 28 Apr 2022 02:03:52 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B4BC6AE053;
+        Thu, 28 Apr 2022 02:03:51 +0000 (GMT)
+Received: from sig-9-65-70-226.ibm.com (unknown [9.65.70.226])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 02:03:51 +0000 (GMT)
+Message-ID: <1f76429bfe89ee37a19f2d8ad0cf1a31ff9da798.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 2/5] ima: define a new template field named 'd-ngv2'
+ and templates
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 27 Apr 2022 22:03:51 -0400
+In-Reply-To: <YkyUdM5hmKf4noS7@gmail.com>
+References: <20220325223824.310119-1-zohar@linux.ibm.com>
+         <20220325223824.310119-3-zohar@linux.ibm.com> <YkyUdM5hmKf4noS7@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Jom3KH8WeVfajdKrCS7j0EwBuV8h46wP
+X-Proofpoint-ORIG-GUID: Jom3KH8WeVfajdKrCS7j0EwBuV8h46wP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204280010
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,73 +87,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 25 Apr 2022 04:08:06 GMT Masahiro Yamada wrote:
-> A *.mod file lists the member objects of a module, but vmlinux does
-> not have such a file to list out all the member objects.
+On Tue, 2022-04-05 at 19:11 +0000, Eric Biggers wrote:
+> On Fri, Mar 25, 2022 at 06:38:21PM -0400, Mimi Zohar wrote:
+> >  static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+> > -				       u8 hash_algo,
+> > +				       u8 digest_type, u8 hash_algo,
+> >  				       struct ima_field_data *field_data)
+> >  {
+> >  	/*
+> >  	 * digest formats:
+> >  	 *  - DATA_FMT_DIGEST: digest
+> >  	 *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + digest,
+> > +	 *  - DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
+> > +	 *	[<digest type> + ':' + <hash algo>] + ':' + '\0' + digest,
+> > +	 *    where <hash type> is either "ima" or "verity",
+> >  	 *    where <hash algo> is provided if the hash algorithm is not
+> >  	 *    SHA1 or MD5
 > 
-> Generate this list to allow modpost to know all the member objects.
+> This says both "hash type" and "digest type".  It should be one or the other.
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+> The square brackets are meant to indicate that the part within it is optional,
+> right?  Are they in the right place?  I don't see how this matches the code.
+> There is also no explanation for why or when <digest type> is optional with
+> DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO.
+
+Agreed.
+
 > 
->  scripts/link-vmlinux.sh | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+> > +	if (digest_type < DIGEST_TYPE__LAST && hash_algo < HASH_ALGO__LAST) {
+> > +		fmt = DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO;
+> > +		offset += snprintf(buffer, DIGEST_TYPE_NAME_LEN_MAX +
+> > +				   CRYPTO_MAX_ALG_NAME + 1, "%*s:%s",
+> > +				   (int)strlen(digest_type_name[digest_type]),
+> > +				   digest_type_name[digest_type],
+> >  				   hash_algo_name[hash_algo]);
+> >  		buffer[offset] = ':';
+> >  		offset += 2;
 > 
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 20f44504a644..d2c193f82004 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -310,7 +310,7 @@ cleanup()
->  	rm -f vmlinux
->  	rm -f vmlinux.map
->  	rm -f vmlinux.o
-> -	rm -f .vmlinux.d
-> +	rm -f .vmlinux*
+> There's no need to use %*s if the length argument is just going to be strlen().
+> It should just use %s.
 
-Wouldn't it be safer to keep the removal of .vmlinux.d for some time 
-and just add .vmlinux.objs?  Somehow I do not like the wildcard here.
+Using "%*s" prevents having a trailing NULL.
 
->  }
->  
->  # Use "make V=1" to debug this script
-> @@ -342,6 +342,19 @@ ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
->  modpost_link vmlinux.o
->  objtool_link vmlinux.o
->  
-> +# Generate the list of objects in vmlinux
-> +rm -f .vmlinux.objs
-> +for f in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
-> +	case ${f} in
-> +	*.a)
-> +		${AR} t ${f} >> .vmlinux.objs
-> +		;;
-> +	*)
-> +		echo ${f} >> .vmlinux.objs
-> +		;;
-> +	esac
-> +done
+> 
+> Also, this is not correct use of snprintf(), given that the string is
+> unconditionally appended to at the offset which snprintf() returns.  So it is
+> not providing buffer overflow protection.  It might as well just be:
+> 
+>                 offset += 1 + sprintf(buffer, "%s:%s:",
+>                                       digest_type_name[digest_type],
+>                                       hash_algo_name[hash_algo]);
+> 
+> and likewise for the other case:
+> 
+>                 offset += 1 + sprintf(buffer, "%s:", hash_algo_name[hash_algo]);
+> 
+> > +/*
+> > + * This function writes the digest of an event (without size limit),
+> > + * prefixed with both the hash type and algorithm.
+> > + */
+> > +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
+> > +			      struct ima_field_data *field_data)
+> > +{
+> > +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
+> 
+> Why is this defaulting to SHA-1?
 
-just some bike shedding comment:  I would have left out the 'rm -f 
-.vmlinux.objs' and moved the redirection to the end of the for loop:
+Violation records contain 0's in the file hash and the template data
+hash fields. Changing the default hash algorithm would result in larger
+violation digests without any real benefit other than cosmetic.  Will
+make the change anyway in the next version.
 
-for f in ...
-    ...
-    ${AR}
-    echo
-done > .vmlinux.objs
+thanks,
 
-but it probably not worth.
+Mimi
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-> +
->  # modpost vmlinux.o to check for section mismatches
->  ${MAKE} -f "${srctree}/scripts/Makefile.modpost" MODPOST_VMLINUX=1
->  
-> -- 
-> 2.32.0
-
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --

@@ -2,246 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7CB512C2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15ECB512C35
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244727AbiD1HH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S244784AbiD1HII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243043AbiD1HH0 (ORCPT
+        with ESMTP id S244758AbiD1HIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:07:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743A98F50;
-        Thu, 28 Apr 2022 00:04:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 535C0B82BC4;
-        Thu, 28 Apr 2022 07:04:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B788C385A0;
-        Thu, 28 Apr 2022 07:04:07 +0000 (UTC)
-Message-ID: <fd81ba16-9772-3f45-dca6-50a0284abd86@xs4all.nl>
-Date:   Thu, 28 Apr 2022 09:04:06 +0200
+        Thu, 28 Apr 2022 03:08:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38E198F50;
+        Thu, 28 Apr 2022 00:04:52 -0700 (PDT)
+Received: from mail-yb1-f182.google.com ([209.85.219.182]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N0WPK-1o7FkU34K4-00wX9v; Thu, 28 Apr 2022 09:04:50 +0200
+Received: by mail-yb1-f182.google.com with SMTP id y2so7372840ybi.7;
+        Thu, 28 Apr 2022 00:04:50 -0700 (PDT)
+X-Gm-Message-State: AOAM530vjkLCXyIvoodzRGwear/VE6c7tM7g9B3NAhLZfPZ6JoKPA+xk
+        qCgzEPALvV2UsJvvCM+sj0IbSkxy+RaLQCTdyhQ=
+X-Google-Smtp-Source: ABdhPJxPFdoAK53KrDUJDvXZZBNItrxVRstFggJZqPSzN1hTf5QMiOJMiJirNLjAI0bMczN8kVmmcLMEGUTHnXYsKxk=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr29428750ybx.472.1651129489342; Thu, 28
+ Apr 2022 00:04:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Documentation/media: Try to make enum usage clearer
-Content-Language: en-US
-To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-References: <20220422092542.1333177-1-dorota.czaplejewicz@puri.sm>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220422092542.1333177-1-dorota.czaplejewicz@puri.sm>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
+ <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com> <YkWVTEG5oFO82GPL@kroah.com>
+ <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
+ <20220408133246.fyw5554lgli4olvg@maple.lan> <CAK8P3a0u2xa9BFmakG+f4kyLsqNZQbE6KQ6jz2356Fyen=1EHw@mail.gmail.com>
+ <YlBE6hZHmLo9/wrU@kroah.com> <CAK8P3a3v4+AO5avGoxeZSyNTOWqk8YS95xQLWSBZ=yV_3DKggg@mail.gmail.com>
+ <20220408150202.yhn3qppqwm7wzmo3@maple.lan> <OSZPR01MB7050BE18BC9E8DA05C00F478EBF29@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+ <OSZPR01MB70504BD8347355EB51F7CCB8EBFD9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSZPR01MB70504BD8347355EB51F7CCB8EBFD9@OSZPR01MB7050.jpnprd01.prod.outlook.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 28 Apr 2022 09:04:34 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2aHBxRJbOcXBGM7gjAqpErBAeaG3NmfgBTn4TNYscSgw@mail.gmail.com>
+Message-ID: <CAK8P3a2aHBxRJbOcXBGM7gjAqpErBAeaG3NmfgBTn4TNYscSgw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt driver
+To:     "hasegawa-hitomi@fujitsu.com" <hasegawa-hitomi@fujitsu.com>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mike Travis <mike.travis@hpe.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:eIi0QbvKv2J0kpPkGcSMwAc+VFulHu30u8L3LD5xEyxQRXD4+MR
+ yMm0vea/KEYXxg8xMkBqgukd81d0BPir5c6lTNko7Wcv07wAopU0JZKjTwula3N1XlGIrNa
+ U1rrhzfPBh1C16f51QH+cYVVBKYOlhqDhZYt9xWbbvG2Y6F3hWu6fnChuXvtPLFYLDHhHwv
+ gIrZkdC/zxsi6ePsBQMug==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+xxvt5P/Pug=:ZGNlrUHFBRGNMS8HB1c/gy
+ taDKegWhqm0r641SGlzyJnXOlW30bB/OwjM2W2dkUSfdGK2r1nKdNcR7aOV0DSjNmlQqf0lu9
+ BMLWpia4NUlHYOJ6ttmjkNgDylDgww9ISZZ9nVu4SIHDI6NCajAehT+/DisUz16Uba8bhVdjL
+ GnK2ZBXiI66zfHnBJBxEbpeb9g1MCuVOElAD+FtiZnvISvryRDJtEn+dpT01zgqQA4thPLdHy
+ b8NdSQzQCRGV8SfTFIEU76Buw/PPvdACEYRbXYa2IDOSm9nRiCFUZYKvoUEWE63iunNiXalUe
+ M3bDyKf5hZxs0i/oNCtHeQMdKVIZuOTViiVqhGIKcUgxm4Aspl4rv312IplmmCpJyumX1yjTP
+ TPxA52LoMoPazBlyL3/6K2Jkfm/fcNQaMdHUI3OuFWRTCUzKe5BUMEkdubr9xiqAahblyJd0F
+ datbraVHPGh7g3zyci9Prw9ZoBKnv2p2jP54TatuCd4iFs4Jb3G3VZJhla5A1tIu6Ku5AEh4q
+ 18Q6x0v2gOKqMZQliAlJf2XUQ3wtvwYUnjVzYxO85Nl249KaP+YVJr6HANtEiNCmwsFQTYcT5
+ srtcPKBavApU8swqK8pZJNKtc8zKTiab8NiQAlX76rylUY9lg9JfWLIa+SfsmGFYEQ9TbuICx
+ DfSQLU93sB/Rnm6eswu5588BTxunVdFRMp3uFSMsUVNYxRzUoSzQb7R3fW3Rg/jdBuHgnm97e
+ axjkTI/nlo03qpDmbUha3qo9f9y2944+qO9Vwti45XF6qKuaOxe1W6ODfHTN1mpRAxRESAvsx
+ f/O9YIscOif2N7B7bADg6p7XB7pDoaAMgshs7WuE/LqeJ2riAM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dorota,
+On Thu, Apr 28, 2022 at 4:15 AM hasegawa-hitomi@fujitsu.com
+<hasegawa-hitomi@fujitsu.com> wrote:
+>
+> Hi Greg, Arnd, and Daniel,
+>
+> > I understand that it is not appropriate to hardcode c.
+> > How about using __setup() to add a new kernel parameter and allow the admin
+> > to specify the sysrq command when booting?
+>
+> I have received a lot of advice regarding sysrq, but after some consideration,
+> I would like to change to calling panic() directly as in v1 instead of sysrq.
+>
+> If the administrator wants to request a diagnostic, I think they usually
+> expect crash with NMI like x86 and take a dump the kernel. It's not common
+> to handle diagnostic interrupts with sysrq now, so I don't think
+> it's necessary to make this driver extensible at this time.
 
-On 22/04/2022 11:30, Dorota Czaplejewicz wrote:
-> Fixed: typo "format" -> "frame size" in enum-frame-size
-> Added: mbus codes must not repeat
-> Added: no holes in the array
-> Added: arrays per what?
-> Added: who fills in what (questionable naming: caller/driver. caller/callee could be confusing for beginners, they look similar)
-> Changed: "zero" -> "0"
-> Changed: "given" -> "selected". "given to me by the driver?" dunno feels like "selected" or "chosen" are the words to indicate agency to the consumer
+Ok, fair enough. Matching x86 behavior sounds like a reasonable outcome.
+If we want to make this configurable in the future, that can still be done then,
+and it should work the same across architectures but adding the logic
+in nmi_panic() directly.
 
-I'm missing a 'Signed-off-by' here, please add this in a v2.
-
-> 
-> ---
-> Hello,
-> 
-> I encountered some difficulties trying to implement a media-api driver, and I traced the problems to not understanding the documentation. Here I try to make the API usage clearer, after consulting with libcamera authors.
-> 
-> Still unclear how it works so I didn't touch it: "which". What is a "try format" vs "active format"?
-> 
-> Cheers,
-> Dorota Czaplejewicz
-> 
-> 
->  .../v4l/vidioc-subdev-enum-frame-size.rst     | 44 ++++++++++++-------
->  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 39 +++++++++++-----
->  2 files changed, 55 insertions(+), 28 deletions(-)
-
-Split this patch up into two separate patches, one for each .rst file.
-
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-> index c25a9896df0e..c7afeffb6269 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.rst
-> @@ -31,18 +31,29 @@ Arguments
->  Description
->  ===========
->  
-> -This ioctl allows applications to enumerate all frame sizes supported by
-> -a sub-device on the given pad for the given media bus format. Supported
-> -formats can be retrieved with the
-> +This ioctl allows applications to access the array of frame sizes supported by
-
-As I mentioned on, I think, irc, I disagree with calling this an array.
-I prefer the original phrase 'enumerate all frame sizes'. This is consistent
-as well with other ENUM ioctls. This applies to the other 'array' references
-below as well. Just keep the original text.
-
-> +a sub-device on the selected pad for the selected media bus format.
-
-I'd use 'specified' instead of 'selected' or 'given' since the application
-specifies this information.
-
-> +Supported formats can be retrieved with the
->  :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE`
->  ioctl.
->  
-> -To enumerate frame sizes applications initialize the ``pad``, ``which``
-> -, ``code`` and ``index`` fields of the struct
-> -:c:type:`v4l2_subdev_mbus_code_enum` and
-> -call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
-> -structure. Drivers fill the minimum and maximum frame sizes or return an
-> -EINVAL error code if one of the input parameters is invalid.
-> +The arrays are defined by the driver, and indexed using the ``index`` field
-> +of the struct :c:type:`v4l2_subdev_mbus_code_enum`.
-> +Each pair of ``pad`` and ``code`` correspond to a separate array.
-> +Each array starts with the ``index`` of 0, and
-> +the first invalid index marks the end of array.
-> +
-> +Therefore, to enumerate frame sizes allowed on the selected pad
-> +and using the selected mbus format, initialize the
-> +``pad``, ``which``, and ``code`` fields to desired values,
-> +and set ``index`` to 0.
-> +Then call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
-> +structure.
-> +
-> +A successful call will return with minimum and maximum frame sizes filled in.
-> +Repeat with increasing ``index`` until ``EINVAL`` is received.
-> +``EINVAL`` means that either no more entries are available in the array,
-> +or that an input parameter was invalid.
->  
->  Sub-devices that only support discrete frame sizes (such as most
->  sensors) will return one or more frame sizes with identical minimum and
-> @@ -72,26 +83,27 @@ information about try formats.
->  
->      * - __u32
->        - ``index``
-> -      - Number of the format in the enumeration, set by the application.
-> +      - Index of the frame size in the enumeration
-> +    belonging to the given pad and format. Filled in by the caller.
-
-Stick to 'application' instead of 'caller'. That's the terminology used elsewhere
-in the documentation as well, changing what it is called is just more confusing.
-
->      * - __u32
->        - ``pad``
-> -      - Pad number as reported by the media controller API.
-> +      - Pad number as reported by the media controller API. Filled in by the caller.
->      * - __u32
->        - ``code``
->        - The media bus format code, as defined in
-> -	:ref:`v4l2-mbus-format`.
-> +	:ref:`v4l2-mbus-format`. Filled in by the caller.
->      * - __u32
->        - ``min_width``
-> -      - Minimum frame width, in pixels.
-> +      - Minimum frame width, in pixels. Filled in by the driver.
->      * - __u32
->        - ``max_width``
-> -      - Maximum frame width, in pixels.
-> +      - Maximum frame width, in pixels. Filled in by the driver.
->      * - __u32
->        - ``min_height``
-> -      - Minimum frame height, in pixels.
-> +      - Minimum frame height, in pixels. Filled in by the driver.
->      * - __u32
->        - ``max_height``
-> -      - Maximum frame height, in pixels.
-> +      - Maximum frame height, in pixels. Filled in by the driver.
->      * - __u32
->        - ``which``
->        - Frame sizes to be enumerated, from enum
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-> index 417f1a19bcc4..22d046dd09c2 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-code.rst
-> @@ -31,15 +31,29 @@ Arguments
->  Description
->  ===========
->  
-> -To enumerate media bus formats available at a given sub-device pad
-> -applications initialize the ``pad``, ``which`` and ``index`` fields of
-> -struct
-> -:c:type:`v4l2_subdev_mbus_code_enum` and
-> -call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this
-> -structure. Drivers fill the rest of the structure or return an ``EINVAL``
-> -error code if either the ``pad`` or ``index`` are invalid. All media bus
-> -formats are enumerable by beginning at index zero and incrementing by
-> -one until ``EINVAL`` is returned.
-> +This call is used by the application to access the array of bus formats
-> +for the selected pad.
-> +
-> +The arrays are defined by the driver, and indexed using the ``index`` field
-> +of struct :c:type:`v4l2_subdev_mbus_code_enum`.
-> +Each value of ``pad`` corresponds to a separate array.
-> +Each array starts with the ``index`` of 0, and
-> +the first invalid index marks the end of array.
-> +
-> +Therefore, to enumerate media bus formats available at a given sub-device pad,
-> +initialize the ``pad``, and ``which`` fields to desired values,
-> +and set ``index`` to 0.
-> +Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
-> +with a pointer to this structure.
-> +
-> +A successful call will return with the ``code`` field filled in
-> +with a mbus format value.
-> +Repeat with increasing ``index`` until ``EINVAL`` is received.
-> +``EINVAL`` means that either ``pad`` is invalid,
-> +or that there are no more codes available at this pad.
-> +
-> +The driver must not return the same value of ``code`` for different indices
-> +at the same pad.
->  
->  Available media bus formats may depend on the current 'try' formats at
->  other pads of the sub-device, as well as on the current active links.
-> @@ -57,14 +71,15 @@ information about the try formats.
->  
->      * - __u32
->        - ``pad``
-> -      - Pad number as reported by the media controller API.
-> +      - Pad number as reported by the media controller API. Filled in by the caller.
->      * - __u32
->        - ``index``
-> -      - Number of the format in the enumeration, set by the application.
-> +      - Index of the mbus code in the enumeration belonging to the given pad.
-> +    Filled in by the caller.
->      * - __u32
->        - ``code``
->        - The media bus format code, as defined in
-> -	:ref:`v4l2-mbus-format`.
-> +	:ref:`v4l2-mbus-format`. Filled in by the driver.
->      * - __u32
->        - ``which``
->        - Media bus format codes to be enumerated, from enum
-
-I'll take another, closer look at this once v2 is posted. The documentation certainly
-can be better, but changing terminology inconsistent with what is used elsewhere in
-the media documentation is not helping.
-
-You should also consider changing vidioc-subdev-enum-frame-interval.rst which is
-closely related to these two documentation files. If changes are made, then it
-should probably be done to all three.
-
-Regards,
-
-	Hans
+        Arnd

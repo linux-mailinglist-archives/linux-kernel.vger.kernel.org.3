@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2AD512EAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573B9512EC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 10:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344548AbiD1Ilc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 04:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S1344562AbiD1Ilg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 04:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiD1Iks (ORCPT
+        with ESMTP id S238117AbiD1Iku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 04:40:48 -0400
+        Thu, 28 Apr 2022 04:40:50 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5F48A6E17
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:34:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B23462EB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 01:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651134898;
+        s=mimecast20190719; t=1651134903;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5pSN8cSMrlmjclRV6stF62mOsP7NodWWP1XDBAD+Ds0=;
-        b=YdFLgHr8rSjGuHypRR2B4i5LtyLkjffuGNefiLocpCNZI1bw++k988494uIfHVve68vn/b
-        C2FDf8x+L1PsfK5y6U3D+6Xs8TS9r5R47TutOi1/lHCR/yVQ5YKTGJaxkCC4AQKUH9Mp/I
-        GIfyJEYDOSo5MN3L/sVn7dNR7/E+dkE=
+        bh=uKusX70JiuPlYzcamhxyk77YgVkoB/zECZIBimqek94=;
+        b=I5bBZaqhhWdIzsjtphCrBjx/s7AHir8ytbp6jhJOnkmO2SkeiCQ96sMCF+wY66xDyeh3nL
+        6U7DkVXJD6SLcIDLBgiQLjMTHAnA7FuCZa23cYlCWcAxU0SmdRmun+JJB8IvH2eX/cD34j
+        Z/oeK/HpZ0WI+eH4J2ZOsQ+7VW+WC+g=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-q-wuszA3OCyEKrkEfmaaDQ-1; Thu, 28 Apr 2022 04:34:54 -0400
-X-MC-Unique: q-wuszA3OCyEKrkEfmaaDQ-1
+ us-mta-647-fh7WDyYiMb-DxCtuxaHKhw-1; Thu, 28 Apr 2022 04:34:59 -0400
+X-MC-Unique: fh7WDyYiMb-DxCtuxaHKhw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CCF4E833966;
-        Thu, 28 Apr 2022 08:34:53 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 639C3801005;
+        Thu, 28 Apr 2022 08:34:58 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C6611566A27;
-        Thu, 28 Apr 2022 08:34:48 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2576D55BA85;
+        Thu, 28 Apr 2022 08:34:53 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -64,11 +64,10 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Liang Zhang <zhangliang5@huawei.com>,
         Pedro Gomes <pedrodemargomes@gmail.com>,
         Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Subject: [PATCH v4 01/17] mm/rmap: fix missing swap_free() in try_to_unmap() after arch_unmap_one() failed
-Date:   Thu, 28 Apr 2022 10:34:25 +0200
-Message-Id: <20220428083441.37290-2-david@redhat.com>
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v4 02/17] mm/hugetlb: take src_mm->write_protect_seq in copy_hugetlb_page_range()
+Date:   Thu, 28 Apr 2022 10:34:26 +0200
+Message-Id: <20220428083441.37290-3-david@redhat.com>
 In-Reply-To: <20220428083441.37290-1-david@redhat.com>
 References: <20220428083441.37290-1-david@redhat.com>
 MIME-Version: 1.0
@@ -83,29 +82,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case arch_unmap_one() fails, we already did a swap_duplicate(). let's
-undo that properly via swap_free().
+Let's do it just like copy_page_range(), taking the seqlock and making
+sure the mmap_lock is held in write mode.
 
-Fixes: ca827d55ebaa ("mm, swap: Add infrastructure for saving page metadata on swap")
-Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+This allows for add a VM_BUG_ON to page_needs_cow_for_dma() and
+properly synchronizes concurrent fork() with GUP-fast of hugetlb pages,
+which will be relevant for further changes.
+
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/rmap.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/mm.h | 4 ++++
+ mm/hugetlb.c       | 8 ++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index fedb82371efe..eb246fc8b089 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1637,6 +1637,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 				break;
- 			}
- 			if (arch_unmap_one(mm, vma, address, pteval) < 0) {
-+				swap_free(entry);
- 				set_pte_at(mm, address, pvmw.pte, pteval);
- 				ret = false;
- 				page_vma_mapped_walk_done(&pvmw);
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9f44254af8ce..c3c862a2e533 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1576,6 +1576,8 @@ static inline bool page_maybe_dma_pinned(struct page *page)
+ /*
+  * This should most likely only be called during fork() to see whether we
+  * should break the cow immediately for a page on the src mm.
++ *
++ * The caller has to hold the PT lock and the vma->vm_mm->->write_protect_seq.
+  */
+ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
+ 					  struct page *page)
+@@ -1583,6 +1585,8 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
+ 	if (!is_cow_mapping(vma->vm_flags))
+ 		return false;
+ 
++	VM_BUG_ON(!(raw_read_seqcount(&vma->vm_mm->write_protect_seq) & 1));
++
+ 	if (!test_bit(MMF_HAS_PINNED, &vma->vm_mm->flags))
+ 		return false;
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 3fc721789743..670117bbc9b4 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4717,6 +4717,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 					vma->vm_start,
+ 					vma->vm_end);
+ 		mmu_notifier_invalidate_range_start(&range);
++		mmap_assert_write_locked(src);
++		raw_write_seqcount_begin(&src->write_protect_seq);
+ 	} else {
+ 		/*
+ 		 * For shared mappings i_mmap_rwsem must be held to call
+@@ -4849,10 +4851,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		spin_unlock(dst_ptl);
+ 	}
+ 
+-	if (cow)
++	if (cow) {
++		raw_write_seqcount_end(&src->write_protect_seq);
+ 		mmu_notifier_invalidate_range_end(&range);
+-	else
++	} else {
+ 		i_mmap_unlock_read(mapping);
++	}
+ 
+ 	return ret;
+ }
 -- 
 2.35.1
 

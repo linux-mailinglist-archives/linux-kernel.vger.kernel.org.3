@@ -2,163 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B30513916
+	by mail.lfdr.de (Postfix) with ESMTP id D03DD513917
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 17:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349653AbiD1P5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 11:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S1349676AbiD1P56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 11:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348580AbiD1P5t (ORCPT
+        with ESMTP id S1348580AbiD1P5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 11:57:49 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F5DB8986
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 08:54:34 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220428155431euoutp017f6180f9c056ecc62e26d71f6e7c05c2~qGm2Y3vMi1958719587euoutp01G
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:54:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220428155431euoutp017f6180f9c056ecc62e26d71f6e7c05c2~qGm2Y3vMi1958719587euoutp01G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651161271;
-        bh=mSww8MNcP9LQau6omtTYAJnuYJvatHm4P/3v9FrFuEQ=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=jX2mVvFSVhV+1u6Dfhpw1ePk0ekW0o6bIDhBkl0cs93PHfA0RNjCvczdJESBLMvmZ
-         3QrHyJ6AMVWa9T7Ttoa+2sV0+6JEeCBq7qsfkmz/JuBmT9X5m/AQu4Ozkxz4lzmxsS
-         uLrXbc6Oj+Gj296oBFsAmHn1yU8xlXftBVxJTOzo=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220428155430eucas1p264e9d46e67a3b87a5f04612884dcf590~qGm195CMC1962619626eucas1p2j;
-        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 8E.9C.09887.6B8BA626; Thu, 28
-        Apr 2022 16:54:30 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220428155430eucas1p19843a8820764ea2bff4c8e828ab4c77d~qGm1ejomq0861808618eucas1p1v;
-        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220428155430eusmtrp1084ab273f286eb108908e2488bc3d4b6~qGm1dczfx2007420074eusmtrp18;
-        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
-X-AuditID: cbfec7f4-471ff7000000269f-d8-626ab8b6a3f7
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id C5.E6.09404.6B8BA626; Thu, 28
-        Apr 2022 16:54:30 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220428155430eusmtip2101d0f2ab9ec7ad016c58052efc89d15~qGm1ROzsV0803308033eusmtip2k;
-        Thu, 28 Apr 2022 15:54:30 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.162) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 28 Apr 2022 16:54:27 +0100
-Message-ID: <c490bd45-deab-8c2b-151c-c8db9f97e10c@samsung.com>
-Date:   Thu, 28 Apr 2022 17:54:26 +0200
+        Thu, 28 Apr 2022 11:57:54 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C9CB8997;
+        Thu, 28 Apr 2022 08:54:39 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id t13so4623905pfg.2;
+        Thu, 28 Apr 2022 08:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zOz9eswdSnbnlgCE4u1qshAALQqhtjly6s/zYnzoZDo=;
+        b=CM62eKY9hR/wJXqj/fSH1DWGMTfmyPZhE42jrqWpTk5Tb5UjPt5F2utBvVAHO90tMY
+         3t/ROcUikaw6dA1pndL0nQIZHAWw7CHz2ijI3vAnTb2LOxXel+3BjBnwmEEdvR5slL1r
+         x7bKFNpKvom0Vy8PQaUKmxn2OhId2Ft71PWmd51R0Lyv14320aqUgcV+KZDD4AGU0LGc
+         f8Qeoi1XC8mKXU8DoC5GD+hiQ5XxLtzd3Ni45nZLjnWgbYk1el+uPGdE9w1GKTgO96W1
+         3cFh014HSIYspHjf9ETJZdpmsDQV4A5Z8dp5g0PlTJlj1S58K3vf/i1sySaiR+h5q38Y
+         qoiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zOz9eswdSnbnlgCE4u1qshAALQqhtjly6s/zYnzoZDo=;
+        b=PaLPsutr9rYWbnMFmkVnqNmva0hn++dghpIyu6nNEGoMVnJ2/S6rG9HGo/rFY4XIST
+         rpdwTZx7VGkIH8e+dZIXxbYKpWrNlCu5oTdViNZM3CKCyxptdvbbwvjiifER8yXYGRuc
+         i7dhBzt7Q7E2B8NQoJm9zzKVnrmSQxNPrhBxrUJmuiruxVfLvLMMMvrrmQYcbrZ02qaU
+         JQPDpfftGrX9JB7ySf36fAJDD46G2o9gdIRA54/uc+ENDgqqj7DXeNoKd94wOGqe+pkh
+         VVTszk4nwj/5QmcrYnO+Se+j/lZBowjHHhg31wk5X/UNYP9fBZcDydUUXWiJ9GLVKVpV
+         n7rw==
+X-Gm-Message-State: AOAM5332gy8+sOBECfFxpQBjdtX1RmI13U81zQ9mGQ7dHvxyjnnE0plQ
+        uSPoD/KIrJYDzNRu7jRbufs=
+X-Google-Smtp-Source: ABdhPJzy1CMlqjk+9uNH6NdqFcYpmSfdQG+AYRCnlMaOyH7EMI9Q+gIoiuOMIk5Wll/bh8zkd0CnAA==
+X-Received: by 2002:a63:bd49:0:b0:39d:a2d3:94a2 with SMTP id d9-20020a63bd49000000b0039da2d394a2mr28279423pgp.242.1651161278983;
+        Thu, 28 Apr 2022 08:54:38 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::597? ([2404:f801:9000:18:efec::597])
+        by smtp.gmail.com with ESMTPSA id 16-20020a621410000000b0050aca5f79f5sm261023pfu.97.2022.04.28.08.54.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 08:54:38 -0700 (PDT)
+Message-ID: <8c390129-4fb3-dd7c-cf83-0451c405d0b9@gmail.com>
+Date:   Thu, 28 Apr 2022 23:54:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH 12/16] zonefs: allow non power of 2 zoned devices
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH 1/2] swiotlb: Split up single swiotlb lock
 Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jaegeuk@kernel.org>, <axboe@kernel.dk>, <snitzer@kernel.org>,
-        <hch@lst.de>, <mcgrof@kernel.org>, <naohiro.aota@wdc.com>,
-        <sagi@grimberg.me>, <dsterba@suse.com>,
-        <johannes.thumshirn@wdc.com>
-CC:     <linux-kernel@vger.kernel.org>, <clm@fb.com>,
-        <gost.dev@samsung.com>, <chao@kernel.org>, <josef@toxicpanda.com>,
-        <jonathan.derrick@linux.dev>, <agk@redhat.com>,
-        <kbusch@kernel.org>, <kch@nvidia.com>,
-        <linux-nvme@lists.infradead.org>, <bvanassche@acm.org>,
-        <jiangbo.365@bytedance.com>, <linux-fsdevel@vger.kernel.org>,
-        <matias.bjorling@wdc.com>, <linux-block@vger.kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <bfc1ddc3-5db3-6879-b6ab-210a00b82c6b@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Robin Murphy <robin.murphy@arm.com>, hch@infradead.org,
+        m.szyprowski@samsung.com, michael.h.kelley@microsoft.com,
+        kys@microsoft.com
+Cc:     parri.andrea@gmail.com, thomas.lendacky@amd.com,
+        wei.liu@kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        linux-hyperv@vger.kernel.org, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org, kirill.shutemov@intel.com,
+        iommu@lists.linux-foundation.org, andi.kleen@intel.com,
+        brijesh.singh@amd.com, vkuznets@redhat.com, hch@lst.de
+References: <20220428141429.1637028-1-ltykernel@gmail.com>
+ <20220428141429.1637028-2-ltykernel@gmail.com>
+ <e7b644f0-6c90-fe99-792d-75c38505dc54@arm.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <e7b644f0-6c90-fe99-792d-75c38505dc54@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.162]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxTVxzd7Xt977Wj5IE1XHFhC34kgwz8Ct4wwuY25GW6SefC5v5Qi7xR
-        GCBrxW2KrkodUtxaC6I2RGSiTBQZpcNKrWM1FKEtIF2XDgMOA6JMvgKbZUW3ltcl/HfO+Z3z
-        u/fcXAoLv0hEUtn5+1h5vjQ3mhDiLba5ntdaTDkZa7p716DGLhuGrgxoCFQ5NYch+yknD+k0
-        Z0jkc/ZgqNd7hIcuX2nnoeFGPYZOtE3h6Jl60K+phjA0P7QW6ay/ATTi1vOQpT8W3bR04sjV
-        WkWg6ksjJNJ+8xeGPNoRgE52NPPRtT8ncXSnf/mbkHH9uoV5fucqwZwsniCZnsEmnHE5CxlD
-        fSnB1ChPYUxz7deM+XclwXxbPEEwN47d5zOTt9wE02h044y2uYnPzBiimJK2Ml4a/YkwKZPN
-        zd7PyuOTdwtlpuIZssBNfelWPiSV4AmhBhQF6Q3wshGpgZAKp38A0NPeSXBkFsA+azFQA4Gf
-        zADo+wkFcCAwVz6OcaY6ANUNuiDxm2qrS4LEDGDXExUeiIjoZOj6Rb9wHk6vgi7HIU4Og51n
-        hxcsS+mPYaXeQQTwEjoFmhv+XdAxOgL2D1fzAjvFtA9AV/cEP0AwWoXByYd9ZGApQcfAI6Vk
-        ICCgN8PRyu8JLvwqPHbdR3L4ZXh9vArjKqzwVygjOXwINtgcZGAnpNuFsLrJyOcG78C5f+YB
-        h5fAsQ5jMPAStJefwDl8EI54fBgXVgGoudEYfNXX4XeOXM6zCU6XKINyKPSMh3H3CYW6ltOY
-        FqzSL3oL/aLO+kUV9IsqnAd4PYhgCxV5WaxiXT77RZxCmqcozM+K27M3zwD8P9n+vGPWBOrG
-        puOsgEcBK4AUFi0WzZplGeGiTOlXB1j53l3ywlxWYQXLKTw6QrQn+0dpOJ0l3cd+xrIFrPz/
-        KY8SRCp5NbOPRnVFpab6gZ0f+AzX9u/wmjZ0H+9kvA9uG34u2/p5snbbffKcSjQUn2B9V+eM
-        FVfsiDrcJji68XF3yr1RVCNJ3HjQdsuxuq/lLedxiRO23ux6O7XBm6GRvaIXxZ7bLPFWuZ7u
-        tFjOgNWPPxSTu1SD5W9clFhyps/LJMs+zevVrchYv2xwxi5KeNZVZU9MEx8m7SG1Iakhho8y
-        c0JWpsevn5c/2n02rHnL1UhBW+rSqfRNUwNRp0Pv2orqkkKN91qn4yIvwa3SbFSRuP12vMlb
-        diE24X3sPerFdZOaAekff08kDPU9KCiKSbdse2HefPTpWKrmrj7JWKFJW5mSdMATjStk0rUx
-        mFwh/Q9mQStiOAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsVy+t/xe7rbdmQlGXz9KWSx/tQxZovVd/vZ
-        LKZ9+MlscXrqWSaLSf0z2C1+nz3PbHHhRyOTxcrVR5ksnqyfxWzRc+ADi8XfrntAsZaHzBZ/
-        HhpaTDp0jdHi6dVZTBZ7b2lb7Nl7ksXi8q45bBbzlz1lt5jQ9pXZ4saEp4wWE49vZrVY9/o9
-        i8WJW9IOEh6Xr3h7/Duxhs1jYvM7do/z9zayeFw+W+qxaVUnm8fChqnMHpuX1HvsvtnA5tHb
-        /I7NY2frfVaP9/uusnms33KVxWPC5o2sHp83yXm0H+hmChCI0rMpyi8tSVXIyC8usVWKNrQw
-        0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0MvY0fyZveAqR8XVhmfsDYxv2LoYOTkk
-        BEwkfk5+y9zFyMUhJLCUUWLWvwdQCRmJT1c+skPYwhJ/rnWxQRR9ZJRYNf8TI4Szm1HiyKyv
-        rCBVvAJ2EpcPzgKq4uBgEVCVuHymFiIsKHFy5hMWEFtUIELiwe6zYOXCAq4Su9f+B4szC4hL
-        3HoynwlkpojAb0aJy+fesYI4zAItzBLvn11ih9j2h1Fix8KZYBvYBLQkGjvBzuMUcJN4Pm0R
-        G8QkTYnW7b/ZIWx5ie1v5zBDvKAM9Gc31Du1Eq/u72acwCg6C8mBs5AcMgvJqFlIRi1gZFnF
-        KJJaWpybnltspFecmFtcmpeul5yfu4kRmMy2Hfu5ZQfjylcf9Q4xMnEwHmKU4GBWEuH9sjsj
-        SYg3JbGyKrUoP76oNCe1+BCjKTCQJjJLiSbnA9NpXkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQ
-        QHpiSWp2ampBahFMHxMHp1QDU42HXeK/o26lG6Z6tqRGbriU98GmXD43Ut1WbO5O8+d2l1N/
-        nYnedqp67033uQyv56otsIuLUlV9Oe+mjmZHRffF36xPy+S3n9y1Z1rXAv5wtqqIzJfCs+rn
-        sovPLOG5aXRqoUoqg87fxa+6Tj+JYer5yZp67WDedsvwfyFbcpk2zOlcrTXN2Yzj4fdVrpbp
-        e//rpbGZlllIbprv9exjX3mK2Przq/iesizNiIgyZhHfuU9HzjZMsnehh5N6j+Ln1yzxU8+p
-        n9Z682zPkhBXi5LrSgvai7bddLq6XaWv56nd1MmpH278PRP791bV8Z28Gv9Ltj8//enfe/0D
-        wXOvlDfPlqtZ8qtD2OGTmT1DrhJLcUaioRZzUXEiAIHUKb3vAwAA
-X-CMS-MailID: 20220428155430eucas1p19843a8820764ea2bff4c8e828ab4c77d
-X-Msg-Generator: CA
-X-RootMTR: 20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44
-References: <20220427160255.300418-1-p.raghav@samsung.com>
-        <CGME20220427160309eucas1p2f677c8db581616f994473f17c4a5bd44@eucas1p2.samsung.com>
-        <20220427160255.300418-13-p.raghav@samsung.com>
-        <bfc1ddc3-5db3-6879-b6ab-210a00b82c6b@opensource.wdc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-28 01:39, Damien Le Moal wrote:
-> On 4/28/22 01:02, Pankaj Raghav wrote:
->> The zone size shift variable is useful only if the zone sizes are known
->> to be power of 2. Remove that variable and use generic helpers from
->> block layer to calculate zone index in zonefs
+On 4/28/2022 10:44 PM, Robin Murphy wrote:
+> On 2022-04-28 15:14, Tianyu Lan wrote:
+>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>
+>> Traditionally swiotlb was not performance critical because it was only
+>> used for slow devices. But in some setups, like TDX/SEV confidential
+>> guests, all IO has to go through swiotlb. Currently swiotlb only has a
+>> single lock. Under high IO load with multiple CPUs this can lead to
+>> significat lock contention on the swiotlb lock.
+>>
+>> This patch splits the swiotlb into individual areas which have their
+>> own lock. When there are swiotlb map/allocate request, allocate
+>> io tlb buffer from areas averagely and free the allocation back
+>> to the associated area. This is to prepare to resolve the overhead
+>> of single spinlock among device's queues. Per device may have its
+>> own io tlb mem and bounce buffer pool.
+>>
+>> This idea from Andi Kleen 
+>> patch(https://github.com/intel/tdx/commit/4529b578
+>> 4c141782c72ec9bd9a92df2b68cb7d45). Rework it and make it may work
+>> for individual device's io tlb mem. The device driver may determine
+>> area number according to device queue number.
 > 
-> Period missing at the end of the sentence.
+> Rather than introduce this extra level of allocator complexity, how 
+> about just dividing up the initial SWIOTLB allocation into multiple 
+> io_tlb_mem instances?
 > 
-Ack
-> What about zonefs-tools and its test suite ? Is everything still OK on
-> that front ? I suspect not...
-> 
-I don't know why you assume that :). Zonefs had only one place that had
-the assumption of po2 zsze sectors:
-if (nr_zones < dev.nr_zones) {
-	size_t runt_sectors = dev.capacity & (dev.zone_nr_sectors - 1);
+> Robin.
 
-In my local tree I changed it and I was able to run zonefs tests for non
-po2 zone device. I have also mentioned it in my cover letter:
-```
-ZoneFS:
-zonefs-tests.sh from zonefs-tools were run with no failures.
-```
-I will make sure to add my private tree for zonefs in my cover letter in
-the next rev. But even without that change, a typical emulated npo2
-device should work fine because the changes are applicable only for
-"runt" zones.
+Agree. Thanks for suggestion. That will be more generic and will update
+in the next version.
+
+Thanks.
+

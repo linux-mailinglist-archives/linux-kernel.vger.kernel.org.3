@@ -2,73 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B214512ACA
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20524512ACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 07:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240970AbiD1FMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 01:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S242859AbiD1FOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 01:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiD1FMB (ORCPT
+        with ESMTP id S239672AbiD1FOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 01:12:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AD85DA56;
-        Wed, 27 Apr 2022 22:08:46 -0700 (PDT)
-X-UUID: 490704e445534698a66f5c41d3c26818-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:74385a90-308e-4acc-b87f-915beed3df18,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:74385a90-308e-4acc-b87f-915beed3df18,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:058ffd2e-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: 490704e445534698a66f5c41d3c26818-20220428
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 24281124; Thu, 28 Apr 2022 13:08:40 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 28 Apr 2022 13:08:38 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 28 Apr 2022 13:08:37 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 13:08:37 +0800
-Message-ID: <de775aae07da3ff855d5bf95da996977efadda23.camel@mediatek.com>
-Subject: Re: [PATCH V4 07/15] clk: mediatek: reset: Support nonsequence base
- offsets of reset registers
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <p.zabel@pengutronix.de>, <chun-jie.chen@mediatek.com>,
-        <wenst@chromium.org>, <runyang.chen@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 28 Apr 2022 13:08:37 +0800
-In-Reply-To: <c643d877-bc0a-a92c-d366-bd27bf580739@collabora.com>
-References: <20220427030950.23395-1-rex-bc.chen@mediatek.com>
-         <20220427030950.23395-8-rex-bc.chen@mediatek.com>
-         <c643d877-bc0a-a92c-d366-bd27bf580739@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 28 Apr 2022 01:14:47 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C97874DC8
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:11:33 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id g15-20020a056e021a2f00b002cd868be1faso1168028ile.21
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 22:11:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xJZar25IIMoQhmB/ByVvMxwj9FB6T+m4xFo/nmu9HX8=;
+        b=X4/x01aFU3aFRqztoEy39UgaIXVJFu8cR0ZW3budN6UtKiClLyAFLJsvRCxxnq077G
+         uzC3egiWgQbNY13A21f1h1U3lQ9r5CtQbqtAJ8zMJ24mZpL85CAuAphzuIx5Wb3bp7u9
+         2vwWuJx9PInZw8SCq90X0hoQW9YxZCQXmjvlw5bQjkuJpxRHGxz2Fl7Nf9iLhEeH1VIv
+         dVGhKVzL0I2GS6PxI0QZBGV09XsiMqb+rYqvyoe9svNbf6YvSCdpOgk69748aYGLfoNi
+         eaOm4FYv0dAyxJokbV/hsQKs1lL/jFc2+sK7yTJjz7g+HRtJDYrA1YdP7PXEzYqt+AVX
+         4blA==
+X-Gm-Message-State: AOAM531J2oH3t+BGLdV4qo9ei0nefrxWb5wZ3ShjtD2iXKSFGjmGxEFn
+        pDpJVgm5VAPprjFXYnShnxuQSpPxMOnHbvSJyLU8ib8pc7yR
+X-Google-Smtp-Source: ABdhPJztTtdnM4nWksmEfEv+EL25zPl+YHTuiLd2Q6nulORxcYO7Z3N9r9GrWghMaT/t+uOS+ZyGSfhNiQQeCmnTEEEdMgbYVYoA
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+X-Received: by 2002:a05:6638:34c:b0:32a:e06d:b6f8 with SMTP id
+ x12-20020a056638034c00b0032ae06db6f8mr9159601jap.213.1651122692510; Wed, 27
+ Apr 2022 22:11:32 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 22:11:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000915bd505ddaff576@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in snd_rawmidi_transmit
+From:   syzbot <syzbot+39e3268af9968f153591@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, coding@diwic.se, colin.king@intel.com,
+        linux-kernel@vger.kernel.org, perex@perex.cz,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,161 +54,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-27 at 15:38 +0200, AngeloGioacchino Del Regno wrote:
-> Il 27/04/22 05:09, Rex-BC Chen ha scritto:
-> > The bank offsets are not serial for all reset registers.
-> > For example, there are five infra reset banks for MT8192: 0x120,
-> > 0x130,
-> > 0x140, 0x150 and 0x730.
-> > 
-> > To support this,
-> > - Change reg_ofs to rst_bank_ofs which is a pointer to base offsets
-> > of
-> >    the reset register.
-> > - Add a new define RST_NR_PER_BANK to define reset number for each
-> >    reset bank.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >   drivers/clk/mediatek/clk-mt2701-eth.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt2701-g3d.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt2701-hif.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt2701.c     | 11 +++++++----
-> >   drivers/clk/mediatek/clk-mt2712.c     | 15 +++++++++------
-> >   drivers/clk/mediatek/clk-mt7622-eth.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt7622-hif.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt7622.c     | 11 +++++++----
-> >   drivers/clk/mediatek/clk-mt7629-eth.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt7629-hif.c |  6 ++++--
-> >   drivers/clk/mediatek/clk-mt8135.c     | 11 +++++++----
-> >   drivers/clk/mediatek/clk-mt8173.c     | 11 +++++++----
-> >   drivers/clk/mediatek/clk-mt8183.c     | 14 ++++++++++++--
-> >   drivers/clk/mediatek/reset.c          | 11 ++++++-----
-> >   drivers/clk/mediatek/reset.h          |  6 ++++--
-> >   15 files changed, 87 insertions(+), 45 deletions(-)
-> > 
-> 
-> ..snip..
-> 
-> > diff --git a/drivers/clk/mediatek/clk-mt2701.c
-> > b/drivers/clk/mediatek/clk-mt2701.c
-> > index 70a934faa529..ebb1b9975ab0 100644
-> > --- a/drivers/clk/mediatek/clk-mt2701.c
-> > +++ b/drivers/clk/mediatek/clk-mt2701.c
-> > @@ -735,18 +735,21 @@ static const struct mtk_fixed_factor
-> > infra_fixed_divs[] = {
-> >   	FACTOR(CLK_INFRA_CLK_13M, "clk13m", "clk26m", 1, 2),
-> >   };
-> >   
-> > +static u16 infrasys_rst_ofs[] = { 0x30, 0x34, };
-> > +static u16 perfcfg_rst_ofs[] = { 0x0, 0x4, };
-> 
-> Typo: perfcfg -> pericfg ... here and in some more files :))
-> 
+Hello,
 
-Hello Angelo,
+syzbot found the following issue on:
 
-Thanks for your review!
+HEAD commit:    45ab9400e73f Merge tag 'perf-tools-fixes-for-v5.18-2022-04..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=115cb458f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d1843173f299d1e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=39e3268af9968f153591
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I will fix them.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> > +
-> >   static const struct mtk_clk_rst_desc clk_rst_desc[] = {
-> >   	/* infrasys */
-> >   	{
-> >   		.version = MTK_RST_SIMPLE,
-> > -		.rst_bank_nr = 2,
-> > -		.reg_ofs = 0x30,
-> > +		.rst_bank_ofs = infrasys_rst_ofs,
-> > +		.rst_bank_nr = ARRAY_SIZE(infrasys_rst_ofs),
-> >   	},
-> >   	/* pericfg */
-> >   	{
-> >   		.version = MTK_RST_SIMPLE,
-> > -		.rst_bank_nr = 2,
-> > -		.reg_ofs = 0x0,
-> > +		.rst_bank_ofs = perfcfg_rst_ofs,
-> > +		.rst_bank_nr = ARRAY_SIZE(perfcfg_rst_ofs),
-> >   	},
-> >   };
-> >   
-> > diff --git a/drivers/clk/mediatek/clk-mt2712.c
-> > b/drivers/clk/mediatek/clk-mt2712.c
-> > index cef7c79788ec..2a9d70dd97d6 100644
-> > --- a/drivers/clk/mediatek/clk-mt2712.c
-> > +++ b/drivers/clk/mediatek/clk-mt2712.c
-> > @@ -1258,18 +1258,21 @@ static const struct mtk_pll_data plls[] = {
-> >   		0, 31, 0x0300, 4, 0, 0, 0, 0x0304, 0),
-> >   };
-> >   
-> > +static u16 infrasys_rst_ofs[] = { 0x30, 0x34, };
-> > +static u16 perfcfg_rst_ofs[] = { 0x0, 0x4, };
-> > +
-> >   static const struct mtk_clk_rst_desc clk_rst_desc[] = {
-> > -	/* infra */
-> > +	/* infrasys */
-> 
-> Instead of renaming these here, if you really want this renamed, can
-> you please
-> do that in patch [06/15]?
-> 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+39e3268af9968f153591@syzkaller.appspotmail.com
 
-I will remove them.
+==================================================================
+BUG: KASAN: use-after-free in __snd_rawmidi_transmit_peek sound/core/rawmidi.c:1286 [inline]
+BUG: KASAN: use-after-free in snd_rawmidi_transmit+0x3f3/0x420 sound/core/rawmidi.c:1411
+Read of size 1 at addr ffff88804ece205e by task kworker/0:1H/9
 
-> >   	{
-> >   		.version = MTK_RST_SIMPLE,
-> > -		.rst_bank_nr = 2,
-> > -		.reg_ofs = 0x30,
-> > +		.rst_bank_ofs = infrasys_rst_ofs,
-> > +		.rst_bank_nr = ARRAY_SIZE(infrasys_rst_ofs),
-> >   	},
-> 
-> ..snip..
-> 
-> > diff --git a/drivers/clk/mediatek/reset.h
-> > b/drivers/clk/mediatek/reset.h
-> > index 91358e8cb851..83840ecf8b27 100644
-> > --- a/drivers/clk/mediatek/reset.h
-> > +++ b/drivers/clk/mediatek/reset.h
-> > @@ -9,6 +9,8 @@
-> >   #include <linux/reset-controller.h>
-> >   #include <linux/types.h>
-> >   
-> > +#define RST_NR_PER_BANK 32
-> > +
-> >   /**
-> >    * enum mtk_reset_version - Version of MediaTek clock reset
-> > controller.
-> >    * @MTK_RST_SIMPLE: Use the same registers for bit set and clear.
-> > @@ -24,12 +26,12 @@ enum mtk_reset_version {
-> >   /**
-> >    * struct mtk_clk_rst_desc - Description of MediaTek clock reset.
-> >    * @version: Reset version which is defined in enum
-> > mtk_reset_version.
-> > - * @reg_ofs: Base offset of the reset register.
-> > + * @rst_bank_ofs: Pointer to base offsets of the reset register.
-> 
-> Instead of generically saying that this is a pointer, it would be
-> more
-> appropriate to say that this is a pointer to an array containing base
-> offsets (etc).
-> 
+CPU: 0 PID: 9 Comm: kworker/0:1H Not tainted 5.18.0-rc3-syzkaller-00196-g45ab9400e73f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_highpri snd_usbmidi_out_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ print_address_description+0x65/0x4b0 mm/kasan/report.c:313
+ print_report+0xf4/0x210 mm/kasan/report.c:429
+ kasan_report+0xfb/0x130 mm/kasan/report.c:491
+ __snd_rawmidi_transmit_peek sound/core/rawmidi.c:1286 [inline]
+ snd_rawmidi_transmit+0x3f3/0x420 sound/core/rawmidi.c:1411
+ snd_usbmidi_standard_output+0x202/0xf30 sound/usb/midi.c:650
+ snd_usbmidi_do_output+0x20e/0x530 sound/usb/midi.c:311
+ process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30
+ </TASK>
 
-ok, I will modify it.
+Allocated by task 7013:
+ kasan_save_stack mm/kasan/common.c:38 [inline]
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc+0xdc/0x110 mm/kasan/common.c:515
+ kasan_kmalloc include/linux/kasan.h:234 [inline]
+ __kmalloc_node+0x262/0x400 mm/slub.c:4462
+ kmalloc_node include/linux/slab.h:604 [inline]
+ kvmalloc_node+0x6d/0x100 mm/util.c:580
+ kvmalloc include/linux/slab.h:731 [inline]
+ kvzalloc include/linux/slab.h:739 [inline]
+ snd_rawmidi_runtime_create sound/core/rawmidi.c:162 [inline]
+ open_substream+0x2a1/0x6d0 sound/core/rawmidi.c:306
+ rawmidi_open_priv+0xc2/0x6a0 sound/core/rawmidi.c:357
+ snd_rawmidi_kernel_open+0x1e3/0x280 sound/core/rawmidi.c:392
+ midisynth_use+0xf9/0x2b0 sound/core/seq/seq_midi.c:215
+ subscribe_port sound/core/seq/seq_ports.c:412 [inline]
+ check_and_subscribe_port+0x633/0xac0 sound/core/seq/seq_ports.c:495
+ snd_seq_port_connect+0x27e/0x480 sound/core/seq/seq_ports.c:581
+ snd_seq_ioctl_subscribe_port+0x394/0x750 sound/core/seq/seq_clientmgr.c:1492
+ snd_seq_oss_midi_open+0x44b/0x9b0 sound/core/seq/oss/seq_oss_midi.c:359
+ snd_seq_oss_synth_setup_midi+0x126/0x530 sound/core/seq/oss/seq_oss_synth.c:269
+ snd_seq_oss_open+0x96d/0x1020 sound/core/seq/oss/seq_oss_init.c:260
+ odev_open+0x5e/0x90 sound/core/seq/oss/seq_oss.c:128
+ chrdev_open+0x5fb/0x680 fs/char_dev.c:414
+ do_dentry_open+0x77f/0xfd0 fs/open.c:824
+ do_open fs/namei.c:3476 [inline]
+ path_openat+0x26c0/0x2ec0 fs/namei.c:3609
+ do_filp_open+0x277/0x4f0 fs/namei.c:3636
+ do_sys_openat2+0x13b/0x500 fs/open.c:1213
+ do_sys_open fs/open.c:1229 [inline]
+ __do_sys_openat fs/open.c:1245 [inline]
+ __se_sys_openat fs/open.c:1240 [inline]
+ __x64_sys_openat+0x243/0x290 fs/open.c:1240
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-BRs,
-Rex
+Freed by task 7013:
+ kasan_save_stack mm/kasan/common.c:38 [inline]
+ kasan_set_track+0x4c/0x70 mm/kasan/common.c:45
+ kasan_set_free_info+0x1f/0x40 mm/kasan/generic.c:370
+ ____kasan_slab_free+0xd8/0x110 mm/kasan/common.c:366
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1754
+ slab_free mm/slub.c:3510 [inline]
+ kfree+0xc6/0x210 mm/slub.c:4552
+ snd_rawmidi_runtime_free sound/core/rawmidi.c:176 [inline]
+ close_substream+0x38a/0x5f0 sound/core/rawmidi.c:528
+ rawmidi_release_priv+0xf1/0x180 sound/core/rawmidi.c:547
+ snd_rawmidi_kernel_release+0x42/0xa0 sound/core/rawmidi.c:564
+ unsubscribe_port sound/core/seq/seq_ports.c:437 [inline]
+ __delete_and_unsubscribe_port+0x15c/0x330 sound/core/seq/seq_ports.c:537
+ snd_seq_port_disconnect+0x533/0x660 sound/core/seq/seq_ports.c:616
+ snd_seq_ioctl_unsubscribe_port+0x394/0x750 sound/core/seq/seq_clientmgr.c:1537
+ snd_seq_oss_midi_close+0x33f/0x740 sound/core/seq/oss/seq_oss_midi.c:404
+ snd_seq_oss_synth_reset+0x3b6/0x9d0 sound/core/seq/oss/seq_oss_synth.c:406
+ snd_seq_oss_reset+0x5b/0x240 sound/core/seq/oss/seq_oss_init.c:435
+ snd_seq_oss_release+0xe9/0x300 sound/core/seq/oss/seq_oss_init.c:412
+ odev_release+0x52/0x70 sound/core/seq/oss/seq_oss.c:144
+ __fput+0x3b9/0x820 fs/file_table.c:317
+ task_work_run+0x146/0x1c0 kernel/task_work.c:164
+ get_signal+0x15d9/0x1780 kernel/signal.c:2641
+ arch_do_signal_or_restart+0x8d/0x750 arch/x86/kernel/signal.c:867
+ exit_to_user_mode_loop+0x74/0x160 kernel/entry/common.c:166
+ exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-> Thanks,
-> Angelo
-> 
-> >    * @rst_bank_nr: Quantity of reset bank.
-> >    */
-> >   struct mtk_clk_rst_desc {
-> >   	u8 version;
-> > -	u16 reg_ofs;
-> > +	u16 *rst_bank_ofs;
-> >   	u32 rst_bank_nr;
-> >   };
-> >   
+The buggy address belongs to the object at ffff88804ece2000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 94 bytes inside of
+ 4096-byte region [ffff88804ece2000, ffff88804ece3000)
 
+The buggy address belongs to the physical page:
+page:ffffea00013b3800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x4ece0
+head:ffffea00013b3800 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea00014fe200 dead000000000002 ffff888011442140
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 4945, tgid 4938 (syz-executor.5), ts 180879892415, free_ts 180837137303
+ prep_new_page mm/page_alloc.c:2441 [inline]
+ get_page_from_freelist+0x72e/0x7a0 mm/page_alloc.c:4182
+ __alloc_pages+0x26c/0x5f0 mm/page_alloc.c:5408
+ alloc_slab_page+0x70/0xf0 mm/slub.c:1799
+ allocate_slab+0x5e/0x560 mm/slub.c:1944
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0x41e/0xcd0 mm/slub.c:3005
+ __slab_alloc mm/slub.c:3092 [inline]
+ slab_alloc_node mm/slub.c:3183 [inline]
+ slab_alloc mm/slub.c:3225 [inline]
+ kmem_cache_alloc_trace+0x25c/0x310 mm/slub.c:3256
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:714 [inline]
+ ipv4_mib_init_net+0x2da/0x4d0 net/ipv4/af_inet.c:1772
+ ops_init+0x313/0x430 net/core/net_namespace.c:134
+ setup_net+0x4bb/0xc10 net/core/net_namespace.c:325
+ copy_net_ns+0x359/0x5b0 net/core/net_namespace.c:471
+ create_new_namespaces+0x4db/0x8e0 kernel/nsproxy.c:110
+ copy_namespaces+0x333/0x390 kernel/nsproxy.c:178
+ copy_process+0x18e9/0x3f70 kernel/fork.c:2237
+ kernel_clone+0x22f/0x7a0 kernel/fork.c:2639
+ __do_sys_clone kernel/fork.c:2756 [inline]
+ __se_sys_clone kernel/fork.c:2740 [inline]
+ __x64_sys_clone+0x289/0x310 kernel/fork.c:2740
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1356 [inline]
+ free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1406
+ free_unref_page_prepare mm/page_alloc.c:3328 [inline]
+ free_unref_page+0x7d/0x390 mm/page_alloc.c:3423
+ free_slab mm/slub.c:2043 [inline]
+ discard_slab mm/slub.c:2049 [inline]
+ __unfreeze_partials+0x1ab/0x200 mm/slub.c:2523
+ put_cpu_partial+0x116/0x180 mm/slub.c:2599
+ do_slab_free mm/slub.c:3498 [inline]
+ ___cache_free+0x118/0x1a0 mm/slub.c:3517
+ qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:176
+ kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:283
+ __kasan_slab_alloc+0x2f/0xe0 mm/kasan/common.c:446
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:749 [inline]
+ slab_alloc_node mm/slub.c:3217 [inline]
+ slab_alloc mm/slub.c:3225 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3232 [inline]
+ kmem_cache_alloc+0x199/0x2f0 mm/slub.c:3242
+ getname_flags+0xb8/0x4e0 fs/namei.c:138
+ user_path_at_empty+0x2a/0x1a0 fs/namei.c:2850
+ do_readlinkat+0x11b/0x3b0 fs/stat.c:456
+ __do_sys_readlink fs/stat.c:489 [inline]
+ __se_sys_readlink fs/stat.c:486 [inline]
+ __x64_sys_readlink+0x7b/0x90 fs/stat.c:486
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Memory state around the buggy address:
+ ffff88804ece1f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88804ece1f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88804ece2000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                    ^
+ ffff88804ece2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88804ece2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

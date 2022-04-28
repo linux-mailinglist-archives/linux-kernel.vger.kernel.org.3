@@ -2,389 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE95512D20
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5084C512D26
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245520AbiD1Hkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S245574AbiD1HlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243818AbiD1Hkn (ORCPT
+        with ESMTP id S243818AbiD1HlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:40:43 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1248B9AE40
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:37:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bv19so7809645ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mUOmY7V1lRpDeCi7kYy1MB/xeJZO9ZXbJC8ifmOwUMk=;
-        b=e8q28E9krzLn0/Cj6S5fynsfFCOs2sPRzQTC5vhNgXBzksgNVHp/z6PN2DN7Tf2u6Q
-         mHjUaJKEx0uWDVOnoi4mPo1ppp78sR6ddlQOnlDGXFwyVlvIEwuNGeQB4kaB1ggS1SWW
-         D4iSKqrqbqxD78DKCN0+P5U6xUr+cNrhzrFdDHUV0DxhiQWkZ9TfqRGQnCkIiqzkQ2F2
-         B9o/2SyyS5jkAuAjmCke4q80wA4nE9nsClNZKZKjQBVGStl4cPA15g7lZWUzBzZCAU8m
-         3a4SzN62Gj10qQNSvEwO7c0FMwEuMfQWa18nDVhb9Y2UD4s/NbHyClTXGXgDOExQLEhF
-         Juqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mUOmY7V1lRpDeCi7kYy1MB/xeJZO9ZXbJC8ifmOwUMk=;
-        b=qotBUKhodTg1+PllAZbarlGuo5E8iHiVYlvUqmyOm5z81UwZfzmAF2+99/TXinrcUt
-         ZLh930Zc0e5sUf4A998004q+bi0/+241L0+f+/INzXpWrcUrZr6NlkOCPugGghLTk7cL
-         58olpAklzf3X6uiqXaXgCZCMVveKUB8jUxTA2vMm42cDT+A/ZrRgXc/A0qIUWBasTe72
-         5jZq1pkTvGNUaeAxLhTXzu6wL9gaisYYfsS3hxeFt247KfwlxYjti5Mvxx8GNjUBbbL1
-         kYLYxvOFis7uknXh4joRJf59XShE4q6dL1Yo+FGZAlNTDKL+KjQAouIJiKsOEiANX+CA
-         gT2g==
-X-Gm-Message-State: AOAM531WxjHGFUPwd+H+qohM11O/ijunyj+uAe4vssixVQubCu25ZjKl
-        kHarJkNJWJ96jof9MrIQjZU5um6spG3yD83f540=
-X-Google-Smtp-Source: ABdhPJxhTxKcyT/YuPL9y4CU0TPFd9pztr1FK6a0227YjH2IuF0zDdNkkiu0hsiM4zAJVtxVcJhGOPIKcZ6k7N5nob4=
-X-Received: by 2002:a17:907:2d23:b0:6e8:807c:cd94 with SMTP id
- gs35-20020a1709072d2300b006e8807ccd94mr30343418ejc.502.1651131445439; Thu, 28
- Apr 2022 00:37:25 -0700 (PDT)
+        Thu, 28 Apr 2022 03:41:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7740F9BAFB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651131465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=I2NcTr95KtVfw5F4bY4of6GdPhEyqhR4X0xs+U4Pi0E=;
+        b=gnI3MnZWshOSvS+pr08NwwrkE7kPGKHBZI/HjnWYqwdhU/Wix3Nug4E+xpGmSvJr7+9Yae
+        LWz6bhaR8J/oQqe8esZt5vR9lbyEdmhYmnopnJBYinlBfvhWA4ndvyfhDJVOq5x1D4p8/b
+        DxgK/qfqGE2munaH6hv57fNChUmUklw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-601-7Q3ccvaLOAKmnK4OARYhHg-1; Thu, 28 Apr 2022 03:37:44 -0400
+X-MC-Unique: 7Q3ccvaLOAKmnK4OARYhHg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C32A5800882;
+        Thu, 28 Apr 2022 07:37:43 +0000 (UTC)
+Received: from server.redhat.com (ovpn-12-110.pek2.redhat.com [10.72.12.110])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3A61A2014F9D;
+        Thu, 28 Apr 2022 07:37:32 +0000 (UTC)
+From:   Cindy Lu <lulu@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, lulu@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
+Date:   Thu, 28 Apr 2022 15:37:27 +0800
+Message-Id: <20220428073727.390987-1-lulu@redhat.com>
 MIME-Version: 1.0
-References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
- <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com> <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
- <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com> <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
-In-Reply-To: <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 28 Apr 2022 19:37:14 +1200
-Message-ID: <CAGsJ_4wKqPEnFGdijwjKeCvfRwfdxkk-263EZt2Y21GMyn1_uA@mail.gmail.com>
-Subject: Re: DAMON VA regions don't split on an large Android APP
-To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
-        brendanhiggins@google.com, foersleo@amazon.de, sieberf@amazon.com,
-        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
-        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>,
-        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
-        xhao@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 2:05 PM Rongwei Wang
-<rongwei.wang@linux.alibaba.com> wrote:
->
->
->
-> On 4/27/22 5:22 PM, Barry Song wrote:
-> > On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
-> >>
-> >> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
-> >> <rongwei.wang@linux.alibaba.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 4/27/22 7:19 AM, Barry Song wrote:
-> >>>> Hi SeongJae & Andrew,
-> >>>> (also Cc-ed main damon developers)
-> >>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
-> >>>> that vaddr regions don't split well on large Android Apps though
-> >>>> everything works well on native Apps.
-> >>>>
-> >>>> I have tried the below two cases on an Android phone with 12GB memory
-> >>>> and snapdragon 888 CPU.
-> >>>> 1. a native program with small memory working set  as below,
-> >>>> #define size (1024*1024*100)
-> >>>> main()
-> >>>> {
-> >>>>           volatile int *p = malloc(size);
-> >>>>           memset(p, 0x55, size);
-> >>>>
-> >>>>           while(1) {
-> >>>>                   int i;
-> >>>>                   for (i = 0; i < size / 4; i++)
-> >>>>                           (void)*(p + i);
-> >>>>                   usleep(1000);
-> >>>>
-> >>>>                   for (i = 0; i < size / 16; i++)
-> >>>>                           (void)*(p + i);
-> >>>>                   usleep(1000);
-> >>>>
-> >>>>           }
-> >>>> }
-> >>>> For this application, the Damon vaddr monitor works very well.
-> >>>> I have modified monitor.py in the damo userspace tool a little bit to
-> >>>> show the raw data getting from the kernel.
-> >>>> Regions can split decently on this kind of applications, a typical raw
-> >>>> data is as below,
-> >>>>
-> >>>> monitoring_start:             2.224 s
-> >>>> monitoring_end:               2.329 s
-> >>>> monitoring_duration:       104.336 ms
-> >>>> target_id: 0
-> >>>> nr_regions: 24
-> >>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
-> >>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
-> >>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
-> >>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
-> >>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
-> >>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
-> >>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
-> >>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
-> >>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
-> >>>> 007661c59000-007661ee4000(   2.543 MiB): 2
-> >>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
-> >>>> 0076623e4000-007662837000(   4.324 MiB): 2
-> >>>> 007662837000-0076630f1000(   8.727 MiB): 3
-> >>>> 0076630f1000-007663494000(   3.637 MiB): 2
-> >>>> 007663494000-007663753000(   2.746 MiB): 1
-> >>>> 007663753000-007664251000(  10.992 MiB): 3
-> >>>> 007664251000-0076666fd000(  36.672 MiB): 2
-> >>>> 0076666fd000-007666e73000(   7.461 MiB): 1
-> >>>> 007666e73000-007667c89000(  14.086 MiB): 2
-> >>>> 007667c89000-007667f97000(   3.055 MiB): 0
-> >>>> 007667f97000-007668112000(   1.480 MiB): 1
-> >>>> 007668112000-00766820f000(1012.000 KiB): 0
-> >>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
-> >>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
-> >>>>
-> >>>> 2. a large Android app like Asphalt 9
-> >>>> For this case, basically regions can't split very well, but monitor
-> >>>> works on small vma:
-> >>>>
-> >>>> monitoring_start:             2.220 s
-> >>>> monitoring_end:               2.318 s
-> >>>> monitoring_duration:        98.576 ms
-> >>>> target_id: 0
-> >>>> nr_regions: 15
-> >>>> 000012c00000-0001c301e000(   6.754 GiB): 0
-> >>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
-> >>>> 000371b6c000-000400000000(   2.223 GiB): 0
-> >>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
-> >>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
-> >>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
-> >>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
-> >>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
-> >>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
-> >>>> 0077e863e000-00798e214000(   6.590 GiB): 0
-> >>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
-> >>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
-> >>>> 007c62f00000-007defb19000(   6.199 GiB): 0
-> >>>> 007defb19000-007f794ef000(   6.150 GiB): 0
-> >>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
-> >>>>
-> >>>> As you can see, we have some regions which are very very big and they
-> >>>> are losing the chance to be splitted. But
-> >>>> Damon can still monitor memory access for those small VMA areas very well like:
-> >>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
-> >>> Hi, Barry
-> >>>
-> >>> Actually, we also had found the same problem in redis by ourselves
-> >>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
-> >>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
-> >>> hot areas to been monitored or found by DAMON, likes one or more address
-> >>> choose by DAMON not been accessed during sample period.
-> >>
-> >> Hi Rongwei,
-> >> Thanks  for your comments and thanks for sharing your tools.
-> >>
-> >> I guess the cause might be:
-> >> in case a region is very big like 10GiB, we have only 1MiB hot pages
-> >> in this large region.
-> >> damon will randomly pick one page to sample, but the page has only
-> >> 1MiB/10GiB, thus
-> >> less than 1/10000 chance to hit the hot 1MiB. so probably we need
-> >> 10000 sample periods
-> >> to hit the hot 1MiB in order to split this large region?
-> >>
-> >> @SeongJae, please correct me if I am wrong.
-> >>
-> >>>
-> >>> I'm not sure whether sets init_regions can deal with the above problem,
-> >>> or dynamic choose one or limited number VMA to monitor.
-> >>>
-> >>
-> >> I won't set a limited number of VMA as this will make the damon too hard to use
-> >> as nobody wants to make such complex operations, especially an Android
-> >> app might have more than 8000 VMAs.
-> >>
-> >> I agree init_regions might be the right place to enhance the situation.
-> >>
-> >>> I'm not sure, just share my idea.
-> >>>
-> >>> [1] https://github.com/aliyun/data-profile-tools.git
-> >>
-> >> I suppose this tool is based on damon? How do you finally resolve the problem
-> >> that large anon VMAs can't be splitted?
-> >> Anyway, I will give your tool a try.
-> >
-> > Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
-> > though autogen.sh
-> > runs successfully.
-> >
-> > /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
-> > /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
-> > reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
-> > reference to `wgetch'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
-> > /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
-> > reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
-> > reference to `subwin'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
-> > /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
-> > /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
-> > /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
-> > /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
-> > /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
-> > /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
-> > reference to `wattr_off'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
-> > reference to `wattr_on'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
-> > /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
-> > reference to `wattr_off'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
-> > reference to `mvwprintw'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
-> > reference to `wattr_off'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
-> > /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
-> > reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
-> > reference to `wclear'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
-> > reference to `wrefresh'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
-> > reference to `endwin'
-> > /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
-> > /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
-> > reference to `initscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
-> > reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
-> > reference to `wrefresh'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
-> > reference to `use_default_colors'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
-> > reference to `start_color'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
-> > reference to `keypad'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
-> > reference to `nonl'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
-> > reference to `cbreak'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
-> > reference to `noecho'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
-> > reference to `curs_set'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
-> > reference to `stdscr'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
-> > reference to `mvwprintw'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
-> > reference to `mvwprintw'
-> > /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
-> > reference to `wrefresh'
-> > collect2: error: ld returned 1 exit status
-> > make[1]: *** [Makefile:592: datop] Error 1
-> > make[1]: Leaving directory '/root/data-profile-tools'
-> > make: *** [Makefile:438: all] Error 2
-> Hi, Barry
->
-> Now, the question made me realize that the compatibility of this tool is
-> very poor. I built a ubuntu environment at yesterday, and fixed above
-> errors by:
->
-> diff --git a/configure.ac b/configure.ac
-> index 7922f27..1ed823c 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -21,13 +21,9 @@ AC_PROG_INSTALL
->   AC_CHECK_LIB([numa], [numa_free])
->   AC_CHECK_LIB([pthread], [pthread_create])
->
-> -PKG_CHECK_MODULES([CHECK], [check])
-> -
-> -PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS
-> $ncurses_LIBS"], [
-> -       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
-> -               AC_MSG_ERROR([ncurses is required but was not found])
-> -       ], [])
-> -])
-> +AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
-> +       AC_MSG_ERROR([required library libncurses or ncurses not found])
-> +       ])
->
+this patch is to add the support for vdpa tool in vp_vdpa
+here is the example steps
 
-I can confirm the patch fixed the issue I reported yesterday, thanks!
+modprobe vp_vdpa
+modprobe vhost_vdpa
+echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
+echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
 
-> It works. But I found an another thing will hinder you using this tool.
-> We had developed other patches about DAMON base on upstream. This tool
-> only works well in ourselves kernel(anolis kernel, already open source).
-> Of course, I think it's unnecessary for you to change kernel, just let
-> you know this tool still has this problem.
->
+vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
 
-Although I can't use this tool directly as I am not a NUMA right now,
-~/data-profile-tools # ./datop --help
-Not support NUMA fault stat (DAMON)!
+Signed-off-by: Cindy Lu <lulu@redhat.com>
+---
+ drivers/vdpa/virtio_pci/vp_vdpa.c | 159 ++++++++++++++++++++++++------
+ include/linux/vdpa.h              |   2 +-
+ 2 files changed, 128 insertions(+), 33 deletions(-)
 
-I am still quite interested in your design and the purpose of this project.
-Unfortunately the project seems to be lacking some design doc.
+diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+index cce101e6a940..a3827e496b8f 100644
+--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
++++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+@@ -32,7 +32,7 @@ struct vp_vring {
+ 
+ struct vp_vdpa {
+ 	struct vdpa_device vdpa;
+-	struct virtio_pci_modern_device mdev;
++	struct virtio_pci_modern_device *mdev;
+ 	struct vp_vring *vring;
+ 	struct vdpa_callback config_cb;
+ 	char msix_name[VP_VDPA_NAME_SIZE];
+@@ -41,6 +41,12 @@ struct vp_vdpa {
+ 	int vectors;
+ };
+ 
++struct vp_vdpa_mgmtdev {
++	struct vdpa_mgmt_dev mgtdev;
++	struct virtio_pci_modern_device *mdev;
++	struct vp_vdpa *vp_vdpa;
++};
++
+ static struct vp_vdpa *vdpa_to_vp(struct vdpa_device *vdpa)
+ {
+ 	return container_of(vdpa, struct vp_vdpa, vdpa);
+@@ -50,7 +56,12 @@ static struct virtio_pci_modern_device *vdpa_to_mdev(struct vdpa_device *vdpa)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+ 
+-	return &vp_vdpa->mdev;
++	return vp_vdpa->mdev;
++}
++
++static struct virtio_pci_modern_device *vp_vdpa_to_mdev(struct vp_vdpa *vp_vdpa)
++{
++	return vp_vdpa->mdev;
+ }
+ 
+ static u64 vp_vdpa_get_device_features(struct vdpa_device *vdpa)
+@@ -96,7 +107,7 @@ static int vp_vdpa_get_vq_irq(struct vdpa_device *vdpa, u16 idx)
+ 
+ static void vp_vdpa_free_irq(struct vp_vdpa *vp_vdpa)
+ {
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	struct pci_dev *pdev = mdev->pci_dev;
+ 	int i;
+ 
+@@ -143,7 +154,7 @@ static irqreturn_t vp_vdpa_config_handler(int irq, void *arg)
+ 
+ static int vp_vdpa_request_irq(struct vp_vdpa *vp_vdpa)
+ {
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	struct pci_dev *pdev = mdev->pci_dev;
+ 	int i, ret, irq;
+ 	int queues = vp_vdpa->queues;
+@@ -198,7 +209,7 @@ static int vp_vdpa_request_irq(struct vp_vdpa *vp_vdpa)
+ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	u8 s = vp_vdpa_get_status(vdpa);
+ 
+ 	if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
+@@ -212,7 +223,7 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
+ static int vp_vdpa_reset(struct vdpa_device *vdpa)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	u8 s = vp_vdpa_get_status(vdpa);
+ 
+ 	vp_modern_set_status(mdev, 0);
+@@ -372,7 +383,7 @@ static void vp_vdpa_get_config(struct vdpa_device *vdpa,
+ 			       void *buf, unsigned int len)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	u8 old, new;
+ 	u8 *p;
+ 	int i;
+@@ -392,7 +403,7 @@ static void vp_vdpa_set_config(struct vdpa_device *vdpa,
+ 			       unsigned int len)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	const u8 *p = buf;
+ 	int i;
+ 
+@@ -412,7 +423,7 @@ static struct vdpa_notification_area
+ vp_vdpa_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+-	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
++	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	struct vdpa_notification_area notify;
+ 
+ 	notify.addr = vp_vdpa->vring[qid].notify_pa;
+@@ -454,38 +465,31 @@ static void vp_vdpa_free_irq_vectors(void *data)
+ 	pci_free_irq_vectors(data);
+ }
+ 
+-static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
++static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
++			   const struct vdpa_dev_set_config *add_config)
+ {
+-	struct virtio_pci_modern_device *mdev;
++	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =
++		container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
++
++	struct virtio_pci_modern_device *mdev = vp_vdpa_mgtdev->mdev;
++	struct pci_dev *pdev = mdev->pci_dev;
+ 	struct device *dev = &pdev->dev;
+-	struct vp_vdpa *vp_vdpa;
++	struct vp_vdpa *vp_vdpa = NULL;
+ 	int ret, i;
+ 
+-	ret = pcim_enable_device(pdev);
+-	if (ret)
+-		return ret;
++	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa, dev, &vp_vdpa_ops,
++				    name, false);
+ 
+-	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
+-				    dev, &vp_vdpa_ops, NULL, false);
+ 	if (IS_ERR(vp_vdpa)) {
+ 		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
+ 		return PTR_ERR(vp_vdpa);
+ 	}
+ 
+-	mdev = &vp_vdpa->mdev;
+-	mdev->pci_dev = pdev;
+-
+-	ret = vp_modern_probe(mdev);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Failed to probe modern PCI device\n");
+-		goto err;
+-	}
+-
+-	pci_set_master(pdev);
+-	pci_set_drvdata(pdev, vp_vdpa);
++	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
+ 
+ 	vp_vdpa->vdpa.dma_dev = &pdev->dev;
+ 	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
++	vp_vdpa->mdev = mdev;
+ 
+ 	ret = devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, pdev);
+ 	if (ret) {
+@@ -516,7 +520,8 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	}
+ 	vp_vdpa->config_irq = VIRTIO_MSI_NO_VECTOR;
+ 
+-	ret = vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
++	vp_vdpa->vdpa.mdev = &vp_vdpa_mgtdev->mgtdev;
++	ret = _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to register to vdpa bus\n");
+ 		goto err;
+@@ -529,12 +534,102 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	return ret;
+ }
+ 
++static void vp_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev,
++			    struct vdpa_device *dev)
++{
++	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =
++		container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
++
++	struct vp_vdpa *vp_vdpa = vp_vdpa_mgtdev->vp_vdpa;
++
++	_vdpa_unregister_device(&vp_vdpa->vdpa);
++	vp_vdpa_mgtdev->vp_vdpa = NULL;
++}
++
++static const struct vdpa_mgmtdev_ops vp_vdpa_mdev_ops = {
++	.dev_add = vp_vdpa_dev_add,
++	.dev_del = vp_vdpa_dev_del,
++};
++
++static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
++{
++	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev = NULL;
++	struct vdpa_mgmt_dev *mgtdev;
++	struct device *dev = &pdev->dev;
++	struct virtio_pci_modern_device *mdev = NULL;
++	struct virtio_device_id *mdev_id = NULL;
++	int err;
++
++	vp_vdpa_mgtdev = kzalloc(sizeof(*vp_vdpa_mgtdev), GFP_KERNEL);
++	if (!vp_vdpa_mgtdev)
++		return -ENOMEM;
++
++	mgtdev = &vp_vdpa_mgtdev->mgtdev;
++	mgtdev->ops = &vp_vdpa_mdev_ops;
++	mgtdev->device = dev;
++
++	mdev = kzalloc(sizeof(struct virtio_pci_modern_device), GFP_KERNEL);
++	if (!mdev) {
++		kfree(vp_vdpa_mgtdev);
++		return -ENOMEM;
++	}
++
++	mdev_id = kzalloc(sizeof(struct virtio_device_id), GFP_KERNEL);
++	if (!mdev_id) {
++		kfree(mdev);
++		kfree(vp_vdpa_mgtdev);
++		return -ENOMEM;
++	}
++
++	vp_vdpa_mgtdev->mdev = mdev;
++	mdev->pci_dev = pdev;
++
++	err = pcim_enable_device(pdev);
++	if (err) {
++		goto err;
++	}
++
++	err = vp_modern_probe(mdev);
++	if (err) {
++		dev_err(&pdev->dev, "Failed to probe modern PCI device\n");
++		goto err;
++	}
++
++	mdev_id->device = mdev->id.device;
++	mdev_id->vendor = mdev->id.vendor;
++	mgtdev->id_table = mdev_id;
++
++	mgtdev->max_supported_vqs = vp_modern_get_num_queues(mdev);
++	mgtdev->supported_features = vp_modern_get_features(mdev);
++	pci_set_master(pdev);
++	pci_set_drvdata(pdev, vp_vdpa_mgtdev);
++
++	err = vdpa_mgmtdev_register(mgtdev);
++	if (err) {
++		dev_err(&pdev->dev, "Failed to register vdpa mgmtdev device\n");
++		vp_modern_remove(vp_vdpa_mgtdev->mdev);
++		goto err;
++	}
++
++	return 0;
++err:
++	kfree(mdev_id);
++	kfree(mdev);
++	kfree(vp_vdpa_mgtdev);
++	return err;
++}
++
+ static void vp_vdpa_remove(struct pci_dev *pdev)
+ {
+-	struct vp_vdpa *vp_vdpa = pci_get_drvdata(pdev);
++	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev = pci_get_drvdata(pdev);
++	struct virtio_pci_modern_device *mdev = NULL;
+ 
+-	vp_modern_remove(&vp_vdpa->mdev);
+-	vdpa_unregister_device(&vp_vdpa->vdpa);
++	mdev = vp_vdpa_mgtdev->mdev;
++	vp_modern_remove(mdev);
++	vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
++	kfree(&vp_vdpa_mgtdev->mgtdev.id_table);
++	kfree(mdev);
++	kfree(vp_vdpa_mgtdev);
+ }
+ 
+ static struct pci_driver vp_vdpa_driver = {
+diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+index 721089bb4c84..342c454c1623 100644
+--- a/include/linux/vdpa.h
++++ b/include/linux/vdpa.h
+@@ -462,7 +462,7 @@ struct vdpa_mgmtdev_ops {
+ struct vdpa_mgmt_dev {
+ 	struct device *device;
+ 	const struct vdpa_mgmtdev_ops *ops;
+-	const struct virtio_device_id *id_table;
++	struct virtio_device_id *id_table;
+ 	u64 config_attr_mask;
+ 	struct list_head list;
+ 	u64 supported_features;
+-- 
+2.34.1
 
-And would you like to send patches to lkml regarding what you
-have changed atop DAMON?
-
-> Anyway, the question that you reported was valuable, made me realize
-> what we need to improve next.
->
-> Thanks,
-> Rongwei Wang
-> >
-> >>
-> >>>>
-> >>>> Typical characteristics of a large Android app is that it has
-> >>>> thousands of vma and very large virtual address spaces:
-> >>>> ~/damo # pmap 2550 | wc -l
-> >>>> 8522
-> >>>>
-> >>>> ~/damo # pmap 2550
-> >>>> ...
-> >>>> 0000007992bbe000      4K r----   [ anon ]
-> >>>> 0000007992bbf000     24K rw---   [ anon ]
-> >>>> 0000007fe8753000      4K -----   [ anon ]
-> >>>> 0000007fe8754000   8188K rw---   [ stack ]
-> >>>>    total         36742112K
-> >>>>
-> >>>> Because the whole vma list is too long, I have put the list here for
-> >>>> you to download:
-> >>>> wget http://www.linuxep.com/patches/android-app-vmas
-> >>>>
-> >>>> I can reproduce this problem on other Apps like youtube as well.
-> >>>> I suppose we need to boost the algorithm of splitting regions for this
-> >>>> kind of application.
-> >>>> Any thoughts?
-> >>>>
-> >>
-
-Thanks
-Barry

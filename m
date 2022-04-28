@@ -2,85 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995F4513401
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACCB513426
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346527AbiD1MqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S1346628AbiD1Ms6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346403AbiD1Mpx (ORCPT
+        with ESMTP id S1346607AbiD1Msy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:45:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8205631D;
-        Thu, 28 Apr 2022 05:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651149752; x=1682685752;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=10NxDxRtq67xm2RzbqaoZqNSZgxkaEYpYv/by8QfknU=;
-  b=HhD4vBm3ElNid5/G0DoODGs33bmp1VubGGagpVsfhvXv92Em3N23f/vE
-   7kZ/pSGzDnxPwyAMtDHD2a30OiWocBhFL02I5i9tyB0qr7MMBoR8jc4il
-   RQK+tH56ocDFknDg/HgsWde+/d1Hv8gzWbjbIHFar7WmFJT9coUdHKsZQ
-   zuhpfIjySkFKXZCtFPoPIgxGXEQGGRZF9JRYvA7OyEGy/+WtOkIz50KiF
-   SLCrLY3PNBiSXUz3vNdI7iezL9xdWGk9p2XjfFv0Bq/g2VeK+71hLUWyq
-   5RjLia46gEOpPdJGO2ZvGcnnyE0GXp+pGWWetdIO667Gnbx+nat6ur8JU
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266090828"
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="266090828"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 05:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
-   d="scan'208";a="878612539"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Apr 2022 05:42:30 -0700
-To:     Zixuan Fu <r33s3n6@gmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
-References: <20220428092321.3011983-1-r33s3n6@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2 resend] drivers: usb: host: fix NULL pointer
- dereferences triggered by unhandled errors in xhci_create_rhub_port_array()
-Message-ID: <eb417aeb-92f2-8910-378f-00031fbbcae5@linux.intel.com>
-Date:   Thu, 28 Apr 2022 15:44:29 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Thu, 28 Apr 2022 08:48:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A33286E7;
+        Thu, 28 Apr 2022 05:45:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 50799210F3;
+        Thu, 28 Apr 2022 12:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651149938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M1tER3DtXbQSLD/j7/Uc6zPjmyydRTQWyAvK011v6WQ=;
+        b=kyeLx/umgkcWp7Jye4+E/wli4Ow/64CCjDRg54IG697QSqk7Rw8tksQOhwQhuqMVZ0ZEBC
+        VSjoH4OYH80t/nZOGas/0XnPYKfxbWIlvUVfN8sUs8oEm9EB51wT2qX4byVfwrDcr5GF/C
+        XYXule2uzIGfdvJ7C1+bH4gQTI3B3/s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651149938;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M1tER3DtXbQSLD/j7/Uc6zPjmyydRTQWyAvK011v6WQ=;
+        b=8uOH1k5ym649fa0VViH9DHTNG9RA9bhvgedB1TQqxU/6MEHo4XHi+B6v9gnBQ0bQWP9czQ
+        YCwB2rtjm8fOKfDA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3B2FF2C141;
+        Thu, 28 Apr 2022 12:45:38 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DBDE8A061A; Thu, 28 Apr 2022 14:45:37 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 14:45:37 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v5 1/3] block, bfq: record how many queues are busy
+ in bfq_group
+Message-ID: <20220428124537.c5ve4vs2jk5uzthy@quack3.lan>
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+ <20220428120837.3737765-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220428092321.3011983-1-r33s3n6@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428120837.3737765-2-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.4.2022 12.23, Zixuan Fu wrote:
-> In xhci_create_rhub_port_array(), when rhub->num_ports is zero, 
-> rhub->ports would not be set; when kcalloc_node() fails, rhub->ports
-> would be set to NULL. In these two cases, xhci_create_rhub_port_array()
-> just returns void, and thus its callers are unaware of the error.
+On Thu 28-04-22 20:08:35, Yu Kuai wrote:
+> Prepare to refactor the counting of 'num_groups_with_pending_reqs'.
 > 
-> Then rhub->ports is dereferenced in xhci_usb3_hub_descriptor() or 
-> xhci_usb2_hub_descriptor().
+> Add a counter 'busy_queues' in bfq_group, and update it in
+> bfq_add/del_bfqq_busy().
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-As it turned out this dereference is only an issue if kcalloc_node() failed,
-not if rhub->num_ports is zero.
+Looks good. Feel free to add:
 
-So this is more of a theoretical issue. Not urgent, not for stable.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-So as Greg suggested its probably better to add this fix on top of
-the one roothub support series it conflicts with.
+								Honza
 
-
-Thanks
-Mathias
+> ---
+>  block/bfq-cgroup.c  |  1 +
+>  block/bfq-iosched.h |  2 ++
+>  block/bfq-wf2q.c    | 20 ++++++++++++++++++++
+>  3 files changed, 23 insertions(+)
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 09574af83566..4d516879d9fa 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -557,6 +557,7 @@ static void bfq_pd_init(struct blkg_policy_data *pd)
+>  				   */
+>  	bfqg->bfqd = bfqd;
+>  	bfqg->active_entities = 0;
+> +	bfqg->busy_queues = 0;
+>  	bfqg->online = true;
+>  	bfqg->rq_pos_tree = RB_ROOT;
+>  }
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 978ef5d6fe6a..3847f4ab77ac 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -906,6 +906,7 @@ struct bfq_group_data {
+>   *                   are groups with more than one active @bfq_entity
+>   *                   (see the comments to the function
+>   *                   bfq_bfqq_may_idle()).
+> + * @busy_queues: number of busy bfqqs.
+>   * @rq_pos_tree: rbtree sorted by next_request position, used when
+>   *               determining if two or more queues have interleaving
+>   *               requests (see bfq_find_close_cooperator()).
+> @@ -942,6 +943,7 @@ struct bfq_group {
+>  	struct bfq_entity *my_entity;
+>  
+>  	int active_entities;
+> +	int busy_queues;
+>  
+>  	struct rb_root rq_pos_tree;
+>  
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index f8eb340381cf..d9ff33e0be38 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -218,6 +218,16 @@ static bool bfq_no_longer_next_in_service(struct bfq_entity *entity)
+>  	return false;
+>  }
+>  
+> +static void bfq_inc_busy_queues(struct bfq_queue *bfqq)
+> +{
+> +	bfqq_group(bfqq)->busy_queues++;
+> +}
+> +
+> +static void bfq_dec_busy_queues(struct bfq_queue *bfqq)
+> +{
+> +	bfqq_group(bfqq)->busy_queues--;
+> +}
+> +
+>  #else /* CONFIG_BFQ_GROUP_IOSCHED */
+>  
+>  static bool bfq_update_parent_budget(struct bfq_entity *next_in_service)
+> @@ -230,6 +240,14 @@ static bool bfq_no_longer_next_in_service(struct bfq_entity *entity)
+>  	return true;
+>  }
+>  
+> +static void bfq_inc_busy_queues(struct bfq_queue *bfqq)
+> +{
+> +}
+> +
+> +static void bfq_dec_busy_queues(struct bfq_queue *bfqq)
+> +{
+> +}
+> +
+>  #endif /* CONFIG_BFQ_GROUP_IOSCHED */
+>  
+>  /*
+> @@ -1660,6 +1678,7 @@ void bfq_del_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>  	bfq_clear_bfqq_busy(bfqq);
+>  
+>  	bfqd->busy_queues[bfqq->ioprio_class - 1]--;
+> +	bfq_inc_busy_queues(bfqq);
+>  
+>  	if (bfqq->wr_coeff > 1)
+>  		bfqd->wr_busy_queues--;
+> @@ -1683,6 +1702,7 @@ void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>  
+>  	bfq_mark_bfqq_busy(bfqq);
+>  	bfqd->busy_queues[bfqq->ioprio_class - 1]++;
+> +	bfq_dec_busy_queues(bfqq);
+>  
+>  	if (!bfqq->dispatched)
+>  		if (bfqq->wr_coeff == 1)
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

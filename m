@@ -2,123 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AD9513126
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50137513146
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 12:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243478AbiD1KVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 06:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S234801AbiD1Kae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 06:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244110AbiD1KUd (ORCPT
+        with ESMTP id S233754AbiD1Kac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 06:20:33 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E927E41FA4;
-        Thu, 28 Apr 2022 03:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651140734; x=1682676734;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DN8nmFYcb38IeRXfm3ZKJ3F7KWzA3y9zzhKp5ZnLg5s=;
-  b=V+S/0rfa6bHAlfhdOxrjpTcTheq203+QLXAL5ciLxQpCnqw+KgsqwgoE
-   hdcR7fhxIgE/Fsm8cm1eY07am1znNbTCAyfnkG6UTugNyKDRrOIqAAP8K
-   RUC5iamRP9jakRf/oLefBJlG5OM9K3NspvflEHLdlvfscKTtuhe63S8vZ
-   0Lm49kEPZAs3ETOkStujWaz7B53AXNn40tgt6rNWIfBxrXO6+2aNZjV9t
-   Si1a364zAdl7PBDz7manQ5AvaotyijnfPNjUAeHeEgB3343Y7baFaZCJT
-   bja8me5+aBlRjRi9/ld1UjP1IVhhCDVyXizQnnxirdy1nm440zSPE1xnM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="265082134"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="265082134"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 03:12:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="731348066"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 03:12:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nk185-009FHA-7N;
-        Thu, 28 Apr 2022 13:12:09 +0300
-Date:   Thu, 28 Apr 2022 13:12:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Paul Gortmaker <paul.gortmaker@windriver.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 0/4] platform: allow ATOM PMC code to be optional
-Message-ID: <YmpoeJtFNSyCq1QL@smile.fi.intel.com>
-References: <20220428062430.31010-1-paul.gortmaker@windriver.com>
+        Thu, 28 Apr 2022 06:30:32 -0400
+X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Apr 2022 03:27:16 PDT
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94F53E0D9
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 03:27:16 -0700 (PDT)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1651141165;
+        bh=HDPmPUonfLA18N3RXFt5kVLnPCi7amyMZQTy67dXQwc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P8aClK6Y0g1CHjYNxqx8xMgauuxlIqa6OfRoobMHCHTXG9xjBjjn8tiNM8DUx5OnE
+         xamrBg2R/Lo2vMt/tzrqJ69VyX4+jmZLqlQIZp1qaTrhe8F0DFWiOcweVmwLhLY/2p
+         0upI/wdk01BVAItbB9EvqqedIndHQaK88SmPSiW4=
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org
+Cc:     linux-nvme@lists.infradead.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH] nvme-pci: fix host memory buffer allocation size
+Date:   Thu, 28 Apr 2022 12:19:22 +0200
+Message-Id: <20220428101922.14216-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428062430.31010-1-paul.gortmaker@windriver.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1651141162; l=1214; s=20211113; h=from:subject; bh=HDPmPUonfLA18N3RXFt5kVLnPCi7amyMZQTy67dXQwc=; b=OiwSDn/v0nel5RXEG7W+KHVEVkvgcbHiVXm+yYEAd5FC4Uc0EuTF1Bc4BT4EmxhFl3URAIeaUSar WqhLdmDgADR5QqlPiuV66HUNIO7gCIYQd5x4wifwMCtLXLp4B9q9
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 02:24:26AM -0400, Paul Gortmaker wrote:
-> A few months back I was doing a test build for "defconfig-like" COTS
-> hardware and happened to notice some pmc-atom stuff being built.  Fine,
-> I thought - the defconfig isn't minimal - we all know that - what Kconfig
-> do I use to turn that off?  Well, imagine my surprise when I found out
-> you couldn't turn it [Atom Power Management Controller] code off!
+We want to allocate the smallest possible amount of buffers with the
+largest possible size (1 buffer of size "hmpre").
 
-Turning it off on BayTrail and CherryTrail devices will be devastating
-to the users' experience. And plenty of cheap tablets are exactly made
-on that SoCs.
+Previously we were allocating as many buffers as possible of the smallest
+possible size.
+This also lead to "hmpre" to not be satisifed as not enough buffer slots
+where available.
 
-> Normally we all agree to not use "default y" unless unavoidable, but
-> somehow this was added as "def_bool y" which is even worse ; you can
-> see the Kconfig setting but there is *no* way you can turn it off.
-> 
-> After investigating, I found no reason why the atom code couldn't be
-> opt-out with just minor changes that the original addition overlooked.
-> 
-> And so this series addreses that.  I tried to be sensitive to not
-> break any existing configs in the process, but the defconfig will
-> now intentionally be different and exclude this atom specific code.
-> 
-> Using a defconfig on today's linux-next, here is the delta summary:
-> 
-> $ ./scripts/bloat-o-meter -c ../pmc-atom-pre/vmlinux ../pmc-atom-post/vmlinux|grep add/remove
-> add/remove: 0/410 grow/shrink: 0/7 up/down: 0/-47659 (-47659)
-> add/remove: 0/105 grow/shrink: 0/1 up/down: 0/-6848 (-6848)
-> add/remove: 0/56 grow/shrink: 0/1 up/down: 0/-10155 (-10155)
-> 
-> $ ./scripts/bloat-o-meter -c ../pmc-atom-pre/vmlinux ../pmc-atom-post/vmlinux|grep Total
-> Total: Before=13626994, After=13579335, chg -0.35%
-> Total: Before=3572137, After=3565289, chg -0.19%
-> Total: Before=1235335, After=1225180, chg -0.82%
-> 
-> It is hard to reclaim anything against the inevitable growth in
-> footprint, so I'd say we should be glad to take whatever we can.
-> 
-> Boot tested defconfig on today's linux-next on older non-atom COTS.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
 
-I believe this needs an extensive test done by Hans who possesses a lot of
-problematic devices that require that module to be present.
+Also discussed at https://lore.kernel.org/linux-nvme/f94565db-f217-4a56-83c3-c6429807185c@t-8ch.de/
 
-Note to all your patches, please, use --cc option instead of putting noisy
-lines in the each of the commit messages. For myself I created a "smart"
-script [1] to avoid bothering with that. Feel free to use, modify, send PRs
-back to improve.
+ drivers/nvme/host/pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 3aacf1c0d5a5..0546523cc20b 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -2090,7 +2090,7 @@ static int __nvme_alloc_host_mem(struct nvme_dev *dev, u64 preferred,
+ 
+ static int nvme_alloc_host_mem(struct nvme_dev *dev, u64 min, u64 preferred)
+ {
+-	u64 min_chunk = min_t(u64, preferred, PAGE_SIZE * MAX_ORDER_NR_PAGES);
++	u64 min_chunk = max_t(u64, preferred, PAGE_SIZE * MAX_ORDER_NR_PAGES);
+ 	u64 hmminds = max_t(u32, dev->ctrl.hmminds * 4096, PAGE_SIZE * 2);
+ 	u64 chunk_size;
+ 
 
+base-commit: 46cf2c613f4b10eb12f749207b0fd2c1bfae3088
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.36.0
 

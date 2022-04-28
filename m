@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D133512FAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A186A512FF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 11:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiD1JsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 05:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S230142AbiD1JsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 05:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347517AbiD1Jcy (ORCPT
+        with ESMTP id S1347651AbiD1JeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 05:32:54 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5467CDD9;
-        Thu, 28 Apr 2022 02:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651138180; x=1682674180;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7BV5PZE7OVogZ8OnZ8XL8xlxDzHseF6zynr6xKJK83U=;
-  b=CXo5QWa5l1k4oNzpWYHHVdYZmM5SQ2Rwh+K9/eoBFGhEAqHjTOPmHNrE
-   MtspgnbxHp7v+X2YRzXePdKr71JeWjY5zWkXYlwk8poQrM1Zif8hYa0Gv
-   YWRAd0bcSEdLy/oRtYcyK53Uuy9a8PLWvC6DmTPZqPUDyjeY7VGNWr+Z0
-   h5qDqG0XOFCeSzmzSZx1j5nbpcAY+KN6Jup/iNnICVtJHtBT3JVOnkzc7
-   m1BCtoeidSa7sb93/4yIAoL0NAEt4PbgvIg49K5LTajaxD2rSKOcLT080
-   X3qK4kEmd5P+qbryzskbXk2rBfg66GUIRvvtoeWR47pobeU80E3meGxgB
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="246139709"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="246139709"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 02:29:39 -0700
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="618047838"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 02:29:29 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nk0Si-009ERe-Hp;
-        Thu, 28 Apr 2022 12:29:24 +0300
-Date:   Thu, 28 Apr 2022 12:29:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Allen Pais <apais@linux.microsoft.com>,
-        olivier.dautricourt@orolia.com, sr@denx.de, vkoul@kernel.org,
-        keescook@chromium.org, linux-hardening@vger.kernel.org,
-        ludovic.desroches@microchip.com, tudor.ambarus@microchip.com,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
-        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
-        leoyang.li@nxp.com, zw@zh-kernel.org, wangzhou1@hisilicon.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com, afaerber@suse.de,
-        mani@kernel.org, logang@deltatee.com, sanju.mehta@amd.com,
-        daniel@zonque.org, haojian.zhuang@gmail.com,
-        robert.jarzmik@free.fr, agross@kernel.org,
-        bjorn.andersson@linaro.org, krzysztof.kozlowski@linaro.org,
-        green.wan@sifive.com, orsonzhai@gmail.com, baolin.wang7@gmail.com,
-        zhang.lyra@gmail.com, patrice.chotard@foss.st.com,
-        linus.walleij@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-Message-ID: <YmpedDjzZXz2t6NS@smile.fi.intel.com>
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com>
- <353023ba-d506-5d45-be68-df2025074ed6@kernel.org>
- <3ee366a7-e61f-e513-aa2f-12e8d5316f3c@embeddedor.com>
+        Thu, 28 Apr 2022 05:34:04 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1417FF70;
+        Thu, 28 Apr 2022 02:30:50 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id e189so4722665oia.8;
+        Thu, 28 Apr 2022 02:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nngAnZlymkzX4sUAsT0146zEMaA0AO4c4fvL3wIWwWk=;
+        b=l18ijNANJ5b5fye/QNxz87z7+j8z02w6R0swX/JLw63krCb6g192GEyjHjzQP5aj5N
+         Oa7DRdFJTdgQbLmCBFuvVrJFSZZCa7u2cofzzcnvLPI61NzdxgLO4fNj9EEFzE61wyUQ
+         mam1iVGXHTeLeNvTESRsLv1awkl9hwK0Yu75xPx/hPIc21cKILj4Dqif7rntW15dNRgM
+         PSyyh4uu+e/czfoBlGa26euNzMwWhk9eRd+G+bd56WOPNdgv9VmPtDcQw6SHIEQqXUoP
+         z/HArI89LLF3VoUNX4cm9BKXp7vKYNCsN+7V/IEXzt52nWFAlin61yEZXfhUw/uPoXAY
+         vqKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nngAnZlymkzX4sUAsT0146zEMaA0AO4c4fvL3wIWwWk=;
+        b=P0BstbZ2lKHZA8ahZk+TV1hKq3zcLrs8qF6v3iu/YHA6+NDLUqkT9jRPGNsTYwd1Tw
+         a7T/eOR5uFjn1QQwXWvAgzVWH7bWvi32haQvsNk4uV9m1QWo++Cdpxwzwe00/PzAmOOQ
+         oOPonXtOq62j9NgiZ5tT2MtcIqEDEreet9J3ZNN5GmFmTObzCW7HOVC0JvhD5hVRWwxe
+         0m/VLTZKU+o0Wk4lGgnuyWEjV7mrYtOR5dB7H1a6wdrGrKcEAKUVA7b/skSRZ1KbTFGV
+         TtGYlDM52hKxHZd2WMtK9m+x3jwFiJNW8e4VYcUjqrprvKUlgyU48hgbUkGhmx0HR0Cr
+         oISg==
+X-Gm-Message-State: AOAM532n4bFSz6cGQqrg+I1YS9SezAkDzqkg7NA3QjSPna3ULzfTI+lf
+        2tpqCwaDZnLb32flglZ+C6LQWSgTLKT+b3KRpV/qvTDbLO8=
+X-Google-Smtp-Source: ABdhPJxBPaN24K5DEsdqrFfIEtSaWdXHM9IEjTWzdDQ+b3wWrScNMI+uGO0dfJS0cpYEZLaEWLJNqGcvxnc4xNMAtpc=
+X-Received: by 2002:a05:6808:1246:b0:2c9:efa5:7209 with SMTP id
+ o6-20020a056808124600b002c9efa57209mr20058605oiv.62.1651138249908; Thu, 28
+ Apr 2022 02:30:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ee366a7-e61f-e513-aa2f-12e8d5316f3c@embeddedor.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220427080330.40136-1-gene.chen.richtek@gmail.com>
+ <20220427080330.40136-3-gene.chen.richtek@gmail.com> <YmmQpg/Hh6qTNhj2@robh.at.kernel.org>
+In-Reply-To: <YmmQpg/Hh6qTNhj2@robh.at.kernel.org>
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+Date:   Thu, 28 Apr 2022 17:30:38 +0800
+Message-ID: <CAE+NS34SawC_pdTm=eDmp6zq1zLZgEaA+_s_xZOc4LuFHDV1iQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: mfd: Add bindings for the Mediatek MT6360
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gene Chen <gene_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 02:55:22PM -0500, Gustavo A. R. Silva wrote:
-> On 4/25/22 10:56, Krzysztof Kozlowski wrote:
-> > On 19/04/2022 23:16, Allen Pais wrote:
+Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B44=E6=9C=8828=E6=97=A5 =
+=E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=882:51=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Wed, Apr 27, 2022 at 04:03:30PM +0800, Gene Chen wrote:
+> > From: Gene Chen <gene_chen@richtek.com>
+> >
+> > Add bindings for the Mediatek MT6360
+> >
+> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> > ---
+> >  .../devicetree/bindings/mfd/mt6360.yaml       | 258 ++++++++++++++++++
+> >  1 file changed, 258 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/mt6360.yaml
+>
+> As I mentioned, I applied your previous version. Please send a patch on
+> top of it adding the child nodes.
+>
+> Rob
 
-...
+Hi Rob,
 
-> > > Github: https://github.com/KSPP/linux/issues/94
-> > 
-> > 3. No external references to some issue management systems, change-ids
-> > etc. Lore link could work, but it's not relevant here, I guess.
-> 
-> I think the link to the KSPP issue tracker should stay. If something,
-> just changing 'Github:' to 'Link:'
-
-BugLink: would be more explicit.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+    I try to sync latest code and can't find the mt6360 led fixed patch.
+    Could you please tell me how to get and apply previous version?
+    And should I add a tags in commit message to tell which previous
+commit I based on?

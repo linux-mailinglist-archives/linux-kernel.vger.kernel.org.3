@@ -2,37 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505425133B6
+	by mail.lfdr.de (Postfix) with ESMTP id 980BF5133B7
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346280AbiD1Mck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S1346294AbiD1Mcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346236AbiD1Mch (ORCPT
+        with ESMTP id S1346291AbiD1Mcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:32:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4C1BAF1EA
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:29:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8A691474;
-        Thu, 28 Apr 2022 05:29:20 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F341C3F73B;
-        Thu, 28 Apr 2022 05:29:19 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH] firmware: arm_scmi: Set clock latency to U32_MAX if it is not supported
-Date:   Thu, 28 Apr 2022 13:29:13 +0100
-Message-Id: <20220428122913.1654821-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.36.0
+        Thu, 28 Apr 2022 08:32:47 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E37DAF1DE;
+        Thu, 28 Apr 2022 05:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651148973; x=1682684973;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gYMv6mhRM0NW8wmhbrz7A30S7YrVvPdbhJi1KdJ+nbs=;
+  b=yEcBT6F1+xYnXKQ+G7xAVLglS7pdi5RnQW7Znoy2ahnCOP3WBNkYOtFn
+   7uT0mDES9oSwOmGuiqszO08JFc0667yMiXKlpyqBAGVONC8cnu8uCEaeo
+   XXKiVvUBM9+rzFULc3lmXtBL3Li6GyWbOvEme7IE/0qRQpSdfZJuwVVN0
+   s=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 28 Apr 2022 05:29:33 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 05:29:32 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 05:29:32 -0700
+Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
+ 2022 05:29:28 -0700
+Message-ID: <da3c667c-cec3-58d8-b06f-b4e79796a07b@quicinc.com>
+Date:   Thu, 28 Apr 2022 17:59:25 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv12 7/9] asm-generic/io: Add logging support for MMIO
+ accessors
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <will@kernel.org>
+References: <cover.1651139070.git.quic_saipraka@quicinc.com>
+ <6673a2e73d3dd4c7aa01fee9b26cc4a52176ba7a.1651139070.git.quic_saipraka@quicinc.com>
+ <YmpxxW5CZjMVrzF0@kroah.com>
+ <6688ffa2-ec14-9126-1296-6180bab3e1d6@quicinc.com>
+ <YmqCYZwHoRuKtFSN@kroah.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <YmqCYZwHoRuKtFSN@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,48 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the spec, the clock_enable_delay is the worst case latency
-incurred by the platform to enable the clock. The value of 0 indicates
-that the platform doesn't support the same and must be considered as
-maximum latency for practical purposes.
+On 4/28/2022 5:32 PM, Greg KH wrote:
+> On Thu, Apr 28, 2022 at 04:51:49PM +0530, Sai Prakash Ranjan wrote:
+>> On 4/28/2022 4:21 PM, Greg KH wrote:
+>>> On Thu, Apr 28, 2022 at 03:25:30PM +0530, Sai Prakash Ranjan wrote:
+>>>> Add logging support for MMIO high level accessors such as read{b,w,l,q}
+>>>> and their relaxed versions to aid in debugging unexpected crashes/hangs
+>>>> caused by the corresponding MMIO operation.
+>>>>
+>>>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>>>> ---
+>>>>    include/asm-generic/io.h | 82 ++++++++++++++++++++++++++++++++++++++--
+>>>>    1 file changed, 78 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+>>>> index 7ce93aaf69f8..99090722cb4b 100644
+>>>> --- a/include/asm-generic/io.h
+>>>> +++ b/include/asm-generic/io.h
+>>>> @@ -10,6 +10,7 @@
+>>>>    #include <asm/page.h> /* I/O is all done through memory accesses */
+>>>>    #include <linux/string.h> /* for memset() and memcpy() */
+>>>>    #include <linux/types.h>
+>>>> +#include <linux/instruction_pointer.h>
+>>>>    #ifdef CONFIG_GENERIC_IOMAP
+>>>>    #include <asm-generic/iomap.h>
+>>>> @@ -61,6 +62,35 @@
+>>>>    #define __io_par(v)     __io_ar(v)
+>>>>    #endif
+>>>> +#if IS_ENABLED(CONFIG_TRACE_MMIO_ACCESS) && !(defined(__DISABLE_TRACE_MMIO__))
+>>> Shouldn't you document __DISABLE_TRACE_MMIO__ somewhere?  It's not even
+>>> in the changelog.  Put a big comment above this for what is is for and
+>>> how to use it.  Otherwise you will forget all about this in 6 months :)
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>> Didn't you ask me to split the patch to the one actually adding the flag and the one using it.
+> Yes, and isn't this the commit that adds the flag?  Or was that on an
+> earlier one that I missed?
+>
+> Ah, it's in patch 6/9
+>
+> But you should also document it here in the .h file, otherwise the only
+> place it is described is in some random kvm Makefile that no one will
+> ever notice :)
+>
+>
 
-Currently the value of 0 is assigned as is and is propogated to the clock
-framework which can assume that the clock can support atomic enable operation.
+Sure it makes sense, will add it.
 
-Fixes: 18f295b758b2 ("firmware: arm_scmi: Add support for clock_enable_latency")
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/firmware/arm_scmi/clock.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
-index 7a031afff389..2460979eabd2 100644
---- a/drivers/firmware/arm_scmi/clock.c
-+++ b/drivers/firmware/arm_scmi/clock.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/limits.h>
- #include <linux/sort.h>
- 
- #include "protocols.h"
-@@ -128,12 +129,13 @@ static int scmi_clock_attributes_get(const struct scmi_protocol_handle *ph,
- 
- 	ret = ph->xops->do_xfer(ph, t);
- 	if (!ret) {
-+		u32 latency;
- 		attributes = le32_to_cpu(attr->attributes);
- 		strlcpy(clk->name, attr->name, SCMI_MAX_STR_SIZE);
- 		/* Is optional field clock_enable_latency provided ? */
- 		if (t->rx.len == sizeof(*attr))
--			clk->enable_latency =
--				le32_to_cpu(attr->clock_enable_latency);
-+			latency = le32_to_cpu(attr->clock_enable_latency);
-+		clk->enable_latency = latency ? : U32_MAX;
- 	}
- 
- 	ph->xops->xfer_put(ph, t);
--- 
-2.36.0
-
+Thanks,
+Sai

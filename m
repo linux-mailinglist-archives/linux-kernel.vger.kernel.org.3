@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9547E51332A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB71B513324
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241494AbiD1MAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S1345952AbiD1MBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345850AbiD1L7u (ORCPT
+        with ESMTP id S1345832AbiD1MBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:59:50 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9788B22;
-        Thu, 28 Apr 2022 04:56:33 -0700 (PDT)
-X-UUID: 223a3ca3df354217a7b1a2fea560289f-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b3597e68-7571-4e0b-b7eb-82f56f96b7fb,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:95
-X-CID-INFO: VERSION:1.1.4,REQID:b3597e68-7571-4e0b-b7eb-82f56f96b7fb,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:95
-X-CID-META: VersionHash:faefae9,CLOUDID:2d5a0c2f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:865956aaf4d8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 223a3ca3df354217a7b1a2fea560289f-20220428
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1107191612; Thu, 28 Apr 2022 19:56:26 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 28 Apr 2022 19:56:24 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 28 Apr 2022 19:56:24 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 19:56:24 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <p.zabel@pengutronix.de>,
-        <angelogioacchino.delregno@collabora.com>,
-        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
-        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH V5 16/16] arm64: dts: mediatek: Add infra #reset-cells property for MT8195
-Date:   Thu, 28 Apr 2022 19:56:19 +0800
-Message-ID: <20220428115620.13512-17-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
-References: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
+        Thu, 28 Apr 2022 08:01:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6794890B4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:57:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A3661474;
+        Thu, 28 Apr 2022 04:57:56 -0700 (PDT)
+Received: from [10.1.31.24] (e122027.cambridge.arm.com [10.1.31.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC3FB3F73B;
+        Thu, 28 Apr 2022 04:57:54 -0700 (PDT)
+Message-ID: <0b3136fa-8fd1-5496-812e-c03e430da84a@arm.com>
+Date:   Thu, 28 Apr 2022 12:57:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm/plane: Move range check for format_count earlier
+Content-Language: en-GB
+To:     Liviu Dudau <liviu.dudau@arm.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211203102815.38624-1-steven.price@arm.com>
+ <YaoWxOk0hCuVZpoz@e110455-lin.cambridge.arm.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <YaoWxOk0hCuVZpoz@e110455-lin.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We will use mediatek clock reset as infracfg_ao reset instead of
-ti-syscon. To support this, remove property of ti reset and add
-property of #reset-cells for mediatek clock reset.
+On 03/12/2021 13:08, Liviu Dudau wrote:
+> On Fri, Dec 03, 2021 at 10:28:15AM +0000, Steven Price wrote:
+>> While the check for format_count > 64 in __drm_universal_plane_init()
+>> shouldn't be hit (it's a WARN_ON), in its current position it will then
+>> leak the plane->format_types array and fail to call
+>> drm_mode_object_unregister() leaking the modeset identifier. Move it to
+>> the start of the function to avoid allocating those resources in the
+>> first place.
+>>
+>> Signed-off-by: Steven Price <steven.price@arm.com>
+> 
+> Well spotted!
+> 
+> Reviewed-by: Liviu Dudau <liviu.dudau@arm.com>
+> 
+> I'm going to wait to see if anyone else has any comments before I'll merge this into
+> drm-misc-fixes (or should it be drm-misc-next-fixes?)
 
-Fixes: 4c78814a1f46ac0 (arm64: dts: Add mediatek SoC mt8195 and evaluation board)
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+Gentle ping! I think we've probably waited long enough. Are you going to
+merge this or would you like me to?
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index b57e620c2c72..8e5ac11b19f1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -10,7 +10,6 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
--#include <dt-bindings/reset/ti-syscon.h>
- 
- / {
- 	compatible = "mediatek,mt8195";
-@@ -295,17 +294,7 @@
- 			compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
--
--			infracfg_rst: reset-controller {
--				compatible = "ti,syscon-reset";
--				#reset-cells = <1>;
--				ti,reset-bits = <
--					0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* pcie */
--					0x120 0  0x124 0  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x730 10 0x734 10 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x150 5  0x154 5  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* svs gpu */
--				>;
--			};
-+			#reset-cells = <1>;
- 		};
- 
- 		pericfg: syscon@10003000 {
--- 
-2.18.0
+Thanks,
+
+Steve
+
+> Best regards,
+> Liviu
+> 
+>> ---
+>>  drivers/gpu/drm/drm_plane.c | 14 +++++++-------
+>>  1 file changed, 7 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
+>> index 82afb854141b..fd0bf90fb4c2 100644
+>> --- a/drivers/gpu/drm/drm_plane.c
+>> +++ b/drivers/gpu/drm/drm_plane.c
+>> @@ -249,6 +249,13 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+>>  	if (WARN_ON(config->num_total_plane >= 32))
+>>  		return -EINVAL;
+>>  
+>> +	/*
+>> +	 * First driver to need more than 64 formats needs to fix this. Each
+>> +	 * format is encoded as a bit and the current code only supports a u64.
+>> +	 */
+>> +	if (WARN_ON(format_count > 64))
+>> +		return -EINVAL;
+>> +
+>>  	WARN_ON(drm_drv_uses_atomic_modeset(dev) &&
+>>  		(!funcs->atomic_destroy_state ||
+>>  		 !funcs->atomic_duplicate_state));
+>> @@ -270,13 +277,6 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+>>  		return -ENOMEM;
+>>  	}
+>>  
+>> -	/*
+>> -	 * First driver to need more than 64 formats needs to fix this. Each
+>> -	 * format is encoded as a bit and the current code only supports a u64.
+>> -	 */
+>> -	if (WARN_ON(format_count > 64))
+>> -		return -EINVAL;
+>> -
+>>  	if (format_modifiers) {
+>>  		const uint64_t *temp_modifiers = format_modifiers;
+>>  
+>> -- 
+>> 2.25.1
+>>
+> 
 

@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF8E512B4A
+	by mail.lfdr.de (Postfix) with ESMTP id 2A050512B48
 	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243494AbiD1GP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        id S243527AbiD1GQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiD1GP6 (ORCPT
+        with ESMTP id S243496AbiD1GQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:15:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506FD20F7F;
-        Wed, 27 Apr 2022 23:12:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04ABFB82B2B;
-        Thu, 28 Apr 2022 06:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A50BC385A9;
-        Thu, 28 Apr 2022 06:12:39 +0000 (UTC)
-Message-ID: <4b7a3d71-629b-56d6-fdc7-d07682390fd2@xs4all.nl>
-Date:   Thu, 28 Apr 2022 08:12:37 +0200
+        Thu, 28 Apr 2022 02:16:06 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6589C21257
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:12:51 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g20so4301019edw.6
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wm9yPzx6czvlBQnyn3z1i+GsN8IoN86F4R1Y0e4QEhY=;
+        b=n/LreBNeA3e/lXfk7FHUfsy5nVyum/m07hDh6cxldE7ONcu+HRW5ztN6LbpQCj5V5m
+         tmZY52qDNngIQ5yz3h2taja2hObSXWVYjYX7eMaPYxUnoDBe22CbecP3do6EqFWTSNJ+
+         dwjaYy2Gg/xLWxKbOms6Qrs1r2UPzk2FEZOermql+E8g2pEUd2kfMv4lGZYuJTEAuz3V
+         lqUWYPmA4igW9D4k2OKMtXdvUmCUrwUS+0MiwgiDcNq9BQPjBX/9GlffVR5MKNt3o/Mm
+         /YPOX1VEW8s8KGJViAyNASO1aIjXmmkGIFAK75v2xJsmBNAhyyPQ87LaQayDrvaQ2YaZ
+         ZSkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wm9yPzx6czvlBQnyn3z1i+GsN8IoN86F4R1Y0e4QEhY=;
+        b=uMk+G2e7S5+aZFfxoYrKjTznMMVB/BhtFpPmZc+H0OJ9FFXUgmA4Ci15UF4TS7nSmg
+         6jZBpBtt98BdB+ad/j5u/VWbVk8tCUjWTpH2QoYSE/Bvy+8OTrnUWAgVf1T29PJBNauI
+         /EWUFefJz8hU1brmUDb7W1xmcpHNadYWBnGfkNMQ8FatgpboE0cKozWfYLeSxB6fCXza
+         wBN5eNzMm5NlCT0oBBTHb3/k0AElX+2JfWfREmUPRtuXlccZN3277FFGQ13L79w2E7Ep
+         cKBsA4LSVYAVZHKL+XOWf7Ix7PVtXdH2CRFdvZhca4wTXnC1orOubna87AoaoSfmgC7C
+         w5vw==
+X-Gm-Message-State: AOAM533zgqFfNZ8vW9pkcXi9BbaK2FK0pnI8tnv5s4uIx+651GdHY0si
+        2gEcjXDcMABqZI/EBzcMCi9Y5w==
+X-Google-Smtp-Source: ABdhPJwKkUBJFO2jKXoH1LLDlOF7hO+RlyZgidW/QcXeirH3zxkeAeFtvMT8SSM+f7aIRaqx0OyVLA==
+X-Received: by 2002:a05:6402:11c9:b0:425:ef56:a1dd with SMTP id j9-20020a05640211c900b00425ef56a1ddmr18383244edw.143.1651126370001;
+        Wed, 27 Apr 2022 23:12:50 -0700 (PDT)
+Received: from [192.168.0.159] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id t19-20020aa7d4d3000000b0042617ba63c2sm933624edr.76.2022.04.27.23.12.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 23:12:49 -0700 (PDT)
+Message-ID: <9248da4f-ca04-82f0-2840-a20797c25d2a@linaro.org>
+Date:   Thu, 28 Apr 2022 08:12:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 03/24] media: videobuf2-v4l2: Warn on holding buffers
- without support
+Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
+ only compatible
 Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-kernel@vger.kernel.org
-References: <20220426125751.108293-1-nicolas.dufresne@collabora.com>
- <20220426125751.108293-4-nicolas.dufresne@collabora.com>
- <CAAFQd5C6qmxmn4y=cx5Mtb3p8vcTAFm6Jfc1vMAE8+x9iwhDZg@mail.gmail.com>
- <a78920881b2ffaf1fba04bc9ebeda591ec0dfd87.camel@ndufresne.ca>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <a78920881b2ffaf1fba04bc9ebeda591ec0dfd87.camel@ndufresne.ca>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+References: <20220427203026.828183-1-swboyd@chromium.org>
+ <20220427203026.828183-2-swboyd@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220427203026.828183-2-swboyd@chromium.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,80 +81,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 17:08, Nicolas Dufresne wrote:
-> Le mercredi 27 avril 2022 à 13:31 +0900, Tomasz Figa a écrit :
->> Hi Nicolas, Sebastian,
->>
->> On Tue, Apr 26, 2022 at 9:58 PM Nicolas Dufresne
->> <nicolas.dufresne@collabora.com> wrote:
->>>
->>> From: Sebastian Fricke <sebastian.fricke@collabora.com>
->>>
->>> Using V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF flag without specifying the
->>> subsystem flag VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF, results in
->>> silently ignoring it.
->>> Warn the user via a debug print when the flag is requested but ignored
->>> by the videobuf2 framework.
->>>
->>> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->>> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->>> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->>> ---
->>>  drivers/media/common/videobuf2/videobuf2-v4l2.c | 7 ++++++-
->>>  1 file changed, 6 insertions(+), 1 deletion(-)
->>>
->>
->> Thanks for the patch. Please see my comments inline.
->>
->>> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
->>> index 6edf4508c636..812c8d1962e0 100644
->>> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
->>> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
->>> @@ -329,8 +329,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
->>>                  */
->>>                 vbuf->flags &= ~V4L2_BUF_FLAG_TIMECODE;
->>>                 vbuf->field = b->field;
->>> -               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF))
->>> +               if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF)) {
->>> +                       if (vbuf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF)
->>> +                               dprintk(q, 1,
->>> +                                       "Request holding buffer (%d), unsupported on output queue\n",
->>> +                                       b->index);
->>
->> I wonder if we shouldn't just fail such a QBUF operation. Otherwise
->> the application would get unexpected behavior from the kernel.
->> Although it might be too late to do it now if there are applications
->> that rely on this implicit ignore...
+On 27/04/2022 22:30, Stephen Boyd wrote:
+> If the device is a detachable, this device won't have a matrix keyboard
+> but it may have some button switches, e.g. volume buttons and power
+> buttons. Let's add a more specific compatible for this type of device
+> that indicates to the OS that there are only switches and no matrix
+> keyboard present.
 > 
-> In the context of this patchset, the statu quo seems to be the logical thing to
-> do. We can raise this up in a separate thread. The side effect is of course
-> confusing for developers, but it is hard for me to tell if a hard failure may
-> break an existing software.
-
-I am leaning towards returning an error as well. It makes no sense to try
-to hold on to a buffer when this is not supported.
-
-I also thought that it should be enough to rely on the core to clear the
-flag upon return if it isn't supported, but looking through the vb2 core code
-it looks like we're not clearing unknown flags at all, so running this for
-older kernels that do not support holding at all will not clear the flag
-either.
-
-The handling for flags in vb2 can be improved, I think I'll take a look at
-that myself.
-
-I plan to merge this series soon, but will skip this patch for now.
-
-Regards,
-
-	Hans
-
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: <devicetree@vger.kernel.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  .../bindings/input/google,cros-ec-keyb.yaml          | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-> regards,
-> Nicolas
-> 
->>
->> Best regards,
->> Tomasz
-> 
+> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> index e8f137abb03c..edc1194d558d 100644
+> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> @@ -15,14 +15,20 @@ description: |
+>    Google's ChromeOS EC Keyboard is a simple matrix keyboard
+>    implemented on a separate EC (Embedded Controller) device. It provides
+>    a message for reading key scans from the EC. These are then converted
+> -  into keycodes for processing by the kernel.
+> +  into keycodes for processing by the kernel. This device also supports
+> +  switches/buttons like power and volume buttons.
+>  
+>  allOf:
+>    - $ref: "/schemas/input/matrix-keymap.yaml#"
+>  
+>  properties:
+>    compatible:
+> -    const: google,cros-ec-keyb
+> +    oneOf:
+> +      - items:
+> +          - const: google,cros-ec-keyb-switches
+> +          - const: google,cros-ec-keyb
+> +      - items:
+> +          - const: google,cros-ec-keyb
+>  
 
+In such case matrix-keymap properties are not valid, right? The
+matrix-keymap should not be referenced, IOW, you need to move allOf
+below "required" and add:
+if:not:...then: $ref: "/schemas/input/matrix-keymap.yaml
+
+Best regards,
+Krzysztof

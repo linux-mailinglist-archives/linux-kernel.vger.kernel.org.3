@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A94F513A3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EAC513A38
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 18:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350313AbiD1Qrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 12:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S1350321AbiD1Qru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 12:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350282AbiD1Qrk (ORCPT
+        with ESMTP id S1350298AbiD1Qrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Apr 2022 12:47:40 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CCBB1AB0;
-        Thu, 28 Apr 2022 09:44:24 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso4695701wmh.2;
-        Thu, 28 Apr 2022 09:44:24 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D34B2471;
+        Thu, 28 Apr 2022 09:44:25 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so3350950wmn.1;
+        Thu, 28 Apr 2022 09:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+OlFWTbdzDsv9ToIL/R1210CLuDsQYdcda5qA/W19rg=;
-        b=GbfNWAoyM2WevW9mfDQ6B0o1VRET7tZQdeALnKgHhzIXdqO2GH/F6b/gSelnw0iPJH
-         zTqVqE7u662EulQa/xmQHrq9g0IQt4BHv/nFna4/zucTVpg6qBB2RBq8gU1Q5BgyLYOW
-         yxjlFqYFozouqqROp8zejWKsmPSq908+Ryyv3FVbmEuVlcp8A5rVX73QcDcSduIGheyr
-         XPQwVMmzDYjyWzdThF6euRPQjQzW/3ubwWUpX+xdEJdQ1+l5YIt2y9jM6/4p84UskSZP
-         IWBO5kpAhR21fzktbxTuFi+ohIkcCc9zR90Ab8YEwLsSav5e4MVgA4fhy4JB/3IoXEX/
-         iKeA==
+        bh=JuNqfwwfmDk9L2CQQ3VU8TN8eMid01qpUgPNixDf+K8=;
+        b=g3z4I7Fw5b659c5VtcJceBdug81emUa4YI1iovyAo23Luwq6y2GMYmVdoEV/5nesYM
+         hXY178GXxuV6ablOJe91n81w60+Z0X2RYnsC8LTEIQaVzA65lVwQTuOFE5xVx0WCU63W
+         /pMpAVpRAc2bGntkk9RkCP0se6LedH0wgFeWSxJG6wlyH8jLaegNCo95osveQo9YZQiv
+         T4TwHdNoONiUlzYEwIOrpul2JAWU58zD085s7dmg5P8mmGn1wv+O/1O+gGmOlDUCp0Eq
+         1MieGyt1kluVV8Ee6jtTXpPpU/pfpDTJsX4dkzQ8upfhmyFPw4brNEVZCEfI2RQg6SjG
+         F5pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+OlFWTbdzDsv9ToIL/R1210CLuDsQYdcda5qA/W19rg=;
-        b=s718pZuAkh5nBfGcZa6LR2Ep7x0I6c5TvWaU1kmDse76klA3OqWTLNZ3Dxq8nlMAzo
-         b5zeMhq+Uwu0t2a0unEPRY0JxV0HOUpV9t0DEjW492xacVUZ6XELoCNCYwvC9VkEVz/K
-         UHX2g1FiNL9JpJfEDd7EHtbbpnK9EQMeKSqAg1gaIK/UTVyIjE9+3/Bi4il8lABNr3kq
-         vYAcox9Wrqzp1sgXkA1lZDi9+evmDNPNsl8QTW28yNYhNZ4cixcm9VQZwLkoARTINvPq
-         R6erUJ578nhi+vAQ3EuVE0p5E95SLGBh6Oe4jYKuZB7PWAX8Y6dRrYmsqxli0iPyY/3f
-         tSqQ==
-X-Gm-Message-State: AOAM531ay3jf6yqucYeLQ2HFMO6Y3INp2d2HbJ14isJ+jiuwb+5JtSGm
-        T9r6v559Bg9fwWnKDCo1udY=
-X-Google-Smtp-Source: ABdhPJxGuFltFCqoZbiB2CsQt6fjOfYm865SzHsHBG1LG0V6RbJwHElh59p0lhayuwW11XVzzcDwLA==
-X-Received: by 2002:a7b:cb48:0:b0:394:b64:8b88 with SMTP id v8-20020a7bcb48000000b003940b648b88mr5624216wmj.183.1651164262619;
-        Thu, 28 Apr 2022 09:44:22 -0700 (PDT)
+        bh=JuNqfwwfmDk9L2CQQ3VU8TN8eMid01qpUgPNixDf+K8=;
+        b=rwefHhei2mPAnH5e2ISej8E/Huc0GvSjlcmry+uSgBuHJwMqPI6F3EvqLPcInltSOE
+         /7yM0BpOS7gHQsZcDbMkI9Bca3x0hgf9n/n/Q+P8y7ZGLSjT4s276ta3YCqXbEl06c2k
+         tbidG+U+MLRmmx2vcifeiflh8ivGXGYkfGOtsutqW1flFdETqTX/Pm6fOQOgwmO6/nx4
+         UTpWRyyZ9QUS4vB8wHcOwnOGVqZU/9wlpJ0iOMjDziHhGoslLcDyXW1x4sIF2jIM3duY
+         XF+ckaVi5aVEzrsDCCfauSC1KfoTVMON0GtqtnW9VU6r2fmSpv8ywWxKcyy+5+f/RJ94
+         JUmw==
+X-Gm-Message-State: AOAM533z34EWEtfsU3jxfA7FzNW3zaYKg+q/tPaLSVJ+lk2YqehGF4TV
+        1xbvmeGREVxIclGVAOBAweg=
+X-Google-Smtp-Source: ABdhPJw+7+C9AZ30tLDTZTu27v5j+y7iZiAb28HCV7CxuuLmfavVlYAq0TEgcX7hehr0Xt1+Pwj74w==
+X-Received: by 2002:a05:600c:3b15:b0:393:eb14:bb5 with SMTP id m21-20020a05600c3b1500b00393eb140bb5mr21007048wms.129.1651164264321;
+        Thu, 28 Apr 2022 09:44:24 -0700 (PDT)
 Received: from localhost (92.40.203.206.threembb.co.uk. [92.40.203.206])
-        by smtp.gmail.com with ESMTPSA id f189-20020a1c38c6000000b0038ff83b9792sm4453035wma.43.2022.04.28.09.44.21
+        by smtp.gmail.com with ESMTPSA id f189-20020a1c38c6000000b0038ff83b9792sm4453035wma.43.2022.04.28.09.44.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 09:44:22 -0700 (PDT)
+        Thu, 28 Apr 2022 09:44:23 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     sboyd@kernel.org, mturquette@baylibre.com,
         tsbogend@alpha.franken.de
 Cc:     paulburton@kernel.org, paul@crapouillou.net,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v2 2/3] clk: ingenic: Mark critical clocks in Ingenic SoCs
-Date:   Thu, 28 Apr 2022 17:44:53 +0100
-Message-Id: <20220428164454.17908-3-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 3/3] mips: ingenic: Do not manually reference the CPU clock
+Date:   Thu, 28 Apr 2022 17:44:54 +0100
+Message-Id: <20220428164454.17908-4-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220428164454.17908-1-aidanmacdonald.0x0@gmail.com>
 References: <20220428164454.17908-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -71,246 +71,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider CPU, L2 cache, and memory clocks as critical to prevent
-them -- and the parent clocks -- from being automatically gated,
-since nothing calls clk_get() on these clocks.
-
-Gating the CPU clock hangs the processor, and gating memory makes
-external DRAM inaccessible. Normal kernel code can't hope to deal
-with either situation so those clocks have to be critical.
-
-The L2 cache is required only if caches are running, and could be
-gated if the kernel takes care to flush and disable caches before
-gating the clock. There's no mechanism to do this, and probably no
-reason to do it, so it's simpler to mark the L2 cache as critical.
+It isn't necessary to manually walk the device tree and enable
+the CPU clock anymore. The CPU and other necessary clocks are
+now flagged as critical in the clock driver, which accomplishes
+the same thing in a more declarative fashion.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/clk/ingenic/jz4725b-cgu.c | 10 ++++++++++
- drivers/clk/ingenic/jz4740-cgu.c  | 10 ++++++++++
- drivers/clk/ingenic/jz4760-cgu.c  | 10 ++++++++++
- drivers/clk/ingenic/jz4770-cgu.c  |  5 +++++
- drivers/clk/ingenic/jz4780-cgu.c  | 15 +++++++++++++++
- drivers/clk/ingenic/x1000-cgu.c   | 15 +++++++++++++++
- drivers/clk/ingenic/x1830-cgu.c   | 11 +++++++++++
- 7 files changed, 76 insertions(+)
+ arch/mips/generic/board-ingenic.c | 26 --------------------------
+ 1 file changed, 26 deletions(-)
 
-diff --git a/drivers/clk/ingenic/jz4725b-cgu.c b/drivers/clk/ingenic/jz4725b-cgu.c
-index 15d61793f53b..590e9c85cb25 100644
---- a/drivers/clk/ingenic/jz4725b-cgu.c
-+++ b/drivers/clk/ingenic/jz4725b-cgu.c
-@@ -87,6 +87,11 @@ static const struct ingenic_cgu_clk_info jz4725b_cgu_clocks[] = {
+diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
+index 3f44f14bdb33..c422bbc890ed 100644
+--- a/arch/mips/generic/board-ingenic.c
++++ b/arch/mips/generic/board-ingenic.c
+@@ -131,36 +131,10 @@ static const struct platform_suspend_ops ingenic_pm_ops __maybe_unused = {
  
- 	[JZ4725B_CLK_CCLK] = {
- 		"cclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling the CPU clock or any parent clocks will hang the
-+		 * system; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4725B_CLK_PLL, -1, -1, -1 },
- 		.div = {
- 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-@@ -114,6 +119,11 @@ static const struct ingenic_cgu_clk_info jz4725b_cgu_clocks[] = {
+ static int __init ingenic_pm_init(void)
+ {
+-	struct device_node *cpu_node;
+-	struct clk *cpu0_clk;
+-	int ret;
+-
+ 	if (boot_cpu_type() == CPU_XBURST) {
+ 		if (IS_ENABLED(CONFIG_PM_SLEEP))
+ 			suspend_set_ops(&ingenic_pm_ops);
+ 		_machine_halt = ingenic_halt;
+-
+-		/*
+-		 * Unconditionally enable the clock for the first CPU.
+-		 * This makes sure that the PLL that feeds the CPU won't be
+-		 * stopped while the kernel is running.
+-		 */
+-		cpu_node = of_get_cpu_node(0, NULL);
+-		if (!cpu_node) {
+-			pr_err("Unable to get CPU node\n");
+-		} else {
+-			cpu0_clk = of_clk_get(cpu_node, 0);
+-			if (IS_ERR(cpu0_clk)) {
+-				pr_err("Unable to get CPU0 clock\n");
+-				return PTR_ERR(cpu0_clk);
+-			}
+-
+-			ret = clk_prepare_enable(cpu0_clk);
+-			if (ret) {
+-				pr_err("Unable to enable CPU0 clock\n");
+-				return ret;
+-			}
+-		}
+ 	}
  
- 	[JZ4725B_CLK_MCLK] = {
- 		"mclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling MCLK or its parents will render DRAM
-+		 * inaccessible; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4725B_CLK_PLL, -1, -1, -1 },
- 		.div = {
- 			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
-diff --git a/drivers/clk/ingenic/jz4740-cgu.c b/drivers/clk/ingenic/jz4740-cgu.c
-index 43ffb62c42bb..3e0a30574ebb 100644
---- a/drivers/clk/ingenic/jz4740-cgu.c
-+++ b/drivers/clk/ingenic/jz4740-cgu.c
-@@ -102,6 +102,11 @@ static const struct ingenic_cgu_clk_info jz4740_cgu_clocks[] = {
- 
- 	[JZ4740_CLK_CCLK] = {
- 		"cclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling the CPU clock or any parent clocks will hang the
-+		 * system; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4740_CLK_PLL, -1, -1, -1 },
- 		.div = {
- 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-@@ -129,6 +134,11 @@ static const struct ingenic_cgu_clk_info jz4740_cgu_clocks[] = {
- 
- 	[JZ4740_CLK_MCLK] = {
- 		"mclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling MCLK or its parents will render DRAM
-+		 * inaccessible; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4740_CLK_PLL, -1, -1, -1 },
- 		.div = {
- 			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
-diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
-index 8fdd383560fb..ecd395ac8a28 100644
---- a/drivers/clk/ingenic/jz4760-cgu.c
-+++ b/drivers/clk/ingenic/jz4760-cgu.c
-@@ -143,6 +143,11 @@ static const struct ingenic_cgu_clk_info jz4760_cgu_clocks[] = {
- 
- 	[JZ4760_CLK_CCLK] = {
- 		"cclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling the CPU clock or any parent clocks will hang the
-+		 * system; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4760_CLK_PLL0, },
- 		.div = {
- 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-@@ -175,6 +180,11 @@ static const struct ingenic_cgu_clk_info jz4760_cgu_clocks[] = {
- 	},
- 	[JZ4760_CLK_MCLK] = {
- 		"mclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling MCLK or its parents will render DRAM
-+		 * inaccessible; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4760_CLK_PLL0, },
- 		.div = {
- 			CGU_REG_CPCCR, 12, 1, 4, 22, -1, -1, 0,
-diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
-index 7ef91257630e..6ae1740367f9 100644
---- a/drivers/clk/ingenic/jz4770-cgu.c
-+++ b/drivers/clk/ingenic/jz4770-cgu.c
-@@ -149,6 +149,11 @@ static const struct ingenic_cgu_clk_info jz4770_cgu_clocks[] = {
- 
- 	[JZ4770_CLK_CCLK] = {
- 		"cclk", CGU_CLK_DIV,
-+		/*
-+		 * Disabling the CPU clock or any parent clocks will hang the
-+		 * system; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4770_CLK_PLL0, },
- 		.div = {
- 			CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1, 0,
-diff --git a/drivers/clk/ingenic/jz4780-cgu.c b/drivers/clk/ingenic/jz4780-cgu.c
-index e357c228e0f1..b1dadc0a5e75 100644
---- a/drivers/clk/ingenic/jz4780-cgu.c
-+++ b/drivers/clk/ingenic/jz4780-cgu.c
-@@ -341,12 +341,22 @@ static const struct ingenic_cgu_clk_info jz4780_cgu_clocks[] = {
- 
- 	[JZ4780_CLK_CPU] = {
- 		"cpu", CGU_CLK_DIV,
-+		/*
-+		 * Disabling the CPU clock or any parent clocks will hang the
-+		 * system; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4780_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CLOCKCONTROL, 0, 1, 4, 22, -1, -1 },
- 	},
- 
- 	[JZ4780_CLK_L2CACHE] = {
- 		"l2cache", CGU_CLK_DIV,
-+		/*
-+		 * The L2 cache clock is critical if caches are enabled and
-+		 * disabling it or any parent clocks will hang the system.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { JZ4780_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CLOCKCONTROL, 4, 1, 4, -1, -1, -1 },
- 	},
-@@ -380,6 +390,11 @@ static const struct ingenic_cgu_clk_info jz4780_cgu_clocks[] = {
- 
- 	[JZ4780_CLK_DDR] = {
- 		"ddr", CGU_CLK_MUX | CGU_CLK_DIV,
-+		/*
-+		 * Disabling DDR clock or its parents will render DRAM
-+		 * inaccessible; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { -1, JZ4780_CLK_SCLKA, JZ4780_CLK_MPLL, -1 },
- 		.mux = { CGU_REG_DDRCDR, 30, 2 },
- 		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 3c4d5a77ccbd..b2ce3fb83f54 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -251,6 +251,11 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_CPU] = {
- 		"cpu", CGU_CLK_DIV | CGU_CLK_GATE,
-+		/*
-+		 * Disabling the CPU clock or any parent clocks will hang the
-+		 * system; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 30 },
-@@ -258,6 +263,11 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_L2CACHE] = {
- 		"l2cache", CGU_CLK_DIV,
-+		/*
-+		 * The L2 cache clock is critical if caches are enabled and
-+		 * disabling it or any parent clocks will hang the system.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
- 	},
-@@ -290,6 +300,11 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_DDR] = {
- 		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		/*
-+		 * Disabling DDR clock or its parents will render DRAM
-+		 * inaccessible; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { -1, X1000_CLK_SCLKA, X1000_CLK_MPLL, -1 },
- 		.mux = { CGU_REG_DDRCDR, 30, 2 },
- 		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
-diff --git a/drivers/clk/ingenic/x1830-cgu.c b/drivers/clk/ingenic/x1830-cgu.c
-index e01ec2dc7a1a..0fd46e50a513 100644
---- a/drivers/clk/ingenic/x1830-cgu.c
-+++ b/drivers/clk/ingenic/x1830-cgu.c
-@@ -225,6 +225,7 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
- 
- 	[X1830_CLK_CPU] = {
- 		"cpu", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { X1830_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
- 		.gate = { CGU_REG_CLKGR1, 15 },
-@@ -232,6 +233,11 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
- 
- 	[X1830_CLK_L2CACHE] = {
- 		"l2cache", CGU_CLK_DIV,
-+		/*
-+		 * The L2 cache clock is critical if caches are enabled and
-+		 * disabling it or any parent clocks will hang the system.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { X1830_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
- 	},
-@@ -264,6 +270,11 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
- 
- 	[X1830_CLK_DDR] = {
- 		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		/*
-+		 * Disabling DDR clock or its parents will render DRAM
-+		 * inaccessible; mark it critical.
-+		 */
-+		.flags = CLK_IS_CRITICAL,
- 		.parents = { -1, X1830_CLK_SCLKA, X1830_CLK_MPLL, -1 },
- 		.mux = { CGU_REG_DDRCDR, 30, 2 },
- 		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
+ 	return 0;
 -- 
 2.35.1
 

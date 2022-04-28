@@ -2,77 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05DD513BA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA142513BB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351151AbiD1Sjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S1351168AbiD1SlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241580AbiD1Sjp (ORCPT
+        with ESMTP id S232896AbiD1SlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:39:45 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88382C11E;
-        Thu, 28 Apr 2022 11:36:29 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:3d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 01F0637A;
-        Thu, 28 Apr 2022 18:36:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 01F0637A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1651170989; bh=XPxBsOv3MHPpWdaP+RHY5sGiWu6noKHQxvTjG9bbEUU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HuF2gwly9ra7GSKC9Ok41SvRF0iV8QH8/JUjflHrj+kqMK9VZwdzo0+t3SyEfpHMb
-         cPEH44p+bF2X6bC9rawA95KHX/CqhKB8dB9wfmrDT43yfz1I1zvoWEh2aWzUXn/Arw
-         PINF+cuEyRmWEVBKo1yXGPuArok+2NbIcNKjfIzWxjn3MAG6oXApAFQYQa5So7trI/
-         YygHgHtWAHTioDUwJUOhwGHwFudxGmNvoRvIGPIvwYgYiluolilCNy9+xOBJYTk7Zq
-         co9QBJqyr3X8DU4X7rIF0UTnTU/zna/VCGtdE35PjGLTO7+jG4KcWfKic123HpYIkF
-         ryqIS9C7SZJcA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, trivial@kernel.org
-Subject: Re: [PATCH] Documentation: add missing angle bracket in cgroup-v2
- doc Tejun Heo <tj@kernel.org>
-In-Reply-To: <20220422164526.3464306-1-jsavitz@redhat.com>
-References: <20220422164526.3464306-1-jsavitz@redhat.com>
-Date:   Thu, 28 Apr 2022 12:36:28 -0600
-Message-ID: <87pml15a37.fsf@meer.lwn.net>
+        Thu, 28 Apr 2022 14:41:17 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F0BBE9E5;
+        Thu, 28 Apr 2022 11:37:59 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:50494)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nk91Y-006tgx-5X; Thu, 28 Apr 2022 12:37:56 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36160 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nk91X-00GPuy-5E; Thu, 28 Apr 2022 12:37:55 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        tj@kernel.org, linux-pm@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <20220426225211.308418-6-ebiederm@xmission.com>
+        <20220427141018.GA17421@redhat.com>
+        <874k2ea9q4.fsf@email.froward.int.ebiederm.org>
+        <87zgk67fdd.fsf@email.froward.int.ebiederm.org>
+        <YmrSijTc6HIv4sAG@hirez.programming.kicks-ass.net>
+Date:   Thu, 28 Apr 2022 13:37:47 -0500
+In-Reply-To: <YmrSijTc6HIv4sAG@hirez.programming.kicks-ass.net> (Peter
+        Zijlstra's message of "Thu, 28 Apr 2022 19:44:42 +0200")
+Message-ID: <8735hxxddw.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-XM-SPF: eid=1nk91X-00GPuy-5E;;;mid=<8735hxxddw.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18yrR4biUCy745ffIUgk1VZ5ZnVJz1nEjE=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Peter Zijlstra <peterz@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 398 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 15 (3.8%), b_tie_ro: 13 (3.3%), parse: 1.19
+        (0.3%), extract_message_metadata: 14 (3.4%), get_uri_detail_list: 1.59
+        (0.4%), tests_pri_-1000: 11 (2.7%), tests_pri_-950: 1.47 (0.4%),
+        tests_pri_-900: 1.24 (0.3%), tests_pri_-90: 61 (15.4%), check_bayes:
+        59 (14.9%), b_tokenize: 8 (1.9%), b_tok_get_all: 9 (2.3%),
+        b_comp_prob: 3.3 (0.8%), b_tok_touch_all: 34 (8.5%), b_finish: 1.48
+        (0.4%), tests_pri_0: 274 (68.7%), check_dkim_signature: 0.55 (0.1%),
+        check_dkim_adsp: 2.7 (0.7%), poll_dns_idle: 2.4 (0.6%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 14 (3.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
+ siglock held
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joel Savitz <jsavitz@redhat.com> writes:
+Peter Zijlstra <peterz@infradead.org> writes:
 
-> Trivial addition of missing closing angle backet.
+> On Wed, Apr 27, 2022 at 09:47:10AM -0500, Eric W. Biederman wrote:
 >
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> Hmm.  If we have the following process tree.
+>> 
+>>     A
+>>      \
+>>       B
+>>        \
+>>         C
+>> 
+>> Process A, B, and C are all in the same process group.
+>> Process A and B are setup to receive SIGCHILD when
+>> their process stops.
+>> 
+>> Process C traces process A.
+>> 
+>> When a sigstop is delivered to the group we can have:
+>> 
+>> Process B takes siglock(B) siglock(A) to notify the real_parent
+>> Process C takes siglock(C) siglock(B) to notify the real_parent
+>> Process A takes siglock(A) siglock(C) to notify the tracer
+>> 
+>> If they all take their local lock at the same time there is
+>> a deadlock.
+>> 
+>> I don't think the restriction that you can never ptrace anyone
+>> up the process tree is going to fly.  So it looks like I am back to the
+>> drawing board for this one.
 >
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 69d7a6983f78..38aa01939e1e 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1881,7 +1881,7 @@ IO Latency Interface Files
->    io.latency
->  	This takes a similar format as the other controllers.
->  
-> -		"MAJOR:MINOR target=<target time in microseconds"
-> +		"MAJOR:MINOR target=<target time in microseconds>"
->  
-Applied, thanks.
+> I've not had time to fully appreciate the nested locking here, but if it
+> is possible to rework things to always take both locks at the same time,
+> then it would be possible to impose an arbitrary lock order on things
+> and break the cycle that way.
+>
+> That is, simply order the locks by their heap address or something:
+>
+> static void double_siglock_irq(struct sighand *sh1, struct sighand2 *sh2)
+> {
+> 	if (sh1 > sh2)
+> 		swap(sh1, sh2)
+>
+> 	spin_lock_irq(&sh1->siglock);
+> 	spin_lock_nested(&sh2->siglock, SINGLE_DEPTH_NESTING);
+> }
 
-jon
+You know it might be.  Especially given that the existing code is
+already dropping siglock and grabbing tasklist_lock.
+
+It would take a potentially triple lock function to lock
+the task it's real_parent and it's tracer (aka parent).
+
+That makes this possible to consider is that notifying the ``parents''
+is a fundamental part of the operation so we know we are going to
+need the lock so we can move it up.
+
+Throw in a pinch of lock_task_sighand and the triple lock function
+gets quite interesting.
+
+It is certainly worth trying, and I will.
+
+Eric
+

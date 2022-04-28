@@ -2,92 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E2D5134E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72875134FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347128AbiD1NXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
+        id S233418AbiD1NZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245525AbiD1NXE (ORCPT
+        with ESMTP id S231500AbiD1NZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:23:04 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C4D94188;
-        Thu, 28 Apr 2022 06:19:48 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A8C9A1F4536D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651151987;
-        bh=Y6r9EqSsbh3Dq7eavxiGIUP0pwnIFPvRrJcfm6QBnE8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HEe0sCPkAkBWKZhzzUzZdry5WIJSxY16gc5VTbcu1Iyil/jW5t1lblH6ZqHf2Lt8C
-         tiuM8VRrJwFmYeZkQN2rfaI6SPqlYGF6+1F2S2pOkpVBM8ovivkkJNQco9jS8F3BM5
-         3YxtmrigFaC8xRHW1vhw9UdHMzkzmj7oiUTSvUD5ov/B/RhGRkOnZRIN4qOogvE6S2
-         Cxun4IVDrPxULNPup5cydHWqsrr61aCcOX208KEOdAfFsGonglKjlezDsgnTQpXH7i
-         sdlrxLr7Lw8QEkT/MmxCyRu6PrYFUEYJY5ou/byucvEqeX5chpKT/5PtuQF+m5UJdj
-         KTe6P5o2Fpz3Q==
-Message-ID: <88ddf1ba-9395-cd40-53f5-25d1d2f9ef9e@collabora.com>
-Date:   Thu, 28 Apr 2022 15:19:44 +0200
+        Thu, 28 Apr 2022 09:25:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DAAABF5C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651152113; x=1682688113;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uy8zSGdRbmu9x6oWV3PwTp0oEkokUG8PpRwrZP5QiPc=;
+  b=Lf18CP0tCW5h7vfsY1loFzINNxoOqdYSZhO6YrVWt9xSiG7Oa9p+ouH7
+   myc8f+PNRD0LMh+K5hr89S/jzmBlxdJmqL6HroHR5FJf/Xf2QXL9LLJ1l
+   wzNC2V7f0NdWpYpogapD670MzRocl6YCeukrRpZYd2U5iBL0SscWB1ODX
+   mMuGp9wXIlVZM/LjpFURwxBMZCvWiyu63iRyTn8OL9Abwqs51EvqKA3P/
+   bSC6H0UU+lei6Q4WW0ysQhY5PXne2vcKOgO6yzO2va4cnXiWwTG2Yd7ql
+   yH/J6BBKBiBtPvGkOVE/43obchqUEkjdpuzK2Tomz3Bb+DJpypk9bja6V
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266101894"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="266101894"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 06:21:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="541279049"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2022 06:21:51 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nk45f-0005OQ-1H;
+        Thu, 28 Apr 2022 13:21:51 +0000
+Date:   Thu, 28 Apr 2022 21:21:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/stringop-overflow 1/1]
+ drivers/gpu/drm/i915/intel_pm.c:3106:9: error: 'intel_read_wm_latency'
+ accessing 16 bytes in a region of size 10
+Message-ID: <202204282134.8kzHtDU9-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4, 1/1] drm/mediatek: add lut diff flag for new gamma
- hardware support
-Content-Language: en-US
-To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
-References: <20220428085829.15855-1-yongqiang.niu@mediatek.com>
- <20220428085829.15855-2-yongqiang.niu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220428085829.15855-2-yongqiang.niu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/04/22 10:58, Yongqiang Niu ha scritto:
-> From: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
-> 
-> mt8183 gamma module usage is different with before soc,
-> gamma odd(index start from 0) lut value set to hardware
-> register should be
-> the difference of current lut value with last lut value.
-> 
-> for example, chrome os user space set lut
-> like this(only r chanel for example):
-> 2 4 6 8 10 12.
-> 1) mt8183 gamma driver should set the gamma lut to hardware
-> register like this:
-> 2 [2] 6 [2] 10 [2]
-> the value with [] is the difference value
-> 2)gamma hardware process display data with original lut
-> 
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/stringop-overflow
+head:   841e98dddf647582547543eba0a1e3e8c8f8db9c
+commit: 841e98dddf647582547543eba0a1e3e8c8f8db9c [1/1] Makefile: Enable -Wstringop-overflow
+config: x86_64-randconfig-c002 (https://download.01.org/0day-ci/archive/20220428/202204282134.8kzHtDU9-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=841e98dddf647582547543eba0a1e3e8c8f8db9c
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/stringop-overflow
+        git checkout 841e98dddf647582547543eba0a1e3e8c8f8db9c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/i915/intel_pm.c: In function 'ilk_setup_wm_latency':
+>> drivers/gpu/drm/i915/intel_pm.c:3106:9: error: 'intel_read_wm_latency' accessing 16 bytes in a region of size 10 [-Werror=stringop-overflow=]
+    3106 |         intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/intel_pm.c:3106:9: note: referencing argument 2 of type 'u16 *' {aka 'short unsigned int *'}
+   drivers/gpu/drm/i915/intel_pm.c:2861:13: note: in a call to function 'intel_read_wm_latency'
+    2861 | static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
 
+vim +/intel_read_wm_latency +3106 drivers/gpu/drm/i915/intel_pm.c
+
+03981c6ebec4fc7 Ville Syrjälä   2018-11-14  3103  
+bb7265197a86bd6 Ville Syrjälä   2016-10-31  3104  static void ilk_setup_wm_latency(struct drm_i915_private *dev_priv)
+53615a5e129534f Ville Syrjälä   2013-08-01  3105  {
+bb7265197a86bd6 Ville Syrjälä   2016-10-31 @3106  	intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+53615a5e129534f Ville Syrjälä   2013-08-01  3107  
+53615a5e129534f Ville Syrjälä   2013-08-01  3108  	memcpy(dev_priv->wm.spr_latency, dev_priv->wm.pri_latency,
+53615a5e129534f Ville Syrjälä   2013-08-01  3109  	       sizeof(dev_priv->wm.pri_latency));
+53615a5e129534f Ville Syrjälä   2013-08-01  3110  	memcpy(dev_priv->wm.cur_latency, dev_priv->wm.pri_latency,
+53615a5e129534f Ville Syrjälä   2013-08-01  3111  	       sizeof(dev_priv->wm.pri_latency));
+53615a5e129534f Ville Syrjälä   2013-08-01  3112  
+5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3113  	intel_fixup_spr_wm_latency(dev_priv, dev_priv->wm.spr_latency);
+fd6b8f43c9e9a3a Tvrtko Ursulin  2016-10-14  3114  	intel_fixup_cur_wm_latency(dev_priv, dev_priv->wm.cur_latency);
+26ec971e302c53b Ville Syrjälä   2013-08-01  3115  
+5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3116  	intel_print_wm_latency(dev_priv, "Primary", dev_priv->wm.pri_latency);
+5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3117  	intel_print_wm_latency(dev_priv, "Sprite", dev_priv->wm.spr_latency);
+5db9401983ac7bf Tvrtko Ursulin  2016-10-13  3118  	intel_print_wm_latency(dev_priv, "Cursor", dev_priv->wm.cur_latency);
+e95a2f7509f5219 Ville Syrjälä   2014-05-08  3119  
+93e7e61eb448318 Lucas De Marchi 2021-04-12  3120  	if (DISPLAY_VER(dev_priv) == 6) {
+bb7265197a86bd6 Ville Syrjälä   2016-10-31  3121  		snb_wm_latency_quirk(dev_priv);
+03981c6ebec4fc7 Ville Syrjälä   2018-11-14  3122  		snb_wm_lp3_irq_quirk(dev_priv);
+03981c6ebec4fc7 Ville Syrjälä   2018-11-14  3123  	}
+53615a5e129534f Ville Syrjälä   2013-08-01  3124  }
+53615a5e129534f Ville Syrjälä   2013-08-01  3125  
+
+:::::: The code at line 3106 was first introduced by commit
+:::::: bb7265197a86bd68078825723b572599fcc60d2b drm/i915: Pass dev_priv to ilk_setup_wm_latency() & co.
+
+:::::: TO: Ville Syrjälä <ville.syrjala@linux.intel.com>
+:::::: CC: Ville Syrjälä <ville.syrjala@linux.intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

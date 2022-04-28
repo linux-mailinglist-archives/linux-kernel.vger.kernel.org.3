@@ -2,119 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBCE51321D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07574513248
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344393AbiD1LLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
+        id S1345485AbiD1LVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiD1LLI (ORCPT
+        with ESMTP id S230231AbiD1LVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:11:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81661BE32
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:07:54 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KptBD5mJczhYfc;
-        Thu, 28 Apr 2022 19:07:32 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 19:07:52 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 19:07:52 +0800
-Subject: Re: [PATCH v2] arm64: add the printing of tpidr_elx in __show_regs()
-To:     Will Deacon <will@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "James Morse" <james.morse@arm.com>
-References: <20220316062408.1113-1-thunder.leizhen@huawei.com>
- <20220428102156.GA14123@willie-the-truck>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4c956c17-6e13-37a1-7da3-b2c8243c2c01@huawei.com>
-Date:   Thu, 28 Apr 2022 19:07:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 28 Apr 2022 07:21:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8016C5B3F8;
+        Thu, 28 Apr 2022 04:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651144666; x=1682680666;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YSpDATXy/AEnQCqNpDDdMNwfxMpapZmzIYX8S6XiNuc=;
+  b=UNCEw+9uLr5Fn5MbiSDzlVu+rRI5AlBUArUaSc3XLcD79z9Vu0VA6EdT
+   XKy6vO8vqDM5NavO1+sawdmeTAZ4Ltc5POW1WXvyUH4Z8Zq7+yW9nQBq0
+   hOVsLuvqoAxrfzKdS8cPmbWY+Pm0WoGNSag89B0zSre+ykrBj+VQm77Uy
+   KXNI1KNZamSMaLbJgwkafRugh4O17n0hSQZU1MHDcQb7+xR1J3MXGG2PR
+   AHAiucQ5hWqwooEThuqV8ygn7skZqk9cvy1I5kkpew8zdhz0ee4VuXy6m
+   NusN34vx6l785y2/OyNiLhGcCK0Cun6mFX8jEDnRzIpZeaMx2XPAixr2k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266069735"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="266069735"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:17:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="682532655"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2022 04:17:43 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23SBHfQK002736;
+        Thu, 28 Apr 2022 12:17:42 +0100
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: [PATCH] bpftool: Use sysfs vmlinux when dumping BTF by ID
+Date:   Thu, 28 Apr 2022 13:08:40 +0200
+Message-Id: <20220428110839.111042-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <20220428102156.GA14123@willie-the-truck>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, dumping almost all BTFs specified by id requires
+using the -B option to pass the base BTF. For most cases
+the vmlinux BTF sysfs path should work.
 
+This patch simplifies dumping by ID usage by attempting to
+use vmlinux BTF from sysfs, if the first try of loading BTF by ID
+fails with certain conditions.
 
-On 2022/4/28 18:21, Will Deacon wrote:
-> On Wed, Mar 16, 2022 at 02:24:08PM +0800, Zhen Lei wrote:
->> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
->> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
->> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
->> pcpu access. However, when performing reverse execution based on the
->> registers and the memory contents in kdump, this information is sometimes
->> required if there is a pcpu access.
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  arch/arm64/kernel/process.c | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->> v1 --> v2:
->> Directly print the tpidr_elx register of the current exception level.
->> Avoid coupling with the implementation of 'my_cpu_offset'.
->>
->> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
->> index 5369e649fa79ff8..738932e6fa4e947 100644
->> --- a/arch/arm64/kernel/process.c
->> +++ b/arch/arm64/kernel/process.c
->> @@ -216,6 +216,17 @@ void __show_regs(struct pt_regs *regs)
->>  	show_regs_print_info(KERN_DEFAULT);
->>  	print_pstate(regs);
->>  
->> +	switch (read_sysreg(CurrentEL)) {
-> 
-> This should use is_kernel_in_hyp_mode() to detect if we're running at El2.
-> 
->> +	case CurrentEL_EL1:
->> +		printk("tpidr_el1 : %016llx\n", read_sysreg(TPIDR_EL1));
->> +		break;
->> +	case CurrentEL_EL2:
->> +		printk("tpidr_el2 : %016llx\n", read_sysreg(TPIDR_EL2));
->> +		break;
->> +	default:
->> +		break;
->> +	}
-> 
-> I think this path can be triggered directly from usermode, so we really
-> shouldn't be printing raw kernel virtual addresses here.
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+---
+ tools/bpf/bpftool/btf.c | 35 ++++++++++++++++++++++++++---------
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
-I run echo c > /proc/sysrq-trigger and didn't trigger this path, but maybe
-there's another way. Analysis from the other side, except for the instruction
-address, all generic registers r0-r31 is output as raw. There's also an
-opportunity to contain the instruction address.
-
-So how about:
-+       if (oops_in_progress)
-+               printk("tpidr : %016lx\n", __my_cpu_offset);
-
-> 
-> Will
-> .
-> 
-
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index a2c665beda87..557f65e2de5c 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -459,6 +459,22 @@ static int dump_btf_c(const struct btf *btf,
+ 	return err;
+ }
+ 
++static const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
++
++static struct btf *get_vmlinux_btf_from_sysfs(void)
++{
++	struct btf *base;
++
++	base = btf__parse(sysfs_vmlinux, NULL);
++	if (libbpf_get_error(base)) {
++		p_err("failed to parse vmlinux BTF at '%s': %ld\n",
++		      sysfs_vmlinux, libbpf_get_error(base));
++		base = NULL;
++	}
++
++	return base;
++}
++
+ static int do_dump(int argc, char **argv)
+ {
+ 	struct btf *btf = NULL, *base = NULL;
+@@ -536,18 +552,11 @@ static int do_dump(int argc, char **argv)
+ 		NEXT_ARG();
+ 	} else if (is_prefix(src, "file")) {
+ 		const char sysfs_prefix[] = "/sys/kernel/btf/";
+-		const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
+ 
+ 		if (!base_btf &&
+ 		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
+-		    strcmp(*argv, sysfs_vmlinux) != 0) {
+-			base = btf__parse(sysfs_vmlinux, NULL);
+-			if (libbpf_get_error(base)) {
+-				p_err("failed to parse vmlinux BTF at '%s': %ld\n",
+-				      sysfs_vmlinux, libbpf_get_error(base));
+-				base = NULL;
+-			}
+-		}
++		    strcmp(*argv, sysfs_vmlinux))
++			base = get_vmlinux_btf_from_sysfs();
+ 
+ 		btf = btf__parse_split(*argv, base ?: base_btf);
+ 		err = libbpf_get_error(btf);
+@@ -593,6 +602,14 @@ static int do_dump(int argc, char **argv)
+ 	if (!btf) {
+ 		btf = btf__load_from_kernel_by_id_split(btf_id, base_btf);
+ 		err = libbpf_get_error(btf);
++		if (err == -EINVAL && !base_btf) {
++			btf__free(base);
++			base = get_vmlinux_btf_from_sysfs();
++			p_info("Warning: valid base BTF was not specified with -B option, falling back on standard base BTF (sysfs vmlinux)");
++			btf = btf__load_from_kernel_by_id_split(btf_id, base);
++			err = libbpf_get_error(btf);
++		}
++
+ 		if (err) {
+ 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
+ 			goto done;
 -- 
-Regards,
-  Zhen Lei
+2.35.1
+

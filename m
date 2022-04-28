@@ -2,70 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116BC512A0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A9B512A3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 05:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241736AbiD1Dij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 23:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S232721AbiD1Dyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 23:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242342AbiD1DiW (ORCPT
+        with ESMTP id S232533AbiD1Dyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 23:38:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B24C11167;
-        Wed, 27 Apr 2022 20:35:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 915A9B82AEB;
-        Thu, 28 Apr 2022 03:35:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE6CC385A9;
-        Thu, 28 Apr 2022 03:35:04 +0000 (UTC)
-From:   Greg Ungerer <gerg@linux-m68k.org>
-To:     linux-m68k@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, dalias@libc.org,
-        Greg Ungerer <gerg@linux-m68k.org>
-Subject: [PATCH 4/4] m68knommu: allow elf_fdpic loader to be selected
-Date:   Thu, 28 Apr 2022 13:33:19 +1000
-Message-Id: <20220428033319.239341-5-gerg@linux-m68k.org>
+        Wed, 27 Apr 2022 23:54:51 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 328968CCFE
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 20:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KuxEd
+        V3VH9xLOauPnO8hQxJT//rN1wAsa32d+NJKS2M=; b=YS9yUDmb3MmpqD8SYVMao
+        b5ytGLlndleexJLDm1aU4/Td5y/nScq6bDa7lPBr7FkeFBO0FKQ50+g7v++iLqBi
+        Z3sL5qPInPYKIN3J0qdMdS6vt0jJuB4fvL3T2FhzWLe3YajKnZPieV974gMBteSg
+        5T0DYtVOnO7K6kj3IZLwWw=
+Received: from carlis (unknown [218.17.89.92])
+        by smtp13 (Coremail) with SMTP id EcCowADXucSHC2piIi4IDg--.61772S2;
+        Thu, 28 Apr 2022 11:35:36 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     stefanr@s5r6.in-berlin.de
+Cc:     linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Subject: [PATCH] firewire: core: convert snprintf to sysfs_emit
+Date:   Thu, 28 Apr 2022 03:35:33 +0000
+Message-Id: <20220428033533.249463-1-zhangxuezhi1@coolpad.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220428033319.239341-1-gerg@linux-m68k.org>
-References: <20220428033319.239341-1-gerg@linux-m68k.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: EcCowADXucSHC2piIi4IDg--.61772S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKr4kAFy8AF1rAr45tF1rCrg_yoW3ZFg_CF
+        y7ZF42kr10gr1Iqr15Zry3Z3sIy3WY9FZIqw40yasaka42grykZrWUWr93KryUKryDAryx
+        Za4DXw4Svr47WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnAcTPUUUUU==
+X-Originating-IP: [218.17.89.92]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbBOQnwhV-PM4LQeAAAsM
+X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The m68k architecture code is capable of supporting the binfmt_elf_fdpic
-loader, so allow it to be configured. It is restricted to nommu
-configurations at this time due to the MMU context structures/code not
-supporting everything elf_fdpic needs when MMU is enabled.
+Fix the following coccicheck warning:
+drivers/firewire/core-device.c:375:8-16:
+WARNING: use scnprintf or sprintf
 
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 ---
- fs/Kconfig.binfmt | 2 +-
+ drivers/firewire/core-device.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-index 21c6332fa785..2666398120c4 100644
---- a/fs/Kconfig.binfmt
-+++ b/fs/Kconfig.binfmt
-@@ -58,7 +58,7 @@ config ARCH_USE_GNU_PROPERTY
- config BINFMT_ELF_FDPIC
- 	bool "Kernel support for FDPIC ELF binaries"
- 	default y if !BINFMT_ELF
--	depends on (ARM || (SUPERH && !MMU))
-+	depends on (ARM || ((M68K || SUPERH) && !MMU))
- 	select ELFCORE
- 	help
- 	  ELF FDPIC binaries are based on ELF, but allow the individual load
+diff --git a/drivers/firewire/core-device.c b/drivers/firewire/core-device.c
+index 90ed8fdaba75..5ad373419d00 100644
+--- a/drivers/firewire/core-device.c
++++ b/drivers/firewire/core-device.c
+@@ -372,7 +372,7 @@ static ssize_t rom_index_show(struct device *dev,
+ 	struct fw_device *device = fw_device(dev->parent);
+ 	struct fw_unit *unit = fw_unit(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return sysfs_emit(buf, "%d\n",
+ 			(int)(unit->directory - device->config_rom));
+ }
+ 
 -- 
 2.25.1
 

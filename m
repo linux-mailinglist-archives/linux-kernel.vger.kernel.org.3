@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97B5513DFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42746513DF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 23:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiD1VwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 17:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S1352538AbiD1VwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 17:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352485AbiD1VwL (ORCPT
+        with ESMTP id S1352502AbiD1VwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 17:52:11 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11806C3E39;
-        Thu, 28 Apr 2022 14:48:51 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id i2so4624596qke.12;
-        Thu, 28 Apr 2022 14:48:51 -0700 (PDT)
+        Thu, 28 Apr 2022 17:52:12 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D165BC3E0A;
+        Thu, 28 Apr 2022 14:48:53 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 1so4159594qvs.8;
+        Thu, 28 Apr 2022 14:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qsHLgickfWiQ7IuTrWQL7pBea0q42fG7zHQIYbkEfSM=;
-        b=lEkcK5oty8z+u4W1KpAM6fz6VMksMG3XO7YO8itOxuHUyOU/kChJT+9krku4HThtUK
-         2yTEas5EPk+1UEKNn+Dk/HpUckaQVsGZTXE7bQGKW7MF+3+ZJAZ4CwTBU0uTMglatLYH
-         tY8snzqnsLbnsHVnggk++zlJB0SLM9s3Ut9BuSzyIkOT29leK4sama7L5Uwo4nXSV8Wh
-         vtBfoEdVmTB6iHBsFHnQK/VZgx2y/4CZMDBjtAbwh5XrJX4FlYi+uwJUFIcwo75FJYLv
-         yxLZF+FAQ5zbBaWpIxlkCgZXYm7HEz+H32KPsCeN1wMkmlfj5oY2IObnhulP40TkRj0N
-         Dujg==
+        bh=Gn7ITOapzCSzC+UQtM9UH81e8sishwGd1JBZzz5dmQ0=;
+        b=QI2TXltuvtMXE9cecftYJaV4Si7Yl+BLHTKNw9x6DaB8Nf1eSsA2VrBHCpiFU0fSyb
+         3BBW5az7wDYeIIfVcnvEl/bPeMQu9V2/qdMMjAfJfzAM9P7/EYQAPPKPOyINz0cBztVL
+         m3++hDriXgeyuWH2M+KpqSUOaMFQiff3K5DGY8LMaRygbz/o3ZeqITM9k2b/9olhyuQn
+         F+UDp6PMpcLJiL0P7pLpQJ7qkpCba/l0pbeMngAWMDiCJ/SKngFgRWfmKWiUukg3Igrt
+         SUXxixSCqbClWXUFIeGO+wHGhTXavhOoe0l7NoMSqX1gIXn+C3MgxV5EzlwUOQoFebCo
+         LDlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qsHLgickfWiQ7IuTrWQL7pBea0q42fG7zHQIYbkEfSM=;
-        b=JSojjKNftd6XiGcqmjKUs7nEhpV25WVVKB3h9MjTBNTaCokWPbqhjO55+Wq6puNVjc
-         aMK8FooPrxXwDek/Ro26myItAEOKPa6xdfZtLnbXdUD0KHD+3a9aZoxtR3/WQUhXhFJH
-         ekvGB/qd2P9I1CXy6xpWSAc0PyZl3klepD9PYP+XYKQrbcVHcf/y00WXxPIUkF3NTWiv
-         GD5fKGOhP/A2rEAjBUh9IqTzbAEOCQxUSftwx0/G5OGyU4hROVzVEoOgCrDzjHO6e2wX
-         X7S6lIpCg6ebrbmS52aobZZc3F9SlF286JkQU6luSH1fEF460XPA11nGSSnFEbw9ILs0
-         3XSw==
-X-Gm-Message-State: AOAM530tm6TyXRm7BnHj2Z99Dk0WnAzry0TaXuCYwlfHn/xfsjDfEIBa
-        7tnMOyVOIAhVLBroI5ubTCo=
-X-Google-Smtp-Source: ABdhPJw0Pjvg4DmZSvpSkEKHOHv17Qd/78xNeyUxAbwn8J7IFj3T8YEDO+akNRaq1aATIHCHyE3Aug==
-X-Received: by 2002:a05:620a:858:b0:69f:9bc4:1db5 with SMTP id u24-20020a05620a085800b0069f9bc41db5mr5023484qku.206.1651182530865;
-        Thu, 28 Apr 2022 14:48:50 -0700 (PDT)
+        bh=Gn7ITOapzCSzC+UQtM9UH81e8sishwGd1JBZzz5dmQ0=;
+        b=ceFx4kUMxT+Dkt+j643fk6stsO94vNUde/TrvhmKqwiRhyW0xxZp2IYqdwyY34lltq
+         aVcZaILe6jowv5FWc2QvchRZCNFk9YkOg57Kv0VwsZx/UxyyrOEg6Eh+0W2VKP1r8g6m
+         K7cfz2I50C8ECKkT+DLO1k+ZBs80vYvYzNYdxq5N0lxsYNenIqOS1OUpIRMMBqe4wRZh
+         LDu/SbErMFmifwS6EmUTY0XVQEkC2e+qv3BpR7egVSLJTKumG6n1tXEzC51VaMR+p2xk
+         cJdq7jmnoqhUwoVuL34F0ia/XhCtDLLApdIBOmLQ0rn0N0BMS4lB/uGCWEhwgugWGm0u
+         bqiw==
+X-Gm-Message-State: AOAM531uo7/jJO9UzpcDE4ZYMef9zMXoG39ViqW/Xtek80yF9Kb5jPPO
+        lgrdUKMjuq1W+KMxdPYLZEg=
+X-Google-Smtp-Source: ABdhPJwEdti+wpPjI/D1brW1LYLvBuG5CvGZfc48iyfzoDbNOlsVLdU+j5YjI9EqNPBdH8VTpxonEw==
+X-Received: by 2002:ad4:4eea:0:b0:446:62c2:4e88 with SMTP id dv10-20020ad44eea000000b0044662c24e88mr26448288qvb.116.1651182532499;
+        Thu, 28 Apr 2022 14:48:52 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id bl5-20020a05620a1a8500b0069f51e47c5esm546442qkb.110.2022.04.28.14.48.49
+        by smtp.gmail.com with ESMTPSA id bl5-20020a05620a1a8500b0069f51e47c5esm546442qkb.110.2022.04.28.14.48.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 14:48:50 -0700 (PDT)
+        Thu, 28 Apr 2022 14:48:52 -0700 (PDT)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -64,9 +64,9 @@ Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-gpio@vger.kernel.org
-Subject: [PATCH v2 06/15] dt-bindings: pinctrl: add i.MXRT1170 pinctrl Documentation
-Date:   Thu, 28 Apr 2022 17:48:29 -0400
-Message-Id: <20220428214838.1040278-7-Mr.Bossman075@gmail.com>
+Subject: [PATCH v2 07/15] dt-bindings: clock: imx: Add documentation for i.MXRT1170 clock
+Date:   Thu, 28 Apr 2022 17:48:30 -0400
+Message-Id: <20220428214838.1040278-8-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
 References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
@@ -82,100 +82,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MXRT1170 pinctrl binding Documentation
+Add DT binding documentation for i.MXRT1170 clock driver.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
 V1 -> V2:
- - Nothing done
+ - Change title to Clock Controller
+ - Rename to add fsl
 ---
- .../bindings/pinctrl/fsl,imxrt1170.yaml       | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+ .../bindings/clock/fsl,imxrt1170-clock.yaml   | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
+diff --git a/Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml b/Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
 new file mode 100644
-index 000000000000..2e880b3e537c
+index 000000000000..a092ac0f7a50
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
-@@ -0,0 +1,77 @@
++++ b/Documentation/devicetree/bindings/clock/fsl,imxrt1170-clock.yaml
+@@ -0,0 +1,59 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/pinctrl/fsl,imxrt1170.yaml#
++$id: http://devicetree.org/schemas/clock/imxrt1170-clock.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Freescale i.MXRT1170 IOMUX Controller
++title: Freescale i.MXRT1170 Clock Controller
 +
 +maintainers:
 +  - Giulio Benetti <giulio.benetti@benettiengineering.com>
 +  - Jesse Taube <Mr.Bossman075@gmail.com>
 +
-+description:
-+  Please refer to fsl,imx-pinctrl.txt and pinctrl-bindings.txt in this directory
-+  for common binding part and usage.
++description: |
++  The clock consumer should specify the desired clock by having the clock
++  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imxrt*-clock.h
++  for the full list of i.MXRT clock IDs.
 +
 +properties:
 +  compatible:
-+    const: fsl,imxrt1170-iomuxc
++    const: fsl,imxrt1170-ccm
 +
 +  reg:
 +    maxItems: 1
 +
-+# Client device subnode's properties
-+patternProperties:
-+  'grp$':
-+    type: object
-+    description:
-+      Pinctrl node's client devices use subnodes for desired pin configuration.
-+      Client device subnodes use below standard properties.
++  clocks:
++    items:
++      - description: 32M ext osc
++      - description: 16M int rcosc
++      - description: 32k osc
 +
-+    properties:
-+      fsl,pins:
-+        description:
-+          each entry consists of 6 integers and represents the mux and config
-+          setting for one pin. The first 5 integers <mux_reg conf_reg input_reg
-+          mux_val input_val> are specified using a PIN_FUNC_ID macro, which can
-+          be found in <arch/arm/boot/dts/imxrt1170-pinfunc.h>. The last
-+          integer CONFIG is the pad setting value like pull-up on this pin. Please
-+          refer to i.MXRT1170 Reference Manual for detailed CONFIG settings.
-+        $ref: /schemas/types.yaml#/definitions/uint32-matrix
-+        items:
-+          items:
-+            - description: |
-+                "mux_reg" indicates the offset of mux register.
-+            - description: |
-+                "conf_reg" indicates the offset of pad configuration register.
-+            - description: |
-+                "input_reg" indicates the offset of select input register.
-+            - description: |
-+                "mux_val" indicates the mux value to be applied.
-+            - description: |
-+                "input_val" indicates the select input value to be applied.
-+            - description: |
-+                "pad_setting" indicates the pad configuration value to be applied.
-+    required:
-+      - fsl,pins
++  clock-names:
++    items:
++      - const: osc
++      - const: rcosc16M
++      - const: osc32k
 +
-+    additionalProperties: false
++  '#clock-cells':
++    const: 1
 +
 +required:
 +  - compatible
 +  - reg
++  - clocks
++  - clock-names
++  - '#clock-cells'
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    iomuxc: iomuxc@400e8000 {
-+        compatible = "fsl,imxrt1170-iomuxc";
-+        reg = <0x400e8000 0x4000>;
-+        pinctrl_lpuart1: lpuart1grp {
-+            fsl,pins =
-+              <0x16C 0x3B0 0x620 0x0 0x0  0xf1>,
-+              <0x170 0x3B4 0x61C 0x0 0x0	0xf1>;
-+        };
++    #include <dt-bindings/clock/imxrt1170-clock.h>
++
++    clks: clock-controller@40cc0000 {
++        compatible = "fsl,imxrt1170-ccm";
++        reg = <0x40cc0000 0x4000>;
++        clocks = <&osc>, <&rcosc16M>, <&osc32k>;
++        clock-names = "osc", "rcosc16M", "osc32k";
++        #clock-cells = <1>;
 +    };
 -- 
 2.35.1

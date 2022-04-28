@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28292512B85
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81795512B78
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243954AbiD1G3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S242003AbiD1G2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244321AbiD1G3W (ORCPT
+        with ESMTP id S230482AbiD1G21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:29:22 -0400
+        Thu, 28 Apr 2022 02:28:27 -0400
 Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6BE38BF2;
-        Wed, 27 Apr 2022 23:26:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CC35A5A9;
+        Wed, 27 Apr 2022 23:25:10 -0700 (PDT)
 Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S6HAJd019758;
-        Wed, 27 Apr 2022 23:24:56 -0700
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S6HAJg019758;
+        Wed, 27 Apr 2022 23:24:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=PPS06212021;
- bh=0jQtq33KfQX1v/IaxLPVsRa4+qmo6hzUgfj9a6njTsw=;
- b=lcndo2FGg66q4dgWlKgy26CTGEBLPdL06myB4iI0OBhVuNR53uZbBtb29m+9kTt09MWw
- 3glueByJ5yJvccr+WgFTFYkabkv5fVAsEIrLZMisqPxVyfcabEgdhsDgnh9kiKiZ8h8D
- n9DpYPJ9xt7DM6FMFMnMPNagczuPSFjdYcTEPkxxmnmIlSqOFRcnj+GTal76xxdiva1S
- kMdBeZQ6TPhuaa0LyFfFBTATNh+xH8g/YnSVmWM7wM7mw+m+GtSR8nDBFNTCyZ85VXkq
- 7FriE7c+rmUoGO5koyrV3HblxgnxcCophFMRPF37sftJylHaKfEC8qKa2FCrZ3Shtx/3 Cw== 
+ bh=aItVUOEpLYfdRTYrg5TGczriMieIcIkd1VOooKonveQ=;
+ b=FRtgA50NY+5CPyfpNu0itrLH11xWSHwIClOfWKvIIqsrT4E7hcKwELwtWM8VJOWTmn2o
+ SaZqgHM3n0Lj03awgGJSzhQioFWWPCth0qNLkNzZZnp1uhcyNtTU4qDY8V85qlbvwGA4
+ AuzlO6K1Mh7KkIS6++ITfWaO0PUkEhV8ELECUIYhoG4stlKO5czGtyws2lZEgNgKnFWr
+ Lk/mC+HMLflm+UHYHOve9CvOZa76n1sSDz4pOaNUf9apAEg0XztL4eWNDruZzetou3R2
+ t9MZTV5D3diwCBU7Y/YTJFcOitbFA1GDZ55JIiscmjAmq3aZn+nambKHViINtHtZW4ui 2Q== 
 Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2170.outbound.protection.outlook.com [104.47.55.170])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3fps57s3ua-1
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3fps57s3ua-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Apr 2022 23:24:51 -0700
+        Wed, 27 Apr 2022 23:24:59 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i4HribPAVUkcxg7PA57rplFQ48iBMF83bos3LwwYahFCLokghIGDQ6ZSOtBU/dYme6/HILEUs96ChyecXivDWhWV5IJdxdNHAH1LRCKRDvsVBDyhkzIn8fb3mHdHT9lkfHv3vRbhVhPDEIyfdf6bqB5uuJP0DORW0gm8HnvISR3v8YuRJxjgtlY9LfRtvfdu+OjSBVaxO5hBodc0QJZD8VDtS/i7OqUWowA3A/FTu6UrKhNWORJJmAXT72tanVIEtZRPx8TA4+TppxFOaaT1FWeBmWxTBkeqec58sD4v9ln5bzB1UDXPN8H6AP07jwogS/QuhngGfE2Np1q3GkGoWw==
+ b=ddzFnKq2DJMStjsx4Cj76bSpuaOVLbYNpyYe3pqm70eyNgUkAmxVhEGvlGXyDPlFyhPW1eFLIadHrORUnIyy0sprUUbDBqCl4q3NKNEjvuvyLCl8234nK5i/dkG5Niw9MNNJkFgY7ImRXYzjjW+RgFfe0RjfM3irQikupe3ifIBNIb9PAoKS3NM9zns7eHHnlmf7gvOKykWY+2atHRE+Mxer4UkCXZ4UovuUvViI3jNwYvY+35c7Mwwgr6qJ8X8ei1sbYTu3d+witLEFmUaZ8IYP9obKK7YSRY0lBiLZ8LthdWpALBnG0uvRgCtVgHH+yeQOQ6dg+uUgOhDqq2QvaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0jQtq33KfQX1v/IaxLPVsRa4+qmo6hzUgfj9a6njTsw=;
- b=kPQQbtycD83xpuF4wGAn7AwTZWE+FclC5/5T4D2SsopJAUZhVLK4RSVOYUXC3p1C4/7gZEq5p3DPtSW6rjdOwgfDvo5gywnbAcrN37oBuehal9IKwzjn7OIWIN8e/jXiE8Tr6EFpfq5+eMpi1kMem9JyIkl1nP6TwPRc/QlKIMq/B7M2NO2l495VjgCZbxUar201ubHJRvMoj/C7c3oTbwag1mVCnAWul7pYQugttmmNoeBBNAF6hgdFjjM1lDIM15dXotQF6mzQ9TPinhnUcuftZX/VK1kG1VG8h2HHunXAfHCJ+5O5wq35ED6FuScwfadKVdrVY+nRfm0E36WLBw==
+ bh=aItVUOEpLYfdRTYrg5TGczriMieIcIkd1VOooKonveQ=;
+ b=NcOAF6SW9zvU1XhSkY9LXaLaoolWMdq2l2vXA2/UOJ+YkOZE9qPJpky4vVPXE/qDzyGt7iSUfiqTQ+ybMRdLTXoOntzJwsRzlADtqONpxlbgpjxShFKUgZRTtDiYBb4fmgxB9YrSKwYobw0tCByhK2BHkHM56nn3o5q+tBykZVuXoDcmC9Ncn2Nb4Ou8AeWTmB0fgPk+PKnPGkrAdlKOp0Zd0jebLpfV0mZd7Z65TNhKk6lDBhyLYkm74qby3+1QZNRYma9PWq764kdScUsaW9+fVkxizNvNOC+/JI4Vv6bRPbMvGDjygOSDjsb1Qvv+Q5OA+KmWJ+9aKPri/A2PPA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -60,9 +60,9 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         platform-driver-x86@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Paul Gortmaker <paul.gortmaker@windriver.com>
-Subject: [PATCH 2/4] ACPI: LPSS: make the Kconfig dependency on PMC_ATOM explicit
-Date:   Thu, 28 Apr 2022 02:24:28 -0400
-Message-Id: <20220428062430.31010-3-paul.gortmaker@windriver.com>
+Subject: [PATCH 3/4] platform/x86: pmc_atom: dont export pmc_atom_read - no modular users
+Date:   Thu, 28 Apr 2022 02:24:29 -0400
+Message-Id: <20220428062430.31010-4-paul.gortmaker@windriver.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220428062430.31010-1-paul.gortmaker@windriver.com>
 References: <20220428062430.31010-1-paul.gortmaker@windriver.com>
@@ -72,64 +72,64 @@ X-ClientProxiedBy: YT3PR01CA0005.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:5:2ae::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 94edcd59-b85e-4e59-8dad-08da28dfcbe2
+X-MS-Office365-Filtering-Correlation-Id: 75e55010-e3d0-45d5-d463-08da28dfcc4d
 X-MS-TrafficTypeDiagnostic: SA2PR11MB4921:EE_
-X-Microsoft-Antispam-PRVS: <SA2PR11MB49213CB181D42423393BB2BF83FD9@SA2PR11MB4921.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <SA2PR11MB4921B03648D50479C60A293783FD9@SA2PR11MB4921.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mv8RWBwQScJO0IW5ZRpZFp6CXf/sXBaFcy3Sb7XZLUWWiWW0TXpR4tFvLKeG7WkBiRF8lHX/qavJuv4cA/I+YTqf1Y8eEA6QiBdNfMomaRkbZ8WusrO/t3VYXBhy5AQAN/EVdOEPCrfp6/vc0yuW9pR8XxPAvSQbN96yTMWiwFLmDloMR5TaPz7Ky6Bc+WHnV+jyfsGtremT6I2fRY5ETCwRpH9F7ba4qsHelaW5RrfmRsIaUE/HUnDfRumujltCgGwBr2fK3GUkh7Sc18XeSjz7/ylUGo2XD3dQ9E7AB6FT7b9Pz7FxUNbdqBLTttWyZ+lO9QxN92sGFjlthj9sWscswPgAM0LVZQojTp0g1JITnGzQW8OPQIfZGIGy2ZdGROmzUn6nyfbQZrxAGMplxLiTdsar1KdijAK7/Gt6YHkHCICPXJMIfsqPsizj8X2uMJwIMhLIhpybqa/o0r4J6TH4C9/RWHZ/yO03pHRqEWfEHoqP5/mYiu3l81YAHVQ0oGKQUdWyLuX6J6XZ/kEYIN9D4aK65qyiXkUtCOwanJu75HSOapAk+AEcwRiGO++0KeaazukqVvbN+/q8SBXXUiV+v5W7EMywFoD55HwiythHT84Sy9C/eQ+dIaepP2EKT+f/a/faER/t81f500NBm5LLtXiuJlzPcaZt7vhB/5c6TLMDO5SoMZtO/Ov7l8kISu2Ldx/oSBxhmsvfu9QvFw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(107886003)(2906002)(44832011)(508600001)(5660300002)(38350700002)(38100700002)(6486002)(8936002)(54906003)(6916009)(1076003)(66556008)(8676002)(4326008)(36756003)(316002)(2616005)(186003)(66476007)(52116002)(86362001)(6666004)(6506007)(26005)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: eMKJ9yFA0X+dVxBQB7wF9JfuSHBTvwdAnBG40Z/5INMql3k+zpJOGpwatFG2VjX5QwK1m2umZKcPJsxfhpY6YFs5jQ+8f4BFdK51GtBFZWHzwYptma7RNjvJPIDY/EPD040XWrL6cRS+9/Ez9yQ/Z2/E6qoubzvDD+3PVa8CW9nH8mZfIRWso1S19KgUvSkwhj9WBloOyUpZ0RUezpd7Xe7KFdC/yMMY1znFQSRvBuEzMG63kj4YhEASia7Ed07WByqZDQn3Jf/++/Uyg1xPYfuuBk0bNVTSYt6JcJ15QKGEEWk7cdK9kQvgkR4/XboYnYwgjRX2+5BOnFM8lbARhlsYdb4+MFFfqauAEiFwGmWWTFfZttKZ8M+ZkRHUR7V3lMvQTzeiCfpLOpJWmspCxtDSIFr4kDeOSSADWaq3wBAcyWngAKfDQ99ZHx0vg8rdsk0z4XIhxS8U2YW4yvPCPPixIqzbOerF2DmoN1tqoSKWXreNieI5GhE0CeJUO116uzIjT2OveGAW6qa0Ql1AAn65fjpqbcP7Pr1qtrZOVAPhtfG+M3J7O6zN9b3Un0n8X35Oy85XpjGoBX4l80/IMClA4c6iRSP4HolVo/SxSu6e2dqSKnuNq1IYple8BK/d89tIsHhhqf0x6jjhlYIJksimIy290HUINVVn1iF3/szyxbG9cJp/XM+YHq3191zmpaxRYSz+E+Fb1UbIGuXLAgs+uIU5ZsVCWlyWXaFMm6cbRqJcyo8dj+5EgId/ln2qSRdMboWR5SkEc7gdca0Awnbv+Sk/f7i917aVeZxwZss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4545.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(107886003)(2906002)(44832011)(508600001)(5660300002)(38350700002)(38100700002)(6486002)(8936002)(54906003)(6916009)(1076003)(66556008)(8676002)(4326008)(36756003)(316002)(2616005)(186003)(66476007)(52116002)(86362001)(6666004)(6506007)(26005)(83380400001)(6512007)(26730200005)(192303002)(19860200003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4yc6wk7pUPvpUYbMSFQq6wZWCXHEA+2+O6RWMEXPc6eC1LP5jpy58S0+Lbna?=
- =?us-ascii?Q?lCu0ny3l4VF8kfO8fqA9TzQSgxMiWDHKKqQ2fpTo02R2Mu/8jFBgX60CeXBk?=
- =?us-ascii?Q?wx7UMEHqeYxGUugpPqT8VnSdRkGVFCm0EvpLuFgNG+xBNqs9hTsVpeK5wEnS?=
- =?us-ascii?Q?PxxSP5XVBRIkHgwa70szCbPY7U3VSnu2fyaCmhEkT9Xddl1YFZ2laH/cOawG?=
- =?us-ascii?Q?bWVDt7PKqIRofIgQQnlS7fmoqinCyqKkYrk21engEjdSe+EOLkexkxqwS0PY?=
- =?us-ascii?Q?3fq8mFl3cxyR49qe1B3DykvO96EII0ecbW+cVUZBfCEoPg4hYKP/t5ziQ3wj?=
- =?us-ascii?Q?QCjNRGDpwzYGzCRl98BE1qXkSaPWZHFMZ7zviCGb0nxnYG0D+FuWP8VFOSaR?=
- =?us-ascii?Q?gE7hfoiglSHX3+8tNrbnKLBrZ9mEmlSrE0/Myk5wxlwDeiknx3IhkEkUmlAp?=
- =?us-ascii?Q?IqhY1JWdPLhiVWVgcOlXbp3xZWuMBqp+1N2DmkPyurxc3KjnWKa3U6xSn7GJ?=
- =?us-ascii?Q?fLc2mh3QrHFGdMZ/DcLQtKP2k4yONaup0cKM55q/QHhyuGuLXWyIfY9rop+0?=
- =?us-ascii?Q?HlYW3AZKZQrCLJ/Liasy4yUdRG8fpDwwkK+r9/s/rp61nXSNN90RM0GeggrP?=
- =?us-ascii?Q?aIJp3Fbo4zKYZ91T29bAZd95+2zjSLJ7xFiy+URW8q9nbYld6XemPN8wXv4Y?=
- =?us-ascii?Q?gcXPWwnC7ysgl8nfStZRa0iLj15Y6ozQXgtUAtb00fWVN9e9p5p9Asm7mwSf?=
- =?us-ascii?Q?Z8bjAvCnfpaBPDp1T4Oc5YDbBRDq95hG17W5+kTpx77YhTqTiwHkkGrKhmPJ?=
- =?us-ascii?Q?hdu5K1w5u7+6cfuMjhAu3aNOCzuna+FqEstos/J1AQDOZzujGjIho0K5lxOZ?=
- =?us-ascii?Q?Qt7fTRgO9rmnP+sMhIBcRgD7QvCT+x6BKlk6O9qjng3kxAOW7s7+SqHlaB0k?=
- =?us-ascii?Q?DlLt2hiBBJfRCgZC5dpDcEKY5/DOLEo5K1lOSKF6yISha6dg06JJW2RFETqr?=
- =?us-ascii?Q?7QmArG1zI4KZodBS5NuP5GMHN1PParErlLK0CO3haveoXw6jrli6xDg5EU8e?=
- =?us-ascii?Q?UXnFTNLeZolY+sYInwImCs04/0KikpV+8MYNbrfHB53BZhLOserzsqxDH5Jx?=
- =?us-ascii?Q?MGNd8Xzm6LZLxOuiuuQDq+tf+oR7gvzr6XDIJSj3E9Vgvfan6Tj6yptIt3jj?=
- =?us-ascii?Q?1R1m1vsFWbZFNhMVRLPALIHLvnVFBVD1GKoKspSyaEje2nmilVGEcWgslWXS?=
- =?us-ascii?Q?fsaX90I5UQCOnrFAY6zAgJ9zhIyfjqTJ0J+Q+My69p/S1o14j8bY7judshDe?=
- =?us-ascii?Q?5RvZk5Dd01azm/e319myrJz+cuyScheCmv0RMREMtEHVpyY28W59NyWkt7zD?=
- =?us-ascii?Q?8jf2AlEkX+/crfHMhEXvqAGEegbMTg6Cgk7LIr1+4oIczeVSGM/qKGOY7PZd?=
- =?us-ascii?Q?nlb/VWDZgA+2uRSMBdqTOWeCEYIQYNXnG1FSTS7AIBv8z1xFvWnltD18sfW0?=
- =?us-ascii?Q?W0jx2xKdly7lcJlMen2PjuknEGcMduw8ce/eeyiOekz+OHfS1vNV5c6PplmT?=
- =?us-ascii?Q?7mI9E1kO+cd4bXMJJlhj9FYEop5JOx11anLylVXof0LV72wZ0OIjYVWCM7/U?=
- =?us-ascii?Q?Q8g/CJAs9gfyM+mc2cvI0NbcTK7lofycoI5HNEplYWgqO6sj0FtnD1vgb/t/?=
- =?us-ascii?Q?9WbxYZp6ZDJTk24RRKKTDMdpsk3EqptJ7Gj/bbxd8g23c4l8ablFMcDM+a22?=
- =?us-ascii?Q?VGPnUL2B8i30kLAqcaejv0pu4QWRgnQ=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QiG3JxDusXg4WiMLneKWb373/FpDxzHutcuhpvOPaRIB+TofqMweAkQ4t60t?=
+ =?us-ascii?Q?2pRM+3qlKeUhB8WCwWztdXKspwbM+JTAW3Zm+4s/51tMlxd7mYKJUyT9suBk?=
+ =?us-ascii?Q?ZHq11J466QWPeGCq6AXS9kFebXFw77G8csegpGcHGbGKKpkduHkn8cWs5WV5?=
+ =?us-ascii?Q?wUyAudHGF1dCX+mWqIV/g9fifctHcaCX8s+hUMWTk24lb0JcGO2nBSCTIhaS?=
+ =?us-ascii?Q?ip7WdlAmG0iA3p45EcPnycj4RSF8wpdX4K+VMqNIrAuDOWpX5alWJ7hqyy5l?=
+ =?us-ascii?Q?sy6NEOsjP6eTW6gsgMKkdYJUzHV2nf9ANJmjwNmNHyPL3wE+auG/CFhXNGDD?=
+ =?us-ascii?Q?IhsjP3jM5+ZpwCFNAmDJdDuIp/n6ySpSI+K5c1u81fisZj9gkmAsJPLOLJmL?=
+ =?us-ascii?Q?I4uikAq6WZWj8JYHRCyw2HL6QJFUg8DGOeb+v+47lUfdD1m2xjB4pyONQBwr?=
+ =?us-ascii?Q?+fotW5AetIa16K5b/jqJRnLkSLTXGL5AC+xykUHMTMcB+OdYf0Lg4QgCGbKP?=
+ =?us-ascii?Q?DnMCXzmey0OjfQDGAZCm2akwRpMHbD92VVFkZxTCEXMC9xbvNP1QuhMxfMg7?=
+ =?us-ascii?Q?4xyT7qBOzSXlilih/BxrRNwnHSKpLIeuzd3dSUEDqdiGfO8h9JJD/L/jiQHj?=
+ =?us-ascii?Q?dr3zgAG7eljOwncboQYcKR+SI/OpjFRrZwJzi9U9i0S10HIm4twLfGbEj9lr?=
+ =?us-ascii?Q?BUgngcKc1UMJmlsSo3n59Wsm/zSyjuuT3ulbpXiE3s0w2WvlhNSF5HV29y6X?=
+ =?us-ascii?Q?SlA2II2Y2JSgsyO7R2G0TXcqeWtVHz02j7pLreb2YLsyoZfbsyJ/lDRQH02Z?=
+ =?us-ascii?Q?IDYb5gZG19wNcWvAlU6A6yHu6Zg6tRZx1wdo2nLuQFQWm86Bej1ENyYjejuW?=
+ =?us-ascii?Q?uvFph9/odyzTswle7YuhGZB7R13oFS744kCL6nhsWnzDwhjTWLrRPcJ0vczF?=
+ =?us-ascii?Q?FsHdpldactldqSKrZ1fis0MhJ7a75FLHda1s1EpxvURhUqvgDThozTc1JteU?=
+ =?us-ascii?Q?5xTyi9ytW8/CJr87ToBkGMs68I0TECStE+LRkoU2qR+ZYWCZdURCWVHC2zwU?=
+ =?us-ascii?Q?2z8RXnScdU4pGl2dYfZRPzovaxAikzf3GJNboy/5GVbayywwUHWEc3V9DxFk?=
+ =?us-ascii?Q?EOIOG9BP7AyKOfD9y90C6td8q1tCJytWY8251kxT99gYbSM4oWGFAx0Y9KGy?=
+ =?us-ascii?Q?LFwcGvBC/YnZorqZq2AaRNMFjVazQ731PaGhLJdKo6lonuBJx785N+3t3stz?=
+ =?us-ascii?Q?FWXWFiQ1AE8sRC444yzGA6vNISfkHlIL74k+jwBAd3ap5UHY9l74HuO+317R?=
+ =?us-ascii?Q?lt5iID9M4QzlalL/+EiRxYgv/QCRNpBtJgmnPZNNxGuBWGgkmDDUlxtF4nOs?=
+ =?us-ascii?Q?8t8Kf2XXJw6aMon65HN4sVrCxgZciTd2SV0fmnEnauJM6qQCl1o+L6mmMOfp?=
+ =?us-ascii?Q?Ilk8NJsIKBW5mjOVtfbE3GjcWKdHV8tGeMx+Qs7GEfRYv4TEG5nrbRw7ztf8?=
+ =?us-ascii?Q?eiR7CKkDZDFrNaceANq5NbYxO76xInZWaKJtrzfOo/L9kIGaji4CvGIDrY1E?=
+ =?us-ascii?Q?9wlIxxTJoVf6hwb9NqmJafsjRBppQl4xsCr9yxqOurEaHOcHO2r0bKWL9udy?=
+ =?us-ascii?Q?e+AmE/fFSGIr0E1Xaua+nWcFdNT1MNTRvpR/k82pG792P6kWURancC/ozA4d?=
+ =?us-ascii?Q?fHvmpi1dvBu1MRulrBG6oa8N/F/4xtE54eYaD8MEsdQZ3O0oR1vhGIWOtNwi?=
+ =?us-ascii?Q?eKo8PTD5sDGyG+C/UwIytfokCXNh4EY=3D?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94edcd59-b85e-4e59-8dad-08da28dfcbe2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75e55010-e3d0-45d5-d463-08da28dfcc4d
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4545.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 06:24:49.1349
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2022 06:24:49.8379
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r5e+KxOA8lPRHG/o5WFItU0oVWSP/cAR2zs8oKbLxfmb4sKEyjVUHZBrunKKKZirqZmBs3MFpfwhKQR5rDAJJ9ecketPf0xFMI50xSqryhs=
+X-MS-Exchange-CrossTenant-UserPrincipalName: LDcOVaLfdLMkb6YhKbHrT1a+kwUObx9ne5MNtOn9mxGeE7JffWGjl4rAvdS6pi7Lq49mZ8Ddciqu4qi2Z/MHysWwK1dMliJscF8GksLfF+E=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4921
-X-Proofpoint-GUID: bXDakq_r0g8Z9eZLrfCxi6qAToJcqhbW
-X-Proofpoint-ORIG-GUID: bXDakq_r0g8Z9eZLrfCxi6qAToJcqhbW
+X-Proofpoint-GUID: 0MOVjOVB6A44zMixY2dTCeuo-h0MGrNU
+X-Proofpoint-ORIG-GUID: 0MOVjOVB6A44zMixY2dTCeuo-h0MGrNU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
  priorityscore=1501 lowpriorityscore=0 impostorscore=0 phishscore=0
- mlxlogscore=607 malwarescore=0 clxscore=1011 adultscore=0 bulkscore=0
+ mlxlogscore=703 malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2204280037
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -141,39 +141,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code in acpi_lpss.c has been unconditionally using pmc_atom_read()
-for about the past six years.  This hasn't been a problem since you
-currently can't disable PMC_ATOM short of disabling PCI entirely.
+There is only one user of pmc_atom_read in tree, and that is in
+drivers/acpi/acpi_lpss.c -- which can't be anything but built-in.
 
-But it doesn't need to be that way, and so that we can change Kconfigs
-in a subsequent commit, we make sure LPSS selects PMC_ATOM in advance,
-so that existing .config files can live on with "make oldconfig".
+As such there is no point in adding this function to the global symbol
+list exported to modules.
 
-In theory, one could make LPSS build w/o PMC_ATOM, similar to what it
-did six years ago, but I doubt there is any demand for that now.
+Note that there is no <linux/export.h> include removal since the code
+was getting that header implicitly.
 
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Aubrey Li <aubrey.li@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: linux-acpi@vger.kernel.org
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Mark Gross <markgross@kernel.org>
+Cc: platform-driver-x86@vger.kernel.org
 Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/platform/x86/pmc_atom.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2ee26f10a814..163c198ec8ec 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -654,6 +654,7 @@ config X86_INTEL_LPSS
- 	select COMMON_CLK
- 	select PINCTRL
- 	select IOSF_MBI
-+	select PMC_ATOM
- 	help
- 	  Select to build support for Intel Low Power Subsystem such as
- 	  found on Intel Lynxpoint PCH. Selecting this option enables
+diff --git a/drivers/platform/x86/pmc_atom.c b/drivers/platform/x86/pmc_atom.c
+index 31cf25d25d66..b8b1ed1406de 100644
+--- a/drivers/platform/x86/pmc_atom.c
++++ b/drivers/platform/x86/pmc_atom.c
+@@ -221,7 +221,6 @@ int pmc_atom_read(int offset, u32 *value)
+ 	*value = pmc_reg_read(pmc, offset);
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(pmc_atom_read);
+ 
+ static void pmc_power_off(void)
+ {
 -- 
 2.17.1
 

@@ -2,103 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA17C512CCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03228512CD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245185AbiD1HcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S245194AbiD1Hck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiD1HcD (ORCPT
+        with ESMTP id S231146AbiD1Hcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:32:03 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932149AE74
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:28:49 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id p18so4477065edr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:28:49 -0700 (PDT)
+        Thu, 28 Apr 2022 03:32:36 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7BC9AE72;
+        Thu, 28 Apr 2022 00:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LzAss+yWW53YzSONceMNkK0Q7IigElaU4OnCLX+9NDc=;
-        b=ExKfTnzhRCQc2W2mn0A5I7yP94j59JDTD5atexxyP/btGR4lJkhtcZ6J1YNX0GmLNg
-         yaIkG852LKYA29T1UX5tH/wCQUohRdhTwcKcfPV/+ImCbeHfdyn/5rSRSVEYVvlFShuc
-         gCBcdX9u5mD/n/MWVNG/AQvGnz6DiqZ8GHj/gmmIBk/ZP192kCIx+lBjCffpxJ2KtGzA
-         4lQmZnOEzinIA6eCka8PA3xR8HUDDhn3i5paIvgWmWHy1GqG3yuOUT6InP4ElmxTzja9
-         Z5Ij1BTqMcIg499GREScTqLwJnzkLwwrwYxeRb2q964aTeFLtDRj1hAUZsTSeUrn+ZqD
-         MApQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LzAss+yWW53YzSONceMNkK0Q7IigElaU4OnCLX+9NDc=;
-        b=DuGLP2BwFy4U5lJRGgTWJIEpb9XoafgJtI2l2gHAMcxOUTZ+R94pIOuDGTRFPmkSUT
-         a8WIS8nqvbI0YhU4qqy8PMKTl9JX6hr9cS88VNM0b5+wtnJNH1IEL6MQk7ZdTRIM4VCn
-         HHAc9yOekGkpv8PCKiFBQ5tnYN533AlzCssexwckd/V70VfOT504tvFSwairlrdpxpDU
-         0YgGTp4XhF6YVAsfaS3vb/Dkj0S4NAtpcFseDYcZ+Pr9n4AESa8Dg+6GmHanM2Du4e8f
-         hHAEEVyZ0S/xlig1H1T/bIoH8WPIqt7kVeisLShtollRhrQX5Srlu+AS47sMRtUbQe0k
-         hJeg==
-X-Gm-Message-State: AOAM533sKPLah1ACD+44AYJUUEIVhJqcs+LQ0L0GHnlNiatD3VI6EIiQ
-        iEiqaI708JTFJfiBlTe5fmQBmA==
-X-Google-Smtp-Source: ABdhPJyK1jHpX+NE6cA3JKcnEjDunX0hlgWftKz57IHJeSxi6G2OWUgrhcIRVO9fBzAuaKhXf2RzjA==
-X-Received: by 2002:a05:6402:43c7:b0:425:f1cd:5f13 with SMTP id p7-20020a05640243c700b00425f1cd5f13mr700720edc.208.1651130927826;
-        Thu, 28 Apr 2022 00:28:47 -0700 (PDT)
-Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g12-20020a170906c18c00b006f3b99d29e0sm3573545ejz.223.2022.04.28.00.28.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 00:28:47 -0700 (PDT)
-Message-ID: <9c93c210-dab5-8c2a-81fb-2e52e6a4d38c@linaro.org>
-Date:   Thu, 28 Apr 2022 09:28:46 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651130962; x=1682666962;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=s0aUg2HE9PFZadcLahl2VUbpekkIPi6XLmEP0rOe9L8=;
+  b=V+uY8ZCHcTN9aVj6Tz0lQLpWb6meb5KyNPCsqx4SbWf3CIvN9f5tETVn
+   SLg7WRKFNu+Jg1IkRAFY+8wTsDRybx5Sip7fvxkfemUvviPmEvPWBJh8M
+   eQzMIG4ulV6oYdyp+3vcMruMaojlStVt09mDVq7hk+VQft7xyMINLfnMY
+   A=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Apr 2022 00:29:21 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:29:19 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 28 Apr 2022 00:29:20 -0700
+Received: from [10.50.42.7] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 28 Apr
+ 2022 00:29:17 -0700
+Message-ID: <96dc5e2e-5d88-52ce-c295-779603e668f2@quicinc.com>
+Date:   Thu, 28 Apr 2022 12:59:13 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Aw: Re: [RFC/RFT v2 05/11] dt-bindings: pci: add bifurcation
- option to Rockchip DesignWare binding
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv11 6/6] asm-generic/io: Add logging support for MMIO
+ accessors
 Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220426132139.26761-1-linux@fw-web.de>
- <20220426132139.26761-6-linux@fw-web.de>
- <ea6ccec6-81a3-b22d-46db-c31a9f1e85f3@linaro.org>
- <trinity-fcca248f-cb76-474a-8227-5b7188140bdf-1651130723782@3c-app-gmx-bs20>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <trinity-fcca248f-cb76-474a-8227-5b7188140bdf-1651130723782@3c-app-gmx-bs20>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <will@kernel.org>
+References: <cover.1645772606.git.quic_saipraka@quicinc.com>
+ <3de35c9f4a3a070d197bab499acefc709a6f5336.1645772606.git.quic_saipraka@quicinc.com>
+ <YmorayBozWWRlTpP@kroah.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <YmorayBozWWRlTpP@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 09:25, Frank Wunderlich wrote:
-> 
-> i guess same here, description+type needed, but how to describe an array of int in yaml? do you know any examples?
+On 4/28/2022 11:21 AM, Greg KH wrote:
+> On Thu, Apr 28, 2022 at 09:00:13AM +0530, Sai Prakash Ranjan wrote:
+>> Add logging support for MMIO high level accessors such as read{b,w,l,q}
+>> and their relaxed versions to aid in debugging unexpected crashes/hangs
+>> caused by the corresponding MMIO operation. Also add a generic flag
+>> (__DISABLE_TRACE_MMIO__) which is used to disable MMIO tracing in nVHE KVM
+>> and if required can be used to disable MMIO tracing for specific drivers.
+> This "add a build flag to a Makefile to change how a driver operates"
+> feels very wrong to me given that this is now a totally new way to
+> control how a driver works at build time.  That's not anything we have
+> done before for drivers and if added, is only going to create much added
+> complexity.
 
-https://elixir.bootlin.com/linux/v5.17-rc4/source/Documentation/devicetree/bindings/arm/l2c2x0.yaml#L74
-https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml#L101
+Not exactly, there are already many such build flags being used currently across kernel.
 
-Best regards,
-Krzysztof
+Example: "-D__KVM_NVHE_HYPERVISOR__, D__KVM_VHE_HYPERVISOR__,
+-D__NO_FORTIFY, -D__DISABLE_EXPORTS, -DDISABLE_BRANCH_PROFILING".
+
+It gives us even more flexibility to disable feature for multiple files under a directory
+rather than individually cluttering each file, look at "-D__KVM_NVHE_HYPERVISOR__"
+for files under "arch/arm64/kvm/hyp/nvhe/".
+
+> How about requiring that the #define be in the .c files, and not in the
+> Makefile, as Makefile changes are much much harder to notice and review
+> over time.
+
+How is this cleaner, lets say we have many such drivers like all drivers under drivers/serial,
+so we go and add #define for each of them? That looks more spread out than having all
+such information under one file (Makefile).
+
+And I didn't understand how is it harder to track changes to makefile? Makefile is  part
+of the driver directory and any changes to makefile is visible to the corresponding maintainers.
+Do you mean something else?
+
+>
+> Also, I see that this "disable the trace" feature has already been asked
+> for for 2 other drivers in the Android kernel tree, why not include
+> those changes here as well?  That kind of shows that this new feature is
+> limited in that driver authors are already wanting it disabled, even
+> before it is accepted.
+
+That can be done later on top of this series right? This series mainly deals with adding
+initial support for such tracing, there could be numerous drivers who might or might
+not want the feature which can be added onto later. We can't actually identify all
+the driver requirements upfront. As an example, we have already used the flag to
+disable tracing for nVHE KVM, so we know how to use the flag.
+
+> Because of that, who _will_ be using this feature?
+>
+
+Every driver except those two or few more, and it is not a bug or anything, they just want to disable it
+to limit the logs in case of example UART driver since the reads/writes are very frequent in those cases
+and the logs are not necessarily useful for them.
+
+Thanks,
+Sai

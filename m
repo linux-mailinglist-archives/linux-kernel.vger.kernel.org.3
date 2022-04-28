@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9C0513B28
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0718F513B2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 20:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350677AbiD1SDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 14:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S1350697AbiD1SFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 14:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbiD1SDu (ORCPT
+        with ESMTP id S245205AbiD1SE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 14:03:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDCB6C96B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 11:00:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651168834; x=1682704834;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gcCHMN2R3ZV830nUOD2eh8/g6lV0UH2wZKBz4H8GihI=;
-  b=EmwrMBEphGyq3saHhXruDZu5beJRXACzXeOA0V5s5iPzrUejMnCUNQE4
-   GAH5YDcvCIXGL/YUIBYAI7FfYAzA6+baK5HmsJu2u+f4NPxKlv4yxmRjZ
-   /dF3QMnoS8a9ZkzuKIv7lWgj9NnbuXQ6hLkg/VZxP+br+gARPBQE98Etp
-   t2gafOlcU2ycmh/abo+QEs/CiuZVFrCD9+xcqVGXdhNxMGgXw3iu6Vj3j
-   COPHd8d0c24KedHKW3SsmwJRmsHMbfFMEdzV1ga8cHDzFCAqkUZY5VW+U
-   VhDd4cTJMQAbjEU6hKbFPMucpAa6JxK4Tth6Y8uPPLPj8vWuIvS3Gt3Vd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266528768"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="266528768"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 11:00:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="596910482"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by orsmga001.jf.intel.com with ESMTP; 28 Apr 2022 11:00:33 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
-        "Borislav Petkov" <bp@alien8.de>, "Ingo Molnar" <mingo@redhat.com>,
-        "Zhangfei Gao" <zhangfei.gao@linaro.org>,
-        "Will Deacon" <will@kernel.org>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Tony Luck" <tony.luck@intel.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        "Ravi V Shankar" <ravi.v.shankar@intel.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>, "x86" <x86@kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux-foundation.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>
-Subject: [PATCH v2] iommu/sva: Fix PASID use-after-free issue
-Date:   Thu, 28 Apr 2022 11:00:41 -0700
-Message-Id: <20220428180041.806809-1-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 28 Apr 2022 14:04:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD7C972A7;
+        Thu, 28 Apr 2022 11:01:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CD5EB82EF7;
+        Thu, 28 Apr 2022 18:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FFB5C385A9;
+        Thu, 28 Apr 2022 18:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651168900;
+        bh=j73iXb7HRmYNvs62beHpaMLechgWJdFxikbQ4RJV4Ew=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=arTulElWhcwZNgmeTTmFxCr7czn03uLlxgEQVPEn9CVlcEMbvRrkd4EJXHmvbSMZ2
+         grajzT44dJmJGlUT/YtAZhPXTpfeZusEKVKFW3/nfS38asp70m0VXe/Z73TEuudCDo
+         nofjhlUGxzjz1ejBATWeP3SkBaj5wKU+xX9MwShHeu9kQPPLq8+h+XNSPEztkpnBln
+         sO70Pg4FknvIyzw48FwKXHlQLXZi7HYEx4BkVzP8bLM3uM/jzJLuwclqY26sstWLDV
+         vGuqfjf1UffYh8B83NMMeGrxHcB8ZaOOxpiIwErDYTq/s4tb3MGaFfi0/xhmlp/LcZ
+         HyIFJ+wpIFAPw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D38FA5C0387; Thu, 28 Apr 2022 11:01:39 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 11:01:39 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcutorture: Fix kmemleak in rcu_test_debug_objects()
+Message-ID: <20220428180139.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220427071520.2239030-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427071520.2239030-1-qiang1.zhang@intel.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PASID is being freed too early.  It needs to stay around until after
-device drivers that might be using it have had a chance to clear it out
-of the hardware.
+On Wed, Apr 27, 2022 at 03:15:20PM +0800, Zqiang wrote:
+> The kmemleak kthread scan to the following:
+> 
+> unreferenced object 0xffff95d941135b50 (size 16):
+>   comm "swapper/0", pid 1, jiffies 4294667610 (age 1367.451s)
+>   hex dump (first 16 bytes):
+>     f0 c6 c2 bd d9 95 ff ff 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000bc81d9b1>] kmem_cache_alloc_trace+0x2f6/0x500
+>     [<00000000d28be229>] rcu_torture_init+0x1235/0x1354
+>     [<0000000032c3acd9>] do_one_initcall+0x51/0x210
+>     [<000000003c117727>] kernel_init_freeable+0x205/0x259
+>     [<000000003961f965>] kernel_init+0x1a/0x120
+>     [<000000001998f890>] ret_from_fork+0x22/0x30
+> 
+> the rhp object is not released after use, so call kfree() to
+> release it.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-As a reminder:
+Good catch, thank you!
 
-mmget() /mmput()  refcount the mm's address space
-mmgrab()/mmdrop() refcount the mm itself
+I queued this for v5.20 with the wordsmithed commit log shown below.
 
-The PASID is currently tied to the life of the mm's address space and
-freed in __mmput().  This makes logical sense because the PASID can't be
-used once the address space is gone.
+							Thanx, Paul
 
-But, this misses an important point: even after the address space is
-gone, the PASID will still be programmed into a device.  Device drivers
-might, for instance, still need to flush operations that are outstanding
-and need to use that PASID.  They do this at file->release() time.
+------------------------------------------------------------------------
 
-Device drivers call the IOMMU driver to hold a reference on the mm itself
-and drop it at file->release() time.  But, the IOMMU driver holds a
-reference on the mm itself, not the address space.  The address space
-(and the PASID) is long gone by the time the driver tries to clean up.
-This is effectively a use-after-free bug on the PASID.
+commit 1a2df31f4026dbc8dc4db17a4c2ed01e67f45c92
+Author: Zqiang <qiang1.zhang@intel.com>
+Date:   Wed Apr 27 15:15:20 2022 +0800
 
-To fix this, move the PASID free operation from __mmput() to __mmdrop().
-This ensures that the IOMMU driver's existing mmgrab() keeps the PASID
-allocated until it drops its mm reference.
+    rcutorture: Fix memory leak in rcu_test_debug_objects()
+    
+    The kernel memory leak detector located the following:
+    
+    unreferenced object 0xffff95d941135b50 (size 16):
+      comm "swapper/0", pid 1, jiffies 4294667610 (age 1367.451s)
+      hex dump (first 16 bytes):
+        f0 c6 c2 bd d9 95 ff ff 00 00 00 00 00 00 00 00  ................
+      backtrace:
+        [<00000000bc81d9b1>] kmem_cache_alloc_trace+0x2f6/0x500
+        [<00000000d28be229>] rcu_torture_init+0x1235/0x1354
+        [<0000000032c3acd9>] do_one_initcall+0x51/0x210
+        [<000000003c117727>] kernel_init_freeable+0x205/0x259
+        [<000000003961f965>] kernel_init+0x1a/0x120
+        [<000000001998f890>] ret_from_fork+0x22/0x30
+    
+    This is caused by the rcu_test_debug_objects() function allocating an
+    rcu_head structure, then failing to free it.  This commit therefore adds
+    the needed kfree() after the last use of this structure.
+    
+    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
-
-Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
-Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
-Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Suggested-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
-
-v2:
-- Dave Hansen rewrites the change log.
-- Add Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
-- Add Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-
-The original patch was posted and discussed in:
-https://lore.kernel.org/lkml/YmdzFFx7fN586jcf@fyu1.sc.intel.com/
-
- kernel/fork.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9796897560ab..35a3beff140b 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
- 	mmu_notifier_subscriptions_destroy(mm);
- 	check_mm(mm);
- 	put_user_ns(mm->user_ns);
-+	mm_pasid_drop(mm);
- 	free_mm(mm);
- }
- EXPORT_SYMBOL_GPL(__mmdrop);
-@@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
- 	}
- 	if (mm->binfmt)
- 		module_put(mm->binfmt->module);
--	mm_pasid_drop(mm);
- 	mmdrop(mm);
- }
- 
--- 
-2.32.0
-
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index bb2e1610d0add..faf6b4c7a7572 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -3176,6 +3176,7 @@ static void rcu_test_debug_objects(void)
+ 	pr_alert("%s: WARN: Duplicate call_rcu() test complete.\n", KBUILD_MODNAME);
+ 	destroy_rcu_head_on_stack(&rh1);
+ 	destroy_rcu_head_on_stack(&rh2);
++	kfree(rhp);
+ #else /* #ifdef CONFIG_DEBUG_OBJECTS_RCU_HEAD */
+ 	pr_alert("%s: !CONFIG_DEBUG_OBJECTS_RCU_HEAD, not testing duplicate call_rcu()\n", KBUILD_MODNAME);
+ #endif /* #else #ifdef CONFIG_DEBUG_OBJECTS_RCU_HEAD */

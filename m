@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E90D51326B
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6C0513239
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235189AbiD1L06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S1345147AbiD1LS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235063AbiD1L0y (ORCPT
+        with ESMTP id S1345394AbiD1LSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:26:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A505E16C;
-        Thu, 28 Apr 2022 04:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651145020; x=1682681020;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YSpDATXy/AEnQCqNpDDdMNwfxMpapZmzIYX8S6XiNuc=;
-  b=Meg06O/KeVEOvbcvwHOkss7GumVYJbLxc7P6jPEMBnqpwHb/QLaA6cgV
-   O5K1DarW7M96UkAn6pPR19Ajk+0uAjvYBE+PVtdj9vSTKsHgovLKg6yAM
-   7oVH33UaGpGYGUxDOtTES+uhH/5+t4OHzEGCkl+JSYYrbcmUujm3JMrs2
-   eqy6VWYmVRbak3YIZlcumeibMrbOyQk9bnwXIxIwjkvNwAss4JfeO9/JM
-   S40mPfl6MM5wYCcZYRhGFaARym7sxnII1RC10yfGnNXDt+N6/XUCuR1/u
-   A2/7x2saHMNYbo2IMD7qj7uTXSzzWxb0LZhiNnLIic3qhMOIUk8feNvzq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352692120"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="352692120"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:23:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="541152152"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2022 04:23:37 -0700
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23SBNZi8003960;
-        Thu, 28 Apr 2022 12:23:35 +0100
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>
-Subject: [PATCH RESEND bpf-next] bpftool: Use sysfs vmlinux when dumping BTF by ID
-Date:   Thu, 28 Apr 2022 13:14:42 +0200
-Message-Id: <20220428111442.111805-1-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 28 Apr 2022 07:18:23 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8657922B21;
+        Thu, 28 Apr 2022 04:15:09 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kq17so8874102ejb.4;
+        Thu, 28 Apr 2022 04:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=m+MfYH2YQ+litd9nC4WLDji5G/nTM7/Ix1hsN4aQQiE=;
+        b=jHDaRN+NjsQ+9ro4gz2Wvs/dDGIlEWHb+T9Y5mQ8AObnsBA5Pd0FlIoc/BIu2k8+bj
+         /SqLjEdJ0MZBiONiCGTKXiTaa5DqMmVe7Sph+iCnEyB20tu2Qw6eNSS3+zCc+D/axZsL
+         rjBBnKxSScWm3WwnPeg65OWtkedtlAZ8F1Kex53HXfIm2H88bMNA1Tn5HoEUlNUA65/6
+         NcxY+80Ezi1ctMi6XpRx/YS4rDtLM5kc8ZJhKrBI5XW/VL4O84FMUxs6FkQzkLKcsAx7
+         c5nTCPQ77/aJ3432dxYq66k7k7wrGE7gYwARTs4fAry2AD/KtPpSrv/UQkd6gSBBGF8O
+         ttjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=m+MfYH2YQ+litd9nC4WLDji5G/nTM7/Ix1hsN4aQQiE=;
+        b=r42hFB3eOSmxHIsU/7K8rGnoGjuxObSrenqqk5jy4+alPC5xQN9oRibODWWwufTk/7
+         GExkrIOxv5FGdWjIsosgpkGrfS659ilkvdOc2r5yjp8M3klF+zYtgB84ednpDhLlXPlI
+         FamT77OfqDeQ0TyRiBTNQZaoUXPMvI3JnnPJa/8T64shgOOkRrQSLYME63+lNNtOhoDI
+         XUSlNuvv8PdNPsgof9DQtEutwakisuyk7K1GeAeHQwcbWh8rGe+Jv0lhtE2g5/sbfH0w
+         omJB/mNp6DJpHNSST9iwdLz6yY2tc1PALA1Asa8mGw3K5yzRDAeYY7CpwQWCgI/Xy/DY
+         hoLg==
+X-Gm-Message-State: AOAM532T6g3AYP6f0zuPiwbWi9eonOf1NQZEBpG/qWMhdQgMJSmtMuAD
+        Qn3AupRx1cG5NDWLt5rFuf+FvaGBmCgRLg==
+X-Google-Smtp-Source: ABdhPJzAYtvVXrl9CAWvbv76jT6c8d/n2DovgQHySmatr7l5Dm4yG1AqCIsF6qg23AwQhhKxNa+28Q==
+X-Received: by 2002:a17:906:6a22:b0:6f3:e768:7de0 with SMTP id qw34-20020a1709066a2200b006f3e7687de0mr1469172ejc.480.1651144507953;
+        Thu, 28 Apr 2022 04:15:07 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id kk14-20020a170907766e00b006f3a6a528c8sm4898179ejc.146.2022.04.28.04.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 04:15:07 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Liang Chen <cl@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: Re: [PATCH 1/3] arm64: dts: rockchip: enable otg/drd operation of usb_host0_xhci in rk356x
+Date:   Thu, 28 Apr 2022 13:15:06 +0200
+Message-ID: <2087500.ItEYzMA54p@archbook>
+In-Reply-To: <20220425133502.405512-1-michael.riesch@wolfvision.net>
+References: <20220425133502.405512-1-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, dumping almost all BTFs specified by id requires
-using the -B option to pass the base BTF. For most cases
-the vmlinux BTF sysfs path should work.
+On Montag, 25. April 2022 15:35:00 CEST Michael Riesch wrote:
+> This USB 3.0 controller is capable of OTG/DRD operation. Enable it in the
+> device tree.
+> 
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> index 55e6dcb948cc..f611aaf2d238 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+> @@ -266,7 +266,7 @@ usb_host0_xhci: usb@fcc00000 {
+>  			 <&cru ACLK_USB3OTG0>;
+>  		clock-names = "ref_clk", "suspend_clk",
+>  			      "bus_clk";
+> -		dr_mode = "host";
+> +		dr_mode = "otg";
+>  		phy_type = "utmi_wide";
+>  		power-domains = <&power RK3568_PD_PIPE>;
+>  		resets = <&cru SRST_USB3OTG0>;
+> 
 
-This patch simplifies dumping by ID usage by attempting to
-use vmlinux BTF from sysfs, if the first try of loading BTF by ID
-fails with certain conditions.
+Hi Michael,
 
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- tools/bpf/bpftool/btf.c | 35 ++++++++++++++++++++++++++---------
- 1 file changed, 26 insertions(+), 9 deletions(-)
+according to official specs[1], only the RK3568 is capable of using the
+USB 3.0 controller in OTG mode. For the RK3566, OTG is USB 2.0, if I
+understand this correctly.
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index a2c665beda87..557f65e2de5c 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -459,6 +459,22 @@ static int dump_btf_c(const struct btf *btf,
- 	return err;
- }
- 
-+static const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
-+
-+static struct btf *get_vmlinux_btf_from_sysfs(void)
-+{
-+	struct btf *base;
-+
-+	base = btf__parse(sysfs_vmlinux, NULL);
-+	if (libbpf_get_error(base)) {
-+		p_err("failed to parse vmlinux BTF at '%s': %ld\n",
-+		      sysfs_vmlinux, libbpf_get_error(base));
-+		base = NULL;
-+	}
-+
-+	return base;
-+}
-+
- static int do_dump(int argc, char **argv)
- {
- 	struct btf *btf = NULL, *base = NULL;
-@@ -536,18 +552,11 @@ static int do_dump(int argc, char **argv)
- 		NEXT_ARG();
- 	} else if (is_prefix(src, "file")) {
- 		const char sysfs_prefix[] = "/sys/kernel/btf/";
--		const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
- 
- 		if (!base_btf &&
- 		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
--		    strcmp(*argv, sysfs_vmlinux) != 0) {
--			base = btf__parse(sysfs_vmlinux, NULL);
--			if (libbpf_get_error(base)) {
--				p_err("failed to parse vmlinux BTF at '%s': %ld\n",
--				      sysfs_vmlinux, libbpf_get_error(base));
--				base = NULL;
--			}
--		}
-+		    strcmp(*argv, sysfs_vmlinux))
-+			base = get_vmlinux_btf_from_sysfs();
- 
- 		btf = btf__parse_split(*argv, base ?: base_btf);
- 		err = libbpf_get_error(btf);
-@@ -593,6 +602,14 @@ static int do_dump(int argc, char **argv)
- 	if (!btf) {
- 		btf = btf__load_from_kernel_by_id_split(btf_id, base_btf);
- 		err = libbpf_get_error(btf);
-+		if (err == -EINVAL && !base_btf) {
-+			btf__free(base);
-+			base = get_vmlinux_btf_from_sysfs();
-+			p_info("Warning: valid base BTF was not specified with -B option, falling back on standard base BTF (sysfs vmlinux)");
-+			btf = btf__load_from_kernel_by_id_split(btf_id, base);
-+			err = libbpf_get_error(btf);
-+		}
-+
- 		if (err) {
- 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
- 			goto done;
--- 
-2.35.1
+So I think this should be an override in rk3568.dtsi.
+
+Regards,
+Nicolas Frattaroli
+
+[1]: Compare page 17 of the RK3568 datasheet to page 16 of the RK3566
+     datasheet
+
 

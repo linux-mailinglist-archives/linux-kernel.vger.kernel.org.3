@@ -2,145 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F59C512BAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64154512BAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244164AbiD1Ghr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S244133AbiD1GjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244129AbiD1Ghl (ORCPT
+        with ESMTP id S244211AbiD1GjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:37:41 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904498D6BD
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:34:27 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l18so7516759ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:34:27 -0700 (PDT)
+        Thu, 28 Apr 2022 02:39:04 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EEF2AE2C
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:35:49 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id fv2so3433627pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uzuvBG3ySD2q6+EwBDVkcHQZJOKGPkpC5+jeVqG/3co=;
-        b=hslMUKE+lJ/AV2mxULrxBj8n9wD1cA7ihbkpDl990VaHaNscheWT3YMDZWHKp/cpG7
-         ZFbphFxD0k8J4Hkc2pDWB7wdceFzPpu2AiRMUUeEc8F6WsGxguMtwDEo2lPUNpDuuEiy
-         GYXKN69K2YASGzxtO1hTO4zpmXbo1n4mywjj+7D7R6/IMDqTv9s1KdlRRc++gnx98MDw
-         lEyYVyJkQJexivMQ2O957UQCz7h2++X4CWJRCVHxNHHeCgWs8ky2QlwziejP5ZBpcK2n
-         eYJWFjRwEapB67DNbOPjuRlfUdm01V07eq+BzNVP5RstzjS8Tmz5XIzRfYgP6HVyWl7p
-         N+NQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=je+NIN2tqYCJVyGuE6IZ8E75zX+G/y6Jcrh/L/hmAO4=;
+        b=WcW3l8sNZlr4GeSgE/0AsPX5QCUuFAeIWVTPz6Wvf7L/gk2NtcG2lBzDzWZzN0auvS
+         fBOWczjbJbb8Xj9Mwn3sLjkUziNyKPwaUplBWC9Yux3giayuW1GTTXzXKc63fpoplGbx
+         +xgMjyRssxbSaNStiMx1/5l67+cxNGdcbxmM7dQX+M7TZ17xE3RVmMOnlJxdZdm/NBU2
+         +uxrglX5dKNBNThKRhHXHiTvomYUGKHLJyaURzkXmn13zYsJtM6Qh8RbCHG9RaVcjuEO
+         rThauw3+5miHZae8St/Wkxk5ukqxkwzDaxyCE8oJ6nvIQJXUISU93WTOv/osLiZhEe1z
+         y7Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uzuvBG3ySD2q6+EwBDVkcHQZJOKGPkpC5+jeVqG/3co=;
-        b=HQOEf8jN3VGPGSnK7tAN1+olp4fa/tKUOqBUWheQx4aaXExECKYffaafzl9drIcm5o
-         MfbBWtxCM3MECqB1cdn+r8UGKH1BFoldM4na3tUKMlajPO8iby2B1TLUjo2daH88VGpl
-         xCc5pmthzys2k2A99wI1bEU4i0u5rRixr5ZgzaPex4k4tKxDKP/RLT0Kns1ut26Te52C
-         hNA8onPPxIHZXCtQF3L5EUurqOZAcoG4dve09jqplcXw8xOxoeyH9LfCdbGtk6EZb4Gi
-         6tkQFItWmGvm6G+WX95xwfYIx6hsNGP4QDb/9zkHpk8nA3FNH19BNyEqu4p5WazBTk3y
-         npfw==
-X-Gm-Message-State: AOAM532nI/WW395cL4YCmPhQnyuAH92eIWWyqzDjd3oIK4rSwcR/RIOi
-        yBLaABUZz60RPEUl7imX0NLmOg==
-X-Google-Smtp-Source: ABdhPJzY1zrs5I3FVQuz284Iw/XuEBYz3tDW17K26IIlFioWkI1mMejMgLKVMYy1IHPyq9D6n6tqXA==
-X-Received: by 2002:a17:907:6e02:b0:6f3:d185:5d25 with SMTP id sd2-20020a1709076e0200b006f3d1855d25mr4921212ejc.14.1651127666184;
-        Wed, 27 Apr 2022 23:34:26 -0700 (PDT)
-Received: from [192.168.0.159] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f31-20020a056402329f00b0042617ba6381sm960602eda.11.2022.04.27.23.34.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 23:34:25 -0700 (PDT)
-Message-ID: <918f5bc9-77f6-4d65-7432-ab53aadd6734@linaro.org>
-Date:   Thu, 28 Apr 2022 08:34:24 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=je+NIN2tqYCJVyGuE6IZ8E75zX+G/y6Jcrh/L/hmAO4=;
+        b=bEiXSMb+CuwdR1IWh619jiS4MPymM3StWrpl5WKyKo++qZ8UT7hxEWUknq5tirrLt+
+         ZNfGDiuIrVWLJwdxx2LDyMUVpugWkqLZ4JlnkJUWtkptGODTDnDDBrJoxYFdad3VUXUo
+         YMjR61XSoZHBBcY1xwDIj56ZE0B08TWvBbGF1vQF9JGn2Aw+ns7Hz2wQPuldpVAZIyyL
+         awV0er75/XYMzAC1XoKmnycdUarXFBhbrOUyeauJ1IzGTGtV2jwM0kjF2YVz7eCPkX2N
+         0xN1R9biV5X8B1FOBKsAS21PyCqoSiaFA9ZERBBfsoC6VZ7BQZkfB9XJPEzQaOembu2q
+         10bw==
+X-Gm-Message-State: AOAM532THlRDR13AjR9RgTmCzLXsiNfbIAZpukNKaFj6cTvI+xeRWgnx
+        syQlMC2KqY3OyNCiHfA6bQgm4e1XZFU=
+X-Google-Smtp-Source: ABdhPJwA7IN09vN19LfhACsDYw/Fap9B8MfDsbk6ipd8F2IYm5dLm9ybHm1UIDR0xfNEJe5evKb26A==
+X-Received: by 2002:a17:90b:3b82:b0:1da:49fe:d057 with SMTP id pc2-20020a17090b3b8200b001da49fed057mr6059314pjb.32.1651127749204;
+        Wed, 27 Apr 2022 23:35:49 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id t29-20020a62d15d000000b0050d42864753sm12485670pfl.49.2022.04.27.23.35.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 23:35:48 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 15:35:42 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/23] mm/slab_common: make kmalloc_large_node()
+ consistent with kmalloc_large()
+Message-ID: <Ymo1vi0JrGVxaQB1@hyeyoo>
+References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+ <20220414085727.643099-9-42.hyeyoo@gmail.com>
+ <37811df5-b0f5-355b-41cf-2e491fb3cd6c@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC/RFT v2 03/11] dt-bindings: phy: rockchip: add PCIe v3
- constants
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220426132139.26761-1-linux@fw-web.de>
- <20220426132139.26761-4-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220426132139.26761-4-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37811df5-b0f5-355b-41cf-2e491fb3cd6c@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 15:21, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Tue, Apr 26, 2022 at 07:15:06PM +0200, Vlastimil Babka wrote:
+> On 4/14/22 10:57, Hyeonggon Yoo wrote:
+> > Move tracepoints into kmalloc_large_node() and add missing flag fix code.
+> > 
+> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 > 
-> Add constants that can be used in devicetree and driver for
-> PCIe v3 phy.
+
+Hello Vlastimil, thanks for review! ;-)
+
+> Hm so there's a problem with the tracepoint's caller.
 > 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> v2:
-> - new patch because splitting out this file
-> - rename file from snps to rockchip
-> ---
->  include/dt-bindings/phy/phy-rockchip-pcie3.h | 21 ++++++++++++++++++++
+> kmalloc_large() is only called from kmalloc() which is an inline  thus the
+> callsite of kmalloc() calls directly kmalloc_large().
+> So when kmalloc_large() does "trace_kmalloc(_RET_IP_, ...)" the _RET_IP_ is the
+> callsite of kmalloc(), which is what we want.
 
-Naming - vendor,device.
+kmalloc_large() had the exact problem before my series when called from __kmalloc().
 
->  1 file changed, 21 insertions(+)
->  create mode 100644 include/dt-bindings/phy/phy-rockchip-pcie3.h
+On top of current slab/for-next:
+  [000] .....    43.172574: kmalloc: call_site=__kmalloc+0x2aa/0x300 ptr=ffff88e2183a0000 bytes_req=12368 bytes_alloc=16384 gfp_flags=GFP_KERNEL
+
+Considering different usecases of kmalloc_large_node() (called from kmalloc_node() or __kmalloc_node()),
+I think we need trace/notrace version of kmalloc_large_node().
+
 > 
-> diff --git a/include/dt-bindings/phy/phy-rockchip-pcie3.h b/include/dt-bindings/phy/phy-rockchip-pcie3.h
-> new file mode 100644
-> index 000000000000..93e57edd337d
-> --- /dev/null
-> +++ b/include/dt-bindings/phy/phy-rockchip-pcie3.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> But with kmalloc_large_node()...
+> 
+> > ---
+> >  mm/slab_common.c |  6 ++++++
+> >  mm/slub.c        | 22 ++++------------------
+> >  2 files changed, 10 insertions(+), 18 deletions(-)
+> > 
+> > diff --git a/mm/slab_common.c b/mm/slab_common.c
+> > index e72089515030..cf17be8cd9ad 100644
+> > --- a/mm/slab_common.c
+> > +++ b/mm/slab_common.c
+> > @@ -955,6 +955,9 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+> >  	void *ptr = NULL;
+> >  	unsigned int order = get_order(size);
+> >  
+> > +	if (unlikely(flags & GFP_SLAB_BUG_MASK))
+> > +		flags = kmalloc_fix_flags(flags);
+> > +
+> >  	flags |= __GFP_COMP;
+> >  	page = alloc_pages_node(node, flags, order);
+> >  	if (page) {
+> > @@ -966,6 +969,9 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+> >  	ptr = kasan_kmalloc_large(ptr, size, flags);
+> >  	/* As ptr might get tagged, call kmemleak hook after KASAN. */
+> >  	kmemleak_alloc(ptr, size, 1, flags);
+> > +	trace_kmalloc_node(_RET_IP_, ptr,
+> > +			   size, PAGE_SIZE << order,
+> > +			   flags, node);
+> 
+> ... the _RET_IP_ here would be __kmalloc_node() which is not useful.
+> 
+> >  	return ptr;
+> >  }
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index 640712706f2b..f10a892f1772 100644
+> > --- a/mm/slub.c
+> > +++ b/mm/slub.c
+> > @@ -4396,15 +4396,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
+> >  	struct kmem_cache *s;
+> >  	void *ret;
+> >  
+> > -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+> > -		ret = kmalloc_large_node(size, flags, node);
+> > -
+> > -		trace_kmalloc_node(_RET_IP_, ret,
+> > -				   size, PAGE_SIZE << get_order(size),
+> > -				   flags, node);
+> 
+> Here it was OK because __kmalloc_node is expanded from something inline
+> coming from slab.h.
+> 
+> > -
+> > -		return ret;
+> > -	}
+> > +	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+> > +		return kmalloc_large_node(size, flags, node);
+> >  
+> >  	s = kmalloc_slab(size, flags);
+> >  
+> > @@ -4861,15 +4854,8 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+> >  	struct kmem_cache *s;
+> >  	void *ret;
+> >  
+> > -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+> > -		ret = kmalloc_large_node(size, gfpflags, node);
+> > -
+> > -		trace_kmalloc_node(caller, ret,
+> > -				   size, PAGE_SIZE << get_order(size),
+> > -				   gfpflags, node);
+> > -
+> > -		return ret;
+> > -	}
+> > +	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+> > +		return kmalloc_large_node(size, gfpflags, node);
+> 
+> And here it even forgets the 'caller'.
+>
 
-s/MIT/BSD-2-clause/ just like bindings because it is part of it. Unless
-you took it from something and it is already licensed like that?
+Thanks for catching this.
+I think notrace version + tracepoint would fit here.
 
-> +/*
-> + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_PHY_ROCKCHIP_PCIE3
-> +#define _DT_BINDINGS_PHY_ROCKCHIP_PCIE3
-> +
-> +/*
-> + * pcie30_phy_mode[2:0]
-> + * bit2: aggregation
-> + * bit1: bifurcation for port 1
-> + * bit0: bifurcation for port 0
-> + */
-> +#define PHY_MODE_PCIE_AGGREGATION 4	/* PCIe3x4 */
-> +#define PHY_MODE_PCIE_NANBNB	0	/* P1:PCIe3x2  +  P0:PCIe3x2 */
-> +#define PHY_MODE_PCIE_NANBBI	1	/* P1:PCIe3x2  +  P0:PCIe3x1*2 */
-> +#define PHY_MODE_PCIE_NABINB	2	/* P1:PCIe3x1*2 + P0:PCIe3x2 */
-> +#define PHY_MODE_PCIE_NABIBI	3	/* P1:PCIe3x1*2 + P0:PCIe3x1*2 */
-> +
-> +#endif /* _DT_BINDINGS_PHY_ROCKCHIP_PCIE3 */
+> >  
+> >  	s = kmalloc_slab(size, gfpflags);
+> >  
+> 
 
-
-Best regards,
-Krzysztof
+-- 
+Thanks,
+Hyeonggon

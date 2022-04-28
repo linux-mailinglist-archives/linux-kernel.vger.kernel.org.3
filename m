@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB7A513596
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940FB5135A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347663AbiD1Nss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S1347683AbiD1Nvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347628AbiD1Nsf (ORCPT
+        with ESMTP id S1344676AbiD1Nvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:48:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71C1525EAB
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:45:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3991B1474;
-        Thu, 28 Apr 2022 06:45:15 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 015423F5A1;
-        Thu, 28 Apr 2022 06:45:13 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 14:45:07 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH 04/22] firmware: arm_scmi: Validate
- BASE_DISCOVER_LIST_PROTOCOLS reply
-Message-ID: <YmqaSZJlPF2qX5Ta@e120937-lin>
-References: <20220330150551.2573938-1-cristian.marussi@arm.com>
- <20220330150551.2573938-5-cristian.marussi@arm.com>
- <20220428100729.qlzl5lkkn2r5u3ra@bogus>
+        Thu, 28 Apr 2022 09:51:42 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3ECB3C47
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 06:48:27 -0700 (PDT)
+Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id C3E1BCD1C0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 13:45:13 +0000 (UTC)
+Received: (Authenticated sender: michael.opdenacker@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 539D120000E;
+        Thu, 28 Apr 2022 13:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651153508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N1Tulo/oSEe9H5n9GB4cImHi2WR56NZD7DcX6uZWIXk=;
+        b=myJyZ8GGk5A2p0B9uBpfnuL2ZsC88dbhxXN9V1IW/gYeN20Yi9+foPepcWeqn7tTZtHtU6
+        oTlhFG+BNBdMXBnKx8WSLj65E8tZqaxdjntrsFz0Qk74wzLDmOpfTAKGdxwX3/lPPgSAAe
+        aSRMBNr86AHB30Vzets23IKTQAQfO6lmYlub17OaW4CY/8v8ajjiXSGzJTwnzqDiokUSUo
+        GBvbXM8ZGvVtP0fhB4KQM0ikT/xjHa7tYhdKV0wKcY9v9lhgLa55vIEJHiI8m2SSncLVlD
+        hq5piOHpdOZKTD71sxcXEfdmajdjiJVYQM/i5B4Pqf5kJ8opSz2TxsEOk4JftQ==
+Message-ID: <574d4aad-b786-71bc-18a0-f768a585658a@bootlin.com>
+Date:   Thu, 28 Apr 2022 15:45:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428100729.qlzl5lkkn2r5u3ra@bogus>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     michael.opdenacker@bootlin.com
+Content-Language: en-US
+To:     LKML <linux-kernel@vger.kernel.org>
+From:   Michael Opdenacker <michael.opdenacker@bootlin.com>
+Subject: How to mount the root filesystem with "strictatime"?
+Organization: Bootlin
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 11:07:29AM +0100, Sudeep Holla wrote:
-> On Wed, Mar 30, 2022 at 04:05:33PM +0100, Cristian Marussi wrote:
-> > Do not blindly trust SCMI backend server reply about list of implemented
-> > protocols, instead validate the reported length of the list of protocols
-> > against the real payload size of the message reply.
-> >
-> > Fixes: b6f20ff8bd9 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> >  drivers/firmware/arm_scmi/base.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
-> > index f279146f8110..c1165d1282ef 100644
-> > --- a/drivers/firmware/arm_scmi/base.c
-> > +++ b/drivers/firmware/arm_scmi/base.c
-> > @@ -189,6 +189,9 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
-> >  	list = t->rx.buf + sizeof(*num_ret);
-> >
-> >  	do {
-> > +		size_t real_list_sz;
-> > +		u32 calc_list_sz;
-> > +
-> >  		/* Set the number of protocols to be skipped/already read */
-> >  		*num_skip = cpu_to_le32(tot_num_ret);
-> >
-> > @@ -202,6 +205,24 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
-> >  			break;
-> >  		}
-> >
-> > +		if (t->rx.len < (sizeof(u32) * 2)) {
-> > +			dev_err(dev, "Truncated reply - rx.len:%zd\n",
-> > +				t->rx.len);
-> > +			ret = -EPROTO;
-> > +			break;
-> > +		}
-> > +
-> > +		real_list_sz = t->rx.len - sizeof(u32);
-> > +		calc_list_sz = ((loop_num_ret / sizeof(u32)) +
-> > +				!!(loop_num_ret % sizeof(u32))) * sizeof(u32);
-> 
-> Any reason this can't be (loop_num_ret - 1) / sizeof(u32) + 1 ?
-> 
+Greetings,
 
-At first sight could be fine with your easier version BUT what if loop_num_ret
-is returned as zero ?
+Sorry, this is almost a userspace question ;-)
 
-real_list_sz should be ZERO length and calc_list_sz
+I need to mount my root filesystem in "strictatime" mode, instead of the
+"relatime"  default.
 
-im my version:
+Of course, if I pass "rootflags=strictatime" through the kernel command
+line, it doesn't work because the kernel only knows about the
+"MS_STRICTATIME" define, and not about the "strictatime"  string, which
+is a userspace thing:
 
-calc_list_sz = ((0/4) +!!(0%4)) * 4   ===>> 0
+    2.351189] EXT4-fs (mmcblk0p2): Unrecognized mount option
+"strictatime" or missing value
 
-while in the simplified one gets calculated wrong:
+Would there be a way to do this from the kernel command line anyway?
+Otherwise, I'll run "mount -o remount,strictatime /" from my startup
+scripts.
 
-calc_list_sz = (0-1)/4 + 1 ====> 1
+Thanks
+Michael.
 
-...moreover being both loop_num_ret and calc_list_sz unsigned I am even
-not so sure about implicit casting messing things up evenm more :D
+-- 
+Michael Opdenacker, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-So I sticked to the more convoluted approach :D
-
-....Have I missed something else ?
-
-Thanks,
-Cristian

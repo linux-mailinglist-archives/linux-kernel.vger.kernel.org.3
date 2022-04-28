@@ -2,134 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A66512859
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 02:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71000512883
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239677AbiD1BBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S240145AbiD1BME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiD1BBu (ORCPT
+        with ESMTP id S231486AbiD1BMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:01:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB00BE24;
-        Wed, 27 Apr 2022 17:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651107517; x=1682643517;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ibHcxG9AHdP/Hj3kBOm8zboMb+9SC8cFbK9QS2LtEU4=;
-  b=M/qLkpK33ycDu9Wi+t/TWufAY3fUdrxIydEkKL7tEbAljzAyudBGAwh6
-   UMvOTRTpVK4sYPZR9wICGa7ltE/IUOlvZnDV3NnU6DIVBMh/s0Y7SmJDV
-   f4Q8k/8Bj0+VNH17Gm1oeeI/LUISucInnFYjRbJ5GnJ22XqiIoHNJsdyf
-   u62GxiYJmto+IGjsB+sjyGcXWX2nF6eUsd6NhKou63MEHQEFwOga/p8mP
-   bTv+tg/KRajx4TnGyE2SY4Ug7IZ+AqP0PUNdO5F8ZWPxqxf46aOQ5K9FW
-   2t54dGpS6j8sxAHSfW6Uo8xWpB2w+dZ9xgUkKiEiRV6flsqH7P4I0LS2x
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="329063334"
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="329063334"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 17:58:37 -0700
-X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
-   d="scan'208";a="596551591"
-Received: from rrnambia-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.78])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 17:58:34 -0700
-Message-ID: <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Thu, 28 Apr 2022 12:58:31 +1200
-In-Reply-To: <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
-         <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
-         <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com>
-         <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
-         <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 27 Apr 2022 21:12:03 -0400
+X-Greylist: delayed 555 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Apr 2022 18:08:50 PDT
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334CF7245B;
+        Wed, 27 Apr 2022 18:08:50 -0700 (PDT)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 830FE800324;
+        Thu, 28 Apr 2022 08:59:30 +0800 (CST)
+From:   Jianqun Xu <jay.xu@rock-chips.com>
+To:     peppe.cavallaro@st.com, alexandre.torgue@st.com,
+        joabreu@synopsys.com
+Cc:     davem@davemloft.net, kuba@kernel.org, mcoquelin.stm32@gmail.com,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jianqun Xu <jay.xu@rock-chips.com>
+Subject: [PATCH] ethernet: stmmac: fix for none child queue node for tx node
+Date:   Thu, 28 Apr 2022 08:59:28 +0800
+Message-Id: <20220428005928.525921-1-jay.xu@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRlMGEJWSUgdGktITx
+        hKThlIVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MyI6Cyo5FT04OhM1ES41CkM3
+        IzEwFBlVSlVKTU5KSktMTkxKSktDVTMWGhIXVREaAlUDDjsJFBgQVhgTEgsIVRgUFkVZV1kSC1lB
+        WU5DVUlJVUxVSkpPWVdZCAFZQUlKS0w3Bg++
+X-HM-Tid: 0a806dae2479b03akuuu830fe800324
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-27 at 17:50 -0700, Dave Hansen wrote:
-> On 4/27/22 17:37, Kai Huang wrote:
-> > On Wed, 2022-04-27 at 14:59 -0700, Dave Hansen wrote:
-> > > In 5 years, if someone takes this code and runs it on Intel hardware
-> > > with memory hotplug, CPU hotplug, NVDIMMs *AND* TDX support, what happens?
-> > 
-> > I thought we could document this in the documentation saying that this code can
-> > only work on TDX machines that don't have above capabilities (SPR for now).  We
-> > can change the code and the documentation  when we add the support of those
-> > features in the future, and update the documentation.
-> > 
-> > If 5 years later someone takes this code, he/she should take a look at the
-> > documentation and figure out that he/she should choose a newer kernel if the
-> > machine support those features.
-> > 
-> > I'll think about design solutions if above doesn't look good for you.
-> 
-> No, it doesn't look good to me.
-> 
-> You can't just say:
-> 
-> 	/*
-> 	 * This code will eat puppies if used on systems with hotplug.
-> 	 */
-> 
-> and merrily await the puppy bloodbath.
-> 
-> If it's not compatible, then you have to *MAKE* it not compatible in a
-> safe, controlled way.
-> 
-> > > You can't just ignore the problems because they're not present on one
-> > > version of the hardware.
-> 
-> Please, please read this again ^^
+In case of nothing to be set for tx node result in no child queue node
+for the tx node, this patch init the queue to tx_queues_to_use instead
+of 0 to support dt file set no queue node for tx node.
 
-OK.  I'll think about solutions and come back later.
+Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > > What about all the concerns about TDX module configuration changing?
-> > 
-> > Leaving the TDX module in fully initialized state or shutdown state (in case of
-> > error during it's initialization) to the new kernel is fine.  If the new kernel
-> > doesn't use TDX at all, then the TDX module won't access memory using it's
-> > global TDX KeyID.  If the new kernel wants to use TDX, it will fail on the very
-> > first SEAMCALL when it tries to initialize the TDX module, and won't use
-> > SEAMCALL to call the TDX module again.  If the new kernel doesn't follow this,
-> > then it is a bug in the new kernel, or the new kernel is malicious, in which
-> > case it can potentially corrupt the data.  But I don't think we need to consider
-> > this as if the new kernel is malicious, then it can corrupt data anyway.
-> > 
-> > Does this make sense?
-> 
-> No, I'm pretty lost.  But, I'll look at the next version of this with
-> fresh eyes and hopefully you'll have had time to streamline the text by
-> then.
-
-OK thanks.
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index 2d8c095f3856..dfe2375bc3c6 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+@@ -235,7 +235,7 @@ static int stmmac_mtl_setup(struct platform_device *pdev,
+ 	else
+ 		plat->tx_sched_algorithm = MTL_TX_ALGORITHM_SP;
+ 
+-	queue = 0;
++	queue = plat->tx_queues_to_use;
+ 
+ 	/* Processing individual TX queue config */
+ 	for_each_child_of_node(tx_node, q_node) {
 -- 
-Thanks,
--Kai
-
+2.25.1
 

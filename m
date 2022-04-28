@@ -2,187 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BA4513F07
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDBF513F10
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 01:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353263AbiD1X2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 19:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S1353277AbiD1XcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 19:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiD1X2f (ORCPT
+        with ESMTP id S233655AbiD1XcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 19:28:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063CE694B8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:25:19 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so7080333pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:25:18 -0700 (PDT)
+        Thu, 28 Apr 2022 19:32:07 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3F9BCB71
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:28:49 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id q23so8667571wra.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 16:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=3i63Gua/vuLdMfOkLrBhash2jdLg2GEMUWtLvv/TlUI=;
-        b=VD5O8MB7E9MVrRah4Ce/+b8ng2HQ1VbzRaKRHy2ZI9pRNMR71WRfC3aICC5NRmvAme
-         87pSBi08ICiaScgjMUeh8AjYv940jyO/j5JuyBa9tLzcIYnm8GoVk26yYQVWjXHs48YA
-         9QJ/OM5szo+3Hv3LwD+b50DCXhqO5T0q6F7FvO8uyVcFWqZE9OV0VyrIpWSNC+TuaIAu
-         TjtXY+Cxgjy7CNmGZgo5whWf1eers1cmzeOMMuuq6Mw/A372CjoahrSBnJICmpT7ShLa
-         5F1bjP9iw6qmD5tPnMojBILpgVQfKwzqF/1SNFtkS8B5n/Et5hTgNB2nGixJ0j+6Hp4c
-         igCA==
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AXuxilFt8bJ4TZzFoEehtqH1L61QxOPFeWD14sA1KQ4=;
+        b=kVB3werFcuHON4QX+/OUCotuXYa3W3x13MoRWMIGj26V9rGs2dQ3RC0L4IVjEM/ugE
+         PpT64lSYNqkTKIxDxpILxZoHX+wJ9nL1nV4g/hJ/e5nJIfPUXwFlX2CR1qYbCIHq2lf2
+         Jriu6al3z6pQ806XQWQuNs1BvAxJyvPNYIHnAMmLbZEptYiLGtJ/6TtAPdlK2a5Z5Es1
+         MqpIfH0nluvXRbRGG8ArFOvxsPdwBSff8V7cpoJcANPG3Q3/zKZWt7DkNhe9tyBtRWTW
+         Xj5kuAdMxkVLiFTDAiE9trlEjdSupiLgss7UqQ3YZk2qQlk2EFO6EteZ2XOAp8bdYE6p
+         P5bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=3i63Gua/vuLdMfOkLrBhash2jdLg2GEMUWtLvv/TlUI=;
-        b=Y33SGP95sl1D1kMgf1+PERdVKye+5l2nyrkWgtzdBymJSpZ2hqXkO+4FDbocGkNtn+
-         rZwQ8jZsBTXnt+3R5rB61eTOBsVpNJ2UxQfIbyD+dwml5SzJ0ud+MhQRD8lRLyfGx5cd
-         SjMozpoK+ZpZosLdSOABtm2yWBR5a23tRhgRnz8YKESN7unzHsGLWeelQqegy5U0bvTU
-         X99SZ4ZsKODffjxKelRXZJc4oRBNn3xJTEm3CwRFPQbnI5NBdirtHYv4EM3TqvqYaoYP
-         K2ACbDdVMFe2s0rGbTET6GN4osQn+seEMUWEkdCtWq2aNtPR5XkFx3K44B69sLJX8TUF
-         fapg==
-X-Gm-Message-State: AOAM533fx+toYgVgikEVNzbTLHEZXA0LRfVE3QvptSu0MnRPB5X4etSy
-        DjrpQnld4c4wambasCltnxnL48fk1z5++N30
-X-Google-Smtp-Source: ABdhPJwAlbqByfjUxd6nYad+wT7XJDqwmTtqImQIXFkPE1XAW1diD5P7Pxsyq8/I54lmvajV7lkDow==
-X-Received: by 2002:a17:90b:3e82:b0:1d9:3195:f259 with SMTP id rj2-20020a17090b3e8200b001d93195f259mr741360pjb.150.1651188318065;
-        Thu, 28 Apr 2022 16:25:18 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 1-20020a631541000000b003c14af50646sm3909894pgv.94.2022.04.28.16.25.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 16:25:17 -0700 (PDT)
-Message-ID: <821f42b6-7d91-8074-8212-d34998097de4@kernel.dk>
-Date:   Thu, 28 Apr 2022 17:25:16 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AXuxilFt8bJ4TZzFoEehtqH1L61QxOPFeWD14sA1KQ4=;
+        b=UMpz6RgyOdSOWp3r/NNS6Jox8kD2uXxO+LtSmVOEWXtY/oPUAw3YwbThdTNRS49pLx
+         vez8lmYQ+lal4ibd7EEn+S1TEwugtj8A3M89VIeeDetKbOAlauoD8x1aXnvJmdkm5+aS
+         0RGRFnioE4AmeIZ2Y4oHdG3BNYI8/fWOOkvSlXn2OoUZkJh1oXIViAOZvG369Sjp5oLr
+         j5yLVsypriP7WolulpdmyhOq71xv7sn4xcJTCoi2uzAj0mDGj8oSZ4f0EtG3yEZzPXPa
+         wTecCn5RzXwOD00Qyqrus7mndX1Keswr1Dv5Zvd7/UuNzdGsI9BEWgsjc5yUVdxyoNKV
+         P4yg==
+X-Gm-Message-State: AOAM5325IKJEPFkZGuqWG4pHQC86PlmxLgnftxiwf8PkCCBiUQ4clyYO
+        yf5qgZWgD4kL85HOWUrUJoifog==
+X-Google-Smtp-Source: ABdhPJyLMnx0MArgAV/mK24K7aUqkpV2X3TMJIQ9RSnXzkai27jhSVBe+fph9u+WWElyurpBPsNCOA==
+X-Received: by 2002:a05:6000:124a:b0:20a:df42:3d4e with SMTP id j10-20020a056000124a00b0020adf423d4emr16141395wrx.33.1651188528248;
+        Thu, 28 Apr 2022 16:28:48 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id g13-20020a5d64ed000000b0020a9e488976sm1061761wri.25.2022.04.28.16.28.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 16:28:47 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 00:28:45 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
+Subject: Re: [PATCH 1/3] cdrom: remove the unused driver specific disc change
+ ioctl
+Message-ID: <YmsjLd5wuWE06dDl@equinox>
+References: <20220427132436.12795-1-paul.gortmaker@windriver.com>
+ <20220427132436.12795-2-paul.gortmaker@windriver.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v2] task_work: allow TWA_SIGNAL without a rescheduling IPI
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427132436.12795-2-paul.gortmaker@windriver.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some use cases don't always need an IPI when sending a TWA_SIGNAL
-notification. Add TWA_SIGNAL_NO_IPI, which is just like TWA_SIGNAL, except
-it doesn't send an IPI to the target task. It merely sets
-TIF_NOTIFY_SIGNAL and wakes up the task.
+On Wed, Apr 27, 2022 at 09:24:33AM -0400, Paul Gortmaker wrote:
+> This was only used by the ide-cd driver, which went away in
+> commit b7fb14d3ac63 ("ide: remove the legacy ide driver")
+> so we might as well take advantage of that and get rid of
+> this hook as well.
+> 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Phillip Potter <phil@philpotter.co.uk>
+> Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
+> ---
+>  Documentation/cdrom/cdrom-standard.rst | 10 ----------
+>  drivers/cdrom/cdrom.c                  |  8 --------
+>  include/linux/cdrom.h                  |  1 -
+>  3 files changed, 19 deletions(-)
+> 
+> diff --git a/Documentation/cdrom/cdrom-standard.rst b/Documentation/cdrom/cdrom-standard.rst
+> index 52ea7b6b2fe8..7964fe134277 100644
+> --- a/Documentation/cdrom/cdrom-standard.rst
+> +++ b/Documentation/cdrom/cdrom-standard.rst
+> @@ -218,7 +218,6 @@ current *struct* is::
+>  		int (*tray_move)(struct cdrom_device_info *, int);
+>  		int (*lock_door)(struct cdrom_device_info *, int);
+>  		int (*select_speed)(struct cdrom_device_info *, int);
+> -		int (*select_disc)(struct cdrom_device_info *, int);
+>  		int (*get_last_session) (struct cdrom_device_info *,
+>  					 struct cdrom_multisession *);
+>  		int (*get_mcn)(struct cdrom_device_info *, struct cdrom_mcn *);
+> @@ -419,15 +418,6 @@ this `auto-selection` capability, the decision should be made on the
+>  current disc loaded and the return value should be positive. A negative
+>  return value indicates an error.
+>  
+> -::
+> -
+> -	int select_disc(struct cdrom_device_info *cdi, int number)
+> -
+> -If the drive can store multiple discs (a juke-box) this function
+> -will perform disc selection. It should return the number of the
+> -selected disc on success, a negative value on error. Currently, only
+> -the ide-cd driver supports this functionality.
+> -
+>  ::
+>  
+>  	int get_last_session(struct cdrom_device_info *cdi,
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index 2dc9da683a13..0a858bfea849 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -2443,14 +2443,6 @@ static int cdrom_ioctl_select_disc(struct cdrom_device_info *cdi,
+>  			return -EINVAL;
+>  	}
+>  
+> -	/*
+> -	 * ->select_disc is a hook to allow a driver-specific way of
+> -	 * seleting disc.  However, since there is no equivalent hook for
+> -	 * cdrom_slot_status this may not actually be useful...
+> -	 */
+> -	if (cdi->ops->select_disc)
+> -		return cdi->ops->select_disc(cdi, arg);
+> -
+>  	cd_dbg(CD_CHANGER, "Using generic cdrom_select_disc()\n");
+>  	return cdrom_select_disc(cdi, arg);
+>  }
+> diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+> index 0a89f111e00e..67caa909e3e6 100644
+> --- a/include/linux/cdrom.h
+> +++ b/include/linux/cdrom.h
+> @@ -77,7 +77,6 @@ struct cdrom_device_ops {
+>  	int (*tray_move) (struct cdrom_device_info *, int);
+>  	int (*lock_door) (struct cdrom_device_info *, int);
+>  	int (*select_speed) (struct cdrom_device_info *, int);
+> -	int (*select_disc) (struct cdrom_device_info *, int);
+>  	int (*get_last_session) (struct cdrom_device_info *,
+>  				 struct cdrom_multisession *);
+>  	int (*get_mcn) (struct cdrom_device_info *,
+> -- 
+> 2.33.0
+> 
 
-This can be useful in avoiding a forceful transition to the kernel if the
-task is running in userspace. Depending on the task_work in question, it
-may be quite fine waiting for the next reschedule or kernel enter anyway,
-or the use case may even have other mechanisms for hinting to the task
-that a transition may be useful. This can drive more cooperative
-scheduling of task_work.
+Hi Paul,
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
+Thanks for the patch, looks good. I'll send onto Jens during the next
+merge window.
 
-v2: - improve code comments and split it up a bit rather than have it be
-      one giant blob.
-    - improve commit message.
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
 
- include/linux/sched/signal.h | 13 +++++++++++--
- include/linux/task_work.h    |  1 +
- kernel/task_work.c           | 25 +++++++++++++++++++------
- 3 files changed, 31 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 3c8b34876744..66b689f6cfcb 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -355,14 +355,23 @@ static inline void clear_notify_signal(void)
- 	smp_mb__after_atomic();
- }
- 
-+/*
-+ * Returns 'true' if kick_process() is needed to force a transition from
-+ * user -> kernel to guarantee expedient run of TWA_SIGNAL based task_work.
-+ */
-+static inline bool __set_notify_signal(struct task_struct *task)
-+{
-+	return !test_and_set_tsk_thread_flag(task, TIF_NOTIFY_SIGNAL) &&
-+	       !wake_up_state(task, TASK_INTERRUPTIBLE);
-+}
-+
- /*
-  * Called to break out of interruptible wait loops, and enter the
-  * exit_to_user_mode_loop().
-  */
- static inline void set_notify_signal(struct task_struct *task)
- {
--	if (!test_and_set_tsk_thread_flag(task, TIF_NOTIFY_SIGNAL) &&
--	    !wake_up_state(task, TASK_INTERRUPTIBLE))
-+	if (__set_notify_signal(task))
- 		kick_process(task);
- }
- 
-diff --git a/include/linux/task_work.h b/include/linux/task_work.h
-index 897494b597ba..795ef5a68429 100644
---- a/include/linux/task_work.h
-+++ b/include/linux/task_work.h
-@@ -17,6 +17,7 @@ enum task_work_notify_mode {
- 	TWA_NONE,
- 	TWA_RESUME,
- 	TWA_SIGNAL,
-+	TWA_SIGNAL_NO_IPI,
- };
- 
- static inline bool task_work_pending(struct task_struct *task)
-diff --git a/kernel/task_work.c b/kernel/task_work.c
-index c59e1a49bc40..2f21a1e64ad4 100644
---- a/kernel/task_work.c
-+++ b/kernel/task_work.c
-@@ -12,12 +12,22 @@ static struct callback_head work_exited; /* all we need is ->next == NULL */
-  * @notify: how to notify the targeted task
-  *
-  * Queue @work for task_work_run() below and notify the @task if @notify
-- * is @TWA_RESUME or @TWA_SIGNAL. @TWA_SIGNAL works like signals, in that the
-- * it will interrupt the targeted task and run the task_work. @TWA_RESUME
-- * work is run only when the task exits the kernel and returns to user mode,
-- * or before entering guest mode. Fails if the @task is exiting/exited and thus
-- * it can't process this @work. Otherwise @work->func() will be called when the
-- * @task goes through one of the aforementioned transitions, or exits.
-+ * is @TWA_RESUME, @TWA_SIGNAL, or @TWA_SIGNAL_NO_IPI.
-+ * 
-+ * @TWA_SIGNAL works like signals, in that the it will interrupt the targeted
-+ * task and run the task_work, regardless of whether the task is currently
-+ * running in the kernel or userspace.
-+ * @TWA_SIGNAL_NO_IPI works like @TWA_SIGNAL, except it doesn't send a
-+ * reschedule IPI to force the targeted task to reschedule and run task_work.
-+ * This can be advantageous if there's no strict requirement that the
-+ * task_work be run as soon as possible, just whenever the task enters the
-+ * kernel anyway.
-+ * @TWA_RESUME work is run only when the task exits the kernel and returns to
-+ * user mode, or before entering guest mode.
-+ * 
-+ * Fails if the @task is exiting/exited and thus it can't process this @work.
-+ * Otherwise @work->func() will be called when the @task goes through one of
-+ * the aforementioned transitions, or exits.
-  *
-  * If the targeted task is exiting, then an error is returned and the work item
-  * is not queued. It's up to the caller to arrange for an alternative mechanism
-@@ -53,6 +63,9 @@ int task_work_add(struct task_struct *task, struct callback_head *work,
- 	case TWA_SIGNAL:
- 		set_notify_signal(task);
- 		break;
-+	case TWA_SIGNAL_NO_IPI:
-+		__set_notify_signal(task);
-+		break;
- 	default:
- 		WARN_ON_ONCE(1);
- 		break;
--- 
-2.35.1
-
--- 
-Jens Axboe
-
+Regards,
+Phil

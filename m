@@ -2,104 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BCC5128B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE9D5128B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240364AbiD1BYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S240444AbiD1BZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiD1BYq (ORCPT
+        with ESMTP id S233607AbiD1BZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:24:46 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D46989CD2;
-        Wed, 27 Apr 2022 18:21:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KpdB31JS9z4xL5;
-        Thu, 28 Apr 2022 11:21:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651108892;
-        bh=/zUY0uZdm8DEHDsmmVYn7dXawhy4V1WT3I/K1KXfZIY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DNN1toqJW9mW6J2hYAKsPiZtIOY1WmmEdXbDZC+O2bAhjtaW1W/5QHerWctIIJAj3
-         y78kOYu7FHXcnQSRmNA6SlU8NKUCmtUB17y6lyoLYprHYAaS6Z+SfaUI8UizWvfT3C
-         q8QFc5pXK2IypbIk9OdpmtTDCvKbkWAYy8XSkTZUDXJPho889/UZmLquKVWRd5elaP
-         sD0v2w3jrjNKBViWmCl4J+fbmR4QJz+zwrYTnuojjsy+Jns5dKRt4gI/k/af04eDI0
-         BKM5cPY3yxYiBjII3yWcu9tyVcaDQR70leCbeL97DdyjS3G7rjHo/78cIIa7cclh7l
-         XXua+k5maS6JA==
-Date:   Thu, 28 Apr 2022 11:21:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220428112130.1f689e5e@canb.auug.org.au>
+        Wed, 27 Apr 2022 21:25:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD68BF02;
+        Wed, 27 Apr 2022 18:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651108910; x=1682644910;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=r5hrV7mZOtCpu7DBMAczG1A8dnsdM0A81gJCQHLw+9c=;
+  b=MIKPzHJqS99px1iAAQ6m2CBgaWw+mZFkFMSmMWPUT9/gKhGgrbBrFLtV
+   Z4qlry7Bka7CkEtXEAOH8BGZrvFZuM91rMS3SqKuxwVqIjCHVfqSAhvN8
+   3biOgn7jaBdC+ZFOSHMrsrczWiXAoK3qRhltFzNbUZdn7phJV4pPpFQzi
+   M99Bz/t0MS5G+bGVa0WdtmAguB2JNIMFebdkYvEhe0sY6LzHqE7VVIOnI
+   rwr+VSywGTJKwQfm1VsVpc8WIqXknXpQFSvnhTXcuaTw9RrrptYNQ79Lu
+   0vrKOZtX44fxMPdt1oMF5nLv2WZaRRqLlGWklLFdcn5DR3/O8F5CK+yEP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="265936800"
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="265936800"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:21:48 -0700
+X-IronPort-AV: E=Sophos;i="5.90,294,1643702400"; 
+   d="scan'208";a="559328068"
+Received: from rrnambia-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.78])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 18:21:44 -0700
+Message-ID: <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Date:   Thu, 28 Apr 2022 13:21:42 +1200
+In-Reply-To: <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+         <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.6XHw4e_seBL1aVx_pir32e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.6XHw4e_seBL1aVx_pir32e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 2022-04-27 at 18:01 -0700, Dan Williams wrote:
+> On Tue, Apr 26, 2022 at 1:10 PM Dave Hansen <dave.hansen@intel.com> wrote:
+> [..]
+> > > 3. Memory hotplug
+> > > 
+> > > The first generation of TDX architecturally doesn't support memory
+> > > hotplug.  And the first generation of TDX-capable platforms don't support
+> > > physical memory hotplug.  Since it physically cannot happen, this series
+> > > doesn't add any check in ACPI memory hotplug code path to disable it.
+> > > 
+> > > A special case of memory hotplug is adding NVDIMM as system RAM using
+> 
+> Saw "NVDIMM" mentioned while browsing this, so stopped to make a comment...
+> 
+> > > kmem driver.  However the first generation of TDX-capable platforms
+> > > cannot enable TDX and NVDIMM simultaneously, so in practice this cannot
+> > > happen either.
+> > 
+> > What prevents this code from today's code being run on tomorrow's
+> > platforms and breaking these assumptions?
+> 
+> The assumption is already broken today with NVDIMM-N. The lack of
+> DDR-T support on TDX enabled platforms has zero effect on DDR-based
+> persistent memory solutions. In other words, please describe the
+> actual software and hardware conflicts at play here, and do not make
+> the mistake of assuming that "no DDR-T support on TDX platforms" ==
+> "no NVDIMM support".
 
-Hi all,
+Sorry I got this information from planning team or execution team I guess. I was
+told NVDIMM and TDX cannot "co-exist" on the first generation of TDX capable
+machine.  "co-exist" means they cannot be turned on simultaneously on the same
+platform.  I am also not aware NVDIMM-N, nor the difference between DDR based
+and DDR-T based persistent memory.  Could you give some more background here so
+I can take a look?
 
-Today's linux-next merge of the net-next tree got a conflict in:
+> 
+> > > Another case is admin can use 'memmap' kernel command line to create
+> > > legacy PMEMs and use them as TD guest memory, or theoretically, can use
+> > > kmem driver to add them as system RAM.  To avoid having to change memory
+> > > hotplug code to prevent this from happening, this series always include
+> > > legacy PMEMs when constructing TDMRs so they are also TDX memory.
+> 
+> I am not sure what you are trying to say here?
 
-  drivers/net/wan/cosa.c
+We want to always make sure the memory managed by page allocator is TDX memory.
+So if the legacy PMEMs are unconditionally configured as TDX memory, then we
+don't need to prevent them from being added as system memory via kmem driver.
 
-between commit:
+> 
+> > > 4. CPU hotplug
+> > > 
+> > > The first generation of TDX architecturally doesn't support ACPI CPU
+> > > hotplug.  All logical cpus are enabled by BIOS in MADT table.  Also, the
+> > > first generation of TDX-capable platforms don't support ACPI CPU hotplug
+> > > either.  Since this physically cannot happen, this series doesn't add any
+> > > check in ACPI CPU hotplug code path to disable it.
+> 
+> What are the actual challenges posed to TDX with respect to CPU hotplug?
 
-  d48fea8401cf ("net: cosa: fix error check return value of register_chrdev=
-()")
+During the TDX module initialization, there is a step to call SEAMCALL on all
+logical cpus to initialize per-cpu TDX staff.  TDX doesn't support initializing
+the new hot-added CPUs after the initialization.  There are MCHECK/BIOS changes
+to enforce this check too I guess but I don't know details about this.
 
-from the net tree and commit:
+> 
+> > > Also, only TDX module initialization requires all BIOS-enabled cpus are
+> 
+> Please define "BIOS-enabled" cpus. There is no "BIOS-enabled" line in
+> /proc/cpuinfo for example.
 
-  89fbca3307d4 ("net: wan: remove support for COSA and SRP synchronous seri=
-al boards")
+It means the CPUs with "enable" bit set in the MADT table.
 
-from the net-next tree.
 
-I fixed it up (I just deleted the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+-- 
+Thanks,
+-Kai
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/.6XHw4e_seBL1aVx_pir32e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJp7BoACgkQAVBC80lX
-0Gxctwf/Y3WJAv6fm9yWW+oAiXEaDTdcqNFePE5NVmvr3qRCveuYmykSHwCAaukG
-m8rYzHvO2/4/uoyE2iwtRLNVsbA7B+dNv/YS8xz+6OEOnf91KnPiC0M4q+ivZi+D
-C1DMKL30KV+337koN4+aMUyD+VEXxAwLmDqp3+wTigFNNtKh1fSJ2JM9o1Sd2Qtw
-9uGzxwoG68IS2im1R4vdXsV1H3UUuAp42MCg5ilQGxzStlNLe6ZTTvePOykh6nw+
-IWyWtsYLUw9a0Dc9hpR2tJw16rV8tnQtpmY0ead/C3K/iE6OEU3qDS5UVvV20olj
-bS9guF6BVayyNaPpes0vteAv4QiHCg==
-=X9ev
------END PGP SIGNATURE-----
-
---Sig_/.6XHw4e_seBL1aVx_pir32e--

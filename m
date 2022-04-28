@@ -2,295 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41465135DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381BF5135E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347831AbiD1OA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S1347864AbiD1OCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346899AbiD1OA4 (ORCPT
+        with ESMTP id S1347841AbiD1OCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:00:56 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464F53DDD3;
-        Thu, 28 Apr 2022 06:57:39 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 642DFDF8DB;
-        Thu, 28 Apr 2022 06:57:39 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ig7oScWZPIsr; Thu, 28 Apr 2022 06:57:38 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 15:57:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1651154258; bh=vLbHlYOt6LoVdFmtMXhjYEpdyn/I1inbFkDo5q7Xc2Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nz8/Fafk2Vr5aiEgJyewn2lnV+gj0UhPCZcRjHm8Ga08pP1HPo0C5a4D+B1Y4T7U4
-         8ex9tXNujPUROXlCvv+P9shIRqhNsxZ3shnE0SQtMXvuPTZElqrm/ne+29SKalNmBP
-         Yuk5J4MOeOy8feiBbKKVsRi/25Mj0ftp5H28iuiRQN83PNXbg5lnJOvFdVnoCIAM6S
-         AEGni3jVS9boTKi6AmBHBYyAkYI0q2CHbKIFlpAM00++HnH3zpH0KsqQJqYkvDAHij
-         /pQjVfgLhwFE1IYrkCn3uvPgR6IDzl3cWZHw5leET3fv3TlvGJeLe7l4dthxY5rXBO
-         6CNgQPfVkpwyQ==
-From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCHv2 1/2] doc/media api: Try to make enum usage clearer
-Message-ID: <20220428155723.456b7ff0.dorota.czaplejewicz@puri.sm>
-In-Reply-To: <20220428130448.bfht2nf23n6lidsk@uno.localdomain>
-References: <20220428105211.7106ce6a.dorota.czaplejewicz@puri.sm>
-        <20220428130448.bfht2nf23n6lidsk@uno.localdomain>
-Organization: Purism
+        Thu, 28 Apr 2022 10:02:02 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A602AAFB24;
+        Thu, 28 Apr 2022 06:58:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id j6so9707321ejc.13;
+        Thu, 28 Apr 2022 06:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mPRYPDXAZuw5D7+ekHvT1vGnzy2EHk8rMdCszNSHcAQ=;
+        b=jH2vOcrLBFhjoWGKAaXeJzRqbQvfiJe6hKq/lT/TIgA2UAw6gSAxz+fH3z4Wj+nHeZ
+         lfsD25NYRLi5oHPyCHd8gf5gA51kpZJgQJBLw0zut3s4MmL0FHQEj8nTPANCpobeaO+M
+         EOuVHY5c4lVKbjy9C27Zsx3dTWTIN51ZBxCk2j+shL74AiYyg5RhLTwbvddVfjVrtu2L
+         bN02OGUFKqoDGxpcUyfx8LYyE7eIaOBCb7KcGqGXJxVmZrPtWx/PWIABcRJ4stCk1bQp
+         BwGI26oQizJkxFvTb0nvzUy1EdOAAh8AorGytgG5EiPzIGDIxQpaveLM6faNEF0nzH1U
+         0Hlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mPRYPDXAZuw5D7+ekHvT1vGnzy2EHk8rMdCszNSHcAQ=;
+        b=1TM4IUXwiM6WYAATDr0YwSxJRpSadkuCj+yN/WCOUUPgHcpk5G25iAGIcaZ5nZobMz
+         EXY0cSsyIDZfkBDMyFm4IX5wfvcn157GU2N4MqB3KkNeyMtQYO25IdELKkghyWUlOauB
+         CRLcpcp0lvJl7kCj9WGD+oGXCXl3eHDQiynUlTRwGfNxyd/rlTkTSpZWZG4XajXYiLoV
+         WrBkfj1PUZ6ytpsv0b5skudf/c9+rG6dnxd1mHZhY/KUa8rETwKFOd8QeTKmq+U+WTs/
+         04jN8WFjir9TVw59n6NLgldOLuWn/eR9a1d2SRMdOTVuiVDl6FMPMMr6ZOWCN4zaU94o
+         i4UQ==
+X-Gm-Message-State: AOAM531o8wbG1u0mOpZJ1hpzFek8kD0/iQZ4ECLAzqDgiY/S7Y5fAaCy
+        Uace8b+vShbChPFNBbPCqUTr59KW/yk=
+X-Google-Smtp-Source: ABdhPJx2BQeYk9nAGrvmZ3uvd8WwEp5vq3xVW4vNweqxTfcjDOCs5g6QX4AQVr3s0QKKauO+KVJORA==
+X-Received: by 2002:a17:906:8982:b0:6f3:95f4:4adf with SMTP id gg2-20020a170906898200b006f395f44adfmr19873768ejc.524.1651154325998;
+        Thu, 28 Apr 2022 06:58:45 -0700 (PDT)
+Received: from 127.0.0.1localhost ([85.255.235.145])
+        by smtp.gmail.com with ESMTPSA id t19-20020aa7d4d3000000b0042617ba63c2sm1652568edr.76.2022.04.28.06.58.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 06:58:45 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH v2 net-next 00/11] UDP/IPv6 refactoring
+Date:   Thu, 28 Apr 2022 14:57:55 +0100
+Message-Id: <cover.1651153920.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vPfZ4CbmyVqo94p47OVPln.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/vPfZ4CbmyVqo94p47OVPln.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Refactor UDP/IPv6 and especially udpv6_sendmsg() paths. The end result looks
+cleaner than it was before and the series also removes a bunch of instructions
+and other overhead from the hot path positively affecting performance.
 
-Hello,
+It was a part of a larger series, there were some perf numbers for it, see
+https://lore.kernel.org/netdev/cover.1648981570.git.asml.silence@gmail.com/
 
-On Thu, 28 Apr 2022 15:04:48 +0200
-Jacopo Mondi <jacopo@jmondi.org> wrote:
+v2: no code changes, just resending properly
 
-> Hi Dorota,
->=20
->=20
-> On Thu, Apr 28, 2022 at 10:52:11AM +0200, Dorota Czaplejewicz wrote:
-> > Added: mbus codes must not repeat
-> > Added: no holes in the enumeration
-> > Added: enumerations per what?
-> > Added: who fills in what in calls
-> > Changed: "zero" -> "0"
-> > Changed: "given" -> "specified"
-> > =20
-> A more discoursive commit message would be appreciated. Just a few lines
-> before the crude list of changes:
->=20
-> Something like
->=20
-> "Update the documentation of ... in order to clarify etc etc"
->=20
-> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > ---
-> > Hello,
-> >
-> > this is the second attempt at updating the media documentation.
-> >
-> > Differences from previous: "selected" is now "specified", "array" is no=
-w "enumeration", and "caller" is now "application". =20
->=20
-> Please stay in 80 cols even for parts that won't end up in the commit
-> message, it's hard to read this if you have multiple terminal windows
-> open.
+Pavel Begunkov (11):
+  ipv6: optimise ipcm6 cookie init
+  udp/ipv6: refactor udpv6_sendmsg udplite checks
+  udp/ipv6: move pending section of udpv6_sendmsg
+  udp/ipv6: prioritise the ip6 path over ip4 checks
+  udp/ipv6: optimise udpv6_sendmsg() daddr checks
+  udp/ipv6: optimise out daddr reassignment
+  udp/ipv6: clean up udpv6_sendmsg's saddr init
+  ipv6: partially inline fl6_update_dst()
+  ipv6: refactor opts push in __ip6_make_skb()
+  ipv6: improve opt-less __ip6_make_skb()
+  ipv6: clean up ip6_setup_cork
 
-I can try to comply with this, but I generally don't do it
-because hard breaks are difficult to read
-on a phone or if I have multiple messages open.
-My line widths vary between 40 and 80 characters,
-and hard breaks can only cover one width, at the cost of all others.
->=20
-> >
-> > No differences: I haven't used the frame intervals calls and haven't ga=
-thered practical knowledge about where docs may be insufficient, so I didn'=
-t touch its documentation. =20
->=20
-> I think Hans required to change the documentation of that ioctl to
-> match the style of the changes you have made here, not because
-> something is missing there.
->=20
-> >
-> > Regards,
-> > Dorota
-> >
-> >  .../v4l/vidioc-subdev-enum-mbus-code.rst      | 39 +++++++++++++------
-> >  1 file changed, 27 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-m=
-bus-code.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbu=
-s-code.rst
-> > index 417f1a19bcc4..87572de0fd26 100644
-> > --- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-cod=
-e.rst
-> > +++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-mbus-cod=
-e.rst
-> > @@ -31,15 +31,29 @@ Arguments
-> >  Description
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > -To enumerate media bus formats available at a given sub-device pad
-> > -applications initialize the ``pad``, ``which`` and ``index`` fields of
-> > -struct
-> > -:c:type:`v4l2_subdev_mbus_code_enum` and
-> > -call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to t=
-his
-> > -structure. Drivers fill the rest of the structure or return an ``EINVA=
-L``
-> > -error code if either the ``pad`` or ``index`` are invalid. All media b=
-us
-> > -formats are enumerable by beginning at index zero and incrementing by
-> > -one until ``EINVAL`` is returned.
-> > +This call is used by the application to access the enumeration of bus =
-formats
-> > +for the selected pad. =20
->=20
-> This is a good introductory phrase.
->=20
-> > +
-> > +The enumerations are defined by the driver, and indexed using the ``in=
-dex`` field
-> > +of struct :c:type:`v4l2_subdev_mbus_code_enum`.
-> > +Each value of ``pad`` corresponds to a separate enumeration. =20
->=20
-> Isn't this a repetition of the above "enumeration of bus formats for
-> the selected pad" ? Also, the fact different mbus codes are available
-> at different pads is an intrinsic characteristics of the device
-> capabilities and of what a pad represents. Put it in this way it seems
-> it's an API requirement.
->=20
-> > +Each enumeration starts with the ``index`` of 0, and
-> > +the lowest invalid index marks the end of enumeration.
-> > +
-> > +Therefore, to enumerate media bus formats available at a given sub-dev=
-ice pad,
-> > +initialize the ``pad``, and ``which`` fields to desired values,
-> > +and set ``index`` to 0.
-> > +Then call the :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl
-> > +with a pointer to this structure. =20
->=20
-> Could these two paragraphs be just:
->=20
-> To enumerate all the media bus codes available at a give sub-device pad,
-> an application set the ``index`` field to 0 and then call the
-> :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE` ioctl with a pointer to this structur=
-e,
-> incrementing ``index`` by one until ``EINVAL`` is returned.
->=20
-What I found difficult with this documentation is that it described an algo=
-rithm,
-and did not describe the basic assumption about the shape of the data.
-Here, I tried to give a quick overview of the data structure in the first p=
-aragraph.
-The second paragraph is just a description of details,
-not needed to get a high level idea of the API.
+ include/net/ipv6.h    |  24 +++----
+ net/ipv6/datagram.c   |   4 +-
+ net/ipv6/exthdrs.c    |  15 ++--
+ net/ipv6/ip6_output.c |  53 +++++++-------
+ net/ipv6/raw.c        |   8 +--
+ net/ipv6/udp.c        | 158 ++++++++++++++++++++----------------------
+ net/l2tp/l2tp_ip6.c   |   8 +--
+ 7 files changed, 122 insertions(+), 148 deletions(-)
 
-> > +
-> > +A successful call will return with the ``code`` field filled in
-> > +with a mbus format value. =20
->=20
-> Generally, I see "mbus code", not "mbus format" as far as
-> I'm aware..
-I was generally confused about the "mbus" thing the whole time I used the A=
-PI.
-That's why I came up with the idea to describe what it's useful for (format=
-),
-instead of using an abstract "code" which could mean anything.
-"mbus code" is not even searchable online much, so it's difficult to make t=
-he connection.
->=20
-> > +Repeat with increasing ``index`` until ``EINVAL`` is received.
-> > +``EINVAL`` means that either ``pad`` is invalid,
-> > +or that there are no more codes available at this pad. =20
->=20
-> Is it necessary to add this last paragraph. Isn't it specified in the
-> error code description below ?
->=20
-> EINVAL
->     The struct
->     :c:type:`v4l2_subdev_mbus_code_enum`
->     ``pad`` references a non-existing pad, or the ``index`` field is out
->     of bounds.
->=20
->=20
-"Out of bounds" does not say what the bounds are.
-What I wrote is in the context of the incrementing algorithm,
-which implies that hitting it means hitting the bound ("no more codes").
-> > +
-> > +The driver must not return the same value of ``code`` for different in=
-dices
-> > +at the same pad. =20
->=20
-> This might be a good thing to specify, a little obvious maybe but it
-> doesn't hurt.
->=20
-Given that I ran head first into a bug involving repeats (prompting this pa=
-tch),
-I testify that nothing about it is obvious :)
-> >
-> >  Available media bus formats may depend on the current 'try' formats at
-> >  other pads of the sub-device, as well as on the current active links.
-> > @@ -57,14 +71,15 @@ information about the try formats.
-> >
-> >      * - __u32
-> >        - ``pad``
-> > -      - Pad number as reported by the media controller API.
-> > +      - Pad number as reported by the media controller API. Filled in =
-by the application.
-> >      * - __u32
-> >        - ``index``
-> > -      - Number of the format in the enumeration, set by the applicatio=
-n.
-> > +      - Index of the mbus code in the enumeration belonging to the giv=
-en pad.
-> > +    Filled in by the application. =20
->=20
-> These last changes are good, provided this phrase still renders correctly
-> now that you added a line break.
->=20
-> >      * - __u32
-> >        - ``code``
-> >        - The media bus format code, as defined in
-> > -	:ref:`v4l2-mbus-format`.
-> > +	:ref:`v4l2-mbus-format`. Filled in by the driver.
-> >      * - __u32
-> >        - ``which``
-> >        - Media bus format codes to be enumerated, from enum =20
->=20
-> In general there are a few good additions, but to be honest I would
-> keep the changes small for sake of consistency with the existing
-> documentation of other enumeration-related ioctls
->=20
-> Thanks
->    j
->=20
-> > --
-> > 2.35.1
-> > =20
->=20
->=20
-Thanks for reviewing.
+-- 
+2.36.0
 
---Dorota
-
---Sig_/vPfZ4CbmyVqo94p47OVPln.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmJqnUMACgkQADBpX4S8
-Znd8jQ/8DpjlOIzRKpSjFYvngl3DGOsYQirndJNf2pxHhwV3vU3kCpl/32K1bhrI
-FZPD8THpKGhDmC9Kw2Q2mbxywvdS/crX5aeeucNgIg1KTSA/odIXou416vGAIrrO
-Xcc/9F+NHIow7qht03zQqczCoBmNcQV1MeigW0WDHOWWSQVfzNPK+ZonUqGp5VKj
-0aIiq6O7SZ1r5bdbt9CytRBnsOHCGeKc1mdPOh+ivIb/N5rgYNZA93DWpYpk6/10
-UewSUuaQH0S9tKFxh48y423Y2awy8HcF8sdjSl7RUWoY1p02vrGs2umT8XI1LkuL
-JBAKMTyVDk2neLGPWrLfcparK/ThbOtALutvQ2CoySYtiPIFcjQKvySreJoXkaUl
-lZn4T6IAd8eAb1ygX+s3dLZxZH0cmnAwk2i3PyF1RJk9T0xGtDJgpRKszLkfIsY1
-FcYnKZ6dcrgwswvwohzzivIicCF2etFMJq+1LQoW4JNvHGDEhsmzkzXmuKrQ4daj
-9VEnEB6KUnndZLUrmAFy1fvRLdI1SGZ0pEGsXTweeYuEK4oz8porBy/F63BwcH+x
-KE/7LZ/yZrz5NrK+c47xGTb3iGt5/1DCvue5wbHCOrK2OJ2r8jaYmz2znl0dpUXZ
-gnE108lqzk+KWBeOTH3VlvXJclaKh6BqZOMpZV3OHfRmLkpBWy8=
-=znw0
------END PGP SIGNATURE-----
-
---Sig_/vPfZ4CbmyVqo94p47OVPln.--

@@ -2,112 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9DA513C3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5403B513C41
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 21:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350872AbiD1T7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 15:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
+        id S1351571AbiD1UCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 16:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236900AbiD1T7O (ORCPT
+        with ESMTP id S235821AbiD1UCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 15:59:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F6CBF531
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 12:55:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A64D3B82FD9
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469DBC385AD;
-        Thu, 28 Apr 2022 19:55:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651175756;
-        bh=vRnZSRIcTqcHKCeWjmxMZBxVcLsxLI+m8lZ+XQEEza8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fUaqFQwLZ+kPqathikKDuZJIaOcX/OYkWvMud/2Qz5gdLLidFxSkYPPZxr1PSU9Xs
-         c3HxamY4IAekJMXwYztltninPRKr1Due435Q+1gTAeqOEGO35Dvd8KHySUb/wqeKiD
-         IK54zoxiEFBA9GXosZaccafRQzweNNc3wtrm4JqcdipGg4AyDQmVq3UkOpae/5hyND
-         QigfMuiwx+KbhsPWuT9bzpXHYrSSdSxSAGAZxkJn+KpUJ+Gt2HJud1ECcPhaXGhGY+
-         ksgSWmA1pXiuFh9aEjlAyRxzBukftfVNPEVn2Wsu4ON/nt/IudxV9rB3v+1RA9TDEC
-         FAfJpvgTgzSvA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nkAEz-007l9y-Qp; Thu, 28 Apr 2022 20:55:53 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>, tabba@google.com,
-        Masahiro Yamada <masahiroy@kernel.org>, surenb@google.com,
-        kvmarm@lists.cs.columbia.edu,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Ard Biesheuvel <ardb@kernel.org>, will@kernel.org,
-        qperret@google.com, linux-kernel@vger.kernel.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Changbin Du <changbin.du@intel.com>, kernel-team@android.com,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v8 0/6] KVM: arm64: Hypervisor stack enhancements
-Date:   Thu, 28 Apr 2022 20:55:50 +0100
-Message-Id: <165117574186.3115452.6818682378273681624.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220420214317.3303360-1-kaleshsingh@google.com>
-References: <20220420214317.3303360-1-kaleshsingh@google.com>
+        Thu, 28 Apr 2022 16:02:10 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AABBF319;
+        Thu, 28 Apr 2022 12:58:54 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id r9so5208704pjo.5;
+        Thu, 28 Apr 2022 12:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CWnSkaOj39Eo0MGVGB4CJor11LXSPlLfWV+GUOsVzCc=;
+        b=iW3DMp+dOdK/4HP31Sy7KPZbhFBRdqimi4fA59MhyZdC98Y8fc2ZP1qahsmBpnfEcy
+         GkJwDhtvl9HdMwaFd35PPDRE7EJMqINfj6BiafO0mHEqH4yc2OCTA86IFVqxubIQKQq9
+         7wrwd/4GuCzPd/I9ZuGO5GC9jvi5qkdQf2zQJguyfFoAtrGS18cYs51zPtA0HMUJxxgx
+         1WHk11NC1hzBdp632cVF2q0li06ZhtZryq/yhVdz5UEgz1RfViXtIL2oYxlOBjmD9kL8
+         2gx4AsdeV9kqccTRkXrXV+qBu3sORY7rt6cl3yrHomSW4cRAJP4vNtoVA57i+XffaibL
+         SvMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=CWnSkaOj39Eo0MGVGB4CJor11LXSPlLfWV+GUOsVzCc=;
+        b=W8x8G3wW2vt7Kxay5VClXX4Mhc44Vdy/9m/rNhZNAltGXN8yHweQeMSkGIqqXx4BD0
+         EGYEDQuzLjSYs0tWVRElTtPeMEl1kvGSVA7FGi4o6RGMSbtkZhH/Nv/lTVI/VFofx8N7
+         RfRSoJh4sjAZxjXUOokgrNa2+dBNgsYoZD46U7vQsCqmhYgyW/N2YKh3jYp9NaH4CKN7
+         x3TYUq0KNpmyRe14V2AhTRDgSZ2LnJCzRVyC2DYM+KAz11HExclvx1HC3GKXYPJZevqP
+         d1pbkFcKDa+TVtu99NLiDoP53NryJz343DNaTdfTsfPDv/CFHpGT19+NFVib7Hef5Mnf
+         InuQ==
+X-Gm-Message-State: AOAM533HaczLJpvM/Z3vlQX4r2i+kXQtyihcvamW7OezjloBg0KuCOT0
+        Y+Yr3rQd9f0mZwpyb+YzKm9mgDHEKxw=
+X-Google-Smtp-Source: ABdhPJw5l+h1G/hbga/MH615HY+bxS4Ph0HiIRnibzBE5bTor+Gvt7/ZFzqWglDSfU1ARkn60Zo/Og==
+X-Received: by 2002:a17:902:d583:b0:15d:11f5:59f5 with SMTP id k3-20020a170902d58300b0015d11f559f5mr23062233plh.37.1651175933932;
+        Thu, 28 Apr 2022 12:58:53 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:dc95:713b:f72c:4ad4])
+        by smtp.gmail.com with ESMTPSA id c10-20020a62f84a000000b0050d86052958sm587980pfm.125.2022.04.28.12.58.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 12:58:53 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 28 Apr 2022 12:58:51 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
+Message-ID: <Ymrx+yZ4i86LZpE9@google.com>
+References: <20220427160016.144237-1-hannes@cmpxchg.org>
+ <20220427160016.144237-5-hannes@cmpxchg.org>
+ <Ymmnrkn0mSWcuvmH@google.com>
+ <YmmznQ8AO5RLxicA@cmpxchg.org>
+ <YmnA0Da90IURbxrM@google.com>
+ <Ymqj93gEEzu2Gb3U@cmpxchg.org>
+ <YmrICbP6bDJqDv5R@google.com>
+ <YmrNiY3VhdMbfTq1@cmpxchg.org>
+ <YmrPgWs5WPabIBQk@google.com>
+ <YmreNLge7b+FBC30@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, james.morse@arm.com, tabba@google.com, masahiroy@kernel.org, surenb@google.com, kvmarm@lists.cs.columbia.edu, suzuki.poulose@arm.com, catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org, ardb@kernel.org, will@kernel.org, qperret@google.com, linux-kernel@vger.kernel.org, alexandru.elisei@arm.com, yuzenghui@huawei.com, changbin.du@intel.com, kernel-team@android.com, nathan@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmreNLge7b+FBC30@cmpxchg.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Apr 2022 14:42:51 -0700, Kalesh Singh wrote:
-> This is v8 of the nVHE hypervisor stack enhancements. This version is based
-> on 5.18-rc3.
+On Thu, Apr 28, 2022 at 02:34:28PM -0400, Johannes Weiner wrote:
+> On Thu, Apr 28, 2022 at 10:31:45AM -0700, Minchan Kim wrote:
+> > On Thu, Apr 28, 2022 at 01:23:21PM -0400, Johannes Weiner wrote:
+> > > On Thu, Apr 28, 2022 at 09:59:53AM -0700, Minchan Kim wrote:
+> > > > On Thu, Apr 28, 2022 at 10:25:59AM -0400, Johannes Weiner wrote:
+> > > > > On Wed, Apr 27, 2022 at 03:16:48PM -0700, Minchan Kim wrote:
+> > > > > > On Wed, Apr 27, 2022 at 05:20:29PM -0400, Johannes Weiner wrote:
+> > > > > > > On Wed, Apr 27, 2022 at 01:29:34PM -0700, Minchan Kim wrote:
+> > > > > > > > Hi Johannes,
+> > > > > > > > 
+> > > > > > > > On Wed, Apr 27, 2022 at 12:00:15PM -0400, Johannes Weiner wrote:
+> > > > > > > > > Currently it requires poking at debugfs to figure out the size and
+> > > > > > > > > population of the zswap cache on a host. There are no counters for
+> > > > > > > > > reads and writes against the cache. As a result, it's difficult to
+> > > > > > > > > understand zswap behavior on production systems.
+> > > > > > > > > 
+> > > > > > > > > Print zswap memory consumption and how many pages are zswapped out in
+> > > > > > > > > /proc/meminfo. Count zswapouts and zswapins in /proc/vmstat.
+> > > > > > > > > 
+> > > > > > > > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > > > > > > > > ---
+> > > > > > > > >  fs/proc/meminfo.c             |  7 +++++++
+> > > > > > > > >  include/linux/swap.h          |  5 +++++
+> > > > > > > > >  include/linux/vm_event_item.h |  4 ++++
+> > > > > > > > >  mm/vmstat.c                   |  4 ++++
+> > > > > > > > >  mm/zswap.c                    | 13 ++++++-------
+> > > > > > > > >  5 files changed, 26 insertions(+), 7 deletions(-)
+> > > > > > > > > 
+> > > > > > > > > diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+> > > > > > > > > index 6fa761c9cc78..6e89f0e2fd20 100644
+> > > > > > > > > --- a/fs/proc/meminfo.c
+> > > > > > > > > +++ b/fs/proc/meminfo.c
+> > > > > > > > > @@ -86,6 +86,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+> > > > > > > > >  
+> > > > > > > > >  	show_val_kb(m, "SwapTotal:      ", i.totalswap);
+> > > > > > > > >  	show_val_kb(m, "SwapFree:       ", i.freeswap);
+> > > > > > > > > +#ifdef CONFIG_ZSWAP
+> > > > > > > > > +	seq_printf(m,  "Zswap:          %8lu kB\n",
+> > > > > > > > > +		   (unsigned long)(zswap_pool_total_size >> 10));
+> > > > > > > > > +	seq_printf(m,  "Zswapped:       %8lu kB\n",
+> > > > > > > > > +		   (unsigned long)atomic_read(&zswap_stored_pages) <<
+> > > > > > > > > +		   (PAGE_SHIFT - 10));
+> > > > > > > > > +#endif
+> > > > > > > > 
+> > > > > > > > I agree it would be very handy to have the memory consumption in meminfo
+> > > > > > > > 
+> > > > > > > > https://lore.kernel.org/all/YYwZXrL3Fu8%2FvLZw@google.com/
+> > > > > > > > 
+> > > > > > > > If we really go this Zswap only metric instead of general term
+> > > > > > > > "Compressed", I'd like to post maybe "Zram:" with same reason
+> > > > > > > > in this patchset. Do you think that's better idea instead of
+> > > > > > > > introducing general term like "Compressed:" or something else?
+> > > > > > > 
+> > > > > > > I'm fine with changing it to Compressed. If somebody cares about a
+> > > > > > > more detailed breakdown, we can add Zswap, Zram subsets as needed.
+> > > > > > 
+> > > > > > Thanks! Please consider ZSWPIN to rename more general term, too.
+> > > > > 
+> > > > > That doesn't make sense to me.
+> > > > > 
+> > > > > Zram is a swap backend, its traffic is accounted in PSWPIN/OUT. Zswap
+> > > > > is a writeback cache on top of the swap backend. It has pages
+> > > > > entering, refaulting, and being written back to the swap backend
+> > > > > (PSWPOUT). A zswpout and a zramout are different things.
+> > > > 
+> > > > Think about that system has two swap devices (storage + zram).
+> > > > I think it's useful to know how many swap IO comes from zram
+> > > > and rest of them are storage.
+> > > 
+> > > Hm, isn't this comparable to having one swap on flash and one swap on
+> > > a rotating disk? /sys/block/*/stat should be able to tell you how
+> > > traffic is distributed, no?
+> > 
+> > That raises me a same question. Could you also look at the zswap stat
+> > instead of adding it into vmstat? (If zswap doesn't have the counter,
+> > couldn't we simply add new stat in sysfs?)
 > 
-> Previous versions can be found at:
-> v7: https://lore.kernel.org/r/20220408200349.1529080-1-kaleshsingh@google.com/
-> v6: https://lore.kernel.org/r/20220314200148.2695206-1-kaleshsingh@google.com/
-> v5: https://lore.kernel.org/r/20220307184935.1704614-1-kaleshsingh@google.com/
-> v4: https://lore.kernel.org/r/20220225033548.1912117-1-kaleshsingh@google.com/
-> v3: https://lore.kernel.org/r/20220224051439.640768-1-kaleshsingh@google.com/
-> v2: https://lore.kernel.org/r/20220222165212.2005066-1-kaleshsingh@google.com/
-> v1: https://lore.kernel.org/r/20220210224220.4076151-1-kaleshsingh@google.com/
+> My point is that for regular swap backends there is already
+> PSWP*. Distinguishing traffic between two swap backends is legitimate
+> of course, but zram is not really special compared to other backends
+> from that POV. It's only special in its memory consumption.
 > 
-> [...]
+> zswap *is* special, though. Even though some people use it *like* a
+> swap backend, it's also a cache on top of swap. zswap loads and stores
+> do not show up in PSWP*. And they shouldn't, because in a cache
+> configuration, you still need the separate PSWP* stats to understand
+> cache eviction behavior and cache miss ratio. memory -> zswap is
+> ZSWPOUT; zswap -> disk is PSWPOUT; PSWPIN is a cache miss etc.
+> 
+> > I thought the patch aims for exposting statistics to grab easier
+> > using popular meminfo and vmstat and wanted to leverage it for
+> > zram, too.
+> 
+> Right. zram and zswap overlap in their functionality and have similar
+> deficits in their stats. Both should be fixed, I'm not opposing
+> that. But IMO we should be careful about conflating
+> them. Fundamentally, one is a block device, the other is an MM-native
+> cache layer that sits on top of block devices. Drawing false
+> equivalencies between them will come back to haunt us.
 
-Applied to next, thanks!
-
-[1/6] KVM: arm64: Introduce hyp_alloc_private_va_range()
-      commit: 92abe0f81e1385afd8f1dc66206b5be9a514899b
-[2/6] KVM: arm64: Introduce pkvm_alloc_private_va_range()
-      commit: f922c13e778d6d5343d4576be785a8204c595113
-[3/6] KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
-      commit: ce3354318a57875dc59f4bb841662e95bfba03db
-[4/6] KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
-      commit: 1a919b17ef012ca0572bae759c27e5ea02bfb47f
-[5/6] KVM: arm64: Detect and handle hypervisor stack overflows
-      commit: 66de19fad9ef47c5376a99bb2b00661f1c788a94
-[6/6] KVM: arm64: Symbolize the nVHE HYP addresses
-      commit: 6ccf9cb557bd32073b0d68baed97f1bd8a40ff1d
-
-Cheers,
-
-	M.
--- 
-Without deviation from the norm, progress is not possible.
-
-
+Make sense to me.

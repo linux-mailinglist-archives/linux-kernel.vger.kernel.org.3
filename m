@@ -2,55 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861B151335D
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA5D513364
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346035AbiD1MOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S1346069AbiD1MRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345829AbiD1MOB (ORCPT
+        with ESMTP id S1345829AbiD1MRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:14:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C00B97BA5
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:10:45 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpvZr427hzhYnK;
-        Thu, 28 Apr 2022 20:10:28 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 20:10:43 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 28 Apr 2022 20:10:42 +0800
-Subject: Re: [PATCH v2] arm64: add the printing of tpidr_elx in __show_regs()
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Will Deacon <will@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "James Morse" <james.morse@arm.com>
-References: <20220316062408.1113-1-thunder.leizhen@huawei.com>
- <20220428102156.GA14123@willie-the-truck>
- <4c956c17-6e13-37a1-7da3-b2c8243c2c01@huawei.com>
- <d3570761-1273-831f-dfbe-aefbadfa37f7@huawei.com>
-Message-ID: <367e3bda-1541-2f9c-5b63-9820f03041e6@huawei.com>
-Date:   Thu, 28 Apr 2022 20:10:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 28 Apr 2022 08:17:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E6ADAD135
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:13:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651148033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=peo0ScnOD/kREKuRjyBJPvH3MAbi5TUpXP5WbTNJH+g=;
+        b=hxGrb9uYlJdARRv1tMRKq6l8zXqXnvEy1Dwo8QtWH8MSJDtLO447Tb91krx3tjqAsSIFlI
+        rYDgyabcljK+f1i7/s4hioXmcDd/1i1fvkoWEbak9ftrGimnrSdStZJtwVjTQpiMwa7Ts6
+        m407XQP2cJyfRdmlZwESxDS3/P4pJTg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-lYx3b5tlMMq_0I_NyAD27Q-1; Thu, 28 Apr 2022 08:13:49 -0400
+X-MC-Unique: lYx3b5tlMMq_0I_NyAD27Q-1
+Received: by mail-ed1-f72.google.com with SMTP id r26-20020a50aada000000b00425afa72622so2624707edc.19
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:13:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=peo0ScnOD/kREKuRjyBJPvH3MAbi5TUpXP5WbTNJH+g=;
+        b=DwtS6M/v19TTMBVln6NTsmmgjLuSjKiHYu9vy0uBiSzs3GF8hcoy0yK1RS0iWxmFH7
+         DQEmyiJ4+DDeCtagtws9g8OyI2vv9Wdpb79HVjpgxZY0olNg7gxSp5VRWXJsxWvhltgq
+         vzpO0t0SFAJLjfNcAVxq6Pi66ylNEN/kvWWPUx4fcQQ/VIMAtsPeiR36kyHFaGbuAgRV
+         KPODnz7JtvSnttK/+DZRyzOzT1YJJwpGXGk5FCqAKqhTUYu4hdLUnLoOvWXLUafx59Xp
+         c3WHttwxlK2hjuxdeqEpKiiNTv3iSRPVfIA0LkdHVqCCJ1kZxpgKivZq1z4oO4+SR0yT
+         QL/Q==
+X-Gm-Message-State: AOAM530dlWVuFpqDPt38EzurJnFM8eT7CkRDyTWEiQvmyknQKwOr9PWu
+        9Q3HZDlG+RYTcDBEIaJ0UciNPe7nl9GGHKPmTA4eOEZFMadpVHFU/fABGQvvSbdDrfuOxUObOum
+        hUJiNFY01kD05DL/rSLMwah3R
+X-Received: by 2002:a05:6402:2309:b0:41f:a5a9:fe13 with SMTP id l9-20020a056402230900b0041fa5a9fe13mr35794019eda.123.1651148028278;
+        Thu, 28 Apr 2022 05:13:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxyWtRVzz9fglE7R6LGmifRxKTF/DA9SAlgj9lilGJMS+YqAMwvtx7BmKuyQwqme/iq0QpQoA==
+X-Received: by 2002:a05:6402:2309:b0:41f:a5a9:fe13 with SMTP id l9-20020a056402230900b0041fa5a9fe13mr35793998eda.123.1651148028036;
+        Thu, 28 Apr 2022 05:13:48 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
+        by smtp.gmail.com with ESMTPSA id cy19-20020a0564021c9300b0042617ba6386sm1461422edb.16.2022.04.28.05.13.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 05:13:47 -0700 (PDT)
+Message-ID: <f31caf6a-fb13-0be3-9fa2-0b4959cc0810@redhat.com>
+Date:   Thu, 28 Apr 2022 14:13:46 +0200
 MIME-Version: 1.0
-In-Reply-To: <d3570761-1273-831f-dfbe-aefbadfa37f7@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
 Content-Language: en-US
+To:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220307150725.6810-1-osalvador@suse.de>
+ <20220307150725.6810-2-osalvador@suse.de>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/3] mm/page_alloc: Do not calculate node's total pages
+ and memmap pages when empty
+In-Reply-To: <20220307150725.6810-2-osalvador@suse.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,89 +87,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07.03.22 16:07, Oscar Salvador wrote:
+> free_area_init_node() calls calculate_node_totalpages() and
+> free_area_init_core(). The former to get node's {spanned,present}_pages,
+> and the latter to calculate, among other things, how many pages per zone
+> we spent on memmap_pages, which is used to substract zone's free pages.
+> 
+> On memoryless-nodes, it is pointless to perform such a bunch of work, so
+> make sure we skip the calculations when having a node or empty zone.
+> 
+> Signed-off-by: Oscar Salvador <osalvador@suse.de>
+
+Sorry, I'm late with review. My mailbox got flooded.
+
+> ---
+>  mm/page_alloc.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 967085c1c78a..0b7d176a8990 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7312,6 +7312,10 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+>  	unsigned long realtotalpages = 0, totalpages = 0;
+>  	enum zone_type i;
+>  
+> +	/* Skip calculation for memoryless nodes */
+> +	if (node_start_pfn == node_end_pfn)
+> +		goto no_pages;
+> +
+
+Just a NIT:
+
+E.g., in zone_spanned_pages_in_node() we test for
+	!node_start_pfn && !node_end_pfn
+
+In update_pgdat_span(), we set
+	node_start_pfn = node_end_pfn = 0;
+when we find an empty node during memory unplug.
+
+Therefore, I wonder if a helper "is_memoryless_node()" or "node_empty()"
+might be reasonable, that just checks for either
+	!node_start_pfn && !node_end_pfn
+or
+	node_start_pfn == node_end_pfn
 
 
-On 2022/4/28 20:03, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/4/28 19:07, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/4/28 18:21, Will Deacon wrote:
->>> On Wed, Mar 16, 2022 at 02:24:08PM +0800, Zhen Lei wrote:
->>>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
->>>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
->>>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
->>>> pcpu access. However, when performing reverse execution based on the
->>>> registers and the memory contents in kdump, this information is sometimes
->>>> required if there is a pcpu access.
->>>>
->>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>> ---
->>>>  arch/arm64/kernel/process.c | 11 +++++++++++
->>>>  1 file changed, 11 insertions(+)
->>>>
->>>> v1 --> v2:
->>>> Directly print the tpidr_elx register of the current exception level.
->>>> Avoid coupling with the implementation of 'my_cpu_offset'.
->>>>
->>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
->>>> index 5369e649fa79ff8..738932e6fa4e947 100644
->>>> --- a/arch/arm64/kernel/process.c
->>>> +++ b/arch/arm64/kernel/process.c
->>>> @@ -216,6 +216,17 @@ void __show_regs(struct pt_regs *regs)
->>>>  	show_regs_print_info(KERN_DEFAULT);
->>>>  	print_pstate(regs);
->>>>  
->>>> +	switch (read_sysreg(CurrentEL)) {
->>>
->>> This should use is_kernel_in_hyp_mode() to detect if we're running at El2.
-> 
-> static inline bool is_kernel_in_hyp_mode(void)
-> {
->         return read_sysreg(CurrentEL) == CurrentEL_EL2;
-> }
-> 
-> I think it's more intuitive to use "switch (read_sysreg(CurrentEL))".
-> 
->>>
->>>> +	case CurrentEL_EL1:
->>>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(TPIDR_EL1));
->>>> +		break;
->>>> +	case CurrentEL_EL2:
->>>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(TPIDR_EL2));
->>>> +		break;
->>>> +	default:
->>>> +		break;
->>>> +	}
->>>
->>> I think this path can be triggered directly from usermode, so we really
->>> shouldn't be printing raw kernel virtual addresses here.
->>
->> I run echo c > /proc/sysrq-trigger and didn't trigger this path, but maybe
->> there's another way. Analysis from the other side, except for the instruction
->> address, all generic registers r0-r31 is output as raw. There's also an
->> opportunity to contain the instruction address.
-> 
-> On second thought, there seemed to be nothing wrong with it. The user need
-> to have capable() first. Then the address of the perpcu memory is not static,
 
-Sorry, __my_cpu_offset is just an offset.
+>  	for (i = 0; i < MAX_NR_ZONES; i++) {
+>  		struct zone *zone = pgdat->node_zones + i;
+>  		unsigned long zone_start_pfn, zone_end_pfn;
+> @@ -7344,6 +7348,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+>  		realtotalpages += real_size;
+>  	}
+>  
+> +no_pages:
+>  	pgdat->node_spanned_pages = totalpages;
+>  	pgdat->node_present_pages = realtotalpages;
+>  	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, realtotalpages);
+> @@ -7562,6 +7567,10 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
+>  		size = zone->spanned_pages;
+>  		freesize = zone->present_pages;
+>  
+> +		/* No pages? Nothing to calculate then. */
+> +		if (!size)
+> +			goto no_pages;
+> +
+>  		/*
+>  		 * Adjust freesize so that it accounts for how much memory
+>  		 * is used by this zone for memmap. This affects the watermark
+> @@ -7597,6 +7606,7 @@ static void __init free_area_init_core(struct pglist_data *pgdat)
+>  		 * when the bootmem allocator frees pages into the buddy system.
+>  		 * And all highmem pages will be managed by the buddy system.
+>  		 */
+> +no_pages:
+>  		zone_init_internals(zone, j, nid, freesize);
+>  
+>  		if (!size)
 
-> the memory is dynamically allocated, exposing it is no different than exposing sp.
-> 
->>
->> So how about:
->> +       if (oops_in_progress)
->> +               printk("tpidr : %016lx\n", __my_cpu_offset);
->>
->>>
->>> Will
->>> .
->>>
->>
-> 
+We have another size check below. We essentially have right now:
+
+"
+	if (!size)
+		goto no_pages;
+
+	[code]
+no_pages:
+	zone_init_internals(zone, j, nid, freesize);
+
+	if (!size)
+		continue
+	[more code]
+"
+
+IMHO, it would be nicer to avoid the label/goto by just doing a:
+
+"
+	if (!size) {
+		zone_init_internals(zone, j, nid, 0);
+		continue;
+	}
+
+	[code]
+	zone_init_internals(zone, j, nid, freesize);
+	[more code]
+"
+
+Or factoring out [code] into a separate function.
+
+
+Anyhow, the change itself looks sane.
 
 -- 
-Regards,
-  Zhen Lei
+Thanks,
+
+David / dhildenb
+

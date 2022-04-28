@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6639051360F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4EC513638
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 16:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348102AbiD1OGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 10:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S240073AbiD1OH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 10:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343893AbiD1OFg (ORCPT
+        with ESMTP id S1348000AbiD1OGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 10:05:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FECAF1F8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:02:20 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1nk4iN-0000As-ME; Thu, 28 Apr 2022 16:01:52 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1nk4iN-005lwi-Pl; Thu, 28 Apr 2022 16:01:50 +0200
-Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1nk4iL-003i1O-FQ; Thu, 28 Apr 2022 16:01:49 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     kernel@pengutronix.de, Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v8 6/6] MAINTAINERS: add myself as CAAM trusted key maintainer
-Date:   Thu, 28 Apr 2022 16:01:45 +0200
-Message-Id: <20220428140145.870527-7-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220428140145.870527-1-a.fatoum@pengutronix.de>
-References: <20220428140145.870527-1-a.fatoum@pengutronix.de>
+        Thu, 28 Apr 2022 10:06:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30AB1B53E6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 07:03:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB6BF1474;
+        Thu, 28 Apr 2022 07:03:16 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BD7D3F5A1;
+        Thu, 28 Apr 2022 07:03:15 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 15:03:05 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        james.quinlan@broadcom.com, Jonathan.Cameron@huawei.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+Subject: Re: [PATCH 04/22] firmware: arm_scmi: Validate
+ BASE_DISCOVER_LIST_PROTOCOLS reply
+Message-ID: <YmqembjBccFV575k@e120937-lin>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-5-cristian.marussi@arm.com>
+ <20220428100729.qlzl5lkkn2r5u3ra@bogus>
+ <YmqaSZJlPF2qX5Ta@e120937-lin>
+ <20220428135504.lt3bjq4sz7uktca6@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428135504.lt3bjq4sz7uktca6@bogus>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer for the just added trusted key integration
-with the NXP Cryptographic Acceleration and Assurance Module.
+On Thu, Apr 28, 2022 at 02:55:04PM +0100, Sudeep Holla wrote:
+> On Thu, Apr 28, 2022 at 02:45:07PM +0100, Cristian Marussi wrote:
+> > On Thu, Apr 28, 2022 at 11:07:29AM +0100, Sudeep Holla wrote:
+> > > On Wed, Mar 30, 2022 at 04:05:33PM +0100, Cristian Marussi wrote:
+> > > > Do not blindly trust SCMI backend server reply about list of implemented
+> > > > protocols, instead validate the reported length of the list of protocols
+> > > > against the real payload size of the message reply.
+> > > >
+> > > > Fixes: b6f20ff8bd9 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
+> > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > > > ---
+> > > >  drivers/firmware/arm_scmi/base.c | 21 +++++++++++++++++++++
+> > > >  1 file changed, 21 insertions(+)
+> > > >
+> > > > diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
+> > > > index f279146f8110..c1165d1282ef 100644
+> > > > --- a/drivers/firmware/arm_scmi/base.c
+> > > > +++ b/drivers/firmware/arm_scmi/base.c
+> > > > @@ -189,6 +189,9 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
+> > > >  	list = t->rx.buf + sizeof(*num_ret);
+> > > >
+> > > >  	do {
+> > > > +		size_t real_list_sz;
+> > > > +		u32 calc_list_sz;
+> > > > +
+> > > >  		/* Set the number of protocols to be skipped/already read */
+> > > >  		*num_skip = cpu_to_le32(tot_num_ret);
+> > > >
+> > > > @@ -202,6 +205,24 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
+> > > >  			break;
+> > > >  		}
+> > > >
+> > > > +		if (t->rx.len < (sizeof(u32) * 2)) {
+> > > > +			dev_err(dev, "Truncated reply - rx.len:%zd\n",
+> > > > +				t->rx.len);
+> > > > +			ret = -EPROTO;
+> > > > +			break;
+> > > > +		}
+> > > > +
+> > > > +		real_list_sz = t->rx.len - sizeof(u32);
+> > > > +		calc_list_sz = ((loop_num_ret / sizeof(u32)) +
+> > > > +				!!(loop_num_ret % sizeof(u32))) * sizeof(u32);
+> > > 
+> > > Any reason this can't be (loop_num_ret - 1) / sizeof(u32) + 1 ?
+> > > 
+> > 
+> > At first sight could be fine with your easier version BUT what if loop_num_ret
+> > is returned as zero ?
+> > 
+> > real_list_sz should be ZERO length and calc_list_sz
+> > 
+> > im my version:
+> > 
+> > calc_list_sz = ((0/4) +!!(0%4)) * 4   ===>> 0
+> > 
+> > while in the simplified one gets calculated wrong:
+> > 
+> > calc_list_sz = (0-1)/4 + 1 ====> 1
+> > 
+> > ...moreover being both loop_num_ret and calc_list_sz unsigned I am even
+> > not so sure about implicit casting messing things up evenm more :D
+> > 
+> > So I sticked to the more convoluted approach :D
+> > 
+> > ....Have I missed something else ?
+> >
+> 
+> Right, but shouldn't we break if it 0 much earlier. It must not happen with
+> your new logic and even if it does, wouldn't it be better to break earlier ?
+> 
 
-Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-v7 -> v8:
-  - add Pankaj's Reviewed-by
-v6 -> v7:
-  - split off as separate patch (Jarkko)
+Fine for me.
 
-To: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <jejb@linux.ibm.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-To: David Howells <dhowells@redhat.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: "Horia Geantă" <horia.geanta@nxp.com>
-Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-Cc: David Gstir <david@sigma-star.at>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: keyrings@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5e8c2f611766..e58e6fc3016d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10855,6 +10855,15 @@ S:	Supported
- F:	include/keys/trusted_tee.h
- F:	security/keys/trusted-keys/trusted_tee.c
- 
-+KEYS-TRUSTED-CAAM
-+M:	Ahmad Fatoum <a.fatoum@pengutronix.de>
-+R:	Pengutronix Kernel Team <kernel@pengutronix.de>
-+L:	linux-integrity@vger.kernel.org
-+L:	keyrings@vger.kernel.org
-+S:	Maintained
-+F:	include/keys/trusted_caam.h
-+F:	security/keys/trusted-keys/trusted_caam.c
-+
- KEYS/KEYRINGS
- M:	David Howells <dhowells@redhat.com>
- M:	Jarkko Sakkinen <jarkko@kernel.org>
--- 
-2.30.2
+Thanks,
+Cristian
 

@@ -2,201 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFFF5133D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13265133F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 14:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346362AbiD1Mil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 08:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S1346506AbiD1MpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 08:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346309AbiD1Mid (ORCPT
+        with ESMTP id S1346554AbiD1Mot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 08:38:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2DD434654
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651149317;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nGWQ6H7zY//+ePLV7y3mXzYy2j68sneKy+Fe3Uh+WKw=;
-        b=KNJ2Li3Q0wGUwR1JyctR0IuE7Nf0kPkYFnk952XcFk1+Y5yM6hbCvb0d4is4MHUm6a8AjC
-        xx3L8nuDjJCPzf2CGmnuBkeO+AN9GPlvcjKZaCVB/ylTIJTe25/gIX2Z524ZJITgBull5V
-        o1P2iXN/Fc1gl3PDhvrOD69VI6TfEaU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-41-yqziudmhPyeZSGEbbiVmCw-1; Thu, 28 Apr 2022 08:35:15 -0400
-X-MC-Unique: yqziudmhPyeZSGEbbiVmCw-1
-Received: by mail-ej1-f71.google.com with SMTP id sd16-20020a1709076e1000b006f3c9ec53f6so2840271ejc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 05:35:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=nGWQ6H7zY//+ePLV7y3mXzYy2j68sneKy+Fe3Uh+WKw=;
-        b=vaD1NtPVgzHV24nERjngkIIYt608kZmAVCSctrzXzECYHiaw4DT86udypamlek50rZ
-         NdLPD4UNy/HHGV+tmoO7RtENwHAJYofvkPC8o5xWUz2zB6BgP0fR/1iL/2xxf3k5Pg2f
-         nDeAqY8FZ++RzCVwpLFMi9RXCA7CaQNendbHQLuK4CTJwdZ1/ePtvtvDq9uVn2yNq8iL
-         WHPRKPgPgKyR6L8P3sNEetZQSzLAVd4UPbsBMhGofvCcHMR/IcP5n3xUOYKWuKn/2HrB
-         zu/ejKs59Wtb+5bMRIpz8sUve9x6GuyxChJiF66SPvaiK2Gvj44/KWPtf15sqdaU/iAy
-         nMHQ==
-X-Gm-Message-State: AOAM530MighVr914Nt3BjpbCCl/wt1WCDZZjnsoHNYAFNNdF0ecwqMgm
-        thtYv3/mGFV5rbPOmHWuoX69GXI68evBaz5nuVpv9T8VdCrfLIAi3p5etMHKofHnsZBKEcpc4Nl
-        z4Go8VzneA6dK3MYhsJrkPio3
-X-Received: by 2002:aa7:cd0a:0:b0:425:bc13:4ccb with SMTP id b10-20020aa7cd0a000000b00425bc134ccbmr34085909edw.229.1651149314522;
-        Thu, 28 Apr 2022 05:35:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw5fl50Q/sAa6D8th7Nk6LW9E3kVKKq1obRR9aikELreRwxgNIJHimE11UjYQ7ynsMj1mw9zQ==
-X-Received: by 2002:aa7:cd0a:0:b0:425:bc13:4ccb with SMTP id b10-20020aa7cd0a000000b00425bc134ccbmr34085879edw.229.1651149314257;
-        Thu, 28 Apr 2022 05:35:14 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:ef00:7443:a23c:26b8:b96? (p200300cbc708ef007443a23c26b80b96.dip0.t-ipconnect.de. [2003:cb:c708:ef00:7443:a23c:26b8:b96])
-        by smtp.gmail.com with ESMTPSA id su22-20020a17090703d600b006f3a97cda9esm4579895ejb.18.2022.04.28.05.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 05:35:12 -0700 (PDT)
-Message-ID: <7946f6ca-fe03-e286-32f9-b22ff1edb52f@redhat.com>
-Date:   Thu, 28 Apr 2022 14:35:11 +0200
+        Thu, 28 Apr 2022 08:44:49 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36F710FC5;
+        Thu, 28 Apr 2022 05:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651149690; x=1682685690;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=jDaoso8XSbsD6Q5i89/pk/Xi3K1DdLaMWFukTg8hKeQ=;
+  b=mTcux2E7ZLul7MpCZLIMfoDriwNJqnMz08/1yY6N7lUQOdpSzQlRi2CR
+   XjwiKL17tL2EoGizi8SGPBxtO5mwy0vXEILR3KOD3OmuKa5T60/aArtms
+   uoKLMaoga72Lyl3+fDW2KsCAjYd7U4rmVIIEHhzAoHIPema68eVdxNhWf
+   +EGhhHkh36orMeUZUh7VvGllZ7CcIkvOj2hY2N+zN10NIGL9Shb2TMz5C
+   ejMydCXr/rM8xB/dmkTC2CprTYklu+G+84dySdNZtXcEj09+ItL2k4VJJ
+   bSSXlAcsEIlKlDltX+qXwtzF5b0WrCyygI6s5wc1q0gCQztlSeeOQk0KC
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352710663"
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="352710663"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 05:41:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,295,1647327600"; 
+   d="scan'208";a="706039981"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2022 05:41:23 -0700
+Date:   Thu, 28 Apr 2022 20:37:51 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 08/13] KVM: Use memfile_pfn_ops to obtain pfn for
+ private pages
+Message-ID: <20220428123751.GB10508@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-9-chao.p.peng@linux.intel.com>
+ <YkJLFu98hZOvTSrL@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 3/3] mm/memory_hotplug: Refactor hotadd_init_pgdat and
- try_online_node
-Content-Language: en-US
-To:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220307150725.6810-1-osalvador@suse.de>
- <20220307150725.6810-4-osalvador@suse.de>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220307150725.6810-4-osalvador@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkJLFu98hZOvTSrL@google.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.03.22 16:07, Oscar Salvador wrote:
-> Since we pre-allocate all nodes now, hotadd_init_pgdat() does
-> not need to return a pgdat struct, as that was meant for
-> __try_online_node() to check whether the node was succesfully
-> allocated.
+On Mon, Mar 28, 2022 at 11:56:06PM +0000, Sean Christopherson wrote:
+> On Thu, Mar 10, 2022, Chao Peng wrote:
+> > @@ -2217,4 +2220,34 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+> >  /* Max number of entries allowed for each kvm dirty ring */
+> >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> >  
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> > +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
+> > +				       int *order)
+> > +{
+> > +	pgoff_t index = gfn - slot->base_gfn +
+> > +			(slot->private_offset >> PAGE_SHIFT);
 > 
-> Also get rid of the __ref as all functions hotadd_init_pgdat()
-> calls fall within the same section.
+> This is broken for 32-bit kernels, where gfn_t is a 64-bit value but pgoff_t is a
+> 32-bit value.  There's no reason to support this for 32-bit kernels, so...
 > 
-> Also try to make more clear the return codes from __try_online_node().
-> __try_online_node() can return either 0, 1 or -errno (the latter not really
-> as the BUG_ON() would catch it before we return) but depending on the caller
-> that has different meanings.
-> For add_memory_resource(), when __try_online_node() returns non-zero,
-> it means that the node was already allocated and it does not need to bring
-> it up. It is fine not to check for -errno values because we do not
-> get to call register_one_node() when !set_node_online.
-> For those who call try_online_node(), so set_node_online is true, a value
-> other than zero means a failure (e.g: cpu_up() or find_and_online_cpu_nid()).
+> The easiest fix, and likely most maintainable for other code too, would be to
+> add a dedicated CONFIG for private memory, and then have KVM check that for all
+> the memfile stuff.  x86 can then select it only for 64-bit kernels, and in turn
+> select MEMFILE_NOTIFIER iff private memory is supported.
 > 
-> Signed-off-by: Oscar Salvador <osalvador@suse.de>
-> ---
->  mm/memory_hotplug.c | 35 ++++++++++++++---------------------
->  1 file changed, 14 insertions(+), 21 deletions(-)
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index ca7b2a6a452a..ee9c8c155300 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -48,7 +48,9 @@ config KVM
+>         select SRCU
+>         select INTERVAL_TREE
+>         select HAVE_KVM_PM_NOTIFIER if PM
+> -       select MEMFILE_NOTIFIER
+> +       select HAVE_KVM_PRIVATE_MEM if X86_64
+> +       select MEMFILE_NOTIFIER if HAVE_KVM_PRIVATE_MEM
+> +
+>         help
+>           Support hosting fully virtualized guest machines using hardware
+>           virtualization extensions.  You will need a fairly recent
 > 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 07cece9e22e4..5c92ac81a399 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1161,8 +1161,7 @@ static void reset_node_present_pages(pg_data_t *pgdat)
->  	pgdat->node_present_pages = 0;
+> And in addition to replacing checks on CONFIG_MEMFILE_NOTIFIER, the probing of
+> whether or not KVM_MEM_PRIVATE is allowed can be:
+> 
+> @@ -1499,23 +1499,19 @@ static void kvm_replace_memslot(struct kvm *kvm,
+>         }
 >  }
->  
-> -/* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
-> -static pg_data_t __ref *hotadd_init_pgdat(int nid)
-> +static void hotadd_init_pgdat(int nid)
->  {
->  	struct pglist_data *pgdat = NODE_DATA(nid);
->  
-> @@ -1182,8 +1181,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
->  	 * to access not-initialized zonelist, build here.
->  	 */
->  	build_all_zonelists(pgdat);
+> 
+> -bool __weak kvm_arch_private_memory_supported(struct kvm *kvm)
+> -{
+> -       return false;
+> -}
 > -
-> -	return pgdat;
->  }
->  
->  /*
-> @@ -1193,31 +1190,27 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
->   * called by cpu_up() to online a node without onlined memory.
->   *
->   * Returns:
-> - * 1 -> a new node has been allocated
-> - * 0 -> the node is already online
-> - * -ENOMEM -> the node could not be allocated
-> + * 1 -> The node has been initialized.
-> + * 0 -> Either the node was already online, or we succesfully registered a new
-> + *      one.
-> + * -errno -> register_one_node() failed.
->   */
->  static int __try_online_node(int nid, bool set_node_online)
+>  static int check_memory_region_flags(struct kvm *kvm,
+>                                 const struct kvm_userspace_memory_region *mem)
 >  {
-> -	pg_data_t *pgdat;
-> -	int ret = 1;
-> +	int ret;
->  
->  	if (node_online(nid))
->  		return 0;
->  
-> -	pgdat = hotadd_init_pgdat(nid);
-> -	if (!pgdat) {
-> -		pr_err("Cannot online node %d due to NULL pgdat\n", nid);
-> -		ret = -ENOMEM;
-> -		goto out;
-> -	}
-> +	hotadd_init_pgdat(nid);
-> +
-> +	if (!set_node_online)
-> +		return 1;
-> +
-> +	node_set_online(nid);
-> +	ret = register_one_node(nid);
-> +	BUG_ON(ret);
->  
-> -	if (set_node_online) {
-> -		node_set_online(nid);
-> -		ret = register_one_node(nid);
-> -		BUG_ON(ret);
-> -	}
-> -out:
->  	return ret;
+>         u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> 
+> -       if (kvm_arch_private_memory_supported(kvm))
+> -               valid_flags |= KVM_MEM_PRIVATE;
+> -
+>  #ifdef __KVM_HAVE_READONLY_MEM
+>         valid_flags |= KVM_MEM_READONLY;
+>  #endif
+> 
+> +#ifdef CONFIG_KVM_HAVE_PRIVATE_MEM
+> +       valid_flags |= KVM_MEM_PRIVATE;
+> +#endif
 
-BUG_ON(ret);
-return ret;
+One thing to mention is CONFIG_KVM_HAVE_PRIVATE_MEM is build-time thing.
+Do you think we should or not do that for runtime? E.g. expose by vm_type
+so only when TDX is enabled KVM_MEM_PRIVATE is exposed.
 
-hm? This will never return :)
-
-So either leave the old code flow or "return 1;" I'd actually prefer the
-old code flow to then "return 1;" here:
-
-if (set_node_online) {
-	node_set_online(nid);
-	BUG_ON(register_one_node(nid));
-}
-return 1;
-
-We can then let go of "ret".
-
--- 
-Thanks,
-
-David / dhildenb
-
+Chao

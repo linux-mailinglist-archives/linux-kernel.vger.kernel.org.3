@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EC5512919
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65BB512924
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 03:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240940AbiD1BxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 27 Apr 2022 21:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S240885AbiD1B7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 27 Apr 2022 21:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiD1BxS (ORCPT
+        with ESMTP id S229889AbiD1B7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 27 Apr 2022 21:53:18 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2378299;
-        Wed, 27 Apr 2022 18:50:04 -0700 (PDT)
-Subject: Re: [PATCH v2 01/12] md/raid5: Factor out ahead_of_reshape() function
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651110603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CbEtAZGkNZAuchq7NKoeV3cKOWr84klzGpqBcsQxcMs=;
-        b=Ip/L+IwlDHTIEdN3OQ3EUG0N8t0/OI25xdagAIH29JcrdPWX9JxzlXmDLlhiVaLWUOy/FU
-        UDjdyrUBaWkaz7D9MWPfnUc/SC/GBGUs9REjEYdwsP+iN3ogsSi7jrkoe5GS+CXFpnNzrS
-        Wrj9xFAOB75rr554/hsktaAeLILDEC4=
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20220420195425.34911-1-logang@deltatee.com>
- <20220420195425.34911-2-logang@deltatee.com>
- <2a6d5554-4f71-6476-6d14-031da52005f5@linux.dev>
- <fe7f6d8a-8c66-3e90-1c52-140fe9d4cf1a@deltatee.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-Message-ID: <19d88098-7e52-38de-ceb7-a68debfbbd10@linux.dev>
-Date:   Thu, 28 Apr 2022 09:49:56 +0800
+        Wed, 27 Apr 2022 21:59:16 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD3134B8D
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:56:03 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so6401870pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 18:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sargun.me; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lq+qsTK8ZKVPJL9HA4iiJLZNw7TQSOzy8Rchv+NWZvU=;
+        b=R33oQZqWEqgeKBDM/HXVhBJUted9XBZhqVBxj/BaOz3dIiBa3WHrFRbMzJ6oRrywRv
+         BMPuSxFZ+sbaIPgbdfx0Go/FFdawlVbulYcv0VVFxVaa6dbsTvbijIkdqLUfAUVzwxtg
+         xTl0BJ5HjqYNyHCX1H8oAKtomrgYXP8meQCwg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lq+qsTK8ZKVPJL9HA4iiJLZNw7TQSOzy8Rchv+NWZvU=;
+        b=jpZadAfhF0IWkq035YtmYdMv/kq8HBSq6F1n9WZh5AsP/g8PFeFWrdqtuT3pswAhek
+         CQ0kXXw7yy3xt64yLyqf5LHZ3yrCQD/CSgud798YjXuTFLxYbE72t6RuM7Jie/Gm6eV2
+         ND/sZoUoJ9xPQw0qGUGEUdgKF/NxsvmLYRAbhgSwLzwU7ruhZQ99pDFJ2Oz9cQg3LTO9
+         hxkTVs6K4VeEWZUkpdGULQUwhY01pWj+cIECMYZQMa2xl6iBh7bvlC1cdYiV6ugFeps+
+         kuExA2+cuu4TN38fMz4fVh/RsxaT7UpnGhxULfbD1sDySiaq3a2PCov+KheyjtjE83vq
+         1WLQ==
+X-Gm-Message-State: AOAM531hnVO+2sDHdwhDmrfPBgtUblYzKouNbdLEvLynWesCdxkR7TDr
+        lLcaWZ4CyMdBhIvZF20c1VUgxc+biH45nA==
+X-Google-Smtp-Source: ABdhPJzHTKAjszOy+oeRzvRr7T+RkPRHjbTtIoYsLz/1URMqXa6euublePemom2BA1H+48yRxLF8qQ==
+X-Received: by 2002:a17:90a:db45:b0:1d9:29d0:4c6e with SMTP id u5-20020a17090adb4500b001d929d04c6emr28909345pjx.46.1651110962835;
+        Wed, 27 Apr 2022 18:56:02 -0700 (PDT)
+Received: from localhost.localdomain ([69.53.254.5])
+        by smtp.gmail.com with ESMTPSA id y14-20020a63ce0e000000b003c14af505edsm637814pgf.5.2022.04.27.18.56.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 18:56:01 -0700 (PDT)
+From:   Sargun Dhillon <sargun@sargun.me>
+To:     Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH 1/2] seccomp: Use FIFO semantics to order notifications
+Date:   Wed, 27 Apr 2022 18:54:46 -0700
+Message-Id: <20220428015447.13661-1-sargun@sargun.me>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <fe7f6d8a-8c66-3e90-1c52-140fe9d4cf1a@deltatee.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Previously, the seccomp notifier used LIFO semantics, where each
+notification would be added on top of the stack, and notifications
+were popped off the top of the stack. This could result one process
+that generates a large number of notifications preventing other
+notifications from being handled. This patch moves from LIFO (stack)
+semantics to FIFO (queue semantics).
 
+Signed-off-by: Sargun Dhillon <sargun@sargun.me>
+---
+ kernel/seccomp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 4/28/22 12:07 AM, Logan Gunthorpe wrote:
->
-> On 2022-04-26 19:28, Guoqing Jiang wrote:
->>>    +static bool ahead_of_reshape(struct mddev *mddev, sector_t sector,
->>> +                 sector_t reshape_sector)
->>> +{
->>> +    if (mddev->reshape_backwards)
->>> +        return sector < reshape_sector;
->>> +    else
->>> +        return sector >= reshape_sector;
->>> +}
->> I think it can be an inline function.
-> Marking static functions in C files as inline is not recommended. GCC
-> will inline it, if it is appropriate.
->
-> https://yarchive.net/comp/linux/inline.html
-> https://www.kernel.org/doc/local/inline.html
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index db10e73d06e0..2cb3bcd90eb3 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1101,7 +1101,7 @@ static int seccomp_do_user_notification(int this_syscall,
+ 	n.data = sd;
+ 	n.id = seccomp_next_notify_id(match);
+ 	init_completion(&n.ready);
+-	list_add(&n.list, &match->notif->notifications);
++	list_add_tail(&n.list, &match->notif->notifications);
+ 	INIT_LIST_HEAD(&n.addfd);
+ 
+ 	up(&match->notif->request);
+-- 
+2.25.1
 
-Thanks for the link, then I suppose those can be deleted
-
-linux> grep "static inline" drivers/md/md.h -r
-static inline int is_badblock(struct md_rdev *rdev, sector_t s, int sectors,
-static inline int __must_check mddev_lock(struct mddev *mddev)
-static inline void mddev_lock_nointr(struct mddev *mddev)
-static inline int mddev_trylock(struct mddev *mddev)
-static inline int mddev_is_locked(struct mddev *mddev)
-static inline void md_sync_acct(struct block_device *bdev, unsigned long 
-nr_sectors)
-static inline void md_sync_acct_bio(struct bio *bio, unsigned long 
-nr_sectors)
-static inline struct kernfs_node *sysfs_get_dirent_safe(struct 
-kernfs_node *sd, char *name)
-static inline void sysfs_notify_dirent_safe(struct kernfs_node *sd)
-static inline char * mdname (struct mddev * mddev)
-static inline int sysfs_link_rdev(struct mddev *mddev, struct md_rdev *rdev)
-static inline void sysfs_unlink_rdev(struct mddev *mddev, struct md_rdev 
-*rdev)
-static inline void safe_put_page(struct page *p)
-static inline bool is_mddev_broken(struct md_rdev *rdev, const char 
-*md_type)
-static inline void rdev_dec_pending(struct md_rdev *rdev, struct mddev 
-*mddev)
-static inline int mddev_is_clustered(struct mddev *mddev)
-static inline void mddev_clear_unsupported_flags(struct mddev *mddev,
-static inline void mddev_check_write_zeroes(struct mddev *mddev, struct 
-bio *bio)
-
-Thanks,
-Guoqing

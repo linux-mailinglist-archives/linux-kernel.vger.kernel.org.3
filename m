@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A32551327F
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D459513285
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 13:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345551AbiD1LfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 07:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S1345587AbiD1Lfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 07:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240604AbiD1LfV (ORCPT
+        with ESMTP id S1345579AbiD1Lfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 07:35:21 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACF320183
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:32:07 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id o17-20020a92c691000000b002c2c04aebe7so1575660ilg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:32:07 -0700 (PDT)
+        Thu, 28 Apr 2022 07:35:34 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E9027CDA
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:32:19 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id f2so5867010ioh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 04:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=UXiI1Ou+hgS6xUOBleoXBZ0P1W6h3cfa19FRe+lKcNc=;
+        b=qdRXWsH4VboVZqMp+U+9xgTkruA8gP1PnMemdrmmg0YO6COokK/UN2OFrTer0rQTAT
+         L/Gk1tYZKKFPFqo7JdutorIHaZilUNgMXSNSOCNevKkAHmcBVMElQGq6HpkYC/lBhR+z
+         cGdhDa6PfwxJvXH1rpfTD2kgzo8ZHUp1se8gwJDs9ievPavEXtbkGq5W5APCsSBEjbhG
+         b6RpLTbmn4cGsMi3ZP7Vc/UnPeVn3UhTzAwx9cOph6YMcAfGfSlA3NE/eQL+O/fC+ky6
+         WCEFGtzo/pZQofGZq0COcl2SR3VgReM6aVbjBeulJfsOg1nbD9JO0lCeZ9TTXm3ROS5F
+         lBgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=OLJAFGzDsMJJ4vQznge540lOuDzmbTYygXPQSl9cRbQ=;
-        b=K8zBKTDyat4hu49q7QGIN1b/N6aO3O3pfBUzWYZ+SOsBo3OCYGsN571o/qJvX4iutk
-         EZAqyqUeQx4LLGpMWoRczdl3g9nyMfctJMVAK54BE6QUwxYbKQ64uJeypZEAMB00c+99
-         4J8+t3cpoK+UhTn7HUv4iaftAYh7sKRpDA8dqlxXaH19hHBxdaBq4H4xP/cCfnE6vBRy
-         ohltpm0e8EQ6mXOLE+o3VzILATeLHBSnZO7/VnZPLnC6UCRC8+u6Jh0X6RTrFWcOPCnq
-         IRyQL+Kq5pXoZ+smMvnWzTW/WEDgqnvLutWY5pXmnLNj3wvIWL2d0cD5i8QQOoxQDoD7
-         2wtQ==
-X-Gm-Message-State: AOAM532I71VwkPB8lOPIEGXnbeJba42/35K3EwukxJEC7830l0/yKHxd
-        0Nw0fakH290jQ9eSEgXounaPn9ZLEnZSfNdEKTk2W8lxJ3Hy
-X-Google-Smtp-Source: ABdhPJxAB0syNAAGUZ1g96hnh6vV4104IOqaj5OdTdHHn6UlNjjQtYhmf+CWQ5O28oTueITCCnG3U8t1lGf+LO7u83qZ5Ixvnhkl
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=UXiI1Ou+hgS6xUOBleoXBZ0P1W6h3cfa19FRe+lKcNc=;
+        b=yLqMCjHqCb2f4qn4WkRXQMhCAWgSxqyu9cCoCfur9YiKfjnqdaY4eWDBxHS2sD0v0a
+         b08Uf39mE/cafPGLNfhSWwnZSbTQLGab4NrJsi/fm5OZjZn4QuiJ8UWr3G0rR4Bar5HM
+         sKpwQ9kisvpGASZT+ZJXyzpmTLzhNiNfYceDbFVk6qB6RqlqYZDpwP1pXfwddzyOMBo+
+         +eTmoM+edO8+896g6jg83+CBvRwn8PVhj+++wsfPkpz1+5dVMdgtilvBYInXhZ4NO0ar
+         FwARsigjyxe4Sq4VF4ZGXHyYTLH8VHFQLVLIWByFWEVGRxIaSCrqnVV8UZpZnGuQ1giw
+         PKdQ==
+X-Gm-Message-State: AOAM533cKoawuB3fdVGitxQv12MOO72GXydIqR2ExrwezVhKQ7tDBSSb
+        AmAPR7knPrhqlF2gARAwvqQfxQ1BmrUrm9Oi7mI=
+X-Google-Smtp-Source: ABdhPJy//UOmnScX3U+9HAMHSaslp0Zg2kKG2rsRF1VyHdz+6Vg1gTuTmghrLA5VXddaXujrR+D0UZta7z+mQH+DG2g=
+X-Received: by 2002:a6b:680c:0:b0:657:aecd:c666 with SMTP id
+ d12-20020a6b680c000000b00657aecdc666mr4431049ioc.218.1651145538572; Thu, 28
+ Apr 2022 04:32:18 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20eb:b0:2cd:83e9:b910 with SMTP id
- q11-20020a056e0220eb00b002cd83e9b910mr10188255ilv.185.1651145526916; Thu, 28
- Apr 2022 04:32:06 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 04:32:06 -0700
-In-Reply-To: <000000000000af7f9905da904400@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009abe0e05ddb546f6@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in dst_destroy
-From:   syzbot <syzbot+736f4a4f98b21dba48f0@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, weiwan@google.com,
-        yajun.deng@linux.dev
+Received: by 2002:a05:6e02:20e7:0:0:0:0 with HTTP; Thu, 28 Apr 2022 04:32:18
+ -0700 (PDT)
+Reply-To: barristerbenwaidhoferb@gmail.com
+From:   "Barrister. Ben Waidhofer" <gogalonasiru@gmail.com>
+Date:   Thu, 28 Apr 2022 04:32:18 -0700
+Message-ID: <CAPs4PmpVKkFuMtUTtqYzDMEM1tkHd6mExwR5ngFD_ZF_qd_qtg@mail.gmail.com>
+Subject: Investment Offer
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d44 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9261]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gogalonasiru[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Good day,
 
-commit d16e6d19ccc6d3aa6b96d6a8fdb9e04fb9dffdbd
-Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Date:   Wed Oct 6 01:09:33 2021 +0000
+I am Barrister. Ben Waidhofer from the stated law firm in London. I act
+for Mr. Andrew Walker, a former loyalist and a personal Friend to the
+President of Russia Vladimir Putin presently in London; he flew into
+the UK months ago before the invasion of Ukraine by Russian government.
+The sum of $3.5b was deposited in a Private bank in Switzerland for
+the procurement of MIC war equipment from North Korea to fight the
+war, but he has decided to back out of the initial plan to divert part
+of the fund for investment in a viable venture.
 
-    Bluetooth: hci_vhci: Fix calling hci_{suspend,resume}_dev
+There is a need for a matured and trusted individual or corporate
+organization to receive part of the fund. All the needed documentation
+will be perfected here in London.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14d40c1f700000
-start commit:   03fa8fc93e44 Merge branch 'remove-virt_to_bus-drivers'
-git tree:       net-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16d40c1f700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12d40c1f700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6e95eee1a1aa4fb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=736f4a4f98b21dba48f0
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1239a4e4f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13a4b3b8f00000
+You are at liberty to respond for more detail.
 
-Reported-by: syzbot+736f4a4f98b21dba48f0@syzkaller.appspotmail.com
-Fixes: d16e6d19ccc6 ("Bluetooth: hci_vhci: Fix calling hci_{suspend,resume}_dev")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Thanks.
+Regards,
+Barrister. Ben Waidhofer

@@ -2,105 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20337513568
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD26513511
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 15:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347496AbiD1Nnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 09:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S1347361AbiD1N3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 09:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241572AbiD1Nn2 (ORCPT
+        with ESMTP id S229625AbiD1N3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 09:43:28 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148601FA49;
-        Thu, 28 Apr 2022 06:40:14 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id b12so4391966plg.4;
-        Thu, 28 Apr 2022 06:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=J6PdeDybWktJ3VOINyxTrk1DVabwU+Bt41DCAGyrJqw=;
-        b=IPsajGJEOyFy0KXi5MbqNqA+B6gzB8xNg++FY3nWAd50+XLHI3IiiXgHM0D0hOvAGP
-         NHzF/Fmjx3BKNr25mf0LCvUD+BlCo9/dmB2/lCRjW51Eam0ExUwFK3YH7YMSti0A4ZZd
-         xEcKqHyrldXKx9tcqf+yWyAzrg4cetWf1poIiq59krbuM8OrRi/cvudto62nFlc/aWbk
-         VsWQAj+C5W8ABz7FdqFhorEwMN6BDyPdq5A590Zmk4vzVVXSN0QQbskvoIT0LCXuVqwX
-         BMeO8voLLYnahizk2FNYrugh1ix+nJ07EM4TTaj80NJn1xQL7mAjorMIdiY2reS7pEos
-         TqYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=J6PdeDybWktJ3VOINyxTrk1DVabwU+Bt41DCAGyrJqw=;
-        b=pFIaISZuLVNtC9oxx6qyQW03KrRpszL4YwWPrup9S2I375shOfrNU1PasuPi9TBsQB
-         vTjP5KgAnk4UExzKfq8qtoZ2hAqEzV0jTkEwL72d/oAPs9ozAlrt7eaEuw8fBwgySe/t
-         +AxrgszU25SBZ1O8YWWPXZA34jUwU/c00itxH0gj4X1+yulErccQvZwfAS2SZ4exwrH3
-         6a2Hee55SdE55nBClST7qqF2cHXRFovItiONFJ1kKk2A6ELx1eHYgTNW8z8s7l18ita/
-         5i7PENJGUNcIiCE19VUpI4BRO38bVdIxTMd3fHww6latZ3oNBRDKErmu4QXTJSzeSqdF
-         ey1A==
-X-Gm-Message-State: AOAM530rQ6FMFwaDEFho/Ub9sSI1BgFXcl2xAZpZyj7OlHtP347SN9sr
-        MRqpHhScuduroFC+dkz87H0=
-X-Google-Smtp-Source: ABdhPJx25FcLG2JQe24kaXZecI9BCEFvz9z8SheCmciK7YDm8iNJkM8WfVpRJ48uQcNgOpHj2YG0Yw==
-X-Received: by 2002:a17:902:d54d:b0:15d:2ff:b0e2 with SMTP id z13-20020a170902d54d00b0015d02ffb0e2mr23275845plf.131.1651153213528;
-        Thu, 28 Apr 2022 06:40:13 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.119])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056a001d8f00b004fda37855ddsm21177011pfw.168.2022.04.28.06.40.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 06:40:13 -0700 (PDT)
-Message-ID: <5c227ef8-72d2-9254-f061-128974a6dc7d@gmail.com>
-Date:   Thu, 28 Apr 2022 21:40:05 +0800
+        Thu, 28 Apr 2022 09:29:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4506BB0D24;
+        Thu, 28 Apr 2022 06:26:25 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KpxFM45kjzfZkJ;
+        Thu, 28 Apr 2022 21:25:27 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
+ 2022 21:26:22 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yebin10@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>,
+        <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH v3] ext4: fix race condition between ext4_write and ext4_convert_inline_data
+Date:   Thu, 28 Apr 2022 21:40:31 +0800
+Message-ID: <20220428134031.4153381-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v4 6/7] perf/x86/amd/core: Add PerfMonV2 overflow handling
-Content-Language: en-US
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     peterz@infradead.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, eranian@google.com,
-        puwen@hygon.cn, ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, x86@kernel.org
-References: <cover.1651058600.git.sandipan.das@amd.com>
- <6bb3a6de79afbdb1ebc1b804fb8c2002c00cbaee.1651058600.git.sandipan.das@amd.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-In-Reply-To: <6bb3a6de79afbdb1ebc1b804fb8c2002c00cbaee.1651058600.git.sandipan.das@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/4/2022 7:31 pm, Sandipan Das wrote:
-> +static inline void amd_pmu_ack_global_status(u64 status)
-> +{
-> +	/*
-> +	 * PerfCntrGlobalStatus is read-only but an overflow acknowledgment
+Hulk Robot reported a BUG_ON:
+ ==================================================================
+ EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
+ block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
+ kernel BUG at fs/ext4/ext4_jbd2.c:53!
+ invalid opcode: 0000 [#1] SMP KASAN PTI
+ CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
+ RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
+ RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
+ [...]
+ Call Trace:
+  ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
+  generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
+  ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
+  ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
+  do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
+  do_iter_write+0x107/0x430 fs/read_write.c:861
+  vfs_writev fs/read_write.c:934 [inline]
+  do_pwritev+0x1e5/0x380 fs/read_write.c:1031
+ [...]
+ ==================================================================
 
-If wrmsrl PerfCntrGlobalStatus, remain silent or report #GP ?
+Above issue may happen as follows:
+           cpu1                     cpu2
+__________________________|__________________________
+do_pwritev
+ vfs_writev
+  do_iter_write
+   ext4_file_write_iter
+    ext4_buffered_write_iter
+     generic_perform_write
+      ext4_da_write_begin
+                           vfs_fallocate
+                            ext4_fallocate
+                             ext4_convert_inline_data
+                              ext4_convert_inline_data_nolock
+                               ext4_destroy_inline_data_nolock
+                                clear EXT4_STATE_MAY_INLINE_DATA
+                               ext4_map_blocks
+                                ext4_ext_map_blocks
+                                 ext4_mb_new_blocks
+                                  ext4_mb_regular_allocator
+                                   ext4_mb_good_group_nolock
+                                    ext4_mb_init_group
+                                     ext4_mb_init_cache
+                                      ext4_mb_generate_buddy  --> error
+       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+                                ext4_restore_inline_data
+                                 set EXT4_STATE_MAY_INLINE_DATA
+       ext4_block_write_begin
+      ext4_da_write_end
+       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+       ext4_write_inline_data_end
+        handle=NULL
+        ext4_journal_stop(handle)
+         __ext4_journal_stop
+          ext4_put_nojournal(handle)
+           ref_cnt = (unsigned long)handle
+           BUG_ON(ref_cnt == 0)  ---> BUG_ON
 
-> +	 * mechanism exists; writing 1 to a bit in PerfCntrGlobalStatusClr
-> +	 * clears the same bit in PerfCntrGlobalStatus
-> +	 */
-> +
-> +	/* Only allow modifications to PerfCntrGlobalStatus.PerfCntrOvfl */
-> +	status &= amd_pmu_global_cntr_mask;
-> +	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, status);
+The lock held by ext4_convert_inline_data is xattr_sem, but the lock
+held by generic_perform_write is i_rwsem. Therefore, the two locks can
+be concurrent.
 
-If rdmsrl PerfCntrGlobalStatusClr, does it return 0 or the value of 
-PerfCntrGlobalStatus ?
+To solve above issue, we add inode_lock() for ext4_convert_inline_data().
+At the same time, move ext4_convert_inline_data() in front of
+ext4_punch_hole(), remove similar handling from ext4_punch_hole().
 
-> +}
+Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
+Cc: stable@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	Increase the range of the inode_lock.
+V2->V3:
+	Move the lock outside the ext4_convert_inline_data().
+	And reorganize ext4_fallocate().
+
+ fs/ext4/extents.c | 10 ++++++----
+ fs/ext4/inode.c   |  9 ---------
+ 2 files changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index e473fde6b64b..474479ce76e0 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -4693,15 +4693,17 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
+ 		     FALLOC_FL_INSERT_RANGE))
+ 		return -EOPNOTSUPP;
+ 
++	inode_lock(inode);
++	ret = ext4_convert_inline_data(inode);
++	inode_unlock(inode);
++	if (ret)
++		goto exit;
++
+ 	if (mode & FALLOC_FL_PUNCH_HOLE) {
+ 		ret = ext4_punch_hole(file, offset, len);
+ 		goto exit;
+ 	}
+ 
+-	ret = ext4_convert_inline_data(inode);
+-	if (ret)
+-		goto exit;
+-
+ 	if (mode & FALLOC_FL_COLLAPSE_RANGE) {
+ 		ret = ext4_collapse_range(file, offset, len);
+ 		goto exit;
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 646ece9b3455..4779673d733e 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -3967,15 +3967,6 @@ int ext4_punch_hole(struct file *file, loff_t offset, loff_t length)
+ 
+ 	trace_ext4_punch_hole(inode, offset, length, 0);
+ 
+-	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+-	if (ext4_has_inline_data(inode)) {
+-		filemap_invalidate_lock(mapping);
+-		ret = ext4_convert_inline_data(inode);
+-		filemap_invalidate_unlock(mapping);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	/*
+ 	 * Write out all dirty pages to avoid race conditions
+ 	 * Then release them.
+-- 
+2.31.1
+

@@ -2,115 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1202C513E8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D846F513E8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 00:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352883AbiD1Wdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 18:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        id S1352890AbiD1WfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 18:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352869AbiD1Wdu (ORCPT
+        with ESMTP id S236003AbiD1WfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 18:33:50 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E5C17E2D
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:30:34 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id j8so5555893pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 15:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2gI3LSc9IHvot1dpIlikzEgv3BfMg9ozniBdSD+e3ZI=;
-        b=b4mY2ou5mE8bJamrxVHk5L74Ll5VBsihoG338wckhM92iYs7GsF+dByDJgpol360NJ
-         nXHcJAlsRBqD79TcjG6AUQlMP9RcXW24vJMopJN+srtRSacmJUZnhDPnuiGrOZ+k4/O4
-         0+RkCDfV/Jcn1ndwZn/3sECaiGoU0Gj9fPP+AhKPY+CXw+iIN0h6ZvNYo6yQ1mn9Gd7S
-         NQM3a2mq8+/xq4NH5bGpaBKNALbepcOcUcqX8fBTSfKQ72rsOjE997J/Tc+iZs/F2v4F
-         Q2U9zxhpfYuLnHoG1WnvTXDDb+HYGWVKmsN3UkUeTFWD9Ucf8efdd+bo+iqv0KndIIoD
-         62Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2gI3LSc9IHvot1dpIlikzEgv3BfMg9ozniBdSD+e3ZI=;
-        b=ry4B83pb7yjMCJK19LJsrSqDshycIBYs6yJd0pUesEaBSqU9t0zzq+Y7id0YQ1ATjH
-         1gbo31epzZFMuFQIf7vZ+2fZIbAPu41ciqoK1+V3iRvxK8v3Q9xtRKLIkJhuVLZydAgu
-         XOavW7lUjzniX4lkknyKqCG5aORe1lGKj6uOWIJDRT2Xk2HxESLf4CjDLSNudjqkxnLR
-         tYgYr0wZPXpOc44u/C00XCX0HjBYn+Cw+P/UyrbGcneQXUC+FiKDhDCzPoMSL2Lt/LAl
-         9eYhKbTZsR+Cat+Vbq6NyDpORsRqC89tEIPhyaqCJLTvHUR4QDwkXz13aRWoBt39o3dH
-         kduw==
-X-Gm-Message-State: AOAM531xdpblIM6zlvkDX7vn968aiNd9RFhwFTt05JSVIb0v3MJLmZQe
-        BRn7NmS7Ra1Q567rNPrMuzzbmA==
-X-Google-Smtp-Source: ABdhPJyc8OD+nndnQhylnDBjtTF4JRM7nd9rYKP6TtQ50VI8lF+Gd51RK4kj33fCyc5HshuLzB02gQ==
-X-Received: by 2002:a17:903:18e:b0:15e:6cc8:470c with SMTP id z14-20020a170903018e00b0015e6cc8470cmr2861512plg.9.1651185033447;
-        Thu, 28 Apr 2022 15:30:33 -0700 (PDT)
-Received: from ?IPV6:2600:380:4a4d:c013:137a:497f:c327:6660? ([2600:380:4a4d:c013:137a:497f:c327:6660])
-        by smtp.gmail.com with ESMTPSA id ct23-20020a056a000f9700b0050d9ac2b3desm759574pfb.161.2022.04.28.15.30.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 15:30:32 -0700 (PDT)
-Message-ID: <3e771f65-b9a1-0582-d718-3e09f3c7f01f@kernel.dk>
-Date:   Thu, 28 Apr 2022 16:30:31 -0600
+        Thu, 28 Apr 2022 18:35:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0982D74DD6;
+        Thu, 28 Apr 2022 15:31:46 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23SKpWDk022478;
+        Thu, 28 Apr 2022 22:31:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=ZHei3AmziMOc2ZCq17jBr4Aqt3V9+CsjQoOHXb+Qrys=;
+ b=DbUZqUqkB31z4mEo+zTlHU5cUifNDOf/iuWZaZuCPnEgkBlC2ATKV8f4FCXBjmjyBCfp
+ YEHab2zkaj4xGlFVHrxhwL2KIKp9FvRJGufqFnnHqpwQkpomnnCx+chCW6+9RLfVcvwm
+ mzLPk0MDUQk0ovaTkH+6cyHQPB+4AN8a32fiYG4REv/D5Z4GtntykQRdF4G1ua+l+Jzx
+ q7+unwAxiZ+N/5RmG4N0ls1mTJQGZZFirAyU5ekVf9/O3bqHYZu9IArhqW1wAonvCZXd
+ tqCDvL3QhQa9QbjZ9Nyks3rgdknPjM3AzNfsslUbzNn7TRz10tBqtcM5MFUAq7q/Q3fY Eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqs3n7uc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 22:31:41 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23SMRxbu022259;
+        Thu, 28 Apr 2022 22:31:41 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqs3n7ubv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 22:31:41 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23SMSkWP002490;
+        Thu, 28 Apr 2022 22:31:40 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma03dal.us.ibm.com with ESMTP id 3fm93af7vw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Apr 2022 22:31:40 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23SMVcnr20840856
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Apr 2022 22:31:38 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F3D86E04E;
+        Thu, 28 Apr 2022 22:31:38 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E6E76E052;
+        Thu, 28 Apr 2022 22:31:38 +0000 (GMT)
+Received: from localhost (unknown [9.41.178.242])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Apr 2022 22:31:38 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linuxppc-dev <linuxppc-dev@ozlabs.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mahesh Salgaonkar <mahesh@linux.ibm.com>
+Subject: Re: [PATCH v6] PCI hotplug: rpaphp: Error out on busy status from
+ get-sensor-state
+In-Reply-To: <20220428204740.GA42242@bhelgaas>
+References: <20220428204740.GA42242@bhelgaas>
+Date:   Thu, 28 Apr 2022 17:31:38 -0500
+Message-ID: <87k0b8q1px.fsf@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] task_work: allow TWA_SIGNAL without a rescheduling IPI
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <543452ca-f82e-4f00-cd51-88bb9723a975@kernel.dk>
- <33a6de15-f487-b12b-8ffe-af978ebb03c3@kernel.dk>
- <20220428090836.GQ2731@worktop.programming.kicks-ass.net>
- <bf6cc541-4de7-3258-ebb8-caa3a8249bc7@kernel.dk> <87wnf8onb1.ffs@tglx>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87wnf8onb1.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: F-0ZcXkTO6JddG-7JKT8snff0dGNk3kG
+X-Proofpoint-ORIG-GUID: RZlCNLCq1bI5dUkDbS47Z6Tpwzchd8as
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-28_05,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 spamscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204280130
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 4:28 PM, Thomas Gleixner wrote:
-> On Thu, Apr 28 2022 at 06:21, Jens Axboe wrote:
->> On 4/28/22 3:08 AM, Peter Zijlstra wrote:
->>> On Mon, Apr 25, 2022 at 07:52:31PM -0600, Jens Axboe wrote:
->>>> On 4/22/22 8:34 AM, Jens Axboe wrote:
->>>>> Some use cases don't always need an IPI when sending a TWA_SIGNAL
->>>>> notification. Add TWA_SIGNAL_NO_IPI, which is just like TWA_SIGNAL,
->>>>> except it doesn't send an IPI to the target task. It merely sets
->>>>> TIF_NOTIFY_SIGNAL and wakes up the task.
->>>
->>> Could you perphaps elaborate on those use-cases? How do they guarantee
->>> the task_work is ran before userspace?
->>
->> The task is still marked as having task_work, so there should be no
->> differences in how it's run before returning to userspace. That would
->> not have delivered an IPI before, if it was in the kernel.
->>
->> The difference would be in the task currently running in userspace, and
->> whether we force a reschedule to ensure the task_work gets run now.
->> Without the forced reschedule, running of the task_work (from io_uring)
->> becomes more cooperative - it'll happen when the task transitions to the
->> kernel anyway (eg to wait for events).
-> 
-> I can see why you want that, but that needs to be part of the change log
-> and it also needs a comprehensive comment for TWA_SIGNAL_NO_IPI.
-> 
-> @TWA_SIGNAL_NO_IPI works like @TWA_SIGNAL.... does not really explain
-> much.
+Bjorn Helgaas <helgaas@kernel.org> writes:
+> On Tue, Apr 26, 2022 at 11:07:39PM +0530, Mahesh Salgaonkar wrote:
+>> +/*
+>> + * RTAS call get-sensor-state(DR_ENTITY_SENSE) return values as per PAPR:
+>> + *    -1: Hardware Error
+>> + *    -2: RTAS_BUSY
+>> + *    -3: Invalid sensor. RTAS Parameter Error.
+>> + * -9000: Need DR entity to be powered up and unisolated before RTAS call
+>> + * -9001: Need DR entity to be powered up, but not unisolated, before RTAS call
+>> + * -9002: DR entity unusable
+>> + *  990x: Extended delay - where x is a number in the range of 0-5
+>> + */
+>> +#define RTAS_HARDWARE_ERROR	(-1)
+>> +#define RTAS_INVALID_SENSOR	(-3)
+>> +#define SLOT_UNISOLATED		(-9000)
+>> +#define SLOT_NOT_UNISOLATED	(-9001)
+>
+> I would say "isolated" instead of "not unisolated", but I suppose this
+> follows language in the spec.  If so, you should follow the spec.
 
-Agree, it should be better. I'll send out a new one with an improved
-commit message and also with a better comment in the code for the NO_IPI
-variant.
+"not unisolated" is the spec language.
 
-Thanks!
 
--- 
-Jens Axboe
+>> +#define SLOT_NOT_USABLE		(-9002)
+>> +
+>> +static int rtas_to_errno(int rtas_rc)
+>> +{
+>> +	int rc;
+>> +
+>> +	switch (rtas_rc) {
+>> +	case RTAS_HARDWARE_ERROR:
+>> +		rc = -EIO;
+>> +		break;
+>> +	case RTAS_INVALID_SENSOR:
+>> +		rc = -EINVAL;
+>> +		break;
+>> +	case SLOT_UNISOLATED:
+>> +	case SLOT_NOT_UNISOLATED:
+>> +		rc = -EFAULT;
+>> +		break;
+>> +	case SLOT_NOT_USABLE:
+>> +		rc = -ENODEV;
+>> +		break;
+>> +	case RTAS_BUSY:
+>> +	case RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX:
+>> +		rc = -EBUSY;
+>> +		break;
+>> +	default:
+>> +		err("%s: unexpected RTAS error %d\n", __func__, rtas_rc);
+>> +		rc = -ERANGE;
+>> +		break;
+>> +	}
+>> +	return rc;
+>
+> This basically duplicates rtas_error_rc().  Why do we need two copies?
 
+It treats RTAS_BUSY, RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX
+differently, which is part of the point of this change.
+
+Aside: rtas_error_rc() (from powerpc's rtas.c) is badly named. Its
+conversions make sense for only a handful of RTAS calls. RTAS error
+codes have function-specific interpretations.

@@ -2,149 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA90D512CC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95229512CC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245195AbiD1H3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S244233AbiD1HbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245235AbiD1H3j (ORCPT
+        with ESMTP id S238181AbiD1HbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:29:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29F4F34B9B
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:26:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651130779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Baw5AAynaYZhBtVAECa7lnldNyZZzfbq8GqHK16Ojp4=;
-        b=eTPwoNVGXsfD7XL5MDd0hgjC0p0c/ydY2Ek8XlTjrqwunK8EV/3bmCV1Zgb1AnydhsjpTu
-        LWPcSDdMZuZsOXLB1ahUq/huMmLxuiT1/LHYHnNOwE03sySJtFmiqc3Mn7YDyjLrJso497
-        EJthh2fXrJOL3LAzW1R0cDvNhLmVRc8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-633-5cFKtU6BMMm8v4l9jh7ndg-1; Thu, 28 Apr 2022 03:26:17 -0400
-X-MC-Unique: 5cFKtU6BMMm8v4l9jh7ndg-1
-Received: by mail-wr1-f71.google.com with SMTP id s8-20020adf9788000000b0020adb01dc25so1577918wrb.20
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:26:17 -0700 (PDT)
+        Thu, 28 Apr 2022 03:31:10 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACC55419F
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:27:55 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g23so4452527edy.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 00:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=G0t5M5PTY98V2pFU2BrLfjWZQRkfAzQU7O0JRiBUSqw=;
+        b=EnjYsneRkqpWt31PWaAmunHv2Pd+bvgHqCNmsTRgS+A2YVMnSz/CmM89rjAHECAXAk
+         mBiY1zaeOhw8ZPeZV2wNl8LNbJ33Qpz3wjJfLKPYxi3b138/mS3V4UQufIs78RugB0Ap
+         7kbifk9oseSfX6SAjwOJP2QsIRcToBXSgngvYQKZjZOYyuMD22P6lP1ONCK6cjil3nzw
+         VeviTCKgSiUp/w+N5Cc/TdV0zc8RqAssHPOHhVDJE1nahj6KQksXd/yPyRQ/5+HlpvWH
+         XTXveEezTBCSoY5UdcdILBF6Sl01ro2IfxUtkaAI+FQNimFtxxgZ0hT7O9s03shgwd+x
+         Go0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Baw5AAynaYZhBtVAECa7lnldNyZZzfbq8GqHK16Ojp4=;
-        b=wUteh+dBgPuQVd7khK/DJlpi9aGQADahVbxSkzA+nWxhh6zhG0whN/3OEKj/YUoNQg
-         BPKcypE8B2oLJ7gwvmpi4JPAx9rugzQb0h6acNNQjwVljrY7CiTU4Chzh/5SAEbvSkUJ
-         WcZ4w4BMQAo+Sx/u9txfh2Bfga4XJ4Aaa5T8wGeLTdp1a+NtnnWXl4B4I1r4+pXFHORz
-         /szCTT5mNYArCI3CzQOOQfQNnZeHIqpbIGFCI2H/zDf+R8FjR2F7phdrG/3gaFebDpcq
-         eiJwjCTGcR46IxWd9MPK+DYzx8uwhzvnQYAZY4GSzMAn1twGtz+IDMCURKmpIW7wzsDq
-         0WtA==
-X-Gm-Message-State: AOAM531nqMMZuTJFDX44avVso0ItM2stQtuxGMD0ZZZ4zJO9jmw0Y+4g
-        NEWRvy+bQpDgTsLHZMPGgmhoCuRTS8sS7Rkz5MjAdpWjK6IwPIvOMmDal8WJU3SKzOmsjfbfeWC
-        a6cnxwU32nxkD9M08cp8JcIXi
-X-Received: by 2002:a7b:c8d5:0:b0:392:b12e:fd11 with SMTP id f21-20020a7bc8d5000000b00392b12efd11mr29610292wml.96.1651130772052;
-        Thu, 28 Apr 2022 00:26:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzNXR7aPjPClAeL9yVwShDBwTTCIJfhAL5A0u1ugWtOkmKMV1lDCAZ9Yu5Tgd4bZgKDo6E2Qg==
-X-Received: by 2002:a7b:c8d5:0:b0:392:b12e:fd11 with SMTP id f21-20020a7bc8d5000000b00392b12efd11mr29610274wml.96.1651130771783;
-        Thu, 28 Apr 2022 00:26:11 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u4-20020a5d6da4000000b0020a8c8d3e00sm16226202wrs.73.2022.04.28.00.26.11
+        bh=G0t5M5PTY98V2pFU2BrLfjWZQRkfAzQU7O0JRiBUSqw=;
+        b=atqUUFtyFHu8Ps/MunSaVN49+QrxFVxvOb6a13Paqj0eySLSjqrsnWN1kaRCnR4ksO
+         ShgjiD/WuvB2erYFJEXIPu4pXr+brqLKOFaaeqVa264fFyFdFqWCWCDwXE57CO4oOlj7
+         7jFm/LANWNNIr324TeHRG29ZNJ5iu7wBi1hnCGN5fwLx4rp+Uz4w+H0GqrAv4bW4TNBO
+         yGtRaNOQ64nS9ldVvXaqEd2446FEgPGz3SK5CnIEXR7avqbBOyUjX09PpkXtNgDk/27P
+         8wnvjDHodcx5JUPwAeAzEvgFvZ4rxC52qJ2+7zrdQyKzjMEIPVAUHvMKfcFjGUNz537P
+         qIrw==
+X-Gm-Message-State: AOAM530e/go9fBd/MVLSHtv+HPIbnJDoCi1vu/qtNJSol6SI7pvfIG/Y
+        Sz3BZP8bl/q2u3FqvY/F+aR6LA==
+X-Google-Smtp-Source: ABdhPJz+rgiwJv2clzp+0bE6ukQ2dupp6EhAp0O3l3QpWIyJToypY1ME9sHL2y6X8oWR56UUJjOmag==
+X-Received: by 2002:a50:d707:0:b0:425:e37d:4ef3 with SMTP id t7-20020a50d707000000b00425e37d4ef3mr22319371edi.167.1651130874526;
+        Thu, 28 Apr 2022 00:27:54 -0700 (PDT)
+Received: from [192.168.0.160] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z3-20020aa7c643000000b0042617ba63bdsm1044782edr.71.2022.04.28.00.27.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 00:26:11 -0700 (PDT)
-Message-ID: <6f3b8d37-0a70-a035-e87b-5aa72926fff9@redhat.com>
-Date:   Thu, 28 Apr 2022 09:26:10 +0200
+        Thu, 28 Apr 2022 00:27:54 -0700 (PDT)
+Message-ID: <29cc62aa-2995-ea96-0e7e-242f9ddaa87e@linaro.org>
+Date:   Thu, 28 Apr 2022 09:27:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] drm/display: Select DP helper for DRM_DP_AUX_CHARDEV
- and DRM_DP_CEC
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
+ only compatible
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     Lyude Paul <lyude@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-References: <20220427215528.237861-1-javierm@redhat.com>
- <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <46446e78-60a6-1b8c-1bb6-1c005489d58c@suse.de>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+References: <20220427203026.828183-1-swboyd@chromium.org>
+ <20220427203026.828183-2-swboyd@chromium.org>
+ <9248da4f-ca04-82f0-2840-a20797c25d2a@linaro.org>
+ <CAE-0n52Y=3EEZ6qguNx=hM44BahbH3cuq7x6Bbe5HELKkkvrUw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAE-0n52Y=3EEZ6qguNx=hM44BahbH3cuq7x6Bbe5HELKkkvrUw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
-
-Thanks for your feedback.
-
-On 4/28/22 09:02, Thomas Zimmermann wrote:
-
-[snip]
-
->> Changes in v2:
->> - Explain better the issue in the change description.
->> - Only select DRM_DISPLAY_DP_HELPER and not DRM_DISPLAY_HELPER.
+On 28/04/2022 08:24, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2022-04-27 23:12:47)
+>> On 27/04/2022 22:30, Stephen Boyd wrote:
+>>> If the device is a detachable, this device won't have a matrix keyboard
+>>> but it may have some button switches, e.g. volume buttons and power
+>>> buttons. Let's add a more specific compatible for this type of device
+>>> that indicates to the OS that there are only switches and no matrix
+>>> keyboard present.
+>>>
+>>> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+>>> Cc: Rob Herring <robh+dt@kernel.org>
+>>> Cc: <devicetree@vger.kernel.org>
+>>> Cc: Benson Leung <bleung@chromium.org>
+>>> Cc: Guenter Roeck <groeck@chromium.org>
+>>> Cc: Douglas Anderson <dianders@chromium.org>
+>>> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+>>> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>>> ---
+>>>  .../bindings/input/google,cros-ec-keyb.yaml          | 12 +++++++++---
+>>>  1 file changed, 9 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+>>> index e8f137abb03c..edc1194d558d 100644
+>>> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+>>> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+>>> @@ -15,14 +15,20 @@ description: |
+>>>    Google's ChromeOS EC Keyboard is a simple matrix keyboard
+>>>    implemented on a separate EC (Embedded Controller) device. It provides
+>>>    a message for reading key scans from the EC. These are then converted
+>>> -  into keycodes for processing by the kernel.
+>>> +  into keycodes for processing by the kernel. This device also supports
+>>> +  switches/buttons like power and volume buttons.
+>>>
+>>>  allOf:
+>>>    - $ref: "/schemas/input/matrix-keymap.yaml#"
+>>>
+>>>  properties:
+>>>    compatible:
+>>> -    const: google,cros-ec-keyb
+>>> +    oneOf:
+>>> +      - items:
+>>> +          - const: google,cros-ec-keyb-switches
+>>> +          - const: google,cros-ec-keyb
+>>> +      - items:
+>>> +          - const: google,cros-ec-keyb
+>>>
 >>
->>   drivers/gpu/drm/display/Kconfig | 2 ++
->>   1 file changed, 2 insertions(+)
+>> In such case matrix-keymap properties are not valid, right? The
+>> matrix-keymap should not be referenced, IOW, you need to move allOf
+>> below "required" and add:
+>> if:not:...then: $ref: "/schemas/input/matrix-keymap.yaml
 >>
->> diff --git a/drivers/gpu/drm/display/Kconfig b/drivers/gpu/drm/display/Kconfig
->> index f84f1b0cd23f..9fe80c4e555c 100644
->> --- a/drivers/gpu/drm/display/Kconfig
->> +++ b/drivers/gpu/drm/display/Kconfig
->> @@ -32,6 +32,7 @@ config DRM_DISPLAY_HDMI_HELPER
->>   config DRM_DP_AUX_CHARDEV
->>   	bool "DRM DP AUX Interface"
->>   	depends on DRM
->> +	select DRM_DISPLAY_DP_HELPER
 > 
-> You cannot select DISPLAY_DP_HELPER without DISPLAY_HELPER.
->
+> Eventually that sounds doable, but for the time being I want to merely
+> add this new compatible in front of the original compatible so that
+> updated DTBs still work with older kernels, i.e. the switches still get
+> registered because the driver works with the original
+> google,cros-ec-keyb compatible. 
 
-That was my original thought as well and what did in v1, but then I noticed
-that doing that it would force DRM_DISPLAY_HELPER to be set as built-in and
-not allow to be built as a module.
- 
-> Can't you simply make it depend on DISPLAY_DP_HELPER.  The menu entry 
-> will show up as soon as there's a driver that selcets DISPLAY_DP_HELPER.
->
+The bindings here do not invalidate (break) existing DTBs. Old DTBs can
+work in old way, we talk only about binding.
 
-I could but then that means that once won't be able to select these two config
-options unless some enable symbol selects DRM_DISPLAY_DP_HELPER.
+> Given that none of the properties are
+> required for google,cros-ec-keyb it didn't seem necessary to make having
+> the google,cros-ec-keyb-switches compatible deny the existence of the
+> matrix-keymap properties.
 
-In my opinion, DRM_DP_AUX_CHARDEV and DRM_DP_CEC are different than all other
-options that select DRM_DISPLAY_DP_HELPER, since those are drivers and want to
-have both DRM_DISPLAY_DP_HELPER and DRM_DISPLAY_HELPER set.
+Maybe I misunderstood the commit msg. Are the
+"google,cros-ec-keyb-switches" devices coming with matrix keyboard or
+not? I mean physically.
 
-But DRM_DP_AUX_CHARDEV and DRM_DP_CEC are just included in drm_display_helper.o
-if enabled, and depend on symbols that are present if CONFIG_DRM_DISPLAY_DP_HELPER
-is enabled. So just need the latter, if DRM_DISPLAY_HELPER is not enabled then it
-will just be a no-op.
-
-Having written that though I noticed that a "depends on DRM_DISPLAY_HELPER" makes
-sense. If you agree I can add it and post a v3.
-
-Now, pondering more about this issue, probably the most correct thing to do is for
-the drivers that make use of the symbols exported by DRM_DP_{AUX_CHARDEV,CEC} to
-select these. What do you think ?
- -- 
 Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Krzysztof

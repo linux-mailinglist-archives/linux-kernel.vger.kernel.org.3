@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07FF512D7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9E0512D80
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 09:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343548AbiD1H63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 03:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S1343582AbiD1H7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 03:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234669AbiD1H60 (ORCPT
+        with ESMTP id S245733AbiD1H7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 03:58:26 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E776DD;
-        Thu, 28 Apr 2022 00:55:11 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 28 Apr 2022 15:55:01
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.13.90]
-Date:   Thu, 28 Apr 2022 15:55:01 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Lin Ma" <linma@zju.edu.cn>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     "Jakub Kicinski" <kuba@kernel.org>,
-        "Duoming Zhou" <duoming@zju.edu.cn>,
-        krzysztof.kozlowski@linaro.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        alexander.deucher@amd.com, akpm@linux-foundation.org,
-        broonie@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v4] nfc: ... device_is_registered() is data
- race-able
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YmpEZQ7EnOIWlsy8@kroah.com>
-References: <20220427011438.110582-1-duoming@zju.edu.cn>
- <20220427174548.2ae53b84@kernel.org>
- <38929d91.237b.1806f05f467.Coremail.linma@zju.edu.cn>
- <YmpEZQ7EnOIWlsy8@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 28 Apr 2022 03:59:20 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B47F20BCE;
+        Thu, 28 Apr 2022 00:56:05 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2362040007;
+        Thu, 28 Apr 2022 07:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651132564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PwJWSFPyWMtOiNkzX7trHwiAp5qywL60TmDmXyh8PGE=;
+        b=dvpykhS3lCXFqqBThqULeTtNcre6KG0VweOfWsTgp9gaa45NvaKxFs1rVpHur9eqVU3bmD
+        CJ3wAoHMqu/3EZT8oXNhPed2JIt/fgielZnLo2c7dJuqNmmXQ4c6A73EGOBBfRMTGcH6Ea
+        VNOhcXutVN3OWNCv6nZfZ1j6F9R4fAnd/4lucF8QHzdMkPjKidzTI2L+teZJZlvrRQSOCu
+        MU8PTHX+fqSU7idnkfHN4ccBqbNaqJdLlP8GBnzfIpPNQ5/b3C9fG+0QUQr56bWZ289iWX
+        d9W7nhhCk/K6rsARwdtrAsNhjHJBMjZhRDoTm9EvMPBRu8WPDtKi5TSusOE5ag==
+Date:   Thu, 28 Apr 2022 09:55:56 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 43/45] media: sun6i-csi: Detect the availability of
+ the ISP
+Message-ID: <YmpIjPe8pw+yvGyL@aptenodytes>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
+ <20220415152811.636419-44-paul.kocialkowski@bootlin.com>
+ <2029179.KlZ2vcFHjT@jernej-laptop>
 MIME-Version: 1.0
-Message-ID: <2d7c9164.2b1f.1806f2a8ed9.Coremail.linma@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgDnXmJVSGpi97osAw--.46956W
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwMOElNG3GhD8wABsM
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ed//Kfe9t1pc7ZsY"
+Content-Disposition: inline
+In-Reply-To: <2029179.KlZ2vcFHjT@jernej-laptop>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,40 +61,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gR3JlZywKCgo+IAo+IFlvdSBzaG91bGQgbm90IGJlIG1ha2luZyB0aGVzZSB0eXBlcyBv
-ZiBjaGVja3Mgb3V0c2lkZSBvZiB0aGUgZHJpdmVyCj4gY29yZS4KPiAKPiA+IFRoaXMgaXMgYnkg
-bm8gbWVhbnMgbWF0Y2hpbmcgb3VyIGV4cGVjdGF0aW9ucyBhcyBvbmUgb2Ygb3VyIHByZXZpb3Vz
-IHBhdGNoIHJlbGllcyBvbiB0aGUgZGV2aWNlX2lzX3JlZ2lzdGVyZWQgY29kZS4KPiAKPiBQbGVh
-c2UgZG8gbm90IGRvIHRoYXQuCj4gCj4gPiAKPiA+IC0+IHRoZSBwYXRjaDogM2UzYjVkZmNkMTZh
-ICgiTkZDOiByZW9yZGVyIHRoZSBsb2dpYyBpbiBuZmNfe3VuLH1yZWdpc3Rlcl9kZXZpY2UiKQo+
-ID4gCj4gPC4uLj4KPiA+IAo+ID4gSW4gYW5vdGhlciB3b3JkLCB0aGUgZGV2aWNlX2RlbCAtPiBr
-b2JqZWN0X2RlbCAtPiBfX2tvYmplY3RfZGVsIGlzIG5vdCBwcm90ZWN0ZWQgYnkgdGhlIGRldmlj
-ZV9sb2NrLgo+IAo+IE5vciBzaG91bGQgaXQgYmUuCj4gCgpJIG1heSBoYXZlIG1pc3Rha2VubHkg
-cHJlc2VudGVkIG15IHBvaW50LiBJbiBmYWN0LCB0aGVyZSBpcyBub3RoaW5nIHdyb25nIHdpdGgg
-dGhlIGRldmljZSBjb3JlLCBub3RoaW5nIHRvIGRvIHdpdGggdGhlIGludGVybmFsIG9mIGRldmlj
-ZV9kZWwgYW5kIGRldmljZV9pc19yZWdpc3RlcmVkIGltcGxlbWVudGF0aW9uLiBBbmQsIG9mIGNv
-dXJzZSwgd2Ugd2lsbCBub3QgYWRkIGFueSBjb2RlIG9yIGRvIGFueSBtb2RpZmljYXRpb24gdG8g
-dGhlIGRldmljZS9kcml2ZXIgYmFzZSBjb2RlLgoKVGhlIHBvaW50IGlzIHRoZSBjb21iaW5hdGlv
-biBvZiBkZXZpY2VfaXNfcmVnaXN0ZXJlZCArIGRldmljZV9kZWwsIHdoaWNoIGlzIHVzZWQgaW4g
-TkZDIGNvcmUsIGlzIG5vdCBzYWZlLgoKVGhhdCBpcyB0byBzYXksIGV2ZW4gdGhlIGRldmljZV9p
-c19yZWdpc3RlcmVkIGNhbiByZXR1cm4gVHJ1ZSBldmVuIHRoZSBkZXZpY2VfZGVsIGlzIGV4ZWN1
-dGluZyBpbiBhbm90aGVyIHRocmVhZC4KCihCeSBkZWJ1Z2dpbmcgd2UgdGhpbmsgdGhpcyBpcyB0
-cnVlLCBjb3JyZWN0IG1lIGlmIGl0IGlzIG5vdCkKCkhlbmNlIHdlIHdhbnQgdG8gYWRkIGFkZGl0
-aW9uYWwgc3RhdGUgaW4gbmZjX2RldiBvYmplY3QgdG8gZml4IHRoYXQsIG5vdCBnb2luZyB0byBh
-ZGQgYW55IHN0YXRlIGluIGRldmljZS9kcml2ZXIgY29yZS4KCj4gPiBUaGlzIG1lYW5zIHRoZSBk
-ZXZpY2VfbG9jayArIGRldmljZV9pc19yZWdpc3RlcmVkIGlzIHN0aWxsIHByb25lIHRvIHRoZSBk
-YXRhIHJhY2UuIEFuZCB0aGlzIGlzIG5vdCBqdXN0IHRoZSBwcm9ibGVtIHdpdGggZmlybXdhcmUg
-ZG93bmxvYWRpbmcuIFRoZSBhbGwgcmVsZXZhbnQgbmV0bGluayB0YXNrcyB0aGF0IHVzZSB0aGUg
-ZGV2aWNlX2xvY2sgKyBkZXZpY2VfaXNfcmVnaXN0ZXJlZCBpcyBwb3NzaWJsZSB0byBiZSByYWNl
-ZC4KPiA+IAo+ID4gVG8gdGhpcyBlbmQsIHdlIHdpbGwgY29tZSBvdXQgd2l0aCB0d28gcGF0Y2hl
-cywgb25lIGZvciBmaXhpbmcgdGhpcyBkZXZpY2VfaXNfcmVnaXN0ZXJlZCBieSB1c2luZyBhbm90
-aGVyIHN0YXR1cyB2YXJpYWJsZSBpbnN0ZWFkLiBUaGUgb3RoZXIgaXMgdGhlIHBhdGNoIHRoYXQg
-cmVvcmRlcnMgdGhlIGNvZGUgaW4gbmNpX3VucmVnaXN0ZXJfZGV2aWNlLgo+IAo+IFdoeSBpcyB0
-aGlzIHNvbWVob3cgdW5pcXVlIHRvIHRoZXNlIGRldmljZXM/ICBXaHkgZG8gbm8gb3RoZXIgYnVz
-ZXMgaGF2ZQo+IHRoaXMgaXNzdWU/ICBBcmUgeW91IHNvbWVob3cgYWxsb3dpbmcgYSBjb2RlIHBh
-dGggdGhhdCBzaG91bGQgbm90IGJlCj4gaGFwcGVuaW5nPwo+IAo+IHRoYW5rcywKPiAKPiBncmVn
-IGstaAoKSW4gZmFjdCwgYnkgc2VhcmNoaW5nIHRoZSBkZXZpY2VfaXNfcmVnaXN0ZXJlZCgpIHVz
-ZSBjYXNlcywgSSBmb3VuZCB0aGF0IG1vc3Qgb2YgdGhlbSBhcmUgdXNlZCBpbiBkcmllciBjb2Rl
-IGluc3RlYWQgb2YgaW4gdGhlIG5ldHdvcmsgc3RhY2suIEkgaGF2ZSBubyBpZGVhIHdoZXRoZXIg
-b3Igbm90IHRoZXkgc3VmZmVyIGZyb20gc2ltaWxhciBwcm9ibGVtcyBhbmQgSSB3aWxsIGNoZWNr
-IHRoYXQgb3V0LgoKVGhhbmtzCkxpbg==
+
+--Ed//Kfe9t1pc7ZsY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jernej,
+
+Thanks a lot for all your reviews!
+
+On Wed 27 Apr 22, 22:07, Jernej =C5=A0krabec wrote:
+> Dne petek, 15. april 2022 ob 17:28:09 CEST je Paul Kocialkowski napisal(a=
+):
+> > Add a helper to detect whether the ISP is available and connected
+> > and store the indication in a driver-wide variable.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++++++++
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+> >  2 files changed, 36 insertions(+)
+> >=20
+> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
+> > a88deb8ba1e7..f185cbd113c7 100644
+> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > @@ -25,6 +25,35 @@
+> >  #include "sun6i_csi_capture.h"
+> >  #include "sun6i_csi_reg.h"
+> >=20
+> > +/* ISP */
+> > +
+> > +static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_dev)
+> > +{
+> > +	struct device *dev =3D csi_dev->dev;
+> > +	struct fwnode_handle *handle =3D NULL;
+> > +
+> > +	/* ISP is not available if disabled in kernel config. */
+> > +	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
+>=20
+> Where is this symbol defined?
+
+That is defined through Kconfig's auto-generated header, from the associated
+option for the ISP driver. It is defined in the ISP support series so this
+will effectively always be false for now.
+
+> Best regards,
+> Jernej
+>=20
+> > +		return 0;
+> > +
+> > +	/*
+> > +	 * ISP is not available if not connected via fwnode graph.
+> > +	 * This weill also check that the remote parent node is available.
+> > +	 */
+> > +	handle =3D fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
+> > +						=20
+> SUN6I_CSI_PORT_ISP, 0,
+> > +						=20
+> FWNODE_GRAPH_ENDPOINT_NEXT);
+> > +	if (!handle)
+> > +		return 0;
+> > +
+> > +	fwnode_handle_put(handle);
+> > +
+> > +	dev_info(dev, "ISP link is available\n");
+> > +	csi_dev->isp_available =3D true;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  /* Media */
+> >=20
+> >  static const struct media_device_ops sun6i_csi_media_ops =3D {
+> > @@ -306,6 +335,10 @@ static int sun6i_csi_probe(struct platform_device
+> > *platform_dev) if (ret)
+> >  		return ret;
+> >=20
+> > +	ret =3D sun6i_csi_isp_detect(csi_dev);
+> > +	if (ret)
+> > +		goto error_resources;
+> > +
+> >  	ret =3D sun6i_csi_v4l2_setup(csi_dev);
+> >  	if (ret)
+> >  		goto error_resources;
+> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h index
+> > 6aa83dd11684..9b105c341047 100644
+> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> > @@ -22,6 +22,7 @@
+> >  enum sun6i_csi_port {
+> >  	SUN6I_CSI_PORT_PARALLEL		=3D 0,
+> >  	SUN6I_CSI_PORT_MIPI_CSI2	=3D 1,
+> > +	SUN6I_CSI_PORT_ISP		=3D 2,
+> >  };
+> >=20
+> >  struct sun6i_csi_buffer {
+> > @@ -46,6 +47,8 @@ struct sun6i_csi_device {
+> >  	struct clk			*clock_mod;
+> >  	struct clk			*clock_ram;
+> >  	struct reset_control		*reset;
+> > +
+> > +	bool				isp_available;
+> >  };
+> >=20
+> >  struct sun6i_csi_variant {
+>=20
+>=20
+>=20
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--Ed//Kfe9t1pc7ZsY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJqSIsACgkQ3cLmz3+f
+v9FaXQgAofXC4aKthXOVBgx2avaUKkXQfv+k5TuIIIcHUt5UxHio7Jz/Jo63k4aS
+40fL2G9UAHlkY/pvlmXOPWyoFOZkEOMgSPrDtOOYHnFDxfVdMMDr+WtEWewhiEic
+bWgj3LQRgrW51O/SFiAmCcFe3lrrkPy7MpSOKduQlfwXxnN9BKyF+SfC/Xd1fcD5
+qHNk3WuDDyJ/jYC7d3hgdy4WdcE4Hy4OvZY8VzvGw0OGA9Ys0s0JMs74ohNqOnz/
+92wSVjm9u7Shz8UZMdA0rY9MKNN1d4WTFTp8ok4IOAIzv/2irOo3HA9+PBzatZw1
+ZcQIEdZFCx0heApvDexHrVygwHTWWw==
+=JFVd
+-----END PGP SIGNATURE-----
+
+--Ed//Kfe9t1pc7ZsY--

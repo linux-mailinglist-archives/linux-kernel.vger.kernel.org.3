@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8533A512B55
-	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E34512B5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 28 Apr 2022 08:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243570AbiD1GUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 02:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S243674AbiD1GVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 02:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238278AbiD1GUc (ORCPT
+        with ESMTP id S243635AbiD1GVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 02:20:32 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2F84ECC8
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:17:19 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f7ee6bc6ddso38345437b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 27 Apr 2022 23:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=u7wndHCcjBCq9MjMJkcDUIkWDGiU0w6bmfVGxnonv/M=;
-        b=CU8+6WTyf1pgwQElEqOndsoRs3YaZpcUu6opi0AGd0maXtTGR66G7zc0icaWW+rvmI
-         fNakozFmiEMeGyRPID/2ka15r4ZHFybMklZkkHG4zdTdW5QlEu9dHt4h0N5hWI0DLOA5
-         0wMkkmUpd8+K/ukZh5NY1svWbqmv8GvukIeuN6F/wOrc8NwfFMRUZZzANhQCk8bBQ+XP
-         ByDw5XH4oOMoc91SwKVfBjZwuefrCyfzusxwI1Fhdm3xFHDbM/J6nwyDWtUwqUeBlKn1
-         R7DKon5BmObE9FeTpmkMGVfT9azOthpaUEb4/ZFCmnC/Ek5949LbpcLB9jzoqtzndJgt
-         +IwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=u7wndHCcjBCq9MjMJkcDUIkWDGiU0w6bmfVGxnonv/M=;
-        b=XkUmvt2O5Sr4WaqBWHtts7K0OJSSnK2WB6j/z/R5G85McqD7eL4lDWnh6Z0zoR0bdg
-         dW6Dfz9PljlQwlMhrF5jHnLY5nX44p7RlI47Rnn8bYjWmU5C3XiBDvkNV4jSquMixc9d
-         FL97Tliib521T1imfdOe/U75/+hCYy2xzU5IEjyKAB6eZJUnV7UwW8BShG3fqSa0S1u2
-         0Lw7gyNQh6HpKm0foOAzBuLTu2+0itlTk4UAvsZo/BN8oPZzHbBeuUs9rWHJRHPy0oyk
-         BRYJxaUWBIMD107lPfmjQEcVxDG5Kx3V8+K4kahxi4wbNl8Y7+OIablkgs3XrnLdAlK1
-         XhqA==
-X-Gm-Message-State: AOAM532We7Bzy+R14ck4GSuZx9C9Ztd3221Z7mb77rmosmOAm9rhzQnd
-        ZR2C7wh/vh3wn5yorJk7PDviH2PUgQ==
-X-Google-Smtp-Source: ABdhPJyFLVRpkOEbdtAoedpI4qeWJmLVRCV37Z9hNxVqgKTlw13xrBWkN+DFyXvA81TiAVYfpAcbjp+Bnw==
-X-Received: from tweek-sin.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:2bfd])
- (user=tweek job=sendgmr) by 2002:a25:d55:0:b0:648:7008:61e0 with SMTP id
- 82-20020a250d55000000b00648700861e0mr16601052ybn.282.1651126638534; Wed, 27
- Apr 2022 23:17:18 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 16:17:07 +1000
-Message-Id: <20220428061707.768468-1-tweek@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v3] firmware_loader: use kernel credentials when reading firmware
-From:   "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Jeffrey Vander Stoep <jeffv@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Alistair Delva <adelva@google.com>,
-        Adam Shih <adamshih@google.com>, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 02:21:01 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87217580D6;
+        Wed, 27 Apr 2022 23:17:47 -0700 (PDT)
+X-UUID: ccc9919feba64604ae56febf37595536-20220428
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:dbc5d9a1-909c-4a12-a56d-e9b566c2084d,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:75
+X-CID-INFO: VERSION:1.1.4,REQID:dbc5d9a1-909c-4a12-a56d-e9b566c2084d,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:75
+X-CID-META: VersionHash:faefae9,CLOUDID:4826002f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:4dc67446a6dc,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: ccc9919feba64604ae56febf37595536-20220428
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 635182525; Thu, 28 Apr 2022 14:17:42 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 28 Apr 2022 14:17:41 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 28 Apr 2022 14:17:19 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Apr 2022 14:17:19 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>, <hsinyi@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v8 0/2] Add basic node support for MediaTek MT8186 SoC
+Date:   Thu, 28 Apr 2022 14:17:15 +0800
+Message-ID: <20220428061717.11197-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device drivers may decide to not load firmware when probed to avoid
-slowing down the boot process should the firmware filesystem not be
-available yet. In this case, the firmware loading request may be done
-when a device file associated with the driver is first accessed. The
-credentials of the userspace process accessing the device file may be
-used to validate access to the firmware files requested by the driver.
-Ensure that the kernel assumes the responsibility of reading the
-firmware.
+MT8186 is a SoC based on 64bit ARMv8 architecture.
+It contains 6 CA55 and 2 CA78 cores.
+MT8186 share many HW IP with MT65xx series.
 
-This was observed on Android for a graphic driver loading their firmware
-when the device file (e.g. /dev/mali0) was first opened by userspace
-(i.e. surfaceflinger). The security context of surfaceflinger was used
-to validate the access to the firmware file (e.g.
-/vendor/firmware/mali.bin).
+This patchset was tested on MT8186 evaluation board to shell.
 
-Previously, Android configurations were not setting up the
-firmware_class.path command line argument and were relying on the
-userspace fallback mechanism. In this case, the security context of the
-userspace daemon (i.e. ueventd) was consistently used to read firmware
-files. More Android devices are now found to set firmware_class.path
-which gives the kernel the opportunity to read the firmware directly
-(via kernel_read_file_from_path_initns). In this scenario, the current
-process credentials were used, even if unrelated to the loading of the
-firmware file.
+Based on matthias/, v5.18-next/dts64. and add the below PATCHs
+- clk series: 20220409132251.31725-1-chun-jie.chen@mediatek.com
+- mt8186 timer compatible: 20220311130732.22706-2-allen-kh.cheng@mediatek.com
+- mt8186 watchdog compatible from commit 888423f98c8f
+  in linux/kernel/git/groeck/linux-staging.git, watchdog-next 
+- reset header from commit 457ece3a0fbf
+  in linux/kernel/git/groeck/linux-staging.git, watchdog-next
 
-Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
----
-v3:=20
-	- Add call to put_cred to avoid a memory leak. Confirmed that no new
-		memory leak occurs on a Pixel 4a.
-	- Update commit log.
-v2: Add comment
+changes since v7:
+ - add scp&auxadc node
 
- drivers/base/firmware_loader/main.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+changes since v6:
+ - remove unnecessary blank line
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_lo=
-ader/main.c
-index 94d1789a233e..406a907a4cae 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -735,6 +735,8 @@ _request_firmware(const struct firmware **firmware_p, c=
-onst char *name,
- 		  size_t offset, u32 opt_flags)
- {
- 	struct firmware *fw =3D NULL;
-+	struct cred *kern_cred =3D NULL;
-+	const struct cred *old_cred;
- 	bool nondirect =3D false;
- 	int ret;
-=20
-@@ -751,6 +753,18 @@ _request_firmware(const struct firmware **firmware_p, =
-const char *name,
- 	if (ret <=3D 0) /* error or already assigned */
- 		goto out;
-=20
-+	/*
-+	 * We are about to try to access the firmware file. Because we may have b=
-een
-+	 * called by a driver when serving an unrelated request from userland, we=
- use
-+	 * the kernel credentials to read the file.
-+	 */
-+	kern_cred =3D prepare_kernel_cred(NULL);
-+	if (!kern_cred) {
-+		ret =3D -ENOMEM;
-+		goto out;
-+	}
-+	old_cred =3D override_creds(kern_cred);
-+
- 	ret =3D fw_get_filesystem_firmware(device, fw->priv, "", NULL);
-=20
- 	/* Only full reads can support decompression, platform, and sysfs. */
-@@ -776,6 +790,9 @@ _request_firmware(const struct firmware **firmware_p, c=
-onst char *name,
- 	} else
- 		ret =3D assign_fw(fw, device);
-=20
-+	revert_creds(old_cred);
-+	put_cred(kern_cred);
-+
-  out:
- 	if (ret < 0) {
- 		fw_abort_batch_reqs(fw);
---=20
-2.36.0.464.gb9c8b46e94-goog
+changes since v5:
+ - replace Mediatek a to MediaTek
+ - use GPL-2.0-only OR BSD-2-Clause
+
+changes since v4:
+ - correct driver clock of mt8186
+ - add power domains controller and clock controllers
+ - add pinctrl, usb host, spi and i2c nodes
+ - add node status in mt8186-evb.dts
+ - correct some dtbs_check warnings
+
+changes since v3:
+ - remove serial, mmc and phy patch from series. (already merged)
+ - remove mcusysoff node
+ - move oscillator nodes at the head of dts
+ - change name from usb-phy to t-phy
+
+changes since v2:
+ - add soc {} in mt8186.dtsi
+
+changes since v1:
+ - add dt-bindings: arm: Add compatible for MediaTek MT8186
+
+Allen-KH Cheng (2):
+  dt-bindings: arm: Add compatible for MediaTek MT8186
+  arm64: dts: Add MediaTek SoC MT8186 dts and evaluation board and
+    Makefile
+
+ .../devicetree/bindings/arm/mediatek.yaml     |   4 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8186-evb.dts   | 232 +++++
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      | 949 ++++++++++++++++++
+ 4 files changed, 1186 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
+
+-- 
+2.18.0
 

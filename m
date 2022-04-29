@@ -2,157 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDAD51485E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0AD514867
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358593AbiD2Loq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S1358608AbiD2Lqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239287AbiD2Lon (ORCPT
+        with ESMTP id S1358073AbiD2Lqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:44:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EEF6B088;
-        Fri, 29 Apr 2022 04:41:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EB25DCE3147;
-        Fri, 29 Apr 2022 11:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE39C385A4;
-        Fri, 29 Apr 2022 11:41:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651232481;
-        bh=P8ium3bEsenNU8fOZNp6SVKuLrL4nFiqeAGvhZZ70sM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vUsW4BOxIR5pvn++nimGWwdRC8puiJd3L0G2l7shx5XlSrbbt/fLOm9KwCtVSHvbz
-         WEI4w4erqu1GiNpS5POhXrHEp/DXDKv0ekJczHexhssYhZ522teJHFZjuDkSf3NUfq
-         a6fdEGAdJvSGqHC6Cg4VZIACW3IyMIH1ntZNKpTQ=
-Date:   Fri, 29 Apr 2022 13:41:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: Taint kernel if any tests run
-Message-ID: <YmvO3RoY1JqrR1pu@kroah.com>
-References: <20220429043913.626647-1-davidgow@google.com>
- <YmuPFGrkzQYACgK0@kroah.com>
- <87tuacrv7t.fsf@intel.com>
+        Fri, 29 Apr 2022 07:46:52 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32AB252AB;
+        Fri, 29 Apr 2022 04:43:34 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id x18so10481340wrc.0;
+        Fri, 29 Apr 2022 04:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=noiLEGjS69TNqfsR+PPtmcT72BXbzXlEteGUOjRdti4=;
+        b=VBCT5w1S0mXJE2U2KRraF7W92VzzhpTIuk/ertQoUbVYS6V+zNOL/nC3B4Taz2fGIq
+         3Tc/0cnzp082Zxar3Q/FWb9rgXdmmmT1ipDxYlxmQgKMfRzHTZCh1wzvBRy7lEmL89Wv
+         jthJtdv/9NLhlkTlkCJmP2G/qYS4i7VTGIec0/gipIVHy5JiF53Hmxl4SzmlX33RWnvF
+         SfV1sxWgJa4Hj+cdzESUhBUXblaYGwLWZGKy+32z8PpIfpEjQmvlZO/mxFcwlXr/zlgS
+         a9UztJBAFJSHXfT83Evm3497rnkjzZs32CrHndY9uS0Mez35COZnKz5vUQjXdcUyCc4i
+         +BCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=noiLEGjS69TNqfsR+PPtmcT72BXbzXlEteGUOjRdti4=;
+        b=OdPA5Tk2qxpOepY+p6fEUUZR1pY65SAeu4aGkFwcrG4/Sll3zZ3lNEEpkA7w5RJYVe
+         yEdAvx9+Ja9mwsLGWf/5JS4Pu6ReSbdc180CZ+kggWgLvLkiDaYXMNY0r1fQloN2apGx
+         U4WtRKWpTG+R1ByIjwK8fPPIxIhCK8qxc4OdVZmyNndy6pFHIwBiYJUKN4YI8v5FgVJS
+         46gJqO3LwD4cQRdCQAUqvcXVd1AMFjuK6luHr22lXSDII7e3qRlrW+mXP7M7nGf3Qtm+
+         mEruR2GOIg3ql2143SLIm5uXvedK3cD72jZ0kxO6tV3J04osEsM5zQ+8Oa0cIwRzNpPJ
+         52VA==
+X-Gm-Message-State: AOAM531Lvq3AEOT2ejDqvJakIOzbeFvmTIjzyyXW2ckJfNArAELr8K/Y
+        YKoi13QAynSBms3AvUsVCYo=
+X-Google-Smtp-Source: ABdhPJy8R+fDWCVWIT8z/71l8GYePMC7jBJ8hyQmGdE9wl+d1vgnwHXdLIyUlbQ1WNfE9YmD9FTuVQ==
+X-Received: by 2002:a5d:498d:0:b0:20a:dc6b:35c9 with SMTP id r13-20020a5d498d000000b0020adc6b35c9mr19684389wrq.176.1651232613260;
+        Fri, 29 Apr 2022 04:43:33 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-99-183.xnet.hr. [88.207.99.183])
+        by smtp.googlemail.com with ESMTPSA id l6-20020a1c2506000000b0038e6fe8e8d8sm2990900wml.5.2022.04.29.04.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 04:43:32 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        jassisinghbrar@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/6] clk: qcom: clk-alpha-pll: add support for APSS PLL
+Date:   Fri, 29 Apr 2022 13:43:25 +0200
+Message-Id: <20220429114330.59026-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tuacrv7t.fsf@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 02:21:26PM +0300, Jani Nikula wrote:
-> On Fri, 29 Apr 2022, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Fri, Apr 29, 2022 at 12:39:14PM +0800, David Gow wrote:
-> >> KUnit tests are not supposed to run on production systems: they may do
-> >> deliberately illegal things to trigger errors, and have security
-> >> implications (assertions will often deliberately leak kernel addresses).
-> >> 
-> >> Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-> >> run. This will be printed as 'N' (for kuNit, as K, U and T were already
-> >> taken).
-> >> 
-> >> This should discourage people from running KUnit tests on production
-> >> systems, and to make it easier to tell if tests have been run
-> >> accidentally (by loading the wrong configuration, etc.)
-> >> 
-> >> Signed-off-by: David Gow <davidgow@google.com>
-> >> ---
-> >> 
-> >> This is something I'd been thinking about for a while, and it came up
-> >> again, so I'm finally giving it a go.
-> >> 
-> >> Two notes:
-> >> - I decided to add a new type of taint, as none of the existing ones
-> >>   really seemed to fit. We could live with considering KUnit tests as
-> >>   TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
-> >>   right.
-> >> - The taint_flags table gives a couple of checkpatch.pl errors around
-> >>   bracket placement. I've kept the new entry consistent with what's
-> >>   there rather than reformatting the whole table, but be prepared for
-> >>   complaints about spaces.
-> >> 
-> >> Thoughts?
-> >> -- David
-> >> 
-> >> ---
-> >>  Documentation/admin-guide/tainted-kernels.rst | 1 +
-> >>  include/linux/panic.h                         | 3 ++-
-> >>  kernel/panic.c                                | 1 +
-> >>  lib/kunit/test.c                              | 4 ++++
-> >>  4 files changed, 8 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-> >> index ceeed7b0798d..8f18fc4659d4 100644
-> >> --- a/Documentation/admin-guide/tainted-kernels.rst
-> >> +++ b/Documentation/admin-guide/tainted-kernels.rst
-> >> @@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
-> >>   15  _/K   32768  kernel has been live patched
-> >>   16  _/X   65536  auxiliary taint, defined for and used by distros
-> >>   17  _/T  131072  kernel was built with the struct randomization plugin
-> >> + 18  _/N  262144  a KUnit test has been run
-> >>  ===  ===  ======  ========================================================
-> >>  
-> >>  Note: The character ``_`` is representing a blank in this table to make reading
-> >> diff --git a/include/linux/panic.h b/include/linux/panic.h
-> >> index f5844908a089..1d316c26bf27 100644
-> >> --- a/include/linux/panic.h
-> >> +++ b/include/linux/panic.h
-> >> @@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
-> >>  #define TAINT_LIVEPATCH			15
-> >>  #define TAINT_AUX			16
-> >>  #define TAINT_RANDSTRUCT		17
-> >> -#define TAINT_FLAGS_COUNT		18
-> >> +#define TAINT_KUNIT			18
-> >> +#define TAINT_FLAGS_COUNT		19
-> >>  #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
-> >>  
-> >>  struct taint_flag {
-> >> diff --git a/kernel/panic.c b/kernel/panic.c
-> >> index eb4dfb932c85..b24ca63ed738 100644
-> >> --- a/kernel/panic.c
-> >> +++ b/kernel/panic.c
-> >> @@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
-> >>  	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
-> >>  	[ TAINT_AUX ]			= { 'X', ' ', true },
-> >>  	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
-> >> +	[ TAINT_KUNIT ]			= { 'N', ' ', false },
-> >
-> > As kunit tests can be in modules, shouldn't this be "true" here?
-> >
-> > Overall, I like it, makes sense to me.  The "N" will take some getting
-> > used to, and I have no idea why "T" was for "struct randomization", that
-> > would have allowed you to use "T" instead.  Oh well.
-> 
-> Would you consider a patch adding more self-explanatory taint flag
-> strings to the output?
+APSS PLL type will be used by the IPQ8074 APSS driver for providing the
+CPU core clocks and enabling CPU Frequency scaling.
 
-Where would those strings go?  In the oops report?  Or somewhere else?
+This is ported from the downstream 5.4 kernel.
 
-thanks,
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/clk/qcom/clk-alpha-pll.c | 12 ++++++++++++
+ drivers/clk/qcom/clk-alpha-pll.h |  1 +
+ 2 files changed, 13 insertions(+)
 
-greg k-h
+diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+index 4406cf609aae..8270363ff98e 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.c
++++ b/drivers/clk/qcom/clk-alpha-pll.c
+@@ -154,6 +154,18 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
+ 		[PLL_OFF_TEST_CTL_U] = 0x30,
+ 		[PLL_OFF_TEST_CTL_U1] = 0x34,
+ 	},
++	[CLK_ALPHA_PLL_TYPE_APSS] = {
++		[PLL_OFF_L_VAL] = 0x08,
++		[PLL_OFF_ALPHA_VAL] = 0x10,
++		[PLL_OFF_ALPHA_VAL_U] = 0xff,
++		[PLL_OFF_USER_CTL] = 0x18,
++		[PLL_OFF_USER_CTL_U] = 0xff,
++		[PLL_OFF_CONFIG_CTL] = 0x20,
++		[PLL_OFF_CONFIG_CTL_U] = 0x24,
++		[PLL_OFF_TEST_CTL] = 0x30,
++		[PLL_OFF_TEST_CTL_U] = 0x34,
++		[PLL_OFF_STATUS] = 0x28,
++	},
+ };
+ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+ 
+diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+index 6e9907deaf30..626fdf80336d 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.h
++++ b/drivers/clk/qcom/clk-alpha-pll.h
+@@ -18,6 +18,7 @@ enum {
+ 	CLK_ALPHA_PLL_TYPE_AGERA,
+ 	CLK_ALPHA_PLL_TYPE_ZONDA,
+ 	CLK_ALPHA_PLL_TYPE_LUCID_EVO,
++	CLK_ALPHA_PLL_TYPE_APSS,
+ 	CLK_ALPHA_PLL_TYPE_MAX,
+ };
+ 
+-- 
+2.35.1
+

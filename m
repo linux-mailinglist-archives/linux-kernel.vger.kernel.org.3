@@ -2,210 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B4D5157E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE85A5157DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381269AbiD2WKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S239687AbiD2WJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381167AbiD2WKo (ORCPT
+        with ESMTP id S1358343AbiD2WI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:10:44 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144B5DBD0E;
-        Fri, 29 Apr 2022 15:07:25 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:55002)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nkYUT-00AIMf-B9; Fri, 29 Apr 2022 15:49:29 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36464 helo=localhost.localdomain)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nkYUS-007RIp-6h; Fri, 29 Apr 2022 15:49:28 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 29 Apr 2022 16:48:36 -0500
-Message-Id: <20220429214837.386518-11-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        Fri, 29 Apr 2022 18:08:56 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF35B82D1E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:05:35 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id w187so16791270ybe.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GAXmCRc3lSOVYcNpy8O/6UhikW8W0LY8j/c9X7o57N8=;
+        b=RwIlF7TtzMr9ei1gzjHEl+WsjKakPNiUJPxtsgL+xc/vfErFq25Bw2KBkF47qccKq1
+         lTGAgrmK2WASE4V8K9ZeW/mmDa90vzKIVXGTrrGjOiis10w/zGKjH3NSMttZkGR0DsEY
+         CiKQHhKqMX4fa+FHrgvbC+YJrAjiULjAlydSoQnaRqvq/2dKRcMyRygxrJ1OyjYmYCHF
+         A7ZclJQtIUf/xjn3Gkfhm/bO6HtHRCRfLc4IfG3yNwQiz4606aJ37B+r2E9kOKin+s0u
+         vtBW+RTfulW6LmArTh5URV7MeTjhjT4XpfAugIZwf0c6S1xO7ZrgqUuI2+DH1Z5Pijb1
+         guIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GAXmCRc3lSOVYcNpy8O/6UhikW8W0LY8j/c9X7o57N8=;
+        b=j/pW6yPW35yUO9ZIcjSa5DHDdVWqKVaQO3wrRTrRzgONeGph5LPd0nyEZuivu5y1+5
+         +DoO0apEPgF30YKIshkGGFnIxYm+ysjxpeaWqPL9MsV/MSnshbojWKBtC9zj0IdwZWN6
+         R/dljkFwPjxzeHN4K78D3dRd5D9n6je6P+JFBtne63OEHOc5slBC84MAnn+vNJEu2BKe
+         hLrN7CRGnGbdPsoclqvWAvVt1XjFGTqLLKRk6c7hGzt/vRF3o+PVmx1MyJzncch17eVT
+         SkBTlIsB/eNAe9B4pdsbj3ArLEp3WLywNSgIgmhw6hO3tr6npRLs6GoYvjw7XXK+7LXh
+         6l9g==
+X-Gm-Message-State: AOAM530nbD8DdD/K5vlyYFptmEskNg2G2TzCo91pjMiXfX8UYon8Jihp
+        wDNFs0wnl/xg0wpfjwaBAp7O2IJ3CV1RcdUJRWBLyg==
+X-Google-Smtp-Source: ABdhPJx8W/f0rIOxwSLCAUKHFdwYsYsmP6YReafF6bxvy28/9zbpMt+wREZ2Hk6CzroVnhUZa8a5ZIZGRCePs7y/hVc=
+X-Received: by 2002:a25:ea48:0:b0:644:e2e5:309 with SMTP id
+ o8-20020a25ea48000000b00644e2e50309mr1559161ybe.407.1651269934754; Fri, 29
+ Apr 2022 15:05:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1nkYUS-007RIp-6h;;;mid=<20220429214837.386518-11-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18Rvz6pahoBBVqRiRjYubwQ90GavkWSLh0=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <CAHmME9r_DbZWe4FsfebHSSf_iPctSe5S-w9bU3o8BN43raeURg@mail.gmail.com>
+ <20151116203709.GA27178@oracle.com> <CAHmME9pNCqbcoqbOnx6p8poehAntyyy1jQhy=0_HjkJ8nvMQdw@mail.gmail.com>
+ <1447712932.22599.77.camel@edumazet-glaptop2.roam.corp.google.com>
+ <CAHmME9oTU7HwP5=qo=aFWe0YXv5EPGoREpF2k-QY7qTmkDeXEA@mail.gmail.com>
+ <YmszSXueTxYOC41G@zx2c4.com> <04f72c85-557f-d67c-c751-85be65cb015a@gmail.com>
+ <YmxTo2hVwcwhdvjO@zx2c4.com> <d9854c74-c209-9ea5-6c76-8390e867521b@gmail.com> <CAHmME9qXC-4OPc5xRbC6CQJcpzb96EXzNWAist5A8momYxvVUA@mail.gmail.com>
+In-Reply-To: <CAHmME9qXC-4OPc5xRbC6CQJcpzb96EXzNWAist5A8momYxvVUA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 29 Apr 2022 15:05:23 -0700
+Message-ID: <CANn89iLyNoCRrp6YYdy6kGhM7X2JQ9J4-LfEJCBvhYAv4N+FPA@mail.gmail.com>
+Subject: Re: Routing loops & TTL tracking with tunnel devices
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hannes Frederic Sowa <hannes@stressinduktion.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 525 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.8 (0.9%), b_tie_ro: 3.3 (0.6%), parse: 1.35
-        (0.3%), extract_message_metadata: 12 (2.2%), get_uri_detail_list: 3.3
-        (0.6%), tests_pri_-1000: 11 (2.1%), tests_pri_-950: 0.98 (0.2%),
-        tests_pri_-900: 0.82 (0.2%), tests_pri_-90: 112 (21.4%), check_bayes:
-        111 (21.1%), b_tokenize: 8 (1.6%), b_tok_get_all: 7 (1.3%),
-        b_comp_prob: 2.1 (0.4%), b_tok_touch_all: 90 (17.2%), b_finish: 0.81
-        (0.2%), tests_pri_0: 371 (70.7%), check_dkim_signature: 0.43 (0.1%),
-        check_dkim_adsp: 1.76 (0.3%), poll_dns_idle: 0.45 (0.1%),
-        tests_pri_10: 1.79 (0.3%), tests_pri_500: 6 (1.1%), rewrite_mail: 0.00
-        (0.0%)
-Subject: [PATCH v2 11/12] ptrace: Always call schedule in ptrace_stop
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stop testing for !current->ptrace and setting __state to TASK_RUNNING.
-The code in __ptrace_unlink wakes up the child with
-ptrace_signal_wake_up which will set __state to TASK_RUNNING.  This
-leaves the only thing ptrace_stop needs to do is to send the signals.
+On Fri, Apr 29, 2022 at 2:54 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Eric,
+>
+> On Fri, Apr 29, 2022 at 11:14 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+> >
+> >
+> > On 4/29/22 14:07, Jason A. Donenfeld wrote:
+> >
+> > Hi Eric,
+> >
+> > On Fri, Apr 29, 2022 at 01:54:27PM -0700, Eric Dumazet wrote:
+> >
+> > Anyway, it'd be nice if there were a free u8 somewhere in sk_buff that I
+> > could use for tracking times through the stack. Other kernels have this
+> > but afaict Linux still does not. I looked into trying to overload some
+> > existing fields -- tstamp/skb_mstamp_ns or queue_mapping -- which I was
+> > thinking might be totally unused on TX?
+> >
+> > if skbs are stored in some internal wireguard queue, can not you use
+> > skb->cb[],
+> >
+> > like many other layers do ?
+> >
+> > This isn't for some internal wireguard queue. The packets get sent out
+> > of udp_tunnel_xmit_skb(), so they leave wireguard's queues.
+> >
+> >
+> > OK, where is the queue then ?
+> >
+> > dev_xmit_recursion() is supposed to catch long chains of virtual devices.
+>
+> This is the long-chain-of-virtual-devices case indeed. But
+> dev_xmit_recursion() does not help here, since that's just a per-cpu
+> increment, assuming that the packet actually gets xmit'd in its
+> ndo_start_xmit function. But in reality, wireguard queues up the
+> packet, encrypts it in some worker later, and eventually transmits it
+> with udp_tunnel_xmit_skb(). All the while ndo_start_xmit() has long
+> returned. So no help from dev_xmit_recursion().
+>
 
-Make the signals sending conditional upon current->ptrace so that
-the correct signals are sent to the parent.
+I assume you add encap headers to the skb ?
 
-After that call schedule and let the fact that __state == TASK_RUNNING
-keep the code from sleeping in schedule.
+You could check if the wireguard header is there already, or if the
+amount of headers is crazy.
 
-Now that it is easy to see that ptrace_stop always sleeps in
-ptrace_stop after ptrace_freeze_trace succeeds modify
-ptrace_check_attach to warn if wait_task_inactive fails.
+net/core/flow_dissector.c might help.
 
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- kernel/ptrace.c | 14 +++-------
- kernel/signal.c | 68 ++++++++++++++++++-------------------------------
- 2 files changed, 28 insertions(+), 54 deletions(-)
-
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index d80222251f60..c1afebd2e8f3 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -261,17 +261,9 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
- 	}
- 	read_unlock(&tasklist_lock);
- 
--	if (!ret && !ignore_state) {
--		if (!wait_task_inactive(child, __TASK_TRACED)) {
--			/*
--			 * This can only happen if may_ptrace_stop() fails and
--			 * ptrace_stop() changes ->state back to TASK_RUNNING,
--			 * so we should not worry about leaking __TASK_TRACED.
--			 */
--			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
--			ret = -ESRCH;
--		}
--	}
-+	if (!ret && !ignore_state &&
-+	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-+		ret = -ESRCH;
- 
- 	return ret;
- }
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 7cb27a27290a..4cae3f47f664 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2255,51 +2255,33 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 
- 	spin_unlock_irq(&current->sighand->siglock);
- 	read_lock(&tasklist_lock);
--	if (likely(current->ptrace)) {
--		/*
--		 * Notify parents of the stop.
--		 *
--		 * While ptraced, there are two parents - the ptracer and
--		 * the real_parent of the group_leader.  The ptracer should
--		 * know about every stop while the real parent is only
--		 * interested in the completion of group stop.  The states
--		 * for the two don't interact with each other.  Notify
--		 * separately unless they're gonna be duplicates.
--		 */
-+	/*
-+	 * Notify parents of the stop.
-+	 *
-+	 * While ptraced, there are two parents - the ptracer and
-+	 * the real_parent of the group_leader.  The ptracer should
-+	 * know about every stop while the real parent is only
-+	 * interested in the completion of group stop.  The states
-+	 * for the two don't interact with each other.  Notify
-+	 * separately unless they're gonna be duplicates.
-+	 */
-+	if (current->ptrace)
- 		do_notify_parent_cldstop(current, true, why);
--		if (gstop_done && ptrace_reparented(current))
--			do_notify_parent_cldstop(current, false, why);
--
--		/*
--		 * Don't want to allow preemption here, because
--		 * sys_ptrace() needs this task to be inactive.
--		 *
--		 * XXX: implement read_unlock_no_resched().
--		 */
--		preempt_disable();
--		read_unlock(&tasklist_lock);
--		cgroup_enter_frozen();
--		preempt_enable_no_resched();
--		freezable_schedule();
--		cgroup_leave_frozen(true);
--	} else {
--		/*
--		 * By the time we got the lock, our tracer went away.
--		 * Don't drop the lock yet, another tracer may come.
--		 *
--		 * If @gstop_done, the ptracer went away between group stop
--		 * completion and here.  During detach, it would have set
--		 * JOBCTL_STOP_PENDING on us and we'll re-enter
--		 * TASK_STOPPED in do_signal_stop() on return, so notifying
--		 * the real parent of the group stop completion is enough.
--		 */
--		if (gstop_done)
--			do_notify_parent_cldstop(current, false, why);
-+	if (gstop_done && (!current->ptrace || ptrace_reparented(current)))
-+		do_notify_parent_cldstop(current, false, why);
- 
--		/* tasklist protects us from ptrace_freeze_traced() */
--		__set_current_state(TASK_RUNNING);
--		read_unlock(&tasklist_lock);
--	}
-+	/*
-+	 * Don't want to allow preemption here, because
-+	 * sys_ptrace() needs this task to be inactive.
-+	 *
-+	 * XXX: implement read_unlock_no_resched().
-+	 */
-+	preempt_disable();
-+	read_unlock(&tasklist_lock);
-+	cgroup_enter_frozen();
-+	preempt_enable_no_resched();
-+	freezable_schedule();
-+	cgroup_leave_frozen(true);
- 
- 	/*
- 	 * We are back.  Now reacquire the siglock before touching
--- 
-2.35.3
-
+You also can take a look at CONFIG_SKB_EXTENSIONS infrastructure.

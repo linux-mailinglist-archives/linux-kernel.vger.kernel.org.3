@@ -2,134 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC795141D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF855141DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354172AbiD2Fow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S1354187AbiD2Fqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 01:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354163AbiD2Fop (ORCPT
+        with ESMTP id S231326AbiD2Fqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 01:44:45 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782F754BEE
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:41:28 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so3040956ilj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:41:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=x3MTACHKJZ3L2DlqgxVgqLiRoxwCwaVIdsT6U6RxAqw=;
-        b=hWaXmT0U6KV037CzJZ1nWIrLvTxxazKfP4WEWHaGF7ofJkRZelp5LYuvLI+DCBM+Xr
-         /nvRXsW9LbeCTDhKTpSAIjVPXwGRZ/+Hod7yc+MgUQPY/7IGKVFvFWFSMm2ltjn3e0hp
-         j1Q4RvBDKONACgfPUAqCmqRg06pQTA1cx72CkcRY6wNXeowgf0nA/LI/S+RgEerR24a9
-         U7iDVPwMZwZuYU5s2fPHPODCM/nynU/fK2u3oN/2fHEyHmwMAD7YlL3yL9cI45Tiq2a1
-         a1Eh3Nv9Z5jqsyGuIe0QBq5/SKXyP1JkwBBNf1KzGipYPV0WdaMDC/urFraQrirdJBE0
-         KjLA==
-X-Gm-Message-State: AOAM533UojVpD0hwtI3PcTIJTzDLb6RpZdd4Gyp8qa+PNhv29rLzhC0S
-        tPMUVohoiJH2pp7rqY81X6cffDPB+3K5DgokbRMEiaeGngJo
-X-Google-Smtp-Source: ABdhPJxoqfI1Tq8QAcjTxAeDa4Kz8N2fm4VNksuraSBI4GnBO4AQcsyK8aYn4jGnceWg0lesom9HGtbbwxSINfmi9aRaBWdWpxju
-MIME-Version: 1.0
-X-Received: by 2002:a6b:4416:0:b0:657:b740:a016 with SMTP id
- r22-20020a6b4416000000b00657b740a016mr4039618ioa.190.1651210887858; Thu, 28
- Apr 2022 22:41:27 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 22:41:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006b8dad05ddc47e92@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in mas_walk
-From:   syzbot <syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+        Fri, 29 Apr 2022 01:46:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E056FF63;
+        Thu, 28 Apr 2022 22:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651211013; x=1682747013;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UI81Hy0EeAd+tens49psKJFgFs0JlShTYmgbYNU/Y5k=;
+  b=EzAdR29A4QkLg470LLlbVWoBIyG8aCHWwkhki3cFFg2/xWZNbtUan6u3
+   C94p9YrdHuLnNnq49A8IrH+9l7i1c6MLM7MXpksjbdDnbp+9zg4G7cpUd
+   mBrGYmfHGyvfREBHnx0Ts/P5mpQyeYv/WgUe84SbnPQneXpscL1m1gNsi
+   j5vDOnyQjQJvqqErsaofgPgp+LB1ln8iT0qpn993smbSD+DmyA0J9190G
+   NfVqCG7fnnHVJHgGRUQf8zo+XCu+6VM4rq/lpY2FSsEsN8UT8RqEsU9Q5
+   ykTsNukgasY4BaOqFgo0d5vuT68riusx62t/ha5fkV9BdAcfRaFvS7hoK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266065418"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="266065418"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 22:43:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="684103579"
+Received: from jenegret-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.59.236])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 22:43:29 -0700
+Message-ID: <224392eea0042b621541aa916f49dd830704ba9a.camel@intel.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Date:   Fri, 29 Apr 2022 17:43:27 +1200
+In-Reply-To: <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+         <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
+         <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
+         <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 2022-04-28 at 19:58 -0700, Dan Williams wrote:
+> On Wed, Apr 27, 2022 at 6:21 PM Kai Huang <kai.huang@intel.com> wrote:
+> > 
+> > On Wed, 2022-04-27 at 18:01 -0700, Dan Williams wrote:
+> > > On Tue, Apr 26, 2022 at 1:10 PM Dave Hansen <dave.hansen@intel.com> wrote:
+> > > [..]
+> > > > > 3. Memory hotplug
+> > > > > 
+> > > > > The first generation of TDX architecturally doesn't support memory
+> > > > > hotplug.  And the first generation of TDX-capable platforms don't support
+> > > > > physical memory hotplug.  Since it physically cannot happen, this series
+> > > > > doesn't add any check in ACPI memory hotplug code path to disable it.
+> > > > > 
+> > > > > A special case of memory hotplug is adding NVDIMM as system RAM using
+> > > 
+> > > Saw "NVDIMM" mentioned while browsing this, so stopped to make a comment...
+> > > 
+> > > > > kmem driver.  However the first generation of TDX-capable platforms
+> > > > > cannot enable TDX and NVDIMM simultaneously, so in practice this cannot
+> > > > > happen either.
+> > > > 
+> > > > What prevents this code from today's code being run on tomorrow's
+> > > > platforms and breaking these assumptions?
+> > > 
+> > > The assumption is already broken today with NVDIMM-N. The lack of
+> > > DDR-T support on TDX enabled platforms has zero effect on DDR-based
+> > > persistent memory solutions. In other words, please describe the
+> > > actual software and hardware conflicts at play here, and do not make
+> > > the mistake of assuming that "no DDR-T support on TDX platforms" ==
+> > > "no NVDIMM support".
+> > 
+> > Sorry I got this information from planning team or execution team I guess. I was
+> > told NVDIMM and TDX cannot "co-exist" on the first generation of TDX capable
+> > machine.  "co-exist" means they cannot be turned on simultaneously on the same
+> > platform.  I am also not aware NVDIMM-N, nor the difference between DDR based
+> > and DDR-T based persistent memory.  Could you give some more background here so
+> > I can take a look?
+> 
+> My rough understanding is that TDX makes use of metadata communicated
+> "on the wire" for DDR, but that infrastructure is not there for DDR-T.
+> However, there are plenty of DDR based NVDIMMs that use super-caps /
+> batteries and flash to save contents. I believe the concern for TDX is
+> that the kernel needs to know not use TDX accepted PMEM as PMEM
+> because the contents saved by the DIMM's onboard energy source are
+> unreadable outside of a TD.
+> 
+> Here is one of the links that comes up in a search for NVDIMM-N.
+> 
+> https://www.snia.org/educational-library/what-you-can-do-nvdimm-n-and-nvdimm-p-2019
 
-syzbot found the following issue on:
+Thanks for the info.  I need some more time to digest those different types of
+DDRs and NVDIMMs.  However I guess they are not quite relevant since TDX has a
+concept of "Convertible Memory Region".  Please see below.
 
-HEAD commit:    bdc61aad77fa Add linux-next specific files for 20220428
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15bb3dc2f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=87767e89da13a759
-dashboard link: https://syzkaller.appspot.com/bug?extid=2ee18845e89ae76342c5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1118a5f6f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125bd212f00000
+> 
+> > 
+> > > 
+> > > > > Another case is admin can use 'memmap' kernel command line to create
+> > > > > legacy PMEMs and use them as TD guest memory, or theoretically, can use
+> > > > > kmem driver to add them as system RAM.  To avoid having to change memory
+> > > > > hotplug code to prevent this from happening, this series always include
+> > > > > legacy PMEMs when constructing TDMRs so they are also TDX memory.
+> > > 
+> > > I am not sure what you are trying to say here?
+> > 
+> > We want to always make sure the memory managed by page allocator is TDX memory.
+> 
+> That only seems possible if the kernel is given a TDX capable physical
+> address map at the beginning of time.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com
+Yes TDX architecture has a concept "Convertible Memory Region" (CMR). The memory
+used by TDX must be convertible memory.  BIOS generates an array of CMR entries
+during boot and they are verified by MCHECK.  CMRs are static during machine's
+runtime.
 
-=============================
-WARNING: suspicious RCU usage
-5.18.0-rc4-next-20220428-syzkaller #0 Not tainted
------------------------------
-lib/maple_tree.c:844 suspicious rcu_dereference_check() usage!
+> 
+> > So if the legacy PMEMs are unconditionally configured as TDX memory, then we
+> > don't need to prevent them from being added as system memory via kmem driver.
+> 
+> I think that is too narrow of a focus.
+> 
+> Does a memory map exist for the physical address ranges that are TDX
+> capable? Please don't say EFI_MEMORY_CPU_CRYPTO, as that single bit is
+> ambiguous beyond the point of utility across the industry's entire
+> range of confidential computing memory capabilities.
+> 
+> One strawman would be an ACPI table with contents like:
+> 
+> struct acpi_protected_memory {
+>    struct range range;
+>    uuid_t platform_mem_crypto_capability;
+> };
+> 
+> With some way to map those uuids to a set of platform vendor specific
+> constraints and specifications. Some would be shared across
+> confidential computing vendors, some might be unique. Otherwise, I do
+> not see how you enforce the expectation of "all memory in the page
+> allocator is TDX capable". 
+> 
 
-other info that might help us debug this:
+Please see above.  TDX has CMR.
 
+> The other alternative is that *none* of the
+> memory in the page allocator is TDX capable and a special memory
+> allocation device is used to map memory for TDs. In either case a map
+> of all possible TDX memory is needed and the discussion above seems
+> like an incomplete / "hopeful" proposal about the memory dax_kmem, or
+> other sources, might online. 
 
-rcu_scheduler_active = 2, debug_locks = 1
-5 locks held by syz-executor842/4211:
- #0: ffff88807f0ae460 (sb_writers#8){.+.+}-{0:0}, at: ksys_write+0x127/0x250 fs/read_write.c:644
- #1: ffff88801df04488 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x28c/0x610 fs/kernfs/file.c:282
- #2: ffff8881453b9a00 (kn->active#106){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b0/0x610 fs/kernfs/file.c:283
- #3: ffffffff8bedc528 (ksm_thread_mutex){+.+.}-{3:3}, at: run_store+0xd1/0xa60 mm/ksm.c:2917
- #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
- #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: unmerge_and_remove_all_rmap_items mm/ksm.c:989 [inline]
- #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: run_store+0x2a5/0xa60 mm/ksm.c:2923
-
-stack backtrace:
-CPU: 0 PID: 4211 Comm: syz-executor842 Not tainted 5.18.0-rc4-next-20220428-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- mas_root lib/maple_tree.c:844 [inline]
- mas_start lib/maple_tree.c:1331 [inline]
- mas_state_walk lib/maple_tree.c:3745 [inline]
- mas_walk+0x45e/0x670 lib/maple_tree.c:4923
- mas_find+0x442/0xc90 lib/maple_tree.c:5861
- vma_find include/linux/mm.h:664 [inline]
- vma_next include/linux/mm.h:673 [inline]
- unmerge_and_remove_all_rmap_items mm/ksm.c:990 [inline]
- run_store+0x2ed/0xa60 mm/ksm.c:2923
- kobj_attr_store+0x50/0x80 lib/kobject.c:824
- sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
- kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:291
- call_write_iter include/linux/fs.h:2059 [inline]
- new_sync_write+0x38a/0x560 fs/read_write.c:504
- vfs_write+0x7c0/0xac0 fs/read_write.c:591
- ksys_write+0x127/0x250 fs/read_write.c:644
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6a91306e79
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffddeb8cde8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6a91306e79
-RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-R10: 0000000020117000 R11: 0000000000000246 R12: 000000000000cf84
-R13: 00007ffddeb8cdfc R14: 00007ffddeb8ce10 R15: 00007ffddeb8ce00
- </TASK>
+Yes we are also developing a new memfd based approach to support TD guest
+memory.  Please see my another reply to you.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> See the CXL CEDT CFWMS (CXL Fixed Memory
+> Window Structure) as an example of an ACPI table that sets the
+> kernel's expectations about how a physical address range might be
+> used.
+> 
+> https://www.computeexpresslink.org/spec-landing
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks for the info. I'll take a look to get some background.
+
+> 
+> > 
+> > > 
+> > > > > 4. CPU hotplug
+> > > > > 
+> > > > > The first generation of TDX architecturally doesn't support ACPI CPU
+> > > > > hotplug.  All logical cpus are enabled by BIOS in MADT table.  Also, the
+> > > > > first generation of TDX-capable platforms don't support ACPI CPU hotplug
+> > > > > either.  Since this physically cannot happen, this series doesn't add any
+> > > > > check in ACPI CPU hotplug code path to disable it.
+> > > 
+> > > What are the actual challenges posed to TDX with respect to CPU hotplug?
+> > 
+> > During the TDX module initialization, there is a step to call SEAMCALL on all
+> > logical cpus to initialize per-cpu TDX staff.  TDX doesn't support initializing
+> > the new hot-added CPUs after the initialization.  There are MCHECK/BIOS changes
+> > to enforce this check too I guess but I don't know details about this.
+> 
+> Is there an ACPI table that indicates CPU-x passed the check? Or since
+> the BIOS is invoked in the CPU-online path, is it trusted to suppress
+> those events for CPUs outside of the mcheck domain?
+
+No the TDX module (and the P-SEAMLDR) internally maintains some data to record
+the total number of LPs and packages, and which logical cpu has been
+initialized, etc.
+
+I asked Intel guys whether BIOS would suppress an ACPI CPU hotplug event but I
+never got a concrete answer.  I'll try again.
+
+> 
+> > > > > Also, only TDX module initialization requires all BIOS-enabled cpus are
+> > > 
+> > > Please define "BIOS-enabled" cpus. There is no "BIOS-enabled" line in
+> > > /proc/cpuinfo for example.
+> > 
+> > It means the CPUs with "enable" bit set in the MADT table.
+> 
+> That just indicates to the present CPUs and then a hot add event
+> changes the state of now present CPUs to enabled. Per above is the
+> BIOS responsible for rejecting those new CPUs, or is the kernel?
+
+I'll ask BIOS guys again to see whether BIOS will suppress ACPI CPU hotplug
+event.  But I think we can have a simple patch to reject ACPI CPU hotplug if
+platform is TDX-capable?
+
+Or do you think we don't need to explicitly reject ACPI CPU hotplug if we can
+confirm with BIOS guys that it will suppress on TDX capable machine?
+
+-- 
+Thanks,
+-Kai
+
+

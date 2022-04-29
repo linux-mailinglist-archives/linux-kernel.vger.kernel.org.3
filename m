@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42195514592
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8465145DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356677AbiD2JqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S1356970AbiD2JuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238887AbiD2JqK (ORCPT
+        with ESMTP id S1356763AbiD2Jss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:46:10 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4877ABF303
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:42:53 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id p10so13005976lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jkxpW3EdVAmqaoDM04pa7Fls99UHVBaNQniA0KfeFwg=;
-        b=LlNxkv2Et2hjxXNddYh87SBmC5hYSOujjgg24Uo8lcr4G+sb7/dJtUOoles0kZrGtr
-         nb+1We3zvwO7gmwGN0D5xrq8VJVqtBIC8L6/JYzNUU++KuCuJzvLinR9X2QRsmFy9Cpo
-         4gSeXZnpNTK4JqphnpzYG1u0wxJSprbIH/ouE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jkxpW3EdVAmqaoDM04pa7Fls99UHVBaNQniA0KfeFwg=;
-        b=EchGxGmfZcWabLTJYHUsDxLvqOqvRzgAGID/tBTFuoqT3hc0jc843/XKOc+Jz0KCy8
-         q3pNjI+ynEjudkPl0EgoFs/6jXdJPuiwMub55XoSnIFs4AW1WIIDld54Gwwf2krxVU54
-         XMuta0K7QkK4bLiMeWR7hdhwoLUKCJL4osxjtVLViC08FRBpftTwmXr02fTEQMDorjtV
-         C/VpuWZeNw/KZvROd5+Oa//ewC4sN6Ectq+xXYmwc8bB1a1iS1lr6Pt/q7C9Zp2BNnR3
-         7VWDrC7bdv6hiag2Tqx1g2CC7xeISdgCC/CIMipBQAz6YGQPn37aVcmseFoLLfjh8Pqu
-         I1Pw==
-X-Gm-Message-State: AOAM531Pk4G/ZtXL5GrHcgkwx1JfiJL/lKzpVqW9px8jedA+KYhypyAo
-        pIX9RmR9cFTcEDKxqUlo4YN/362YKbfh4wODZei2r3d1TTF1W37a
-X-Google-Smtp-Source: ABdhPJxQ4ryA2tYTRZ94S76YdZelWYjf5tfAgH5HawCXSSq8+UOoE+WbPV/mgCuTZO9vIPqIll75OctNYwK0C3lvnvQ=
-X-Received: by 2002:a05:6512:108e:b0:472:2f9:ecae with SMTP id
- j14-20020a056512108e00b0047202f9ecaemr18910638lfg.618.1651225371669; Fri, 29
- Apr 2022 02:42:51 -0700 (PDT)
+        Fri, 29 Apr 2022 05:48:48 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF55939AB;
+        Fri, 29 Apr 2022 02:45:21 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KqSJb5V4tzhYq4;
+        Fri, 29 Apr 2022 17:45:03 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 17:45:09 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 17:45:09 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>
+CC:     <jthierry@redhat.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <masahiroy@kernel.org>, <jpoimboe@redhat.com>,
+        <peterz@infradead.org>, <ycote@redhat.com>,
+        <herbert@gondor.apana.org.au>, <mark.rutland@arm.com>,
+        <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>,
+        <chenzhongjin@huawei.com>
+Subject: [RFC PATCH v4 00/37] objtool: add base support for arm64
+Date:   Fri, 29 Apr 2022 17:43:18 +0800
+Message-ID: <20220429094355.122389-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220429023113.74993-1-sargun@sargun.me> <20220429023113.74993-2-sargun@sargun.me>
-In-Reply-To: <20220429023113.74993-2-sargun@sargun.me>
-From:   Rodrigo Campos <rodrigo@kinvolk.io>
-Date:   Fri, 29 Apr 2022 11:42:15 +0200
-Message-ID: <CACaBj2bW8XkENHoLNXEprQ_d8=_aLT_XQdjCZtSOiPJis8G_pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] seccomp: Add wait_killable semantic to seccomp
- user notifier
-To:     Sargun Dhillon <sargun@sargun.me>
-Cc:     Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Will Drewry <wad@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Alban Crequy <alban@kinvolk.io>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,51 +55,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:32 AM Sargun Dhillon <sargun@sargun.me> wrote:
-> the concept is searchable. If the notifying process is signaled prior
-> to the notification being received by the userspace agent, it will
-> be handled as normal.
+This series enables objtool to start doing stack validation/check 
+on arm64 kernel builds.
 
-Why is that? Why not always handle in the same way (if wait killable
-is set, wait like that)
+Gathering Julien's previous work[1][2], now objtool can check build
+on arm64 build for defconfig and yesconfig, with only few unreachable
+warning.
 
-> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-> index db10e73d06e0..9291b0843cb2 100644
-> --- a/kernel/seccomp.c
-> +++ b/kernel/seccomp.c
-> @@ -1081,6 +1088,12 @@ static void seccomp_handle_addfd(struct seccomp_kaddfd *addfd, struct seccomp_kn
->         complete(&addfd->completion);
->  }
->
-> +static bool should_sleep_killable(struct seccomp_filter *match,
-> +                                 struct seccomp_knotif *n)
-> +{
-> +       return match->wait_killable_recv && n->state == SECCOMP_NOTIFY_SENT;
+This series includes objtool part (1-15) and arm64 part (16-37), if
+necessary it can be taken apart as two series.
 
-Here for some reason we check the notification state to be SENT.
+I'm not sure that UNWIND_HINT added to entry (33-36) is complete
+and correct, because after Julien finished it there was a
+refactoring for entry. It will be fully tested after I implement
+unwinder_orc for arm64.
 
-> +}
-> +
->  static int seccomp_do_user_notification(int this_syscall,
->                                         struct seccomp_filter *match,
->                                         const struct seccomp_data *sd)
-> @@ -1111,11 +1124,25 @@ static int seccomp_do_user_notification(int this_syscall,
->          * This is where we wait for a reply from userspace.
->          */
->         do {
-> +               bool wait_killable = should_sleep_killable(match, &n);
-> +
+[1] https://lkml.org/lkml/2021/3/3/1135
+[2] https://github.com/julien-thierry/linux.git
 
-So here, the first time this runs this will be false even if the
-wait_killable flag was used in the filter (because that function
-checks the notification state to be sent, that is not true the first
-time)
+---
+Changes v3 -> v4:
+- [1] fix EX_ENTRY_SIZE from 8 to 12.
+- [14-37] modify arm64 for supporting objtool, including annotation,
+	asm code modification, ignoring some validation, to make objtool
+	be enable to pass arm64 builds.
 
-Why not just do wait_for_completion_killable if match->wait_killable
-and wait_for_completion_interruptible otherwise? Am I missing
-something?
+Changes v2 -> v3:
+- [04] rebase Julien's version to mainstream and solve conflicts.
+- [05, 06, 08] Merge dumplicate "*type = INSN_OTHER".
+- [08, 09, 10] When meeting unrecognized instructions such as  datas
+	in .text code or 0x0 padding insns, last version used
+	"loc->ignorable" to mark and remove them from objtool insn list.
 
+	However there are two problems to do so:
+	1. when meeting insns can't be decoded or excluded, objtool will
+	just stop.
+	
+	2. deleting every insn can cause problems in fellow procedure.
 
+	So I changed "record_invalid_insn" that we can delete one insn or
+	just set it ignored. Now check will throw an error and going on when
+	meeting undecodable instructions.
 
-Best,
-Rodrigo
+	Also, to prevent the confusion between "loc->ignorable" and
+	"insn->ignore" I changed "ignore" to "delete".
+
+Changes v1 -> v2:
+	- Drop gcc plugin in favor of -fno-jump-tables
+	- miscelaneous fixes and cleanups
+
+--->
+Chen Zhongjin (6):
+  arm64: Add annotate_reachable() for objtools
+  arm64: irq-gic: Replace unreachable() with -EINVAL
+  arm64: ftrace: Skip validation of entry-ftrace.o
+  arm64: bpf: Skip validation of ___bpf_prog_run
+  arm64: Annotate ASM symbols with unknown stack state
+  arm64: entry: Align stack size for alternative
+
+Julien Thierry (29):
+  tools: Add some generic functions and headers
+  tools: arm64: Make aarch64 instruction decoder available to tools
+  tools: bug: Remove duplicate definition
+  objtool: arm64: Add base definition for arm64 backend
+  objtool: arm64: Decode add/sub instructions
+  objtool: arm64: Decode jump and call related instructions
+  objtool: arm64: Decode other system instructions
+  objtool: arm64: Decode load/store instructions
+  objtool: arm64: Decode LDR instructions
+  objtool: arm64: Accept non-instruction data in code sections
+  objtool: arm64: Handle supported relocations in alternatives
+  objtool: arm64: Ignore replacement section for alternative callback
+  objtool: check: Support data in text section
+  objtool: arm64: Add unwind_hint support
+  arm64: bug: Add reachable annotation to warning macros
+  arm64: kgdb: Mark code following kgdb brk as reachable
+  arm64: Set intra-function call annotations
+  arm64: kernel: Skip validation of proton-pack.c.c and hibernate.c
+  arm64: kernel: Skip validation of sigreturn32.o
+  arm64: crypto: Remove unnecessary stackframe
+  arm64: sleep: Properly set frame pointer before call
+  arm64: Change symbol annotations
+  arm64: efi-header: Mark efi header as data
+  arm64: head: Mark constants as data
+  arm64: proc: Mark constant as data
+  arm64: crypto: Mark data in code sections
+  arm64: entry: Annotate valid stack in kernel entry
+  arm64: entry: Annotate code switching to tasks
+  arm64: kvm: Annotate stack state for guest enter/exit code
+
+Raphael Gault (2):
+  objtool: arm64: Enable stack validation for arm64
+  arm64: kernel: Skip validation of kuser32.o
+
+ arch/arm64/Kconfig                            |    1 +
+ arch/arm64/Makefile                           |    4 +
+ arch/arm64/crypto/aes-neonbs-core.S           |   14 +-
+ arch/arm64/crypto/crct10dif-ce-core.S         |    5 +
+ arch/arm64/crypto/poly1305-armv8.pl           |    4 +
+ arch/arm64/crypto/sha512-armv8.pl             |   29 +-
+ arch/arm64/include/asm/assembler.h            |    2 +
+ arch/arm64/include/asm/bug.h                  |    6 +-
+ arch/arm64/include/asm/kgdb.h                 |    1 +
+ arch/arm64/include/asm/unwind_hints.h         |   27 +
+ arch/arm64/kernel/Makefile                    |   10 +
+ arch/arm64/kernel/cpu-reset.S                 |    2 +
+ arch/arm64/kernel/efi-entry.S                 |    2 +
+ arch/arm64/kernel/efi-header.S                |    2 +
+ arch/arm64/kernel/entry.S                     |   29 +-
+ arch/arm64/kernel/head.S                      |   75 +-
+ arch/arm64/kernel/hibernate-asm.S             |    2 +
+ arch/arm64/kernel/hibernate.c                 |    2 +
+ arch/arm64/kernel/proton-pack.c               |    2 +
+ arch/arm64/kernel/relocate_kernel.S           |    2 +
+ arch/arm64/kernel/sleep.S                     |    8 +-
+ arch/arm64/kvm/hyp/entry.S                    |    7 +-
+ arch/arm64/kvm/hyp/hyp-entry.S                |    3 +
+ arch/arm64/kvm/hyp/vgic-v3-sr.c               |    7 +-
+ arch/arm64/mm/proc.S                          |    4 +-
+ drivers/irqchip/irq-gic-v3.c                  |    2 +-
+ include/linux/compiler.h                      |    9 +
+ kernel/bpf/core.c                             |    3 +
+ tools/arch/arm64/include/asm/insn.h           |  565 +++++++
+ tools/arch/arm64/include/asm/unwind_hints.h   |   27 +
+ tools/arch/arm64/lib/insn.c                   | 1464 +++++++++++++++++
+ tools/include/asm-generic/bitops/__ffs.h      |   11 +
+ tools/include/linux/bug.h                     |    6 +-
+ tools/include/linux/kernel.h                  |   21 +
+ tools/include/linux/printk.h                  |   40 +
+ tools/objtool/Makefile                        |    5 +
+ tools/objtool/arch/arm64/Build                |    8 +
+ tools/objtool/arch/arm64/decode.c             |  506 ++++++
+ .../arch/arm64/include/arch/cfi_regs.h        |   14 +
+ tools/objtool/arch/arm64/include/arch/elf.h   |    8 +
+ .../arch/arm64/include/arch/endianness.h      |    9 +
+ .../objtool/arch/arm64/include/arch/special.h |   22 +
+ tools/objtool/arch/arm64/special.c            |   36 +
+ tools/objtool/arch/x86/decode.c               |    5 +
+ tools/objtool/check.c                         |   25 +-
+ tools/objtool/elf.c                           |   14 +
+ tools/objtool/include/objtool/arch.h          |    3 +
+ tools/objtool/include/objtool/elf.h           |    1 +
+ tools/objtool/sync-check.sh                   |    5 +
+ 49 files changed, 2985 insertions(+), 74 deletions(-)
+ create mode 100644 arch/arm64/include/asm/unwind_hints.h
+ create mode 100644 tools/arch/arm64/include/asm/insn.h
+ create mode 100644 tools/arch/arm64/include/asm/unwind_hints.h
+ create mode 100644 tools/arch/arm64/lib/insn.c
+ create mode 100644 tools/include/linux/printk.h
+ create mode 100644 tools/objtool/arch/arm64/Build
+ create mode 100644 tools/objtool/arch/arm64/decode.c
+ create mode 100644 tools/objtool/arch/arm64/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/endianness.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/special.h
+ create mode 100644 tools/objtool/arch/arm64/special.c
+
+-- 
+2.17.1
+

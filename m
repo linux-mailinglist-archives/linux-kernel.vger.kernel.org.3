@@ -2,292 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D445155BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D405C5155C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380842AbiD2Uj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S1380847AbiD2UkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380825AbiD2UjW (ORCPT
+        with ESMTP id S1349590AbiD2UkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:39:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0C482D1C;
-        Fri, 29 Apr 2022 13:36:03 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 20:36:00 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651264562;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3hpobYdb68wtjs4UYIvsEhJTNvi8fFPQosZ65XrwdJM=;
-        b=O33cEJPw79As7f0WZ93MaoBbWJqpMbb7uYx1jGiD0vqIOEcx5hfdhfoyIu7gO4xEegyCLx
-        SbyaISdX/JE4I+2jUK80Hz6Y1J2251Z7ZfRKP0HP/70TvB5DwqMIru1UZuFkhNnkW0l5Uv
-        hW88nlBb1wJnyojOhJtXA2+x7QDLg/8FK655eaBmITKqaG16rtfDhj3Pq01gq38egobt9P
-        GqyTYENs2ma/W3MpOM33pHgGMAfWFvT7hIxc5xC1VoXUdaSQ7lqJRAT/18g/eWZvcBiByE
-        QJWTPfaO/+gkN+sJL5VBLYXX+1kvL2+m1tVvfU1cc3EETtVddNrJ+bWPqrfbjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651264562;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3hpobYdb68wtjs4UYIvsEhJTNvi8fFPQosZ65XrwdJM=;
-        b=ilSHti+gsG3m/GQmb7DNR77r9P7bjZq4qVIgv1zHgbTjCtTe6jMmskdmvRLKdS83uM+My8
-        OkAMjZwe9cmZ43CA==
-From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Refactor cpu_util_without()
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220318163656.954440-1-dietmar.eggemann@arm.com>
-References: <20220318163656.954440-1-dietmar.eggemann@arm.com>
-MIME-Version: 1.0
-Message-ID: <165126456076.4207.12214230176299764349.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 16:40:07 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E5F83019
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:36:48 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f83cc145edso84212547b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MegzHCUKl9bZRKyWJryCWFanU+3QTq1uqFqNfNdcp1U=;
+        b=OaqBerHn3Y/lAZochJD93816tJcalYdCONu3nn/3uzGUgV4IF7MJnz/bOWNjmzhrdW
+         IYyeSBDhNs1RhFW5x04tx7/LK0XD9fFHVKHZoOgl5EbVMmYiWaE0AeqwB0XEMd50iqoG
+         5ibyncxUJZ+k9aIqdL52P6MbStLnBRl5LskBuAX1503ah3mtkUhOgIe/r6DC4vmNPl2G
+         6JS3ZnFI7xMPsEDgdwKVsvuRzn9XPjF9Ug+RnkuVYxb6hANjBj10txsQzkgVWiGObpkF
+         Ka+faORzx0le0lOf78PdX2liqVoL1YtXY4EEyoRK7nyRtUc9tQV0nSjXJNheva95Xy/n
+         3WFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MegzHCUKl9bZRKyWJryCWFanU+3QTq1uqFqNfNdcp1U=;
+        b=LIaI7SOLiXlIrrfHyQltGWMUVvobWbNmurZGHOgYLTUnjuFxldNaCcEWNUzTqIGxi1
+         V4J4MkRA0VUb6MNsHNO5NQigzJac/YtQf+TUxdyhZ7z07dg2D4Ec0U9DLHDIrIEL/Wcz
+         NyvNPEdi+eBAEYb5ZNNE/x0tjSe8bCoUxbTsi66H6FNfYI/rOJD+BbAivZOnqdywWEVr
+         eRxaObkh4R0aQM9YS/ls9rTJhYdCyeYV4HpC5XL2LH5DnaH49inRTyDD94r/NxuZKbQ6
+         QiD4cS1UPJaAuzorR3Ca4iIAjtqGBlbzBOZcPVmMTtnGcqaU4D/RdI1OSi5mG4lZmX38
+         GyQw==
+X-Gm-Message-State: AOAM531PfcHyUmwqLMlTi7EBv78g+byz4el5BFKlYFSe9Ir3I+LQOCLZ
+        TQn+p1VQ5zl1blpdKgsZQUKkaJQfU412H+0EBsR9xrL+h1lMJxI9RPDCrV1nenxecLnlKC4NQTT
+        bInH0SS0D3XGy3SynNS722AAmjok1OkvfOWCzPftJGn1gb+gSpipJY1bz/ovFHTsEkw9PgM29+m
+        5aShDINsSE1g==
+X-Google-Smtp-Source: ABdhPJyio4MtmnhBGmkLGk678vdjpsFxGW0jft/fZMlB8G4BO22hETb7+iNeMXAut+zUXIRuWmeclrXdGab3OE258eU=
+X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:351:bea9:f158:1021])
+ (user=samitolvanen job=sendgmr) by 2002:a25:37cd:0:b0:648:3b1a:97e4 with SMTP
+ id e196-20020a2537cd000000b006483b1a97e4mr1272372yba.624.1651264607285; Fri,
+ 29 Apr 2022 13:36:47 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 13:36:23 -0700
+Message-Id: <20220429203644.2868448-1-samitolvanen@google.com>
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7763; h=from:subject;
+ bh=Y5sqA/70oYhk0R144QR9LlAfelh5tkejjJm3VYpdAzo=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExUWv4g8pmw5iLjb/OQbuGWfKBCh3Cqp9nzOMPR
+ CBJsyZ6JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMVAAKCRBMtfaEi7xW7v8wC/
+ 94FDsOKFoqzKZQhC/RXtvjgtYXoam8m58rZjXy8I58uTTSsbzXNNrAQhPNNy1hRngOyjaClVhm48re
+ lmh5ijp8raC0b7lrmdjYZo7yILyGkLghZ6NhgIL8Xeih8L8/RckgnhYZwEyKlVGzWV59SS9aoQyJ0p
+ 1wYbPUxIiac5Y89rPzMh18R/XF7D70tShHpfBT3hys9NNm70RGRq8DGrDpWLE67bDYX2UAWiDA8gyr
+ JVfEMq8x+qxRoZHHHKOcP4vsO2abvLUq7aMTEHLUAW8z1Z0XOkHoxrXOw2AZGWPEFv1QeBmo+eWQf0
+ ggFY+f5YbZKtnyjdly8nnUpGhZcUE21iN/xNBscr6tCDu1IAUxePnxgrLlUeuifyLki2Fqmdea0nle
+ Dh9b7ql363u+Sx+GdGt2Z+sMHJHjmiZtwtpfyOkspzYxUIjShERQSJwxMJz4ywAcQIzfZj3t5zgOi3
+ Zs1DXthiB5ELW9KPxHMi1qalz5qRy7Gf8xg6tHtGHoQIU=
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [RFC PATCH 00/21] KCFI support
+From:   Sami Tolvanen <samitolvanen@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+KCFI is a proposed forward-edge control-flow integrity scheme for
+Clang, which is more suitable for kernel use than the existing CFI
+scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+alter function references to point to a jump table, and won't break
+function address equality. The latest LLVM patches are here:
 
-Commit-ID:     4e3c7d338a2260406ae22eaf6d77b639d59bdc7e
-Gitweb:        https://git.kernel.org/tip/4e3c7d338a2260406ae22eaf6d77b639d59bdc7e
-Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
-AuthorDate:    Fri, 18 Mar 2022 17:36:56 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 29 Apr 2022 11:06:29 +02:00
+  https://reviews.llvm.org/D119296
+  https://reviews.llvm.org/D124211
 
-sched/fair: Refactor cpu_util_without()
+This RFC series replaces the current arm64 CFI implementation with
+KCFI and adds support for x86_64.
 
-Except the 'task has no contribution or is new' condition at the
-beginning of cpu_util_without(), which it shares with the load and
-runnable counterpart functions, a cpu_util_next(..., dst_cpu = -1)
-call can replace the rest of it.
+The proposed compiler patches add a built-in function that allows
+CFI checks to be disabled for specific indirect calls. This is
+necessary to prevent unnecessary checks from being emitted for
+static_call trampoline calls that are later patched into direct
+calls. However, as the call expression must be passed as an argument
+to the built-in, this requires changing the static_call macro API to
+include the call arguments. Patch 14 changes the macros to accept
+arguments and patch 15 disables checks for the generated calls.
 
-The UTIL_EST specific check that task util_est has to be subtracted
-from the CPU one in case of an enqueued (or current (to cater for the
-wakeup - lb race)) task has to be moved to cpu_util_next().
-This was initially introduced by commit c469933e7721
-("sched/fair: Fix cpu_util_wake() for 'execl' type workloads").
-UnixBench's `execl` throughput tests were run on the dual socket 40
-CPUs Intel E5-2690 v2 to make sure it doesn't regress again.
+KCFI also requires assembly functions that are indirectly called
+from C code to be annotated with type identifiers. As type
+information is only available in C, the compiler emits expected
+type identifiers into the symbol table, so they can be referenced
+from assembly without having to hardcode type hashes. Patch 7 adds
+helper macros for annotating functions, and patches 8 and 18 add
+annotations.
 
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20220318163656.954440-1-dietmar.eggemann@arm.com
----
- kernel/sched/fair.c | 157 +++++++++++++++----------------------------
- 1 file changed, 57 insertions(+), 100 deletions(-)
+In case of a type mismatch, KCFI always traps. To support error
+handling, the compiler generates a .kcfi_traps section that contains
+the locations of each trap. Patches 9 and 21 add arch-specific error
+handlers. In addition, to support x86_64, objtool must be able to
+identify KCFI type identifiers that are emitted before function
+entries. The compiler generates an additional .kcfi_types section,
+which points to each emitted type identifier. Patch 16 adds objtool
+support.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 4c42012..7d38728 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6544,108 +6544,19 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- }
- 
- /*
-- * cpu_util_without: compute cpu utilization without any contributions from *p
-- * @cpu: the CPU which utilization is requested
-- * @p: the task which utilization should be discounted
-- *
-- * The utilization of a CPU is defined by the utilization of tasks currently
-- * enqueued on that CPU as well as tasks which are currently sleeping after an
-- * execution on that CPU.
-- *
-- * This method returns the utilization of the specified CPU by discounting the
-- * utilization of the specified task, whenever the task is currently
-- * contributing to the CPU utilization.
-- */
--static unsigned long cpu_util_without(int cpu, struct task_struct *p)
--{
--	struct cfs_rq *cfs_rq;
--	unsigned int util;
--
--	/* Task has no contribution or is new */
--	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
--		return cpu_util_cfs(cpu);
--
--	cfs_rq = &cpu_rq(cpu)->cfs;
--	util = READ_ONCE(cfs_rq->avg.util_avg);
--
--	/* Discount task's util from CPU's util */
--	lsub_positive(&util, task_util(p));
--
--	/*
--	 * Covered cases:
--	 *
--	 * a) if *p is the only task sleeping on this CPU, then:
--	 *      cpu_util (== task_util) > util_est (== 0)
--	 *    and thus we return:
--	 *      cpu_util_without = (cpu_util - task_util) = 0
--	 *
--	 * b) if other tasks are SLEEPING on this CPU, which is now exiting
--	 *    IDLE, then:
--	 *      cpu_util >= task_util
--	 *      cpu_util > util_est (== 0)
--	 *    and thus we discount *p's blocked utilization to return:
--	 *      cpu_util_without = (cpu_util - task_util) >= 0
--	 *
--	 * c) if other tasks are RUNNABLE on that CPU and
--	 *      util_est > cpu_util
--	 *    then we use util_est since it returns a more restrictive
--	 *    estimation of the spare capacity on that CPU, by just
--	 *    considering the expected utilization of tasks already
--	 *    runnable on that CPU.
--	 *
--	 * Cases a) and b) are covered by the above code, while case c) is
--	 * covered by the following code when estimated utilization is
--	 * enabled.
--	 */
--	if (sched_feat(UTIL_EST)) {
--		unsigned int estimated =
--			READ_ONCE(cfs_rq->avg.util_est.enqueued);
--
--		/*
--		 * Despite the following checks we still have a small window
--		 * for a possible race, when an execl's select_task_rq_fair()
--		 * races with LB's detach_task():
--		 *
--		 *   detach_task()
--		 *     p->on_rq = TASK_ON_RQ_MIGRATING;
--		 *     ---------------------------------- A
--		 *     deactivate_task()                   \
--		 *       dequeue_task()                     + RaceTime
--		 *         util_est_dequeue()              /
--		 *     ---------------------------------- B
--		 *
--		 * The additional check on "current == p" it's required to
--		 * properly fix the execl regression and it helps in further
--		 * reducing the chances for the above race.
--		 */
--		if (unlikely(task_on_rq_queued(p) || current == p))
--			lsub_positive(&estimated, _task_util_est(p));
--
--		util = max(util, estimated);
--	}
--
--	/*
--	 * Utilization (estimated) can exceed the CPU capacity, thus let's
--	 * clamp to the maximum CPU capacity to ensure consistency with
--	 * cpu_util.
--	 */
--	return min_t(unsigned long, util, capacity_orig_of(cpu));
--}
--
--/*
-- * Predicts what cpu_util(@cpu) would return if @p was migrated (and enqueued)
-- * to @dst_cpu.
-+ * Predicts what cpu_util(@cpu) would return if @p was removed from @cpu
-+ * (@dst_cpu = -1) or migrated to @dst_cpu.
-  */
- static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- {
- 	struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
--	unsigned long util_est, util = READ_ONCE(cfs_rq->avg.util_avg);
-+	unsigned long util = READ_ONCE(cfs_rq->avg.util_avg);
- 
- 	/*
--	 * If @p migrates from @cpu to another, remove its contribution. Or,
--	 * if @p migrates from another CPU to @cpu, add its contribution. In
--	 * the other cases, @cpu is not impacted by the migration, so the
--	 * util_avg should already be correct.
-+	 * If @dst_cpu is -1 or @p migrates from @cpu to @dst_cpu remove its
-+	 * contribution. If @p migrates from another CPU to @cpu add its
-+	 * contribution. In all the other cases @cpu is not impacted by the
-+	 * migration so its util_avg is already correct.
- 	 */
- 	if (task_cpu(p) == cpu && dst_cpu != cpu)
- 		lsub_positive(&util, task_util(p));
-@@ -6653,16 +6564,40 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- 		util += task_util(p);
- 
- 	if (sched_feat(UTIL_EST)) {
-+		unsigned long util_est;
-+
- 		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
- 
- 		/*
--		 * During wake-up, the task isn't enqueued yet and doesn't
--		 * appear in the cfs_rq->avg.util_est.enqueued of any rq,
--		 * so just add it (if needed) to "simulate" what will be
--		 * cpu_util after the task has been enqueued.
-+		 * During wake-up @p isn't enqueued yet and doesn't contribute
-+		 * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
-+		 * If @dst_cpu == @cpu add it to "simulate" cpu_util after @p
-+		 * has been enqueued.
-+		 *
-+		 * During exec (@dst_cpu = -1) @p is enqueued and does
-+		 * contribute to cpu_rq(cpu)->cfs.util_est.enqueued.
-+		 * Remove it to "simulate" cpu_util without @p's contribution.
-+		 *
-+		 * Despite the task_on_rq_queued(@p) check there is still a
-+		 * small window for a possible race when an exec
-+		 * select_task_rq_fair() races with LB's detach_task().
-+		 *
-+		 *   detach_task()
-+		 *     deactivate_task()
-+		 *       p->on_rq = TASK_ON_RQ_MIGRATING;
-+		 *       -------------------------------- A
-+		 *       dequeue_task()                    \
-+		 *         dequeue_task_fair()              + Race Time
-+		 *           util_est_dequeue()            /
-+		 *       -------------------------------- B
-+		 *
-+		 * The additional check "current == p" is required to further
-+		 * reduce the race window.
- 		 */
- 		if (dst_cpu == cpu)
- 			util_est += _task_util_est(p);
-+		else if (unlikely(task_on_rq_queued(p) || current == p))
-+			lsub_positive(&util_est, _task_util_est(p));
- 
- 		util = max(util, util_est);
- 	}
-@@ -6671,6 +6606,28 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- }
- 
- /*
-+ * cpu_util_without: compute cpu utilization without any contributions from *p
-+ * @cpu: the CPU which utilization is requested
-+ * @p: the task which utilization should be discounted
-+ *
-+ * The utilization of a CPU is defined by the utilization of tasks currently
-+ * enqueued on that CPU as well as tasks which are currently sleeping after an
-+ * execution on that CPU.
-+ *
-+ * This method returns the utilization of the specified CPU by discounting the
-+ * utilization of the specified task, whenever the task is currently
-+ * contributing to the CPU utilization.
-+ */
-+static unsigned long cpu_util_without(int cpu, struct task_struct *p)
-+{
-+	/* Task has no contribution or is new */
-+	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
-+		return cpu_util_cfs(cpu);
-+
-+	return cpu_util_next(cpu, p, -1);
-+}
-+
-+/*
-  * compute_energy(): Estimates the energy that @pd would consume if @p was
-  * migrated to @dst_cpu. compute_energy() predicts what will be the utilization
-  * landscape of @pd's CPUs after the task migration, and uses the Energy Model
+To test this series, you'll need to compile your own Clang toolchain
+with the patches linked above. You can also find the complete source
+tree here:
+
+  https://github.com/samitolvanen/llvm-project/commits/kcfi-rfc
+
+This series is also available in GitHub:
+
+  https://github.com/samitolvanen/linux/commits/kcfi-rfc
+
+
+Sami Tolvanen (21):
+  efi/libstub: Filter out CC_FLAGS_CFI
+  arm64/vdso: Filter out CC_FLAGS_CFI
+  kallsyms: Ignore __kcfi_typeid_
+  cfi: Remove CONFIG_CFI_CLANG_SHADOW
+  cfi: Drop __CFI_ADDRESSABLE
+  cfi: Switch to -fsanitize=kcfi
+  cfi: Add type helper macros
+  arm64/crypto: Add types to indirect called assembly functions
+  arm64: Add CFI error handling
+  treewide: Drop function_nocfi
+  treewide: Drop WARN_ON_FUNCTION_MISMATCH
+  treewide: Drop __cficanonical
+  cfi: Add the cfi_unchecked macro
+  treewide: static_call: Pass call arguments to the macro
+  static_call: Use cfi_unchecked
+  objtool: Add support for CONFIG_CFI_CLANG
+  x86/tools/relocs: Ignore __kcfi_typeid_ relocations
+  x86: Add types to indirect called assembly functions
+  x86/purgatory: Disable CFI
+  x86/vdso: Disable CFI
+  x86: Add support for CONFIG_CFI_CLANG
+
+ Makefile                                  |  13 +-
+ arch/Kconfig                              |  18 +-
+ arch/arm/include/asm/paravirt.h           |   2 +-
+ arch/arm64/crypto/ghash-ce-core.S         |   5 +-
+ arch/arm64/crypto/sm3-ce-core.S           |   3 +-
+ arch/arm64/include/asm/brk-imm.h          |   2 +
+ arch/arm64/include/asm/compiler.h         |  16 -
+ arch/arm64/include/asm/ftrace.h           |   2 +-
+ arch/arm64/include/asm/insn.h             |   1 +
+ arch/arm64/include/asm/mmu_context.h      |   2 +-
+ arch/arm64/include/asm/paravirt.h         |   2 +-
+ arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
+ arch/arm64/kernel/cpufeature.c            |   2 +-
+ arch/arm64/kernel/ftrace.c                |   2 +-
+ arch/arm64/kernel/machine_kexec.c         |   2 +-
+ arch/arm64/kernel/psci.c                  |   2 +-
+ arch/arm64/kernel/smp_spin_table.c        |   2 +-
+ arch/arm64/kernel/traps.c                 |  57 ++++
+ arch/arm64/kernel/vdso/Makefile           |   3 +-
+ arch/x86/Kconfig                          |   1 +
+ arch/x86/crypto/aesni-intel_glue.c        |   7 +-
+ arch/x86/crypto/blowfish-x86_64-asm_64.S  |   5 +-
+ arch/x86/entry/vdso/Makefile              |   3 +-
+ arch/x86/events/core.c                    |  40 +--
+ arch/x86/include/asm/kvm_host.h           |   6 +-
+ arch/x86/include/asm/linkage.h            |   7 +
+ arch/x86/include/asm/paravirt.h           |   4 +-
+ arch/x86/kernel/traps.c                   |  39 ++-
+ arch/x86/kvm/cpuid.c                      |   2 +-
+ arch/x86/kvm/hyperv.c                     |   4 +-
+ arch/x86/kvm/irq.c                        |   2 +-
+ arch/x86/kvm/kvm_cache_regs.h             |  10 +-
+ arch/x86/kvm/lapic.c                      |  32 +-
+ arch/x86/kvm/mmu.h                        |   4 +-
+ arch/x86/kvm/mmu/mmu.c                    |   8 +-
+ arch/x86/kvm/mmu/spte.c                   |   4 +-
+ arch/x86/kvm/pmu.c                        |   4 +-
+ arch/x86/kvm/trace.h                      |   4 +-
+ arch/x86/kvm/x86.c                        | 326 ++++++++++-----------
+ arch/x86/kvm/x86.h                        |   4 +-
+ arch/x86/kvm/xen.c                        |   4 +-
+ arch/x86/lib/memcpy_64.S                  |   3 +-
+ arch/x86/purgatory/Makefile               |   4 +
+ arch/x86/tools/relocs.c                   |   1 +
+ drivers/cpufreq/amd-pstate.c              |   8 +-
+ drivers/firmware/efi/libstub/Makefile     |   2 +
+ drivers/firmware/psci/psci.c              |   4 +-
+ drivers/misc/lkdtm/usercopy.c             |   2 +-
+ include/asm-generic/bug.h                 |  16 -
+ include/asm-generic/vmlinux.lds.h         |  38 +--
+ include/linux/cfi.h                       |  50 ++--
+ include/linux/cfi_types.h                 |  57 ++++
+ include/linux/compiler-clang.h            |  10 +-
+ include/linux/compiler.h                  |  16 +-
+ include/linux/compiler_types.h            |   4 +-
+ include/linux/entry-common.h              |   2 +-
+ include/linux/init.h                      |   4 +-
+ include/linux/kernel.h                    |   2 +-
+ include/linux/module.h                    |   8 +-
+ include/linux/pci.h                       |   4 +-
+ include/linux/perf_event.h                |   6 +-
+ include/linux/sched.h                     |   2 +-
+ include/linux/static_call.h               |  18 +-
+ include/linux/static_call_types.h         |  13 +-
+ include/linux/tracepoint.h                |   2 +-
+ kernel/cfi.c                              | 340 ++++------------------
+ kernel/kthread.c                          |   3 +-
+ kernel/module.c                           |  49 +---
+ kernel/static_call_inline.c               |   2 +-
+ kernel/trace/bpf_trace.c                  |   2 +-
+ kernel/workqueue.c                        |   2 +-
+ scripts/Makefile.build                    |   3 +-
+ scripts/kallsyms.c                        |   1 +
+ scripts/link-vmlinux.sh                   |   3 +
+ scripts/module.lds.S                      |  24 +-
+ security/keys/trusted-keys/trusted_core.c |  14 +-
+ tools/include/linux/static_call_types.h   |  13 +-
+ tools/objtool/arch/x86/include/arch/elf.h |   2 +
+ tools/objtool/builtin-check.c             |   3 +-
+ tools/objtool/check.c                     | 128 +++++++-
+ tools/objtool/elf.c                       |  13 +
+ tools/objtool/include/objtool/arch.h      |   1 +
+ tools/objtool/include/objtool/builtin.h   |   2 +-
+ tools/objtool/include/objtool/elf.h       |   2 +
+ 84 files changed, 748 insertions(+), 793 deletions(-)
+ create mode 100644 include/linux/cfi_types.h
+
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

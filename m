@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A124514ED9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE38514EE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378150AbiD2PQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
+        id S1378168AbiD2PQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378149AbiD2PQe (ORCPT
+        with ESMTP id S1378129AbiD2PQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:16:34 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1841AD4C49
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:13:15 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id a21so9445872edb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:13:15 -0700 (PDT)
+        Fri, 29 Apr 2022 11:16:35 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6ED4C53
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:13:16 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id k23so16066537ejd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:13:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=l+Ao2RwIkRyyANPkSXXqtBch6AKumaxguIhH1CidR1Y=;
-        b=emAqveVyJeyC4WuwF8N7NcYLVa+LcSLZc8Uu+9bmFtY2XC7qosw9nBSM15Et4VeWk5
-         6wiLh6cEtHZomttMnIHD09BbSb2eX5yQ3n1T1OQkhVFK8zM2jHx32FAG7O7HjFvwXbm1
-         gI3SgvTA/eouq5hXzQbAdg4uzFAalqoWue7UFfxCRI0UtRWJOoUjMch/lI3N6GMJ5y/k
-         98KV6D6A6gNlE6v1ztbwGr+iSv914wRcTES2umwo/N2K5ybbD789xWkAR08lOhXEPqW/
-         liZnUjVUltDdk+wr6i0VC1Dvbm0Xh+R91+5uYEoh1ktIIZoDHZPppmW9RwWK4hjAGvcF
-         Acvg==
+        bh=2I0IVGg0BbgV1kbTA3FjHG5NPrG7JlSoU1fPvx52hGk=;
+        b=QUqOFZHfild3SFCFMiuVaM/8ojoUaHzc/sNxsWRcPWRBbykRgdH4LWMc/lKjYUdHUc
+         V+VXdbx4oBB+09JhF8BWUKKE5w0KkoWAwVD8tVp8VJ6cU++Tlyb1RJRykxM0rtSokCEt
+         bAEm2fGtw4S8H7v6aPRpOy0YfgUo5G1EyA+FlFBtQqoQoVJyuKSPEC5MfsJ+cGMk6e94
+         YSxjQF1jd1deeW1cAduv3kT6EDaKU5JvA4JyAzYqLe5blCpCw1pL72ne/N7V1VWuNEge
+         VlD6PPlkEmf8/rKCecr7LK40121FWrwqv9SIts6lH22BgHDKgVqHlh4OaTMEwKfejpDz
+         fGrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l+Ao2RwIkRyyANPkSXXqtBch6AKumaxguIhH1CidR1Y=;
-        b=gkSIEiG938EEGPBsDezJWGWHw81IIxvxR+3jK88iXNWxqjDs+7dw+2tiS/TVYOthDt
-         wB65QMdRqd0Y/Swld14u2Mbh24QwXH2j/vutHcd3767cqIii09ntab6QOkFsGvyMpOEe
-         Q+C9yV4QCUkJTFRfNrqIFcZ9NRfhuP4ZNeah/HMD6aJdRjnxtBIOXFfJ4NpzNHHxd1xE
-         GLKrgfipTrVwjrqONwYnQZDZ/rHhtpcEyYoDjw/xzYLP5kU7bMyDssCwvCS1Es9KvfWo
-         0E1DVjxIvuL7LkfyfywtdPy+s3UIEpjzwUh54cYYTBsza49TSsFrpP8ZvLN99h0+S5xu
-         Q9YA==
-X-Gm-Message-State: AOAM5335l2adiS1v0bgoqiDQaIIQOljXqtDr0mdRHHViCklb5D3fvfaa
-        xpoa+y/ML0usDQ23Qb2J//2CsA==
-X-Google-Smtp-Source: ABdhPJzi5dJ8Czhs0cBu3LyhHTq/Q+4bJZT8Tq3PYo2S17j/Kabihnnt9BXxbZtMl5r5w3TJtmC0VQ==
-X-Received: by 2002:a05:6402:13c3:b0:425:d94b:4118 with SMTP id a3-20020a05640213c300b00425d94b4118mr31006881edx.75.1651245193575;
-        Fri, 29 Apr 2022 08:13:13 -0700 (PDT)
+        bh=2I0IVGg0BbgV1kbTA3FjHG5NPrG7JlSoU1fPvx52hGk=;
+        b=ApxNypLOxZXzJ+OpuDT1pI4xCCyM53oVJgWNPLNAvJbCqZuIJZRCjw0JhzzQSWwhZz
+         XjuUetYUOmA+PCDCVhcixp6Kqws2EFDNlSZgq/Ps3PQrSGxrVmUS+gNIbHkSlRtWjbU7
+         saYXgrL7MHbbX015ggs4QFaI+f7L7405u5KxTDtQ5sHsuyNwQVE1i132gJuJNcb5BGsV
+         0+mubqQOswGrs4+YBIsNmeYR8txHndS4sRuch/HSi8xP2vlCQB1OkV3ctXYmGEjDzjrF
+         gBPnJjmXUNvppSMQKaFaq3BtSwB9S5p8yeFokQlp2+z3iyolxH1NjxVv3nKLTEWCpeXr
+         7+5Q==
+X-Gm-Message-State: AOAM531706oV3HDpi7fqZQ3jofMhiKSCLaRicQOFXXQqjtz2O6VG9FqI
+        VpeKhvu/9Dk9POF9/esHeBKB8w==
+X-Google-Smtp-Source: ABdhPJyHoZGJ43TSX0cs2VBvX7DpGY3ixFpog1wfc7GyZhnw03bwgRZmK+WpJbSitfLu0V/9a1LKiQ==
+X-Received: by 2002:a17:907:60d3:b0:6db:8b59:1564 with SMTP id hv19-20020a17090760d300b006db8b591564mr36772935ejc.228.1651245194937;
+        Fri, 29 Apr 2022 08:13:14 -0700 (PDT)
 Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id zp15-20020a17090684ef00b006f3ef214e4esm712677ejb.180.2022.04.29.08.13.12
+        by smtp.gmail.com with ESMTPSA id zp15-20020a17090684ef00b006f3ef214e4esm712677ejb.180.2022.04.29.08.13.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 08:13:12 -0700 (PDT)
+        Fri, 29 Apr 2022 08:13:14 -0700 (PDT)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     bjorn.andersson@linaro.org, agross@kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -56,9 +56,9 @@ To:     bjorn.andersson@linaro.org, agross@kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v1 2/9] clk: Introduce CLK_ASSUME_ENABLED_WHEN_UNUSED
-Date:   Fri, 29 Apr 2022 17:12:40 +0200
-Message-Id: <20220429151247.388837-2-robert.foss@linaro.org>
+Subject: [PATCH v1 3/9] clk: qcom: sm8250-dispcc: Flag shared RCGs as assumed enable
+Date:   Fri, 29 Apr 2022 17:12:41 +0200
+Message-Id: <20220429151247.388837-3-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220429151247.388837-1-robert.foss@linaro.org>
 References: <20220429151247.388837-1-robert.foss@linaro.org>
@@ -76,55 +76,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Some clock implementations doesn't provide means of implementing
-is_enabled(), but still requires to be explicitly disabled when found
-unused as part of clk_disable_unused().
+The state of the shared RCGs found in the SM8250 dispcc can't reliably
+be queried and hence doesn't implement the is_enabled() callback.
 
-One such set of clocks are Qualcomm's display RCGs. These can be enabled
-and disabled automatically by the hardware, so it's not possible to
-reliably query their configuration. Further more, these clocks need to
-be disabled when unused, to allow them to be "parked" onto a safe
-parent. Failure to disable the RCG results in the hardware locking up as
-clk_disable_unused() traverses up the tree and turns off its source
-clocks.
-
-Add a new flag, CLK_ASSUME_ENABLED_BOOT, which clock drivers can use to
-signal that these clocks should be disabled even if they don't implement
-the is_enabled() ops.
+Mark the shared RCGs as CLK_ASSUME_ENABLED_WHEN_UNUSED, to ensure that
+clk_disable_unused() will issue a disable and park the RCGs before it
+turns off the parent PLLs - which will lock up these RCGs in any system
+with continuous splash enabled.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Reviewed-by: Vinod Koul <vkoul@kernel.org>
 ---
- drivers/clk/clk.c            | 2 +-
- include/linux/clk-provider.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/dispcc-sm8250.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index ed119182aa1b..9789ec137219 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -1284,7 +1284,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
- 	 * sequence.  call .disable_unused if available, otherwise fall
- 	 * back to .disable
- 	 */
--	if (clk_core_is_enabled(core)) {
-+	if (clk_core_is_enabled(core) || core->flags & CLK_ASSUME_ENABLED_WHEN_UNUSED) {
- 		trace_clk_disable(core);
- 		if (core->ops->disable_unused)
- 			core->ops->disable_unused(core->hw);
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index c10dc4c659e2..9038022ffebd 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -32,6 +32,8 @@
- #define CLK_OPS_PARENT_ENABLE	BIT(12)
- /* duty cycle call may be forwarded to the parent clock */
- #define CLK_DUTY_CYCLE_PARENT	BIT(13)
-+/* assume clock is enabled if found unused in late init */
-+#define CLK_ASSUME_ENABLED_WHEN_UNUSED	BIT(14)
- 
- struct clk;
- struct clk_hw;
+diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
+index db9379634fb2..22d9cbabecab 100644
+--- a/drivers/clk/qcom/dispcc-sm8250.c
++++ b/drivers/clk/qcom/dispcc-sm8250.c
+@@ -214,7 +214,7 @@ static struct clk_rcg2 disp_cc_mdss_ahb_clk_src = {
+ 		.name = "disp_cc_mdss_ahb_clk_src",
+ 		.parent_data = disp_cc_parent_data_3,
+ 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
+-		.flags = CLK_SET_RATE_PARENT,
++		.flags = CLK_SET_RATE_PARENT | CLK_ASSUME_ENABLED_WHEN_UNUSED,
+ 		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+@@ -546,7 +546,7 @@ static struct clk_rcg2 disp_cc_mdss_mdp_clk_src = {
+ 		.name = "disp_cc_mdss_mdp_clk_src",
+ 		.parent_data = disp_cc_parent_data_5,
+ 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
+-		.flags = CLK_SET_RATE_PARENT,
++		.flags = CLK_SET_RATE_PARENT | CLK_ASSUME_ENABLED_WHEN_UNUSED,
+ 		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
+@@ -598,7 +598,7 @@ static struct clk_rcg2 disp_cc_mdss_rot_clk_src = {
+ 		.name = "disp_cc_mdss_rot_clk_src",
+ 		.parent_data = disp_cc_parent_data_5,
+ 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
+-		.flags = CLK_SET_RATE_PARENT,
++		.flags = CLK_SET_RATE_PARENT | CLK_ASSUME_ENABLED_WHEN_UNUSED,
+ 		.ops = &clk_rcg2_shared_ops,
+ 	},
+ };
 -- 
 2.32.0
 

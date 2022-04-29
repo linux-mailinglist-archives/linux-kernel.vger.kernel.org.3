@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAD4515337
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D12B515342
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379865AbiD2SGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S1379870AbiD2SGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiD2SGS (ORCPT
+        with ESMTP id S1379866AbiD2SGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:06:18 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0B68BE26;
-        Fri, 29 Apr 2022 11:02:59 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id l7so16901964ejn.2;
-        Fri, 29 Apr 2022 11:02:59 -0700 (PDT)
+        Fri, 29 Apr 2022 14:06:39 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F995D4C4D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:03:19 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id h8so10520911iov.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:03:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sBYSjhExy8FPS84fDKOS2lo0heZ+WhIcDHz+cn1FRbE=;
-        b=irhsPAq3aUs20/CjP71rBBRTfgRKoLFdaziB2gz6m6KBvp6oXmY6NPO9sqMqMOELUf
-         Xz2Dctb/hWVvAh2HbpS1VNe41kyo95D8EhzeUvw2HW5KAJwa2UApFLIIZFdi3YQ5o5NZ
-         cJrFFee29SVr+AUrSPt0V4w0GMEX1VYL6BD/rgolwHmBnScwiYY0Mjtq27LADiAUyXno
-         0AJg46DyvxJCDdYyK7V2iY5gvJkGcaZFTfHVBenuOnqsdAaDuO9+vjKyyqiHq7cBpFDc
-         H5184lj/RquE0ScLPtj9CxuV0YmA+upDDRX2kqy3zj3tR3ER/HKk2idfm1wh8PfOsOPL
-         I3ZQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+UEKgXrrD0bBkveYKV1BzyuG02j+m4QM4Vug4t1K1Lc=;
+        b=QTAhsROB7PeybDtVIea7NpCcw6Y2SGXrxVNMO7ueaeqMjkvhygrvrO0CB92dH9jYHv
+         /1nCwI6Csg2CaPABJV27UPGb+RZGethrwyW6l9S/0RC4pDBGuwKfa+1q7I/+z5H21Z+w
+         +7l5ZduiDLL6NLD8GFd41Tsa7yF5dg6x6s+q3kbxi4YNf3F7vWX1I2KU7vW2wJ2z/HrJ
+         TdeOd6pFhgxZGYn+oda5ArqSaiiM9auNh6u6kBlG8er/5Dn7LqYesgqm6k8RG1rG2swV
+         jLFb9vwGPv4PNejd+S6r4d5/N9/J7CVn5pzUglxFfDhAg7y/B0z64DikIAot0VeJMD+r
+         oaRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sBYSjhExy8FPS84fDKOS2lo0heZ+WhIcDHz+cn1FRbE=;
-        b=qz+DK3xpy+Nl1Fy/s06qWtsp2q7jMttU84JBpUQuf0rQUKnIJ3TPkoTG0eXV/sf83d
-         yk1PdghKf9wJcDCKb4mAkPaOv5S9sGUPZ614VZY7FLEnNdmguQeQ5Dz+vMd1TAKb89Yp
-         rsX/99kRGzzK19Jd9o1niFTnMxzwnXO6UCaadHn+0L/MoRE17SH9HkJrIa/QmF2h+gQw
-         MAPSRluAjh0UVbcYLZljWaepjcWcp+tANBsdeIFQKkB5QySyIIqZOO3z//cu0GMKMAjT
-         IyogHvLbfSaT/siHXEXxNon4N/KLZvTkm1m0azQr0G7u0FvL+HOV/krfVF0zEzvlUqLT
-         S/GA==
-X-Gm-Message-State: AOAM530qEy3q6PmrggsucSUc1pn3VLJmZj9eL4+uXjBP1a6P/CggpwMM
-        3rVgXrw1CR6XS1KlJa4TKJlWPyKN4g==
-X-Google-Smtp-Source: ABdhPJzey0qcrgC+yH5euuaSkLBSbZ6GOQXju8Sfc9zdWKMENFdelOeNXZCmwn6FqtehVIY+ESWPJw==
-X-Received: by 2002:a17:907:9482:b0:6da:8ad6:c8b5 with SMTP id dm2-20020a170907948200b006da8ad6c8b5mr496340ejc.372.1651255377899;
-        Fri, 29 Apr 2022 11:02:57 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.248.99])
-        by smtp.gmail.com with ESMTPSA id hf27-20020a1709072c5b00b006f3ef214e2fsm866785ejc.149.2022.04.29.11.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 11:02:57 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 21:02:55 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH] ELF, uapi: fixup ELF_ST_TYPE definition
-Message-ID: <YmwoT2/6rh6K1tDE@localhost.localdomain>
-References: <Ymv7G1BeX4kt3obz@localhost.localdomain>
- <202204291019.B628991360@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+UEKgXrrD0bBkveYKV1BzyuG02j+m4QM4Vug4t1K1Lc=;
+        b=088KfxnmexoKybaMgmNHz7A0C12vA8vFT8k1raEf0G5X4V1kQEwuJ5k6pweNEfuf1+
+         PWTcLKKBno9b6CskswJD+Bbv09U0o7juXiSmWWoQUOpP749BqEqzXjkNRxyKu+AzJsPN
+         jE0BuNbo2yKFNoLHtiHV1eapC29dVysgQzZgOMjSAgGBUNSPI14eglSFwzX7nsWUmEP6
+         mVx0FPGJBsSH4PMMB5iJtqY9EeSTob0+peDxh2Y2JAUmkOaHpgfVhRsydE0jYROxxAQU
+         ZJgiVKb1PqSD8poI0XFcjgswHYqUHWLE0JTM9DtbSK0Jix81U5WCNXBqvqe6PZhAWmG9
+         wR7Q==
+X-Gm-Message-State: AOAM530Dt9GLbgMk1fAaJg+LBLq7lb1GduuOE3z9quW9TE+A9dYQfKuJ
+        Z4PiZwx9LpgKt/HMLg+WxOFBTjH9ed0qxxFl86fSmeFBsbE=
+X-Google-Smtp-Source: ABdhPJxlXzGicn38bpRJBvIzpXXTfNsqk06DDdDi/Q9CDMeryZztyna/X6hAAJIMQXteAb0adbuW7DcpXj+kgmwV6hg=
+X-Received: by 2002:a02:7a06:0:b0:32b:1b83:649a with SMTP id
+ a6-20020a027a06000000b0032b1b83649amr229323jac.29.1651255398079; Fri, 29 Apr
+ 2022 11:03:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202204291019.B628991360@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220412224348.1038613-1-tansuresh@google.com>
+ <20220412224348.1038613-2-tansuresh@google.com> <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
+From:   Tanjore Suresh <tansuresh@google.com>
+Date:   Fri, 29 Apr 2022 11:03:07 -0700
+Message-ID: <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,10 +73,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:25:23AM -0700, Kees Cook wrote:
-> Please keep Eric & I CCed on ELF changes; there's a MAINTAINERS entry
-> now...
+Rafael,
 
-Hah!
+That is a good observation, however, many of the use cases in data
+centers (deployment of devices in data centers) do not exploit device
+power management. Therefore, I'm not sure that is the right way to
+design this.
 
-I honestly searched for 'ELF' before sending and didn't find anything.
+Also if you look into device_shutdown (drivers/base/core.c) generic
+kernel routine does not exploit the shutdown method suggested by you
+instead use the generic shutdown methods defined in bus, class,
+drivers structures. Therefore, adopting to expand on those generic
+shutdown interfaces is the incremental choice to not confuse driver
+developers.
+
+Hope this clarifies why this extension is proposed when compared to
+overloading a generic shutdown entry point with device power
+management requirements.
+
+Thanks
+sureshtk
+
+
+
+On Fri, Apr 15, 2022 at 7:42 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Apr 13, 2022 at 12:44 AM Tanjore Suresh <tansuresh@google.com> wrote:
+> >
+> > This changes the bus driver interface with additional entry points
+> > to enable devices to implement asynchronous shutdown. The existing
+> > synchronous interface to shutdown is unmodified and retained for
+> > backward compatibility.
+> >
+> > This changes the common device shutdown code to enable devices to
+> > participate in asynchronous shutdown implementation.
+> >
+> > Signed-off-by: Tanjore Suresh <tansuresh@google.com>
+>
+> Is there any specific reason why you didn't follow the design of, say,
+> dpm_suspend(), where the "async" devices only need to have a flag set
+> and the driver is not required to implement any new callbacks?
+>
+> IMO having different driver interfaces for asynchronous suspend and
+> shutdown would be quite confusing for driver developers, wouldn't it?
+>
+> > ---
+> >  drivers/base/core.c        | 38 +++++++++++++++++++++++++++++++++++++-
+> >  include/linux/device/bus.h | 12 ++++++++++++
+> >  2 files changed, 49 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > index 3d6430eb0c6a..ba267ae70a22 100644
+> > --- a/drivers/base/core.c
+> > +++ b/drivers/base/core.c
+> > @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
+> >  void device_shutdown(void)
+> >  {
+> >         struct device *dev, *parent;
+> > +       LIST_HEAD(async_shutdown_list);
+> >
+> >         wait_for_device_probe();
+> >         device_block_probing();
+> > @@ -4523,7 +4524,13 @@ void device_shutdown(void)
+> >                                 dev_info(dev, "shutdown_pre\n");
+> >                         dev->class->shutdown_pre(dev);
+> >                 }
+> > -               if (dev->bus && dev->bus->shutdown) {
+> > +               if (dev->bus && dev->bus->async_shutdown_start) {
+> > +                       if (initcall_debug)
+> > +                               dev_info(dev, "async_shutdown_start\n");
+> > +                       dev->bus->async_shutdown_start(dev);
+> > +                       list_add_tail(&dev->kobj.entry,
+> > +                               &async_shutdown_list);
+> > +               } else if (dev->bus && dev->bus->shutdown) {
+> >                         if (initcall_debug)
+> >                                 dev_info(dev, "shutdown\n");
+> >                         dev->bus->shutdown(dev);
+> > @@ -4543,6 +4550,35 @@ void device_shutdown(void)
+> >                 spin_lock(&devices_kset->list_lock);
+> >         }
+> >         spin_unlock(&devices_kset->list_lock);
+> > +
+> > +       /*
+> > +        * Second pass spin for only devices, that have configured
+> > +        * Asynchronous shutdown.
+> > +        */
+> > +       while (!list_empty(&async_shutdown_list)) {
+> > +               dev = list_entry(async_shutdown_list.next, struct device,
+> > +                               kobj.entry);
+> > +               parent = get_device(dev->parent);
+> > +               get_device(dev);
+> > +               /*
+> > +                * Make sure the device is off the  list
+> > +                */
+> > +               list_del_init(&dev->kobj.entry);
+> > +               if (parent)
+> > +                       device_lock(parent);
+> > +               device_lock(dev);
+> > +               if (dev->bus && dev->bus->async_shutdown_end) {
+> > +                       if (initcall_debug)
+> > +                               dev_info(dev,
+> > +                               "async_shutdown_end called\n");
+> > +                       dev->bus->async_shutdown_end(dev);
+> > +               }
+> > +               device_unlock(dev);
+> > +               if (parent)
+> > +                       device_unlock(parent);
+> > +               put_device(dev);
+> > +               put_device(parent);
+> > +       }
+> >  }
+> >
+> >  /*
+> > diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> > index a039ab809753..f582c9d21515 100644
+> > --- a/include/linux/device/bus.h
+> > +++ b/include/linux/device/bus.h
+> > @@ -49,6 +49,16 @@ struct fwnode_handle;
+> >   *             will never get called until they do.
+> >   * @remove:    Called when a device removed from this bus.
+> >   * @shutdown:  Called at shut-down time to quiesce the device.
+> > + * @async_shutdown_start:      Called at the shutdown-time to start
+> > + *                             the shutdown process on the device.
+> > + *                             This entry point will be called only
+> > + *                             when the bus driver has indicated it would
+> > + *                             like to participate in asynchronous shutdown
+> > + *                             completion.
+> > + * @async_shutdown_end:        Called at shutdown-time  to complete the shutdown
+> > + *                     process of the device. This entry point will be called
+> > + *                     only when the bus drive has indicated it would like to
+> > + *                     participate in the asynchronous shutdown completion.
+> >   *
+> >   * @online:    Called to put the device back online (after offlining it).
+> >   * @offline:   Called to put the device offline for hot-removal. May fail.
+> > @@ -93,6 +103,8 @@ struct bus_type {
+> >         void (*sync_state)(struct device *dev);
+> >         void (*remove)(struct device *dev);
+> >         void (*shutdown)(struct device *dev);
+> > +       void (*async_shutdown_start)(struct device *dev);
+> > +       void (*async_shutdown_end)(struct device *dev);
+> >
+> >         int (*online)(struct device *dev);
+> >         int (*offline)(struct device *dev);
+> > --
+> > 2.36.0.rc0.470.gd361397f0d-goog
+> >

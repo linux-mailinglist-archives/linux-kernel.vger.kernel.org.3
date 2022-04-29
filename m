@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F87514FB0
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE12514FAD
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378563AbiD2Pk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S1343710AbiD2Pkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343710AbiD2Pk1 (ORCPT
+        with ESMTP id S1344267AbiD2Pkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:40:27 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438B1D5EB3;
-        Fri, 29 Apr 2022 08:37:09 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ebf4b91212so89224067b3.8;
-        Fri, 29 Apr 2022 08:37:09 -0700 (PDT)
+        Fri, 29 Apr 2022 11:40:41 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24604D64E2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:21 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id v4so10943624ljd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/qAuxqoXysKENNiIlItnlrcQMTT0GxzNNHI80GK7T7M=;
-        b=iUWQVjnBqeSdZ3g8BrUg+9CAJm4xwvaWfVce3WbZzUm2jaVKxg6PNrMIUdpn2GU77a
-         Tag3k25kmMQSJGFOOtg8PovwYoC1gopbSiGub2seyqZQzq5KukgWtJpEYrJBxdRr7eYf
-         RvuWdZZV0M63NKMnBT4UF8AjpLN8yC38T35k5YtmrCMPGzmG/q3pbwvR8p074V5n5EEw
-         ll9o65trUcwa4wJBO38p7Q4FUC6uaatPSU+Gg+CwNcpr49SBKWaahHuvYr66/pC3S8Mk
-         6mY9FphCt+ABjElkcW084lGSL2TbZWgRD8X4TLhfw4y9j2bZNN+YMsWadu3dAQkVYdoZ
-         tcaw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=tX5B+XNuprxeTIlbG/3H80IXDOGiNxtXPtXER0/ilC4=;
+        b=vMpBLAWofJB14kAEHBpFa1NC+M7Xli8t96vO27YJcrZbbvDae0THbnSOs/DVKdddCJ
+         TkDlo+al/pq8PvU5q07Wlsj7A499DxWEpYGvR3nThJe5ASqtPWBp23YJwFuyAtuyty46
+         q8cLDnhKLFUpu8bW8YVCpGK0E38IR2r2V3q4CdrW6xVN6WOtDaJ90SbHkRhgU3pj/a/v
+         UWUWH9xu8dsnM339mhngjhCtIgWEPi+0oVEjCy+DMLO7ZsoQbk8iU/+9QTr0UjBUYEbQ
+         9Ou4r+Oal1LwfxbG7Wcmv2EekpglJNKoBVgQ1NI9ZQhzjH8wiFWROovtZgbx4w4WatCD
+         LeSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/qAuxqoXysKENNiIlItnlrcQMTT0GxzNNHI80GK7T7M=;
-        b=FP8Ox4dUcBfcDjGKmcEpBaiMluYd1L406PCHBS1LLMOuDyW6otNX4ew4q1dJxDx/0D
-         3tcx2x33QG2Em9wWNI1sir/6eDh1dOAyTfUPzaMcfGMDxqADWApbpOTx1tPStHSH49h2
-         tBVz6T5PiBNi/6P0SYu+1cF4FT90IdIzlfrEOkrmukYiTFBGemGbJuyeNWFbkz1lPyTy
-         jL4ixj6YZrljJgBl/zY5b8hLPjaVaO6j2ZqwRtpODpOWt7qCDvaLYAFiINdROmla51/J
-         JoH+MLWXpMJrz7zeNAWSAqvWCD7TbEds+nUUqXJoF319wYFpKypxFkrwrJ71oRxoacqN
-         kKSw==
-X-Gm-Message-State: AOAM530LdVSf9grD/Sfmf/wJ31HX3PfUNc1u7qdCSwBat0lulzl5fb0b
-        pGLqSMO58UpXpamgkw5/SAWyMjPXxab+HScLWV0=
-X-Google-Smtp-Source: ABdhPJxgTV2qY+1DwOHYvXXKa8HcDK6E1iCbcMFAqey13vx3FiEB+fpA1t0IyhXskVPsyTzLd+UNJwlo4eMN/JnEEcM=
-X-Received: by 2002:a81:9213:0:b0:2f6:eaae:d22f with SMTP id
- j19-20020a819213000000b002f6eaaed22fmr36558385ywg.249.1651246628512; Fri, 29
- Apr 2022 08:37:08 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tX5B+XNuprxeTIlbG/3H80IXDOGiNxtXPtXER0/ilC4=;
+        b=E29DBXHAnFDjew79yyGeZi+3Hq/np7RLCFlAQn0hVbSJP2Zk42knL0T3grw6vMV8XT
+         KPvDfLST6AC1/gg0ymtKVYqKRoirbHF7Smetpv+trJzvxnbsBEI6SvLELbqMUMJ6Rm0y
+         ngY11yqYTzKwd38KAU8TuCmA+09se8ZNodVbliA06ebjT0+FVmkcQIhYDmZ88urjIEsU
+         ZL/n4VMzXFfgbDEkwGHnoidqvCffBVf6HicOqaVkPhfqs7b3F/CaAdgOaBMz+xwtWIdl
+         7D+6MY/IreonxOT2Q75Rgfgr5a0K9SqQxUB/yszoCqo2y00IedCZ3KkXcjrYgV+6RL+a
+         ZHBQ==
+X-Gm-Message-State: AOAM5312NREc9pUmqot0AJ3ra8o4/S/QFdQU3nbheAe1jVzx0FT2clj2
+        tb5gpaw6arrOgIvsmsl5c7NSRw==
+X-Google-Smtp-Source: ABdhPJz0MkxQGLGnvyGJvXL0G1mJRGSzAa8m+lcGzUyGNkLb1KxdXRVLuJsuhMrQwqZbPpz1LUmhJQ==
+X-Received: by 2002:a2e:8346:0:b0:24d:ac67:42c7 with SMTP id l6-20020a2e8346000000b0024dac6742c7mr24657567ljh.323.1651246639214;
+        Fri, 29 Apr 2022 08:37:19 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f2-20020a193802000000b004721714d2a2sm263121lfa.214.2022.04.29.08.37.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 08:37:18 -0700 (PDT)
+Message-ID: <65d2fc77-fb4b-b53b-d1bd-41c9688891e2@linaro.org>
+Date:   Fri, 29 Apr 2022 18:37:18 +0300
 MIME-Version: 1.0
-References: <20220429004244.3557063-1-goldstein.w.n@gmail.com> <8f8d07c1-9276-df86-f1dc-3d272d4ab91d@kernel.dk>
-In-Reply-To: <8f8d07c1-9276-df86-f1dc-3d272d4ab91d@kernel.dk>
-From:   Noah Goldstein <goldstein.w.n@gmail.com>
-Date:   Fri, 29 Apr 2022 10:36:57 -0500
-Message-ID: <CAFUsyfK-Mo76PNBHmvUnavHgemgb92g2muqWJjPKv5T7TE-rhA@mail.gmail.com>
-Subject: Re: [PATCH v1] io_uring: Fix memory leak if file setup fails.
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 8/9] arm64: dts: qcom: sm8350: Power up dispcc using
+ MMCX regulator
+Content-Language: en-GB
+To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
+        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
+        tdas@codeaurora.org, anischal@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220429151247.388837-1-robert.foss@linaro.org>
+ <20220429151247.388837-8-robert.foss@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220429151247.388837-8-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 7:47 AM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 4/28/22 6:42 PM, Noah Goldstein wrote:
-> > If `get_unused_fd_flags` files fails (either in setting up `ctx` as
-> > `tctx->last` or `get_unused_fd_flags`) `ctx` will never be freed.
->
-> There's a comment there telling you why, the fput will end up
-> releasing it just like it would when an application closes it.
+On 29/04/2022 18:12, Robert Foss wrote:
+> Add regulator controlling MMCX power domain to be used by display clock
+> controller on SM8350.
 
-I see. Thought the 'it' refered to in the comment was the file, not
-ctx.
+NAK. rgulator-fixed-domain is deprecated and is going to be removed shortly.
 
->
-> > I very well may be missing something (or there may be a double
-> > free if the failure is after `get_unused_fd_flags`) but looks
-> > to me to be a memory leak.
->
-> Have you tried synthetically reproducing the two failures you're
-> thinking of and tracing cleanup?
->
-> --
-> Jens Axboe
->
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index c0137bdcf94b..c49735d1b458 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -278,6 +278,14 @@ memory@80000000 {
+>   		reg = <0x0 0x80000000 0x0 0x0>;
+>   	};
+>   
+> +	mmcx_reg: mmcx-reg {
+> +		compatible = "regulator-fixed-domain";
+> +		power-domains = <&rpmhpd SM8350_MMCX>;
+> +		required-opps = <&rpmhpd_opp_nom>;
+> +		regulator-name = "MMCX";
+> +		regulator-always-on;
+> +	};
+> +
+>   	pmu {
+>   		compatible = "arm,armv8-pmuv3";
+>   		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
+
+
+-- 
+With best wishes
+Dmitry

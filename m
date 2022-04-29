@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C4C514292
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EAC514289
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354692AbiD2GoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S1354684AbiD2GoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354579AbiD2Gnv (ORCPT
+        with ESMTP id S1354649AbiD2Gnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 02:43:51 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA1C1A822
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE637B9F1A
         for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:40:33 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KqNBb2Y8Wz1JBpy;
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KqNBb5XYmz1JBqW;
         Fri, 29 Apr 2022 14:39:35 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,10 +26,12 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <vitaly.wool@konsulko.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 0/9] A few fixup patches for z3fold
-Date:   Fri, 29 Apr 2022 14:40:42 +0800
-Message-ID: <20220429064051.61552-1-linmiaohe@huawei.com>
+Subject: [PATCH 1/9] mm/z3fold: fix sheduling while atomic
+Date:   Fri, 29 Apr 2022 14:40:43 +0800
+Message-ID: <20220429064051.61552-2-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20220429064051.61552-1-linmiaohe@huawei.com>
+References: <20220429064051.61552-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -45,26 +47,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
-This series contains a few fixup patches to fix sheduling while atomic,
-fix possible null pointer dereferencing, fix various race conditions and
-so on. More details can be found in the respective changelogs. Thanks!
+z3fold's page_lock is always held when calling alloc_slots. So gfp should
+be GFP_ATOMIC to avoid "scheduling while atomic" bug.
 
-Miaohe Lin (9):
-  mm/z3fold: fix sheduling while atomic
-  mm/z3fold: fix possible null pointer dereferencing
-  mm/z3fold: remove buggy use of stale list for allocation
-  mm/z3fold: throw warning on failure of trylock_page in z3fold_alloc
-  revert "mm/z3fold.c: allow __GFP_HIGHMEM in z3fold_alloc"
-  mm/z3fold: put z3fold page back into unbuddied list when reclaim or
-    migration fails
-  mm/z3fold: always clear PAGE_CLAIMED under z3fold page lock
-  mm/z3fold: fix z3fold_reclaim_page races with z3fold_free
-  mm/z3fold: fix z3fold_page_migrate races with z3fold_map
+Fixes: fc5488651c7d ("z3fold: simplify freeing slots")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/z3fold.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- mm/z3fold.c | 97 ++++++++++++++++++++++-------------------------------
- 1 file changed, 41 insertions(+), 56 deletions(-)
-
+diff --git a/mm/z3fold.c b/mm/z3fold.c
+index 83b5a3514427..c2260f5a5885 100644
+--- a/mm/z3fold.c
++++ b/mm/z3fold.c
+@@ -941,8 +941,7 @@ static inline struct z3fold_header *__z3fold_alloc(struct z3fold_pool *pool,
+ 	}
+ 
+ 	if (zhdr && !zhdr->slots)
+-		zhdr->slots = alloc_slots(pool,
+-					can_sleep ? GFP_NOIO : GFP_ATOMIC);
++		zhdr->slots = alloc_slots(pool, GFP_ATOMIC);
+ 	return zhdr;
+ }
+ 
 -- 
 2.23.0
 

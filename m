@@ -2,178 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B68515427
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 712F55153FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380182AbiD2TAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S1380127AbiD2SvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380172AbiD2TAD (ORCPT
+        with ESMTP id S1380011AbiD2SvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:00:03 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6728D6A2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:56:42 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BF93A6A127F;
-        Fri, 29 Apr 2022 18:56:41 +0000 (UTC)
-Received: from pdx1-sub0-mail-a237.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E2A826A15D0;
-        Fri, 29 Apr 2022 18:56:40 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651258601; a=rsa-sha256;
-        cv=none;
-        b=h+YKgCBIErxGxLCOh3DExzO8Dm6owK6OgpFT8p4jh3D92Rl7IfWyLLPSuBcb3XkpL//OEn
-        JSYLZFFXja2tZBHX5+GArXnjA/5btbavzLEcxwuxRtr92DEXIIbR4NhY9fpWPWQC7S+Z2a
-        bIguA/H1wiRTI7wp3/jYwDE7QON92hm8VMKEvAnP4DMPk20mEex12KdMBXoxw3KA0U2gRo
-        IenUnmE3gLM2316ML3Fm6PA1KqRCIc3TSf+mrOM2+/nWd3WFVVQpl7klB7ce35wuYwvQBj
-        FJjSchlby9VhTbqFGMaXisw8hs2SfyJTG/0LcL+Jgmn50SrjIe1Wy1j4I/uqQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651258601;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=q7GK4tNtUdPsCkIB6AGnkYHFR71fuWyelk2LtXFBMMU=;
-        b=nVhx4YrZUrzK/XZ1NJaMjR7/AXqmJZS4+oIaQEKHUSS/aRye545dyQCLcwPAGz6CWUjv2x
-        +wLU4AsVhRA8gzjCIJFKgIFvvmRL7AfWsZCwx+xqb/jz+lDY+N+Pvwl8KS0rqMoK5pPQgb
-        ZNQl0lE2ccHtuGmT0tnZvTxJ3Zxq3lOqCC7oH5T1RKMs+oAdkgw1sZUAvGUizd1yB5/RU6
-        QZ97CwPS/PzC3fB0o7j0wNKiKlBWxLyNXu7YpuGuqvRvTw4N+WOsNRcCUlwDs1Yp0DxFCm
-        dQV740EDhIruL5IlVuqvK3k4kDS/YnaQjAn2I9yGBqviOJ+osI1nZ+yPkaIXcQ==
-ARC-Authentication-Results: i=1;
-        rspamd-847dd8955c-c7snv;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Descriptive-Quick: 6eb74fb32a06ba3c_1651258601427_2688605735
-X-MC-Loop-Signature: 1651258601427:646155923
-X-MC-Ingress-Time: 1651258601427
-Received: from pdx1-sub0-mail-a237.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.123.55 (trex/6.7.1);
-        Fri, 29 Apr 2022 18:56:41 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a237.dreamhost.com (Postfix) with ESMTPSA id 4KqhY373Lgz1NJ;
-        Fri, 29 Apr 2022 11:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1651258600;
-        bh=q7GK4tNtUdPsCkIB6AGnkYHFR71fuWyelk2LtXFBMMU=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=p8msJRphPZ9QAdkC+ArXhVohZPhu8xlkp2RMslXXvlyN2bgm2DX+ESggcBI++TQAJ
-         45IDIvAFmoiXtRgrEQSZjhrI334yq2npKbNfc2ozWDUWQlH5T2rAADbMe/QilT4QsU
-         wCsMgtTnkFiVWmk1JN158r9U6g6vOwkju6wZD5z8gC70/zO1aZKMVlny0dMihUGSMK
-         iVvbfeKJwp5sLaE2N85IOI5JQFrUlcUF6fklOTNTqG7ukB9M0T2gvwblBP/Loy1cAk
-         JkrbyfCOoMEOB8pdCb08B6ELcLZYjXjmAC8m7myKJDeqVNgcTVZ0lQJxu/WwzTgLUF
-         lX8dXeJS9yqOA==
-Date:   Fri, 29 Apr 2022 11:45:13 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] locking/rwsem: Teach contention tracing about optimistic
- spinning
-Message-ID: <20220429184513.vftv4pj72fxzrpm2@offworld>
-References: <20220427155241.26410-1-dave@stgolabs.net>
- <CAM9d7ciQnUcefR-hLBHSDhu6zZovxXvGYW-CdSBiub_GAOfAiA@mail.gmail.com>
+        Fri, 29 Apr 2022 14:51:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3B3B53D5;
+        Fri, 29 Apr 2022 11:48:00 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TIhYbi008240;
+        Fri, 29 Apr 2022 18:46:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=CmQcpniDwe+mXgnPI+CYX47gDa+lF4VP2K5Tb10PSgo=;
+ b=bTNrOnkDXh09pnCHUKCfVTj5O7a2rMkLSO1DAFMikxnzlOk842BnVGNnlxjbavr8wxSm
+ aOP4oPacZVwhk2+nACPTWiDhwPxyd0jlejF5h74fWWI1oIVsbhF16gpgLRcULgtREdDE
+ ZVJN5BEU2k3dT7ownrQWfbB7t+hMkUYaYJeBX/g91k8XSQa3Vre/7LGhk8wcXzDf1kiv
+ oQ2iUNVOdBVbKDS9SyEcnVmbm4ZhnqmtglnqQQ9AIucI/CNGWOo+s+8TbDE7Hi7pEpcO
+ DHP4bZPnfDn7+LocgB0sqZLpX0rqcpBhSBx8Sg3u1bbgRievtyCZGncSkoY2WOU7WhmC jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frnhvg21h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 18:46:47 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TIjCZm012916;
+        Fri, 29 Apr 2022 18:46:46 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frnhvg20t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 18:46:45 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TIcqwO026358;
+        Fri, 29 Apr 2022 18:46:43 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3fpuygbgfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 18:46:43 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TIkenH33554928
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 18:46:40 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 153A4A4057;
+        Fri, 29 Apr 2022 18:46:40 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA594A4053;
+        Fri, 29 Apr 2022 18:46:37 +0000 (GMT)
+Received: from osiris (unknown [9.145.187.229])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 29 Apr 2022 18:46:37 +0000 (GMT)
+Date:   Fri, 29 Apr 2022 20:46:36 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH 13/30] s390/consoles: Improve panic notifiers reliability
+Message-ID: <YmwyjMtT7QTZiHaa@osiris>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-14-gpiccoli@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAM9d7ciQnUcefR-hLBHSDhu6zZovxXvGYW-CdSBiub_GAOfAiA@mail.gmail.com>
-User-Agent: NeoMutt/20220408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427224924.592546-14-gpiccoli@igalia.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ot_aQO11mG-F1A04tqv6Sk5P4k7ltRIu
+X-Proofpoint-ORIG-GUID: vOdOmdbQUdbprpYu7qwc87i31NSF1LbM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_09,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=368 impostorscore=0 clxscore=1011
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the late reply.
+On Wed, Apr 27, 2022 at 07:49:07PM -0300, Guilherme G. Piccoli wrote:
+> Currently many console drivers for s390 rely on panic/reboot notifiers
+> to invoke callbacks on these events. The panic() function disables local
+> IRQs, secondary CPUs and preemption, so callbacks invoked on panic are
+> effectively running in atomic context.
+> 
+> Happens that most of these console callbacks from s390 doesn't take the
+> proper care with regards to atomic context, like taking spinlocks that
+> might be taken in other function/CPU and hence will cause a lockup
+> situation.
+> 
+> The goal for this patch is to improve the notifiers reliability, acting
+> on 4 console drivers, as detailed below:
+> 
+> (1) con3215: changed a regular spinlock to the trylock alternative.
+> 
+> (2) con3270: also changed a regular spinlock to its trylock counterpart,
+> but here we also have another problem: raw3270_activate_view() takes a
+> different spinlock. So, we worked a helper to validate if this other lock
+> is safe to acquire, and if so, raw3270_activate_view() should be safe.
+> 
+> Notice though that there is a functional change here: it's now possible
+> to continue the notifier code [reaching con3270_wait_write() and
+> con3270_rebuild_update()] without executing raw3270_activate_view().
+> 
+> (3) sclp: a global lock is used heavily in the functions called from
+> the notifier, so we added a check here - if the lock is taken already,
+> we just bail-out, preventing the lockup.
+> 
+> (4) sclp_vt220: same as (3), a lock validation was added to prevent the
+> potential lockup problem.
+> 
+> Besides (1)-(4), we also removed useless void functions, adding the
+> code called from the notifier inside its own body, and changed the
+> priority of such notifiers to execute late, since they are "heavyweight"
+> for the panic environment, so we aim to reduce risks here.
+> Changed return values to NOTIFY_DONE as well, the standard one.
+> 
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+> 
+> As a design choice, the option used here to verify a given spinlock is taken
+> was the function "spin_is_locked()" - but we noticed that it is not often used.
+> An alternative would to take the lock with a spin_trylock() and if it succeeds,
+> just release the spinlock and continue the code. But that seemed weird...
+> 
+> Also, we'd like to ask a good validation of case (2) potential functionality
+> change from the s390 console experts - far from expert here, and in our naive
+> code observation, that seems fine, but that analysis might be missing some
+> corner case.
+> 
+> Thanks in advance!
+> 
+>  drivers/s390/char/con3215.c    | 36 +++++++++++++++--------------
+>  drivers/s390/char/con3270.c    | 34 +++++++++++++++------------
+>  drivers/s390/char/raw3270.c    | 18 +++++++++++++++
+>  drivers/s390/char/raw3270.h    |  1 +
+>  drivers/s390/char/sclp_con.c   | 28 +++++++++++++----------
+>  drivers/s390/char/sclp_vt220.c | 42 +++++++++++++++++++---------------
+>  6 files changed, 96 insertions(+), 63 deletions(-)
 
-On Wed, 27 Apr 2022, Namhyung Kim wrote:
+Code looks good, and everything still seems to work. I applied this
+internally for the time being, and if it passes testing, I'll schedule
+it for the next merge window.
 
->Hi Davidlohr,
->
->On Wed, Apr 27, 2022 at 9:04 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
->>
->> Similar to the mutex counterpart, we can further distinguish the
->> types of contention. Similarly this patch also introduces potentially
->> various _begin() tracepoints with a single respective _end().
->
->Thanks for doing this.  I was thinking about it as well.
-
-I really like your work on this. I've always wanted a low overhead
-equivalent-ish of lock_stat, which could be used in production and
-look forward to see these tracepoints put to good use.
-
->> @@ -115,7 +116,8 @@ TRACE_EVENT(contention_begin,
->>                                 { LCB_F_WRITE,          "WRITE" },
->>                                 { LCB_F_RT,             "RT" },
->>                                 { LCB_F_PERCPU,         "PERCPU" },
->> -                               { LCB_F_MUTEX,          "MUTEX" }
->> +                               { LCB_F_MUTEX,          "MUTEX" },
->> +                               { LCB_F_RWSEM,          "RWSEM" }
->>                           ))
->>  );
->
->Well I'm ok with this but it'd be better if we can do this
->without adding a new flag.  Originally a mutex can be
->identified with 0, and a rwsem with either of READ or WRITE.
->
->The MUTEX flag was added to note optimistic spins
->on mutex and now we need something similar for
->rwsem.  Then can we change the MUTEX to OPTIMISTIC
->if it's not too late?
-
-Ok. Perhaps name it OSQ? I had thought of that but at the
-time was also thinking about potentially the rtmutex and
-rt spinlock spinning too - which don't use osq so the name
-would fit in that sense.
-
-While not in Linus' tree, I wouldn't think it's too late.
-
->>         for (;;) {
->>                 if (rwsem_try_write_lock(sem, &waiter)) {
->> @@ -1161,18 +1167,25 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->>                 if (waiter.handoff_set) {
->>                         enum owner_state owner_state;
->>
->> +                       trace_contention_begin(sem, LCB_F_RWSEM |
->> +                                              LCB_F_WRITE | LCB_F_SPIN);
->>                         preempt_disable();
->>                         owner_state = rwsem_spin_on_owner(sem);
->>                         preempt_enable();
->>
->> -                       if (owner_state == OWNER_NULL)
->> -                               goto trylock_again;
->> +                       if (owner_state == OWNER_NULL) {
->> +                               raw_spin_lock_irq(&sem->wait_lock);
->> +                               if (rwsem_try_write_lock(sem, &waiter))
->> +                                       break;
->> +                               raw_spin_unlock_irq(&sem->wait_lock);
->> +                       }
->> +
->> +                       trace_contention_begin(sem, LCB_F_RWSEM | LCB_F_WRITE);
->
->I'm afraid that it'd generate many contention_begin
->trace events for a single lock acquisition.
-
-You are right, lets just trace the "normal" optimistic spinning
-at the start of the write slowpath.
-
-Thanks,
-Davidlohr
+Thanks!

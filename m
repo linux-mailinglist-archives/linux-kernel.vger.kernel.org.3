@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4457A515702
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7170515708
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238557AbiD2Vmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S238593AbiD2Vof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237955AbiD2Vme (ORCPT
+        with ESMTP id S237955AbiD2Vob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:42:34 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B92ABF6F;
-        Fri, 29 Apr 2022 14:39:15 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id EF97B1F44998
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651268354;
-        bh=WK4FKxae6LiE0ifOj5eYluz18VJJvRL3D1Oio2jffCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H7tQBYWieqJk/kul1aCTNMBZGLJonywzSUcjW69kxCCY+dOCDNEbVaEDvQWMvZ3x2
-         qiDmZJwvKW2XuNOi23eg2IG/UgSXjEoU4H5AFxaqsa6qyQ6vO2lf+QAV6kfcoUsJOt
-         S+suDoPEZyHlAZlwt1MRmDJvnnOuL/WpIkzjWukKrGPBM9iMCwJRtTExYhCCEXSCd1
-         DNL8BfDCCwqKciTaPJE9oCr1iVpKBjuZ0WJnl8Gvs7Puqsp54Jsq0nyLme66MnEzbw
-         QjB6+wUxMBJp4Pf2fO+VNxsvMGzMocMH0pvKKr4/6SCrtyhSm++W5FV5atqfc4/K7W
-         vA8Y0VpysqLVA==
-Date:   Fri, 29 Apr 2022 17:39:07 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>, hsinyi@chromium.org
-Subject: Re: [PATCH v8 2/2] arm64: dts: Add MediaTek SoC MT8186 dts and
- evaluation board and Makefile
-Message-ID: <20220429213907.d2lwnukugoa7owxn@notapiano>
-References: <20220428061717.11197-1-allen-kh.cheng@mediatek.com>
- <20220428061717.11197-3-allen-kh.cheng@mediatek.com>
- <20220428172736.qlkinujpxjxumsnx@notapiano>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220428172736.qlkinujpxjxumsnx@notapiano>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 17:44:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB895DA59;
+        Fri, 29 Apr 2022 14:41:12 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TLVOT4021288;
+        Fri, 29 Apr 2022 21:41:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=j+s8ZQMPKlBFOKUQOHw4jpURzDyrn4Xu6MhLmXlQSa0=;
+ b=si5++2xbEVJcNmQJB8Y9BPHsPtE/Pd0IzUsan9yv3mZG/W7lPLv3YzFBWxi0z8LslSds
+ Utd9/GD6sbxbm03xu87WW4chnxQS9yDaHNhy92GwbwLQ0Mwczi3+3JDvcsvm7jsyHlF/
+ 0qSYepNXkT7BdCMqpMU40eHv2whdWJy4DZIy7OfvriJQW9NiFQxJxx/pIFWqMvCh9/mJ
+ iNUGHJe0lBB0+jrxx2y40dJLoW/vGGmlFpI2ZkCj5M84lESYQ9KGrBP4OGaYC00hjWI9
+ vFmmgaQdmUFUv5PF/mSMJWLF1IrqrGqjI/HLN10bic7csNCiT2EsctxLWg2Vij69IzSf Yw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtdnnaj3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 21:41:10 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TLc91t019335;
+        Fri, 29 Apr 2022 21:41:08 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj9n98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 21:41:07 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TLf5Qt27197730
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 21:41:05 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB52511C050;
+        Fri, 29 Apr 2022 21:41:05 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB96511C04C;
+        Fri, 29 Apr 2022 21:41:04 +0000 (GMT)
+Received: from sig-9-65-75-248.ibm.com (unknown [9.65.75.248])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 21:41:04 +0000 (GMT)
+Message-ID: <c317858898c7974b5f046f9fb8117d299f0c6504.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 4/7] ima: define a new template field named 'd-ngv2'
+ and templates
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 29 Apr 2022 17:41:04 -0400
+In-Reply-To: <026c9596-9ebe-d148-fc5f-442a7e16f48b@linux.ibm.com>
+References: <20220429112601.1421947-1-zohar@linux.ibm.com>
+         <20220429112601.1421947-5-zohar@linux.ibm.com>
+         <026c9596-9ebe-d148-fc5f-442a7e16f48b@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VwRJbrI1-N6IZDhkjxfR16oQ8w24TlsD
+X-Proofpoint-ORIG-GUID: VwRJbrI1-N6IZDhkjxfR16oQ8w24TlsD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_09,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ mlxlogscore=999 clxscore=1015 impostorscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 01:27:41PM -0400, Nícolas F. R. A. Prado wrote:
-> Hi Allen,
+On Fri, 2022-04-29 at 11:09 -0400, Stefan Berger wrote:
+> > -     if (hash_algo < HASH_ALGO__LAST) {
+> > +     if (digest_type < DIGEST_TYPE__LAST && hash_algo < HASH_ALGO__LAST) {
+> > +             fmt = DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO;
+> > +             offset += 1 + sprintf(buffer, "%*s:%*s:",
+> > +                                   (int)strlen(digest_type_name[digest_type]),
+> > +                                   digest_type_name[digest_type],
+> > +                                   (int)strlen(hash_algo_name[hash_algo]),
+> > +                                   hash_algo_name[hash_algo]);
 > 
-> On Thu, Apr 28, 2022 at 02:17:17PM +0800, Allen-KH Cheng wrote:
-> > +		scp: scp@10500000 {
-> > +			compatible = "mediatek,mt8186-scp";
-> > +			reg = <0 0x10500000 0 0x40000>,
-> > +			      <0 0x105c0000 0 0x19080>;
-> > +			reg-names = "sram", "cfg";
-> 
-> The mtk,scp dt-binding should be updated as it currently doesn't allow l1tcm to
-> be missing. According to comments in the driver cfg is optional as well, so a
-> patch to the binding making both optional would be great.
+> '%*s' seems to be for right-alignment but only makes sense if the length 
+> indicator is different than then following string. sprintf(buffer, 
+> "|%*s|",5,"test") prints | test|. Otherwise it seems to behave like 
+> plain '%s' in this case... ?
 
-Hi Allen,
+Re-testing now, it works properly without the length.
 
-actually I've just sent a patch for this myself [1], as it was also required for
-mt8192-asurada. Sorry for the noise.
+thanks,
 
-Thanks,
-Nícolas
+Mimi
 
-[1] https://lore.kernel.org/all/20220429211111.2214119-2-nfraprado@collabora.com/
-
-> 
-> Thanks,
-> Nícolas

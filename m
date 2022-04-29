@@ -2,408 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025D85146B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D909051469C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357432AbiD2KZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S1357427AbiD2KYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357579AbiD2KXn (ORCPT
+        with ESMTP id S239081AbiD2KYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:23:43 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4C053710
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:20:24 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id C23222223E;
-        Fri, 29 Apr 2022 12:20:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651227622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R1S2KNuyjkofgQZU0b5VVloFhnEOc6IXwt6isawlmfE=;
-        b=n2fl5/9bsf6jDxTAqh3T7xQwX1dhJWoL952pJUnIQ4GKttYTEke7Sab0j8L54Efp8fkx0Z
-        Yc9pQagaPTAQEP/SyR7DdmT+NkMMEdiKe5eLAGVuie4ZzxnvbwB+lU0ElRKoFb7OQcm36N
-        nl2XiBoD2zqXRYqHkaB9r7aSO90Lwek=
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 2/2] mtd: spi-nor: expose internal parameters via debugfs
-Date:   Fri, 29 Apr 2022 12:20:18 +0200
-Message-Id: <20220429102018.2361038-2-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220429102018.2361038-1-michael@walle.cc>
-References: <20220429102018.2361038-1-michael@walle.cc>
+        Fri, 29 Apr 2022 06:24:06 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C28108B;
+        Fri, 29 Apr 2022 03:20:47 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E962045F;
+        Fri, 29 Apr 2022 12:20:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1651227646;
+        bh=YGQZ9FdIXcFg1Ief9zdOSawPpmwRJCKGsGEdTnBu7wI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=koBR8rQvFYiirFZva0Q0lYzKn3RvenTeCjbVh1dZ1Or2mc03pz8s6K9Nu6V1YGMWj
+         WG83G80i4+S5KevOh2BkDKBCH/MxQ3dHIWWKDMn/wwtilN3Rpq8EGvzphFQgjPJ9jw
+         lO3rJou9VDJIKpHIBvG0Fw0ttp73Bw1ZuZcWLFHY=
+Date:   Fri, 29 Apr 2022 13:20:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>, Eugen.Hristev@microchip.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu.Beznea@microchip.com, robh+dt@kernel.org,
+        Nicolas.Ferre@microchip.com
+Subject: Re: [PATCH v9 08/13] media: atmel: atmel-isc: change format
+ propagation to subdev into only verification
+Message-ID: <Ymu7/VWrvT0bZfeP@pendragon.ideasonboard.com>
+References: <20220310095202.2701399-1-eugen.hristev@microchip.com>
+ <20220310095202.2701399-9-eugen.hristev@microchip.com>
+ <39f541ec-313f-fe15-b93f-dd78469b2366@xs4all.nl>
+ <b6630c65-0720-3633-d5ed-aadf4716f206@microchip.com>
+ <dabbff36-a10c-0a8a-94e8-ce7c2d896403@xs4all.nl>
+ <20220429095848.ec4xnul6tin6n7sf@uno.localdomain>
+ <Ymu4ywjEvX5HbE/W@pendragon.ideasonboard.com>
+ <a10a255c-e3b7-4c5f-2a7e-9474e0526a61@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a10a255c-e3b7-4c5f-2a7e-9474e0526a61@xs4all.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no way to gather all information to verify support for a new
-flash chip. Also if you want to convert an existing flash chip to the
-new SFDP parsing, there is not enough information to determine if the
-flash will work like before. To ease this development, expose internal
-parameters via the debugfs.
+On Fri, Apr 29, 2022 at 12:13:46PM +0200, Hans Verkuil wrote:
+> On 29/04/2022 12:07, Laurent Pinchart wrote:
+> > On Fri, Apr 29, 2022 at 11:58:48AM +0200, Jacopo Mondi wrote:
+> >> On Fri, Apr 29, 2022 at 10:43:09AM +0200, Hans Verkuil wrote:
+> >>> On 29/04/2022 10:28, Eugen.Hristev@microchip.com wrote:
+> >>>> On 4/29/22 11:17 AM, Hans Verkuil wrote:
+> >>>>> On 10/03/2022 10:51, Eugen Hristev wrote:
+> >>>>>> As a top MC video driver, the atmel-isc should not propagate the format to the
+> >>>>>> subdevice, it should rather check at start_streaming() time if the subdev is properly
+> >>>>>> configured with a compatible format.
+> >>>>>> Removed the whole format finding logic, and reworked the format verification
+> >>>>>> at start_streaming time, such that the ISC will return an error if the subdevice
+> >>>>>> is not properly configured. To achieve this, media_pipeline_start
+> >>>>>> is called and a link_validate callback is created to check the formats.
+> >>>>>> With this being done, the module parameter 'sensor_preferred' makes no sense
+> >>>>>> anymore. The ISC should not decide which format the sensor is using. The
+> >>>>>> ISC should only cope with the situation and inform userspace if the streaming
+> >>>>>> is possible in the current configuration.
+> >>>>>> The redesign of the format propagation has also risen the question of the
+> >>>>>> enumfmt callback. If enumfmt is called with an mbus_code, the enumfmt handler
+> >>>>>> should only return the formats that are supported for this mbus_code.
+> >>>>>> Otherwise, the enumfmt will report all the formats that the ISC could output.
+> >>>>>> With this rework, the dynamic list of user formats is removed. It makes no
+> >>>>>> more sense to identify at complete time which formats the sensor could emit,
+> >>>>>> and add those into a separate dynamic list.
+> >>>>>> The ISC will start with a simple preconfigured default format, and at
+> >>>>>> link validate time, decide whether it can use the format that is configured
+> >>>>>> on the sink or not.
+> >>>>>>
+> >>>>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> >>>>>> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> >>>>>> ---
+> >>>>>> Changes in v9:
+> >>>>>> - isc_link_validate now static
+> >>>>>>
+> >>>>>> Changes in v7:
+> >>>>>> - minor typos as suggested by Jacopo
+> >>>>>> - small changes, reduce some indentation, modified an index, as suggested by
+> >>>>>> Jacopo
+> >>>>>>
+> >>>>>> Changes in v6:
+> >>>>>> - reworked a bit enum_fmt as suggested by Jacopo
+> >>>>>>
+> >>>>>> Changes in v5:
+> >>>>>> - removed user_formats dynamic list as it is now pointless
+> >>>>>> - greatly simplified the enum_fmt function
+> >>>>>> - removed some init code that was useless now
+> >>>>>>
+> >>>>>> Changes in v4:
+> >>>>>> - moved validation code into link_validate and used media_pipeline_start
+> >>>>>> - merged this patch with the enum_fmt patch which was previously in v3 of
+> >>>>>> the series
+> >>>>>>
+> >>>>>> Changes in v3:
+> >>>>>> - clamp to maximum resolution once the frame size from the subdev is found
+> >>>>>>   drivers/media/platform/atmel/atmel-isc-base.c | 412 ++++++++----------
+> >>>>>>   .../media/platform/atmel/atmel-isc-scaler.c   |   5 +
+> >>>>>>   drivers/media/platform/atmel/atmel-isc.h      |  13 +-
+> >>>>>>   .../media/platform/atmel/atmel-sama5d2-isc.c  |  20 +
+> >>>>>>   .../media/platform/atmel/atmel-sama7g5-isc.c  |  20 +
+> >>>>>>   5 files changed, 236 insertions(+), 234 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+> >>>>>> index ee1dda6707a0..fe2c0af58060 100644
+> >>>>>> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+> >>>>>> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+> >>>>>> @@ -36,11 +36,6 @@ static unsigned int debug;
+> >>>>>>   module_param(debug, int, 0644);
+> >>>>>>   MODULE_PARM_DESC(debug, "debug level (0-2)");
+> >>>>>>
+> >>>>>> -static unsigned int sensor_preferred = 1;
+> >>>>>> -module_param(sensor_preferred, uint, 0644);
+> >>>>>> -MODULE_PARM_DESC(sensor_preferred,
+> >>>>>> -              "Sensor is preferred to output the specified format (1-on 0-off), default 1");
+> >>>>>> -
+> >>>>>>   #define ISC_IS_FORMAT_RAW(mbus_code) \
+> >>>>>>        (((mbus_code) & 0xf000) == 0x3000)
+> >>>>>>
+> >>>>>> @@ -337,6 +332,10 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+> >>>>>>        unsigned long flags;
+> >>>>>>        int ret;
+> >>>>>>
+> >>>>>> +     ret = media_pipeline_start(&isc->video_dev.entity, &isc->mpipe);
+> >>>>>
+> >>>>> The pipeline validation is done in start_streaming, but I don't think that
+> >>>>> is the best place: if STREAMON is called before buffers are queued, then
+> >>>>> an invalid pipeline isn't discovered until enough buffers are queued to
+> >>>>> kick off start_streaming.
+> >>>>>
+> >>>>> Drivers like vsp1, omap3isp and the samsung drivers all do this in streamon().
+> >>>>>
+> >>>>> I think that is the correct time to do this.
+> >>>>
+> >>>> Hello Hans,
+> >>>>
+> >>>> Initially (v2, v3) I had this in streamon(). The problem that I faced at
+> >>>> that time was that streamoff was never called, so I could not call
+> >>>> media_pipeline_stop(). Then Jacopo told me to move it to start_streaming
+> >>>> (see change log for v4) , and I did not face any more problems.
+> >>
+> >> Yes indeed, seems I suggested to use media_pipeline_handler in a
+> >> comment on your v3
+> >>
+> >> "at s_stream time your top driver calls media_pipeline_start()"
+> >>
+> >> sorry about that, I should have looked around a bit more carefully and
+> >> notice most drivers do so at vb2 streamon
+> >>
+> >> However I don't see media_pipeline_start being called at all in v3 of
+> >> the patch
+> >>
+> >>> It's a mess. Looking at some drivers I see that omap3isp calls media_pipeline_stop
+> >>> in streamoff (so will have the same problem as you described if VIDIOC_STREAMOFF
+> >>> isn't called), exynos4-is does the same, but it also checks the streaming state in
+> >>> the release() fop callback, so that would fix this problem. And vimc does this
+> >>> in stop_streaming.
+> >>>
+> >>> I'm in favor of fixing this in vb2, that framework knows exactly when this needs
+> >>> to be called.
+> >>
+> >> Are you suggesting to have vb2 to call media_pipeline_start() or is it
+> >> more complex than this ?
+> > 
+> > I think Hans meant adding a .validate() operation to vb2.
+> > 
+> > vb2 is already quite complex, I don't think adding more features is a
+> > good idea. I'd rather have vb2 focus on buffer management only
+> > (.start_streaming() and .stop_streaming() shouldn't have been in there
+> > in my opinion), and handle validation in the .streamon() handler. I'd
+> > expect most drivers that deal with media pipelines to do more work in
+> > .streamon() anyway.
+> 
+> I disagree with that :-)
+> 
+> It's vb2 that keeps track of the streaming state and when what actions
+> need to be taken. Drivers really shouldn't need to care about the ioctls
+> themselves, and just implement the relevant vb2 callbacks. Relying on
+> drivers to handle any of the streaming ioctls is asking for problems,
+> as this shows: most drivers implement this wrong today.
+> 
+> The vb2 framework knows when e.g. the pipeline needs to be started or
+> stopped, and can do this at the best time, without drivers needing to
+> keep track of when streamon/off/release is called. Keep that logic in
+> vb2.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-changes since v2:
- - add comment to enum spi_nor_option_flags
- - fix module unloading/loading
+Pipeline management and buffer management are two different issues.
+Don't forget about devices that have multiple video nodes, part of the
+same pipeline (possibly a combination of output and capture nodes, or
+all of the same type). Forcing drivers to go through vb2 operations to
+handle the pipeline will be messy, will result in more bloat in vb2, and
+make the result more bug-prone and harder to maintain.
 
-changes since rfc (v1):
- - rebase onto latest next
- - drop spi_nor_debugfs_unregister() and use devm_add_action() instead
- - output style fixes, (0x prefix, whitespace around '|')
+If pipeline management is too complex, let's simplify it, new helpers
+can make sense, but not through vb2.
 
- drivers/mtd/spi-nor/Makefile  |   1 +
- drivers/mtd/spi-nor/core.c    |   2 +
- drivers/mtd/spi-nor/core.h    |   7 +
- drivers/mtd/spi-nor/debugfs.c | 249 ++++++++++++++++++++++++++++++++++
- include/linux/mtd/spi-nor.h   |   2 +
- 5 files changed, 261 insertions(+)
- create mode 100644 drivers/mtd/spi-nor/debugfs.c
-
-diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
-index 6b904e439372..e347b435a038 100644
---- a/drivers/mtd/spi-nor/Makefile
-+++ b/drivers/mtd/spi-nor/Makefile
-@@ -17,6 +17,7 @@ spi-nor-objs			+= sst.o
- spi-nor-objs			+= winbond.o
- spi-nor-objs			+= xilinx.o
- spi-nor-objs			+= xmc.o
-+spi-nor-$(CONFIG_DEBUG_FS)	+= debugfs.o
- obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
- 
- obj-$(CONFIG_MTD_SPI_NOR)	+= controllers/
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 6f61e97ecd75..ce5d69317d46 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -3127,6 +3127,8 @@ static int spi_nor_probe(struct spi_mem *spimem)
- 	if (ret)
- 		return ret;
- 
-+	spi_nor_debugfs_register(nor);
-+
- 	/*
- 	 * None of the existing parts have > 512B pages, but let's play safe
- 	 * and add this logic so that if anyone ever adds support for such
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 007ea9896a06..858ef19a94bd 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -114,6 +114,7 @@
- 		   SPI_MEM_OP_NO_ADDR,					\
- 		   SPI_MEM_OP_NO_DATA)
- 
-+/* Keep these in sync with the list in debugfs.c */
- enum spi_nor_option_flags {
- 	SNOR_F_HAS_SR_TB	= BIT(0),
- 	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
-@@ -698,4 +699,10 @@ static inline struct spi_nor *mtd_to_spi_nor(struct mtd_info *mtd)
- 	return container_of(mtd, struct spi_nor, mtd);
- }
- 
-+#ifdef CONFIG_DEBUG_FS
-+void spi_nor_debugfs_register(struct spi_nor *nor);
-+#else
-+static inline void spi_nor_debugfs_register(struct spi_nor *nor) {}
-+#endif
-+
- #endif /* __LINUX_MTD_SPI_NOR_INTERNAL_H */
-diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
-new file mode 100644
-index 000000000000..1949905eefea
---- /dev/null
-+++ b/drivers/mtd/spi-nor/debugfs.c
-@@ -0,0 +1,249 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/mtd/spi-nor.h>
-+#include <linux/spi/spi.h>
-+#include <linux/spi/spi-mem.h>
-+#include <linux/debugfs.h>
-+
-+#include "core.h"
-+
-+#define SPI_NOR_DEBUGFS_ROOT "spi-nor"
-+
-+#define SNOR_F_NAME(name) [ilog2(SNOR_F_##name)] = #name
-+static const char *const snor_f_names[] = {
-+	SNOR_F_NAME(HAS_SR_TB),
-+	SNOR_F_NAME(NO_OP_CHIP_ERASE),
-+	SNOR_F_NAME(BROKEN_RESET),
-+	SNOR_F_NAME(4B_OPCODES),
-+	SNOR_F_NAME(HAS_4BAIT),
-+	SNOR_F_NAME(HAS_LOCK),
-+	SNOR_F_NAME(HAS_16BIT_SR),
-+	SNOR_F_NAME(NO_READ_CR),
-+	SNOR_F_NAME(HAS_SR_TB_BIT6),
-+	SNOR_F_NAME(HAS_4BIT_BP),
-+	SNOR_F_NAME(HAS_SR_BP3_BIT6),
-+	SNOR_F_NAME(IO_MODE_EN_VOLATILE),
-+	SNOR_F_NAME(SOFT_RESET),
-+	SNOR_F_NAME(SWP_IS_VOLATILE),
-+};
-+#undef SNOR_F_NAME
-+
-+static const char *spi_nor_protocol_name(enum spi_nor_protocol proto)
-+{
-+	switch (proto) {
-+	case SNOR_PROTO_1_1_1:     return "1S-1S-1S";
-+	case SNOR_PROTO_1_1_2:     return "1S-1S-2S";
-+	case SNOR_PROTO_1_1_4:     return "1S-1S-4S";
-+	case SNOR_PROTO_1_1_8:     return "1S-1S-8S";
-+	case SNOR_PROTO_1_2_2:     return "1S-2S-2S";
-+	case SNOR_PROTO_1_4_4:     return "1S-4S-4S";
-+	case SNOR_PROTO_1_8_8:     return "1S-8S-8S";
-+	case SNOR_PROTO_2_2_2:     return "2S-2S-2S";
-+	case SNOR_PROTO_4_4_4:     return "4S-4S-4S";
-+	case SNOR_PROTO_8_8_8:     return "8S-8S-8S";
-+	case SNOR_PROTO_1_1_1_DTR: return "1D-1D-1D";
-+	case SNOR_PROTO_1_2_2_DTR: return "1D-2D-2D";
-+	case SNOR_PROTO_1_4_4_DTR: return "1D-4D-4D";
-+	case SNOR_PROTO_1_8_8_DTR: return "1D-8D-8D";
-+	case SNOR_PROTO_8_8_8_DTR: return "8D-8D-8D";
-+	}
-+
-+	return "<unknown>";
-+}
-+
-+static void spi_nor_print_flags(struct seq_file *s, unsigned long flags,
-+				const char *const *names, int names_len)
-+{
-+	bool sep = false;
-+	int i;
-+
-+	for (i = 0; i < sizeof(flags) * BITS_PER_BYTE; i++) {
-+		if (!(flags & BIT(i)))
-+			continue;
-+		if (sep)
-+			seq_puts(s, " | ");
-+		sep = true;
-+		if (i < names_len && names[i])
-+			seq_puts(s, names[i]);
-+		else
-+			seq_printf(s, "1<<%d", i);
-+	}
-+}
-+
-+static int spi_nor_params_show(struct seq_file *s, void *data)
-+{
-+	struct spi_nor *nor = s->private;
-+	struct spi_nor_flash_parameter *params = nor->params;
-+	struct spi_nor_erase_map *erase_map = &params->erase_map;
-+	struct spi_nor_erase_region *region;
-+	const struct flash_info *info = nor->info;
-+	char buf[16], *str;
-+	int i;
-+
-+	seq_printf(s, "name\t\t%s\n", info->name);
-+	seq_printf(s, "id\t\t%*phn\n", info->id_len, info->id);
-+	string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
-+	seq_printf(s, "size\t\t%s\n", buf);
-+	seq_printf(s, "write size\t%u\n", params->writesize);
-+	seq_printf(s, "page size\t%u\n", params->page_size);
-+	seq_printf(s, "address width\t%u\n", nor->addr_width);
-+
-+	seq_puts(s, "flags\t\t");
-+	spi_nor_print_flags(s, nor->flags, snor_f_names, sizeof(snor_f_names));
-+	seq_puts(s, "\n");
-+
-+	seq_puts(s, "\nopcodes\n");
-+	seq_printf(s, " read\t\t0x%02x\n", nor->read_opcode);
-+	seq_printf(s, "  dummy cycles\t%u\n", nor->read_dummy);
-+	seq_printf(s, " erase\t\t0x%02x\n", nor->erase_opcode);
-+	seq_printf(s, " program\t0x%02x\n", nor->program_opcode);
-+
-+	switch (nor->cmd_ext_type) {
-+	case SPI_NOR_EXT_NONE:
-+		str = "none";
-+		break;
-+	case SPI_NOR_EXT_REPEAT:
-+		str = "repeat";
-+		break;
-+	case SPI_NOR_EXT_INVERT:
-+		str = "invert";
-+		break;
-+	default:
-+		str = "<unknown>";
-+		break;
-+	}
-+	seq_printf(s, " 8D extension\t%s\n", str);
-+
-+	seq_puts(s, "\nprotocols\n");
-+	seq_printf(s, " read\t\t%s\n",
-+		   spi_nor_protocol_name(nor->read_proto));
-+	seq_printf(s, " write\t\t%s\n",
-+		   spi_nor_protocol_name(nor->write_proto));
-+	seq_printf(s, " register\t%s\n",
-+		   spi_nor_protocol_name(nor->reg_proto));
-+
-+	seq_puts(s, "\nerase commands\n");
-+	for (i = 0; i < SNOR_ERASE_TYPE_MAX; i++) {
-+		struct spi_nor_erase_type *et = &erase_map->erase_type[i];
-+
-+		if (et->size) {
-+			string_get_size(et->size, 1, STRING_UNITS_2, buf,
-+					sizeof(buf));
-+			seq_printf(s, " %02x (%s) [%d]\n", et->opcode, buf, i);
-+		}
-+	}
-+
-+	if (!(nor->flags & SNOR_F_NO_OP_CHIP_ERASE)) {
-+		string_get_size(params->size, 1, STRING_UNITS_2, buf, sizeof(buf));
-+		seq_printf(s, " %02x (%s)\n", SPINOR_OP_CHIP_ERASE, buf);
-+	}
-+
-+	seq_puts(s, "\nsector map\n");
-+	seq_puts(s, " region (in hex)   | erase mask | flags\n");
-+	seq_puts(s, " ------------------+------------+----------\n");
-+	for (region = erase_map->regions;
-+	     region;
-+	     region = spi_nor_region_next(region)) {
-+		u64 start = region->offset & ~SNOR_ERASE_FLAGS_MASK;
-+		u64 flags = region->offset & SNOR_ERASE_FLAGS_MASK;
-+		u64 end = start + region->size - 1;
-+
-+		seq_printf(s, " %08llx-%08llx |     [%c%c%c%c] | %s\n",
-+			   start, end,
-+			   flags & BIT(0) ? '0' : ' ',
-+			   flags & BIT(1) ? '1' : ' ',
-+			   flags & BIT(2) ? '2' : ' ',
-+			   flags & BIT(3) ? '3' : ' ',
-+			   flags & SNOR_OVERLAID_REGION ? "overlaid" : "");
-+	}
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(spi_nor_params);
-+
-+static void spi_nor_print_read_cmd(struct seq_file *s, u32 cap,
-+				   struct spi_nor_read_command *cmd)
-+{
-+	seq_printf(s, " %s%s\n", spi_nor_protocol_name(cmd->proto),
-+		   cap == SNOR_HWCAPS_READ_FAST ? " (fast read)" : "");
-+	seq_printf(s, "  opcode\t0x%02x\n", cmd->opcode);
-+	seq_printf(s, "  mode cycles\t%u\n", cmd->num_mode_clocks);
-+	seq_printf(s, "  dummy cycles\t%u\n", cmd->num_wait_states);
-+}
-+
-+static void spi_nor_print_pp_cmd(struct seq_file *s,
-+				 struct spi_nor_pp_command *cmd)
-+{
-+	seq_printf(s, " %s\n", spi_nor_protocol_name(cmd->proto));
-+	seq_printf(s, "  opcode\t0x%02x\n", cmd->opcode);
-+}
-+
-+static int spi_nor_capabilities_show(struct seq_file *s, void *data)
-+{
-+	struct spi_nor *nor = s->private;
-+	struct spi_nor_flash_parameter *params = nor->params;
-+	u32 hwcaps = params->hwcaps.mask;
-+	int i, cmd;
-+
-+	seq_puts(s, "Supported read modes by the flash\n");
-+	for (i = 0; i < sizeof(hwcaps) * BITS_PER_BYTE; i++) {
-+		if (!(hwcaps & BIT(i)))
-+			continue;
-+
-+		cmd = spi_nor_hwcaps_read2cmd(BIT(i));
-+		if (cmd < 0)
-+			continue;
-+
-+		spi_nor_print_read_cmd(s, BIT(i), &params->reads[cmd]);
-+		hwcaps &= ~BIT(i);
-+	}
-+
-+	seq_puts(s, "\nSupported page program modes by the flash\n");
-+	for (i = 0; i < sizeof(hwcaps) * BITS_PER_BYTE; i++) {
-+		if (!(hwcaps & BIT(i)))
-+			continue;
-+
-+		cmd = spi_nor_hwcaps_pp2cmd(BIT(i));
-+		if (cmd < 0)
-+			continue;
-+
-+		spi_nor_print_pp_cmd(s, &params->page_programs[cmd]);
-+		hwcaps &= ~BIT(i);
-+	}
-+
-+	if (hwcaps)
-+		seq_printf(s, "\nunknown hwcaps 0x%x\n", hwcaps);
-+
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(spi_nor_capabilities);
-+
-+static void spi_nor_debugfs_unregister(void *data)
-+{
-+	struct spi_nor *nor = data;
-+
-+	debugfs_remove(nor->debugfs_root);
-+	nor->debugfs_root = NULL;
-+}
-+
-+void spi_nor_debugfs_register(struct spi_nor *nor)
-+{
-+	struct dentry *rootdir, *d;
-+	int ret;
-+
-+	/* Create rootdir once. Will never be deleted again. */
-+	rootdir = debugfs_lookup(SPI_NOR_DEBUGFS_ROOT, NULL);
-+	if (!rootdir)
-+		rootdir = debugfs_create_dir(SPI_NOR_DEBUGFS_ROOT, NULL);
-+
-+	ret = devm_add_action(nor->dev, spi_nor_debugfs_unregister, nor);
-+	if (ret)
-+		return;
-+
-+	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
-+	nor->debugfs_root = d;
-+
-+	debugfs_create_file("params", 0444, d, nor, &spi_nor_params_fops);
-+	debugfs_create_file("capabilities", 0444, d, nor,
-+			    &spi_nor_capabilities_fops);
-+}
-diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
-index e505c4a5c530..1ede4c89805a 100644
---- a/include/linux/mtd/spi-nor.h
-+++ b/include/linux/mtd/spi-nor.h
-@@ -363,6 +363,7 @@ struct spi_nor_flash_parameter;
-  * @write_proto:	the SPI protocol for write operations
-  * @reg_proto:		the SPI protocol for read_reg/write_reg/erase operations
-  * @sfdp:		the SFDP data of the flash
-+ * @debugfs_root:	pointer to the debugfs directory
-  * @controller_ops:	SPI NOR controller driver specific operations.
-  * @params:		[FLASH-SPECIFIC] SPI NOR flash parameters and settings.
-  *                      The structure includes legacy flash parameters and
-@@ -392,6 +393,7 @@ struct spi_nor {
- 	u32			flags;
- 	enum spi_nor_cmd_ext	cmd_ext_type;
- 	struct sfdp		*sfdp;
-+	struct dentry		*debugfs_root;
- 
- 	const struct spi_nor_controller_ops *controller_ops;
- 
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart

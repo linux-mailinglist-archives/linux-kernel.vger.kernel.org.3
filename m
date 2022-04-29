@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054C3514FC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0F7514FC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359559AbiD2PnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S1378603AbiD2PnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbiD2PnC (ORCPT
+        with ESMTP id S231540AbiD2PnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:43:02 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE90D64EF;
-        Fri, 29 Apr 2022 08:39:43 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i19so16140028eja.11;
-        Fri, 29 Apr 2022 08:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+mmy7RuPMU9hCC/2o2BzJ3rLqYOzAAc3YMuV1L840fY=;
-        b=i+LxBL7iEddxNdeB47NwwEeblzTlvP/xkHb3kztkrbhOeQ7NYmE/BOaMX+pYeWC7JI
-         kFidWrhpdqBmR9M6OS4sqssUmN/EbofEIc4u52ErRJ6IXhoThxZEeJFvidJHzLmwcdbt
-         C1/EeVsuvYQcRmF7YseuoTBlBSuoot2dihCCfusuEeI+NYnnSwlwRTOyc/nHIqN++YSK
-         t9R3JZgsO2jsPVvTj8BB/SJ/uk5tev642NtoR4Jh+Khofyyb5owT4ks4a0VgWzyEIHBk
-         dmhObRVcJUH40ze/gihxdQExwcLfzKYZV1NWEv4Qaum0x/BvdYh6AxlqL8JKaWbE7aSn
-         lxXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+mmy7RuPMU9hCC/2o2BzJ3rLqYOzAAc3YMuV1L840fY=;
-        b=rzHg3kJ0phbzwerEiWFKl8aYKAFOyOTSL/Zda6J1hnLVlIDyRiArif3IQfBenHnlsS
-         +eELN8ZAqwaAWn1OeuDEfXdKP20aQN4FKbqcMpnIL4Aer2PbuX9CE77nJLZ2qK1sZDT8
-         yrBlPJJGdlpI0kH5zAHxMdIaF3+yYNb9Zn+3hTSxG3NWf/pajdhMJyN5sK7YynPO/6Aj
-         +5aTK91TYvuyiUvA2MI9hyeI2NqqKwRnYYPQOa7qWrIqHXImya8WJZUfhQn8IZRTj36w
-         ndjs2NYwwUi5uUGvckpMIUv/smSc/NlxkNezpAPQYdMJQoQF+RE2L3DRUFft5+bENbD2
-         TR2A==
-X-Gm-Message-State: AOAM530vmmoEua3Zfn0tOo3oN7/VgqbxtGVv8tbWrkTy8DwADleat7WL
-        TDve+uu2ldc84fO3ZVlMgzYkwYl5k08Zc/iW8/M=
-X-Google-Smtp-Source: ABdhPJysTx09E3S+k4vxcIhSGn2Xk6ivf6iVrOPm3PvZJQqFGajE+UPPkdSWH+q+J6XFLOdHkBSSQL/MinWpkeTpo/k=
-X-Received: by 2002:a17:907:c18:b0:6f3:9c23:20fd with SMTP id
- ga24-20020a1709070c1800b006f39c2320fdmr23390448ejc.740.1651246782030; Fri, 29
- Apr 2022 08:39:42 -0700 (PDT)
+        Fri, 29 Apr 2022 11:43:15 -0400
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E2AD76C6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:39:54 -0700 (PDT)
+Received: from [192.168.3.48] (unknown [58.22.1.245])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 02F4C800387;
+        Fri, 29 Apr 2022 23:39:52 +0800 (CST)
+Message-ID: <24c08c1e-e4b5-3731-de33-e75a9b4bdf1f@rock-chips.com>
+Date:   Fri, 29 Apr 2022 23:39:53 +0800
 MIME-Version: 1.0
-References: <20220429114330.59026-1-robimarko@gmail.com> <20220429114330.59026-5-robimarko@gmail.com>
-In-Reply-To: <20220429114330.59026-5-robimarko@gmail.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Fri, 29 Apr 2022 10:39:29 -0500
-Message-ID: <CABb+yY3dPwT4ASdxHqRidRBEq19YHsp8RfAgO0tr_rZ+Dde2hA@mail.gmail.com>
-Subject: Re: [PATCH 5/6] dt-bindings: mailbox: set correct #clock-cells
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] ASoC: hdmi-codec: Add option for ELD bypass
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <1651245218-47201-1-git-send-email-sugar.zhang@rock-chips.com>
+ <YmwDv7poot/5pcgb@sirena.org.uk>
+From:   sugar zhang <sugar.zhang@rock-chips.com>
+In-Reply-To: <YmwDv7poot/5pcgb@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUJJSE1WSUJITkkeGBlJSU
+        NOVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITk9VS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6M006ISo4ED0xIhcLMhkYIh4y
+        Mk1PCy1VSlVKTU5KSU9NTEJITUlIVTMWGhIXVQgOHBoJVQETGhUcOwkUGBBWGBMSCwhVGBQWRVlX
+        WRILWUFZTkNVSUlVSlVJT05ZV1kIAVlBSU5NQjcG
+X-HM-Tid: 0a8075fa8274b03akuuu02f4c800387
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,14 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 6:43 AM Robert Marko <robimarko@gmail.com> wrote:
->
-> IPQ6018 and IPQ8074 require #clock-cells to be set to 1 as their APSS
-> clock driver provides multiple clock outputs.
->
-> So allow setting 1 as #clock-cells and check that its set to 1 for IPQ6018
-> and IPQ8074, check others for 0 as its currently.
->
-Please include qcom specific marker in the subject line.
+Hi Mark,
 
-thanks.
+在 2022/4/29 23:26, Mark Brown 写道:
+> On Fri, Apr 29, 2022 at 11:13:38PM +0800, Sugar Zhang wrote:
+>
+>> So, add this option to allow user to select the manual way
+>> to output audio as expected. such as multi-channels LPCM(7.1),
+>> or HBR bitstream for these sink devices.
+> Please check this with mixer-test, it'll help validate that you've got
+> the control interface correct.
+Okay, I have found it in the tools/testing/selftests/alsa/mixer-test.c
+>
+>>   		.info	= hdmi_eld_ctl_info,
+>>   		.get	= hdmi_eld_ctl_get,
+>>   	},
+>> +	HDMI_CODEC_ELD_BYPASS_DECL("ELD Bypass"),
+> This is a true/false value so the name should end with Switch.
+will do in v2.
+
+-- 
+Best Regards!
+张学广/Sugar
+瑞芯微电子股份有限公司
+Rockchip Electronics Co., Ltd.
+

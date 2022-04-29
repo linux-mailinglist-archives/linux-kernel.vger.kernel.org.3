@@ -2,78 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E589515184
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA72F515187
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379487AbiD2RVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S1379491AbiD2RXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377752AbiD2RVN (ORCPT
+        with ESMTP id S1353856AbiD2RXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:21:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205D68878E;
-        Fri, 29 Apr 2022 10:17:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651252674; x=1682788674;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kvflxqM96jhZNLmg4d5WFE0pIbmtCjEb6LWVYafIRJQ=;
-  b=MhRHtQ9hMyTv3MKPkVmCRnk2+lrUAzpNbE05hYpfwLSSepvpC0JigVFm
-   oxP2DryITtvc8mbCzuj8ccjV7cm+fMoy0zKsExg1VTBwnnD5tJMSVXvi4
-   4X+B5G8RQ6uxR7GR1xmJqWUb+AMHzSd/t0O3JouPyKN1HwP3MqeppEt18
-   gp1BQr3RJUiZGDdd43axGUhSpf3Sm+GkD+2LtYzdcv3lYuHKx/MXW+a+K
-   EPdFzCgUXym9nr/L3oN3ZMLzqx8unVt6aYOTAfKpZAwrSO8/g2MRsDZQh
-   V3ck6ZHMvczjxS654/WhPfRXOZPaupbnzkOM2TZW8mzR3Cj+TjfrBVJ8B
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="246622967"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="246622967"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:17:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="582273107"
-Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:17:52 -0700
-Message-ID: <4a5143cc-3102-5e30-08b4-c07e44f1a2fc@intel.com>
-Date:   Fri, 29 Apr 2022 10:18:09 -0700
+        Fri, 29 Apr 2022 13:23:11 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D44E89084
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:19:47 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1651252771tiwj7d2n
+Received: from localhost.localdomain ( [218.17.207.33])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 30 Apr 2022 01:19:23 +0800 (CST)
+X-QQ-SSF: 01400000002000B0D000000A0000000
+X-QQ-FEAT: Nw/vDu2WDVBe46xp/lQfK5H1wHZk/IA0LX2WgfIshjKPF0PveIsObBibNE8X2
+        klVO32IWTv60mUMmy4uPCqmcCpcArTjVULRzw0wpsOfMei4KI8xw1ZAHBjo5oEqABVzsmt1
+        gPf1YvnnyCUgAFD6kXsCZZi8cJL2oWtQpXDrJa5hCGFnIjs+9o9qbdvNulGZE6rN9jozrgL
+        m6+T0sULk5UICG0g8tdWtdcW8cPTH6+5aVjnAaqCNAkQSaHml6thMgMW+0bcMn5VCTzVPix
+        Ff3ht8sndMWH3OXmb71lDehZYF0ibmPFRGo4PuFGcumyvTHiraiiAtOsdwHV6UbWvYP5bPG
+        lHrBmzLRB6HphIiCSfKX6Tq2642QA==
+X-QQ-GoodBg: 2
+From:   Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+To:     akpm@linux-foundation.org
+Cc:     corbet@lwn.net, akiyks@gmail.com, baihaowen@meizu.com,
+        seakeel@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
+        Yinan Zhang <zhangyinan2019@email.szu.edu.cn>,
+        Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>,
+        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
+        Yuhong Feng <yuhongf@szu.edu.cn>
+Subject: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error and Describe details using table
+Date:   Sat, 30 Apr 2022 01:18:44 +0800
+Message-Id: <20220429171844.9673-1-hanshenghong2019@email.szu.edu.cn>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-Content-Language: en-US
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
- <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
- <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
- <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
- <92af7b22-fa8a-5d42-ae15-8526abfd2622@intel.com>
- <CAPcyv4iG977DErCfYTqhVzuZqjtqFHK3smnaOpO3p+EbxfvXcQ@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAPcyv4iG977DErCfYTqhVzuZqjtqFHK3smnaOpO3p+EbxfvXcQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,42 +56,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/22 08:18, Dan Williams wrote:
-> Yes, I want to challenge the idea that all core-mm memory must be TDX
-> capable. Instead, this feels more like something that wants a
-> hugetlbfs / dax-device like capability to ask the kernel to gather /
-> set-aside the enumerated TDX memory out of all the general purpose
-> memory it knows about and then VMs use that ABI to get access to
-> convertible memory. Trying to ensure that all page allocator memory is
-> TDX capable feels too restrictive with all the different ways pfns can
-> get into the allocator.
+Some syntax errors exist in "page_owner.rst". Thanks to Akira Yokosawa and
+Haowen Bai for tips to help improve the documentation.
 
-The KVM users are the problem here.  They use a variety of ABIs to get
-memory and then hand it to KVM.  KVM basically just consumes the
-physical addresses from the page tables.
+We try to fix them. Hope that the Documentation is showed as we expect.
 
-Also, there's no _practical_ problem here today.  I can't actually think
-of a case where any memory that ends up in the allocator on today's TDX
-systems is not TDX capable.
+Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+Fixes: edc93abbcc6d ("tools/vm/page_owner_sort.c: support sorting blocks by multiple keys")
 
-Tomorrow's systems are going to be the problem.  They'll (presumably)
-have a mix of CXL devices that will have varying capabilities.  Some
-will surely lack the metadata storage for checksums and TD-owner bits.
-TDX use will be *safe* on those systems: if you take this code and run
-it on one tomorrow's systems, it will notice the TDX-incompatible memory
-and will disable TDX.
+Co-developed-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+Co-developed-by: Yinan Zhang <zhangyinan2019@email.szu.edu.cn>
+Co-developed-by: Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>
+Co-developed-by: Jiajian Ye <yejiajian2018@email.szu.edu.cn>
+Co-developed-by: Yuhong Feng <yuhongf@szu.edu.cn>
+---
+Hello Andrew,
 
-The only way around this that I can see is to introduce ABI today that
-anticipates the needs of the future systems.  We could require that all
-the KVM memory be "validated" before handing it to TDX.  Maybe a new
-syscall that says: "make sure this mapping works for TDX".  It could be
-new sysfs ABI which specifies which NUMA nodes contain TDX-capable memory.
+In Commit 57f2b54a9379 ("Documentation/vm/page_owner.rst: update the
+documentation") and Commit edc93abbcc6d ("tools/vm/page_owner_sort.c:
+support sorting blocks by multiple keys"), some incorrect syntax
+are used, which laeds to "build warning after merge of the mm tree".
+Apologize for that!
 
-But, neither of those really help with, say, a device-DAX mapping of
-TDX-*IN*capable memory handed to KVM.  The "new syscall" would just
-throw up its hands and leave users with the same result: TDX can't be
-used.  The new sysfs ABI for NUMA nodes wouldn't clearly apply to
-device-DAX because they don't respect the NUMA policy ABI.
+This issue is trying to fix it.
 
-I'm open to ideas here.  If there's a viable ABI we can introduce to
-train TDX users today that will work tomorrow too, I'm all for it.
+Best,
+
+	Shenghong Han
+---
+---
+ Documentation/vm/page_owner.rst | 67 ++++++++++++++++++++++-----------
+ 1 file changed, 44 insertions(+), 23 deletions(-)
+
+diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+index 25622c715..f900ab99d 100644
+--- a/Documentation/vm/page_owner.rst
++++ b/Documentation/vm/page_owner.rst
+@@ -171,26 +171,47 @@ Usage
+ 
+ STANDARD FORMAT SPECIFIERS
+ ==========================
+-::
+-
+-For --sort option:
+-
+-	KEY		LONG		DESCRIPTION
+-	p		pid		process ID
+-	tg		tgid		thread group ID
+-	n		name		task command name
+-	st		stacktrace	stack trace of the page allocation
+-	T		txt		full text of block
+-	ft		free_ts		timestamp of the page when it was released
+-	at		alloc_ts	timestamp of the page when it was allocated
+-        ator            allocator       memory allocator for pages
+-
+-For --curl option:
+-
+-	KEY		LONG		DESCRIPTION
+-	p		pid		process ID
+-	tg		tgid		thread group ID
+-	n		name		task command name
+-	f		free		whether the page has been released or not
+-	st		stacktrace	stack trace of the page allocation
+-        ator            allocator       memory allocator for pages
++
++1) `Table 1`_ for the ``--sort`` option.
++
++.. table:: Table 1
++   :name: Table 1
++
++   +--------+--------------+----------------------------------------------+
++   | KEY    | LONG         | DESCRIPTION                                  |
++   +========+==============+==============================================+
++   | p      | pid          | process ID                                   |
++   +--------+--------------+----------------------------------------------+
++   | tg     | tgid         | thread group ID                              |
++   +--------+--------------+----------------------------------------------+
++   | n      | name         | task command name                            |
++   +--------+--------------+----------------------------------------------+
++   | st     | stacktrace   | stack trace of the page allocation           |
++   +--------+--------------+----------------------------------------------+
++   | T      | txt          | full text of block                           |
++   +--------+--------------+----------------------------------------------+
++   | ft     | free_ts      | timestamp of the page when it was released   |
++   +--------+--------------+----------------------------------------------+
++   | at     | alloc_ts     | timestamp of the page when it was allocated  |
++   +--------+--------------+----------------------------------------------+
++   | ator   | allocator    | memory allocator for pages                   |
++   +--------+--------------+----------------------------------------------+
++
++2) `Table 2`_ for the ``--cull`` option.
++
++.. table:: Table 2
++   :name: Table 2
++
++   +--------+--------------+----------------------------------------------+
++   | KEY    | LONG         | DESCRIPTION                                  |
++   +========+==============+==============================================+
++   | p      | pid          | process ID                                   |
++   +--------+--------------+----------------------------------------------+
++   | tg     | tgid         | thread group ID                              |
++   +--------+--------------+----------------------------------------------+
++   | n      | name         | task command name                            |
++   +--------+--------------+----------------------------------------------+
++   | st     | stacktrace   | stack trace of the page allocation           |
++   +--------+--------------+----------------------------------------------+
++   | ator   | allocator    | memory allocator for pages                   |
++   +--------+--------------+----------------------------------------------+
+-- 
+2.30.1
+
+
+

@@ -2,140 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6683051538E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66761515393
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379979AbiD2SYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S1379799AbiD2SY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237037AbiD2SXx (ORCPT
+        with ESMTP id S236995AbiD2SYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:23:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A298933366;
-        Fri, 29 Apr 2022 11:20:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C95D6244C;
-        Fri, 29 Apr 2022 18:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6C7C385A7;
-        Fri, 29 Apr 2022 18:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651256432;
-        bh=7UlwWJyNgO5O8HAPQY4CevoguxGtN71USDYsxCC4Y1I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u0+tCCPLMcAPDoyXRHMoixV/Z0LeuwRRZuVV6YJqDPXCMAyu6bp1HqrLhdZjG9Cyh
-         QYJFW5R7kiAcrSezRCwm7ENodSCUhCJjtpqzm8cd/HFpkS4sMGegRRQASH5n2SihkJ
-         71HJ1xTMFivjTVqgd4DPNTs7LM6lfZnZ8DzEzNE0oyYqPlKCdTvIv23u3eGTMBYaOt
-         2wiCePOny8nv8PLW7e+Nz32vtmsDfQhUnorB1/3LgjVu9HRSU6K6LoPIEjrMtXRAwq
-         gSkSxWg9xur9RU7CW+BnHL/qWaY7Tt1AlSEuqbaVhcTiKCDIrzlj5v67mhP4+8Bla0
-         PK6vOCY0vQL6g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nkVED-0080Zl-Vn; Fri, 29 Apr 2022 19:20:30 +0100
-Date:   Fri, 29 Apr 2022 19:20:29 +0100
-Message-ID: <87mtg392fm.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH 02/30] ARM: kexec: Disable IRQs/FIQs also on crash CPUs shutdown path
-In-Reply-To: <20220427224924.592546-3-gpiccoli@igalia.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
-        <20220427224924.592546-3-gpiccoli@igalia.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: gpiccoli@igalia.com, akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org, linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org, linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org, sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org, x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de, corbe
- t@lwn.net, d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com, dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org, mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com, jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org, senozhatsky@chromium.org, stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com, will@kernel.org, linux@armlinux.org.uk
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 14:24:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC7C51E52
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651256495; x=1682792495;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ruTQkiuiIWww3FG4Asoi5D5mE4TCsmeMFfdM3HiY15I=;
+  b=bMnHqWVTXIGlVaIHjRFUDMmW+ZPr7/ds3SI1rAYRr11UrQ73qDe5NmnS
+   CRFk58MyM1IN8PiNXQVldYNuUlH2x1wcOrjitCyegmVY7k+dZqKu7mWmT
+   8Y0FE+3KaCttlKrBorZowkHnLIQmsNOHbqz9jXYRXp9BmEe5eRezgy7RK
+   vtNGBw26vGlM+8zu5MGJpKVEwCLH9fKPfyRMOn25/7fUxHMdcJua5iqR9
+   wiIlbcep8qTV7I52IIsZ+SC93doYeAY6/Nq3UL0DrmMxBOeMexIkwJi5d
+   SztiYZx8e6/V/kE818ZN33dzqe4aOcczjLxjDWiFOgiWq6wX45AuGjZLR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="353167246"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="353167246"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 11:21:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="732213521"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Apr 2022 11:21:20 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkVF1-0006YF-B0;
+        Fri, 29 Apr 2022 18:21:19 +0000
+Date:   Sat, 30 Apr 2022 02:20:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>,
+        Bhagavathi Perumal S <quic_bperumal@quicinc.com>,
+        Karthikeyan Periyasamy <quic_periyasa@quicinc.com>,
+        Pradeep Kumar Chitrapu <quic_pradeepc@quicinc.com>,
+        P Praneesh <quic_ppranees@quicinc.com>,
+        Ramya Gnanasekar <quic_rgnanase@quicinc.com>,
+        Sriram R <quic_srirrama@quicinc.com>
+Subject: [ammarfaizi2-block:kvalo/ath/ath12k-bringup 29/38]
+ drivers/net/wireless/ath/ath12k/hal_rx.c:404:25: warning: cast to pointer
+ from integer of different size
+Message-ID: <202204300256.UMWIbtD0-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 23:48:56 +0100,
-"Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
-> 
-> Currently the regular CPU shutdown path for ARM disables IRQs/FIQs
-> in the secondary CPUs - smp_send_stop() calls ipi_cpu_stop(), which
-> is responsible for that. This makes sense, since we're turning off
-> such CPUs, putting them in an endless busy-wait loop.
-> 
-> Problem is that there is an alternative path for disabling CPUs,
-> in the form of function crash_smp_send_stop(), used for kexec/panic
-> paths. This functions relies in a SMP call that also triggers a
-> busy-wait loop [at machine_crash_nonpanic_core()], but *without*
-> disabling interrupts. This might lead to odd scenarios, like early
-> interrupts in the boot of kexec'd kernel or even interrupts in
-> other CPUs while the main one still works in the panic path and
-> assumes all secondary CPUs are (really!) off.
-> 
-> This patch mimics the ipi_cpu_stop() interrupt disable mechanism
-> in the crash CPU shutdown path, hence disabling IRQs/FIQs in all
-> secondary CPUs in the kexec/panic path as well.
-> 
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
->  arch/arm/kernel/machine_kexec.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
-> index f567032a09c0..ef788ee00519 100644
-> --- a/arch/arm/kernel/machine_kexec.c
-> +++ b/arch/arm/kernel/machine_kexec.c
-> @@ -86,6 +86,9 @@ void machine_crash_nonpanic_core(void *unused)
->  	set_cpu_online(smp_processor_id(), false);
->  	atomic_dec(&waiting_for_crash_ipi);
->  
-> +	local_fiq_disable();
-> +	local_irq_disable();
-> +
+Hi Vasanthakumar,
 
-My expectations would be that, since we're getting here using an IPI,
-interrupts are already masked. So what reenabled them the first place?
+FYI, the error/warning still remains.
 
-Thanks,
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/ath12k-bringup
+head:   910edb5ff5fbe5ad5460c750c7a62e92c4eb0aa5
+commit: f40abb4788a2a3868606a29d99583421e0874350 [29/38] ath12k: New driver for Qualcomm 11be hw family
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220430/202204300256.UMWIbtD0-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/f40abb4788a2a3868606a29d99583421e0874350
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/ath12k-bringup
+        git checkout f40abb4788a2a3868606a29d99583421e0874350
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/wireless/ath/ath12k/
 
-	M.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/wireless/ath/ath12k/hal_rx.c: In function 'ath12k_hal_wbm_desc_parse_err':
+>> drivers/net/wireless/ath/ath12k/hal_rx.c:404:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     404 |                         (struct ath12k_rx_desc_info *)((u64)wbm_cc_desc->buf_va_hi << 32 |
+         |                         ^
+--
+   drivers/net/wireless/ath/ath12k/dp_tx.c: In function 'ath12k_dp_tx_completion_handler':
+>> drivers/net/wireless/ath/ath12k/dp_tx.c:605:35: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     605 |                         tx_desc = (struct ath12k_tx_desc_info *)
+         |                                   ^
+   In file included from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:13,
+                    from include/linux/interrupt.h:6,
+                    from drivers/net/wireless/ath/ath12k/core.h:11,
+                    from drivers/net/wireless/ath/ath12k/dp_tx.c:7:
+   drivers/net/wireless/ath/ath12k/dp_tx.c: In function 'ath12k_dp_tx_htt_h2t_vdev_stats_ol_req':
+   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
+         |                             ^~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/net/wireless/ath/ath12k/dp.h:1921:49: note: in expansion of macro 'GENMASK'
+    1921 | #define HTT_H2T_VDEV_TXRX_HI_BITMASK            GENMASK(63, 32)
+         |                                                 ^~~~~~~
+   drivers/net/wireless/ath/ath12k/dp_tx.c:1074:37: note: in expansion of macro 'HTT_H2T_VDEV_TXRX_HI_BITMASK'
+    1074 |                                     HTT_H2T_VDEV_TXRX_HI_BITMASK) >> 32);
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
+      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+         |                  ^~
+   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
+      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~
+   drivers/net/wireless/ath/ath12k/dp.h:1921:49: note: in expansion of macro 'GENMASK'
+    1921 | #define HTT_H2T_VDEV_TXRX_HI_BITMASK            GENMASK(63, 32)
+         |                                                 ^~~~~~~
+   drivers/net/wireless/ath/ath12k/dp_tx.c:1074:37: note: in expansion of macro 'HTT_H2T_VDEV_TXRX_HI_BITMASK'
+    1074 |                                     HTT_H2T_VDEV_TXRX_HI_BITMASK) >> 32);
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+   drivers/net/wireless/ath/ath12k/dp_rx.c: In function 'ath12k_dp_process_rx':
+>> drivers/net/wireless/ath/ath12k/dp_rx.c:2739:29: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    2739 |                 desc_info = (struct ath12k_rx_desc_info *)((u64)desc.buf_va_hi << 32 |
+         |                             ^
+   drivers/net/wireless/ath/ath12k/dp_rx.c: In function 'ath12k_dp_process_rx_err_buf':
+   drivers/net/wireless/ath/ath12k/dp_rx.c:3413:21: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    3413 |         desc_info = (struct ath12k_rx_desc_info *)((u64)desc.buf_va_hi << 32 |
+         |                     ^
+
+
+vim +404 drivers/net/wireless/ath/ath12k/hal_rx.c
+
+   352	
+   353	int ath12k_hal_wbm_desc_parse_err(struct ath12k_base *ab, void *desc,
+   354					  struct hal_rx_wbm_rel_info *rel_info)
+   355	{
+   356		struct hal_wbm_release_ring *wbm_desc = desc;
+   357		struct hal_wbm_release_ring_cc_rx *wbm_cc_desc = desc;
+   358		enum hal_wbm_rel_desc_type type;
+   359		enum hal_wbm_rel_src_module rel_src;
+   360		bool hw_cc_done;
+   361	
+   362		type = FIELD_GET(HAL_WBM_RELEASE_INFO0_DESC_TYPE,
+   363				 wbm_desc->info0);
+   364		/* We expect only WBM_REL buffer type */
+   365		if (type != HAL_WBM_REL_DESC_TYPE_REL_MSDU) {
+   366			WARN_ON(1);
+   367			return -EINVAL;
+   368		}
+   369	
+   370		rel_src = FIELD_GET(HAL_WBM_RELEASE_INFO0_REL_SRC_MODULE,
+   371				    wbm_desc->info0);
+   372		if (rel_src != HAL_WBM_REL_SRC_MODULE_RXDMA &&
+   373		    rel_src != HAL_WBM_REL_SRC_MODULE_REO)
+   374			return -EINVAL;
+   375	
+   376		/* The format of wbm rel ring desc changes based on the
+   377		 * hw cookie conversion status
+   378		 */
+   379		hw_cc_done = FIELD_GET(HAL_WBM_RELEASE_RX_INFO0_CC_STATUS,
+   380				       wbm_desc->info0);
+   381	
+   382		if (!hw_cc_done) {
+   383			if (FIELD_GET(BUFFER_ADDR_INFO1_RET_BUF_MGR,
+   384				      wbm_desc->buf_addr_info.info1) != HAL_RX_BUF_RBM_SW3_BM) {
+   385				ab->soc_stats.invalid_rbm++;
+   386				return -EINVAL;
+   387			}
+   388	
+   389			rel_info->cookie = FIELD_GET(BUFFER_ADDR_INFO1_SW_COOKIE,
+   390						     wbm_desc->buf_addr_info.info1);
+   391	
+   392			rel_info->rx_desc = NULL;
+   393		} else {
+   394			if (FIELD_GET(HAL_WBM_RELEASE_RX_CC_INFO0_RBM,
+   395				      wbm_cc_desc->info0) != HAL_RX_BUF_RBM_SW3_BM) {
+   396				ab->soc_stats.invalid_rbm++;
+   397				return -EINVAL;
+   398			}
+   399	
+   400			rel_info->cookie = FIELD_GET(HAL_WBM_RELEASE_RX_CC_INFO1_COOKIE,
+   401						     wbm_cc_desc->info1);
+   402	
+   403			rel_info->rx_desc =
+ > 404				(struct ath12k_rx_desc_info *)((u64)wbm_cc_desc->buf_va_hi << 32 |
+   405					wbm_cc_desc->buf_va_lo);
+   406		}
+   407	
+   408		rel_info->err_rel_src = rel_src;
+   409		rel_info->hw_cc_done = hw_cc_done;
+   410	
+   411		if (rel_info->err_rel_src == HAL_WBM_REL_SRC_MODULE_REO) {
+   412			rel_info->push_reason =
+   413				FIELD_GET(HAL_WBM_RELEASE_INFO0_REO_PUSH_REASON,
+   414					  wbm_desc->info0);
+   415			rel_info->err_code =
+   416				FIELD_GET(HAL_WBM_RELEASE_INFO0_REO_ERROR_CODE,
+   417					  wbm_desc->info0);
+   418		} else {
+   419			rel_info->push_reason =
+   420				FIELD_GET(HAL_WBM_RELEASE_INFO0_RXDMA_PUSH_REASON,
+   421					  wbm_desc->info0);
+   422			rel_info->err_code =
+   423				FIELD_GET(HAL_WBM_RELEASE_INFO0_RXDMA_ERROR_CODE,
+   424					  wbm_desc->info0);
+   425		}
+   426	
+   427		return 0;
+   428	}
+   429	
 
 -- 
-Without deviation from the norm, progress is not possible.
+0-DAY CI Kernel Test Service
+https://01.org/lkp

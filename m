@@ -2,230 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351FA515088
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A34651508A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378937AbiD2QRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S1378951AbiD2QSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378924AbiD2QRM (ORCPT
+        with ESMTP id S236806AbiD2QSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:17:12 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8974FD76E4;
-        Fri, 29 Apr 2022 09:13:53 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id j4so14886347lfh.8;
-        Fri, 29 Apr 2022 09:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MUtQYlZoDY/R7p7PZwkNl6WiYboCc/+BzRALrXjVnvc=;
-        b=gvDIjfQM9cYBysUlSu+rJ70grv4sEIjWCqJrnoAf2j9t4E2irKEhaNhwBI7b1SExGh
-         mpJPRwAn/M1hHBN9fPn3QNX4ElAZpOSXjqPTrYfo1NWbeMPZiQv4Ua4z5cURnJNT+NuK
-         lylCSVvEO5IPpnSCm3SSGm0uoJilwXkjsPNWl6mwio9T6Z7/lj7WYRw1EuQ6rxzj6kIX
-         9hKimeilwQDiW84CjPGjnadDFVfsRLJ2gTTjvQ4w9nhoeBMv13kJTNA+z5XrjGLrjuIn
-         VI4hrh96Hzw+43jnakjcDrWX/mlWXaVFNhQtjN4sEix+k2gjWDyzKA7NrRZQHqjPIupy
-         jhSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MUtQYlZoDY/R7p7PZwkNl6WiYboCc/+BzRALrXjVnvc=;
-        b=ngNrDQBckmunfoyu4d0ZBH/PWpoJMW9ozKgnt3q69CusbWLqdBz3h+rRX1v2O/SCeh
-         eTq937PjwC5cJPEJNeBP3CZdsAq0Js6s0b7yH3KnXjjOl+2nxYWCoFy62PMaqXpDLBQW
-         k+4qCgkF5keTtyqcp7VSabaG00a4/skZd9r3IsERYguy8U9AjWGAVLm8Zs1UdIP21QK1
-         xag1VUpCP+MrP7ubhe+vB9Tuhhe9IDyqujE9qR796RQlYgFTAqRBD7Kgc6T3+CP9W+QY
-         r530d0JQNbphr2bLsbB2hAH75/PZdt5XGKMpDPbRxclLnyHQ0+t3gUyVh/k+41doA244
-         11hQ==
-X-Gm-Message-State: AOAM532zkeCKN6jW5vcyyLkS8UFcBpWDk+TtM3AzGC8QyvINJXNvdxwR
-        IUzl28q+ghfxWvqS5nFSnII=
-X-Google-Smtp-Source: ABdhPJzED2GrN8k3q0hFKOMMX7D6RIvKelthpmj6cYjNYcDivSsOqIrLY/Ug2RdRLhY6Qho3x5OLJA==
-X-Received: by 2002:a05:6512:3d0e:b0:472:f72:a0a9 with SMTP id d14-20020a0565123d0e00b004720f72a0a9mr16681308lfv.484.1651248831732;
-        Fri, 29 Apr 2022 09:13:51 -0700 (PDT)
-Received: from mobilestation.baikal.int (mail.baikalelectronics.com. [87.245.175.226])
-        by smtp.gmail.com with ESMTPSA id p16-20020a056512329000b00472067068f7sm269746lfe.246.2022.04.29.09.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:13:50 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 19:13:48 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 25/25] PCI: dwc: Add DW eDMA engine support
-Message-ID: <20220429161348.zfjogvb3uxs3fxzp@mobilestation.baikal.int>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-26-Sergey.Semin@baikalelectronics.ru>
- <20220328141521.GA17663@thinkpad>
- <20220419205403.hdtp67mwoyrl6b6q@mobilestation>
- <20220423144055.GR374560@thinkpad>
- <20220428140501.6geybgwvkevqaz7e@mobilestation.baikal.int>
- <20220428170929.GC81644@thinkpad>
+        Fri, 29 Apr 2022 12:18:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE2ECD662;
+        Fri, 29 Apr 2022 09:14:47 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 18:14:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651248885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=yaD0dBmIVg6N44VAeTBZ1Ugl+lZrVnj4dLlWZVYYXhU=;
+        b=zgSaY5kvxUKJdo39EGaxzL1jOFEiHjfi8iW9kJgJPdem3kh+63gL5PZeQJ9MNIJKywHS0A
+        /4QswSn7u8RsSbU9N2501/1363BZw/aq6bJVlxcnY11+9Vy/34DkJmK5ALWpPDzizPiQEf
+        SgAA6MW1ntVDIDg+Wk9uhriX4JU5hchtnsTUaWsnGmAc2+bl5nZT1Kw8+yOqDwO5MQfTxs
+        gtlRjmOgO8pvS+IG3h53jVs9rTGvtCN23ul5E1Ir7LvNyTLZcY4N54CYZw3mcg/1qPZM6s
+        KEeB4vi7z9uI1H/ea9u8DLh5OJHg4RIbDIyMLzeF7ZVwrLGr/VwokEGSF9HcFQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651248885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=yaD0dBmIVg6N44VAeTBZ1Ugl+lZrVnj4dLlWZVYYXhU=;
+        b=qU8dvp4IErrVio55741xQCITIJrqvYGiICGvmVdM7faL2D1HpDmj9SLllR3T3XtdPOZd/E
+        dXcZ37kQOQZGKgBA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.18-rc4-rt3
+Message-ID: <YmwO9LGfNv+FhwJz@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220428170929.GC81644@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:39:29PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Apr 28, 2022 at 05:05:23PM +0300, Serge Semin wrote:
-> 
-> [...]
-> 
-> > > If iATU has unroll enabled then I think we can assume that edma will also be
-> > > the same. So I was wondering if we could just depend on iatu_unroll_enabled
-> > > here.
-> > 
-> > I thought about that, but then I decided it was easier to just define
-> > a new flag. Anyway according to the hw manuals indeed the unroll
-> > mapping is enabled either for both iATU and eDMA modules or for none
-> > of them just because they are mapped over a single space. It's
-> > determined by the internal VHL parameter CC_UNROLL_ENABLE.
-> > On the second thought I agree with you then. I'll convert the
-> > iatu_unroll_enabled flag into a more generic 'reg_unroll' and make
-> > sure it's used for both modules.
-> > 
-> 
-> Sounds good!
-> 
-> > > 
-> > > > > 
-> > > > > > +	if (pci->edma_unroll_enabled && pci->iatu_unroll_enabled) {
-> > > > > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
-> > > > > > +		if (pci->atu_base != pci->dbi_base + DEFAULT_DBI_ATU_OFFSET)
-> > > > > > +			pci->edma.reg_base = pci->atu_base + PCIE_DMA_UNROLL_BASE;
-> > > > > > +		else
-> > > > > > +			pci->edma.reg_base = pci->dbi_base + DEFAULT_DBI_DMA_OFFSET;
-> > > > > 
-> > > > 
-> > > > > This assumption won't work on all platforms. Atleast on our platform, the
-> > > > > offsets vary. So I'd suggest to try getting the reg_base from DT first and use
-> > > > > these offsets as a fallback as we do for iATU.
-> > > > 
-> > > > I don't know how the eDMA offset can vary at least concerning the
-> > > > normal DW PCIe setup. In any case the DW eDMA controller CSRs are
-> > > > mapped in the same way as the iATU space: CS2=1 CDM=1. They are either
-> > > > created as an unrolled region mapped into the particular MMIO space
-> > > > (as a separate MMIO space or as a part of the DBI space), or
-> > > > accessible over the PL viewports (as a part of the Port Logic CSRs).
-> > > > Nothing else is described in the hardware manuals. Based on that I
-> > > > don't see a reason to add one more reg space binding.
-> > > > 
-> > > 
-> > 
-> > > This is not true. Vendors can customize the iATU location inside DBI region
-> > > for unroll too. That's one of the reason why dw_pcie_iatu_detect() works on
-> > > qcom platforms as it tries to get iatu address from DT first and then falls
-> > > back to the default offset if not found.
-> > > 
-> > > So please define an additional DT region for edma.
-> > 
-> > It's obvious that iATU location can vary. I never said it didn't. We
-> > are talking about eDMA here. In accordance with what the DW PCIe hw
-> > manuals say eDMA always resides the same space as the iATU. The space
-> > is enabled by setting the CS2=1 and CDM=1 wires in case of the Native
-> > Controller DBI access. In this case eDMA is defined with the 0x80000
-> > offset over the iATU base address while the iATU base can be placed at
-> > whatever region platform engineer needs.
-> > 
-> > Alternatively the AXI Bridge-based DBI access can be enabled thus
-> > having the DBI+iATU+eDMA mapped over the same MMIO space with
-> > respective offsets 0x0;0x300000;0x380000. This case is handled in the
-> > branch of the conditional statement above if it's found that iATU base
-> > is having the default offset with respect to the DBI base address
-> > (pci->atu_base == pci->dbi_base + DEFAULT_DBI_ATU_OFFSET).
-> > 
-> > To sum up seeing I couldn't find the eDMA region defined in the qcom
-> > bindings and judging by what you say doesn't really contradict to what
-> > is done in my code, I guess there must be some misunderstanding either in
-> > what you see in the code above or what I understand from what you say.
-> > So please be more specific what offsets and whether they are really
-> > different from what I use in the code above.
-> > 
-> 
-> You won't see any edma register offset because no one bothered to define it
-> since it was not used until now. But the memory region should've been
-> documented...
-> 
+Dear RT folks!
 
-> Anyway, here is the offset for the Qcom SoC I'm currently working on:
-> 
-> DBI  - 0x0
-> iATU - 0x1000
-> eDMA - 0x2000
+I'm pleased to announce the v5.18-rc4-rt3 patch set. 
 
-Finally we've got to something. Earlier you said:
+Changes since v5.18-rc4-rt2:
 
-> > > This is not true. Vendors can customize the iATU location inside DBI region
-> > > for unroll too.
+  - Update John's printk series to v4.
 
-Actually it is if we are talking about the standard Syopsys DW PCIe
-IP-CoreConsultant methods, which don't imply any eDMA base address
-customization parameter. Thus there must be some address translation
-performed at some layer before the address reaches the DW PCIe DBI
-interface. So it's platform-specific. That happens in your case too.
+Known issues
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
 
-> > > That's one of the reason why dw_pcie_iatu_detect() works on
-> > > qcom platforms as it tries to get iatu address from DT first and then falls
-> > > back to the default offset if not found.
-> 
-> As you can see, these offsets doesn't really fit in both the cases you shared
-> above.
+The delta patch against v5.18-rc4-rt2 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.18/incr/patch-5.18-rc4-rt2-rt3.patch.xz
 
-Seeing the iATU address bits layout can be changed the next
-reg-space calculation code shall work for all the discussed cases:
+You can get this release via the git tree at:
 
-if (!unroll) {
-	pci->edma.reg_base = pci->dbi_base + PCIE_DMA_VIEWPORT_BASE;
-} else if (!pci->edma.reg_base) {
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dma");
-	if (res) {
-		pci->edma.reg_base = devm_ioremap_resource(dev, res);
-		if (IS_ERR(pci->edma.reg_base))
-			return PTR_ERR(pci->edma.reg_base);
-	} else (pci->atu_size >= 2 * 0x80000) {
-		pci->edma.reg_base = pci->atu_base + 0x80000;
-	} else {
-		/* No standard eDMA CSRs mapping found. Just skip */
-		return 0;
-	}
-} else {
-	/* pci->edma.reg_base can be specified by the platform code. This shall
-	 * be useful for the tegra194 or intel gw SoCs. The former
-	 * platform has the "atu_dma" resource declared which implies
-	 * having the joint iATU+eDMA CSR space, while the later has
-	 * specific iATU offset with respect to the DBI base address
-	 * (address is two bits shorter).
-	 */
-}
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.18-rc4-rt3
 
--Sergey
+The RT patch against v5.18-rc4 can be found here:
 
-> 
-> I don't have the knowledge about the internal representation of the IP or what
-> customization Qcom did apart from some high level information.
-> 
-> Hope this clarifies!
-> 
-> Thanks,
-> Mani
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.18/older/patch-5.18-rc4-rt3.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.18/older/patches-5.18-rc4-rt3.tar.xz
+
+Sebastian
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index cdaba7a333f4d..28d4f011211a0 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1224,6 +1224,7 @@ static void autoconfig(struct uart_8250_port *up)
+ 	unsigned char status1, scratch, scratch2, scratch3;
+ 	unsigned char save_lcr, save_mcr;
+ 	struct uart_port *port = &up->port;
++	unsigned long cs_flags;
+ 	unsigned long flags;
+ 	unsigned int old_capabilities;
+ 	bool is_console;
+@@ -1244,8 +1245,6 @@ static void autoconfig(struct uart_8250_port *up)
+ 	up->bugs = 0;
+ 
+ 	if (!(port->flags & UPF_BUGGY_UART)) {
+-		unsigned long cs_flags;
+-
+ 		is_console = uart_console(port);
+ 
+ 		if (is_console)
+diff --git a/include/linux/console.h b/include/linux/console.h
+index 5093055bf7904..8a813cbaf9285 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -137,7 +137,6 @@ static inline int con_debug_leave(void)
+ #define CON_ANYTIME	(16) /* Safe to call when cpu is offline */
+ #define CON_BRL		(32) /* Used for a braille device */
+ #define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
+-#define CON_THD_BLOCKED	(128) /* Thread blocked because console is locked */
+ 
+ #ifdef CONFIG_HAVE_ATOMIC_CONSOLE
+ struct console_atomic_data {
+@@ -169,12 +168,13 @@ struct console {
+ 	struct console_atomic_data *atomic_data;
+ #endif
+ 	struct task_struct *thread;
++	bool	blocked;
+ 
+ 	/*
+ 	 * The per-console lock is used by printing kthreads to synchronize
+ 	 * this console with callers of console_lock(). This is necessary in
+ 	 * order to allow printing kthreads to run in parallel to each other,
+-	 * while each safely accessing their own @flags and synchronizing
++	 * while each safely accessing the @blocked field and synchronizing
+ 	 * against direct printing via console_lock/console_unlock.
+ 	 *
+ 	 * Note: For synchronizing against direct printing via
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index bae7765fe622e..2311a0ad584a0 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -301,7 +301,7 @@ static bool panic_in_progress(void)
+ /*
+  * Tracks whether kthread printers are all blocked. A value of true implies
+  * that the console is locked via console_lock() or the console is suspended.
+- * Reading and writing to this variable requires holding @console_sem.
++ * Writing to this variable requires holding @console_sem.
+  */
+ static bool console_kthreads_blocked;
+ 
+@@ -316,7 +316,7 @@ static void console_kthreads_block(void)
+ 
+ 	for_each_console(con) {
+ 		mutex_lock(&con->lock);
+-		con->flags |= CON_THD_BLOCKED;
++		con->blocked = true;
+ 		mutex_unlock(&con->lock);
+ 	}
+ 
+@@ -334,7 +334,7 @@ static void console_kthreads_unblock(void)
+ 
+ 	for_each_console(con) {
+ 		mutex_lock(&con->lock);
+-		con->flags &= ~CON_THD_BLOCKED;
++		con->blocked = false;
+ 		mutex_unlock(&con->lock);
+ 	}
+ 
+@@ -2756,7 +2756,11 @@ static int console_cpu_notify(unsigned int cpu)
+ 		if (console_trylock())
+ 			console_unlock();
+ 		else {
+-			/* Some kthread printers may have become usable. */
++			/*
++			 * If a new CPU comes online, the conditions for
++			 * printer_should_wake() may have changed for some
++			 * kthread printer with !CON_ANYTIME.
++			 */
+ 			wake_up_klogd();
+ 		}
+ 	}
+@@ -2783,25 +2787,6 @@ void console_lock(void)
+ }
+ EXPORT_SYMBOL(console_lock);
+ 
+-/*
+- * Lock the console_lock, but rather than blocking all the kthread printers,
+- * lock a specified kthread printer and hold the lock. This is useful if
+- * console flags for a particular console need to be updated.
+- */
+-static void console_lock_single_hold(struct console *con)
+-{
+-	might_sleep();
+-	down_console_sem();
+-	mutex_lock(&con->lock);
+-	console_may_schedule = 1;
+-}
+-
+-static void console_unlock_single_release(struct console *con)
+-{
+-	mutex_unlock(&con->lock);
+-	up_console_sem();
+-}
+-
+ /**
+  * console_trylock - try to lock the console system for exclusive use.
+  *
+@@ -2885,7 +2870,7 @@ static inline bool __console_is_usable(short flags)
+  * Check if the given console is currently capable and allowed to print
+  * records.
+  *
+- * Requires holding the console_lock or con->lock.
++ * Requires holding the console_lock.
+  */
+ static inline bool console_is_usable(struct console *con, bool atomic_printing)
+ {
+@@ -3008,6 +2993,7 @@ static void write_console_seq(struct console *con, u64 val, bool atomic_printing
+  * true.
+  *
+  * Requires the console_lock if @handover is non-NULL.
++ * Requires con->lock otherwise.
+  */
+ static bool __console_emit_next_record(struct console *con, char *text, char *ext_text,
+ 				       char *dropped_text, bool atomic_printing,
+@@ -3197,13 +3183,12 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
+ 	return any_usable;
+ }
+ 
+-#ifdef CONFIG_HAVE_ATOMIC_CONSOLE
++#if defined(CONFIG_HAVE_ATOMIC_CONSOLE) && defined(CONFIG_PRINTK)
+ static bool console_emit_next_record(struct console *con, char *text, char *ext_text,
+ 				     char *dropped_text, bool atomic_printing);
+ 
+ static void atomic_console_flush_all(void)
+ {
+-	bool any_usable = false;
+ 	unsigned long flags;
+ 	struct console *con;
+ 	bool any_progress;
+@@ -3227,7 +3212,6 @@ static void atomic_console_flush_all(void)
+ 
+ 			if (!console_is_usable(con, true))
+ 				continue;
+-			any_usable = true;
+ 
+ 			if (con->flags & CON_EXTENDED) {
+ 				/* Extended consoles do not print "dropped messages". */
+@@ -3257,7 +3241,7 @@ static void atomic_console_flush_all(void)
+ 
+ 	printk_cpu_sync_put_irqrestore(flags);
+ }
+-#else /* CONFIG_HAVE_ATOMIC_CONSOLE */
++#else /* CONFIG_HAVE_ATOMIC_CONSOLE && CONFIG_PRINTK */
+ #define atomic_console_flush_all()
+ #endif
+ 
+@@ -3430,20 +3414,17 @@ struct tty_driver *console_device(int *index)
+ void console_stop(struct console *console)
+ {
+ 	__pr_flush(console, 1000, true);
+-	console_lock_single_hold(console);
++	console_lock();
+ 	console->flags &= ~CON_ENABLED;
+-	console_unlock_single_release(console);
++	console_unlock();
+ }
+ EXPORT_SYMBOL(console_stop);
+ 
+-
+ void console_start(struct console *console)
+ {
+-	console_lock_single_hold(console);
++	console_lock();
+ 	console->flags |= CON_ENABLED;
+-	console_unlock_single_release(console);
+-	/* Wake the newly enabled kthread printer. */
+-	wake_up_klogd();
++	console_unlock();
+ 	__pr_flush(console, 1000, true);
+ }
+ EXPORT_SYMBOL(console_start);
+@@ -3645,7 +3626,7 @@ void register_console(struct console *newcon)
+ 
+ 	atomic_long_set(&newcon->dropped, 0);
+ 	newcon->thread = NULL;
+-	newcon->flags |= CON_THD_BLOCKED;
++	newcon->blocked = true;
+ 	mutex_init(&newcon->lock);
+ #ifdef CONFIG_HAVE_ATOMIC_CONSOLE
+ 	newcon->atomic_data = NULL;
+@@ -3703,7 +3684,7 @@ int unregister_console(struct console *console)
+ 		return 0;
+ 
+ 	res = -ENODEV;
+-	console_lock_single_hold(console);
++	console_lock();
+ 	if (console_drivers == console) {
+ 		console_drivers=console->next;
+ 		res = 0;
+@@ -3733,14 +3714,14 @@ int unregister_console(struct console *console)
+ 	console->flags &= ~CON_ENABLED;
+ 
+ 	/*
+-	 * console->thread can only be cleared while holding con->lock. But
+-	 * stopping the thread must be done without con->lock. The task that
+-	 * clears @thread is the task that stops the kthread.
++	 * console->thread can only be cleared under the console lock. But
++	 * stopping the thread must be done without the console lock. The
++	 * task that clears @thread is the task that stops the kthread.
+ 	 */
+ 	thd = console->thread;
+ 	console->thread = NULL;
+ 
+-	console_unlock_single_release(console);
++	console_unlock();
+ 
+ 	if (thd)
+ 		kthread_stop(thd);
+@@ -3758,7 +3739,7 @@ int unregister_console(struct console *console)
+ 
+ out_disable_unlock:
+ 	console->flags &= ~CON_ENABLED;
+-	console_unlock_single_release(console);
++	console_unlock();
+ 
+ 	return res;
+ }
+@@ -3975,6 +3956,11 @@ static bool printer_should_wake(struct console *con, u64 seq)
+ 	if (kthread_should_stop() || !printk_kthreads_available)
+ 		return true;
+ 
++	if (con->blocked ||
++	    console_kthreads_atomically_blocked()) {
++		return false;
++	}
++
+ 	/*
+ 	 * This is an unsafe read from con->flags, but a false positive is
+ 	 * not a problem. Worst case it would allow the printer to wake up
+@@ -3986,11 +3972,6 @@ static bool printer_should_wake(struct console *con, u64 seq)
+ 	if (!__console_is_usable(flags))
+ 		return false;
+ 
+-	if ((flags & CON_THD_BLOCKED) ||
+-	    console_kthreads_atomically_blocked()) {
+-		return false;
+-	}
+-
+ 	return prb_read_valid(prb, seq, NULL);
+ }
+ 
+@@ -4057,13 +4038,22 @@ static int printk_kthread_func(void *data)
+ 		if (error)
+ 			continue;
+ 
+-		if (!console_is_usable(con, false)) {
++		if (con->blocked ||
++		    !console_kthread_printing_tryenter()) {
++			/* Another context has locked the console_lock. */
+ 			mutex_unlock(&con->lock);
+ 			continue;
+ 		}
+ 
+-		if ((con->flags & CON_THD_BLOCKED) ||
+-		    !console_kthread_printing_tryenter()) {
++		/*
++		 * Although this context has not locked the console_lock, it
++		 * is known that the console_lock is not locked and it is not
++		 * possible for any other context to lock the console_lock.
++		 * Therefore it is safe to read con->flags.
++		 */
++
++		if (!__console_is_usable(con->flags)) {
++			console_kthread_printing_exit();
+ 			mutex_unlock(&con->lock);
+ 			continue;
+ 		}
+@@ -4092,14 +4082,14 @@ static int printk_kthread_func(void *data)
+ 	kfree(ext_text);
+ 	kfree(text);
+ 
+-	mutex_lock(&con->lock);
++	console_lock();
+ 	/*
+ 	 * If this kthread is being stopped by another task, con->thread will
+ 	 * already be NULL. That is fine. The important thing is that it is
+ 	 * NULL after the kthread exits.
+ 	 */
+ 	con->thread = NULL;
+-	mutex_unlock(&con->lock);
++	console_unlock();
+ 
+ 	return 0;
+ }
+diff --git a/localversion-rt b/localversion-rt
+index c3054d08a1129..1445cd65885cd 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt2
++-rt3

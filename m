@@ -2,142 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16C8514891
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A4F5148B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358725AbiD2Lyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S1358811AbiD2MDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358676AbiD2Lyq (ORCPT
+        with ESMTP id S235150AbiD2MDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:54:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6693AC6EC8;
-        Fri, 29 Apr 2022 04:51:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651233088; x=1682769088;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vUGUX7Nvc/8LjzsG1/1jXvrhtbo00tkto7h2bu3JZ70=;
-  b=H4DSI1d+94Djdk3XQD/VbKAY2wwOazJtVUnjc6AqU7ayVl8Ihh5xw/hQ
-   djKsrR45uV5NYLqM33Lqa0aIQo6SNYPeAgAI9ZjrQvoXYpYuVCiBHSQve
-   7aN4RqDOzFQpzlfg15Y80nJD5RAirT2kb7D7tgzde/AJzy12LsfpUmi8B
-   GXXb8gy5+ZgLpdim8rHfj9a4tl7+NXpPfNVR2gcWB2ueSUu5ZRchO6SGp
-   fbg0vhNDGrnVtdfk98i5XzgdRafq8xdg5ZxlJ2k/BQkw9DdTtVqACvWOg
-   /NpcPba+nQREkDMy9QbXbcBR1iLaUb2nHhzl0z8gP/5o607bvMxAESrOG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329565488"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="329565488"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 04:51:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="582085655"
-Received: from p12hl01tmin.png.intel.com ([10.158.65.175])
-  by orsmga008.jf.intel.com with ESMTP; 29 Apr 2022 04:51:21 -0700
-From:   Tan Tee Min <tee.min.tan@linux.intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Ling Pei Lee <pei.lee.ling@intel.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Matthew Hagan <mnhagan88@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Song Yoong Siang <yoong.siang.song@intel.com>,
-        Ong@vger.kernel.org, Boon Leong <boon.leong.ong@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        Looi Hong Aun <hong.aun.looi@intel.com>
-Subject: [PATCH net v2 1/1] net: stmmac: disable Split Header (SPH) for Intel platforms
-Date:   Fri, 29 Apr 2022 19:58:07 +0800
-Message-Id: <20220429115807.2198448-1-tee.min.tan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 29 Apr 2022 08:03:13 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6981C8A8E;
+        Fri, 29 Apr 2022 04:59:55 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nkPHt-0002CR-PA; Fri, 29 Apr 2022 13:59:54 +0200
+Message-ID: <9811c780-ea28-1461-6347-93a3cf218b6c@leemhuis.info>
+Date:   Fri, 29 Apr 2022 13:59:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [Bug 215872] New: ath11k: QCA6390 firmware crashes after some
+ time
+Content-Language: en-US
+References: <bug-215872-62941@https.bugzilla.kernel.org/>
+Cc:     linux-bluetooth@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Kai Mast <mail@kai-mast.de>
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <bug-215872-62941@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651233595;7d280789;
+X-HE-SMSGID: 1nkPHt-0002CR-PA
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
-of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
-This SPH limitation will cause ping failure when the packets size exceed
-the MTU size. For example, the issue happens once the basic ping packet
-size is larger than the configured MTU size and the data is lost inside
-the fragmented packet, replaced by zeros/corrupted values, and leads to
-ping fail.
+Hi, this is your Linux kernel regression tracker.
 
-So, disable the Split Header for Intel platforms.
+I noticed below regression report in bugzilla.kernel.org that afaics
+nobody acted upon since it was reported about a week ago, that's why I
+decided to step in here. Could somebody take a look into below issue? Or
+was this discussed somewhere else already? Or even fixed?
 
-v2: Add fixes tag in commit message.
+On 21.04.22 22:07, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=215872
+> 
+>             Bug ID: 215872
+>            Summary: ath11k: QCA6390 firmware crashes after some time
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 5.17.3-arch1-1
+>           Hardware: x86-64
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: normal
+>           Priority: P1
+>          Component: Bluetooth
+>           Assignee: linux-bluetooth@vger.kernel.org
+>           Reporter: mail@kai-mast.de
+>         Regression: No
+> 
+> Created attachment 300786
+>   --> https://bugzilla.kernel.org/attachment.cgi?id=300786&action=edit
+> dmesg | grep Bluetooth
+> 
+> I'm on arch Linux. For a while now (multiple kernel versions since 5.15 at
+> least) my qca firwmare seems to crash. Weirdly bluetooth stops working and WiFi
+> still works fine.
+> There is nothing in particular that seems to trigger this. I just have to wait
+> for a while. Sometimes a few minutes after boot sometimes a few hours. 
+> 
+> Rebooting without a power connection or booting into Windows usually resolves
+> this issue.
+> 
+> I'm on a 2020 Dell XPS 9500. Fimrware is up to date at 1.13.
+> 
+> Output of uname -a: Linux kai-xps 5.17.3-arch1-1 #1 SMP PREEMPT Thu, 14 Apr
+> 2022 01:18:36 +0000 x86_64 GNU/Linux
 
-Fixes: 67afd6d1cfdf("net: stmmac: Add Split Header support and enable it
-in XGMAC cores")
-Cc: <stable@vger.kernel.org> # 5.10.x
-Suggested-by: Ong, Boon Leong <boon.leong.ong@intel.com>
-Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
-Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 1 +
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
- include/linux/stmmac.h                            | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+Anyway, to get this tracked:
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 63754a9c4ba7..0b0be0898ac5 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -454,6 +454,7 @@ static int intel_mgbe_common_data(struct pci_dev *pdev,
- 	plat->has_gmac4 = 1;
- 	plat->force_sf_dma_mode = 0;
- 	plat->tso_en = 1;
-+	plat->sph_disable = 1;
- 
- 	/* Multiplying factor to the clk_eee_i clock time
- 	 * period to make it closer to 100 ns. This value
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 4a4b3651ab3e..2525a80353b7 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7021,7 +7021,7 @@ int stmmac_dvr_probe(struct device *device,
- 		dev_info(priv->device, "TSO feature enabled\n");
- 	}
- 
--	if (priv->dma_cap.sphen) {
-+	if (priv->dma_cap.sphen && !priv->plat->sph_disable) {
- 		ndev->hw_features |= NETIF_F_GRO;
- 		priv->sph_cap = true;
- 		priv->sph = priv->sph_cap;
-diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index 24eea1b05ca2..29917850f079 100644
---- a/include/linux/stmmac.h
-+++ b/include/linux/stmmac.h
-@@ -270,5 +270,6 @@ struct plat_stmmacenet_data {
- 	int msi_rx_base_vec;
- 	int msi_tx_base_vec;
- 	bool use_phy_wol;
-+	bool sph_disable;
- };
- #endif
+#regzbot introduced: v5.15..v5.17
+#regzbot from: Kai Mast <mail@kai-mast.de>
+#regzbot title: bluetooth: QCA6390 firmware crashes after some time
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215872
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
 -- 
-2.25.1
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.
 

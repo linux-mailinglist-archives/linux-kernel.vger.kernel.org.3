@@ -2,92 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE305147AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C075147AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354512AbiD2LBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S1357772AbiD2LBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236220AbiD2LBK (ORCPT
+        with ESMTP id S236220AbiD2LBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:01:10 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B6BB53DC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:57:52 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id j6so14663746ejc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kh7cG0R0SMeE4jm3EWRld6u5ddyYFj4+YrMk4VBJgW8=;
-        b=GTFuxBgUOEchycqCqavOLLCBbzS6CfSxXO0rgSUwCs0H8J8P7yRd4VYn+ih//UR5xL
-         hZokdb3P44yN4CHC62sWCzuSabmnPHIwV0cqSt83+GkTWAOUDH1WnrTSikxwA6vFiXR9
-         5Mqg7H8GGOY8hqWTnopAUqUFogOQi+J9b5ty8LZHWfxM6JD67BGlCNT/ny7OlJg9ztAJ
-         AfUKBEkB6dKrfneiQjaKj0M0ZhgbBgHWvnft+myjIdUxtydW0VKowKttz7gwgInHL53h
-         IZDoA3lYu4fTZdc8Cr9dMBdLmDFMDfFfQwNmfUVn52GEWvwE/xT9oO+mC3I88nsO4Gp2
-         x1sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kh7cG0R0SMeE4jm3EWRld6u5ddyYFj4+YrMk4VBJgW8=;
-        b=7a58/h4OTi4XywZrV9zJmig+mvGPqFKW5A5VnYkGD3JFm+BarodpsMxdqyiQ0iyvBN
-         FUiBpkFTQmIpVoK905jdJIldnocKv5ZdkbCaqTXNdqWw9YcevQb719oGyopLRtr8UFtt
-         ZFyvG9cqitsGPlWTLc21qQVfOQE+zWjl2Xns7f5wkmn+CiRu2h6pDX1fio4LdEoVmZdg
-         ClSfAnXEmLnPRNIgPjjW8w1p0eNyrvkBsIqWxT6woVuKJ2tcgRGCOcZs1cqHg6+4U+Pl
-         9hcH3T7oIuyZPrFrgztqex9vR/ZGVWT0ceDE5tOfCm+pGUuj8T43OKOUkPnORiJPVaUL
-         JWKA==
-X-Gm-Message-State: AOAM532jhkop91H9BfC/ekkRz0GWshBjQn9zcHZlrovc+BRtrrJflOBw
-        9mXlE+KjYg/YxSDjC9pOD2udm9+aCEnEmdKG8To=
-X-Google-Smtp-Source: ABdhPJxjZnFIUavnzePAJF9brVDJFEux6qXARizED533tTUaLxu4IciRVe1Y3JZ5JrMSrGaOeswfRvQfzc5nbagfrEs=
-X-Received: by 2002:a17:906:1841:b0:6e8:872d:8999 with SMTP id
- w1-20020a170906184100b006e8872d8999mr34869485eje.492.1651229870707; Fri, 29
- Apr 2022 03:57:50 -0700 (PDT)
+        Fri, 29 Apr 2022 07:01:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 047C7B6452
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651229906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hd8jixMX/+sl7pAeiP0+TvqgeE8m0z/UExwqrgT495g=;
+        b=UB5VbFfQ7mcLxCpSSH5/xA6V/YXCaad//gM7/QpjL0XkSo+kT8uN7KGoQQSffD44Ax55kD
+        jyodzXlg/R0cBi4Sy2GyWg3Tb/nZLSSbwtoTNY8Aela4VPF5CVIcXfNTBDRBsYsxIoyHrO
+        YFfqY6mM8Ub8kIkVJM9/HSSUWo/nP/A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-136-DkyOpML2MXGOm-WSt3_m7A-1; Fri, 29 Apr 2022 06:58:22 -0400
+X-MC-Unique: DkyOpML2MXGOm-WSt3_m7A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50142811E84;
+        Fri, 29 Apr 2022 10:58:21 +0000 (UTC)
+Received: from fedora (unknown [10.22.16.76])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F1469C27EAB;
+        Fri, 29 Apr 2022 10:58:15 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 07:58:14 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 04/12] x86/boot: Add infrastructure required for
+ unaccepted memory support
+Message-ID: <YmvExncBpvDdfTjd@fedora>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-5-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-References: <202204290610.SVJgr8qV-lkp@intel.com>
-In-Reply-To: <202204290610.SVJgr8qV-lkp@intel.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 29 Apr 2022 07:57:41 -0300
-Message-ID: <CAOMZO5A-ZbMUM-17n2JPN2+w+DWLL9fnGwo2SrS=O024M4v0MQ@mail.gmail.com>
-Subject: Re: [sailus-media-tree:master 55/60] drivers/media/i2c/adv7180.c:573
- adv7180_test_pattern() error: uninitialized symbol 'reg'.
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, kbuild test robot <lkp@intel.com>,
-        kbuild-all@lists.01.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425033934.68551-5-kirill.shutemov@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Mon, Apr 25, 2022 at 06:39:26AM +0300, Kirill A. Shutemov wrote:
 
-On Fri, Apr 29, 2022 at 7:30 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> tree:   git://linuxtv.org/sailus/media_tree.git master
-> head:   ea1280040a678f38a4ce6f1817933c04cfe74552
-> commit: f3b4b140d87dc7f256229f20a8d70429a7549aca [55/60] media: i2c: adv7180: Add support for the test patterns
-> config: microblaze-randconfig-m031-20220427 (https://download.01.org/0day-ci/archive/20220429/202204290610.SVJgr8qV-lkp@intel.com/config)
-> compiler: microblaze-linux-gcc (GCC) 11.3.0
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->
-> smatch warnings:
-> drivers/media/i2c/adv7180.c:573 adv7180_test_pattern() error: uninitialized symbol 'reg'.
+[snip]
 
-Thanks for the report.
+>  
+> +static __always_inline void __set_bit(long nr, volatile unsigned long *addr)
 
-This problem has been resolved in v3:
+Can't we update the existing set_bit function?
 
-https://patchwork.linuxtv.org/project/linux-media/patch/20220427135025.3036234-1-festevam@gmail.com/
+> +{
+> +	asm volatile(__ASM_SIZE(bts) " %1,%0" : : "m" (*(volatile long *) addr),
+
+Why do we need the cast here?
+
+> +		     "Ir" (nr) : "memory");
+
+Shouldn't we add "cc" to the clobber list?
+
+> +}
+> +
+> +static __always_inline void __clear_bit(long nr, volatile unsigned long *addr)
+> +{
+> +	asm volatile(__ASM_SIZE(btr) " %1,%0" : : "m" (*(volatile long *) addr),
+> +		     "Ir" (nr) : "memory");
+> +}
+
+Same comments of __set_bit apply here (except there is no clear_bit function)
+
+[snip]
+
+> +
+> +static __always_inline unsigned long swab(const unsigned long y)
+> +{
+> +#if __BITS_PER_LONG == 64
+> +	return __builtin_bswap32(y);
+> +#else /* __BITS_PER_LONG == 32 */
+> +	return __builtin_bswap64(y);
+
+Suppose y = 0x11223344UL, then, the compiler to cast it to a 64 bits
+value yielding 0x0000000011223344ULL, __builtin_bswap64 will then
+return 0x4433221100000000, and the return value will be casted back
+to 32 bits, so swapb will always return 0, won't it?
+
+> +#endif
+> +}
+> +
+> +unsigned long _find_next_bit(const unsigned long *addr1,
+> +		const unsigned long *addr2, unsigned long nbits,
+
+The addr2 name seems a bit misleading, it seems to act as some kind of mask,
+is that right?
+
+> +		unsigned long start, unsigned long invert, unsigned long le)
+> +{
+> +	unsigned long tmp, mask;
+> +
+> +	if (unlikely(start >= nbits))
+> +		return nbits;
+> +
+> +	tmp = addr1[start / BITS_PER_LONG];
+> +	if (addr2)
+> +		tmp &= addr2[start / BITS_PER_LONG];
+> +	tmp ^= invert;
+> +
+> +	/* Handle 1st word. */
+> +	mask = BITMAP_FIRST_WORD_MASK(start);
+> +	if (le)
+> +		mask = swab(mask);
+> +
+> +	tmp &= mask;
+> +
+> +	start = round_down(start, BITS_PER_LONG);
+> +
+> +	while (!tmp) {
+> +		start += BITS_PER_LONG;
+> +		if (start >= nbits)
+> +			return nbits;
+> +
+> +		tmp = addr1[start / BITS_PER_LONG];
+> +		if (addr2)
+> +			tmp &= addr2[start / BITS_PER_LONG];
+> +		tmp ^= invert;
+> +	}
+
+Isn't better to divide start by BITS_PER_LONG in the beginning of the fuction,
+and then multiply it by BITS_PER_LONG when necessary, saving the division operations
+in the while loop?
+
+[snip]
+

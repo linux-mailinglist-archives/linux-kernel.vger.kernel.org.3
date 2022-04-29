@@ -2,100 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12B25156C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3D45156C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236993AbiD2Van (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S237865AbiD2VdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiD2Vai (ORCPT
+        with ESMTP id S231147AbiD2VdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:30:38 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A6C9F398;
-        Fri, 29 Apr 2022 14:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651267639; x=1682803639;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iBDXurEoX+VAKyel977MnypOTEgCCqkREVmIpcHL3L8=;
-  b=Yqjq1jjpBpBJCHOStlm51fzUd2zor/2geNZLJXdtcmg2gcX7F0Wig7MK
-   c3V856oua/NY4tWhvndXL6ffYZhPOmHOSp2moKSSBzk+ZkjUSmA0vSU1g
-   WSdlFLD3LeLOQGBtbVRudwkrnR1gYKGpAwK/voPC+Yqq90vl/BsrGtj5+
-   8S8+M+U1Yw6LT1ajORiUAec6J+bLVAmYbWBvtRvJWA1tJgX/tt8+P9Rp7
-   Ee8Ud40jG8U71abrhs1QIrH/lu/fU8sDOPrCwITiGLVfeZ5DH91wK9XS3
-   2gj1tvzlOZP865CmtYzITIJsWtnrGBjX2XxPcakiolBelox7iLCn6SywV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="247333950"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="247333950"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 14:27:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="582407851"
-Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 14:26:59 -0700
-Message-ID: <915ed339-f5e6-c31f-ffe1-a80402ce78dd@intel.com>
-Date:   Fri, 29 Apr 2022 14:27:16 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-Content-Language: en-US
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
- <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
- <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
- <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
- <92af7b22-fa8a-5d42-ae15-8526abfd2622@intel.com>
- <CAPcyv4iG977DErCfYTqhVzuZqjtqFHK3smnaOpO3p+EbxfvXcQ@mail.gmail.com>
- <4a5143cc-3102-5e30-08b4-c07e44f1a2fc@intel.com>
- <CAPcyv4i6X6ODNbOnT7+NEzpicLS4m9bNDybZLvN3gqXFTTf=mg@mail.gmail.com>
- <4d0c7316-3564-ef27-1113-042019d583dc@intel.com>
- <CAPcyv4gYw3k4YMEV1E26fMx-GNCNCb+zJDERfhieCrROWv_Jxg@mail.gmail.com>
- <73ed1e55-7e7c-2995-b411-8e26b711cc22@intel.com>
- <CAPcyv4gzEvMA4F5ncuhVenRDuz7Tq6aCSJR=z7wVqNGOYGS5Kw@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAPcyv4gzEvMA4F5ncuhVenRDuz7Tq6aCSJR=z7wVqNGOYGS5Kw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 17:33:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD8A9F39C;
+        Fri, 29 Apr 2022 14:29:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 704A36229E;
+        Fri, 29 Apr 2022 21:29:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5137C385A7;
+        Fri, 29 Apr 2022 21:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651267797;
+        bh=EuQ+Tnjjj+1/zdg5oEaPiwrIStLtZ5qMD9wOSYLHeyg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OdudNfruDa6O3Jvs0g45BNiB2bs+O3p65nKmMIPAWsviqPhxjzOpNLD8GHfVnsC2u
+         tSGfz9momnEHOq2KWdJatcMSblOQe6YUegtiOxvJU+VjEAp7z5zlgHu7JPrFdSl+iy
+         blqoOR+sJ/ffLDl/ZNqP9Vfm1IxpXOrKcrH3k58pvsG+/t6dR2HzYeA/f2qBpZvi9c
+         R5dGwXLnoe0YNCzQHnCH2xKG6Az11aitfhdDfVO+s5JTVz9aGlfPaylPWyxQNvxRKP
+         j3knDg8FZxV0MNCI2Ory5rlmzpmxPjSIGDi7YSVwqfxDzHD1eKLfiH8lk0+MINkkhk
+         /g6SEQkONBsww==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkYBX-0082bx-4t; Fri, 29 Apr 2022 22:29:55 +0100
+Date:   Fri, 29 Apr 2022 22:29:54 +0100
+Message-ID: <87levn8tnx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Thomas Pfaff <tpfaff@pcs.com>, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v2] irq/core: synchronize irq_thread startup
+In-Reply-To: <87fslvoez3.ffs@tglx>
+References: <1e3f96b7-9294-1534-e83b-efe3602f876f@pcs.com>
+        <87sfpv98j0.wl-maz@kernel.org>
+        <87fslvoez3.ffs@tglx>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, tpfaff@pcs.com, linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org, hdanton@sina.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/22 14:20, Dan Williams wrote:
-> Is there something already like this today for people that, for
-> example, attempt to use PCI BAR mappings as memory? Or does KVM simply
-> allow for garbage-in garbage-out?
+On Fri, 29 Apr 2022 20:40:32 +0100,
+Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> On Fri, Apr 29 2022 at 17:08, Marc Zyngier wrote:
+> > On Fri, 29 Apr 2022 12:52:48 +0100,
+> > Thomas Pfaff <tpfaff@pcs.com> wrote:
+> 
+>  > +static void wait_for_irq_thread_startup(struct irq_desc *desc,
+>  > +		struct irqaction *action)
+> 
+>  and this would be wait_for_irq_thread_ready().
+> 
+> which is sill a misnomer as this actually wakes and waits.
 
-I'm just guessing, but I _assume_ those garbage PCI BAR mappings are how
-KVM does device passthrough.
+Hey, I didn't say I picked the right color for that shed! ;-)
 
-I know that some KVM users even use mem= to chop down the kernel-owned
-'struct page'-backed memory, then have a kind of /dev/mem driver to let
-the memory get mapped back into userspace.  KVM is happy to pass through
-those mappings.
+> 
+> >> @@ -1522,6 +1548,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+> >>  		}
+> >>  	}
+> >>  
+> >> +	init_waitqueue_head(&desc->wait_for_threads);
+> >> +
+> >
+> > I'm trying to convince myself that this one is safe.
+> >
+> > It was so far only done when registering the first handler of a
+> > threaded interrupt, while it is now done on every call to
+> > __setup_irq().  However, this is now done outside of the protection of
+> > any of the locks, meaning that a concurrent __setup_irq() for a shared
+> > interrupt can now barge in and corrupt the wait queue.
+> >
+> > So I don't think this is right. You may be able to hoist the
+> > request_lock up, but I haven't checked what could break, if anything.
+> 
+> It can't be moved here, but I can see why Thomas wants to move it. With
+> a spurious wakeup of the irq thread (should not happen), the thread
+> would try to invoke wake_up() on a non initialize wait queue head.
+> 
+> Something like this should do the trick.
+> 
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index 939d21cd55c3..0099b87dd853 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -407,6 +407,7 @@ static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,
+>  	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+>  	mutex_init(&desc->request_mutex);
+>  	init_rcu_head(&desc->rcu);
+> +	init_waitqueue_head(&desc->wait_for_threads);
+>  
+>  	desc_set_defaults(irq, desc, node, affinity, owner);
+>  	irqd_set(&desc->irq_data, flags);
+> @@ -575,6 +576,7 @@ int __init early_irq_init(void)
+>  		raw_spin_lock_init(&desc[i].lock);
+>  		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+>  		mutex_init(&desc[i].request_mutex);
+> +		init_waitqueue_head(&desc[i].wait_for_threads);
+>  		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+>  	}
+>  	return arch_early_irq_init();
+> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+> index c03f71d5ec10..6a0942f4d068 100644
+> --- a/kernel/irq/manage.c
+> +++ b/kernel/irq/manage.c
+> @@ -1683,8 +1683,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+>  	}
+>  
+>  	if (!shared) {
+> -		init_waitqueue_head(&desc->wait_for_threads);
+> -
+>  		/* Setup the type (level, edge polarity) if configured: */
+>  		if (new->flags & IRQF_TRIGGER_MASK) {
+>  			ret = __irq_set_trigger(desc,
+> 
+
+Indeed, it makes a lot of sense to fully initialise the irqdesc
+structure at the point of allocation, rather than later.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

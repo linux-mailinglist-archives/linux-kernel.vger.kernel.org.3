@@ -2,361 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545D751451F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECE2514526
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356306AbiD2JOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
+        id S1356331AbiD2JRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356317AbiD2JOB (ORCPT
+        with ESMTP id S238756AbiD2JRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:14:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2F2D41631
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651223442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NQBF27sLvoyu31aEO9O5DUZCAAPdfiax5jdqp0nMXvs=;
-        b=AyCjU2KT2MejFkrEVfXEjI9uDk9CdwcxIeGNQW93E42PozoxNZycIDK+nBApfMnZIqh5nj
-        vuA+vz+/QoC/Q2Ml67K93x0Dge8HGaRFy6G0vrD5GGNT+o+1B5ngFaVzMWrpw9e1fyjXjM
-        gcEKvLxjOR3x3Wul2IHb46sqeZh1Jjs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-o74r9XkUM92mrpjd-6eU5g-1; Fri, 29 Apr 2022 05:10:40 -0400
-X-MC-Unique: o74r9XkUM92mrpjd-6eU5g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1FFF028014A0;
-        Fri, 29 Apr 2022 09:10:40 +0000 (UTC)
-Received: from server.redhat.com (ovpn-12-215.pek2.redhat.com [10.72.12.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5F63040869CB;
-        Fri, 29 Apr 2022 09:10:36 +0000 (UTC)
-From:   Cindy Lu <lulu@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com, lulu@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] vdpa/vp_vdpa : add vdpa tool support in vp_vdpa
-Date:   Fri, 29 Apr 2022 17:10:30 +0800
-Message-Id: <20220429091030.547434-1-lulu@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 05:17:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F32465F8E0;
+        Fri, 29 Apr 2022 02:13:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC7F51063;
+        Fri, 29 Apr 2022 02:13:56 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.14.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 474083F73B;
+        Fri, 29 Apr 2022 02:13:54 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, lukasz.luba@arm.com,
+        xuewen.yan@unisoc.com, linux-doc@vger.kernel.org
+Subject: [PATCH] sched: thermal_load_avg: Change the raising/decaying period mechanism
+Date:   Fri, 29 Apr 2022 10:12:45 +0100
+Message-Id: <20220429091245.12423-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this patch is to add the support for vdpa tool in vp_vdpa
-here is the example steps
+The thermal pressure mechanism consists of two parts:
+1) PELT-like signal with its own clock (rq_clock_thermal()) which is
+   responsible for the raising/decaying characteristics
+2) instantaneous information provided in 'thermal_pressure' variable,
+   which is set by thermal framework or drivers to notify about
+   the throttling.
 
-modprobe vp_vdpa
-modprobe vhost_vdpa
-echo 0000:00:06.0>/sys/bus/pci/drivers/virtio-pci/unbind
-echo 1af4 1041 > /sys/bus/pci/drivers/vp-vdpa/new_id
+Add a new mechanism which allows to change the raising/decaying
+characteristics of the PELT-like thermal signal. To make this happen
+modify how the rq_clock_thermal() counts. Instead of only slowing down the
+clock, which results in longer raising/decaying periods, make it faster.
+Thanks to that the information about throttling can faster arrive at the
+right place in the scheduler. This faster propagation of information
+is useful for the latency sensitive stuff, such as RT tasks. In
+a situation of CPU capacity inversion, such task might suffer when
+staying on the lower capacity CPU.
 
-vdpa dev add name vdpa1 mgmtdev pci/0000:00:06.0
+Change the boot parameter 'sched_thermal_decay_shift' allowed values
+and use the negatives to speed up the thermal clock.
 
-Signed-off-by: Cindy Lu <lulu@redhat.com>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- drivers/vdpa/virtio_pci/vp_vdpa.c | 161 ++++++++++++++++++++++++------
- include/linux/vdpa.h              |   2 +-
- 2 files changed, 130 insertions(+), 33 deletions(-)
+Hi all,
 
-diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-index cce101e6a940..adb75d77eff2 100644
---- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-@@ -32,7 +32,7 @@ struct vp_vring {
+This patch addresses an issue of missing configuration for the
+thermal pressure raising/decaying characteristic to be more instantaneous.
+This more sharp signal might be better if the raw thermal signal
+already has 'some logic' or doesn't change that often, like in IPA
+(every 100ms).
+
+I've prepared a notebook with experiments with different shifter
+values [0, -2, -3, -4, 2, 4] for IPA thermal update periods:
+50ms, 100ms (and also jumping between cooling states 0, 1 or 0, 3).
+It presents two signals: instantaneous thermal update and thermal_load_avg().
+It would be useful for discussion. I can provide more details if needed.
+
+Regards,
+Lukasz Luba
+
+[1] https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/thermal_pressure_delays-all-ipa.ipynb
+
+
+
+ Documentation/admin-guide/kernel-parameters.txt | 15 +++++++++++----
+ kernel/sched/fair.c                             |  2 +-
+ kernel/sched/sched.h                            | 17 +++++++++++++++--
+ 3 files changed, 27 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index c2d1f8b5e8f3..ba32540f1fbf 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5117,15 +5117,22 @@
+ 			pressure signal. Thermal pressure signal follows the
+ 			default decay period of other scheduler pelt
+ 			signals(usually 32 ms but configurable). Setting
+-			sched_thermal_decay_shift will left shift the decay
+-			period for the thermal pressure signal by the shift
+-			value.
++			a positive value for sched_thermal_decay_shift will
++			left shift the decay period for the thermal pressure
++			signal by the shift value. This would make
++			raising/decaying characteristic longer. Setting
++			a negative value will right shift the decay period
++			by the shift value and make the raising/decaying
++			characteristic more sharp.
+ 			i.e. with the default pelt decay period of 32 ms
+ 			sched_thermal_decay_shift   thermal pressure decay pr
++				-2			8 ms
++				-1			16 ms
++				0			32 ms
+ 				1			64 ms
+ 				2			128 ms
+ 			and so on.
+-			Format: integer between 0 and 10
++			Format: integer between -5 and 10
+ 			Default is 0.
  
- struct vp_vdpa {
- 	struct vdpa_device vdpa;
--	struct virtio_pci_modern_device mdev;
-+	struct virtio_pci_modern_device *mdev;
- 	struct vp_vring *vring;
- 	struct vdpa_callback config_cb;
- 	char msix_name[VP_VDPA_NAME_SIZE];
-@@ -41,6 +41,12 @@ struct vp_vdpa {
- 	int vectors;
- };
+ 	scftorture.holdoff= [KNL]
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 5146163bfabb..93cb7db5939c 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -100,7 +100,7 @@ static int __init setup_sched_thermal_decay_shift(char *str)
+ 	if (kstrtoint(str, 0, &_shift))
+ 		pr_warn("Unable to set scheduler thermal pressure decay shift parameter\n");
  
-+struct vp_vdpa_mgmtdev {
-+	struct vdpa_mgmt_dev mgtdev;
-+	struct virtio_pci_modern_device *mdev;
-+	struct vp_vdpa *vp_vdpa;
-+};
-+
- static struct vp_vdpa *vdpa_to_vp(struct vdpa_device *vdpa)
+-	sched_thermal_decay_shift = clamp(_shift, 0, 10);
++	sched_thermal_decay_shift = clamp(_shift, -5, 10);
+ 	return 1;
+ }
+ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index de53be905739..cb453c0f3572 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1478,8 +1478,14 @@ static inline u64 rq_clock_task(struct rq *rq)
+ /**
+  * By default the decay is the default pelt decay period.
+  * The decay shift can change the decay period in
+- * multiples of 32.
++ * multiples of 32 to make it longer or to make it shorter using
++ * negative values as on the example below.
+  *  Decay shift		Decay period(ms)
++ *	-5			1
++ *	-4			2
++ *	-3			4
++ *	-2			8
++ *	-1			16
+  *	0			32
+  *	1			64
+  *	2			128
+@@ -1490,7 +1496,14 @@ extern int sched_thermal_decay_shift;
+ 
+ static inline u64 rq_clock_thermal(struct rq *rq)
  {
- 	return container_of(vdpa, struct vp_vdpa, vdpa);
-@@ -50,7 +56,12 @@ static struct virtio_pci_modern_device *vdpa_to_mdev(struct vdpa_device *vdpa)
- {
- 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
- 
--	return &vp_vdpa->mdev;
-+	return vp_vdpa->mdev;
-+}
+-	return rq_clock_task(rq) >> sched_thermal_decay_shift;
++	u64 thermal_clock = rq_clock_task(rq);
 +
-+static struct virtio_pci_modern_device *vp_vdpa_to_mdev(struct vp_vdpa *vp_vdpa)
-+{
-+	return vp_vdpa->mdev;
++	if (sched_thermal_decay_shift < 0)
++		thermal_clock <<= -sched_thermal_decay_shift;
++	else
++		thermal_clock >>= sched_thermal_decay_shift;
++
++	return thermal_clock;
  }
  
- static u64 vp_vdpa_get_device_features(struct vdpa_device *vdpa)
-@@ -96,7 +107,7 @@ static int vp_vdpa_get_vq_irq(struct vdpa_device *vdpa, u16 idx)
- 
- static void vp_vdpa_free_irq(struct vp_vdpa *vp_vdpa)
- {
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	struct pci_dev *pdev = mdev->pci_dev;
- 	int i;
- 
-@@ -143,7 +154,7 @@ static irqreturn_t vp_vdpa_config_handler(int irq, void *arg)
- 
- static int vp_vdpa_request_irq(struct vp_vdpa *vp_vdpa)
- {
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	struct pci_dev *pdev = mdev->pci_dev;
- 	int i, ret, irq;
- 	int queues = vp_vdpa->queues;
-@@ -198,7 +209,7 @@ static int vp_vdpa_request_irq(struct vp_vdpa *vp_vdpa)
- static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
- {
- 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	u8 s = vp_vdpa_get_status(vdpa);
- 
- 	if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
-@@ -212,7 +223,7 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
- static int vp_vdpa_reset(struct vdpa_device *vdpa)
- {
- 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	u8 s = vp_vdpa_get_status(vdpa);
- 
- 	vp_modern_set_status(mdev, 0);
-@@ -372,7 +383,7 @@ static void vp_vdpa_get_config(struct vdpa_device *vdpa,
- 			       void *buf, unsigned int len)
- {
- 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	u8 old, new;
- 	u8 *p;
- 	int i;
-@@ -392,7 +403,7 @@ static void vp_vdpa_set_config(struct vdpa_device *vdpa,
- 			       unsigned int len)
- {
- 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	const u8 *p = buf;
- 	int i;
- 
-@@ -412,7 +423,7 @@ static struct vdpa_notification_area
- vp_vdpa_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
- {
- 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
--	struct virtio_pci_modern_device *mdev = &vp_vdpa->mdev;
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
- 	struct vdpa_notification_area notify;
- 
- 	notify.addr = vp_vdpa->vring[qid].notify_pa;
-@@ -454,38 +465,31 @@ static void vp_vdpa_free_irq_vectors(void *data)
- 	pci_free_irq_vectors(data);
- }
- 
--static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
-+			   const struct vdpa_dev_set_config *add_config)
- {
--	struct virtio_pci_modern_device *mdev;
-+	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =
-+		container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
-+
-+	struct virtio_pci_modern_device *mdev = vp_vdpa_mgtdev->mdev;
-+	struct pci_dev *pdev = mdev->pci_dev;
- 	struct device *dev = &pdev->dev;
--	struct vp_vdpa *vp_vdpa;
-+	struct vp_vdpa *vp_vdpa = NULL;
- 	int ret, i;
- 
--	ret = pcim_enable_device(pdev);
--	if (ret)
--		return ret;
-+	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa, dev, &vp_vdpa_ops,
-+				    name, false);
- 
--	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
--				    dev, &vp_vdpa_ops, NULL, false);
- 	if (IS_ERR(vp_vdpa)) {
- 		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
- 		return PTR_ERR(vp_vdpa);
- 	}
- 
--	mdev = &vp_vdpa->mdev;
--	mdev->pci_dev = pdev;
--
--	ret = vp_modern_probe(mdev);
--	if (ret) {
--		dev_err(&pdev->dev, "Failed to probe modern PCI device\n");
--		goto err;
--	}
--
--	pci_set_master(pdev);
--	pci_set_drvdata(pdev, vp_vdpa);
-+	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
- 
- 	vp_vdpa->vdpa.dma_dev = &pdev->dev;
- 	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
-+	vp_vdpa->mdev = mdev;
- 
- 	ret = devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, pdev);
- 	if (ret) {
-@@ -516,7 +520,8 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	}
- 	vp_vdpa->config_irq = VIRTIO_MSI_NO_VECTOR;
- 
--	ret = vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
-+	vp_vdpa->vdpa.mdev = &vp_vdpa_mgtdev->mgtdev;
-+	ret = _vdpa_register_device(&vp_vdpa->vdpa, vp_vdpa->queues);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Failed to register to vdpa bus\n");
- 		goto err;
-@@ -529,12 +534,104 @@ static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	return ret;
- }
- 
-+static void vp_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev,
-+			    struct vdpa_device *dev)
-+{
-+	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev =
-+		container_of(v_mdev, struct vp_vdpa_mgmtdev, mgtdev);
-+
-+	struct vp_vdpa *vp_vdpa = vp_vdpa_mgtdev->vp_vdpa;
-+
-+	_vdpa_unregister_device(&vp_vdpa->vdpa);
-+	vp_vdpa_mgtdev->vp_vdpa = NULL;
-+}
-+
-+static const struct vdpa_mgmtdev_ops vp_vdpa_mdev_ops = {
-+	.dev_add = vp_vdpa_dev_add,
-+	.dev_del = vp_vdpa_dev_del,
-+};
-+
-+static int vp_vdpa_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+{
-+	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev = NULL;
-+	struct vdpa_mgmt_dev *mgtdev;
-+	struct device *dev = &pdev->dev;
-+	struct virtio_pci_modern_device *mdev = NULL;
-+	struct virtio_device_id *mdev_id = NULL;
-+	int err;
-+
-+	vp_vdpa_mgtdev = kzalloc(sizeof(*vp_vdpa_mgtdev), GFP_KERNEL);
-+	if (!vp_vdpa_mgtdev)
-+		return -ENOMEM;
-+
-+	mgtdev = &vp_vdpa_mgtdev->mgtdev;
-+	mgtdev->ops = &vp_vdpa_mdev_ops;
-+	mgtdev->device = dev;
-+
-+	mdev = kzalloc(sizeof(struct virtio_pci_modern_device), GFP_KERNEL);
-+	if (!mdev) {
-+		err = -ENOMEM;
-+		goto mdev_err;
-+	}
-+
-+	mdev_id = kzalloc(sizeof(struct virtio_device_id), GFP_KERNEL);
-+	if (!mdev_id) {
-+		err = -ENOMEM;
-+		goto mdev_id_err;
-+	}
-+
-+	vp_vdpa_mgtdev->mdev = mdev;
-+	mdev->pci_dev = pdev;
-+
-+	err = pcim_enable_device(pdev);
-+	if (err) {
-+		goto probe_err;
-+	}
-+
-+	err = vp_modern_probe(mdev);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to probe modern PCI device\n");
-+		goto probe_err;
-+	}
-+
-+	mdev_id->device = mdev->id.device;
-+	mdev_id->vendor = mdev->id.vendor;
-+	mgtdev->id_table = mdev_id;
-+	mgtdev->max_supported_vqs = vp_modern_get_num_queues(mdev);
-+	mgtdev->supported_features = vp_modern_get_features(mdev);
-+	pci_set_master(pdev);
-+	pci_set_drvdata(pdev, vp_vdpa_mgtdev);
-+
-+	err = vdpa_mgmtdev_register(mgtdev);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to register vdpa mgmtdev device\n");
-+		goto register_err;
-+	}
-+
-+	return 0;
-+
-+register_err:
-+	vp_modern_remove(vp_vdpa_mgtdev->mdev);
-+probe_err:
-+	kfree(mdev_id);
-+mdev_id_err:
-+	kfree(mdev);
-+mdev_err:
-+	kfree(vp_vdpa_mgtdev);
-+	return err;
-+}
-+
- static void vp_vdpa_remove(struct pci_dev *pdev)
- {
--	struct vp_vdpa *vp_vdpa = pci_get_drvdata(pdev);
-+	struct vp_vdpa_mgmtdev *vp_vdpa_mgtdev = pci_get_drvdata(pdev);
-+	struct virtio_pci_modern_device *mdev = NULL;
- 
--	vp_modern_remove(&vp_vdpa->mdev);
--	vdpa_unregister_device(&vp_vdpa->vdpa);
-+	mdev = vp_vdpa_mgtdev->mdev;
-+	vp_modern_remove(mdev);
-+	vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
-+	kfree(&vp_vdpa_mgtdev->mgtdev.id_table);
-+	kfree(mdev);
-+	kfree(vp_vdpa_mgtdev);
- }
- 
- static struct pci_driver vp_vdpa_driver = {
-diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-index 721089bb4c84..342c454c1623 100644
---- a/include/linux/vdpa.h
-+++ b/include/linux/vdpa.h
-@@ -462,7 +462,7 @@ struct vdpa_mgmtdev_ops {
- struct vdpa_mgmt_dev {
- 	struct device *device;
- 	const struct vdpa_mgmtdev_ops *ops;
--	const struct virtio_device_id *id_table;
-+	struct virtio_device_id *id_table;
- 	u64 config_attr_mask;
- 	struct list_head list;
- 	u64 supported_features;
+ static inline void rq_clock_skip_update(struct rq *rq)
 -- 
-2.34.1
+2.17.1
 

@@ -2,103 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F63D514878
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01AC51487A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358702AbiD2LrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S240194AbiD2Lrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358626AbiD2LrA (ORCPT
+        with ESMTP id S230052AbiD2Lrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:47:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5940FB36B0;
-        Fri, 29 Apr 2022 04:43:42 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j15so10460785wrb.2;
-        Fri, 29 Apr 2022 04:43:42 -0700 (PDT)
+        Fri, 29 Apr 2022 07:47:42 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4CC7495
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:44:18 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id r9so6884081pjo.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QAG6pPyD19LucMP6CU8bLxTFEbcMKLUH+h3BO7hHMdg=;
-        b=XrPtIQJKdVelzjyZcDP5JYWrAupI8eZfW+4qG0MmikLOobez5/6ud+gLpdOLZq0qwz
-         5toAEsssrC9sqnJ4HQhGUJcYOB80r7aCIq0ahp12jO/r2k9Q0/9GFD9wz3locbaO+4Ja
-         dDIJQ1eZ/pa6I06DOQKdfLsrH84GiyAdDTcJtVJl9onmAOaiaTmVvVUhIT3nkA76UPWw
-         jFjnt/vJKMmieYSXzyGaOSu+lsQkhJCI1VNHvG+9wvv3T69ycqRGyR5V6Npw48QLREmb
-         HglDsujyrC+DWR62abq5WjWN+j4ry+eIZ/iAqRth9YFKC08dQblImp1l2trLqws/awdV
-         FMHg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EkPpqVJFZwtWuFEh4cjXyyHHD2JdNkeuaKvQxOerGLs=;
+        b=UiTgjpBDLYNVb5S2HJ7JkqhnXTLajN0F89ea627idBHei/lCATFHimuuXRKJrI7VP1
+         hXd7YtHmJfxGyoIYThnjXVLHYbsWVstByJN/HBzblqHJmwTxONK1aH8TlhMIUEt+J9JL
+         Jvj2ubAeOBdbV9dq8oG8yygZ9JPthi8vSkNDCX94aI4sEhLujFDd+HRF55Ml0m06TdkX
+         I6Xj25mlJ0iyRn7ETPC/BZk4FHDDb2OOBnDcodFk6gi47HGtXFbrvtnl7TQeEoom11lr
+         HZAz2r2JE0eZk/RGC0m2KhI7rmMDlVncQ6eLOBDh+9jdIJ4jcDL3YARyrhK3+hqz12g4
+         Xu6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QAG6pPyD19LucMP6CU8bLxTFEbcMKLUH+h3BO7hHMdg=;
-        b=QSCE2WzkjwxveiiEdkxUEJDA2CTIdSi7leihBDyrhuCvSD8P2+QncrbBDAWbH62ozl
-         yQig5f//p1TzFBfYC9lpLxjdoy4ZgvNkkJbzNbilhLV/VxPLfLBfzU4RwiuJb0Xu2wMJ
-         bdhUL+pTFadw20DsXfO+dPdlR8CUjY/v2IrmBEaQcWzUW+U3gp4Ud1cxjljsOG0DRrG/
-         q6t35olAV2GRJKsGtHnYuPP0LUGAXgoNqLz48Tvk8ptHFc99gz2J2AIvqJZr83xAP7Zq
-         VggrTHCThjPv5lG+Q74qEXwSdn5Ftt9j7aRBQh3DuM6UdLcgTJ/A9boB5cNHU7vkmv+T
-         TFXQ==
-X-Gm-Message-State: AOAM532lFkSzkomgpqPK3URnbdcEiKU616tsQAHljhnC8x40J8LQcPYF
-        umSptQkrWZAeo6XPFxoH0eSNIz5WoPB+8w==
-X-Google-Smtp-Source: ABdhPJwa9zh912EeQ+Wd2W4TIvEJ8UM0h4erACtzSUOUAWGv85uWKfGiyjFUhY9MzrZxsC1K1zBUMw==
-X-Received: by 2002:a5d:634e:0:b0:20a:d67e:4a76 with SMTP id b14-20020a5d634e000000b0020ad67e4a76mr24094750wrw.637.1651232620918;
-        Fri, 29 Apr 2022 04:43:40 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-99-183.xnet.hr. [88.207.99.183])
-        by smtp.googlemail.com with ESMTPSA id l6-20020a1c2506000000b0038e6fe8e8d8sm2990900wml.5.2022.04.29.04.43.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EkPpqVJFZwtWuFEh4cjXyyHHD2JdNkeuaKvQxOerGLs=;
+        b=Be7b4UczUdvPLRfF24H6M2Vu4gLgXlssMHJXH/JdGPUhtbqUf1zbge40sxL/im+vSc
+         Xmvq/Bx5/dUYKWUeqH1RL77VU2SRNekl3u7bkbKnXtu+dR0ZBeSIFKuSiH/tUX++xk4j
+         r0kfR2P3MOPg0dHAqZPiZHwlMOarqw4qHeel6BO6/9REtLQQsVoDYIEGvharKB2B6jIL
+         FyX/MJXVa9WkGcMgiLrMohuzoCUopmkWJj3frXNvAFoAAG1iQP6b71gQFSPSRkTgR06L
+         CwxX6O3n9IEcBrMH1BP0AEARtoybpuvoSIROLWUjmZU6w2ycMMX9w69a21sphD43Fq2A
+         rJ1A==
+X-Gm-Message-State: AOAM532vQ5KWzebTUzqn19V5ttWVhQ5H1gmxMTyg6PbdiV3MMbE2Zy0m
+        8S1uji17sdc1b7s8IFvPHFsqEQ==
+X-Google-Smtp-Source: ABdhPJzBsgHH4J5QAo+Gn1X23WEJ7Tm2fIjGmg7YoFqHNQUGWoo/feizs2yfyHBrgsdv6ewosE17vw==
+X-Received: by 2002:a17:902:e84b:b0:15c:fee2:aeb6 with SMTP id t11-20020a170902e84b00b0015cfee2aeb6mr27576901plg.128.1651232657669;
+        Fri, 29 Apr 2022 04:44:17 -0700 (PDT)
+Received: from localhost ([139.177.225.239])
+        by smtp.gmail.com with ESMTPSA id u14-20020a63470e000000b003c14af5061esm5653739pga.54.2022.04.29.04.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 04:43:40 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        jassisinghbrar@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 6/6] arm64: dts: ipq8074: update APCS node due to clock support
-Date:   Fri, 29 Apr 2022 13:43:30 +0200
-Message-Id: <20220429114330.59026-6-robimarko@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220429114330.59026-1-robimarko@gmail.com>
-References: <20220429114330.59026-1-robimarko@gmail.com>
+        Fri, 29 Apr 2022 04:44:17 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 19:44:14 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Peng Liu <liupeng256@huawei.com>
+Cc:     mike.kravetz@oracle.com, david@redhat.com,
+        akpm@linux-foundation.org, yaozhenguo1@gmail.com,
+        baolin.wang@linux.alibaba.com, liuyuntao10@huawei.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        wangkefeng.wang@huawei.com, dave@stgolabs.net,
+        wangborong@cdjrlc.com, linux-ia64@vger.kernel.org,
+        adobriyan@gmail.com
+Subject: Re: [PATCH v4] mm: Using for_each_online_node and node_online
+ instead of open coding
+Message-ID: <YmvPjnjufx+XZxN3@FVFYT0MHHV2J.usts.net>
+References: <20220413032915.251254-4-liupeng256@huawei.com>
+ <20220429030218.644635-1-liupeng256@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429030218.644635-1-liupeng256@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-APCS now has support for providing the APSS clocks as the child device
-for IPQ8074, so update the DT node to reflect the expanded register space
-as well as add #clock-cells property as it now provides the APSS clock
-that will be used for CPU scaling.
+On Fri, Apr 29, 2022 at 03:02:18AM +0000, Peng Liu wrote:
+> Use more generic functions to deal with issues related to online
+> nodes. The changes will make the code simplified.
+> 
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+> Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 5b32d141c7ae..d23b14a8d4b4 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -970,8 +970,9 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
- 
- 		apcs_glb: mailbox@b111000 {
- 			compatible = "qcom,ipq8074-apcs-apps-global";
--			reg = <0x0b111000 0x1000>;
-+			reg = <0x0b111000 0x6000>;
- 
-+			#clock-cells = <1>;
- 			#mbox-cells = <1>;
- 		};
- 
--- 
-2.35.1
-
+Thanks.

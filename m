@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690E9515319
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256F651531D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379800AbiD2SCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S1379846AbiD2SEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiD2SCk (ORCPT
+        with ESMTP id S231160AbiD2SET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:02:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDF08FFB7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:59:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AA27B8376D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 17:59:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E19C385A4;
-        Fri, 29 Apr 2022 17:59:18 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 13:59:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
- non-weak symbols
-Message-ID: <20220429135916.47c3e623@gandalf.local.home>
-In-Reply-To: <1651252324.js9790ngjg.naveen@linux.ibm.com>
-References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220428184212.18fbf438@gandalf.local.home>
-        <1651252324.js9790ngjg.naveen@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 29 Apr 2022 14:04:19 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5A786E33;
+        Fri, 29 Apr 2022 11:01:01 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q23so11775371wra.1;
+        Fri, 29 Apr 2022 11:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kwQwtR8Oa7bR+n2zK/7E32nJYLiZTZEmGGHscOLXyGg=;
+        b=omW4ZgNy3/eRtdMQX8jV0vHYKuikLSy/pjGklKPyktIR3Op8rhe25cBdCRhn2QLg6G
+         tolziYACJvJKqVxSLXiJ/CVYDj9EdJWiIKSCfkJ0w/kD/v8jlaUmtvo5TQrb/355Vd8P
+         zTFyi62DxQ2O3fgqT+ikw1unEpXCip02UU5mh2DWoAZuDaqg5Cj182s4p+jG/5khKQAR
+         G/LLHH5/cbRAf5WCi9jXfgDsWiIxtXMecyQ70EGGibHC7Vu+odSNPRl0IRVFZHKAnOZL
+         h3g0Nx/Wpu8F0X8H2VdyzaSOZL2uAE3mVDy7eaoXI+3zlIhwtc2bXoHHAuTs5M87ZUtX
+         vFvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kwQwtR8Oa7bR+n2zK/7E32nJYLiZTZEmGGHscOLXyGg=;
+        b=Vrd/E/lLav8L0dZGzLQoKX3OHpqMbRNiHg9Lpbria0luMz4ysyFcLG/dqVOn4WJacU
+         XoH+BKzCMwkJ9RCWmlzGP+MeTBlJqVyLy6jrj19lI2XqcSc/yXdUjsOHRJdoFzECsS95
+         fSuh+j+qZSJMM90nR2zibkL7OJHQGG9JG9H6fDyRPLaJ0UYGH2PVjFa3rhiOPO4uQg50
+         SU41qCYFHCj1og7h71VRNcIwRfV7KEfnIVUSm7hJ2CViT2g7OUL+FU7szIJw0C36+6fZ
+         UL+pzbE/7cG46FlOymrVLTp0pw+5w/j3tMECgjIpAq+iz2O6KMFt8krYyIyTZQNrS57G
+         dJ0A==
+X-Gm-Message-State: AOAM532AHjG+Xs6DOmSpt8XgG2mhAy7a39LzjtT+08WDWHiA6SwxTN4Z
+        kfM9FKLNuQOMimZnFZkrKlY=
+X-Google-Smtp-Source: ABdhPJyojKtW+Lvnm5YqDhEX45F4uXf5KSoPl4PhvF828tf3rDJwWkjJ0zVderhj/1i5vb1y0rhebA==
+X-Received: by 2002:adf:b613:0:b0:20a:c7db:3ce4 with SMTP id f19-20020adfb613000000b0020ac7db3ce4mr269389wre.70.1651255259533;
+        Fri, 29 Apr 2022 11:00:59 -0700 (PDT)
+Received: from xws.localdomain (pd9e5acba.dip0.t-ipconnect.de. [217.229.172.186])
+        by smtp.gmail.com with ESMTPSA id s30-20020adf979e000000b0020adfb1292fsm3041309wrb.16.2022.04.29.11.00.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 11:00:58 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] platform/surface: gpe: Add support for Surface Pro 8
+Date:   Fri, 29 Apr 2022 20:00:49 +0200
+Message-Id: <20220429180049.1282447-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 23:09:19 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+The new Surface Pro 8 uses GPEs for lid events as well. Add an entry for
+that so that the lid can be used to wake the device. Note that this is a
+device with a keyboard type-cover, where this acts as the "lid".
 
-> If I'm understanding your suggestion right:
-> - we now create a new section in each object file: __mcount_loc_weak, 
->   and capture such relocations using weak symbols there.
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ drivers/platform/surface/surface_gpe.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Yes, but it would be putting the same information it puts into __mcount_loc
-but also add it here too. That is, it will duplicate the data.
+diff --git a/drivers/platform/surface/surface_gpe.c b/drivers/platform/surface/surface_gpe.c
+index c1775db29efb..ec66fde28e75 100644
+--- a/drivers/platform/surface/surface_gpe.c
++++ b/drivers/platform/surface/surface_gpe.c
+@@ -99,6 +99,14 @@ static const struct dmi_system_id dmi_lid_device_table[] = {
+ 		},
+ 		.driver_data = (void *)lid_device_props_l4D,
+ 	},
++	{
++		.ident = "Surface Pro 8",
++		.matches = {
++			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Pro 8"),
++		},
++		.driver_data = (void *)lid_device_props_l4B,
++	},
+ 	{
+ 		.ident = "Surface Book 1",
+ 		.matches = {
+-- 
+2.36.0
 
-> - we then ask the linker to put these separately between, say, 
->   __start_mcount_loc_weak and __stop_mcount_loc_weak
-
-Yes, but it will also go in the location between __start_mcount_loc and
-__stop_mcount_loc.
-
-> - on ftrace init, we go through entries in this range, but discard those 
->   that belong to functions that also have an entry between 
->   __start_mcount_loc and __stop_mcount loc.
-
-But we should be able to know if it was overridden or not, by seeing if
-there's another function that was called. Or at least, we can validate them
-to make sure that they are correct.
-
-> 
-> The primary issue I see here is that the mcount locations within the new 
-> weak section will end up being offsets from a different function in 
-> vmlinux, since the linker does not create a symbol for the weak 
-> functions that were over-ridden.
-
-The point of this section is to know which functions in __mcount_loc may
-have been overridden, as they would be found in the __mcount_loc_weak
-section. And then we can do something "special" to them.
-
-> 
-> As an example, in the issue described in this patch set, if powerpc 
-> starts over-riding kexec_arch_apply_relocations(), then the current weak 
-> implementation in kexec_file.o gets carried over to the final vmlinux, 
-> but the instructions will instead appear under the previous function in 
-> kexec_file.o: crash_prepare_elf64_headers(). This function may or may 
-> not be traced to begin with, so we won't be able to figure out if this 
-> is valid or not.
-
-If it was overridden, then there would be two entries for function that
-overrides the weak function in the __mcount_loc section, right? One for the
-new function, and one that was overridden. Of course this could be more
-complex if the new function had been marked notrace.
-
-I was thinking of doing this just so that we know what functions are weak
-and perhaps need extra processing.
-
-Another issue with weak functions and ftrace just came up here:
-
-  https://lore.kernel.org/all/20220428095803.66c17c32@gandalf.local.home/
-
-
--- Steve

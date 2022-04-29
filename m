@@ -2,159 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D725E51554B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BE8515547
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380627AbiD2UQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S1380565AbiD2UQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380634AbiD2UQn (ORCPT
+        with ESMTP id S1380566AbiD2UQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:16:43 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD81BD5566
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651263203; x=1682799203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1yJ6dtBUmzSPd3KmuoPqTe8eRBSPNU2G69mjWH9cZx8=;
-  b=hRVSjEgkMVQQAZWnvE0JtB+Q/5R33rduQ4VDjCO8i8c8O/JB8jOm7Ta7
-   WLnz0ec7fUsJAIafDO9WAk03FppVVymrnXA/6K6UmZMLBfl4DleLVkwkA
-   ecQ68TGfAYZYKbNzmUzpSoL5kUuIdkGdaBjJ8Av4yPv6D/VtqxoZQASoB
-   8Jhp7Azf/dEuUZVEP6ZvPi3rVOYfCQXUz2J8TgAL9dbcNa5spCkGkml4p
-   9jPJKXYnjD2U1WhbC1dc3sSDbRGI1d3M+kCCOMOyvKFQ7gXVm+ihA8vpB
-   i1ZZIqvrPT2hu64/nsaYfnKA1k6cdqxWbF1koiTMOJ33b+SLTWAdXcG0q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="265604811"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="265604811"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 13:13:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="685307939"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Apr 2022 13:13:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkWzR-0006bH-6o;
-        Fri, 29 Apr 2022 20:13:21 +0000
-Date:   Sat, 30 Apr 2022 04:12:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Ott <sebott@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: smc91c92_cs.c:undefined reference to `iounmap'
-Message-ID: <202204300425.kL7G88z7-lkp@intel.com>
+        Fri, 29 Apr 2022 16:16:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E51256FB9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651263174;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VFq3FS22EtZGeQS1oNCaYOBGWZnQDFBvgQIs9pjL7WE=;
+        b=D9nU/HBYSTX7frAtfLJIywl0vP9vmHxuOVp926xoQK7ZISD/VQP3m5nJlGe3/EDp7N0H8c
+        vzArSzoU8ACVoCS2BKmoCcR4Ei6ktrqX1CmHa52NRaQA4IbWXXOTQQ2YPoJyOUO3TOMVwD
+        VNZ9GZswMSYiyaKFnceznVyDMs2TLnQ=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-212-yyWaouqwPX-SUWhK5M3Btw-1; Fri, 29 Apr 2022 16:12:53 -0400
+X-MC-Unique: yyWaouqwPX-SUWhK5M3Btw-1
+Received: by mail-qv1-f69.google.com with SMTP id p3-20020a05621421e300b004562c4a6b08so6762109qvj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:12:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VFq3FS22EtZGeQS1oNCaYOBGWZnQDFBvgQIs9pjL7WE=;
+        b=D2ZzcXmvO2DKJPeGt8C9C1dBbaif/2YDmBBNg9cRJVxGwHdHlre06xIebi/fF/PqRv
+         LFbnrPnhO7FENXJ9g6PjXmu6JKFueINhSRgl9a7WEOLRCOmB8Cbg5r7ELsO2kN/SAjYF
+         uhCek/N1A7I7JTYtEkmHaeKow9AkZbt5MWJSHBqh2NXq7QRgqWiFcgCsQMwXKd/HoQel
+         yysGX3U2imhcrXrjsM7Cj6e3VtzQVqsO+0nN8mE5im73A04ebojtApCpPTDpLv+2TERZ
+         W4rUTdcuEe4+VG4GAzAb3a0IDK648AfA3Z8Ob9EcjZLrOFJqoilxdTltmjfeTVqIoCiJ
+         cxjw==
+X-Gm-Message-State: AOAM532jv+NpOutSGBSQpYfThZ8Bu1SoA25bq4lHZpMjyEFuYeiSFdCn
+        BVuBLQD9yW377LuLfJLdnegXu1geTqNdIxksMHX9Jr6X3h6z5w2xssBdbah1EK0Qnz/Os340PZ/
+        U7fo1pZTgzTICUBs3drvcCX9I
+X-Received: by 2002:a05:622a:5:b0:2f3:7dd0:3d13 with SMTP id x5-20020a05622a000500b002f37dd03d13mr1036009qtw.362.1651263172761;
+        Fri, 29 Apr 2022 13:12:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzWwL5xKqhCNor6yaHrMCbJD5xi0aZ8jf94JlgbQ9LACtypq6Go9z5qVCLrD1q7s7iJ8ycSVg==
+X-Received: by 2002:a05:622a:5:b0:2f3:7dd0:3d13 with SMTP id x5-20020a05622a000500b002f37dd03d13mr1035998qtw.362.1651263172562;
+        Fri, 29 Apr 2022 13:12:52 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id x1-20020ac87a81000000b002f39b99f6a7sm94599qtr.65.2022.04.29.13.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 13:12:52 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 13:12:49 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, mark.rutland@arm.com, linux-kernel@vger.kernel.org,
+        linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH] linkage: Fix issue with missing symbol size
+Message-ID: <20220429201249.5hjcutds4wmkhemr@treble>
+References: <20220429091859.GS2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220429091859.GS2731@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2d0de93ca2515958e717138e5ee07ec3b6bf0226
-commit: 71ba41c9b1d91042960e9d92a5c8f52dc8531eda s390/pci: provide support for MIO instructions
-date:   3 years ago
-config: s390-randconfig-r012-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300425.kL7G88z7-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 71ba41c9b1d91042960e9d92a5c8f52dc8531eda
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+On Fri, Apr 29, 2022 at 11:18:59AM +0200, Peter Zijlstra wrote:
+> 
+> Occasionally, typically when a function doesn't end with 'ret', an
+> alias on that function will have 0 size.
+> 
+> The difference between what GCC generates and our linkage magic, is
+> that GCC doesn't appear to provide .size for the alias'ed symbol at
+> all. And indeed, removing this directive cures the issue.
+> 
+> Additionally, GCC also doesn't emit .type for alias symbols either, so
+> also omit that.
+> 
+> Fixes: e0891269a8c2 ("linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()")
+> Suggested-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
-   phy-mvebu-a3700-utmi.c:(.text+0x544): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
-   fsl-edma.c:(.text+0xb72): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: fsl-edma.c:(.text+0xbe0): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/idma64.o: in function `idma64_platform_probe':
-   idma64.c:(.text+0x1b7a): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_xbar_event_map':
-   edma.c:(.text+0x750): undefined reference to `of_address_to_resource'
-   s390-linux-ld: edma.c:(.text+0x790): undefined reference to `devm_ioremap'
-   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_probe':
-   edma.c:(.text+0x2908): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/omap-dma.o: in function `omap_dma_probe':
-   omap-dma.c:(.text+0x68): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_am335x_xbar_probe':
-   dma-crossbar.c:(.text+0x3b4): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_dra7_xbar_probe':
-   dma-crossbar.c:(.text+0x868): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
-   main.c:(.text+0xa0): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0xf0): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
-   main.c:(.text+0x2f2): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x33c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
-   main.c:(.text+0x6f0): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x7e8): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x824): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x874): undefined reference to `iounmap'
-   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
-   xillybus_of.c:(.text+0x54e): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_exit':
-   com90xx.c:(.exit.text+0x72): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `check_mirror':
-   com90xx.c:(.init.text+0x5e): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x9c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_found':
-   com90xx.c:(.init.text+0x13c): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x2aa): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0x3fe): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0x526): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/com90xx.o: in function `com90xx_probe':
-   com90xx.c:(.init.text+0x92e): undefined reference to `ioremap'
-   s390-linux-ld: com90xx.c:(.init.text+0xa2e): undefined reference to `iounmap'
-   s390-linux-ld: com90xx.c:(.init.text+0xde8): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
-   arc-rimi.c:(.exit.text+0x34): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
-   arc-rimi.c:(.init.text+0x12a): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x1e4): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x3f8): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x49e): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x5b4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
-   arc-rimi.c:(.text.unlikely+0x5e): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.text.unlikely+0x9c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/altera/altera_tse_main.o: in function `request_and_map':
-   altera_tse_main.c:(.text+0x19e6): undefined reference to `devm_ioremap_nocache'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_detach':
->> smc91c92_cs.c:(.text+0x22d2): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_config':
->> smc91c92_cs.c:(.text+0x2c96): undefined reference to `ioremap'
->> s390-linux-ld: smc91c92_cs.c:(.text+0x3466): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   cistpl.c:(.text+0x3b6): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x3ce): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x460): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x480): undefined reference to `iounmap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0x1688): undefined reference to `iounmap'
-   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
-   sirfsoc_wdt.c:(.text+0x18e): undefined reference to `devm_ioremap_resource'
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Josh
+

@@ -2,179 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A27514FF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304C2514FFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378652AbiD2P4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S1378664AbiD2P4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiD2P4k (ORCPT
+        with ESMTP id S1378290AbiD2P4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:56:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D13CE10F;
-        Fri, 29 Apr 2022 08:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651247601; x=1682783601;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v3xHt04zUoM51m57wES9OEH4SBADCPxc9G7xtsUo2b0=;
-  b=SjLJi9WGQa+2fBsBQZ+iP6CnjRh4AsWjaLMZALplkkpKvmrmplw1/O9v
-   Y1FMeVs3wz2RklkEz0ddL0ALrnkQrVT34AABBeeDOMvMKzA/X1tcj4UAk
-   Y5P84xf2VajX2YnbJAyxhJ5L1Vh8wxN+oUxrEaFk9MUcylnPAxafnRx+z
-   4/9VlCqvyVQvdLkq8aGX9dtRY9gWCVdiqIjxjnidIImuJypIPaUdoILiO
-   mQXfJU+jpv2dI/mfX0Ce66Ltd3GknkEiKzrSka+XQgXwnh8ZJYK6xq3NI
-   0w3gLQChbC8A55L+N1kJW2weq6vZ40nKaQWTRwWCeM6xfjjUthNcj/2qz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="329623786"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="329623786"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 08:52:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="706606733"
-Received: from vpareek-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.103.56])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 08:52:20 -0700
-Date:   Fri, 29 Apr 2022 08:52:20 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-modules@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>
-Subject: Re: [Intel-gfx] [PATCH 1/2] module: add a function to add module
- references
-Message-ID: <20220429155220.6k63lt5knhertj3g@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <cover.1651212016.git.mchehab@kernel.org>
- <a078eb2e46d00ec59c8a91ea0afa5190730c9e58.1651212016.git.mchehab@kernel.org>
- <YmuZovuDaCYDDG4c@phenom.ffwll.local>
- <20220429090757.1acb943a@sal.lan>
- <YmuiKcHgl+nABvo/@kroah.com>
- <20220429101503.4048db5b@sal.lan>
- <Ymu5f8EjdC1Mawzt@kroah.com>
- <20220429112351.0e044950@sal.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220429112351.0e044950@sal.lan>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 11:56:41 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42705CABBE;
+        Fri, 29 Apr 2022 08:53:20 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id e4so8948643oif.2;
+        Fri, 29 Apr 2022 08:53:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=8c/8aPQ+INHY9UT15ou0Pj3sFCcZR4zflpgcHdOlHcU=;
+        b=ESHqhbeyzjt7S5d0vZPvl43UmynKJDaQrIIJJRRCg6Kgea7LTJecxeZ51SqpxzrvEE
+         pBYegpBFWrsEL3Dvjlift1tekjHe5AywmToaLUnhLYXPXzfh2ncDUuWFezvZpnhEeeZ9
+         rC1jcW+GYgp7tY2NclZTdTL4z3H8+PNsaE/M3CgECI0S6lZfsH0qrzjHbvAgZlDsh3VA
+         PEeMh5yE0uZtxvBUymIZYrVcWNJJTS/AJOrCDnUOGEc9v/Rlyoj6zbjd1QfY6fjK7jPo
+         9wPU+SFdk29Iw0hlI/kUi7V/8RxEIS8Nn2d0DcZN9o2Pjgz7T4pCqvmA6bExT8bgYPU0
+         6TBQ==
+X-Gm-Message-State: AOAM530giWbKYGGrvNgVzIRioW6RNt3FYH/KLG9hDYgXBdadSYfRKxmG
+        eLGflFQghN5EaAYANZLhlQ==
+X-Google-Smtp-Source: ABdhPJyHk6Vezdq2ZcgOXBezvob14dh5P9RlvoepRdMfGc3VB1Wg+ZVR0YtpfMvXI89g6zvT2louZg==
+X-Received: by 2002:a05:6808:188a:b0:323:47b:2030 with SMTP id bi10-20020a056808188a00b00323047b2030mr23553oib.77.1651247599523;
+        Fri, 29 Apr 2022 08:53:19 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056870160e00b000e915a9121csm3362607oae.52.2022.04.29.08.53.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 08:53:18 -0700 (PDT)
+Received: (nullmailer pid 2344495 invoked by uid 1000);
+        Fri, 29 Apr 2022 15:53:16 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <20220429121739.28584-4-ansuelsmth@gmail.com>
+References: <20220429121739.28584-1-ansuelsmth@gmail.com> <20220429121739.28584-4-ansuelsmth@gmail.com>
+Subject: Re: [PATCH 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver Documentation to yaml
+Date:   Fri, 29 Apr 2022 10:53:16 -0500
+Message-Id: <1651247596.124069.2344494.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:23:51AM +0100, Mauro Carvalho Chehab wrote:
->Em Fri, 29 Apr 2022 12:10:07 +0200
->Greg KH <gregkh@linuxfoundation.org> escreveu:
->
->> On Fri, Apr 29, 2022 at 10:15:03AM +0100, Mauro Carvalho Chehab wrote:
->> > HI Greg,
->> >
->> > Em Fri, 29 Apr 2022 10:30:33 +0200
->> > Greg KH <gregkh@linuxfoundation.org> escreveu:
->> >
->> > > On Fri, Apr 29, 2022 at 09:07:57AM +0100, Mauro Carvalho Chehab wrote:
->> > > > Hi Daniel,
->> > > >
->> > > > Em Fri, 29 Apr 2022 09:54:10 +0200
->> > > > Daniel Vetter <daniel@ffwll.ch> escreveu:
->> > > >
->> > > > > On Fri, Apr 29, 2022 at 07:31:15AM +0100, Mauro Carvalho Chehab wrote:
->> > > > > > Sometimes, device drivers are bound using indirect references,
->> > > > > > which is not visible when looking at /proc/modules or lsmod.
->> > > > > >
->> > > > > > Add a function to allow setting up module references for such
->> > > > > > cases.
->> > > > > >
->> > > > > > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
->> > > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->> > > > >
->> > > > > This sounds like duct tape at the wrong level. We should have a
->> > > > > device_link connecting these devices, and maybe device_link internally
->> > > > > needs to make sure the respective driver modules stay around for long
->> > > > > enough too. But open-coding this all over the place into every driver that
->> > > > > has some kind of cross-driver dependency sounds terrible.
->> > > > >
->> > > > > Or maybe the bug is that the snd driver keeps accessing the hw/component
->> > > > > side when that is just plain gone. Iirc there's still fundamental issues
->> > > > > there on the sound side of things, which have been attempted to paper over
->> > > > > by timeouts and stuff like that in the past instead of enforcing a hard
->> > > > > link between the snd and i915 side.
->> > > >
->> > > > I agree with you that the device link between snd-hda and the DRM driver
->> > > > should properly handle unbinding on both directions. This is something
->> > > > that require further discussions with ALSA and DRM people, and we should
->> > > > keep working on it.
->> > > >
->> > > > Yet, the binding between those drivers do exist, but, despite other
->> > > > similar inter-driver bindings being properly reported by lsmod, this one
->> > > > is invisible for userspace.
->> > > >
->> > > > What this series does is to make such binding visible. As simple as that.
->> > >
->> > > It also increases the reference count, and creates a user/kernel api
->> > > with the symlinks, right?  Will the reference count increase prevent the
->> > > modules from now being unloadable?
->> > >
->> > > This feels like a very "weak" link between modules that should not be
->> > > needed if reference counting is implemented properly (so that things are
->> > > cleaned up in the correct order.)
->> >
->> > The refcount increment exists even without this patch, as
->> > hda_component_master_bind() at sound/hda/hdac_component.c uses
->> > try_module_get() when it creates the device link.
->>
->> Ok, then why shouldn't try_module_get() be creating this link instead of
->> having to manually do it this way again?  You don't want to have to go
->> around and add this call to all users of that function, right?
->
->Works for me, but this is not a too trivial change, as the new
->try_module_get() function will require two parameters, instead of one:
->
->	- the module to be referenced;
->	- the module which will reference it.
->
->On trivial cases, one will be THIS_MODULE, but, in the specific case
->of snd_hda, the binding is done via an ancillary routine under
->snd_hda_core, but the actual binding happens at snd_hda_intel.
->
->Ok, we could add a __try_module_get() (or whatever other name that
->would properly express what it does) with two parameters, and then
->define try_module_get() as:
->
->	#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
+On Fri, 29 Apr 2022 14:17:39 +0200, Ansuel Smith wrote:
+> Convert kpss-gcc driver Documentation to yaml.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 -------------
+>  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++++++++
+>  2 files changed, 63 insertions(+), 44 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> 
 
-agree that this should be done at this level rather than open coding it
-at every driver. Main improvement being fixed here regardless of the
-snd-hda-intel issue is to properly annotate what is holding a module.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Right now we have 1) symbol module dependencies; 2) kernel references;
-3) userspace references. With (2) and (3) being unknown to the user from
-lsmod pov. Handling this any time try_module_get() is called would make
-(2) visible to lsmod.
+yamllint warnings/errors:
 
-Paired with fixes to the (unreleased) kmod 30[1], this allows `modprobe
--r --remove-holders <module>` to also try removing the holders before
-removing the module itself.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: properties: '#clock-cells' is a dependency of 'clock-output-names'
+	from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: ignoring, error in schema: properties
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb: clock-controller@2011000: '#clock-cells' is a dependency of 'clock-output-names'
+	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/clock/clock.yaml
+Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb:0:0: /example-0/clock-controller@2011000: failed to match any schema with compatible: ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc']
+Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb:0:0: /example-0/clock-controller@2011000: failed to match any schema with compatible: ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc']
 
-thanks
-Lucas De Marchi
+doc reference errors (make refcheckdocs):
 
-[1] https://lore.kernel.org/linux-modules/20220329090912.geymr6xk7taq4rtq@ldmartin-desk2.jf.intel.com/T/#t
+See https://patchwork.ozlabs.org/patch/
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
->
->Would that work for you?
->
->Regards,
->Mauro
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

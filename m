@@ -2,103 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE0D514547
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D63514550
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356474AbiD2JZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S1356505AbiD2J0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238781AbiD2JZo (ORCPT
+        with ESMTP id S1356484AbiD2J0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:25:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA01B6E6C;
-        Fri, 29 Apr 2022 02:22:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57159B833A3;
-        Fri, 29 Apr 2022 09:22:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C917C385A4;
-        Fri, 29 Apr 2022 09:22:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651224144;
-        bh=DWY3tcFSxZ1I9wg1umYsP1PNmy2rL31Mt0gramjBMfU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PUWyyh4N+TkgN5eLLeLHPh1Jo5pt+8Ae9Vp221wrO4SA8QJGgvQ1Sm9jOTzDJMmAt
-         ozKtDroXLk4T/iV4pekBzKOBRO/yjVbWbMwdnUB/aOw0ZEGXUwaG5niS7SGb1SnWcl
-         qavvgEX82BZwOjEGNQe7SPhal6JYMYjVrvfBpdbs=
-Date:   Fri, 29 Apr 2022 11:22:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     iwamatsu@nigauri.org, dinguyen@kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/53] 4.19.240-rc1 review [net: ethernet: stmmac:
- fix altr_tse_pcs function when using a]
-Message-ID: <YmuuTb7Cv/JExahQ@kroah.com>
-References: <20220426081735.651926456@linuxfoundation.org>
- <20220426200000.GB9427@duo.ucw.cz>
- <YmkrZ5t2cb1JSHR8@kroah.com>
- <20220429074341.GB1423@amd>
+        Fri, 29 Apr 2022 05:26:09 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3029C6145;
+        Fri, 29 Apr 2022 02:22:50 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bu29so13029543lfb.0;
+        Fri, 29 Apr 2022 02:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bhPxd6svpKOboxST/6guS4MOSMze/71rIJIgOQA8rZo=;
+        b=CcHlI3Au6GCo1UVzpXVov/h1wYElTNB9KLySGMMq2ve/a+TtvK5YlNIE1buiqFG4Nl
+         u/yJNPitTZt8sIeOJjB65Ui/1u355v1A2H7rivfKbBLHtHs+twE1aeJijeY6w74gk/C9
+         beognAtlmiiMUVoRPY2P2xBjOD5kn8WzXajIeBHjp2IbcVFILkaLGvvcgQymLNFVLX7W
+         O2NCAewH21dEqhwgYIy8zCJ1hXEDN8sGRLk/bc4Oj4c5AC8PD4Xjq19cf3SOi69El8Xe
+         CE7Bw/RGpPKDZ+W4HqGQMjQxaF5kblB25nziyJo7yUSAzUuWVoHRSngnqULHAZHmFVOo
+         K43A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bhPxd6svpKOboxST/6guS4MOSMze/71rIJIgOQA8rZo=;
+        b=0SwckDKyvdXtrGfj3hhw1YjwsKW9ovm6CR+kyVHkOL5C+wTIoQqtk3PyRio/+GXfwC
+         JKX/Phvw30VecJTvcM30pNnW/1kS6wwQAhWT72EDG2Ep4pE2FfDX08Oi+P//rUsVuAYh
+         8raAG9nJUrTn637tGyLrAiFo9mh/8Ql7wEcKu+Ut5+ne5Id/xqcEHPK5FBg4wwv8Pp+g
+         xdNSeLkA44/7Pe9MgSyCDg/qnWS1cUrB0o849lSW6st+A4tuLKkrsXXMxV3et/HRxuOT
+         lvX4iu0uIluRywm3wuZDuaDiPAq1LPqY2N7H8Gxq+Fqcfci9Mf0z+xt8oL18WsYyDuG4
+         6Y1Q==
+X-Gm-Message-State: AOAM5325XnkyXPcpINg1KmTdV56P0nmyRtY8ADBE+nUNBsU5hs6E3oJL
+        8oMZbCdPh/rLoWKChR8uicc=
+X-Google-Smtp-Source: ABdhPJzFja3bmADODH1fdpoqaNJXuuCGiOo+I2PKC036x77KFxdRqfAwbMVEMu8UhB/GID87ZxayFg==
+X-Received: by 2002:a05:6512:3ba0:b0:472:49f2:a752 with SMTP id g32-20020a0565123ba000b0047249f2a752mr1049387lfv.374.1651224168844;
+        Fri, 29 Apr 2022 02:22:48 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.73.25])
+        by smtp.gmail.com with ESMTPSA id e1-20020a196741000000b0046bc4be1d60sm192072lfj.123.2022.04.29.02.22.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 02:22:48 -0700 (PDT)
+Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-18-gpiccoli@igalia.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <b8771b37-01f5-f50b-dbb3-9db4ee26e67e@gmail.com>
+Date:   Fri, 29 Apr 2022 12:22:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429074341.GB1423@amd>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427224924.592546-18-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 09:43:41AM +0200, Pavel Machek wrote:
-> Hi!
-> 
-> > > > This is the start of the stable review cycle for the 4.19.240 release.
-> > > > There are 53 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> ...
-> > > I still see problems on socfpga:
-> > > 
-> > > [    1.227759]  mmcblk0: p1 p2 p3
-> > > [    1.269825] Micrel KSZ9031 Gigabit PHY stmmac-0:01: attached PHY driver [Micrel KSZ9031 Gigabit PHY] (mii_bus:phy_addr=stmmac-0:01, irq=POLL)
-> > > [    1.284600] socfpga-dwmac ff702000.ethernet eth0: No Safety Features support found
-> > > [    1.292374] socfpga-dwmac ff702000.ethernet eth0: registered PTP clock
-> > > [    1.299247] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready
-> > > [    5.444552] Unable to handle kernel NULL pointer dereference at virtual address 00000000
-> ...
-> > > [    5.478679] Workqueue: events_power_efficient phy_state_machine
-> > > [    5.484579] PC is at socfpga_dwmac_fix_mac_speed+0x3c/0xbc
-> > > [    5.490044] LR is at arm_heavy_mb+0x2c/0x48
-> 
-> > > https://lava.ciplatform.org/scheduler/job/669257
-> > > https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/jobs/2377419824
-> > 
-> > Can you run git bisect?
-> 
-> Not a bisect, but we guessed e2423aa174e6 was responsible, and tested
-> it boots with that patch reverted.
-> 
-> Best regards,
-> 								Pavel
-> 
-> commit e2423aa174e6c3e9805e96db778245ba73cdd88c
-> 
->     net: ethernet: stmmac: fix altr_tse_pcs function when using a
->     fixed-link
-> 
->     [ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
->     
+Hello!
 
-Thanks, now reverted from 4.19.y, 4.14.y, and 4.9.y
+On 4/28/22 1:49 AM, Guilherme G. Piccoli wrote:
 
-greg k-h
+> Currently the tracing dump_on_oops feature is implemented
+> through separate notifiers, one for die/oops and the other
+> for panic. With the addition of panic notifier "id", this
+> patch makes use of such "id" to unify both functions.
+> 
+> It also comments the function and changes the priority of the
+> notifier blocks, in order they run early compared to other
+> notifiers, to prevent useless trace data (like the callback
+> names for the other notifiers). Finally, we also removed an
+> unnecessary header inclusion.
+> 
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  kernel/trace/trace.c | 57 +++++++++++++++++++++++++-------------------
+>  1 file changed, 32 insertions(+), 25 deletions(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index f4de111fa18f..c1d8a3622ccc 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+[...]
+> @@ -9767,38 +9766,46 @@ static __init int tracer_init_tracefs(void)
+>  
+>  fs_initcall(tracer_init_tracefs);
+>  
+> -static int trace_panic_handler(struct notifier_block *this,
+> -			       unsigned long event, void *unused)
+> +/*
+> + * The idea is to execute the following die/panic callback early, in order
+> + * to avoid showing irrelevant information in the trace (like other panic
+> + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
+> + * warnings get disabled (to prevent potential log flooding).
+> + */
+> +static int trace_die_panic_handler(struct notifier_block *self,
+> +				unsigned long ev, void *unused)
+>  {
+> -	if (ftrace_dump_on_oops)
+> +	int do_dump;
+
+   bool?
+
+> +
+> +	if (!ftrace_dump_on_oops)
+> +		return NOTIFY_DONE;
+> +
+> +	switch (ev) {
+> +	case DIE_OOPS:
+> +		do_dump = 1;
+> +		break;
+> +	case PANIC_NOTIFIER:
+> +		do_dump = 1;
+> +		break;
+
+   Why not:
+
+	case DIE_OOPS:
+	case PANIC_NOTIFIER:
+		do_dump = 1;
+		break;
+
+> +	default:
+> +		do_dump = 0;
+> +		break;
+> +	}
+> +
+> +	if (do_dump)
+>  		ftrace_dump(ftrace_dump_on_oops);
+> -	return NOTIFY_OK;
+> +
+> +	return NOTIFY_DONE;
+>  }
+[...]
+
+MBR, Sergey

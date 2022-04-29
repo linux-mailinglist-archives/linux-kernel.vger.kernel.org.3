@@ -2,116 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5993B5153B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD0F5153B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380037AbiD2SfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S1379899AbiD2Seq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380024AbiD2SfO (ORCPT
+        with ESMTP id S238511AbiD2Sel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:35:14 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C695C664C;
-        Fri, 29 Apr 2022 11:31:50 -0700 (PDT)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 23TIVUoD026819;
-        Sat, 30 Apr 2022 03:31:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 23TIVUoD026819
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651257090;
-        bh=jHfLjG5Ne1YIgVeYha0Y78HVPC4COImuukUBIAGiiHk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=z0GHFxi838FQYwQAEkLx3Vv0GL0YwypEVeLJFMv1sHoZhBKq6WxNLkigcL4jBthmN
-         inkUuIfl+2rv0fu/i7apxnOpsytEc33dmB0slG+G7v1BjFuPnszwl9t1ZgAo8fVlYk
-         5JgflA9DTQzLF7GKZYx0u2CW+AZe4b3Oboa4hfsGtdaWK/rK+PcDDFctXkejnCyicI
-         U1OuvU9WoRKmzqEUCfiqZhEC5JTuhAIj1T/7AwWpUKj6sGHAoefVzDDdHZPOgrDnmm
-         QvDurdCB76lbQ4+z6lZGrrZDIBA3BIcWO44ZgnlABWUmO5IlIlph1aR9sdQUmjuT7l
-         2NwmAU8koAboQ==
-X-Nifty-SrcIP: [209.85.214.179]
-Received: by mail-pl1-f179.google.com with SMTP id u9so7223091plf.6;
-        Fri, 29 Apr 2022 11:31:30 -0700 (PDT)
-X-Gm-Message-State: AOAM531p/10LHzziIzj9r/7uJTjbEIdr+M1Hi8zi1JzGMeQVix2d+ElS
-        NjgxO3OKlUzmJVm5zgnknQ9eKqnSsUPdOVT79oI=
-X-Google-Smtp-Source: ABdhPJw26k1JhuBLHXAf0Y8KVZv2aa+x79Gha6QDi8b0G3tNpF4WiFfLrSfCSywpziY3RmLYIwJfHQQnCJtIwHzWCkI=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr658922plp.162.1651257089650; Fri, 29 Apr
- 2022 11:31:29 -0700 (PDT)
+        Fri, 29 Apr 2022 14:34:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCBF45ADD
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651257082; x=1682793082;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=22k+uDUKRz+4AKVJv51f6r8phWje2KTHsjePCuxnph4=;
+  b=jIm/EJPOLGCvxWhYwrhVZXRUK9kw7PtNoYBb/O6WgiAPGQauF2NsEQ0D
+   6pk66UkIt91u+s85BSwTY7vxZs2US5n6Lb/Pqph/fcmQi5nIBnvKqI0hX
+   TzpwjU0r5d+93I/MIHUUsLxA6+kqNko3AdYF2HG3rD+oni7vYRauRzwSY
+   ++UhgQV73PJaaKW5B1G3nq0yTf2v7tCTCsOwgYGHrss8CC6Kh3cBOmSOO
+   cdhWac31R9KUx7hsJGKjoz9Vcuf9Y3Dr0c1ipXIfHSZO5kNiInZ5iPzCi
+   k17K3UIhaquyluGasUj7LbKYtmcaDd7EGS0+e/sOtuaoNuvRoAPbBEL5E
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="247295940"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="247295940"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 11:31:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="542747392"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2022 11:31:20 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkVOh-0006Yd-Ik;
+        Fri, 29 Apr 2022 18:31:19 +0000
+Date:   Sat, 30 Apr 2022 02:30:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: expecting prototype
+ for Handler for protected floating(). Prototype was for
+ kvm_handle_pvm_fpsimd() instead
+Message-ID: <202204300241.xkeys5UL-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-7-masahiroy@kernel.org> <CAKwvOdmDiD11Az02U1i8OtxL49V3SH1ORRj8C5jy6Btv3LFY_g@mail.gmail.com>
- <CAKwvOdmeOYsBGSZrprdtoxcUmpy1oscnBfLUaSARPNKsH4Aeug@mail.gmail.com>
-In-Reply-To: <CAKwvOdmeOYsBGSZrprdtoxcUmpy1oscnBfLUaSARPNKsH4Aeug@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 30 Apr 2022 03:30:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQez0wm4keBfqwn82ynvpYETD4fo9wD6WceBj-65F6dqg@mail.gmail.com>
-Message-ID: <CAK7LNAQez0wm4keBfqwn82ynvpYETD4fo9wD6WceBj-65F6dqg@mail.gmail.com>
-Subject: Re: [PATCH 06/27] modpost: use bool type where appropriate
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 3:56 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, Apr 25, 2022 at 11:34 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > /On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > ---
-> > >
-> > >  scripts/mod/modpost.c | 60 +++++++++++++++++++++----------------------
-> > >  scripts/mod/modpost.h | 10 ++++----
-> > >  2 files changed, 35 insertions(+), 35 deletions(-)
-> > >
-> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > > index f9cbb6b6b7a5..52dd07a36379 100644
-> > > --- a/scripts/mod/modpost.c
-> > > +++ b/scripts/mod/modpost.c
-> > > @@ -203,10 +203,10 @@ struct symbol {
-> > >         struct symbol *next;
-> > >         struct module *module;
-> > >         unsigned int crc;
-> > > -       int crc_valid;
-> > > +       bool crc_valid;
-> > >         char *namespace;
-> > > -       unsigned int weak:1;
-> > > -       unsigned int is_static:1;  /* 1 if symbol is not global */
-> > > +       bool weak;
-> > > +       bool is_static;         /* true if symbol is not global */
-> > >         enum export  export;       /* Type of export */
-> > >         char name[];
-> > >  };
->
-> This will change the sizeof(struct symbol).  I'm guessing we have lots
-> of symbols to process? If we have many live at once, perhaps it would
-> be better to keep these as bitfields, but additionally move them to
-> the end of the struct definition so as to save space?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
+commit: 1423afcb411780c7a6a68f801fdcfb6920ad6f06 KVM: arm64: Trap access to pVM restricted features
+date:   7 months ago
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220430/202204300241.xkeys5UL-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1423afcb411780c7a6a68f801fdcfb6920ad6f06
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1423afcb411780c7a6a68f801fdcfb6920ad6f06
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/arm64/kvm/hyp/nvhe/switch.c:126: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Disable host events, enable guest events
+   arch/arm64/kvm/hyp/nvhe/switch.c:146: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Disable guest events, enable host events
+   arch/arm64/kvm/hyp/nvhe/switch.c:164: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Handler for protected VM restricted exceptions.
+   arch/arm64/kvm/hyp/nvhe/switch.c:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Handler for protected VM MSR, MRS or System instruction execution in AArch64.
+   arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'vcpu' not described in 'kvm_handle_pvm_fpsimd'
+   arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'exit_code' not described in 'kvm_handle_pvm_fpsimd'
+>> arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: expecting prototype for Handler for protected floating(). Prototype was for kvm_handle_pvm_fpsimd() instead
 
 
-Not really.
-On 64 bit systems, sizeof(struct symbol) is still 40 bytes.
+vim +196 arch/arm64/kvm/hyp/nvhe/switch.c
 
-We may save some space by using bit fields and pahole analysis,
-but I do not think that is a big deal for userspace programs.
-
-I tend to prioritize code readability.
-
-
+   188	
+   189	/**
+   190	 * Handler for protected floating-point and Advanced SIMD accesses.
+   191	 *
+   192	 * Returns true if the hypervisor has handled the exit, and control should go
+   193	 * back to the guest, or false if it hasn't.
+   194	 */
+   195	static bool kvm_handle_pvm_fpsimd(struct kvm_vcpu *vcpu, u64 *exit_code)
+ > 196	{
+   197		/* Linux guests assume support for floating-point and Advanced SIMD. */
+   198		BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_FP),
+   199					PVM_ID_AA64PFR0_ALLOW));
+   200		BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_ASIMD),
+   201					PVM_ID_AA64PFR0_ALLOW));
+   202	
+   203		return kvm_hyp_handle_fpsimd(vcpu, exit_code);
+   204	}
+   205	
 
 -- 
-Best Regards
-Masahiro Yamada
+0-DAY CI Kernel Test Service
+https://01.org/lkp

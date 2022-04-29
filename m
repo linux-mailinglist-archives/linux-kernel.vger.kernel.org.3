@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9846A5147A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3485147A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239157AbiD2K7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S239197AbiD2K74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358074AbiD2K7N (ORCPT
+        with ESMTP id S239106AbiD2K7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:59:13 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18F3EA76DD;
-        Fri, 29 Apr 2022 03:55:54 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 97E2792009C; Fri, 29 Apr 2022 12:55:53 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8B80892009B;
-        Fri, 29 Apr 2022 11:55:53 +0100 (BST)
-Date:   Fri, 29 Apr 2022 11:55:53 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Fix CP0 counter erratum detection for R4k CPUs
-In-Reply-To: <20220429100128.GB11365@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2204291119040.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2204240214430.9383@angie.orcam.me.uk> <20220429100128.GB11365@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 29 Apr 2022 06:59:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1425CB53C4;
+        Fri, 29 Apr 2022 03:56:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D18271063;
+        Fri, 29 Apr 2022 03:56:34 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.10.213])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4899B3F73B;
+        Fri, 29 Apr 2022 03:56:33 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 11:56:27 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        linux-kernel@vger.kernel.org, Tom Joseph <tjoseph@cadence.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI: cadence: respond to received PTM Requests
+Message-ID: <20220429105627.GA28438@lpieralisi>
+References: <20220218132037.GA345784@bhelgaas>
+ <116138f6-8f44-66be-c6b9-ccfbab6b8ca2@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <116138f6-8f44-66be-c6b9-ccfbab6b8ca2@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022, Thomas Bogendoerfer wrote:
-
-> > Fix the discrepancy between the two places we check for the CP0 counter 
-> > erratum in along with the incorrect comparison of the R4400 revision 
-> > number against 0x30 which matches none and consistently consider all 
-> > R4000 and R4400 processors affected, as documented in processor errata 
-> > publications[1][2][3], following the mapping between CP0 PRId register 
-> > values and processor models:
+On Tue, Feb 22, 2022 at 07:40:54PM +0530, Kishon Vijay Abraham I wrote:
+> Hi Bjorn,
+> 
+> On 18/02/22 6:50 pm, Bjorn Helgaas wrote:
+> > On Fri, Feb 18, 2022 at 04:26:48PM +0530, Kishon Vijay Abraham I wrote:
+> >> Hi Bjorn,
+> >>
+> >> On 01/02/22 3:35 am, Bjorn Helgaas wrote:
+> >>> Update subject line to match previous conventions ("git log --oneline
+> >>> drivers/pci/controller/cadence/pcie-cadence-host.c" to see).
+> >>>
+> >>> On Mon, Jan 31, 2022 at 01:08:27PM +0100, Christian Gmeiner wrote:
+> >>>> This enables the Controller [RP] to automatically respond
+> >>>> with Response/ResponseD messages.
+> >>>
 > > 
-> >   PRId   |  Processor Model
-> > ---------+--------------------
-> > 00000422 | R4000 Revision 2.2
-> > 00000430 | R4000 Revision 3.0
-> > 00000440 | R4400 Revision 1.0
-> > 00000450 | R4400 Revision 2.0
-> > 00000460 | R4400 Revision 3.0
+> >>>> +static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
+> >>>> +{
+> >>>> +	u32 val;
+> >>>> +
+> >>>> +	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
+> >>>> +	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
+> >>>
+> >>> I assume this is some device-specific enable bit that is effectively
+> >>> ANDed with PCI_PTM_CTRL_ENABLE in the Precision Time Measurement
+> >>> Capability?
+> >>
+> >> That's correct. This bit enables Controller [RP] to respond to the
+> >> received PTM Requests.
+> > 
+> > Great!  Christian, can you update the commit log to reflect that
+> > both this bit *and* PCI_PTM_CTRL_ENABLE must be set for the RP to
+> > respond to received PTM Requests?
+> > 
+> > When CDNS_PCIE_LM_TPM_CTRL_PTMRSEN is cleared, do PCI_PTM_CAP_ROOT
+> > and the PTM Responder Capable bit (for which we don't have a #define)
+> > read as zero?
 > 
-> interesting, where is this documented ? And it's quite funny that so far
-> everybody messed up revision printing for R4400 CPUs. 
+> I see both PTM Responder Capable bit and PTM Root Capable is by-default set to '1'.
 
- That's just observation combined with past discussions with Ralf.
+Without this patch applied and with no other SW setting
+CDNS_PCIE_LM_TPM_CTRL_PTMRSEN, correct ?
 
- Basically the PRId implementation number is 0x04 for both the R4000 and 
-the R4400 (the only difference between the two CPUs is the addition of the 
-write-back buffer in the latter one, making it weakly ordered).  And then 
-the PRId revision number matches exactly the documented CPU revision for 
-the R4000, while for the R4400 you need to subtract 3 from the PRId 
-revision number to get the documented CPU revision (i.e. what would be 
-R4000 Revision 4.0 actually became R4400 Revision 1.0).
-
- At this time no old MIPSer from the SGI days may be around to confirm or 
-contradict this observation.  Documentation explicitly says[1]:
-
-"The revision number can distinguish some chip revisions, however there is 
-no guarantee that changes to the chip will necessarily be reflected in the 
-PRId register, or that changes to the revision number necessarily reflect 
-real chip changes.  For this reason, these values are not listed and 
-software should not rely on the revision number in the PRId register to 
-characterize the chip."
-
-but surely the author didn't have errata workarounds in mind plus all CPU 
-revisions have already been manufactured so the mapping has been fixed.
-
-> >  Conversely a system can do without a high-precision clock source, in
-> > which case jiffies will be used.  Of course such a system will suffer if 
-> > used for precision timekeeping, but such is the price for broken hardware.  
-> > Don't SNI systems have any alternative timer available, not even the 
-> > venerable 8254?
 > 
-> all SNI systems have a i8254 in their EISA/PCI chipsets. But they aren't
-> that nice for clock events as their interupts are connected via an i8259
-> addresses via ISA PIO. 
-
- Interrupts are used for clock events, so you don't need one here.  For 
-clock sources you just read the counter.
-
- That said reading from the 8254 is messy too and you may need a spinlock 
-(you need to write the Counter Latch or Read-Back command to the control 
-register and then issue consecutive two reads to the requested timer's 
-data register[2]).  Which is I guess why support for it has been removed 
-from x86 code.  For non-SMP it might be good enough.
-
-> >  With the considerations above in mind, please apply.
+> root@am64xx-evm:~# devmem2 0xD000A24
 > 
-> will do later.
+> 
+> /dev/mem opened.
+> Memory mapped at address 0xffffa8980000.
+> Read at address  0x0D000A24 (0xffffa8980a24): 0x00000406
+> 
+> And this bit can be programmed through the local management APB
+> interface if required.
 
- Great, thanks!
+Which bit ? CDNS_PCIE_LM_TPM_CTRL_PTMRSEN ?
 
-References:
+> But with this patch which enables PTM by default for RC, it wouldn't be required
+> to clear those bits.
 
-[1] Joe Heinrich: "MIPS R4000 Microprocessor User's Manual", Second
-    Edition, MIPS Technologies, Inc., April 1, 1994, Chapter 4 "Memory 
-    Management", p.90
+Yes but that does not comply with the specifications as Bjorn pointed
+out below.
 
-[2] "8254 Programmable Interval Timer", Intel Corporation, Order Number: 
-    231164-005, September 1993, Section "Read Operations", pp.7-9
+We can merge this patch but it would be good to investigate on this
+point.
 
-  Maciej
+Thanks,
+Lorenzo
+
+> Thanks,
+> Kishon
+> > 
+> > I think that would be the correct behavior per PCIe r6.0, sec
+> > 7.9.15.2, and it would avoid the confusion of having the PTM
+> > Capability register advertise functionality that cannot be enabled via
+> > the PTM Control register.
+> > 
+> >>>> +/* PTM Control Register */
+> >>>> +#define CDNS_PCIE_LM_PTM_CTRL 	(CDNS_PCIE_LM_BASE + 0x0DA8)
+> > 
+> > Other #defines in this file use lower-case hex.
+> > 
+> > Bjorn
+> > 

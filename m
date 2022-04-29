@@ -2,173 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C075147AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213395147B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357772AbiD2LBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S1358020AbiD2LCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236220AbiD2LBp (ORCPT
+        with ESMTP id S236220AbiD2LCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:01:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 047C7B6452
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651229906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hd8jixMX/+sl7pAeiP0+TvqgeE8m0z/UExwqrgT495g=;
-        b=UB5VbFfQ7mcLxCpSSH5/xA6V/YXCaad//gM7/QpjL0XkSo+kT8uN7KGoQQSffD44Ax55kD
-        jyodzXlg/R0cBi4Sy2GyWg3Tb/nZLSSbwtoTNY8Aela4VPF5CVIcXfNTBDRBsYsxIoyHrO
-        YFfqY6mM8Ub8kIkVJM9/HSSUWo/nP/A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-136-DkyOpML2MXGOm-WSt3_m7A-1; Fri, 29 Apr 2022 06:58:22 -0400
-X-MC-Unique: DkyOpML2MXGOm-WSt3_m7A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50142811E84;
-        Fri, 29 Apr 2022 10:58:21 +0000 (UTC)
-Received: from fedora (unknown [10.22.16.76])
-        by smtp.corp.redhat.com (Postfix) with SMTP id F1469C27EAB;
-        Fri, 29 Apr 2022 10:58:15 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 07:58:14 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 04/12] x86/boot: Add infrastructure required for
- unaccepted memory support
-Message-ID: <YmvExncBpvDdfTjd@fedora>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-5-kirill.shutemov@linux.intel.com>
+        Fri, 29 Apr 2022 07:02:34 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020CAB6443;
+        Fri, 29 Apr 2022 03:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=kmc13/9QXKmxSe5KTNtIvDaUnhBa/LBzSHNpr/JlHjc=;
+        t=1651229956; x=1652439556; b=MGtZqaTln8kneYOUmUxxOjG+sy20jct3Y/eWQcRcjBh3FiL
+        QlwkhrNgiB6MmwZXhX3z5THBWW0cKvIFXUuDJc5z5+xkpiZM7QvFLMkqasks90X/AX5W1SFKwbSuV
+        JXyUrzAqORX5+vGDjeFIwLdsB5pcQfwFKAcjMul5YDI3r2opzJ89z/RMVc2eT5woYXhiKD5gRaukU
+        GtQbOvjNO/OAYmdfdzP4u8FluaG7pZa6+0g2s3fAa+ek72d7d3Yh/KuxR6BaHAFCYQuWRh4MHVW6V
+        Pv2KwZAqluynPHkY8KR/Td/rUcdBgTzF63MLN/snXRi/2zgpPhgQe279zc2cOYxw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nkOL3-00GukB-L5;
+        Fri, 29 Apr 2022 12:59:05 +0200
+Message-ID: <b16d831f7f8601702297d92fc28f2ae9bb159016.camel@sipsolutions.net>
+Subject: Re: [PATCH] [v2] plfxlc: fix le16_to_cpu warning for beacon_interval
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Srinivasan Raju <srini.raju@purelifi.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Fri, 29 Apr 2022 12:59:04 +0200
+In-Reply-To: <CWLP265MB32172ACD5B2F2ECD0A512F0DE0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
+References: <CWLP265MB32172ACD5B2F2ECD0A512F0DE0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425033934.68551-5-kirill.shutemov@linux.intel.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 06:39:26AM +0300, Kirill A. Shutemov wrote:
+On Fri, 2022-04-29 at 10:44 +0000, Srinivasan Raju wrote:
+> Fix the following sparse warnings:
+> 
+> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: expected unsigned short [usertype] beacon_interval
+> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: got restricted __le16 [usertype]
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Srinivasan Raju <srini.raju@purelifi.com>
+> ---
+>  drivers/net/wireless/purelifi/plfxlc/chip.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/purelifi/plfxlc/chip.c b/drivers/net/wireless/purelifi/plfxlc/chip.c
+> index a5ec10b66ed5..79d187cf3715 100644
+> --- a/drivers/net/wireless/purelifi/plfxlc/chip.c
+> +++ b/drivers/net/wireless/purelifi/plfxlc/chip.c
+> @@ -29,11 +29,10 @@ int plfxlc_set_beacon_interval(struct plfxlc_chip *chip, u16 interval,
+>                                u8 dtim_period, int type)
+>  {
+>         if (!interval ||
+> -           (chip->beacon_set &&
+> -            le16_to_cpu(chip->beacon_interval) == interval))
+> +           (chip->beacon_set && chip->beacon_interval) == interval)
+> 
 
-[snip]
+I think you got the parentheses wrong.
 
->  
-> +static __always_inline void __set_bit(long nr, volatile unsigned long *addr)
-
-Can't we update the existing set_bit function?
-
-> +{
-> +	asm volatile(__ASM_SIZE(bts) " %1,%0" : : "m" (*(volatile long *) addr),
-
-Why do we need the cast here?
-
-> +		     "Ir" (nr) : "memory");
-
-Shouldn't we add "cc" to the clobber list?
-
-> +}
-> +
-> +static __always_inline void __clear_bit(long nr, volatile unsigned long *addr)
-> +{
-> +	asm volatile(__ASM_SIZE(btr) " %1,%0" : : "m" (*(volatile long *) addr),
-> +		     "Ir" (nr) : "memory");
-> +}
-
-Same comments of __set_bit apply here (except there is no clear_bit function)
-
-[snip]
-
-> +
-> +static __always_inline unsigned long swab(const unsigned long y)
-> +{
-> +#if __BITS_PER_LONG == 64
-> +	return __builtin_bswap32(y);
-> +#else /* __BITS_PER_LONG == 32 */
-> +	return __builtin_bswap64(y);
-
-Suppose y = 0x11223344UL, then, the compiler to cast it to a 64 bits
-value yielding 0x0000000011223344ULL, __builtin_bswap64 will then
-return 0x4433221100000000, and the return value will be casted back
-to 32 bits, so swapb will always return 0, won't it?
-
-> +#endif
-> +}
-> +
-> +unsigned long _find_next_bit(const unsigned long *addr1,
-> +		const unsigned long *addr2, unsigned long nbits,
-
-The addr2 name seems a bit misleading, it seems to act as some kind of mask,
-is that right?
-
-> +		unsigned long start, unsigned long invert, unsigned long le)
-> +{
-> +	unsigned long tmp, mask;
-> +
-> +	if (unlikely(start >= nbits))
-> +		return nbits;
-> +
-> +	tmp = addr1[start / BITS_PER_LONG];
-> +	if (addr2)
-> +		tmp &= addr2[start / BITS_PER_LONG];
-> +	tmp ^= invert;
-> +
-> +	/* Handle 1st word. */
-> +	mask = BITMAP_FIRST_WORD_MASK(start);
-> +	if (le)
-> +		mask = swab(mask);
-> +
-> +	tmp &= mask;
-> +
-> +	start = round_down(start, BITS_PER_LONG);
-> +
-> +	while (!tmp) {
-> +		start += BITS_PER_LONG;
-> +		if (start >= nbits)
-> +			return nbits;
-> +
-> +		tmp = addr1[start / BITS_PER_LONG];
-> +		if (addr2)
-> +			tmp &= addr2[start / BITS_PER_LONG];
-> +		tmp ^= invert;
-> +	}
-
-Isn't better to divide start by BITS_PER_LONG in the beginning of the fuction,
-and then multiply it by BITS_PER_LONG when necessary, saving the division operations
-in the while loop?
-
-[snip]
-
+johannes

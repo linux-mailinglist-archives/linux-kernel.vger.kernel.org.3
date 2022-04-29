@@ -2,71 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3694A5140B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4205140CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234727AbiD2CuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 22:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S234553AbiD2DBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234656AbiD2CuN (ORCPT
+        with ESMTP id S230299AbiD2DBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 22:50:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE73334B90
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651200414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L2gx7h6NbYu8uuTSJ9N8wCp852RvTqnX9mX9jiXJyBc=;
-        b=e6TN7QFmlfQ6b81tLKKQIDoYw2a/kYs6y7Cr1q96xBj4PbaXIJR2SeXKyqmBJ68u1DAnci
-        xnnhyXSe2suPMk+mGPH6lZXbTGSVc51Gfab7VO6a1aohjyKsbVqfSosy4O23YgHgUKcTog
-        AfPRybVfDJZuPOK4omVQ6KgMSZXR3k4=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-279-9BEY--ZsMmyM5UC_jbMpJw-1; Thu, 28 Apr 2022 22:46:52 -0400
-X-MC-Unique: 9BEY--ZsMmyM5UC_jbMpJw-1
-Received: by mail-lf1-f69.google.com with SMTP id br31-20020a056512401f00b00471c57013ceso2747555lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:46:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L2gx7h6NbYu8uuTSJ9N8wCp852RvTqnX9mX9jiXJyBc=;
-        b=o4tje8emSKKFwYAog2RUUMXCPiTCv+i2UqKWT4lM3fLTh0gYueQIw4YErOVkxTbn7/
-         IzY6aX8qIMsx0SMEggxBDs9tfM7yTdqMQZ87N0YrMWhKlt0OOHfMNbff7BgvXP6zHc45
-         O3nLDVUnwaNeTCMW+m8rquodS5x/5at2B0q+YJZX3An2rEZnBTowZdaDeZRAkieV46+g
-         uRePDDEhYX3Q5g1rpMeJkXyW2l+mHnvuAcfRvK7IrX7v/16kt04LtQqS0hm2hSA0NGFC
-         iw3CL8bJhkajvQMFQBW9cu0yjx9O/yRt5fnz+nhxWQ7kfBLGUcLnexeKDN4SK/8/Q5rA
-         +Fqw==
-X-Gm-Message-State: AOAM533Z5BZsMrW6GaqOYFqlY7AeTNbrRbdZdpjFikixa+MPYfJyDO8E
-        jQ9dNdVMxNFQlnNF9/J5fLpIzirTi01jIB7sFbuCbOyIX7gO+O4YC+VVnZSGfE6S+2OqSUXmQYO
-        XpBhtq5tCnlHOrgqRX5d/qrkoZbwU9Qfjvi+++nar
-X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id h16-20020a19ca50000000b00471f556092bmr22046663lfj.587.1651200411380;
-        Thu, 28 Apr 2022 19:46:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx6iPLLBUifBPvjONr1Ab9ze/wQ5cB0TwkyM+p9qr7gp7ho++cFBXhVIBCz1e5TwUXO7O0QeVLJ2MLAvlTw4Ac=
-X-Received: by 2002:a19:ca50:0:b0:471:f556:92b with SMTP id
- h16-20020a19ca50000000b00471f556092bmr22046647lfj.587.1651200411210; Thu, 28
- Apr 2022 19:46:51 -0700 (PDT)
+        Thu, 28 Apr 2022 23:01:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0829BBB099
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651201072; x=1682737072;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iwmaNv8Mz1sl8eYpdeW1vmgH0LaPk2vCD5QTVC0RnHY=;
+  b=h5WRhlN8l8huo9mdvWsYPJ5K2Bi7B4GCzzMTQJqU/P/Rl8qhPefvOrpj
+   UcHrYqlQW4Hh/AeqrXp4Qt0iR9/wSDOmmQlL7NE7gq8F5ajsoB6sF4eyP
+   b/nPS1wU8IZEKBVwNUPosx2QkNiDdMbu3QSWC10N5GOPPr1cMPWCPdLOf
+   lEyHlmV4+rgcn1dQxXBsWXjBls7Ualj2o65e+8ou9prOW4sNk7e43C9CU
+   9fG5KgfoFQKPM3TMcU5wC7wQYReq2PA+03ub8NYgWmz67ZXI1gkEoysxD
+   tX9De60WO5jMOMiBdWWfTi3iTDBPhJTuTh52oKeroKNtSRqjHIXZ/0p/o
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="247064830"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="247064830"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 19:57:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="731830511"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Apr 2022 19:57:49 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkGpJ-0005v1-4K;
+        Fri, 29 Apr 2022 02:57:49 +0000
+Date:   Fri, 29 Apr 2022 10:57:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/wip.freezer 3/7]
+ include/linux/sched/jobctl.h:23:2: error: stray '#' in program
+Message-ID: <202204291009.ntJSd5uS-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220428151242.213824-1-sgarzare@redhat.com>
-In-Reply-To: <20220428151242.213824-1-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 29 Apr 2022 10:46:40 +0800
-Message-ID: <CACGkMEv=0VWh_NxhvM+6_TRHEx0f2RGRWbR1n5RhKfq0a7xJUw@mail.gmail.com>
-Subject: Re: [PATCH] vdpa_sim_blk: add support for VIRTIO_BLK_T_FLUSH
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,57 +60,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 11:13 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> The simulator behaves like a ramdisk, so we don't have to do
-> anything when a VIRTIO_BLK_T_FLUSH request is received, but it
-> could be useful to test driver behavior.
->
-> Let's expose the VIRTIO_BLK_F_FLUSH feature to inform the driver
-> that we support the flush command.
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> index 42d401d43911..a6dd1233797c 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> @@ -25,6 +25,7 @@
->  #define DRV_LICENSE  "GPL v2"
->
->  #define VDPASIM_BLK_FEATURES   (VDPASIM_FEATURES | \
-> +                                (1ULL << VIRTIO_BLK_F_FLUSH)    | \
->                                  (1ULL << VIRTIO_BLK_F_SIZE_MAX) | \
->                                  (1ULL << VIRTIO_BLK_F_SEG_MAX)  | \
->                                  (1ULL << VIRTIO_BLK_F_BLK_SIZE) | \
-> @@ -166,6 +167,17 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
->                 pushed += bytes;
->                 break;
->
-> +       case VIRTIO_BLK_T_FLUSH:
-> +               if (sector != 0) {
-> +                       dev_err(&vdpasim->vdpa.dev,
-> +                               "A driver MUST set sector to 0 for a VIRTIO_BLK_T_FLUSH request - sector: 0x%llx\n",
-> +                               sector);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/wip.freezer
+head:   a1b437cfec0d2b0060cf85538c2379c74fb63ad5
+commit: 4cb4f3dc01c45f8a1621f13b55705ba4a6844081 [3/7] sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220429/202204291009.ntJSd5uS-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=4cb4f3dc01c45f8a1621f13b55705ba4a6844081
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/wip.freezer
+        git checkout 4cb4f3dc01c45f8a1621f13b55705ba4a6844081
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 prepare
 
-If this is something that could be triggered by userspace/guest, then
-we should avoid this.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks
+All errors (new ones prefixed by >>):
 
-> +                       status = VIRTIO_BLK_S_IOERR;
-> +                       break;
-> +               }
-> +
-> +               break;
-> +
->         default:
->                 dev_warn(&vdpasim->vdpa.dev,
->                          "Unsupported request type %d\n", type);
-> --
-> 2.35.1
->
+   In file included from include/linux/sched/signal.h:8,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/cgroup.h:17,
+                    from include/linux/memcontrol.h:13,
+                    from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from arch/x86/kernel/asm-offsets.c:13:
+>> include/linux/sched/jobctl.h:23:2: error: stray '#' in program
+      23 | q#define JOBCTL_STOPPED_BIT     25      /* do_signal_stop() */
+         |  ^
+   include/linux/sched/jobctl.h:23:1: error: unknown type name 'q'
+      23 | q#define JOBCTL_STOPPED_BIT     25      /* do_signal_stop() */
+         | ^
+>> include/linux/sched/jobctl.h:23:10: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'JOBCTL_STOPPED_BIT'
+      23 | q#define JOBCTL_STOPPED_BIT     25      /* do_signal_stop() */
+         |          ^~~~~~~~~~~~~~~~~~
+   include/linux/sched/signal.h: In function 'kernel_signal_stop':
+>> include/linux/sched/jobctl.h:35:41: error: 'JOBCTL_STOPPED_BIT' undeclared (first use in this function); did you mean 'JOBCTL_STOPPED'?
+      35 | #define JOBCTL_STOPPED          (1UL << JOBCTL_STOPPED_BIT)
+         |                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/sched/signal.h:298:36: note: in expansion of macro 'JOBCTL_STOPPED'
+     298 |                 current->jobctl |= JOBCTL_STOPPED;
+         |                                    ^~~~~~~~~~~~~~
+   include/linux/sched/jobctl.h:35:41: note: each undeclared identifier is reported only once for each function it appears in
+      35 | #define JOBCTL_STOPPED          (1UL << JOBCTL_STOPPED_BIT)
+         |                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/sched/signal.h:298:36: note: in expansion of macro 'JOBCTL_STOPPED'
+     298 |                 current->jobctl |= JOBCTL_STOPPED;
+         |                                    ^~~~~~~~~~~~~~
+   include/linux/sched/signal.h: In function 'signal_wake_up':
+>> include/linux/sched/jobctl.h:35:41: error: 'JOBCTL_STOPPED_BIT' undeclared (first use in this function); did you mean 'JOBCTL_STOPPED'?
+      35 | #define JOBCTL_STOPPED          (1UL << JOBCTL_STOPPED_BIT)
+         |                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/sched/signal.h:444:32: note: in expansion of macro 'JOBCTL_STOPPED'
+     444 |                 t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
+         |                                ^~~~~~~~~~~~~~
+   make[2]: *** [scripts/Makefile.build:120: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
+
+vim +23 include/linux/sched/jobctl.h
+
+    13	
+    14	#define JOBCTL_STOP_DEQUEUED_BIT 16	/* stop signal dequeued */
+    15	#define JOBCTL_STOP_PENDING_BIT	17	/* task should stop for group stop */
+    16	#define JOBCTL_STOP_CONSUME_BIT	18	/* consume group stop count */
+    17	#define JOBCTL_TRAP_STOP_BIT	19	/* trap for STOP */
+    18	#define JOBCTL_TRAP_NOTIFY_BIT	20	/* trap for NOTIFY */
+    19	#define JOBCTL_TRAPPING_BIT	21	/* switching to TRACED */
+    20	#define JOBCTL_LISTENING_BIT	22	/* ptracer is listening for events */
+    21	#define JOBCTL_TRAP_FREEZE_BIT	23	/* trap for cgroup freezer */
+    22	#define JOBCTL_DELAY_WAKEKILL_BIT	24	/* delay killable wakeups */
+  > 23	q#define JOBCTL_STOPPED_BIT	25	/* do_signal_stop() */
+    24	#define JOBCTL_TRACED_BIT	26	/* ptrace_stop() */
+    25	
+    26	#define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
+    27	#define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
+    28	#define JOBCTL_STOP_CONSUME	(1UL << JOBCTL_STOP_CONSUME_BIT)
+    29	#define JOBCTL_TRAP_STOP	(1UL << JOBCTL_TRAP_STOP_BIT)
+    30	#define JOBCTL_TRAP_NOTIFY	(1UL << JOBCTL_TRAP_NOTIFY_BIT)
+    31	#define JOBCTL_TRAPPING		(1UL << JOBCTL_TRAPPING_BIT)
+    32	#define JOBCTL_LISTENING	(1UL << JOBCTL_LISTENING_BIT)
+    33	#define JOBCTL_TRAP_FREEZE	(1UL << JOBCTL_TRAP_FREEZE_BIT)
+    34	#define JOBCTL_DELAY_WAKEKILL	(1UL << JOBCTL_DELAY_WAKEKILL_BIT)
+  > 35	#define JOBCTL_STOPPED		(1UL << JOBCTL_STOPPED_BIT)
+    36	#define JOBCTL_TRACED		(1UL << JOBCTL_TRACED_BIT)
+    37	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

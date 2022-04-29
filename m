@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90898514F3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4F5514F44
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378345AbiD2P0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S1378358AbiD2P2N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Apr 2022 11:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbiD2P0W (ORCPT
+        with ESMTP id S229482AbiD2P2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:26:22 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BEE689A4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:23:02 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id d12so15071584ybc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZohBTUQ/LZbS+o8W/VtMK+1Flcbn9HfcCfSB3a36VjI=;
-        b=BafF1IEZ4EDjsmtHXSsqVqrWZ8g2k5/kH6HfKliDsRHA43hy2G2+BtITONBujNnLl9
-         pLCwWahreUD6kBQmDFxL/MzrUF0SJKzdT/cKllJHdTRWb5qoZklkD+LOMU/Puy0duaUM
-         tv/CORBR7bOo+VfJBEVTa+rKyibTdw/wMAm9z9NPYT9FtqdEgYGun76+4YC3DHL6w+Qv
-         ykVgZ7jE7iJiTDJpDE3DWRI2b/JThT+f6qMZa2+6nWbcBORWWE0j5suB4MoRBxf0kKra
-         AdbtXHGo3Z5u/a2Gy8oPTmfyx52K719oDWDFhyg6pDvC5WfJAH1lGIzAr7xaacOafkSE
-         /PSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZohBTUQ/LZbS+o8W/VtMK+1Flcbn9HfcCfSB3a36VjI=;
-        b=cVLKSHuP804J6tYS4MDpG5nX7GhKQxjF3iuYF1NiEBYQo+7XkxHmAtAH70ruARbyfe
-         nLliOto5Rj+cRmQMdNy7avRzYiDIVzw3/W6yLdTNizXvFcPZKUK1RNhcepWpmpFECk5y
-         NXDgCyybMZRLKxICPRkzlQINZrRWcg7+ahh6peKYyzYqZVCDsewXB+66wRT4rvBhALTm
-         0sHYkS07daHGtK6C4TMySKJD6d7WMetxgv0f4ytPPfwDKEIVTvD04Xee3ais1mD/2okV
-         7RowAPJzvJGAcCpVG78TO4CDTcC61KUhT+5LVb13rKQHygoH6zWVVQENxJx8RVnmSIq9
-         XPMg==
-X-Gm-Message-State: AOAM532GPMdK2dW1PN3ECA+hzRDHtTotYevOhR4jgsC9nR9cugGYGHqV
-        7NO5EA69M6NY78iFEaeTIq6Rfz6mpee9gY2DFHW7OA==
-X-Google-Smtp-Source: ABdhPJxFUndINlvlcj6DuIlMnf+ph+4UTobF5BjRzTm793kkDfWoGguZCTA+VCrNsOiM/AOPBy7pN3PAUhJmbnr33f0=
-X-Received: by 2002:a25:a1c6:0:b0:641:5ff5:9f93 with SMTP id
- a64-20020a25a1c6000000b006415ff59f93mr36532265ybi.49.1651245782234; Fri, 29
- Apr 2022 08:23:02 -0700 (PDT)
+        Fri, 29 Apr 2022 11:28:11 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCB63D4471
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:24:52 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-148-H2iRa9rHN0SC6_3kj-vIRQ-1; Fri, 29 Apr 2022 16:24:49 +0100
+X-MC-Unique: H2iRa9rHN0SC6_3kj-vIRQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Fri, 29 Apr 2022 16:24:48 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Fri, 29 Apr 2022 16:24:48 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Maciej W. Rozycki'" <macro@orcam.me.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] MIPS: Fix CP0 counter erratum detection for R4k CPUs
+Thread-Topic: [PATCH] MIPS: Fix CP0 counter erratum detection for R4k CPUs
+Thread-Index: AQHYW7e8izRkWzTXwESA/9rrqnvRW60HAA6w
+Date:   Fri, 29 Apr 2022 15:24:48 +0000
+Message-ID: <3582358fb8ae47d7b88f85aa895a7109@AcuMS.aculab.com>
+References: <alpine.DEB.2.21.2204240214430.9383@angie.orcam.me.uk>
+ <20220429100128.GB11365@alpha.franken.de>
+ <alpine.DEB.2.21.2204291119040.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204291119040.9383@angie.orcam.me.uk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220429120108.9396-1-ansuelsmth@gmail.com> <20220429120108.9396-4-ansuelsmth@gmail.com>
- <b7de49e0-c0cf-5062-8426-dcb54272d350@linaro.org> <626bff7e.1c69fb81.bdf89.4da7@mx.google.com>
-In-Reply-To: <626bff7e.1c69fb81.bdf89.4da7@mx.google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 29 Apr 2022 18:22:50 +0300
-Message-ID: <CAA8EJppzj13egBnNg=GkGV0_c_4SqZinek1Y3Byc7g2r95ff8g@mail.gmail.com>
-Subject: Re: [PATCH 3/4] clk: qcom: clk-krait: add hw_parent check for div2_round_rate
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,79 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 at 18:08, Ansuel Smith <ansuelsmth@gmail.com> wrote:
->
-> On Fri, Apr 29, 2022 at 05:53:32PM +0300, Dmitry Baryshkov wrote:
-> > On 29/04/2022 15:01, Ansuel Smith wrote:
-> > > Check if hw_parent is present before calculating the round_rate to
-> > > prevent kernel panic. On error -EINVAL is reported.
-> > >
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> >
-> > I see that other clock drivers do not perform this check. Which path leads
-> > to this oops?
-> >
->
-> This comes from qsdk patches so I apologize in advance about this.
+>  That said reading from the 8254 is messy too and you may need a spinlock
+> (you need to write the Counter Latch or Read-Back command to the control
+> register and then issue consecutive two reads to the requested timer's
+> data register[2]).  Which is I guess why support for it has been removed
+> from x86 code.  For non-SMP it might be good enough.
 
-Ugh. If it comes from the code authored by somebody else, it'd be
-better to note this (by using the From or Co-developed-by tags).
-At the very least (if the author is unknown) you can mention the
-origin of the patch (qsdk) in the commit message.
+It is important to 'latch' the counter before reading it.
+I tried to optimise some code to avoid the extra accesses.
+In principle it ought to have worked, but reading the
+unlatched values gave garbage - not just messed up 16bit values.
+It was probably returning a value that was being ripple-counted.
 
->
-> Anyway I'm checking the code and krait-cc is the only user of
-> krait_div2_clk_ops. That user have as parent only hfpll_something that
-> is declared by gcc. Now hfpll can also be declared in dts with a
-> dedicated driver so I wonder if the problem is there in the case when
-> hfpll is declared in dts and is probed after krait-cc. This is not the
-> case for ipq8064 but I wonder if qsdk have other krait based device that
-> have a configuration with hfpll declared in dts.
+The sheer number of IO cycles you need to read the counters
+just beggars belief.
+So while they can be used to get an accurate timestamp it
+really takes too long to be useful.
+Even in a modern x86 chipset I think they are still ISA
+speed cycles.
+(Mind you, we've an fpga based PCIe boards where reads
+are ISA speed....)
 
-On msm8974 (and maybe others) the hfpll should be driven by the
-separate hfpll driver.
+OTOH I'd have though that for a real 486 (one without a TSC)
+that is the only way to get a high res timer count.
 
->
-> In short you are right and in our current code the check is uselss and
-> I'm positive about dropping this patch but I do wonder if downstream
-> there is an actual use of this. Don't know how to proceed. Any hint?
+	David
 
-I'd say, let's drop it for now unless Stephen or Bjorn tell us that
-it's a valid check.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
->
-> > > ---
-> > >   drivers/clk/qcom/clk-krait.c | 7 ++++++-
-> > >   1 file changed, 6 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
-> > > index 90046428693c..6c367ad6506a 100644
-> > > --- a/drivers/clk/qcom/clk-krait.c
-> > > +++ b/drivers/clk/qcom/clk-krait.c
-> > > @@ -84,7 +84,12 @@ EXPORT_SYMBOL_GPL(krait_mux_clk_ops);
-> > >   static long krait_div2_round_rate(struct clk_hw *hw, unsigned long rate,
-> > >                               unsigned long *parent_rate)
-> > >   {
-> > > -   *parent_rate = clk_hw_round_rate(clk_hw_get_parent(hw), rate * 2);
-> > > +   struct clk_hw *hw_parent = clk_hw_get_parent(hw);
-> > > +
-> > > +   if (!hw_parent)
-> > > +           return -EINVAL;
-> > > +
-> > > +   *parent_rate = clk_hw_round_rate(hw_parent, rate * 2);
-> > >     return DIV_ROUND_UP(*parent_rate, 2);
-> > >   }
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
->
-> --
->         Ansuel
-
-
-
--- 
-With best wishes
-Dmitry

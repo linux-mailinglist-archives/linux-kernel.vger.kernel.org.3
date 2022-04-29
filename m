@@ -2,150 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51240515728
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D5F515726
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238871AbiD2Vrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S238936AbiD2Vrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238760AbiD2Vrp (ORCPT
+        with ESMTP id S238913AbiD2Vrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:47:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E1AD890A;
-        Fri, 29 Apr 2022 14:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651268665; x=1682804665;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P2UJ/TZ038lSA/cIVqZWSYw3gdJ/2sLQfrgZKGge4O4=;
-  b=kfLJu83CCnSe67m4bsC2fROsc4pnT8tDL7cpphThVZ7rkvYhaV1/ah0I
-   eZ02X3c5TTkIsMqjgntK0qQ7Mp/g1lL50RLZbbkGumf/Z60wOS/gL76/N
-   HxD6TOknyPFYCFb/1wd+4dxtmzNYGfY7R9XiyDRT7oDWL/Tpe4dYXbz7u
-   QabUX7Q8pKubXkhDoYx0qpMTgrV3YrhzkUR86DH1fARkHdbi06Wmc/06E
-   SpR3oKdhBbY20WWNwJHnJdXRQw9PpBQ5YviQeOrU/CLOUIRbx3RjylnG6
-   LBebyR5TlYUzpqgeYhe1tafGXIAeWIR3XhmQhnS/4XslKEprR0zeUsHJz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="265625360"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="265625360"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 14:44:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="881666036"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Apr 2022 14:44:23 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkYPW-0006cz-DH;
-        Fri, 29 Apr 2022 21:44:22 +0000
-Date:   Sat, 30 Apr 2022 05:43:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, quic_vgarodia@quicinc.com,
-        frkoenig@chromium.org, quic_dikshita@quicinc.com
-Subject: Re: [PATCH] media: venus: set ubwc configuration on specific video
- hardware
-Message-ID: <202204300506.tuUok8FR-lkp@intel.com>
-References: <1651131248-20313-1-git-send-email-quic_vgarodia@quicinc.com>
+        Fri, 29 Apr 2022 17:47:47 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4396FD8936
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:28 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so11603750pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cPKs9GVKGDSLOQL2zQiD6oZiNSnA4Ko5SyLdG3pcspE=;
+        b=AQeKf5X42YQmvfUJhMz5xEM+z1so3kgd8cgzlQRhphzfmIkWk5CbVzdl6shGEqD4yJ
+         aHGeeKKT1kQvEZtcsPARhWXSC67sEXZ0c3pBD4E+1gxvKXgIiZH0RcAb525/oGg96Oue
+         h1CDWGzlKDp42/eFcr4lSF0HX3+B1LO7gWa94VIbUcm9IXd88/80DuRsOtmGHLnZxzic
+         Ci99uxxgEq7uURLkMtF0JIUHuIUQHfnbadpaPaB7ASfGdT2yguHuAiijrCEm9A5fcV0N
+         Tuz9u1Iw3BmADrBBnw2ZNpPJ9uM0dguAn4I9UXj0Z2jE49yfoDnKUZgexnnnwVrKS4OQ
+         ggTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cPKs9GVKGDSLOQL2zQiD6oZiNSnA4Ko5SyLdG3pcspE=;
+        b=f6bPqSrMf27p8tR+MzHh0pjNNslQ7sqtpXbIuoKW6P1PkcXz2EDxqksxPzXarw+JBW
+         EprkshvzMfXht2qxx3C27SQBwcMBWfiIt0+ggXfGuYereaZBudeXWkTWm4Hv3zHVAZ+S
+         BznkYrN+fJ3ig/sDZxXXUErghkx6TuF52gd09PD4pfuFG61Jnxr8+X1CPvC9t7ygjf/R
+         oGNQoANcq5KahcFdWwwiu91xxEzP1zdUd9HaESkpr20DCwZGGZjAdAjM7/eZISMGbEFT
+         mL9lPLHA8ZyeDAXAe3kGvV6EpOpVcbzos+bIBFTBN5wC5q1ShnH4o8RYI5lQGfISVBZs
+         sgYw==
+X-Gm-Message-State: AOAM531euTJ1r5sr9J92VIijxmdM4yh5zCfCOqkku8nHg3F+zzmNNeCn
+        ong1O175RO+jOfuyIBsaDGAPkuSfJYaFEg==
+X-Google-Smtp-Source: ABdhPJyD5nledjZldpVBkUeIHwtkPn86Y8kWM9/OKUm3v0yMu1s2avwykyzK1dXTyzhQDRDdazX/3w==
+X-Received: by 2002:a17:90b:304:b0:1d9:752b:437f with SMTP id ay4-20020a17090b030400b001d9752b437fmr5964663pjb.242.1651268667658;
+        Fri, 29 Apr 2022 14:44:27 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.64.97])
+        by smtp.gmail.com with ESMTPSA id fv12-20020a17090b0e8c00b001cd4989fed0sm15271086pjb.28.2022.04.29.14.44.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 14:44:27 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
+Subject: [PATCH 0/3] arm64: dts: qcom: Fix 'sdhci' nodes for 'make dtbs_check'
+Date:   Sat, 30 Apr 2022 03:14:17 +0530
+Message-Id: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651131248-20313-1-git-send-email-quic_vgarodia@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vikash,
+Since I sent a separate patchset to convert the Qualcomm 'sdhci-msm'
+device-tree binding to yaml format, 'make dtbs_check' now reports several
+issues with sdhci nodes used across qcom dts files.
 
-Thank you for the patch! Yet something to improve:
+This patchset fixes the same.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on v5.18-rc4 next-20220429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Bhupesh Sharma (3):
+  arm64: dts: qcom: sdm630: Fix 'interconnect-names' for sdhci nodes
+  arm64: dts: qcom: Fix node names for sdhci 'opp-table' nodes (across
+    dts files)
+  arm64: dts: qcom: Fix ordering of 'clocks' & 'clock-names' for sdhci
+    nodes
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vikash-Garodia/media-venus-set-ubwc-configuration-on-specific-video-hardware/20220428-153510
-base:   git://linuxtv.org/media_tree.git master
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220430/202204300506.tuUok8FR-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/22d299bea1f679d007cb71b3916bf39bb957ab66
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vikash-Garodia/media-venus-set-ubwc-configuration-on-specific-video-hardware/20220428-153510
-        git checkout 22d299bea1f679d007cb71b3916bf39bb957ab66
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/qcom/venus/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/media/platform/qcom/venus/hfi_venus.c: In function 'venus_sys_set_default_properties':
->> drivers/media/platform/qcom/venus/hfi_venus.c:997:23: error: too few arguments to function 'venus_sys_set_ubwc_config'
-     997 |                 ret = venus_sys_set_ubwc_config();
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/venus/hfi_venus.c:907:12: note: declared here
-     907 | static int venus_sys_set_ubwc_config(struct venus_hfi_device *hdev)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/venus_sys_set_ubwc_config +997 drivers/media/platform/qcom/venus/hfi_venus.c
-
-   967	
-   968	static int venus_sys_set_default_properties(struct venus_hfi_device *hdev)
-   969	{
-   970		struct device *dev = hdev->core->dev;
-   971		const struct venus_resources *res = hdev->core->res;
-   972		int ret;
-   973	
-   974		ret = venus_sys_set_debug(hdev, venus_fw_debug);
-   975		if (ret)
-   976			dev_warn(dev, "setting fw debug msg ON failed (%d)\n", ret);
-   977	
-   978		/*
-   979		 * Idle indicator is disabled by default on some 4xx firmware versions,
-   980		 * enable it explicitly in order to make suspend functional by checking
-   981		 * WFI (wait-for-interrupt) bit.
-   982		 */
-   983		if (IS_V4(hdev->core) || IS_V6(hdev->core))
-   984			venus_sys_idle_indicator = true;
-   985	
-   986		ret = venus_sys_set_idle_message(hdev, venus_sys_idle_indicator);
-   987		if (ret)
-   988			dev_warn(dev, "setting idle response ON failed (%d)\n", ret);
-   989	
-   990		ret = venus_sys_set_power_control(hdev, venus_fw_low_power_mode);
-   991		if (ret)
-   992			dev_warn(dev, "setting hw power collapse ON failed (%d)\n",
-   993				 ret);
-   994	
-   995		/* For specific venus core, it is mandatory to set the UBWC configuration */
-   996		if (res->ubwc_conf) {
- > 997			ret = venus_sys_set_ubwc_config();
-   998			if (ret)
-   999				dev_warn(dev, "setting ubwc config failed (%d)\n", ret);
-  1000		}
-  1001	
-  1002		return ret;
-  1003	}
-  1004	
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi |  8 ++++----
+ arch/arm64/boot/dts/qcom/msm8916.dtsi | 12 ++++++------
+ arch/arm64/boot/dts/qcom/msm8994.dtsi | 14 +++++++-------
+ arch/arm64/boot/dts/qcom/qcs404.dtsi  |  6 +++---
+ arch/arm64/boot/dts/qcom/sc7180.dtsi  | 16 ++++++++--------
+ arch/arm64/boot/dts/qcom/sc7280.dtsi  | 12 ++++++------
+ arch/arm64/boot/dts/qcom/sdm630.dtsi  | 17 ++++++++++-------
+ arch/arm64/boot/dts/qcom/sm6350.dtsi  |  4 ++--
+ arch/arm64/boot/dts/qcom/sm8150.dtsi  |  2 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi  |  2 +-
+ 10 files changed, 48 insertions(+), 45 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
